@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 
@@ -43,6 +43,13 @@ class MagentoSoapTransport extends Transport
      * @ORM\Column(type="date")
      */
     protected $syncStartDate;
+
+    /**
+     * @var \DateInterval
+     *
+     * @ORM\Column(type="string", length=50)
+     */
+    protected $syncRange;
 
     /**
      * @param string $wsdlUrl
@@ -125,6 +132,25 @@ class MagentoSoapTransport extends Transport
     }
 
     /**
+     * @param \DateInterval $syncRange
+     * @return $this
+     */
+    public function setSyncRange($syncRange)
+    {
+        $this->syncRange = $syncRange;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateInterval
+     */
+    public function getSyncRange()
+    {
+        return $this->syncRange;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSettingsBag()
@@ -134,6 +160,8 @@ class MagentoSoapTransport extends Transport
                 'api_user' => $this->getApiUser(),
                 'api_key'  => $this->getApiKey(),
                 'wsdl_url' => $this->getWsdlUrl(),
+                'sync_range'     => $this->getSyncRange(),
+                'last_sync_date' => $this->getSyncStartDate(),
             ]
         );
     }

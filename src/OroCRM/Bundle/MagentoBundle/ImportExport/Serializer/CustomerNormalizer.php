@@ -2,18 +2,21 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
-class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface
+class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
 {
     protected $importFieldsMap = [
-        'customer_id' => 'id',
+        'customer_id' => 'original_id',
         'firstname'   => 'first_name',
         'lastname'    => 'last_name',
         'middlename'  => 'middle_name',
@@ -28,10 +31,29 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface
         'addresses',
     );
 
-    const STORES_TYPE    = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\Store>';
-    const WEBSITES_TYPE  = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\Website>';
-    const GROUPS_TYPE    = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup>';
+    const STORE_TYPE    = 'OroCRM\Bundle\MagentoBundle\Entity\Store';
+    const WEBSITE_TYPE  = 'OroCRM\Bundle\MagentoBundle\Entity\Website';
+    const GROUPS_TYPE    = 'OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup';
     const ADDRESSES_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactAddress>';
+
+    /**
+     * @var SerializerInterface|NormalizerInterface|DenormalizerInterface
+     */
+    protected $serializer;
+
+    public function setSerializer(SerializerInterface $serializer)
+    {
+        if (!$serializer instanceof NormalizerInterface || !$serializer instanceof DenormalizerInterface) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Serializer must implement "%s" and "%s"',
+                    'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
+                    'Symfony\Component\Serializer\Normalizer\DenormalizerInterface'
+                )
+            );
+        }
+        $this->serializer = $serializer;
+    }
 
     /**
      * For exporting customers
@@ -76,9 +98,8 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $data = is_array($data) ? $data : array();
+        $data = is_array($data) ? $data : [];
         $resultObject = new Customer();
-
 
         $mappedData = [];
         foreach ($data as $key => $value) {
@@ -86,8 +107,10 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface
             $mappedData[$fieldKey] = $value;
         }
 
+        var_dump($data);
         $this->setScalarFieldsValues($resultObject, $mappedData);
         $this->setObjectFieldsValues($resultObject, $mappedData);
+        var_dump($resultObject); die();
 
         return $resultObject;
     }
@@ -98,6 +121,13 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface
      */
     protected function setScalarFieldsValues(Customer $object, array $data)
     {
+        foreach (['created_at', 'updated_at'] as $itemName) {
+            if (isset($data[$itemName]) && is_string($data[$itemName])) {
+                $timezone = new \DateTimeZone('UTC');
+                $data[$itemName] = new \DateTime($data[$itemName], $timezone);
+            }
+        }
+
         $object->fillFromArray($data);
     }
 
@@ -109,25 +139,23 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface
      */
     protected function setObjectFieldsValues(Customer $object, array $data, $format = null, array $context = array())
     {
+        $values =             [
+            [
+                'name' => 'store',
+                'value' => $this->denormalizeObject($data, 'store_id', static::STORE_TYPE, $format, $context)
+            ],
+            [
+                'name' => 'website',
+                'value' => $this->denormalizeObject($data, 'website_id', static::WEBSITE_TYPE, $format, $context)
+            ],
+        ];
+
         $this->setNotEmptyValues(
             $object,
-            [
-                [
-                    'name' => 'store',
-                    'value' => $this->denormalizeObject($data, 'store', static::STORES_TYPE, $format, $context)
-                ],
-                [
-                    'name' => 'website',
-                    'value' => $this->denormalizeObject($data, 'website', static::WEBSITES_TYPE, $format, $context)
-                ],
-                [
-                    'name' => 'group',
-                    'value' => $this->denormalizeObject($data, 'group', static::GROUPS_TYPE, $format, $context)
-                ],
-            ]
+            $values
         );
 
-        $addresses = $this->denormalizeObject($data, 'addresses', static::ADDRESSES_TYPE, $format, $context);
+        //$addresses = $this->denormalizeObject($data, 'addresses', static::ADDRESSES_TYPE, $format, $context);
 
         // TODO: normalize and set addresses to contact and bill/ship addr to account
     }

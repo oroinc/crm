@@ -2,7 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Command;
 
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
@@ -24,7 +26,8 @@ class SyncCommand extends ContainerAwareCommand
         $this
             ->setName('orocrm:magento:sync')
             ->setDescription('Sync magento entities (currently only import customers)')
-            ->addArgument('channelId', null, 'Channel identification name', false);
+            ->addArgument('channelId', InputArgument::REQUIRED, 'Channel identification name')
+            ->addOption('force', null, InputOption::VALUE_NONE, 'Do actual import, readonly otherwise');
     }
 
     /**
@@ -38,11 +41,17 @@ class SyncCommand extends ContainerAwareCommand
     {
         $output->writeln($this->getDescription());
 
-        $channelId = '';
+        $channelId = $input->getArgument('channelId');
+        $force = $input->getOption('force');
+
+        $closure = function ($context) use ($output) {
+            $output->writeln(var_export($context, true));
+        };
 
         $this->getContainer()
             ->get(self::CUSTOMER_SYNC_PROCESSOR)
-            ->process($channelId);
+            ->setLogClosure($closure)
+            ->process($channelId, $force);
 
         $output->writeln('Completed');
     }

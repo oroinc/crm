@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Connector;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
 class CustomerConnector extends AbstractConnector implements CustomerConnectorInterface
@@ -17,34 +17,85 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /** @var \DateInterval */
     protected $syncRange;
 
+    /** @var array */
+    protected $customerIdsBuffer = [];
+
+    /** @var int */
+    protected $batchSize;
+
+    /**
+     * @param $startDate
+     * @param $endDate
+     * @param string $format
+     * @return array
+     */
+    protected function getBatchFilter(\DateTime $startDate, \DateTime $endDate, $format = 'Y-m-d H:i:s')
+    {
+        return [
+            'complex_filter' => [
+                [
+                    'key'   => 'created_at',
+                    'value' => [
+                        'key'   => 'from',
+                        'value' => $startDate->format($format),
+                    ],
+                ],
+                [
+                    'key'   => 'created_at',
+                    'value' => [
+                        'key'   => 'to',
+                        'value' => $endDate->format($format),
+                    ],
+                ],
+            ]
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function read()
     {
-        $startDate = $this->lastSyncDate;
-        $endDate = $this->lastSyncDate->add($this->syncRange);
+        if (empty($this->customerIdsBuffer)) {
+            do {
+                $now = new \DateTime('now', new \DateTimeZone('UTC'));
+                $startDate = $this->lastSyncDate;
+                $endDate = clone $this->lastSyncDate;
+                $endDate = $endDate->add($this->syncRange);
 
-        $filters = function ($startDate, $endDate) {
-            return [
-                ['complex_filter' => [
-                    [
-                        'key'   => 'created_at',
-                        'value' => ['key'   => 'gteq', 'value' => $startDate],
-                    ],
-                    [
-                        'key'   => 'created_at',
-                        'value' => ['key'   => 'lt', 'value' => $endDate],
-                    ],
-                ]
-                ]
-            ];
-        };
+                // TODO: remove / log
+                echo sprintf(
+                    '[%s] Looking for entities from %s to %s ... ',
+                    $now->format('d-m-Y H:i:s'),
+                    $startDate->format('d-m-Y'),
+                    $endDate->format('d-m-Y')
+                );
 
-        $data = $this->getCustomersList($filters($startDate, $endDate));
+                $this->customerIdsBuffer = $this->getCustomersList(
+                    $this->getBatchFilter($startDate, $endDate),
+                    $this->batchSize,
+                    true
+                );
 
-        // move date range, from end to start, allow new customers to be imported first
-        $endDate = $startDate;
+                // TODO: remove / log
+                echo sprintf('found %d customers', count($this->customerIdsBuffer)) . "\n";
+
+                $this->lastSyncDate = $endDate;
+            } while (empty($this->customerIdsBuffer) && $endDate <= $now);
+        }
+
+        // keep going till endDate >= NOW
+        if (!empty($this->customerIdsBuffer)) {
+            $customerId = array_shift($this->customerIdsBuffer);
+
+            // TODO: log
+            var_dump($now->format('d-m-Y H:i:s') . " loading customer $customerId");
+
+            $data = $this->getCustomerData($customerId, true, true);
+        } else {
+            // no more data
+            $data = null;
+        }
 
         return $data;
     }
@@ -52,9 +103,24 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /**
      * {@inheritdoc}
      */
-    public function getCustomersList($filters = [])
+    public function getCustomersList($filters = [], $batchSize = null, $idOnly = false)
     {
-        return $this->call(CustomerConnectorInterface::ACTION_CUSTOMER_LIST, $filters);
+        $result = $this->call(CustomerConnectorInterface::ACTION_CUSTOMER_LIST, $filters);
+
+        if ($idOnly) {
+            $result = array_map(
+                function ($item) {
+                    return is_object($item) ? $item->customer_id : $item['customer_id'];
+                },
+                $result
+            );
+        }
+
+        if ((int)$batchSize > 0) {
+            $result = array_slice($result, 0, $batchSize);
+        }
+
+        return $result;
     }
 
     /**
@@ -65,15 +131,15 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         $result = $this->call(CustomerConnectorInterface::ACTION_CUSTOMER_INFO, [$id, $onlyAttributes]);
 
         if ($isAddressesIncluded) {
-            $result->addresses = $this->getCustomerAddressData($id);
+            $result->addresses = (array) $this->getCustomerAddressData($id);
         }
 
         if ($isGroupsIncluded) {
-            $result->groups = $this->getCustomerGroups($result->group_id);
+            $result->groups = (array) $this->getCustomerGroups($result->group_id);
             $result->group_name = $result->groups[$result->group_id];
         }
 
-        return $result;
+        return (array)$result;
     }
 
     /**
@@ -131,29 +197,34 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     }
 
     /**
-     * @param Channel $channel
-     * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @return $this
+     * {@inheritdoc}
      */
-    public function setChannel(Channel $channel)
+    public function setConnectorEntity(Connector $connector)
     {
-        $channelSettings = $channel->getSettings();
-        if (empty($channelSettings['last_sync_date'])) {
+        $settings = $connector->getTransport()
+            ->getSettingsBag()
+            ->all();
+
+        if (empty($settings['last_sync_date'])) {
             throw new InvalidConfigurationException('Last sync date can\'t be empty');
-        } elseif ($channelSettings['last_sync_date'] instanceof \DateTime) {
-                $this->lastSyncDate = $channelSettings['last_sync_date'];
+        } elseif ($settings['last_sync_date'] instanceof \DateTime) {
+                $this->lastSyncDate = $settings['last_sync_date'];
         } else {
-            $this->lastSyncDate = new \DateTime($channelSettings['last_sync_date']);
+            $this->lastSyncDate = new \DateTime($settings['last_sync_date']);
         }
 
-        if (empty($channelSettings['sync_range'])) {
-            $channelSettings['sync_range'] = self::DEFAULT_SYNC_RANGE;
-        } elseif ($channelSettings['sync_range'] instanceof \DateInterval) {
-            $this->syncRange = $channelSettings['sync_range'];
-        } else {
-            $this->syncRange = \DateInterval::createFromDateString($channelSettings['sync_range']);
+        if (empty($settings['sync_range'])) {
+            $settings['sync_range'] = self::DEFAULT_SYNC_RANGE;
+        } elseif ($settings['sync_range'] instanceof \DateInterval) {
+            $this->syncRange = $settings['sync_range'];
         }
 
-        return parent::setChannel($channel);
+        $this->syncRange = \DateInterval::createFromDateString($settings['sync_range']);
+
+        if (!empty($settings['batch_size'])) {
+            $this->batchSize = $settings['batch_size'];
+        }
+
+        return parent::setConnectorEntity($connector);
     }
 }

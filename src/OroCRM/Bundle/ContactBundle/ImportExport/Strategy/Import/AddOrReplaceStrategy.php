@@ -6,10 +6,11 @@ use Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException;
 use Oro\Bundle\ImportExportBundle\Exception\LogicException;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import\ContactImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import\ContactImportStrategyHelper;
 
 class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
 {
