@@ -85,7 +85,12 @@ class SoapContactApiTest extends WebTestCase
         // get getContacts
         $contacts = $this->client->getSoap()->getContacts(1, 1000);
         $contacts = ToolsAPI::classToArray($contacts);
-        $contactFound = array_filter($contacts, function($a) use($contactId) { return $a['id'] == $contactId; });
+        $contactFound = array_filter(
+            $contacts,
+            function ($a) use ($contactId) {
+                return $a['id'] == $contactId;
+            }
+        );
         $this->assertNotEmpty($contactFound);
     }
 
