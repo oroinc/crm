@@ -227,4 +227,28 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
 
         return parent::setConnectorEntity($connector);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabel()
+    {
+        return 'orocrm.magento.connector.customer.label';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSettingsFormType()
+    {
+        return 'orocrm_magento_customer_connector_setting_form_type';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSettingsEntityFQCN()
+    {
+        return 'OroCRM\\Bundle\\MagentoBundle\\Entity\\MagentoCustomerConnector';
+    }
 }

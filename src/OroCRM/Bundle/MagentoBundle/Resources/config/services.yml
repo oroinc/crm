@@ -13,6 +13,7 @@ parameters:
 
     orocrm_magento.provider.channel_type.class:                  OroCRM\Bundle\MagentoBundle\Provider\MageChannelType
     orocrm_magento.form.type.soap_transport_setting.class:       OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
+    orocrm_magento.form.type.customer_connector_setting.class:   OroCRM\Bundle\MagentoBundle\Form\Type\CustomerConnectorSettingFormType
 
 services:
     orocrm_magento.mage.soap_transport:
@@ -24,6 +25,8 @@ services:
         class: %orocrm_magento.mage.customer_connector.class%
         arguments:
           - @orocrm_magento.mage.soap_transport
+        tags:
+          - { name: oro_integration.connector, type: customer, channel_type: magento }
 
     # customer sync processor
     orocrm_magento.customer_sync.processor:
@@ -80,5 +83,13 @@ services:
         class: %orocrm_magento.form.type.soap_transport_setting.class%
         arguments:
             - @orocrm_magento.mage.soap_transport
+            - @oro_security.encoder.mcrypt
         tags:
             - { name: form.type, alias: orocrm_magento_soap_transport_setting_form_type }
+
+    orocrm_magento.form.type.customer_connector_setting:
+        class: %orocrm_magento.form.type.customer_connector_setting.class%
+        arguments:
+            - @orocrm_magento.mage.customer_connector
+        tags:
+            - { name: form.type, alias: orocrm_magento_customer_connector_setting_form_type }
