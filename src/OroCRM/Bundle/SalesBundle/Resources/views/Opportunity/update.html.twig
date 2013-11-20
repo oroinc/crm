@@ -22,7 +22,7 @@
             'dataUrl': path('oro_api_delete_opportunity', {'id': form.vars.value.id}),
             'dataRedirect': path('orocrm_sales_opportunity_index'),
             'aCss': 'no-hash remove-button',
-            'id': 'btn-remove-contact',
+            'id': 'btn-remove-oppotunity',
             'dataId': form.vars.value.id,
             'dataMessage': 'Are you sure you want to delete this opportunity?',
             'title': 'Delete Opportunity',
@@ -70,7 +70,7 @@
         'class': 'active',
         'subblocks': [
             {
-                'title': 'Contact Information',
+                'title': 'Opportunity Information',
                 'data': [
                     form_row(form.name, {'label': 'Opportunity name'|trans}),
                     form_row(form.contact, {'label': 'Contact'|trans}),
