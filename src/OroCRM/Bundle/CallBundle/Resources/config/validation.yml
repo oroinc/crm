@@ -9,3 +9,6 @@ OroCRM\Bundle\CallBundle\Entity\Call:
         callStatus:
             - NotBlank: ~
 
+    constraints:
+        - Callback:
+            methods: [isPhoneValid]

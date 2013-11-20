@@ -38,7 +38,7 @@ class CallControllerTest extends WebTestCase
     }
     
 
-    public function testCreate()
+    public function testCreateSubject()
     {
         $crawler = $this->client->request('GET', $this->client->generate('orocrm_call_create'));
         $form = $crawler->selectButton('Save and Close')->form();
@@ -50,7 +50,20 @@ class CallControllerTest extends WebTestCase
         $this->assertContains("This value should not be blank", $crawler->html());
     }
 
-    public function testCreate1()
+    public function testCreatePhoneNumber()
+    {
+        $crawler = $this->client->request('GET', $this->client->generate('orocrm_call_create'));
+        $form = $crawler->selectButton('Save and Close')->form();
+        $form['orocrm_call_call_form[subject]'] = 'Subject';
+        $this->client->followRedirects(true);
+        $crawler = $this->client->submit($form);
+
+        $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertContains("Phone number is required field", $crawler->html());
+    }
+
+    public function testCreate()
     {
         $crawler = $this->client->request('GET', $this->client->generate('orocrm_call_create'));
         $form = $crawler->selectButton('Save and Close')->form();

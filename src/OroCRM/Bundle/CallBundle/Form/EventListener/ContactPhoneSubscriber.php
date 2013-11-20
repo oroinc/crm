@@ -52,7 +52,8 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
             'property' => 'phone',
             'empty_value' => '...',
             'label' => 'Phone Number',
-            'required' => false);
+            'required' => true
+            );
 
         if (null !== $data) {
             $contact = $data->getRelatedContact();
@@ -61,10 +62,9 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
                             return $er->getContactPhoneQueryBuilder($contact);
                 };
             }
-        } else {
-            $formOptions['attr'] = array('class' => 'hide');
-
-        }
+        } 
+        
+        $form->add('phoneNumber', 'text', array('required' => true, 'attr' => array('class' => 'hide')));
         $form->add('contactPhoneNumber', 'entity', $formOptions);
     }
 

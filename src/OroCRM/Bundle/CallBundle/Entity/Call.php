@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CallBundle\Entity;
 
+use Symfony\Component\Validator\ExecutionContext;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -377,4 +378,16 @@ class Call
     {
         return $this->callStatus;
     }
+
+    public function isPhoneValid(ExecutionContext $context)
+    {
+        if (!$this->getPhoneNumber() && !$this->getContactPhoneNumber()) {
+            $propertyPath = $context->getPropertyPath() . '.contactPhoneNumber';
+            $context->addViolationAt(
+                $propertyPath,
+                'Phone number is required field'
+                );
+        }
+    }
+
 }
