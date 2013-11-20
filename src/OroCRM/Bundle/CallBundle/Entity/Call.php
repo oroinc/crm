@@ -386,8 +386,7 @@ class Call
             $context->addViolationAt(
                 $propertyPath,
                 'Phone number is required field'
-                );
+            );
         }
     }
-
 }

@@ -62,7 +62,7 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
                             return $er->getContactPhoneQueryBuilder($contact);
                 };
             }
-        } 
+        }
         
         $form->add('phoneNumber', 'text', array('required' => true, 'attr' => array('class' => 'hide')));
         $form->add('contactPhoneNumber', 'entity', $formOptions);
