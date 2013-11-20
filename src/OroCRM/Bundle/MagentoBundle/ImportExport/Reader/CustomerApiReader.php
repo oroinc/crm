@@ -49,10 +49,12 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface, StepE
      */
     public function read()
     {
-        // read peace of data
-        $data = $this->customerConnector->read();
+        // read peace of data, skipping empty
+        do {
+            $data = $this->customerConnector->read();
+        } while ($data === false);
 
-        if (empty($data)) {
+        if (is_null($data)) {
             return null; // no data anymore
         }
 
