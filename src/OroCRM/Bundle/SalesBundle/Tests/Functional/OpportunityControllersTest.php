@@ -69,10 +69,8 @@ class OpportunityControllersTest extends WebTestCase
             $this->client,
             'sales-opportunity-grid',
             array(
-                'sales-opportunity-grid[_filter][name][type]=3' => '3',
+                'sales-opportunity-grid[_filter][name][type]' => '1',
                 'sales-opportunity-grid[_filter][name][value]' => $name,
-                'sales-opportunity-grid[_pager][_page]' => '1',
-                'sales-opportunity-grid[_pager][_per_page]' => '10'
             )
         );
 
