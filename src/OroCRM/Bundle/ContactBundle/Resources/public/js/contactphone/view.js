@@ -71,9 +71,7 @@ function(_, Backbone) {
 
             this.listenTo(this.collection, 'reset', this.render);
 
-            this.render(!options.isRelatedContact);
-            this.phonesList.trigger('change');
-            this.phonePlain.css('margin-top', '0px');
+            this.render(options.isRelatedContact);
         },
 
         /**
@@ -105,11 +103,15 @@ function(_, Backbone) {
         /**
          * Render list and or input field
          */
-        render: function(hide) {
+        render: function(isRelatedContact) {
             if (this.collection.models.length > 0) {
                 this.showPhoneOptions();
-            } else {                
-                this.showPlain(hide);
+            } else {      
+                if (isRelatedContact) {
+                    this.showPlain(false); 
+                } else {
+                    this.showPlain(true);
+                }
             }
         },
         
@@ -122,8 +124,9 @@ function(_, Backbone) {
                 this.displaySelect2(false);
                 $('#uniform-' + this.phonesList[0].id).hide();
                 this.phonePlain.css('margin-top', '0px');
-            }
+            } else {
                 this.phonePlain.css('margin-top', '12px');
+            }
                 this.phonePlain.show();
         },
 
@@ -139,7 +142,6 @@ function(_, Backbone) {
                 this.phonesList.trigger('change');
                 this.phonePlain.hide();
                 this.phonePlain.val('');
-                this.phonePlain.css('margin-top', '12px');
         }
     });
 });
