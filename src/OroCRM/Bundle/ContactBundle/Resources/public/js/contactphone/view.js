@@ -73,6 +73,7 @@ function(_, Backbone) {
 
             this.render(!options.isRelatedContact);
             this.phonesList.trigger('change');            
+            this.phonePlain.css('margin-top', '0px');
         },
 
         /**
@@ -118,10 +119,12 @@ function(_, Backbone) {
         showPlain: function(hide) {
             if (hide) {
                 this.phonesList.hide();
-                this.displaySelect2(false);                
-                $('#uniform-' + this.phonesList[0].id).hide();                
+                this.displaySelect2(false);
+                $('#uniform-' + this.phonesList[0].id).hide();
+                this.phonePlain.css('margin-top', '0px');
             }
-                this.phonePlain.show();            
+                this.phonePlain.css('margin-top', '12px');            
+                this.phonePlain.show();
         },
 
         /**
