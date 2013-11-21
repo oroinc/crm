@@ -25,6 +25,17 @@ workflows:
                 options:
                     class: OroCRM\Bundle\SalesBundle\Entity\Lead
                     managed_entity: true
+            opportunity_name:
+                label: 'Opportunity name'
+                type: string
+            account:
+                label: 'Account'
+                type: entity
+                options:
+                    class: OroCRM\Bundle\AccountBundle\Entity\Account
+            company_name:
+                label: 'Company name'
+                type: string
         transitions:
             qualify:
                 label: 'Qualify'
@@ -33,6 +44,22 @@ workflows:
                 frontend_options:
                     icon: 'icon-ok'
                     class: 'btn-primary'
+                form_options:
+                    attribute_fields:
+                        opportunity_name:
+                            form_type: text
+                            options:
+                                required: true
+                                constraints:
+                                  - NotBlank: ~
+                        account:
+                            form_type: orocrm_account_select
+                            options:
+                                required: false
+                        company_name:
+                            form_type: text
+                            options:
+                                required: false
                 transition_definition: qualify_definition
             cancel:
                 label: 'Disqualify'
@@ -50,8 +77,19 @@ workflows:
                 transition_definition: reactivate_definition
         transition_definitions:
             qualify_definition:
+                init_actions:
+                    - @assign_value:
+                        - [$opportunity_name, $lead.name]
+                        - [$account, $lead.account]
+                        - [$company_name, $lead.companyName]
                 conditions: # if lead.status = "new"
-                    @equal: [$lead.status.name, 'new']
+                    @and:
+                        - @equal: [$lead.status.name, 'new']
+                        - @or:
+                            parameters:
+                                - @not_empty: [$company_name]
+                                - @not_empty: [$account]
+                            message: "Company name or account must be selected."
                 post_actions: # set lead.status = "qualified"
                     - @find_entity:
                           class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
@@ -133,12 +171,25 @@ workflows:
                                         method_parameters: [$.result.phone]
                                     - @unset_value: # unset temporary property
                                         [$.result.phone]
+                    - @create_entity: # create an account
+                        conditions:
+                            @empty: $acount
+                        parameters:
+                            class: OroCRM\Bundle\AccountBundle\Entity\Account
+                            attribute: $account
+                            data:
+                                name: $company_name
+                                extendPhone: $lead.phone
+                                extendEmail: $lead.email
+                                extendWebsite: $lead.website
+                                extendEmployees: $lead.numberOfEmployees
                     - @create_entity: # create an opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $.result.opportunity
                         data:
                             name: $lead.name
                             contact: $lead.contact
+                            account: $account
                     - @find_entity: # set status "In progress" to opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
