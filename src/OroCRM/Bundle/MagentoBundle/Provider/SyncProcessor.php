@@ -7,17 +7,16 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Connector as ConnectorEntity;
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessorInterface;
 
 class SyncProcessor implements SyncProcessorInterface
 {
     const DEFAULT_BATCH_SIZE         = 15;
     const DEFAULT_EMPTY_RANGES_COUNT = 2; // doesn't affect anything yet
-    const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';
-    const JOB_IMPORT          = 'mage_customer_import';
-    const ENTITY_NAME         = 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
 
     /** @var EntityManager */
     protected $em;
@@ -28,22 +27,28 @@ class SyncProcessor implements SyncProcessorInterface
     /** @var JobExecutor */
     protected $jobExecutor;
 
+    /** @var TypesRegistry */
+    protected $registry;
+
     /** @var \Closure */
     protected $loggingClosure;
 
     /**
-     * @param EntityManager $em
+     * @param EntityManager     $em
      * @param ProcessorRegistry $processorRegistry
-     * @param JobExecutor $jobExecutor
+     * @param JobExecutor       $jobExecutor
+     * @param TypesRegistry     $registry
      */
     public function __construct(
         EntityManager $em,
         ProcessorRegistry $processorRegistry,
-        JobExecutor $jobExecutor
+        JobExecutor $jobExecutor,
+        TypesRegistry $registry
     ) {
-        $this->em = $em;
+        $this->em                = $em;
         $this->processorRegistry = $processorRegistry;
-        $this->jobExecutor = $jobExecutor;
+        $this->jobExecutor       = $jobExecutor;
+        $this->registry          = $registry;
     }
 
     /**
@@ -51,45 +56,46 @@ class SyncProcessor implements SyncProcessorInterface
      */
     public function process($channelName, $force = false)
     {
-        $processorAliases = $this->processorRegistry->getProcessorAliasesByEntity(
-            ProcessorRegistry::TYPE_IMPORT,
-            self::ENTITY_NAME
-        );
-
         $channel = $this->getChannelByName($channelName);
-        $processorAlias = reset($processorAliases);
-
         /** @var ConnectorEntity[] $connectors */
         $connectors = $channel->getConnectors();
 
-        // TODO: get job name from connector settings
-        if ($force) {
-            $mode = ProcessorRegistry::TYPE_IMPORT;
-            $jobName = self::JOB_IMPORT;
-        } else {
-            $mode = ProcessorRegistry::TYPE_IMPORT_VALIDATION;
-            $jobName = self::JOB_VALIDATE_IMPORT;
-        }
-
-        $configuration = [
-            $mode => [
-                'processorAlias' => $processorAlias,
-                // TODO: get entity name from real connector
-                'entityName'     => self::ENTITY_NAME,
-                'channelName'    => $channelName,
-                'batchSize'      => self::DEFAULT_BATCH_SIZE,
-                'maxEmptyRanges' => self::DEFAULT_EMPTY_RANGES_COUNT,
-                //'logger'         => $this->loggingClosure,
-            ],
-        ];
-
         /** @var ConnectorEntity $connector */
         foreach ($connectors as $connector) {
-            $configuration[$mode]['connector'] = $connector;
-            // TODO: get job name from real connector
-            //$jobName = $connector->getJobName();
+            try {
+                $realConnector = $this->registry->getConnectorTypeBySettingEntity($connector, $channel->getType());
+            } catch (\Exception $e) {
+                // log and continue
+                $this->log($e->getMessage());
+                continue;
+            }
+            if ($force) {
+                $mode    = ProcessorRegistry::TYPE_IMPORT;
+                $jobName = $realConnector->getImportJobName();
+            } else {
+                $mode    = ProcessorRegistry::TYPE_IMPORT_VALIDATION;
+                $jobName = $realConnector->getImportJobName(true);
+            }
 
-            $result = $this->processImport($mode, $jobName, $configuration);
+            $processorAliases = $this->processorRegistry->getProcessorAliasesByEntity(
+                ProcessorRegistry::TYPE_IMPORT,
+                $realConnector->getImportEntityFQCN()
+            );
+            $processorAlias   = reset($processorAliases);
+
+            $configuration = [
+                $mode => [
+                    'processorAlias' => $processorAlias,
+                    'entityName'     => $realConnector->getImportEntityFQCN(),
+                    'channelName'    => $channelName,
+                    'batchSize'      => self::DEFAULT_BATCH_SIZE,
+                    'maxEmptyRanges' => self::DEFAULT_EMPTY_RANGES_COUNT,
+                    'connector'      => $connector
+                    // @TODO allow to pass logger here
+                    //'logger'         => $this->loggingClosure,
+                ],
+            ];
+            $result        = $this->processImport($mode, $jobName, $configuration);
             $this->log($result);
         }
     }
@@ -97,7 +103,8 @@ class SyncProcessor implements SyncProcessorInterface
     /**
      * @param string $mode import or validation (dry run, readonly)
      * @param string $jobName
-     * @param array $configuration
+     * @param array  $configuration
+     *
      * @return array
      */
     public function processImport($mode, $jobName, $configuration)
@@ -113,15 +120,15 @@ class SyncProcessor implements SyncProcessorInterface
         /** @var ContextInterface $contexts */
         $context = $jobResult->getContext();
 
-        $counts = [];
+        $counts           = [];
         $counts['errors'] = count($jobResult->getFailureExceptions());
         if ($context) {
             $counts['process'] = 0;
-            $counts['read'] = $context->getReadCount();
-            $counts['process'] += $counts['add']     = $context->getAddCount();
+            $counts['read']    = $context->getReadCount();
+            $counts['process'] += $counts['add'] = $context->getAddCount();
             $counts['process'] += $counts['replace'] = $context->getReplaceCount();
-            $counts['process'] += $counts['update']  = $context->getUpdateCount();
-            $counts['process'] += $counts['delete']  = $context->getDeleteCount();
+            $counts['process'] += $counts['update'] = $context->getUpdateCount();
+            $counts['process'] += $counts['delete'] = $context->getDeleteCount();
             $counts['process'] -= $counts['error_entries'] = $context->getErrorEntriesCount();
             $counts['errors'] += count($context->getErrors());
         }
@@ -139,12 +146,12 @@ class SyncProcessor implements SyncProcessorInterface
         }
 
         return [
-            'success' => $jobResult->isSuccessful(),
-            'message' => $message,
-            'exceptions' => $jobResult->getFailureExceptions(),
+            'success'      => $jobResult->isSuccessful(),
+            'message'      => $message,
+            'exceptions'   => $jobResult->getFailureExceptions(),
             'isSuccessful' => $jobResult->isSuccessful() && isset($counts['process']) && $counts['process'] > 0,
-            'counts' => $counts,
-            'errors' => $errorsAndExceptions,
+            'counts'       => $counts,
+            'errors'       => $errorsAndExceptions,
         ];
     }
 
@@ -152,6 +159,7 @@ class SyncProcessor implements SyncProcessorInterface
      * Get channel entity by it's name
      *
      * @param string $channelName
+     *
      * @throws \Exception
      * @return Channel
      */
@@ -171,6 +179,7 @@ class SyncProcessor implements SyncProcessorInterface
 
     /**
      * @param callable $closure
+     *
      * @return $this
      */
     public function setLogClosure(\Closure $closure)

@@ -10,6 +10,9 @@ use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 class CustomerConnector extends AbstractConnector implements CustomerConnectorInterface
 {
     const DEFAULT_SYNC_RANGE = '2 year'; // '1 week';
+    const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer';
+    const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';
+    const JOB_IMPORT          = 'mage_customer_import';
 
     /** @var \DateTime */
     protected $lastSyncDate;
@@ -24,9 +27,10 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     protected $batchSize;
 
     /**
-     * @param $startDate
-     * @param $endDate
+     * @param        $startDate
+     * @param        $endDate
      * @param string $format
+     *
      * @return array
      */
     protected function getBatchFilter(\DateTime $startDate, \DateTime $endDate, $format = 'Y-m-d H:i:s')
@@ -61,8 +65,8 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
         if (empty($this->customerIdsBuffer)) {
             $startDate = $this->lastSyncDate;
-            $endDate = clone $this->lastSyncDate;
-            $endDate = $endDate->add($this->syncRange);
+            $endDate   = clone $this->lastSyncDate;
+            $endDate   = $endDate->add($this->syncRange);
 
             // TODO: remove / log
             echo sprintf(
@@ -142,12 +146,12 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         if ($isAddressesIncluded) {
             $result->addresses = $this->getCustomerAddressData($id);
             foreach ($result->addresses as $key => $val) {
-                $result->addresses[$key] = (array) $val;
+                $result->addresses[$key] = (array)$val;
             }
         }
 
         if ($isGroupsIncluded) {
-            $result->groups = (array) $this->getCustomerGroups($result->group_id);
+            $result->groups     = (array)$this->getCustomerGroups($result->group_id);
             $result->group_name = $result->groups[$result->group_id];
         }
 
@@ -180,7 +184,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
             $result = $groups;
         }
 
-        return  $result;
+        return $result;
     }
 
     /**
@@ -220,7 +224,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         if (empty($settings['last_sync_date'])) {
             throw new InvalidConfigurationException('Last sync date can\'t be empty');
         } elseif ($settings['last_sync_date'] instanceof \DateTime) {
-                $this->lastSyncDate = $settings['last_sync_date'];
+            $this->lastSyncDate = $settings['last_sync_date'];
         } else {
             $this->lastSyncDate = new \DateTime($settings['last_sync_date']);
         }
@@ -262,5 +266,25 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     public function getSettingsEntityFQCN()
     {
         return 'OroCRM\\Bundle\\MagentoBundle\\Entity\\MagentoCustomerConnector';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getImportEntityFQCN()
+    {
+        return self::ENTITY_NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getImportJobName($isValidationOnly = false)
+    {
+        if ($isValidationOnly) {
+            return self::JOB_VALIDATE_IMPORT;
+        }
+
+        return self::JOB_IMPORT;
     }
 }
