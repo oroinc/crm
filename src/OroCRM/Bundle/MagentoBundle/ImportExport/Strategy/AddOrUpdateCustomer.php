@@ -191,7 +191,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     {
         $account = $entity->getAccount();
 
-        $account = $this->findAndReplaceEntity($account, AccountNormalizer::ACCOUNT_TYPE, 'name', 'id');
+        $account = $this->findAndReplaceEntity($account, AccountNormalizer::ACCOUNT_TYPE, 'name', ['id']);
 
         $entity->setAccount($account);
 

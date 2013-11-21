@@ -32,19 +32,21 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     protected function getBatchFilter(\DateTime $startDate, \DateTime $endDate, $format = 'Y-m-d H:i:s')
     {
         return [
-            'complex_filter' => [
-                [
-                    'key'   => 'created_at',
-                    'value' => [
-                        'key'   => 'from',
-                        'value' => $startDate->format($format),
+            [
+                'complex_filter' => [
+                    [
+                        'key'   => 'created_at',
+                        'value' => [
+                            'key'   => 'from',
+                            'value' => $startDate->format($format),
+                        ],
                     ],
-                ],
-                [
-                    'key'   => 'created_at',
-                    'value' => [
-                        'key'   => 'to',
-                        'value' => $endDate->format($format),
+                    [
+                        'key'   => 'created_at',
+                        'value' => [
+                            'key'   => 'to',
+                            'value' => $endDate->format($format),
+                        ],
                     ],
                 ],
             ]
@@ -56,8 +58,8 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function read()
     {
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
         if (empty($this->customerIdsBuffer)) {
-            $now = new \DateTime('now', new \DateTimeZone('UTC'));
             $startDate = $this->lastSyncDate;
             $endDate = clone $this->lastSyncDate;
             $endDate = $endDate->add($this->syncRange);
@@ -129,8 +131,12 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /**
      * {@inheritdoc}
      */
-    public function getCustomerData($id, $isAddressesIncluded = false, $isGroupsIncluded = false, $onlyAttributes = [])
-    {
+    public function getCustomerData(
+        $id,
+        $isAddressesIncluded = false,
+        $isGroupsIncluded = false,
+        $onlyAttributes = null
+    ) {
         $result = $this->call(CustomerConnectorInterface::ACTION_CUSTOMER_INFO, [$id, $onlyAttributes]);
 
         if ($isAddressesIncluded) {

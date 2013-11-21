@@ -48,9 +48,9 @@ class MageSoapTransport extends SOAPTransport implements TransportTypeInterface
     /**
      * {@inheritdoc}
      */
-    public function call($action, $params = [])
+    public function call($action, array $params = [])
     {
-        return parent::call($action, [$this->sessionId, $params]);
+        return parent::call($action, array_merge([$this->sessionId], $params));
     }
 
     /**
