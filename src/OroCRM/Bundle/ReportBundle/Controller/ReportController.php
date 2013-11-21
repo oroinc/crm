@@ -5,17 +5,15 @@ namespace OroCRM\Bundle\ReportBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Symfony\Component\Yaml\Yaml;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use OroCRM\Bundle\ReportBundle\Datagrid\ReportGridManagerAbstract;
 
 class ReportController extends Controller
 {
     /**
      * @Route(
-     *      "/{reportGroupName}/{reportName}/{_format}",
+     *      "/{reportGroupName}/{reportName}",
      *      name="orocrm_report_index",
      *      requirements={"reportGroupName"="\w+", "reportName"="\w+", "_format"="html|json"},
      *      defaults={"_format" = "html"}
@@ -30,36 +28,18 @@ class ReportController extends Controller
      */
     public function indexAction($reportGroupName, $reportName)
     {
-        $input = Yaml::parse(file_get_contents(__DIR__ . '/../Resources/config/reports.yml'));
-        $gridServiceName = 'orocrm_report.datagrid.' . implode('.', array($reportGroupName, $reportName));
-        if (!$this->has($gridServiceName) || !isset($input['reports'][$reportGroupName][$reportName])) {
-            throw $this->createNotFoundException();
-        }
+        $gridName  = implode('-', ['orocrm_report', $reportGroupName, $reportName]);
+        $pageTitle = $this->get('oro_datagrid.datagrid.manager')->getConfigurationForGrid($gridName)['pageTitle'];
 
-        /** @var ReportGridManagerAbstract $datagridManager */
-        $datagridManager = $this->get($gridServiceName);
-
-        $definition = $input['reports'][$reportGroupName][$reportName];
-        $datagridManager->setReportDefinitionArray($definition);
-        $datagridManager->getRouteGenerator()->setRouteParameters(
-            array(
-                'reportGroupName' => $reportGroupName,
-                'reportName'      => $reportName
-            )
-        );
-
-        $pageTitle = $definition['name'];
         $this->get('oro_navigation.title_service')->setParams(array('%reportName%' => $pageTitle));
 
-        $datagridView = $datagridManager->getDatagrid()->createView();
-
-        if ('json' == $this->getRequest()->getRequestFormat()) {
-            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
-        }
-
-        return array(
+        return [
             'pageTitle' => $pageTitle,
-            'datagrid'  => $datagridView
-        );
+            'gridName'  => $gridName,
+            'params'    => [
+                'reportGroupName' => $reportGroupName,
+                'reportName'      => $reportName
+            ]
+        ];
     }
 }

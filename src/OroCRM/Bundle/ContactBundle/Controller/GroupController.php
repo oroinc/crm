@@ -2,8 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -11,7 +11,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
-use Oro\Bundle\GridBundle\Datagrid\DatagridInterface;
 use OroCRM\Bundle\ContactBundle\Entity\Group;
 use OroCRM\Bundle\ContactBundle\Datagrid\GroupContactDatagridManager;
 
@@ -55,40 +54,6 @@ class GroupController extends Controller
     }
 
     /**
-     * Get grid data
-     *
-     * @Route(
-     *      "/grid/{id}",
-     *      name="orocrm_contact_group_contact_grid",
-     *      requirements={"id"="\d+"},
-     *      defaults={"id"=0, "_format"="json"}
-     * )
-     * @Template("OroGridBundle:Datagrid:list.json.php")
-     * @AclAncestor("orocrm_contact_view")
-     */
-    public function gridDataAction(Group $entity = null)
-    {
-        if (!$entity) {
-            $entity = new Group();
-        }
-
-        return array('datagrid' => $this->getGroupContactDatagridManager($entity)->getDatagrid()->createView());
-    }
-
-    /**
-     * @param Group $group
-     * @return GroupContactDatagridManager
-     */
-    protected function getGroupContactDatagridManager(Group $group)
-    {
-        /** @var $result GroupContactDatagridManager */
-        $result = $this->get('orocrm_contact.group_contact.datagrid_manager');
-        $result->setGroup($group);
-        $result->getRouteGenerator()->setRouteParameters(array('id' => $group->getId()));
-        return $result;
-    }
-
-    /**
      * @Route(
      *      "/{_format}",
      *      name="orocrm_contact_group_index",
@@ -101,23 +66,16 @@ class GroupController extends Controller
      *      permission="VIEW",
      *      class="OroCRMContactBundle:Group"
      * )
+     * @Template()
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-        /** @var $datagrid DatagridInterface */
-        $datagrid = $this->get('orocrm_contact.group.datagrid_manager')->getDatagrid();
-        $view = 'json' == $request->getRequestFormat()
-            ? 'OroGridBundle:Datagrid:list.json.php'
-            : 'OroCRMContactBundle:Group:index.html.twig';
-
-        return $this->render(
-            $view,
-            array('datagrid' => $datagrid->createView())
-        );
+        return [];
     }
 
     /**
      * @param Group $entity
+     *
      * @return array
      */
     protected function update(Group $entity)
@@ -132,7 +90,7 @@ class GroupController extends Controller
 
                 return $this->get('oro_ui.router')->actionRedirect(
                     array(
-                        'route' => 'orocrm_contact_group_update',
+                        'route'      => 'orocrm_contact_group_update',
                         'parameters' => array('id' => $entity->getId()),
                     ),
                     array(
@@ -143,8 +101,7 @@ class GroupController extends Controller
         }
 
         return array(
-            'datagrid' => $this->getGroupContactDatagridManager($entity)->getDatagrid()->createView(),
-            'form'     => $this->get('orocrm_contact.form.group')->createView(),
+            'form'             => $this->get('orocrm_contact.form.group')->createView(),
             'showContactsGrid' => count($this->get('orocrm_contact.contact.manager')->getList()) ? true : false
         );
     }

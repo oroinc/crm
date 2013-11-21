@@ -8,7 +8,6 @@ use Doctrine\ORM\PersistentCollection;
 use Oro\Bundle\EntityConfigBundle\Metadata\EntityMetadata;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -21,7 +20,6 @@ use Oro\Bundle\EntityExtendBundle\Extend\ExtendManager;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Datagrid\OpportunityDatagridManager;
 
 /**
  * @Route("/opportunity")
@@ -199,15 +197,7 @@ class OpportunityController extends Controller
      */
     public function indexAction()
     {
-        /** @var OpportunityDatagridManager $datagridManager */
-        $datagridManager = $this->get('orocrm_sales.opportunity.datagrid_manager');
-        $datagridView    = $datagridManager->getDatagrid()->createView();
-
-        if ('json' == $this->getRequest()->getRequestFormat()) {
-            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
-        }
-
-        return array('datagrid' => $datagridView);
+        return [];
     }
 
     /**

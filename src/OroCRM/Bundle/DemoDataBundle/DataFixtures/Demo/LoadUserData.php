@@ -1,19 +1,20 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
+use Oro\Bundle\DataAuditBundle\Tests\Unit\Fixture\Repository\UserRepository;
 use Oro\Bundle\TagBundle\Entity\TagManager;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadUserData extends AbstractFlexibleFixture implements ContainerAwareInterface, OrderedFixtureInterface
+class LoadUserData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
     /** @var ContainerInterface */
     private $container;
@@ -24,7 +25,7 @@ class LoadUserData extends AbstractFlexibleFixture implements ContainerAwareInte
     /** @var  EntityRepository */
     protected $group;
 
-    /** @var FlexibleEntityRepository */
+    /** @var UserRepository */
     protected $user;
 
     /** @var  TagManager */
@@ -75,8 +76,6 @@ class LoadUserData extends AbstractFlexibleFixture implements ContainerAwareInte
                     )
                 )
             );
-        $this->setFlexibleAttributeValue($userManager, $sale, 'company', 'Oro, Inc');
-        $this->setFlexibleAttributeValueOption($userManager, $sale, 'gender', 'Female');
 
         if ($this->hasReference('default_main_business')) {
             $sale->setOwner($this->getReference('default_main_business'));
@@ -104,8 +103,6 @@ class LoadUserData extends AbstractFlexibleFixture implements ContainerAwareInte
                     )
                 )
             );
-        $this->setFlexibleAttributeValue($userManager, $marketing, 'company', 'Oro, Inc');
-        $this->setFlexibleAttributeValueOption($userManager, $marketing, 'gender', 'Male');
 
         if ($this->hasReference('default_main_business')) {
             $marketing->setOwner($this->getReference('default_main_business'));

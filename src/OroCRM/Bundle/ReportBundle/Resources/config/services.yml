@@ -1,0 +1,22 @@
+parameters:
+    orocrm.report.filter.type.period.class:   OroCRM\Bundle\ReportBundle\Filter\PeriodFilter
+    orocrm.report.grid.listener.class:        OroCRM\Bundle\ReportBundle\EventListener\ReportGridListener
+
+services:
+    orocrm.report.filter.type.period:
+        class: %orocrm.report.filter.type.period.class%
+        arguments:
+            - @form.factory
+            - @translator
+        tags:
+            - { name:oro_filter.extension.orm_filter.filter, type: orocrm_period_filter }
+
+    orocrm.report.grid.listener:
+        class: %orocrm.report.grid.listener.class%
+        arguments:
+            - @oro_datagrid.datagrid.request_params
+        tags:
+            -
+                name:   kernel.event_listener
+                event:  oro_datagrid.datgrid.build.before.orocrm_report-opportunities-won_by_period
+                method: onBuildBefore

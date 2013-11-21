@@ -10,7 +10,7 @@
     },
     "require": {
         "php": ">=5.4.4",
-        "oro/platform": "1.0.0-beta3"
+        "oro/platform": "1.0.0-beta4"
     },
     "minimum-stability": "dev"
 }
