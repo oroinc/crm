@@ -21,11 +21,10 @@ interface CustomerConnectorInterface
     /**
      * @param $id
      * @param bool $isAddressesIncluded
-     * @param bool $isGroupsIncluded
      * @param array $onlyAttributes
      * @return mixed
      */
-    public function getCustomerData($id, $isAddressesIncluded = false, $isGroupsIncluded = false, $onlyAttributes = []);
+    public function getCustomerData($id, $isAddressesIncluded = false, $onlyAttributes = []);
 
     /**
      * @param $customerId
