@@ -72,7 +72,7 @@ function(_, Backbone) {
             this.listenTo(this.collection, 'reset', this.render);
 
             this.render(!options.isRelatedContact);
-            this.phonesList.trigger('change');            
+            this.phonesList.trigger('change');
             this.phonePlain.css('margin-top', '0px');
         },
 
@@ -123,7 +123,7 @@ function(_, Backbone) {
                 $('#uniform-' + this.phonesList[0].id).hide();
                 this.phonePlain.css('margin-top', '0px');
             }
-                this.phonePlain.css('margin-top', '12px');            
+                this.phonePlain.css('margin-top', '12px');
                 this.phonePlain.show();
         },
 
@@ -139,6 +139,7 @@ function(_, Backbone) {
                 this.phonesList.trigger('change');
                 this.phonePlain.hide();
                 this.phonePlain.val('');
+                this.phonePlain.css('margin-top', '12px');
         }
     });
 });
