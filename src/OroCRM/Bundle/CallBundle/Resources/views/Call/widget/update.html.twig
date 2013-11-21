@@ -28,20 +28,20 @@
                 <fieldset class="form form-horizontal">
                     <div class="span6">
 
-                        form_row(form.owner, {'label': 'orocrm.call.form.call.owner'|trans}),
-                        form_row(form.subject, {'label': 'orocrm.call.form.call.subject'|trans}),
-                        form_row(form.notes, {'label': 'orocrm.call.form.call.notes'|trans}),
-                        form_row(form.callDateTime, {'label': 'orocrm.call.form.call.dateTime'|trans}),
+                        {{ form_row(form.owner, {'label': 'orocrm.call.form.call.owner'|trans}) }}
+                        {{ form_row(form.subject, {'label': 'orocrm.call.form.call.subject'|trans}) }}
+                        {{ form_row(form.notes, {'label': 'orocrm.call.form.call.notes'|trans}) }}
+                        {{ form_row(form.callDateTime, {'label': 'orocrm.call.form.call.dateTime'|trans}) }}
 
                     </div>
                     <div class="span6">
 
-                        form_row(form.relatedAccount, {'label': 'orocrm.call.form.call.relatedTo'|trans}),
-                        form_row(form.relatedContact, {'label': 'orocrm.call.form.call.relatedContact'|trans}),
-                        form_row(form.contactPhoneNumber, {'label': 'orocrm.call.form.call.phoneNumber'|trans}),
-                        form_row(form.phoneNumber, {'label': 'orocrm.call.form.call.contactPhoneNumber'|trans}),
-                        form_row(form.direction, {'label': 'orocrm.call.form.call.direction'|trans}),
-                        form_row(form.duration, {'label': 'orocrm.call.form.call.duration'|trans}),
+                        {{ form_row(form.relatedAccount, {'label': 'orocrm.call.form.call.relatedTo'|trans}) }}
+                        {{ form_row(form.relatedContact, {'label': 'orocrm.call.form.call.relatedContact'|trans}) }}
+                        {{ form_row(form.contactPhoneNumber, {'label': 'orocrm.call.form.call.phoneNumber'|trans}) }}
+                        {{ form_row(form.phoneNumber, {'label': 'orocrm.call.form.call.contactPhoneNumber'|trans}) }}
+                        {{ form_row(form.direction, {'label': 'orocrm.call.form.call.direction'|trans}) }}
+                        {{ form_row(form.duration, {'label': 'orocrm.call.form.call.duration'|trans}) }}
                         {{ form_row(form.callStatus) }}
 
                     </div>
