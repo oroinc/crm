@@ -64,7 +64,7 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
             }
         }
         
-        $form->add('phoneNumber', 'text', array('required' => true, 'attr' => array('class' => 'hide')));
+        $form->add('phoneNumber', 'text', array('required' => true, 'attr' => array('class' => 'plainphonenumber hide')));
         $form->add('contactPhoneNumber', 'entity', $formOptions);
     }
 
@@ -84,7 +84,6 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
                     'label' => 'orocrm.call.form.call.contactPhone',
                     'required' => true);
 
-
         if ($data['relatedContact']) {
             $contact = $this->om
                             ->getRepository('OroCRMContactBundle:Contact')
@@ -94,12 +93,11 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
             $options['query_builder'] = function (ContactPhoneRepository $er) use ($contact) {
                     return $er->getContactPhoneQueryBuilder($contact);
             };
-            $form->add('phoneNumber', 'text', array('required' => true, 'attr' => array('class' => 'hide')));
-            $form->add('contactPhoneNumber', 'entity', $options);
-        } else {
-            $form->add('contactPhoneNumber', 'hidden', array('required' => true, 'attr' => array('class' => 'hide')));
-            $form->add('phoneNumber', 'text', array('required' => true));
+
         }
+
+        $form->add('contactPhoneNumber', 'entity', $options);
+        $form->add('phoneNumber', 'text', array('required' => true, 'attr' => array('class' => 'plainphonenumber hide')));
 
         $event->setData($data);
     }

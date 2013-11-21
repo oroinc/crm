@@ -54,6 +54,11 @@ function(_, Backbone) {
             
             this.phonesList = $(options.target);
             this.phonePlain = $(options.simpleEl);
+            
+            this.displaySelect2(options.isRelatedContact);
+            this.phonesList.on('select2-init', _.bind(function() {
+                this.displaySelect2(options.isRelatedContact);
+            }, this));
 
             this.phonesList.closest('.controls').append(this.phonePlain);
             this.phonesList.on('change', _.bind(function(e) {
@@ -61,24 +66,13 @@ function(_, Backbone) {
                     this.showPlain(false);
                 } else {
                     this.phonePlain.hide();
-                    this.phonePlain.val('');                    
                 }
-            }, this));
-            
-            if (!options.showSelect) {
-                this.showPlain(true);
-            } else {
-                this.phonePlain.hide();
-                this.phonePlain.val('');
-                this.phonesList.trigger('change');
-            }
-
-            this.displaySelect2(options.showSelect);
-            this.phonesList.on('select2-init', _.bind(function() {
-                this.displaySelect2(options.showSelect);
             }, this));
 
             this.listenTo(this.collection, 'reset', this.render);
+
+            this.render(!options.isRelatedContact);
+            this.phonesList.trigger('change');            
         },
 
         /**
@@ -101,23 +95,20 @@ function(_, Backbone) {
          */
         selectionChanged: function(e) {
             var contactId = $(e.currentTarget).val();
-            console.log(contactId);
             if (contactId) {
                 this.collection.setContactId(contactId);
                 this.collection.fetch();
-            } else {
-                this.showPlain(true);
             }
         },
 
         /**
          * Render list and or input field
          */
-        render: function() {
+        render: function(hide) {
             if (this.collection.models.length > 0) {
                 this.showPhoneOptions();
             } else {                
-                this.showPlain(true);
+                this.showPlain(hide);
             }
         },
         

@@ -54,7 +54,7 @@
             </form>
         </div>
 
-        {% set showSelect = (form.vars.value.relatedContact is null) ? 0 : 1 %}
+        {% set isRelatedContact = (form.vars.value.relatedContact is null) ? 0 : 1 %}
         <script type="text/javascript">
             require(['jquery', 'orocrm/contactphone/view', 'orocrm/contactphone/collection'],
             function($, ContactPhoneView, ContactPhoneCollection){
@@ -64,7 +64,7 @@
                         target: $('#orocrm_call_call_form_contactPhoneNumber'),
                         simpleEl: $('#orocrm_call_call_form_phoneNumber'),
                         collection: new ContactPhoneCollection(),
-                        showSelect: {{ showSelect }}
+                        isRelatedContact: {{ isRelatedContact }}
                     });
                 });
             });            

@@ -46,7 +46,7 @@
         }
     %}
 
-    {% set showSelect = (form.vars.value.relatedContact is null) ? 0 : 1 %}
+    {% set isRelatedContact = (form.vars.value.relatedContact is null) ? 0 : 1 %}
     <script type="text/javascript">
         require(['jquery', 'orocrm/contactphone/view', 'orocrm/contactphone/collection'],
         function($, ContactPhoneView, ContactPhoneCollection){
@@ -56,7 +56,7 @@
                     target: $('#orocrm_call_call_form_contactPhoneNumber'),
                     simpleEl: $('#orocrm_call_call_form_phoneNumber'),
                     collection: new ContactPhoneCollection(),
-                    showSelect: {{ showSelect }}
+                    isRelatedContact: {{ isRelatedContact }}
                 });
             });
         });            
@@ -66,7 +66,7 @@
 {% endblock content_data %}
 
 {% block navButtons %}    
-    {{ UI.button({'path' : path('orocrm_contact_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
+    {{ UI.button({'path' : path('orocrm_call_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
     {{ UI.saveAndStayButton('orocrm_call_index') }}
     {{ UI.saveAndCloseButton() }}
 {% endblock %}
@@ -85,3 +85,13 @@
         {% include 'OroUIBundle::page_title_block.html.twig' %}
     {% endif %}
 {% endblock pageHeader %}
+
+
+{% block styles %}
+    <style>
+    .plainphonenumber {
+        width: 220px;
+        margin-top: 12px;
+    }
+    </style>
+{% endblock %}
