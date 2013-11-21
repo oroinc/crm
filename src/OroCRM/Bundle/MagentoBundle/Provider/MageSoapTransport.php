@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
+use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport;
 use Oro\Bundle\IntegrationBundle\Provider\TransportTypeInterface;
 
@@ -20,13 +21,22 @@ class MageSoapTransport extends SOAPTransport implements TransportTypeInterface
     /** @var string */
     protected $sessionId;
 
+    /** @var Mcrypt */
+    protected $encoder;
+
+    public function __construct(Mcrypt $encoder)
+    {
+        $this->encoder = $encoder;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function init(ParameterBag $settings)
     {
         $apiUser = $settings->get('api_user', false);
-        $apiKey = $settings->get('api_key', false);
+        $apiKey  = $settings->get('api_key', false);
+        $apiKey  = $this->encoder->decryptData($apiKey);
 
         if (!$apiUser || !$apiKey) {
             throw new InvalidConfigurationException(

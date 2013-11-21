@@ -18,6 +18,8 @@ parameters:
 services:
     orocrm_magento.mage.soap_transport:
         class: %orocrm_magento.mage.soap_transport.class%
+        arguments:
+            - @oro_security.encoder.mcrypt
         tags:
             - { name: oro_integration.transport, type: magento_soap, channel_type: magento }
 
