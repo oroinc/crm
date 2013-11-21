@@ -51,7 +51,7 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
             'property_path' => 'contactPhoneNumber',
             'property' => 'phone',
             'empty_value' => '...',
-            'label' => 'Phone Number',
+            'label' => 'orocrm.call.form.call.contactPhone',
             'required' => true
             );
 

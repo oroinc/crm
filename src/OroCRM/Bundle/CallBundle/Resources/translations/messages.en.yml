@@ -1,7 +1,26 @@
-orocrm.call.controller.call.saved.message: "Call logged"
+orocrm.call.controller.call.saved.message: 'Call logged successfully'
+
+orocrm.call.form.call.owner: 'Owner'
+orocrm.call.form.call.subject: 'Subject'
+orocrm.call.form.call.notes: 'Notes'
+orocrm.call.form.call.dateTime: 'Call Date & Time'
+orocrm.call.form.call.relatedTo: 'Related To'
+orocrm.call.form.call.relatedContact: 'Related Contact'
+orocrm.call.form.call.phoneNumber: 'Phone Number'
+orocrm.call.form.call.contactPhoneNumber: 'Phone Number'
+orocrm.call.form.call.direction: 'Direction'
+orocrm.call.form.call.duration: 'Duration'
 
 orocrm.call.datagrid.contact_name: 'Contact name'
 orocrm.call.datagrid.account_name: 'Account name'
 orocrm.call.datagrid.subject: 'Subject'
 orocrm.call.datagrid.phone: 'Phone'
 orocrm.call.datagrid.date_time: 'Call date'
+
+'Call': 'Call'
+'Calls': 'Calls'
+'Create call': 'Create call'
+'Add a call log': 'Add a call log'
+'Cancel': 'Cancel'
+'Log': 'Log'
+'Call logged successfully': 'Call logged successfully'
