@@ -9,7 +9,7 @@ use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
 class CustomerConnector extends AbstractConnector implements CustomerConnectorInterface
 {
-    const DEFAULT_SYNC_RANGE = '1 week';
+    const DEFAULT_SYNC_RANGE = '2 year'; // '1 week';
 
     /** @var \DateTime */
     protected $lastSyncDate;

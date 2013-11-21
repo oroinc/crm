@@ -9,7 +9,11 @@ use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 
+use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
+use OroCRM\Bundle\MagentoBundle\Entity\Store;
+use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerNormalizer;
 
 class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
@@ -39,11 +43,11 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      */
     public function process($entity)
     {
-        $entity = $this->findAndReplaceEntity($entity, self::ENTITY_NAME, 'originalId');
+        $entity = $this->findAndReplaceEntity($entity, self::ENTITY_NAME, 'originalId', ['id']);
 
         // update all related entities
         $this
-            ->updateStores($entity)
+            ->updateStoresAndGroup($entity)
             ->updateAccount($entity)
             ->updateContact($entity)
             ->updateAddresses($entity);
@@ -61,14 +65,15 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      * @param mixed $entity
      * @param $entityName
      * @param string $idFieldName
+     * @param array $excludedProperties
      * @return Customer
      */
-    protected function findAndReplaceEntity($entity, $entityName, $idFieldName = 'id')
+    protected function findAndReplaceEntity($entity, $entityName, $idFieldName = 'id', $excludedProperties = [])
     {
         $existingEntity = $this->getEntityOrNull($entity, $idFieldName, $entityName);
 
         if ($existingEntity) {
-            $this->strategyHelper->importEntity($existingEntity, $entity);
+            $this->strategyHelper->importEntity($existingEntity, $entity, $excludedProperties);
             $entity = $existingEntity;
         } else {
             $entity->setId(null);
@@ -140,17 +145,28 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      * @param Customer $entity
      * @return $this
      */
-    public function updateStores(Customer $entity)
+    protected function updateStoresAndGroup(Customer $entity)
     {
-        $websiteEntity = $this->findAndReplaceEntity($entity->getWebsite(), CustomerNormalizer::WEBSITE_TYPE);
+        $self = $this;
+        $findAndReplaceEntity = function ($entity, $type) use ($self) {
+            // do not allow to change code/website name by imported entity
+            return $self->findAndReplaceEntity($entity, $type, 'id', ['code', 'name']);
+        };
 
-        var_dump($websiteEntity); die();
-        $entity->setWebsite($websiteEntity);
+        /** @var Website $websiteEntity */
+        $websiteEntity = $findAndReplaceEntity($entity->getWebsite(), CustomerNormalizer::WEBSITE_TYPE);
 
+        /** @var Store $storeEntity */
+        $storeEntity = $findAndReplaceEntity($entity->getStore(), CustomerNormalizer::STORE_TYPE);
+        $storeEntity->setWebsite($websiteEntity);
 
+        /** @var CustomerGroup $groupEntity */
+        $groupEntity = $findAndReplaceEntity($entity->getGroup(), CustomerNormalizer::GROUPS_TYPE);
 
-        $storeEntity = $this->findAndReplaceEntity($entity->getStore(), CustomerNormalizer::STORE_TYPE);
-        $entity->getStore($storeEntity);
+        $entity
+            ->setWebsite($websiteEntity)
+            ->setStore($storeEntity)
+            ->setGroup($groupEntity);
 
         return $this;
     }
@@ -159,7 +175,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      * @param Customer $entity
      * @return $this
      */
-    public function updateAddresses(Customer $entity)
+    protected function updateAddresses(Customer $entity)
     {
         // TODO: update addresses
         $entity->getContact()->resetAddresses([]);
@@ -171,7 +187,22 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      * @param Customer $entity
      * @return $this
      */
-    public function updateAccount(Customer $entity)
+    protected function updateAccount(Customer $entity)
+    {
+        $account = $entity->getAccount();
+
+        $account = $this->findAndReplaceEntity($account, AccountNormalizer::ACCOUNT_TYPE, 'name', 'id');
+
+        $entity->setAccount($account);
+
+        return $this;
+    }
+
+    /**
+     * @param Customer $entity
+     * @return $this
+     */
+    protected function updateContact(Customer $entity)
     {
         return $this;
     }
@@ -180,16 +211,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      * @param Customer $entity
      * @return $this
      */
-    public function updateContact(Customer $entity)
-    {
-        return $this;
-    }
-
-    /**
-     * @param Customer $entity
-     * @return $this
-     */
-    public function updateRelatedEntitiesOwner(Customer $entity)
+    protected function updateRelatedEntitiesOwner(Customer $entity)
     {
         return $this;
     }
