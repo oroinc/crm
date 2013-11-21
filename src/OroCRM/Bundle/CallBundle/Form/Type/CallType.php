@@ -56,6 +56,9 @@ class CallType extends AbstractType
         $resolver->setDefaults(
             array(
                 'data_class' => 'OroCRM\Bundle\CallBundle\Entity\Call',
+                'error_mapping' => array(
+                  '.' => 'contactPhoneNumber',
+                ),
             )
         );
     }

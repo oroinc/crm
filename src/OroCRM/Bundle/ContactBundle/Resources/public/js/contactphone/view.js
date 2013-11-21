@@ -60,7 +60,6 @@ function(_, Backbone) {
                 this.displaySelect2(options.isRelatedContact);
             }, this));
 
-            this.phonesList.closest('.controls').append(this.phonePlain);
             this.phonesList.on('change', _.bind(function(e) {
                 if ($(e.target.selectedOptions).val() == "") {
                     this.showPlain(false);
@@ -106,9 +105,11 @@ function(_, Backbone) {
         render: function(isRelatedContact) {
             if (this.collection.models.length > 0) {
                 this.showPhoneOptions();
+                this.phonesList.closest('.controls').append(this.phonePlain);
             } else {      
                 if (isRelatedContact) {
                     this.showPlain(false); 
+                    this.phonesList.trigger('change');
                 } else {
                     this.showPlain(true);
                 }
@@ -124,7 +125,9 @@ function(_, Backbone) {
                 this.displaySelect2(false);
                 $('#uniform-' + this.phonesList[0].id).hide();
                 this.phonePlain.css('margin-top', '0px');
+                this.phonesList.closest('.controls').prepend(this.phonePlain);
             } else {
+                this.phonesList.closest('.controls').append(this.phonePlain);
                 this.phonePlain.css('margin-top', '12px');
             }
                 this.phonePlain.show();
