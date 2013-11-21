@@ -1,4 +1,0 @@
-oro_crm_integration_bundle:
-    resource:     "@OroCRMIntegrationBundle/Controller"
-    type:         annotation
-    prefix:       /integration

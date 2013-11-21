@@ -1,0 +1,6 @@
+OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
+    properties:
+        wsdlUrl:
+          - NotBlank: ~
+        apiUser:
+          - NotBlank: ~
