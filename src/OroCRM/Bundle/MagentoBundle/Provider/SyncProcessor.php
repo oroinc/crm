@@ -74,6 +74,7 @@ class SyncProcessor implements SyncProcessorInterface
         $configuration = [
             $mode => [
                 'processorAlias' => $processorAlias,
+                // TODO: get entity name from real connector
                 'entityName'     => self::ENTITY_NAME,
                 'channelName'    => $channelName,
                 'batchSize'      => self::DEFAULT_BATCH_SIZE,
@@ -85,7 +86,7 @@ class SyncProcessor implements SyncProcessorInterface
         /** @var ConnectorEntity $connector */
         foreach ($connectors as $connector) {
             $configuration[$mode]['connector'] = $connector;
-            // TODO: get job name from connector settings
+            // TODO: get job name from real connector
             //$jobName = $connector->getJobName();
 
             $result = $this->processImport($mode, $jobName, $configuration);
