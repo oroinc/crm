@@ -148,13 +148,19 @@
         ]
     }]) %}
 
-    {# TODO: Replace block with widget including https://magecore.atlassian.net/browse/CRM-609 #}
     {% set dataBlocks = dataBlocks|merge([{
         'title' : 'Calls',
         'subblocks': [
             {
                 'title' : null,
-                'data' : [dataGrid.renderGrid('widget-calls-grid', {accountId: entity.id}, { cssClass: 'inner-grid' })],
+                'data' : [
+                    oro_widget_render({
+                        'widgetType': 'buttons',
+                        'url': path('orocrm_call_widget_calls', {accountId: entity.id}),
+                        'alias': 'account_calls',
+                        'cssClass': 'inner-grid',
+                    })
+                ],
                 'useSpan': false
             }
         ]
