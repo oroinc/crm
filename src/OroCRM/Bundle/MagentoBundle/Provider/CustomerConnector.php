@@ -153,16 +153,29 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         foreach ([self::ALIAS_GROUPS, self::ALIAS_STORES, self::ALIAS_WEBSITES, self::ALIAS_REGIONS] as $item) {
             switch ($item) {
                 case self::ALIAS_GROUPS:
-                    $this->dependencies[self::ALIAS_GROUPS] = (array) $this->getCustomerGroups();
+                    $this->dependencies[self::ALIAS_GROUPS] = $this->getCustomerGroups();
                     break;
                 case self::ALIAS_STORES:
-                    $this->dependencies[self::ALIAS_STORES] = (array) $this->getCustomerGroups();
+                    $this->dependencies[self::ALIAS_STORES] = $this->getStores();
                     break;
                 case self::ALIAS_WEBSITES:
-                    $this->dependencies[self::ALIAS_WEBSITES] = (array) $this->getCustomerGroups();
+                    // TODO: refactor this code to present websites data in some way
+                    $websites = [];
+                    foreach ($this->dependencies[self::ALIAS_STORES] as $store) {
+                        $websites[$store['website_id']]['name'][] = $store['name'];
+                        $websites[$store['website_id']]['code'][] = $store['code'];
+                    }
+
+                    foreach ($websites as $websiteId => $websiteItem) {
+                        $websites[$websiteId]['name'] = implode(', ', $websiteItem['name']);
+                        $websites[$websiteId]['code'] = implode(' / ', $websiteItem['code']);
+                        $websites[$websiteId]['id'] = $websiteId;
+                    }
+
+                    $this->dependencies[self::ALIAS_WEBSITES] = $websites;
                     break;
                 case self::ALIAS_REGIONS:
-                    $this->dependencies[self::ALIAS_REGIONS] = (array) $this->getCustomerGroups();
+                    //$this->dependencies[self::ALIAS_REGIONS] = $this->getRegions();
                     break;
             }
         }
@@ -209,6 +222,8 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         }
 
         $result->group = $this->dependencies[self::ALIAS_GROUPS][$result->group_id];
+        $result->store = $this->dependencies[self::ALIAS_STORES][$result->store_id];
+        $result->website = $this->dependencies[self::ALIAS_WEBSITES][$result->website_id];
 
         return (array)$result;
     }
@@ -233,7 +248,6 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
 
             $groups = [];
             foreach ($result as $item) {
-                //$groups[$item->customer_group_id] = $item->customer_group_code;
                 $groups[$item->customer_group_id] = (array) $item;
             }
         }
@@ -252,31 +266,32 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      *
      * {@inheritdoc}
      */
-    public function getWebsites($groupId = null)
+    public function getStores($storeId = null)
     {
-        $result = $this->call(CustomerConnectorInterface::ACTION_STORE_LIST);
-
-        $groups = [];
-        foreach ($result as $item) {
-            //$groups[$item->customer_group_id] = $item->customer_group_code;
-            $groups[$item->customer_group_id] = (array) $item;
-        }
-
-        if (!is_null($groupId) && isset($groups[$groupId])) {
-            $result = [$groupId => $groups[$groupId]];
+        if (!empty($this->dependencies[self::ALIAS_STORES])) {
+            $stores = $this->dependencies[self::ALIAS_STORES];
         } else {
-            $result = $groups;
+            $result = $this->call(CustomerConnectorInterface::ACTION_STORE_LIST);
+
+            $stores = [];
+            foreach ($result as $item) {
+                $stores[$item->store_id] = (array) $item;
+            }
+
+            // add default/admin store
+            $stores[0] = [
+                'store_id'   => 0,
+                'website_id' => 0,
+                'code'       => 'admin',
+                'name'       => 'Admin',
+            ];
         }
 
-        return $result;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStoresData()
-    {
-        return $this->call(CustomerConnectorInterface::ACTION_STORE_LIST);
+        if (!is_null($storeId) && isset($stores[$storeId])) {
+            return [$storeId => $stores[$storeId]];
+        } else {
+            return $stores;
+        }
     }
 
     /**

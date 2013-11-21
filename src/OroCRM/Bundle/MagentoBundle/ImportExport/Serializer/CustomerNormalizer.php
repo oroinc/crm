@@ -29,9 +29,9 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
     ];
 
     static protected $objectFields = array(
-        'store_id',
-        'website_id',
-        'group_id',
+        'store',
+        'website',
+        'group',
         'addresses',
     );
 
@@ -134,7 +134,7 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
         foreach ($data as $itemName => $item) {
             $method = 'set' . ucfirst($itemName);
 
-            if (method_exists($object, $method)) {
+            if (method_exists($object, $method) && !in_array($itemName, self::$objectFields)) {
                 $object->$method($item);
             }
         }
