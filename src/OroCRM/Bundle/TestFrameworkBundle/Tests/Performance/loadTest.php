@@ -71,18 +71,16 @@ class LoadTest extends WebTestCase
     }
 
     public function testPager()
-    {   $url = $this->client->generate('orocrm_contact_index', array('_format' => 'json'));
+    {   $url = $this->client->generate('oro_datagrid_index', array('gridName' => 'contacts-grid'));
         $averageTime = 0.0;
         for ($i  = 1; $i <= self::MAX_PAGE_TESTS; $i++) {
             $page = rand(1, self::MAX_PAGES);
             $parameters = array(
-                'contacts[_pager][_page]' => $page,
-                'contacts[_pager][_per_page]' => 10,
-                'contacts[_sort_by][first_name]' => 'ASC',
-                'contacts[_sort_by][last_name]' => 'ASC'
+                '_pager' => array('_page' => $page, '_per_page' => 10),
+                '_sort_by' => array('first_name' => 'ASC', 'last_name' => 'ASC')
             );
             $s = microtime(true);
-            $this->client->request('GET', $url, $parameters, array(), array(), null, false);
+            $this->client->request('GET', $url, array('contacts-grid' => $parameters), array(), array(), null, false);
             $e = microtime(true);
             $averageTime += ($e - $s);
             if ($i % 10 == 0) {
