@@ -18,3 +18,6 @@ orocrm:
         transport:
             soap:
                 label: SOAP v2 API
+        connector:
+            customer:
+                label: Customer connector
