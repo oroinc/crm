@@ -1,8 +1,0 @@
-filters:
-    opportunity_status:
-        applicable: [{entity: %orocrm_sales.opportunity.class%, field: status}]
-        type:       choice
-        options:
-            field_options:
-                class:      OroCRMSalesBundle:OpportunityStatus
-                property:   label

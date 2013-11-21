@@ -91,7 +91,7 @@
     {% set dataBlocks = dataBlocks|merge(
         [{
             'title' : 'Designer'|trans,
-            'contentClass': 'report-designer',
+            'content_attr': {'class': 'report-designer', 'data-metadata': metadata|json_encode|raw},
             'subblocks': [
                 {
                     'title': 'Columns'|trans,

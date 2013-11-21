@@ -133,7 +133,8 @@ class ReportController extends Controller
         return array(
             'entity'   => $entity,
             'form'     => $this->get('orocrm_report.form.report')->createView(),
-            'entities' => $this->get('orocrm_report.entity_provider')->getEntities()
+            'entities' => $this->get('orocrm_report.entity_provider')->getEntities(),
+            'metadata' => $this->get('oro_querydesigner.querydesigner.manager')->getMetadata()
         );
     }
 }
