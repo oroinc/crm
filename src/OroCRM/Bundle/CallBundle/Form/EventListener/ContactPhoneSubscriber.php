@@ -50,7 +50,7 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
             'class' => 'OroCRMContactBundle:ContactPhone',
             'property_path' => 'contactPhoneNumber',
             'property' => 'phone',
-            'empty_value' => '...',
+            'empty_value' => 'orocrm.call.form.call.other',
             'label' => 'orocrm.call.form.call.contactPhone',
             'required' => true
             );
@@ -76,26 +76,31 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
         $form = $event->getForm();
         $data = $event->getData();
 
+        $options = array(
+                    'class' => 'OroCRMContactBundle:ContactPhone',
+                    'property_path' => 'contactPhoneNumber',
+                    'property' => 'phone',
+                    'empty_value' => 'orocrm.call.form.call.other',
+                    'label' => 'orocrm.call.form.call.contactPhone',
+                    'required' => true);
+
+
         if ($data['relatedContact']) {
             $contact = $this->om
                             ->getRepository('OroCRMContactBundle:Contact')
                             ->find($data['relatedContact']);
 
-            $options = $form->get('contactPhoneNumber')->getConfig()->getOptions();
-            $options = array(
-                        'class' => 'OroCRMContactBundle:ContactPhone',
-                        'property' => 'phone',
-                        'required' => false,
-                        'query_builder' => function (ContactPhoneRepository $er) use ($contact) {
-                                return $er->getContactPhoneQueryBuilder($contact);
-                        },
-                        );
+            // $options = $form->get('contactPhoneNumber')->getConfig()->getOptions();
+            $options['query_builder'] = function (ContactPhoneRepository $er) use ($contact) {
+                    return $er->getContactPhoneQueryBuilder($contact);
+            };
+            $form->add('phoneNumber', 'text', array('required' => true, 'attr' => array('class' => 'hide')));
             $form->add('contactPhoneNumber', 'entity', $options);
-            $form->add('phoneNumber', 'text', array('required' => false));
         } else {
-            $form->add('contactPhoneNumber', 'hidden');
-            $form->add('phoneNumber', 'text', array('required' => false));
+            $form->add('contactPhoneNumber', 'hidden', array('required' => true, 'attr' => array('class' => 'hide')));
+            $form->add('phoneNumber', 'text', array('required' => true));
         }
+
         $event->setData($data);
     }
 }

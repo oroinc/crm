@@ -1,5 +1,6 @@
 orocrm.call.controller.call.saved.message: 'Call logged successfully'
 
+orocrm.call.form.call.other: 'Other...'
 orocrm.call.form.call.owner: 'Owner'
 orocrm.call.form.call.subject: 'Subject'
 orocrm.call.form.call.notes: 'Notes'

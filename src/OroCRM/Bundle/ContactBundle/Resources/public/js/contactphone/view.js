@@ -59,7 +59,10 @@ function(_, Backbone) {
             this.phonesList.on('change', _.bind(function(e) {
                 if ($(e.target.selectedOptions).val() == "") {
                     this.showPlain(false);
-                } 
+                } else {
+                    this.phonePlain.hide();
+                    this.phonePlain.val('');                    
+                }
             }, this));
             
             if (!options.showSelect) {
@@ -67,6 +70,7 @@ function(_, Backbone) {
             } else {
                 this.phonePlain.hide();
                 this.phonePlain.val('');
+                this.phonesList.trigger('change');
             }
 
             this.displaySelect2(options.showSelect);
