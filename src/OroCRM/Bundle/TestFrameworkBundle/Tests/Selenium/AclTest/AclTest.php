@@ -128,7 +128,7 @@ class AclTest extends Selenium2TestCase
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
             ->openRoles()
-            ->filterBy('Role', $roleName)
+            ->filterBy('Label', $roleName)
             ->open(array($roleName))
             ->setEntity('Account', array('Create', 'Edit', 'Delete', 'Assign'))
             ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'Assign'))

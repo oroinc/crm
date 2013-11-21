@@ -5,6 +5,8 @@ parameters:
     orocrm_sales.lead.entity.class: OroCRM\Bundle\SalesBundle\Entity\Lead
     orocrm_sales.lead.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
+    orocrm_sales.lead.datagrid_helper.class: Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
+
 services:
     orocrm_sales.opportunity.manager.api:
         class: %orocrm_sales.opportunity.manager.api.class%
@@ -17,3 +19,8 @@ services:
         arguments:
             - %orocrm_sales.lead.entity.class%
             - @doctrine.orm.entity_manager
+
+    orocrm_sales.lead.datagrid_helper:
+        class: %orocrm_sales.lead.datagrid_helper.class%
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.sales-lead-datagrid, method: onBuildAfter }

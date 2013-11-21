@@ -18,7 +18,7 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType;
@@ -126,7 +126,7 @@ class ContactController extends RestController implements ClassResourceInterface
     /**
      * Get entity Manager
      *
-     * @return ApiFlexibleEntityManager
+     * @return ApiEntityManager
      */
     public function getManager()
     {

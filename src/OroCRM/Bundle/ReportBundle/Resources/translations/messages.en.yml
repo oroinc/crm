@@ -15,4 +15,9 @@ orocrm:
                 budget_amount:     Budget Amount
                 workflow:          Workflow
 
+                wonCount:        Number Won
+                lostCount:       Number Lost
+                inProgressCount: Number In Progress
+                totalOps:        Total
+
 

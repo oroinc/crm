@@ -2,17 +2,16 @@
 
 namespace OroCRM\Bundle\ReportBundle\Filter;
 
-use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
-use Oro\Bundle\GridBundle\Filter\ORM\ChoiceFilter;
+use Doctrine\ORM\QueryBuilder;
+
+use Oro\Bundle\FilterBundle\Extension\Orm\ChoiceFilter;
 
 class PeriodFilter extends ChoiceFilter
 {
-    const SERVICE_NAME = 'orocrm_report_filter_period';
-
     /**
      * {@inheritdoc}
      */
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
+    public function apply(QueryBuilder $qb, $data)
     {
         $data = $this->parseData($data);
         if (!$data) {
@@ -22,6 +21,15 @@ class PeriodFilter extends ChoiceFilter
         if (is_array($data['value'])) {
             $data['value'] = reset($data['value']);
         }
-        $queryBuilder->groupBy($data['value']);
+        $qb->groupBy($data['value']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function init($name, array $params)
+    {
+        $params[self::TYPE_KEY] = 'choice';
+        parent::init($name, $params);
     }
 }

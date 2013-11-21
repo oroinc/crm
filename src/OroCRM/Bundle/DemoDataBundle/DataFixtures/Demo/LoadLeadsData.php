@@ -1,24 +1,28 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Collections\Collection;
+
 use Doctrine\ORM\EntityManager;
+
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 
-use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+
+use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+
+use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
@@ -102,7 +106,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                     $this->transit(
                         $this->workflowManager,
                         $salesFlow,
-                        'close',
+                        'develop',
                         array(
                             'budget_amount' => rand(10, 10000),
                             'customer_need' => rand(10, 10000),
@@ -111,29 +115,24 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                         )
                     );
                     if ((bool) rand(0, 1)) {
-                        $reason = $this->em->find('OroCRMSalesBundle:OpportunityCloseReason', 'won');
                         $this->transit(
                             $this->workflowManager,
                             $salesFlow,
                             'close_as_won',
                             array(
-                                'close_reason' => $reason,
                                 'close_revenue' => rand(100, 1000),
                                 'close_date' => new \DateTime('now'),
-                                'probability' => 1
                             )
                         );
                     } elseif ((bool) rand(0, 1)) {
-                        $reason = $this->em->find('OroCRMSalesBundle:OpportunityCloseReason', 'cancelled');
                         $this->transit(
                             $this->workflowManager,
                             $salesFlow,
                             'close_as_lost',
                             array(
-                                'close_reason' => $reason,
+                                'close_reason_name' => 'cancelled',
                                 'close_revenue' => rand(100, 1000),
                                 'close_date' => new \DateTime('now'),
-                                'probability' => 0.0
                             )
                         );
                     }
@@ -151,7 +150,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     protected function setSecurityContext($user)
     {
         $securityContext = $this->container->get('security.context');
-        $token = new UsernamePasswordToken($user, $user->getName(), 'main');
+        $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
         $securityContext->setToken($token);
     }
     /**
@@ -214,15 +213,15 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /**
      * @param WorkflowManager $workflowManager
      * @param WorkflowItem    $workflowItem
-     * @param string          $step
+     * @param string          $transition
      * @param array           $data
      */
-    protected function transit($workflowManager, $workflowItem, $step, array $data)
+    protected function transit($workflowManager, $workflowItem, $transition, array $data)
     {
         foreach ($data as $key => $value) {
             $workflowItem->getData()->set($key, $value);
         }
-        $workflowManager->transit($workflowItem, $step);
+        $workflowManager->transit($workflowItem, $transition);
     }
 
     /**
