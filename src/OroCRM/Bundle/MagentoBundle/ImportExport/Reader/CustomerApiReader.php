@@ -36,7 +36,6 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface, StepE
      */
     protected function initializeFromContext(ContextInterface $context)
     {
-        $channelName = $context->getOption('channelName');
         $this->loggerClosure = $context->getOption('logger');
 
         /** @var ConnectorEntity $connector */

@@ -63,7 +63,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 
     /**
      * @param mixed $entity
-     * @param $entityName
+     * @param string $entityName
      * @param string $idFieldName
      * @param array $excludedProperties
      * @return Customer
@@ -108,7 +108,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 
     /**
      * @param mixed $entity
-     * @param $entityIdField
+     * @param string $entityIdField
      * @param string $entityClass
      * @return Customer|null
      */
@@ -147,21 +147,31 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      */
     protected function updateStoresAndGroup(Customer $entity)
     {
-        $self = $this;
-        $findAndReplaceEntity = function ($entity, $type) use ($self) {
-            // do not allow to change code/website name by imported entity
-            return $self->findAndReplaceEntity($entity, $type, 'id', ['code', 'name']);
-        };
-
+        // do not allow to change code/website name by imported entity
         /** @var Website $websiteEntity */
-        $websiteEntity = $findAndReplaceEntity($entity->getWebsite(), CustomerNormalizer::WEBSITE_TYPE);
+        $websiteEntity = $this->findAndReplaceEntity(
+            $entity->getWebsite(),
+            CustomerNormalizer::WEBSITE_TYPE,
+            'code',
+            ['code', 'name']
+        );
 
         /** @var Store $storeEntity */
-        $storeEntity = $findAndReplaceEntity($entity->getStore(), CustomerNormalizer::STORE_TYPE);
+        $storeEntity = $this->findAndReplaceEntity(
+            $entity->getStore(),
+            CustomerNormalizer::STORE_TYPE,
+            'code',
+            ['code', 'name']
+        );
         $storeEntity->setWebsite($websiteEntity);
 
         /** @var CustomerGroup $groupEntity */
-        $groupEntity = $findAndReplaceEntity($entity->getGroup(), CustomerNormalizer::GROUPS_TYPE);
+        $groupEntity = $this->findAndReplaceEntity(
+            $entity->getGroup(),
+            CustomerNormalizer::GROUPS_TYPE,
+            'name',
+            ['code', 'name']
+        );
 
         $entity
             ->setWebsite($websiteEntity)
