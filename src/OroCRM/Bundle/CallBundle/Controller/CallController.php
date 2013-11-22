@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -18,6 +21,12 @@ class CallController extends Controller
     /**
      * @Route("/view/{id}", name="orocrm_call_view", requirements={"id"="\d+"})
      * @Template
+     * @Acl(
+     *      id="orocrm_call_view",
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMCallBundle:Call"
+     * )     
      */
     public function viewAction($id)
     {
@@ -30,6 +39,12 @@ class CallController extends Controller
     /**
      * @Route("/create/ajax", name="orocrm_call_create_ajax")
      * @Template("OroCRMCallBundle:Call:update.html.twig")
+     * @Acl(
+     *      id="orocrm_call_create",
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMCallBundle:Call"
+     * )
      */
     public function createForContactAjaxAction()
     {
@@ -39,6 +54,12 @@ class CallController extends Controller
     /**
      * @Route("/create/{contactId}", name="orocrm_call_create", requirements={"id"="\d+"}, defaults={"contactId"=0})
      * @Template("OroCRMCallBundle:Call:update.html.twig")
+     * @Acl(
+     *      id="orocrm_call_create",
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMCallBundle:Call"
+     * )     
      */
     public function createForContactAction($contactId)
     {
@@ -48,6 +69,12 @@ class CallController extends Controller
     /**
      * @Route("/update/{id}", name="orocrm_call_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
+     * @Acl(
+     *      id="orocrm_call_update",
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMCallBundle:Call"
+     * )     
      */
     public function updateAction(Call $entity = null)
     {
@@ -117,6 +144,7 @@ class CallController extends Controller
     /**
      * @Route(name="orocrm_call_index")
      * @Template
+     * @AclAncestor("orocrm_call_view")     
      */
     public function indexAction()
     {

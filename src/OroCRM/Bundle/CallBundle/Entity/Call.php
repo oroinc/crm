@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\CallBundle\Entity;
 use Symfony\Component\Validator\ExecutionContext;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
@@ -16,8 +17,23 @@ use OroCRM\Bundle\CallBundle\Entity\CallDirection;
  *
  * @ORM\Table(name="orocrm_call")
  * @ORM\Entity
+ * @Config(
+ *  routeName="orocrm_call_index",
+ *  routeView="orocrm_call_view",
+ *  defaultValues={
+ *      "entity"={"label"="Call", "plural_label"="Calls"},
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
+ *  }
+ * )
  */
-
 class Call
 {
     /**
