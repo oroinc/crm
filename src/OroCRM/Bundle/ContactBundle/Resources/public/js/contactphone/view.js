@@ -54,23 +54,24 @@ function(_, Backbone) {
             
             this.phonesList = $(options.target);
             this.phonePlain = $(options.simpleEl);
+            this.isRelatedContact = options.isRelatedContact;
             
-            this.displaySelect2(options.isRelatedContact);
+            this.displaySelect2(this.isRelatedContact);
             this.phonesList.on('select2-init', _.bind(function() {
-                this.displaySelect2(options.isRelatedContact);
+                this.displaySelect2(this.isRelatedContact);
             }, this));
 
             this.phonesList.on('change', _.bind(function(e) {
-                if ($(e.target.selectedOptions).val() == "") {
-                    this.showPlain(false);
+                if (this.phonesList.val() == "") {
+                    this.showPlain();
                 } else {
-                    this.phonePlain.hide();
+                    this.hidePlain();
                 }
             }, this));
 
             this.listenTo(this.collection, 'reset', this.render);
 
-            this.render(options.isRelatedContact);
+            this.render();
         },
 
         /**
@@ -102,49 +103,54 @@ function(_, Backbone) {
         /**
          * Render list and or input field
          */
-        render: function(isRelatedContact) {
+        render: function() {
+
             if (this.collection.models.length > 0) {
-                this.showPhoneOptions();
-                this.phonesList.closest('.controls').append(this.phonePlain);
+                this.showPhonesList();
             } else {      
-                if (isRelatedContact) {
-                    this.showPlain(false); 
-                    this.phonesList.trigger('change');
-                } else {
-                    this.showPlain(true);
-                }
+                this.showPlain(); 
             }
+            this.phonesList.trigger('change');
+
+            if (!this.isRelatedContact && this.collection.models.length == 0) {
+                this.hidePhonesList();
+            }            
         },
         
         /**
          * Show plain phone input field
          */        
-        showPlain: function(hide) {
-            if (hide) {
-                this.phonesList.hide();
-                this.displaySelect2(false);
-                $('#uniform-' + this.phonesList[0].id).hide();
-                this.phonePlain.css('margin-top', '0px');
-                this.phonesList.closest('.controls').prepend(this.phonePlain);
-            } else {
-                this.phonesList.closest('.controls').append(this.phonePlain);
-                this.phonePlain.css('margin-top', '12px');
-            }
-                this.phonePlain.show();
+        showPlain: function() {
+            this.phonePlain.css('margin-top', '12px');            
+            this.phonesList.closest('.controls').append(this.phonePlain);
+            this.phonePlain.show();
         },
+        
+        hidePlain: function() {
+            this.phonePlain.css('margin-top', '0px');
+            this.phonePlain.hide();
+            this.phonePlain.val('');
+        },  
 
         /**
          * Show phone seleciton dropdown
          */
-        showPhoneOptions: function() {
-                this.phonesList.show();
-                this.displaySelect2(true);
-                $('#uniform-' + this.phonesList[0].id).show();
-                this.phonesList.find('option[value!=""]').remove();
-                this.phonesList.append(this.phonesListTemplate({contactphones: this.collection.models}));
-                this.phonesList.trigger('change');
-                this.phonePlain.hide();
-                this.phonePlain.val('');
-        }
+        showPhonesList: function() {
+            this.phonePlain.css('margin-top', '12px');
+            this.phonesList.closest('.controls').append(this.phonePlain);
+            this.phonesList.show();
+            this.displaySelect2(true);
+            $('#uniform-' + this.phonesList[0].id).show();
+            this.phonesList.find('option[value!=""]').remove();
+            this.phonesList.append(this.phonesListTemplate({contactphones: this.collection.models}));
+        },
+
+        hidePhonesList: function() {
+            this.phonePlain.css('margin-top', '0px');
+            this.phonesList.closest('.controls').prepend(this.phonePlain);
+            this.phonesList.hide();
+            this.displaySelect2(false);
+            $('#uniform-' + this.phonesList[0].id).hide();
+        },
     });
 });
