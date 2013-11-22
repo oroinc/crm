@@ -354,22 +354,6 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /**
      * {@inheritdoc}
      */
-    public function getSettingsFormType()
-    {
-        return 'orocrm_magento_customer_connector_setting_form_type';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSettingsEntityFQCN()
-    {
-        return 'OroCRM\\Bundle\\MagentoBundle\\Entity\\MagentoCustomerConnector';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getImportEntityFQCN()
     {
         return self::ENTITY_NAME;

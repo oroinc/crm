@@ -50,7 +50,6 @@ class SoapTransportSettingFormType extends AbstractType
             }
         );
 
-        $builder->add('label', 'text', ['label' => 'Label', 'required' => true]);
         $builder->add('wsdlUrl', 'text', ['label' => 'WSDL Url', 'required' => true]);
         $builder->add('apiUser', 'text', ['label' => 'API User', 'required' => true]);
         $builder->add('apiKey', 'password', ['label' => 'API Key', 'required' => true]);
