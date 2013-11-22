@@ -89,6 +89,7 @@ workflows:
                             parameters:
                                 - @not_empty: [$company_name]
                                 - @not_empty: [$account]
+                                - @true: ~
                             message: "Company name or account must be selected."
                 post_actions: # set lead.status = "qualified"
                     - @find_entity:
@@ -179,7 +180,7 @@ workflows:
                             attribute: $account
                             data:
                                 name: $company_name
-                                extendPhone: $lead.phone
+                                extendPhone: $lead.phoneNumber
                                 extendEmail: $lead.email
                                 extendWebsite: $lead.website
                                 extendEmployees: $lead.numberOfEmployees
