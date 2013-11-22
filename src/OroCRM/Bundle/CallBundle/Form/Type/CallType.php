@@ -35,7 +35,7 @@ class CallType extends AbstractType
         $builder->addEventSubscriber($this->contactPhoneSubscriber);
 
         $builder
-            ->add('owner', 'entity', array('class' => 'Oro\Bundle\UserBundle\Entity\User', 'required' => true))
+            // ->add('owner', 'entity', array('class' => 'Oro\Bundle\UserBundle\Entity\User', 'required' => true))
             ->add('relatedAccount', 'orocrm_account_select', array('required' => false))
             ->add('subject', 'text', array('required' => true))
             ->add('relatedContact', 'orocrm_contact_select', array('required' => false))

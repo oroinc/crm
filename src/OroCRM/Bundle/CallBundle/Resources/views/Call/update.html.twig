@@ -77,7 +77,7 @@
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_call_index'),
             'indexLabel': 'Calls'|trans,
-            'entityTitle': form.vars.value.name|default('N/A')
+            'entityTitle': form.vars.value.subject|default('N/A')
         }
         %}
         {{ parent() }}
