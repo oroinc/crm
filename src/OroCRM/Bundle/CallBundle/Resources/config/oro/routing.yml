@@ -3,3 +3,7 @@ orocrm_call_bundle:
     type:     annotation
     prefix:   /call
 
+orocrm_call_api:
+    resource: "@OroCRMCallBundle/Controller/Api/Rest/CallController.php"
+    type:     rest
+    prefix:   /call

@@ -37,7 +37,7 @@ class CallController extends Controller
     }
 
     /**
-     * @Route("/create/ajax", name="orocrm_call_create_ajax")
+     * @Route("/create/widget", name="orocrm_call_create_widget")
      * @Template("OroCRMCallBundle:Call:update.html.twig")
      * @Acl(
      *      id="orocrm_call_create",

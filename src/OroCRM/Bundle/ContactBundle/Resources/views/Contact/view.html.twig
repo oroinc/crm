@@ -10,7 +10,7 @@
 {% set gridName = 'contacts-email-grid' %}
 
 {% block navButtons %}
-    {% if resource_granted('orocrm_call') %}
+    {% if resource_granted('orocrm_call_create') %}
         {{ UI.clientButton({
             'dataUrl': path('orocrm_call_create', { 'contactId': entity.id }) ,
             'aCss': 'no-hash log-call-button',

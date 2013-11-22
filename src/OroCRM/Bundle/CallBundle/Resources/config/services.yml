@@ -1,6 +1,10 @@
 parameters:
-    orocrm_call.call.entity.class: OroCRM\Bundle\CallBundle\Entity\Call
+    orocrm_call.call.entity.class:                  OroCRM\Bundle\CallBundle\Entity\Call
+    orocrm_call.handler.call.class:                 OroCRM\Bundle\CallBundle\Form\Handler\CallHandler
     orocrm_call.event_listener.datagrid.call.class: OroCRM\Bundle\CallBundle\EventListener\Datagrid\CallListener
+    orocrm_call.call.manager.api.class:             Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_call.form.type.call.api.class:           OroCRM\Bundle\callBundle\Form\Type\callApiType
+
 
 services:
     orocrm_call.event_listener.datagrid.call:
@@ -11,3 +15,25 @@ services:
         tags:
           - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.widget-calls-grid, method: onBuildAfter }
 
+
+    orocrm_call.call.manager.api:
+        class: %orocrm_call.call.manager.api.class%
+        arguments:
+            - %orocrm_call.call.entity.class%
+            - @doctrine.orm.entity_manager
+
+    orocrm_call.form.call.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments: ["call", "call", null]
+
+    orocrm_call.form.handler.call.api:
+        class: %orocrm_call.handler.call.class%
+        scope: request
+        arguments:
+            - @orocrm_call.form.call.api
+            - @request
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: oro_tag.tag_manager }
