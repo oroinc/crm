@@ -142,15 +142,52 @@ class CallController extends Controller
     }
 
     /**
+     * @Route("/delete/{id}", name="orocrm_call_delete", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Template
+     * @Acl(
+     *      id="orocrm_call_delete",
+     *      type="entity",
+     *      permission="DELETE",
+     *      class="OroCRMCallBundle:Call"
+     * )     
+     */
+    public function deleteAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $call = $em->getRepository('OroCRMCallBundle:Call')->find($id);
+
+        if ($call) {
+
+            $em->remove($call);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('Call deleted successfully')
+            );
+            return $this->get('oro_ui.router')->actionRedirect(
+                array(
+                    'route'      => 'orocrm_call_index'
+                ),
+                array(
+                    'route'      => 'orocrm_call_index'
+                )
+            );
+        } else {
+            throw new NotFoundHttpException(sprintf('Call with ID %s is not found', $contactId));
+        }
+    }
+
+    /**
      * @Route(name="orocrm_call_index")
      * @Template
-     * @AclAncestor("orocrm_call_view")     
+     * @AclAncestor("orocrm_call_view")
      */
     public function indexAction()
     {
         return array();
     }
-
     /**
      * @Route("/widget", name="orocrm_call_widget_calls")
      * @Template
