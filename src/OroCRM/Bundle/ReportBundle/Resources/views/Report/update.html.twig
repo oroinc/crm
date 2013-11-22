@@ -106,7 +106,7 @@
                     'title': 'Filters'|trans,
                     'spanClass': 'report-filters span6',
                     'data': [
-                        QD.query_designer_filter_form(form.filter, {'id': 'report-filter-form'}),
+                        QD.query_designer_filter_form(form.filter, form.filters_logic, {'id': 'report-filter-form'}),
                         QD.query_designer_filter_list(),
                         QD.query_designer_filter_template('report-filter-row')
                     ]
