@@ -95,6 +95,7 @@ function(_, Backbone) {
         selectionChanged: function(e) {
             var contactId = $(e.currentTarget).val();
             if (contactId) {
+                this.phonesList.find('option[value!=""]').remove();
                 this.collection.setContactId(contactId);
                 this.collection.fetch();
             }
@@ -114,7 +115,7 @@ function(_, Backbone) {
 
             if (!this.isRelatedContact && this.collection.models.length == 0) {
                 this.hidePhonesList();
-            }            
+            }
         },
         
         /**
