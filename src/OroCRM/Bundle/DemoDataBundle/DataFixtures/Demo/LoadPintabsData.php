@@ -88,7 +88,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
                 "remove" => false
             ),
             'leads' => array(
-                "url" => "/sales/lead",
+                "url" => "/lead",
                 "title_rendered" => "Leads - Sales",
                 "title" => "{\"template\":\"Leads - Sales\",\"short_template\":\"Leads\",\"params\":[]}",
                 "position" => 0,
@@ -98,7 +98,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
                 "remove" => false
             ),
             'opportunities' => array(
-                "url" => "/sales/opportunity",
+                "url" => "/opportunity",
                 "title_rendered" => "Opportunities - Sales",
                 "title" => "{\"template\":\"Opportunities - Sales\",\"short_template\":\"Opportunities\",\"params\":[]}",
                 "position" => 0,
