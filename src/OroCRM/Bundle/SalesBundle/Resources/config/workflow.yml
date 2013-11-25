@@ -41,6 +41,7 @@ workflows:
                 label: 'Qualify'
                 step_to: qualified
                 is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-ok'
                     class: 'btn-primary'
@@ -65,6 +66,7 @@ workflows:
                 label: 'Disqualify'
                 step_to: cancelled
                 is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-remove'
                 transition_definition: cancel_definition
@@ -72,6 +74,7 @@ workflows:
                 label: 'Reactivate'
                 step_to: new
                 is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-repeat'
                 transition_definition: reactivate_definition
