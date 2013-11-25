@@ -25,7 +25,7 @@ use OroCRM\Bundle\CallBundle\Entity\CallDirection;
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",
- *          "owner_column_name"="user_owner_id"
+ *          "owner_column_name"="owner_id"
  *      },
  *      "security"={
  *          "type"="ACL",
@@ -98,12 +98,12 @@ class Call
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="callDateTime", type="datetime")
+     * @ORM\Column(name="call_date_time", type="datetime")
      */
     protected $callDateTime;
 
     /**
-     * @var string
+     * @var CallStatus
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\CallBundle\Entity\CallStatus")
      * @ORM\JoinColumn(name="call_status_id", referencedColumnName="id", onDelete="SET NULL")
@@ -118,13 +118,12 @@ class Call
     protected $duration;
 
     /**
-     * @var \CallDirection
+     * @var CallDirection
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\CallBundle\Entity\CallDirection")
      * @ORM\JoinColumn(name="call_direction_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $direction;
-
 
     public function __construct()
     {
@@ -401,7 +400,7 @@ class Call
             $propertyPath = $context->getPropertyPath() . '.contactPhoneNumber';
             $context->addViolationAt(
                 $propertyPath,
-                'Phone number is required field'
+                'orocrm.call.phone.required.message'
             );
         }
     }

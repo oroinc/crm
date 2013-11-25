@@ -22,9 +22,9 @@ class LoadCallDirectionData extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        foreach ($this->data as $status) {
-            $callDirection= new CallDirection();
-            $callDirection->setDirection($status);
+        foreach ($this->data as $direction) {
+            $callDirection = new CallDirection();
+            $callDirection->setDirection($direction);
             $manager->persist($callDirection);
         }
 

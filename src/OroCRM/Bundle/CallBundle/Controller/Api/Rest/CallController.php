@@ -20,15 +20,29 @@ use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
-use OroCRM\Bundle\CallBundle\Entity\Call;
-use OroCRM\Bundle\CallBundle\Form\Type\CallType;
-
 /**
  * @RouteResource("call")
  * @NamePrefix("oro_api_")
  */
 class CallController extends RestController implements ClassResourceInterface
 {
+    /**
+     * REST GET item
+     *
+     * @param string $id
+     *
+     * @ApiDoc(
+     *      description="Get call item",
+     *      resource=true
+     * )
+     * @AclAncestor("orocrm_call_view")
+     * @return Response
+     */
+    public function getAction($id)
+    {
+        return $this->handleGetRequest($id);
+    }
+
     /**
      * REST PUT
      *
@@ -73,7 +87,7 @@ class CallController extends RestController implements ClassResourceInterface
      *      id="orocrm_call_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMCallBundle:call"
+     *      class="OroCRMCallBundle:Call"
      * )
      * @return Response
      */
@@ -107,5 +121,4 @@ class CallController extends RestController implements ClassResourceInterface
     {
         return $this->get('orocrm_call.form.handler.call.api');
     }
-
 }

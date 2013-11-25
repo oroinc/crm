@@ -29,7 +29,6 @@ class CallDirection
      */
     protected $direction;
 
-
     /**
      * Get id
      *

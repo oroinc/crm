@@ -4,7 +4,7 @@
 {% set gridName = 'calls-grid' %}
 
 {% block navButtons %}
-    {% if resource_granted('orocrm_call') %}
+    {% if resource_granted('orocrm_call_create') %}
         <div class="btn-group">
             {{ UI.addButton({
                 'path' : path('orocrm_call_create'),

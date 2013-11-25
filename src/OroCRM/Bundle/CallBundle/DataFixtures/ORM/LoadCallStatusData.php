@@ -23,7 +23,7 @@ class LoadCallStatusData extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         foreach ($this->data as $status) {
-            $callStatus= new CallStatus();
+            $callStatus = new CallStatus();
             $callStatus->setStatus($status);
             $manager->persist($callStatus);
         }
