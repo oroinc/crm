@@ -10,12 +10,10 @@ use Oro\Bundle\ImportExportBundle\Reader\ReaderInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Connector as ConnectorEntity;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 
-use OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector;
-
-class CustomerApiReader extends AbstractReader implements ReaderInterface, StepExecutionAwareInterface
+class MagentoApiReader extends AbstractReader implements ReaderInterface, StepExecutionAwareInterface
 {
-    /** @var CustomerConnector */
-    protected $customerConnector;
+    /** @var ConnectorInterface */
+    protected $connector;
 
     /** @var \Closure */
     protected $loggerClosure;
@@ -28,7 +26,7 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface, StepE
     {
         parent::__construct($contextRegistry);
 
-        $this->customerConnector = $customerConnector;
+        $this->connector = $customerConnector;
     }
 
     /**
@@ -40,7 +38,9 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface, StepE
 
         /** @var ConnectorEntity $connector */
         $connectorEntity = $context->getOption('connector');
-        $this->customerConnector->setConnectorEntity($connectorEntity);
+        if (method_exists($this->connector, 'setConnectorEntity') && $connectorEntity) {
+            $this->connector->setConnectorEntity($connectorEntity);
+        }
     }
 
     /**
@@ -50,7 +50,7 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface, StepE
     {
         // read peace of data, skipping empty
         do {
-            $data = $this->customerConnector->read();
+            $data = $this->connector->read();
         } while ($data === false);
 
         if (is_null($data)) {

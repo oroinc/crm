@@ -13,23 +13,20 @@ use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
+use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerNormalizer;
 
-class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
+class RegionStrategy implements StrategyInterface, ContextAwareInterface
 {
-    const ENTITY_NAME = 'OroCRMMagentoBundle:Customer';
-    const GROUP_ENTITY_NAME = 'OroCRMMagentoBundle:CustomerGroup';
+    const ENTITY_NAME = 'OroCRMMagentoBundle:Region';
 
     /** @var ImportStrategyHelper */
     protected $strategyHelper;
 
     /** @var ContextInterface */
     protected $importExportContext;
-
-    /** @var array */
-    protected $regionsCache = [];
 
     /**
      * @param ImportStrategyHelper $strategyHelper
@@ -47,17 +44,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      */
     public function process($entity)
     {
-        $entity = $this->findAndReplaceEntity($entity, self::ENTITY_NAME, 'originalId', ['id']);
-
-        // update all related entities
-        $this
-            ->updateStoresAndGroup($entity)
-            ->updateAccount($entity)
-            ->updateContact($entity)
-            ->updateAddresses($entity);
-
-        // update owner for addresses, emails and phones
-        $this->updateRelatedEntitiesOwner($entity);
+        $entity = $this->findAndReplaceEntity($entity, self::ENTITY_NAME, 'combinedCode');
 
         // validate and update context - increment counter or add validation error
         $entity = $this->validateAndUpdateContext($entity);
@@ -70,7 +57,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      * @param string $entityName
      * @param string $idFieldName
      * @param array $excludedProperties
-     * @return Customer
+     * @return Region
      */
     protected function findAndReplaceEntity($entity, $entityName, $idFieldName = 'id', $excludedProperties = [])
     {
@@ -87,10 +74,10 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     }
 
     /**
-     * @param Customer $entity
-     * @return null|Customer
+     * @param Region $entity
+     * @return null|Region
      */
-    protected function validateAndUpdateContext(Customer $entity)
+    protected function validateAndUpdateContext(Region $entity)
     {
         // validate contact
         $validationErrors = $this->strategyHelper->validateEntity($entity);
@@ -218,7 +205,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             }
 
             $address->setCountry($this->regionsCache[$countryCode])
-                    ->setRegion($this->regionsCache[$regionCode]);
+                ->setRegion($this->regionsCache[$regionCode]);
         }
 
 

@@ -174,9 +174,6 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
 
                     $this->dependencies[self::ALIAS_WEBSITES] = $websites;
                     break;
-                case self::ALIAS_REGIONS:
-                    //$this->dependencies[self::ALIAS_REGIONS] = $this->getRegions();
-                    break;
             }
         }
     }
@@ -288,6 +285,33 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
                 'code'       => 'admin',
                 'name'       => 'Admin',
             ];
+        }
+
+        if (!is_null($storeId) && isset($stores[$storeId])) {
+            return [$storeId => $stores[$storeId]];
+        } else {
+            return $stores;
+        }
+    }
+
+    /**
+     * TODO: consider move this to some sort of connecor and inject it here
+     *
+     * @param string $countryIso2Code
+     * @return array
+     */
+    public function getRegions($countryIso2Code)
+    {
+        if (!empty($this->dependencies[self::ALIAS_REGIONS][$countryIso2Code])) {
+            $stores = $this->dependencies[self::ALIAS_STORES][$countryIso2Code];
+        } else {
+            $result = $this->call('directoryRegionList');
+
+            $stores = [];
+            foreach ($result as $item) {
+                $stores[$item->store_id] = (array) $item;
+                $stores[$item->store_id]['id'] = $item->store_id;
+            }
         }
 
         if (!is_null($storeId) && isset($stores[$storeId])) {
