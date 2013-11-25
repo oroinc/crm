@@ -33,10 +33,14 @@ class RelationNormalizer implements NormalizerInterface, DenormalizerInterface
     {
         /** @var Store|Website|CustomerGroup $result */
         $result = new $class();
-        $result->setId($data);
+        $result->setId($data['id']);
 
-        if (!empty($context['data']['group_name']) && $class == CustomerNormalizer::GROUPS_TYPE) {
-            $result->setName($context['data']['group_name']);
+        if (method_exists($result, 'setCode') && !empty($data['code'])) {
+            $result->setCode($data['code']);
+        }
+
+        if (method_exists($result, 'setName') && !empty($data['name'])) {
+            $result->setName($data['name']);
         }
 
         return $result;
@@ -61,6 +65,6 @@ class RelationNormalizer implements NormalizerInterface, DenormalizerInterface
             CustomerNormalizer::GROUPS_TYPE
         ];
 
-        return is_int($data) && class_exists($type) && in_array($type, $supportedEntities);
+        return is_array($data) && class_exists($type) && in_array($type, $supportedEntities);
     }
 }
