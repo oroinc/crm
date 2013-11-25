@@ -247,6 +247,8 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
 
             $groups = [];
             foreach ($result as $item) {
+                $item->id = $item->customer_group_id;
+                $item->name = $item->customer_group_code;
                 $groups[$item->customer_group_id] = (array) $item;
             }
         }
@@ -275,11 +277,12 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
             $stores = [];
             foreach ($result as $item) {
                 $stores[$item->store_id] = (array) $item;
+                $stores[$item->store_id]['id'] = $item->store_id;
             }
 
             // add default/admin store
             $stores[0] = [
-                'store_id'   => 0,
+                'id'         => 0,
                 'website_id' => 0,
                 'code'       => 'admin',
                 'name'       => 'Admin',

@@ -192,24 +192,16 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
         );
 
         /** @var Website $website */
-        $website = $this->denormalizeObject($data, 'website_id', static::WEBSITE_TYPE, $format, $context);
+        $website = $this->denormalizeObject($data, 'website', static::WEBSITE_TYPE, $format, $context);
 
         /** @var Store $store */
-        $store = $this->denormalizeObject($data, 'store_id', static::STORE_TYPE, $format, $context);
+        $store = $this->denormalizeObject($data, 'store', static::STORE_TYPE, $format, $context);
         $store->setWebsite($website);
 
         $object
             ->setWebsite($website)
             ->setStore($store)
-            ->setGroup(
-                $this->denormalizeObject(
-                    $data,
-                    'group_id',
-                    static::GROUPS_TYPE,
-                    $format,
-                    array_merge($context, ['data' => $data])
-                )
-            )
+            ->setGroup($this->denormalizeObject($data, 'group', static::GROUPS_TYPE, $format, $context))
             ->setContact($contact)
             ->setAccount($account);
     }
@@ -274,22 +266,6 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
 
         }
         return $result;
-    }
-
-    protected function initRelatedObject($type)
-    {
-        // TODO: find or create
-        if ($type == 'store_id') {
-            return new Store();
-        }
-
-        if ($type == 'website_id') {
-            return new Website();
-        }
-
-        if ($type == 'group_id') {
-            return new CustomerGroup();
-        }
     }
 
     /**
