@@ -41,8 +41,8 @@ function(_, Backbone) {
          * @property
          */
         phonesListTemplate: _.template(
-            '<% _.each(contactphones, function(p, i) { %>' + 
-                '<option <% if (p.get("primary")) { %> selected="selected" <% } %> value=<%= p.get("id") %>><%= p.get("phone") %></option>' +
+            '<% _.each(contactphones, function(phone) { %>' + 
+                '<option <% if (phone.get("primary")) { %> selected="selected" <% } %> value=<%= phone.get("id") %>><%= phone.get("phone") %></option>' +
             '<% }); %>'
         ),         
         /**

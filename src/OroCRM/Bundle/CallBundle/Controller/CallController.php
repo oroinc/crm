@@ -53,7 +53,7 @@ class CallController extends Controller
 
     /**
      * @param int $contactId
-     * @return array
+     * @return Call
      */
     protected function preCreate($contactId = null)
     {
@@ -147,7 +147,7 @@ class CallController extends Controller
             );
             return $this->redirect($this->generateUrl('orocrm_call_index'));
         } else {
-            throw new NotFoundHttpException(sprintf('Call with ID %s is not found', $contactId));
+            throw new NotFoundHttpException(sprintf('Call with ID %s is not found', $id));
         }
     }
 

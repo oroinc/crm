@@ -14,12 +14,6 @@ function(Backbone, routing, ContactPhoneModel) {
         model: ContactPhoneModel,
 
         /**
-         * Constructor
-         */
-        initialize: function () {
-        },
-
-        /**
          * Regenerate route for selected contact
          *
          * @param id {string}

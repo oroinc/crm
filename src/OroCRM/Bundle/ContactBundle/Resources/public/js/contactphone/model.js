@@ -11,9 +11,9 @@ function(Backbone) {
     return Backbone.Model.extend({
         defaults: {
             id: '',
-            owner: '',
-            phone: '',
-            primary: ''
+            owner: null,
+            phone: null,
+            primary: false,
         }
     });
 });
