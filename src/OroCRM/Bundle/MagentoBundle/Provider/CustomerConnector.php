@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-use Oro\Bundle\IntegrationBundle\Entity\Connector;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
 class CustomerConnector extends AbstractConnector implements CustomerConnectorInterface
@@ -311,37 +310,37 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         // TODO: implement create/update customer address
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setConnectorEntity(Connector $connector)
-    {
-        $settings = $connector->getTransport()
-            ->getSettingsBag()
-            ->all();
-
-        if (empty($settings['last_sync_date'])) {
-            throw new InvalidConfigurationException('Last sync date can\'t be empty');
-        } elseif ($settings['last_sync_date'] instanceof \DateTime) {
-            $this->lastSyncDate = $settings['last_sync_date'];
-        } else {
-            $this->lastSyncDate = new \DateTime($settings['last_sync_date']);
-        }
-
-        if (empty($settings['sync_range'])) {
-            $settings['sync_range'] = self::DEFAULT_SYNC_RANGE;
-        } elseif ($settings['sync_range'] instanceof \DateInterval) {
-            $this->syncRange = $settings['sync_range'];
-        }
-
-        $this->syncRange = \DateInterval::createFromDateString($settings['sync_range']);
-
-        if (!empty($settings['batch_size'])) {
-            $this->batchSize = $settings['batch_size'];
-        }
-
-        return parent::setConnectorEntity($connector);
-    }
+//    /**
+//     * {@inheritdoc}
+//     */
+//    public function setConnectorEntity(Connector $connector)
+//    {
+//        $settings = $connector->getTransport()
+//            ->getSettingsBag()
+//            ->all();
+//
+//        if (empty($settings['last_sync_date'])) {
+//            throw new InvalidConfigurationException('Last sync date can\'t be empty');
+//        } elseif ($settings['last_sync_date'] instanceof \DateTime) {
+//            $this->lastSyncDate = $settings['last_sync_date'];
+//        } else {
+//            $this->lastSyncDate = new \DateTime($settings['last_sync_date']);
+//        }
+//
+//        if (empty($settings['sync_range'])) {
+//            $settings['sync_range'] = self::DEFAULT_SYNC_RANGE;
+//        } elseif ($settings['sync_range'] instanceof \DateInterval) {
+//            $this->syncRange = $settings['sync_range'];
+//        }
+//
+//        $this->syncRange = \DateInterval::createFromDateString($settings['sync_range']);
+//
+//        if (!empty($settings['batch_size'])) {
+//            $this->batchSize = $settings['batch_size'];
+//        }
+//
+//        return parent::setConnectorEntity($connector);
+//    }
 
     /**
      * {@inheritdoc}

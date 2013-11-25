@@ -42,7 +42,7 @@ class SoapTransportSettingFormType extends AbstractType
                 if (empty($data['apiKey']) && $oldPassword) {
                     // populate old password
                     $data['apiKey'] = $oldPassword;
-                } else {
+                } elseif (isset($data['apiKey'])) {
                     $data['apiKey'] = $encryptor->encryptData($data['apiKey']);
                 }
 
