@@ -8,7 +8,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use OroCRM\Bundle\ContactBundle\Entity\Repository\ContactPhoneRepository;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class ContactPhoneSubscriber implements EventSubscriberInterface
 {
