@@ -1,0 +1,4 @@
+orocrm.demo_integration.db.transport.label: DB transport
+orocrm.demo_integration.prestashop.channel.label: PrestaShop
+orocrm.demo_integration.magento_product.connector.label: Product connector
+orocrm.demo_integration.prestashop_product.connector.label: Product connector

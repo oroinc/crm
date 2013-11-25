@@ -1,0 +1,36 @@
+parameters:
+    orocrm.demo_integration.form.type.db_transport_setting.class:         OroCRM\Bundle\DemoIntegrationBundle\Form\Type\DatabaseTransportSettingForm
+    orocrm.demo_integration.provider.db_transport.class:                  OroCRM\Bundle\DemoIntegrationBundle\Provider\DatabaseTransport
+    orocrm.demo_integration.provider.prestashop.channel.class:            OroCRM\Bundle\DemoIntegrationBundle\Provider\PrestaShopChannelType
+    orocrm.demo_integration.provider.magento_product.connector.class:     OroCRM\Bundle\DemoIntegrationBundle\Provider\MagentoProductConnector
+    orocrm.demo_integration.provider.prestashop_product.connector.class:  OroCRM\Bundle\DemoIntegrationBundle\Provider\PrestaShopProductConnector
+
+services:
+    orocrm.demo_integration.form.type.db_transport_setting:
+        class: %orocrm.demo_integration.form.type.db_transport_setting.class%
+        arguments:
+            - @orocrm.demo_integration.provider.db_transport
+            - @oro_security.encoder.mcrypt
+        tags:
+            - { name: form.type, alias: orocrm_demo_integration_db_stranspot_setting }
+
+    orocrm.demo_integration.provider.db_transport:
+        class: %orocrm.demo_integration.provider.db_transport.class%
+        tags:
+            - { name: oro_integration.transport, type: db, channel_type: magento }
+            - { name: oro_integration.transport, type: db, channel_type: presta_shop }
+
+    orocrm.demo_integration.provider.prestashop.channel:
+        class: %orocrm.demo_integration.provider.prestashop.channel.class%
+        tags:
+            - { name: oro_integration.channel, type: presta_shop }
+
+    orocrm.demo_integration.provider.magento_product.connector:
+        class: %orocrm.demo_integration.provider.magento_product.connector.class%
+        tags:
+            - { name: oro_integration.connector, type: product, channel_type: magento }
+
+    orocrm.demo_integration.provider.prestashop_product.connector:
+        class: %orocrm.demo_integration.provider.prestashop_product.connector.class%
+        tags:
+            - { name: oro_integration.connector, type: product, channel_type: presta_shop }
