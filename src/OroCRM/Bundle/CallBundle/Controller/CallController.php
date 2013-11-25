@@ -26,25 +26,25 @@ class CallController extends Controller
      *      type="entity",
      *      permission="CREATE",
      *      class="OroCRMCallBundle:Call"
-     * )     
+     * )
      */
     public function createForContactAction($contactId)
     {
         $redirect = ($this->getRequest()->get('noredir')) ? false : true;
 
-        $entity = $this->preCreate($contactId);
+        $entity = $this->initEntity($contactId);
         return $this->update($entity, $redirect);
     }
 
     /**
-     * @Route("/update/{id}", name="orocrm_call_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="orocrm_call_update", requirements={"id"="\d+"})
      * @Template
      * @Acl(
      *      id="orocrm_call_update",
      *      type="entity",
      *      permission="EDIT",
      *      class="OroCRMCallBundle:Call"
-     * )     
+     * )
      */
     public function updateAction(Call $entity = null)
     {
@@ -52,10 +52,70 @@ class CallController extends Controller
     }
 
     /**
+     * @Route("/delete/{id}", name="orocrm_call_delete", requirements={"id"="\d+"})
+     * @Template
+     * @Acl(
+     *      id="orocrm_call_delete",
+     *      type="entity",
+     *      permission="DELETE",
+     *      class="OroCRMCallBundle:Call"
+     * )
+     */
+    public function deleteAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $call = $em->getRepository('OroCRMCallBundle:Call')->find($id);
+
+        if ($call) {
+
+            $em->remove($call);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('Call deleted successfully')
+            );
+            return $this->redirect($this->generateUrl('orocrm_call_index'));
+        } else {
+            throw new NotFoundHttpException(sprintf('Call with ID %s is not found', $id));
+        }
+    }
+
+    /**
+     * @Route(name="orocrm_call_index")
+     * @Template
+     * @Acl(
+     *      id="orocrm_call_index",
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMCallBundle:Call"
+     * )
+     */
+    public function indexAction()
+    {
+        return array();
+    }
+
+    /**
+     * @Route("/widget", name="orocrm_call_widget_calls")
+     * @Template
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function callsAction(Request $request)
+    {
+        return array(
+            'datagridParameters' => $request->query->all()
+        );
+    }
+
+   /**
      * @param int $contactId
      * @return Call
      */
-    protected function preCreate($contactId = null)
+    protected function initEntity($contactId = null)
     {
         $entity = $this->getManager()->createEntity();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -118,60 +178,5 @@ class CallController extends Controller
     public function getManager()
     {
         return $this->get('orocrm_call.call.manager.api');
-    }
-
-    /**
-     * @Route("/delete/{id}", name="orocrm_call_delete", requirements={"id"="\d+"}, defaults={"id"=0})
-     * @Template
-     * @Acl(
-     *      id="orocrm_call_delete",
-     *      type="entity",
-     *      permission="DELETE",
-     *      class="OroCRMCallBundle:Call"
-     * )     
-     */
-    public function deleteAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $call = $em->getRepository('OroCRMCallBundle:Call')->find($id);
-
-        if ($call) {
-
-            $em->remove($call);
-            $em->flush();
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                $this->get('translator')->trans('Call deleted successfully')
-            );
-            return $this->redirect($this->generateUrl('orocrm_call_index'));
-        } else {
-            throw new NotFoundHttpException(sprintf('Call with ID %s is not found', $id));
-        }
-    }
-
-    /**
-     * @Route(name="orocrm_call_index")
-     * @Template
-     * @AclAncestor("orocrm_call_view")
-     */
-    public function indexAction()
-    {
-        return array();
-    }
-
-    /**
-     * @Route("/widget", name="orocrm_call_widget_calls")
-     * @Template
-     *
-     * @param Request $request
-     * @return array
-     */
-    public function callsAction(Request $request)
-    {
-        return array(
-            'datagridParameters' => $request->query->all()
-        );
-    }
+    }    
 }

@@ -19,7 +19,6 @@ use OroCRM\Bundle\CallBundle\Entity\CallDirection;
  * @ORM\Entity
  * @Config(
  *  routeName="orocrm_call_index",
- *  routeView="orocrm_call_view",
  *  defaultValues={
  *      "entity"={"label"="Call", "plural_label"="Calls"},
  *      "ownership"={

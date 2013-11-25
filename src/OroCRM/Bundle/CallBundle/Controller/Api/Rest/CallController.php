@@ -34,7 +34,7 @@ class CallController extends RestController implements ClassResourceInterface
      *      description="Get call item",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_call_view")
+     * @AclAncestor("orocrm_call_index")
      * @return Response
      */
     public function getAction($id)
