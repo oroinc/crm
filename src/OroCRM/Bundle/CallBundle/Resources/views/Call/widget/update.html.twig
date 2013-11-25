@@ -58,8 +58,8 @@
                 $(function() {
                     new ContactPhoneView({
                         el: $('#orocrm_call_call_form_relatedContact'),
-                        target: $('#orocrm_call_call_form_contactPhoneNumber'),
-                        simpleEl: $('#orocrm_call_call_form_phoneNumber'),
+                        phonesList: $('#orocrm_call_call_form_contactPhoneNumber'),
+                        phonePlain: $('#orocrm_call_call_form_phoneNumber'),
                         collection: new ContactPhoneCollection(),
                         isRelatedContact: {{ isRelatedContact }}
                     });

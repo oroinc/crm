@@ -52,8 +52,8 @@ function(_, Backbone) {
          */
         initialize: function(options) {
             
-            this.phonesList = $(options.target);
-            this.phonePlain = $(options.simpleEl);
+            this.phonesList = $(options.phonesList);
+            this.phonePlain = $(options.phonePlain);
             this.isRelatedContact = options.isRelatedContact;
             
             this.displaySelect2(this.isRelatedContact);
@@ -141,7 +141,9 @@ function(_, Backbone) {
             this.phonesList.closest('.controls').append(this.phonePlain);
             this.phonesList.show();
             this.displaySelect2(true);
-            $('#uniform-' + this.phonesList[0].id).show();
+            if (this.phonesList[0]) {
+                $('#uniform-' + this.phonesList[0].id).show();
+            }
             this.phonesList.find('option[value!=""]').remove();
             this.phonesList.append(this.phonesListTemplate({contactphones: this.collection.models}));
         },
@@ -151,7 +153,9 @@ function(_, Backbone) {
             this.phonesList.closest('.controls').prepend(this.phonePlain);
             this.phonesList.hide();
             this.displaySelect2(false);
-            $('#uniform-' + this.phonesList[0].id).hide();
+            if (this.phonesList[0]) {
+                $('#uniform-' + this.phonesList[0].id).hide();
+            }
         },
     });
 });
