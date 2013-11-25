@@ -48,7 +48,6 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
 
         $formOptions = array(
             'class' => 'OroCRMContactBundle:ContactPhone',
-            'property_path' => 'contactPhoneNumber',
             'property' => 'phone',
             'empty_value' => 'orocrm.call.form.call.other',
             'label' => 'orocrm.call.form.call.contactPhone',
@@ -64,7 +63,6 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
             }
         }
         
-        $form->add('phoneNumber', 'text', array('required' => true, 'attr' => array('class' => 'plainphonenumber hide')));
         $form->add('contactPhoneNumber', 'entity', $formOptions);
     }
 
@@ -78,7 +76,6 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
 
         $options = array(
                     'class' => 'OroCRMContactBundle:ContactPhone',
-                    'property_path' => 'contactPhoneNumber',
                     'property' => 'phone',
                     'empty_value' => 'orocrm.call.form.call.other',
                     'label' => 'orocrm.call.form.call.contactPhone',
@@ -97,7 +94,6 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
         }
 
         $form->add('contactPhoneNumber', 'entity', $options);
-        $form->add('phoneNumber', 'text', array('required' => true, 'attr' => array('class' => 'plainphonenumber hide')));
 
         $event->setData($data);
     }
