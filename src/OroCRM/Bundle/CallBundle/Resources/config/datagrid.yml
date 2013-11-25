@@ -135,30 +135,5 @@ datagrid:
                     data_name: call.callDateTime
             default:
                 dateTime: DESC
-        properties:
-            id: ~
-            update_link:
-                type:       url
-                route:      orocrm_call_update
-                params:     [ id ]
-            delete_link:
-                type:       url
-                route:      oro_api_delete_call
-                params:     [ id ]
-        actions:
-            update:
-                type:          navigate
-                acl_resource:  orocrm_call_create
-                label:         Update
-                icon:          edit
-                link:          update_link
-                rowAction:     true
-            delete:
-                type:          delete
-                acl_resource:  orocrm_call_delete
-                label:         Delete
-                icon:          trash
-                link:          delete_link
-                rowAction:     true
         options:
             entityHint: calls

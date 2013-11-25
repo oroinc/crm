@@ -16,12 +16,18 @@
 
     {% set id = 'call-log' %}
 
+    {% if form.vars.value.id %}
+        {% set title = 'Update call log'|trans %}
+    {% else %}
+        {% set title = 'Add call log'|trans %}
+    {% endif %}
+
     {% set dataBlocks = [{
-            'title': 'Add a call log'|trans,
+            'title': title,
             'class': 'active',
             'subblocks': [
                 {
-                    'title': 'Add a call log'|trans,
+                    'title': title,
                     'data': [
                         form_row(form.owner, {'label': 'orocrm.call.form.call.owner'|trans}),
                         form_row(form.subject, {'label': 'orocrm.call.form.call.subject'|trans}),
@@ -69,7 +75,6 @@
 
 {% block navButtons %}    
     {{ UI.button({'path' : path('orocrm_call_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
-    {{ UI.saveAndStayButton('orocrm_call_index') }}
     {{ UI.saveAndCloseButton() }}
 {% endblock %}
 
@@ -82,10 +87,16 @@
             'entityTitle': form.vars.value.subject|default('N/A')
         }
         %}
-        {{ parent() }}
     {% else %}
-        {% include 'OroUIBundle::page_title_block.html.twig' %}
+        {% set breadcrumbs = {
+            'entity':      form.vars.value,
+            'indexPath':   path('orocrm_call_index'),
+            'indexLabel': 'Calls'|trans,
+            'entityTitle': 'New Call'|trans
+        }
+        %}
     {% endif %}
+    {{ parent() }}    
 {% endblock pageHeader %}
 
 

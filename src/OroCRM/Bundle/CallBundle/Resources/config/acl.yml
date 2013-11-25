@@ -1,5 +1,0 @@
-orocrm_call:
-    label: 'Calls'
-    type: action
-    group_name: ""
-    bindings: ~
