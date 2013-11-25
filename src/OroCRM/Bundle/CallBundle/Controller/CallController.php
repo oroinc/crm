@@ -80,7 +80,7 @@ class CallController extends Controller
             } else {
                 throw new NotFoundHttpException(sprintf('Contact with ID %s is not found', $contactId));
             }
-        }  
+        }
 
         return $entity;
     }
