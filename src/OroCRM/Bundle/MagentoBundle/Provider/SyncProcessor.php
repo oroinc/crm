@@ -7,9 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\IntegrationBundle\Entity\Connector as ConnectorEntity;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessorInterface;
 
@@ -56,14 +54,12 @@ class SyncProcessor implements SyncProcessorInterface
      */
     public function process($channelName, $force = false)
     {
-        $channel = $this->getChannelByName($channelName);
-        /** @var ConnectorEntity[] $connectors */
+        $channel    = $this->getChannelByName($channelName);
         $connectors = $channel->getConnectors();
 
-        /** @var ConnectorEntity $connector */
         foreach ($connectors as $connector) {
             try {
-                $realConnector = $this->registry->getConnectorTypeBySettingEntity($connector, $channel->getType());
+                $realConnector = $this->registry->getConnectorType($channel->getType(), $connector);
             } catch (\Exception $e) {
                 // log and continue
                 $this->log($e->getMessage());
@@ -90,7 +86,7 @@ class SyncProcessor implements SyncProcessorInterface
                     'channelName'    => $channelName,
                     'batchSize'      => self::DEFAULT_BATCH_SIZE,
                     'maxEmptyRanges' => self::DEFAULT_EMPTY_RANGES_COUNT,
-                    'connector'      => $connector
+                    'connector'      => $realConnector
                     // @TODO allow to pass logger here
                     //'logger'         => $this->loggingClosure,
                 ],

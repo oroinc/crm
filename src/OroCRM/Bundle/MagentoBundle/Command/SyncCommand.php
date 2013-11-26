@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  */
 class SyncCommand extends ContainerAwareCommand
 {
-    const CUSTOMER_SYNC_PROCESSOR = 'orocrm_magento.customer_sync.processor';
+    const SYNC_PROCESSOR = 'orocrm_magento.sync.processor';
 
     /**
      * Console command configuration
@@ -35,6 +35,7 @@ class SyncCommand extends ContainerAwareCommand
      *
      * @param  InputInterface  $input
      * @param  OutputInterface $output
+     *
      * @return int|null|void
      */
     public function execute(InputInterface $input, OutputInterface $output)
@@ -42,14 +43,14 @@ class SyncCommand extends ContainerAwareCommand
         $output->writeln($this->getDescription());
 
         $channelId = $input->getArgument('channelId');
-        $force = $input->getOption('force');
+        $force     = $input->getOption('force');
 
         $closure = function ($context) use ($output) {
             $output->writeln(var_export($context, true));
         };
 
         $this->getContainer()
-            ->get(self::CUSTOMER_SYNC_PROCESSOR)
+            ->get(self::SYNC_PROCESSOR)
             ->setLogClosure($closure)
             ->process($channelId, $force);
 
