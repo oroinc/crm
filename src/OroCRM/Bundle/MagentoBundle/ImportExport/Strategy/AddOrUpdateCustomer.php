@@ -13,7 +13,10 @@ use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
@@ -53,14 +56,17 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      */
     public function process($entity)
     {
+        $originalContact = '';
+        $originalAccount = '';
+
         $entity = $this->findAndReplaceEntity($entity, self::ENTITY_NAME, 'originalId', ['id']);
 
         // update all related entities
         $this
             ->updateStoresAndGroup($entity)
+            ->updateAddresses($entity)
             ->updateAccount($entity)
-            ->updateContact($entity)
-            ->updateAddresses($entity);
+            ->updateContact($entity);
 
         // update owner for addresses, emails and phones
         $this->updateRelatedEntitiesOwner($entity);
@@ -275,8 +281,8 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      */
     protected function updateAccount(Customer $entity)
     {
+        /** @var Account $account */
         $account = $entity->getAccount();
-
         $account = $this->findAndReplaceEntity($account, AccountNormalizer::ACCOUNT_TYPE, 'name', ['id']);
 
         $entity->setAccount($account);
@@ -290,6 +296,14 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      */
     protected function updateContact(Customer $entity)
     {
+        /** @var Contact $contact */
+        $contact = $entity->getContact();
+
+        $contact = $this->findAndReplaceEntity($contact, ContactNormalizer::CONTACT_TYPE, 'id', ['id']);
+        $contact->addAccount($entity->getAccount());
+
+        $entity->setContact($contact);
+
         return $this;
     }
 
