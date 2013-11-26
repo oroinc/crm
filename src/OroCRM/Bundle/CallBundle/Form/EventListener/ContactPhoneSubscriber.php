@@ -45,23 +45,19 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
         $form = $event->getForm();
         $data = $event->getData();
 
-        $formOptions = array(
-            'class' => 'OroCRMContactBundle:ContactPhone',
-            'property' => 'phone',
-            'empty_value' => 'orocrm.call.form.call.other',
-            'label' => 'orocrm.call.form.call.contactPhone',
-            'required' => true
-            );
+        $formOptions = $this->getDefaultOptions();
 
         if (null !== $data) {
             $contact = $data->getRelatedContact();
             if (null !== $contact) {
                 $formOptions['query_builder'] = function (ContactPhoneRepository $er) use ($contact) {
-                            return $er->getContactPhoneQueryBuilder($contact);
+                    return $er->getContactPhoneQueryBuilder($contact);
                 };
+            } else {
+                $formOptions['choices'] = array();
             }
         }
-        
+
         $form->add('contactPhoneNumber', 'entity', $formOptions);
     }
 
@@ -73,27 +69,34 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
         $form = $event->getForm();
         $data = $event->getData();
 
-        $options = array(
-                    'class' => 'OroCRMContactBundle:ContactPhone',
-                    'property' => 'phone',
-                    'empty_value' => 'orocrm.call.form.call.other',
-                    'label' => 'orocrm.call.form.call.contactPhone',
-                    'required' => true);
+        $formOptions = $this->getDefaultOptions();
 
         if ($data['relatedContact']) {
             $contact = $this->om
                             ->getRepository('OroCRMContactBundle:Contact')
                             ->find($data['relatedContact']);
 
-            // $options = $form->get('contactPhoneNumber')->getConfig()->getOptions();
-            $options['query_builder'] = function (ContactPhoneRepository $er) use ($contact) {
+            $formOptions['query_builder'] = function (ContactPhoneRepository $er) use ($contact) {
                     return $er->getContactPhoneQueryBuilder($contact);
             };
 
+        } else {
+            $formOptions['choices'] = array();
         }
 
-        $form->add('contactPhoneNumber', 'entity', $options);
+        $form->add('contactPhoneNumber', 'entity', $formOptions);
 
         $event->setData($data);
+    }
+
+    protected function getDefaultOptions()
+    {
+        return array(
+            'class' => 'OroCRMContactBundle:ContactPhone',
+            'property' => 'phone',
+            'empty_value' => 'orocrm.call.form.call.other',
+            'label' => 'orocrm.call.form.call.contactPhone',
+            'required' => true);
+
     }
 }

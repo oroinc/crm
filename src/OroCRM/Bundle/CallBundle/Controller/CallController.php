@@ -30,7 +30,7 @@ class CallController extends Controller
      */
     public function createAction()
     {
-        $redirect = ($this->getRequest()->get('noredir')) ? false : true;
+        $redirect = ($this->getRequest()->get('no_redirect')) ? false : true;
         $contactId = $this->getRequest()->get('contactId');
 
         $entity = $this->initEntity($contactId);

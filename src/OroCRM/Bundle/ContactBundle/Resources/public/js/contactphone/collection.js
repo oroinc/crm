@@ -16,7 +16,7 @@ function(Backbone, routing, ContactPhoneModel) {
         /**
          * Regenerate route for selected contact
          *
-         * @param id {string}
+         * @param contactId {string}
          */
         setContactId: function (contactId) {
             this.url = routing.generate(this.route, {contactId: contactId});

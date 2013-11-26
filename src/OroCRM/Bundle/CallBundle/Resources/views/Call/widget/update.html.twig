@@ -1,4 +1,3 @@
-
 <div class="widget-content call-form">
     {% if saved is defined and saved %}
         <script type="text/javascript">
@@ -36,7 +35,7 @@
                         {{ form_row(form.relatedAccount, {'label': 'orocrm.call.form.call.relatedTo'|trans}) }}
                         {{ form_row(form.relatedContact, {'label': 'orocrm.call.form.call.relatedContact'|trans}) }}
                         {{ form_row(form.contactPhoneNumber, {'label': 'orocrm.call.form.call.phoneNumber'|trans}) }}
-                        {{ form_row(form.phoneNumber, {'label': 'orocrm.call.form.call.contactPhoneNumber'|trans}) }}
+                        {{ form_widget(form.phoneNumber) }}
                         {{ form_row(form.direction, {'label': 'orocrm.call.form.call.direction'|trans}) }}
                         {{ form_row(form.duration, {'label': 'orocrm.call.form.call.duration'|trans}) }}
                         {{ form_row(form.callStatus) }}
@@ -53,15 +52,13 @@
 
         {% set isRelatedContact = (form.vars.value.relatedContact is null) ? 0 : 1 %}
         <script type="text/javascript">
-            require(['jquery', 'orocrm/contactphone/view', 'orocrm/contactphone/collection'],
-            function($, ContactPhoneView, ContactPhoneCollection){
+            require(['jquery', 'orocrm/contactphone/view'],
+            function($, ContactPhoneView){
                 $(function() {
                     new ContactPhoneView({
-                        el: $('#orocrm_call_call_form_relatedContact'),
-                        phonesList: $('#orocrm_call_call_form_contactPhoneNumber'),
-                        phonePlain: $('#orocrm_call_call_form_phoneNumber'),
-                        collection: new ContactPhoneCollection(),
-                        isRelatedContact: {{ isRelatedContact }}
+                        contact: $('#{{ form.relatedContact.vars.id }}'),
+                        phoneSelector: $('#{{ form.contactPhoneNumber.vars.id }}'),
+                        phonePlain: $('#{{ form.phoneNumber.vars.id }}')
                     });
                 });
             });            

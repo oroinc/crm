@@ -1,9 +1,7 @@
 /* global define */
-define(['underscore', 'backbone', 'jquery.select2'],
-function(_, Backbone) {
+define(['jquery', 'underscore', 'backbone', 'orocrm/contactphone/collection', 'jquery.select2'],
+function($, _, Backbone, ContactPhoneCollection) {
     'use strict';
-
-    var $ = Backbone.$;
 
     /**
      * @export  orocrm/contactphone/view
@@ -11,22 +9,24 @@ function(_, Backbone) {
      * @extends Backbone.View
      */
     return Backbone.View.extend({
+        /**
+         * @property ContactPhoneCollection
+         */
+        collection: null,
 
         /**
-         * List of events
+         * Contact element
          *
          * @property
-         */        
-        events: {
-            'change': 'selectionChanged'
-        },
+         */
+        contact: null,
 
         /**
          * Select element of contact's phones numbers.
          *
          * @property
          */
-        phonesList: null,
+        phoneSelector: null,
 
         /**
          * Input field for phone number
@@ -40,122 +40,110 @@ function(_, Backbone) {
          *
          * @property
          */
-        phonesListTemplate: _.template(
-            '<% _.each(contactphones, function(phone) { %>' + 
+        phonesSelectorTemplate: _.template(
+            '<% _.each(contactPhones, function(phone) { %>' +
                 '<option <% if (phone.get("primary")) { %> selected="selected" <% } %> value=<%= phone.get("id") %>><%= phone.get("phone") %></option>' +
             '<% }); %>'
-        ),         
+        ),
+
         /**
          * Constructor
          *
          * @param options {Object}
          */
         initialize: function(options) {
-            
-            this.phonesList = $(options.phonesList);
-            this.phonePlain = $(options.phonePlain);
-            this.isRelatedContact = options.isRelatedContact;
-            
-            this.displaySelect2(this.isRelatedContact);
-            this.phonesList.on('select2-init', _.bind(function() {
-                this.displaySelect2(this.isRelatedContact);
-            }, this));
+            if (!options.contact) {
+                throw new Error('Contact must be specified');
+            }
+            this.contact = options.contact;
 
-            this.phonesList.on('change', _.bind(function(e) {
-                if (this.phonesList.val() == "") {
-                    this.showPlain();
-                } else {
-                    this.hidePlain();
-                }
-            }, this));
+            if (!options.phoneSelector) {
+                throw new Error('Phone selector must be specified');
+            }
+            this.phoneSelector = options.phoneSelector;
 
+            if (!options.phonePlain) {
+                throw new Error('Phone text field must be specified');
+            }
+            this.phonePlain = options.phonePlain;
+
+            this.initializeCollection();
+
+            // put plain phone field in the correct place
+            this.phoneSelector.closest('.controls').append(this.phonePlain);
+            this.phonePlain.css('margin-top', '12px');
+
+            // listen to change of selectors
+            this.contact.on('change', _.bind(this.contactChanged, this));
+            this.phoneSelector.on('change', _.bind(this.redrawPhonePlain, this));
+
+            // redraw element on collection update
             this.listenTo(this.collection, 'reset', this.render);
 
             this.render();
         },
 
         /**
-         * Show/hide select 2 element
-         *
-         * @param {Boolean} display
+         * Initialize and fill collection with default models
          */
-        displaySelect2: function(display) {
-            if (display) {
-                this.phonesList.select2('container').show();
+        initializeCollection: function() {
+            var models = [];
+            _.each(this.phoneSelector.find('option'), function(option) {
+                if (option.value) {
+                    models.push({
+                        'id':      option.value,
+                        'phone':   option.label,
+                        'primary': option.selected
+                    });
+                }
+            }, this);
+            this.collection = new ContactPhoneCollection(models);
+        },
+
+        /**
+         * @returns {boolean}
+         */
+        isShowPhonePlain: function() {
+            return this.collection.models.length == 0 || this.phoneSelector.val() == "";
+        },
+
+        /**
+         * Redraw
+         */
+        redrawPhonePlain: function() {
+            if (this.isShowPhonePlain()) {
+                this.phonePlain.show();
             } else {
-                this.phonesList.select2('container').hide();
+                this.phonePlain.hide();
+                this.phonePlain.val('');
             }
         },
 
         /**
          * onChange event listener
-         *
-         * @param e {Object}
          */
-        selectionChanged: function(e) {
-            var contactId = $(e.currentTarget).val();
+        contactChanged: function() {
+            var contactId = this.contact.val();
             if (contactId) {
-                this.phonesList.find('option[value!=""]').remove();
                 this.collection.setContactId(contactId);
                 this.collection.fetch();
+            } else {
+                this.collection.reset();
             }
+        },
+
+        syncPhoneSelector: function() {
+            this.phoneSelector.find('option[value!=""]').remove();
+            this.phoneSelector.append(this.phonesSelectorTemplate({contactPhones: this.collection.models}));
+            this.phoneSelector.trigger('change');
         },
 
         /**
          * Render list and or input field
          */
         render: function() {
-
-            if (this.collection.models.length > 0) {
-                this.showPhonesList();
-            } else {      
-                this.showPlain(); 
-            }
-            this.phonesList.trigger('change');
-
-            if (!this.isRelatedContact && this.collection.models.length == 0) {
-                this.hidePhonesList();
-            }
-        },
-        
-        /**
-         * Show plain phone input field
-         */        
-        showPlain: function() {
-            this.phonePlain.css('margin-top', '12px');            
-            this.phonesList.closest('.controls').append(this.phonePlain);
-            this.phonePlain.show();
-        },
-        
-        hidePlain: function() {
-            this.phonePlain.css('margin-top', '0px');
-            this.phonePlain.hide();
-            this.phonePlain.val('');
-        },  
-
-        /**
-         * Show phone seleciton dropdown
-         */
-        showPhonesList: function() {
-            this.phonePlain.css('margin-top', '12px');
-            this.phonesList.closest('.controls').append(this.phonePlain);
-            this.phonesList.show();
-            this.displaySelect2(true);
-            if (this.phonesList[0]) {
-                $('#uniform-' + this.phonesList[0].id).show();
-            }
-            this.phonesList.find('option[value!=""]').remove();
-            this.phonesList.append(this.phonesListTemplate({contactphones: this.collection.models}));
-        },
-
-        hidePhonesList: function() {
-            this.phonePlain.css('margin-top', '0px');
-            this.phonesList.closest('.controls').prepend(this.phonePlain);
-            this.phonesList.hide();
-            this.displaySelect2(false);
-            if (this.phonesList[0]) {
-                $('#uniform-' + this.phonesList[0].id).hide();
-            }
-        },
+            this.syncPhoneSelector();
+            this.redrawPhonePlain();
+        }
     });
 });
