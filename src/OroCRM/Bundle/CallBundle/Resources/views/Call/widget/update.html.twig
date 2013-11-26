@@ -21,7 +21,7 @@
             </div>
         {% endif %}
         <div class="form-container">
-            <form id="{{ form.vars.name }}" action="{{ path('orocrm_call_create') }}?noredir=true" method="post">
+            <form id="{{ form.vars.name }}" action="{{ path('orocrm_call_create', {'noredir': true }) }}" method="post">
                 <fieldset class="form form-horizontal">
                     <div class="span6">
 

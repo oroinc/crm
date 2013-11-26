@@ -19,7 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class CallController extends Controller
 {
     /**
-     * @Route("/create/{contactId}", name="orocrm_call_create", requirements={"id"="\d+"}, defaults={"contactId"=0})
+     * @Route("/create", name="orocrm_call_create")
      * @Template("OroCRMCallBundle:Call:update.html.twig")
      * @Acl(
      *      id="orocrm_call_create",
@@ -28,9 +28,10 @@ class CallController extends Controller
      *      class="OroCRMCallBundle:Call"
      * )
      */
-    public function createForContactAction($contactId)
+    public function createAction()
     {
         $redirect = ($this->getRequest()->get('noredir')) ? false : true;
+        $contactId = $this->getRequest()->get('contactId');
 
         $entity = $this->initEntity($contactId);
         return $this->update($entity, $redirect);
@@ -74,7 +75,7 @@ class CallController extends Controller
 
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('Call deleted successfully')
+                $this->get('translator')->trans('orocrm.call.controller.call.deleted.message')
             );
             return $this->redirect($this->generateUrl('orocrm_call_index'));
         } else {
@@ -86,7 +87,7 @@ class CallController extends Controller
      * @Route(name="orocrm_call_index")
      * @Template
      * @Acl(
-     *      id="orocrm_call_index",
+     *      id="orocrm_call_view",
      *      type="entity",
      *      permission="VIEW",
      *      class="OroCRMCallBundle:Call"
@@ -117,7 +118,7 @@ class CallController extends Controller
      */
     protected function initEntity($contactId = null)
     {
-        $entity = $this->getManager()->createEntity();
+        $entity = new Call();
         $user = $this->container->get('security.context')->getToken()->getUser();
         $entity->setOwner($user);
 
@@ -155,14 +156,14 @@ class CallController extends Controller
         $saved = false;
 
         if (!$entity) {
-            $entity = $this->getManager()->createEntity();
+            $entity = new Call();
         }
 
         if ($this->get('orocrm_call.call.form.handler')->process($entity)) {
             if ($redirect) {
                 $this->get('session')->getFlashBag()->add(
                     'success',
-                    $this->get('translator')->trans('Call logged successfully')
+                    $this->get('translator')->trans('orocrm.call.controller.call.saved.message')
                 );
                 return $this->redirect($this->generateUrl('orocrm_call_index'));
             }
@@ -174,9 +175,4 @@ class CallController extends Controller
             'form' => $this->get('orocrm_call.call.form')->createView()
         );
     }
-
-    public function getManager()
-    {
-        return $this->get('orocrm_call.call.manager.api');
-    }    
 }
