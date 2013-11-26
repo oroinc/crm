@@ -1,6 +1,7 @@
 parameters:
     orocrm_magento.mage.region_connector.class:                           OroCRM\Bundle\MagentoBundle\Provider\RegionConnector
     orocrm_magento.customer.entity.class:                                 OroCRM\Bundle\MagentoBundle\Entity\Customer
+    orocrm_magento.region.entity.class:                                   OroCRM\Bundle\MagentoBundle\Entity\Region
     orocrm_magento.mage.customer_connector.class:                         OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector
     orocrm_magento.mage.soap_transport.class:                             OroCRM\Bundle\MagentoBundle\Provider\MageSoapTransport
     orocrm_magento.sync.processor.class:                                  OroCRM\Bundle\MagentoBundle\Provider\SyncProcessor

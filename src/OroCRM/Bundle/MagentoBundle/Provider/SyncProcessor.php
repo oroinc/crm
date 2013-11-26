@@ -9,6 +9,7 @@ use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessorInterface;
 
 class SyncProcessor implements SyncProcessorInterface
@@ -78,6 +79,11 @@ class SyncProcessor implements SyncProcessorInterface
                 $realConnector->getImportEntityFQCN()
             );
             $processorAlias   = reset($processorAliases);
+
+            $realTransport = $this->registry
+                ->getTransportTypeBySettingEntity($channel->getTransport(), $channel->getType());
+            /** @var ConnectorInterface $realConnector */
+            $realConnector->configure($realTransport, $channel->getTransport());
 
             $configuration = [
                 $mode => [
