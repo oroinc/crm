@@ -1,13 +1,15 @@
-{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% if resource_granted('orocrm_call_view') %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
 
-{{ UI.scrollSubblock(
-    'Calls',
-    [
-        oro_widget_render({
-            'widgetType': 'buttons',
-            'url': path('orocrm_call_widget_calls', {userId: app.request.get('id')}),
-            'alias': 'account_calls',
-            'cssClass': 'inner-grid',
-        })
-    ]
-) }}
+    {{ UI.scrollSubblock(
+        'Calls',
+        [
+            oro_widget_render({
+                'widgetType': 'buttons',
+                'url': path('orocrm_call_widget_calls', {userId: app.request.get('id')}),
+                'alias': 'account_calls',
+                'cssClass': 'inner-grid',
+            })
+        ]
+    ) }}
+{% endif %}

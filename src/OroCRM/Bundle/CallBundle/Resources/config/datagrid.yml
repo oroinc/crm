@@ -2,7 +2,7 @@ datagrid:
     calls-grid:
         source:
             type: orm
-            acl_resource: orocrm_call
+            acl_resource: orocrm_call_view
             query:
                 select:
                     - call.id
@@ -89,11 +89,10 @@ datagrid:
         options:
             entityHint: calls
 
-
     widget-calls-grid:
         source:
             type: orm
-            acl_resource: orocrm_call
+            acl_resource: orocrm_call_view
             query:
                 select:
                     - call.id

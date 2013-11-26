@@ -148,23 +148,25 @@
         ]
     }]) %}
 
-    {% set dataBlocks = dataBlocks|merge([{
-        'title' : 'Calls',
-        'subblocks': [
-            {
-                'title' : null,
-                'data' : [
-                    oro_widget_render({
-                        'widgetType': 'buttons',
-                        'url': path('orocrm_call_widget_calls', {accountId: entity.id}),
-                        'alias': 'account_calls',
-                        'cssClass': 'inner-grid',
-                    })
-                ],
-                'useSpan': false
-            }
-        ]
-    }]) %}
+    {% if resource_granted('orocrm_call_view') %}
+        {% set dataBlocks = dataBlocks|merge([{
+            'title' : 'Calls',
+            'subblocks': [
+                {
+                    'title' : null,
+                    'data' : [
+                        oro_widget_render({
+                            'widgetType': 'buttons',
+                            'url': path('orocrm_call_widget_calls', {accountId: entity.id}),
+                            'alias': 'account_calls',
+                            'cssClass': 'inner-grid',
+                        })
+                    ],
+                    'useSpan': false
+                }
+            ]
+        }]) %}
+    {% endif %}
 
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}

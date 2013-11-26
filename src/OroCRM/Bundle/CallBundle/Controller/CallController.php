@@ -86,7 +86,7 @@ class CallController extends Controller
      * @Route(name="orocrm_call_index")
      * @Template
      * @Acl(
-     *      id="orocrm_call_index",
+     *      id="orocrm_call_view",
      *      type="entity",
      *      permission="VIEW",
      *      class="OroCRMCallBundle:Call"
@@ -100,6 +100,7 @@ class CallController extends Controller
     /**
      * @Route("/widget", name="orocrm_call_widget_calls")
      * @Template
+     * @AclAncestor("orocrm_call_view")
      *
      * @param Request $request
      * @return array
@@ -111,7 +112,7 @@ class CallController extends Controller
         );
     }
 
-   /**
+    /**
      * @param int $contactId
      * @return Call
      */
@@ -178,5 +179,5 @@ class CallController extends Controller
     public function getManager()
     {
         return $this->get('orocrm_call.call.manager.api');
-    }    
+    }
 }
