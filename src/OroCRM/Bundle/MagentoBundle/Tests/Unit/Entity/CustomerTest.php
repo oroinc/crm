@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
 class CustomerTest extends AbstractEntityTestCase
 {
     const TEST_ORIGINAL_ID = 123;
+    const TEST_IS_ACTIVE   = false;
+    const TEST_STRING      = 'string';
 
     /**
      * {@inheritDoc}
@@ -35,6 +37,15 @@ class CustomerTest extends AbstractEntityTestCase
             'contact'    => ['contact', $contact, $contact],
             'account'    => ['account', $account, $account],
             'originalId' => ['originalId', self::TEST_ORIGINAL_ID, self::TEST_ORIGINAL_ID],
+            'vat'        => ['vat', self::TEST_STRING . 'vat', self::TEST_STRING . 'vat'],
+            'isActive'   => ['isActive', self::TEST_IS_ACTIVE, self::TEST_IS_ACTIVE]
         ];
+    }
+
+    public function toStringTest()
+    {
+        $this->entity->setFirstName(self::TEST_STRING . 'first');
+        $this->entity->setLastName(self::TEST_STRING . 'last');
+        $this->assertEquals('stringfirst stringlast', (string)$this->entity);
     }
 }

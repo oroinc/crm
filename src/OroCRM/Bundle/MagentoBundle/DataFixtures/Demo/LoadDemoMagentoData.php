@@ -53,12 +53,6 @@ class LoadDemoMagentoData extends AbstractFixture implements OrderedFixtureInter
             $lastName  = $this->generateLastName();
             $birthday  = $this->generateBirthday();
             $email     = $this->generateEmail($firstName, $lastName);
-            $phone     = sprintf(
-                '%s-%s-%s',
-                rand(pow(10, 3 - 1), pow(10, 3) - 1),
-                rand(pow(10, 3 - 1), pow(10, 3) - 1),
-                rand(pow(10, 4 - 1), pow(10, 4) - 1)
-            );
             $vat       = rand(pow(10, 14 - 1), pow(10, 14) - 1);
 
             $customer = new Customer();
@@ -68,7 +62,6 @@ class LoadDemoMagentoData extends AbstractFixture implements OrderedFixtureInter
                 ->setLastName($lastName)
                 ->setEmail($email)
                 ->setBirthday($birthday)
-                ->setPhone($phone)
                 ->setVat($vat)
                 ->setGroup($group)
                 ->setCreatedAt(new \DateTime('now'))

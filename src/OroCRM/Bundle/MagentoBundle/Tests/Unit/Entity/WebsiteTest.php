@@ -21,7 +21,7 @@ class WebsiteTest extends AbstractEntityTestCase
     public function getSetDataProvider()
     {
         return [
-            'id'   => ['id'],
+            'id'   => ['id', self::TEST_ID, self::TEST_ID],
             'code' => ['code', self::TEST_WEBSITE_CODE, self::TEST_WEBSITE_CODE],
             'name' => ['name', self::TEST_WEBSITE_NAME, self::TEST_WEBSITE_NAME]
         ];

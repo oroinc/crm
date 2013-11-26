@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCustomerEntity;
+use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -30,22 +30,8 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *  }
  * )
  */
-class Customer extends BaseCustomerEntity implements FullNameInterface
+class Customer extends BasePerson implements FullNameInterface
 {
-    /**
-     * @var \DateTime $createdAt
-     *
-     * @ORM\Column(type="datetime")
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime $updatedAt
-     *
-     * @ORM\Column(type="datetime")
-     */
-    protected $updatedAt;
-
     /**
      * @var Website
      *
@@ -87,51 +73,25 @@ class Customer extends BaseCustomerEntity implements FullNameInterface
     protected $account;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $isActive = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="vat", type="string", length=255, nullable=true)
+     */
+    protected $vat;
+
+    /**
      * @var integer
      *
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
     protected $originalId;
-
-    /**
-     * @param \DateTime $createdAt
-     *
-     * @return $this
-     */
-    public function setCreatedAt(\DateTime $createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTime $updatedAt
-     *
-     * @return $this
-     */
-    public function setUpdatedAt(\DateTime $updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
 
     /**
      * @param Website $website
@@ -251,6 +211,46 @@ class Customer extends BaseCustomerEntity implements FullNameInterface
     public function getOriginalId()
     {
         return $this->originalId;
+    }
+
+    /**
+     * @param string $vat
+     *
+     * @return $this
+     */
+    public function setVat($vat)
+    {
+        $this->vat = $vat;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVat()
+    {
+        return $this->vat;
+    }
+
+    /**
+     * @param bool $isActive
+     *
+     * @return $this
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 
     public function __toString()
