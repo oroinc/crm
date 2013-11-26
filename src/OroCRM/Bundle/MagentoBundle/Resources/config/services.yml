@@ -1,14 +1,17 @@
 parameters:
+    orocrm_magento.mage.region_connector.class:                           OroCRM\Bundle\MagentoBundle\Provider\RegionConnector
     orocrm_magento.customer.entity.class:                                 OroCRM\Bundle\MagentoBundle\Entity\Customer
     orocrm_magento.mage.customer_connector.class:                         OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector
     orocrm_magento.mage.soap_transport.class:                             OroCRM\Bundle\MagentoBundle\Provider\MageSoapTransport
     orocrm_magento.mage.sync_processor.class:                             OroCRM\Bundle\MagentoBundle\Provider\SyncProcessor
 
     orocrm_magento.importexport.normalizer.customer.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerNormalizer
+    orocrm_magento.importexport.normalizer.region.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\RegionNormalizer
     orocrm_magento.importexport.relation_normalizer.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\RelationNormalizer
 
     orocrm_magento.import_strategy.customer.add_or_update.class:          OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AddOrUpdateCustomer
-    orocrm_magento.import.reader.magento_api.class:                       OroCRM\Bundle\MagentoBundle\ImportExport\Reader\CustomerApiReader
+    orocrm_magento.import_strategy.region.add_or_update.class:            OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\RegionStrategy
+    orocrm_magento.import.reader.magento_api.class:                       OroCRM\Bundle\MagentoBundle\ImportExport\Reader\MagentoApiReader
 
     orocrm_magento.provider.channel_type.class:                           OroCRM\Bundle\MagentoBundle\Provider\MageChannelType
     orocrm_magento.form.type.soap_transport_setting.class:                OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
@@ -28,6 +31,13 @@ services:
         tags:
           - { name: oro_integration.connector, type: customer, channel_type: magento }
 
+    orocrm_magento.mage.region_connector:
+        class: %orocrm_magento.mage.region_connector.class%
+        arguments:
+          - @orocrm_magento.mage.soap_transport
+        tags:
+          - { name: oro_integration.connector, type: region, channel_type: magento }
+
     # customer sync processor
     orocrm_magento.customer_sync.processor:
         class: %orocrm_magento.mage.sync_processor.class%
@@ -43,13 +53,24 @@ services:
         tags:
             - { name: oro_importexport.normalizer }
 
+    orocrm_magento.importexport.normalizer.region:
+        class: %orocrm_magento.importexport.normalizer.region.class%
+        tags:
+            - { name: oro_importexport.normalizer }
+
     orocrm_magento.importexport.relation_normalizer:
         class: %orocrm_magento.importexport.relation_normalizer.class%
         tags:
             - { name: oro_importexport.normalizer, priority: -10 }
 
+    # strategy
     orocrm_magento.import.strategy.customer.add_or_update:
         class: %orocrm_magento.import_strategy.customer.add_or_update.class%
+        arguments:
+            - @oro_importexport.strategy.import.helper
+
+    orocrm_magento.import.strategy.region.add_or_update:
+        class: %orocrm_magento.import_strategy.region.add_or_update.class%
         arguments:
             - @oro_importexport.strategy.import.helper
 
@@ -63,11 +84,26 @@ services:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.customer.entity.class%, alias: orocrm_magento.add_or_update_customer }
             - { name: oro_importexport.processor, type: import_validation, entity: %orocrm_magento.customer.entity.class%, alias: orocrm_magento.add_or_update_customer }
 
-    orocrm_magento.import.reader.magento_api:
+    orocrm_magento.importexport.processor.import_region:
+        parent: oro_importexport.processor.import_abstract
+        calls:
+             - [setDataConverter, [@oro_importexport.data_converter.default]]
+             - [setStrategy, [@orocrm_magento.import.strategy.region.add_or_update]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.region.entity.class%, alias: orocrm_magento.add_or_update_region }
+            - { name: oro_importexport.processor, type: import_validation, entity: %orocrm_magento.region.entity.class%, alias: orocrm_magento.add_or_update_region }
+
+    orocrm_magento.import.customer_reader.magento_api:
         class: %orocrm_magento.import.reader.magento_api.class%
         arguments:
             - @oro_importexport.context_registry
             - @orocrm_magento.mage.customer_connector
+
+    orocrm_magento.import.region_reader.magento_api:
+        class: %orocrm_magento.import.reader.magento_api.class%
+        arguments:
+            - @oro_importexport.context_registry
+            - @orocrm_magento.mage.region_connector
 
     orocrm_magento.provider.channel_type:
         class: %orocrm_magento.provider.channel_type.class%

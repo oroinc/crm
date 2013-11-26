@@ -252,4 +252,9 @@ class Customer extends BaseCustomerEntity implements FullNameInterface
     {
         return $this->originalId;
     }
+
+    public function __toString()
+    {
+        return sprintf("%s %s", $this->getFirstName(), $this->getLastName());
+    }
 }

@@ -2,11 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\BatchBundle\Item\InvalidItemException;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
@@ -16,26 +13,20 @@ use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
+use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerNormalizer;
 
-class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
+class RegionStrategy implements StrategyInterface, ContextAwareInterface
 {
-    const ENTITY_NAME = 'OroCRMMagentoBundle:Customer';
-    const GROUP_ENTITY_NAME = 'OroCRMMagentoBundle:CustomerGroup';
+    const ENTITY_NAME = 'OroCRMMagentoBundle:Region';
 
     /** @var ImportStrategyHelper */
     protected $strategyHelper;
 
     /** @var ContextInterface */
     protected $importExportContext;
-
-    /** @var array */
-    protected $regionsCache = [];
-
-    /** @var array */
-    protected $mageRegionsCache = [];
 
     /**
      * @param ImportStrategyHelper $strategyHelper
@@ -53,17 +44,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      */
     public function process($entity)
     {
-        $entity = $this->findAndReplaceEntity($entity, self::ENTITY_NAME, 'originalId', ['id']);
-
-        // update all related entities
-        $this
-            ->updateStoresAndGroup($entity)
-            ->updateAccount($entity)
-            ->updateContact($entity)
-            ->updateAddresses($entity);
-
-        // update owner for addresses, emails and phones
-        $this->updateRelatedEntitiesOwner($entity);
+        $entity = $this->findAndReplaceEntity($entity, self::ENTITY_NAME, 'combinedCode');
 
         // validate and update context - increment counter or add validation error
         $entity = $this->validateAndUpdateContext($entity);
@@ -76,7 +57,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      * @param string $entityName
      * @param string $idFieldName
      * @param array $excludedProperties
-     * @return Customer
+     * @return Region
      */
     protected function findAndReplaceEntity($entity, $entityName, $idFieldName = 'id', $excludedProperties = [])
     {
@@ -93,10 +74,10 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     }
 
     /**
-     * @param Customer $entity
-     * @return null|Customer
+     * @param Region $entity
+     * @return null|Region
      */
-    protected function validateAndUpdateContext(Customer $entity)
+    protected function validateAndUpdateContext(Region $entity)
     {
         // validate contact
         $validationErrors = $this->strategyHelper->validateEntity($entity);
@@ -201,73 +182,35 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         $addresses = $entity->getContact()->getAddresses();
 
         foreach ($addresses as $address) {
-            $this->updateAddressCountryRegion($address, $entity);
+            $countryCode = $address->getCountry()->getIso2Code();
+            $this->regionsCache[$countryCode] = empty($this->regionsCache[$countryCode]) ?
+                $this->findAndReplaceEntity(
+                    $address->getCountry(),
+                    'Oro\Bundle\AddressBundle\Entity\Country',
+                    'iso2Code',
+                    ['iso2Code', 'iso3Code', 'name']
+                ) :
+                $this->regionsCache[$countryCode];
 
-            // update address type
-            $types = $address->getTypeNames();
-            $address->getTypes()->clear();
-            $loadedTypes = $this->getEntityRepository('OroAddressBundle:AddressType')
-                ->findBy(['name' => $types]);
+            $regionCode = $address->getRegion()->getCombinedCode();
+            $this->regionsCache[$regionCode] = empty($this->regionsCache[$regionCode]) ?
+                $this->getEntityOrNull($address->getRegion(), 'combinedCode', 'Oro\Bundle\AddressBundle\Entity\Region'):
+                $this->regionsCache[$regionCode];
 
-            foreach ($loadedTypes as $type) {
-                $address->addType($type);
+            if (empty($this->regionsCache[$regionCode])) {
+                throw new InvalidItemException(
+                    sprintf("Cannot find '%s' region for '%s' country", $regionCode, $countryCode),
+                    [$entity]
+                );
             }
+
+            $address->setCountry($this->regionsCache[$countryCode])
+                ->setRegion($this->regionsCache[$regionCode]);
         }
+
 
         return $this;
     }
-
-    /**
-     * @param AbstractAddress $address
-     * @param Customer $entity
-     * @throws InvalidItemException
-     */
-    protected function updateAddressCountryRegion(AbstractAddress $address, Customer $entity)
-    {
-        $countryCode = $address->getCountry()->getIso2Code();
-
-        // country cache
-        $this->regionsCache[$countryCode] = empty($this->regionsCache[$countryCode]) ?
-            $this->findAndReplaceEntity(
-                $address->getCountry(),
-                'Oro\Bundle\AddressBundle\Entity\Country',
-                'iso2Code',
-                ['iso2Code', 'iso3Code', 'name']
-            ) :
-            $this->regionsCache[$countryCode];
-
-        // get region by Magento code (region_id)
-        $regionCode = $address->getRegion()->getCode();
-
-        if (empty($this->mageRegionsCache[$regionCode])) {
-            $this->mageRegionsCache[$regionCode] = $this->getEntityRepository(
-                'OroCRM\Bundle\MagentoBundle\Entity\Region'
-            )
-            ->findOneBy(['region_id' => $regionCode]);
-        }
-
-        $mageRegion = $this->mageRegionsCache[$regionCode];
-        $combinedCode = $mageRegion->getCombinedCode();
-
-        // set ISO combined code
-        $address->getRegion()->setCombinedCode($combinedCode);
-
-        // get region
-        $this->regionsCache[$combinedCode] = empty($this->regionsCache[$combinedCode]) ?
-            $this->getEntityOrNull($address->getRegion(), 'combinedCode', 'Oro\Bundle\AddressBundle\Entity\Region'):
-            $this->regionsCache[$combinedCode];
-
-        if (empty($this->regionsCache[$combinedCode])) {
-            throw new InvalidItemException(
-                sprintf("Cannot find '%s' region for '%s' country", $combinedCode, $countryCode),
-                [$entity]
-            );
-        }
-
-        $address->setCountry($this->regionsCache[$countryCode])
-            ->setRegion($this->regionsCache[$combinedCode]);
-    }
-
 
     /**
      * @param Customer $entity

@@ -233,10 +233,11 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
 
         // format contact addresses data
         foreach ($contact['addresses'] as $key => $address) {
+            // fill address with contact info
             $contact['addresses'][$key] = array_merge($contact['addresses'][$key], $contact);
+            unset($contact['addresses'][$key]['addresses']);
 
             // TODO: make sure this works after CRM-185
-            // TODO: test this after we'll have Magento region db in place
             $contact['addresses'][$key]['postalCode'] = $contact['addresses'][$key]['postcode'];
             $contact['addresses'][$key]['country']    = $contact['addresses'][$key]['country_id'];
             $contact['addresses'][$key]['regionText'] = $contact['addresses'][$key]['region'];
@@ -245,6 +246,14 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             // TODO: make sure datetime normalized and set correctly to object
             $contact['addresses'][$key]['created']     = $contact['addresses'][$key]['created_at'];
             $contact['addresses'][$key]['updated']     = $contact['addresses'][$key]['updated_at'];
+
+            // prepare address types
+            if (!empty($contact['addresses'][$key]['is_default_shipping'])) {
+                $contact['addresses'][$key]['types'][] = 'shipping';
+            }
+            if (!empty($contact['addresses'][$key]['is_default_billing'])) {
+                $contact['addresses'][$key]['types'][] = 'billing';
+            }
         }
 
         return $contact;
