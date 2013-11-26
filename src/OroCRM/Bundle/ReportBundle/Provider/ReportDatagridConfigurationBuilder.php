@@ -12,7 +12,6 @@ class ReportDatagridConfigurationBuilder extends DatagridConfigurationBuilder
     {
         parent::__construct($gridName, $report);
 
-        $this->config->offsetSetByPath('[pageTitle]', $report->getName());
         $this->config->offsetSetByPath('[source][acl_resource]', 'orocrm_report_view');
     }
 }
