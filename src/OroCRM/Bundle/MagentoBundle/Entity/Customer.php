@@ -77,7 +77,7 @@ class Customer extends BasePerson implements FullNameInterface
      *
      * @ORM\Column(type="boolean")
      */
-    protected $isActive;
+    protected $isActive = false;
 
     /**
      * @var string
