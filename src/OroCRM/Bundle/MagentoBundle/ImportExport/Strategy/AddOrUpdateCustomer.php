@@ -56,17 +56,27 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      */
     public function process($entity)
     {
-        $originalContact = '';
-        $originalAccount = '';
+        $newEntity = $this->findAndReplaceEntity(
+            $entity,
+            self::ENTITY_NAME,
+            'originalId',
+            ['id', 'contact', 'account']
+        );
 
-        $entity = $this->findAndReplaceEntity($entity, self::ENTITY_NAME, 'originalId', ['id']);
+        $originalContactId = $newEntity->getContact()->getId();
+        $originalAccountId = $newEntity->getAccount()->getId();
+
+        $entity->getContact()->setId($originalContactId);
+        $entity->getAccount()->setId($originalAccountId);
+
+        $entity = $newEntity->setContact($entity->getContact())
+            ->setAccount($entity->getAccount());
 
         // update all related entities
         $this
             ->updateStoresAndGroup($entity)
-            ->updateAddresses($entity)
-            ->updateAccount($entity)
-            ->updateContact($entity);
+            ->updateContact($entity)
+            ->updateAccount($entity);
 
         // update owner for addresses, emails and phones
         $this->updateRelatedEntitiesOwner($entity);
@@ -198,32 +208,6 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     }
 
     /**
-     * @param Customer $entity
-     * @throws \Oro\Bundle\BatchBundle\Item\InvalidItemException
-     * @return $this
-     */
-    protected function updateAddresses(Customer $entity)
-    {
-        $addresses = $entity->getContact()->getAddresses();
-
-        foreach ($addresses as $address) {
-            $this->updateAddressCountryRegion($address, $entity);
-
-            // update address type
-            $types = $address->getTypeNames();
-            $address->getTypes()->clear();
-            $loadedTypes = $this->getEntityRepository('OroAddressBundle:AddressType')
-                ->findBy(['name' => $types]);
-
-            foreach ($loadedTypes as $type) {
-                $address->addType($type);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @param AbstractAddress $address
      * @param Customer $entity
      * @throws InvalidItemException
@@ -300,10 +284,24 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         $contact = $entity->getContact();
 
         $contact = $this->findAndReplaceEntity($contact, ContactNormalizer::CONTACT_TYPE, 'id', ['id']);
-        $contact->addAccount($entity->getAccount());
+        //$contact->addAccount($entity->getAccount());
+
+        $addresses = $contact->getAddresses();
+        foreach ($addresses as $address) {
+            $this->updateAddressCountryRegion($address, $entity);
+
+            // update address type
+            $types = $address->getTypeNames();
+            $address->getTypes()->clear();
+            $loadedTypes = $this->getEntityRepository('OroAddressBundle:AddressType')
+                ->findBy(['name' => $types]);
+
+            foreach ($loadedTypes as $type) {
+                $address->addType($type);
+            }
+        }
 
         $entity->setContact($contact);
-
         return $this;
     }
 
