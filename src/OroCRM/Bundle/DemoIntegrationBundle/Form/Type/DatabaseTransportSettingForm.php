@@ -42,7 +42,7 @@ class DatabaseTransportSettingForm extends AbstractType
                 if (empty($data['password']) && $oldPassword) {
                     // populate old password
                     $data['password'] = $oldPassword;
-                } else {
+                } elseif (isset($data['password'])) {
                     $data['password'] = $encryptor->encryptData($data['password']);
                 }
 
