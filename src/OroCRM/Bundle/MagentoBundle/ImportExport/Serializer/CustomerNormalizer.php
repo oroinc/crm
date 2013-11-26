@@ -26,6 +26,8 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
         'middlename'  => 'middle_name',
         'prefix'      => 'name_prefix',
         'suffix'      => 'name_suffix',
+        'dob'         => 'birthday',
+        'taxvat'      => 'vat',
     ];
 
     static protected $objectFields = array(
@@ -33,6 +35,11 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
         'website',
         'group',
         'addresses',
+        'updated_at',
+        'updatedAt',
+        'created_at',
+        'createdAt',
+        'birthday',
     );
 
     const STORE_TYPE     = 'OroCRM\Bundle\MagentoBundle\Entity\Store';
@@ -111,6 +118,8 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             $mappedData[$fieldKey] = $value;
         }
 
+        $mappedData['birthday'] = substr($mappedData['birthday'], 0, 10);
+
         $this->setScalarFieldsValues($resultObject, $mappedData);
         $this->setObjectFieldsValues($resultObject, $mappedData);
 
@@ -123,15 +132,12 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
      */
     protected function setScalarFieldsValues(Customer $object, array $data)
     {
-        foreach (['created_at', 'updated_at'] as $itemName) {
-            if (isset($data[$itemName]) && is_string($data[$itemName])) {
-                $timezone = new \DateTimeZone('UTC');
-                $data[$itemName] = new \DateTime($data[$itemName], $timezone);
-            }
-        }
-
         $data = $this->convertToCamelCase($data);
         foreach ($data as $itemName => $item) {
+            if (in_array($itemName, static::$objectFields)) {
+                continue;
+            }
+
             $method = 'set' . ucfirst($itemName);
 
             if (method_exists($object, $method) && !in_array($itemName, self::$objectFields)) {
@@ -203,7 +209,35 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             ->setStore($store)
             ->setGroup($this->denormalizeObject($data, 'group', static::GROUPS_TYPE, $format, $context))
             ->setContact($contact)
-            ->setAccount($account);
+            ->setAccount($account)
+            ->setBirthday(
+                $this->denormalizeObject(
+                    $data,
+                    'birthday',
+                    'DateTime',
+                    $format,
+                    array_merge($context, ['type' => 'date'])
+                )
+            )
+            ->setCreatedAt(
+                $this->denormalizeObject(
+                    $data,
+                    'created_at',
+                    'DateTime',
+                    $format,
+                    array_merge($context, ['type' => 'datetime', 'format' => 'Y-m-d H:i:s'])
+                )
+            )
+            ->setUpdatedAt(
+                $this->denormalizeObject(
+                    $data,
+                    'updated_at',
+                    'DateTime',
+                    $format,
+                    array_merge($context, ['type' => 'datetime', 'format' => 'Y-m-d H:i:s'])
+                )
+            );
+
     }
 
     /**
