@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ReportBundle\Provider;
+namespace OroCRM\Bundle\ReportBundle\Grid;
 
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\DataGridBundle\Provider\ConfigurationProviderInterface;

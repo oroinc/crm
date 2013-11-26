@@ -1,7 +1,7 @@
 parameters:
     orocrm_report.report.filter.type.period.class:        OroCRM\Bundle\ReportBundle\Filter\PeriodFilter
     orocrm_report.report.grid.listener.class:             OroCRM\Bundle\ReportBundle\EventListener\ReportGridListener
-    orocrm_report.datagrid.configuration.provider.class:  OroCRM\Bundle\ReportBundle\Provider\ReportDatagridConfigurationProvider
+    orocrm_report.datagrid.configuration.provider.class:  OroCRM\Bundle\ReportBundle\Grid\ReportDatagridConfigurationProvider
 
 services:
     orocrm_report.report.filter.type.period:

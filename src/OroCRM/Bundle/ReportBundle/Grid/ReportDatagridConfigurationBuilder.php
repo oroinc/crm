@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ReportBundle\Provider;
+namespace OroCRM\Bundle\ReportBundle\Grid;
 
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
-use Oro\Bundle\QueryDesignerBundle\Provider\DatagridConfigurationBuilder;
+use Oro\Bundle\QueryDesignerBundle\Grid\DatagridConfigurationBuilder;
 use OroCRM\Bundle\ReportBundle\Entity\Report;
 
 class ReportDatagridConfigurationBuilder extends DatagridConfigurationBuilder
