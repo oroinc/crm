@@ -30,7 +30,7 @@ class CallController extends Controller
      */
     public function createAction()
     {
-        $redirect = ($this->getRequest()->get('no_redirect')) ? false : true;
+        $redirect = ($this->getRequest()->get('noredir')) ? false : true;
         $contactId = $this->getRequest()->get('contactId');
 
         $entity = $this->initEntity($contactId);
@@ -50,6 +50,37 @@ class CallController extends Controller
     public function updateAction(Call $entity = null)
     {
         return $this->update($entity);
+    }
+
+    /**
+     * @Route("/delete/{id}", name="orocrm_call_delete", requirements={"id"="\d+"})
+     * @Template
+     * @Acl(
+     *      id="orocrm_call_delete",
+     *      type="entity",
+     *      permission="DELETE",
+     *      class="OroCRMCallBundle:Call"
+     * )
+     */
+    public function deleteAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $call = $em->getRepository('OroCRMCallBundle:Call')->find($id);
+
+        if ($call) {
+
+            $em->remove($call);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.call.controller.call.deleted.message')
+            );
+            return $this->redirect($this->generateUrl('orocrm_call_index'));
+        } else {
+            throw new NotFoundHttpException(sprintf('Call with ID %s is not found', $id));
+        }
     }
 
     /**
