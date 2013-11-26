@@ -17,6 +17,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
+use OroCRM\Bundle\MagentoBundle\Entity\AddressRelation;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
@@ -283,11 +284,15 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         /** @var Contact $contact */
         $contact = $entity->getContact();
 
-        $contact = $this->findAndReplaceEntity($contact, ContactNormalizer::CONTACT_TYPE, 'id', ['id']);
+
+        /** @var Contact $newContact */
+        $newContact = $this->findAndReplaceEntity($contact, ContactNormalizer::CONTACT_TYPE, 'id', ['id', 'addresses']);
+        $existingAddresses = $newContact->getAddresses()->toArray();
+
         //$contact->addAccount($entity->getAccount());
 
         $addresses = $contact->getAddresses();
-        foreach ($addresses as $address) {
+        foreach ($addresses as $i => $address) {
             $this->updateAddressCountryRegion($address, $entity);
 
             // update address type
@@ -299,6 +304,9 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             foreach ($loadedTypes as $type) {
                 $address->addType($type);
             }
+
+            $addressId = isset($existingAddresses[$i]) ? $existingAddresses[$i]->getId() : null;
+            $address->setId($addressId);
         }
 
         $entity->setContact($contact);
