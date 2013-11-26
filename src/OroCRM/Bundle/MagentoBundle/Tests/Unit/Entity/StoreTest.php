@@ -23,7 +23,7 @@ class StoreTest extends AbstractEntityTestCase
         $website = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Website');
 
         return [
-            'id'      => ['id'],
+            'id'      => ['id', self::TEST_ID, self::TEST_ID],
             'code'    => ['code', self::TEST_STORE_CODE, self::TEST_STORE_CODE],
             'name'    => ['name', self::TEST_STORE_NAME, self::TEST_STORE_NAME],
             'website' => ['website', $website, $website]

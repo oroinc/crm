@@ -4,11 +4,13 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
 
 abstract class AbstractEntityTestCase extends \PHPUnit_Framework_TestCase
 {
+    const TEST_ID = 123;
+
     protected $entity;
 
     public function setUp()
     {
-        $name = $this->getEntityFQCN();
+        $name         = $this->getEntityFQCN();
         $this->entity = new $name();
     }
 

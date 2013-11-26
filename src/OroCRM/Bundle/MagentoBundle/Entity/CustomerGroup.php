@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCustomerGroupEntity;
+use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePersonGroup;
 
 /**
  * Class CustomerGroup
@@ -13,7 +13,7 @@ use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCustomerGroupEntity;
  * @ORM\Entity
  * @ORM\Table(name="orocrm_magento_customer_group")
  */
-class CustomerGroup extends BaseCustomerGroupEntity
+class CustomerGroup extends BasePersonGroup
 {
 
 }
