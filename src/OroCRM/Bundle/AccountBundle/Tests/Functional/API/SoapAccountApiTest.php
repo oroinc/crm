@@ -57,7 +57,12 @@ class SoapAccountApiTest extends WebTestCase
         $accountName = $request['name'];
         $account = $accounts['item'];
         if (isset($account[0])) {
-            $account = array_filter($account, function($a) use ($accountName) { return $a['name'] == $accountName; });
+            $account = array_filter(
+                $account,
+                function ($a) use ($accountName) {
+                    return $a['name'] == $accountName;
+                }
+            );
             $account = reset($account);
         }
 

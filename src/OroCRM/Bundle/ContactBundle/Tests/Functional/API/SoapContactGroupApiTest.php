@@ -54,7 +54,12 @@ class SoapContactGroupApiTest extends WebTestCase
         $groups = $this->client->getSoap()->getContactGroups(1, 1000);
         $groups = ToolsAPI::classToArray($groups);
         $groupLabel = $request['label'];
-        $group = array_filter($groups['item'], function($a) use($groupLabel) { return $a['label'] == $groupLabel; });
+        $group = array_filter(
+            $groups['item'],
+            function ($a) use ($groupLabel) {
+                return $a['label'] == $groupLabel;
+            }
+        );
         $this->assertNotEmpty($group);
 
         return reset($group);
