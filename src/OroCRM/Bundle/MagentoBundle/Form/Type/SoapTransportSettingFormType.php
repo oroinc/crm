@@ -59,7 +59,16 @@ class SoapTransportSettingFormType extends AbstractType
             ['label' => 'Sync start date', 'required' => true]
         );
         $builder->add('check', 'button', ['label' => 'Check connection']);
-        $builder->add('website_id', 'choice', ['label' => 'Website', 'empty_value' => 'All', 'required' => false]);
+        $builder->add(
+            'store_id',
+            'choice',
+            [
+                'label'       => 'Store',
+                'empty_value' => 'All',
+                'required'    => false,
+                'tooltip'     => 'List will be available after connection will be properly configured',
+            ]
+        );
     }
 
     /**

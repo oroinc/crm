@@ -54,9 +54,9 @@ class MagentoSoapTransport extends Transport
     /**
      * @var int
      *
-     * @ORM\Column(name="website_id", type="integer", nullable=true)
+     * @ORM\Column(name="store_id", type="integer", nullable=true)
      */
-    protected $websiteId = null;
+    protected $storeId = null;
 
     public function __construct()
     {
@@ -164,13 +164,13 @@ class MagentoSoapTransport extends Transport
     }
 
     /**
-     * @param int $websiteId
+     * @param int $storeId
      *
      * @return $this
      */
-    public function setWebsiteId($websiteId)
+    public function setStoreId($storeId)
     {
-        $this->websiteId = $websiteId;
+        $this->storeId = $storeId;
 
         return $this;
     }
@@ -178,9 +178,9 @@ class MagentoSoapTransport extends Transport
     /**
      * @return int
      */
-    public function getWebsiteId()
+    public function getStoreId()
     {
-        return $this->websiteId;
+        return $this->storeId;
     }
 
     /**
