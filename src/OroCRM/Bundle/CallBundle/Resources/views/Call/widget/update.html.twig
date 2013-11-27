@@ -48,6 +48,7 @@
                     </div>
                 </fieldset>
             </form>
+            {{ oro_form_js_validation(form) }}
         </div>
 
         {% set isRelatedContact = (form.vars.value.relatedContact is null) ? 0 : 1 %}

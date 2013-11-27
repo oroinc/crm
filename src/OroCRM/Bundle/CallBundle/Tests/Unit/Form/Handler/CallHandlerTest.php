@@ -48,9 +48,7 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->entity  = new Call();
         $this->handler = new CallHandler($this->form, $this->request, $this->manager);
-
     }
-
 
     public function testProcessUnsupportedRequest()
     {

@@ -10,7 +10,7 @@ function(Backbone) {
      */
     return Backbone.Model.extend({
         defaults: {
-            id: '',
+            id: null,
             owner: null,
             phone: null,
             primary: false,
