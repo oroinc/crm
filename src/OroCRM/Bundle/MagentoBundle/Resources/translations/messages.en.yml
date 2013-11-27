@@ -21,3 +21,5 @@ orocrm:
         connector:
             customer:
                 label: Customer connector
+            region:
+                label: Regions connector
