@@ -38,13 +38,21 @@ class CallType extends AbstractType
             ->add('relatedAccount', 'orocrm_account_select', array('required' => false))
             ->add('subject', 'text', array('required' => true))
             ->add('relatedContact', 'orocrm_contact_select', array('required' => false))
-            ->add('contactPhoneNumber', 'entity', array('class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone', 'required' => false))
+            ->add(
+                'contactPhoneNumber',
+                'entity',
+                array('class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone', 'required' => false)
+            )
             ->add('phoneNumber', 'text', array('required' => false, 'attr' => array('class' => 'hide')))
             ->add('notes', 'textarea', array('required' => false))
             ->add('callDateTime', 'oro_datetime', array('required' => true))
             ->add('callStatus', 'hidden', array('property_path' => 'callStatus.status'))
             ->add('duration', 'time', array('required' => false, 'widget' => 'single_text', 'with_seconds' => true))
-            ->add('direction', 'entity', array('class' => 'OroCRM\Bundle\CallBundle\Entity\CallDirection', 'required'  => true));
+            ->add(
+                'direction',
+                'entity',
+                array('class' => 'OroCRM\Bundle\CallBundle\Entity\CallDirection', 'required' => true)
+            );
     }
 
     /**
@@ -56,7 +64,7 @@ class CallType extends AbstractType
             array(
                 'data_class' => 'OroCRM\Bundle\CallBundle\Entity\Call',
                 'error_mapping' => array(
-                  '.' => 'contactPhoneNumber',
+                    '.' => 'contactPhoneNumber',
                 ),
             )
         );
