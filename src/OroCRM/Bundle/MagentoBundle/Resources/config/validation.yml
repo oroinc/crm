@@ -4,3 +4,5 @@ OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
           - NotBlank: ~
         apiUser:
           - NotBlank: ~
+        syncStartDate:
+          - NotBlank: ~

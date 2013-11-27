@@ -52,6 +52,18 @@ class MagentoSoapTransport extends Transport
     protected $syncRange;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="website_id", type="integer", nullable=true)
+     */
+    protected $websiteId = null;
+
+    public function __construct()
+    {
+        $this->setSyncStartDate(new \DateTime('2007-01-01'));
+    }
+
+    /**
      * @param string $wsdlUrl
      *
      * @return $this
@@ -116,7 +128,7 @@ class MagentoSoapTransport extends Transport
      *
      * @return $this
      */
-    public function setSyncStartDate(\DateTime $syncStartDate)
+    public function setSyncStartDate(\DateTime $syncStartDate = null)
     {
         $this->syncStartDate = $syncStartDate;
 
@@ -133,6 +145,7 @@ class MagentoSoapTransport extends Transport
 
     /**
      * @param \DateInterval $syncRange
+     *
      * @return $this
      */
     public function setSyncRange($syncRange)
@@ -151,15 +164,35 @@ class MagentoSoapTransport extends Transport
     }
 
     /**
+     * @param int $websiteId
+     *
+     * @return $this
+     */
+    public function setWebsiteId($websiteId)
+    {
+        $this->websiteId = $websiteId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWebsiteId()
+    {
+        return $this->websiteId;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSettingsBag()
     {
         return new ParameterBag(
             [
-                'api_user' => $this->getApiUser(),
-                'api_key'  => $this->getApiKey(),
-                'wsdl_url' => $this->getWsdlUrl(),
+                'api_user'       => $this->getApiUser(),
+                'api_key'        => $this->getApiKey(),
+                'wsdl_url'       => $this->getWsdlUrl(),
                 'sync_range'     => $this->getSyncRange(),
                 'last_sync_date' => $this->getSyncStartDate(),
             ]
