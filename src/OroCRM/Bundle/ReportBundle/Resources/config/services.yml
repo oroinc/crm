@@ -25,7 +25,7 @@ services:
     orocrm_report.datagrid.configuration.provider:
         class: %orocrm_report.datagrid.configuration.provider.class%
         arguments:
-            - @doctrine.orm.entity_manager
+            - @doctrine
         tags:
             - { name: oro_datagrid.configuration.provider }
 

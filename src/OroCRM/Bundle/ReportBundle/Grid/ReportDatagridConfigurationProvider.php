@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\ReportBundle\Grid;
 
-use Doctrine\ORM\EntityManager;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Oro\Bundle\DataGridBundle\Provider\ConfigurationProviderInterface;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 
@@ -11,13 +11,13 @@ class ReportDatagridConfigurationProvider implements ConfigurationProviderInterf
     const GRID_PREFIX      = 'oro_report_table_';
 
     /**
-     * @var EntityManager
+     * @var ManagerRegistry
      */
-    protected $em;
+    protected $doctrine;
 
-    public function __construct(EntityManager $em)
+    public function __construct(ManagerRegistry $doctrine)
     {
-        $this->em = $em;
+        $this->doctrine = $doctrine;
     }
 
     /**
@@ -34,9 +34,9 @@ class ReportDatagridConfigurationProvider implements ConfigurationProviderInterf
     public function getConfiguration($gridName)
     {
         $id     = intval(substr($gridName, strlen(self::GRID_PREFIX)));
-        $repo   = $this->em->getRepository('OroCRMReportBundle:Report');
+        $repo   = $this->doctrine->getRepository('OroCRMReportBundle:Report');
         $report = $repo->find($id);
-        $builder = new ReportDatagridConfigurationBuilder($gridName, $report);
+        $builder = new ReportDatagridConfigurationBuilder($gridName, $report, $this->doctrine);
 
         return $builder->getConfiguration();
     }
