@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
@@ -16,6 +17,7 @@ use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 use OroCRM\Bundle\MagentoBundle\Entity\AddressRelation;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -28,6 +30,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 {
     const ENTITY_NAME = 'OroCRMMagentoBundle:Customer';
     const GROUP_ENTITY_NAME = 'OroCRMMagentoBundle:CustomerGroup';
+    const ADDRESS_RELATION_ENTITY = 'OroCRMMagentoBundle:AddressRelation';
 
     /** @var ImportStrategyHelper */
     protected $strategyHelper;
@@ -53,6 +56,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      * Process item strategy
      *
      * @param mixed $entity
+     * @throws \Exception
      * @return mixed|null
      */
     public function process($entity)
@@ -64,20 +68,23 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             ['id', 'contact', 'account']
         );
 
-        $originalContactId = $newEntity->getContact()->getId();
-        $originalAccountId = $newEntity->getAccount()->getId();
-
-        $entity->getContact()->setId($originalContactId);
-        $entity->getAccount()->setId($originalAccountId);
-
-        $entity = $newEntity->setContact($entity->getContact())
+        // fill existing ids
+        if ($newEntity->getContact()) {
+            $originalContactId = $newEntity->getContact()->getId();
+            $entity->getContact()->setId($originalContactId);
+        }
+        if ($newEntity->getAccount()) {
+            $originalAccountId = $newEntity->getAccount()->getId();
+            $entity->getAccount()->setId($originalAccountId);
+        }
+        $newEntity
+            ->setContact($entity->getContact())
             ->setAccount($entity->getAccount());
 
         // update all related entities
-        $this
-            ->updateStoresAndGroup($entity)
-            ->updateContact($entity)
-            ->updateAccount($entity);
+        $this->updateStoresAndGroup($entity)
+             ->updateContact($entity)
+             ->updateAccount($entity);
 
         $entity->getContact()->addAccount($entity->getAccount());
         $entity->getAccount()->setDefaultContact($entity->getContact());
@@ -192,7 +199,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             $entity->getWebsite(),
             CustomerNormalizer::WEBSITE_TYPE,
             'code',
-            ['code', 'name']
+            ['id', 'code', 'name']
         );
 
         /** @var Store $storeEntity */
@@ -200,7 +207,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             $entity->getStore(),
             CustomerNormalizer::STORE_TYPE,
             'code',
-            ['code', 'name']
+            ['id', 'code', 'name']
         );
         $storeEntity->setWebsite($websiteEntity);
 
@@ -299,10 +306,32 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         /** @var Contact $newContact */
         $newContact = $this->findAndReplaceEntity($contact, ContactNormalizer::CONTACT_TYPE, 'id', ['id', 'addresses']);
 
-        $existingAddresses = $newContact->getAddresses()->toArray();
-        $addresses = $contact->getAddresses();
+        $existingAddressIds = [];
+        $existingAddressEntities = [];
+        foreach ($newContact->getAddresses() as $existingAddress) {
+            $existingAddressIds[] = $existingAddress->getId();
+            $existingAddressEntities[$existingAddress->getId()] = $existingAddress;
+        }
 
-        foreach ($addresses as $i => $address) {
+        $originAddressIds = $this->getOriginAddressesIds($existingAddressIds);
+
+        // loop by imported addresses, update existing, add new
+        foreach ($contact->getAddresses() as $address) {
+            $originAddressId = $address->getId();
+            $existingAddressId = empty($originAddressIds[$originAddressId]) ?
+                null : $originAddressIds[$originAddressId];
+
+            if (!empty($existingAddressId) && isset($existingAddressEntities[$existingAddressId])) {
+                $newContact->removeAddress($existingAddressEntities[$existingAddressId]);
+
+                // so we have new data for existing address
+                $this->strategyHelper->importEntity($existingAddressEntities[$existingAddressId], $address, ['id']);
+                $address = $existingAddressEntities[$existingAddressId];
+            } else {
+                // it's not existing address
+                $address->setId(null);
+            }
+
             $this->updateAddressCountryRegion($address, $entity);
 
             // update address type
@@ -310,30 +339,54 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             $address->getTypes()->clear();
             $loadedTypes = $this->getEntityRepository('OroAddressBundle:AddressType')
                 ->findBy(['name' => $types]);
-
             foreach ($loadedTypes as $type) {
                 $address->addType($type);
             }
 
-            //$addressId = isset($existingAddresses[$i]) ? $existingAddresses[$i]->getId() : null;
-            //$address->setId($addressId);
-
-            // origin magento id
-            $addressId = $address->getId();
-            $address->setId(null);
-
             $newContact->addAddress($address);
 
-            $addressRelation = new AddressRelation();
-            $addressRelation->setOriginId($addressId)
-                ->setAddress($address);
-
-            $this->getEntityManager('OroCRMMagentoBundle:AddressRelation')
-                ->persist($addressRelation);
+            if (!in_array($originAddressId, array_keys($originAddressIds))) {
+                $this->createOriginAddressRelation($address, $originAddressId);
+            }
         }
 
         $entity->setContact($newContact);
         return $this;
+    }
+
+    /**
+     * @param ContactAddress $address
+     * @param int $originId
+     */
+    protected function createOriginAddressRelation($address, $originId)
+    {
+        $addressRelation = new AddressRelation();
+        $addressRelation->setOriginId($originId)
+            ->setAddress($address);
+
+        $this->getEntityManager(self::ADDRESS_RELATION_ENTITY)
+            ->persist($addressRelation);
+    }
+
+    /**
+     * @param int[] $addressIds
+     * @return array
+     */
+    protected function getOriginAddressesIds($addressIds)
+    {
+        $qb = $this->getEntityRepository(self::ADDRESS_RELATION_ENTITY)
+            ->createQueryBuilder('r');
+
+        $result = $qb->where($qb->expr()->in('r.address', $addressIds))
+            ->getQuery()
+            ->getResult();
+
+        $items = [];
+        foreach ($result as $item) {
+            $items[$item->getOriginId()] = $item->getAddress()->getId();
+        }
+
+        return $items;
     }
 
     /**

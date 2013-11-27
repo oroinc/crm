@@ -13,7 +13,6 @@ parameters:
 
     orocrm_magento.import_strategy.customer.add_or_update.class:          OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AddOrUpdateCustomer
     orocrm_magento.import_strategy.region.add_or_update.class:            OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\RegionStrategy
-    orocrm_magento.import.reader.magento_api.class:                       OroCRM\Bundle\MagentoBundle\ImportExport\Reader\MagentoApiReader
 
     orocrm_magento.provider.channel_type.class:                           OroCRM\Bundle\MagentoBundle\Provider\MageChannelType
     orocrm_magento.form.subscriber.soap_transport_setting.class:          OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
@@ -104,13 +103,13 @@ services:
             - { name: oro_importexport.processor, type: import_validation, entity: %orocrm_magento.region.entity.class%, alias: orocrm_magento.add_or_update_region }
 
     orocrm_magento.import.customer_reader.magento_api:
-        class: %orocrm_magento.import.reader.magento_api.class%
+        class: %oro_integration.import.api_reader.class%
         arguments:
             - @oro_importexport.context_registry
             - @orocrm_magento.mage.customer_connector
 
     orocrm_magento.import.region_reader.magento_api:
-        class: %orocrm_magento.import.reader.magento_api.class%
+        class: %oro_integration.import.api_reader.class%
         arguments:
             - @oro_importexport.context_registry
             - @orocrm_magento.mage.region_connector
