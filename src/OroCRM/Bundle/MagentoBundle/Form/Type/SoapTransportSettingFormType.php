@@ -2,13 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\IntegrationBundle\Provider\TransportTypeInterface;
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
+use OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber;
 
 class SoapTransportSettingFormType extends AbstractType
 {
