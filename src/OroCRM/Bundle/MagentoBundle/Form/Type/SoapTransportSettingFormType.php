@@ -44,17 +44,16 @@ class SoapTransportSettingFormType extends AbstractType
         );
         $builder->add('check', 'button', ['label' => 'Check connection']);
         $builder->add(
-            'store_id',
+            'websiteId',
             'choice',
             [
-                'label'       => 'Store',
-                'empty_value' => 'All',
-                'required'    => false,
-                'tooltip'     => 'List will be available after connection will be properly configured',
+                'label'    => 'Website',
+                'required' => true,
+                'tooltip'  => 'List could be refreshed using connection settings filled above',
             ]
         );
         $builder->add(
-            $builder->create('stores', 'hidden')
+            $builder->create('websites', 'hidden')
                 ->addViewTransformer(new ArrayToJsonTransformer())
         );
     }
