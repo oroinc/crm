@@ -9,7 +9,6 @@ datagrid:
                     - c.firstName
                     - c.lastName
                     - c.email
-                    - c.phone
                     - c.createdAt
                     - c.updatedAt
                     - cg.name as groupName
@@ -27,8 +26,6 @@ datagrid:
                 label: orocrm.magento.datagrid.columns.last_name
             email:
                 label: orocrm.magento.datagrid.columns.email
-            phone:
-                label: orocrm.magento.datagrid.columns.phone
             groupName:
                 label: orocrm.magento.datagrid.columns.group
             websiteName:
@@ -50,7 +47,6 @@ datagrid:
                 firstName:   { data_name: c.firstName }
                 lastName:    { data_name: c.lastName }
                 email:       { data_name: c.email }
-                phone:       { data_name: c.phone }
                 groupName:   { data_name: cg.name }
                 websiteName: { data_name: cw.name }
                 createdAt:   { data_name: c.createdAt }
@@ -69,9 +65,6 @@ datagrid:
                 email:
                     type: string
                     data_name: c.email
-                phone:
-                    type: string
-                    data_name: c.phone
                 groupName:
                     type: entity
                     data_name: cg

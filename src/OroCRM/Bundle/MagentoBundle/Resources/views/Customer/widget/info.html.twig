@@ -19,7 +19,6 @@
             {% set email = '<a href="mailto: ' ~ email ~ '" title="' ~ email ~ '">' ~ email ~ '</a>'%}
         {% endif %}
         {{ _self.renderRow('Email'|trans, email) }}
-        {{ _self.renderRow('Phone'|trans, entity.phone) }}
         <div class="control-group">
             <label class="control-label">{% trans %}Birthday{% endtrans %}</label>
             <div class="controls">
@@ -36,7 +35,6 @@
 
         {{ _self.renderRow('Gender'|trans, oro_gender(entity.gender)) }}
         {{ _self.renderRow('Tax/Vat'|trans, entity.vat) }}
-        {{ _self.renderRow('Description'|trans, entity.description) }}
     </div>
 
     <div class="span6">
