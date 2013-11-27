@@ -2,20 +2,20 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
+use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 
 class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
 {
@@ -266,6 +266,7 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
         }
 
         // format contact addresses data
+        $contact['addresses'] = empty($contact['addresses']) ? [] : $contact['addresses'];
         foreach ($contact['addresses'] as $key => $address) {
             // fill address with contact info
             $contact['addresses'][$key] = array_merge($contact['addresses'][$key], $contact);

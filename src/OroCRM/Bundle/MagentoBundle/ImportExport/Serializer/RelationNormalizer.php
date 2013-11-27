@@ -33,14 +33,12 @@ class RelationNormalizer implements NormalizerInterface, DenormalizerInterface
     {
         /** @var Store|Website|CustomerGroup $result */
         $result = new $class();
-        $result->setId($data['id']);
 
-        if (method_exists($result, 'setCode') && !empty($data['code'])) {
-            $result->setCode($data['code']);
-        }
-
-        if (method_exists($result, 'setName') && !empty($data['name'])) {
-            $result->setName($data['name']);
+        foreach (['id', 'code', 'name'] as $name) {
+            $method = 'set'.ucfirst($name);
+            if (method_exists($result, $method) && !empty($data[$name])) {
+                $result->$method($data[$name]);
+            }
         }
 
         return $result;
