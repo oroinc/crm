@@ -16,6 +16,7 @@ parameters:
     orocrm_magento.import.reader.magento_api.class:                       OroCRM\Bundle\MagentoBundle\ImportExport\Reader\MagentoApiReader
 
     orocrm_magento.provider.channel_type.class:                           OroCRM\Bundle\MagentoBundle\Provider\MageChannelType
+    orocrm_magento.form.subscriber.soap_transport_setting.class:          OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
     orocrm_magento.form.type.soap_transport_setting.class:                OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
 
 services:
@@ -118,10 +119,15 @@ services:
         tags:
             - { name: oro_integration.channel, type: magento }
 
+    orocrm_magento.form.subscriber.soap_transport_setting:
+        class: %orocrm_magento.form.subscriber.soap_transport_setting.class%
+        arguments:
+            - @oro_security.encoder.mcrypt
+
     orocrm_magento.form.type.soap_transport_setting:
         class: %orocrm_magento.form.type.soap_transport_setting.class%
         arguments:
             - @orocrm_magento.mage.soap_transport
-            - @oro_security.encoder.mcrypt
+            - @orocrm_magento.form.subscriber.soap_transport_setting
         tags:
             - { name: form.type, alias: orocrm_magento_soap_transport_setting_form_type }

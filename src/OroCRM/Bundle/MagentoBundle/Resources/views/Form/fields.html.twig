@@ -1,3 +1,19 @@
 {% block _oro_integration_channel_form_transport_check_widget %}
-    asdasd
+    <div class="control-group">
+        <div class="controls">
+            {{ form_widget(form, {attr: {class: 'btn btn-primary' }}) }}
+            <script type="text/javascript">
+                require(['orocrm/magento/soap-checker'], function (SoapChecker) {
+                    "use strict";
+
+                    new SoapChecker({
+                        el: '#{{ form.vars.id }}',
+                        transportEntityId: {{ form.parent.vars.value ? form.parent.vars.value.id|json_encode|raw : 'null' }},
+                        storeSelectEl: '#{{ form.parent.store_id.vars.id }}',
+                        storesListEl: '#{{ form.parent.stores.vars.id }}'
+                    });
+                });
+            </script>
+        </div>
+    </div>
 {% endblock %}

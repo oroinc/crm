@@ -2,10 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
@@ -13,7 +9,6 @@ use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
-
 
 class RegionNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
 {
@@ -80,8 +75,6 @@ class RegionNormalizer implements NormalizerInterface, DenormalizerInterface, Se
         }
 
         $resultObject = new Region();
-
-        $combinedCode = '';
 
         if (isset($data['region_id'])) {
             $resultObject->setRegionId($data['region_id']);

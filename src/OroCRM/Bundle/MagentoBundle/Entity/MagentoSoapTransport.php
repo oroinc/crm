@@ -58,9 +58,16 @@ class MagentoSoapTransport extends Transport
      */
     protected $storeId = null;
 
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="stores", type="array")
+     */
+    protected $stores = [];
+
     public function __construct()
     {
-        $this->setSyncStartDate(new \DateTime('2007-01-01'));
+        $this->setSyncStartDate(new \DateTime('2007-01-01', new \DateTimeZone('UTC')));
     }
 
     /**
@@ -181,6 +188,26 @@ class MagentoSoapTransport extends Transport
     public function getStoreId()
     {
         return $this->storeId;
+    }
+
+    /**
+     * @param array $stores
+     *
+     * @return $this
+     */
+    public function setStores($stores)
+    {
+        $this->stores = $stores;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getStores()
+    {
+        return $this->stores;
     }
 
     /**

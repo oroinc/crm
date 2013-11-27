@@ -1,0 +1,95 @@
+/* global:define */
+define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/navigation'],
+    function ($, _, routing, Backbone, __, Navigation) {
+        "use strict";
+
+    return Backbone.View.extend({
+        events: {
+            'click': 'processClick'
+        },
+
+        /**
+         * Check url
+         * @property string
+         */
+        route: 'orocrm_magento_soap_check',
+        url: null,
+
+        resultTemplate: _.template(
+            '<div class="alert alert-<%= type %> connection-status span5"><%= message %></div>'
+        ),
+
+        initialize: function (options) {
+            var id = options.transportEntityId || null;
+            this.url = routing.generate(this.route, {id: id});
+
+            if (!options.storeSelectEl || !options.storesListEl) {
+                throw  new TypeError('Missing required options');
+            }
+        },
+
+        /**
+         * Click handler
+         *
+         * @param e
+         */
+        processClick: function (e) {
+            var data = this.$el.parents('form').serializeArray();
+            data = _.filter(data, function (field) {
+                return field.name.indexOf('[transport]') !== -1;
+            });
+            data = _.map(data, function (field) {
+                field.name = field.name.replace(/.+\[(.+)\]$/, 'soap-check[$1]')
+                return field;
+            });
+            var navigation = Navigation.getInstance();
+            if (navigation) {
+                navigation.loadingMask.show();
+            }
+            $.post(this.url, data, _.bind(this.responseHandler, this), 'json')
+                .always(_.bind(function (respose, status) {
+                    if (navigation) {
+                        navigation.loadingMask.hide();
+                    }
+                    if (status !== 'success') {
+                        this.renderResult('error', __('Error occurred during check request, please try later!'));
+                    }
+                }, this));
+        },
+
+        /**
+         * Handler ajax response
+         *
+         * @param res {}
+         */
+        responseHandler: function (res) {
+            var success = res.success || false,
+                message = success ? __('Connection succeed, please choose store.') : __('Parameters are not valid!');
+
+            if (success && res.stores) {
+                var $listEl = $(this.options.storesListEl),
+                    $storeSelectEl = $(this.options.storeSelectEl);
+
+                $listEl.val(JSON.stringify(res.stores));
+                $storeSelectEl.empty();
+                _.each(res.stores, function (store) {
+                    $storeSelectEl.append($("<option />").val(store.id).text(store.name));
+                });
+                $storeSelectEl.trigger('change');
+            }
+
+            this.renderResult(success ? 'success' : 'error', message);
+        },
+
+        /**
+         * Render check result message
+         *
+         * @param type string
+         * @param message string
+         */
+        renderResult: function (type, message) {
+            $(this.$el.siblings('.alert')).remove();
+            this.$el.parent().append(this.resultTemplate({type: type, message: message}));
+        }
+    });
+});
