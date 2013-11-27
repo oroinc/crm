@@ -149,6 +149,7 @@ class AccountController extends Controller
     /**
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * TODO: will be refactored via twig extension
      */
     protected function getDynamicFields(Account $entity)

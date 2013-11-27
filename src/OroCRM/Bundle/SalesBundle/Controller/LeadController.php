@@ -55,6 +55,7 @@ class LeadController extends Controller
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * TODO: will be refactored via twig extension
      */
     public function infoAction(Lead $lead)
