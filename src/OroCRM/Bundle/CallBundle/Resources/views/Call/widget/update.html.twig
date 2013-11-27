@@ -1,0 +1,67 @@
+<div class="widget-content call-form">
+    {% if saved is defined and saved %}
+        <script type="text/javascript">
+            require(['underscore', 'oro/translator', 'oro/widget-manager', 'oro/messenger', 'oro/registry'],
+                    function(_, __, widgetManager, messenger, registry) {
+                        widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
+                            messenger.notificationFlashMessage('success', __('Call logged successfully'));
+                            widget.trigger('contactCallLogged');
+                            widget.remove();
+                        });
+                    });
+        </script>
+    {% else %}
+        
+        {% if not form.vars.valid and form.vars.errors|length %}
+            <div class="alert alert-error">
+                <div class="message">
+                    {{ form_errors(form) }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="form-container">
+            <form id="{{ form.vars.name }}" action="{{ path('orocrm_call_create', {'no_redirect': true }) }}" method="post">
+                <fieldset class="form form-horizontal">
+                    <div class="span6">
+
+                        {{ form_row(form.owner, {'label': 'orocrm.call.form.call.owner'|trans}) }}
+                        {{ form_row(form.subject, {'label': 'orocrm.call.form.call.subject'|trans}) }}
+                        {{ form_row(form.notes, {'label': 'orocrm.call.form.call.notes'|trans}) }}
+                        {{ form_row(form.callDateTime, {'label': 'orocrm.call.form.call.dateTime'|trans}) }}
+
+                    </div>
+                    <div class="span6">
+
+                        {{ form_row(form.relatedAccount, {'label': 'orocrm.call.form.call.relatedTo'|trans}) }}
+                        {{ form_row(form.relatedContact, {'label': 'orocrm.call.form.call.relatedContact'|trans}) }}
+                        {{ form_row(form.contactPhoneNumber, {'label': 'orocrm.call.form.call.phoneNumber'|trans}) }}
+                        {{ form_widget(form.phoneNumber) }}
+                        {{ form_row(form.direction, {'label': 'orocrm.call.form.call.direction'|trans}) }}
+                        {{ form_row(form.duration, {'label': 'orocrm.call.form.call.duration'|trans}) }}
+                        {{ form_row(form.callStatus) }}
+
+                    </div>
+                    {{ form_rest(form) }}
+                    <div class="widget-actions form-actions">
+                        <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
+                        <button class="btn btn-primary" type="submit">{{ 'Log call'|trans }}</button>
+                    </div>
+                </fieldset>
+            </form>
+            {{ oro_form_js_validation(form) }}
+        </div>
+
+        <script type="text/javascript">
+            require(['jquery', 'orocrm/contactphone/view'],
+            function($, ContactPhoneView){
+                $(function() {
+                    new ContactPhoneView({
+                        contact: $('#{{ form.relatedContact.vars.id }}'),
+                        phoneSelector: $('#{{ form.contactPhoneNumber.vars.id }}'),
+                        phonePlain: $('#{{ form.phoneNumber.vars.id }}')
+                    });
+                });
+            });            
+        </script>        
+    {% endif %}
+</div>
