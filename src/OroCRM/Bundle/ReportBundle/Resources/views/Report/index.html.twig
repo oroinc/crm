@@ -1,5 +1,7 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
+{% set gridName = 'reports-grid' %}
+{% set pageTitle = 'Reports' %}
 
 {% block navButtons %}
     {% if resource_granted('orocrm_report_create') %}

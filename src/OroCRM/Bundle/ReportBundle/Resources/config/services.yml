@@ -1,6 +1,9 @@
 parameters:
+    orocrm.report.report.entity.class:        OroCRM\Bundle\ReportBundle\Entity\Report
     orocrm.report.filter.type.period.class:   OroCRM\Bundle\ReportBundle\Filter\PeriodFilter
     orocrm.report.grid.listener.class:        OroCRM\Bundle\ReportBundle\EventListener\ReportGridListener
+    orocrm_report.listener.navigation_listener.class: OroCRM\Bundle\ReportBundle\EventListener\NavigationListener
+    orocrm_report.report_manage.class:        OroCRM\Bundle\ReportBundle\Entity\Manager\ReportManager
 
 services:
     orocrm.report.filter.type.period:
@@ -31,3 +34,15 @@ services:
             - @oro_entity.orm.entity_class_resolver
             - @doctrine
             - @orocrm_report.entity_provider
+
+    orocrm_report.listener.navigation_listener:
+        class: %orocrm_report.listener.navigation_listener.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
+
+    orocrm_report.report_manager:
+        class: %orocrm_report.report_manage.class%
+        arguments:
+            - @doctrine.orm.entity_manager
