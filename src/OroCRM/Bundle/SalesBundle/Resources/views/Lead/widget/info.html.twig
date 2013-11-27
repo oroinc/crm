@@ -12,7 +12,7 @@
     }
 </style>
 <div class="widget-content form-horizontal lead-info box-content row-fluid">
-    <div class="span6">
+    <div class="responsive-block">
         {{ _self.renderRow('First Name'|trans, entity.firstName) }}
         {{ _self.renderRow('Last Name'|trans, entity.lastName) }}
 
@@ -49,7 +49,7 @@
             {% endfor %}
         {% endif %}
     </div>
-    <div class="span6">
+    <div class="responsive-block">
         {{ _self.renderRow('Email'|trans, entity.email ? '<a href="mailto:' ~ entity.email ~ '">' ~ entity.email ~ '</a>' : '') }}
         {{ _self.renderRow('Phone'|trans, entity.phoneNumber ? '<a href="tel:' ~ entity.phoneNumber ~ '">' ~ entity.phoneNumber ~ '</a>' : '') }}
         {{ _self.renderRow('Website'|trans, entity.website ? '<a href="' ~ entity.website ~ '" class="no-hash">' ~ entity.website ~ '</a>' : '') }}

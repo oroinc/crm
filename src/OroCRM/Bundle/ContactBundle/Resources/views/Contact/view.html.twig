@@ -59,9 +59,9 @@
 {% endblock stats %}
 
 {% block content_data %}
-    <div class="contact-info-col-set conact-page well-small dark-bg">
-        <div class="row-fluid well-small-bottom clearfix">
-            <div class="span6 contact-info-col">
+    <div class="contact-info-col-set well-small dark-bg">
+        <div class="clearfix">
+            <div class="responsive-cell contact-info-col">
                 {{
                     oro_widget_render({
                         'widgetType': 'block',
@@ -70,7 +70,7 @@
                     })
                 }}
             </div>
-            <div class="span6 contact-info-col">
+            <div class="responsive-cell contact-info-col">
                 {{
                     oro_widget_render({
                         'widgetType': 'block',
@@ -81,28 +81,26 @@
                 }}
             </div>
         </div>
-    </div>
     {# TODO: This is a temporary list of emails for demo purposes. It will be removed when 'display activities' functionality is implemented  #}
     {#{% if resource_granted('oro_email_view') %}#}
         {#{{ render(controller('OroEmailBundle:Email:activities', {'emails': entity.emails})) }}#}
     {#{% endif %}#}
 
-    {% if resource_granted('oro_email_view') %}
-        <div class="contact-info-col-set well-small dark-bg">
-            <div class="row-fluid well-small-bottom clearfix">
-                <div class="contact-info-row">
-                    <div class="box-type1">
-                        <div class="title">
-                            <div class="pull-right widget-actions-container"></div>
-                            <span class="widget-title">{{ "Emails"|trans }}</span>
-                        </div>
-                        <div class="row-fluid">
-                            {{ dataGrid.renderGrid(gridName, { contactId: entity.id }) }}
-                            {{ Email.renderJs() }}
-                        </div>
+        {% if resource_granted('oro_email_view') %}
+        <div class="clearfix">
+            <div class="responsive-cell contact-info-col">
+                <div class="box-type1">
+                    <div class="title">
+                        <div class="pull-right widget-actions-container"></div>
+                        <span class="widget-title">{{ "Emails"|trans }}</span>
+                    </div>
+                    <div class="row-fluid">
+                        {{ dataGrid.renderGrid(gridName, { contactId: entity.id }) }}
+                        {{ Email.renderJs() }}
                     </div>
                 </div>
             </div>
         </div>
-    {% endif %}
+        {% endif %}
+    </div>
 {% endblock content_data %}
