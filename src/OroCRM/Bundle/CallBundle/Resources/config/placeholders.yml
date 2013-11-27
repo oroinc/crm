@@ -1,0 +1,9 @@
+placeholders:
+    oro_user_view_additional_data:
+        items:
+            user_calls:
+                order: 50
+
+items:
+    user_calls:
+        template: OroCRMCallBundle:Call:user_calls.html.twig

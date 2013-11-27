@@ -1,0 +1,97 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+
+{% oro_title_set({params : {"%subject%": form.vars.value.subject|default('N/A') } }) %}
+
+{% set formAction = form.vars.value.id ? path('orocrm_call_update', { 'id': form.vars.value.id }) : path('orocrm_call_create')  %}
+
+{% block head_script %}
+    {{ parent() }}
+
+    {% block stylesheets %}
+        {{ form_stylesheet(form) }}
+    {% endblock %}
+{% endblock %}
+
+{% block content_data %}
+
+    {% set id = 'call-log' %}
+
+    {% if form.vars.value.id %}
+        {% set title = 'Update call log'|trans %}
+    {% else %}
+        {% set title = 'Add call log'|trans %}
+    {% endif %}
+
+    {% set dataBlocks = [{
+            'title': title,
+            'class': 'active',
+            'subblocks': [
+                {
+                    'title': title,
+                    'data': [
+                        form_row(form.owner, {'label': 'orocrm.call.form.call.owner'|trans}),
+                        form_row(form.subject, {'label': 'orocrm.call.form.call.subject'|trans}),
+                        form_row(form.notes, {'label': 'orocrm.call.form.call.notes'|trans}),
+                        form_row(form.callDateTime, {'label': 'orocrm.call.form.call.dateTime'|trans}),
+                        form_row(form.relatedAccount, {'label': 'orocrm.call.form.call.relatedTo'|trans}),
+                        form_row(form.relatedContact, {'label': 'orocrm.call.form.call.relatedContact'|trans}),
+                        form_row(form.contactPhoneNumber, {'label': 'orocrm.call.form.call.phoneNumber'|trans}),
+                        form_widget(form.phoneNumber),
+                        form_row(form.direction, {'label': 'orocrm.call.form.call.direction'|trans}),
+                        form_row(form.duration, {'label': 'orocrm.call.form.call.duration'|trans}),
+                        form_row(form.callStatus),
+                        form_rest(form)
+                    ]
+                }
+            ]
+        }]
+    %}
+
+    {% set data =
+        {
+            'formErrors': form_errors(form)? form_errors(form) : null,
+            'dataBlocks': dataBlocks,
+        }
+    %}
+
+    <script type="text/javascript">
+        require(['jquery', 'orocrm/contactphone/view'],
+        function($, ContactPhoneView){
+            $(function() {
+                new ContactPhoneView({
+                    contact: $('#{{ form.relatedContact.vars.id }}'),
+                    phoneSelector: $('#{{ form.contactPhoneNumber.vars.id }}'),
+                    phonePlain: $('#{{ form.phoneNumber.vars.id }}')
+                });
+            });
+        });            
+    </script>
+
+    {{ parent() }}
+{% endblock content_data %}
+
+{% block navButtons %}    
+    {{ UI.button({'path' : path('orocrm_call_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
+    {{ UI.saveAndCloseButton() }}
+{% endblock %}
+
+{% block pageHeader %}
+    {% if form.vars.value.id %}
+        {% set breadcrumbs = {
+            'entity':      form.vars.value,
+            'indexPath':   path('orocrm_call_index'),
+            'indexLabel': 'Calls'|trans,
+            'entityTitle': form.vars.value.subject|default('N/A')
+        }
+        %}
+    {% else %}
+        {% set breadcrumbs = {
+            'entity':      form.vars.value,
+            'indexPath':   path('orocrm_call_index'),
+            'indexLabel': 'Calls'|trans,
+            'entityTitle': 'New Call'|trans
+        }
+        %}
+    {% endif %}
+    {{ parent() }}    
+{% endblock pageHeader %}
