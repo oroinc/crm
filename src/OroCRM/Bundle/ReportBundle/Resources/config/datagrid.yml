@@ -75,12 +75,12 @@ datagrid:
                 label:         Update
                 icon:          edit
                 link:          update_link
-            update:
-                type:          navigate
+            delete:
+                type:          delete
                 acl_resource:  orocrm_report_delete
-                label:         Update
-                icon:          edit
-                link:          update_link
+                label:         Delete
+                icon:          trash
+                link:          delete_link
         options:
             entityHint: report
 
