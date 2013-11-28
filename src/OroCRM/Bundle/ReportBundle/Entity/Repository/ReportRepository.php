@@ -10,7 +10,7 @@ class ReportRepository extends EntityRepository
     /**
      * @return QueryBuilder
      */
-    public function getReportsQB()
+    public function getReportsQueryBuilder()
     {
         return $this->createQueryBuilder('reports')
             ->select('reports');

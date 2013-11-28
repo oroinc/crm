@@ -22,19 +22,6 @@ oro_menu_config:
                     children:
                         manage_reports: ~
                         divider: ~
-                        accounts_report_tab:
-                            children:
-                                accounts_life_time_value: ~
-                                accounts_by_opportunities: ~
-
-                        leads_report_tab:
-                            children:
-                                leads_by_date: ~
-
-                        opportunities_report_tab:
-                            children:
-                                opportunities_by_step: ~
-                                won_by_period: ~
 
 oro_titles:
     orocrm_report_index: ~

@@ -30,7 +30,7 @@ class NavigationListener
         $reportsMenuItem = $event->getMenu()->getChild('reports_tab');
         if ($reportsMenuItem) {
             $reports = $this->em->getRepository('OroCRM\Bundle\ReportBundle\Entity\Report')
-                ->getReportsQB()
+                ->getReportsQueryBuilder()
                 ->getQuery()->getResult();
             //todo: Add ACL Access level protection
             if (!empty($reports)) {

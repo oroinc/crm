@@ -2,8 +2,10 @@ parameters:
     orocrm_report.report.filter.type.period.class:        OroCRM\Bundle\ReportBundle\Filter\PeriodFilter
     orocrm_report.report.grid.listener.class:             OroCRM\Bundle\ReportBundle\EventListener\ReportGridListener
     orocrm_report.datagrid.configuration.provider.class:  OroCRM\Bundle\ReportBundle\Grid\ReportDatagridConfigurationProvider
-    orocrm_report.listener.navigation_listener.class: OroCRM\Bundle\ReportBundle\EventListener\NavigationListener
-    orocrm_report.report_manage.class:        OroCRM\Bundle\ReportBundle\Entity\Manager\ReportManager
+    orocrm_report.listener.navigation_listener.class:     OroCRM\Bundle\ReportBundle\EventListener\NavigationListener
+    orocrm_report.report_manage.class:                    OroCRM\Bundle\ReportBundle\Entity\Manager\ReportManager
+    orocrm.report.report.entity.class:                    OroCRM\Bundle\ReportBundle\Entity\Report
+
 services:
     orocrm_report.report.filter.type.period:
         class: %orocrm_report.report.filter.type.period.class%
