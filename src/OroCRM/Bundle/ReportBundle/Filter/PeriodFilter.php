@@ -16,13 +16,15 @@ class PeriodFilter extends ChoiceFilter
     {
         $data = $this->parseData($data);
         if (!$data) {
-            return;
+            return false;
         }
 
         if (is_array($data['value'])) {
             $data['value'] = reset($data['value']);
         }
         $qb->groupBy($data['value']);
+
+        return true;
     }
 
     /**
