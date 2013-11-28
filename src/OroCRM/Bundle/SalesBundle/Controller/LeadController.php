@@ -16,8 +16,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\EntityConfigBundle\Metadata\EntityMetadata;
+
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
+use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
+use Oro\Bundle\EntityConfigBundle\Entity\Repository\OptionSetRelationRepository;
+use Oro\Bundle\EntityConfigBundle\Metadata\EntityMetadata;
+
 use Oro\Bundle\EntityExtendBundle\Extend\ExtendManager;
 
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
@@ -51,6 +55,7 @@ class LeadController extends Controller
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * TODO: will be refactored via twig extension
      */
     public function infoAction(Lead $lead)
@@ -87,6 +92,27 @@ class LeadController extends Controller
             if ($value instanceof \DateTime) {
                 $configFormat = $this->get('oro_config.global')->get('oro_locale.date_format') ? : 'Y-m-d';
                 $value        = $value->format($configFormat);
+            }
+
+            /** Prepare OptionSet field type */
+            if ($field->getId()->getFieldType() == 'optionSet') {
+                /** @var OptionSetRelationRepository  */
+                $osr = $configManager->getEntityManager()->getRepository(OptionSetRelation::ENTITY_NAME);
+
+                $model = $extendProvider->getConfigManager()->getConfigFieldModel(
+                    $field->getId()->getClassName(),
+                    $field->getId()->getFieldName()
+                );
+
+                $value = $osr->findByFieldId($model->getId(), $lead->getId());
+                array_walk(
+                    $value,
+                    function (&$item) {
+                        $item = ['title' => $item->getOption()->getLabel()];
+                    }
+                );
+
+                $value['values'] = $value;
             }
 
             /** Prepare Relation field type */
