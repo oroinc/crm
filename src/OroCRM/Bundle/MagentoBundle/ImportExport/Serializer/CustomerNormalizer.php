@@ -204,13 +204,8 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
         $store = $this->denormalizeObject($data, 'store', static::STORE_TYPE, $format, $context);
         $store->setWebsite($website);
 
-        $object
-            ->setWebsite($website)
-            ->setStore($store)
-            ->setGroup($this->denormalizeObject($data, 'group', static::GROUPS_TYPE, $format, $context))
-            ->setContact($contact)
-            ->setAccount($account)
-            ->setBirthday(
+        if (!empty($data['birthday'])) {
+            $object->setBirthday(
                 $this->denormalizeObject(
                     $data,
                     'birthday',
@@ -218,7 +213,15 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
                     $format,
                     array_merge($context, ['type' => 'date'])
                 )
-            )
+            );
+        }
+
+        $object
+            ->setWebsite($website)
+            ->setStore($store)
+            ->setGroup($this->denormalizeObject($data, 'group', static::GROUPS_TYPE, $format, $context))
+            ->setContact($contact)
+            ->setAccount($account)
             ->setCreatedAt(
                 $this->denormalizeObject(
                     $data,

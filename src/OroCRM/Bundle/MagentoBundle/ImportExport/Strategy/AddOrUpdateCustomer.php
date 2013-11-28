@@ -65,7 +65,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             $entity,
             self::ENTITY_NAME,
             'originalId',
-            ['id', 'contact', 'account']
+            ['id', 'contact', 'account', 'website', 'store']
         );
 
         // fill existing ids
@@ -254,6 +254,13 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
                 'OroCRM\Bundle\MagentoBundle\Entity\Region'
             )
             ->findOneBy(['region_id' => $regionCode]);
+        }
+
+        if (empty($this->mageRegionsCache[$regionCode])) {
+            throw new InvalidItemException(
+                sprintf("Cannot find Magento region '%s' by id for '%s' country", $regionCode, $countryCode),
+                [$entity]
+            );
         }
 
         $mageRegion = $this->mageRegionsCache[$regionCode];
