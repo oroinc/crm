@@ -60,10 +60,7 @@ class ContactAddressControllersTest extends WebTestCase
             $this->client,
             'contacts-grid',
             array(
-                'contacts-grids[_filter][name][value]' => 'Contact_fname',
-                'contacts-grids[_pager][_page]' => '1',
-                'contacts-grids[_pager][_per_page]' => '10',
-                'contacts-grids[_sort_by][name]' => 'ASC',
+                'contacts-grid[_filter][firstName][value]' => 'Contact_fname',
             )
         );
 

@@ -2,11 +2,14 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Functional;
 
+use Symfony\Component\DomCrawler\Form;
+
+use Doctrine\Common\Persistence\ManagerRegistry;
+
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
-use Symfony\Component\DomCrawler\Form;
-use Symfony\Component\DomCrawler\Field\ChoiceFormField;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @outputBuffering enabled
@@ -37,15 +40,17 @@ class OpportunityControllersTest extends WebTestCase
     public function testCreate()
     {
         $crawler = $this->client->request('GET', $this->client->generate('orocrm_sales_opportunity_create'));
+        $account = $this->createAccount();
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . ToolsAPI::generateRandomString();
-        $form['orocrm_sales_opportunity_form[name]']               = $name;
-        $form['orocrm_sales_opportunity_form[probability]']         = 50;
-        $form['orocrm_sales_opportunity_form[budgetAmount]']         = 10000;
-        $form['orocrm_sales_opportunity_form[customerNeed]']         = 10001;
-        $form['orocrm_sales_opportunity_form[closeReason]']         = 'cancelled';
-        $form['orocrm_sales_opportunity_form[owner]']         = 1;
+        $form['orocrm_sales_opportunity_form[name]']         = $name;
+        $form['orocrm_sales_opportunity_form[account]']      = $account->getId();
+        $form['orocrm_sales_opportunity_form[probability]']  = 50;
+        $form['orocrm_sales_opportunity_form[budgetAmount]'] = 10000;
+        $form['orocrm_sales_opportunity_form[customerNeed]'] = 10001;
+        $form['orocrm_sales_opportunity_form[closeReason]']  = 'cancelled';
+        $form['orocrm_sales_opportunity_form[owner]']        = 1;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -55,6 +60,24 @@ class OpportunityControllersTest extends WebTestCase
         $this->assertContains("Opportunity saved", $crawler->html());
 
         return $name;
+    }
+
+    /**
+     * @return Account
+     */
+    protected function createAccount()
+    {
+        /** @var ManagerRegistry $registry */
+        $registry = $this->client->getKernel()->getContainer()->get('doctrine');
+        $entityManager = $registry->getManagerForClass('OroCRMAccountBundle:Account');
+
+        $account = new Account();
+        $account->setName('test account');
+
+        $entityManager->persist($account);
+        $entityManager->flush($account);
+
+        return $account;
     }
 
     /**
@@ -69,10 +92,8 @@ class OpportunityControllersTest extends WebTestCase
             $this->client,
             'sales-opportunity-grid',
             array(
-                'sales-opportunity-grid[_filter][name][type]=3' => '3',
+                'sales-opportunity-grid[_filter][name][type]' => '1',
                 'sales-opportunity-grid[_filter][name][value]' => $name,
-                'sales-opportunity-grid[_pager][_page]' => '1',
-                'sales-opportunity-grid[_pager][_per_page]' => '10'
             )
         );
 
