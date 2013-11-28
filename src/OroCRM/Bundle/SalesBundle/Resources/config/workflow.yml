@@ -61,6 +61,22 @@ workflows:
                             form_type: text
                             options:
                                 required: false
+                    attribute_default_values:
+                        opportunity_name: $lead.name
+                        account: $lead.account
+                        company_name: $lead.companyName
+                    attribute_init_actions:
+                        - @find_entity: # try to find account by company name
+                            conditions:
+                                @and: # if account is empty and company name is specified
+                                    - @empty: $account
+                                    - @not_empty: $company_name
+                            parameters:
+                                class: OroCRM\Bundle\AccountBundle\Entity\Account
+                                attribute: $account
+                                where:
+                                    name: $company_name
+                                case_insensitive: true
                 transition_definition: qualify_definition
             cancel:
                 label: 'Disqualify'
@@ -82,22 +98,6 @@ workflows:
             qualify_definition:
                 pre_conditions:  # if lead.status = "new"
                     @equal: [$lead.status.name, 'new']
-                init_actions:
-                    - @assign_value:
-                        - [$opportunity_name, $lead.name]
-                        - [$account, $lead.account]
-                        - [$company_name, $lead.companyName]
-                    - @find_entity: # try to find account by company name
-                        conditions:
-                            @and: # if account is empty and company name is specified
-                                - @empty: $account
-                                - @not_empty: $company_name
-                        parameters:
-                            class: OroCRM\Bundle\AccountBundle\Entity\Account
-                            attribute: $account
-                            where:
-                                name: $company_name
-                            case_insensitive: true
                 conditions:
                     @or:
                         parameters:
@@ -383,6 +383,13 @@ workflows:
                             form_type: text
                             options:
                                 required: false
+                    attribute_default_values:
+                        contact: $opportunity.contact
+                        account: $opportunity.account
+                        budget_amount: $opportunity.budgetAmount
+                        probability: $opportunity.probability
+                        customer_need: $opportunity.customerNeed
+                        proposed_solution: $opportunity.proposedSolution
             close_as_won:
                 label: 'Close as Won'
                 step_to: close
@@ -408,6 +415,10 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
+                    attribute_init_actions:
+                        - @create_object:
+                            class: '\DateTime'
+                            attribute: $close_date
             close_as_lost:
                 label: 'Close as Lost'
                 step_to: close
@@ -435,6 +446,10 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
+                    attribute_init_actions:
+                        - @create_object:
+                            class: '\DateTime'
+                            attribute: $close_date
             requalify:
                 label: 'Requalify'
                 message: 'Performing this transition will reset some data.'
@@ -474,17 +489,6 @@ workflows:
                     @equal:
                         message: 'Opportunity must be in status "In progress"'
                         parameters: [$opportunity.status.name, 'in_progress']
-                init_actions:
-                    - @assign_value:
-                        - [$contact, $opportunity.contact]
-                        - [$account, $opportunity.account]
-                        - [$budget_amount, $opportunity.budgetAmount]
-                        - [$customer_need, $opportunity.customerNeed]
-                        - [$proposed_solution, $opportunity.proposedSolution]
-                        - [$probability, $opportunity.probability]
-                        - [$close_reason, $opportunity.closeReason]
-                        - [$close_revenue, $opportunity.closeRevenue]
-                        - [$close_date, $opportunity.closeDate]
                 conditions: # if opportunity.status = "in_progress"
                     @and:
                         - @greater_or_equal:
@@ -511,10 +515,6 @@ workflows:
                     @equal:
                         message: 'Opportunity must be in status "In progress"'
                         parameters: [$opportunity.status.name, 'in_progress']
-                init_actions:
-                    - @create_object:
-                        class: '\DateTime'
-                        attribute: $close_date
                 conditions: # if opportunity.status = "in_progress", required data is entered and reason = "won"
                     @and:
                         - @not_empty:
@@ -551,10 +551,6 @@ workflows:
                     @equal:
                         message: 'Opportunity must be in status "In progress"'
                         parameters: [$opportunity.status.name, 'in_progress']
-                init_actions:
-                    - @create_object:
-                        class: '\DateTime'
-                        attribute: $close_date
                 conditions:
                     @and:
                         - @not_empty:
