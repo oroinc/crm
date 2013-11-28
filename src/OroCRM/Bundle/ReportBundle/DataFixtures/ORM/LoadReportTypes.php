@@ -17,7 +17,7 @@ class LoadReportTypes extends AbstractFixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager)
     {
         $tableReport = new ReportType('TABLE');
-        $tableReport->setLabel('Table');
+        $tableReport->setLabel('orocrm.report.type.table');
         $this->addReference('table_report', $tableReport);
 
         $manager->persist($tableReport);

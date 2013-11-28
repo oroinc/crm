@@ -58,7 +58,7 @@ class ReportController extends Controller
     public function viewAction(Report $entity)
     {
         return $this->render(
-            sprintf('OroCRMReportBundle:Report:%s/view.html.twig', strtolower($entity->getType())),
+            sprintf('OroCRMReportBundle:Report:%s/view.html.twig', strtolower($entity->getType()->getName())),
             array(
                 'entity' => $entity
             )
