@@ -75,7 +75,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             $originalAccountId = $newEntity->getAccount()->getId();
             $entity->getAccount()->setId($originalAccountId);
         }
-        $newEntity
+        $entity = $newEntity
             ->setContact($entity->getContact())
             ->setAccount($entity->getAccount());
 
@@ -91,7 +91,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         $this->updateRelatedEntitiesOwner($entity);
 
         // validate and update context - increment counter or add validation error
-        $entity = $this->validateAndUpdateContext($entity);
+        $this->validateAndUpdateContext($entity);
 
         return $entity;
     }
@@ -119,7 +119,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 
     /**
      * @param Customer $entity
-     * @return null|Customer
+     * @return $this
      */
     protected function validateAndUpdateContext(Customer $entity)
     {
@@ -138,7 +138,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             $this->importExportContext->incrementAddCount();
         }
 
-        return $entity;
+        return $this;
     }
 
     /**
@@ -228,9 +228,10 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     /**
      * @param AbstractAddress $address
      * @param Customer $entity
-     * @throws InvalidItemException
+     * @param int $mageRegionId
+     * @throws \Oro\Bundle\BatchBundle\Item\InvalidItemException
      */
-    protected function updateAddressCountryRegion(AbstractAddress $address, Customer $entity)
+    protected function updateAddressCountryRegion(AbstractAddress $address, Customer $entity, $mageRegionId)
     {
         $countryCode = $address->getCountry()->getIso2Code();
 
@@ -244,24 +245,21 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             ) :
             $this->regionsCache[$countryCode];
 
-        // get region by Magento code (region_id)
-        $regionCode = $address->getRegion()->getCode();
-
-        if (empty($this->mageRegionsCache[$regionCode])) {
-            $this->mageRegionsCache[$regionCode] = $this->getEntityRepository(
+        if (empty($this->mageRegionsCache[$mageRegionId])) {
+            $this->mageRegionsCache[$mageRegionId] = $this->getEntityRepository(
                 'OroCRM\Bundle\MagentoBundle\Entity\Region'
             )
-            ->findOneBy(['region_id' => $regionCode]);
+            ->findOneBy(['region_id' => $mageRegionId]);
         }
 
-        if (empty($this->mageRegionsCache[$regionCode])) {
+        if (empty($this->mageRegionsCache[$mageRegionId])) {
             throw new InvalidItemException(
-                sprintf("Cannot find Magento region '%s' by id for '%s' country", $regionCode, $countryCode),
+                sprintf("Cannot find Magento region '%s' by id for '%s' country", $mageRegionId, $countryCode),
                 [$entity]
             );
         }
 
-        $mageRegion = $this->mageRegionsCache[$regionCode];
+        $mageRegion = $this->mageRegionsCache[$mageRegionId];
         $combinedCode = $mageRegion->getCombinedCode();
 
         // set ISO combined code
@@ -291,21 +289,24 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     {
         /** @var Account $account */
         $account = $entity->getAccount();
-        $account = $this->findAndReplaceEntity($account, AccountNormalizer::ACCOUNT_TYPE, 'name', ['id']);
+        $account = $this->findAndReplaceEntity(
+            $account,
+            AccountNormalizer::ACCOUNT_TYPE,
+            'name',
+            ['id', 'shippingAddress', 'billingAddress']
+        );
 
-//        foreach ($entity->getContact()->getAddresses() as $address) {
-//            if ($address->getTypeByName(AddressType::TYPE_BILLING)) {
-//                $account->setBillingAddress($address);
-//            }
-//
-//            if ($address->getTypeByName(AddressType::TYPE_SHIPPING)) {
-//                $account->setShippingAddress($address);
-//            }
-//        }
+
+        // AddressType::TYPE_SHIPPING
+
+        /** @var AbstractAddress $shippingAddress */
+        $shippingAddress = $account->getShippingAddress();
+        $billingAddress = $account->getBillingAddress();
 
         $entity->setAccount($account);
 
         return $this;
+
     }
 
     /**
@@ -331,13 +332,14 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 
         // loop by imported addresses, update existing, add new
         foreach ($contact->getAddresses() as $address) {
+            // at this point imported address region have code equal to region_id in magento db field
+            $mageRegionId = $address->getRegion()->getCode();
+
             $originAddressId = $address->getId();
             $existingAddressId = empty($originAddressIds[$originAddressId]) ?
                 null : $originAddressIds[$originAddressId];
 
             if (!empty($existingAddressId) && isset($existingAddressEntities[$existingAddressId])) {
-                $newContact->removeAddress($existingAddressEntities[$existingAddressId]);
-
                 // so we have new data for existing address
                 $this->strategyHelper->importEntity(
                     $existingAddressEntities[$existingAddressId],
@@ -350,7 +352,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
                 $address->setId(null);
             }
 
-            $this->updateAddressCountryRegion($address, $entity);
+            $this->updateAddressCountryRegion($address, $entity, $mageRegionId);
 
             // update address type
             $types = $address->getTypeNames();
@@ -361,7 +363,9 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
                 $address->addType($type);
             }
 
-            $newContact->addAddress($address);
+            if (!$address->getId()) {
+                $newContact->addAddress($address);
+            }
 
             if (!in_array($originAddressId, array_keys($originAddressIds))) {
                 $this->createOriginAddressRelation($address, $originAddressId);

@@ -113,7 +113,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
 
             // TODO: log
             $now = new \DateTime('now', new \DateTimeZone('UTC'));
-            var_dump($now->format('d-m-Y H:i:s') . " loading customer $customerId");
+            echo $now->format('d-m-Y H:i:s') . " loading customer $customerId\n";
 
             $data = $this->getCustomerData($customerId, true);
         } else {
