@@ -33,14 +33,20 @@ class SoapTransportSettingFormType extends AbstractType
     {
         $builder->addEventSubscriber($this->subscriber);
 
-        $builder->add('wsdlUrl', 'text', ['label' => 'WSDL Url', 'required' => true]);
-        $builder->add('apiUser', 'text', ['label' => 'API User', 'required' => true]);
-        $builder->add('apiKey', 'password', ['label' => 'API Key', 'required' => true]);
+        $builder->add('wsdlUrl', 'text', ['label' => 'SOAP WSDL Url', 'required' => true]);
+        $builder->add('apiUser', 'text', ['label' => 'SOAP API User', 'required' => true]);
+        $builder->add('apiKey', 'password', ['label' => 'SOAP API Key', 'required' => true]);
         // @TODO put default value here, when form updated via ajax
         $builder->add(
             'syncStartDate',
             'oro_date',
-            ['label' => 'Sync start date', 'required' => true]
+            [
+                'label'    => 'Sync start date',
+                'required' => true,
+                'tooltip'  => 'Synchronization period start date is necessary'
+                    . ' due to magento API do not provide possibility to paginate,'
+                    . ' dates will be used for splitting data on batches.',
+            ]
         );
         $builder->add('check', 'button', ['label' => 'Check connection']);
         $builder->add(
@@ -49,7 +55,7 @@ class SoapTransportSettingFormType extends AbstractType
             [
                 'label'    => 'Website',
                 'required' => true,
-                'tooltip'  => 'List could be refreshed using connection settings filled above',
+                'tooltip'  => 'List could be refreshed using connection settings filled above.',
             ]
         );
         $builder->add(

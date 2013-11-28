@@ -46,6 +46,13 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
 
         $modifier = $this->getModifierWebsitesList($data->getWebsites());
         $modifier($form);
+
+        if ($data->getId()) {
+            // change label for apiKey field
+            $options = $event->getForm()->get('apiKey')->getConfig()->getOptions();
+            $options = array_merge($options, ['label' => 'New SOAP API Key', 'required' => false]);
+            $form->add('apiKey', 'password', $options);
+        }
     }
 
     /**
@@ -92,8 +99,8 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
                 return;
             }
 
-            if ($form->has('website_id')) {
-                $config = $form->get('website_id')->getConfig()->getOptions();
+            if ($form->has('websiteId')) {
+                $config = $form->get('websiteId')->getConfig()->getOptions();
                 unset($config['choice_list']);
                 unset($config['choices']);
             } else {
@@ -109,7 +116,7 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
                 $choices[$website['id']] = $website['label'];
             }
 
-            $form->add('website_id', 'choice', array_merge($config, ['choices' => $choices]));
+            $form->add('websiteId', 'choice', array_merge($config, ['choices' => $choices]));
         };
     }
 }

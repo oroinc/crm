@@ -13,7 +13,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
          * @property string
          */
         route: 'orocrm_magento_soap_check',
-        url: null,
+        url:   null,
 
         resultTemplate: _.template(
             '<div class="alert alert-<%= type %> connection-status span5"><%= message %></div>'
