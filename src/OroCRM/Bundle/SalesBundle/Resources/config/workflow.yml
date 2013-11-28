@@ -101,8 +101,8 @@ workflows:
                 conditions:
                     @or:
                         parameters:
-                            - @not_empty: [$company_name]
-                            - @not_empty: [$account]
+                            - @not_empty: $company_name
+                            - @not_empty: $account
                         message: "Company name or account must be selected."
                 post_actions: # set lead.status = "qualified"
                     - @find_entity:
@@ -213,7 +213,7 @@ workflows:
                         class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $.result.opportunity
                         data:
-                            name: $lead.name
+                            name: $opportunity_name
                             contact: $lead.contact
                             account: $account
                     - @find_entity: # set status "In progress" to opportunity
@@ -303,7 +303,6 @@ workflows:
                 type: entity
                 options:
                     class: OroCRM\Bundle\AccountBundle\Entity\Account
-
             probability:
                 label: 'Probability'
                 type: float
