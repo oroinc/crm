@@ -8,7 +8,7 @@ use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner;
 
 /**
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\ReportBundle\Entity\Repository\ReportRepository")
+ * @ORM\Entity()
  * @ORM\Table(name="orocrm_report")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
