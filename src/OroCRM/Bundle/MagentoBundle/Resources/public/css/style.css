@@ -8,6 +8,9 @@
 .magento-website-selector-container .selector {
     float:left;
 }
+.magento-website-selector-container .selector > span {
+    overflow: hidden;
+}
 .magento-website-selector-container .selector select {
     width: 235px !important;
 }
