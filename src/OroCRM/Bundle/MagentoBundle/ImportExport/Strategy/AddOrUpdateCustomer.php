@@ -2,12 +2,10 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\BatchBundle\Item\InvalidItemException;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
@@ -285,7 +283,6 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             ->setRegion($this->regionsCache[$combinedCode]);
     }
 
-
     /**
      * @param Customer $entity
      * @return $this
@@ -295,6 +292,16 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         /** @var Account $account */
         $account = $entity->getAccount();
         $account = $this->findAndReplaceEntity($account, AccountNormalizer::ACCOUNT_TYPE, 'name', ['id']);
+
+//        foreach ($entity->getContact()->getAddresses() as $address) {
+//            if ($address->getTypeByName(AddressType::TYPE_BILLING)) {
+//                $account->setBillingAddress($address);
+//            }
+//
+//            if ($address->getTypeByName(AddressType::TYPE_SHIPPING)) {
+//                $account->setShippingAddress($address);
+//            }
+//        }
 
         $entity->setAccount($account);
 
@@ -332,7 +339,11 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
                 $newContact->removeAddress($existingAddressEntities[$existingAddressId]);
 
                 // so we have new data for existing address
-                $this->strategyHelper->importEntity($existingAddressEntities[$existingAddressId], $address, ['id']);
+                $this->strategyHelper->importEntity(
+                    $existingAddressEntities[$existingAddressId],
+                    $address,
+                    ['id', 'country', 'state']
+                );
                 $address = $existingAddressEntities[$existingAddressId];
             } else {
                 // it's not existing address

@@ -118,7 +118,9 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             $mappedData[$fieldKey] = $value;
         }
 
-        $mappedData['birthday'] = substr($mappedData['birthday'], 0, 10);
+        if (!empty($mappedData['birthday'])) {
+            $mappedData['birthday'] = substr($mappedData['birthday'], 0, 10);
+        }
 
         $this->setScalarFieldsValues($resultObject, $mappedData);
         $this->setObjectFieldsValues($resultObject, $mappedData);
