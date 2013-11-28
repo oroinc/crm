@@ -13,7 +13,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
          * @property string
          */
         route: 'orocrm_magento_soap_check',
-        url: null,
+        url:   null,
 
         resultTemplate: _.template(
             '<div class="alert alert-<%= type %> connection-status span5"><%= message %></div>'
@@ -23,7 +23,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
             var id = options.transportEntityId || null;
             this.url = routing.generate(this.route, {id: id});
 
-            if (!options.storeSelectEl || !options.storesListEl) {
+            if (!options.websiteSelectEl || !options.websitesListEl) {
                 throw  new TypeError('Missing required options');
             }
         },
@@ -66,16 +66,16 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
             var success = res.success || false,
                 message = success ? __('Connection succeed, please choose store.') : __('Parameters are not valid!');
 
-            if (success && res.stores) {
-                var $listEl = $(this.options.storesListEl),
-                    $storeSelectEl = $(this.options.storeSelectEl);
+            if (success && res.websites) {
+                var $listEl = $(this.options.websitesListEl),
+                    $websiteSelectEl = $(this.options.websiteSelectEl);
 
-                $listEl.val(JSON.stringify(res.stores));
-                $storeSelectEl.empty();
-                _.each(res.stores, function (store) {
-                    $storeSelectEl.append($("<option />").val(store.id).text(store.name));
+                $listEl.val(JSON.stringify(res.websites));
+                $websiteSelectEl.empty();
+                _.each(res.websites, function (website) {
+                    $websiteSelectEl.append($("<option />").val(website.id).text(website.label));
                 });
-                $storeSelectEl.trigger('change');
+                $websiteSelectEl.trigger('change');
             }
 
             this.renderResult(success ? 'success' : 'error', message);

@@ -115,22 +115,6 @@ class RegionConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    public function getSettingsFormType()
-    {
-        return 'orocrm_magento_region_connector_setting_form_type';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSettingsEntityFQCN()
-    {
-        return 'OroCRM\\Bundle\\MagentoBundle\\Entity\\MagentoRegionConnector';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getImportEntityFQCN()
     {
         return self::ENTITY_NAME;

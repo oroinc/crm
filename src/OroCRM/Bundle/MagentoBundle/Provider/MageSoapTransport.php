@@ -44,7 +44,6 @@ class MageSoapTransport extends SOAPTransport implements TransportTypeInterface
             );
         }
 
-
         if (!parent::init($settings)) {
             return false;
         }

@@ -31,7 +31,7 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Populate store choices if exist in entity
+     * Populate websites choices if exist in entity
      *
      * @param FormEvent $event
      */
@@ -44,14 +44,21 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $modifier = $this->getModifierStoresList($data->getStores());
+        $modifier = $this->getModifierWebsitesList($data->getWebsites());
         $modifier($form);
+
+        if ($data->getId()) {
+            // change label for apiKey field
+            $options = $event->getForm()->get('apiKey')->getConfig()->getOptions();
+            $options = array_merge($options, ['label' => 'New SOAP API Key', 'required' => false]);
+            $form->add('apiKey', 'password', $options);
+        }
     }
 
     /**
      * Pre submit event listener
      * Encrypt passwords and populate if empty
-     * Populate store choices from hidden fields
+     * Populate websites choices from hidden fields
      *
      * @param FormEvent $event
      */
@@ -67,13 +74,13 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
             $data['apiKey'] = $this->encryptor->encryptData($data['apiKey']);
         }
 
-        if (!empty($data['stores'])) {
-            $stores = $data['stores'];
+        if (!empty($data['websites'])) {
+            $websites = $data['websites'];
             // reverseTransform, but not set back to event
-            if (!is_array($stores)) {
-                $stores = json_decode($stores, true);
+            if (!is_array($websites)) {
+                $websites = json_decode($websites, true);
             }
-            $modifier = $this->getModifierStoresList($stores);
+            $modifier = $this->getModifierWebsitesList($websites);
             $modifier($event->getForm());
         }
 
@@ -81,19 +88,19 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param array $stores
+     * @param array $websites
      *
      * @return callable
      */
-    protected function getModifierStoresList($stores)
+    protected function getModifierWebsitesList($websites)
     {
-        return function (FormInterface $form) use ($stores) {
-            if (empty($stores)) {
+        return function (FormInterface $form) use ($websites) {
+            if (empty($websites)) {
                 return;
             }
 
-            if ($form->has('store_id')) {
-                $config = $form->get('store_id')->getConfig()->getOptions();
+            if ($form->has('websiteId')) {
+                $config = $form->get('websiteId')->getConfig()->getOptions();
                 unset($config['choice_list']);
                 unset($config['choices']);
             } else {
@@ -105,11 +112,11 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
             }
 
             $choices = [];
-            foreach ($stores as $store) {
-                $choices[$store['id']] = $store['name'];
+            foreach ($websites as $website) {
+                $choices[$website['id']] = $website['label'];
             }
 
-            $form->add('store_id', 'choice', array_merge($config, ['choices' => $choices]));
+            $form->add('websiteId', 'choice', array_merge($config, ['choices' => $choices]));
         };
     }
 }

@@ -9,8 +9,8 @@
                     new SoapChecker({
                         el: '#{{ form.vars.id }}',
                         transportEntityId: {{ form.parent.vars.value ? form.parent.vars.value.id|json_encode|raw : 'null' }},
-                        storeSelectEl: '#{{ form.parent.store_id.vars.id }}',
-                        storesListEl: '#{{ form.parent.stores.vars.id }}'
+                        websiteSelectEl: '#{{ form.parent.websiteId.vars.id }}',
+                        websitesListEl: '#{{ form.parent.websites.vars.id }}'
                     });
                 });
             </script>

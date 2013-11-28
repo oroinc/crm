@@ -17,6 +17,7 @@ parameters:
     orocrm_magento.provider.channel_type.class:                           OroCRM\Bundle\MagentoBundle\Provider\MageChannelType
     orocrm_magento.form.subscriber.soap_transport_setting.class:          OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
     orocrm_magento.form.type.soap_transport_setting.class:                OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
+    orocrm_magento.converter.stores_to_website.class:                     OroCRM\Bundle\MagentoBundle\Converter\StoreListToWebsiteConverter
 
 services:
     orocrm_magento.mage.soap_transport:
@@ -130,3 +131,8 @@ services:
             - @orocrm_magento.form.subscriber.soap_transport_setting
         tags:
             - { name: form.type, alias: orocrm_magento_soap_transport_setting_form_type }
+
+    orocrm_magento.converter.stores_to_website:
+        class: %orocrm_magento.converter.stores_to_website.class%
+        arguments:
+            - @translator

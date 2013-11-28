@@ -54,16 +54,16 @@ class MagentoSoapTransport extends Transport
     /**
      * @var int
      *
-     * @ORM\Column(name="store_id", type="integer", nullable=true)
+     * @ORM\Column(name="website_id", type="integer", nullable=true)
      */
-    protected $storeId = null;
+    protected $websiteId = null;
 
     /**
      * @var array
      *
-     * @ORM\Column(name="stores", type="array")
+     * @ORM\Column(name="websites", type="array")
      */
-    protected $stores = [];
+    protected $websites = [];
 
     public function __construct()
     {
@@ -171,13 +171,13 @@ class MagentoSoapTransport extends Transport
     }
 
     /**
-     * @param int $storeId
+     * @param int $websiteId
      *
      * @return $this
      */
-    public function setStoreId($storeId)
+    public function setWebsiteId($websiteId)
     {
-        $this->storeId = $storeId;
+        $this->websiteId = $websiteId;
 
         return $this;
     }
@@ -185,19 +185,19 @@ class MagentoSoapTransport extends Transport
     /**
      * @return int
      */
-    public function getStoreId()
+    public function getWebsiteId()
     {
-        return $this->storeId;
+        return $this->websiteId;
     }
 
     /**
-     * @param array $stores
+     * @param array $websites
      *
      * @return $this
      */
-    public function setStores($stores)
+    public function setWebsites(array $websites)
     {
-        $this->stores = $stores;
+        $this->websites = $websites;
 
         return $this;
     }
@@ -205,9 +205,9 @@ class MagentoSoapTransport extends Transport
     /**
      * @return array
      */
-    public function getStores()
+    public function getWebsites()
     {
-        return $this->stores;
+        return $this->websites;
     }
 
     /**
@@ -221,6 +221,7 @@ class MagentoSoapTransport extends Transport
                 'api_key'        => $this->getApiKey(),
                 'wsdl_url'       => $this->getWsdlUrl(),
                 'sync_range'     => $this->getSyncRange(),
+                'website_id'     => $this->getWebsites(),
                 'last_sync_date' => $this->getSyncStartDate(),
             ]
         );

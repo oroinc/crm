@@ -6,3 +6,5 @@ OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
           - NotBlank: ~
         syncStartDate:
           - NotBlank: ~
+        websiteId:
+          - NotBlank: ~

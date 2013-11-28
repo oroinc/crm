@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller;
 
-use Oro\Bundle\SecurityBundle\Tests\Unit\Acl\Persistence\AclPrivilegeRepositoryTest;
-use OroCRM\Bundle\MagentoBundle\Provider\CustomerConnectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -12,7 +10,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Provider\CustomerConnectorInterface;
 
 class SoapController extends Controller
 {
@@ -22,44 +22,34 @@ class SoapController extends Controller
      */
     public function checkAction(Request $request)
     {
-        $transport            = $this->get('orocrm_magento.mage.soap_transport');
-        $transportSavedEntity = $request->get('id', false);
+        $transport = $this->get('orocrm_magento.mage.soap_transport');
 
+        /*
+         * Transport setting entity should be set to form
+         * in case when password should be merged from saved data
+         */
         $data = null;
-        if ($transportSavedEntity) {
-            $data = $this->get('doctrine.orm.entity_manager')
-                ->find($transport->getSettingsEntityFQCN(), $transportSavedEntity);
+        if ($id = $request->get('id', false)) {
+            $data = $this->get('doctrine.orm.entity_manager')->find($transport->getSettingsEntityFQCN(), $id);
         }
 
-        $form = $this->get('form.factory')->createNamed(
-            'soap-check',
-            $transport->getSettingsFormType(),
-            $data,
-            ['csrf_protection' => false]
-        );
-
+        $form = $this->get('form.factory')
+            ->createNamed('soap-check', $transport->getSettingsFormType(), $data, ['csrf_protection' => false]);
         $form->submit($request);
 
         /** @var MagentoSoapTransport $transportEntity */
         $transportEntity = $form->getData();
-        $stores          = [];
+        $websites        = [];
         try {
             $result = $transport->init($transportEntity->getSettingsBag());
-            $stores = $transport->call(CustomerConnectorInterface::ACTION_STORE_LIST);
-            $stores = array_map(
-                function ($item) {
-                    return [
-                        'id'   => $item->store_id,
-                        'name' => $item->name
-                    ];
-                },
-                $stores
-            );
-
+            if ($result) {
+                $stores   = $transport->call(CustomerConnectorInterface::ACTION_STORE_LIST);
+                $websites = $this->get('orocrm_magento.converter.stores_to_website')->convert($stores);
+            }
         } catch (\Exception $e) {
             $result = false;
         }
 
-        return new JsonResponse(['success' => $result, 'stores' => $stores]);
+        return new JsonResponse(['success' => $result, 'websites' => $websites]);
     }
 }
