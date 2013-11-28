@@ -48,7 +48,6 @@ class ReportController extends Controller
 
     /**
      * @Route("/view/{id}", name="orocrm_report_view", requirements={"id"="\d+"}, defaults={"id"=0})
-     * @Template
      * @Acl(
      *      id="orocrm_report_view",
      *      type="entity",
@@ -58,7 +57,12 @@ class ReportController extends Controller
      */
     public function viewAction(Report $entity)
     {
-        return array();
+        return $this->render(
+            sprintf('OroCRMReportBundle:Report:%s/view.html.twig', strtolower($entity->getType())),
+            array(
+                'entity' => $entity
+            )
+        );
     }
 
     /**
