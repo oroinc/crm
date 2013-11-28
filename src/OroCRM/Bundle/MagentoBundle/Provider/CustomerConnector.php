@@ -61,33 +61,36 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     }
 
     /**
-     * @param        $startDate
-     * @param        $endDate
-     * @param string $format
+     * @param int       $websiteId
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @param string    $format
      *
      * @return array
      */
-    protected function getBatchFilter(\DateTime $startDate, \DateTime $endDate, $format = 'Y-m-d H:i:s')
+    protected function getBatchFilter($websiteId, \DateTime $startDate, \DateTime $endDate, $format = 'Y-m-d H:i:s')
     {
         return [
-            [
-                'complex_filter' => [
-                    [
-                        'key'   => 'created_at',
-                        'value' => [
-                            'key'   => 'from',
-                            'value' => $startDate->format($format),
-                        ],
-                    ],
-                    [
-                        'key'   => 'created_at',
-                        'value' => [
-                            'key'   => 'to',
-                            'value' => $endDate->format($format),
-                        ],
+            'complex_filter' => [
+                [
+                    'key'   => 'created_at',
+                    'value' => [
+                        'key'   => 'from',
+                        'value' => $startDate->format($format),
                     ],
                 ],
-            ]
+                [
+                    'key'   => 'created_at',
+                    'value' => [
+                        'key'   => 'to',
+                        'value' => $endDate->format($format),
+                    ],
+                ],
+                [
+                    'key'   => 'website_id',
+                    'value' => ['key' => 'eq', 'value' => $websiteId]
+                ]
+            ],
         ];
     }
 
@@ -146,11 +149,9 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
             $endDate->format('d-m-Y')
         );
 
-        $this->customerIdsBuffer = $this->getCustomersList(
-            $this->getBatchFilter($startDate, $endDate),
-            $this->batchSize,
-            true
-        );
+        $filters   = [];
+        $filters[] = $this->getBatchFilter($this->transportSettings->getWebsiteId(), $startDate, $endDate);
+        $this->customerIdsBuffer = $this->getCustomersList($filters, $this->batchSize, true);
 
         // TODO: remove / log
         echo sprintf('found %d customers', count($this->customerIdsBuffer)) . "\n";
