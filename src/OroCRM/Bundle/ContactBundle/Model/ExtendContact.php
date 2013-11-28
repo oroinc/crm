@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\Model;
 
-class ExtendContact
+use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
+
+class ExtendContact extends BasePerson
 {
 }

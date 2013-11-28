@@ -52,79 +52,6 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, FullNameInterface
 {
     /**
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @Soap\ComplexType("int", nillable=true)
-     */
-    protected $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
-     */
-    protected $namePrefix;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="first_name", type="string", length=255)
-     * @Soap\ComplexType("string")
-     * @Oro\Versioned
-     */
-    protected $firstName;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
-     */
-    protected $middleName;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="last_name", type="string", length=255)
-     * @Soap\ComplexType("string")
-     * @Oro\Versioned
-     */
-    protected $lastName;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
-     */
-    protected $nameSuffix;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="gender", type="string", length=8, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
-     */
-    protected $gender;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="birthday", type="datetime", nullable=true)
-     * @Soap\ComplexType("date", nillable=true)
-     * @Oro\Versioned
-     */
-    protected $birthday;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
@@ -293,22 +220,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     protected $accounts;
 
     /**
-     * @var \DateTime $created
-     *
-     * @ORM\Column(type="datetime")
-     * @Soap\ComplexType("dateTime", nillable=true)
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime $updated
-     *
-     * @ORM\Column(type="datetime")
-     * @Soap\ComplexType("dateTime", nillable=true)
-     */
-    protected $updatedAt;
-
-    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
@@ -378,141 +289,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     }
 
     /**
-     * Returns the contact unique id.
-     *
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     * @return Contact
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @param string $namePrefix
-     * @return Contact
-     */
-    public function setNamePrefix($namePrefix)
-    {
-        $this->namePrefix = $namePrefix;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNamePrefix()
-    {
-        return $this->namePrefix;
-    }
-
-    /**
-     * @param string $firstName
-     * @return Contact
-     */
-    public function setFirstName($firstName)
-    {
-        $this->firstName = $firstName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMiddleName()
-    {
-        return $this->middleName;
-    }
-
-    /**
-     * @param string $middleName
-     * @return Contact
-     */
-    public function setMiddleName($middleName)
-    {
-        $this->middleName = $middleName;
-
-        return $this;
-    }
-
-    /**
-     * @param string $lastName
-     * @return Contact
-     */
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * @param string $nameSuffix
-     * @return Contact
-     */
-    public function setNameSuffix($nameSuffix)
-    {
-        $this->nameSuffix = $nameSuffix;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNameSuffix()
-    {
-        return $this->nameSuffix;
-    }
-
-    /**
-     * @param string $gender
-     * @return Contact
-     */
-    public function setGender($gender)
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getGender()
-    {
-        return $this->gender;
-    }
-
-    /**
      * @param User $assignedTo
      * @return Contact
      */
@@ -529,25 +305,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     public function getAssignedTo()
     {
         return $this->assignedTo;
-    }
-
-    /**
-     * @param \DateTime $birthday
-     * @return Contact
-     */
-    public function setBirthday($birthday)
-    {
-        $this->birthday = $birthday;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getBirthday()
-    {
-        return $this->birthday;
     }
 
     /**
@@ -1242,48 +999,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     public function hasAccounts()
     {
         return count($this->accounts) > 0;
-    }
-
-    /**
-     * Get contact created date/time
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTime $created
-     * @return Contact
-     */
-    public function setCreatedAt($created)
-    {
-        $this->createdAt = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get contact last update date/time
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param \DateTime $updated
-     * @return Contact
-     */
-    public function setUpdatedAt($updated)
-    {
-        $this->updatedAt = $updated;
-
-        return $this;
     }
 
     /**
