@@ -73,8 +73,8 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             $importedEntity->getGroup()
         );
 
-        $this->updateContact($newEntity, $importedEntity->getContact())
-             ->updateAccount($newEntity, $importedEntity->getAccount());
+        $this->updateContact($newEntity, $importedEntity->getContact(), true);
+             //->updateAccount($newEntity, $importedEntity->getAccount());
 
         die();
         // set relations
@@ -120,16 +120,29 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     }
 
     /**
+     * Update $entity with new contact data
+     *
      * @param Customer $entity
+     * @param Contact $contact
+     * @param bool $isUpdateAllowed
      * @return $this
      */
-    protected function updateContact(Customer $entity)
+    protected function updateContact(Customer $entity, Contact $contact, $isUpdateAllowed = false)
     {
-        /** @var Contact $contact */
-        $contact = $entity->getContact();
+        // update not allowed
+        if (!$isUpdateAllowed) {
+            return $this;
+        }
 
-        /** @var Contact $newContact */
-        $newContact = $this->findAndReplaceEntity($contact, ContactNormalizer::CONTACT_TYPE, 'id', ['id', 'addresses']);
+        if ($entity->getContact()->getId()) {
+            $this->strategyHelper->importEntity($entity->getContact(), $contact, ['id', 'addresses']);
+            /** @var Contact $newContact */
+            //$newContact = $this->findAndReplaceEntity(
+            //    $contact, ContactNormalizer::CONTACT_TYPE, 'id', ['id', 'addresses']
+            //);
+        }
+
+        $newContact = $entity->getContact();
 
         $existingAddressIds = [];
         $existingAddressEntities = [];
@@ -185,10 +198,9 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             }
         }
 
-        $entity->setContact($newContact);
         return $this;
     }
-    
+
     /**
      * @param mixed $entity
      * @param string $entityName
