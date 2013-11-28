@@ -1,4 +1,4 @@
 OroCRMSalesBundle Documentation
 ===============================
 
-- [Workflows](./reference/workflows.md)
+- [Sales Workflows](./reference/workflows.md)
