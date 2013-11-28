@@ -38,13 +38,14 @@
     {% if form.vars.value.id %}
         {% set breadcrumbs = {
             'entity':      form.vars.value,
-            'indexPath':   path('orocrm_contact_index'),
+            'indexPath':   path('orocrm_report_index'),
             'indexLabel': 'Reports'|trans,
             'entityTitle': entity.name
         }
         %}
         {{ parent() }}
     {% else %}
+        {% set title = 'New Report'|trans %}
         {% include 'OroUIBundle::page_title_block.html.twig' %}
     {% endif %}
 {% endblock pageHeader %}
