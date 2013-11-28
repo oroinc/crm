@@ -1,6 +1,6 @@
 /* global:define */
-define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/navigation'],
-    function ($, _, routing, Backbone, __, Navigation) {
+define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/navigation', 'oro/messenger'],
+    function ($, _, routing, Backbone, __, Navigation, messenger) {
         "use strict";
 
     return Backbone.View.extend({
@@ -88,8 +88,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
          * @param message string
          */
         renderResult: function (type, message) {
-            $(this.$el.siblings('.alert')).remove();
-            this.$el.parent().append(this.resultTemplate({type: type, message: message}));
+            messenger.notificationFlashMessage(type, message, {container: this.$el.parent(), template: this.resultTemplate});
         }
     });
 });
