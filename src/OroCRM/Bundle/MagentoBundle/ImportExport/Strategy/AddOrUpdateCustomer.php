@@ -53,55 +53,148 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     /**
      * Process item strategy
      *
-     * @param mixed $entity
-     * @throws \Exception
+     * @param mixed $importedEntity
      * @return mixed|null
      */
-    public function process($entity)
+    public function process($importedEntity)
     {
         $newEntity = $this->findAndReplaceEntity(
-            $entity,
+            $importedEntity,
             self::ENTITY_NAME,
             'originalId',
-            ['id', 'contact', 'account', 'website', 'store']
+            ['id', 'contact', 'account', 'website', 'store', 'group']
         );
 
-        // fill existing ids
-        if ($newEntity->getContact()) {
-            $originalContactId = $newEntity->getContact()->getId();
-            $entity->getContact()->setId($originalContactId);
-        }
-        if ($newEntity->getAccount()) {
-            $originalAccountId = $newEntity->getAccount()->getId();
-            $entity->getAccount()->setId($originalAccountId);
-        }
-        $entity = $newEntity
-            ->setContact($entity->getContact())
-            ->setAccount($entity->getAccount());
-
         // update all related entities
-        $this->updateStoresAndGroup($entity)
-             ->updateContact($entity)
-             ->updateAccount($entity);
+        $this->updateStoresAndGroup(
+            $newEntity,
+            $importedEntity->getStore(),
+            $importedEntity->getWebsite(),
+            $importedEntity->getGroup()
+        );
 
-        $entity->getContact()->addAccount($entity->getAccount());
-        $entity->getAccount()->setDefaultContact($entity->getContact());
+        $this->updateContact($newEntity, $importedEntity->getContact())
+             ->updateAccount($newEntity, $importedEntity->getAccount());
 
-        // update owner for addresses, emails and phones
-        $this->updateRelatedEntitiesOwner($entity);
+        die();
+        // set relations
+        if ($newEntity->getId()) {
+            $newEntity->getContact()->addAccount($newEntity->getAccount());
+            $newEntity->getAccount()->setDefaultContact($newEntity->getContact());
+        }
 
         // validate and update context - increment counter or add validation error
-        $this->validateAndUpdateContext($entity);
+        $this->validateAndUpdateContext($newEntity);
 
-        return $entity;
+        return $newEntity;
     }
 
+    /**
+     * Update $entity with new data from imported $store, $website, $group
+     *
+     * @param Customer $entity
+     * @param Store $store
+     * @param Website $website
+     * @param CustomerGroup $group
+     *
+     * @return $this
+     */
+    protected function updateStoresAndGroup(Customer $entity, Store $store, Website $website, CustomerGroup $group)
+    {
+        // do not allow to change code/website name by imported entity
+        $doNotUpdateFields = ['id', 'code', 'name'];
+        $entity
+            ->setWebsite(
+                $this->findAndReplaceEntity($website, CustomerNormalizer::WEBSITE_TYPE, 'code', $doNotUpdateFields)
+            )
+            ->setStore(
+                $this->findAndReplaceEntity($store, CustomerNormalizer::STORE_TYPE, 'code', $doNotUpdateFields)
+            )
+            ->setGroup(
+                $this->findAndReplaceEntity($group, CustomerNormalizer::GROUPS_TYPE, 'name', $doNotUpdateFields)
+            );
+
+        $entity->getStore()->setWebsite($entity->getWebsite());
+
+        return $this;
+    }
+
+    /**
+     * @param Customer $entity
+     * @return $this
+     */
+    protected function updateContact(Customer $entity)
+    {
+        /** @var Contact $contact */
+        $contact = $entity->getContact();
+
+        /** @var Contact $newContact */
+        $newContact = $this->findAndReplaceEntity($contact, ContactNormalizer::CONTACT_TYPE, 'id', ['id', 'addresses']);
+
+        $existingAddressIds = [];
+        $existingAddressEntities = [];
+        foreach ($newContact->getAddresses() as $existingAddress) {
+            $existingAddressIds[] = $existingAddress->getId();
+            $existingAddressEntities[$existingAddress->getId()] = $existingAddress;
+        }
+
+        $originAddressIds = [];
+        if (!empty($existingAddressIds)) {
+            $originAddressIds = $this->getOriginAddressesIds($existingAddressIds);
+        }
+
+        // loop by imported addresses, update existing, add new
+        foreach ($contact->getAddresses() as $address) {
+            // at this point imported address region have code equal to region_id in magento db field
+            $mageRegionId = $address->getRegion()->getCode();
+
+            $originAddressId = $address->getId();
+            $existingAddressId = empty($originAddressIds[$originAddressId]) ?
+                null : $originAddressIds[$originAddressId];
+
+            if (!empty($existingAddressId) && isset($existingAddressEntities[$existingAddressId])) {
+                // so we have new data for existing address
+                $this->strategyHelper->importEntity(
+                    $existingAddressEntities[$existingAddressId],
+                    $address,
+                    ['id', 'country', 'state']
+                );
+                $address = $existingAddressEntities[$existingAddressId];
+            } else {
+                // it's not existing address
+                $address->setId(null);
+            }
+
+            $this->updateAddressCountryRegion($address, $entity, $mageRegionId);
+
+            // update address type
+            $types = $address->getTypeNames();
+            $address->getTypes()->clear();
+            $loadedTypes = $this->getEntityRepository('OroAddressBundle:AddressType')
+                ->findBy(['name' => $types]);
+            foreach ($loadedTypes as $type) {
+                $address->addType($type);
+            }
+
+            if (!$address->getId()) {
+                $newContact->addAddress($address);
+            }
+
+            if (!in_array($originAddressId, array_keys($originAddressIds))) {
+                $this->createOriginAddressRelation($address, $originAddressId);
+            }
+        }
+
+        $entity->setContact($newContact);
+        return $this;
+    }
+    
     /**
      * @param mixed $entity
      * @param string $entityName
      * @param string $idFieldName
      * @param array $excludedProperties
-     * @return Customer
+     * @return mixed
      */
     protected function findAndReplaceEntity($entity, $entityName, $idFieldName = 'id', $excludedProperties = [])
     {
@@ -185,45 +278,6 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         $this->importExportContext = $importExportContext;
     }
 
-    /**
-     * @param Customer $entity
-     * @return $this
-     */
-    protected function updateStoresAndGroup(Customer $entity)
-    {
-        // do not allow to change code/website name by imported entity
-        /** @var Website $websiteEntity */
-        $websiteEntity = $this->findAndReplaceEntity(
-            $entity->getWebsite(),
-            CustomerNormalizer::WEBSITE_TYPE,
-            'code',
-            ['id', 'code', 'name']
-        );
-
-        /** @var Store $storeEntity */
-        $storeEntity = $this->findAndReplaceEntity(
-            $entity->getStore(),
-            CustomerNormalizer::STORE_TYPE,
-            'code',
-            ['id', 'code', 'name']
-        );
-        $storeEntity->setWebsite($websiteEntity);
-
-        /** @var CustomerGroup $groupEntity */
-        $groupEntity = $this->findAndReplaceEntity(
-            $entity->getGroup(),
-            CustomerNormalizer::GROUPS_TYPE,
-            'name',
-            ['code', 'name']
-        );
-
-        $entity
-            ->setWebsite($websiteEntity)
-            ->setStore($storeEntity)
-            ->setGroup($groupEntity);
-
-        return $this;
-    }
 
     /**
      * @param AbstractAddress $address
@@ -309,72 +363,6 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 
     }
 
-    /**
-     * @param Customer $entity
-     * @return $this
-     */
-    protected function updateContact(Customer $entity)
-    {
-        /** @var Contact $contact */
-        $contact = $entity->getContact();
-
-        /** @var Contact $newContact */
-        $newContact = $this->findAndReplaceEntity($contact, ContactNormalizer::CONTACT_TYPE, 'id', ['id', 'addresses']);
-
-        $existingAddressIds = [];
-        $existingAddressEntities = [];
-        foreach ($newContact->getAddresses() as $existingAddress) {
-            $existingAddressIds[] = $existingAddress->getId();
-            $existingAddressEntities[$existingAddress->getId()] = $existingAddress;
-        }
-
-        $originAddressIds = $this->getOriginAddressesIds($existingAddressIds);
-
-        // loop by imported addresses, update existing, add new
-        foreach ($contact->getAddresses() as $address) {
-            // at this point imported address region have code equal to region_id in magento db field
-            $mageRegionId = $address->getRegion()->getCode();
-
-            $originAddressId = $address->getId();
-            $existingAddressId = empty($originAddressIds[$originAddressId]) ?
-                null : $originAddressIds[$originAddressId];
-
-            if (!empty($existingAddressId) && isset($existingAddressEntities[$existingAddressId])) {
-                // so we have new data for existing address
-                $this->strategyHelper->importEntity(
-                    $existingAddressEntities[$existingAddressId],
-                    $address,
-                    ['id', 'country', 'state']
-                );
-                $address = $existingAddressEntities[$existingAddressId];
-            } else {
-                // it's not existing address
-                $address->setId(null);
-            }
-
-            $this->updateAddressCountryRegion($address, $entity, $mageRegionId);
-
-            // update address type
-            $types = $address->getTypeNames();
-            $address->getTypes()->clear();
-            $loadedTypes = $this->getEntityRepository('OroAddressBundle:AddressType')
-                ->findBy(['name' => $types]);
-            foreach ($loadedTypes as $type) {
-                $address->addType($type);
-            }
-
-            if (!$address->getId()) {
-                $newContact->addAddress($address);
-            }
-
-            if (!in_array($originAddressId, array_keys($originAddressIds))) {
-                $this->createOriginAddressRelation($address, $originAddressId);
-            }
-        }
-
-        $entity->setContact($newContact);
-        return $this;
-    }
 
     /**
      * @param ContactAddress $address
@@ -409,14 +397,5 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         }
 
         return $items;
-    }
-
-    /**
-     * @param Customer $entity
-     * @return $this
-     */
-    protected function updateRelatedEntitiesOwner(Customer $entity)
-    {
-        return $this;
     }
 }
