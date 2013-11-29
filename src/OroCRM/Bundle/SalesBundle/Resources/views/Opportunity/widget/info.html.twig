@@ -14,7 +14,7 @@
 
 <div class="widget-content opportunity-info form-horizontal box-content row-fluid">
 
-    <div class="span6">
+    <div class="responsive-block">
         {{ _self.renderRow('Opportunity name'|trans, entity.name) }}
         {{ _self.renderRow('Status'|trans, entity.status) }}
 
@@ -56,7 +56,7 @@
             {% endfor %}
         {% endif %}
     </div>
-    <div class="span6">
+    <div class="responsive-block">
         {{ _self.renderRow('Customer need'|trans, entity.customerNeed) }}
         {{ _self.renderRow('Proposed solution'|trans, entity.proposedSolution) }}
         {{ _self.renderRow('Close reason'|trans, entity.closeReason) }}
