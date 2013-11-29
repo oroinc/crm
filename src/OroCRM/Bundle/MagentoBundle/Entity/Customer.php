@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
@@ -19,6 +20,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
  * @ORM\Table(name="orocrm_magento_customer")
+ * @Oro\Loggable
  * @Config(
  *  routeName="orocrm_magento_customer_index",
  *  routeView="orocrm_magento_customer_view",
@@ -38,6 +40,7 @@ class Customer extends BasePerson implements FullNameInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website", cascade="PERSIST")
      * @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned("getName")
      */
     protected $website;
 
@@ -46,6 +49,7 @@ class Customer extends BasePerson implements FullNameInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store", cascade="PERSIST")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned("getName")
      */
     protected $store;
 
@@ -54,6 +58,7 @@ class Customer extends BasePerson implements FullNameInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup", cascade="PERSIST")
      * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned("getName")
      */
     protected $group;
 
@@ -76,10 +81,11 @@ class Customer extends BasePerson implements FullNameInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\MagentoAddress",
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Address",
      *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
+     * @Oro\Versioned()
      */
     protected $addresses;
 
@@ -94,6 +100,7 @@ class Customer extends BasePerson implements FullNameInterface
      * @var string
      *
      * @ORM\Column(name="vat", type="string", length=255, nullable=true)
+     * @Oro\Versioned()
      */
     protected $vat;
 

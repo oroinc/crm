@@ -4,10 +4,13 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+
 /**
  * Class Website
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
+ * @Oro\Loggable
  * @ORM\Entity
  * @ORM\Table(
  *  name="orocrm_magento_website",
