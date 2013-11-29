@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ReportBundle\EventListener;
 use Doctrine\ORM\EntityManager;
 use Knp\Menu\ItemInterface;
 
+use Knp\Menu\MenuItem;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
 
@@ -40,48 +41,64 @@ class NavigationListener
         /** @var ItemInterface $reportsMenuItem */
         $reportsMenuItem = $event->getMenu()->getChild('reports_tab');
         if ($reportsMenuItem) {
-            $reports = $this->em->getRepository('OroCRM\Bundle\ReportBundle\Entity\Report')->findBy([], ['entity' => 'ASC', 'name' => 'ASC']);
+            $reports = $this->em->getRepository('OroCRM\Bundle\ReportBundle\Entity\Report')->findBy([], ['name' => 'ASC']);
             //todo: Add ACL Access level protection
             if (!empty($reports)) {
+                $reportMenuData = [];
                 foreach ($reports as $report) {
-                    $this->getEntityMenuItem($reportsMenuItem, $report->getEntity())->addChild(
-                        $report->getName(),
-                        [
-                            'label' => $report->getName(),
-                            'route' => 'orocrm_report_view',
-                            'routeParameters' => [
-                                'id' => $report->getId()
-                            ],
-                            'extras' => [
-                                'safe_label' => true,
-                                'routes' => array('orocrm_report_*')
-                            ]
-
-                        ]
-                    );
+                    $config = $this->entityConfigProvider->getConfig($report->getEntity());
+                    $entityLabel = $config->get('plural_label');
+                    $reportMenuData[$entityLabel] = [
+                        'label' => $report->getName(),
+                        'id' => $report->getId()
+                    ];
                 }
+                ksort($reportMenuData);
+                $this->buildReportMenu($reportsMenuItem, $reportMenuData);
             }
         }
     }
 
     /**
-     * Get entity menu item for retprt item
+     * Build report menu
+     *
+     * @param ItemInterface $reportsItem
+     * @param array $reportData
+     *  key => entity label
+     *  value => array of reports id's and label's
+     */
+    protected function buildReportMenu(ItemInterface $reportsItem, $reportData)
+    {
+        foreach ($reportData as $entityName => $report) {
+            $this->getEntityMenuItem($reportsItem, $entityName)->addChild(
+                $report['label'] . '_report',
+                [
+                    'label' => $report['label'] ,
+                    'route' => 'orocrm_report_view',
+                    'routeParameters' => [
+                        'id' => $report['id']
+                    ]
+                ]
+            );
+        }
+    }
+
+    /**
+     * Get entity menu item for report item
      *
      * @param ItemInterface $reportItem
-     * @param $entityClass
+     * @param string $entityName
      * @return ItemInterface
      */
-    protected function getEntityMenuItem(ItemInterface $reportItem, $entityClass)
+    protected function getEntityMenuItem(ItemInterface $reportItem, $entityName)
     {
-        $config = $this->entityConfigProvider->getConfig($entityClass);
-        $entityLabel = $config->get('label');
-        $entityItemName = $entityLabel . '_report_tab';
+        $entityItemName = $entityName . '_report_tab';
         $entityItem = $reportItem->getChild($entityItemName);
         if (!$entityItem) {
             $reportItem->addChild(
                 $entityItemName,
                 [
-                    'label' => $entityLabel,
+                    'label' => $entityName,
                     'uri' => '#',
                 ]
             );
