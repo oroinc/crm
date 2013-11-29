@@ -279,10 +279,24 @@ class Customer extends BasePerson implements FullNameInterface
     /**
      * Get addresses
      *
-     * @return Collection|MagentoAddress[]
+     * @return Collection|Address[]
      */
     public function getAddresses()
     {
         return $this->addresses;
+    }
+
+    /**
+     * @param int $originId
+     * @return Address|null
+     */
+    public function getAddressByOriginId($originId)
+    {
+        return $this->addresses->filter(
+            function ($item) use ($originId) {
+                return $item->getOriginId() == $originId;
+            }
+        )
+            ->first();
     }
 }

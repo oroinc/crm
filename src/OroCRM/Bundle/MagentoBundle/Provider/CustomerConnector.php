@@ -73,14 +73,14 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         return [
             'complex_filter' => [
                 [
-                    'key'   => 'created_at',
+                    'key'   => 'updated_at',
                     'value' => [
                         'key'   => 'from',
                         'value' => $startDate->format($format),
                     ],
                 ],
                 [
-                    'key'   => 'created_at',
+                    'key'   => 'updated_at',
                     'value' => [
                         'key'   => 'to',
                         'value' => $endDate->format($format),

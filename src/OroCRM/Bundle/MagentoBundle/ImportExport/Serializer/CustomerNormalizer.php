@@ -8,6 +8,8 @@ use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
+use Oro\Bundle\AddressBundle\Entity\AddressType;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -183,9 +185,7 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
     {
         // format contact data
         $data['contact'] = $this->formatContactData($data);
-
-        // format account data
-        $data['account'] = $data['contact']['firstName'] . ' ' . $data['contact']['lastName'];
+        $data['account'] = $this->formatAccountData($data);
 
         /** @var Contact $contact */
         $contact = $this->denormalizeObject($data, 'contact', ContactNormalizer::CONTACT_TYPE, $format, $context);
@@ -196,8 +196,9 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             'account',
             AccountNormalizer::ACCOUNT_TYPE,
             $format,
-            array_merge($context, ['mode' => AccountNormalizer::SHORT_MODE])
+            array_merge($context, ['mode' => AccountNormalizer::FULL_MODE])
         );
+        unset($data['account']);
 
         /** @var Website $website */
         $website = $this->denormalizeObject($data, 'website', static::WEBSITE_TYPE, $format, $context);
@@ -243,6 +244,46 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
                 )
             );
 
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    protected function formatAccountData($data)
+    {
+        $account = [];
+
+        $account['name'] = sprintf("%s %s", $data['first_name'], $data['last_name']);
+
+        foreach ($data['addresses'] as $address) {
+            $type = false;
+
+            // prepare address types
+            if (!empty($address['is_default_shipping'])) {
+                $type = AddressType::TYPE_SHIPPING . '_address';
+            }
+
+            if (!empty($address['is_default_billing'])) {
+                $type = AddressType::TYPE_BILLING . '_address';
+            }
+
+            if ($type) {
+                $account[$type]['firstName']  = $address['firstname'];
+                $account[$type]['lastName']   = $address['lastname'];
+                $account[$type]['street']     = $address['street'];
+                $account[$type]['city']       = $address['city'];
+
+                $account[$type]['postalCode'] = $address['postcode'];
+                $account[$type]['country']    = $address['country_id'];
+                $account[$type]['regionText'] = $address['region'];
+                $account[$type]['region']     = $address['region_id'];
+                $account[$type]['created']    = $address['created_at'];
+                $account[$type]['updated']    = $address['updated_at'];
+            }
+        }
+
+        return $account;
     }
 
     /**
