@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
@@ -20,6 +21,7 @@ use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormal
 use OroCRM\Bundle\MagentoBundle\Entity\AddressRelation;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerNormalizer;
@@ -62,7 +64,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             $importedEntity,
             self::ENTITY_NAME,
             'originalId',
-            ['id', 'contact', 'account', 'website', 'store', 'group']
+            ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses']
         );
 
         // update all related entities
@@ -73,8 +75,9 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             $importedEntity->getGroup()
         );
 
-        $this->updateContact($newEntity, $importedEntity->getContact(), true);
-             //->updateAccount($newEntity, $importedEntity->getAccount());
+        $this->updateAddresses($newEntity, $newEntity->getAddresses())
+             ->updateContact($newEntity, $importedEntity->getContact(), true)
+             ->updateAccount($newEntity, $importedEntity->getAccount());
 
         // set relations
         if ($newEntity->getId()) {
@@ -137,41 +140,12 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             $this->strategyHelper->importEntity($entity->getContact(), $contact, ['id', 'addresses']);
         }
 
-        $newContact = $entity->getContact();
-
-        $existingAddressIds = [];
-        $existingAddressEntities = [];
-        foreach ($newContact->getAddresses() as $existingAddress) {
-            $existingAddressIds[] = $existingAddress->getId();
-            $existingAddressEntities[$existingAddress->getId()] = $existingAddress;
-        }
-
-        $originAddressIds = [];
-        if (!empty($existingAddressIds)) {
-            $originAddressIds = $this->getOriginAddressesIds($existingAddressIds);
-        }
-
-        // loop by imported addresses, update existing, add new
+        // loop by imported addresses, add new only
         foreach ($contact->getAddresses() as $address) {
             // at this point imported address region have code equal to region_id in magento db field
             $mageRegionId = $address->getRegion()->getCode();
-
             $originAddressId = $address->getId();
-            $existingAddressId = empty($originAddressIds[$originAddressId]) ?
-                null : $originAddressIds[$originAddressId];
-
-            if (!empty($existingAddressId) && isset($existingAddressEntities[$existingAddressId])) {
-                // so we have new data for existing address
-                $this->strategyHelper->importEntity(
-                    $existingAddressEntities[$existingAddressId],
-                    $address,
-                    ['id', 'country', 'state']
-                );
-                $address = $existingAddressEntities[$existingAddressId];
-            } else {
-                // it's not existing address
-                $address->setId(null);
-            }
+            $address->setId(null);
 
             $this->updateAddressCountryRegion($address, $entity, $mageRegionId);
 
@@ -184,16 +158,19 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
                 $address->addType($type);
             }
 
-            if (!$address->getId()) {
-                $newContact->addAddress($address);
-            }
-
-            if (!in_array($originAddressId, array_keys($originAddressIds))) {
-                $this->createOriginAddressRelation($address, $originAddressId);
-            }
+            $entity->getContact()->addAddress($address);
         }
 
         return $this;
+    }
+
+    /**
+     * @param Customer $entity
+     * @param ArrayCollection|MagentoAddress[] $addresses
+     */
+    public function updateAddresses(Customer $entity, ArrayCollection $addresses)
+    {
+
     }
 
     /**
@@ -368,41 +345,5 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 
         return $this;
 
-    }
-
-
-    /**
-     * @param ContactAddress $address
-     * @param int $originId
-     */
-    protected function createOriginAddressRelation($address, $originId)
-    {
-        $addressRelation = new AddressRelation();
-        $addressRelation->setOriginId($originId)
-            ->setAddress($address);
-
-        $this->getEntityManager(self::ADDRESS_RELATION_ENTITY)
-            ->persist($addressRelation);
-    }
-
-    /**
-     * @param int[] $addressIds
-     * @return array
-     */
-    protected function getOriginAddressesIds($addressIds)
-    {
-        $qb = $this->getEntityRepository(self::ADDRESS_RELATION_ENTITY)
-            ->createQueryBuilder('r');
-
-        $result = $qb->where($qb->expr()->in('r.address', $addressIds))
-            ->getQuery()
-            ->getResult();
-
-        $items = [];
-        foreach ($result as $item) {
-            $items[$item->getOriginId()] = $item->getAddress()->getId();
-        }
-
-        return $items;
     }
 }

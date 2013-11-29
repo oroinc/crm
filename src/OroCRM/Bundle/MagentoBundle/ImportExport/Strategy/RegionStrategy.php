@@ -4,19 +4,13 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\BatchBundle\Item\InvalidItemException;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 
-use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
-use OroCRM\Bundle\MagentoBundle\Entity\Store;
-use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerNormalizer;
 
 class RegionStrategy implements StrategyInterface, ContextAwareInterface
 {
@@ -130,118 +124,5 @@ class RegionStrategy implements StrategyInterface, ContextAwareInterface
     public function setImportExportContext(ContextInterface $importExportContext)
     {
         $this->importExportContext = $importExportContext;
-    }
-
-    /**
-     * @param Customer $entity
-     * @return $this
-     */
-    protected function updateStoresAndGroup(Customer $entity)
-    {
-        // do not allow to change code/website name by imported entity
-        /** @var Website $websiteEntity */
-        $websiteEntity = $this->findAndReplaceEntity(
-            $entity->getWebsite(),
-            CustomerNormalizer::WEBSITE_TYPE,
-            'code',
-            ['code', 'name']
-        );
-
-        /** @var Store $storeEntity */
-        $storeEntity = $this->findAndReplaceEntity(
-            $entity->getStore(),
-            CustomerNormalizer::STORE_TYPE,
-            'code',
-            ['code', 'name']
-        );
-        $storeEntity->setWebsite($websiteEntity);
-
-        /** @var CustomerGroup $groupEntity */
-        $groupEntity = $this->findAndReplaceEntity(
-            $entity->getGroup(),
-            CustomerNormalizer::GROUPS_TYPE,
-            'name',
-            ['code', 'name']
-        );
-
-        $entity
-            ->setWebsite($websiteEntity)
-            ->setStore($storeEntity)
-            ->setGroup($groupEntity);
-
-        return $this;
-    }
-
-    /**
-     * @param Customer $entity
-     * @throws \Oro\Bundle\BatchBundle\Item\InvalidItemException
-     * @return $this
-     */
-    protected function updateAddresses(Customer $entity)
-    {
-        $addresses = $entity->getContact()->getAddresses();
-
-        foreach ($addresses as $address) {
-            $countryCode = $address->getCountry()->getIso2Code();
-            $this->regionsCache[$countryCode] = empty($this->regionsCache[$countryCode]) ?
-                $this->findAndReplaceEntity(
-                    $address->getCountry(),
-                    'Oro\Bundle\AddressBundle\Entity\Country',
-                    'iso2Code',
-                    ['iso2Code', 'iso3Code', 'name']
-                ) :
-                $this->regionsCache[$countryCode];
-
-            $regionCode = $address->getRegion()->getCombinedCode();
-            $this->regionsCache[$regionCode] = empty($this->regionsCache[$regionCode]) ?
-                $this->getEntityOrNull($address->getRegion(), 'combinedCode', 'Oro\Bundle\AddressBundle\Entity\Region'):
-                $this->regionsCache[$regionCode];
-
-            if (empty($this->regionsCache[$regionCode])) {
-                throw new InvalidItemException(
-                    sprintf("Cannot find '%s' region for '%s' country", $regionCode, $countryCode),
-                    [$entity]
-                );
-            }
-
-            $address->setCountry($this->regionsCache[$countryCode])
-                ->setRegion($this->regionsCache[$regionCode]);
-        }
-
-
-        return $this;
-    }
-
-    /**
-     * @param Customer $entity
-     * @return $this
-     */
-    protected function updateAccount(Customer $entity)
-    {
-        $account = $entity->getAccount();
-
-        $account = $this->findAndReplaceEntity($account, AccountNormalizer::ACCOUNT_TYPE, 'name', ['id']);
-
-        $entity->setAccount($account);
-
-        return $this;
-    }
-
-    /**
-     * @param Customer $entity
-     * @return $this
-     */
-    protected function updateContact(Customer $entity)
-    {
-        return $this;
-    }
-
-    /**
-     * @param Customer $entity
-     * @return $this
-     */
-    protected function updateRelatedEntitiesOwner(Customer $entity)
-    {
-        return $this;
     }
 }

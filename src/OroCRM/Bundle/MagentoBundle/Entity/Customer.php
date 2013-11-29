@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -71,6 +72,16 @@ class Customer extends BasePerson implements FullNameInterface
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $account;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\MagentoAddress",
+     *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"primary" = "DESC"})
+     */
+    protected $addresses;
 
     /**
      * @var boolean
@@ -256,5 +267,15 @@ class Customer extends BasePerson implements FullNameInterface
     public function __toString()
     {
         return sprintf("%s %s", $this->getFirstName(), $this->getLastName());
+    }
+
+    /**
+     * Get addresses
+     *
+     * @return Collection|MagentoAddress[]
+     */
+    public function getAddresses()
+    {
+        return $this->addresses;
     }
 }
