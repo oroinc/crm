@@ -76,7 +76,6 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         $this->updateContact($newEntity, $importedEntity->getContact(), true);
              //->updateAccount($newEntity, $importedEntity->getAccount());
 
-        die();
         // set relations
         if ($newEntity->getId()) {
             $newEntity->getContact()->addAccount($newEntity->getAccount());
@@ -130,16 +129,12 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     protected function updateContact(Customer $entity, Contact $contact, $isUpdateAllowed = false)
     {
         // update not allowed
-        if (!$isUpdateAllowed) {
+        if ($entity->getContact()->getId() && !$isUpdateAllowed) {
             return $this;
         }
 
         if ($entity->getContact()->getId()) {
             $this->strategyHelper->importEntity($entity->getContact(), $contact, ['id', 'addresses']);
-            /** @var Contact $newContact */
-            //$newContact = $this->findAndReplaceEntity(
-            //    $contact, ContactNormalizer::CONTACT_TYPE, 'id', ['id', 'addresses']
-            //);
         }
 
         $newContact = $entity->getContact();
