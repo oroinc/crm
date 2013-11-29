@@ -8,6 +8,8 @@ use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
+use Oro\Bundle\AddressBundle\Entity\AddressType;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -253,8 +255,6 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
         $account = [];
 
         $account['name'] = sprintf("%s %s", $data['first_name'], $data['last_name']);
-        $account['shipping_address'] = [];
-        $account['billing_address'] = [];
 
         foreach ($data['addresses'] as $address) {
             $type = false;
@@ -271,7 +271,6 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             if ($type) {
                 $account[$type]['firstName']  = $address['firstname'];
                 $account[$type]['lastName']   = $address['lastname'];
-                $account[$type]['middleName'] = $address['middlename'];
                 $account[$type]['street']     = $address['street'];
                 $account[$type]['city']       = $address['city'];
 
