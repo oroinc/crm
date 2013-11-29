@@ -76,7 +76,7 @@ class Customer extends BasePerson implements FullNameInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\MagentoAddress",
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Address",
      *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
@@ -272,7 +272,7 @@ class Customer extends BasePerson implements FullNameInterface
     /**
      * Get addresses
      *
-     * @return Collection|MagentoAddress[]
+     * @return Collection|Address[]
      */
     public function getAddresses()
     {

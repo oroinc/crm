@@ -18,6 +18,7 @@ use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormal
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\AddressRelation;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
@@ -166,11 +167,12 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 
     /**
      * @param Customer $entity
-     * @param ArrayCollection|MagentoAddress[] $addresses
+     * @param ArrayCollection|Address[] $addresses
+     * @return $this
      */
     public function updateAddresses(Customer $entity, ArrayCollection $addresses)
     {
-
+        return $this;
     }
 
     /**
