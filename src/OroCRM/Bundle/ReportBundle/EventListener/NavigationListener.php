@@ -48,10 +48,10 @@ class NavigationListener
                 foreach ($reports as $report) {
                     $config = $this->entityConfigProvider->getConfig($report->getEntity());
                     $entityLabel = $config->get('plural_label');
-                    $reportMenuData[$entityLabel] = [
-                        'label' => $report->getName(),
-                        'id' => $report->getId()
-                    ];
+                    if (!isset ($reportMenuData[$entityLabel])) {
+                        $reportMenuData[$entityLabel] = [];
+                    }
+                    $reportMenuData[$entityLabel][$report->getId()] = $report->getName();
                 }
                 ksort($reportMenuData);
                 $this->buildReportMenu($reportsMenuItem, $reportMenuData);
@@ -69,17 +69,19 @@ class NavigationListener
      */
     protected function buildReportMenu(ItemInterface $reportsItem, $reportData)
     {
-        foreach ($reportData as $entityName => $report) {
-            $this->getEntityMenuItem($reportsItem, $entityName)->addChild(
-                $report['label'] . '_report',
-                [
-                    'label' => $report['label'] ,
-                    'route' => 'orocrm_report_view',
-                    'routeParameters' => [
-                        'id' => $report['id']
+        foreach ($reportData as $entityLabel => $reports) {
+            foreach ($reports as $reportId => $reportLabel) {
+                $this->getEntityMenuItem($reportsItem, $entityLabel)->addChild(
+                    $reportLabel . '_report',
+                    [
+                        'label' => $reportLabel ,
+                        'route' => 'orocrm_report_view',
+                        'routeParameters' => [
+                            'id' => $reportId
+                        ]
                     ]
-                ]
-            );
+                );
+            }
         }
     }
 
@@ -87,18 +89,18 @@ class NavigationListener
      * Get entity menu item for report item
      *
      * @param ItemInterface $reportItem
-     * @param string $entityName
+     * @param string $entityLabel
      * @return ItemInterface
      */
-    protected function getEntityMenuItem(ItemInterface $reportItem, $entityName)
+    protected function getEntityMenuItem(ItemInterface $reportItem, $entityLabel)
     {
-        $entityItemName = $entityName . '_report_tab';
+        $entityItemName = $entityLabel . '_report_tab';
         $entityItem = $reportItem->getChild($entityItemName);
         if (!$entityItem) {
             $reportItem->addChild(
                 $entityItemName,
                 [
-                    'label' => $entityName,
+                    'label' => $entityLabel,
                     'uri' => '#',
                 ]
             );
