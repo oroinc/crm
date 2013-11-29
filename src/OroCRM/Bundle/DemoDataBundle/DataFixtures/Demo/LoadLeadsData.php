@@ -99,7 +99,16 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
                 $this->persist($this->em, $lead);
 
-                $workFlow = $this->workflowManager->startWorkflow('sales_lead', $lead, 'qualify');
+                $workFlow = $this->workflowManager->startWorkflow(
+                    'sales_lead',
+                    $lead,
+                    'qualify',
+                    array(
+                        'opportunity_name' => $lead->getName(),
+                        'company_name' => $lead->getCompanyName(),
+                        'account' => $lead->getAccount(),
+                    )
+                );
                 if ((bool) rand(0, 1)) {
                     /** @var WorkflowItem $salesFlow */
                     $salesFlow = $workFlow->getResult()->get('workflowItem');
@@ -168,6 +177,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setLastName($data['Surname']);
         $lead->setEmail($data['EmailAddress']);
         $lead->setPhoneNumber($data['TelephoneNumber']);
+        $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
         /** @var Address $address */
         $address = new Address();

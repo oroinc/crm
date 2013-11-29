@@ -17,13 +17,20 @@
         {{ _self.renderRow('Last Name'|trans, entity.lastName) }}
 
         {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
-            {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact ~ '</a>' %}
+            {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name ~ '</a>' %}
         {%- else -%}
             {% set contactView = entity.contact ? entity.contact : '' %}
         {%- endif -%}
         {{ _self.renderRow('Contact'|trans, contactView) }}
 
         {{ _self.renderRow('Job Title'|trans, entity.jobTitle) }}
+
+        {%- if resource_granted('orocrm_account_view') and entity.account -%}
+            {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.account.id}) ~ '">' ~ entity.account ~ '</a>' %}
+        {%- else -%}
+            {% set accountView = entity.account ? entity.account : '' %}
+        {%- endif -%}
+        {{ _self.renderRow('Account'|trans, accountView) }}
         {{ _self.renderRow('Company Name'|trans, entity.companyName) }}
         {{ _self.renderRow('Industry'|trans, entity.industry) }}
         {{ _self.renderRow('Number Of Employees'|trans, entity.numberOfEmployees) }}

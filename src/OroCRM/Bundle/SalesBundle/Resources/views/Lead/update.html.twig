@@ -33,24 +33,24 @@
     {{ UI.saveAndStayButton('orocrm_sales_lead_update') }}
     {{ UI.saveAndCloseButton() }}
 
-    {% if resource_granted('orocrm_sales_lead_create') and resource_granted('oro_workflow') and form.vars.value.id is empty %}
+    {% if resource_granted('orocrm_sales_lead_create')
+        and resource_granted('oro_workflow')
+        and form.vars.value.id is empty
+    %}
         <div class="btn-group">
-            <button type="button" class="btn btn-primary" id="save_and_qualify">
+            <button type="button" class="btn btn-primary save-and-transit"
+                data-workflow="sales_lead"
+                data-transition="qualify"
+                data-entity-class="{{ oro_class_name(entity) }}"
+            >
                 {% trans %}Save and Qualify{% endtrans %}
             </button>
+
             <script type="text/javascript">
-                require(['jquery'],
-                    function($){
-                        $('button#save_and_qualify').click(
-                            function() {
-                                var form = $(this).closest('form');
-                                var defaultAction = form.attr('action');
-                                form.attr('action', {{ path('orocrm_sales_lead_create_and_qualify')|json_encode|raw }});
-                                form.submit();
-                                form.attr('action', defaultAction);
-                            }
-                        );
-                    });
+                require(['jquery', 'oro/workflow-save-and-transit-handler'],
+                function($, saveAndTransitHandler) {
+                    $('.save-and-transit').click(saveAndTransitHandler);
+                });
             </script>
         </div>
     {% endif %}
@@ -92,6 +92,7 @@
                 {
                     'title': 'Lead Information',
                     'data': [
+                        form_row(form.owner, {'label': 'Owner'}),
                         form_row(form.name, {'label': 'Lead Name'}),
                         form_row(form.namePrefix, {'label': 'Name prefix'}),
                         form_row(form.firstName, {'label': 'First name'}),
@@ -104,11 +105,11 @@
                         form_row(form.phoneNumber, {'label': 'Phone Number'}),
                         form_row(form.email, {'label': 'Email'}),
 
+                        form_row(form.account, {'label': 'Account'}),
                         form_row(form.companyName, {'label': 'Company Name'}),
                         form_row(form.website, {'label': 'Website'}),
                         form_row(form.numberOfEmployees, {'label': 'Number Of Employees'}),
                         form_row(form.industry, {'label': 'Industry'}),
-
                     ]
                 },
                 {
