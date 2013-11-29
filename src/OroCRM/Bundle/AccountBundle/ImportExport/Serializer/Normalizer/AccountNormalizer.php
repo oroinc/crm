@@ -141,14 +141,27 @@ class AccountNormalizer extends AbstractContextModeAwareNormalizer implements Se
      */
     protected function setObjectFieldsValues(Account $object, array $data, $format = null, array $context = array())
     {
-
-        $object->setShippingAddress(
-            $this->denormalizeObject($data['account'], 'shipping_address', static::ADDRESSES_TYPE, $format, $context)
+        $shippingAddress = $this->denormalizeObject(
+            $data,
+            'shipping_address',
+            static::ADDRESSES_TYPE,
+            $format,
+            $context
         );
+        if (!empty($shippingAddress)) {
+            $object->setShippingAddress($shippingAddress);
+        }
 
-        $object->setBillingAddress(
-            $this->denormalizeObject($data['account'], 'billing_address', static::ADDRESSES_TYPE, $format, $context)
+        $billingAddress = $this->denormalizeObject(
+            $data,
+            'billing_address',
+            static::ADDRESSES_TYPE,
+            $format,
+            $context
         );
+        if (!empty($billingAddress)) {
+            $object->setBillingAddress($billingAddress);
+        }
 
         $object->setCreatedAt(
             $this->denormalizeObject(

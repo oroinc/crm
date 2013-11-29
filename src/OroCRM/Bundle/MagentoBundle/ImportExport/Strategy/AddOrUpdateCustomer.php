@@ -209,6 +209,10 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         ];
 
         foreach ($addresses as $key => $address) {
+            if (empty($address)) {
+                continue;
+            }
+
             $originAddressId = $address->getId();
             $address->setId(null);
             $mageRegionId = $address->getRegion()->getCode();
