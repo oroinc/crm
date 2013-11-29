@@ -54,10 +54,18 @@ class Region
      *
      * @ORM\Column(name="region_id", type="integer")
      */
-    protected $region_id;
+    protected $regionId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    protected $name;
 
     /**
      * @param string $code
+     *
      * @return $this
      */
     public function setCode($code)
@@ -77,6 +85,7 @@ class Region
 
     /**
      * @param string $combinedCode
+     *
      * @return $this
      */
     public function setCombinedCode($combinedCode)
@@ -96,6 +105,7 @@ class Region
 
     /**
      * @param string $countryCode
+     *
      * @return $this
      */
     public function setCountryCode($countryCode)
@@ -115,6 +125,7 @@ class Region
 
     /**
      * @param int $id
+     *
      * @return $this
      */
     public function setId($id)
@@ -133,12 +144,13 @@ class Region
     }
 
     /**
-     * @param int $region_id
+     * @param int $regionId
+     *
      * @return $this
      */
-    public function setRegionId($region_id)
+    public function setRegionId($regionId)
     {
-        $this->region_id = $region_id;
+        $this->regionId = $regionId;
 
         return $this;
     }
@@ -148,6 +160,26 @@ class Region
      */
     public function getRegionId()
     {
-        return $this->region_id;
+        return $this->regionId;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }
