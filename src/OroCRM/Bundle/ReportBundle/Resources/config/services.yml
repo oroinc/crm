@@ -47,6 +47,7 @@ services:
         class: %orocrm_report.listener.navigation_listener.class%
         arguments:
             - @doctrine.orm.entity_manager
+            - @oro_entity_config.provider.entity
         tags:
             - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
 
