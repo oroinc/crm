@@ -87,6 +87,7 @@ class RegionNormalizer implements NormalizerInterface, DenormalizerInterface, Se
             $combinedCode = $data['countryCode'] . '.' . $code;
             $resultObject->setCombinedCode($combinedCode);
             $resultObject->setCountryCode($data['countryCode']);
+            $resultObject->setName($data['name']);
         }
 
         return $resultObject;

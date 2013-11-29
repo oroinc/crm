@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 
@@ -19,8 +20,9 @@ use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
  *  }
  * )
  * @ORM\Entity
+ * @Oro\Loggable
  */
-class MagentoAddress extends AbstractTypedAddress
+class Address extends AbstractTypedAddress
 {
     /**
      * @ORM\ManyToOne(targetEntity="Customer", inversedBy="addresses",cascade={"persist"})
@@ -37,7 +39,6 @@ class MagentoAddress extends AbstractTypedAddress
      *     joinColumns={@ORM\JoinColumn(name="contact_address_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )
-     * @Soap\ComplexType("string[]", nillable=true)
      **/
     protected $types;
 
