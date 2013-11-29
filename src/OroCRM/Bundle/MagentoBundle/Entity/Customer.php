@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Entities\Address;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
@@ -277,5 +278,19 @@ class Customer extends BasePerson implements FullNameInterface
     public function getAddresses()
     {
         return $this->addresses;
+    }
+
+    /**
+     * @param int $originId
+     * @return Address|null
+     */
+    public function getAddressByOriginId($originId)
+    {
+        return $this->addresses->filter(
+            function ($item) use ($originId) {
+                return $item->getOriginId() == $originId;
+            }
+        )
+            ->first();
     }
 }

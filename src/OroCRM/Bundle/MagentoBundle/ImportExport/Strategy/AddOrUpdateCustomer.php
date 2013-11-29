@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
@@ -124,21 +125,17 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 
     /**
      * Update $entity with new contact data
+     * updating contact data is not allowed
      *
      * @param Customer $entity
      * @param Contact $contact
-     * @param bool $isUpdateAllowed
      * @return $this
      */
-    protected function updateContact(Customer $entity, Contact $contact, $isUpdateAllowed = false)
+    protected function updateContact(Customer $entity, Contact $contact)
     {
         // update not allowed
-        if ($entity->getContact()->getId() && !$isUpdateAllowed) {
+        if ($entity->getContact()) {
             return $this;
-        }
-
-        if ($entity->getContact()->getId()) {
-            $this->strategyHelper->importEntity($entity->getContact(), $contact, ['id', 'addresses']);
         }
 
         // loop by imported addresses, add new only
@@ -148,7 +145,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             $originAddressId = $address->getId();
             $address->setId(null);
 
-            $this->updateAddressCountryRegion($address, $entity, $mageRegionId);
+            $this->updateAddressCountryRegion($address, $mageRegionId);
 
             // update address type
             $types = $address->getTypeNames();
@@ -158,8 +155,34 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             foreach ($loadedTypes as $type) {
                 $address->addType($type);
             }
+        }
 
-            $entity->getContact()->addAddress($address);
+        $entity->setContact($contact);
+
+        return $this;
+    }
+
+    /**
+     * @param Customer $entity
+     * @param Collection|Address[] $addresses
+     * @return $this
+     */
+    public function updateAddresses(Customer $entity, Collection $addresses)
+    {
+        /** $address - imported address */
+        foreach ($addresses as $address) {
+            // at this point imported address region have code equal to region_id in magento db field
+            $mageRegionId = $address->getRegion()->getCode();
+
+            $originAddressId = $address->getId();
+            $existingAddress = $entity->getAddressByOriginId($originAddressId);
+
+            if ($existingAddress) {
+                $this->strategyHelper->importEntity($existingAddress, $address, ['id', 'region', 'country']);
+                $address = $existingAddress;
+            }
+
+            $this->updateAddressCountryRegion($address, $mageRegionId);
         }
 
         return $this;
@@ -167,11 +190,37 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 
     /**
      * @param Customer $entity
-     * @param ArrayCollection|Address[] $addresses
+     * @param Account $account
      * @return $this
      */
-    public function updateAddresses(Customer $entity, ArrayCollection $addresses)
+    protected function updateAccount(Customer $entity, Account $account)
     {
+        /** @var Account $existingAccount */
+        $existingAccount = $entity->getAccount();
+
+        // update not allowed
+        if ($existingAccount) {
+            return $this;
+        }
+
+        $addresses = [
+            AddressType::TYPE_SHIPPING => $account->getShippingAddress(),
+            AddressType::TYPE_BILLING => $account->getBillingAddress()
+        ];
+
+        foreach ($addresses as $key => $address) {
+            $originAddressId = $address->getId();
+            $address->setId(null);
+            $mageRegionId = $address->getRegion()->getCode();
+
+            $this->updateAddressCountryRegion($address, $mageRegionId);
+
+
+            $account->{'set'.ucfirst($key).'Address'}($address);
+        }
+
+        $entity->setAccount($account);
+
         return $this;
     }
 
@@ -267,11 +316,10 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 
     /**
      * @param AbstractAddress $address
-     * @param Customer $entity
      * @param int $mageRegionId
      * @throws \Oro\Bundle\BatchBundle\Item\InvalidItemException
      */
-    protected function updateAddressCountryRegion(AbstractAddress $address, Customer $entity, $mageRegionId)
+    protected function updateAddressCountryRegion(AbstractAddress $address, $mageRegionId)
     {
         $countryCode = $address->getCountry()->getIso2Code();
 
@@ -289,13 +337,13 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             $this->mageRegionsCache[$mageRegionId] = $this->getEntityRepository(
                 'OroCRM\Bundle\MagentoBundle\Entity\Region'
             )
-            ->findOneBy(['region_id' => $mageRegionId]);
+            ->findOneBy(['regionId' => $mageRegionId]);
         }
 
         if (empty($this->mageRegionsCache[$mageRegionId])) {
             throw new InvalidItemException(
                 sprintf("Cannot find Magento region '%s' by id for '%s' country", $mageRegionId, $countryCode),
-                [$entity]
+                []
             );
         }
 
@@ -313,7 +361,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         if (empty($this->regionsCache[$combinedCode])) {
             throw new InvalidItemException(
                 sprintf("Cannot find '%s' region for '%s' country", $combinedCode, $countryCode),
-                [$entity]
+                []
             );
         }
 
@@ -321,31 +369,4 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             ->setRegion($this->regionsCache[$combinedCode]);
     }
 
-    /**
-     * @param Customer $entity
-     * @return $this
-     */
-    protected function updateAccount(Customer $entity)
-    {
-        /** @var Account $account */
-        $account = $entity->getAccount();
-        $account = $this->findAndReplaceEntity(
-            $account,
-            AccountNormalizer::ACCOUNT_TYPE,
-            'name',
-            ['id', 'shippingAddress', 'billingAddress']
-        );
-
-
-        // AddressType::TYPE_SHIPPING
-
-        /** @var AbstractAddress $shippingAddress */
-        $shippingAddress = $account->getShippingAddress();
-        $billingAddress = $account->getBillingAddress();
-
-        $entity->setAccount($account);
-
-        return $this;
-
-    }
 }

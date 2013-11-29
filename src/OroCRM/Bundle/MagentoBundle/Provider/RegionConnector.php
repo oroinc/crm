@@ -40,7 +40,9 @@ class RegionConnector extends AbstractConnector
             // TODO: log
             $now = new \DateTime('now', new \DateTimeZone('UTC'));
             echo $now->format('d-m-Y H:i:s') . " loading country " . $country['name'] . ': ';
+
             $data = $this->getRegionsData($country['iso2_code']);
+
             echo count($data) . "\n";
 
             // will skip further processing
