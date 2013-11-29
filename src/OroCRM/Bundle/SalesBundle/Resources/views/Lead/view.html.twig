@@ -47,8 +47,8 @@
 
 {% block content_data %}
 <div class="contact-info-col-set well-small dark-bg">
-    <div class="row-fluid well-small-bottom clearfix">
-        <div class="span6 contact-info-col">
+    <div class="clearfix">
+        <div class="responsive-cell contact-info-col">
             {{
                 oro_widget_render({
                     'widgetType': 'block',
@@ -57,7 +57,7 @@
                 })
             }}
         </div>
-        <div class="span6 contact-info-col">
+        <div class="responsive-cell contact-info-col">
             {{
                 oro_widget_render({
                     'widgetType': 'block',
