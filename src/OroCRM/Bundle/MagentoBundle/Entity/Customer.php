@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -110,6 +111,14 @@ class Customer extends BasePerson implements FullNameInterface
      * @ORM\Column(type="integer", options={"unsigned"=true})
      */
     protected $originalId;
+
+    /**
+     * Init addresses with empty collection
+     */
+    public function __construct()
+    {
+        $this->addresses = new ArrayCollection();
+    }
 
     /**
      * @param Website $website
@@ -287,8 +296,18 @@ class Customer extends BasePerson implements FullNameInterface
     }
 
     /**
+     * @param Address $address
+     */
+    public function addAddress(Address $address)
+    {
+        if (!$this->addresses->contains($address)) {
+            $this->addresses->add($address);
+        }
+    }
+
+    /**
      * @param int $originId
-     * @return Address|null
+     * @return Address|false
      */
     public function getAddressByOriginId($originId)
     {

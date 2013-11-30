@@ -9,26 +9,36 @@ class SOAPTransportTest extends \PHPUnit_Framework_TestCase
     /** @var MageSoapTransport */
     protected $transport;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var SoapClient|\PHPUnit_Framework_MockObject_MockObject */
     protected $soapClientMock;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $encoder;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $settings;
 
     /** @var string */
     protected $sessionId;
 
-    protected $settings = [
-        'api_user' => 'user',
-        'api_key'  => 'test',
-    ];
+    /** @var string */
+    protected $encryptedApiKey = 'encKey';
 
     /**
      * Setup test entity
      */
     public function setUp()
     {
-        $this->markTestSkipped('TODO fix');
+        $this->encoder = $this->getMock('Oro\Bundle\SecurityBundle\Encoder\Mcrypt');
+        $this->encoder->expects($this->once())
+            ->method('decryptData')
+            ->with($this->encryptedApiKey)
+            ->will($this->returnValue('api_key'));
+
         $this->transport = $this->getMock(
             'OroCRM\Bundle\MagentoBundle\Provider\MageSoapTransport',
-            ['getSoapClient']
+            ['getSoapClient'],
+            [$this->encoder]
         );
 
         $this->soapClientMock = $this->getMockBuilder('\SoapClient')
@@ -36,14 +46,7 @@ class SOAPTransportTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['login', '__soapCall'])
             ->getMock();
 
-        $this->transport->expects($this->once())
-            ->method('getSoapClient')
-            ->will($this->returnValue($this->soapClientMock));
-
-        $this->soapClientMock->expects($this->once())
-            ->method('login')
-            ->with($this->settings['api_user'], $this->settings['api_key'])
-            ->will($this->returnValue($this->sessionId));
+        $this->settings = $this->getMock('Symfony\Component\HttpFoundation\ParameterBag');
     }
 
     /**
@@ -51,8 +54,33 @@ class SOAPTransportTest extends \PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        unset($this->transport);
+        unset($this->transport, $this->encoder, $this->soapClientMock);
     }
+
+    /**
+     * Init settings bag
+     */
+    protected function initSettings()
+    {
+        $this->settings->expects($this->at(0))
+            ->method('get')
+            ->with('api_user')
+            ->will($this->returnValue('api_user'));
+        $this->settings->expects($this->at(1))
+            ->method('get')
+            ->with('api_key')
+            ->will($this->returnValue($this->encryptedApiKey));
+
+        $this->transport->expects($this->once())
+            ->method('getSoapClient')
+            ->will($this->returnValue($this->soapClientMock));
+
+        $this->soapClientMock->expects($this->once())
+            ->method('login')
+            ->with('api_user', 'api_key')
+            ->will($this->returnValue($this->sessionId));
+    }
+
 
     /**
      * Test init method
@@ -60,37 +88,62 @@ class SOAPTransportTest extends \PHPUnit_Framework_TestCase
     public function testInit()
     {
         $this->sessionId = uniqid();
-        $settings = $this->settings;
+        $this->initSettings();
 
-        $result = $this->transport->init($settings);
-        $this->assertFalse($result); // no wsdl_url param supplied
+        $this->settings->expects($this->at(2))
+            ->method('get')
+            ->with('wsdl_url')
+            ->will($this->returnValue('http://localhost/?wsdl'));
 
-        $settings['wsdl_url'] = 'http://localhost/?wsdl'; // fake url
+        $result = $this->transport->init($this->settings);
+        $this->assertTrue($result);
+    }
 
-        $result = $this->transport->init($settings);
+    /**
+     * Test init method errors
+     *
+     * @expectedException Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    public function testInitErrors()
+    {
+        $this->sessionId = uniqid();
+
+        $this->settings->expects($this->at(1))
+            ->method('get')
+            ->with('api_key')
+            ->will($this->returnValue($this->encryptedApiKey));
+
+        $result = $this->transport->init($this->settings);
         $this->assertTrue($result);
     }
 
     /**
      * Test call method
      *
-     * @depends testInit
      */
     public function testCall()
     {
         $action = 'testAction';
+        $this->initSettings();
 
-        $settings = $this->settings;
-        $settings['wsdl_url'] = 'http://localhost/?wsdl'; // fake url
+        $this->settings->expects($this->at(2))
+            ->method('get')
+            ->with('wsdl_url')
+            ->will($this->returnValue('http://localhost/?wsdl'));
 
-        $this->transport->init($settings);
+        $this->transport->init($this->settings);
 
         $this->soapClientMock->expects($this->once())
             ->method('__soapCall')
-            ->with($action, [$this->sessionId, []])
+            ->with($action, [$this->sessionId])
             ->will($this->returnValue(true));
 
         $result = $this->transport->call($action);
         $this->assertTrue($result);
+
+        $data = ['label', 'settingsFormType', 'settingsEntityFQCN'];
+        foreach ($data as $item) {
+            $this->assertNotEmpty($this->transport->{'get'.ucfirst($item)}(), $item . ' getter should not be empty');
+        }
     }
 }

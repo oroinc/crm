@@ -44,9 +44,7 @@ class MageSoapTransport extends SOAPTransport implements TransportTypeInterface
             );
         }
 
-        if (!parent::init($settings)) {
-            return false;
-        }
+        parent::init($settings);
 
         /** @var string sessionId returned by Magento API login method */
         $this->sessionId = $this->client->login($apiUser, $apiKey);
