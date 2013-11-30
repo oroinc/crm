@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 
@@ -16,10 +15,7 @@ use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\AddressRelation;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -322,7 +318,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     /**
      * @param AbstractAddress $address
      * @param int $mageRegionId
-     * @throws InvalidConfigurationException
+     * @throws InvalidItemException
      */
     protected function updateAddressCountryRegion(AbstractAddress $address, $mageRegionId)
     {
@@ -362,9 +358,8 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         }
 
         if (empty($this->regionsCache[$countryCode])) {
-            throw new InvalidConfigurationException(sprintf('Unable to find country by code "%s"', $countryCode));
+            throw new InvalidItemException(sprintf('Unable to find country by code "%s"', $countryCode), []);
         }
         $address->setCountry($this->regionsCache[$countryCode]);
     }
-
 }

@@ -33,6 +33,22 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /** @var array dependencies data: customer groups, stores, websites, regions? */
     protected $dependencies = [];
 
+    /** @var StoreConnector */
+    protected $storeConnector;
+
+    /**
+     * @param StoreConnector $storeConnector
+     */
+    public function __construct(StoreConnector $storeConnector)
+    {
+        $this->storeConnector = $storeConnector;
+    }
+
+    /**
+     * @param TransportInterface $realTransport
+     * @param Transport $transportSettings
+     * @throws \LogicException
+     */
     public function configure(TransportInterface $realTransport, Transport $transportSettings)
     {
         $settings = $transportSettings->getSettingsBag()->all();
@@ -47,15 +63,20 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
 
         if (empty($settings['sync_range'])) {
             $settings['sync_range'] = self::DEFAULT_SYNC_RANGE;
-        } elseif ($settings['sync_range'] instanceof \DateInterval) {
-            $this->syncRange = $settings['sync_range'];
         }
 
-        $this->syncRange = \DateInterval::createFromDateString($settings['sync_range']);
+        if ($settings['sync_range'] instanceof \DateInterval) {
+            $this->syncRange = $settings['sync_range'];
+        } else {
+            $this->syncRange = \DateInterval::createFromDateString($settings['sync_range']);
+        }
 
         if (!empty($settings['batch_size'])) {
             $this->batchSize = $settings['batch_size'];
         }
+
+        // init helper connector
+        $this->storeConnector->configure($realTransport, $transportSettings);
 
         parent::configure($realTransport, $transportSettings);
     }
@@ -183,7 +204,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
                     $this->dependencies[self::ALIAS_GROUPS] = $this->getCustomerGroups();
                     break;
                 case self::ALIAS_STORES:
-                    $this->dependencies[self::ALIAS_STORES] = $this->getStores();
+                    $this->dependencies[self::ALIAS_STORES] = $this->storeConnector->getStores();
                     break;
                 case self::ALIAS_WEBSITES:
                     // TODO: refactor this code to present websites data in some way
@@ -285,39 +306,6 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         }
 
         return $result;
-    }
-
-    /**
-     * TODO: consider move this to some sort of store/website connecor and inject it here
-     *
-     * {@inheritdoc}
-     */
-    public function getStores($storeId = null)
-    {
-        if (!empty($this->dependencies[self::ALIAS_STORES])) {
-            $stores = $this->dependencies[self::ALIAS_STORES];
-        } else {
-            $result = $this->call(CustomerConnectorInterface::ACTION_STORE_LIST);
-
-            $stores = [];
-            foreach ($result as $item) {
-                $stores[$item->store_id]       = (array)$item;
-                $stores[$item->store_id]['id'] = $item->store_id;
-            }
-
-            // add default/admin store
-            $stores[0] = [
-                'website_id' => 0,
-                'code'       => 'admin',
-                'name'       => 'Admin',
-            ];
-        }
-
-        if (!is_null($storeId) && isset($stores[$storeId])) {
-            return [$storeId => $stores[$storeId]];
-        } else {
-            return $stores;
-        }
     }
 
     /**
