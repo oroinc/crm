@@ -11,6 +11,7 @@ use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\BatchBundle\Item\InvalidItemException;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+use Oro\Bundle\ImportExportBundle\Exception\InvalidConfigurationException;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 
@@ -134,14 +135,14 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     protected function updateContact(Customer $entity, Contact $contact)
     {
         // update not allowed
-        if ($entity->getContact()) {
+        if ($entity->getContact() && $entity->getContact()->getId()) {
             return $this;
         }
 
         // loop by imported addresses, add new only
         foreach ($contact->getAddresses() as $address) {
             // at this point imported address region have code equal to region_id in magento db field
-            $mageRegionId = $address->getRegion()->getCode();
+            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
             $originAddressId = $address->getId();
             $address->setId(null);
 
@@ -199,7 +200,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         $existingAccount = $entity->getAccount();
 
         // update not allowed
-        if ($existingAccount) {
+        if ($existingAccount && $existingAccount->getId()) {
             return $this;
         }
 
@@ -215,7 +216,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 
             $originAddressId = $address->getId();
             $address->setId(null);
-            $mageRegionId = $address->getRegion()->getCode();
+            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
 
             $this->updateAddressCountryRegion($address, $mageRegionId);
 
@@ -321,7 +322,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     /**
      * @param AbstractAddress $address
      * @param int $mageRegionId
-     * @throws \Oro\Bundle\BatchBundle\Item\InvalidItemException
+     * @throws InvalidConfigurationException
      */
     protected function updateAddressCountryRegion(AbstractAddress $address, $mageRegionId)
     {
@@ -337,7 +338,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             ) :
             $this->regionsCache[$countryCode];
 
-        if (empty($this->mageRegionsCache[$mageRegionId])) {
+        if (!empty($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId])) {
             $this->mageRegionsCache[$mageRegionId] = $this->getEntityRepository(
                 'OroCRM\Bundle\MagentoBundle\Entity\Region'
             )
@@ -345,32 +346,25 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         }
 
         if (empty($this->mageRegionsCache[$mageRegionId])) {
-            throw new InvalidItemException(
-                sprintf("Cannot find Magento region '%s' by id for '%s' country", $mageRegionId, $countryCode),
-                []
-            );
+            // use regionText instead
+        } else {
+            $mageRegion = $this->mageRegionsCache[$mageRegionId];
+            $combinedCode = $mageRegion->getCombinedCode();
+
+            // set ISO combined code
+            $address->getRegion()->setCombinedCode($combinedCode);
+
+            $this->regionsCache[$combinedCode] = empty($this->regionsCache[$combinedCode]) ?
+                $this->getEntityOrNull($address->getRegion(), 'combinedCode', 'Oro\Bundle\AddressBundle\Entity\Region'):
+                $this->regionsCache[$combinedCode];
+
+            $address->setRegion($this->regionsCache[$combinedCode]);
         }
 
-        $mageRegion = $this->mageRegionsCache[$mageRegionId];
-        $combinedCode = $mageRegion->getCombinedCode();
-
-        // set ISO combined code
-        $address->getRegion()->setCombinedCode($combinedCode);
-
-        // get region
-        $this->regionsCache[$combinedCode] = empty($this->regionsCache[$combinedCode]) ?
-            $this->getEntityOrNull($address->getRegion(), 'combinedCode', 'Oro\Bundle\AddressBundle\Entity\Region'):
-            $this->regionsCache[$combinedCode];
-
-        if (empty($this->regionsCache[$combinedCode])) {
-            throw new InvalidItemException(
-                sprintf("Cannot find '%s' region for '%s' country", $combinedCode, $countryCode),
-                []
-            );
+        if (empty($this->regionsCache[$countryCode])) {
+            throw new InvalidConfigurationException(sprintf('Unable to find country by code "%s"', $countryCode));
         }
-
-        $address->setCountry($this->regionsCache[$countryCode])
-            ->setRegion($this->regionsCache[$combinedCode]);
+        $address->setCountry($this->regionsCache[$countryCode]);
     }
 
 }
