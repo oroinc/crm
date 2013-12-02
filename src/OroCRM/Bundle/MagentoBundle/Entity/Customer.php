@@ -21,7 +21,6 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
  * @ORM\Table(name="orocrm_magento_customer")
- * @Oro\Loggable
  * @Config(
  *  routeName="orocrm_magento_customer_index",
  *  routeView="orocrm_magento_customer_view",
@@ -33,15 +32,98 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *      }
  *  }
  * )
+ * @Oro\Loggable
  */
 class Customer extends BasePerson implements FullNameInterface
 {
+    /*
+     * FIELDS are duplicated to enable dataaudit only for customer fields
+     */
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     */
+    protected $namePrefix;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     */
+    protected $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     */
+    protected $middleName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     */
+    protected $lastName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     */
+    protected $nameSuffix;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=8, nullable=true)
+     * @Oro\Versioned
+     */
+    protected $gender;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="birthday", type="datetime", nullable=true)
+     * @Oro\Versioned
+     */
+    protected $birthday;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     */
+    protected $email;
+
+    /**
+     * @var \DateTime $createdAt
+     *
+     * @ORM\Column(type="datetime")
+     * @Oro\Versioned
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime $updatedAt
+     *
+     * @ORM\Column(type="datetime")
+     * @Oro\Versioned
+     */
+    protected $updatedAt;
+
     /**
      * @var Website
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website", cascade="PERSIST")
      * @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned("getName")
      */
     protected $website;
 
@@ -50,7 +132,6 @@ class Customer extends BasePerson implements FullNameInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store", cascade="PERSIST")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned("getName")
      */
     protected $store;
 
@@ -59,7 +140,6 @@ class Customer extends BasePerson implements FullNameInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup", cascade="PERSIST")
      * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned("getName")
      */
     protected $group;
 
@@ -86,7 +166,6 @@ class Customer extends BasePerson implements FullNameInterface
      *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
-     * @Oro\Versioned()
      */
     protected $addresses;
 
@@ -101,7 +180,7 @@ class Customer extends BasePerson implements FullNameInterface
      * @var string
      *
      * @ORM\Column(name="vat", type="string", length=255, nullable=true)
-     * @Oro\Versioned()
+     * @Oro\Versioned
      */
     protected $vat;
 

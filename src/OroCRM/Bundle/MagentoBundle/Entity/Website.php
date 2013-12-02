@@ -32,6 +32,7 @@ class Website
      * @var string
      *
      * @ORM\Column(name="website_code", type="string", length=32, nullable=false)
+     * @Oro\Versioned
      */
     protected $code;
 
@@ -39,6 +40,7 @@ class Website
      * @var string
      *
      * @ORM\Column(name="website_name", type="string", length=255, nullable=false)
+     * @Oro\Versioned
      */
     protected $name;
 
