@@ -1,4 +1,93 @@
 datagrid:
+    reports-grid:
+        extended_entity_name: %orocrm.report.report.entity.class%
+        source:
+            type:           orm
+            acl_resource:   orocrm_report_view
+            query:
+                select:
+                    - r.id
+                    - r.name
+                    - r.entity
+                    - type.label as reportType
+                from:
+                    - { table: %orocrm.report.report.entity.class%, alias: r }
+                join:
+                    left:
+                        - { join: r.type, alias: type }
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_report_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_report_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_report
+                params:     [ id ]
+        columns:
+            name:
+                label:   Name
+            entity:
+                label: Entity
+                data_name: entity
+                frontend_type: select
+                choices: @oro_entity_config.event_listener.entityconfig_grid_listener->getChoicesName
+            reportType:
+                type: translateable
+                label: Report type
+                choices: @orocrm_report.report_manager->getReportTypeChoices
+        sorters:
+            columns:
+                name:
+                    data_name: r.name
+                entity:
+                    data_name: r.entity
+                reportType:
+                    data_name: type.label
+            default:
+                name: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
+        filters:
+            columns:
+                name:
+                    type:      string
+                    data_name: name
+                entity:
+                    type:      string
+                    data_name: entity
+                reportType:
+                    type: choice
+                    data_name: type.label
+                    options:
+                        field_options:
+                            choices: @orocrm_report.report_manager->getReportTypeChoices
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_report_view
+                label:         View
+                icon:          user
+                link:          view_link
+                rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_report_update
+                label:         Update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_report_delete
+                label:         Delete
+                icon:          trash
+                link:          delete_link
+        options:
+            entityHint: report
+
     orocrm_report-accounts-life_time_value:
         pageTitle: "Account life time value"
         source:
