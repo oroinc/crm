@@ -11,8 +11,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
+use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Provider\CustomerConnectorInterface;
 
 class SoapController extends Controller
 {
@@ -43,7 +43,7 @@ class SoapController extends Controller
         try {
             $result = $transport->init($transportEntity->getSettingsBag());
             if ($result) {
-                $stores   = $transport->call(CustomerConnectorInterface::ACTION_STORE_LIST);
+                $stores   = $transport->call(StoreConnector::ACTION_STORE_LIST);
                 $websites = $this->get('orocrm_magento.converter.stores_to_website')->convert($stores);
             }
         } catch (\Exception $e) {
