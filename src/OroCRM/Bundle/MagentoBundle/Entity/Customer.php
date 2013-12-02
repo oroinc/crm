@@ -113,14 +113,6 @@ class Customer extends BasePerson implements FullNameInterface
     protected $originalId;
 
     /**
-     * Init addresses with empty collection
-     */
-    public function __construct()
-    {
-        $this->addresses = new ArrayCollection();
-    }
-
-    /**
      * @param Website $website
      *
      * @return $this
@@ -283,26 +275,6 @@ class Customer extends BasePerson implements FullNameInterface
     public function __toString()
     {
         return sprintf("%s %s", $this->getFirstName(), $this->getLastName());
-    }
-
-    /**
-     * Get addresses
-     *
-     * @return Collection|Address[]
-     */
-    public function getAddresses()
-    {
-        return $this->addresses;
-    }
-
-    /**
-     * @param Address $address
-     */
-    public function addAddress(Address $address)
-    {
-        if (!$this->addresses->contains($address)) {
-            $this->addresses->add($address);
-        }
     }
 
     /**

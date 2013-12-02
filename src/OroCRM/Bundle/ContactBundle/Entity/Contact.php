@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
@@ -237,9 +238,10 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->groups    = new ArrayCollection();
         $this->accounts  = new ArrayCollection();
-        $this->addresses = new ArrayCollection();
         $this->emails    = new ArrayCollection();
         $this->phones    = new ArrayCollection();
         $this->tags      = new ArrayCollection();
@@ -247,14 +249,13 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
 
     public function __clone()
     {
+        parent::__clone();
+
         if ($this->groups) {
             $this->groups = clone $this->groups;
         }
         if ($this->accounts) {
             $this->accounts = clone $this->accounts;
-        }
-        if ($this->addresses) {
-            $this->addresses = clone $this->addresses;
         }
         if ($this->emails) {
             $this->emails = clone $this->emails;
@@ -586,7 +587,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     }
 
     /**
-     * Add address
+     * Add email
      *
      * @param ContactEmail $email
      * @return Contact
@@ -602,7 +603,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     }
 
     /**
-     * Remove address
+     * Remove email
      *
      * @param ContactEmail $email
      * @return Contact
@@ -665,7 +666,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     }
 
     /**
-     * Add address
+     * Add phone
      *
      * @param ContactPhone $phone
      * @return Contact
@@ -681,7 +682,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     }
 
     /**
-     * Remove address
+     * Remove phone
      *
      * @param ContactPhone $phone
      * @return Contact
@@ -725,31 +726,12 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     }
 
     /**
-     * Set addresses.
-     *
-     * This method could not be named setAddresses because of bug CRM-253.
-     *
-     * @param Collection|ContactAddress[] $addresses
-     * @return Contact
-     */
-    public function resetAddresses($addresses)
-    {
-        $this->addresses->clear();
-
-        foreach ($addresses as $address) {
-            $this->addAddress($address);
-        }
-
-        return $this;
-    }
-
-    /**
      * Add address
      *
-     * @param ContactAddress $address
-     * @return Contact
+     * @param AbstractAddress $address
+     * @return BasePerson
      */
-    public function addAddress(ContactAddress $address)
+    public function addAddress(AbstractAddress $address)
     {
         if (!$this->addresses->contains($address)) {
             $this->addresses->add($address);
@@ -757,31 +739,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
         }
 
         return $this;
-    }
-
-    /**
-     * Remove address
-     *
-     * @param ContactAddress $address
-     * @return Contact
-     */
-    public function removeAddress(ContactAddress $address)
-    {
-        if ($this->addresses->contains($address)) {
-            $this->addresses->removeElement($address);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get addresses
-     *
-     * @return Collection|ContactAddress[]
-     */
-    public function getAddresses()
-    {
-        return $this->addresses;
     }
 
     /**
@@ -842,15 +799,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
         }
 
         return $this;
-    }
-
-    /**
-     * @param ContactAddress $address
-     * @return bool
-     */
-    public function hasAddress(ContactAddress $address)
-    {
-        return $this->getAddresses()->contains($address);
     }
 
     /**
