@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium\Sales;
 
-use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Accounts;
 use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Login;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
@@ -28,15 +27,18 @@ class CreateOpportunityTest extends Selenium2TestCase
      */
     public function testCreateOpportunity()
     {
-        $name = 'Opportunity_'.mt_rand();
-
         $login = new Login($this);
         $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openOpportunities()
+            ->submit();
+
+        $opportunityName = 'Opportunity_'.mt_rand();
+        $accountName = $this->createAccount($login);
+
+        $login->openOpportunities()
             ->add()
-            ->setName($name)
+            ->setName($opportunityName)
+            ->setAccount($accountName)
             ->setProbability('50')
             ->seBudget('100')
             ->setCustomerNeed('50')
@@ -49,7 +51,24 @@ class CreateOpportunityTest extends Selenium2TestCase
             ->toGrid()
             ->assertTitle('Opportunities - Sales');
 
-        return $name;
+        return $opportunityName;
+    }
+
+    /**
+     * @param Login $login
+     * @return string
+     */
+    protected function createAccount(Login $login)
+    {
+        $accountName = 'Account_'.mt_rand();
+
+        $login->openAccounts()
+            ->add()
+            ->setAccountName($accountName)
+            ->setOwner('admin')
+            ->save();
+
+        return $accountName;
     }
 
     /**
