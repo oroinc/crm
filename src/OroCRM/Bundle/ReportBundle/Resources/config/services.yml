@@ -1,5 +1,5 @@
 parameters:
-    orocrm_report.report.filter.type.period.class:        OroCRM\Bundle\ReportBundle\Filter\PeriodFilter
+    orocrm_report.report.filter.period.class:             OroCRM\Bundle\ReportBundle\Filter\PeriodFilter
     orocrm_report.report.grid.listener.class:             OroCRM\Bundle\ReportBundle\EventListener\ReportGridListener
     orocrm_report.datagrid.configuration.provider.class:  OroCRM\Bundle\ReportBundle\Grid\ReportDatagridConfigurationProvider
     orocrm_report.listener.navigation_listener.class:     OroCRM\Bundle\ReportBundle\EventListener\NavigationListener
@@ -7,11 +7,11 @@ parameters:
     orocrm.report.report.entity.class:                    OroCRM\Bundle\ReportBundle\Entity\Report
 
 services:
-    orocrm_report.report.filter.type.period:
-        class: %orocrm_report.report.filter.type.period.class%
+    orocrm_report.report.filter.period:
+        class: %orocrm_report.report.filter.period.class%
         arguments:
             - @form.factory
-            - @oro_filter.extension.filter_utility
+            - @oro_filter.filter_utility
         tags:
             - { name:oro_filter.extension.orm_filter.filter, type: orocrm_period_filter }
 

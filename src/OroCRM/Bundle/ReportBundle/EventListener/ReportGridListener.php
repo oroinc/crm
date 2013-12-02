@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\ReportBundle\EventListener;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\DataGridBundle\Datagrid\RequestParameters;
 use Oro\Bundle\DataGridBundle\Extension\Formatter\Property\PropertyInterface;
-use Oro\Bundle\FilterBundle\Filter\Orm\FilterUtility;
+use Oro\Bundle\FilterBundle\Filter\FilterUtility;
 use Oro\Bundle\FilterBundle\Grid\Extension\OrmFilterExtension;
 use Oro\Bundle\FilterBundle\Grid\Extension\Configuration as FilterConfiguration;
 use Oro\Bundle\DataGridBundle\Extension\Sorter\Configuration as OrmSorterConfiguration;
