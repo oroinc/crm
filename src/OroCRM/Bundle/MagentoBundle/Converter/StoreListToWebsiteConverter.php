@@ -43,12 +43,12 @@ class StoreListToWebsiteConverter
                 return [
                     'id'    => $id,
                     'label' => $this->translator->trans(
-                            'Website ID: %websiteId%, Stores: %storesList%',
-                            [
-                                '%websiteId%'  => $id,
-                                '%storesList%' => implode(', ', $item)
-                            ]
-                        )
+                        'Website ID: %websiteId%, Stores: %storesList%',
+                        [
+                            '%websiteId%'  => $id,
+                            '%storesList%' => implode(', ', $item)
+                        ]
+                    )
                 ];
             },
             $websites
