@@ -22,14 +22,14 @@ class NavigationListener
     protected $entityConfigProvider = null;
 
     /**
-     * @param EntityManager $entityManager
+     * @param EntityManager  $entityManager
      * @param ConfigProvider $entityConfigProvider
      */
     public function __construct(
         EntityManager $entityManager,
         ConfigProvider $entityConfigProvider
     ) {
-        $this->em = $entityManager;
+        $this->em                   = $entityManager;
         $this->entityConfigProvider = $entityConfigProvider;
     }
 
@@ -47,7 +47,7 @@ class NavigationListener
             if (!empty($reports)) {
                 $reportMenuData = [];
                 foreach ($reports as $report) {
-                    $config = $this->entityConfigProvider->getConfig($report->getEntity());
+                    $config      = $this->entityConfigProvider->getConfig($report->getEntity());
                     $entityLabel = $config->get('plural_label');
                     if (!isset ($reportMenuData[$entityLabel])) {
                         $reportMenuData[$entityLabel] = [];
@@ -64,7 +64,7 @@ class NavigationListener
      * Build report menu
      *
      * @param ItemInterface $reportsItem
-     * @param array $reportData
+     * @param array         $reportData
      *  key => entity label
      *  value => array of reports id's and label's
      */
@@ -72,16 +72,17 @@ class NavigationListener
     {
         foreach ($reportData as $entityLabel => $reports) {
             foreach ($reports as $reportId => $reportLabel) {
-                $this->getEntityMenuItem($reportsItem, $entityLabel)->addChild(
-                    $reportLabel . '_report',
-                    [
-                        'label' => $reportLabel ,
-                        'route' => 'orocrm_report_view',
-                        'routeParameters' => [
-                            'id' => $reportId
+                $this->getEntityMenuItem($reportsItem, $entityLabel)
+                    ->addChild(
+                        $reportLabel . '_report',
+                        [
+                            'label'           => $reportLabel,
+                            'route'           => 'orocrm_report_view',
+                            'routeParameters' => [
+                                'id' => $reportId
+                            ]
                         ]
-                    ]
-                );
+                    );
             }
         }
     }
@@ -90,19 +91,19 @@ class NavigationListener
      * Get entity menu item for report item
      *
      * @param ItemInterface $reportItem
-     * @param string $entityLabel
+     * @param string        $entityLabel
      * @return ItemInterface
      */
     protected function getEntityMenuItem(ItemInterface $reportItem, $entityLabel)
     {
         $entityItemName = $entityLabel . '_report_tab';
-        $entityItem = $reportItem->getChild($entityItemName);
+        $entityItem     = $reportItem->getChild($entityItemName);
         if (!$entityItem) {
             $reportItem->addChild(
                 $entityItemName,
                 [
                     'label' => $entityLabel,
-                    'uri' => '#',
+                    'uri'   => '#',
                 ]
             );
             $entityItem = $reportItem->getChild($entityItemName);
