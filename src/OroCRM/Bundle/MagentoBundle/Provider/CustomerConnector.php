@@ -164,9 +164,14 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
             return false;
         }
 
+
         $startDate = $this->lastSyncDate;
         $endDate   = clone $this->lastSyncDate;
         $endDate   = $endDate->add($this->syncRange);
+
+        if ($startDate >= $now) {
+            return null;
+        }
 
         // TODO: remove / log
         echo sprintf(
