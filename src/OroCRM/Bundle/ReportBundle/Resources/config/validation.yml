@@ -1,0 +1,14 @@
+OroCRM\Bundle\ReportBundle\Entity\Report:
+    properties:
+        name:
+            - NotBlank:     ~
+            - Length:
+                max: 255
+        type:
+            - NotBlank:     ~
+            - Length:
+                max: 32
+        entity:
+            - NotBlank:     ~
+            - Length:
+                max: 255
