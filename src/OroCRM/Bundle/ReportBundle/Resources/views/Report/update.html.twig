@@ -66,23 +66,25 @@
     {% set dataBlocks = [{
             'title': 'General'|trans,
             'class': 'active',
-            'useSubBlockDivider': false,
             'subblocks': [
                 {
-                    'title': 'Report Information'|trans,
-                    'spanClass': 'report-general',
+                    'title': '',
                     'data': [
                         form_row(form.name, {'label': 'Name'|trans}),
-                        form_row(form.entity, {'label': 'Entity'|trans}),
-                        form_row(form.type, {'label': 'Type'|trans}),
-                        ownerDataBlock.dataBlocks[0].subblocks[0].data[0]
+                        form_row(form.description, {
+                            'label': 'Description'|trans,
+                            'attr': {
+                                'class': 'report-descr'
+                            }
+                        })
                     ]
                 },
                 {
                     'title': '',
-                    'spanClass': 'report-general-descr',
                     'data': [
-                        form_row(form.description, {'label': 'Description'|trans})
+                        form_row(form.entity, {'label': 'Entity'|trans}),
+                        form_row(form.type, {'label': 'Type'|trans}),
+                        ownerDataBlock.dataBlocks[0].subblocks[0].data[0]
                     ]
                 }
             ]

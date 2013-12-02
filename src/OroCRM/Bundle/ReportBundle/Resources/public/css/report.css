@@ -1,34 +1,3 @@
-.form-horizontal .report-general .control-group {
-    float: left;
-}
-.form-horizontal .report-general .control-group label.control-label,
-.form-horizontal .report-general-descr .control-group label.control-label {
-    width: auto;
-    margin-left: 15px;
-}
-.form-horizontal .report-general .control-group .controls {
-    margin-left: 10px;
-    float: left;
-}
-.form-horizontal .report-general h5+.control-group label.control-label,
-.form-horizontal .report-general .control-group:first-child label.control-label,
-.form-horizontal .report-general-descr .control-group:first-child label.control-label {
-    width: 100px;
-    margin-left: 0;
-}
-.form-horizontal .report-general-descr {
-    clear: both;
-}
-.form-horizontal .report-general-descr textarea {
-    width: 99%;
-    height: 40px;
-}
-.form-horizontal .report-general-descr .control-group {
-    max-width: none;
-}
-.form-horizontal .report-general-descr .control-group .controls {
-    margin-left: 110px;
-}
-.report-designer {
-    position: relative;
+.form-horizontal .report-descr textarea {
+    height: 54px;
 }
