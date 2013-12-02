@@ -10,6 +10,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
 
@@ -62,6 +63,15 @@ class Lead extends ExtendLead implements FullNameInterface
      * @Oro\Versioned
      **/
     protected $contact;
+
+    /**
+     * @var Account
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
+     **/
+    protected $account;
 
     /**
      * @var string
@@ -639,6 +649,24 @@ class Lead extends ExtendLead implements FullNameInterface
     {
         $this->owner = $owningUser;
 
+        return $this;
+    }
+
+    /**
+     * @return \OroCRM\Bundle\AccountBundle\Entity\Account
+     */
+    public function getAccount()
+    {
+        return $this->account;
+    }
+
+    /**
+     * @param Account $account
+     * @return Lead
+     */
+    public function setAccount($account)
+    {
+        $this->account = $account;
         return $this;
     }
 }

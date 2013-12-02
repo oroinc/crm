@@ -28,7 +28,7 @@ class OpportunityType extends AbstractType
 
         $builder
             ->add('contact', 'orocrm_contact_select', array('required' => false))
-            ->add('account', 'orocrm_account_select', array('required' => false))
+            ->add('account', 'orocrm_account_select', array('required' => true))
             ->add('name', 'text', array('required' => true))
             ->add('closeDate', 'oro_date', array('required' => false))
             ->add('probability', 'percent', array('required' => false))

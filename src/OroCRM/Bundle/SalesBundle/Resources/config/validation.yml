@@ -16,6 +16,8 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
         closeRevenue:
             - Range:
                 min: 0
+        account:
+            - NotBlank: ~
 
 OroCRM\Bundle\SalesBundle\Entity\Lead:
     properties:
