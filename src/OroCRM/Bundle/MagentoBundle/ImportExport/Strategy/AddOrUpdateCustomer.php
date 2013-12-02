@@ -180,6 +180,8 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             }
 
             $this->updateAddressCountryRegion($address, $mageRegionId);
+
+            $entity->addAddress($address);
         }
 
         return $this;
@@ -262,7 +264,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 
         // increment context counter
         if ($entity->getId()) {
-            $this->importExportContext->incrementReplaceCount();
+            $this->importExportContext->incrementUpdateCount();
         } else {
             $this->importExportContext->incrementAddCount();
         }
