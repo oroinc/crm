@@ -2,27 +2,28 @@
 
 namespace OroCRM\Bundle\ReportBundle\Filter;
 
-use Doctrine\ORM\QueryBuilder;
-
-use Oro\Bundle\FilterBundle\Filter\Orm\ChoiceFilter;
-use Oro\Bundle\FilterBundle\Filter\Orm\FilterUtility;
+use Oro\Bundle\FilterBundle\Filter\ChoiceFilter;
+use Oro\Bundle\FilterBundle\Filter\FilterUtility;
+use Oro\Bundle\FilterBundle\Datasource\FilterDatasourceAdapterInterface;
 
 class PeriodFilter extends ChoiceFilter
 {
     /**
      * {@inheritdoc}
      */
-    public function apply(QueryBuilder $qb, $data)
+    public function apply(FilterDatasourceAdapterInterface $ds, $data)
     {
         $data = $this->parseData($data);
         if (!$data) {
-            return;
+            return false;
         }
 
         if (is_array($data['value'])) {
             $data['value'] = reset($data['value']);
         }
-        $qb->groupBy($data['value']);
+        $ds->groupBy($data['value']);
+
+        return true;
     }
 
     /**
