@@ -1,18 +1,22 @@
 parameters:
-    orocrm.report.filter.type.period.class:   OroCRM\Bundle\ReportBundle\Filter\PeriodFilter
-    orocrm.report.grid.listener.class:        OroCRM\Bundle\ReportBundle\EventListener\ReportGridListener
+    orocrm_report.report.filter.period.class:             OroCRM\Bundle\ReportBundle\Filter\PeriodFilter
+    orocrm_report.report.grid.listener.class:             OroCRM\Bundle\ReportBundle\EventListener\ReportGridListener
+    orocrm_report.datagrid.configuration.provider.class:  OroCRM\Bundle\ReportBundle\Grid\ReportDatagridConfigurationProvider
+    orocrm_report.listener.navigation_listener.class:     OroCRM\Bundle\ReportBundle\EventListener\NavigationListener
+    orocrm_report.report_manage.class:                    OroCRM\Bundle\ReportBundle\Entity\Manager\ReportManager
+    orocrm.report.report.entity.class:                    OroCRM\Bundle\ReportBundle\Entity\Report
 
 services:
-    orocrm.report.filter.type.period:
-        class: %orocrm.report.filter.type.period.class%
+    orocrm_report.report.filter.period:
+        class: %orocrm_report.report.filter.period.class%
         arguments:
             - @form.factory
-            - @translator
+            - @oro_filter.filter_utility
         tags:
             - { name:oro_filter.extension.orm_filter.filter, type: orocrm_period_filter }
 
-    orocrm.report.grid.listener:
-        class: %orocrm.report.grid.listener.class%
+    orocrm_report.report.grid.listener:
+        class: %orocrm_report.report.grid.listener.class%
         arguments:
             - @oro_datagrid.datagrid.request_params
         tags:
@@ -20,3 +24,34 @@ services:
                 name:   kernel.event_listener
                 event:  oro_datagrid.datgrid.build.before.orocrm_report-opportunities-won_by_period
                 method: onBuildBefore
+
+    orocrm_report.datagrid.configuration.provider:
+        class: %orocrm_report.datagrid.configuration.provider.class%
+        arguments:
+            - @doctrine
+        tags:
+            - { name: oro_datagrid.configuration.provider }
+
+    orocrm_report.entity_provider:
+        alias: oro_entity.entity_provider
+
+    orocrm_report.entity_field_provider:
+        class: %oro_entity.entity_field_provider.class%
+        arguments:
+            - @oro_entity_config.provider.entity
+            - @oro_entity.orm.entity_class_resolver
+            - @doctrine
+            - @orocrm_report.entity_provider
+
+    orocrm_report.listener.navigation_listener:
+        class: %orocrm_report.listener.navigation_listener.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @oro_entity_config.provider.entity
+        tags:
+            - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
+
+    orocrm_report.report_manager:
+        class: %orocrm_report.report_manage.class%
+        arguments:
+            - @doctrine.orm.entity_manager
