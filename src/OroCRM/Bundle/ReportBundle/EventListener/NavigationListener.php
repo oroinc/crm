@@ -41,7 +41,8 @@ class NavigationListener
         /** @var ItemInterface $reportsMenuItem */
         $reportsMenuItem = $event->getMenu()->getChild('reports_tab');
         if ($reportsMenuItem) {
-            $reports = $this->em->getRepository('OroCRM\Bundle\ReportBundle\Entity\Report')->findBy([], ['name' => 'ASC']);
+            $reports = $this->em->getRepository('OroCRM\Bundle\ReportBundle\Entity\Report')
+                ->findBy([], ['name' => 'ASC']);
             //todo: Add ACL Access level protection
             if (!empty($reports)) {
                 $reportMenuData = [];

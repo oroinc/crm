@@ -13,39 +13,6 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 class ReportController extends Controller
 {
-// @todo: EXISTING REPORTS NEED TO BE MOVED TO DATABASE
-//    /**
-//     * @Route(
-//     *      "/{reportGroupName}/{reportName}/{_format}",
-//     *      name="orocrm_report_view",
-//     *      requirements={"reportGroupName"="\w+", "reportName"="\w+", "_format"="html|json"},
-//     *      defaults={"_format" = "html"}
-//     * )
-//     * @Template()
-//     * @Acl(
-//     *      id="orocrm_report_view",
-//     *      type="entity",
-//     *      permission="VIEW",
-//     *      class="OroCRMReportBundle:Report"
-//     * )
-//     */
-//    public function viewAction($reportGroupName, $reportName)
-//    {
-//        $gridName  = implode('-', ['orocrm_report', $reportGroupName, $reportName]);
-//        $pageTitle = $this->get('oro_datagrid.datagrid.manager')->getConfigurationForGrid($gridName)['pageTitle'];
-//
-//        $this->get('oro_navigation.title_service')->setParams(array('%reportName%' => $pageTitle));
-//
-//        return [
-//            'pageTitle' => $pageTitle,
-//            'gridName'  => $gridName,
-//            'params'    => [
-//                'reportGroupName' => $reportGroupName,
-//                'reportName'      => $reportName
-//            ]
-//        ];
-//    }
-
     /**
      * @Route("/view/{id}", name="orocrm_report_view", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Acl(
