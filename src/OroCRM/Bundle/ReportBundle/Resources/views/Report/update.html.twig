@@ -96,7 +96,7 @@
             'subblocks': [
                 {
                     'title': 'Columns'|trans,
-                    'spanClass': 'report-columns span6',
+                    'spanClass': 'report-columns responsive-cell',
                     'data': [
                         QD.query_designer_column_form(form.column, {'id': 'report-column-form'}),
                         QD.query_designer_column_list(),
@@ -105,7 +105,7 @@
                 },
                 {
                     'title': 'Filters'|trans,
-                    'spanClass': 'report-filters span6',
+                    'spanClass': 'report-filters responsive-cell',
                     'data': [
                         QD.query_designer_filter_form(form.filter, form.filters_logic, {'id': 'report-filter-form'}),
                         QD.query_designer_filter_list(),

@@ -23,6 +23,9 @@
     width: 99%;
     height: 40px;
 }
+.form-horizontal .report-general-descr .control-group {
+    max-width: none;
+}
 .form-horizontal .report-general-descr .control-group .controls {
     margin-left: 110px;
 }
