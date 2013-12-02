@@ -25,6 +25,7 @@ class LeadType extends AbstractType
             ->add('jobTitle', 'text', array('required' => false))
             ->add('phoneNumber', 'text', array('required' => false))
             ->add('email', 'email', array('required' => false))
+            ->add('account', 'orocrm_account_select', array('required' => false))
             ->add('companyName', 'text', array('required' => false))
             ->add('website', 'url', array('required' => false))
             ->add('numberOfEmployees', 'number', array('required' => false))
