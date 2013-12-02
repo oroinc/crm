@@ -53,12 +53,13 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     {
         $settings = $transportSettings->getSettingsBag()->all();
 
-        if (empty($settings['last_sync_date'])) {
-            throw new \LogicException('Last sync date can\'t be empty');
-        } elseif ($settings['last_sync_date'] instanceof \DateTime) {
-            $this->lastSyncDate = $settings['last_sync_date'];
+        $startSyncDateKey = 'start_sync_date';
+        if (empty($settings[$startSyncDateKey])) {
+            throw new \LogicException('Start sync date can\'t be empty');
+        } elseif ($settings[$startSyncDateKey] instanceof \DateTime) {
+            $this->lastSyncDate = $settings[$startSyncDateKey];
         } else {
-            $this->lastSyncDate = new \DateTime($settings['last_sync_date']);
+            $this->lastSyncDate = new \DateTime($settings[$startSyncDateKey]);
         }
 
         if (empty($settings['sync_range'])) {
