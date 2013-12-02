@@ -77,10 +77,8 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
              ->updateAccount($newEntity, $importedEntity->getAccount());
 
         // set relations
-        if ($newEntity->getId()) {
-            $newEntity->getContact()->addAccount($newEntity->getAccount());
-            $newEntity->getAccount()->setDefaultContact($newEntity->getContact());
-        }
+        $newEntity->getContact()->addAccount($newEntity->getAccount());
+        $newEntity->getAccount()->setDefaultContact($newEntity->getContact());
 
         // validate and update context - increment counter or add validation error
         $this->validateAndUpdateContext($newEntity);
