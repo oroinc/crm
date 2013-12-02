@@ -248,9 +248,10 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
                 )
             );
 
-        $object->resetAddresses(
-            $this->denormalizeObject($data, 'addresses', static::MAGE_ADDRESSES_TYPE, $format, $context)
-        );
+        $addresses = $this->denormalizeObject($data, 'addresses', static::MAGE_ADDRESSES_TYPE, $format, $context);
+        if (!empty($addresses)) {
+            $object->resetAddresses($addresses);
+        }
     }
 
     /**
