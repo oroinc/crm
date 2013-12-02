@@ -229,12 +229,13 @@ class MagentoSoapTransport extends Transport
     {
         return new ParameterBag(
             [
-                'api_user'       => $this->getApiUser(),
-                'api_key'        => $this->getApiKey(),
-                'wsdl_url'       => $this->getWsdlUrl(),
-                'sync_range'     => $this->getSyncRange(),
-                'website_id'     => $this->getWebsites(),
-                'last_sync_date' => $this->getSyncStartDate(),
+                'api_user'        => $this->getApiUser(),
+                'api_key'         => $this->getApiKey(),
+                'wsdl_url'        => $this->getWsdlUrl(),
+                'sync_range'      => $this->getSyncRange(),
+                'website_id'      => $this->getWebsites(),
+                'start_sync_date' => $this->getSyncStartDate(),
+                'last_sync_date'  => $this->getLastSyncDate(),
             ]
         );
     }
