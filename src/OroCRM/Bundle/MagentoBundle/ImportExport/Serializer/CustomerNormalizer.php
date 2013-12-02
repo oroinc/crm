@@ -8,6 +8,8 @@ use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
+use Doctrine\Common\Collections\Collection;
+
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
@@ -48,6 +50,7 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
     const WEBSITE_TYPE   = 'OroCRM\Bundle\MagentoBundle\Entity\Website';
     const GROUPS_TYPE    = 'OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup';
     const ADDRESSES_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactAddress>';
+    const MAGE_ADDRESSES_TYPE = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\Address>';
 
     /**
      * @var SerializerInterface|NormalizerInterface|DenormalizerInterface
@@ -186,6 +189,7 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
         // format contact data
         $data['contact'] = $this->formatContactData($data);
         $data['account'] = $this->formatAccountData($data);
+        $data['addresses'] = $data['contact']['addresses'];
 
         /** @var Contact $contact */
         $contact = $this->denormalizeObject($data, 'contact', ContactNormalizer::CONTACT_TYPE, $format, $context);
@@ -244,7 +248,26 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
                 )
             );
 
+        $object->resetAddresses(
+            $this->denormalizeObject($data, 'addresses', static::MAGE_ADDRESSES_TYPE, $format, $context)
+        );
     }
+
+    /**
+     * @param $collection
+     * @param mixed $format
+     * @param array $context
+     * @return mixed
+     */
+    protected function normalizeCollection($collection, $format = null, array $context = array())
+    {
+        $result = array();
+        if ($collection instanceof Collection && !$collection->isEmpty()) {
+            $result = $this->serializer->normalize($collection, $format, $context);
+        }
+        return $result;
+    }
+
 
     /**
      * @param $data

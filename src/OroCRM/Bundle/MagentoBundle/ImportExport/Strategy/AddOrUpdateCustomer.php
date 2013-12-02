@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\BatchBundle\Item\InvalidItemException;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
@@ -74,7 +75,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             $importedEntity->getGroup()
         );
 
-        $this->updateAddresses($newEntity, $newEntity->getAddresses())
+        $this->updateAddresses($newEntity, $importedEntity->getAddresses())
              ->updateContact($newEntity, $importedEntity->getContact(), true)
              ->updateAccount($newEntity, $importedEntity->getAccount());
 
@@ -139,19 +140,12 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         foreach ($contact->getAddresses() as $address) {
             // at this point imported address region have code equal to region_id in magento db field
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
-            $originAddressId = $address->getId();
+            //$originAddressId = $address->getId();
             $address->setId(null);
 
-            $this->updateAddressCountryRegion($address, $mageRegionId);
-
-            // update address type
-            $types = $address->getTypeNames();
-            $address->getTypes()->clear();
-            $loadedTypes = $this->getEntityRepository('OroAddressBundle:AddressType')
-                ->findBy(['name' => $types]);
-            foreach ($loadedTypes as $type) {
-                $address->addType($type);
-            }
+            $this
+                ->updateAddressCountryRegion($address, $mageRegionId)
+                ->updateAddressTypes($address);
         }
 
         $entity->setContact($contact);
@@ -169,7 +163,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         /** $address - imported address */
         foreach ($addresses as $address) {
             // at this point imported address region have code equal to region_id in magento db field
-            $mageRegionId = $address->getRegion()->getCode();
+            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
 
             $originAddressId = $address->getId();
             $existingAddress = $entity->getAddressByOriginId($originAddressId);
@@ -179,7 +173,9 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
                 $address = $existingAddress;
             }
 
-            $this->updateAddressCountryRegion($address, $mageRegionId);
+            $this
+                ->updateAddressCountryRegion($address, $mageRegionId)
+                ->updateAddressTypes($address);
 
             $entity->addAddress($address);
         }
@@ -316,10 +312,34 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         $this->importExportContext = $importExportContext;
     }
 
+    /**
+     * @param AbstractTypedAddress $address
+     * @return $this
+     */
+    protected function updateAddressTypes(AbstractTypedAddress $address)
+    {
+        // update address type
+        $types = $address->getTypeNames();
+        if (empty($types)) {
+            return $this;
+        }
+
+        $address->getTypes()->clear();
+        $loadedTypes = $this->getEntityRepository('OroAddressBundle:AddressType')
+            ->findBy(['name' => $types]);
+
+        foreach ($loadedTypes as $type) {
+            $address->addType($type);
+        }
+
+        return $this;
+    }
 
     /**
      * @param AbstractAddress $address
      * @param int $mageRegionId
+     * @return $this
+     *
      * @throws InvalidItemException
      */
     protected function updateAddressCountryRegion(AbstractAddress $address, $mageRegionId)
@@ -363,5 +383,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             throw new InvalidItemException(sprintf('Unable to find country by code "%s"', $countryCode), []);
         }
         $address->setCountry($this->regionsCache[$countryCode]);
+
+        return $this;
     }
 }
