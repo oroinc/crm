@@ -38,10 +38,10 @@ class ControllersTest extends WebTestCase
         $this->client->request(
             'GET',
             $this->client->generate(
-                'orocrm_report_index',
+                'orocrm_report_static_index',
                 array(
                     'reportGroupName' => $group,
-                    'reportName' => $report,
+                    'reportName'      => $report,
                     //'_format'    => 'json'
                 )
             )
@@ -63,12 +63,12 @@ class ControllersTest extends WebTestCase
     public function testGrid($gridName, $report, $group)
     {
         $reportName = $gridName . '-' . $report;
-        $result = ToolsAPI::getEntityGrid(
+        $result     = ToolsAPI::getEntityGrid(
             $this->client,
             $reportName,
             array(
                 "{$reportName}[reportGroupName]" => $group,
-                "{$reportName}[reportName]" => $report
+                "{$reportName}[reportName]"      => $report
             )
         );
 
@@ -78,11 +78,36 @@ class ControllersTest extends WebTestCase
     public function reportsProvider()
     {
         return array(
-            'life_time_value' => array('orocrm_report-accounts', 'life_time_value', 'accounts', 'Account life time value'),
-            'by_opportunities' => array('orocrm_report-accounts', 'by_opportunities', 'accounts', 'Accounts by opportunities'),
-            'by_step' => array('orocrm_report-opportunities', 'by_step', 'opportunities', 'Opportunities by step'),
-            'won_by_period' => array('orocrm_report-opportunities', 'won_by_period', 'opportunities', 'Won opportunities by date period'),
-            'by_date' => array('orocrm_report-leads', 'by_date', 'leads', 'Number leads by date'),
+            'life_time_value'  => array(
+                'orocrm_report-accounts',
+                'life_time_value',
+                'accounts',
+                'Account life time value'
+            ),
+            'by_opportunities' => array(
+                'orocrm_report-accounts',
+                'by_opportunities',
+                'accounts',
+                'Accounts by opportunities'
+            ),
+            'by_step'          => array(
+                'orocrm_report-opportunities',
+                'by_step',
+                'opportunities',
+                'Opportunities by step'
+            ),
+            'won_by_period'    => array(
+                'orocrm_report-opportunities',
+                'won_by_period',
+                'opportunities',
+                'Won opportunities by date period'
+            ),
+            'by_date'          => array(
+                'orocrm_report-leads',
+                'by_date',
+                'leads',
+                'Number leads by date'
+            ),
         );
     }
 }

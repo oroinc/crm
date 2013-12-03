@@ -5,9 +5,9 @@ namespace OroCRM\Bundle\ReportBundle\EventListener;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\DataGridBundle\Datagrid\RequestParameters;
 use Oro\Bundle\DataGridBundle\Extension\Formatter\Property\PropertyInterface;
-use Oro\Bundle\FilterBundle\Extension\Orm\FilterInterface;
-use Oro\Bundle\FilterBundle\Extension\OrmFilterExtension;
-use Oro\Bundle\FilterBundle\Extension\Configuration as FilterConfiguration;
+use Oro\Bundle\FilterBundle\Filter\FilterUtility;
+use Oro\Bundle\FilterBundle\Grid\Extension\OrmFilterExtension;
+use Oro\Bundle\FilterBundle\Grid\Extension\Configuration as FilterConfiguration;
 use Oro\Bundle\DataGridBundle\Extension\Sorter\Configuration as OrmSorterConfiguration;
 use Oro\Bundle\DataGridBundle\Extension\Formatter\Configuration as FormatterConfiguration;
 
@@ -45,7 +45,7 @@ class ReportGridListener
                 '%s[%s][%s]',
                 FilterConfiguration::COLUMNS_PATH,
                 self::PERIOD_COLUMN_NAME,
-                FilterInterface::DATA_NAME_KEY
+                FilterUtility::DATA_NAME_KEY
             ),
             $period
         );

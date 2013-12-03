@@ -100,7 +100,8 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
             'opportunities' => array(
                 "url" => "/opportunity",
                 "title_rendered" => "Opportunities - Sales",
-                "title" => "{\"template\":\"Opportunities - Sales\",\"short_template\":\"Opportunities\",\"params\":[]}",
+                "title"
+                    => "{\"template\":\"Opportunities - Sales\",\"short_template\":\"Opportunities\",\"params\":[]}",
                 "position" => 0,
                 "type" => "pinbar",
                 "display_type" => "list",
