@@ -130,6 +130,8 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
         $this->setScalarFieldsValues($resultObject, $mappedData);
         $this->setObjectFieldsValues($resultObject, $mappedData);
 
+        $resultObject->setChannelId($context['channelId']);
+
         return $resultObject;
     }
 

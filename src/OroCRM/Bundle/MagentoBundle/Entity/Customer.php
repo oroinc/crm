@@ -2,13 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
 
@@ -192,6 +192,15 @@ class Customer extends BasePerson implements FullNameInterface
     protected $originalId;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(type="integer", options={"unsigned"=true})
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
+     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $channel;
+
+    /**
      * @param Website $website
      *
      * @return $this
@@ -349,6 +358,25 @@ class Customer extends BasePerson implements FullNameInterface
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * @param Channel $channel
+     * @return $this
+     */
+    public function setChannel(Channel $channel)
+    {
+        $this->channel = $channel;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getChannelId()
+    {
+        return $this->channelId;
     }
 
     public function __toString()
