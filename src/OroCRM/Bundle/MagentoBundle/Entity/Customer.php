@@ -192,9 +192,8 @@ class Customer extends BasePerson implements FullNameInterface
     protected $originalId;
 
     /**
-     * @var integer
+     * @var Channel
      *
-     * @ORM\Column(type="integer", options={"unsigned"=true})
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
      */
@@ -372,11 +371,11 @@ class Customer extends BasePerson implements FullNameInterface
     }
 
     /**
-     * @return int
+     * @return Channel
      */
-    public function getChannelId()
+    public function getChannel()
     {
-        return $this->channelId;
+        return $this->channel;
     }
 
     public function __toString()
