@@ -6,6 +6,8 @@ use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\TypedAddressNorm
 
 class MagentoAddressNormalizer extends TypedAddressNormalizer
 {
+    const ADDRESS_TYPE = 'OroCRM\Bundle\MagentoBundle\Entity\Address';
+
     /**
      * @param mixed $data
      * @param string $class
@@ -29,6 +31,6 @@ class MagentoAddressNormalizer extends TypedAddressNormalizer
         return
             is_array($data)
             && class_exists($type)
-            && in_array(static::ABSTRACT_TYPED_ADDRESS_TYPE, class_parents($type));
+            && static::ADDRESS_TYPE == $type;
     }
 }

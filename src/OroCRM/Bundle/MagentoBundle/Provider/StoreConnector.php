@@ -10,10 +10,9 @@ class StoreConnector extends AbstractConnector
     const ACTION_STORE_LIST   = 'storeList';
 
     /**
-     * @param null|int $storeId
      * @return array
      */
-    public function getStores($storeId = null)
+    public function getStores()
     {
         $result = $this->call(self::ACTION_STORE_LIST);
 
