@@ -54,7 +54,9 @@
 <div class="widget-content contact-info form-horizontal box-content">
     <div class="responsive-block">
         <div class="control-group">
-            <label class="control-label">{% trans %}Phones{% endtrans %}</label>
+            {#<label class="control-label">{% trans %}Phones{% endtrans %}</label>#}
+            {#<label class="control-label">{{ 'Phones'|trans }}</label>#}
+            <label class="control-label">{{ 'oroCRM.contact.phones'|trans({}, 'config') }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
                     <div class="control-label">
@@ -69,7 +71,8 @@
         </div>
 
         <div class="control-group">
-            <label class="control-label">{% trans %}Emails{% endtrans %}</label>
+            {#<label class="control-label">{% trans %}Emails{% endtrans %}</label>#}
+            <label class="control-label">{{ 'oroCRM.contact.emails'|trans }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
                     <div class="control-label email-field">

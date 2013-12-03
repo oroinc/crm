@@ -1,6 +1,11 @@
+orocrm.contact.controller.contact.saved.message: "Contact saved"
+orocrm.contact.controller.contact_group.saved.message: "Contact Group saved"
+
 orocrm.contact.form.choose_contact: Choose a contact...
 orocrm.contact.form.choose_phone: Choose a phone...
 orocrm.contact.form.choose_contact_method: Choose a contact method...
+
+oro.importexport.import.orocrm_contact.add_or_replace: Add and Replace
 
 orocrm.contact.datagrid.contact_id: ID
 orocrm.contact.datagrid.first_name: First Name
@@ -19,7 +24,21 @@ orocrm.contact.datagrid.view: View
 orocrm.contact.datagrid.update: Update
 orocrm.contact.datagrid.delete: Delete
 
-orocrm.contact.controller.contact.saved.message: "Contact saved"
-orocrm.contact.controller.contact_group.saved.message: "Contact Group saved"
+#
+# Entity Config Labels
+#
+oroCRM.contact.first_name: First Name
 
-oro.importexport.import.orocrm_contact.add_or_replace: Add and Replace
+oroCRM.contact.phones:     Phones
+oroCRM.contact.emails:     Emails
+oroCRM.contact.fax:        Fax
+oroCRM.contact.skype:      Skype
+
+#
+# Backward compatibility
+#
+#"First Name": %oroCRM.contact.first_name%
+#"Fax":        %oroCRM.contact.fax%
+#"Skype":      %oroCRM.contact.skype%
+#"Emails":     %oroCRM.contact.emails%
+#"Phones":     %oroCRM.contact.phones%
