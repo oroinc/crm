@@ -30,7 +30,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /** @var int */
     protected $batchSize;
 
-    /** @var array dependencies data: customer groups, stores, websites, regions? */
+    /** @var array dependencies data: customer groups, stores, websites, regions */
     protected $dependencies = [];
 
     /** @var StoreConnector */
