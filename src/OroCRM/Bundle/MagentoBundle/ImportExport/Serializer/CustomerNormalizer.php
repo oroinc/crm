@@ -302,8 +302,8 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
 
                 $account[$type]['postalCode'] = $address['postcode'];
                 $account[$type]['country']    = $address['country_id'];
-                $account[$type]['regionText'] = $address['region'];
-                $account[$type]['region']     = $address['region_id'];
+                $account[$type]['regionText'] = isset($address['region']) ? $address['region'] : null;
+                $account[$type]['region']     = isset($address['region_id']) ? $address['region_id'] : null;
                 $account[$type]['created']    = $address['created_at'];
                 $account[$type]['updated']    = $address['updated_at'];
             }
@@ -349,8 +349,10 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             // TODO: make sure this works after CRM-185
             $contact['addresses'][$key]['postalCode'] = $contact['addresses'][$key]['postcode'];
             $contact['addresses'][$key]['country']    = $contact['addresses'][$key]['country_id'];
-            $contact['addresses'][$key]['regionText'] = $contact['addresses'][$key]['region'];
-            $contact['addresses'][$key]['region']     = $contact['addresses'][$key]['region_id'];
+            $contact['addresses'][$key]['regionText'] = isset($contact['addresses'][$key]['region'])
+                ? $contact['addresses'][$key]['region'] : null;
+            $contact['addresses'][$key]['region']     = isset($contact['addresses'][$key]['region_id'])
+                ? $contact['addresses'][$key]['region_id'] : null;
 
             // TODO: make sure datetime normalized and set correctly to object
             $contact['addresses'][$key]['created']     = $contact['addresses'][$key]['created_at'];

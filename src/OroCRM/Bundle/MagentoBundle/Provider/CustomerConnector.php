@@ -8,7 +8,7 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 
 class CustomerConnector extends AbstractConnector implements CustomerConnectorInterface
 {
-    const DEFAULT_SYNC_RANGE = '2 year'; // '1 week';
+    const DEFAULT_SYNC_RANGE  = '1 week'; // '1 week';
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer';
     const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';
     const JOB_IMPORT          = 'mage_customer_import';
