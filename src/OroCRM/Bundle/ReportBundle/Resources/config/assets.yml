@@ -1,3 +1,0 @@
-css:
-    'report':
-        - '@OroCRMReportBundle/Resources/public/css/report.css'
