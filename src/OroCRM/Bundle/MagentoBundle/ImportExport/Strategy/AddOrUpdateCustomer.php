@@ -41,6 +41,16 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     /** @var array */
     protected $mageRegionsCache = [];
 
+    /** @var array */
+    protected $storeEntityCache   = [];
+
+    /** @var array */
+    protected $websiteEntityCache = [];
+
+    /** @var array */
+    protected $groupEntityCache   = [];
+
+
     /**
      * @param ImportStrategyHelper $strategyHelper
      */
@@ -100,16 +110,38 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     {
         // do not allow to change code/website name by imported entity
         $doNotUpdateFields = ['id', 'code', 'name'];
-        $entity
-            ->setWebsite(
-                $this->findAndReplaceEntity($website, CustomerNormalizer::WEBSITE_TYPE, 'code', $doNotUpdateFields)
-            )
-            ->setStore(
-                $this->findAndReplaceEntity($store, CustomerNormalizer::STORE_TYPE, 'code', $doNotUpdateFields)
-            )
-            ->setGroup(
-                $this->findAndReplaceEntity($group, CustomerNormalizer::GROUPS_TYPE, 'name', $doNotUpdateFields)
+
+        if (!isset($this->websiteEntityCache[$website->getCode()])) {
+            $this->websiteEntityCache[$website->getCode()] = $this->findAndReplaceEntity(
+                $website,
+                CustomerNormalizer::WEBSITE_TYPE,
+                'code',
+                $doNotUpdateFields
             );
+        }
+
+        if (!isset($this->storeEntityCache[$store->getCode()])) {
+            $this->storeEntityCache[$store->getCode()] = $this->findAndReplaceEntity(
+                $store,
+                CustomerNormalizer::STORE_TYPE,
+                'code',
+                $doNotUpdateFields
+            );
+        }
+
+        if (!isset($this->groupEntityCache[$group->getName()])) {
+            $this->groupEntityCache[$group->getName()] = $this->findAndReplaceEntity(
+                $group,
+                CustomerNormalizer::GROUPS_TYPE,
+                'name',
+                $doNotUpdateFields
+            );
+        }
+
+        $entity
+            ->setWebsite($this->websiteEntityCache[$website->getCode()])
+            ->setStore($this->storeEntityCache[$store->getCode()])
+            ->setGroup($this->groupEntityCache[$group->getName()]);
 
         $entity->getStore()->setWebsite($entity->getWebsite());
 
