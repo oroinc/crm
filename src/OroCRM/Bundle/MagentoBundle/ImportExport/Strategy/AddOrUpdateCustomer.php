@@ -173,6 +173,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
                 ->updateAddressCountryRegion($address, $mageRegionId)
                 ->updateAddressTypes($address);
 
+            $address->setOwner($entity);
             $entity->addAddress($address);
         }
 
@@ -372,7 +373,14 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
                 $this->getEntityOrNull($address->getRegion(), 'combinedCode', 'Oro\Bundle\AddressBundle\Entity\Region'):
                 $this->regionsCache[$combinedCode];
 
-            $address->setRegion($this->regionsCache[$combinedCode]);
+            // no region found in system db for corresponding magento region, use region text
+            if (empty($this->regionsCache[$combinedCode])) {
+                $address->setRegion(null);
+            } else {
+                $address->setRegion($this->regionsCache[$combinedCode]);
+                $address->setRegionText(null);
+            }
+
         }
 
         if (empty($this->regionsCache[$countryCode])) {

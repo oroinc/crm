@@ -327,7 +327,9 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             'nameSuffix',
             'gender',
             'addresses',
-            'birthday'
+            'birthday',
+            'phones',
+            'emails',
         ];
 
         // format contact data
@@ -359,7 +361,13 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             if (!empty($contact['addresses'][$key]['is_default_billing'])) {
                 $contact['addresses'][$key]['types'][] = 'billing';
             }
+
+            if (!empty($contact['addresses'][$key]['telephone'])) {
+                $contact['phones'][] = $contact['addresses'][$key]['telephone'];
+            }
         }
+
+        $contact['emails'] = [$contactData['email']];
 
         return $contact;
     }

@@ -140,7 +140,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
 
             // TODO: log
             $now = new \DateTime('now', new \DateTimeZone('UTC'));
-            echo $now->format('d-m-Y H:i:s') . " loading customer $customerId\n";
+            echo $now->format('d-m-Y H:i:s') . " loading customer ID: $customerId\n";
 
             $data = $this->getCustomerData($customerId, true);
         } else {
@@ -164,7 +164,6 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
             return false;
         }
 
-
         $startDate = $this->lastSyncDate;
         $endDate   = clone $this->lastSyncDate;
         $endDate   = $endDate->add($this->syncRange);
@@ -177,8 +176,8 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         echo sprintf(
             '[%s] Looking for entities from %s to %s ... ',
             $now->format('d-m-Y H:i:s'),
-            $startDate->format('d-m-Y'),
-            $endDate->format('d-m-Y')
+            $startDate->format('d-m-Y H:i:s'),
+            $endDate->format('d-m-Y H:i:s')
         );
 
         $filters   = [];

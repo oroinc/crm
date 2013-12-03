@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer;
 
-use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -78,7 +77,7 @@ class AccountNormalizer extends AbstractContextModeAwareNormalizer implements Se
      */
     protected function normalizeFull($object, $format = null, array $context = array())
     {
-        throw new NotImplementedException("Full normalization not implemented yet.");
+        throw new NotImplementedException('Normalization with mode "full" is not supported.');
     }
 
     /**
