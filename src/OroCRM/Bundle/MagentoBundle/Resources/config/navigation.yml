@@ -6,6 +6,9 @@ oro_menu_config:
             extras:
                 routes: ['/^orocrm_magento_customer_(index|view)+$/']
                 description: List of customers from "Magento channel"
+        channels_submenu:
+            label: 'Channels'
+            uri: '#'
 
     tree:
         application_menu:
