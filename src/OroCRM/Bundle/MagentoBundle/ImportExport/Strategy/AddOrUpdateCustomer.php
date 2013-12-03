@@ -237,7 +237,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
                 continue;
             }
 
-            $originAddressId = $address->getId();
+            //$originAddressId = $address->getId();
             $address->setId(null);
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
 
@@ -375,15 +375,8 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     {
         $countryCode = $address->getCountry()->getIso2Code();
 
-        // country cache
-        $this->regionsCache[$countryCode] = empty($this->regionsCache[$countryCode]) ?
-            $this->findAndReplaceEntity(
-                $address->getCountry(),
-                'Oro\Bundle\AddressBundle\Entity\Country',
-                'iso2Code',
-                ['iso2Code', 'iso3Code', 'name']
-            ) :
-            $this->regionsCache[$countryCode];
+        $country = $this->getAddressCountryByCode($address, $countryCode);
+        $address->setCountry($country);
 
         if (!empty($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId])) {
             $this->mageRegionsCache[$mageRegionId] = $this->getEntityRepository(
@@ -392,9 +385,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             ->findOneBy(['regionId' => $mageRegionId]);
         }
 
-        if (empty($this->mageRegionsCache[$mageRegionId])) {
-            // use regionText instead
-        } else {
+        if (!empty($this->mageRegionsCache[$mageRegionId])) {
             $mageRegion = $this->mageRegionsCache[$mageRegionId];
             $combinedCode = $mageRegion->getCombinedCode();
 
@@ -415,11 +406,30 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 
         }
 
+        return $this;
+    }
+
+    /**
+     * @param AbstractAddress $address
+     * @param string $countryCode
+     * @throws InvalidItemException
+     * @returns
+     */
+    protected function getAddressCountryByCode(AbstractAddress $address, $countryCode)
+    {
+        $this->regionsCache[$countryCode] = empty($this->regionsCache[$countryCode]) ?
+            $this->findAndReplaceEntity(
+                $address->getCountry(),
+                'Oro\Bundle\AddressBundle\Entity\Country',
+                'iso2Code',
+                ['iso2Code', 'iso3Code', 'name']
+            ) :
+            $this->regionsCache[$countryCode];
+
         if (empty($this->regionsCache[$countryCode])) {
             throw new InvalidItemException(sprintf('Unable to find country by code "%s"', $countryCode), []);
         }
-        $address->setCountry($this->regionsCache[$countryCode]);
 
-        return $this;
+        return $this->regionsCache[$countryCode];
     }
 }

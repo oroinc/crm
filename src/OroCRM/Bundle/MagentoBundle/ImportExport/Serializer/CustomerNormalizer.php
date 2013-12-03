@@ -346,15 +346,17 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             $contact['addresses'][$key] = array_merge($contact['addresses'][$key], $contact);
             unset($contact['addresses'][$key]['addresses']);
 
-            // TODO: make sure this works after CRM-185
-            $contact['addresses'][$key]['postalCode'] = $contact['addresses'][$key]['postcode'];
-            $contact['addresses'][$key]['country']    = $contact['addresses'][$key]['country_id'];
-            $contact['addresses'][$key]['regionText'] = $contact['addresses'][$key]['region'];
-            $contact['addresses'][$key]['region']     = $contact['addresses'][$key]['region_id'];
-
-            // TODO: make sure datetime normalized and set correctly to object
-            $contact['addresses'][$key]['created']     = $contact['addresses'][$key]['created_at'];
-            $contact['addresses'][$key]['updated']     = $contact['addresses'][$key]['updated_at'];
+            $contact['addresses'][$key] = array_merge(
+                $contact['addresses'][$key],
+                [
+                    'postalCode' => $contact['addresses'][$key]['postcode'],
+                    'country'    => $contact['addresses'][$key]['country_id'],
+                    'regionText' => $contact['addresses'][$key]['region'],
+                    'region'     => $contact['addresses'][$key]['region_id'],
+                    'created'    => $contact['addresses'][$key]['created_at'],
+                    'updated'    => $contact['addresses'][$key]['updated_at'],
+                ]
+            );
 
             // prepare address types
             if (!empty($contact['addresses'][$key]['is_default_shipping'])) {
