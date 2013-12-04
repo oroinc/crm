@@ -39,17 +39,15 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
         'website',
         'group',
         'addresses',
-        'updated_at',
         'updatedAt',
-        'created_at',
         'createdAt',
         'birthday',
     );
 
-    const STORE_TYPE     = 'OroCRM\Bundle\MagentoBundle\Entity\Store';
-    const WEBSITE_TYPE   = 'OroCRM\Bundle\MagentoBundle\Entity\Website';
-    const GROUPS_TYPE    = 'OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup';
-    const ADDRESSES_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactAddress>';
+    const STORE_TYPE          = 'OroCRM\Bundle\MagentoBundle\Entity\Store';
+    const WEBSITE_TYPE        = 'OroCRM\Bundle\MagentoBundle\Entity\Website';
+    const GROUPS_TYPE         = 'OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup';
+    const ADDRESSES_TYPE      = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactAddress>';
     const MAGE_ADDRESSES_TYPE = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\Address>';
 
     /**
@@ -75,8 +73,8 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
      * For exporting customers
      *
      * @param Customer $object
-     * @param null $format
-     * @param array $context
+     * @param null     $format
+     * @param array    $context
      *
      * @return array
      */
@@ -106,20 +104,21 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
     /**
      * For importing customers
      *
-     * @param mixed $data
+     * @param mixed  $data
      * @param string $class
-     * @param null $format
-     * @param array $context
+     * @param null   $format
+     * @param array  $context
+     *
      * @return object|Customer
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $data = is_array($data) ? $data : [];
+        $data         = is_array($data) ? $data : [];
         $resultObject = new Customer();
 
         $mappedData = [];
         foreach ($data as $key => $value) {
-            $fieldKey = isset($this->importFieldsMap[$key]) ? $this->importFieldsMap[$key] : $key;
+            $fieldKey              = isset($this->importFieldsMap[$key]) ? $this->importFieldsMap[$key] : $key;
             $mappedData[$fieldKey] = $value;
         }
 
@@ -137,7 +136,7 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
 
     /**
      * @param Customer $object
-     * @param array $data
+     * @param array    $data
      */
     protected function setScalarFieldsValues(Customer $object, array $data)
     {
@@ -148,8 +147,7 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             }
 
             $method = 'set' . ucfirst($itemName);
-
-            if (method_exists($object, $method) && !in_array($itemName, self::$objectFields)) {
+            if (method_exists($object, $method)) {
                 $object->$method($item);
             }
         }
@@ -160,6 +158,7 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
      * to camel case 'sampleKey'
      *
      * @param array $data
+     *
      * @return array
      */
     protected function convertToCamelCase($data)
@@ -182,15 +181,15 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
 
     /**
      * @param Customer $object
-     * @param array $data
-     * @param mixed $format
-     * @param array $context
+     * @param array    $data
+     * @param mixed    $format
+     * @param array    $context
      */
     protected function setObjectFieldsValues(Customer $object, array $data, $format = null, array $context = array())
     {
         // format contact data
-        $data['contact'] = $this->formatContactData($data);
-        $data['account'] = $this->formatAccountData($data);
+        $data['contact']   = $this->formatContactData($data);
+        $data['account']   = $this->formatAccountData($data);
         $data['addresses'] = $data['contact']['addresses'];
 
         /** @var Contact $contact */
@@ -257,9 +256,10 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
     }
 
     /**
-     * @param $collection
+     * @param       $collection
      * @param mixed $format
      * @param array $context
+     *
      * @return mixed
      */
     protected function normalizeCollection($collection, $format = null, array $context = array())
@@ -268,12 +268,14 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
         if ($collection instanceof Collection && !$collection->isEmpty()) {
             $result = $this->serializer->normalize($collection, $format, $context);
         }
+
         return $result;
     }
 
 
     /**
      * @param $data
+     *
      * @return array
      */
     protected function formatAccountData($data)
@@ -295,10 +297,10 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             }
 
             if ($type) {
-                $account[$type]['firstName']  = $address['firstname'];
-                $account[$type]['lastName']   = $address['lastname'];
-                $account[$type]['street']     = $address['street'];
-                $account[$type]['city']       = $address['city'];
+                $account[$type]['firstName'] = $address['firstname'];
+                $account[$type]['lastName']  = $address['lastname'];
+                $account[$type]['street']    = $address['street'];
+                $account[$type]['city']      = $address['city'];
 
                 $account[$type]['postalCode'] = $address['postcode'];
                 $account[$type]['country']    = $address['country_id'];
@@ -314,77 +316,95 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
 
     /**
      * @param $data
+     *
      * @return array
      */
     protected function formatContactData($data)
     {
-        $contact = [];
-
-        $contactData = $this->convertToCamelCase($data);
+        $contact           = $this->convertToCamelCase($data);
         $contactFieldNames = [
-            'firstName',
-            'lastName',
-            'middleName',
-            'namePrefix',
-            'nameSuffix',
-            'gender',
-            'addresses',
-            'birthday',
-            'phones',
-            'emails',
+            'firstName'  => null,
+            'lastName'   => null,
+            'middleName' => null,
+            'namePrefix' => null,
+            'nameSuffix' => null,
+            'gender'     => null,
+            'addresses'  => [],
+            'birthday'   => null,
+            'phones'     => [],
+            'emails'     => [],
+        ];
+        // fill default values
+        $contact = array_merge($contactFieldNames, $contact);
+
+        $addressFields    = [
+            'firstName'  => null,
+            'lastName'   => null,
+            'middleName' => null,
+            'namePrefix' => null,
+            'nameSuffix' => null,
+            'postalCode' => null,
+            'country'    => null,
+            'region'     => null,
+            'regionText' => null,
+            'created'    => null,
+            'updated'    => null,
+            'types'      => []
+        ];
+        $addressFieldsMap = [
+            'region'     => 'regionText',
+            'region_id'  => 'region',
+            'country_id' => 'country',
+            'created_at' => 'created',
+            'updated_at' => 'updated',
+            'postcode'   => 'postalCode'
+        ];
+        $namesMap         = [
+            'firstname'  => 'first_name',
+            'lastname'   => 'last_name',
+            'middlename' => 'middle_name',
+            'prefix'     => 'name_prefix',
+            'suffix'     => 'name_suffix',
         ];
 
-        // format contact data
-        foreach ($contactFieldNames as $fieldName) {
-            $contact[$fieldName] = empty($contactData[$fieldName]) ? null : $contactData[$fieldName];
-        }
-
-        // format contact addresses data
-        $contact['addresses'] = empty($contact['addresses']) ? [] : $contact['addresses'];
         foreach ($contact['addresses'] as $key => $address) {
-            // fill address with contact info
-            $contact['addresses'][$key] = array_merge($contact['addresses'][$key], $contact);
-            unset($contact['addresses'][$key]['addresses']);
-
-            // TODO: make sure this works after CRM-185
-            $contact['addresses'][$key] = array_merge(
-                $contact['addresses'][$key],
-                [
-                    'postalCode' => $contact['addresses'][$key]['postcode'],
-                    'country'    => $contact['addresses'][$key]['country_id'],
-                    'regionText' => isset($contact['addresses'][$key]['region'])
-                            ? $contact['addresses'][$key]['region'] : null,
-                    'region'     => isset($contact['addresses'][$key]['region_id'])
-                            ? $contact['addresses'][$key]['region_id'] : null,
-                    'created'    => $contact['addresses'][$key]['created_at'],
-                    'updated'    => $contact['addresses'][$key]['updated_at'],
-                ]
-            );
+            // process keys that will not be camelized correctly
+            $address = $this->mapParams($namesMap, $address);
+            $address = $this->convertToCamelCase($address);
+            $address = $this->mapParams($addressFieldsMap, $address);
+            $address = array_merge($addressFields, $address);
+            //merge firstName and lastName from contact in case when it's not filled in address
+            $address = array_merge(array_intersect_key(array_flip(['firstName', 'lastName']), $contact), $address);
 
             // prepare address types
-            if (!empty($contact['addresses'][$key]['is_default_shipping'])) {
-                $contact['addresses'][$key]['types'][] = 'shipping';
+            if (!empty($address['isDefaultShipping'])) {
+                $address['types'][] = 'shipping';
             }
-            if (!empty($contact['addresses'][$key]['is_default_billing'])) {
-                $contact['addresses'][$key]['types'][] = 'billing';
+            if (!empty($address['isDefaultBilling'])) {
+                $address['types'][] = 'billing';
             }
 
-            if (!empty($contact['addresses'][$key]['telephone'])) {
-                $contact['phones'][] = $contact['addresses'][$key]['telephone'];
+            if (!empty($address['telephone'])
+                && !in_array($address['telephone'], $contact['phones'])
+            ) {
+                $contact['phones'][] = $address['telephone'];
             }
+            $contact['addresses'][$key] = $address;
         }
 
-        $contact['emails'] = [$contactData['email']];
+        $contact['emails'][] = $contact['email'];
+        unset($contact['email']);
 
         return $contact;
     }
 
     /**
-     * @param array $data
+     * @param array  $data
      * @param string $name
      * @param string $type
-     * @param mixed $format
-     * @param array $context
+     * @param mixed  $format
+     * @param array  $context
+     *
      * @return null|object
      */
     protected function denormalizeObject(array $data, $name, $type, $format = null, $context = array())
@@ -394,6 +414,7 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             $result = $this->serializer->denormalize($data[$name], $type, $format, $context);
 
         }
+
         return $result;
     }
 
@@ -401,7 +422,8 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
      * Used in export
      *
      * @param mixed $data
-     * @param null $format
+     * @param null  $format
+     *
      * @return bool
      */
     public function supportsNormalization($data, $format = null)
@@ -412,13 +434,36 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
     /**
      * Used in import
      *
-     * @param mixed $data
+     * @param mixed  $data
      * @param string $type
-     * @param null $format
+     * @param null   $format
+     *
      * @return bool
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
         return is_array($data) && $type == 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
+    }
+
+    /**
+     * Process params mapping
+     *
+     * @param array $map
+     * @param array $params
+     *
+     * @return array
+     */
+    protected function mapParams($map, $params)
+    {
+        $keys = [];
+        foreach (array_keys($params) as $key) {
+            if (isset($map[$key])) {
+                $keys[] = $map[$key];
+            } else {
+                $keys[] = $key;
+            }
+        }
+
+        return array_combine($keys, array_values($params));
     }
 }

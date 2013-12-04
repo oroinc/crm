@@ -395,6 +395,7 @@ class Customer extends BasePerson implements FullNameInterface
 
     /**
      * @param int $originId
+     *
      * @return Address|false
      */
     public function getAddressByOriginId($originId)
@@ -403,7 +404,6 @@ class Customer extends BasePerson implements FullNameInterface
             function ($item) use ($originId) {
                 return $item->getOriginId() == $originId;
             }
-        )
-            ->first();
+        )->first();
     }
 }

@@ -20,7 +20,10 @@ class CallControllerTest extends WebTestCase
     public function setUp()
     {
         $this->client = static::createClient(array(), ToolsAPI::generateBasicHeader());
-        $this->client = static::createClient(array(), array_merge(ToolsAPI::generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1)));
+        $this->client = static::createClient(
+            array(),
+            array_merge(ToolsAPI::generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
+        );
     }
     
     public function testIndex()

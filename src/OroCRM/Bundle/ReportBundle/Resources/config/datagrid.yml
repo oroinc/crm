@@ -92,7 +92,7 @@ datagrid:
         pageTitle: "Account life time value"
         source:
             type: orm
-            acl_resource: orocrm_reports
+            acl_resource: orocrm_report_view
             query:
                 select:
                     - a.name
@@ -140,7 +140,7 @@ datagrid:
         pageTitle: "Accounts by opportunities"
         source:
             type: orm
-            acl_resource: orocrm_reports
+            acl_resource: orocrm_report_view
             query:
                 from:
                     - { table: OroCRMSalesBundle:Opportunity, alias: o }
@@ -206,7 +206,7 @@ datagrid:
         pageTitle: "Number leads by date"
         source:
             type: orm
-            acl_resource: orocrm_reports
+            acl_resource: orocrm_report_view
             query:
                 select:
                     - COUNT(l.id) as leadsCount
@@ -233,7 +233,7 @@ datagrid:
         pageTitle: "Opportunities by step"
         source:
             type: orm
-            acl_resource: orocrm_reports
+            acl_resource: orocrm_report_view
             query:
                 from:
                     - { table: OroCRMReportBundle:OpportunityByWorkflowItem, alias: owi }
@@ -300,7 +300,7 @@ datagrid:
         pageTitle: "Won opportunities by date period"
         source:
             type: orm
-            acl_resource: orocrm_reports
+            acl_resource: orocrm_report_view
             query:
                 from:
                     - { table: OroCRMSalesBundle:Opportunity, alias: o }

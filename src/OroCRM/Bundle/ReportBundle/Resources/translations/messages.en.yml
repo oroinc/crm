@@ -14,6 +14,12 @@ orocrm:
                 close_revenue:     Close Revenue
                 budget_amount:     Budget Amount
                 workflow:          Workflow
+                wonCount:          Number Won
+                lostCount:         Number Lost
+                inProgressCount:   Number In Progress
+                totalOps:          Total
+
+
         form:
             choose_report_type:    Choose a report type...
         controller:

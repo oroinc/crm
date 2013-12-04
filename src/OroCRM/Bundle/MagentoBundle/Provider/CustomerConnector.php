@@ -8,7 +8,7 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 
 class CustomerConnector extends AbstractConnector implements CustomerConnectorInterface
 {
-    const DEFAULT_SYNC_RANGE  = '1 week';
+    const DEFAULT_SYNC_RANGE  = '2 day';
 
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer';
     const CONNECTOR_LABEL     = 'orocrm.magento.connector.customer.label';
