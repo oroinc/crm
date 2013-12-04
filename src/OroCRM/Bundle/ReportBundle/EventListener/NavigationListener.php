@@ -45,6 +45,7 @@ class NavigationListener
                 ->findBy([], ['name' => 'ASC']);
             //todo: Add ACL Access level protection
             if (!empty($reports)) {
+                $this->addDivider($reportsMenuItem);
                 $reportMenuData = [];
                 foreach ($reports as $report) {
                     $config      = $this->entityConfigProvider->getConfig($report->getEntity());
@@ -85,6 +86,18 @@ class NavigationListener
                     );
             }
         }
+    }
+
+    /**
+     * Adds a divider to the given menu
+     *
+     * @param ItemInterface $menu
+     */
+    protected function addDivider(ItemInterface $menu)
+    {
+        $menu->addChild('divider-' . rand(1, 99999))
+            ->setLabel('')
+            ->setAttribute('class', 'divider');
     }
 
     /**

@@ -17,9 +17,10 @@ class CallTypeTest extends FormIntegrationTestCase
     {
         parent::setUp();
 
-        $contactPhoneSubscriber = $this->getMockBuilder('OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber')
-                                       ->disableOriginalConstructor()
-                                       ->getMock();
+        $contactPhoneSubscriber =
+            $this->getMockBuilder('OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber')
+                ->disableOriginalConstructor()
+                ->getMock();
 
         $this->type = new CallType($contactPhoneSubscriber);
     }
