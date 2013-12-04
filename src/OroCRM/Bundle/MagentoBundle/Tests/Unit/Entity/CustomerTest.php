@@ -53,6 +53,6 @@ class CustomerTest extends AbstractEntityTestCase
         $this->entity->addAddress($this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Address'));
 
         $this->assertInstanceOf('Doctrine\Common\Collections\Collection', $this->entity->getAddresses());
-        $this->assertFalse($this->entity->getAddressByOriginId(1));
+        $this->assertFalse($this->entity->getAddressByOriginalId(1));
     }
 }

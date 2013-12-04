@@ -12,6 +12,7 @@ datagrid:
                     - c.createdAt
                     - c.updatedAt
                     - cg.name as groupName
+                    - ch.name as channelName
                     - cw.name as websiteName
                 from:
                     - { table: OroCRMMagentoBundle:Customer , alias: c }
@@ -19,6 +20,7 @@ datagrid:
                     left:
                         - { join: c.group, alias: cg }
                         - { join: c.website, alias: cw }
+                        - { join: c.channel, alias: ch }
         columns:
             firstName:
                 label: orocrm.magento.datagrid.columns.first_name
@@ -28,6 +30,8 @@ datagrid:
                 label: orocrm.magento.datagrid.columns.email
             groupName:
                 label: orocrm.magento.datagrid.columns.group
+            channelName:
+                label: orocrm.magento.datagrid.columns.channel
             websiteName:
                 label: orocrm.magento.datagrid.columns.website
             createdAt:
@@ -48,6 +52,7 @@ datagrid:
                 lastName:    { data_name: c.lastName }
                 email:       { data_name: c.email }
                 groupName:   { data_name: cg.name }
+                channelName: { data_name: channelName }
                 websiteName: { data_name: cw.name }
                 createdAt:   { data_name: c.createdAt }
                 updatedAt:   { data_name: c.updatedAt }
@@ -71,6 +76,13 @@ datagrid:
                     options:
                         field_options:
                           class: OroCRMMagentoBundle:CustomerGroup
+                          property: name
+                channelName:
+                    type: entity
+                    data_name: cw
+                    options:
+                        field_options:
+                          class: OroIntegrationBundle:Channel
                           property: name
                 websiteName:
                     type: entity

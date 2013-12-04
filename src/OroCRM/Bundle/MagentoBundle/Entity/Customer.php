@@ -20,7 +20,9 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
- * @ORM\Table(name="orocrm_magento_customer")
+ * @ORM\Table(name="orocrm_magento_customer",
+ *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_original_id_channel_id", columns={"original_id", "channel_id"})}
+ * )
  * @Config(
  *  routeName="orocrm_magento_customer_index",
  *  routeView="orocrm_magento_customer_view",
@@ -106,7 +108,7 @@ class Customer extends BasePerson implements FullNameInterface
     /**
      * @var \DateTime $createdAt
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", name="created_at")
      * @Oro\Versioned
      */
     protected $createdAt;
@@ -114,7 +116,7 @@ class Customer extends BasePerson implements FullNameInterface
     /**
      * @var \DateTime $updatedAt
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", name="updated_at")
      * @Oro\Versioned
      */
     protected $updatedAt;
@@ -172,7 +174,7 @@ class Customer extends BasePerson implements FullNameInterface
     /**
      * @var boolean
      *
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", name="is_active")
      */
     protected $isActive = false;
 
@@ -187,7 +189,7 @@ class Customer extends BasePerson implements FullNameInterface
     /**
      * @var integer
      *
-     * @ORM\Column(type="integer", options={"unsigned"=true})
+     * @ORM\Column(type="integer", options={"unsigned"=true}, name="original_id")
      */
     protected $originalId;
 
@@ -384,15 +386,15 @@ class Customer extends BasePerson implements FullNameInterface
     }
 
     /**
-     * @param int $originId
+     * @param int $originalId
      *
      * @return Address|false
      */
-    public function getAddressByOriginId($originId)
+    public function getAddressByOriginalId($originalId)
     {
         return $this->addresses->filter(
-            function ($item) use ($originId) {
-                return $item->getOriginId() == $originId;
+            function ($item) use ($originalId) {
+                return $item->getOriginalId() == $originalId;
             }
         )->first();
     }

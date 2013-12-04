@@ -24,7 +24,9 @@ use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
  */
 class Address extends AbstractTypedAddress
 {
-
+    /*
+     * FIELDS are duplicated to enable dataaudit only for customer address fields
+     */
     /**
      * @var string
      *
@@ -146,9 +148,9 @@ class Address extends AbstractTypedAddress
     /**
      * @var integer
      *
-     * @ORM\Column(name="origin_id", type="integer")
+     * @ORM\Column(name="original_id", type="integer")
      */
-    protected $originId;
+    protected $originalId;
 
     /**
      * Set contact as owner.
@@ -171,13 +173,13 @@ class Address extends AbstractTypedAddress
     }
 
     /**
-     * @param int $originId
+     * @param int $originalId
      *
      * @return $this
      */
-    public function setOriginId($originId)
+    public function setOriginalId($originalId)
     {
-        $this->originId = $originId;
+        $this->originalId = $originalId;
 
         return $this;
     }
@@ -185,8 +187,8 @@ class Address extends AbstractTypedAddress
     /**
      * @return int
      */
-    public function getOriginId()
+    public function getOriginalId()
     {
-        return $this->originId;
+        return $this->originalId;
     }
 }
