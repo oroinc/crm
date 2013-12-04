@@ -2,9 +2,10 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Common\Util\ClassUtils;
+use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
@@ -53,7 +54,6 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
 
     /** @var array */
     protected $groupEntityCache = [];
-
 
     /**
      * @param ImportStrategyHelper $strategyHelper
@@ -123,6 +123,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
                 $doNotUpdateFields
             );
         }
+        $this->websiteEntityCache[$website->getCode()] = $this->merge($this->websiteEntityCache[$website->getCode()]);
 
         if (!isset($this->storeEntityCache[$store->getCode()])) {
             $this->storeEntityCache[$store->getCode()] = $this->findAndReplaceEntity(
@@ -132,6 +133,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
                 $doNotUpdateFields
             );
         }
+        $this->storeEntityCache[$store->getCode()] = $this->merge($this->storeEntityCache[$store->getCode()]);
 
         if (!isset($this->groupEntityCache[$group->getName()])) {
             $this->groupEntityCache[$group->getName()] = $this->findAndReplaceEntity(
@@ -141,6 +143,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
                 $doNotUpdateFields
             );
         }
+        $this->groupEntityCache[$group->getName()] = $this->merge($this->groupEntityCache[$group->getName()]);
 
         $entity
             ->setWebsite($this->websiteEntityCache[$website->getCode()])
@@ -346,6 +349,21 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     }
 
     /**
+     * @param $entity
+     *
+     * @return object
+     */
+    protected function merge($entity)
+    {
+        $em = $this->getEntityManager(ClassUtils::getClass($entity));
+        if ($em->getUnitOfWork()->getEntityState($entity) !== UnitOfWork::STATE_MANAGED) {
+            $entity = $em->merge($entity);
+        }
+
+        return $entity;
+    }
+
+    /**
      * @param AbstractTypedAddress $address
      * @return $this
      */
@@ -358,8 +376,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         }
 
         $address->getTypes()->clear();
-        $loadedTypes = $this->getEntityRepository('OroAddressBundle:AddressType')
-            ->findBy(['name' => $types]);
+        $loadedTypes = $this->getEntityRepository('OroAddressBundle:AddressType')->findBy(['name' => $types]);
 
         foreach ($loadedTypes as $type) {
             $address->addType($type);
@@ -377,6 +394,9 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      */
     protected function updateAddressCountryRegion(AbstractAddress $address, $mageRegionId)
     {
+        /*
+         * @TODO review this implementation
+         */
         $countryCode = $address->getCountry()->getIso2Code();
 
         $country = $this->getAddressCountryByCode($address, $countryCode);
@@ -385,8 +405,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         if (!empty($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId])) {
             $this->mageRegionsCache[$mageRegionId] = $this->getEntityRepository(
                 'OroCRM\Bundle\MagentoBundle\Entity\Region'
-            )
-            ->findOneBy(['regionId' => $mageRegionId]);
+            )->findOneBy(['regionId' => $mageRegionId]);
         }
 
         if (!empty($this->mageRegionsCache[$mageRegionId])) {
@@ -396,7 +415,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             // set ISO combined code
             $address->getRegion()->setCombinedCode($combinedCode);
 
-            $this->regionsCache[$countryCode] = empty($this->regionsCache[$combinedCode]) ?
+            $this->regionsCache[$combinedCode] = empty($this->regionsCache[$combinedCode]) ?
                 $this->getEntityOrNull(
                     $address->getRegion(),
                     'combinedCode',
@@ -408,9 +427,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             if (empty($this->regionsCache[$combinedCode])) {
                 $address->setRegion(null);
             } else {
-                $region                            = $this->regionsCache[$combinedCode];
-                $em                                = $this->getEntityManager(ClassUtils::getClass($region));
-                $this->regionsCache[$combinedCode] = $em->merge($region);
+                $this->regionsCache[$combinedCode] = $this->merge($this->regionsCache[$combinedCode]);
                 $address->setRegion($this->regionsCache[$combinedCode]);
                 $address->setRegionText(null);
             }
@@ -428,23 +445,19 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      */
     protected function getAddressCountryByCode(AbstractAddress $address, $countryCode)
     {
-        $country = empty($this->countriesCache[$countryCode]) ?
-            $this->findAndReplaceEntity(
+        $this->countriesCache[$countryCode] = empty($this->countriesCache[$countryCode])
+            ? $this->findAndReplaceEntity(
                 $address->getCountry(),
                 'Oro\Bundle\AddressBundle\Entity\Country',
                 'iso2Code',
                 ['iso2Code', 'iso3Code', 'name']
-            ) :
-            $this->countriesCache[$countryCode];
+            )
+            : $this->merge($this->countriesCache[$countryCode]);
 
         if (empty($this->countriesCache[$countryCode])) {
             throw new InvalidItemException(sprintf('Unable to find country by code "%s"', $countryCode), []);
         }
 
-        $em                                 = $this->getEntityManager(ClassUtils::getClass($country));
-        $country                            = $em->merge($country);
-        $this->countriesCache[$countryCode] = $country;
-
-        return $country;
+        return $this->countriesCache[$countryCode];
     }
 }
