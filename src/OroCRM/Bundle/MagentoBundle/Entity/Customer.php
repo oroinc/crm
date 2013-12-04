@@ -170,6 +170,16 @@ class Customer extends BasePerson implements FullNameInterface
     protected $addresses;
 
     /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Cart",
+     *     mappedBy="customer", cascade={"all"}, orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"primary" = "DESC"})
+     */
+    protected $carts;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(type="boolean")
