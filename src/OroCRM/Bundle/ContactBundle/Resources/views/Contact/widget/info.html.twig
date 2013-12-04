@@ -54,8 +54,6 @@
 <div class="widget-content contact-info form-horizontal box-content">
     <div class="responsive-block">
         <div class="control-group">
-            {#<label class="control-label">{% trans %}Phones{% endtrans %}</label>#}
-            {#<label class="control-label">{{ 'Phones'|trans }}</label>#}
             <label class="control-label">{{ 'oroCRM.contact.phones'|trans }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
@@ -71,7 +69,6 @@
         </div>
 
         <div class="control-group">
-            {#<label class="control-label">{% trans %}Emails{% endtrans %}</label>#}
             <label class="control-label">{{ 'oroCRM.contact.emails'|trans }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
@@ -86,10 +83,10 @@
             </div>
         </div>
 
-        {{ _self.renderRow('Fax'|trans, entity.fax) }}
+        {{ _self.renderRow('oroCRM.contact.fax'|trans, entity.fax) }}
 
         <div class="control-group">
-            <label class="control-label">{% trans %}Skype{% endtrans %}</label>
+            <label class="control-label">{{ 'oroCRM.contact.skype'|trans }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
                     <p class="control-label">
@@ -103,38 +100,38 @@
             </div>
         </div>
 
-        {{ _self.renderRow('Contact Method'|trans, entity.method) }}
+        {{ _self.renderRow('oroCRM.contact.method'|trans, entity.method) }}
 
         <div class="control-group">
-            <label class="control-label">{% trans %}Social{% endtrans %}</label>
+            <label class="control-label">{{ 'oroCRM.contact.social'|trans }}</label>
             <div class="controls">
                 <div class="control-label">
                     {% if entity.twitter or entity.facebook or entity.googlePlus or entity.linkedIn %}
                     <ul class="list-inline">
                         {% if entity.twitter %}
                             <li>
-                                <a class="no-hash" href="{{ _self.getSocialUrl('twitter', entity.twitter) }}" target="_blank" title="Twitter">
+                                <a class="no-hash" href="{{ _self.getSocialUrl('oroCRM.contact.twitter'|trans, entity.twitter) }}" target="_blank" title="Twitter">
                                     <i class="icon-twitter"></i>
                                 </a>
                             </li>
                         {% endif %}
                         {% if entity.facebook %}
                             <li>
-                                <a class="no-hash" href="{{ _self.getSocialUrl('facebook', entity.facebook) }}" target="_blank" title="Facebook">
+                                <a class="no-hash" href="{{ _self.getSocialUrl('oroCRM.contact.facebook'|trans, entity.facebook) }}" target="_blank" title="Facebook">
                                     <i class="icon-facebook"></i>
                                 </a>
                             </li>
                         {% endif %}
                         {% if entity.googlePlus %}
                             <li>
-                                <a class="no-hash" href="{{ _self.getSocialUrl('google_plus', entity.googlePlus) }}" target="_blank" title="Google+">
+                                <a class="no-hash" href="{{ _self.getSocialUrl('oroCRM.contact.google_plus'|trans, entity.googlePlus) }}" target="_blank" title="Google+">
                                     <i class="icon-google-plus"></i>
                                 </a>
                             </li>
                         {% endif %}
                         {% if entity.linkedIn %}
                             <li>
-                                <a class="no-hash" href="{{ _self.getSocialUrl('linked_in', entity.linkedIn) }}" target="_blank" title="LinkedIn">
+                                <a class="no-hash" href="{{ _self.getSocialUrl('oroCRM.contact.linked_in'|trans, entity.linkedIn) }}" target="_blank" title="LinkedIn">
                                     <i class="icon-linkedin"></i>
                                 </a>
                             </li>
@@ -172,10 +169,10 @@
     </div>
 
     <div class="responsive-block">
-        {{ _self.renderRow('Job Title'|trans, entity.jobTitle) }}
+        {{ _self.renderRow('oroCRM.contact.job_title'|trans, entity.jobTitle) }}
 
         <div class="control-group">
-            <label class="control-label">{% trans %}Companies{% endtrans %}</label>
+            <label class="control-label">{{ 'oroCRM.contact.companies'|trans }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
                     <p class="control-label">
@@ -198,7 +195,7 @@
         </div>
 
         <div class="control-group">
-            <label class="control-label">{% trans %}Birthday{% endtrans %}</label>
+            <label class="control-label">{{ 'oroCRM.contact.birthday'|trans }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
                     <p class="control-label">
@@ -211,11 +208,11 @@
             </div>
         </div>
 
-        {{ _self.renderRow('Gender'|trans, oro_gender(entity.gender)) }}
-        {{ _self.renderRow('Source'|trans, entity.source) }}
+        {{ _self.renderRow('oroCRM.contact.gender'|trans, oro_gender(entity.gender)) }}
+        {{ _self.renderRow('oroCRM.contact.source'|trans, entity.source) }}
 
         <div class="control-group">
-            <label class="control-label">{% trans %}Assigned to{% endtrans %}</label>
+            <label class="control-label">{{ 'oroCRM.contact.assigned_to'|trans }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
                     <p class="control-label">
@@ -236,7 +233,7 @@
         </div>
 
         <div class="control-group">
-            <label class="control-label">{% trans %}Reports to{% endtrans %}</label>
+            <label class="control-label">{{ 'oroCRM.contact.reports_to'|trans }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
                     <p class="control-label">
@@ -253,7 +250,7 @@
         </div>
 
         <div class="control-group">
-            <label class="control-label">{% trans %}Groups{% endtrans %}</label>
+            <label class="control-label">{{ 'oroCRM.contact.groups'|trans }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
                     <p class="control-label">
@@ -268,7 +265,7 @@
         </div>
 
         <div class="control-group">
-            <label class="control-label">{% trans %}Tags{% endtrans %}</label>
+            <label class="control-label">{{ 'oroCRM.contact.tags'|trans  }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
                     {{ _tag.renderView(entity) }}

@@ -23,3 +23,10 @@ orocrm.contact.datagrid.selected_rows: Selected Rows
 orocrm.contact.datagrid.view: View
 orocrm.contact.datagrid.update: Update
 orocrm.contact.datagrid.delete: Delete
+
+oroCRM.contact.phones: Phones
+oroCRM.contact.emails: Emails
+oroCRM.contact.skype:  Skype
+oroCRM.contact.fax:    Fax
+oroCRM.contact.method: Contact Method
+oroCRM.contact.social: Social
