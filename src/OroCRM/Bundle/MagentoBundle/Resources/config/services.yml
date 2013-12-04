@@ -4,6 +4,7 @@ parameters:
     orocrm_magento.region.entity.class:                                   OroCRM\Bundle\MagentoBundle\Entity\Region
     orocrm_magento.mage.customer_connector.class:                         OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector
     orocrm_magento.mage.store_connector.class:                            OroCRM\Bundle\MagentoBundle\Provider\StoreConnector
+    orocrm_magento.mage.cart_connector.class:                             OroCRM\Bundle\MagentoBundle\Provider\CartConnector
     orocrm_magento.mage.soap_transport.class:                             OroCRM\Bundle\MagentoBundle\Provider\MageSoapTransport
 
     orocrm_magento.importexport.normalizer.customer.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerNormalizer
@@ -27,6 +28,7 @@ services:
         tags:
             - { name: oro_integration.transport, type: magento_soap, channel_type: magento }
 
+    # Connectors
     orocrm_magento.mage.customer_connector:
         class: %orocrm_magento.mage.customer_connector.class%
         arguments:
@@ -47,7 +49,12 @@ services:
         tags:
           - { name: oro_integration.connector, type: region, channel_type: magento }
 
-    # customer normalizer/denormalizer
+    orocrm_magento.mage.cart_connector:
+        class: %orocrm_magento.mage.cart_connector.class%
+        tags:
+          - { name: oro_integration.connector, type: cart, channel_type: magento }
+
+    # ImportExport normalizers
     orocrm_magento.importexport.normalizer.customer:
         class: %orocrm_magento.importexport.normalizer.customer.class%
         tags:
@@ -69,7 +76,7 @@ services:
         tags:
             - { name: oro_importexport.normalizer, priority: -10 }
 
-    # strategy
+    # ImportExport strategies
     orocrm_magento.import.strategy.customer.add_or_update:
         class: %orocrm_magento.import_strategy.customer.add_or_update.class%
         arguments:
@@ -80,7 +87,7 @@ services:
         arguments:
             - @oro_importexport.strategy.import.helper
 
-    # import processor
+    # ImportExport processors
     orocrm_magento.importexport.processor.import_customer:
         parent: oro_importexport.processor.import_abstract
         calls:
@@ -99,6 +106,7 @@ services:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.region.entity.class%, alias: orocrm_magento.add_or_update_region }
             - { name: oro_importexport.processor, type: import_validation, entity: %orocrm_magento.region.entity.class%, alias: orocrm_magento.add_or_update_region }
 
+    # ImportExport readers
     orocrm_magento.import.customer_reader.magento_api:
         class: %oro_integration.import.api_reader.class%
         arguments:
@@ -111,6 +119,13 @@ services:
             - @oro_importexport.context_registry
             - @orocrm_magento.mage.region_connector
 
+    orocrm_magento.import.cart_reader.magento_api:
+        class: %oro_integration.import.api_reader.class%
+        arguments:
+            - @oro_importexport.context_registry
+            - @orocrm_magento.mage.cart_connector
+
+    # Providers and subscribers
     orocrm_magento.provider.channel_type:
         class: %orocrm_magento.provider.channel_type.class%
         tags:

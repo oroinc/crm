@@ -10,7 +10,9 @@ use Doctrine\Common\Collections\Collection;
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
- * @ORM\Table(name="orocrm_magento_cart")
+ * @ORM\Table(name="orocrm_magento_cart", indexes={
+ *      @ORM\Index(name="magecart_origin_idx", columns={"origin_id"})
+ * })
  */
 class Cart
 {

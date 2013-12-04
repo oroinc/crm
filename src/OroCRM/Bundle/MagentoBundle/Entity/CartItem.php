@@ -9,7 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
- * @ORM\Table(name="orocrm_magento_cart_item")
+ * @ORM\Table(name="orocrm_magento_cart_item", indexes={
+ *      @ORM\Index(name="magecartitem_origin_idx", columns={"origin_id"}),
+ *      @ORM\Index(name="magecartitem_sku_idx", columns={"sku"}),*
+ * })
  */
 class CartItem
 {
