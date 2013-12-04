@@ -20,18 +20,9 @@ orocrm:
                 totalOps:          Total
 
 
-        form:
-            choose_report_type:    Choose a report type...
         controller:
             report:
-                saved:             Report saved
-                deleted:           Report deleted
                 wonCount:          Number Won
                 lostCount:         Number Lost
                 inProgressCount:   Number In Progress
                 totalOps:          Total
-        type:
-            table: Table
-"Reports": Reports
-"Delete report": Delete report
-"Are you sure you want to delete this report?": Are you sure you want to delete this report?
