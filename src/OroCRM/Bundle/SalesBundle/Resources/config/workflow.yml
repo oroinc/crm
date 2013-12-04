@@ -106,9 +106,9 @@ workflows:
                         message: "Company name or account must be selected."
                 post_actions: # set lead.status = "qualified"
                     - @find_entity:
-                          class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
-                          identifier: 'qualified'
-                          attribute: $lead.status
+                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                        identifier: 'qualified'
+                        attribute: $lead.status
                     - @tree: # create Contact entity
                         conditions: # if contact not specified
                             @empty: $lead.contact
