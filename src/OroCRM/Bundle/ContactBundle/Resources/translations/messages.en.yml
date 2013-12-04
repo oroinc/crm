@@ -23,22 +23,3 @@ orocrm.contact.datagrid.selected_rows: Selected Rows
 orocrm.contact.datagrid.view: View
 orocrm.contact.datagrid.update: Update
 orocrm.contact.datagrid.delete: Delete
-
-#
-# Entity Config Labels
-#
-oroCRM.contact.first_name: First Name
-
-oroCRM.contact.phones:     Phones
-oroCRM.contact.emails:     Emails
-oroCRM.contact.fax:        Fax
-oroCRM.contact.skype:      Skype
-
-#
-# Backward compatibility
-#
-#"First Name": %oroCRM.contact.first_name%
-#"Fax":        %oroCRM.contact.fax%
-#"Skype":      %oroCRM.contact.skype%
-#"Emails":     %oroCRM.contact.emails%
-#"Phones":     %oroCRM.contact.phones%
