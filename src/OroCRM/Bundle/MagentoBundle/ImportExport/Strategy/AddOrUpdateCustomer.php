@@ -2,15 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\BatchBundle\Item\InvalidItemException;
-use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
-use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
