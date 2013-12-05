@@ -10,6 +10,7 @@ orocrm:
                 email:      Email
                 phone:      Phone
                 group:      Group
+                channel:    Channel
                 website:    Website
                 created_at: Created At
                 updated_at: Updated At

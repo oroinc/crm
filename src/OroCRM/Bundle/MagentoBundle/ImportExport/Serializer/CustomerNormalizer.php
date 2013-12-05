@@ -285,18 +285,15 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
         $account['name'] = sprintf("%s %s", $data['first_name'], $data['last_name']);
 
         foreach ($data['addresses'] as $address) {
-            $type = false;
-
-            // prepare address types
+            $types = [];
             if (!empty($address['is_default_shipping'])) {
-                $type = AddressType::TYPE_SHIPPING . '_address';
+                $types[] = AddressType::TYPE_SHIPPING . '_address';
             }
-
             if (!empty($address['is_default_billing'])) {
-                $type = AddressType::TYPE_BILLING . '_address';
+                $types[] = AddressType::TYPE_BILLING . '_address';
             }
 
-            if ($type) {
+            foreach ($types as $type) {
                 $account[$type]['firstName'] = $address['firstname'];
                 $account[$type]['lastName']  = $address['lastname'];
                 $account[$type]['street']    = $address['street'];
@@ -352,14 +349,14 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             'types'      => []
         ];
         $addressFieldsMap = [
-            'region'     => 'regionText',
-            'region_id'  => 'region',
-            'country_id' => 'country',
-            'created_at' => 'created',
-            'updated_at' => 'updated',
-            'postcode'   => 'postalCode'
+            'region'    => 'regionText',
+            'regionId'  => 'region',
+            'countryId' => 'country',
+            'createdAt' => 'created',
+            'updatedAt' => 'updated',
+            'postcode'  => 'postalCode'
         ];
-        $namesMap         = [
+        $namesMap = [
             'firstname'  => 'first_name',
             'lastname'   => 'last_name',
             'middlename' => 'middle_name',
@@ -378,10 +375,10 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
 
             // prepare address types
             if (!empty($address['isDefaultShipping'])) {
-                $address['types'][] = 'shipping';
+                $address['types'][] = AddressType::TYPE_SHIPPING;
             }
             if (!empty($address['isDefaultBilling'])) {
-                $address['types'][] = 'billing';
+                $address['types'][] = AddressType::TYPE_BILLING;
             }
 
             if (!empty($address['telephone'])

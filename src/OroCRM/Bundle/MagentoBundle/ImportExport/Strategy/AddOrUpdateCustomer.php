@@ -200,8 +200,8 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
 
             $originAddressId = $address->getId();
-            $address->setOriginId($originAddressId);
-            $existingAddress = $entity->getAddressByOriginId($originAddressId);
+            $address->setOriginalId($originAddressId);
+            $existingAddress = $entity->getAddressByOriginalId($originAddressId);
 
             if ($existingAddress) {
                 $this->strategyHelper->importEntity($existingAddress, $address, ['id', 'region', 'country']);
