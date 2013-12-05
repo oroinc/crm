@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseProduct;
@@ -78,7 +79,23 @@ class Product extends BaseProduct
     protected $price;
 
     /**
-     * @var Website
+     * @var \DateTime $createdAt
+     *
+     * @ORM\Column(type="datetime", name="created_at")
+     * @Oro\Versioned
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime $updatedAt
+     *
+     * @ORM\Column(type="datetime", name="updated_at")
+     * @Oro\Versioned
+     */
+    protected $updatedAt;
+
+    /**
+     * @var Website[]|ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website", cascade="PERSIST")
      * @ORM\JoinTable(name="orocrm_magento_product_to_website",
@@ -86,16 +103,76 @@ class Product extends BaseProduct
      *      inverseJoinColumns={@ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
-    protected $website;
+    protected $websites;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(type="integer", options={"unsigned"=true}, name="original_id")
+     */
+    protected $originalId;
+
+    public function __construct()
+    {
+        $this->websites = new ArrayCollection();
+    }
+
+    /**
+     * @param float $specialPrice
+     *
+     * @return $this
+     */
+    public function setSpecialPrice($specialPrice)
+    {
+        $this->specialPrice = $specialPrice;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSpecialPrice()
+    {
+        return $this->specialPrice;
+    }
 
     /**
      * @param Website $website
      *
      * @return $this
      */
-    public function setWebsite(Website $website)
+    public function addWebsite(Website $website)
     {
-        $this->website = $website;
+        if (!$this->websites->contains($website)) {
+            $this->websites->add($website);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Website $website
+     *
+     * @return $this
+     */
+    public function removeWebsite(Website $website)
+    {
+        if ($this->websites->contains($website)) {
+            $this->websites->remove($website);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Website[] $websites
+     *
+     * @return $this
+     */
+    public function setWebsites(array $websites)
+    {
+        $this->websites = new ArrayCollection($websites);
 
         return $this;
     }
@@ -103,8 +180,28 @@ class Product extends BaseProduct
     /**
      * @return Website
      */
-    public function getWebsite()
+    public function getWebsites()
     {
-        return $this->website;
+        return $this->websites;
+    }
+
+    /**
+     * @param int $originalId
+     *
+     * @return $this
+     */
+    public function setOriginalId($originalId)
+    {
+        $this->originalId = $originalId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOriginalId()
+    {
+        return $this->originalId;
     }
 }

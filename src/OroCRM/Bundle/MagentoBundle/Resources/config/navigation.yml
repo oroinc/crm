@@ -22,11 +22,11 @@ oro_menu_config:
     tree:
         application_menu:
             children:
-                products_tab:
-                    children:
-                        channels_submenu:
-                            children:
-                                magento_product_list: ~
+                # @TODO uncomment when feature will be full implemented
+#                products_tab:
+#                    children:
+#                        channels_submenu: ~
+#                                magento_product_list: ~
                 customers_tab:
                     children:
                         channels_submenu:

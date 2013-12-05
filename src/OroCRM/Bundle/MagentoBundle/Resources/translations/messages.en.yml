@@ -5,15 +5,21 @@ orocrm:
                 view:
                     label: View
             columns:
-                first_name: First Name
-                last_name:  Last Name
-                email:      Email
-                phone:      Phone
-                group:      Group
-                channel:    Channel
-                website:    Website
-                created_at: Created At
-                updated_at: Updated At
+                first_name:   First Name
+                last_name:    Last Name
+                email:        Email
+                phone:        Phone
+                group:        Group
+                channel:      Channel
+                website:      Website
+                created_at:   Created At
+                updated_at:   Updated At
+                name:         Name
+                sku:          Sku
+                type:         Type
+                specialPrice: Special Price
+                price:        Price
+                websites:     Websites
         channel_type:
             label:  Magento
         transport:
