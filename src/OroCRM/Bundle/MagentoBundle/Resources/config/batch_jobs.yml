@@ -1,0 +1,42 @@
+connector:
+    name: oro_importexport
+    jobs:
+        mage_customer_import_validation:
+            title: "Entity Import Validation from Magento SOAP API"
+            type: import_validation
+            steps:
+                import_validation:
+                    title:     import_validation
+                    reader:    orocrm_magento.import.customer_reader.magento_api
+                    processor: oro_importexport.processor.import_validation_delegate
+                    writer:    oro_importexport.writer.doctrine_clear
+
+        mage_customer_import:
+            title: "Entity Import from Magento SOAP API"
+            type: import
+            steps:
+                import:
+                    title:     import
+                    reader:    orocrm_magento.import.customer_reader.magento_api
+                    processor: oro_importexport.processor.import_delegate
+                    writer:     oro_integration.writer.persistent_batch_writer
+
+        mage_regions_import:
+            title: "Import Magento regions via SOAP API"
+            type: import
+            steps:
+                import:
+                    title:     import
+                    reader:    orocrm_magento.import.region_reader.magento_api
+                    processor: oro_importexport.processor.import_delegate
+                    writer:    oro_integration.writer.persistent_batch_writer
+
+        mage_regions_import_validation:
+            title: "Validate Magento regions via SOAP API"
+            type: import_validation
+            steps:
+                import_validation:
+                    title:     import_validation
+                    reader:    orocrm_magento.import.region_reader.magento_api
+                    processor: oro_importexport.processor.import_validation_delegate
+                    writer:    oro_importexport.writer.doctrine_clear

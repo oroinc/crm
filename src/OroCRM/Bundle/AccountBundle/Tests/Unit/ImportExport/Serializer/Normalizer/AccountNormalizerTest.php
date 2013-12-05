@@ -71,8 +71,9 @@ class AccountNormalizerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Serializer\Exception\RuntimeException
-     * @expectedExceptionMessage Normalization with mode "full" is not supported
+     * @expectedException Symfony\Component\Intl\Exception\NotImplementedException
+     * @expectedExceptionMessage Normalization with mode "full" is not supported.
+     * Please install the "intl" extension for full localization capabilities.
      */
     public function testNormalizeFullMode()
     {
@@ -81,13 +82,14 @@ class AccountNormalizerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Serializer\Exception\RuntimeException
-     * @expectedExceptionMessage Denormalization with mode "full" is not supported
+     *
      */
-    public function testDeormalizeFullMode()
+    public function testDenormalizeFullMode()
     {
         $data = array();
-        $this->normalizer->denormalize($data, self::ACCOUNT_TYPE, null);
+        $result = $this->normalizer->denormalize($data, self::ACCOUNT_TYPE, null);
+
+        $this->assertEmpty($result->getName());
     }
 
     /**
