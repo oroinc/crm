@@ -1,0 +1,32 @@
+{% extends "OroWorkflowBundle:WorkflowStep:edit.html.twig" %}
+
+{% oro_title_set({
+    params : {
+        '%section%': 'Orders'|trans,
+        '%entity%': 'Order #'|trans ~ workflowItem.data.order.id,
+        '%workflow_data%': workflow.label ~ ' (' ~ currentStep.label ~ ')',
+    }
+}) %}
+
+{% block breadcrumb %}
+    {% set breadcrumbs = [
+        {label: 'Mocks'|trans},
+        {label: 'Orders'|trans}
+    ] %}
+    {{ parent() }}
+{% endblock %}
+
+{% block workflow_title %}
+    {% set titleParts = {
+        'indexPath':   path('orocrm_b2c_order_index'),
+        'indexLabel': 'Orders'|trans,
+        'additional': [
+            {
+                'indexPath': path('orocrm_b2c_order_view', {id:  workflowItem.data.order.id}),
+                'indexLabel': 'Order #'|trans ~ workflowItem.data.order.id
+            }
+        ],
+        'entityTitle': workflow.label ~ ' (' ~ currentStep.label ~ ')'
+    } %}
+    {{ parent() }}
+{% endblock %}
