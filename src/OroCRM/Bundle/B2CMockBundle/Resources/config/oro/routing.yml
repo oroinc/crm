@@ -1,0 +1,4 @@
+orocrm_b2c_mock_bundle:
+    resource: "@OroCRMB2CMockBundle/Controller"
+    type:     annotation
+    prefix:   /b2c
