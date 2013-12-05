@@ -23,7 +23,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 class ContactAddress extends AbstractTypedAddress
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Contact", inversedBy="addresses")
+     * @ORM\ManyToOne(targetEntity="Contact", inversedBy="addresses",cascade={"persist"})
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      */
     protected $owner;
@@ -31,7 +31,7 @@ class ContactAddress extends AbstractTypedAddress
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType")
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType",cascade={"persist"})
      * @ORM\JoinTable(
      *     name="orocrm_contact_address_to_address_type",
      *     joinColumns={@ORM\JoinColumn(name="contact_address_id", referencedColumnName="id")},

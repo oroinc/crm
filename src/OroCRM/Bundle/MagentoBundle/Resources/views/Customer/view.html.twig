@@ -1,0 +1,29 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+
+{% set fullname = entity|oro_format_name|default('N/A'|trans) %}
+{% oro_title_set({params : {"%customer.name%": fullname} }) %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('orocrm_magento_customer_index'),
+        'indexLabel': 'Customers'|trans,
+        'entityTitle': fullname
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    <div class="customer-info-col-set well-small dark-bg">
+        <div class="row-fluid well-small-bottom clearfix">
+            {{
+                oro_widget_render({
+                    'widgetType': 'block',
+                    'url':         path('orocrm_magento_customer_info', {id: entity.id}),
+                    'title':      'Customer Information'|trans
+                })
+            }}
+        </div>
+    </div>
+{% endblock content_data %}

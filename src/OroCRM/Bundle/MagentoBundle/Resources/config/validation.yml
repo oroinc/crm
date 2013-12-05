@@ -1,0 +1,10 @@
+OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
+    properties:
+        wsdlUrl:
+          - NotBlank: ~
+        apiUser:
+          - NotBlank: ~
+        syncStartDate:
+          - NotBlank: ~
+        websiteId:
+          - NotBlank: ~

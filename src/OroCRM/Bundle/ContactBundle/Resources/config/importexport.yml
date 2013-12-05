@@ -82,6 +82,6 @@ services:
     orocrm_contact.importexport.processor.export:
         parent: oro_importexport.processor.export_abstract
         calls:
-             - [setDataConverter, [@orocrm_contact.importexport.data_converter.contact]]
+            - [setDataConverter, [@orocrm_contact.importexport.data_converter.contact]]
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_contact }
