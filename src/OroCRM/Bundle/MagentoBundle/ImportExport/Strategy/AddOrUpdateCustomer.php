@@ -171,7 +171,7 @@ class AddOrUpdateCustomer extends BaseStrategy
      * @param Collection|Address[] $addresses
      * @return $this
      */
-    public function updateAddresses(Customer $entity, Collection $addresses)
+    protected function updateAddresses(Customer $entity, Collection $addresses)
     {
         /** $address - imported address */
         foreach ($addresses as $address) {
