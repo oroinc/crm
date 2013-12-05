@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
+use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 
@@ -36,12 +37,17 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /** @var StoreConnector */
     protected $storeConnector;
 
+    /** @var LoggerStrategy */
+    protected $logger;
+
     /**
      * @param StoreConnector $storeConnector
+     * @param LoggerStrategy $logger
      */
-    public function __construct(StoreConnector $storeConnector)
+    public function __construct(StoreConnector $storeConnector, LoggerStrategy $logger)
     {
         $this->storeConnector = $storeConnector;
+        $this->logger         = $logger;
     }
 
     /**
@@ -138,10 +144,8 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         if (!empty($this->customerIdsBuffer)) {
             $customerId = array_shift($this->customerIdsBuffer);
 
-            // TODO: log
             $now = new \DateTime('now', new \DateTimeZone('UTC'));
-            echo $now->format('d-m-Y H:i:s') . " loading customer ID: $customerId\n";
-
+            $this->logger->info(sprintf('[%s] loading customer ID: %d', $now->format('d-m-Y H:i:s'), $customerId));
             $data = $this->getCustomerData($customerId, true);
         } else {
             // empty record, nothing found but keep going
@@ -172,20 +176,25 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
             return null;
         }
 
-        // TODO: remove / log
-        echo sprintf(
-            '[%s] Looking for entities from %s to %s ... ',
-            $now->format('d-m-Y H:i:s'),
-            $startDate->format('d-m-Y H:i:s'),
-            $endDate->format('d-m-Y H:i:s')
+        $this->logger->info(
+            sprintf(
+                '[%s] Looking for entities from %s to %s ... ',
+                $now->format('d-m-Y H:i:s'),
+                $startDate->format('d-m-Y H:i:s'),
+                $endDate->format('d-m-Y H:i:s')
+            )
         );
 
-        $filters   = [];
-        $filters[] = $this->getBatchFilter($this->transportSettings->getWebsiteId(), $startDate, $endDate);
+        $filters                 = [
+            $this->getBatchFilter(
+                $this->transportSettings->getWebsiteId(),
+                $startDate,
+                $endDate
+            )
+        ];
         $this->customerIdsBuffer = $this->getCustomersList($filters, $this->batchSize, true);
 
-        // TODO: remove / log
-        echo sprintf('found %d customers', count($this->customerIdsBuffer)) . "\n";
+        $this->logger->info(sprintf('found %d customers', count($this->customerIdsBuffer)));
 
         $this->lastSyncDate = $endDate;
 
@@ -217,7 +226,6 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
                     $this->dependencies[self::ALIAS_STORES] = $this->storeConnector->getStores();
                     break;
                 case self::ALIAS_WEBSITES:
-                    // TODO: refactor this code to present websites data in some way
                     $websites = [];
                     foreach ($this->dependencies[self::ALIAS_STORES] as $store) {
                         $websites[$store['website_id']]['name'][] = $store['name'];
@@ -323,7 +331,6 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function saveCustomerData()
     {
-        // TODO: implement create/update customer data
         return [];
     }
 
@@ -332,7 +339,6 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function saveCustomerAddress()
     {
-        // TODO: implement create/update customer address
     }
 
     /**
