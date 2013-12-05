@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\B2CMockBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\B2CMockBundle\Entity\SaleAddress;
 
 /**
  * ShoppingCart
@@ -56,5 +55,62 @@ class ShoppingCart
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param Customer $customer
+     * @return ShoppingCart
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param SaleAddress $billingAddress
+     * @return ShoppingCart
+     */
+    public function setBillingAddress($billingAddress)
+    {
+        $this->billingAddress = $billingAddress;
+
+        return $this;
+    }
+
+    /**
+     * @return SaleAddress
+     */
+    public function getBillingAddress()
+    {
+        return $this->billingAddress;
+    }
+
+    /**
+     * @param SaleAddress $shippingAddress
+     * @return ShoppingCart
+     */
+    public function setShippingAddress($shippingAddress)
+    {
+        $this->shippingAddress = $shippingAddress;
+
+        return $this;
+    }
+
+    /**
+     * @return SaleAddress
+     */
+    public function getShippingAddress()
+    {
+        return $this->shippingAddress;
     }
 }

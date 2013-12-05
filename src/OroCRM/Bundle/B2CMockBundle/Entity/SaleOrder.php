@@ -38,4 +38,23 @@ class SaleOrder
     {
         return $this->id;
     }
+
+    /**
+     * @param Customer $customer
+     * @return SaleOrder
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
 }
