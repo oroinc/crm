@@ -4,34 +4,12 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException;
-use Symfony\Component\Serializer\SerializerAwareInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 
-class RegionNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
+class RegionNormalizer extends AbstractNormalizer implements NormalizerInterface, DenormalizerInterface
 {
     const STORE_TYPE     = 'OroCRM\Bundle\MagentoBundle\Entity\Region';
-
-    /**
-     * @var SerializerInterface|NormalizerInterface|DenormalizerInterface
-     */
-    protected $serializer;
-
-    public function setSerializer(SerializerInterface $serializer)
-    {
-        if (!$serializer instanceof NormalizerInterface || !$serializer instanceof DenormalizerInterface) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Serializer must implement "%s" and "%s"',
-                    'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
-                    'Symfony\Component\Serializer\Normalizer\DenormalizerInterface'
-                )
-            );
-        }
-        $this->serializer = $serializer;
-    }
 
     /**
      * For exporting regions
