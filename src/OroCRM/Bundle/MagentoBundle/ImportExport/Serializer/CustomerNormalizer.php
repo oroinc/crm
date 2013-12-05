@@ -132,32 +132,6 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
     }
 
     /**
-     * Convert assoc array with 'sample_key' keys notation
-     * to camel case 'sampleKey'
-     *
-     * @param array $data
-     *
-     * @return array
-     */
-    protected function convertToCamelCase($data)
-    {
-        $result = [];
-        foreach ($data as $itemName => $item) {
-            $fieldName = preg_replace_callback(
-                '/_([a-z])/',
-                function ($string) {
-                    return strtoupper($string[1]);
-                },
-                $itemName
-            );
-
-            $result[$fieldName] = $item;
-        }
-
-        return $result;
-    }
-
-    /**
      * @param Customer $object
      * @param array    $data
      * @param mixed    $format

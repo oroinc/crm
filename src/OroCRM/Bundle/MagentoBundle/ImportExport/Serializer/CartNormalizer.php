@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+
 class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, DenormalizerInterface
 {
     /**
@@ -12,7 +14,7 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
      */
     public function supportsNormalization($data, $format = null)
     {
-        // TODO: Implement supportsNormalization() method.
+        return $data instanceof Cart;
     }
 
     /**
@@ -20,7 +22,7 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        // TODO: Implement supportsDenormalization() method.
+        return is_array($data) && $type == 'OroCRM\Bundle\MagentoBundle\Entity\Cart';
     }
 
     /**
@@ -28,7 +30,21 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
      */
     public function normalize($object, $format = null, array $context = array())
     {
-        // TODO: Implement normalize() method.
+        if (method_exists($object, 'toArray')) {
+            $result = $object->toArray($format, $context);
+        } else {
+            $result = array(
+                'id'          => $object->getId(),
+                'customer_id' => $object->getCustomer() ? $object->getCustomer()->getId() : null,
+                'email'       => $object->getEmail(),
+                'store'       => $object->getStore() ? $object->getStore()->getCode() : null,
+                'origin_id'   => $object->getOriginId(),
+                'items_qty'   => $object->getItemsQty(),
+                'grand_total' => $object->getGrandTotal(),
+            );
+        }
+
+        return $result;
     }
 
     /**
@@ -36,6 +52,22 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        // TODO: Implement denormalize() method.
+        $data         = is_array($data) ? $data : [];
+        $resultObject = new Cart();
+
+        $reflObj = new \ReflectionObject($resultObject);
+        $importedEntityProperties = $reflObj->getProperties();
+
+        /** @var \ReflectionProperty $reflectionProperty */
+        foreach ($importedEntityProperties as $reflectionProperty) {
+            $reflectionProperty->setAccessible(true);
+            $name = $reflectionProperty->getName();
+
+            if (!empty($data[$name])) {
+                $reflectionProperty->setValue($reflObj, $data[$name]);
+            }
+        }
+
+        return $resultObject;
     }
 }

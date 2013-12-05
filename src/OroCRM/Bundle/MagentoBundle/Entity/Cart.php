@@ -171,4 +171,28 @@ class Cart
     {
         return $this->cartItems;
     }
+
+    /**
+     * @return int
+     */
+    public function getOriginId()
+    {
+        return $this->originId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getItemsQty()
+    {
+        return $this->itemsQty;
+    }
+
+    /**
+     * @return float
+     */
+    public function getGrandTotal()
+    {
+        return $this->grandTotal;
+    }
 }
