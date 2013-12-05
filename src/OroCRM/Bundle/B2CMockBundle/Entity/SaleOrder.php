@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\B2CMockBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+
 /**
  * @ORM\Table("orocrm_b2c_sale_order")
  * @ORM\Entity
@@ -20,18 +22,12 @@ class SaleOrder
     private $id;
 
     /**
-     * @var string
+     * @var Customer
      *
-     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
-    protected $email;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
-     */
-    private $phone;
+    protected $customer;
 
     /**
      * Get id
@@ -41,51 +37,5 @@ class SaleOrder
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     * @return SaleOrder
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-    
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set phone
-     *
-     * @param string $phone
-     * @return SaleOrder
-     */
-    public function setPhone($phone)
-    {
-        $this->phone = $phone;
-    
-        return $this;
-    }
-
-    /**
-     * Get phone
-     *
-     * @return string 
-     */
-    public function getPhone()
-    {
-        return $this->phone;
     }
 }

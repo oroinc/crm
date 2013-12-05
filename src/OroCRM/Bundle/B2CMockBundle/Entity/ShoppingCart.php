@@ -4,6 +4,9 @@ namespace OroCRM\Bundle\B2CMockBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\B2CMockBundle\Entity\SaleAddress;
+
 /**
  * ShoppingCart
  *
@@ -19,22 +22,31 @@ class ShoppingCart
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
-     * @var string
+     * @var Customer
      *
-     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
-    private $email;
+    protected $customer;
 
     /**
-     * @var string
+     * @var SaleAddress
      *
-     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\B2CMockBundle\Entity\SaleAddress", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
-    private $phone;
+    protected $billingAddress;
 
+    /**
+     * @var SaleAddress
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\B2CMockBundle\Entity\SaleAddress", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     */
+    protected $shippingAddress;
 
     /**
      * Get id
@@ -44,51 +56,5 @@ class ShoppingCart
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     * @return ShoppingCart
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-    
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set phone
-     *
-     * @param string $phone
-     * @return ShoppingCart
-     */
-    public function setPhone($phone)
-    {
-        $this->phone = $phone;
-    
-        return $this;
-    }
-
-    /**
-     * Get phone
-     *
-     * @return string 
-     */
-    public function getPhone()
-    {
-        return $this->phone;
     }
 }
