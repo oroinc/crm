@@ -1,12 +1,21 @@
+oro.importexport.import.orocrm_contact.add_or_replace: Add and Replace
+
+#
+# Messages
+#
 orocrm.contact.controller.contact.saved.message: "Contact saved"
 orocrm.contact.controller.contact_group.saved.message: "Contact Group saved"
 
+#
+# Form
+#
 orocrm.contact.form.choose_contact: Choose a contact...
 orocrm.contact.form.choose_phone: Choose a phone...
 orocrm.contact.form.choose_contact_method: Choose a contact method...
 
-oro.importexport.import.orocrm_contact.add_or_replace: Add and Replace
-
+#
+# DataGrid
+#
 orocrm.contact.datagrid.contact_id: ID
 orocrm.contact.datagrid.first_name: First Name
 orocrm.contact.datagrid.last_name: Last Name
@@ -24,9 +33,36 @@ orocrm.contact.datagrid.view: View
 orocrm.contact.datagrid.update: Update
 orocrm.contact.datagrid.delete: Delete
 
-oroCRM.contact.phones: Phones
-oroCRM.contact.emails: Emails
-oroCRM.contact.skype:  Skype
-oroCRM.contact.fax:    Fax
-oroCRM.contact.method: Contact Method
-oroCRM.contact.social: Social
+#
+# Entity oroCRM\Bundle\ContactBundle\Entity\Contact
+#
+orocrm.contact.phones:      Phones
+orocrm.contact.emails:      Emails
+orocrm.contact.skype:       Skype
+orocrm.contact.fax:         Fax
+orocrm.contact.method:      Contact Method
+orocrm.contact.social:      Social
+orocrm.contact.name_prefix: Name prefix
+orocrm.contact.first_name:  First name
+orocrm.contact.middle_name: Middle name
+orocrm.contact.last_name:   Last name
+orocrm.contact.name_suffix: Name suffix
+orocrm.contact.gender:      Gender
+orocrm.contact.birthday:    Birthday
+orocrm.contact.description: Description
+orocrm.contact.job_title:   Job Title
+orocrm.contact.twitter:     Twitter
+orocrm.contact.facebook:    Facebook
+orocrm.contact.google_plus: Google+
+orocrm.contact.linked_in:   LinkedIn
+orocrm.contact.created_at:  Created At
+orocrm.contact.updated_at:  Updated At
+orocrm.contact.source:      Source
+orocrm.contact.owner:       Owner
+orocrm.contact.assigned_to: Assigned to
+orocrm.contact.reports_to:  Reports to
+orocrm.contact.addresses:   Addresses
+orocrm.contact.groups:      Groups
+orocrm.contact.accounts:    Accounts
+orocrm.contact.created_by:  Created By
+orocrm.contact.updated_by:  Updated By
