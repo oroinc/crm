@@ -81,23 +81,22 @@ class CallController extends Controller
     }
 
     /**
-     * @param int $contactId
+     * @param int|null $contactId
      * @return Call
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function initEntity($contactId = null)
     {
         $entity = new Call();
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        $entity->setOwner($user);
 
         $callStatus = $this->getDoctrine()
-                           ->getRepository('OroCRMCallBundle:CallStatus')
-                           ->findOneByStatus('completed');
+            ->getRepository('OroCRMCallBundle:CallStatus')
+            ->findOneByStatus('completed');
         $entity->setCallStatus($callStatus);
 
         $callDirection = $this->getDoctrine()
-                           ->getRepository('OroCRMCallBundle:CallDirection')
-                           ->findOneByDirection('outgoing');
+            ->getRepository('OroCRMCallBundle:CallDirection')
+            ->findOneByDirection('outgoing');
         $entity->setDirection($callDirection);
         
         if ($contactId) {

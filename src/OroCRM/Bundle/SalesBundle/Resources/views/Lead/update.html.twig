@@ -85,32 +85,37 @@
 {% block content_data %}
     {% set id = 'lead-profile' %}
 
+    {% set formFields = [] %}
+    {% if form.owner is defined %}
+        {% set formFields = formFields|merge([form_row(form.owner)]) %}
+    {% endif %}
+    {% set formFields = formFields|merge([
+        form_row(form.name, {'label': 'Lead Name'}),
+        form_row(form.namePrefix, {'label': 'Name prefix'}),
+        form_row(form.firstName, {'label': 'First name'}),
+        form_row(form.middleName, {'label': 'Middle name'}),
+        form_row(form.lastName, {'label': 'Last name'}),
+        form_row(form.nameSuffix, {'label': 'Name suffix'}),
+        form_row(form.contact, {'label': 'Contact'}),
+        form_row(form.jobTitle, {'label': 'Job Title'}),
+
+        form_row(form.phoneNumber, {'label': 'Phone Number'}),
+        form_row(form.email, {'label': 'Email'}),
+
+        form_row(form.account, {'label': 'Account'}),
+        form_row(form.companyName, {'label': 'Company Name'}),
+        form_row(form.website, {'label': 'Website'}),
+        form_row(form.numberOfEmployees, {'label': 'Number Of Employees'}),
+        form_row(form.industry, {'label': 'Industry'})
+    ]) %}
+
     {% set dataBlocks = [{
             'title': 'General',
             'class': 'active',
             'subblocks': [
                 {
                     'title': 'Lead Information',
-                    'data': [
-                        form_row(form.owner, {'label': 'Owner'}),
-                        form_row(form.name, {'label': 'Lead Name'}),
-                        form_row(form.namePrefix, {'label': 'Name prefix'}),
-                        form_row(form.firstName, {'label': 'First name'}),
-                        form_row(form.middleName, {'label': 'Middle name'}),
-                        form_row(form.lastName, {'label': 'Last name'}),
-                        form_row(form.nameSuffix, {'label': 'Name suffix'}),
-                        form_row(form.contact, {'label': 'Contact'}),
-                        form_row(form.jobTitle, {'label': 'Job Title'}),
-
-                        form_row(form.phoneNumber, {'label': 'Phone Number'}),
-                        form_row(form.email, {'label': 'Email'}),
-
-                        form_row(form.account, {'label': 'Account'}),
-                        form_row(form.companyName, {'label': 'Company Name'}),
-                        form_row(form.website, {'label': 'Website'}),
-                        form_row(form.numberOfEmployees, {'label': 'Number Of Employees'}),
-                        form_row(form.industry, {'label': 'Industry'}),
-                    ]
+                    'data': formFields
                 },
                 {
                     'title': 'Address',
