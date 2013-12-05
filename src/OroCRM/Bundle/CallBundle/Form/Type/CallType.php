@@ -5,10 +5,6 @@ namespace OroCRM\Bundle\CallBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
 
 use OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber;
 
@@ -19,7 +15,7 @@ class CallType extends AbstractType
     /**
      * Constructor.
      *
-     * @param ContactPhoneSubscriber $om
+     * @param ContactPhoneSubscriber $contactPhoneSubscriber
      */
     public function __construct(ContactPhoneSubscriber $contactPhoneSubscriber)
     {
