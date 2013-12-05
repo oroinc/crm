@@ -165,11 +165,43 @@ class Cart
     protected $updatedAt;
 
     /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * @return CartItem[]|Collection
      */
     public function getCartItems()
     {
         return $this->cartItems;
+    }
+
+    /**
+     * @param \OroCRM\Bundle\MagentoBundle\Entity\Store $store
+     */
+    public function setStore($store)
+    {
+        $this->store = $store;
+    }
+
+    /**
+     * @return \OroCRM\Bundle\MagentoBundle\Entity\Store
+     */
+    public function getStore()
+    {
+        return $this->store;
     }
 
     /**
