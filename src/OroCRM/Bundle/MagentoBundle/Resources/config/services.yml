@@ -31,6 +31,7 @@ services:
         class: %orocrm_magento.mage.customer_connector.class%
         arguments:
           - @orocrm_magento.mage.store_connector
+          - @oro_integration.logger.strategy
         tags:
           - { name: oro_integration.connector, type: customer, channel_type: magento }
 
