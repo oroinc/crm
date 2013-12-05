@@ -26,7 +26,7 @@ class Cart
     protected $id;
 
     /**
-     * @var Collection
+     * @var CartItem[]|Collection
      *
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CartItem",
      *     mappedBy="cart", cascade={"all"}, orphanRemoval=true
@@ -163,4 +163,12 @@ class Cart
      * @ORM\Column(type="datetime")
      */
     protected $updatedAt;
+
+    /**
+     * @return CartItem[]|Collection
+     */
+    public function getCartItems()
+    {
+        return $this->cartItems;
+    }
 }

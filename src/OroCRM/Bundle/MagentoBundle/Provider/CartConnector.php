@@ -31,9 +31,10 @@ class CartConnector extends AbstractConnector
             return null; // no more data
         }
 
+        $result = $this->objectToArray($result);
         $this->currentPage++;
 
-        return $result;
+        return (array) $result;
     }
 
     /**

@@ -20,6 +20,7 @@ parameters:
     orocrm_magento.import_strategy.customer.add_or_update.class:          OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AddOrUpdateCustomer
     orocrm_magento.import_strategy.region.add_or_update.class:            OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\RegionStrategy
     orocrm_magento.import_strategy.cart.add_or_update.class:              OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy
+    orocrm_magento.import_strategy.store.class:                           OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StoreStrategy
 
 services:
     # Connectors
@@ -48,6 +49,7 @@ services:
         tags:
           - { name: oro_integration.connector, type: cart, channel_type: magento }
 
+
     # Normalizers
     orocrm_magento.importexport.normalizer.customer:
         class: %orocrm_magento.importexport.normalizer.customer.class%
@@ -70,6 +72,7 @@ services:
         tags:
             - { name: oro_importexport.normalizer, priority: -10 }
 
+
     # Strategies
     orocrm_magento.import.strategy.customer.add_or_update:
         class: %orocrm_magento.import_strategy.customer.add_or_update.class%
@@ -81,10 +84,17 @@ services:
         arguments:
             - @oro_importexport.strategy.import.helper
 
+    orocrm_magento.import.strategy.store:
+        class: %orocrm_magento.import_strategy.store.class%
+        arguments:
+            - @oro_importexport.strategy.import.helper
+
     orocrm_magento.import.strategy.cart.add_or_update:
         class: %orocrm_magento.import_strategy.cart.add_or_update.class%
         arguments:
             - @oro_importexport.strategy.import.helper
+        calls:
+            - [setStoreStrategy, ["@orocrm_magento.import.strategy.store"]]
 
     # Processors
     orocrm_magento.importexport.processor.import_customer:
@@ -113,6 +123,7 @@ services:
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.cart.entity.class%, alias: orocrm_magento.add_or_update_cart }
             - { name: oro_importexport.processor, type: import_validation, entity: %orocrm_magento.cart.entity.class%, alias: orocrm_magento.add_or_update_cart }
+
 
     # Readers
     orocrm_magento.import.customer_reader.magento_api:
