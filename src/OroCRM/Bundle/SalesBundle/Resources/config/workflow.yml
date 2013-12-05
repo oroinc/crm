@@ -25,19 +25,64 @@ workflows:
                 options:
                     class: OroCRM\Bundle\SalesBundle\Entity\Lead
                     managed_entity: true
+            opportunity_name:
+                label: 'Opportunity name'
+                type: string
+            account:
+                label: 'Account'
+                type: entity
+                options:
+                    class: OroCRM\Bundle\AccountBundle\Entity\Account
+            company_name:
+                label: 'Company name'
+                type: string
         transitions:
             qualify:
                 label: 'Qualify'
                 step_to: qualified
                 is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-ok'
                     class: 'btn-primary'
+                form_options:
+                    attribute_fields:
+                        opportunity_name:
+                            form_type: text
+                            options:
+                                required: true
+                                constraints:
+                                  - NotBlank: ~
+                        account:
+                            form_type: orocrm_account_select
+                            options:
+                                required: false
+                        company_name:
+                            form_type: text
+                            options:
+                                required: false
+                    attribute_default_values:
+                        opportunity_name: $lead.name
+                        account: $lead.account
+                        company_name: $lead.companyName
+                    init_actions:
+                        - @find_entity: # try to find account by company name
+                            conditions:
+                                @and: # if account is empty and company name is specified
+                                    - @empty: $account
+                                    - @not_empty: $company_name
+                            parameters:
+                                class: OroCRM\Bundle\AccountBundle\Entity\Account
+                                attribute: $account
+                                where:
+                                    name: $company_name
+                                case_insensitive: true
                 transition_definition: qualify_definition
             cancel:
                 label: 'Disqualify'
                 step_to: cancelled
                 is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-remove'
                 transition_definition: cancel_definition
@@ -45,13 +90,20 @@ workflows:
                 label: 'Reactivate'
                 step_to: new
                 is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-repeat'
                 transition_definition: reactivate_definition
         transition_definitions:
             qualify_definition:
-                conditions: # if lead.status = "new"
+                pre_conditions:  # if lead.status = "new"
                     @equal: [$lead.status.name, 'new']
+                conditions:
+                    @or:
+                        parameters:
+                            - @not_empty: $company_name
+                            - @not_empty: $account
+                        message: "Company name or account must be selected."
                 post_actions: # set lead.status = "qualified"
                     - @find_entity:
                           class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
@@ -133,12 +185,37 @@ workflows:
                                         method_parameters: [$.result.phone]
                                     - @unset_value: # unset temporary property
                                         [$.result.phone]
+                    - @tree: # create and set Account
+                        conditions:
+                            @and: # if account not selected and company name is selected
+                                - @empty: $account
+                                - @not_empty: $company_name
+                        actions:
+                            - @find_entity: # try to find account by company name
+                                class: OroCRM\Bundle\AccountBundle\Entity\Account
+                                attribute: $account
+                                where:
+                                    name: $company_name
+                                case_insensitive: true
+                            - @create_entity: # if account not found - create new one
+                                conditions:
+                                    @empty: $account
+                                parameters:
+                                    class: OroCRM\Bundle\AccountBundle\Entity\Account
+                                    attribute: $account
+                                    data:
+                                        name: $company_name
+                                        extendPhone: $lead.phoneNumber
+                                        extendEmail: $lead.email
+                                        extendWebsite: $lead.website
+                                        extendEmployees: $lead.numberOfEmployees
                     - @create_entity: # create an opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $.result.opportunity
                         data:
-                            name: $lead.name
+                            name: $opportunity_name
                             contact: $lead.contact
+                            account: $account
                     - @find_entity: # set status "In progress" to opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
@@ -168,83 +245,6 @@ workflows:
                         class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
                         identifier: 'new'
                         attribute: $lead.status
-
-    # Qualified Sales Opportunity Workflow
-    sales_opportunity:
-        label: 'Qualified Sales Opportunity'
-        enabled: true
-        type: entity
-        steps:
-            new:
-                label: 'New'
-                allowed_transitions:
-                    - close_as_won
-                    - close_as_lost
-                    - reopen
-            close:
-                label: 'Close'
-                allowed_transitions:
-                    - reopen
-        attributes:
-            opportunity:
-                label: Sales Opportunity
-                type: entity
-                options:
-                    class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
-                    managed_entity: true
-        transitions:
-            close_as_won:
-                label: 'Close as Won'
-                step_to: close
-                is_start: true
-                frontend_options:
-                    icon: 'icon-ok-circle'
-                    class: 'btn-success'
-                transition_definition: close_as_won_definition
-            close_as_lost:
-                label: 'Close as Lost'
-                step_to: close
-                is_start: true
-                frontend_options:
-                    icon: 'icon-remove-circle'
-                    class: 'btn-danger'
-                transition_definition: close_as_lost_definition
-            reopen:
-                label: 'Reopen'
-                step_to: new
-                is_start: true
-                frontend_options:
-                    icon: 'icon-repeat'
-                transition_definition: reopen_definition
-        transition_definitions:
-            close_as_won_definition:
-                conditions: # if opportunity.status = "in_progress"
-                    @equal: [$opportunity.status.name, 'in_progress']
-                post_actions: # set opportunity.status = "won"
-                    - @find_entity:
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
-                        identifier: 'won'
-                        attribute: $opportunity.status
-                    - @assign_value: [$opportunity.probability, 1]
-            close_as_lost_definition:
-                conditions: # if opportunity.status = "in_progress"
-                    @equal: [$opportunity.status.name, 'in_progress']
-                post_actions: # set opportunity.status = "lost"
-                    - @find_entity:
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
-                        identifier: 'lost'
-                        attribute: $opportunity.status
-                    - @assign_value: [$opportunity.probability, 0]
-            reopen_definition:
-                conditions: # if opportunity.status = "won" or opportunity.status = "lost"
-                    @or:
-                        - @equal: [$opportunity.status.name, 'won']
-                        - @equal: [$opportunity.status.name, 'lost']
-                post_actions: # set opportunity.status = "in_progress"
-                    - @find_entity:
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
-                        identifier: 'in_progress'
-                        attribute: $opportunity.status
 
     # B2B Sales Workflow
     sales_flow_b2b:
@@ -303,7 +303,6 @@ workflows:
                 type: entity
                 options:
                     class: OroCRM\Bundle\AccountBundle\Entity\Account
-
             probability:
                 label: 'Probability'
                 type: float
@@ -343,6 +342,7 @@ workflows:
                 label: 'Develop'
                 step_to: develop
                 is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-play'
                     class: 'btn-primary'
@@ -356,7 +356,9 @@ workflows:
                         account:
                             form_type: orocrm_account_select
                             options:
-                                required: false
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
                         budget_amount:
                             form_type: oro_money
                             options:
@@ -380,9 +382,18 @@ workflows:
                             form_type: text
                             options:
                                 required: false
+                    attribute_default_values:
+                        contact: $opportunity.contact
+                        account: $opportunity.account
+                        budget_amount: $opportunity.budgetAmount
+                        probability: $opportunity.probability
+                        customer_need: $opportunity.customerNeed
+                        proposed_solution: $opportunity.proposedSolution
             close_as_won:
                 label: 'Close as Won'
                 step_to: close
+                is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-ok-circle'
                     class: 'btn-success'
@@ -403,9 +414,15 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
+                    init_actions:
+                        - @create_object:
+                            class: '\DateTime'
+                            attribute: $close_date
             close_as_lost:
                 label: 'Close as Lost'
                 step_to: close
+                is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-remove-circle'
                     class: 'btn-danger'
@@ -428,10 +445,15 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
+                    init_actions:
+                        - @create_object:
+                            class: '\DateTime'
+                            attribute: $close_date
             requalify:
                 label: 'Requalify'
                 message: 'Performing this transition will reset some data.'
                 step_to: qualify
+                is_start: true
                 is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-backward'
@@ -440,6 +462,7 @@ workflows:
             edit:
                 label: 'Edit'
                 step_to: qualify
+                is_start: true
                 is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-pencil'
@@ -461,22 +484,12 @@ workflows:
                         - [$close_revenue, $opportunity.closeRevenue]
                         - [$close_date, $opportunity.closeDate]
             develop_definition:
-                init_actions:
-                    - @assign_value:
-                        - [$contact, $opportunity.contact]
-                        - [$account, $opportunity.account]
-                        - [$budget_amount, $opportunity.budgetAmount]
-                        - [$customer_need, $opportunity.customerNeed]
-                        - [$proposed_solution, $opportunity.proposedSolution]
-                        - [$probability, $opportunity.probability]
-                        - [$close_reason, $opportunity.closeReason]
-                        - [$close_revenue, $opportunity.closeRevenue]
-                        - [$close_date, $opportunity.closeDate]
+                pre_conditions: # if opportunity.status = "in_progress"
+                    @equal:
+                        message: 'Opportunity must be in status "In progress"'
+                        parameters: [$opportunity.status.name, 'in_progress']
                 conditions: # if opportunity.status = "in_progress"
                     @and:
-                        - @equal:
-                            message: 'Opportunity must be in status "In progress"'
-                            parameters: [$opportunity.status.name, 'in_progress']
                         - @greater_or_equal:
                             message: 'Budget amout must be greater or equal to 0'
                             parameters: [$budget_amount, 0]
@@ -497,11 +510,12 @@ workflows:
                         - [$opportunity.closeRevenue, $close_revenue]
                         - [$opportunity.closeDate, $close_date]
             close_as_won_definition:
+                pre_conditions:
+                    @equal:
+                        message: 'Opportunity must be in status "In progress"'
+                        parameters: [$opportunity.status.name, 'in_progress']
                 conditions: # if opportunity.status = "in_progress", required data is entered and reason = "won"
                     @and:
-                        - @equal:
-                            message: 'Opportunity must be in status "In progress"'
-                            parameters: [$opportunity.status.name, 'in_progress']
                         - @not_empty:
                             message: 'Close date must be set'
                             parameters: $close_date
@@ -532,11 +546,12 @@ workflows:
                         route_parameters:
                             id: $opportunity.id
             close_as_lost_definition:
-                conditions: # opportunity.status = "in_progress", required data is entered and reason = "cancelled"
+                pre_conditions: # opportunity.status = "in_progress", required data is entered and reason = "cancelled"
+                    @equal:
+                        message: 'Opportunity must be in status "In progress"'
+                        parameters: [$opportunity.status.name, 'in_progress']
+                conditions:
                     @and:
-                        - @equal:
-                            message: 'Opportunity must be in status "In progress"'
-                            parameters: [$opportunity.status.name, 'in_progress']
                         - @not_empty:
                             message: 'Close date must be set'
                             parameters: $close_date

@@ -20,6 +20,16 @@
             'label' : 'Send email'|trans
         }) }}
     {% endif %}
+    {% if resource_granted('orocrm_call_create') %}
+        {{ UI.clientButton({
+        'dataUrl': path('orocrm_call_create', { 'contactId': entity.id }) ,
+        'aCss': 'no-hash log-call-button',
+        'iCss': 'icon-phone',
+        'dataId': entity.id,
+        'title' : 'Log call'|trans,
+        'label' : 'Log call'|trans
+        }) }}
+    {% endif %}
     {% if resource_granted('orocrm_contact_update') %}
         {{ UI.button({
             'path' : path('orocrm_contact_update', { 'id': entity.id }),
@@ -42,6 +52,56 @@
             })
         }}
     {% endif %}
+
+    {# Open dialog to log a call #}
+    <script type="text/javascript">
+        require(['jquery', 'underscore', 'oro/dialog-widget', 'oro/widget-manager'],
+        function($, _, DialogWidget, WidgetManager) {
+            'use strict';
+            $(function () {
+                $(document).on('click', '.log-call-button', function (e) {
+                    var callDialogAlias = 'log_call_dialog';
+
+                    // only one instance of a call widget is allowed
+                    if (WidgetManager.aliases.hasOwnProperty(callDialogAlias)) {
+                        var wid = WidgetManager.aliases[callDialogAlias];
+                        if (WidgetManager.widgets.hasOwnProperty(wid)) {
+                            return;
+                        }
+                    }
+
+                    var url = $(this).attr('data-url');
+                    if (_.isUndefined(url)) {
+                        url = $(this).attr('href');
+                    }
+
+                    // create and open widget
+                    var widget = new DialogWidget({
+                        url: url,
+                        alias: callDialogAlias,
+                        dialogOptions: {
+                            allowMaximize: true,
+                            allowMinimize: true,
+                            dblclick: 'maximize',
+                            maximizedHeightDecreaseBy: 'minimize-bar',
+                            width: 1000,
+                            title: $(this).attr('title')
+                        }
+                    });
+                    widget.render();
+
+                    // reload widget with list of contact calls
+                    widget.on('contactCallLogged', function() {
+                        WidgetManager.getWidgetInstanceByAlias('contact_calls', function(contactCallsWidget) {
+                            contactCallsWidget.loadContent();
+                        });
+                    });
+
+                    e.preventDefault();
+                });
+            });
+        });
+    </script>
 {% endblock navButtons %}
 
 {% block pageHeader %}
@@ -59,9 +119,9 @@
 {% endblock stats %}
 
 {% block content_data %}
-    <div class="contact-info-col-set conact-page well-small dark-bg">
-        <div class="row-fluid well-small-bottom clearfix">
-            <div class="span6 contact-info-col">
+    <div class="contact-info-col-set well-small dark-bg">
+        <div class="clearfix">
+            <div class="responsive-cell contact-info-col">
                 {{
                     oro_widget_render({
                         'widgetType': 'block',
@@ -70,7 +130,7 @@
                     })
                 }}
             </div>
-            <div class="span6 contact-info-col">
+            <div class="responsive-cell contact-info-col">
                 {{
                     oro_widget_render({
                         'widgetType': 'block',
@@ -80,29 +140,33 @@
                     })
                 }}
             </div>
-        </div>
-    </div>
-    {# TODO: This is a temporary list of emails for demo purposes. It will be removed when 'display activities' functionality is implemented  #}
-    {#{% if resource_granted('oro_email_view') %}#}
-        {#{{ render(controller('OroEmailBundle:Email:activities', {'emails': entity.emails})) }}#}
-    {#{% endif %}#}
 
-    {% if resource_granted('oro_email_view') %}
-        <div class="contact-info-col-set well-small dark-bg">
-            <div class="row-fluid well-small-bottom clearfix">
-                <div class="contact-info-row">
-                    <div class="box-type1">
-                        <div class="title">
-                            <div class="pull-right widget-actions-container"></div>
-                            <span class="widget-title">{{ "Emails"|trans }}</span>
-                        </div>
-                        <div class="row-fluid">
-                            {{ dataGrid.renderGrid(gridName, { contactId: entity.id }) }}
-                            {{ Email.renderJs() }}
-                        </div>
+            {% if resource_granted('oro_email_view') %}
+            <div class="responsive-cell contact-info-col">
+                <div class="box-type1">
+                    <div class="title">
+                        <span class="widget-title">{{ "Emails"|trans }}</span>
+                    </div>
+                    <div class="row-fluid">
+                        {{ dataGrid.renderGrid(gridName, { contactId: entity.id }) }}
+                        {{ Email.renderJs() }}
                     </div>
                 </div>
             </div>
+            {% endif %}
+
+            {% if resource_granted('orocrm_call_view') %}
+                <div class="responsive-cell contact-info-col">
+                    {{
+                        oro_widget_render({
+                            'widgetType': 'block',
+                            'url': path('orocrm_call_widget_calls', {contactId: entity.id}),
+                            'title': 'Calls'|trans,
+                            'alias': 'contact_calls'
+                        })
+                    }}
+                </div>
+            {% endif %}
         </div>
-    {% endif %}
+    </div>
 {% endblock content_data %}

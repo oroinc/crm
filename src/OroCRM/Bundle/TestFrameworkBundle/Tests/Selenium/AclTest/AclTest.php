@@ -36,9 +36,9 @@ class AclTest extends Selenium2TestCase
             ->add()
             ->setLabel($this->newRole['LABEL'] . $randomPrefix)
             ->setOwner('Main')
-            ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'View', 'Assign'))
-            ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'View', 'Assign'))
-            ->setEntity('Account', array('Create', 'Edit', 'Delete', 'View', 'Assign'))
+            ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
+            ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
+            ->setEntity('Account', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
             ->save()
             ->assertMessage('Role saved');
 
@@ -130,9 +130,9 @@ class AclTest extends Selenium2TestCase
             ->openRoles()
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
-            ->setEntity('Account', array('Create', 'Edit', 'Delete', 'Assign'))
-            ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'Assign'))
-            ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'Assign'))
+            ->setEntity('Account', array('Create', 'Edit', 'Delete', 'Assign'), 'None')
+            ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'Assign'), 'None')
+            ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'Assign'), 'None')
             //->setEntity('User', array('View', 'Edit'))
             ->save()
             ->assertMessage('Role saved');

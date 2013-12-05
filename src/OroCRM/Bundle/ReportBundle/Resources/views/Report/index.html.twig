@@ -1,7 +1,14 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
+{% set gridName = 'reports-grid' %}
+{% set pageTitle = 'Reports' %}
 
-{% block content %}
-    {% set buttons = [] %}
-    {{ parent() }}
+{% block navButtons %}
+    {% if resource_granted('orocrm_report_create') %}
+    {{ UI.addButton({
+        'path' : path('orocrm_report_create'),
+        'title' : 'Create report',
+        'label' : 'Create report'
+    }) }}
+    {% endif %}
 {% endblock %}

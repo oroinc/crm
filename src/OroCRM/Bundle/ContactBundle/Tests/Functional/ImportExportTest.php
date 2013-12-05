@@ -73,8 +73,11 @@ class ImportExportTest extends WebTestCase
         $this->client->submit($form);
 
         $result = $this->client->getResponse();
+
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
 
+        $crawler = $this->client->getCrawler();
+        $this->assertEquals(0, $crawler->filter('.import-errors')->count());
     }
 
     /**
@@ -95,6 +98,15 @@ class ImportExportTest extends WebTestCase
         );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
+        $data = ToolsAPI::jsonToArray($result->getContent());
+        $this->assertEquals(
+            array(
+                'success' => true,
+                'message' => 'File was successful imported.',
+                'errorsUrl' => null
+            ),
+            $data
+        );
     }
 
     /**
