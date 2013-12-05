@@ -2,9 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
-use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 
 class CartConnector extends AbstractConnector
 {
@@ -13,12 +11,24 @@ class CartConnector extends AbstractConnector
     const JOB_VALIDATE_IMPORT = 'mage_cart_import_validation';
     const JOB_IMPORT          = 'mage_cart_import';
 
+    const ACTION_CART_LIST    = 'salesQuoteList';
 
     /**
      * {@inheritdoc}
      */
     public function read()
     {
-        // TODO: Implement read() method.
+        $filters = [];
+
+        $result = $this->getQuoteList($filters);
+    }
+
+    /**
+     * @param array $filters
+     * @return mixed
+     */
+    public function getQuoteList($filters = [])
+    {
+        return $this->call(self::ACTION_CART_LIST, $filters);
     }
 }
