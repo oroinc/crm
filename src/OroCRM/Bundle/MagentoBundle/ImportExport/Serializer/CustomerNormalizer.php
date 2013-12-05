@@ -4,9 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException;
-use Symfony\Component\Serializer\SerializerAwareInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 use Doctrine\Common\Collections\Collection;
 
@@ -21,7 +18,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 
-class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
+class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterface, DenormalizerInterface
 {
     protected $importFieldsMap = [
         'customer_id' => 'original_id',
@@ -49,25 +46,6 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
     const GROUPS_TYPE         = 'OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup';
     const ADDRESSES_TYPE      = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactAddress>';
     const MAGE_ADDRESSES_TYPE = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\Address>';
-
-    /**
-     * @var SerializerInterface|NormalizerInterface|DenormalizerInterface
-     */
-    protected $serializer;
-
-    public function setSerializer(SerializerInterface $serializer)
-    {
-        if (!$serializer instanceof NormalizerInterface || !$serializer instanceof DenormalizerInterface) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Serializer must implement "%s" and "%s"',
-                    'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
-                    'Symfony\Component\Serializer\Normalizer\DenormalizerInterface'
-                )
-            );
-        }
-        $this->serializer = $serializer;
-    }
 
     /**
      * For exporting customers
