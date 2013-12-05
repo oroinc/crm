@@ -10,16 +10,6 @@
 {% set gridName = 'contacts-email-grid' %}
 
 {% block navButtons %}
-    {% if resource_granted('orocrm_call_create') %}
-        {{ UI.clientButton({
-            'dataUrl': path('orocrm_call_create', { 'contactId': entity.id }) ,
-            'aCss': 'no-hash log-call-button',
-            'iCss': 'icon-phone',
-            'dataId': entity.id,
-            'title' : 'Log call'|trans,
-            'label' : 'Log call'|trans
-        }) }}
-    {% endif %}
     {% if resource_granted('oro_email_create') %}
         {{ UI.clientButton({
             'dataUrl': path('orocrm_contact_email_create', { 'contactId': entity.id }) ,
@@ -28,6 +18,16 @@
             'dataId': entity.id,
             'title' : 'Send email'|trans,
             'label' : 'Send email'|trans
+        }) }}
+    {% endif %}
+    {% if resource_granted('orocrm_call_create') %}
+        {{ UI.clientButton({
+        'dataUrl': path('orocrm_call_create', { 'contactId': entity.id }) ,
+        'aCss': 'no-hash log-call-button',
+        'iCss': 'icon-phone',
+        'dataId': entity.id,
+        'title' : 'Log call'|trans,
+        'label' : 'Log call'|trans
         }) }}
     {% endif %}
     {% if resource_granted('orocrm_contact_update') %}
