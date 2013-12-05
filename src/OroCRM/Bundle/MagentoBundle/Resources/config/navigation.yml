@@ -5,14 +5,28 @@ oro_menu_config:
             route: 'orocrm_magento_customer_index'
             extras:
                 routes: ['/^orocrm_magento_customer_(index|view)+$/']
-                description: List of customers from "Magento channel"
+                description: List of customers from "Magento type channels"
+        magento_product_list:
+            label: 'Magento'
+            route: 'orocrm_magento_product_index'
+            extras:
+                routes: ['/^orocrm_magento_product_(index|view)+$/']
+                description: List of products from "Magento type channels"
         channels_submenu:
             label: 'Channels'
+            uri: '#'
+        products_tab:
+            label: 'Products'
             uri: '#'
 
     tree:
         application_menu:
             children:
+                products_tab:
+                    children:
+                        channels_submenu:
+                            children:
+                                magento_product_list: ~
                 customers_tab:
                     children:
                         channels_submenu:
@@ -22,3 +36,5 @@ oro_menu_config:
 oro_titles:
     orocrm_magento_customer_index: ~
     orocrm_magento_customer_view:  %%customer.name%%
+    orocrm_magento_product_index:  ~
+    orocrm_magento_product_view:   %%product.name%%
