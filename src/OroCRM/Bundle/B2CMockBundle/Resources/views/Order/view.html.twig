@@ -7,8 +7,8 @@
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('orocrm_b2c_shopping_cart_index'),
-        'indexLabel': 'Shopping Carts'|trans,
-        'entityTitle': 'Shopping Cart #' ~ entity.id
+        'indexLabel': 'Orders'|trans,
+        'entityTitle': 'Order #' ~ entity.id
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
@@ -17,8 +17,6 @@
     <div class="contact-info-col-set well-small dark-bg">
         <div class="clearfix">
             <div class="responsive-cell contact-info-col">
-                <b>Status:</b> {{ entity.status }}
-                <br />
                 <b>Customer:</b> {{ entity.customer }}
             </div>
         </div>

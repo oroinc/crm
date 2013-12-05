@@ -10,6 +10,9 @@ datagrid:
         columns:
             id:
                 label: 'ID'
+            status:
+                label: 'Status'
+                frontend_type: string
             customer:
                 label: 'Customer'
                 frontend_type: string
@@ -20,6 +23,36 @@ datagrid:
             view_link:
                 type:       url
                 route:      orocrm_b2c_shopping_cart_view
+                params:     [ id ]
+        actions:
+            view:
+                type: navigate
+                label: 'View'
+                icon: user
+                link: view_link
+                rowAction: true
+
+    orders-grid:
+        source:
+            type: orm
+            query:
+                select:
+                    - sale_order
+                from:
+                    - { table: OroCRM\Bundle\B2CMockBundle\Entity\SaleOrder, alias: sale_order }
+        columns:
+            id:
+                label: 'ID'
+            customer:
+                label: 'Customer'
+                frontend_type: string
+        options:
+            entityHint: orders
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_b2c_order_view
                 params:     [ id ]
         actions:
             view:

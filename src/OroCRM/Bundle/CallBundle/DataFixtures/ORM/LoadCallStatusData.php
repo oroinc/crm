@@ -13,8 +13,8 @@ class LoadCallStatusData extends AbstractFixture
      * @var array
      */
     protected $data = array(
-        'in_progress',
-        'completed',
+        'in_progress' => 'In progress',
+        'completed'   => 'Completed',
     );
 
     /**
@@ -22,9 +22,9 @@ class LoadCallStatusData extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        foreach ($this->data as $status) {
-            $callStatus = new CallStatus();
-            $callStatus->setStatus($status);
+        foreach ($this->data as $name => $label) {
+            $callStatus = new CallStatus($name);
+            $callStatus->setLabel($label);
             $manager->persist($callStatus);
         }
 

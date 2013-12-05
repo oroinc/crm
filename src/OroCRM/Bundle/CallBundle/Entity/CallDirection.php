@@ -5,65 +5,63 @@ namespace OroCRM\Bundle\CallBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CallDirection
- *
  * @ORM\Table(name="orocrm_call_direction")
  * @ORM\Entity
  */
-
 class CallDirection
 {
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="name", type="string", length=32)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="direction", type="string", length=255)
+     * @ORM\Column(name="label", type="string", length=255, unique=true)
      */
-    protected $direction;
+    protected $label;
 
     /**
-     * Get id
-     *
-     * @return integer 
+     * @param string $name
      */
-    public function getId()
+    public function __construct($name)
     {
-        return $this->id;
+        $this->name = $name;
     }
 
     /**
-     * Set direction
-     *
-     * @param string $direction
+     * @return integer
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $label
      * @return CallDirection
      */
-    public function setDirection($direction)
+    public function setLabel($label)
     {
-        $this->direction = $direction;
-    
+        $this->label = $label;
+
         return $this;
     }
 
     /**
-     * Get direction
-     *
-     * @return string 
+     * @return string
      */
-    public function getDirection()
+    public function getLabel()
     {
-        return $this->direction;
+        return $this->label;
     }
 
     public function __toString()
     {
-        return $this->direction;
+        return $this->label;
     }
 }

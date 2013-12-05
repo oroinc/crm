@@ -91,12 +91,12 @@ class CallController extends Controller
 
         $callStatus = $this->getDoctrine()
             ->getRepository('OroCRMCallBundle:CallStatus')
-            ->findOneByStatus('completed');
+            ->findOneBy(array('name' => 'completed'));
         $entity->setCallStatus($callStatus);
 
         $callDirection = $this->getDoctrine()
             ->getRepository('OroCRMCallBundle:CallDirection')
-            ->findOneByDirection('outgoing');
+            ->findOneBy(array('name' => 'outgoing'));
         $entity->setDirection($callDirection);
         
         if ($contactId) {

@@ -11,6 +11,12 @@ oro_menu_config:
             extras:
                 routes: ['orocrm_b2c_shopping_cart_*']
                 description: List of shopping carts
+        order_list:
+            label: 'Orders'
+            route: orocrm_b2c_order_index
+            extras:
+                routes: ['orocrm_b2c_order_*']
+                description: List of orders
 
     tree:
         application_menu:
@@ -18,3 +24,4 @@ oro_menu_config:
                 mocks_tab:
                     children:
                         shopping_cart_list: ~
+                        order_list: ~

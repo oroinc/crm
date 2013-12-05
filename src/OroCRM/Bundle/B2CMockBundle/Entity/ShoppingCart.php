@@ -7,8 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 /**
- * ShoppingCart
- *
  * @ORM\Table("orocrm_b2c_shopping_cart")
  * @ORM\Entity
  */
@@ -46,6 +44,14 @@ class ShoppingCart
      * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $shippingAddress;
+
+    /**
+     * @var ShoppingCartStatus
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\B2CMockBundle\Entity\ShoppingCartStatus")
+     * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
+     */
+    protected $status;
 
     /**
      * Get id
@@ -112,5 +118,24 @@ class ShoppingCart
     public function getShippingAddress()
     {
         return $this->shippingAddress;
+    }
+
+    /**
+     * @param ShoppingCartStatus $status
+     * @return ShoppingCart
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return ShoppingCartStatus
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

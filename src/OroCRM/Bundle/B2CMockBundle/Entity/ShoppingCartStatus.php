@@ -1,26 +1,22 @@
 <?php
 
-namespace OroCRM\Bundle\CallBundle\Entity;
+namespace OroCRM\Bundle\B2CMockBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="orocrm_call_status")
  * @ORM\Entity
+ * @ORM\Table(name="orocrm_b2c_shopping_cart_status")
  */
-class CallStatus
+class ShoppingCartStatus
 {
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=32)
      * @ORM\Id
      */
     protected $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="label", type="string", length=255, unique=true)
      */
     protected $label;
@@ -34,7 +30,9 @@ class CallStatus
     }
 
     /**
-     * @return integer
+     * Get type name
+     *
+     * @return string
      */
     public function getName()
     {
@@ -42,17 +40,21 @@ class CallStatus
     }
 
     /**
+     * Set address type label
+     *
      * @param string $label
-     * @return CallStatus
+     * @return ShoppingCartStatus
      */
     public function setLabel($label)
     {
         $this->label = $label;
-    
+
         return $this;
     }
 
     /**
+     * Get address type label
+     *
      * @return string
      */
     public function getLabel()
@@ -60,8 +62,11 @@ class CallStatus
         return $this->label;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
-        return $this->label;
+        return (string) $this->label;
     }
 }

@@ -7,15 +7,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use OroCRM\Bundle\B2CMockBundle\Entity\ShoppingCart;
+use OroCRM\Bundle\B2CMockBundle\Entity\SaleOrder;
 
 /**
- * @Route("/shopping_cart")
+ * @Route("/order")
  */
-class ShoppingCartController extends Controller
+class OrderController extends Controller
 {
     /**
-     * @Route(name="orocrm_b2c_shopping_cart_index")
+     * @Route(name="orocrm_b2c_order_index")
      * @Template
      */
     public function indexAction()
@@ -24,11 +24,11 @@ class ShoppingCartController extends Controller
     }
 
     /**
-     * @Route("/view/{id}", name="orocrm_b2c_shopping_cart_view", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="orocrm_b2c_order_view", requirements={"id"="\d+"})
      * @Template
      */
-    public function viewAction(ShoppingCart $cart)
+    public function viewAction(SaleOrder $order)
     {
-        return array('entity' => $cart);
+        return array('entity' => $order);
     }
 }
