@@ -1,0 +1,5 @@
+orocrm:
+    call:
+        phone:
+            required:
+                message: "Phone is required field"

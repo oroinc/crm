@@ -22,7 +22,7 @@
             'dataUrl': path('oro_api_delete_opportunity', {'id': form.vars.value.id}),
             'dataRedirect': path('orocrm_sales_opportunity_index'),
             'aCss': 'no-hash remove-button',
-            'id': 'btn-remove-contact',
+            'id': 'btn-remove-oppotunity',
             'dataId': form.vars.value.id,
             'dataMessage': 'Are you sure you want to delete this opportunity?',
             'title': 'Delete Opportunity',
@@ -65,24 +65,30 @@
 {% block content_data %}
     {% set id = 'opportunity-profile' %}
 
+    {% set formFields = [] %}
+    {% if form.owner is defined %}
+        {% set formFields = formFields|merge([form_row(form.owner)]) %}
+    {% endif %}
+    {% set formFields = formFields|merge([
+        form_row(form.name, {'label': 'Opportunity name'|trans}),
+        form_row(form.contact, {'label': 'Contact'|trans}),
+        form_row(form.account, {'label': 'Account'|trans}),
+        form_row(form.probability, {'label': 'Probability'|trans}),
+        form_row(form.budgetAmount, {'label': 'Budget amount'|trans}),
+        form_row(form.customerNeed, {'label': 'Customer need'|trans}),
+        form_row(form.proposedSolution, {'label': 'Proposed solution'|trans}),
+        form_row(form.closeReason, {'label': 'Close reason'|trans}),
+        form_row(form.closeRevenue, {'label': 'Close revenue'|trans}),
+        form_row(form.closeDate, {'label': 'Close date'|trans})
+    ]) %}
+
     {% set dataBlocks = [{
         'title': 'General',
         'class': 'active',
         'subblocks': [
             {
-                'title': 'Contact Information',
-                'data': [
-                    form_row(form.name, {'label': 'Opportunity name'|trans}),
-                    form_row(form.contact, {'label': 'Contact'|trans}),
-                    form_row(form.account, {'label': 'Account'|trans}),
-                    form_row(form.probability, {'label': 'Probability'|trans}),
-                    form_row(form.budgetAmount, {'label': 'Budget amount'|trans}),
-                    form_row(form.customerNeed, {'label': 'Customer need'|trans}),
-                    form_row(form.proposedSolution, {'label': 'Proposed solution'|trans}),
-                    form_row(form.closeReason, {'label': 'Close reason'|trans}),
-                    form_row(form.closeRevenue, {'label': 'Close revenue'|trans}),
-                    form_row(form.closeDate, {'label': 'Close date'|trans})
-                ]
+                'title': 'Opportunity Information',
+                'data': formFields
             }
         ]
     }] %}

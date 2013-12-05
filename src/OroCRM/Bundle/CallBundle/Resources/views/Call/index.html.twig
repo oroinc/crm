@@ -1,0 +1,16 @@
+{% extends 'OroUIBundle:actions:index.html.twig' %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+{% set pageTitle = 'Calls' %}
+{% set gridName = 'calls-grid' %}
+
+{% block navButtons %}
+    {% if resource_granted('orocrm_call_create') %}
+        <div class="btn-group">
+            {{ UI.addButton({
+                'path' : path('orocrm_call_create'),
+                'title' : 'Log call'|trans,
+                'label' : 'Log call'|trans
+            }) }}
+        </div>
+    {% endif %}
+{% endblock %}

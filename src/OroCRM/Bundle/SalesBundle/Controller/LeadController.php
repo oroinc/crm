@@ -16,8 +16,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\EntityConfigBundle\Metadata\EntityMetadata;
+
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
+use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
+use Oro\Bundle\EntityConfigBundle\Entity\Repository\OptionSetRelationRepository;
+use Oro\Bundle\EntityConfigBundle\Metadata\EntityMetadata;
+
 use Oro\Bundle\EntityExtendBundle\Extend\ExtendManager;
 
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
@@ -51,6 +55,7 @@ class LeadController extends Controller
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * TODO: will be refactored via twig extension
      */
     public function infoAction(Lead $lead)
@@ -87,6 +92,27 @@ class LeadController extends Controller
             if ($value instanceof \DateTime) {
                 $configFormat = $this->get('oro_config.global')->get('oro_locale.date_format') ? : 'Y-m-d';
                 $value        = $value->format($configFormat);
+            }
+
+            /** Prepare OptionSet field type */
+            if ($field->getId()->getFieldType() == 'optionSet') {
+                /** @var OptionSetRelationRepository  */
+                $osr = $configManager->getEntityManager()->getRepository(OptionSetRelation::ENTITY_NAME);
+
+                $model = $extendProvider->getConfigManager()->getConfigFieldModel(
+                    $field->getId()->getClassName(),
+                    $field->getId()->getFieldName()
+                );
+
+                $value = $osr->findByFieldId($model->getId(), $lead->getId());
+                array_walk(
+                    $value,
+                    function (&$item) {
+                        $item = ['title' => $item->getOption()->getLabel()];
+                    }
+                );
+
+                $value['values'] = $value;
             }
 
             /** Prepare Relation field type */
@@ -182,51 +208,6 @@ class LeadController extends Controller
         $lead->setStatus($defaultStatus);
 
         return $this->update($lead);
-    }
-
-    /**
-     * Create lead and redirect to qualification
-     *
-     * @Route("/createAndQualify", name="orocrm_sales_lead_create_and_qualify")
-     * @AclAncestor("orocrm_sales_lead_create")
-     */
-    public function createAndQualifyAction()
-    {
-        // TODO: refactor workflow functionality to allow custom transition buttons on forms,
-        // TODO: should be done in scope of https://magecore.atlassian.net/browse/CRM-544
-        $lead          = new Lead();
-        $defaultStatus = $this->getDoctrine()->getManager()->find('OroCRMSalesBundle:LeadStatus', 'new');
-        $lead->setStatus($defaultStatus);
-
-        $response = $this->update($lead);
-
-        if (is_object($response) && $response instanceof RedirectResponse) {
-            // start workflow using qualify transition
-            $jsonResponse = $this->forward(
-                'OroWorkflowBundle:Api/Rest/Workflow:start',
-                array(
-                    'entityClass'    => ClassUtils::getClass($lead),
-                    'entityId'       => $lead->getId(),
-                    'workflowName'   => 'sales_lead',
-                    'transitionName' => 'qualify',
-                    '_format'        => 'json',
-                )
-            );
-
-            // throw an exception if forward action wasn't successful
-            $responseStatusCode = $jsonResponse->getStatusCode();
-            if ($responseStatusCode != 200) {
-                throw new HttpException($responseStatusCode, 'Can\'t qualify created lead');
-            }
-
-            // redirect to Sales flow
-            $jsonResponseData = json_decode($jsonResponse->getContent(), true);
-            if (!empty($jsonResponseData['workflowItem']['result']['redirectUrl'])) {
-                return $this->redirect($jsonResponseData['workflowItem']['result']['redirectUrl']);
-            }
-        }
-
-        return $response;
     }
 
     /**

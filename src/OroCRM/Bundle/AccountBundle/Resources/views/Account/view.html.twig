@@ -5,7 +5,6 @@
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 {% oro_title_set({params : {"%account.name%": entity.name|default('N/A')} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_AccountBundle_Entity_Account' %}
-{% set gridName = 'account-contacts-view-grid' %}
 
 {% block navButtons %}
     {% if resource_granted('orocrm_contact_create') %}
@@ -138,12 +137,37 @@
         EntityExtend fields END
     #}
 
-    {% set dataBlocks = dataBlocks|merge([{'title' : 'Contacts', 'subblocks': [{'title' : null, 'data' : [dataGrid.renderGrid(gridName, {account: entity.id}, { cssClass: 'inner-grid' })], 'useSpan': false}] }])%}
+    {% set dataBlocks = dataBlocks|merge([{
+        'title' : 'Contacts',
+        'subblocks': [
+            {
+                'title' : null,
+                'data' : [dataGrid.renderGrid('account-contacts-view-grid', {account: entity.id}, { cssClass: 'inner-grid' })],
+                'useSpan': false
+            }
+        ]
+    }]) %}
 
-    {% set data =
-        {
-            'dataBlocks': dataBlocks,
-        }
-    %}
+    {% if resource_granted('orocrm_call_view') %}
+        {% set dataBlocks = dataBlocks|merge([{
+            'title' : 'Calls',
+            'subblocks': [
+                {
+                    'title' : null,
+                    'data' : [
+                        oro_widget_render({
+                            'widgetType': 'buttons',
+                            'url': path('orocrm_call_widget_calls', {accountId: entity.id}),
+                            'alias': 'account_calls',
+                            'cssClass': 'inner-grid',
+                        })
+                    ],
+                    'useSpan': false
+                }
+            ]
+        }]) %}
+    {% endif %}
+
+    {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}
 {% endblock content_data %}

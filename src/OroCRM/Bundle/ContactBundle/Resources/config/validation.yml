@@ -11,14 +11,14 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
         birthday:
             - Date: ~
         addresses:
-            - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary:
+            - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
                 message: One of addresses must be set as primary.
             - Oro\Bundle\AddressBundle\Validator\Constraints\UniqueAddressTypes: ~
         emails:
-            - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary:
+            - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
                 message: One of emails must be set as primary.
         phones:
-            - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary:
+            - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
                 message: One of phones must be set as primary.
 
 OroCRM\Bundle\ContactBundle\Entity\Group:

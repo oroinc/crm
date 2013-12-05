@@ -1,7 +1,7 @@
 {% extends bap.layout %}
 
 {% macro renderWidget(widget) %}
-    <div class="quick-launchpad-widget span6">
+    <div class="quick-launchpad-widget responsive-block">
         <div class="clearfix">
             <div class="image-wrap pull-left">
                 <p class="text-center">
@@ -28,7 +28,7 @@
 {% import _self as __ %}
 
 {% block content %}
-    <div class="scrollable-container quick-launchpad">
+    <div class="scrollable-container quick-launchpad responsive-section">
         <div class="container">
             <h3>{{ 'Quick Launchpad'|trans }}</h3>
 
@@ -79,7 +79,7 @@
                     {% endif %}
                 {% endfor %}
                 {% if allowedLinks > 0 %}
-                    {% if index is odd %}<div class="row">{% endif %}
+                    {% if index is odd %}<div>{% endif %}
                     {{ __.renderWidget(widget) }}
                     {% if index is even %}</div>{% endif %}
                 {% else %}
