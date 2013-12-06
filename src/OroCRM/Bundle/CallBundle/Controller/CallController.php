@@ -81,6 +81,16 @@ class CallController extends Controller
     }
 
     /**
+     * @Route("/widget/info/{id}", name="orocrm_call_widget_info", requirements={"id"="\d+"})
+     * @Template
+     * @AclAncestor("orocrm_call_view")
+     */
+    public function infoAction(Call $entity)
+    {
+        return array('entity' => $entity);
+    }
+
+    /**
      * @param int|null $contactId
      * @return Call
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException

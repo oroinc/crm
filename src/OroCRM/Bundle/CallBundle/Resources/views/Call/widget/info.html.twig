@@ -1,0 +1,31 @@
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+
+<div class="widget-content form-horizontal box-content row-fluid">
+    <div class="responsive-block">
+        {{ macros.renderProperty('Subject'|trans, entity.subject) }}
+        {#{{ macros.renderProperty('Status'|trans, entity.callStatus ? entity.callStatus.label : null) }}#}
+        {{ macros.renderProperty('Notes'|trans, entity.notes) }}
+        {{ macros.renderProperty('Call Date & Time'|trans, entity.callDateTime|oro_format_datetime) }}
+    </div>
+    <div class="responsive-block">
+        {% set accountView = entity.relatedAccount ? entity.relatedAccount.__toString() : null %}
+        {%- if accountView and resource_granted('orocrm_account_view') -%}
+            {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.relatedAccount.id}) ~ '">' ~ accountView ~ '</a>' %}
+        {%- endif -%}
+        {{ macros.renderProperty('Related To'|trans, accountView) }}
+
+        {% set contactView = entity.relatedContact ? entity.relatedContact|oro_format_name : null %}
+        {%- if contactView and resource_granted('orocrm_contact_view') -%}
+            {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.relatedContact.id}) ~ '">' ~ contactView ~ '</a>' %}
+        {%- endif -%}
+        {{ macros.renderProperty('Related Contact'|trans, contactView) }}
+
+        {% set phoneNumber = entity.contactPhoneNumber ? entity.contactPhoneNumber.phone : entity.phoneNumber %}
+        {{ macros.renderProperty('Phone Number'|trans, phoneNumber) }}
+
+        {{ macros.renderProperty('Direction'|trans, entity.direction ? entity.direction.label : null) }}
+
+        {# Don't use time formatting here because it's a time interval #}
+        {{ macros.renderProperty('Duration'|trans, entity.duration|date('H:i:s')) }}
+    </div>
+</div>
