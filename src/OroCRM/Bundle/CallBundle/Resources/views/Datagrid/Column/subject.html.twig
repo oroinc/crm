@@ -3,7 +3,7 @@
     <a class="call-info-widget-link"
        data-call-id="{{ callId }}"
        data-call-info-widget-url="{{ path('orocrm_call_widget_info', {id : callId}) }}"
-       data-call-info-widget-title="{{ value|json_encode|raw }}"
+       data-call-info-widget-title="{{ value|escape }}"
        href="javascript: void(0);">
         {{ value }}
     </a>
