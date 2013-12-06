@@ -52,6 +52,82 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  */
 class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, FullNameInterface
 {
+    /*
+     * Fields have to be duplicated here to enable dataaudit and soap transformation only for contact
+     */
+    /**
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @Soap\ComplexType("int", nillable=true)
+     */
+    protected $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     */
+    protected $namePrefix;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="first_name", type="string", length=255)
+     * @Soap\ComplexType("string")
+     * @Oro\Versioned
+     */
+    protected $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     */
+    protected $middleName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_name", type="string", length=255)
+     * @Soap\ComplexType("string")
+     * @Oro\Versioned
+     */
+    protected $lastName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     */
+    protected $nameSuffix;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=8, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     */
+    protected $gender;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="birthday", type="datetime", nullable=true)
+     * @Soap\ComplexType("date", nillable=true)
+     * @Oro\Versioned
+     */
+    protected $birthday;
+
     /**
      * @var string
      *
@@ -235,6 +311,22 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
      * @ORM\JoinColumn(name="updated_by_user_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $updatedBy;
+
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(type="datetime")
+     * @Soap\ComplexType("dateTime", nillable=true)
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime")
+     * @Soap\ComplexType("dateTime", nillable=true)
+     */
+    protected $updatedAt;
 
     public function __construct()
     {
