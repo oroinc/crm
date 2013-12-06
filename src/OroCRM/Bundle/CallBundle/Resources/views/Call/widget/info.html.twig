@@ -4,7 +4,7 @@
     <div class="responsive-block">
         {{ macros.renderProperty('Subject'|trans, entity.subject) }}
         {#{{ macros.renderProperty('Status'|trans, entity.callStatus ? entity.callStatus.label : null) }}#}
-        {{ macros.renderProperty('Notes'|trans, entity.notes) }}
+        {{ macros.renderProperty('Notes'|trans, entity.notes|nl2br) }}
         {{ macros.renderProperty('Call Date & Time'|trans, entity.callDateTime|oro_format_datetime) }}
     </div>
     <div class="responsive-block">
