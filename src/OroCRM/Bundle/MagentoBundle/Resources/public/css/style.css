@@ -1,0 +1,20 @@
+.alert.connection-status {
+    margin: 10px 0;
+    float: none;
+}
+.customer-info-widget {
+    min-height: 300px;
+}
+.magento-website-selector-container .selector {
+    float:left;
+}
+.magento-website-selector-container .selector > span {
+    overflow: hidden;
+}
+.magento-website-selector-container .selector select {
+    width: 235px !important;
+}
+.magento-website-selector-container .sync-website-list-link {
+    line-height: 26px;
+    margin-left: 15px;
+}

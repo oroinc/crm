@@ -1,0 +1,30 @@
+{
+    "name": "orocrm/magento-bundle",
+    "type": "symfony-bundle",
+    "description": "Oro CRM Magento Bundle",
+    "keywords": ["CRM", "Magento", "Customers"],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.3.*",
+        "doctrine/orm": ">=2.3,<2.4-dev",
+
+        "oro/ui-bundle": "dev-master",
+        "oro/business-entities-bundle": "dev-master",
+        "orocrm/contact-bundle": "dev-master",
+        "orocrm/account-bundle": "dev-master",
+        "orocrm/integration-bundle": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        }
+    },
+    "target-dir": "OroCRM/Bundle/MagentoBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

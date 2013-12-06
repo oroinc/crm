@@ -1,0 +1,3 @@
+config:
+    paths:
+        'orocrm/magento/soap-checker': 'bundles/orocrmmagento/js/soap-checker.js'
