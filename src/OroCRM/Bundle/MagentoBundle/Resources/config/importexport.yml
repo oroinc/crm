@@ -6,6 +6,7 @@ parameters:
 
     # converter
     orocrm_magento.importexport.data_converter.cart.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CartDataConverter
+    orocrm_magento.importexport.data_converter.cartitem.class:            OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CartItemDataConverter
 
     # connectors
     orocrm_magento.mage.region_connector.class:                           OroCRM\Bundle\MagentoBundle\Provider\RegionConnector
@@ -31,6 +32,9 @@ services:
     # Data converter
     orocrm_magento.importexport.data_converter.cart:
         class: %orocrm_magento.importexport.data_converter.cart.class%
+
+    orocrm_magento.importexport.data_converter.cartitem:
+        class: %orocrm_magento.importexport.data_converter.cartitem.class%
 
     # Connectors
     orocrm_magento.mage.customer_connector:
@@ -86,8 +90,10 @@ services:
         tags:
             - { name: oro_importexport.normalizer }
 
-    orocrm_magento.importexport.normalizer.cart:
+    orocrm_magento.importexport.normalizer.cartitem:
         class: %orocrm_magento.importexport.normalizer.cart_item.class%
+        calls:
+            - [setCartItemDataConverter, ["@orocrm_magento.importexport.data_converter.cartitem"]]
         tags:
             - { name: oro_importexport.normalizer }
 

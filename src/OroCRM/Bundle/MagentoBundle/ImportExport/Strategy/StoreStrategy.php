@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerNormalizer;
 
 class StoreStrategy extends BaseStrategy
 {

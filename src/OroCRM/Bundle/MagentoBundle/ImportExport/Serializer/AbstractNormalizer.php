@@ -76,4 +76,30 @@ class AbstractNormalizer implements SerializerAwareInterface
             }
         }
     }
+
+    /**
+     * @param array  $data
+     * @param string $format
+     * @param array  $context
+     *
+     * @return array
+     */
+    protected function denormalizeCreatedUpdated($data, $format, $context)
+    {
+        $dateTimeFormat = ['type' => 'datetime', 'format' => 'Y-m-d H:i:s'];
+        $data['createdAt'] = $this->serializer->denormalize(
+            $data['createdAt'],
+            'DateTime',
+            $format,
+            array_merge($context, $dateTimeFormat)
+        );
+        $data['updatedAt'] = $this->serializer->denormalize(
+            $data['updatedAt'],
+            'DateTime',
+            $format,
+            array_merge($context, $dateTimeFormat)
+        );
+
+        return $data;
+    }
 }

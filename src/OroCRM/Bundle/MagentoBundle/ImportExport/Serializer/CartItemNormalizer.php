@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CartItemDataConverter;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -9,12 +10,18 @@ use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
 
 class CartItemNormalizer extends AbstractNormalizer implements NormalizerInterface, DenormalizerInterface
 {
+    const ENTITIES_TYPE = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\CartItem>';
+    const ENTITY_TYPE   = 'OroCRM\Bundle\MagentoBundle\Entity\CartItem';
+
+    /** @var CartItemDataConverter */
+    protected $itemConverter;
+
     /**
      * {@inheritdoc}
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && $type == 'OroCRM\Bundle\MagentoBundle\Entity\CartItem';
+        return is_array($data) && $type == self::ENTITY_TYPE;
     }
 
     /**
@@ -22,7 +29,15 @@ class CartItemNormalizer extends AbstractNormalizer implements NormalizerInterfa
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
+        $data         = is_array($data) ? $data : [];
+        $data = $this->itemConverter->convertToImportFormat($data);
 
+        $data = $this->denormalizeCreatedUpdated($data, $format, $context);
+
+        $cartItem = new CartItem();
+        $this->fillResultObject($cartItem, $data);
+
+        return $cartItem;
     }
 
     /**
@@ -51,5 +66,13 @@ class CartItemNormalizer extends AbstractNormalizer implements NormalizerInterfa
         }
 
         return $result;
+    }
+
+    /**
+     * @param CartItemDataConverter $itemConverter
+     */
+    public function setCartItemDataConverter(CartItemDataConverter $itemConverter)
+    {
+        $this->itemConverter = $itemConverter;
     }
 }

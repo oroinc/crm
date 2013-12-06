@@ -55,29 +55,21 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
     {
         $serializer = $this->serializer;
         $data         = is_array($data) ? $data : [];
-        $dateTimeFormat = ['type' => 'datetime', 'format' => 'Y-m-d H:i:s'];
 
         $data['cartItems'] = $serializer->denormalize(
             $data['cartItems'],
-            'ArrayCollection<OroCRMMagentoBundle:CartItem>',
+            CartItemNormalizer::ENTITIES_TYPE,
             $format,
             $context
         );
-        $data['customer'] = $this->fillResultObject($data, $format, $context);
-        $data['store'] = $serializer->denormalize($data['store'], CustomerNormalizer::STORE_TYPE, $format, $context);
 
-        $data['createdAt'] = $serializer->denormalize(
-            $data['createdAt'],
-            'DateTime',
-            $format,
-            array_merge($context, $dateTimeFormat)
-        );
-        $data['updatedAt'] = $serializer->denormalize(
-            $data['updatedAt'],
-            'DateTime',
-            $format,
-            array_merge($context, $dateTimeFormat)
-        );
+        $customer = new Customer();
+        $this->fillResultObject($customer, $data['customer']);
+        $data['customer'] = $customer;
+
+        $data['store'] = $serializer->denormalize(['id' => $data['store']], CustomerNormalizer::STORE_TYPE, $format, $context);
+
+        $data = $this->denormalizeCreatedUpdated($data, $format, $context);
 
         $cart = new Cart();
         $this->fillResultObject($cart, $data);
