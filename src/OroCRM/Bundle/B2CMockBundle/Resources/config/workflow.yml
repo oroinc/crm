@@ -169,12 +169,6 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
-                        call_status:
-                            form_type: entity
-                            options:
-                                class: OroCRM\Bundle\CallBundle\Entity\CallStatus
-                                property: label
-                                required: false
                         call_duration:
                             form_type: time
                             options:
@@ -318,6 +312,10 @@ workflows:
                             parameters: $call_direction
                             message: 'Call direction must be chosen'
                 post_actions:
+                     - @find_entity: # Set call status to in_progress
+                        class: OroCRM\Bundle\CallBundle\Entity\CallStatus
+                        identifier: 'in_progress'
+                        attribute: $call_status
                      - @create_entity: # create Call
                         class: OroCRM\Bundle\CallBundle\Entity\Call
                         attribute: $call
