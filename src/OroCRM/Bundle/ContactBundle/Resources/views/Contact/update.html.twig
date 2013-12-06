@@ -59,34 +59,34 @@
                 {
                     'title': 'Contact Information'|trans,
                     'data': [
-                        form_row(form.namePrefix, {'label': 'oroCRM.contact.name_prefix'|trans}),
-                        form_row(form.firstName, {'label': 'oroCRM.contact.first_name'|trans}),
-                        form_row(form.middleName, {'label': 'oroCRM.contact.middle_name'|trans}),
-                        form_row(form.lastName, {'label': 'oroCRM.contact.last_name'|trans}),
-                        form_row(form.nameSuffix, {'label': 'oroCRM.contact.name_suffix'|trans}),
-                        form_row(form.description, {'label': 'oroCRM.contact.description'|trans}),
-                        form_row(form.assignedTo, {'label': 'oroCRM.contact.assigned_to'|trans}),
-                        form_row(form.reportsTo, {'label': 'oroCRM.contact.reports_to'|trans}),
+                        form_row(form.namePrefix, {'label': 'orocrm.contact.name_prefix'|trans}),
+                        form_row(form.firstName, {'label': 'orocrm.contact.first_name'|trans}),
+                        form_row(form.middleName, {'label': 'orocrm.contact.middle_name'|trans}),
+                        form_row(form.lastName, {'label': 'orocrm.contact.last_name'|trans}),
+                        form_row(form.nameSuffix, {'label': 'orocrm.contact.name_suffix'|trans}),
+                        form_row(form.description, {'label': 'orocrm.contact.description'|trans}),
+                        form_row(form.assignedTo, {'label': 'orocrm.contact.assigned_to'|trans}),
+                        form_row(form.reportsTo, {'label': 'orocrm.contact.reports_to'|trans}),
 
-                        form_row(form.emails, {'label': 'oroCRM.contact.emails'|trans}),
-                        form_row(form.phones, {'label': 'oroCRM.contact.phones'|trans}),
-                        form_row(form.fax, {'label': 'oroCRM.contact.fax'|trans}),
-                        form_row(form.skype, {'label': 'oroCRM.contact.skype'|trans}),
-                        form_row(form.method, {'label': 'oroCRM.contact.method'|trans}),
-                        form_row(form.twitter, {'label': 'oroCRM.contact.twitter'|trans}),
-                        form_row(form.facebook, {'label': 'oroCRM.contact.facebook'|trans}),
-                        form_row(form.googlePlus, {'label': 'oroCRM.contact.google_plus'|trans}),
-                        form_row(form.linkedIn, {'label': 'oroCRM.contact.linked_in'|trans}),
-                        form_row(form.jobTitle, {'label': 'oroCRM.contact.job_title'|trans}),
-                        form_row(form.birthday, {'label': 'oroCRM.contact.birthday'|trans}),
-                        form_row(form.gender, {'label': 'oroCRM.contact.gender'|trans}),
-                        form_row(form.source, {'label': 'oroCRM.contact.source'|trans}),
+                        form_row(form.emails, {'label': 'orocrm.contact.emails'|trans}),
+                        form_row(form.phones, {'label': 'orocrm.contact.phones'|trans}),
+                        form_row(form.fax, {'label': 'orocrm.contact.fax'|trans}),
+                        form_row(form.skype, {'label': 'orocrm.contact.skype'|trans}),
+                        form_row(form.method, {'label': 'orocrm.contact.method'|trans}),
+                        form_row(form.twitter, {'label': 'orocrm.contact.twitter'|trans}),
+                        form_row(form.facebook, {'label': 'orocrm.contact.facebook'|trans}),
+                        form_row(form.googlePlus, {'label': 'orocrm.contact.google_plus'|trans}),
+                        form_row(form.linkedIn, {'label': 'orocrm.contact.linked_in'|trans}),
+                        form_row(form.jobTitle, {'label': 'orocrm.contact.job_title'|trans}),
+                        form_row(form.birthday, {'label': 'orocrm.contact.birthday'|trans}),
+                        form_row(form.gender, {'label': 'orocrm.contact.gender'|trans}),
+                        form_row(form.source, {'label': 'orocrm.contact.source'|trans}),
 
                         form_row(form.tags)
                     ]
                 },
                 {
-                    'title': 'oroCRM.contact.addresses'|trans,
+                    'title': 'orocrm.contact.addresses'|trans,
                     'data': [
                         form_widget(form.addresses),
                     ]
@@ -114,7 +114,7 @@
     {% if form.groups is defined and form.groups.children|length > 0 %}
         {% set dataBlocks = dataBlocks|merge(
             [{
-                'title' : 'oroCRM.contact.groups'|trans,
+                'title' : 'orocrm.contact.groups'|trans,
                 'subblocks':
                 [
                     {
@@ -131,7 +131,7 @@
     {% endif %}
     {% set dataBlocks = dataBlocks|merge(
         [{
-            'title' : 'oroCRM.contact.accounts'|trans,
+            'title' : 'orocrm.contact.accounts'|trans,
             'subblocks':
             [
                 {
