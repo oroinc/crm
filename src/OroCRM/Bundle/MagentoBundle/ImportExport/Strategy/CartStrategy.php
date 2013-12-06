@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Doctrine\Common\Util\ClassUtils;
+use Oro\Bundle\BatchBundle\Item\InvalidItemException;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 
 class CartStrategy extends BaseStrategy
@@ -26,6 +28,7 @@ class CartStrategy extends BaseStrategy
         $newEntity->setStore(
             $this->storeStrategy->process($entity->getStore())
         );
+
 
         $this
             ->updateCartItems($newEntity, $entity->getCartItems());

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCart;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 /**
  * Class Cart
@@ -18,6 +19,14 @@ use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCart;
  */
 class Cart extends BaseCart
 {
+    /**
+     * @var Channel
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
+     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $channel;
+
     /**
      * @var CartItem[]|Collection
      *
@@ -160,5 +169,24 @@ class Cart extends BaseCart
     public function getItemsQty()
     {
         return $this->itemsQty;
+    }
+
+    /**
+     * @param Channel $channel
+     * @return $this
+     */
+    public function setChannel(Channel $channel)
+    {
+        $this->channel = $channel;
+
+        return $this;
+    }
+
+    /**
+     * @return Channel
+     */
+    public function getChannel()
+    {
+        return $this->channel;
     }
 }

@@ -67,12 +67,19 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
         $this->fillResultObject($customer, $data['customer']);
         $data['customer'] = $customer;
 
-        $data['store'] = $serializer->denormalize(['id' => $data['store']], CustomerNormalizer::STORE_TYPE, $format, $context);
+        $data['store'] = $serializer->denormalize(
+            ['id' => $data['store']],
+            CustomerNormalizer::STORE_TYPE,
+            $format,
+            $context
+        );
 
         $data = $this->denormalizeCreatedUpdated($data, $format, $context);
 
         $cart = new Cart();
         $this->fillResultObject($cart, $data);
+
+        $cart->setChannel($context['channel']);
 
         return $cart;
     }

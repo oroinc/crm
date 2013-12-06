@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
+use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
 class CartConnector extends AbstractConnector
 {
@@ -23,7 +24,7 @@ class CartConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    public function read()
+    public function doRead()
     {
         $result = $this->getNextItem();
 
@@ -31,7 +32,7 @@ class CartConnector extends AbstractConnector
             return null; // no more data
         }
 
-        $result = $this->objectToArray($result);
+        $result = ConverterUtils::objectToArray($result);
         $this->currentPage++;
 
         return (array) $result;
