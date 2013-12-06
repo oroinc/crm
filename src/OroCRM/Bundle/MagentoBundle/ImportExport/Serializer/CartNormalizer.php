@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 
 class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, DenormalizerInterface
@@ -52,22 +53,61 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
+        $serializer = $this->serializer;
         $data         = is_array($data) ? $data : [];
-        $resultObject = new Cart();
+        $dateTimeFormat = ['type' => 'datetime', 'format' => 'Y-m-d H:i:s'];
 
-        $reflObj = new \ReflectionObject($resultObject);
-        $importedEntityProperties = $reflObj->getProperties();
+        $data['cartItems'] = $serializer->denormalize(
+            $data['cartItems'],
+            'ArrayCollection<OroCRMMagentoBundle:CartItem>',
+            $format,
+            $context
+        );
+        $data['customer'] = $this->fillResultObject($data, $format, $context);
+        $data['store'] = $serializer->denormalize($data['store'], CustomerNormalizer::STORE_TYPE, $format, $context);
 
-        /** @var \ReflectionProperty $reflectionProperty */
-        foreach ($importedEntityProperties as $reflectionProperty) {
-            $reflectionProperty->setAccessible(true);
-            $name = $reflectionProperty->getName();
+        $data['createdAt'] = $serializer->denormalize(
+            $data['createdAt'],
+            'DateTime',
+            $format,
+            array_merge($context, $dateTimeFormat)
+        );
+        $data['updatedAt'] = $serializer->denormalize(
+            $data['updatedAt'],
+            'DateTime',
+            $format,
+            array_merge($context, $dateTimeFormat)
+        );
 
-            if (!empty($data[$name])) {
-                $reflectionProperty->setValue($reflObj, $data[$name]);
-            }
-        }
+        $cart = new Cart();
+        $this->fillResultObject($cart, $data);
 
-        return $resultObject;
+        return $cart;
+    }
+
+    /**
+     * @param $data
+     * @param $format
+     * @param $context
+     *
+     * @return Customer
+     */
+    protected function denormalizeCustomer($data, $format, $context)
+    {
+        $customer = new Customer();
+        $customer
+            ->setOriginalId($data['customer']['originId'])
+            ->setFirstName($data['customer']['firstname'])
+            ->setLastName($data['customer']['lastname'])
+            ->setGroup(
+                $this->serializer->denormalize(
+                    ['id' => $data['customer']['group_id']],
+                    CustomerNormalizer::GROUPS_TYPE,
+                    $format,
+                    $context
+                )
+            );
+
+        return $customer;
     }
 }

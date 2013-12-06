@@ -3,8 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Converter;
 
 use Oro\Bundle\ImportExportBundle\Converter\AbstractTableDataConverter;
-use Oro\Bundle\ImportExportBundle\Converter\DataConverterInterface;
-use Oro\Bundle\ImportExportBundle\Converter\DefaultDataConverter;
 
 class CartDataConverter extends AbstractTableDataConverter
 {
@@ -24,10 +22,28 @@ class CartDataConverter extends AbstractTableDataConverter
     protected function getHeaderConversionRules()
     {
         return [
-            'entity_id' => 'originId',
+            'entity_id'             => 'originId',
+            'store_id'              => 'store',
+            'subtotal'              => 'subTotal',
+            'grand_total'           => 'grandTotal',
+            'items'                 => 'cartItems',
+            'customer_id'           => 'customer:originId',
+            'customer_email'        => 'email',
+            'customer_tax_class_id' => 'customer:tax_class_id',
+            'customer_group_id'     => 'customer:group_id',
+            'customer_firstname'    => 'customer:firstname',
+            'customer_lastname'     => 'customer:lastname',
+            'customer_is_guest'     => 'isGuest',
+            'created_at'            => 'createdAt',
+            'updated_at'            => 'updatedAt',
+            'items_count'           => 'itemsCount',
+            'items_qty'             => 'itemsQty',
+            'store_to_base_rate'    => 'storeToBaseRate',
+            'store_to_quote_rate'   => 'storeToQuoteRate',
+            'base_currency_code'    => 'baseCurrencyCode',
+            'store_currency_code'   => 'storeCurrencyCode',
+            'quote_currency_code'   => 'quoteCurrencyCode',
         ];
-
-        // TODO: Implement getHeaderConversionRules() method.
     }
 
     /**

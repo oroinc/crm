@@ -19,6 +19,7 @@ parameters:
     orocrm_magento.importexport.relation_normalizer.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\RelationNormalizer
     orocrm_magento.importexport.typed_address_normalizer.class:           OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\MagentoAddressNormalizer
     orocrm_magento.importexport.normalizer.cart.class:                    OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CartNormalizer
+    orocrm_magento.importexport.normalizer.cart_item.class:               OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CartItemNormalizer
 
     # strategies
     orocrm_magento.import_strategy.customer.add_or_update.class:          OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AddOrUpdateCustomer
@@ -82,6 +83,11 @@ services:
 
     orocrm_magento.importexport.normalizer.cart:
         class: %orocrm_magento.importexport.normalizer.cart.class%
+        tags:
+            - { name: oro_importexport.normalizer }
+
+    orocrm_magento.importexport.normalizer.cart:
+        class: %orocrm_magento.importexport.normalizer.cart_item.class%
         tags:
             - { name: oro_importexport.normalizer }
 

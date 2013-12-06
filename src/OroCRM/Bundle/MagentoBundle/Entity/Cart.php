@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
+use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCart;
+
 /**
  * Class Cart
  *
@@ -14,17 +16,8 @@ use Doctrine\Common\Collections\Collection;
  *      @ORM\Index(name="magecart_origin_idx", columns={"origin_id"})
  * })
  */
-class Cart
+class Cart extends BaseCart
 {
-    /**
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
-
     /**
      * @var CartItem[]|Collection
      *
@@ -109,34 +102,6 @@ class Cart
     protected $storeToQuoteRate;
 
     /**
-     * @var float
-     *
-     * @ORM\Column(name="grand_total", type="decimal")
-     */
-    protected $grandTotal;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="base_grand_total", type="decimal")
-     */
-    protected $baseGrandTotal;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="sub_total", type="decimal")
-     */
-    protected $subTotal;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="base_sub_total", type="decimal")
-     */
-    protected $baseSubTotal;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255)
@@ -144,41 +109,18 @@ class Cart
     protected $email;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="gift_message", type="string", length=255)
+     */
+    protected $giftMessage;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="is_guest", type="boolean")
      */
     protected $isGuest;
-
-    /**
-     * @var \DateTime $createdAt
-     *
-     * @ORM\Column(type="datetime")
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime $updatedAt
-     *
-     * @ORM\Column(type="datetime")
-     */
-    protected $updatedAt;
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * @return CartItem[]|Collection
@@ -218,13 +160,5 @@ class Cart
     public function getItemsQty()
     {
         return $this->itemsQty;
-    }
-
-    /**
-     * @return float
-     */
-    public function getGrandTotal()
-    {
-        return $this->grandTotal;
     }
 }

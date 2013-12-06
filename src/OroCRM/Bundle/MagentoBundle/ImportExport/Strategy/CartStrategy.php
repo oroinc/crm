@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
+use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 
 class CartStrategy extends BaseStrategy
 {
@@ -36,6 +36,15 @@ class CartStrategy extends BaseStrategy
         $this->validateAndUpdateContext($newEntity);
 
         return $newEntity;
+    }
+
+    /**
+     * @param Cart $newCart
+     * @param      $cartItems
+     */
+    protected function updateCartItems(Cart $newCart, $cartItems)
+    {
+
     }
 
     /**
