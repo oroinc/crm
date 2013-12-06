@@ -1,0 +1,92 @@
+{% block email_workflow_view_attribute_value %}
+    {# Value must be instance of Oro\Bundle\EmailBundle\Entity\Email #}
+    {% if value is not empty %}
+        {% set identifier = 'email_attribute_' ~ random() %}
+        <a id="{{ identifier }}"
+            data-email-id="{{ value.id }}"
+            data-email-info-widget-url="{{ path('oro_email_view', {id : value.id}) }}"
+            data-email-info-widget-title="{{ value.subject|escape }}"
+            href="javascript: void(0);">
+            {{ value.subject }}
+        </a>
+        <script type="text/javascript">
+            require(['jquery', 'oro/widget-manager', 'oro/dialog-widget'],
+            function($, WidgetManager, DialogWidget){
+                'use strict';
+                $(function () {
+                    var element = $('#{{ identifier }}');
+                    element.on('click', function () {
+                        var dialogAlias = 'widget_' + element.attr('id');
+
+                        // only one instance of a widget is allowed
+                        if (WidgetManager.hasWidgetAlias(dialogAlias)) {
+                            return;
+                        }
+
+                        // create and open widget
+                        var dialogUrl = element.data('email-info-widget-url');
+                        var dialogTitle = element.data('email-info-widget-title');
+                        var widget = new DialogWidget({
+                            url: dialogUrl,
+                            alias: dialogAlias,
+                            dialogOptions: {
+                                width: 1000,
+                                title: dialogTitle
+                            }
+                        });
+                        widget.render();
+                    });
+                });
+            });
+        </script>
+    {% else %}
+        N/A
+    {% endif %}
+{% endblock %}
+
+{% block call_workflow_view_attribute_value %}
+    {# Value must be instance of OroCRM\Bundle\CallBundle\Entity\Call #}
+    {% if value is not empty %}
+        {% set identifier = 'call_attribute_' ~ random() %}
+        <a id="{{ identifier }}"
+           data-call-id="{{ value.id }}"
+           data-call-info-widget-url="{{ path('orocrm_call_widget_info', {id : value.id}) }}"
+           data-call-info-widget-title="{{ value.subject|escape }}"
+           href="javascript: void(0);">
+            {{ value.subject }}
+        </a>
+        <script type="text/javascript">
+            require(['jquery', 'oro/widget-manager', 'oro/dialog-widget'],
+            function($, WidgetManager, DialogWidget){
+                'use strict';
+                $(function () {
+                    var element = $('#{{ identifier }}');
+                    element.on('click', function () {
+                        var dialogAlias = 'widget_' + element.attr('id');
+
+                        // only one instance of a widget is allowed
+                        if (WidgetManager.hasWidgetAlias(dialogAlias)) {
+                            return;
+                        }
+
+                        // create and open widget
+                        var dialogUrl = element.data('call-info-widget-url');
+                        var dialogTitle = element.data('call-info-widget-title');
+                        var widget = new DialogWidget({
+                            url: dialogUrl,
+                            alias: dialogAlias,
+                            dialogOptions: {
+                                width: 600,
+                                title: dialogTitle
+                            }
+                        });
+                        widget.render();
+                    });
+                });
+            });
+        </script>
+    {% else %}
+        N/A
+    {% endif %}
+{% endblock %}
+

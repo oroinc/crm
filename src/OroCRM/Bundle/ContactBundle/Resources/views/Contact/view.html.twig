@@ -60,11 +60,8 @@
                     var callDialogAlias = 'log_call_dialog';
 
                     // only one instance of a call widget is allowed
-                    if (WidgetManager.aliases.hasOwnProperty(callDialogAlias)) {
-                        var wid = WidgetManager.aliases[callDialogAlias];
-                        if (WidgetManager.widgets.hasOwnProperty(wid)) {
-                            return;
-                        }
+                    if (WidgetManager.hasWidgetAlias(callDialogAlias)) {
+                        return;
                     }
 
                     var url = $(this).attr('data-url');

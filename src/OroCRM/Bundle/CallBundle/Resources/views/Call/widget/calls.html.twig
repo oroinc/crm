@@ -15,11 +15,8 @@
                 var dialogAlias = 'call_info_widget_' + callId;
 
                 // only one instance of a call widget is allowed
-                if (WidgetManager.aliases.hasOwnProperty(dialogAlias)) {
-                    var wid = WidgetManager.aliases[dialogAlias];
-                    if (WidgetManager.widgets.hasOwnProperty(wid)) {
-                        return;
-                    }
+                if (WidgetManager.hasWidgetAlias(dialogAlias)) {
+                    return;
                 }
 
                 // create and open widget

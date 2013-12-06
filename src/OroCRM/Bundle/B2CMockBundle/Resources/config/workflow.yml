@@ -3,7 +3,6 @@ workflows:
         label: 'Shopping Cart flow'
         enabled: true
         type: wizard
-
         steps:
             open:
                 label: 'Open'
@@ -27,12 +26,12 @@ workflows:
                     - abandon
                 view_attributes:
                     - { attribute: email_to, label: 'Last contacted email', view_type: string }
-                    - { path: $email.subject, label: 'Email subject', view_type: string }
+                    - { attribute: email, label: 'Email subject', view_type: email }
                     - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
                     - { attribute: notes, view_type: string }
 
                     - { attribute: phone_number, label: 'Last contacted phone', view_type: string }
-                    - { path: $call.subject, label: 'Call subject', view_type: string }
+                    - { attribute: call, label: 'Call subject', view_type: call }
                     - { path: $call.callDateTime, label: 'Call date', view_type: datetime }
             abandoned:
                 label: 'Abandoned'
@@ -239,6 +238,9 @@ workflows:
                                 required: false
                     attribute_default_values:
                         email_to: $shopping_cart.customer.contact.primaryEmail.email
+                    init_actions:
+                        - @assign_active_user: $.result.user
+                        - @assign_value: [$email_from, $.result.user.email]
             convert:
                 label: 'Convert'
                 step_to: converted
