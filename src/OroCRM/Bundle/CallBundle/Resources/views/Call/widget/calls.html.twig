@@ -14,9 +14,11 @@
                 var callId = element.data('call-id');
                 var dialogAlias = 'call_info_widget_' + callId;
 
-                // only one instance of a call widget is allowed
-                if (WidgetManager.hasWidgetAlias(dialogAlias)) {
+                // only one instance of widget is allowed
+                if (element.data('widget-opened')) {
                     return;
+                } else {
+                    element.data('widget-opened', true);
                 }
 
                 // create and open widget
@@ -30,6 +32,11 @@
                         title: dialogTitle
                     }
                 });
+
+                widget.on('widgetRemove', function() {
+                    element.data('widget-opened', false);
+                });
+
                 widget.render();
 
                 e.preventDefault();

@@ -15,12 +15,12 @@
                 'use strict';
                 $(function () {
                     var element = $('#{{ identifier }}');
-                    element.on('click', function () {
-                        var dialogAlias = 'widget_' + element.attr('id');
-
-                        // only one instance of a widget is allowed
-                        if (WidgetManager.hasWidgetAlias(dialogAlias)) {
+                    element.on('click', function (e) {
+                        // only one instance of widget is allowed
+                        if (element.data('widget-opened')) {
                             return;
+                        } else {
+                            element.data('widget-opened', true);
                         }
 
                         // create and open widget
@@ -28,13 +28,19 @@
                         var dialogTitle = element.data('email-info-widget-title');
                         var widget = new DialogWidget({
                             url: dialogUrl,
-                            alias: dialogAlias,
                             dialogOptions: {
                                 width: 1000,
                                 title: dialogTitle
                             }
                         });
+
+                        widget.on('widgetRemove', function() {
+                            element.data('widget-opened', false);
+                        });
+
                         widget.render();
+
+                        e.preventDefault();
                     });
                 });
             });
@@ -61,12 +67,12 @@
                 'use strict';
                 $(function () {
                     var element = $('#{{ identifier }}');
-                    element.on('click', function () {
-                        var dialogAlias = 'widget_' + element.attr('id');
-
-                        // only one instance of a widget is allowed
-                        if (WidgetManager.hasWidgetAlias(dialogAlias)) {
+                    element.on('click', function (e) {
+                        // only one instance of widget is allowed
+                        if (element.data('widget-opened')) {
                             return;
+                        } else {
+                            element.data('widget-opened', true);
                         }
 
                         // create and open widget
@@ -74,13 +80,19 @@
                         var dialogTitle = element.data('call-info-widget-title');
                         var widget = new DialogWidget({
                             url: dialogUrl,
-                            alias: dialogAlias,
                             dialogOptions: {
                                 width: 600,
                                 title: dialogTitle
                             }
                         });
+
+                        widget.on('widgetRemove', function() {
+                            element.data('widget-opened', false);
+                        });
+
                         widget.render();
+
+                        e.preventDefault();
                     });
                 });
             });

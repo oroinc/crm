@@ -57,32 +57,31 @@
             'use strict';
             $(function () {
                 $(document).on('click', '.log-call-button', function (e) {
-                    var callDialogAlias = 'log_call_dialog';
-
-                    // only one instance of a call widget is allowed
-                    if (WidgetManager.hasWidgetAlias(callDialogAlias)) {
-                        return;
+                    var element = $(this);
+                    var url = element.data('url');
+                    if (_.isUndefined(url)) {
+                        url = element.attr('href');
                     }
 
-                    var url = $(this).attr('data-url');
-                    if (_.isUndefined(url)) {
-                        url = $(this).attr('href');
+                    // only one instance of widget is allowed
+                    if (element.data('widget-opened')) {
+                        return;
+                    } else {
+                        element.data('widget-opened', true);
                     }
 
                     // create and open widget
                     var widget = new DialogWidget({
                         url: url,
-                        alias: callDialogAlias,
                         dialogOptions: {
                             allowMaximize: true,
                             allowMinimize: true,
                             dblclick: 'maximize',
                             maximizedHeightDecreaseBy: 'minimize-bar',
                             width: 1000,
-                            title: $(this).attr('title')
+                            title: element.attr('title')
                         }
                     });
-                    widget.render();
 
                     // reload widget with list of contact calls
                     widget.on('contactCallLogged', function() {
@@ -90,6 +89,12 @@
                             contactCallsWidget.loadContent();
                         });
                     });
+
+                    widget.on('widgetRemove', function() {
+                        element.data('widget-opened', false);
+                    });
+
+                    widget.render();
 
                     e.preventDefault();
                 });
