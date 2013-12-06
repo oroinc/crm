@@ -104,11 +104,11 @@ class ContactAddressControllersTest extends WebTestCase
             '<select name="orocrm_contact_address_form[state]" id="orocrm_contact_address_form_state" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
-            '<option value="AF.01">Badakhshan</option> </select>'
+            '<option value="AF.BDS">Badakhshān</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
-        $form['orocrm_contact_address_form[state]'] = 'AF.01';
+        $form['orocrm_contact_address_form[state]'] = 'AF.BDS';
 
         $this->client->followRedirects(true);
         $this->client->submit($form);
@@ -123,7 +123,7 @@ class ContactAddressControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $result = ToolsAPI::jsonToArray($result->getContent());
-        $this->assertEquals('Badakhshan', $result['state']);
+        $this->assertEquals('Badakhshān', $result['state']);
 
         return $id;
     }
@@ -172,11 +172,11 @@ class ContactAddressControllersTest extends WebTestCase
             '<select name="orocrm_contact_address_form[state]" id="orocrm_contact_address_form_state" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
-            '<option value="ZW.01">Manicaland</option> </select>'
+            '<option value="ZW.MA">Manicaland</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
-        $form['orocrm_contact_address_form[state]'] = 'ZW.01';
+        $form['orocrm_contact_address_form[state]'] = 'ZW.MA';
 
         $this->client->followRedirects(true);
         $this->client->submit($form);
