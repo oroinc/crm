@@ -1,5 +1,5 @@
 workflows:
-    # Unqualified Sales Lead Workflow
+    # Order Follow Up flow
     order_follow_up:
         label: 'Order Follow Up'
         enabled: true
