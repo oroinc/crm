@@ -59,7 +59,10 @@ class StoreConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    public function read()
+    public function doRead()
     {
+        /**
+         * @TODO FIXME review implementation
+         */
     }
 }

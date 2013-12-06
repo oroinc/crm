@@ -2,14 +2,15 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use Oro\Bundle\IntegrationBundle\Entity\Transport;
+use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
+use Oro\Bundle\IntegrationBundle\Guesser\TransportGuesser;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
-use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 
 class CustomerConnector extends AbstractConnector implements CustomerConnectorInterface
 {
-    const DEFAULT_SYNC_RANGE  = '1 month'; // '1 week';
+    const DEFAULT_SYNC_RANGE  = '1 month';
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer';
     const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';
     const JOB_IMPORT          = 'mage_customer_import';
@@ -41,26 +42,33 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     protected $logger;
 
     /**
-     * @param StoreConnector $storeConnector
-     * @param LoggerStrategy $logger
+     * @param ContextRegistry  $contextRegistry
+     * @param TransportGuesser $transportGuesser
+     * @param StoreConnector   $storeConnector
+     * @param LoggerStrategy   $logger
      */
-    public function __construct(StoreConnector $storeConnector, LoggerStrategy $logger)
-    {
+    public function __construct(
+        ContextRegistry $contextRegistry,
+        TransportGuesser $transportGuesser,
+        StoreConnector $storeConnector,
+        LoggerStrategy $logger
+    ) {
+        parent::__construct($contextRegistry, $transportGuesser);
         $this->storeConnector = $storeConnector;
         $this->logger         = $logger;
     }
 
+
     /**
-     * @param TransportInterface $realTransport
-     * @param Transport $transportSettings
-     * @throws \LogicException
+     * {@inheritdoc}
      */
-    public function configure(TransportInterface $realTransport, Transport $transportSettings)
+    protected function initializeFromContext(ContextInterface $context)
     {
-        $settings = $transportSettings->getSettingsBag()->all();
+        parent::initializeFromContext($context);
+        $settings = $this->transportSettings->getSettingsBag()->all();
 
         $startSyncDateKey = 'start_sync_date';
-        $lastSyncDateKey = 'last_sync_date';
+        $lastSyncDateKey  = 'last_sync_date';
         if (empty($settings[$startSyncDateKey])) {
             throw new \LogicException('Start sync date can\'t be empty');
         }
@@ -88,9 +96,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         }
 
         // init helper connector
-        $this->storeConnector->configure($realTransport, $transportSettings);
-
-        parent::configure($realTransport, $transportSettings);
+        $this->storeConnector->setStepExecution($this->getStepExecution());
     }
 
     /**
@@ -130,7 +136,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /**
      * {@inheritdoc}
      */
-    public function read()
+    public function doRead()
     {
         $this->preLoadDependencies();
 
@@ -195,7 +201,6 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         $this->customerIdsBuffer = $this->getCustomersList($filters, $this->batchSize, true);
 
         $this->logger->info(sprintf('found %d customers', count($this->customerIdsBuffer)));
-
         $this->lastSyncDate = $endDate;
 
         // no more data to look for

@@ -32,5 +32,7 @@ orocrm:
                 label: Regions connector
             product:
                 label: Product connector
+            order:
+                label: Order connector
 
 "Website ID: %websiteId%, Stores: %storesList%": "Website ID: %websiteId%, Stores: %storesList%"
