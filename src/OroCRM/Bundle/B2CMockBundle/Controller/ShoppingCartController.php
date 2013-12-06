@@ -31,4 +31,13 @@ class ShoppingCartController extends Controller
     {
         return array('entity' => $cart);
     }
+
+    /**
+     * @Route("/info/{id}", name="orocrm_b2c_shopping_cart_info", requirements={"id"="\d+"})
+     * @Template
+     */
+    public function infoAction(ShoppingCart $cart)
+    {
+        return array('entity' => $cart);
+    }
 }
