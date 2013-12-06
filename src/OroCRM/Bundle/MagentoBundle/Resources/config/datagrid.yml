@@ -109,3 +109,113 @@ datagrid:
                 rowAction:    true
         options:
             entityHint: customer
+
+    magento-products-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_magento_product_view
+            query:
+                select:
+                    - p
+                    - pch.name as channelName
+                from:
+                    - { table: OroCRMMagentoBundle:Product , alias: p }
+                join:
+                    left:
+                        - { join: p.channel, alias: pch }
+                        - { join: p.websites, alias: pw }
+        columns:
+            name:
+                label: orocrm.magento.datagrid.columns.name
+            sku:
+                label: orocrm.magento.datagrid.columns.sku
+            type:
+                label: orocrm.magento.datagrid.columns.type
+            price:
+                label: orocrm.magento.datagrid.columns.price
+                frontend_type: decimal
+            specialPrice:
+                label: orocrm.magento.datagrid.columns.specialPrice
+                frontend_type: decimal
+            websites:
+                label: orocrm.magento.datagrid.columns.websites
+                type:  callback
+                callable: OroCRM\Bundle\MagentoBundle\Converter\WebsiteCollectionToString::getConverterCallback
+            channelName:
+                label: orocrm.magento.datagrid.columns.channel
+            createdAt:
+                label: orocrm.magento.datagrid.columns.created_at
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.magento.datagrid.columns.updated_at
+                frontend_type: datetime
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: orocrm_magento_product_view
+                params: [ id ]
+        sorters:
+            columns:
+                name:          { data_name: p.name }
+                sku:           { data_name: p.sku }
+                type:          { data_name: p.type }
+                price:         { data_name: p.price }
+                specialPrice:  { data_name: p.specialPrice }
+                channelName:   { data_name: channelName }
+                createdAt:     { data_name: p.createdAt }
+                updatedAt:     { data_name: p.updatedAt }
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: p.name
+                sku:
+                    type: string
+                    data_name: p.sku
+                type:
+                    type: string
+                    data_name: p.type
+                price:
+                    type:             number
+                    data_name:        p.price
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                specialPrice:
+                    type:             number
+                    data_name:        p.specialPrice
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                channelName:
+                    type: entity
+                    data_name: pch
+                    options:
+                        field_options:
+                          class: OroIntegrationBundle:Channel
+                          property: name
+                websites:
+                    type: entity
+                    data_name: pw
+                    options:
+                        field_options:
+                          class: OroCRMMagentoBundle:Website
+                          multiple: true
+                          property: name
+                createdAt:
+                    type:      datetime
+                    data_name: c.createdAt
+                    enabled: false
+                updatedAt:
+                    type:      datetime
+                    data_name: c.updatedAt
+                    enabled: false
+        actions:
+            view:
+                type:         navigate
+                label:        orocrm.magento.datagrid.actions.view.label
+                link:         view_link
+                icon:         user
+                acl_recource: orocrm_magento_product_view
+                rowAction:    true
+        options:
+            entityHint: product

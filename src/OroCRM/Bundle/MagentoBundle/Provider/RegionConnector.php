@@ -25,7 +25,7 @@ class RegionConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    public function read()
+    public function doRead()
     {
         if ($this->countriesBuffer === false) {
             $this->findCountriesToImport();

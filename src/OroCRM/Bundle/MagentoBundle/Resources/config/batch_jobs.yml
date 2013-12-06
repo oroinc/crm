@@ -8,7 +8,7 @@ connector:
             steps:
                 import_validation:
                     title:     import_validation
-                    reader:    orocrm_magento.import.customer_reader.magento_api
+                    reader:    orocrm_magento.mage.customer_connector
                     processor: oro_importexport.processor.import_validation_delegate
                     writer:    oro_importexport.writer.doctrine_clear
 
@@ -18,7 +18,7 @@ connector:
             steps:
                 import:
                     title:     import
-                    reader:    orocrm_magento.import.customer_reader.magento_api
+                    reader:    orocrm_magento.mage.customer_connector
                     processor: oro_importexport.processor.import_delegate
                     writer:    oro_integration.writer.persistent_batch_writer
 
@@ -29,7 +29,7 @@ connector:
             steps:
                 import:
                     title:     import
-                    reader:    orocrm_magento.import.region_reader.magento_api
+                    reader:    orocrm_magento.mage.region_connector
                     processor: oro_importexport.processor.import_delegate
                     writer:    oro_integration.writer.persistent_batch_writer
 
@@ -39,9 +39,30 @@ connector:
             steps:
                 import_validation:
                     title:     import_validation
-                    reader:    orocrm_magento.import.region_reader.magento_api
+                    reader:    orocrm_magento.mage.region_connector
                     processor: oro_importexport.processor.import_validation_delegate
                     writer:    oro_importexport.writer.doctrine_clear
+
+        # Magento orders import/update
+        mage_order_import_validation:
+            title: "Order Import Validation from Magento SOAP API"
+            type: import_validation
+            steps:
+                import_validation:
+                    title:     import_validation
+                    reader:    orocrm_magento.mage.order_connector
+                    processor: oro_importexport.processor.import_validation_delegate
+                    writer:    oro_importexport.writer.doctrine_clear
+
+        mage_order_import:
+            title: "Order Import from Magento SOAP API"
+            type: import
+            steps:
+                import:
+                    title:     import
+                    reader:    orocrm_magento.mage.order_connector
+                    processor: oro_importexport.processor.import_delegate
+                    writer:    oro_integration.writer.persistent_batch_writer
 
         # Cart import jobs
         mage_cart_import_validation:

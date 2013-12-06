@@ -10,16 +10,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\Product;
 
 /**
- * @Route("/customer")
+ * @Route("/product")
  */
-class CustomerController extends Controller
+class ProductController extends Controller
 {
     /**
      * @Route("/index")
-     * @AclAncestor("orocrm_magento_customer_view")
+     * @AclAncestor("orocrm_magento_product_view")
      * @Template()
      */
     public function indexAction()
@@ -30,24 +30,24 @@ class CustomerController extends Controller
     /**
      * @Route("/view/{id}", requirements={"id"="\d+"}))
      * @Acl(
-     *      id="orocrm_magento_customer_view",
+     *      id="orocrm_magento_product_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMMagentoBundle:Customer"
+     *      class="OroCRMMagentoBundle:Product"
      * )
      * @Template()
      */
-    public function viewAction(Customer $customer)
+    public function viewAction(Product $customer)
     {
         return ['entity' => $customer];
     }
 
     /**
      * @Route("/info/{id}", requirements={"id"="\d+"}))
-     * @AclAncestor("orocrm_magento_customer_view")
+     * @AclAncestor("orocrm_magento_product_view")
      * @Template()
      */
-    public function infoAction(Customer $customer)
+    public function infoAction(Product $customer)
     {
         return ['entity' => $customer];
     }

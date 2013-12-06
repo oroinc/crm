@@ -9,6 +9,7 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
 
@@ -38,6 +39,8 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  */
 class Customer extends BasePerson implements FullNameInterface
 {
+    use IntegrationEntityTrait;
+
     /*
      * FIELDS are duplicated to enable dataaudit only for customer fields
      */
@@ -204,14 +207,6 @@ class Customer extends BasePerson implements FullNameInterface
     protected $originalId;
 
     /**
-     * @var Channel
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
-     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $channel;
-
-    /**
      * @param Website $website
      *
      * @return $this
@@ -369,25 +364,6 @@ class Customer extends BasePerson implements FullNameInterface
     public function getIsActive()
     {
         return $this->isActive;
-    }
-
-    /**
-     * @param Channel $channel
-     * @return $this
-     */
-    public function setChannel(Channel $channel)
-    {
-        $this->channel = $channel;
-
-        return $this;
-    }
-
-    /**
-     * @return Channel
-     */
-    public function getChannel()
-    {
-        return $this->channel;
     }
 
     public function __toString()
