@@ -31,4 +31,13 @@ class OrderController extends Controller
     {
         return array('entity' => $order);
     }
+
+    /**
+     * @Route("/info/{id}", name="orocrm_b2c_order_info", requirements={"id"="\d+"})
+     * @Template
+     */
+    public function infoAction(SaleOrder $order)
+    {
+        return array('entity' => $order);
+    }
 }

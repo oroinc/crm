@@ -1,7 +1,6 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
 <div class="widget-content contact-info form-horizontal box-content">
-    {{ macros.renderProperty('Status'|trans, entity.status.label) }}
     {{ macros.renderProperty('Customer'|trans, entity.customer|oro_format_name) }}
 
     <div class="control-group">
@@ -32,9 +31,9 @@
                 <p class="control-label">
                     {% if entity.customer.contact %}
                         {% if resource_granted('orocrm_contact_view') %}
-                        <a href="{{ path('orocrm_contact_view', {'id': entity.customer.contact.id}) }}">
-                            {{ entity.customer.contact }}
-                        </a>
+                            <a href="{{ path('orocrm_contact_view', {'id': entity.customer.contact.id}) }}">
+                                {{ entity.customer.contact }}
+                            </a>
                         {% else %}
                             {{ entity.customer.contact }}
                         {% endif %}
