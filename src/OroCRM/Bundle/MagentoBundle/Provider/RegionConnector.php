@@ -10,6 +10,7 @@ class RegionConnector extends AbstractConnector
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Region';
     const JOB_VALIDATE_IMPORT = 'mage_regions_import_validation';
     const JOB_IMPORT          = 'mage_regions_import';
+    const CONNECTOR_LABEL     = 'orocrm.magento.connector.region.label';
     const ALIAS_REGIONS       = 'regions';
 
     /** @var array */
@@ -104,33 +105,5 @@ class RegionConnector extends AbstractConnector
         }
 
         return $this->regionsBuffer;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLabel()
-    {
-        return 'orocrm.magento.connector.region.label';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getImportEntityFQCN()
-    {
-        return self::ENTITY_NAME;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getImportJobName($isValidationOnly = false)
-    {
-        if ($isValidationOnly) {
-            return self::JOB_VALIDATE_IMPORT;
-        }
-
-        return self::JOB_IMPORT;
     }
 }

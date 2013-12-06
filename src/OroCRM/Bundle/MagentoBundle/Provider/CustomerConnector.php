@@ -9,8 +9,10 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 
 class CustomerConnector extends AbstractConnector implements CustomerConnectorInterface
 {
-    const DEFAULT_SYNC_RANGE  = '1 month'; // '1 week';
+    const DEFAULT_SYNC_RANGE  = '1 month';
+
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer';
+    const CONNECTOR_LABEL     = 'orocrm.magento.connector.customer.label';
     const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';
     const JOB_IMPORT          = 'mage_customer_import';
 
@@ -339,33 +341,5 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function saveCustomerAddress()
     {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLabel()
-    {
-        return 'orocrm.magento.connector.customer.label';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getImportEntityFQCN()
-    {
-        return self::ENTITY_NAME;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getImportJobName($isValidationOnly = false)
-    {
-        if ($isValidationOnly) {
-            return self::JOB_VALIDATE_IMPORT;
-        }
-
-        return self::JOB_IMPORT;
     }
 }
