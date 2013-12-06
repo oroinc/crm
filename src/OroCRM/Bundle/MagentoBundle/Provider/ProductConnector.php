@@ -2,9 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
-use Oro\Bundle\IntegrationBundle\Guesser\TransportGuesser;
-use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
 class ProductConnector extends AbstractConnector
@@ -14,18 +11,6 @@ class ProductConnector extends AbstractConnector
 
     const JOB_VALIDATE_IMPORT = null;
     const JOB_IMPORT          = null;
-
-    /** @var LoggerStrategy */
-    protected $logger;
-
-    public function __construct(
-        ContextRegistry $contextRegistry,
-        TransportGuesser $transportGuesser,
-        LoggerStrategy $logger
-    ) {
-        parent::__construct($contextRegistry, $transportGuesser);
-        $this->logger = $logger;
-    }
 
     /**
      * {@inheritdoc}

@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
-use Oro\Bundle\IntegrationBundle\Guesser\TransportGuesser;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
@@ -38,24 +37,18 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /** @var StoreConnector */
     protected $storeConnector;
 
-    /** @var LoggerStrategy */
-    protected $logger;
-
     /**
-     * @param ContextRegistry  $contextRegistry
-     * @param TransportGuesser $transportGuesser
-     * @param StoreConnector   $storeConnector
-     * @param LoggerStrategy   $logger
+     * @param ContextRegistry $contextRegistry
+     * @param StoreConnector  $storeConnector
+     * @param LoggerStrategy  $logger
      */
     public function __construct(
         ContextRegistry $contextRegistry,
-        TransportGuesser $transportGuesser,
         StoreConnector $storeConnector,
         LoggerStrategy $logger
     ) {
-        parent::__construct($contextRegistry, $transportGuesser);
+        parent::__construct($contextRegistry, $logger);
         $this->storeConnector = $storeConnector;
-        $this->logger         = $logger;
     }
 
 

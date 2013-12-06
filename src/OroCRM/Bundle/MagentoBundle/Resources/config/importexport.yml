@@ -26,7 +26,6 @@ services:
         class: %orocrm_magento.mage.customer_connector.class%
         arguments:
           - @oro_importexport.context_registry
-          - @oro_integration.guesser.transport_guesser
           - @orocrm_magento.mage.store_connector
           - @oro_integration.logger.strategy
         tags:
@@ -36,7 +35,6 @@ services:
         class: %orocrm_magento.mage.product_connector.class%
         arguments:
           - @oro_importexport.context_registry
-          - @oro_integration.guesser.transport_guesser
           - @oro_integration.logger.strategy
         tags: []
           # @TODO uncomment when feature will be full implemented
@@ -46,7 +44,6 @@ services:
         class: %orocrm_magento.mage.order_connector.class%
         arguments:
           - @oro_importexport.context_registry
-          - @oro_integration.guesser.transport_guesser
           - @oro_integration.logger.strategy
         tags:
           - { name: oro_integration.connector, type: order, channel_type: magento }
@@ -55,13 +52,13 @@ services:
         class: %orocrm_magento.mage.store_connector.class%
         arguments:
           - @oro_importexport.context_registry
-          - @oro_integration.guesser.transport_guesser
+          - @oro_integration.logger.strategy
 
     orocrm_magento.mage.region_connector:
         class: %orocrm_magento.mage.region_connector.class%
         arguments:
           - @oro_importexport.context_registry
-          - @oro_integration.guesser.transport_guesser
+          - @oro_integration.logger.strategy
         tags:
           - { name: oro_integration.connector, type: region, channel_type: magento }
 
