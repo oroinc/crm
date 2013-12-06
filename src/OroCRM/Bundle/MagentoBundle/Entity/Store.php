@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 
 /**
  * Class Store
@@ -17,11 +18,15 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
  *  indexes={
  *      @ORM\Index(name="idx_website", columns={"website_id"})
  *  },
- *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_code", columns={"store_code"})}
+ *  uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="unq_code_channel_id", columns={"store_code", "channel_id"})
+ *  }
  * )
  */
 class Store
 {
+    use IntegrationEntityTrait;
+
     /**
      * @var integer
      *

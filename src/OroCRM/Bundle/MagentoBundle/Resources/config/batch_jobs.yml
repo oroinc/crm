@@ -71,7 +71,7 @@ connector:
             steps:
                 import_validation:
                     title:     import_validation
-                    reader:    orocrm_magento.import.cart_reader.magento_api
+                    reader:    orocrm_magento.mage.cart_connector
                     processor: oro_importexport.processor.import_validation_delegate
                     writer:    oro_importexport.writer.doctrine_clear
 
@@ -81,6 +81,6 @@ connector:
             steps:
                 import:
                     title:     import
-                    reader:    orocrm_magento.import.cart_reader.magento_api
+                    reader:    orocrm_magento.mage.cart_connector
                     processor: oro_importexport.processor.import_delegate
                     writer:    oro_importexport.writer.entity
