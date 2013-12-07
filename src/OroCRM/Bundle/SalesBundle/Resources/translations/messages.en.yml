@@ -1,3 +1,11 @@
+oro:
+    query_designer:
+        aggregates:
+            opportunity_status:
+                WonCount:           Won Count
+                LostCount:          Lost Count
+                InProgressCount:    In Progress Count
+
 orocrm.sales.opportunity.datagrid.name: Opportunity Name
 orocrm.sales.opportunity.datagrid.contact_name: Potential Customer
 orocrm.sales.opportunity.datagrid.close_date: Close Date
