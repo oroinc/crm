@@ -51,7 +51,7 @@ class CartItem extends BaseCartItem
     /**
      * @var string
      *
-     * @ORM\Column(name="gift_message", type="string", length=255)
+     * @ORM\Column(name="gift_message", type="string", length=255, nullable=true)
      */
     protected $giftMessage;
 
@@ -86,7 +86,7 @@ class CartItem extends BaseCartItem
     /**
      * @var float
      *
-     * @ORM\Column(name="price_incl_tax", type="decimal")
+     * @ORM\Column(name="price_incl_tax", type="decimal", nullable=true)
      */
     protected $priceInclTax;
 

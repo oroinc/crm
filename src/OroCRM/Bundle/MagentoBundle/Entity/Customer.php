@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
@@ -22,7 +21,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
  * @ORM\Table(name="orocrm_magento_customer",
- *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_original_id_channel_id", columns={"original_id", "channel_id"})}
+ *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})}
  * )
  * @Config(
  *  routeName="orocrm_magento_customer_index",
@@ -39,7 +38,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  */
 class Customer extends BasePerson implements FullNameInterface
 {
-    use IntegrationEntityTrait;
+    use IntegrationEntityTrait, OriginTrait;
 
     /*
      * FIELDS are duplicated to enable dataaudit only for customer fields
@@ -200,13 +199,6 @@ class Customer extends BasePerson implements FullNameInterface
     protected $vat;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(type="integer", options={"unsigned"=true}, name="original_id")
-     */
-    protected $originalId;
-
-    /**
      * @param Website $website
      *
      * @return $this
@@ -307,26 +299,6 @@ class Customer extends BasePerson implements FullNameInterface
     }
 
     /**
-     * @param int $originalId
-     *
-     * @return $this
-     */
-    public function setOriginalId($originalId)
-    {
-        $this->originalId = $originalId;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOriginalId()
-    {
-        return $this->originalId;
-    }
-
-    /**
      * @param string $vat
      *
      * @return $this
@@ -372,15 +344,15 @@ class Customer extends BasePerson implements FullNameInterface
     }
 
     /**
-     * @param int $originalId
+     * @param int $originId
      *
      * @return Address|false
      */
-    public function getAddressByOriginalId($originalId)
+    public function getAddressByOriginId($originId)
     {
         return $this->addresses->filter(
-            function ($item) use ($originalId) {
-                return $item->getOriginalId() == $originalId;
+            function ($item) use ($originId) {
+                return $item->getOriginId() == $originId;
             }
         )->first();
     }

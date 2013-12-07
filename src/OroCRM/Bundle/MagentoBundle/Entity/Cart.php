@@ -19,7 +19,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      @ORM\Index(name="magecart_origin_idx", columns={"origin_id"})
  *  },
  *  uniqueConstraints={
- *      @ORM\UniqueConstraint(name="unq_original_id_channel_id", columns={"origin_id", "channel_id"})
+ *      @ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})
  *  }
  * )
  * @Config(
@@ -123,7 +123,7 @@ class Cart extends BaseCart
     /**
      * @var string
      *
-     * @ORM\Column(name="gift_message", type="string", length=255)
+     * @ORM\Column(name="gift_message", type="string", length=255, nullable=true)
      */
     protected $giftMessage;
 
@@ -156,5 +156,24 @@ class Cart extends BaseCart
     public function getStore()
     {
         return $this->store;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param mixed $customer
+     *
+     * @return $this
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
+        return $this;
     }
 }

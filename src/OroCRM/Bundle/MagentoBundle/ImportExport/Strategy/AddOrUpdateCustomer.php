@@ -53,7 +53,7 @@ class AddOrUpdateCustomer extends BaseStrategy
         $newEntity = $this->findAndReplaceEntity(
             $importedEntity,
             self::ENTITY_NAME,
-            'originalId',
+            'originId',
             ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses']
         );
 
@@ -179,8 +179,8 @@ class AddOrUpdateCustomer extends BaseStrategy
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
 
             $originAddressId = $address->getId();
-            $address->setOriginalId($originAddressId);
-            $existingAddress = $entity->getAddressByOriginalId($originAddressId);
+            $address->setOriginId($originAddressId);
+            $existingAddress = $entity->getAddressByOriginId($originAddressId);
 
             if ($existingAddress) {
                 $this->strategyHelper->importEntity($existingAddress, $address, ['id', 'region', 'country']);

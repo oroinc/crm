@@ -18,11 +18,11 @@ class AddressTest extends AbstractEntityTestCase
     public function getSetDataProvider()
     {
         $owner      = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Customer');
-        $originalId = 123;
+        $originId = 123;
 
         return [
-            'owner'       => ['owner', $owner, $owner],
-            'original_id' => ['originalId', $originalId, $originalId],
+            'owner'     => ['owner', $owner, $owner],
+            'origin_id' => ['originId', $originId, $originId],
         ];
     }
 }
