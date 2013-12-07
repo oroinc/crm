@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
@@ -15,28 +17,33 @@ class CartStrategy extends BaseStrategy
     /**
      * {@inheritdoc}
      */
-    public function process($entity)
+    public function process($newEntity)
     {
-        $newEntity = $this->findAndReplaceEntity(
-            $entity,
-            self::ENTITY_NAME,
-            'originId',
-            ['id', 'store', 'cartItems', 'customer']
+        $existingEntity = $this->getEntityByCriteria(
+            ['originId' => $newEntity->getOriginId(), 'channel' => $newEntity->getChannel()],
+            $newEntity
         );
 
-        if (!$newEntity->getStore()->getId()) {
-            $newEntity->setStore(
-                $this->storeStrategy->process($entity->getStore())
+        if ($existingEntity) {
+            $this->strategyHelper->importEntity($existingEntity, $newEntity, ['id', 'store', 'cartItems', 'customer']);
+            $cartItemsMode = 'update';
+        } else {
+            $existingEntity = $newEntity;
+            $cartItemsMode = 'new';
+        }
+
+        if (!$existingEntity->getStore()->getId()) {
+            $existingEntity->setStore(
+                $this->storeStrategy->process($newEntity->getStore())
             );
         }
 
-        $this
-            ->updateCustomer($newEntity, $entity->getCustomer())
-            ->updateCartItems($newEntity, $entity->getCartItems());
+        $this->updateCustomer($existingEntity, $newEntity->getCustomer())
+            ->updateAddresses($existingEntity)
+            ->updateCartItems($existingEntity, $newEntity->getCartItems(), $cartItemsMode);
 
         // TODO: update addresses, if exists
-
-        $this->validateAndUpdateContext($newEntity);
+        $this->validateAndUpdateContext($existingEntity);
 
         return $newEntity;
     }
@@ -51,12 +58,13 @@ class CartStrategy extends BaseStrategy
      */
     protected function updateCustomer(Cart $newCart, Customer $customer)
     {
-        $updatedCustomer = $this->getEntityByCriteria(
+        $existingCustomer = $this->getEntityByCriteria(
             ['originId' => $customer->getOriginId(), 'channel' => $customer->getChannel()],
             $customer
         );
 
-        if ($updatedCustomer) {
+        if ($existingCustomer) {
+            $newCart->setCustomer($existingCustomer);
         } else {
             $newCart->setCustomer(null);
         }
@@ -65,13 +73,71 @@ class CartStrategy extends BaseStrategy
     }
 
     /**
-     * @param Cart $newCart
-     * @param      $cartItems
+     * @param Cart            $cart
+     * @param ArrayCollection $cartItems imported items
+     * @param string          $mode update or new
      *
      * @return $this
      */
-    protected function updateCartItems(Cart $newCart, $cartItems)
+    protected function updateCartItems(Cart $cart, ArrayCollection $cartItems, $mode = 'update')
     {
+        $existingCartItems = $cart->getCartItems()
+            ->filter(
+                function ($item) {
+                    return (bool) $item->getId();
+                }
+            );
+
+        $importedOriginIds = $cartItems->map(
+            function ($item) {
+                return $item->getOriginId();
+            }
+        )->toArray();
+
+        // insert new and update existing items
+        /** $item - imported cart item */
+        foreach ($cartItems as $item) {
+            $originId = $item->getOriginId();
+
+            $existingItem = $existingCartItems->filter(
+                function ($item) use ($originId) {
+                    return $item->getOriginId() == $originId;
+                }
+            )->first();
+
+            if ($existingItem) {
+                $this->strategyHelper->importEntity($existingItem, $item, ['id', 'cart']);
+            } else {
+                $item->setCart($cart);
+            }
+
+            if (!$existingItem && !$cart->getCartItems()->contains($item)) {
+                $cart->getCartItems()->add($item);
+            }
+        }
+
+        // delete cart items that not exists in remote cart
+        $deletedCartItems = $cart->getCartItems()->filter(
+            function ($item) use ($importedOriginIds) {
+                return !in_array($item->getOriginId(), $importedOriginIds);
+            }
+        );
+        foreach ($deletedCartItems as $item) {
+            $cart->getCartItems()->remove($item);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Cart $newCart
+     *
+     * @return $this
+     */
+    protected function updateAddresses(Cart $newCart)
+    {
+        // TODO: implement update addresses, if exists
+
         return $this;
     }
 

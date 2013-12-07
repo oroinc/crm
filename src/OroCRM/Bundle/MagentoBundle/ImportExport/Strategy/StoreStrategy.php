@@ -18,7 +18,7 @@ class StoreStrategy extends BaseStrategy
     public function process($entity)
     {
         // do not allow to change code/website name by imported entity
-        $doNotUpdateFields = ['id', 'code', 'name'];
+        $doNotUpdateFields = ['id', 'code', 'name', 'website'];
         $code = $entity->getCode();
 
         $criteria = ['code' => $code, 'channel' => $entity->getChannel()];

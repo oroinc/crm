@@ -50,6 +50,7 @@ class AddOrUpdateCustomer extends BaseStrategy
      */
     public function process($importedEntity)
     {
+        // TODO: look for customer by originId and channelId
         $newEntity = $this->findAndReplaceEntity(
             $importedEntity,
             self::ENTITY_NAME,
