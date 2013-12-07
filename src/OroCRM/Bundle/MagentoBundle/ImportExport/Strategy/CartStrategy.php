@@ -45,7 +45,7 @@ class CartStrategy extends BaseStrategy
         // TODO: update addresses, if exists
         $this->validateAndUpdateContext($existingEntity);
 
-        return $newEntity;
+        return $existingEntity;
     }
 
     /**
@@ -81,13 +81,6 @@ class CartStrategy extends BaseStrategy
      */
     protected function updateCartItems(Cart $cart, ArrayCollection $cartItems, $mode = 'update')
     {
-        $existingCartItems = $cart->getCartItems()
-            ->filter(
-                function ($item) {
-                    return (bool) $item->getId();
-                }
-            );
-
         $importedOriginIds = $cartItems->map(
             function ($item) {
                 return $item->getOriginId();
@@ -99,7 +92,7 @@ class CartStrategy extends BaseStrategy
         foreach ($cartItems as $item) {
             $originId = $item->getOriginId();
 
-            $existingItem = $existingCartItems->filter(
+            $existingItem = $cart->getCartItems()->filter(
                 function ($item) use ($originId) {
                     return $item->getOriginId() == $originId;
                 }
@@ -107,11 +100,14 @@ class CartStrategy extends BaseStrategy
 
             if ($existingItem) {
                 $this->strategyHelper->importEntity($existingItem, $item, ['id', 'cart']);
-            } else {
+                $item = $existingItem;
+            }
+
+            if (!$item->getCart()) {
                 $item->setCart($cart);
             }
 
-            if (!$existingItem && !$cart->getCartItems()->contains($item)) {
+            if (!$cart->getCartItems()->contains($item)) {
                 $cart->getCartItems()->add($item);
             }
         }
