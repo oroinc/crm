@@ -224,19 +224,9 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
                     $this->dependencies[self::ALIAS_STORES] = $this->storeConnector->getStores();
                     break;
                 case self::ALIAS_WEBSITES:
-                    $websites = [];
-                    foreach ($this->dependencies[self::ALIAS_STORES] as $store) {
-                        $websites[$store['website_id']]['name'][] = $store['name'];
-                        $websites[$store['website_id']]['code'][] = $store['code'];
-                    }
-
-                    foreach ($websites as $websiteId => $websiteItem) {
-                        $websites[$websiteId]['name'] = implode(', ', $websiteItem['name']);
-                        $websites[$websiteId]['code'] = implode(' / ', $websiteItem['code']);
-                        $websites[$websiteId]['id']   = $websiteId;
-                    }
-
-                    $this->dependencies[self::ALIAS_WEBSITES] = $websites;
+                    $this->dependencies[self::ALIAS_WEBSITES] = $this->storeConnector->getWebsites(
+                        $this->dependencies[self::ALIAS_STORES]
+                    );
                     break;
             }
         }

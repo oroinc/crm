@@ -29,7 +29,7 @@ class StoreStrategy extends BaseStrategy
             if ($this->storeEntityCache[$code]) {
                 $this->strategyHelper->importEntity($this->storeEntityCache[$code], $entity, $doNotUpdateFields);
             } else {
-                $this->storeEntityCache[$code]->setId(null);
+                $this->storeEntityCache[$code] = $entity->setId(null);
             }
 
             $this->storeEntityCache[$code] = $this->merge($this->storeEntityCache[$code]);

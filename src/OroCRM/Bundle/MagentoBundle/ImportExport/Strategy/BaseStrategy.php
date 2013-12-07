@@ -92,7 +92,7 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
         $entityId = $entity->{'get'.ucfirst($entityIdField)}();
 
         if ($entityId) {
-            $existingEntity = $this->getEntityByCriteria($entityClass, [$entityIdField => $entityId]);
+            $existingEntity = $this->getEntityByCriteria([$entityIdField => $entityId], $entityClass);
         }
 
         return $existingEntity ?: null;

@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -64,25 +65,16 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
             $context
         );
 
-        $data['customer']['group'] = $serializer->denormalize(
-            $data['customer']['group'],
-            CustomerNormalizer::GROUPS_TYPE,
-            $format,
-            $context
-        );
-        $data['customer']['group']->setChannel($channel);
+        $data['customer'] = $this->denormalizeCustomer($data, $format, $context);
 
-        $customer = new Customer();
-        $this->fillResultObject($customer, $data['customer']);
-        $customer->setEmail($data['email']);
-        $data['customer'] = $customer;
-
+        $website = $serializer->denormalize($data['store']['website'], StoreConnector::WEBSITE_TYPE, $format, $context);
         $data['store'] = $serializer->denormalize(
             $data['store'],
-            CustomerNormalizer::STORE_TYPE,
+            StoreConnector::STORE_TYPE,
             $format,
             $context
         );
+        $data['store']->setWebsite($website);
         $data['store']->setChannel($channel);
 
         $data = $this->denormalizeCreatedUpdated($data, $format, $context);
@@ -104,19 +96,17 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
      */
     protected function denormalizeCustomer($data, $format, $context)
     {
+        $group = $this->serializer->denormalize(
+            $data['customer']['group'],
+            CustomerNormalizer::GROUPS_TYPE,
+            $format,
+            $context
+        );
+        $group->setChannel($context['channel']);
+
         $customer = new Customer();
-        $customer
-            ->setOriginalId($data['customer']['originId'])
-            ->setFirstName($data['customer']['firstname'])
-            ->setLastName($data['customer']['lastname'])
-            ->setGroup(
-                $this->serializer->denormalize(
-                    ['id' => $data['customer']['group_id']],
-                    CustomerNormalizer::GROUPS_TYPE,
-                    $format,
-                    $context
-                )
-            );
+        $this->fillResultObject($customer, $data['customer']);
+        $customer->setEmail($data['email']);
 
         return $customer;
     }

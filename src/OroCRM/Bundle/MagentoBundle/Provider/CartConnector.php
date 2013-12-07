@@ -18,6 +18,7 @@ class CartConnector extends AbstractConnector
 
     const ALIAS_GROUPS        = 'groups';
     const ALIAS_STORES        = 'stores';
+    const ALIAS_WEBSITES      = 'websites';
 
     /** @var int */
     protected $currentPage = 1;
@@ -50,7 +51,9 @@ class CartConnector extends AbstractConnector
         $store = $this->getStoreDataById($result->store_id);
         $result->store_code = $store['code'];
         $result->store_name = $store['name'];
-        $result->store_website_id = $store['website_id'];
+        $result->store_website_id = $store['website']['id'];
+        $result->store_website_code = $store['website']['code'];
+        $result->store_website_name = $store['website']['name'];
 
         $customer_group = $this->getCustomerGroupDataById($result->customer_group_id);
         $result->customer_group_code = $customer_group['customer_group_code'];
@@ -122,7 +125,10 @@ class CartConnector extends AbstractConnector
      */
     protected function getStoreDataById($id)
     {
-        return $this->dependencies[self::ALIAS_STORES][$id];
+        $store = $this->dependencies[self::ALIAS_STORES][$id];
+        $store['website'] = $this->dependencies[self::ALIAS_WEBSITES][$store['website_id']];
+
+        return $store;
     }
 
     /**
@@ -144,13 +150,18 @@ class CartConnector extends AbstractConnector
             return;
         }
 
-        foreach ([self::ALIAS_GROUPS, self::ALIAS_STORES] as $item) {
+        foreach ([self::ALIAS_GROUPS, self::ALIAS_STORES, self::ALIAS_WEBSITES] as $item) {
             switch ($item) {
                 case self::ALIAS_GROUPS:
                     $this->dependencies[self::ALIAS_GROUPS] = $this->customerConnector->getCustomerGroups();
                     break;
                 case self::ALIAS_STORES:
                     $this->dependencies[self::ALIAS_STORES] = $this->storeConnector->getStores();
+                    break;
+                case self::ALIAS_WEBSITES:
+                    $this->dependencies[self::ALIAS_WEBSITES] = $this->storeConnector->getWebsites(
+                        $this->dependencies[self::ALIAS_STORES]
+                    );
                     break;
             }
         }

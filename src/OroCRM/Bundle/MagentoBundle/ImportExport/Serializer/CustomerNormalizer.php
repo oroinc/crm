@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -23,7 +24,7 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
     const ENTITY_NAME = 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
 
     protected $importFieldsMap = [
-        'customer_id' => 'original_id',
+        'customer_id' => 'origin_id',
         'firstname'   => 'first_name',
         'lastname'    => 'last_name',
         'middlename'  => 'middle_name',
@@ -43,8 +44,6 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
         'birthday',
     );
 
-    const STORE_TYPE          = 'OroCRM\Bundle\MagentoBundle\Entity\Store';
-    const WEBSITE_TYPE        = 'OroCRM\Bundle\MagentoBundle\Entity\Website';
     const GROUPS_TYPE         = 'OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup';
     const ADDRESSES_TYPE      = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactAddress>';
     const MAGE_ADDRESSES_TYPE = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\Address>';
@@ -160,10 +159,10 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
         unset($data['account']);
 
         /** @var Website $website */
-        $website = $this->denormalizeObject($data, 'website', static::WEBSITE_TYPE, $format, $context);
+        $website = $this->denormalizeObject($data, 'website', StoreConnector::WEBSITE_TYPE, $format, $context);
 
         /** @var Store $store */
-        $store = $this->denormalizeObject($data, 'store', static::STORE_TYPE, $format, $context);
+        $store = $this->denormalizeObject($data, 'store', StoreConnector::STORE_TYPE, $format, $context);
         $store->setWebsite($website);
 
         if (!empty($data['birthday'])) {
