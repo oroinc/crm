@@ -31,7 +31,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /** @var int */
     protected $batchSize;
 
-    /** @var array dependencies data: customer groups, stores, websites, regions */
+    /** @var array dependencies data: customer groups, stores, websites */
     protected $dependencies = [];
 
     /** @var StoreConnector */
@@ -144,6 +144,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
 
             $now = new \DateTime('now', new \DateTimeZone('UTC'));
             $this->logger->info(sprintf('[%s] loading customer ID: %d', $now->format('d-m-Y H:i:s'), $customerId));
+
             $data = $this->getCustomerData($customerId, true);
         } else {
             // empty record, nothing found but keep going

@@ -25,7 +25,7 @@ use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
  */
 class Store
 {
-    use IntegrationEntityTrait;
+    use IntegrationEntityTrait, OriginTrait;
 
     /**
      * @var integer

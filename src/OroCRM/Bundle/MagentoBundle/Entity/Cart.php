@@ -36,7 +36,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  */
 class Cart extends BaseCart
 {
-    use IntegrationEntityTrait;
+    use IntegrationEntityTrait, OriginTrait;
 
     /**
      * @var CartItem[]|Collection
@@ -61,14 +61,6 @@ class Cart extends BaseCart
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $store;
-
-    /**
-     * Mage cart origin id (quote_id)
-     * @var integer
-     *
-     * @ORM\Column(name="origin_id", type="integer", options={"unsigned"=true})
-     */
-    protected $originId;
 
     /**
      * Total items qty
@@ -164,21 +156,5 @@ class Cart extends BaseCart
     public function getStore()
     {
         return $this->store;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOriginId()
-    {
-        return $this->originId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getItemsQty()
-    {
-        return $this->itemsQty;
     }
 }

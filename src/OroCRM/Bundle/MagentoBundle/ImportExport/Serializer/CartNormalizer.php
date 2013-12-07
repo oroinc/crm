@@ -53,6 +53,7 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
+        $channel = $context['channel'];
         $serializer = $this->serializer;
         $data         = is_array($data) ? $data : [];
 
@@ -63,23 +64,33 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
             $context
         );
 
+        $data['customer']['group'] = $serializer->denormalize(
+            $data['customer']['group'],
+            CustomerNormalizer::GROUPS_TYPE,
+            $format,
+            $context
+        );
+        $data['customer']['group']->setChannel($channel);
+
         $customer = new Customer();
         $this->fillResultObject($customer, $data['customer']);
+        $customer->setEmail($data['email']);
         $data['customer'] = $customer;
 
         $data['store'] = $serializer->denormalize(
-            ['id' => $data['store']],
+            $data['store'],
             CustomerNormalizer::STORE_TYPE,
             $format,
             $context
         );
+        $data['store']->setChannel($channel);
 
         $data = $this->denormalizeCreatedUpdated($data, $format, $context);
 
         $cart = new Cart();
         $this->fillResultObject($cart, $data);
 
-        $cart->setChannel($context['channel']);
+        $cart->setChannel($channel);
 
         return $cart;
     }

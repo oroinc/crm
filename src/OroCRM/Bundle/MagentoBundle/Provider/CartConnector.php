@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
@@ -15,22 +16,45 @@ class CartConnector extends AbstractConnector
     const ACTION_CART_LIST    = 'salesQuoteList';
     const PAGE_SIZE           = 10;
 
+    const ALIAS_GROUPS        = 'groups';
+    const ALIAS_STORES        = 'stores';
+
     /** @var int */
     protected $currentPage = 1;
 
     /** @var array */
     protected $quoteQueue = [];
 
+    /** @var array dependencies data: customer groups, stores */
+    protected $dependencies = [];
+
+    /** @var CustomerConnector */
+    protected $customerConnector;
+
+    /** @var StoreConnector */
+    protected $storeConnector;
+
     /**
      * {@inheritdoc}
      */
     public function doRead()
     {
+        $this->preLoadDependencies();
         $result = $this->getNextItem();
 
         if (empty($result)) {
             return null; // no more data
         }
+
+        // fill related entities data
+        $store = $this->getStoreDataById($result->store_id);
+        $result->store_code = $store['code'];
+        $result->store_name = $store['name'];
+        $result->store_website_id = $store['website_id'];
+
+        $customer_group = $this->getCustomerGroupDataById($result->customer_group_id);
+        $result->customer_group_code = $customer_group['customer_group_code'];
+        $result->customer_group_name = $customer_group['name'];
 
         $result = ConverterUtils::objectToArray($result);
         $this->currentPage++;
@@ -48,23 +72,14 @@ class CartConnector extends AbstractConnector
         $filters = [];
 
         if (empty($this->quoteQueue)) {
-            // TODO: remove / log
-            echo sprintf(
-                'Looking for entities at %d page ... ',
-                $this->currentPage
-            );
+            $this->logger->info(sprintf('Looking for entities at %d page ... ', $this->currentPage));
 
             $this->quoteQueue = $this->getQuoteList(
                 $filters,
                 ['page' => $this->currentPage, 'pageSize' => self::PAGE_SIZE]
             );
 
-            // TODO: remove / log
-            echo sprintf(
-                '%d records',
-                count($this->quoteQueue),
-                $this->currentPage
-            ) . "\n";
+            $this->logger->info(sprintf('%d records', count($this->quoteQueue), $this->currentPage));
         }
 
         return array_shift($this->quoteQueue);
@@ -85,5 +100,75 @@ class CartConnector extends AbstractConnector
         }
 
         return $this->call(self::ACTION_CART_LIST, [$filters, $limits]);
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function initializeFromContext(ContextInterface $context)
+    {
+        parent::initializeFromContext($context);
+
+        // init helper connectors
+        $this->storeConnector->setStepExecution($this->getStepExecution());
+        $this->customerConnector->setStepExecution($this->getStepExecution());
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return array
+     */
+    protected function getStoreDataById($id)
+    {
+        return $this->dependencies[self::ALIAS_STORES][$id];
+    }
+
+    /**
+     * @param $id
+     *
+     * @return array
+     */
+    protected function getCustomerGroupDataById($id)
+    {
+        return $this->dependencies[self::ALIAS_GROUPS][$id];
+    }
+
+    /**
+     * Load stores and customer groups data
+     */
+    public function preLoadDependencies()
+    {
+        if (!empty($this->dependencies)) {
+            return;
+        }
+
+        foreach ([self::ALIAS_GROUPS, self::ALIAS_STORES] as $item) {
+            switch ($item) {
+                case self::ALIAS_GROUPS:
+                    $this->dependencies[self::ALIAS_GROUPS] = $this->customerConnector->getCustomerGroups();
+                    break;
+                case self::ALIAS_STORES:
+                    $this->dependencies[self::ALIAS_STORES] = $this->storeConnector->getStores();
+                    break;
+            }
+        }
+    }
+
+    /**
+     * @param CustomerConnector $customerConnector
+     */
+    public function setCustomerConnector(CustomerConnector $customerConnector)
+    {
+        $this->customerConnector = $customerConnector;
+    }
+
+    /**
+     * @param StoreConnector $storeConnector
+     */
+    public function setStoreConnector(StoreConnector $storeConnector)
+    {
+        $this->storeConnector = $storeConnector;
     }
 }
