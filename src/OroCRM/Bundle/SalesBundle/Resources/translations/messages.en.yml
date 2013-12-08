@@ -1,4 +1,4 @@
-oro:
+orocrm:
     query_designer:
         aggregates:
             opportunity_status:
