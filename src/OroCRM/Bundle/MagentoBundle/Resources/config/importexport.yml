@@ -3,6 +3,7 @@ parameters:
     orocrm_magento.customer.entity.class:                                 OroCRM\Bundle\MagentoBundle\Entity\Customer
     orocrm_magento.region.entity.class:                                   OroCRM\Bundle\MagentoBundle\Entity\Region
     orocrm_magento.cart.entity.class:                                     OroCRM\Bundle\MagentoBundle\Entity\Cart
+    orocrm_magento.order.entity.class:                                    OroCRM\Bundle\MagentoBundle\Entity\Order
 
     # converter
     orocrm_magento.importexport.data_converter.cart.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CartDataConverter
@@ -29,6 +30,7 @@ parameters:
     orocrm_magento.import_strategy.region.add_or_update.class:            OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\RegionStrategy
     orocrm_magento.import_strategy.cart.add_or_update.class:              OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy
     orocrm_magento.import_strategy.store.class:                           OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StoreStrategy
+    orocrm_magento.import_strategy.order.add_or_update.class:             OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderStrategy
 
 services:
     # Data converter
@@ -43,8 +45,8 @@ services:
         class: %orocrm_magento.mage.customer_connector.class%
         arguments:
           - @oro_importexport.context_registry
-          - @orocrm_magento.mage.store_connector
           - @oro_integration.logger.strategy
+          - @orocrm_magento.mage.store_connector
         tags:
           - { name: oro_integration.connector, type: customer, channel_type: magento }
 
@@ -63,6 +65,7 @@ services:
           - @oro_importexport.context_registry
           - @oro_integration.logger.strategy
           - @orocrm_magento.mage.store_connector
+          - @orocrm_magento.mage.customer_connector
         tags:
           - { name: oro_integration.connector, type: order, channel_type: magento }
 
@@ -149,6 +152,13 @@ services:
         calls:
             - [setStoreStrategy, ["@orocrm_magento.import.strategy.store"]]
 
+    orocrm_magento.import.strategy.order.add_or_update:
+        class: %orocrm_magento.import_strategy.order.add_or_update.class%
+        arguments:
+            - @oro_importexport.strategy.import.helper
+        calls:
+            - [setStoreStrategy, ["@orocrm_magento.import.strategy.store"]]
+
     # Processors
     orocrm_magento.importexport.processor.import_customer:
         parent: oro_importexport.processor.import_abstract
@@ -176,3 +186,12 @@ services:
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.cart.entity.class%, alias: orocrm_magento.add_or_update_cart }
             - { name: oro_importexport.processor, type: import_validation, entity: %orocrm_magento.cart.entity.class%, alias: orocrm_magento.add_or_update_cart }
+
+    orocrm_magento.importexport.processor.import_order:
+        parent: oro_importexport.processor.import_abstract
+        calls:
+             - [setDataConverter, [@oro_importexport.data_converter.default]]
+             - [setStrategy, [@orocrm_magento.import.strategy.region.add_or_update]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.order.entity.class%, alias: orocrm_magento.add_or_update_order }
+            - { name: oro_importexport.processor, type: import_validation, entity: %orocrm_magento.order.entity.class%, alias: orocrm_magento.add_or_order }

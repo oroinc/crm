@@ -19,7 +19,6 @@ class StoreConnector extends AbstractConnector implements MagentoConnectorInterf
     const STORE_TYPE   = 'OroCRM\Bundle\MagentoBundle\Entity\Store';
     const WEBSITE_TYPE = 'OroCRM\Bundle\MagentoBundle\Entity\Website';
 
-    const ACTION_STORE_LIST      = 'storeList';
     const WEBSITE_CODE_SEPARATOR = ' / ';
     const WEBSITE_NAME_SEPARATOR = ', ';
 
@@ -28,7 +27,7 @@ class StoreConnector extends AbstractConnector implements MagentoConnectorInterf
      */
     public function getStores()
     {
-        $result = $this->call(self::ACTION_STORE_LIST);
+        $result = $this->call(MagentoConnectorInterface::ACTION_STORE_LIST);
 
         $stores = $websites = [];
         foreach ($result as $item) {

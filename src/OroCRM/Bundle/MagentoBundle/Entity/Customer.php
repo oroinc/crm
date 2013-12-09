@@ -37,7 +37,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * )
  * @Oro\Loggable
  */
-class Customer extends BasePerson implements FullNameInterface
+class Customer extends BasePerson
 {
     use IntegrationEntityTrait, OriginTrait;
 

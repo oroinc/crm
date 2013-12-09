@@ -36,6 +36,13 @@ class Order extends BaseOrder
     use IntegrationEntityTrait, OriginTrait;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="increment_id", type="integer", options={"unsigned"=true}, nullable=false)
+     */
+    protected $incrementId;
+
+    /**
      * @var ArrayCollection
      *
      * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"})
@@ -135,6 +142,26 @@ class Order extends BaseOrder
      * @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order",cascade={"all"})
      */
     protected $items;
+
+    /**
+     * @param integer $incrementId
+     *
+     * @return $this
+     */
+    public function setIncrementId($incrementId)
+    {
+        $this->incrementId = $incrementId;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getIncrementId()
+    {
+        return $this->incrementId;
+    }
 
     /**
      * @param string $giftMessage

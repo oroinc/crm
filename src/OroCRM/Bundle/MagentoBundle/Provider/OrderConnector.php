@@ -2,11 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
-use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
-class OrderConnector extends AbstractConnector implements MagentoConnectorInterface
+class OrderConnector extends AbstractApiBasedConnector implements MagentoConnectorInterface
 {
     const ENTITY_NAME     = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Order';
     const CONNECTOR_LABEL = 'orocrm.magento.connector.order.label';
@@ -14,89 +14,155 @@ class OrderConnector extends AbstractConnector implements MagentoConnectorInterf
     const JOB_VALIDATE_IMPORT = 'mage_order_import_validation';
     const JOB_IMPORT          = 'mage_order_import';
 
-    /** @var \DateTime */
-    protected $lastSyncDate;
+    /** @var CustomerConnector */
+    protected $customerConnector;
 
-    /** @var \DateInterval */
-    protected $syncRange;
-
-    /** @var array */
-    protected $customerIdsBuffer = [];
-
-    /** @var int */
-    protected $batchSize;
-
-    /** @var array dependencies data: customer groups, stores, websites */
-    protected $dependencies = [];
-
-    /** @var StoreConnector */
-    protected $storeConnector;
-
-    /**
-     * @param ContextRegistry $contextRegistry
-     * @param StoreConnector  $storeConnector
-     * @param LoggerStrategy  $logger
-     */
     public function __construct(
         ContextRegistry $contextRegistry,
         LoggerStrategy $logger,
-        StoreConnector $storeConnector
+        StoreConnector $storeConnector,
+        CustomerConnector $customerConnector
     ) {
-        parent::__construct($contextRegistry, $logger);
-        $this->storeConnector = $storeConnector;
+        parent::__construct($contextRegistry, $logger, $storeConnector);
+        $this->customerConnector = $customerConnector;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function doRead()
+    protected function getBatchFilter($websiteId, \DateTime $startDate, \DateTime $endDate, $format = 'Y-m-d H:i:s')
     {
-        $this->preLoadDependencies();
+        $store = array_filter(
+            $this->dependencies[self::ALIAS_STORES],
+            function ($store) use ($websiteId) {
+                return $store['website_id'] == $websiteId;
+            }
+        );
+        $store = reset($store);
 
-        $result = $this->findOrdersToImport();
-        // no more data to look for
-        if (is_null($result)) {
-            return null;
+        if ($store === false) {
+            throw new \LogicException(sprintf('Could not resolve store dependency for website id: %d', $websiteId));
         }
 
-        // keep going till endDate >= NOW
-        if (!empty($this->orderIdsBuffer)) {
-            $orderId = array_shift($this->orderIdsBuffer);
-
-            $now = new \DateTime('now', new \DateTimeZone('UTC'));
-            $this->logger->info(sprintf('[%s] loading order ID: %d', $now->format('d-m-Y H:i:s'), $orderId));
-
-            $data = $this->loadOrderById($orderId, true);
-        } else {
-            // empty record, nothing found but keep going
-            $data = false;
-        }
-
-        return $data;
-    }
-
-    protected function findOrdersToImport()
-    {
-
-    }
-
-    protected function loadOrderById($id)
-    {
-
+        return [
+            'complex_filter' => [
+                [
+                    'key'   => 'updated_at',
+                    'value' => [
+                        'key'   => 'from',
+                        'value' => $startDate->format($format),
+                    ],
+                ],
+                [
+                    'key'   => 'updated_at',
+                    'value' => [
+                        'key'   => 'to',
+                        'value' => $endDate->format($format),
+                    ],
+                ],
+                [
+                    'key'   => 'store_id',
+                    'value' => ['key' => 'eq', 'value' => $store['store_id']]
+                ]
+            ],
+        ];
     }
 
     /**
-     * Pre-load dependencies
+     * {@inheritdoc}
      */
-    protected function preLoadDependencies()
+    public function getList($filters = [], $limit = null, $idsOnly = true)
     {
-        if (!empty($this->dependencies)) {
-            return;
+        $result = $this->call(MagentoConnectorInterface::ACTION_ORDER_LIST, $filters);
+
+        if ($idsOnly) {
+            $result = array_map(
+                function ($item) {
+                    return is_object($item) ? $item->increment_id : $item['increment_id'];
+                },
+                $result
+            );
         }
 
-        $this->dependencies[self::ALIAS_STORES]   = $this->storeConnector->getStores();
-        $this->dependencies[self::ALIAS_WEBSITES] = $this->storeConnector->getWebsites(
-            $this->dependencies[self::ALIAS_STORES]
-        );
+        if ((int)$limit > 0) {
+            $result = array_slice($result, 0, $limit);
+        }
+
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData($id, $dependenciesInclude = false, $onlyAttributes = [])
+    {
+        var_dump($id);
+
+        return [];
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function initializeFromContext(ContextInterface $context)
+    {
+        parent::initializeFromContext($context);
+
+        // init helper connectors
+        $this->customerConnector->setStepExecution($this->getStepExecution());
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return array
+     */
+    protected function getStoreDataById($id)
+    {
+        $store            = $this->dependencies[self::ALIAS_STORES][$id];
+        $store['website'] = $this->dependencies[self::ALIAS_WEBSITES][$store['website_id']];
+
+        return $store;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return array
+     */
+    protected function getCustomerGroupDataById($id)
+    {
+        return $this->dependencies[self::ALIAS_GROUPS][$id];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function loadDependencies()
+    {
+        foreach ([self::ALIAS_GROUPS, self::ALIAS_STORES, self::ALIAS_WEBSITES] as $item) {
+            switch ($item) {
+                case self::ALIAS_GROUPS:
+                    $this->dependencies[self::ALIAS_GROUPS] = $this->customerConnector->getCustomerGroups();
+                    break;
+                case self::ALIAS_STORES:
+                    $this->dependencies[self::ALIAS_STORES] = $this->storeConnector->getStores();
+                    break;
+                case self::ALIAS_WEBSITES:
+                    $this->dependencies[self::ALIAS_WEBSITES] = $this->storeConnector->getWebsites(
+                        $this->dependencies[self::ALIAS_STORES]
+                    );
+                    break;
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getType()
+    {
+        return 'order';
     }
 }

@@ -4,29 +4,29 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 interface CustomerConnectorInterface extends MagentoConnectorInterface
 {
-    const ACTION_CUSTOMER_LIST = 'customerCustomerList';
-    const ACTION_CUSTOMER_INFO = 'customerCustomerInfo';
-    const ACTION_ADDRESS_LIST  = 'customerAddressList';
-    const ACTION_GROUP_LIST    = 'customerGroupList';
-
     /**
      * Get customer list
      *
      * @param array $filters
+     * @param int   $limit
+     * @param bool  $idsOnly
+     *
      * @return array
      */
-    public function getCustomersList($filters = []);
+    public function getList($filters = [], $limit = null, $idsOnly = true);
 
     /**
-     * @param $id
-     * @param bool $isAddressesIncluded
-     * @param array $onlyAttributes
+     * @param int   $id
+     * @param bool  $isAddressesIncluded
+     * @param array|null $onlyAttributes array of needed attributes or null to get all list
+     *
      * @return mixed
      */
-    public function getCustomerData($id, $isAddressesIncluded = false, $onlyAttributes = []);
+    public function getData($id, $isAddressesIncluded = false, $onlyAttributes = null);
 
     /**
      * @param $customerId
+     *
      * @return mixed
      */
     public function getCustomerAddressData($customerId);
@@ -36,6 +36,7 @@ interface CustomerConnectorInterface extends MagentoConnectorInterface
      * with magento group ids as keys and codes as values
      *
      * @param null $groupId if specified, only data for this group will be returned
+     *
      * @return mixed
      */
     public function getCustomerGroups($groupId = null);
