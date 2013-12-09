@@ -283,9 +283,12 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
             $result->group['originId'] = $result->group['customer_group_id'];
         }
         $result->store   = $this->dependencies[self::ALIAS_STORES][$result->store_id];
+        if ($result->store) {
+            $result->store['originId'] = $result->store['id'];
+        }
         $result->website = $this->dependencies[self::ALIAS_WEBSITES][$result->website_id];
         if ($result->website) {
-            $result->website = $result->website['website_id'];
+            $result->website['originId'] = $result->website['id'];
         }
 
         return (array)$result;

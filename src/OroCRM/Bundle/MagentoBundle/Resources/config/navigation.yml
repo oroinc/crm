@@ -12,6 +12,12 @@ oro_menu_config:
             extras:
                 routes: ['/^orocrm_magento_product_(index|view)+$/']
                 description: List of products from "Magento type channels"
+        magento_cart_list:
+            label: 'Magento Carts'
+            route: 'orocrm_magento_cart_index'
+            extras:
+                routes: ['/^orocrm_magento_cart_(index|view)+$/']
+                description: List of carts from "Magento type channels"
         channels_submenu:
             label: 'Channels'
             uri: '#'
@@ -32,6 +38,7 @@ oro_menu_config:
                         channels_submenu:
                             children:
                                 magento_customers_list: ~
+                                magento_cart_list: ~
 
 oro_titles:
     orocrm_magento_customer_index: ~

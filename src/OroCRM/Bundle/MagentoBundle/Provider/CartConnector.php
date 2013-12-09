@@ -14,6 +14,7 @@ class CartConnector extends AbstractConnector
     const JOB_IMPORT          = 'mage_cart_import';
 
     const ACTION_CART_LIST    = 'salesQuoteList';
+    const ACTION_CART_INFO    = 'shoppingCartInfo';
     const PAGE_SIZE           = 10;
 
     const ALIAS_GROUPS        = 'groups';
@@ -103,6 +104,17 @@ class CartConnector extends AbstractConnector
         }
 
         return $this->call(self::ACTION_CART_LIST, [$filters, $limits]);
+    }
+
+    /**
+     * @param int $quoteId
+     *
+     * @return mixed
+     */
+    public function getQuoteInfo($quoteId)
+    {
+        return $this->call(self::ACTION_CART_INFO, $quoteId);
+
     }
 
 

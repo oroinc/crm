@@ -2,15 +2,19 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
+use Oro\Bundle\AddressBundle\Entity\Address;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 
 class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, DenormalizerInterface
 {
+    const ADDRESS_TYPE = 'Oro\Bundle\AddressBundle\Entity\Address';
+
     /**
      * {@inheritdoc}
      */
@@ -81,6 +85,9 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
 
         $data = $this->denormalizeCreatedUpdated($data, $format, $context);
 
+        //$data['shipping_address'] = $this->denormalizeAddress($data, 'shipping', $format, $context);
+        //$data['billing_address'] = $this->denormalizeAddress($data, 'billing', $format, $context);
+
         $cart = new Cart();
         $this->fillResultObject($cart, $data);
 
@@ -114,5 +121,20 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
         }
 
         return $customer;
+    }
+
+    /**
+     * @param array  $data
+     * @param string $type shipping or billing
+     * @param string $format
+     * @param array  $context
+     *
+     * @return Address
+     */
+    protected function denormalizeAddress($data, $type, $format, $context)
+    {
+        $key = $type . '_address';
+
+        return $this->serializer->denormalize($data[$key], self::ADDRESS_TYPE, $format, $context);
     }
 }
