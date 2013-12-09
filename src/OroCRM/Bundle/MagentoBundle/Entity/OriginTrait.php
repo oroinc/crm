@@ -9,7 +9,7 @@ trait OriginTrait
      * Mage entity origin id
      * @var integer
      *
-     * @ORM\Column(name="origin_id", type="integer", options={"unsigned"=true})
+     * @ORM\Column(name="origin_id", type="integer", options={"unsigned"=true}, nullable=true)
      */
     protected $originId;
 

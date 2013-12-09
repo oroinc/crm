@@ -17,6 +17,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerNormalizer;
+use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 
 class AddOrUpdateCustomer extends BaseStrategy
 {
@@ -98,7 +99,7 @@ class AddOrUpdateCustomer extends BaseStrategy
         if (!isset($this->websiteEntityCache[$website->getCode()])) {
             $this->websiteEntityCache[$website->getCode()] = $this->findAndReplaceEntity(
                 $website,
-                CustomerNormalizer::WEBSITE_TYPE,
+                StoreConnector::WEBSITE_TYPE,
                 'code',
                 $doNotUpdateFields
             );
@@ -108,7 +109,7 @@ class AddOrUpdateCustomer extends BaseStrategy
         if (!isset($this->storeEntityCache[$store->getCode()])) {
             $this->storeEntityCache[$store->getCode()] = $this->findAndReplaceEntity(
                 $store,
-                CustomerNormalizer::STORE_TYPE,
+                StoreConnector::STORE_TYPE,
                 'code',
                 $doNotUpdateFields
             );

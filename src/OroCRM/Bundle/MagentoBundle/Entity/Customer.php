@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
@@ -179,7 +180,6 @@ class Customer extends BasePerson implements FullNameInterface
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Cart",
      *     mappedBy="customer", cascade={"all"}, orphanRemoval=true
      * )
-     * @ORM\OrderBy({"primary" = "DESC"})
      */
     protected $carts;
 
@@ -338,9 +338,20 @@ class Customer extends BasePerson implements FullNameInterface
         return $this->isActive;
     }
 
-    public function __toString()
+    /**
+     * @param Collection $carts
+     */
+    public function setCarts($carts)
     {
-        return sprintf("%s %s", $this->getFirstName(), $this->getLastName());
+        $this->carts = $carts;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCarts()
+    {
+        return $this->carts;
     }
 
     /**

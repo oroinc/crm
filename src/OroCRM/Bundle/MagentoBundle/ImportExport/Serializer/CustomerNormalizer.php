@@ -105,10 +105,9 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
             $mappedData['birthday'] = substr($mappedData['birthday'], 0, 10);
         }
 
+        $resultObject->setChannel($context['channel']);
         $this->setScalarFieldsValues($resultObject, $mappedData);
         $this->setObjectFieldsValues($resultObject, $mappedData);
-
-        $resultObject->setChannel($context['channel']);
 
         return $resultObject;
     }
@@ -164,6 +163,7 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
         /** @var Store $store */
         $store = $this->denormalizeObject($data, 'store', StoreConnector::STORE_TYPE, $format, $context);
         $store->setWebsite($website);
+        $store->setChannel($object->getChannel());
 
         if (!empty($data['birthday'])) {
             $object->setBirthday(
@@ -177,10 +177,13 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
             );
         }
 
+        $group = $this->denormalizeObject($data, 'group', static::GROUPS_TYPE, $format, $context);
+        $group->setChannel($object->getChannel());
+
         $object
             ->setWebsite($website)
             ->setStore($store)
-            ->setGroup($this->denormalizeObject($data, 'group', static::GROUPS_TYPE, $format, $context))
+            ->setGroup($group)
             ->setContact($contact)
             ->setAccount($account)
             ->setCreatedAt(

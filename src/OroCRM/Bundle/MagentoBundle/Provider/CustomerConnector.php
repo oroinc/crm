@@ -13,6 +13,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer';
     const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';
     const JOB_IMPORT          = 'mage_customer_import';
+    const CONNECTOR_LABEL     = 'orocrm.magento.connector.customer.label';
 
     const ALIAS_GROUPS   = 'groups';
     const ALIAS_STORES   = 'stores';
@@ -273,6 +274,9 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         }
 
         $result->group   = $this->dependencies[self::ALIAS_GROUPS][$result->group_id];
+        if ($result->group) {
+            $result->group['originId'] = $result->group['customer_group_id'];
+        }
         $result->store   = $this->dependencies[self::ALIAS_STORES][$result->store_id];
         $result->website = $this->dependencies[self::ALIAS_WEBSITES][$result->website_id];
 
