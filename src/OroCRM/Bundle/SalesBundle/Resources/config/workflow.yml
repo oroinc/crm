@@ -1,6 +1,6 @@
 workflows:
     # Unqualified Sales Lead Workflow
-    sales_lead:
+    b2b_flow_lead:
         label: 'Unqualified Sales Lead'
         enabled: true
         type: entity
@@ -247,7 +247,7 @@ workflows:
                         attribute: $lead.status
 
     # B2B Sales Workflow
-    sales_flow_b2b:
+    b2b_flow_sales:
         label: 'B2B Sales Flow'
         enabled: true
         type: wizard

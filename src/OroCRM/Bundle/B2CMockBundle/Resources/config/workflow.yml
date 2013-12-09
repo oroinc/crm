@@ -13,7 +13,7 @@ workflows:
                     - send_email
                     - convert_to_opportunity
                 view_attributes:
-                    - { attribute: notes, view_type: string }
+                    - { attribute: notes, view_type: text }
             contacted:
                 label: 'Contacted'
                 template: 'OroCRMB2CMockBundle:Workflow:shopping_cart_flow_general.html.twig'
@@ -26,12 +26,12 @@ workflows:
                     - abandon
                 view_attributes:
                     - { attribute: email_to, label: 'Last contacted email', view_type: string }
-                    - { attribute: email, label: 'Email subject', view_type: email }
+                    - { path: $email.subject, label: 'Email subject', view_type: string }
                     - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
-                    - { attribute: notes, view_type: string }
+                    - { attribute: notes, view_type: text }
 
                     - { attribute: phone_number, label: 'Last contacted phone', view_type: string }
-                    - { attribute: call, label: 'Call subject', view_type: call }
+                    - { path: $call.subject, label: 'Call subject', view_type: string }
                     - { path: $call.callDateTime, label: 'Call date', view_type: datetime }
             abandoned:
                 label: 'Abandoned'
@@ -40,7 +40,7 @@ workflows:
                 allowed_transitions:
                     - reopen
                 view_attributes:
-                    - { attribute: notes, view_type: string }
+                    - { attribute: notes, view_type: text }
             converted_to_opportunity:
                 label: 'Converted to opportunity'
                 template: 'OroCRMB2CMockBundle:Workflow:shopping_cart_flow_opportunity.html.twig'
@@ -48,7 +48,7 @@ workflows:
                 allowed_transitions:
                     - reopen
                 view_attributes:
-                    - { attribute: notes, view_type: string }
+                    - { attribute: notes, view_type: text }
             converted:
                 label: 'Converted'
                 template: 'OroCRMB2CMockBundle:Workflow:shopping_cart_flow_general.html.twig'
@@ -56,7 +56,7 @@ workflows:
                 allowed_transitions:
                     - reopen
                 view_attributes:
-                    - { attribute: notes, view_type: string }
+                    - { attribute: notes, view_type: text }
 
         attributes:
             # Interaction entities
@@ -132,6 +132,11 @@ workflows:
             opportunity_name:
                 label: 'Opportunity name'
                 type: string
+            owner:
+                label: 'Owner'
+                type: entity
+                options:
+                    class: Oro\Bundle\UserBundle\Entity\User
 
         transitions:
             log_call:
@@ -262,10 +267,18 @@ workflows:
                                 required: true
                                 constraints:
                                   - NotBlank: ~
+                        owner:
+                            form_type: oro_user_select
+                            options:
+                                required: true
+                                constraints:
+                                  - NotBlank: ~
                         notes:
                             form_type: textarea
                             options:
                                 required: false
+                    init_actions:
+                        - @assign_active_user: $owner
             abandon:
                 label: 'Abandon'
                 message: 'You are going to abandon this shopping cart.'
@@ -367,6 +380,14 @@ workflows:
             convert_to_opportunity_definition:
                 pre_conditions:
                     @equal: [$shopping_cart.status.name, 'open']
+                conditions:
+                    @and:
+                        - @not_empty:
+                            parameters: $opportunity_name
+                            message: 'Opportunity name must be set'
+                        - @not_empty:
+                            parameters: $owner
+                            message: 'Owner must be set'
                 post_actions:
                     - @find_entity: # Set cart status to converted_to_opportunity
                         class: OroCRM\Bundle\B2CMockBundle\Entity\ShoppingCartStatus
@@ -381,6 +402,7 @@ workflows:
                         attribute: $opportunity
                         data:
                             name: $opportunity_name
+                            owner: $owner
                             contact: $shopping_cart.customer.contact
                             account: $shopping_cart.customer.account
                             status: $.result.opportunity_status
@@ -434,7 +456,7 @@ workflows:
                     - send_email
                     - log_call
                 view_attributes:
-                    - { attribute: notes, view_type: string }
+                    - { attribute: notes, view_type: text }
             emailed:
                 label: 'Emailed'
                 template: 'OroCRMB2CMockBundle:Workflow:order_follow_up.html.twig'
@@ -446,7 +468,7 @@ workflows:
                     - { attribute: email_to, label: 'Last contacted email', view_type: string }
                     - { attribute: email, label: 'Email subject', view_type: email }
                     - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
-                    - { attribute: notes, view_type: string }
+                    - { attribute: notes, view_type: text }
             called:
                 label: 'Called'
                 template: 'OroCRMB2CMockBundle:Workflow:order_follow_up.html.twig'
@@ -458,7 +480,7 @@ workflows:
                     - { attribute: phone_number, label: 'Last contacted phone', view_type: string }
                     - { attribute: call, label: 'Call subject', view_type: call }
                     - { path: $call.callDateTime, label: 'Call date', view_type: datetime }
-                    - { attribute: notes, view_type: string }
+                    - { attribute: notes, view_type: text }
             contacted:
                 label: 'Contacted'
                 template: 'OroCRMB2CMockBundle:Workflow:order_follow_up.html.twig'
@@ -468,7 +490,7 @@ workflows:
                     - { attribute: email_to, label: 'Last contacted email', view_type: string }
                     - { attribute: email, label: 'Email subject', view_type: email }
                     - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
-                    - { attribute: notes, view_type: string }
+                    - { attribute: notes, view_type: text }
 
                     - { attribute: phone_number, label: 'Last contacted phone', view_type: string }
                     - { attribute: call, label: 'Call subject', view_type: call }
@@ -731,15 +753,5 @@ workflows:
                          to: $email_to
                          subject: $email_subject
                          body: $email_body
-            no_reply_definition:
-                post_actions:
-                    - @redirect:
-                        route: orocrm_b2c_order_view
-                        route_parameters:
-                            id: $order.id
-            record_feedback_definition:
-                post_actions:
-                    - @redirect:
-                        route: orocrm_b2c_order_view
-                        route_parameters:
-                            id: $order.id
+            no_reply_definition: [] # do nothing
+            record_feedback_definition: [] # do nothing
