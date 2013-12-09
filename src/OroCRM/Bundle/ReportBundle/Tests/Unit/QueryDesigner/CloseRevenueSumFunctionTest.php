@@ -30,7 +30,11 @@ class CloseRevenueSumFunctionTest extends OrmQueryConverterTest
         ];
         $doctrine         = $this->getDoctrine(
             [
-                'OroCRM\Bundle\ReportBundle\Entity\OpportunityByWorkflowItem' => ['id' => 'integer'],
+                'OroCRM\Bundle\ReportBundle\Entity\OpportunityByWorkflowItem' => [
+                    'id'           => 'integer',
+                    'opportunity'  => ['nullable' => true],
+                    'workflowItem' => ['nullable' => true],
+                ],
                 'OroCRM\Bundle\SalesBundle\Entity\Opportunity'                => ['closeRevenue' => 'float'],
             ]
         );
