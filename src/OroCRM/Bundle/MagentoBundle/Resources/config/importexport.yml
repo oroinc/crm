@@ -62,6 +62,7 @@ services:
         arguments:
           - @oro_importexport.context_registry
           - @oro_integration.logger.strategy
+          - @orocrm_magento.mage.store_connector
         tags:
           - { name: oro_integration.connector, type: order, channel_type: magento }
 

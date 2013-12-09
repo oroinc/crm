@@ -5,13 +5,12 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 use Oro\Bundle\BatchBundle\Item\InvalidItemException;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
-class RegionConnector extends AbstractConnector
+class RegionConnector extends AbstractConnector implements MagentoConnectorInterface
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Region';
     const JOB_VALIDATE_IMPORT = 'mage_regions_import_validation';
     const JOB_IMPORT          = 'mage_regions_import';
     const CONNECTOR_LABEL     = 'orocrm.magento.connector.region.label';
-    const ALIAS_REGIONS       = 'regions';
 
     /** @var array */
     protected $countriesBuffer = false;
@@ -42,7 +41,7 @@ class RegionConnector extends AbstractConnector
             $this->logger->info(sprintf("%s loading country %s: ", $now->format('d-m-Y H:i:s'), $country['name']));
 
             $data = $this->getRegionsData($country['iso2_code']);
-            $this->logger->info(sprintf('found %d', $data));
+            $this->logger->info(sprintf('Found %d regions to process', count($data)));
 
             // will skip further processing
             if (empty($data)) {
@@ -66,15 +65,6 @@ class RegionConnector extends AbstractConnector
         $this->countriesBuffer = $this->getCountryList();
 
         $this->logger->info(sprintf('found %d countries', count($this->countriesBuffer)));
-
-        // no more data to look for
-        if (empty($this->countriesBuffer)) {
-            $result = false;
-        } else {
-            $result = $this->countriesBuffer;
-        }
-
-        return $result;
     }
 
     /**

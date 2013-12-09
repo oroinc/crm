@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-interface CustomerConnectorInterface
+interface CustomerConnectorInterface extends MagentoConnectorInterface
 {
     const ACTION_CUSTOMER_LIST = 'customerCustomerList';
     const ACTION_CUSTOMER_INFO = 'customerCustomerInfo';

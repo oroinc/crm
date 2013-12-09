@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
-class ProductConnector extends AbstractConnector
+class ProductConnector extends AbstractConnector implements MagentoConnectorInterface
 {
     const ENTITY_NAME     = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Product';
     const CONNECTOR_LABEL = 'orocrm.magento.connector.product.label';

@@ -18,11 +18,6 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     const CONNECTOR_LABEL     = 'orocrm.magento.connector.customer.label';
     const TYPE_KEY            = 'customer';
 
-    const ALIAS_GROUPS   = 'groups';
-    const ALIAS_STORES   = 'stores';
-    const ALIAS_WEBSITES = 'websites';
-    const ALIAS_REGIONS  = 'regions';
-
     /** @var \DateTime */
     protected $lastSyncDate;
 
@@ -224,7 +219,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
             return;
         }
 
-        foreach ([self::ALIAS_GROUPS, self::ALIAS_STORES, self::ALIAS_WEBSITES, self::ALIAS_REGIONS] as $item) {
+        foreach ([self::ALIAS_GROUPS, self::ALIAS_STORES, self::ALIAS_WEBSITES] as $item) {
             switch ($item) {
                 case self::ALIAS_GROUPS:
                     $this->dependencies[self::ALIAS_GROUPS] = $this->getCustomerGroups();

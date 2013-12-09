@@ -33,7 +33,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  */
 class Order extends BaseOrder
 {
-    use IntegrationEntityTrait;
+    use IntegrationEntityTrait, OriginTrait;
 
     /**
      * @var ArrayCollection

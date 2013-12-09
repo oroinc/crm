@@ -12,14 +12,14 @@ use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
  * Just a fake connector for internal needs
  * It's not registered as connector service
  */
-class StoreConnector extends AbstractConnector
+class StoreConnector extends AbstractConnector implements MagentoConnectorInterface
 {
-    const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Store';
+    const ENTITY_NAME = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Store';
 
-    const STORE_TYPE          = 'OroCRM\Bundle\MagentoBundle\Entity\Store';
-    const WEBSITE_TYPE        = 'OroCRM\Bundle\MagentoBundle\Entity\Website';
+    const STORE_TYPE   = 'OroCRM\Bundle\MagentoBundle\Entity\Store';
+    const WEBSITE_TYPE = 'OroCRM\Bundle\MagentoBundle\Entity\Website';
 
-    const ACTION_STORE_LIST   = 'storeList';
+    const ACTION_STORE_LIST      = 'storeList';
     const WEBSITE_CODE_SEPARATOR = ' / ';
     const WEBSITE_NAME_SEPARATOR = ', ';
 

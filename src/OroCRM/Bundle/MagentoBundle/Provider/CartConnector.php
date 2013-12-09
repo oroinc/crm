@@ -6,7 +6,7 @@ use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
-class CartConnector extends AbstractConnector
+class CartConnector extends AbstractConnector implements MagentoConnectorInterface
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart';
     const CONNECTOR_LABEL     = 'orocrm.magento.connector.cart.label';
@@ -15,10 +15,6 @@ class CartConnector extends AbstractConnector
 
     const ACTION_CART_LIST    = 'salesQuoteList';
     const PAGE_SIZE           = 10;
-
-    const ALIAS_GROUPS        = 'groups';
-    const ALIAS_STORES        = 'stores';
-    const ALIAS_WEBSITES      = 'websites';
 
     /** @var int */
     protected $currentPage = 1;
