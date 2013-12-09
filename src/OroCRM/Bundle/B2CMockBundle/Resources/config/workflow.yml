@@ -421,7 +421,7 @@ workflows:
                         attribute: $shopping_cart.status
 
     # Order Follow Up flow
-    order_follow_up:
+    b2c_flow_order_follow_up:
         label: 'Order Follow Up'
         enabled: true
         type: wizard
