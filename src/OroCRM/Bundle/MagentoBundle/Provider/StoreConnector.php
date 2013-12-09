@@ -7,7 +7,13 @@ use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 class StoreConnector extends AbstractConnector
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Store';
+
+    const STORE_TYPE          = 'OroCRM\Bundle\MagentoBundle\Entity\Store';
+    const WEBSITE_TYPE        = 'OroCRM\Bundle\MagentoBundle\Entity\Website';
+
     const ACTION_STORE_LIST   = 'storeList';
+    const WEBSITE_CODE_SEPARATOR = ' / ';
+    const WEBSITE_NAME_SEPARATOR = ', ';
 
     /**
      * @return array
@@ -16,7 +22,7 @@ class StoreConnector extends AbstractConnector
     {
         $result = $this->call(self::ACTION_STORE_LIST);
 
-        $stores = [];
+        $stores = $websites = [];
         foreach ($result as $item) {
             $stores[$item->store_id]       = (array)$item;
             $stores[$item->store_id]['id'] = $item->store_id;
@@ -30,6 +36,28 @@ class StoreConnector extends AbstractConnector
         ];
 
         return $stores;
+    }
+
+    /**
+     * @param array $stores
+     *
+     * @return array
+     */
+    public function getWebsites(array $stores)
+    {
+        $websites = [];
+        foreach ($stores as $store) {
+            $websites[$store['website_id']]['name'][] = $store['name'];
+            $websites[$store['website_id']]['code'][] = $store['code'];
+        }
+
+        foreach ($websites as $websiteId => $websiteItem) {
+            $websites[$websiteId]['name'] = implode(self::WEBSITE_NAME_SEPARATOR, $websiteItem['name']);
+            $websites[$websiteId]['code'] = implode(self::WEBSITE_CODE_SEPARATOR, $websiteItem['code']);
+            $websites[$websiteId]['id']   = $websiteId;
+        }
+
+        return $websites;
     }
 
     /**

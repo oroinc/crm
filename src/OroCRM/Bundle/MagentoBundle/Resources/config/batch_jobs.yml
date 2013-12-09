@@ -1,6 +1,7 @@
 connector:
     name: oro_importexport
     jobs:
+        # Customer import jobs
         mage_customer_import_validation:
             title: "Entity Import Validation from Magento SOAP API"
             type: import_validation
@@ -21,6 +22,7 @@ connector:
                     processor: oro_importexport.processor.import_delegate
                     writer:    oro_integration.writer.persistent_batch_writer
 
+        # Region import jobs
         mage_regions_import:
             title: "Import Magento regions via SOAP API"
             type: import
@@ -61,3 +63,24 @@ connector:
                     reader:    orocrm_magento.mage.order_connector
                     processor: oro_importexport.processor.import_delegate
                     writer:    oro_integration.writer.persistent_batch_writer
+
+        # Cart import jobs
+        mage_cart_import_validation:
+            title: "Import validation Magento carts (quote) from Magento"
+            type: import_validation
+            steps:
+                import_validation:
+                    title:     import_validation
+                    reader:    orocrm_magento.mage.cart_connector
+                    processor: oro_importexport.processor.import_validation_delegate
+                    writer:    oro_importexport.writer.doctrine_clear
+
+        mage_cart_import:
+            title: "Import validation Magento carts (quote) from Magento"
+            type: import
+            steps:
+                import:
+                    title:     import
+                    reader:    orocrm_magento.mage.cart_connector
+                    processor: oro_importexport.processor.import_delegate
+                    writer:    oro_importexport.writer.entity

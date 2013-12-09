@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -20,8 +21,10 @@ use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormal
 
 class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterface, DenormalizerInterface
 {
+    const ENTITY_NAME = 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
+
     protected $importFieldsMap = [
-        'customer_id' => 'original_id',
+        'customer_id' => 'origin_id',
         'firstname'   => 'first_name',
         'lastname'    => 'last_name',
         'middlename'  => 'middle_name',
@@ -41,8 +44,6 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
         'birthday',
     );
 
-    const STORE_TYPE          = 'OroCRM\Bundle\MagentoBundle\Entity\Store';
-    const WEBSITE_TYPE        = 'OroCRM\Bundle\MagentoBundle\Entity\Website';
     const GROUPS_TYPE         = 'OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup';
     const ADDRESSES_TYPE      = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactAddress>';
     const MAGE_ADDRESSES_TYPE = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\Address>';
@@ -104,10 +105,9 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
             $mappedData['birthday'] = substr($mappedData['birthday'], 0, 10);
         }
 
+        $resultObject->setChannel($context['channel']);
         $this->setScalarFieldsValues($resultObject, $mappedData);
         $this->setObjectFieldsValues($resultObject, $mappedData);
-
-        $resultObject->setChannel($context['channel']);
 
         return $resultObject;
     }
@@ -129,32 +129,6 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
                 $object->$method($item);
             }
         }
-    }
-
-    /**
-     * Convert assoc array with 'sample_key' keys notation
-     * to camel case 'sampleKey'
-     *
-     * @param array $data
-     *
-     * @return array
-     */
-    protected function convertToCamelCase($data)
-    {
-        $result = [];
-        foreach ($data as $itemName => $item) {
-            $fieldName = preg_replace_callback(
-                '/_([a-z])/',
-                function ($string) {
-                    return strtoupper($string[1]);
-                },
-                $itemName
-            );
-
-            $result[$fieldName] = $item;
-        }
-
-        return $result;
     }
 
     /**
@@ -184,11 +158,12 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
         unset($data['account']);
 
         /** @var Website $website */
-        $website = $this->denormalizeObject($data, 'website', static::WEBSITE_TYPE, $format, $context);
+        $website = $this->denormalizeObject($data, 'website', StoreConnector::WEBSITE_TYPE, $format, $context);
 
         /** @var Store $store */
-        $store = $this->denormalizeObject($data, 'store', static::STORE_TYPE, $format, $context);
+        $store = $this->denormalizeObject($data, 'store', StoreConnector::STORE_TYPE, $format, $context);
         $store->setWebsite($website);
+        $store->setChannel($object->getChannel());
 
         if (!empty($data['birthday'])) {
             $object->setBirthday(
@@ -202,10 +177,13 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
             );
         }
 
+        $group = $this->denormalizeObject($data, 'group', static::GROUPS_TYPE, $format, $context);
+        $group->setChannel($object->getChannel());
+
         $object
             ->setWebsite($website)
             ->setStore($store)
-            ->setGroup($this->denormalizeObject($data, 'group', static::GROUPS_TYPE, $format, $context))
+            ->setGroup($group)
             ->setContact($contact)
             ->setAccount($account)
             ->setCreatedAt(
@@ -417,7 +395,7 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && $type == 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
+        return is_array($data) && $type == self::ENTITY_NAME;
     }
 
     /**

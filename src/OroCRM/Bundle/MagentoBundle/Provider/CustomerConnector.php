@@ -13,6 +13,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer';
     const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';
     const JOB_IMPORT          = 'mage_customer_import';
+    const CONNECTOR_LABEL     = 'orocrm.magento.connector.customer.label';
 
     const ALIAS_GROUPS   = 'groups';
     const ALIAS_STORES   = 'stores';
@@ -31,7 +32,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /** @var int */
     protected $batchSize;
 
-    /** @var array dependencies data: customer groups, stores, websites, regions */
+    /** @var array dependencies data: customer groups, stores, websites */
     protected $dependencies = [];
 
     /** @var StoreConnector */
@@ -50,7 +51,6 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         parent::__construct($contextRegistry, $logger);
         $this->storeConnector = $storeConnector;
     }
-
 
     /**
      * {@inheritdoc}
@@ -145,6 +145,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
 
             $now = new \DateTime('now', new \DateTimeZone('UTC'));
             $this->logger->info(sprintf('[%s] loading customer ID: %d', $now->format('d-m-Y H:i:s'), $customerId));
+
             $data = $this->getCustomerData($customerId, true);
         } else {
             // empty record, nothing found but keep going
@@ -224,19 +225,9 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
                     $this->dependencies[self::ALIAS_STORES] = $this->storeConnector->getStores();
                     break;
                 case self::ALIAS_WEBSITES:
-                    $websites = [];
-                    foreach ($this->dependencies[self::ALIAS_STORES] as $store) {
-                        $websites[$store['website_id']]['name'][] = $store['name'];
-                        $websites[$store['website_id']]['code'][] = $store['code'];
-                    }
-
-                    foreach ($websites as $websiteId => $websiteItem) {
-                        $websites[$websiteId]['name'] = implode(', ', $websiteItem['name']);
-                        $websites[$websiteId]['code'] = implode(' / ', $websiteItem['code']);
-                        $websites[$websiteId]['id']   = $websiteId;
-                    }
-
-                    $this->dependencies[self::ALIAS_WEBSITES] = $websites;
+                    $this->dependencies[self::ALIAS_WEBSITES] = $this->storeConnector->getWebsites(
+                        $this->dependencies[self::ALIAS_STORES]
+                    );
                     break;
             }
         }
@@ -283,6 +274,9 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         }
 
         $result->group   = $this->dependencies[self::ALIAS_GROUPS][$result->group_id];
+        if ($result->group) {
+            $result->group['originId'] = $result->group['customer_group_id'];
+        }
         $result->store   = $this->dependencies[self::ALIAS_STORES][$result->store_id];
         $result->website = $this->dependencies[self::ALIAS_WEBSITES][$result->website_id];
 
@@ -337,33 +331,5 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function saveCustomerAddress()
     {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLabel()
-    {
-        return 'orocrm.magento.connector.customer.label';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getImportEntityFQCN()
-    {
-        return self::ENTITY_NAME;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getImportJobName($isValidationOnly = false)
-    {
-        if ($isValidationOnly) {
-            return self::JOB_VALIDATE_IMPORT;
-        }
-
-        return self::JOB_IMPORT;
     }
 }

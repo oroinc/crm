@@ -30,6 +30,8 @@ orocrm:
                 label: Customer connector
             region:
                 label: Regions connector
+            cart:
+                label: Cart connector
             product:
                 label: Product connector
             order:

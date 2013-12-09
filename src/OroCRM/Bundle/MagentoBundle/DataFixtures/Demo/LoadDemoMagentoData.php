@@ -66,7 +66,7 @@ class LoadDemoMagentoData extends AbstractFixture implements OrderedFixtureInter
                 ->setGroup($group)
                 ->setCreatedAt(new \DateTime('now'))
                 ->setUpdatedAt(new \DateTime('now'))
-                ->setOriginalId($i + 1);
+                ->setOriginId($i + 1);
             $om->persist($customer);
         }
     }
