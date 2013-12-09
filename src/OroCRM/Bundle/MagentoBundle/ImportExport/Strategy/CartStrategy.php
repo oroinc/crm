@@ -36,6 +36,7 @@ class CartStrategy extends BaseStrategy
             );
         }
 
+        $newEntity->getCustomer()->setChannel($newEntity->getChannel());
         $this->updateCustomer($existingEntity, $newEntity->getCustomer())
             ->updateAddresses($existingEntity)
             ->updateCartItems($existingEntity, $newEntity->getCartItems());
