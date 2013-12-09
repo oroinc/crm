@@ -25,14 +25,18 @@ workflows:
                     - convert_to_opportunity
                     - abandon
                 view_attributes:
-                    - { attribute: email_to, label: 'Last contacted email', view_type: string }
+                    - { path: $email.fromEmailAddress, label: 'Last contacted email', view_type: string }
                     - { path: $email.subject, label: 'Email subject', view_type: string }
                     - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
-                    - { attribute: notes, view_type: text }
+                    - { attribute: notes, view_type: string }
 
-                    - { attribute: phone_number, label: 'Last contacted phone', view_type: string }
+                    - { path: $call.phone_number, label: 'Last contacted phone', view_type: string }
                     - { path: $call.subject, label: 'Call subject', view_type: string }
                     - { path: $call.callDateTime, label: 'Call date', view_type: datetime }
+                    - { path: $call.relatedAccount, label: 'Related To', view_type: orocrm_account }
+                    - { path: $call.relatedContact, label: 'Related Contact', view_type: orocrm_contact }
+                    - { path: $call.direction.label, label: 'Direction', view_type: string }
+                    - { path: $call.duration, label: 'Duration', view_type: time }
             abandoned:
                 label: 'Abandoned'
                 template: 'OroCRMB2CMockBundle:Workflow:shopping_cart_flow_general.html.twig'
@@ -465,8 +469,8 @@ workflows:
                     - log_call
                     - record_feedback
                 view_attributes:
-                    - { attribute: email_to, label: 'Last contacted email', view_type: string }
-                    - { attribute: email, label: 'Email subject', view_type: email }
+                    - { path: $email.to, label: 'Last contacted email', view_type: string }
+                    - { path: $email.subject, label: 'Email subject', view_type: string }
                     - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
                     - { attribute: notes, view_type: text }
             called:
@@ -477,9 +481,13 @@ workflows:
                     - no_reply
                     - record_feedback
                 view_attributes:
-                    - { attribute: phone_number, label: 'Last contacted phone', view_type: string }
-                    - { attribute: call, label: 'Call subject', view_type: call }
+                    - { path: $call.phone_number, label: 'Last contacted phone', view_type: string }
+                    - { path: $call.subject, label: 'Call subject', view_type: string }
                     - { path: $call.callDateTime, label: 'Call date', view_type: datetime }
+                    - { path: $call.relatedAccount, label: 'Related To', view_type: orocrm_account }
+                    - { path: $call.relatedContact, label: 'Related Contact', view_type: orocrm_contact }
+                    - { path: $call.direction.label, label: 'Direction', view_type: string }
+                    - { path: $call.duration, label: 'Duration', view_type: time }
                     - { attribute: notes, view_type: text }
             contacted:
                 label: 'Contacted'
@@ -487,14 +495,18 @@ workflows:
                 order: 40
                 is_final: true
                 view_attributes:
-                    - { attribute: email_to, label: 'Last contacted email', view_type: string }
-                    - { attribute: email, label: 'Email subject', view_type: email }
+                    - { path: $email.to, label: 'Last contacted email', view_type: string }
+                    - { path: $email.subject, label: 'Email subject', view_type: string }
                     - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
                     - { attribute: notes, view_type: text }
 
-                    - { attribute: phone_number, label: 'Last contacted phone', view_type: string }
-                    - { attribute: call, label: 'Call subject', view_type: call }
+                    - { path: $call.phone_number, label: 'Last contacted phone', view_type: string }
+                    - { path: $call.subject, label: 'Call subject', view_type: string }
                     - { path: $call.callDateTime, label: 'Call date', view_type: datetime }
+                    - { path: $call.relatedAccount, label: 'Related To', view_type: orocrm_account }
+                    - { path: $call.relatedContact, label: 'Related Contact', view_type: orocrm_contact }
+                    - { path: $call.direction.label, label: 'Direction', view_type: string }
+                    - { path: $call.duration, label: 'Duration', view_type: time }
                     - { attribute: feedback, view_type: text }
         attributes:
             order:
