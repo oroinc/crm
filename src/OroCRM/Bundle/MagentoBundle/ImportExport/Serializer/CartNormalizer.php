@@ -68,6 +68,8 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
         $data['customer'] = $this->denormalizeCustomer($data, $format, $context);
 
         $website = $serializer->denormalize($data['store']['website'], StoreConnector::WEBSITE_TYPE, $format, $context);
+        $website->setChannel($channel);
+
         $data['store'] = $serializer->denormalize(
             $data['store'],
             StoreConnector::STORE_TYPE,
@@ -106,7 +108,10 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
 
         $customer = new Customer();
         $this->fillResultObject($customer, $data['customer']);
-        $customer->setEmail($data['email']);
+
+        if (!empty($data['email'])) {
+            $customer->setEmail($data['email']);
+        }
 
         return $customer;
     }

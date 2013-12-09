@@ -159,6 +159,7 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
 
         /** @var Website $website */
         $website = $this->denormalizeObject($data, 'website', StoreConnector::WEBSITE_TYPE, $format, $context);
+        $website->setChannel($object->getChannel());
 
         /** @var Store $store */
         $store = $this->denormalizeObject($data, 'store', StoreConnector::STORE_TYPE, $format, $context);

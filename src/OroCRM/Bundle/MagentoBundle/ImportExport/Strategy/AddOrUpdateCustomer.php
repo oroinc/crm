@@ -51,13 +51,20 @@ class AddOrUpdateCustomer extends BaseStrategy
      */
     public function process($importedEntity)
     {
-        // TODO: look for customer by originId and channelId
-        $newEntity = $this->findAndReplaceEntity(
-            $importedEntity,
-            self::ENTITY_NAME,
-            'originId',
-            ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses']
+        $newEntity = $this->getEntityByCriteria(
+            ['originId' => $importedEntity->getOriginId(), 'channel' => $importedEntity->getChannel()],
+            $importedEntity
         );
+
+        if ($newEntity) {
+            $this->strategyHelper->importEntity(
+                $newEntity,
+                $importedEntity,
+                ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses']
+            );
+        } else {
+            $newEntity = $importedEntity;
+        }
 
         // update all related entities
         $this->updateStoresAndGroup(
@@ -100,7 +107,11 @@ class AddOrUpdateCustomer extends BaseStrategy
             $this->websiteEntityCache[$website->getCode()] = $this->findAndReplaceEntity(
                 $website,
                 StoreConnector::WEBSITE_TYPE,
-                'code',
+                [
+                    'code'     => $website->getCode(),
+                    'channel'  => $website->getChannel(),
+                    'originId' => $website->getOriginId()
+                ],
                 $doNotUpdateFields
             );
         }
@@ -110,7 +121,11 @@ class AddOrUpdateCustomer extends BaseStrategy
             $this->storeEntityCache[$store->getCode()] = $this->findAndReplaceEntity(
                 $store,
                 StoreConnector::STORE_TYPE,
-                'code',
+                [
+                    'code'     => $store->getCode(),
+                    'channel'  => $store->getChannel(),
+                    'originId' => $store->getOriginId()
+                ],
                 $doNotUpdateFields
             );
         }
@@ -120,7 +135,11 @@ class AddOrUpdateCustomer extends BaseStrategy
             $this->groupEntityCache[$group->getName()] = $this->findAndReplaceEntity(
                 $group,
                 CustomerNormalizer::GROUPS_TYPE,
-                'name',
+                [
+                    'name'     => $group->getName(),
+                    'channel'  => $group->getChannel(),
+                    'originId' => $group->getOriginId()
+                ],
                 $doNotUpdateFields
             );
         }
