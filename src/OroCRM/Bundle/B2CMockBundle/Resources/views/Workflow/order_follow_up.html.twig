@@ -30,3 +30,72 @@
     } %}
     {{ parent() }}
 {% endblock %}
+
+{% block workflow_entities %}
+    <div class="clearfix">
+        <div class="responsive-cell contact-info-col">
+            {{
+                oro_widget_render({
+                    'widgetType': 'block',
+                    'url': path('orocrm_b2c_order_info', { id: workflowItem.data.order.id }),
+                    'title': 'Order Information'|trans,
+                    'alias': 'orer_info',
+                    'contentClasses': ['form-horizontal']
+                })
+            }}
+
+            {#{%- if resource_granted('orocrm_b2c_shopping_cart_view') and workflowItem.data.shopping_cart -%}#}
+            <script type="text/javascript">
+                require(['jquery', 'oro/widget-manager', 'oro/navigation'],
+                function($, widgetManager, Navigation){
+                    widgetManager.getWidgetInstanceByAlias('orer_info', function(widget) {
+                        var viewLink = $('<a href="{{ path('orocrm_b2c_order_view', {id:  workflowItem.data.order.id}) }}" class="btn btn-small">{{ 'View'|trans }}</a>');
+                        Navigation.getInstance().processClicks(viewLink);
+                        widget.addAction('view', 'default', viewLink);
+                    });
+                });
+            </script>
+            {#{% endif %}#}
+        </div>
+    </div>
+{% endblock %}
+
+{% block workflow_toolbox %}
+    <style type="text/css">
+        .workflow-data .box-type1 .grid {
+            background-color: white;
+        }
+    </style>
+    <div class="container-fluid" style="padding: 20px;">
+        {% if resource_granted('oro_email_view') %}
+            <div class="clearfix">
+                <div class="responsive-cell contact-info-col">
+                    {{
+                        oro_widget_render({
+                            'widgetType': 'block',
+                            'url': path('orocrm_contact_widget_email', {contactId:  workflowItem.data.order.customer.contact.id}),
+                            'title': 'Emails'|trans,
+                            'alias': 'contact_emails'
+                        })
+                    }}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if resource_granted('orocrm_call_view') %}
+            <div class="clearfix">
+                <div class="responsive-cell contact-info-col">
+                    {{
+                        oro_widget_render({
+                            'widgetType': 'block',
+                            'url': path('orocrm_call_widget_calls', {contactId: workflowItem.data.order.customer.contact.id}),
+                            'title': 'Calls'|trans,
+                            'alias': 'contact_calls'
+                        })
+                    }}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
