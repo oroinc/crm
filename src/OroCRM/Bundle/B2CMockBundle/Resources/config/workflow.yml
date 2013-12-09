@@ -651,10 +651,11 @@ workflows:
                     icon: 'icon-repeat'
                 transition_definition: no_reply_definition
                 form_options:
-                    notes:
-                        form_type: textarea
-                        options:
-                            required: false
+                    attribute_fields:
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false
             record_feedback:
                 label: 'Record feedback'
                 step_to: contacted
