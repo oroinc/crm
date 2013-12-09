@@ -36,14 +36,13 @@ class RegionConnector extends AbstractConnector
         }
 
         if (empty($this->regionsBuffer)) {
-            $this->currentCountry = $country = (array) array_shift($this->countriesBuffer);
+            $this->currentCountry = $country = (array)array_shift($this->countriesBuffer);
 
             $now = new \DateTime('now', new \DateTimeZone('UTC'));
             $this->logger->info(sprintf("%s loading country %s: ", $now->format('d-m-Y H:i:s'), $country['name']));
 
             $data = $this->getRegionsData($country['iso2_code']);
-
-            echo count($data) . "\n";
+            $this->logger->info(sprintf('found %d', $data));
 
             // will skip further processing
             if (empty($data)) {
@@ -51,7 +50,7 @@ class RegionConnector extends AbstractConnector
             }
         }
 
-        $region = array_shift($this->regionsBuffer);
+        $region                = array_shift($this->regionsBuffer);
         $region['countryCode'] = $this->currentCountry['iso2_code'];
 
         return $region;
@@ -92,7 +91,7 @@ class RegionConnector extends AbstractConnector
     public function getRegionsData($iso2Code)
     {
         if (empty($this->regionsBuffer)) {
-            $result = (array) $this->call('directoryRegionList', $iso2Code);
+            $result  = (array)$this->call('directoryRegionList', $iso2Code);
             $regions = [];
 
             foreach ($result as $obj) {

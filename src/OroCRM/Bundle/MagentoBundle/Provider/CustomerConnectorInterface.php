@@ -39,8 +39,4 @@ interface CustomerConnectorInterface
      * @return mixed
      */
     public function getCustomerGroups($groupId = null);
-
-    public function saveCustomerData();
-
-    public function saveCustomerAddress();
 }
