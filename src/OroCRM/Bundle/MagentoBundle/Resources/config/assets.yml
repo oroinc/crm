@@ -1,0 +1,3 @@
+css:
+    'OROCRMMagento':
+        - 'bundles/orocrmmagento/css/style.css'

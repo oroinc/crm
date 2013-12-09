@@ -120,6 +120,25 @@ datagrid:
             dateTime:
                 label: orocrm.call.datagrid.date_time
                 frontend_type: datetime
+        filters:
+            columns:
+                contactName:
+                    type: string
+                    enabled: false
+                    data_name: contactName
+                accountName:
+                    type: string
+                    enabled: false
+                    data_name: account.name
+                subject:
+                    type: string
+                    data_name: call.subject
+                phone:
+                    type: string
+                    data_name: phone
+                dateTime:
+                    type: datetime
+                    data_name: call.callDateTime
         sorters:
             columns:
                 contactName:
