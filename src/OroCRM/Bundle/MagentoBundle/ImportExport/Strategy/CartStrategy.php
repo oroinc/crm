@@ -26,13 +26,11 @@ class CartStrategy extends BaseStrategy
 
         if ($existingEntity) {
             $this->strategyHelper->importEntity($existingEntity, $newEntity, ['id', 'store', 'cartItems', 'customer']);
-            $cartItemsMode = 'update';
         } else {
             $existingEntity = $newEntity;
-            $cartItemsMode = 'new';
         }
 
-        if (!$existingEntity->getStore()->getId()) {
+        if (!$existingEntity->getStore() || !$existingEntity->getStore()->getId()) {
             $existingEntity->setStore(
                 $this->storeStrategy->process($newEntity->getStore())
             );
@@ -40,9 +38,8 @@ class CartStrategy extends BaseStrategy
 
         $this->updateCustomer($existingEntity, $newEntity->getCustomer())
             ->updateAddresses($existingEntity)
-            ->updateCartItems($existingEntity, $newEntity->getCartItems(), $cartItemsMode);
+            ->updateCartItems($existingEntity, $newEntity->getCartItems());
 
-        // TODO: update addresses, if exists
         $this->validateAndUpdateContext($existingEntity);
 
         return $existingEntity;
@@ -75,11 +72,10 @@ class CartStrategy extends BaseStrategy
     /**
      * @param Cart            $cart
      * @param ArrayCollection $cartItems imported items
-     * @param string          $mode update or new
      *
      * @return $this
      */
-    protected function updateCartItems(Cart $cart, ArrayCollection $cartItems, $mode = 'update')
+    protected function updateCartItems(Cart $cart, ArrayCollection $cartItems)
     {
         $importedOriginIds = $cartItems->map(
             function ($item) {

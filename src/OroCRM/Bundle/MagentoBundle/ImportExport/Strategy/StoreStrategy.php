@@ -33,6 +33,7 @@ class StoreStrategy extends BaseStrategy
             }
 
             $this->storeEntityCache[$code] = $this->merge($this->storeEntityCache[$code]);
+            $this->storeEntityCache[$code]->setWebsite($this->merge($this->storeEntityCache[$code]->getWebsite()));
         }
 
         return $this->storeEntityCache[$code];

@@ -36,15 +36,20 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
     }
 
     /**
-     * @param mixed $entity
+     * @param mixed  $entity
      * @param string $entityName
-     * @param string $idFieldName
-     * @param array $excludedProperties
+     * @param string|array $criteria
+     * @param array  $excludedProperties
      * @return mixed
      */
-    protected function findAndReplaceEntity($entity, $entityName, $idFieldName = 'id', $excludedProperties = [])
+    protected function findAndReplaceEntity($entity, $entityName, $criteria = 'id', $excludedProperties = [])
     {
-        $existingEntity = $this->getEntityOrNull($entity, $idFieldName, $entityName);
+        if (is_array($criteria)) {
+            $existingEntity = $this->getEntityByCriteria($criteria, $entity);
+        } else {
+            $existingEntity = $this->getEntityOrNull($entity, $criteria, $entityName);
+
+        }
 
         if ($existingEntity) {
             $this->strategyHelper->importEntity($existingEntity, $entity, $excludedProperties);
