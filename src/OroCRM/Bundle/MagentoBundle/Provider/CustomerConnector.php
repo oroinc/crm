@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
@@ -14,6 +16,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';
     const JOB_IMPORT          = 'mage_customer_import';
     const CONNECTOR_LABEL     = 'orocrm.magento.connector.customer.label';
+    const TYPE_KEY            = 'customer';
 
     const ALIAS_GROUPS   = 'groups';
     const ALIAS_STORES   = 'stores';
@@ -61,7 +64,6 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         $settings = $this->transportSettings->getSettingsBag()->all();
 
         $startSyncDateKey = 'start_sync_date';
-        $lastSyncDateKey  = 'last_sync_date';
         if (empty($settings[$startSyncDateKey])) {
             throw new \LogicException('Start sync date can\'t be empty');
         }
@@ -70,10 +72,16 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
             $settings[$startSyncDateKey] = new \DateTime($settings[$startSyncDateKey]);
         }
 
-        if (empty($settings[$lastSyncDateKey])) {
-            $settings[$lastSyncDateKey] = $settings[$startSyncDateKey];
+        $startSyncFrom = $settings[$startSyncDateKey];
+        /** @var Channel $channel */
+        $channel = $context->getOption('channel');
+        $status  = $channel->getStatusesForConnector(self::TYPE_KEY, Status::STATUS_COMPLETED)->first();
+        if (false !== $status) {
+            /** @var Status $status */
+            $startSyncFrom = $status->getDate();
         }
-        $this->lastSyncDate = $settings[$lastSyncDateKey];
+
+        $this->lastSyncDate = $startSyncFrom;
 
         if (empty($settings['sync_range'])) {
             $settings['sync_range'] = self::DEFAULT_SYNC_RANGE;
@@ -259,11 +267,8 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /**
      * {@inheritdoc}
      */
-    public function getCustomerData(
-        $id,
-        $isAddressesIncluded = false,
-        $onlyAttributes = null
-    ) {
+    public function getCustomerData($id, $isAddressesIncluded = false, $onlyAttributes = null)
+    {
         $result = $this->call(CustomerConnectorInterface::ACTION_CUSTOMER_INFO, [$id, $onlyAttributes]);
 
         if ($isAddressesIncluded) {
@@ -273,7 +278,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
             }
         }
 
-        $result->group   = $this->dependencies[self::ALIAS_GROUPS][$result->group_id];
+        $result->group = $this->dependencies[self::ALIAS_GROUPS][$result->group_id];
         if ($result->group) {
             $result->group['originId'] = $result->group['customer_group_id'];
         }
@@ -316,20 +321,5 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         }
 
         return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function saveCustomerData()
-    {
-        return [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function saveCustomerAddress()
-    {
     }
 }

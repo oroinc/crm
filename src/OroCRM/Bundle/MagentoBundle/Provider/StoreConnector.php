@@ -4,6 +4,14 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
+/***
+ * Class StoreConnector
+ *
+ * @package OroCRM\Bundle\MagentoBundle\Provider
+ *
+ * Just a fake connector for internal needs
+ * It's not registered as connector service
+ */
 class StoreConnector extends AbstractConnector
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Store';
