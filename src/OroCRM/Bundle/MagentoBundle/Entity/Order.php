@@ -16,7 +16,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @ORM\Entity
  * @ORM\Table(name="orocrm_magento_order",
  *     uniqueConstraints={
- *          @ORM\UniqueConstraint(name="unq_original_id_channel_id", columns={"original_id", "channel_id"})
+ *          @ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})
  *     }
  * )
  * @Config(

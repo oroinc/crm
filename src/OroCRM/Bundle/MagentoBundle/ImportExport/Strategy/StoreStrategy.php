@@ -18,16 +18,19 @@ class StoreStrategy extends BaseStrategy
     public function process($entity)
     {
         // do not allow to change code/website name by imported entity
-        $doNotUpdateFields = ['id', 'code', 'name'];
+        $doNotUpdateFields = ['id', 'code', 'name', 'website'];
         $code = $entity->getCode();
 
+        $criteria = ['code' => $code, 'channel' => $entity->getChannel()];
+
         if (empty($this->storeEntityCache[$code])) {
-            $this->storeEntityCache[$code] = $this->findAndReplaceEntity(
-                $entity,
-                self::ENTITY_NAME,
-                'code',
-                $doNotUpdateFields
-            );
+            $this->storeEntityCache[$code] = $this->getEntityByCriteria($criteria, $entity);
+
+            if ($this->storeEntityCache[$code]) {
+                $this->strategyHelper->importEntity($this->storeEntityCache[$code], $entity, $doNotUpdateFields);
+            } else {
+                $this->storeEntityCache[$code] = $entity->setId(null);
+            }
 
             $this->storeEntityCache[$code] = $this->merge($this->storeEntityCache[$code]);
         }

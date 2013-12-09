@@ -19,6 +19,8 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
  */
 class Website
 {
+    use OriginTrait;
+
     /**
      * @var integer
      *

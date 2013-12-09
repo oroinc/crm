@@ -108,9 +108,9 @@ class Product extends BaseProduct
     /**
      * @var integer
      *
-     * @ORM\Column(type="integer", options={"unsigned"=true}, name="original_id")
+     * @ORM\Column(type="integer", options={"unsigned"=true}, name="origin_id")
      */
-    protected $originalId;
+    protected $originId;
 
     public function __construct()
     {
@@ -186,13 +186,13 @@ class Product extends BaseProduct
     }
 
     /**
-     * @param int $originalId
+     * @param int $originId
      *
      * @return $this
      */
-    public function setOriginalId($originalId)
+    public function setOriginId($originId)
     {
-        $this->originalId = $originalId;
+        $this->originId = $originId;
 
         return $this;
     }
@@ -200,8 +200,8 @@ class Product extends BaseProduct
     /**
      * @return int
      */
-    public function getOriginalId()
+    public function getOriginId()
     {
-        return $this->originalId;
+        return $this->originId;
     }
 }

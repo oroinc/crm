@@ -13,6 +13,7 @@ parameters:
     orocrm_magento.mage.customer_connector.class:                         OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector
     orocrm_magento.mage.store_connector.class:                            OroCRM\Bundle\MagentoBundle\Provider\StoreConnector
     orocrm_magento.mage.product_connector.class:                          OroCRM\Bundle\MagentoBundle\Provider\ProductConnector
+    orocrm_magento.mage.cart_connector.class:                              OroCRM\Bundle\MagentoBundle\Provider\CartConnector
     orocrm_magento.mage.order_connector.class:                            OroCRM\Bundle\MagentoBundle\Provider\OrderConnector
 
     # normalizers
@@ -64,7 +65,7 @@ services:
         tags:
           - { name: oro_integration.connector, type: order, channel_type: magento }
 
-    orocrm_magento.mage.store_connector: # for customer, etc connectors only
+    orocrm_magento.mage.store_connector: # helper for customer, cart connectors only
         class: %orocrm_magento.mage.store_connector.class%
         arguments:
           - @oro_importexport.context_registry
@@ -80,6 +81,12 @@ services:
 
     orocrm_magento.mage.cart_connector:
         class: %orocrm_magento.mage.cart_connector.class%
+        arguments:
+          - @oro_importexport.context_registry
+          - @oro_integration.logger.strategy
+        calls:
+            - [setCustomerConnector, ["@orocrm_magento.mage.customer_connector"]]
+            - [setStoreConnector, ["@orocrm_magento.mage.store_connector"]]
         tags:
           - { name: oro_integration.connector, type: cart, channel_type: magento }
 

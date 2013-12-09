@@ -6,18 +6,38 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCart;
+use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * Class Cart
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
- * @ORM\Table(name="orocrm_magento_cart", indexes={
+ * @ORM\Table(name="orocrm_magento_cart",
+ *  indexes={
  *      @ORM\Index(name="magecart_origin_idx", columns={"origin_id"})
- * })
+ *  },
+ *  uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})
+ *  }
+ * )
+ * @Config(
+ *  routeName="orocrm_magento_cart_index",
+ *  routeView="orocrm_magento_cart_view",
+ *  defaultValues={
+ *      "entity"={"label"="Magento Cart", "plural_label"="Magento Carts"},
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
+ *  }
+ * )
  */
 class Cart extends BaseCart
 {
+    use IntegrationEntityTrait, OriginTrait;
+
     /**
      * @var CartItem[]|Collection
      *
@@ -41,14 +61,6 @@ class Cart extends BaseCart
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $store;
-
-    /**
-     * Mage cart origin id (quote_id)
-     * @var integer
-     *
-     * @ORM\Column(name="origin_id", type="integer", options={"unsigned"=true})
-     */
-    protected $originId;
 
     /**
      * Total items qty
@@ -111,7 +123,7 @@ class Cart extends BaseCart
     /**
      * @var string
      *
-     * @ORM\Column(name="gift_message", type="string", length=255)
+     * @ORM\Column(name="gift_message", type="string", length=255, nullable=true)
      */
     protected $giftMessage;
 
@@ -147,18 +159,21 @@ class Cart extends BaseCart
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getOriginId()
+    public function getCustomer()
     {
-        return $this->originId;
+        return $this->customer;
     }
 
     /**
-     * @return int
+     * @param mixed $customer
+     *
+     * @return $this
      */
-    public function getItemsQty()
+    public function setCustomer($customer)
     {
-        return $this->itemsQty;
+        $this->customer = $customer;
+        return $this;
     }
 }

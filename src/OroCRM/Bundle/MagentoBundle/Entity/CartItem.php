@@ -17,19 +17,13 @@ use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCartItem;
  */
 class CartItem extends BaseCartItem
 {
+    use OriginTrait;
+
     /**
      * @ORM\ManyToOne(targetEntity="Cart", inversedBy="cartItems",cascade={"persist"})
      * @ORM\JoinColumn(name="cart_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $cart;
-
-    /**
-     * Mage cart item origin id (item_id)
-     * @var integer
-     *
-     * @ORM\Column(name="origin_id", type="integer", options={"unsigned"=true})
-     */
-    protected $originId;
 
     /**
      * Mage product id
@@ -57,7 +51,7 @@ class CartItem extends BaseCartItem
     /**
      * @var string
      *
-     * @ORM\Column(name="gift_message", type="string", length=255)
+     * @ORM\Column(name="gift_message", type="string", length=255, nullable=true)
      */
     protected $giftMessage;
 
@@ -92,7 +86,7 @@ class CartItem extends BaseCartItem
     /**
      * @var float
      *
-     * @ORM\Column(name="price_incl_tax", type="decimal")
+     * @ORM\Column(name="price_incl_tax", type="decimal", nullable=true)
      */
     protected $priceInclTax;
 
@@ -116,20 +110,4 @@ class CartItem extends BaseCartItem
      * @ORM\Column(name="product_type", type="string", length=255)
      */
     protected $productType;
-
-    /**
-     * @param int $originId
-     */
-    public function setOriginId($originId)
-    {
-        $this->originId = $originId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOriginId()
-    {
-        return $this->originId;
-    }
 }
