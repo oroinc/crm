@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AddressDataConverter;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -14,7 +15,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 
 class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, DenormalizerInterface
 {
-    const ADDRESS_TYPE = 'OroCRM\Bundle\MagentoBundle\Entity\Address';
+    const ADDRESS_TYPE = 'OroCRM\Bundle\MagentoBundle\Entity\CartAddress';
 
     /** @var AddressDataConverter */
     protected $addressConverter;
@@ -89,8 +90,8 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
 
         $data = $this->denormalizeCreatedUpdated($data, $format, $context);
 
-        $data['shipping_address'] = $this->denormalizeAddress($data, 'shipping', $format, $context);
-        $data['billing_address'] = $this->denormalizeAddress($data, 'billing', $format, $context);
+        $data['shippingAddress'] = $this->denormalizeAddress($data, 'shipping', $format, $context);
+        $data['billingAddress'] = $this->denormalizeAddress($data, 'billing', $format, $context);
 
         $cart = new Cart();
         $this->fillResultObject($cart, $data);
@@ -133,14 +134,16 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
      * @param string $format
      * @param array  $context
      *
-     * @return Address
+     * @return CartAddress
      */
     protected function denormalizeAddress($data, $type, $format, $context)
     {
         $key = $type . '_address';
         $data = $this->addressConverter->convertToImportFormat($data[$key]);
 
-        return $this->serializer->denormalize($data, self::ADDRESS_TYPE, $format, $context);
+        return $this->serializer
+            ->denormalize($data, self::ADDRESS_TYPE, $format, $context)
+            ->setOriginId($data['originId']);
     }
 
     /**

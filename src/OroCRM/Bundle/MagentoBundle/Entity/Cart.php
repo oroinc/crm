@@ -135,17 +135,17 @@ class Cart extends BaseCart
     protected $isGuest;
 
     /**
-     * @var Address $shippingAddress
+     * @var CartAddress $shippingAddress
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CartAddress", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $shippingAddress;
 
     /**
-     * @var Address $billingAddress
+     * @var CartAddress $billingAddress
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CartAddress", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $billingAddress;
@@ -194,7 +194,23 @@ class Cart extends BaseCart
     }
 
     /**
-     * @return Address
+     * @param CartAddress $shippingAddress
+     */
+    public function setShippingAddress(CartAddress $shippingAddress)
+    {
+        $this->shippingAddress = $shippingAddress;
+    }
+
+    /**
+     * @param CartAddress $billingAddress
+     */
+    public function setBillingAddress(CartAddress $billingAddress)
+    {
+        $this->billingAddress = $billingAddress;
+    }
+
+    /**
+     * @return CartAddress
      */
     public function getBillingAddress()
     {
@@ -202,7 +218,7 @@ class Cart extends BaseCart
     }
 
     /**
-     * @return \OroCRM\Bundle\MagentoBundle\Entity\Address
+     * @return CartAddress
      */
     public function getShippingAddress()
     {

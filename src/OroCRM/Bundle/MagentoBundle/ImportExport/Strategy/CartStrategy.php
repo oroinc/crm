@@ -25,7 +25,11 @@ class CartStrategy extends BaseStrategy
         );
 
         if ($existingEntity) {
-            $this->strategyHelper->importEntity($existingEntity, $newEntity, ['id', 'store', 'cartItems', 'customer']);
+            $this->strategyHelper->importEntity(
+                $existingEntity,
+                $newEntity,
+                ['id', 'store', 'cartItems', 'customer', 'shippingAddress', 'billingAddress']
+            );
         } else {
             $existingEntity = $newEntity;
         }
@@ -38,7 +42,7 @@ class CartStrategy extends BaseStrategy
 
         $newEntity->getCustomer()->setChannel($newEntity->getChannel());
         $this->updateCustomer($existingEntity, $newEntity->getCustomer())
-            ->updateAddresses($existingEntity)
+            ->updateAddresses($existingEntity, $newEntity)
             ->updateCartItems($existingEntity, $newEntity->getCartItems());
 
         $this->validateAndUpdateContext($existingEntity);
@@ -124,12 +128,31 @@ class CartStrategy extends BaseStrategy
 
     /**
      * @param Cart $newCart
+     * @param Cart $importedCart
      *
      * @return $this
      */
-    protected function updateAddresses(Cart $newCart)
+    protected function updateAddresses(Cart $newCart, Cart $importedCart)
     {
-        // TODO: implement update addresses, if exists
+        $addresses = ['ShippingAddress', 'BillingAddress'];
+
+        foreach ($addresses as $addressName) {
+            $addressGetter = 'get'.$addressName;
+            $address = $importedCart->$addressGetter();
+
+            // at this point imported address region have code equal to region_id in magento db field
+            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
+            $originAddressId = $address->getOriginId();
+
+            $existingAddress = $newCart->$addressGetter();
+            if ($existingAddress && $existingAddress->getOriginId() == $originAddressId) {
+                $this->strategyHelper->importEntity($existingAddress, $address, ['id', 'region', 'country']);
+                $address = $existingAddress;
+            }
+
+            $this->updateAddressCountryRegion($address, $mageRegionId);
+            $newCart->{'set'.$addressName}($address);
+        }
 
         return $this;
     }
