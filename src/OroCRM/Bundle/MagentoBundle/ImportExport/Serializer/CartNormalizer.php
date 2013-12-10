@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AddressDataConverter;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -13,7 +14,10 @@ use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 
 class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, DenormalizerInterface
 {
-    const ADDRESS_TYPE = 'Oro\Bundle\AddressBundle\Entity\Address';
+    const ADDRESS_TYPE = 'OroCRM\Bundle\MagentoBundle\Entity\Address';
+
+    /** @var AddressDataConverter */
+    protected $addressConverter;
 
     /**
      * {@inheritdoc}
@@ -85,8 +89,8 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
 
         $data = $this->denormalizeCreatedUpdated($data, $format, $context);
 
-        //$data['shipping_address'] = $this->denormalizeAddress($data, 'shipping', $format, $context);
-        //$data['billing_address'] = $this->denormalizeAddress($data, 'billing', $format, $context);
+        $data['shipping_address'] = $this->denormalizeAddress($data, 'shipping', $format, $context);
+        $data['billing_address'] = $this->denormalizeAddress($data, 'billing', $format, $context);
 
         $cart = new Cart();
         $this->fillResultObject($cart, $data);
@@ -134,7 +138,16 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
     protected function denormalizeAddress($data, $type, $format, $context)
     {
         $key = $type . '_address';
+        $data = $this->addressConverter->convertToImportFormat($data[$key]);
 
-        return $this->serializer->denormalize($data[$key], self::ADDRESS_TYPE, $format, $context);
+        return $this->serializer->denormalize($data, self::ADDRESS_TYPE, $format, $context);
+    }
+
+    /**
+     * @param AddressDataConverter $addressConverter
+     */
+    public function setAddressDataConverter(AddressDataConverter $addressConverter)
+    {
+        $this->addressConverter = $addressConverter;
     }
 }
