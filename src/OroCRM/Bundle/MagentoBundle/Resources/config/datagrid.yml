@@ -110,6 +110,96 @@ datagrid:
         options:
             entityHint: customer
 
+    magento-cart-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_magento_cart_view
+            query:
+                select:
+                    - c.id
+                    - c.email
+                    - c.itemsQty
+                    - c.quoteCurrencyCode
+                    - c.subTotal
+                    - c.grandTotal
+                    - c.createdAt
+                    - c.updatedAt
+                    - ch.name as channelName
+                    - cw.name as websiteName
+                from:
+                    - { table: OroCRMMagentoBundle:Cart , alias: c }
+                join:
+                    left:
+                        - { join: c.store, alias: cs }
+                        - { join: cs.website, alias: cw }
+                        - { join: c.channel, alias: ch }
+        columns:
+            itemsQty:
+                label: orocrm.magento.datagrid.columns.qty
+            quoteCurrencyCode:
+                label: orocrm.magento.datagrid.columns.currency
+            subTotal:
+                label: orocrm.magento.datagrid.columns.sub_total
+            grandTotal:
+                label: orocrm.magento.datagrid.columns.grand_total
+            email:
+                label: orocrm.magento.datagrid.columns.email
+            channelName:
+                label: orocrm.magento.datagrid.columns.channel
+            websiteName:
+                label: orocrm.magento.datagrid.columns.website
+            createdAt:
+                label: orocrm.magento.datagrid.columns.created_at
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.magento.datagrid.columns.updated_at
+                frontend_type: datetime
+        properties:
+            id: ~
+        sorters:
+            columns:
+                itemsQty:             { data_name: c.itemsQty }
+                quoteCurrencyCode:    { data_name: c.quoteCurrencyCode }
+                email:                { data_name: c.email }
+                subTotal:    { data_name: c.subTotal }
+                grandTotal:  { data_name: c.grandTotal }
+                channelName: { data_name: channelName }
+                websiteName: { data_name: cw.name }
+                createdAt:   { data_name: c.createdAt }
+                updatedAt:   { data_name: c.updatedAt }
+            default:
+                grandTotal:  DESC
+        filters:
+            columns:
+                email:
+                    type: string
+                    data_name: c.email
+                channelName:
+                    type: entity
+                    data_name: cw
+                    options:
+                        field_options:
+                          class: OroIntegrationBundle:Channel
+                          property: name
+                websiteName:
+                    type: entity
+                    data_name: cw
+                    options:
+                        field_options:
+                          class: OroCRMMagentoBundle:Website
+                          property: name
+                createdAt:
+                    type:      datetime
+                    data_name: c.createdAt
+                    enabled: false
+                updatedAt:
+                    type:      datetime
+                    data_name: c.updatedAt
+                    enabled: false
+        actions: ~
+        options:
+            entityHint: cart
+
     magento-products-grid:
         source:
             type: orm

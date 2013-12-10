@@ -20,6 +20,10 @@ orocrm:
                 specialPrice: Special Price
                 price:        Price
                 websites:     Websites
+                qty:          Qty
+                currency:     Currency
+                sub_total:    Sub Total
+                grand_total:  Grand Total
         channel_type:
             label:  Magento
         transport:
