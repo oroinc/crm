@@ -76,6 +76,16 @@ workflows:
                 type: entity
                 options:
                     class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+            call_collection:
+                label: 'Calls'
+                type: object
+                options:
+                    class: Doctrine\Common\Collections\ArrayCollection
+            email_collection:
+                label: 'Emails'
+                type: object
+                options:
+                    class: Doctrine\Common\Collections\ArrayCollection
 
             # Call related fields
             call:
@@ -353,11 +363,11 @@ workflows:
                             parameters: $call_direction
                             message: 'Call direction must be chosen'
                 post_actions:
-                     - @find_entity: # Set call status to in_progress
+                    - @find_entity: # Set call status to in_progress
                         class: OroCRM\Bundle\CallBundle\Entity\CallStatus
                         identifier: 'in_progress'
                         attribute: $call_status
-                     - @create_entity: # create Call
+                    - @create_entity: # create Call
                         class: OroCRM\Bundle\CallBundle\Entity\Call
                         attribute: $call
                         data:
@@ -370,6 +380,16 @@ workflows:
                             callStatus: $call_status
                             duration: $call_duration
                             direction: $call_direction
+                    - @create_object:
+                        conditions:
+                            @empty: $call_collection
+                        parameters:
+                            class: Doctrine\Common\Collections\ArrayCollection
+                            attribute: $call_collection
+                    - @call_method:
+                        method: 'add'
+                        object: $call_collection
+                        method_parameters: [$call]
 
             send_email_definition:
                 pre_conditions:
@@ -395,6 +415,16 @@ workflows:
                          to: $email_to
                          subject: $email_subject
                          body: $email_body
+                     - @create_object:
+                         conditions:
+                             @empty: $email_collection
+                         parameters:
+                             class: Doctrine\Common\Collections\ArrayCollection
+                             attribute: $email_collection
+                     - @call_method:
+                         method: 'add'
+                         object: $email_collection
+                         method_parameters: [$email]
 
             convert_definition:
                 pre_conditions:
@@ -544,6 +574,16 @@ workflows:
                     class: OroCRM\Bundle\B2CMockBundle\Entity\SaleOrder
                     managed_entity: true
                     multiple: false
+            call_collection:
+                label: 'Calls'
+                type: object
+                options:
+                    class: Doctrine\Common\Collections\ArrayCollection
+            email_collection:
+                label: 'Emails'
+                type: object
+                options:
+                    class: Doctrine\Common\Collections\ArrayCollection
 
             # Call related fields
             call:
@@ -757,11 +797,11 @@ workflows:
                             parameters: $call_direction
                             message: 'Call direction must be chosen'
                 post_actions:
-                     - @find_entity: # Set call status to in_progress
+                    - @find_entity: # Set call status to in_progress
                         class: OroCRM\Bundle\CallBundle\Entity\CallStatus
                         identifier: 'in_progress'
                         attribute: $call_status
-                     - @create_entity: # create Call
+                    - @create_entity: # create Call
                         class: OroCRM\Bundle\CallBundle\Entity\Call
                         attribute: $call
                         data:
@@ -774,6 +814,16 @@ workflows:
                             callStatus: $call_status
                             duration: $call_duration
                             direction: $call_direction
+                    - @create_object:
+                        conditions:
+                            @empty: $call_collection
+                        parameters:
+                            class: Doctrine\Common\Collections\ArrayCollection
+                            attribute: $call_collection
+                    - @call_method:
+                        method: 'add'
+                        object: $call_collection
+                        method_parameters: [$call]
 
             send_email_definition:
                 conditions:
@@ -791,11 +841,21 @@ workflows:
                             parameters: $email_body
                             message: 'Email content must be chosen'
                 post_actions:
-                     - @send_email: # Send email
-                         attribute: $email
-                         from: $email_from
-                         to: $email_to
-                         subject: $email_subject
-                         body: $email_body
+                    - @send_email: # Send email
+                        attribute: $email
+                        from: $email_from
+                        to: $email_to
+                        subject: $email_subject
+                        body: $email_body
+                    - @create_object:
+                        conditions:
+                            @empty: $email_collection
+                        parameters:
+                            class: Doctrine\Common\Collections\ArrayCollection
+                            attribute: $email_collection
+                    - @call_method:
+                        method: 'add'
+                        object: $email_collection
+                        method_parameters: [$email]
             no_reply_definition: [] # do nothing
             record_feedback_definition: [] # do nothing
