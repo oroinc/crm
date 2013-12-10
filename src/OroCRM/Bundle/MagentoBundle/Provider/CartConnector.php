@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
+use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
@@ -13,8 +15,6 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
     const JOB_VALIDATE_IMPORT = 'mage_cart_import_validation';
     const JOB_IMPORT          = 'mage_cart_import';
 
-    const ACTION_CART_LIST    = 'salesQuoteList';
-    const ACTION_CART_INFO    = 'shoppingCartInfo';
     const PAGE_SIZE           = 10;
 
     /** @var int */
@@ -31,6 +31,18 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
 
     /** @var StoreConnector */
     protected $storeConnector;
+
+    public function __construct(
+        ContextRegistry $contextRegistry,
+        LoggerStrategy $logger,
+        CustomerConnector $customerConnector,
+        StoreConnector $storeConnector
+    ) {
+        parent::__construct($contextRegistry, $logger);
+
+        $this->customerConnector = $customerConnector;
+        $this->storeConnector    = $storeConnector;
+    }
 
     /**
      * {@inheritdoc}
@@ -57,7 +69,6 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
         $result->customer_group_name = $customer_group['name'];
 
         $result = ConverterUtils::objectToArray($result);
-        $this->currentPage++;
 
         return (array) $result;
     }
@@ -80,6 +91,7 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
             );
 
             $this->logger->info(sprintf('%d records', count($this->quoteQueue), $this->currentPage));
+            $this->currentPage++;
         }
 
         return array_shift($this->quoteQueue);
@@ -173,21 +185,5 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
                     break;
             }
         }
-    }
-
-    /**
-     * @param CustomerConnector $customerConnector
-     */
-    public function setCustomerConnector(CustomerConnector $customerConnector)
-    {
-        $this->customerConnector = $customerConnector;
-    }
-
-    /**
-     * @param StoreConnector $storeConnector
-     */
-    public function setStoreConnector(StoreConnector $storeConnector)
-    {
-        $this->storeConnector = $storeConnector;
     }
 }

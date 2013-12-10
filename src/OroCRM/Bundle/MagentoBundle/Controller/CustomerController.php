@@ -18,7 +18,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 class CustomerController extends Controller
 {
     /**
-     * @Route("/index")
+     * @Route("/")
      * @AclAncestor("orocrm_magento_customer_view")
      * @Template()
      */

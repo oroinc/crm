@@ -16,7 +16,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @ORM\Entity
  * @ORM\Table(name="orocrm_magento_order",
  *     uniqueConstraints={
- *          @ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})
+ *          @ORM\UniqueConstraint(name="unq_increment_id_channel_id", columns={"increment_id", "channel_id"})
  *     }
  * )
  * @Config(
@@ -33,12 +33,12 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  */
 class Order extends BaseOrder
 {
-    use IntegrationEntityTrait, OriginTrait;
+    use IntegrationEntityTrait;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="increment_id", type="integer", options={"unsigned"=true}, nullable=false)
+     * @ORM\Column(name="increment_id", type="string", length=60, nullable=false)
      */
     protected $incrementId;
 
@@ -144,7 +144,7 @@ class Order extends BaseOrder
     protected $items;
 
     /**
-     * @param integer $incrementId
+     * @param string $incrementId
      *
      * @return $this
      */
@@ -156,7 +156,7 @@ class Order extends BaseOrder
     }
 
     /**
-     * @return integer
+     * @return string
      */
     public function getIncrementId()
     {

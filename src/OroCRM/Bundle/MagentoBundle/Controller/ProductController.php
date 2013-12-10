@@ -18,7 +18,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Product;
 class ProductController extends Controller
 {
     /**
-     * @Route("/index")
+     * @Route("/")
      * @AclAncestor("orocrm_magento_product_view")
      * @Template()
      */
