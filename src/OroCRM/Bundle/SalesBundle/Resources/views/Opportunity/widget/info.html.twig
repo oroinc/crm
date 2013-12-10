@@ -56,5 +56,6 @@
         {{ macros.renderProperty('Close reason'|trans, entity.closeReason) }}
         {{ macros.renderProperty('Close revenue'|trans, entity.closeRevenue|length ? entity.closeRevenue|oro_format_currency, '') }}
         {{ macros.renderProperty('Close date'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '') }}
+        {{ macros.renderProperty('Notes'|trans, entity.notes|nl2br) }}
     </div>
 </div>

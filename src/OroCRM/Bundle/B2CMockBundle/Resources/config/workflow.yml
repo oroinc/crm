@@ -435,6 +435,7 @@ workflows:
                             contact: $shopping_cart.customer.contact
                             account: $shopping_cart.customer.account
                             status: $.result.opportunity_status
+                            notes: $notes
 
             abandon_definition:
                 pre_conditions:
