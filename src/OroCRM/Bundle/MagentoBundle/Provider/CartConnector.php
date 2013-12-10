@@ -57,7 +57,6 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
         $result->customer_group_name = $customer_group['name'];
 
         $result = ConverterUtils::objectToArray($result);
-        $this->currentPage++;
 
         return (array) $result;
     }
@@ -69,7 +68,15 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
      */
     protected function getNextItem()
     {
-        $filters = [];
+        $store = $this->getStoreDataByWebsiteId($this->transportSettings->getWebsiteId());
+        $filters = [
+            'complex_filter' => [
+                [
+                    'key'   => 'store_id',
+                    'value' => ['key' => 'eq', 'value' => $store['store_id']]
+                ]
+            ],
+        ];
 
         if (empty($this->quoteQueue)) {
             $this->logger->info(sprintf('Looking for entities at %d page ... ', $this->currentPage));
@@ -80,6 +87,7 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
             );
 
             $this->logger->info(sprintf('%d records', count($this->quoteQueue), $this->currentPage));
+            $this->currentPage++;
         }
 
         return array_shift($this->quoteQueue);
@@ -137,6 +145,23 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
         $store['website'] = $this->dependencies[self::ALIAS_WEBSITES][$store['website_id']];
 
         return $store;
+    }
+
+    /**
+     * @param int $websiteId
+     *
+     * @return mixed
+     */
+    protected function getStoreDataByWebsiteId($websiteId)
+    {
+        $store = array_filter(
+            $this->dependencies[self::ALIAS_STORES],
+            function ($store) use ($websiteId) {
+                return $store['website_id'] == $websiteId;
+            }
+        );
+
+        return reset($store);
     }
 
     /**

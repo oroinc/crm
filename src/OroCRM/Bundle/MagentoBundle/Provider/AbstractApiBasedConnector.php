@@ -224,6 +224,26 @@ abstract class AbstractApiBasedConnector extends AbstractConnector
     }
 
     /**
+     * @param $websiteId
+     *
+     * @throws \LogicException
+     */
+    protected function getStoreByWebsiteId($websiteId)
+    {
+        $store = array_filter(
+            $this->dependencies[self::ALIAS_STORES],
+            function ($store) use ($websiteId) {
+                return $store['website_id'] == $websiteId;
+            }
+        );
+        $store = reset($store);
+
+        if ($store === false) {
+            throw new \LogicException(sprintf('Could not resolve store dependency for website id: %d', $websiteId));
+        }
+    }
+
+    /**
      * Get entities list
      *
      * @param array $filters

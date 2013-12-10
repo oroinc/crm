@@ -156,6 +156,10 @@ datagrid:
                 frontend_type: datetime
         properties:
             id: ~
+            view_link:
+                type: url
+                route: orocrm_magento_cart_view
+                params: [ id ]
         sorters:
             columns:
                 itemsQty:             { data_name: c.itemsQty }
@@ -196,9 +200,109 @@ datagrid:
                     type:      datetime
                     data_name: c.updatedAt
                     enabled: false
-        actions: ~
+        actions:
+            view:
+                type:         navigate
+                label:        orocrm.magento.datagrid.actions.view.label
+                link:         view_link
+                icon:         book
+                acl_recource: orocrm_magento_cart_view
+                rowAction:    true
         options:
             entityHint: cart
+
+    magento-cartitem-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_magento_cart_view
+            query:
+                select:
+                    - c.id
+                    - c.sku
+                    - c.name
+                    - c.qty
+                    - c.giftMessage
+                    - c.price
+                    - c.priceInclTax
+                    - c.rowTotal
+                    - c.taxAmount
+                    - c.discountAmount
+                    - c.weight
+                    - c.productType
+                    - c.createdAt
+                    - c.updatedAt
+                from:
+                    - { table: OroCRMMagentoBundle:CartItem , alias: c }
+        columns:
+            sku:
+                label: orocrm.magento.datagrid.columns.sku
+            name:
+                label: orocrm.magento.datagrid.columns.name
+            qty:
+                label: orocrm.magento.datagrid.columns.qty
+                frontend_type: decimal
+            giftMessage:
+                label: orocrm.magento.datagrid.columns.gift_message
+            price:
+                label: orocrm.magento.datagrid.columns.price
+                frontend_type: decimal
+            priceInclTax:
+                label: orocrm.magento.datagrid.columns.price_incl_tax
+                frontend_type: decimal
+            rowTotal:
+                label: orocrm.magento.datagrid.columns.row_total
+                frontend_type: decimal
+            taxAmount:
+                label: orocrm.magento.datagrid.columns.tax_amount
+                frontend_type: decimal
+            discountAmount:
+                label: orocrm.magento.datagrid.columns.discount_amount
+                frontend_type: decimal
+            weight:
+                label: orocrm.magento.datagrid.columns.weight
+                frontend_type: decimal
+            createdAt:
+                label: orocrm.magento.datagrid.columns.added_on
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.magento.datagrid.columns.updated_on
+                frontend_type: datetime
+        properties:
+            id: ~
+        sorters:
+            columns:
+                sku:            { data_name: c.sku }
+                name:           { data_name: c.name }
+                qty:            { data_name: c.qty }
+                giftMessage:    { data_name: c.giftMessage }
+                price:          { data_name: c.price }
+                priceInclTax:   { data_name: c.priceInclTax }
+                rowTotal:       { data_name: c.rowTotal }
+                taxAmount:      { data_name: c.taxAmount }
+                discountAmount: { data_name: c.discountAmount }
+                weight:         { data_name: c.weight }
+                createdAt:      { data_name: c.createdAt }
+                updatedAt:      { data_name: c.updatedAt }
+            default:
+                createdAt:  DESC
+        filters:
+            columns:
+                sku:
+                    type: string
+                    data_name: c.sku
+                price:
+                    type: number
+                    data_name: c.price
+                createdAt:
+                    type:      datetime
+                    data_name: c.createdAt
+                    enabled: false
+                updatedAt:
+                    type:      datetime
+                    data_name: c.updatedAt
+                    enabled: false
+        options:
+            entityHint: cart item
 
     magento-products-grid:
         source:

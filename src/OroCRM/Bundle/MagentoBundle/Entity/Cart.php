@@ -224,4 +224,36 @@ class Cart extends BaseCart
     {
         return $this->shippingAddress;
     }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return int
+     */
+    public function getItemsQty()
+    {
+        return $this->itemsQty;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSubTotal()
+    {
+        return $this->subTotal;
+    }
+
+    /**
+     * @return string
+     */
+    public function getQuoteCurrencyCode()
+    {
+        return $this->quoteCurrencyCode;
+    }
 }
