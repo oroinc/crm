@@ -25,12 +25,12 @@ workflows:
                     - convert_to_opportunity
                     - abandon
                 view_attributes:
-                    - { attribute: email_to, label: 'Last contacted email', view_type: string }
+                    - { attribute: email_to, label: 'Last contacted email', view_type: string, default: 'Not contacted' }
                     - { path: $email.subject, label: 'Email subject', view_type: string }
                     - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
-                    - { attribute: notes, view_type: string }
+                    - { attribute: notes, view_type: text }
 
-                    - { path: $call.phone_number, label: 'Last contacted phone', view_type: string }
+                    - { path: $call.phone_number, label: 'Last contacted phone', view_type: string, default: 'Not contacted' }
                     - { path: $call.subject, label: 'Call subject', view_type: string }
                     - { path: $call.callDateTime, label: 'Call date', view_type: datetime }
                     - { path: $call.relatedAccount, label: 'Related To', view_type: orocrm_account }
@@ -469,7 +469,7 @@ workflows:
                     - log_call
                     - record_feedback
                 view_attributes:
-                    - { attribute: email_to, label: 'Last contacted email', view_type: string }
+                    - { attribute: email_to, label: 'Last contacted email', view_type: string, default: 'Not contacted' }
                     - { path: $email.subject, label: 'Email subject', view_type: string }
                     - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
                     - { attribute: notes, view_type: text }
@@ -481,7 +481,7 @@ workflows:
                     - no_reply
                     - record_feedback
                 view_attributes:
-                    - { path: $call.phone_number, label: 'Last contacted phone', view_type: string }
+                    - { path: $call.phone_number, label: 'Last contacted phone', view_type: string, default: 'Not contacted' }
                     - { path: $call.subject, label: 'Call subject', view_type: string }
                     - { path: $call.callDateTime, label: 'Call date', view_type: datetime }
                     - { path: $call.relatedAccount, label: 'Related To', view_type: orocrm_account }
@@ -495,12 +495,12 @@ workflows:
                 order: 40
                 is_final: true
                 view_attributes:
-                    - { attribute: email_to, label: 'Last contacted email', view_type: string }
+                    - { attribute: email_to, label: 'Last contacted email', view_type: string, default: 'Not contacted' }
                     - { path: $email.subject, label: 'Email subject', view_type: string }
                     - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
                     - { attribute: notes, view_type: text }
 
-                    - { path: $call.phone_number, label: 'Last contacted phone', view_type: string }
+                    - { path: $call.phone_number, label: 'Last contacted phone', view_type: string, default: 'Not contacted' }
                     - { path: $call.subject, label: 'Call subject', view_type: string }
                     - { path: $call.callDateTime, label: 'Call date', view_type: datetime }
                     - { path: $call.relatedAccount, label: 'Related To', view_type: orocrm_account }
