@@ -221,6 +221,9 @@ workflows:
                 is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-envelope-alt'
+                    dialog:
+                        dialogOptions:
+                            width: 700
                 transition_definition: send_email_definition
                 form_options:
                     attribute_fields:
@@ -248,12 +251,16 @@ workflows:
                             form_type: textarea
                             options:
                                 required: true
+                                attr:
+                                    style: 'width: 90%;height: 200px;'
                                 constraints:
                                     - NotBlank: ~
                         notes:
                             form_type: textarea
                             options:
                                 required: false
+                                attr:
+                                    style: 'width: 90%;height: 60px'
                     attribute_default_values:
                         email_to: $shopping_cart.customer.contact.primaryEmail.email
                     init_actions:
@@ -710,6 +717,9 @@ workflows:
                 is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-envelope-alt'
+                    dialog:
+                        dialogOptions:
+                            width: 700
                 transition_definition: send_email_definition
                 form_options:
                     attribute_fields:
@@ -737,12 +747,16 @@ workflows:
                             form_type: textarea
                             options:
                                 required: true
+                                attr:
+                                    style: 'width: 90%;height: 200px;'
                                 constraints:
                                     - NotBlank: ~
                         notes:
                             form_type: textarea
                             options:
                                 required: false
+                                attr:
+                                    style: 'width: 90%;height: 60px'
                     attribute_default_values:
                         email_to: $order.customer.contact.primaryEmail.email
                     init_actions:
