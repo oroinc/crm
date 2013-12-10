@@ -53,6 +53,8 @@ abstract class AbstractApiBasedConnector extends AbstractConnector
      */
     protected function initializeFromContext(ContextInterface $context)
     {
+        $this->dependencies      = [];
+        $this->entitiesIdsBuffer = [];
         parent::initializeFromContext($context);
         $settings = $this->transportSettings->getSettingsBag()->all();
 
@@ -235,8 +237,8 @@ abstract class AbstractApiBasedConnector extends AbstractConnector
     /**
      * Get entity data by id
      *
-     * @param int   $id
-     * @param bool  $dependenciesInclude
+     * @param int        $id
+     * @param bool       $dependenciesInclude
      * @param array|null $onlyAttributes array of needed attributes or null to get all list
      *
      * @return mixed
