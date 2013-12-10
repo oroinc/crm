@@ -40,7 +40,7 @@ class StoreConnector extends AbstractConnector implements MagentoConnectorInterf
             'website_id' => 0,
             'code'       => 'admin',
             'name'       => 'Admin',
-            'origin_id'  => 0
+            'store_id'   => 0
         ];
 
         return $stores;

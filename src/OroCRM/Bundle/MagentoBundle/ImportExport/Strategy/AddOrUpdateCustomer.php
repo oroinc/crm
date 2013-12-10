@@ -36,6 +36,7 @@ class AddOrUpdateCustomer extends BaseStrategy
      * Process item strategy
      *
      * @param mixed $importedEntity
+     *
      * @return mixed|null
      */
     public function process($importedEntity)
@@ -64,8 +65,8 @@ class AddOrUpdateCustomer extends BaseStrategy
         );
 
         $this->updateAddresses($newEntity, $importedEntity->getAddresses())
-             ->updateContact($newEntity, $importedEntity->getContact(), true)
-             ->updateAccount($newEntity, $importedEntity->getAccount());
+            ->updateContact($newEntity, $importedEntity->getContact(), true)
+            ->updateAccount($newEntity, $importedEntity->getAccount());
 
         // set relations
         $newEntity->getContact()->addAccount($newEntity->getAccount());
@@ -80,9 +81,9 @@ class AddOrUpdateCustomer extends BaseStrategy
     /**
      * Update $entity with new data from imported $store, $website, $group
      *
-     * @param Customer $entity
-     * @param Store $store
-     * @param Website $website
+     * @param Customer      $entity
+     * @param Store         $store
+     * @param Website       $website
      * @param CustomerGroup $group
      *
      * @return $this
@@ -149,7 +150,8 @@ class AddOrUpdateCustomer extends BaseStrategy
      * updating contact data is not allowed
      *
      * @param Customer $entity
-     * @param Contact $contact
+     * @param Contact  $contact
+     *
      * @return $this
      */
     protected function updateContact(Customer $entity, Contact $contact)
@@ -177,8 +179,9 @@ class AddOrUpdateCustomer extends BaseStrategy
     }
 
     /**
-     * @param Customer $entity
+     * @param Customer             $entity
      * @param Collection|Address[] $addresses
+     *
      * @return $this
      */
     protected function updateAddresses(Customer $entity, Collection $addresses)
@@ -210,7 +213,8 @@ class AddOrUpdateCustomer extends BaseStrategy
 
     /**
      * @param Customer $entity
-     * @param Account $account
+     * @param Account  $account
+     *
      * @return $this
      */
     protected function updateAccount(Customer $entity, Account $account)
@@ -223,24 +227,33 @@ class AddOrUpdateCustomer extends BaseStrategy
             return $this;
         }
 
-        $addresses = [
-            AddressType::TYPE_SHIPPING => $account->getShippingAddress(),
-            AddressType::TYPE_BILLING => $account->getBillingAddress()
-        ];
+        // match account by name because name is unique
+        $matchedAccount = $this->getEntityByCriteria(
+            ['name' => $account->getName()],
+            $account
+        );
+        if ($matchedAccount) {
+            $account = $matchedAccount;
+        } else {
+            $addresses = [
+                AddressType::TYPE_SHIPPING => $account->getShippingAddress(),
+                AddressType::TYPE_BILLING  => $account->getBillingAddress()
+            ];
 
-        foreach ($addresses as $key => $address) {
-            if (empty($address)) {
-                continue;
+            foreach ($addresses as $key => $address) {
+                if (empty($address)) {
+                    continue;
+                }
+
+                //$originAddressId = $address->getId();
+                $address->setId(null);
+                $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
+
+                $this->updateAddressCountryRegion($address, $mageRegionId);
+
+
+                $account->{'set' . ucfirst($key) . 'Address'}($address);
             }
-
-            //$originAddressId = $address->getId();
-            $address->setId(null);
-            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
-
-            $this->updateAddressCountryRegion($address, $mageRegionId);
-
-
-            $account->{'set'.ucfirst($key).'Address'}($address);
         }
 
         $entity->setAccount($account);
@@ -250,6 +263,7 @@ class AddOrUpdateCustomer extends BaseStrategy
 
     /**
      * @param AbstractTypedAddress $address
+     *
      * @return $this
      */
     protected function updateAddressTypes(AbstractTypedAddress $address)

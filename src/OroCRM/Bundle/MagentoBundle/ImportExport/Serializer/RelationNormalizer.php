@@ -37,7 +37,7 @@ class RelationNormalizer implements NormalizerInterface, DenormalizerInterface
 
         foreach (['id', 'code', 'name', 'originId'] as $name) {
             $method = 'set'.ucfirst($name);
-            if (method_exists($result, $method) && !empty($data[$name])) {
+            if (method_exists($result, $method) && isset($data[$name])) {
                 $result->$method($data[$name]);
             }
         }
