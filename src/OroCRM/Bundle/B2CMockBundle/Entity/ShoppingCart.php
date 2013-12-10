@@ -52,6 +52,13 @@ class ShoppingCart
      * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
      */
     protected $status;
+    
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="subtotal", type="float", nullable=true)
+     */
+    protected $subtotal;
 
     /**
      * Get id
@@ -137,5 +144,24 @@ class ShoppingCart
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * @param float $status
+     * @return ShoppingCart
+     */
+    public function setSubtotal($subtotal)
+    {
+        $this->subtotal = $subtotal;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSubtotal()
+    {
+        return $this->subtotal;
     }
 }

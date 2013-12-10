@@ -136,17 +136,21 @@ workflows:
             opportunity_name:
                 label: 'Opportunity name'
                 type: string
-            owner:
+            opportunity_owner:
                 label: 'Owner'
                 type: entity
                 options:
                     class: Oro\Bundle\UserBundle\Entity\User
+            opportunity_budget:
+                label: 'Budget amount'
+                type: float
 
         transitions:
             log_call:
                 label: 'Log call'
                 step_to: contacted
                 is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-phone'
                 transition_definition: log_call_definition
@@ -204,6 +208,7 @@ workflows:
                 label: 'Send email'
                 step_to: contacted
                 is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-envelope-alt'
                 transition_definition: send_email_definition
@@ -247,6 +252,7 @@ workflows:
             convert:
                 label: 'Convert'
                 step_to: converted
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-shopping-cart'
                 transition_definition: convert_definition
@@ -260,6 +266,7 @@ workflows:
                 label: 'Convert to opportunity'
                 step_to: converted_to_opportunity
                 is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-usd'
                 transition_definition: convert_to_opportunity_definition
@@ -271,18 +278,24 @@ workflows:
                                 required: true
                                 constraints:
                                   - NotBlank: ~
-                        owner:
+                        opportunity_owner:
                             form_type: oro_user_select
                             options:
                                 required: true
                                 constraints:
                                   - NotBlank: ~
+                        opportunity_budget:
+                            form_type: oro_money
+                            options:
+                                required: false
                         notes:
                             form_type: textarea
                             options:
                                 required: false
+                    attribute_default_values:
+                        opportunity_budget: $shopping_cart.subtotal
                     init_actions:
-                        - @assign_active_user: $owner
+                        - @assign_active_user: $opportunity_owner
                         - @format_name:
                             attribute: $.result.formattedCustomerName
                             object: $shopping_cart.customer
@@ -296,6 +309,7 @@ workflows:
                 label: 'Abandon'
                 message: 'You are going to abandon this shopping cart.'
                 step_to: abandoned
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-remove-circle'
                 transition_definition: abandon_definition
@@ -309,6 +323,7 @@ workflows:
                 label: 'Reopen'
                 message: 'Performing this transition will reset call and email data.'
                 step_to: open
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-backward'
                 transition_definition: reopen_definition
@@ -399,7 +414,7 @@ workflows:
                             parameters: $opportunity_name
                             message: 'Opportunity name must be set'
                         - @not_empty:
-                            parameters: $owner
+                            parameters: $opportunity_owner
                             message: 'Owner must be set'
                 post_actions:
                     - @find_entity: # Set cart status to converted_to_opportunity
@@ -415,7 +430,8 @@ workflows:
                         attribute: $opportunity
                         data:
                             name: $opportunity_name
-                            owner: $owner
+                            owner: $opportunity_owner
+                            budgetAmount: $opportunity_budget
                             contact: $shopping_cart.customer.contact
                             account: $shopping_cart.customer.account
                             status: $.result.opportunity_status
@@ -439,6 +455,8 @@ workflows:
                     - @assign_value: # Reset latest opportunity, call and email data
                         - [$opportunity, ~]
                         - [$opportunity_name, ~]
+                        - [$opportunity_owner, ~]
+                        - [$opportunity_budget, ~]
 
                         - [$call, ~]
                         - [$call_subject, ~]
@@ -591,6 +609,7 @@ workflows:
                 label: 'Log call'
                 step_to: called
                 is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-phone'
                 transition_definition: log_call_definition
@@ -647,6 +666,7 @@ workflows:
                 label: 'Send email'
                 step_to: emailed
                 is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-envelope-alt'
                 transition_definition: send_email_definition
@@ -690,6 +710,7 @@ workflows:
             no_reply:
                 label: 'No reply'
                 step_to: not_contacted
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-repeat'
                 transition_definition: no_reply_definition
@@ -703,6 +724,7 @@ workflows:
                 label: 'Record feedback'
                 step_to: contacted
                 is_start: true
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-ok'
                     class: 'btn-primary'

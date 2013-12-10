@@ -45,4 +45,6 @@
             </div>
         </div>
     </div>
+
+    {{ macros.renderProperty('Subtotal'|trans, entity.subtotal|length ? entity.subtotal|oro_format_currency, '') }}
 </div>
