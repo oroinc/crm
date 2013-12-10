@@ -30,6 +30,17 @@ class OrderConnector extends AbstractApiBasedConnector implements MagentoConnect
     /**
      * {@inheritdoc}
      */
+    protected function initializeFromContext(ContextInterface $context)
+    {
+        parent::initializeFromContext($context);
+
+        // init helper connectors
+        $this->customerConnector->setStepExecution($this->getStepExecution());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getBatchFilter($websiteId, \DateTime $startDate, \DateTime $endDate, $format = 'Y-m-d H:i:s')
     {
         $store = array_filter(
@@ -94,24 +105,13 @@ class OrderConnector extends AbstractApiBasedConnector implements MagentoConnect
     /**
      * {@inheritdoc}
      */
-    public function getData($id, $dependenciesInclude = false, $onlyAttributes = [])
+    public function getData($id, $dependenciesInclude = false, $onlyAttributes = null)
     {
-        var_dump($id);
+        $result = $this->call(MagentoConnectorInterface::ACTION_ORDER_LIST, [$id, $onlyAttributes]);
 
         return [];
     }
 
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function initializeFromContext(ContextInterface $context)
-    {
-        parent::initializeFromContext($context);
-
-        // init helper connectors
-        $this->customerConnector->setStepExecution($this->getStepExecution());
-    }
 
     /**
      * @param int $id
