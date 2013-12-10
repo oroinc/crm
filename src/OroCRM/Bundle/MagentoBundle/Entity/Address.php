@@ -24,6 +24,8 @@ use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
  */
 class Address extends AbstractTypedAddress
 {
+    use OriginTrait;
+
     /*
      * FIELDS are duplicated to enable dataaudit only for customer address fields
      */
@@ -146,13 +148,6 @@ class Address extends AbstractTypedAddress
     protected $types;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="origin_id", type="integer")
-     */
-    protected $originId;
-
-    /**
      * Set contact as owner.
      *
      * @param Customer $owner
@@ -170,25 +165,5 @@ class Address extends AbstractTypedAddress
     public function getOwner()
     {
         return $this->owner;
-    }
-
-    /**
-     * @param int $originId
-     *
-     * @return $this
-     */
-    public function setOriginId($originId)
-    {
-        $this->originId = $originId;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOriginId()
-    {
-        return $this->originId;
     }
 }

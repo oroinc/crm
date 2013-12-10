@@ -8,6 +8,7 @@ parameters:
     # converter
     orocrm_magento.importexport.data_converter.cart.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CartDataConverter
     orocrm_magento.importexport.data_converter.cartitem.class:            OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CartItemDataConverter
+    orocrm_magento.importexport.data_converter.mage_address.class:        OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AddressDataConverter
 
     # connectors
     orocrm_magento.mage.region_connector.class:                           OroCRM\Bundle\MagentoBundle\Provider\RegionConnector
@@ -39,6 +40,9 @@ services:
 
     orocrm_magento.importexport.data_converter.cartitem:
         class: %orocrm_magento.importexport.data_converter.cartitem.class%
+
+    orocrm_magento.importexport.data_converter.mage_address:
+        class: %orocrm_magento.importexport.data_converter.mage_address.class%
 
     # Connectors
     orocrm_magento.mage.customer_connector:
@@ -119,6 +123,8 @@ services:
 
     orocrm_magento.importexport.normalizer.cart:
         class: %orocrm_magento.importexport.normalizer.cart.class%
+        calls:
+            - [setAddressDataConverter, ["@orocrm_magento.importexport.data_converter.mage_address"]]
         tags:
             - { name: oro_importexport.normalizer }
 

@@ -49,6 +49,8 @@ class CartDataConverter extends AbstractTableDataConverter
             'base_currency_code'  => 'baseCurrencyCode',
             'store_currency_code' => 'storeCurrencyCode',
             'quote_currency_code' => 'quoteCurrencyCode',
+            'shipping_address_id' => 'shipping_address:originId',
+            'billing_address_id'  => 'billing_address:originId',
         ];
     }
 

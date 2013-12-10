@@ -4,10 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\BatchBundle\Item\InvalidItemException;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -24,15 +22,6 @@ class AddOrUpdateCustomer extends BaseStrategy
     const ENTITY_NAME             = 'OroCRMMagentoBundle:Customer';
     const GROUP_ENTITY_NAME       = 'OroCRMMagentoBundle:CustomerGroup';
     const ADDRESS_RELATION_ENTITY = 'OroCRMMagentoBundle:AddressRelation';
-
-    /** @var array */
-    protected $regionsCache = [];
-
-    /** @var array */
-    protected $countriesCache = [];
-
-    /** @var array */
-    protected $mageRegionsCache = [];
 
     /** @var array */
     protected $storeEntityCache = [];
@@ -293,82 +282,5 @@ class AddOrUpdateCustomer extends BaseStrategy
         }
 
         return $this;
-    }
-
-    /**
-     * @param AbstractAddress $address
-     * @param int             $mageRegionId
-     *
-     * @return $this
-     *
-     * @throws InvalidItemException
-     */
-    protected function updateAddressCountryRegion(AbstractAddress $address, $mageRegionId)
-    {
-        /*
-         * @TODO review this implementation
-         */
-        $countryCode = $address->getCountry()->getIso2Code();
-
-        $country = $this->getAddressCountryByCode($address, $countryCode);
-        $address->setCountry($country);
-
-        if (!empty($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId])) {
-            $this->mageRegionsCache[$mageRegionId] = $this->getEntityRepository(
-                'OroCRM\Bundle\MagentoBundle\Entity\Region'
-            )->findOneBy(['regionId' => $mageRegionId]);
-        }
-
-        if (!empty($this->mageRegionsCache[$mageRegionId])) {
-            $mageRegion   = $this->mageRegionsCache[$mageRegionId];
-            $combinedCode = $mageRegion->getCombinedCode();
-
-            // set ISO combined code
-            $address->getRegion()->setCombinedCode($combinedCode);
-
-            $this->regionsCache[$combinedCode] = empty($this->regionsCache[$combinedCode]) ?
-                $this->getEntityOrNull(
-                    $address->getRegion(),
-                    'combinedCode',
-                    'Oro\Bundle\AddressBundle\Entity\Region'
-                ) :
-                $this->regionsCache[$combinedCode];
-
-            // no region found in system db for corresponding magento region, use region text
-            if (empty($this->regionsCache[$combinedCode])) {
-                $address->setRegion(null);
-            } else {
-                $this->regionsCache[$combinedCode] = $this->merge($this->regionsCache[$combinedCode]);
-                $address->setRegion($this->regionsCache[$combinedCode]);
-                $address->setRegionText(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param AbstractAddress $address
-     * @param string          $countryCode
-     *
-     * @throws \Oro\Bundle\BatchBundle\Item\InvalidItemException
-     * @return object
-     */
-    protected function getAddressCountryByCode(AbstractAddress $address, $countryCode)
-    {
-        $this->countriesCache[$countryCode] = empty($this->countriesCache[$countryCode])
-            ? $this->findAndReplaceEntity(
-                $address->getCountry(),
-                'Oro\Bundle\AddressBundle\Entity\Country',
-                'iso2Code',
-                ['iso2Code', 'iso3Code', 'name']
-            )
-            : $this->merge($this->countriesCache[$countryCode]);
-
-        if (empty($this->countriesCache[$countryCode])) {
-            throw new InvalidItemException(sprintf('Unable to find country by code "%s"', $countryCode), []);
-        }
-
-        return $this->countriesCache[$countryCode];
     }
 }

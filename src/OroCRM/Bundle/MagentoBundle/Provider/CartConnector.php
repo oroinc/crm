@@ -14,6 +14,7 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
     const JOB_IMPORT          = 'mage_cart_import';
 
     const ACTION_CART_LIST    = 'salesQuoteList';
+    const ACTION_CART_INFO    = 'shoppingCartInfo';
     const PAGE_SIZE           = 10;
 
     /** @var int */
@@ -99,6 +100,17 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
         }
 
         return $this->call(self::ACTION_CART_LIST, [$filters, $limits]);
+    }
+
+    /**
+     * @param int $quoteId
+     *
+     * @return mixed
+     */
+    public function getQuoteInfo($quoteId)
+    {
+        return $this->call(self::ACTION_CART_INFO, $quoteId);
+
     }
 
 
