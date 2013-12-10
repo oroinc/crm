@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -13,6 +12,7 @@ use Oro\Bundle\AddressBundle\Entity\AddressType;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -237,6 +237,10 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
      */
     protected function formatAccountData($data)
     {
+        /**
+         * @TODO FIXME move to converter
+         */
+
         $account = [];
 
         $account['name'] = sprintf("%s %s", $data['first_name'], $data['last_name']);
@@ -275,6 +279,10 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
      */
     protected function formatContactData($data)
     {
+        /**
+         * @TODO FIXME move to converter
+         */
+
         $contact           = $this->convertToCamelCase($data);
         $contactFieldNames = [
             'firstName'  => null,

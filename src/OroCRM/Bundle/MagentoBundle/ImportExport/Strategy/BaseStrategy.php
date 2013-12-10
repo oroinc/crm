@@ -77,7 +77,7 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
 
         // increment context counter
         if ($entity->getId()) {
-            $this->importExportContext->incrementReplaceCount();
+            $this->importExportContext->incrementUpdateCount();
         } else {
             $this->importExportContext->incrementAddCount();
         }
