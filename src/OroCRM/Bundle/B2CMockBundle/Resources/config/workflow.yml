@@ -25,7 +25,7 @@ workflows:
                     - convert_to_opportunity
                     - abandon
                 view_attributes:
-                    - { path: $email.fromEmailAddress, label: 'Last contacted email', view_type: string }
+                    - { attribute: email_to, label: 'Last contacted email', view_type: string }
                     - { path: $email.subject, label: 'Email subject', view_type: string }
                     - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
                     - { attribute: notes, view_type: string }
@@ -36,7 +36,7 @@ workflows:
                     - { path: $call.relatedAccount, label: 'Related To', view_type: orocrm_account }
                     - { path: $call.relatedContact, label: 'Related Contact', view_type: orocrm_contact }
                     - { path: $call.direction.label, label: 'Direction', view_type: string }
-                    - { path: $call.duration, label: 'Duration', view_type: time }
+                    - { path: $call.duration, label: 'Duration', view_type: datetime_duration }
             abandoned:
                 label: 'Abandoned'
                 template: 'OroCRMB2CMockBundle:Workflow:shopping_cart_flow_general.html.twig'
@@ -469,7 +469,7 @@ workflows:
                     - log_call
                     - record_feedback
                 view_attributes:
-                    - { path: $email.to, label: 'Last contacted email', view_type: string }
+                    - { attribute: email_to, label: 'Last contacted email', view_type: string }
                     - { path: $email.subject, label: 'Email subject', view_type: string }
                     - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
                     - { attribute: notes, view_type: text }
@@ -487,7 +487,7 @@ workflows:
                     - { path: $call.relatedAccount, label: 'Related To', view_type: orocrm_account }
                     - { path: $call.relatedContact, label: 'Related Contact', view_type: orocrm_contact }
                     - { path: $call.direction.label, label: 'Direction', view_type: string }
-                    - { path: $call.duration, label: 'Duration', view_type: time }
+                    - { path: $call.duration, label: 'Duration', view_type: datetime_duration }
                     - { attribute: notes, view_type: text }
             contacted:
                 label: 'Contacted'
@@ -495,7 +495,7 @@ workflows:
                 order: 40
                 is_final: true
                 view_attributes:
-                    - { path: $email.to, label: 'Last contacted email', view_type: string }
+                    - { attribute: email_to, label: 'Last contacted email', view_type: string }
                     - { path: $email.subject, label: 'Email subject', view_type: string }
                     - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
                     - { attribute: notes, view_type: text }
@@ -506,7 +506,7 @@ workflows:
                     - { path: $call.relatedAccount, label: 'Related To', view_type: orocrm_account }
                     - { path: $call.relatedContact, label: 'Related Contact', view_type: orocrm_contact }
                     - { path: $call.direction.label, label: 'Direction', view_type: string }
-                    - { path: $call.duration, label: 'Duration', view_type: time }
+                    - { path: $call.duration, label: 'Duration', view_type: datetime_duration }
                     - { attribute: feedback, view_type: text }
         attributes:
             order:
