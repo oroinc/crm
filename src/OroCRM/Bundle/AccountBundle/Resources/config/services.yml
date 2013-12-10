@@ -88,7 +88,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-contacts-view-grid, method: onBuildAfter }
 
-    orocrm_account.event_listener.account_contacts_updagte_listener:
+    orocrm_account.event_listener.account_contacts_update_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
            - 'account'
