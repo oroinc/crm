@@ -283,6 +283,15 @@ workflows:
                                 required: false
                     init_actions:
                         - @assign_active_user: $owner
+                        - @format_name:
+                            attribute: $.result.formattedCustomerName
+                            object: $shopping_cart.customer
+                        - @format_string:
+                            attribute: $opportunity_name
+                            string: '%customer_name% - %shopping_cart_id%'
+                            arguments:
+                                customer_name: $.result.formattedCustomerName
+                                shopping_cart_id: $shopping_cart.id
             abandon:
                 label: 'Abandon'
                 message: 'You are going to abandon this shopping cart.'
