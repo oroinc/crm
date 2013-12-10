@@ -54,5 +54,6 @@
         {{ macros.renderProperty('Email'|trans, entity.email ? '<a href="mailto:' ~ entity.email ~ '">' ~ entity.email ~ '</a>' : '') }}
         {{ macros.renderProperty('Phone'|trans, entity.phoneNumber ? '<a href="tel:' ~ entity.phoneNumber ~ '">' ~ entity.phoneNumber ~ '</a>' : '') }}
         {{ macros.renderProperty('Website'|trans, entity.website ? '<a href="' ~ entity.website ~ '" class="no-hash">' ~ entity.website ~ '</a>' : '') }}
+        {{ macros.renderProperty('Notes'|trans, entity.notes|nl2br) }}
     </div>
 </div>

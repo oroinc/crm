@@ -159,6 +159,13 @@ class Opportunity extends ExtendOpportunity
     protected $updatedAt;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="notes", type="text", nullable=true)
+     */
+    protected $notes;
+
+    /**
      * @return int
      */
     public function getId()
@@ -435,6 +442,24 @@ class Opportunity extends ExtendOpportunity
     {
         $this->owner = $owningUser;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * @param string $notes
+     * @return Opportunity
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
         return $this;
     }
 }

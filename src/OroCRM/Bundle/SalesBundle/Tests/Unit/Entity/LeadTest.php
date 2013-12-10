@@ -39,6 +39,7 @@ class LeadTest extends \PHPUnit_Framework_TestCase
             'owner' => array('owner', $user, $user),
             'createdAt' => array('createdAt', $now, $now),
             'updatedAt' => array('updatedAt', $now, $now),
+            'notes' => array('notes', 'test', 'test')
         );
     }
 }
