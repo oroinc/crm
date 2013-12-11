@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractPhone;
 
@@ -13,6 +14,11 @@ use Oro\Bundle\AddressBundle\Entity\AbstractPhone;
  *      @ORM\Index(name="primary_phone_idx", columns={"phone", "is_primary"})
  * })
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\ContactBundle\Entity\Repository\ContactPhoneRepository")
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"label"="Contact Phone", "plural_label"="Contact Phones"}
+ *  }
+ * )
  */
 class ContactPhone extends AbstractPhone
 {
