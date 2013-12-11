@@ -46,7 +46,6 @@ class CustomerTest extends AbstractEntityTestCase
     {
         $this->entity->setFirstName(self::TEST_STRING . 'first');
         $this->entity->setLastName(self::TEST_STRING . 'last');
-        $this->assertEquals('stringfirst stringlast', (string)$this->entity);
 
         $this->entity->addAddress($this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Address'));
 
