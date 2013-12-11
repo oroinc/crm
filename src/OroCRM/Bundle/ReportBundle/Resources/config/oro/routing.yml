@@ -2,10 +2,3 @@ orocrm_report:
     resource:     "@OroCRMReportBundle/Controller"
     type:         annotation
     prefix:       /report
-
-orocrm_report_api:
-    resource:     "@OroCRMReportBundle/Resources/config/routing_api.yml"
-    type: rest
-    prefix: api/rest/{version}
-    defaults:
-        version:  latest
