@@ -43,7 +43,7 @@ class Order extends BaseOrder
     protected $incrementId;
 
     /**
-     * @var ArrayCollection
+     * @var Customer
      *
      * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"})
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)

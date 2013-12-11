@@ -151,6 +151,14 @@ class Cart extends BaseCart
     protected $billingAddress;
 
     /**
+     * @var CartStatus
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CartStatus")
+     * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
+     */
+    protected $status;
+
+    /**
      * @return CartItem[]|Collection
      */
     public function getCartItems()
@@ -255,5 +263,24 @@ class Cart extends BaseCart
     public function getQuoteCurrencyCode()
     {
         return $this->quoteCurrencyCode;
+    }
+
+    /**
+     * @param CartStatus $status
+     * @return Cart
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return CartStatus
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

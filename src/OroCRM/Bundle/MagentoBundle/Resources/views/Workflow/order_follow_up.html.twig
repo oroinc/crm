@@ -10,7 +10,8 @@
 
 {% block breadcrumb %}
     {% set breadcrumbs = [
-        {label: 'Mocks'|trans},
+        {label: 'Customers'|trans},
+        {label: 'Сhanells'|trans},
         {label: 'Orders'|trans}
     ] %}
     {{ parent() }}
@@ -18,11 +19,11 @@
 
 {% block workflow_title %}
     {% set titleParts = {
-        'indexPath':   path('orocrm_b2c_order_index'),
+        'indexPath':   path('orocrm_magento_order_index'),
         'indexLabel': 'Orders'|trans,
         'additional': [
             {
-                'indexPath': path('orocrm_b2c_order_view', {id:  workflowItem.data.order.id}),
+                'indexPath': path('orocrm_magento_order_view', {id:  workflowItem.data.order.id}),
                 'indexLabel': 'Order #'|trans ~ workflowItem.data.order.id
             }
         ],
@@ -37,7 +38,7 @@
             {{
                 oro_widget_render({
                     'widgetType': 'block',
-                    'url': path('orocrm_b2c_order_info', { id: workflowItem.data.order.id }),
+                    'url': path('orocrm_magento_order_info', { id: workflowItem.data.order.id }),
                     'title': 'Order Information'|trans,
                     'alias': 'orer_info',
                     'contentClasses': ['form-horizontal']
@@ -49,7 +50,7 @@
                 require(['jquery', 'oro/widget-manager', 'oro/navigation'],
                 function($, widgetManager, Navigation){
                     widgetManager.getWidgetInstanceByAlias('orer_info', function(widget) {
-                        var viewLink = $('<a href="{{ path('orocrm_b2c_order_view', {id:  workflowItem.data.order.id}) }}" class="btn btn-small">{{ 'View'|trans }}</a>');
+                        var viewLink = $('<a href="{{ path('orocrm_magento_order_view', {id:  workflowItem.data.order.id}) }}" class="btn btn-small">{{ 'View'|trans }}</a>');
                         Navigation.getInstance().processClicks(viewLink);
                         widget.addAction('view', 'default', viewLink);
                     });
@@ -94,7 +95,7 @@
                                     {% for email in workflowItem.data.email_collection|reverse %}
                                         <tr>
                                             <td>
-                                                {{ oro_workflow_render_view_attribute_value(workflowItem, {'path': email, 'view_type': 'email', 'label': 'Call info'}) }}
+                                                {{ oro_workflow_render_view_attribute_value(workflowItem, {'path': email, 'view_type': 'email', 'label': 'Email info'}) }}
                                             </td>
                                             <td>
                                                 {% set recipients = [] %}

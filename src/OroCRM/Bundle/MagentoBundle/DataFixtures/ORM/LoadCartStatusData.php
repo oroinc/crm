@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\B2CMockBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\B2CMockBundle\Entity\ShoppingCartStatus;
+use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 
 class LoadShoppingCartStatusData extends AbstractFixture
 {
@@ -25,7 +25,7 @@ class LoadShoppingCartStatusData extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         foreach ($this->data as $name => $label) {
-            $method = new ShoppingCartStatus($name);
+            $method = new CartStatus($name);
             $method->setLabel($label);
             $manager->persist($method);
         }

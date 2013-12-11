@@ -4,28 +4,29 @@
 
 {% oro_title_set({
     params : {
-        '%section%': 'Shopping carts'|trans,
-        '%entity%': 'Shopping cart #'|trans ~ workflowItem.data.shopping_cart.id,
+        '%section%': 'Carts'|trans,
+        '%entity%': 'Cart #'|trans ~ workflowItem.data.shopping_cart.id,
         '%workflow_data%': workflow.label ~ ' (' ~ currentStep.label ~ ')',
     }
 }) %}
 
 {% block breadcrumb %}
     {% set breadcrumbs = [
-        {label: 'Mocks'|trans},
-        {label: 'Shopping carts'|trans}
+        {label: 'Customers'|trans},
+        {label: 'Сhanells'|trans},
+        {label: 'Magento Сarts'|trans}
     ] %}
     {{ parent() }}
 {% endblock %}
 
 {% block workflow_title %}
     {% set titleParts = {
-        'indexPath':   path('orocrm_b2c_shopping_cart_index'),
-        'indexLabel': 'Shopping carts'|trans,
+        'indexPath':   path('orocrm_magento_cart_index'),
+        'indexLabel': 'Carts'|trans,
         'additional': [
             {
-                'indexPath': path('orocrm_b2c_shopping_cart_view', {id:  workflowItem.data.shopping_cart.id}),
-                'indexLabel': 'Shopping cart #'|trans ~ workflowItem.data.shopping_cart.id
+                'indexPath': path('orocrm_magento_cart_view', {id:  workflowItem.data.shopping_cart.id}),
+                'indexLabel': 'Сart #'|trans ~ workflowItem.data.shopping_cart.id
             }
         ],
         'entityTitle': workflow.label ~ ' (' ~ currentStep.label ~ ')'
@@ -39,25 +40,51 @@
             {{
                 oro_widget_render({
                     'widgetType': 'block',
-                    'url': path('orocrm_b2c_shopping_cart_info', { id: workflowItem.data.shopping_cart.id }),
-                    'title': 'Shopping Cart Information'|trans,
+                    'url': path('orocrm_magento_cart_info', { id: workflowItem.data.shopping_cart.id }),
+                    'title': 'Cart Information'|trans,
                     'alias': 'shopping_cart_info',
                     'contentClasses': ['form-horizontal']
                 })
             }}
 
-            {#{%- if resource_granted('orocrm_b2c_shopping_cart_view') and workflowItem.data.shopping_cart -%}#}
+            {%- if resource_granted('orocrm_magento_cart_view') -%}
                 <script type="text/javascript">
                     require(['jquery', 'oro/widget-manager', 'oro/navigation'],
                     function($, widgetManager, Navigation){
                         widgetManager.getWidgetInstanceByAlias('shopping_cart_info', function(widget) {
-                            var viewLink = $('<a href="{{ path('orocrm_b2c_shopping_cart_view', {id:  workflowItem.data.shopping_cart.id}) }}" class="btn btn-small">{{ 'View'|trans }}</a>');
+                            var viewLink = $('<a href="{{ path('orocrm_magento_cart_view', {id:  workflowItem.data.shopping_cart.id}) }}" class="btn btn-small">{{ 'View'|trans }}</a>');
                             Navigation.getInstance().processClicks(viewLink);
                             widget.addAction('view', 'default', viewLink);
                         });
                     });
                 </script>
-            {#{% endif %}#}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="clearfix">
+        <div class="responsive-cell contact-info-col">
+            {{
+                oro_widget_render({
+                    'widgetType': 'block',
+                    'url': path('orocrm_magento_customer_info', {id: workflowItem.data.shopping_cart.customer.id}),
+                    'title': 'Customer Information'|trans,
+                    'alias': 'cart_customer_info'
+                })
+            }}
+
+            {%- if resource_granted('orocrm_magento_customer_view') -%}
+            <script type="text/javascript">
+                require(['jquery', 'oro/widget-manager', 'oro/navigation'],
+                function($, widgetManager, Navigation){
+                    widgetManager.getWidgetInstanceByAlias('cart_customer_info', function(widget) {
+                        var viewLink = $('<a href="{{ path('orocrm_magento_customer_view', {id:  workflowItem.data.shopping_cart.customer.id}) }}" class="btn btn-small">{{ 'View'|trans }}</a>');
+                        Navigation.getInstance().processClicks(viewLink);
+                        widget.addAction('view', 'default', viewLink);
+                    });
+                });
+            </script>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
@@ -96,7 +123,7 @@
                                 {% for email in workflowItem.data.email_collection|reverse %}
                                     <tr>
                                         <td>
-                                            {{ oro_workflow_render_view_attribute_value(workflowItem, {'path': email, 'view_type': 'email', 'label': 'Call info'}) }}
+                                            {{ oro_workflow_render_view_attribute_value(workflowItem, {'path': email, 'view_type': 'email', 'label': 'Email info'}) }}
                                         </td>
                                         <td>
                                             {% set recipients = [] %}

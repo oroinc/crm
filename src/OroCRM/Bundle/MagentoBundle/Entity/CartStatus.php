@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\B2CMockBundle\Entity;
+namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_b2c_shopping_cart_status")
+ * @ORM\Table(name="orocrm_magento_cart_status")
  */
-class ShoppingCartStatus
+class CartStatus
 {
     /**
      * @ORM\Column(name="name", type="string", length=32)
@@ -43,7 +43,7 @@ class ShoppingCartStatus
      * Set address type label
      *
      * @param string $label
-     * @return ShoppingCartStatus
+     * @return CartStatus
      */
     public function setLabel($label)
     {
