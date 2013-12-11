@@ -5,10 +5,16 @@ namespace OroCRM\Bundle\ContactBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_contact_source")
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"label"="Contact Source", "plural_label"="Contact Sources"}
+ *  }
+ * )
  */
 class Source
 {

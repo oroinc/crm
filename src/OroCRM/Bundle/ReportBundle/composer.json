@@ -9,7 +9,6 @@
         "symfony/symfony": "2.3.*",
 
         "oro/ui-bundle": "dev-master",
-        "oro/query-designer-bundle": "dev-master",
         "orocrm/account-bundle": "dev-master",
         "orocrm/sales-bundle": "dev-master"
     },
