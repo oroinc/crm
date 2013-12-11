@@ -3,10 +3,16 @@
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_sales_lead_status")
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"label"="Lead Status", "plural_label"="Lead Statuses"}
+ *  }
+ * )
  */
 class LeadStatus
 {
