@@ -37,10 +37,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *  routeName="orocrm_contact_index",
  *  routeView="orocrm_contact_view",
  *  defaultValues={
- *      "entity"={
- *          "label"="Contact",
- *          "plural_label"="Contacts"
- *      },
+ *      "entity"={"label"="Contact", "plural_label"="Contacts"},
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",
