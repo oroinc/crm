@@ -1,0 +1,9 @@
+query_designer:
+    aggregates:
+        opportunity_status:
+            applicable: [{entity: OroCRMSalesBundle:OpportunityStatus, field: name}]
+            functions:
+                - { name: WonCount,        return_type: integer, expr: SUM(CASE WHEN $column = 'won' THEN 1 ELSE 0 END) }
+                - { name: LostCount,       return_type: integer, expr: SUM(CASE WHEN $column = 'lost' THEN 1 ELSE 0 END) }
+                - { name: InProgressCount, return_type: integer, expr: SUM(CASE WHEN $column = 'in_progress' THEN 1 ELSE 0 END) }
+            query_type: [report]

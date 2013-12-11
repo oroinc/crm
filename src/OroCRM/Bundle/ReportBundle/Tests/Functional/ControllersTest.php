@@ -38,7 +38,7 @@ class ControllersTest extends WebTestCase
         $this->client->request(
             'GET',
             $this->client->generate(
-                'orocrm_report_static_index',
+                'orocrm_report_index',
                 array(
                     'reportGroupName' => $group,
                     'reportName'      => $report,
