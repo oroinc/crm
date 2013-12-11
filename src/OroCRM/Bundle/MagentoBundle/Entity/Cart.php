@@ -102,14 +102,14 @@ class Cart extends BaseCart
     /**
      * @var float
      *
-     * @ORM\Column(name="store_to_base_rate", type="decimal", nullable=false)
+     * @ORM\Column(name="store_to_base_rate", type="float", nullable=false)
      */
     protected $storeToBaseRate;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="store_to_quote_rate", type="decimal", nullable=true)
+     * @ORM\Column(name="store_to_quote_rate", type="float", nullable=true)
      */
     protected $storeToQuoteRate;
 
