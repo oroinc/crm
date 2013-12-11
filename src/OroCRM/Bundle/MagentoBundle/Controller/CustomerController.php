@@ -12,6 +12,9 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
+/**
+ * @Route("/customer")
+ */
 class CustomerController extends Controller
 {
     /**

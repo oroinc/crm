@@ -1,0 +1,27 @@
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+
+{# TODO: Move this to OroUIBundle::macros.html.twig #}
+{% macro renderRow(label, value) %}
+    {% import 'OroUIBundle::macros.html.twig' as macros %}
+    {{ macros.renderAttribute(label, '<p class="control-label">' ~ value|default('N/A'|trans) ~ '</p>') }}
+{% endmacro %}
+
+<div class="widget-content product-info-widget form-horizontal box-content row-fluid">
+    <div class="span6">
+        {{ _self.renderRow('Name'|trans, entity.name) }}
+        {{ _self.renderRow('SKU'|trans, entity.sku) }}
+        {{ _self.renderRow('Type'|trans, entity.type) }}
+        {{ _self.renderRow('Price'|trans, entity.price) }}
+        {{ _self.renderRow('Special Price'|trans, entity.specialPrice) }}
+    </div>
+
+    <div class="span6">
+        {{ _self.renderRow('Channel'|trans, entity.channel.name) }}
+
+        {% set websites = [] %}
+        {% for website in entity.websites %}
+            {% set websites = websites|merge([website.name]) %}
+        {% endfor %}
+        {{ _self.renderRow('Websites'|trans, websites|join(', ')) }}
+    </div>
+</div>

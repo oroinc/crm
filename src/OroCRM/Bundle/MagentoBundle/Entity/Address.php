@@ -24,6 +24,8 @@ use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
  */
 class Address extends AbstractTypedAddress
 {
+    use OriginTrait;
+
     /*
      * FIELDS are duplicated to enable dataaudit only for customer address fields
      */
@@ -139,18 +141,11 @@ class Address extends AbstractTypedAddress
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType",cascade={"persist"})
      * @ORM\JoinTable(
      *     name="orocrm_magento_customer_address_to_address_type",
-     *     joinColumns={@ORM\JoinColumn(name="contact_address_id", referencedColumnName="id")},
+     *     joinColumns={@ORM\JoinColumn(name="customer_address_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )
      **/
     protected $types;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="original_id", type="integer")
-     */
-    protected $originalId;
 
     /**
      * Set contact as owner.
@@ -170,25 +165,5 @@ class Address extends AbstractTypedAddress
     public function getOwner()
     {
         return $this->owner;
-    }
-
-    /**
-     * @param int $originalId
-     *
-     * @return $this
-     */
-    public function setOriginalId($originalId)
-    {
-        $this->originalId = $originalId;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOriginalId()
-    {
-        return $this->originalId;
     }
 }

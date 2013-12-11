@@ -109,3 +109,307 @@ datagrid:
                 rowAction:    true
         options:
             entityHint: customer
+
+    magento-cart-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_magento_cart_view
+            query:
+                select:
+                    - c.id
+                    - c.email
+                    - c.itemsQty
+                    - c.quoteCurrencyCode
+                    - c.subTotal
+                    - c.grandTotal
+                    - c.createdAt
+                    - c.updatedAt
+                    - ch.name as channelName
+                    - cw.name as websiteName
+                from:
+                    - { table: OroCRMMagentoBundle:Cart , alias: c }
+                join:
+                    left:
+                        - { join: c.store, alias: cs }
+                        - { join: cs.website, alias: cw }
+                        - { join: c.channel, alias: ch }
+        columns:
+            itemsQty:
+                label: orocrm.magento.datagrid.columns.qty
+            quoteCurrencyCode:
+                label: orocrm.magento.datagrid.columns.currency
+            subTotal:
+                label: orocrm.magento.datagrid.columns.sub_total
+            grandTotal:
+                label: orocrm.magento.datagrid.columns.grand_total
+            email:
+                label: orocrm.magento.datagrid.columns.email
+            channelName:
+                label: orocrm.magento.datagrid.columns.channel
+            websiteName:
+                label: orocrm.magento.datagrid.columns.website
+            createdAt:
+                label: orocrm.magento.datagrid.columns.created_at
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.magento.datagrid.columns.updated_at
+                frontend_type: datetime
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: orocrm_magento_cart_view
+                params: [ id ]
+        sorters:
+            columns:
+                itemsQty:             { data_name: c.itemsQty }
+                quoteCurrencyCode:    { data_name: c.quoteCurrencyCode }
+                email:                { data_name: c.email }
+                subTotal:    { data_name: c.subTotal }
+                grandTotal:  { data_name: c.grandTotal }
+                channelName: { data_name: channelName }
+                websiteName: { data_name: cw.name }
+                createdAt:   { data_name: c.createdAt }
+                updatedAt:   { data_name: c.updatedAt }
+            default:
+                grandTotal:  DESC
+        filters:
+            columns:
+                email:
+                    type: string
+                    data_name: c.email
+                channelName:
+                    type: entity
+                    data_name: cw
+                    options:
+                        field_options:
+                          class: OroIntegrationBundle:Channel
+                          property: name
+                websiteName:
+                    type: entity
+                    data_name: cw
+                    options:
+                        field_options:
+                          class: OroCRMMagentoBundle:Website
+                          property: name
+                createdAt:
+                    type:      datetime
+                    data_name: c.createdAt
+                    enabled: false
+                updatedAt:
+                    type:      datetime
+                    data_name: c.updatedAt
+                    enabled: false
+        actions:
+            view:
+                type:         navigate
+                label:        orocrm.magento.datagrid.actions.view.label
+                link:         view_link
+                icon:         book
+                acl_recource: orocrm_magento_cart_view
+                rowAction:    true
+        options:
+            entityHint: cart
+
+    magento-cartitem-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_magento_cart_view
+            query:
+                select:
+                    - c.id
+                    - c.sku
+                    - c.name
+                    - c.qty
+                    - c.giftMessage
+                    - c.price
+                    - c.priceInclTax
+                    - c.rowTotal
+                    - c.taxAmount
+                    - c.discountAmount
+                    - c.weight
+                    - c.productType
+                    - c.createdAt
+                    - c.updatedAt
+                from:
+                    - { table: OroCRMMagentoBundle:CartItem , alias: c }
+        columns:
+            sku:
+                label: orocrm.magento.datagrid.columns.sku
+            name:
+                label: orocrm.magento.datagrid.columns.name
+            qty:
+                label: orocrm.magento.datagrid.columns.qty
+                frontend_type: decimal
+            giftMessage:
+                label: orocrm.magento.datagrid.columns.gift_message
+            price:
+                label: orocrm.magento.datagrid.columns.price
+                frontend_type: decimal
+            priceInclTax:
+                label: orocrm.magento.datagrid.columns.price_incl_tax
+                frontend_type: decimal
+            rowTotal:
+                label: orocrm.magento.datagrid.columns.row_total
+                frontend_type: decimal
+            taxAmount:
+                label: orocrm.magento.datagrid.columns.tax_amount
+                frontend_type: decimal
+            discountAmount:
+                label: orocrm.magento.datagrid.columns.discount_amount
+                frontend_type: decimal
+            weight:
+                label: orocrm.magento.datagrid.columns.weight
+                frontend_type: decimal
+            createdAt:
+                label: orocrm.magento.datagrid.columns.added_on
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.magento.datagrid.columns.updated_on
+                frontend_type: datetime
+        properties:
+            id: ~
+        sorters:
+            columns:
+                sku:            { data_name: c.sku }
+                name:           { data_name: c.name }
+                qty:            { data_name: c.qty }
+                giftMessage:    { data_name: c.giftMessage }
+                price:          { data_name: c.price }
+                priceInclTax:   { data_name: c.priceInclTax }
+                rowTotal:       { data_name: c.rowTotal }
+                taxAmount:      { data_name: c.taxAmount }
+                discountAmount: { data_name: c.discountAmount }
+                weight:         { data_name: c.weight }
+                createdAt:      { data_name: c.createdAt }
+                updatedAt:      { data_name: c.updatedAt }
+            default:
+                createdAt:  DESC
+        filters:
+            columns:
+                sku:
+                    type: string
+                    data_name: c.sku
+                price:
+                    type: number
+                    data_name: c.price
+                createdAt:
+                    type:      datetime
+                    data_name: c.createdAt
+                    enabled: false
+                updatedAt:
+                    type:      datetime
+                    data_name: c.updatedAt
+                    enabled: false
+        options:
+            entityHint: cart item
+
+    magento-products-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_magento_product_view
+            query:
+                select:
+                    - p
+                    - pch.name as channelName
+                from:
+                    - { table: OroCRMMagentoBundle:Product , alias: p }
+                join:
+                    left:
+                        - { join: p.channel, alias: pch }
+                        - { join: p.websites, alias: pw }
+        columns:
+            name:
+                label: orocrm.magento.datagrid.columns.name
+            sku:
+                label: orocrm.magento.datagrid.columns.sku
+            type:
+                label: orocrm.magento.datagrid.columns.type
+            price:
+                label: orocrm.magento.datagrid.columns.price
+                frontend_type: decimal
+            specialPrice:
+                label: orocrm.magento.datagrid.columns.specialPrice
+                frontend_type: decimal
+            websites:
+                label: orocrm.magento.datagrid.columns.websites
+                type:  callback
+                callable: OroCRM\Bundle\MagentoBundle\Converter\WebsiteCollectionToString::getConverterCallback
+            channelName:
+                label: orocrm.magento.datagrid.columns.channel
+            createdAt:
+                label: orocrm.magento.datagrid.columns.created_at
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.magento.datagrid.columns.updated_at
+                frontend_type: datetime
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: orocrm_magento_product_view
+                params: [ id ]
+        sorters:
+            columns:
+                name:          { data_name: p.name }
+                sku:           { data_name: p.sku }
+                type:          { data_name: p.type }
+                price:         { data_name: p.price }
+                specialPrice:  { data_name: p.specialPrice }
+                channelName:   { data_name: channelName }
+                createdAt:     { data_name: p.createdAt }
+                updatedAt:     { data_name: p.updatedAt }
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: p.name
+                sku:
+                    type: string
+                    data_name: p.sku
+                type:
+                    type: string
+                    data_name: p.type
+                price:
+                    type:             number
+                    data_name:        p.price
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                specialPrice:
+                    type:             number
+                    data_name:        p.specialPrice
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                channelName:
+                    type: entity
+                    data_name: pch
+                    options:
+                        field_options:
+                          class: OroIntegrationBundle:Channel
+                          property: name
+                websites:
+                    type: entity
+                    data_name: pw
+                    options:
+                        field_options:
+                          class: OroCRMMagentoBundle:Website
+                          multiple: true
+                          property: name
+                createdAt:
+                    type:      datetime
+                    data_name: c.createdAt
+                    enabled: false
+                updatedAt:
+                    type:      datetime
+                    data_name: c.updatedAt
+                    enabled: false
+        actions:
+            view:
+                type:         navigate
+                label:        orocrm.magento.datagrid.actions.view.label
+                link:         view_link
+                icon:         user
+                acl_recource: orocrm_magento_product_view
+                rowAction:    true
+        options:
+            entityHint: product

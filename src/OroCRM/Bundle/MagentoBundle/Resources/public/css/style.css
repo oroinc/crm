@@ -2,6 +2,7 @@
     margin: 10px 0;
     float: none;
 }
+.product-info-widget,
 .customer-info-widget {
     min-height: 300px;
 }

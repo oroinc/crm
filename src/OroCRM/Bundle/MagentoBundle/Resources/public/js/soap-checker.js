@@ -16,7 +16,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
         url:   null,
 
         resultTemplate: _.template(
-            '<div class="alert alert-<%= type %> connection-status span5"><%= message %></div>'
+            '<div class="alert alert-<%= type %> connection-status"><%= message %></div>'
         ),
 
         initialize: function (options) {
