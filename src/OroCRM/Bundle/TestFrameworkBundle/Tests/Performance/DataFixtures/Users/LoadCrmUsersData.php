@@ -84,7 +84,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
                 $birthday
             );
 
-            $user->setPlainPassword(self::USER_PASSWORD);
+            $user->setPlainPassword($username);
             $this->userManager->updatePassword($user);
 
             $this->persist($user);
