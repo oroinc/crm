@@ -1,0 +1,21 @@
+{% extends 'OroUIBundle:Dashboard:widget.html.twig' %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+{% set widgetName = 'recent-calls' %}
+{% set widgetTitle = 'orocrm.dashboard.recent_calls.title'|trans %}
+{% set gridName = 'dashboard-recentcalls-grid' %}
+
+{% block content %}
+    {{ dataGrid.renderGrid(gridName, {userId: currentUserId}) }}
+{% endblock %}
+
+{% block actions %}
+    {% set actions = [{
+        'url': path('orocrm_call_index', {'id': currentUserId}),
+        'icon': 'phone',
+        'label': 'orocrm.dashboard.recent_calls.view_all'|trans
+    }] %}
+
+    {{ parent() }}
+{% endblock %}
+

@@ -1,4 +1,70 @@
 datagrid:
+    dashboard-recentcalls-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_call_view
+            query:
+                select:
+                    - call.id
+                    - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
+                    - contact.id as contactId
+                    - account.name as accountName
+                    - call.subject
+                    - CONCAT(CASE WHEN call.phoneNumber IS NOT NULL THEN call.phoneNumber ELSE contactPhone.phone END, '') as phone
+                    - call.callDateTime as dateTime
+                    - directionType.direction as callDirection
+                from:
+                    - { table: %orocrm_call.call.entity.class%, alias: call }
+                join:
+                    left:
+                        - { join: call.relatedContact, alias: contact }
+                        - { join: call.contactPhoneNumber, alias: contactPhone }
+                        - { join: call.relatedAccount, alias: account }
+                        - { join: call.direction, alias: directionType }
+                    inner:
+                        - { join: call.owner, alias: ownerUser }
+                where:
+                    and:
+                      - ownerUser.id = @oro_user.grid.helper->getUserId
+        properties:
+            id: ~
+            update_link:
+                type:       url
+                route:      orocrm_call_update
+                params:     [ id ]
+        actions:
+            update:
+                type:          navigate
+                acl_resource:  orocrm_call_create
+                label:         Update
+                icon:          edit
+                link:          update_link
+                rowAction:     true
+        columns:
+            callDirection:
+                type: twig
+                label: ~
+                frontend_type: html
+                template: OroCRMCallBundle:Call:Datagrid/Property/callDirection.html.twig
+            dateTime:
+                label: orocrm.call.datagrid.date_time
+                frontend_type: datetime
+            contactName:
+                type: twig
+                label: orocrm.call.datagrid.contact_name
+                frontend_type: html
+                template: OroCRMCallBundle:Call:Datagrid/Property/contactName.html.twig
+            phone:
+                label: orocrm.call.datagrid.phone
+            subject:
+                label: orocrm.call.datagrid.subject
+        options:
+            toolbarOptions:
+                hide: true
+                pageSize:
+                    items: [5]
+                    default_per_page: 5
+
     calls-grid:
         source:
             type: orm

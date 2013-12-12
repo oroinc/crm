@@ -21,3 +21,9 @@ orocrm.call.datagrid.date_time: 'Call date'
 'Call logged successfully': 'Call logged successfully'
 'Call deleted successfully': 'Call deleted successfully'
 'Phone number is required field': 'Phone number is required field'
+
+orocrm:
+    dashboard:
+        recent_calls:
+            title: Recent calls
+            view_all: View All
