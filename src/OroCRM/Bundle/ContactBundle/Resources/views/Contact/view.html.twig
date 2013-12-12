@@ -108,7 +108,7 @@
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('orocrm_contact_index'),
-        'indexLabel': 'Contacts'|trans,
+        'indexLabel': 'orocrm.contact.plural_label'|trans,
         'entityTitle': fullname
     } %}
     {{ parent() }}
@@ -145,7 +145,7 @@
             <div class="responsive-cell contact-info-col">
                 <div class="box-type1">
                     <div class="title">
-                        <span class="widget-title">{{ "Emails"|trans }}</span>
+                        <span class="widget-title">{{ 'Emails'|trans }}</span>
                     </div>
                     <div class="row-fluid">
                         {{ dataGrid.renderGrid(gridName, { contactId: entity.id }) }}

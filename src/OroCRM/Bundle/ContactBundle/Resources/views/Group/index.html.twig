@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% set gridName = 'contact-groups-grid' %}
-{% set pageTitle = 'Contact Groups' %}
+{% set pageTitle = 'orocrm.contact.group.label'|trans %}
 
 {% block navButtons %}
     {% if resource_granted('orocrm_contact_group_create') %}

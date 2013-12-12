@@ -34,7 +34,7 @@
         {% set breadcrumbs = {
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_contact_group_index'),
-            'indexLabel': 'Contact Groups',
+            'indexLabel': 'orocrm.contact.group.plural_label'|trans,
             'entityTitle': form.vars.value.label|default('N/A')
         }
         %}

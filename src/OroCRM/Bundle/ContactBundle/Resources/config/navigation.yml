@@ -6,7 +6,7 @@ oro_menu_config:
             extras:
                 position: 10
         contact_list:
-            label: 'Contacts'
+            label: 'orocrm.contact.label'
             route: 'orocrm_contact_index'
             extras:
                 routes: ['/^orocrm_contact_(?!group\w+|group\w+)\w+$/']

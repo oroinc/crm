@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% set gridName = 'contacts-grid' %}
-{% set pageTitle = 'Contacts' %}
+{% set pageTitle = 'orocrm.contact.plural_label'|trans %}
 
 {% block navButtons %}
     {% if resource_granted('oro_importexport_import') %}
