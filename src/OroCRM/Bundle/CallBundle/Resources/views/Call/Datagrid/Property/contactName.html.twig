@@ -1,0 +1,4 @@
+{#- TODO: we need EntityConfig to get view url for an entity -#}
+{% if record.getValue('contactId') is not empty  %}
+    <a href="{{ path('orocrm_contact_view', {id:record.getValue('contactId')}) }}">{{ value }}</a>
+{% endif %}

@@ -7,3 +7,8 @@ orocrm_call_api:
     resource: "@OroCRMCallBundle/Controller/Api/Rest/CallController.php"
     type:     rest
     prefix:   /call
+
+orocrm_call_dashboard:
+    resource:     "@OroCRMCallBundle/Controller/Dashboard"
+    type:         annotation
+    prefix:       /dashboard
