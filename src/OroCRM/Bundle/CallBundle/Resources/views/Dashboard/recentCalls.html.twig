@@ -1,9 +1,9 @@
-{% extends 'OroUIBundle:Dashboard:widget.html.twig' %}
+{% extends 'OroDashboardBundle:Dashboard:widget.html.twig' %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
 {% set widgetName = 'recent-calls' %}
 {% set widgetTitle = 'orocrm.dashboard.recent_calls.title'|trans %}
-{% set gridName = 'dashboard-recentcalls-grid' %}
+{% set gridName = 'dashboard-recent-calls-grid' %}
 
 {% block content %}
     {{ dataGrid.renderGrid(gridName) }}
