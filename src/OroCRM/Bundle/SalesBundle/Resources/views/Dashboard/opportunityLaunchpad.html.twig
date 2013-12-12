@@ -1,0 +1,16 @@
+{% extends 'OroDashboardBundle:Dashboard:launchpadWidget.html.twig' %}
+
+{% set widgetName = 'opportunity-launchpad' %}
+
+{% block content %}
+    {% set widget = {
+        label: 'Opportunities',
+        icon:  'usd',
+        links: [
+            {url: path('orocrm_sales_opportunity_index'), label: 'List', acl: 'orocrm_sales_opportunity_view'},
+            {url: path('orocrm_sales_opportunity_create'), label: 'Create opportunity', acl: 'orocrm_sales_opportunity_create'}
+        ]
+    }%}
+
+    {{ parent() }}
+{% endblock %}
