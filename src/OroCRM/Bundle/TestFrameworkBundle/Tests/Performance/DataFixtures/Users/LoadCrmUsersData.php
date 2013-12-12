@@ -13,11 +13,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
 
-/**
- * @SuppressWarnings(PHPMD.TooManyMethods)
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * TODO: This class should be refactored (BAP-975)
- */
 class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterface
 {
     const USERS_NUMBER  = 200;
@@ -102,8 +97,6 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
      * @param string $middleName
      * @param \DateTime $birthday
      * @return User
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * TODO: This method should be refactored (BAP-975)
      */
     private function createUser(
         $username,
