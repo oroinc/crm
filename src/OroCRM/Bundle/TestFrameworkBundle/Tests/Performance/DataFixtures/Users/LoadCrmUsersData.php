@@ -46,7 +46,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
         $this->userManager         = $container->get('oro_user.manager');
         $this->userRepository      = $this->userManager->getRepository();
         $this->role                = $this->userManager->getStorageManager()->getRepository('OroUserBundle:Role')
-            ->findBy(array('role' => 'ROLE_USER'));
+            ->findBy(array('role' => 'ROLE_ADMINISTRATOR'));
         $this->businessUnitManager = $container->get('oro_organization.business_unit_manager');
         $this->businessUnit        = $this->businessUnitManager->getBusinessUnitRepo()->findAll();
         $this->businessUnit        = $this->businessUnit[0];
