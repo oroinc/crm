@@ -43,11 +43,21 @@ class CartController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", requirements={"id"="\d+"}))
+     * @Route("/info/{id}", name="orocrm_cart_widget_info", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_cart_view")
      * @Template()
      */
     public function infoAction(Cart $cart)
+    {
+        return ['entity' => $cart];
+    }
+
+    /**
+     * @Route("/widget/grid/{id}", name="orocrm_cart_widget_items", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_cart_view")
+     * @Template("OroCRMMagentoBundle:Cart:cartItems.html.twig")
+     */
+    public function gridAction(Cart $cart)
     {
         return ['entity' => $cart];
     }
