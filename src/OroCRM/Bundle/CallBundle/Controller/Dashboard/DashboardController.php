@@ -20,6 +20,6 @@ class DashboardController extends Controller
      */
     public function recentCallsAction()
     {
-        return ['currentUserId' => $this->getUser()->getId()];
+        return [];
     }
 }

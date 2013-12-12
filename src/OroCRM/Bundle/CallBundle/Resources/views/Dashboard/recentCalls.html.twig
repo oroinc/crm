@@ -6,12 +6,12 @@
 {% set gridName = 'dashboard-recentcalls-grid' %}
 
 {% block content %}
-    {{ dataGrid.renderGrid(gridName, {userId: currentUserId}) }}
+    {{ dataGrid.renderGrid(gridName) }}
 {% endblock %}
 
 {% block actions %}
     {% set actions = [{
-        'url': path('orocrm_call_index', {'id': currentUserId}),
+        'url': path('orocrm_call_index'),
         'icon': 'phone',
         'label': 'orocrm.dashboard.recent_calls.view_all'|trans
     }] %}
