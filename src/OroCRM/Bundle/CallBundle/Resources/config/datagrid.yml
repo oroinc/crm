@@ -25,7 +25,7 @@ datagrid:
                         - { join: call.owner, alias: ownerUser }
                 where:
                     and:
-                      - ownerUser.id = @oro_user.grid.helper->getUserId
+                      - ownerUser.id = @oro_security.security_facade->geLoggedUserId
         properties:
             id: ~
             update_link:
