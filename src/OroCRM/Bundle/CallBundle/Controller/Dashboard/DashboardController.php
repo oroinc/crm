@@ -12,7 +12,7 @@ class DashboardController extends Controller
     /**
      * @Route(
      *      "/recent_calls/{_format}",
-     *      name="orocrm_call_dashboard_recentcalls",
+     *      name="orocrm_call_dashboard_recent_calls",
      *      requirements={"_format"="html|json"},
      *      defaults={"_format" = "html"}
      * )

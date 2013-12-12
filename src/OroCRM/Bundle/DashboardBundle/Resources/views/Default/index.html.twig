@@ -1,91 +1,39 @@
 {% extends bap.layout %}
 
-{% macro renderWidget(widget) %}
-    <div class="quick-launchpad-widget responsive-block">
-        <div class="clearfix">
-            <div class="image-wrap pull-left">
-                <p class="text-center">
-                    {{ widget.label|trans }}
-                </p>
-                {% if widget.image is defined and widget.image %}
-                    <a href="javascript:void(0);" class="widget-image {{ widget.image }}"></a>
-                {% endif %}
-            </div>
-            <div class="list-wrap pull-left">
-                <ul class="nav nav-list">
-                    {% for link in widget.links %}
-                        {%  if resource_granted(link.acl) %}
-                        <li class="{{ loop.last ? 'last' : '' }}">
-                            <a href="{{  link.url|raw }}" title="{{ link.label|trans }}">{{ link.label|trans }}</a>
-                        </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+{% macro renderColumn(urls, isEven) %}
+    {% if (not isEven and urls|length) or (isEven and urls|length > 1) %}
+    <div class="responsive-block">
+        {% set index = 1 %}
+        {% for url in urls %}
+            {% if (isEven and index is even) or (not isEven and index is odd) %}
+            {{
+                oro_widget_render({
+                    'widgetType': 'block',
+                    'url': url
+                })
+            }}
+            {% endif %}
+            {% set index = index + 1 %}
+        {% endfor %}
     </div>
+    {% endif %}
 {% endmacro %}
 {% import _self as __ %}
 
 {% block content %}
-    <div class="scrollable-container quick-launchpad responsive-section">
+    <div class="scrollable-container launchpad-container responsive-section">
         <div class="container">
             <h3>{{ 'Quick Launchpad'|trans }}</h3>
 
-            {# TODO: Set appropriate icons for leads and opportunities #}
-            {% set widgetsArray = [
-                {
-                    label: 'Accounts',
-                    links: [
-                        {url: path('orocrm_account_index'), label: 'List'|trans, acl: 'orocrm_account_view'},
-                        {url: path('orocrm_account_create'), label: 'Create account'|trans, acl: 'orocrm_account_create'}
-                    ],
-                    image: 'accounts-image'
-                },
-                {
-                    label: 'Contacts',
-                    links: [
-                        {url: path('orocrm_contact_index'), label: 'List'|trans, acl: 'orocrm_contact_view'},
-                        {url: path('orocrm_contact_create'), label: 'Create contact'|trans, acl: 'orocrm_contact_create'},
-                        {url: path('orocrm_contact_group_index'), label: 'Manage groups'|trans, acl: 'orocrm_contact_group_view'}
-                    ],
-                    image: 'contacts-image'
-                },
-                {
-                    label: 'Leads',
-                    links: [
-                        {url: path('orocrm_sales_lead_index'), label: 'List'|trans, acl: 'orocrm_sales_lead_view'},
-                        {url: path('orocrm_sales_lead_create'), label: 'Create lead'|trans, acl: 'orocrm_sales_lead_create'}
-                    ],
-                    image: 'lead-image'
-                },
-                {
-                    label: 'Opportunities',
-                    links: [
-                        {url: path('orocrm_sales_opportunity_index'), label: 'List'|trans, acl: 'orocrm_sales_opportunity_view'},
-                        {url: path('orocrm_sales_opportunity_create'), label: 'Create opportunity'|trans, acl: 'orocrm_sales_opportunity_create'}
-                    ],
-                    image: 'opportunity-image'
-                },
+            {% set urls = [
+                path('oro_dashboard_widget', {'bundle': 'OroCRMAccountBundle', 'name': 'accountLaunchpad'}),
+                path('oro_dashboard_widget', {'bundle': 'OroCRMContactBundle', 'name': 'contactLaunchpad'}),
+                path('oro_dashboard_widget', {'bundle': 'OroCRMSalesBundle', 'name': 'leadLaunchpad'}),
+                path('oro_dashboard_widget', {'bundle': 'OroCRMSalesBundle', 'name': 'opportunityLaunchpad'}),
             ] %}
 
-            {% set index = 0 %}
-            {% for widget in widgetsArray %}
-                {% set index = index + 1 %}
-                {% set allowedLinks = 0 %}
-                {% for link in widget.links %}
-                    {%  if resource_granted(link.acl) %}
-                        {% set allowedLinks = allowedLinks + 1 %}
-                    {% endif %}
-                {% endfor %}
-                {% if allowedLinks > 0 %}
-                    {% if index is odd %}<div>{% endif %}
-                    {{ __.renderWidget(widget) }}
-                    {% if index is even %}</div>{% endif %}
-                {% else %}
-                    {% set index = index - 1 %}
-                {% endif %}
-            {% endfor %}
+            {{ __.renderColumn(urls, false) }}
+            {{ __.renderColumn(urls, true) }}
         </div>
         <div class="version-container">
             Version: {{ constant('Oro\\Bundle\\PlatformBundle\\OroPlatformBundle::VERSION') }}
