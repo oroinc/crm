@@ -33,9 +33,14 @@ oro_menu_config:
 #                    children:
 #                        channels_submenu: ~
 #                                magento_product_list: ~
+                customers_tab:
+                    children:
+                        channels_submenu:
+                            children:
+                                magento_customers_list: ~
+
                 sales_tab:
                     children:
-                        magento_customers_list: ~
                         magento_cart_list: ~
 
 oro_titles:

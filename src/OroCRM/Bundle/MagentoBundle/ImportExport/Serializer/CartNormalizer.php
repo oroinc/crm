@@ -93,12 +93,36 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
         $data['shippingAddress'] = $this->denormalizeAddress($data, 'shipping', $format, $context);
         $data['billingAddress'] = $this->denormalizeAddress($data, 'billing', $format, $context);
 
+        $data['paymentDetails'] = $this->denormalizePaymentDetails($data['paymentDetails']);
+
         $cart = new Cart();
         $this->fillResultObject($cart, $data);
 
         $cart->setChannel($channel);
 
         return $cart;
+    }
+
+    public function denormalizePaymentDetails($paymentDetails)
+    {
+        if (!empty($paymentDetails['cc_last4'])) {
+            $paymentDetails = sprintf(
+                "Card [%s, %s], exp [%s/%s], %s",
+                $paymentDetails['cc_type'],
+                $paymentDetails['cc_last4'],
+                $paymentDetails['cc_exp_month'],
+                $paymentDetails['cc_exp_year'],
+                $paymentDetails['method']
+            );
+        } else {
+            $result = [];
+            foreach ($paymentDetails as $key => $value) {
+                $result[] = sprintf("%s: %s", $key, $value);
+            }
+            $paymentDetails = implode(' / ', $result);
+        }
+
+        return $paymentDetails;
     }
 
     /**
@@ -141,9 +165,13 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
         $key = $type . '_address';
         $data = $this->addressConverter->convertToImportFormat($data[$key]);
 
-        return $this->serializer
-            ->denormalize($data, self::ADDRESS_TYPE, $format, $context)
-            ->setOriginId($data['originId']);
+        if (empty($data['country'])) {
+            return null;
+        } else {
+            return $this->serializer
+                ->denormalize($data, self::ADDRESS_TYPE, $format, $context)
+                ->setOriginId($data['originId']);
+        }
     }
 
     /**

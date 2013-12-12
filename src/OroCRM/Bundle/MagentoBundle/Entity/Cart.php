@@ -151,6 +151,13 @@ class Cart extends BaseCart
     protected $billingAddress;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="payment_details", type="string", length=255, nullable=true)
+     */
+    protected $paymentDetails;
+
+    /**
      * @return CartItem[]|Collection
      */
     public function getCartItems()
@@ -255,5 +262,21 @@ class Cart extends BaseCart
     public function getQuoteCurrencyCode()
     {
         return $this->quoteCurrencyCode;
+    }
+
+    /**
+     * @param string $paymentDetails
+     */
+    public function setPaymentDetails($paymentDetails)
+    {
+        $this->paymentDetails = $paymentDetails;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentDetails()
+    {
+        return $this->paymentDetails;
     }
 }
