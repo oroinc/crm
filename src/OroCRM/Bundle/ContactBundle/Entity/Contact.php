@@ -49,7 +49,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *  }
  * )
  */
-class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, FullNameInterface
+class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 {
     /*
      * Fields have to be duplicated here to enable dataaudit and soap transformation only for contact

@@ -235,7 +235,6 @@ class MagentoSoapTransport extends Transport
                 'sync_range'      => $this->getSyncRange(),
                 'website_id'      => $this->getWebsites(),
                 'start_sync_date' => $this->getSyncStartDate(),
-                'last_sync_date'  => $this->getLastSyncDate(),
             ]
         );
     }

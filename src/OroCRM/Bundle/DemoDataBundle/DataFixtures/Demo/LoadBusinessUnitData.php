@@ -59,7 +59,7 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
 
         $organization->setName('Acme, Inc');
 
-        $this->persistAndFlush($this->organizationManager, $organization);
+        $this->persist($this->organizationManager, $organization);
         $this->addReference('default_organization', $organization);
 
         /** @var BusinessUnit $oroMain */
@@ -94,7 +94,7 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
             ->setPhone('798-682-5918')
             ->setOwner($oroMain);
 
-        $this->persistAndFlush($this->organizationManager, $oroUnit);
+        $this->persist($this->organizationManager, $oroUnit);
         $this->addReference('default_crm_business', $oroUnit);
 
         $mageCoreUnit
@@ -117,6 +117,15 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
     {
         $manager->persist($object);
         $manager->flush();
+    }
+
+    /**
+     * @param EntityManager $manager
+     * @param mixed         $object
+     */
+    private function persist($manager, $object)
+    {
+        $manager->persist($object);
     }
 
     public function getOrder()

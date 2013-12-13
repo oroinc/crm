@@ -68,12 +68,6 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
      */
     protected $countries;
 
-    /** @var  TagManager */
-    protected $tagManager;
-
-    /** @var EntityRepository */
-    protected $tagsRepository;
-
     /**
      * {@inheritDoc}
      */
@@ -82,8 +76,6 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
         $this->container = $container;
 
         $this->accountManager = $container->get('doctrine.orm.entity_manager');
-        $this->userManager = $container->get('oro_user.manager');
-        $this->tagManager = $container->get('oro_tag.tag.manager');
     }
 
     /**
@@ -91,18 +83,17 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $manager)
     {
-        $this->initSupportingEntities();
+        $this->initSupportingEntities($manager);
         $this->loadAccounts();
     }
 
-    protected function initSupportingEntities()
+    /**
+     * @param ObjectManager $manager
+     */
+    protected function initSupportingEntities(ObjectManager $manager)
     {
-        $userStorageManager = $this->userManager->getStorageManager();
-        $entityManager = $this->container->get('doctrine.orm.entity_manager');
-
-        $this->users = $userStorageManager->getRepository('OroUserBundle:User')->findAll();
-        $this->countries = $userStorageManager->getRepository('OroAddressBundle:Country')->findAll();
-        $this->tagsRepository = $entityManager->getRepository('OroTagBundle:Tag');
+        $this->users = $manager->getRepository('OroUserBundle:User')->findAll();
+        $this->countries = $manager->getRepository('OroAddressBundle:Country')->findAll();
     }
 
     /**
@@ -112,7 +103,7 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
      */
     public function loadAccounts()
     {
-         $companies = array();
+        $companies = array();
 
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR. "accounts.csv", "r");
         if ($handle) {
@@ -121,12 +112,12 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
                 //read headers
                 $headers = $data;
             }
+            $randomUser = count($this->users)-1;
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 $data = array_combine($headers, array_values($data));
                 if (!array_key_exists($data['Company'], $companies)) {
                     $account = $this->createAccount($data);
-                    $user = $this->users[rand(0, count($this->users)-1)];
-                    $account->setOwner($user);
+                    $account->setOwner($this->users[rand(0, $randomUser)]);
 
                     $this->persist($this->accountManager, $account);
 

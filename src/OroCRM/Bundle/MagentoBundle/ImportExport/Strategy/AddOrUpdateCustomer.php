@@ -4,10 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\BatchBundle\Item\InvalidItemException;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -17,21 +15,13 @@ use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerNormalizer;
+use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 
 class AddOrUpdateCustomer extends BaseStrategy
 {
     const ENTITY_NAME             = 'OroCRMMagentoBundle:Customer';
     const GROUP_ENTITY_NAME       = 'OroCRMMagentoBundle:CustomerGroup';
     const ADDRESS_RELATION_ENTITY = 'OroCRMMagentoBundle:AddressRelation';
-
-    /** @var array */
-    protected $regionsCache = [];
-
-    /** @var array */
-    protected $countriesCache = [];
-
-    /** @var array */
-    protected $mageRegionsCache = [];
 
     /** @var array */
     protected $storeEntityCache = [];
@@ -46,16 +36,25 @@ class AddOrUpdateCustomer extends BaseStrategy
      * Process item strategy
      *
      * @param mixed $importedEntity
+     *
      * @return mixed|null
      */
     public function process($importedEntity)
     {
-        $newEntity = $this->findAndReplaceEntity(
-            $importedEntity,
-            self::ENTITY_NAME,
-            'originalId',
-            ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses']
+        $newEntity = $this->getEntityByCriteria(
+            ['originId' => $importedEntity->getOriginId(), 'channel' => $importedEntity->getChannel()],
+            $importedEntity
         );
+
+        if ($newEntity) {
+            $this->strategyHelper->importEntity(
+                $newEntity,
+                $importedEntity,
+                ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses']
+            );
+        } else {
+            $newEntity = $importedEntity;
+        }
 
         // update all related entities
         $this->updateStoresAndGroup(
@@ -66,8 +65,8 @@ class AddOrUpdateCustomer extends BaseStrategy
         );
 
         $this->updateAddresses($newEntity, $importedEntity->getAddresses())
-             ->updateContact($newEntity, $importedEntity->getContact(), true)
-             ->updateAccount($newEntity, $importedEntity->getAccount());
+            ->updateContact($newEntity, $importedEntity->getContact(), true)
+            ->updateAccount($newEntity, $importedEntity->getAccount());
 
         // set relations
         $newEntity->getContact()->addAccount($newEntity->getAccount());
@@ -82,9 +81,9 @@ class AddOrUpdateCustomer extends BaseStrategy
     /**
      * Update $entity with new data from imported $store, $website, $group
      *
-     * @param Customer $entity
-     * @param Store $store
-     * @param Website $website
+     * @param Customer      $entity
+     * @param Store         $store
+     * @param Website       $website
      * @param CustomerGroup $group
      *
      * @return $this
@@ -97,8 +96,12 @@ class AddOrUpdateCustomer extends BaseStrategy
         if (!isset($this->websiteEntityCache[$website->getCode()])) {
             $this->websiteEntityCache[$website->getCode()] = $this->findAndReplaceEntity(
                 $website,
-                CustomerNormalizer::WEBSITE_TYPE,
-                'code',
+                StoreConnector::WEBSITE_TYPE,
+                [
+                    'code'     => $website->getCode(),
+                    'channel'  => $website->getChannel(),
+                    'originId' => $website->getOriginId()
+                ],
                 $doNotUpdateFields
             );
         }
@@ -107,8 +110,12 @@ class AddOrUpdateCustomer extends BaseStrategy
         if (!isset($this->storeEntityCache[$store->getCode()])) {
             $this->storeEntityCache[$store->getCode()] = $this->findAndReplaceEntity(
                 $store,
-                CustomerNormalizer::STORE_TYPE,
-                'code',
+                StoreConnector::STORE_TYPE,
+                [
+                    'code'     => $store->getCode(),
+                    'channel'  => $store->getChannel(),
+                    'originId' => $store->getOriginId()
+                ],
                 $doNotUpdateFields
             );
         }
@@ -118,7 +125,11 @@ class AddOrUpdateCustomer extends BaseStrategy
             $this->groupEntityCache[$group->getName()] = $this->findAndReplaceEntity(
                 $group,
                 CustomerNormalizer::GROUPS_TYPE,
-                'name',
+                [
+                    'name'     => $group->getName(),
+                    'channel'  => $group->getChannel(),
+                    'originId' => $group->getOriginId()
+                ],
                 $doNotUpdateFields
             );
         }
@@ -139,7 +150,8 @@ class AddOrUpdateCustomer extends BaseStrategy
      * updating contact data is not allowed
      *
      * @param Customer $entity
-     * @param Contact $contact
+     * @param Contact  $contact
+     *
      * @return $this
      */
     protected function updateContact(Customer $entity, Contact $contact)
@@ -167,8 +179,9 @@ class AddOrUpdateCustomer extends BaseStrategy
     }
 
     /**
-     * @param Customer $entity
+     * @param Customer             $entity
      * @param Collection|Address[] $addresses
+     *
      * @return $this
      */
     protected function updateAddresses(Customer $entity, Collection $addresses)
@@ -179,8 +192,8 @@ class AddOrUpdateCustomer extends BaseStrategy
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
 
             $originAddressId = $address->getId();
-            $address->setOriginalId($originAddressId);
-            $existingAddress = $entity->getAddressByOriginalId($originAddressId);
+            $address->setOriginId($originAddressId);
+            $existingAddress = $entity->getAddressByOriginId($originAddressId);
 
             if ($existingAddress) {
                 $this->strategyHelper->importEntity($existingAddress, $address, ['id', 'region', 'country']);
@@ -200,7 +213,8 @@ class AddOrUpdateCustomer extends BaseStrategy
 
     /**
      * @param Customer $entity
-     * @param Account $account
+     * @param Account  $account
+     *
      * @return $this
      */
     protected function updateAccount(Customer $entity, Account $account)
@@ -213,24 +227,33 @@ class AddOrUpdateCustomer extends BaseStrategy
             return $this;
         }
 
-        $addresses = [
-            AddressType::TYPE_SHIPPING => $account->getShippingAddress(),
-            AddressType::TYPE_BILLING => $account->getBillingAddress()
-        ];
+        // match account by name because name is unique
+        $matchedAccount = $this->getEntityByCriteria(
+            ['name' => $account->getName()],
+            $account
+        );
+        if ($matchedAccount) {
+            $account = $matchedAccount;
+        } else {
+            $addresses = [
+                AddressType::TYPE_SHIPPING => $account->getShippingAddress(),
+                AddressType::TYPE_BILLING  => $account->getBillingAddress()
+            ];
 
-        foreach ($addresses as $key => $address) {
-            if (empty($address)) {
-                continue;
+            foreach ($addresses as $key => $address) {
+                if (empty($address)) {
+                    continue;
+                }
+
+                //$originAddressId = $address->getId();
+                $address->setId(null);
+                $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
+
+                $this->updateAddressCountryRegion($address, $mageRegionId);
+
+
+                $account->{'set' . ucfirst($key) . 'Address'}($address);
             }
-
-            //$originAddressId = $address->getId();
-            $address->setId(null);
-            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
-
-            $this->updateAddressCountryRegion($address, $mageRegionId);
-
-
-            $account->{'set'.ucfirst($key).'Address'}($address);
         }
 
         $entity->setAccount($account);
@@ -240,6 +263,7 @@ class AddOrUpdateCustomer extends BaseStrategy
 
     /**
      * @param AbstractTypedAddress $address
+     *
      * @return $this
      */
     protected function updateAddressTypes(AbstractTypedAddress $address)
@@ -258,81 +282,5 @@ class AddOrUpdateCustomer extends BaseStrategy
         }
 
         return $this;
-    }
-
-    /**
-     * @param AbstractAddress $address
-     * @param int $mageRegionId
-     * @return $this
-     *
-     * @throws InvalidItemException
-     */
-    protected function updateAddressCountryRegion(AbstractAddress $address, $mageRegionId)
-    {
-        /*
-         * @TODO review this implementation
-         */
-        $countryCode = $address->getCountry()->getIso2Code();
-
-        $country = $this->getAddressCountryByCode($address, $countryCode);
-        $address->setCountry($country);
-
-        if (!empty($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId])) {
-            $this->mageRegionsCache[$mageRegionId] = $this->getEntityRepository(
-                'OroCRM\Bundle\MagentoBundle\Entity\Region'
-            )->findOneBy(['regionId' => $mageRegionId]);
-        }
-
-        if (!empty($this->mageRegionsCache[$mageRegionId])) {
-            $mageRegion   = $this->mageRegionsCache[$mageRegionId];
-            $combinedCode = $mageRegion->getCombinedCode();
-
-            // set ISO combined code
-            $address->getRegion()->setCombinedCode($combinedCode);
-
-            $this->regionsCache[$combinedCode] = empty($this->regionsCache[$combinedCode]) ?
-                $this->getEntityOrNull(
-                    $address->getRegion(),
-                    'combinedCode',
-                    'Oro\Bundle\AddressBundle\Entity\Region'
-                ) :
-                $this->regionsCache[$combinedCode];
-
-            // no region found in system db for corresponding magento region, use region text
-            if (empty($this->regionsCache[$combinedCode])) {
-                $address->setRegion(null);
-            } else {
-                $this->regionsCache[$combinedCode] = $this->merge($this->regionsCache[$combinedCode]);
-                $address->setRegion($this->regionsCache[$combinedCode]);
-                $address->setRegionText(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param AbstractAddress $address
-     * @param string          $countryCode
-     *
-     * @throws \Oro\Bundle\BatchBundle\Item\InvalidItemException
-     * @return object
-     */
-    protected function getAddressCountryByCode(AbstractAddress $address, $countryCode)
-    {
-        $this->countriesCache[$countryCode] = empty($this->countriesCache[$countryCode])
-            ? $this->findAndReplaceEntity(
-                $address->getCountry(),
-                'Oro\Bundle\AddressBundle\Entity\Country',
-                'iso2Code',
-                ['iso2Code', 'iso3Code', 'name']
-            )
-            : $this->merge($this->countriesCache[$countryCode]);
-
-        if (empty($this->countriesCache[$countryCode])) {
-            throw new InvalidItemException(sprintf('Unable to find country by code "%s"', $countryCode), []);
-        }
-
-        return $this->countriesCache[$countryCode];
     }
 }

@@ -9,6 +9,7 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
 
@@ -21,7 +22,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
  * @ORM\Table(name="orocrm_magento_customer",
- *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_original_id_channel_id", columns={"original_id", "channel_id"})}
+ *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})}
  * )
  * @Config(
  *  routeName="orocrm_magento_customer_index",
@@ -36,8 +37,10 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * )
  * @Oro\Loggable
  */
-class Customer extends BasePerson implements FullNameInterface
+class Customer extends BasePerson
 {
+    use IntegrationEntityTrait, OriginTrait;
+
     /*
      * FIELDS are duplicated to enable dataaudit only for customer fields
      */
@@ -172,6 +175,15 @@ class Customer extends BasePerson implements FullNameInterface
     protected $addresses;
 
     /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Cart",
+     *     mappedBy="customer", cascade={"all"}, orphanRemoval=true
+     * )
+     */
+    protected $carts;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(type="boolean", name="is_active")
@@ -185,21 +197,6 @@ class Customer extends BasePerson implements FullNameInterface
      * @Oro\Versioned
      */
     protected $vat;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(type="integer", options={"unsigned"=true}, name="original_id")
-     */
-    protected $originalId;
-
-    /**
-     * @var Channel
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
-     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $channel;
 
     /**
      * @param Website $website
@@ -302,26 +299,6 @@ class Customer extends BasePerson implements FullNameInterface
     }
 
     /**
-     * @param int $originalId
-     *
-     * @return $this
-     */
-    public function setOriginalId($originalId)
-    {
-        $this->originalId = $originalId;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOriginalId()
-    {
-        return $this->originalId;
-    }
-
-    /**
      * @param string $vat
      *
      * @return $this
@@ -362,39 +339,31 @@ class Customer extends BasePerson implements FullNameInterface
     }
 
     /**
-     * @param Channel $channel
-     * @return $this
+     * @param Collection $carts
      */
-    public function setChannel(Channel $channel)
+    public function setCarts($carts)
     {
-        $this->channel = $channel;
-
-        return $this;
+        $this->carts = $carts;
     }
 
     /**
-     * @return Channel
+     * @return Collection
      */
-    public function getChannel()
+    public function getCarts()
     {
-        return $this->channel;
-    }
-
-    public function __toString()
-    {
-        return sprintf("%s %s", $this->getFirstName(), $this->getLastName());
+        return $this->carts;
     }
 
     /**
-     * @param int $originalId
+     * @param int $originId
      *
      * @return Address|false
      */
-    public function getAddressByOriginalId($originalId)
+    public function getAddressByOriginId($originId)
     {
         return $this->addresses->filter(
-            function ($item) use ($originalId) {
-                return $item->getOriginalId() == $originalId;
+            function ($item) use ($originId) {
+                return $item->getOriginId() == $originId;
             }
         )->first();
     }
