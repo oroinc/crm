@@ -1,5 +1,5 @@
 datagrid:
-    dashboard-recentcalls-grid:
+    dashboard-recent-calls-grid:
         source:
             type: orm
             acl_resource: orocrm_call_view
