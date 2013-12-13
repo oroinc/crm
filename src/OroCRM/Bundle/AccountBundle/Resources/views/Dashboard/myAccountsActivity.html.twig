@@ -1,9 +1,9 @@
 {% extends 'OroDashboardBundle:Dashboard:widget.html.twig' %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
-{% set widgetName = 'recent-calls' %}
-{% set widgetTitle = 'orocrm.dashboard.my_accounts.title'|trans %}
-{% set gridName = 'dashboard-my-accounts-grid' %}
+{% set widgetName = 'my-accounts-activity' %}
+{% set widgetTitle = 'orocrm.dashboard.my_accounts_activity.title'|trans %}
+{% set gridName = 'dashboard-my-accounts-activity-grid' %}
 
 {% block content %}
     {{ dataGrid.renderGrid(gridName) }}
@@ -12,8 +12,8 @@
 {% block actions %}
     {% set actions = [{
     'url': path('orocrm_account_index'),
-    'icon': 'user',
-    'label': 'orocrm.dashboard.my_accounts.view_all'|trans
+    'icon': 'briefcase',
+    'label': 'orocrm.dashboard.my_accounts_activity.view_all'|trans
     }] %}
 
     {{ parent() }}
