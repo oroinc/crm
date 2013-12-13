@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-class OrderStrategy 
+class OrderStrategy
 {
 
 }
