@@ -14,8 +14,8 @@ datagrid:
                     - { table: %orocrm_contact.entity.class%, alias: c }
                 join:
                     left:
-                       - { join: c.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
-                       - { join: c.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
+                        - { join: c.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+                        - { join: c.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
                     inner:
                         -
                             join: Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem
