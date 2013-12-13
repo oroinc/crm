@@ -5,12 +5,12 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 use Oro\Bundle\BatchBundle\Item\InvalidItemException;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
-class RegionConnector extends AbstractConnector
+class RegionConnector extends AbstractConnector implements MagentoConnectorInterface
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Region';
     const JOB_VALIDATE_IMPORT = 'mage_regions_import_validation';
     const JOB_IMPORT          = 'mage_regions_import';
-    const ALIAS_REGIONS       = 'regions';
+    const CONNECTOR_LABEL     = 'orocrm.magento.connector.region.label';
 
     /** @var array */
     protected $countriesBuffer = false;
@@ -24,7 +24,7 @@ class RegionConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    public function read()
+    public function doRead()
     {
         if ($this->countriesBuffer === false) {
             $this->findCountriesToImport();
@@ -35,15 +35,13 @@ class RegionConnector extends AbstractConnector
         }
 
         if (empty($this->regionsBuffer)) {
-            $this->currentCountry = $country = (array) array_shift($this->countriesBuffer);
+            $this->currentCountry = $country = (array)array_shift($this->countriesBuffer);
 
-            // TODO: log
             $now = new \DateTime('now', new \DateTimeZone('UTC'));
-            echo $now->format('d-m-Y H:i:s') . " loading country " . $country['name'] . ': ';
+            $this->logger->info(sprintf("%s loading country %s: ", $now->format('d-m-Y H:i:s'), $country['name']));
 
             $data = $this->getRegionsData($country['iso2_code']);
-
-            echo count($data) . "\n";
+            $this->logger->info(sprintf('Found %d regions to process', count($data)));
 
             // will skip further processing
             if (empty($data)) {
@@ -51,7 +49,7 @@ class RegionConnector extends AbstractConnector
             }
         }
 
-        $region = array_shift($this->regionsBuffer);
+        $region                = array_shift($this->regionsBuffer);
         $region['countryCode'] = $this->currentCountry['iso2_code'];
 
         return $region;
@@ -66,17 +64,7 @@ class RegionConnector extends AbstractConnector
     {
         $this->countriesBuffer = $this->getCountryList();
 
-        // TODO: remove / log
-        echo sprintf('found %d countries', count($this->countriesBuffer)) . "\n";
-
-        // no more data to look for
-        if (empty($this->countriesBuffer)) {
-            $result = false;
-        } else {
-            $result = $this->countriesBuffer;
-        }
-
-        return $result;
+        $this->logger->info(sprintf('found %d countries', count($this->countriesBuffer)));
     }
 
     /**
@@ -93,7 +81,7 @@ class RegionConnector extends AbstractConnector
     public function getRegionsData($iso2Code)
     {
         if (empty($this->regionsBuffer)) {
-            $result = (array) $this->call('directoryRegionList', $iso2Code);
+            $result  = (array)$this->call('directoryRegionList', $iso2Code);
             $regions = [];
 
             foreach ($result as $obj) {
@@ -104,33 +92,5 @@ class RegionConnector extends AbstractConnector
         }
 
         return $this->regionsBuffer;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLabel()
-    {
-        return 'orocrm.magento.connector.region.label';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getImportEntityFQCN()
-    {
-        return self::ENTITY_NAME;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getImportJobName($isValidationOnly = false)
-    {
-        if ($isValidationOnly) {
-            return self::JOB_VALIDATE_IMPORT;
-        }
-
-        return self::JOB_IMPORT;
     }
 }

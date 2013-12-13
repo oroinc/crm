@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -34,9 +35,9 @@ class RelationNormalizer implements NormalizerInterface, DenormalizerInterface
         /** @var Store|Website|CustomerGroup $result */
         $result = new $class();
 
-        foreach (['id', 'code', 'name'] as $name) {
+        foreach (['id', 'code', 'name', 'originId'] as $name) {
             $method = 'set'.ucfirst($name);
-            if (method_exists($result, $method) && !empty($data[$name])) {
+            if (method_exists($result, $method) && isset($data[$name])) {
                 $result->$method($data[$name]);
             }
         }
@@ -58,8 +59,8 @@ class RelationNormalizer implements NormalizerInterface, DenormalizerInterface
     public function supportsDenormalization($data, $type, $format = null)
     {
         $supportedEntities = [
-            CustomerNormalizer::STORE_TYPE,
-            CustomerNormalizer::WEBSITE_TYPE,
+            StoreConnector::STORE_TYPE,
+            StoreConnector::WEBSITE_TYPE,
             CustomerNormalizer::GROUPS_TYPE
         ];
 

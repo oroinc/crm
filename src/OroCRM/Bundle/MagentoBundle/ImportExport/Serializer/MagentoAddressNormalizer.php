@@ -19,7 +19,11 @@ class MagentoAddressNormalizer extends TypedAddressNormalizer
     public function denormalize($data, $class, $format = null, array $context = array())
     {
         $result = parent::denormalize($data, $class, $format, $context);
-        $result->setId($data['customerAddressId']);
+
+        // can be empty when using this normalizer with cart
+        if (!empty($data['customerAddressId'])) {
+            $result->setId($data['customerAddressId']);
+        }
 
         return $result;
     }
