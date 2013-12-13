@@ -104,6 +104,66 @@ class ControllersTest extends WebTestCase
     /**
      * @depends testUpdate
      */
+    public function testContactWidget($id)
+    {
+        $this->client->request(
+            'GET',
+            $this->client->generate('orocrm_account_contact_select', array('_widgetContainer' => 'dialog'))
+        );
+        //just verify method OK
+        $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+
+        $this->client->request(
+            'GET',
+            $this->client->generate('orocrm_account_contact_select', array('id' => $id, '_widgetContainer' => 'dialog'))
+        );
+        //just verify method OK
+        $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+    }
+
+    /**
+     * @depends testUpdate
+     */
+    public function testContactViewGrid($id)
+    {
+        $result = ToolsAPI::getEntityGrid(
+            $this->client,
+            'account-contacts-view-grid',
+            array(
+                'account-contacts-view-grid[account]' => $id
+            )
+        );
+        ToolsAPI::assertJsonResponse($result, 200);
+
+        $result = ToolsAPI::jsonToArray($result->getContent());
+        $this->assertEmpty($result['data']);
+        $this->assertEquals(0, $result['options']['totalRecords']);
+    }
+
+    /**
+     * @depends testUpdate
+     */
+    public function testContactUpdateGrid($id)
+    {
+        $result = ToolsAPI::getEntityGrid(
+            $this->client,
+            'account-contacts-update-grid',
+            array(
+                'account-contacts-update-grid[account]' => $id
+            )
+        );
+        ToolsAPI::assertJsonResponse($result, 200);
+
+        $result = ToolsAPI::jsonToArray($result->getContent());
+        $this->assertEmpty($result['data']);
+        $this->assertEquals(0, $result['options']['totalRecords']);
+    }
+
+    /**
+     * @depends testUpdate
+     */
     public function testDelete($id)
     {
         $this->client->request(
