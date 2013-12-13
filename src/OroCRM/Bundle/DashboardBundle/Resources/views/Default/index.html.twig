@@ -30,6 +30,17 @@
 {% block content %}
     <div class="scrollable-container quick-launchpad responsive-section">
         <div class="container">
+
+            <div id="poll-widget2">
+                {{
+                    oro_widget_render({
+                    'widgetType': 'block',
+                    'url': path('orocrm_contact_my_contacts')
+                    })
+                }}
+
+            </div>
+
             <h3>{{ 'Quick Launchpad'|trans }}</h3>
 
             {# TODO: Set appropriate icons for leads and opportunities #}

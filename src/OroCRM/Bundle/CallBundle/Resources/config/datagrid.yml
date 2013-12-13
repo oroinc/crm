@@ -53,7 +53,7 @@ datagrid:
                 type: twig
                 label: orocrm.call.datagrid.contact_name
                 frontend_type: html
-                template: OroCRMCallBundle:Call:Datagrid/Property/contactName.html.twig
+                template: OroCRMCallBundle:Contact:Datagrid/Property/contactName.html.twig
             phone:
                 label: orocrm.call.datagrid.phone
             subject:
@@ -62,8 +62,8 @@ datagrid:
             toolbarOptions:
                 hide: true
                 pageSize:
-                    items: [5]
-                    default_per_page: 5
+                    items: [10]
+                    default_per_page: 10
 
     calls-grid:
         source:

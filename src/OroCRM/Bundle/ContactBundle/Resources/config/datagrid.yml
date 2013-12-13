@@ -1,4 +1,65 @@
 datagrid:
+    dashboard-my-contacts-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_call_view
+            query:
+                select:
+                    - c.id
+                    - CONCAT(c.firstName, CONCAT(' ', c.lastName)) as contactName
+                    - email.email as primaryEmail
+                    - phone.phone as primaryPhone
+                    - history.visitedAt as visitDate
+                from:
+                    - { table: %orocrm_contact.entity.class%, alias: c }
+                join:
+                    left:
+                       - { join: c.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+                       - { join: c.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
+                    inner:
+                        -
+                            join: Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem
+                            alias: history
+                            conditionType: WITH
+                            condition: "c.id = substring(history.url, locate('/', history.url, locate('/contact/', history.url) + 9) + 1)"
+                where:
+                    and:
+                      - locate('/contact/', history.url) <> 0
+                      - history.user = @oro_security.security_facade->geLoggedUserId
+        sorters:
+            visitDate: { history.: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
+        columns:
+            contactName:
+                type: twig
+                label: orocrm.contact.datagrid.contact_name
+                frontend_type: html
+                template: OroCRMContactBundle:Contact:Datagrid/Property/contactName.html.twig
+            primaryEmail:
+                label: orocrm.contact.datagrid.email
+            primaryPhone:
+                label: orocrm.contact.datagrid.phone
+        properties:
+            id: ~
+            update_link:
+                type:       url
+                route:      orocrm_contact_update
+                params:     [ id ]
+
+        actions:
+            update:
+                type: navigate
+                acl_resource: orocrm_contact_update
+                label: orocrm.contact.datagrid.update
+                icon: edit
+                link: update_link
+                rowAction: true
+        options:
+            toolbarOptions:
+                hide: true
+                pageSize:
+                    items: [10]
+                    default_per_page: 10
+
     # contact groups grid, shown on orocrm_contact_group_index
     contact-groups-grid:
         source:

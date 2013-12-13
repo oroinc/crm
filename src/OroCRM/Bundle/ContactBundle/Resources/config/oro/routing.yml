@@ -11,3 +11,8 @@ orocrm_contact_bundle_api:
         version:  latest|v1
     defaults:
         version:  latest
+
+orocrm_contact_dashboard:
+    resource:     "@OroCRMContactBundle/Controller/Dashboard"
+    type:         annotation
+    prefix:       /dashboard
