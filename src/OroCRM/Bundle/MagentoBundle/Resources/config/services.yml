@@ -32,6 +32,7 @@ services:
         arguments:
             - @orocrm_magento.mage.soap_transport
             - @orocrm_magento.form.subscriber.soap_transport_setting
+            - @oro_integration.manager.types_registry
         tags:
             - { name: form.type, alias: orocrm_magento_soap_transport_setting_form_type }
 

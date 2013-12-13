@@ -40,16 +40,26 @@ class SoapController extends Controller
         /** @var MagentoSoapTransport $transportEntity */
         $transportEntity = $form->getData();
         $websites        = [];
+        $isExtensioInstalled = false;
         try {
             $result = $transport->init($transportEntity->getSettingsBag());
             if ($result) {
                 $stores   = $transport->call(StoreConnector::ACTION_STORE_LIST);
                 $websites = $this->get('orocrm_magento.converter.stores_to_website')->convert($stores);
+
+                // @TODO FIXME
+                $isExtensioInstalled = true;
             }
         } catch (\Exception $e) {
             $result = false;
         }
 
-        return new JsonResponse(['success' => $result, 'websites' => $websites]);
+        return new JsonResponse(
+            [
+                'success' => $result,
+                'websites' => $websites,
+                'isExtensioInstalled' => $isExtensioInstalled
+            ]
+        );
     }
 }

@@ -23,7 +23,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
             var id = options.transportEntityId || null;
             this.url = routing.generate(this.route, {id: id});
 
-            if (!options.websiteSelectEl || !options.websitesListEl) {
+            if (!options.websiteSelectEl || !options.websitesListEl, !options.isExtensionInstalledEl) {
                 throw  new TypeError('Missing required options');
             }
         },
@@ -68,7 +68,8 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
 
             if (success && res.websites) {
                 var $listEl = $(this.options.websitesListEl),
-                    $websiteSelectEl = $(this.options.websiteSelectEl);
+                    $websiteSelectEl = $(this.options.websiteSelectEl),
+                    $isExtensionInstalledEl = $(this.options.isExtensionInstalledEl);
 
                 $listEl.val(JSON.stringify(res.websites));
                 $websiteSelectEl.empty();
@@ -76,6 +77,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
                     $websiteSelectEl.append($("<option />").val(website.id).text(website.label));
                 });
                 $websiteSelectEl.trigger('change');
+                $isExtensionInstalledEl.val(res.isExtensioInstalled || false ? 1 : 0);
             }
 
             this.renderResult(success ? 'success' : 'error', message);

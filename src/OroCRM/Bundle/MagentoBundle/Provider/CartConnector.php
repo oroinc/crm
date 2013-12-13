@@ -6,7 +6,9 @@ use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
-class CartConnector extends AbstractConnector implements MagentoConnectorInterface
+class CartConnector
+    extends AbstractConnector
+    implements MagentoConnectorInterface, ExtensionAwareInterface
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart';
     const CONNECTOR_LABEL     = 'orocrm.magento.connector.cart.label';

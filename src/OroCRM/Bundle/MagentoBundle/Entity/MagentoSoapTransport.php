@@ -77,6 +77,13 @@ class MagentoSoapTransport extends Transport
      */
     protected $websites = [];
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_extension_installed", type="boolean")
+     */
+    protected $isExtensionInstalled = false;
+
     public function __construct()
     {
         $this->setSyncStartDate(new \DateTime('2007-01-01', new \DateTimeZone('UTC')));
@@ -220,6 +227,26 @@ class MagentoSoapTransport extends Transport
     public function getWebsites()
     {
         return $this->websites;
+    }
+
+    /**
+     * @param boolean $isExtensionInstalled
+     *
+     * @return $this
+     */
+    public function setIsExtensionInstalled($isExtensionInstalled)
+    {
+        $this->isExtensionInstalled = $isExtensionInstalled;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsExtensionInstalled()
+    {
+        return $this->isExtensionInstalled;
     }
 
     /**
