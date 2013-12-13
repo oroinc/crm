@@ -1,5 +1,7 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {
@@ -12,15 +14,56 @@
 {% endblock pageHeader %}
 
 {% block content_data %}
-    <div class="cart-info-col-set well-small dark-bg">
-        <div class="row-fluid well-small-bottom clearfix">
-            {{
-                oro_widget_render({
-                    'widgetType': 'block',
-                    'url':         path('orocrm_magento_cart_info', {id: entity.id}),
-                    'title':      'Cart Information'|trans
-                })
-            }}
-        </div>
-    </div>
+
+
+    {% set id = 'navbarCartView' %}
+    {% set dataSubBlocks = [
+        oro_widget_render({
+            'widgetType': 'block',
+            'url':         path('orocrm_cart_widget_info', {id: entity.id}),
+            'template':   '<div class="row-fluid <%= contentClasses.join(\' \') %>"></div>'
+        })
+    ] %}
+
+    {% set dataBlocks =
+        [
+            {
+                'title': 'Cart Information'|trans,
+                'class': 'active',
+                'subblocks': [
+                    {
+                        'title': null,
+                        'data' : dataSubBlocks
+                    },
+                    {
+                        'title': 'Shipping Address',
+                        'data' : [ addressView.renderAddress(entity.shippingAddress) ]
+                    },
+                    {
+                        'title': 'Billing Address',
+                        'data' : [ addressView.renderAddress(entity.billingAddress) ]
+                    }
+                ]
+            },
+            {
+                'title': 'Cart Items'|trans,
+                'subblocks': [
+                    {
+                        'title': null,
+                        'data': [
+                            oro_widget_render({
+                                'widgetType': 'block',
+                                'contentClasses': [],
+                                'url': path('orocrm_cart_widget_items', {id: entity.id}),
+                                'template': '<div class="row-fluid <%= contentClasses.join(\' \') %>"></div>'
+                            })
+                        ]
+                    }
+                ]
+            }
+        ]
+    %}
+
+    {% set data = {'dataBlocks': dataBlocks} %}
+    {{ parent() }}
 {% endblock content_data %}
