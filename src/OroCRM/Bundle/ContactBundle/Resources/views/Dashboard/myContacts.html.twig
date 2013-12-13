@@ -1,0 +1,20 @@
+{% extends 'OroDashboardBundle:Dashboard:widget.html.twig' %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+{% set widgetName = 'recent-calls' %}
+{% set widgetTitle = 'orocrm.dashboard.my_contacts.title'|trans %}
+{% set gridName = 'dashboard-my-contacts-grid' %}
+
+{% block content %}
+    {{ dataGrid.renderGrid(gridName) }}
+{% endblock %}
+
+{% block actions %}
+    {% set actions = [{
+    'url': path('orocrm_contact_index'),
+    'icon': 'group',
+    'label': 'orocrm.dashboard.my_contacts.view_all'|trans
+    }] %}
+
+    {{ parent() }}
+{% endblock %}

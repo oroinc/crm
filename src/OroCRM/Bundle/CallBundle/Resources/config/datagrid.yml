@@ -62,8 +62,8 @@ datagrid:
             toolbarOptions:
                 hide: true
                 pageSize:
-                    items: [5]
-                    default_per_page: 5
+                    items: [10]
+                    default_per_page: 10
 
     calls-grid:
         source:
