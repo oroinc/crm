@@ -5,18 +5,20 @@ oro_menu_config:
             uri: '#'
             extras:
                 position: 10
+
         contact_list:
-            label: 'orocrm.contact.label'
+            label: 'orocrm.contact.entity_label'
             route: 'orocrm_contact_index'
             extras:
                 routes: ['/^orocrm_contact_(?!group\w+|group\w+)\w+$/']
                 description: List of contacts
         contact_group_list:
-            label: 'Contact Groups'
+            label: 'orocrm.contact.group.entity_plural_label'
             route: 'orocrm_contact_group_index'
             extras:
                 routes: ['orocrm_contact_group_*']
                 description: List of contact groups
+
         shortcut_new_contact:
             label: Create new contact
             route: orocrm_contact_create

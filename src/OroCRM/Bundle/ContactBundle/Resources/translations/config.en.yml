@@ -1,10 +1,10 @@
 entity:
     contact:
-        name:           orocrm.contact.label
+        name:           orocrm.contact.entity_label
         description:    Represent contact
     contact_address:
-        name:           orocrm.contact.address.label
+        name:           orocrm.contact.contactaddress.entity_label
         description:    Represent contact's address
     contact_group:
-        name:           orocrm.contact.group.label
+        name:           orocrm.contact.group.entity_label
         description:    Represent contact's group

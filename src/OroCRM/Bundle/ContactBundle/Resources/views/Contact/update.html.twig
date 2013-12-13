@@ -1,9 +1,11 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
-{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
+{% form_theme form with ['OroCRMContactBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
 {% set fullname = entity|oro_format_name|default('N/A') %}
-{% oro_title_set({params : {"%contact.name%": fullname} }) %}
+{% oro_title_set({
+    params : {"%contact.name%": fullname}
+}) %}
 {% set title = form.vars.value.id ? fullname ~ ' - ' ~ 'Update Contact'|trans : 'New Contact'|trans %}
 {% set audit_entity_class = 'OroCRM_Bundle_ContactBundle_Entity_Contact' %}
 {% set gridName = 'contact-accounts-grid' %}
@@ -35,7 +37,7 @@
         {% set breadcrumbs = {
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_contact_index'),
-            'indexLabel': 'orocrm.contact.plural_label'|trans,
+            'indexLabel': 'orocrm.contact.entity_plural_label'|trans,
             'entityTitle': fullname
         }
         %}

@@ -36,10 +36,13 @@ orocrm.contact.datagrid.delete: Delete
 #
 # Entity oroCRM\Bundle\ContactBundle\Entity\Contact
 #
-orocrm.contact.label:             Contact
-orocrm.contact.plural_label:      Contacts
+orocrm.contact.entity_label:             Contact
+orocrm.contact.entity_plural_label:      Contacts
+orocrm.contact.entity_description:       Contacts
 
+orocrm.contact.id.label:          Id
 orocrm.contact.phones.label:      Phones
+orocrm.contact.email.label:       Email
 orocrm.contact.emails.label:      Emails
 orocrm.contact.skype.label:       Skype
 orocrm.contact.fax.label:         Fax
@@ -71,38 +74,78 @@ orocrm.contact.created_by.label:  Created By
 orocrm.contact.updated_by.label:  Updated By
 
 #
+# Entity oroCRM\Bundle\ContactBundle\Entity\ContactAddress
+#
+orocrm.contact.contactaddress.entity_label:         Contact Address
+orocrm.contact.contactaddress.entity_plural_label:  Contact Addresses
+
+orocrm.contact.contactaddress.id.label:            Id
+orocrm.contact.contactaddress.city.label:          City
+orocrm.contact.contactaddress.country.label:       Country
+orocrm.contact.contactaddress.created.label:       Created
+orocrm.contact.contactaddress.first_name.label:    First name
+orocrm.contact.contactaddress.label.label:         Label
+orocrm.contact.contactaddress.last_name.label:     Last name
+orocrm.contact.contactaddress.middle_name.label:   Middle name
+orocrm.contact.contactaddress.name_prefix.label:   Name prefix
+orocrm.contact.contactaddress.name_suffix.label:   Name suffix
+orocrm.contact.contactaddress.organization.label:  Organization
+orocrm.contact.contactaddress.owner.label:         Owner
+orocrm.contact.contactaddress.postal_code.label:   Zip/postal code
+orocrm.contact.contactaddress.primary.label:       Primary
+orocrm.contact.contactaddress.state.label:         State
+orocrm.contact.contactaddress.state_text.label:    State
+orocrm.contact.contactaddress.street.label:        Street
+orocrm.contact.contactaddress.street2.label:       Street 2
+orocrm.contact.contactaddress.types.label:         Types
+orocrm.contact.contactaddress.updated.label:       Updated
+
+#
+# Entity oroCRM\Bundle\ContactBundle\Entity\ContactEmail
+#
+orocrm.contact.contactemail.entity_label:         Contact Email
+orocrm.contact.contactemail.entity_plural_label:  Contact Emails
+
+orocrm.contact.contactemail.id.label:      Id
+orocrm.contact.contactemail.email.label:   Email
+orocrm.contact.contactemail.owner.label:   Owner
+orocrm.contact.contactemail.primary.label: Primary
+
+#
+# Entity oroCRM\Bundle\ContactBundle\Entity\ContactPhone
+#
+orocrm.contact.contactphone.entity_label:         Contact Phone
+orocrm.contact.contactphone.entity_plural_label:  Contact Phones
+
+orocrm.contact.contactphone.id.label:      Id
+orocrm.contact.contactphone.owner.label:   Owner
+orocrm.contact.contactphone.phone.label:   Phone
+orocrm.contact.contactphone.primary.label: Primary
+
+#
 # Entity oroCRM\Bundle\ContactBundle\Entity\Group
 #
-orocrm.contact.group.label:           Contact Group
-orocrm.contact.group.plural_label:    Contact Groups
+orocrm.contact.group.entity_label:        Contact Group
+orocrm.contact.group.entity_plural_label: Contact Groups
 
-orocrm.contact.group.id.label:        Id
-orocrm.contact.group.owner.label:     Owner
-orocrm.contact.group.label.label:     Label
+orocrm.contact.group.id.label:     Id
+orocrm.contact.group.owner.label:  Owner
+orocrm.contact.group.label.label:  Label
 
 #
-# Entity oroCRM\Bundle\ContactBundle\Entity\Address
+# Entity oroCRM\Bundle\ContactBundle\Entity\Method
 #
-orocrm.contact.address.label:         Contact Address
-orocrm.contact.address.plural_label:  Contact Addresses
+orocrm.contact.method.entity_label:        Contact Method
+orocrm.contact.method.entity_plural_label: Contact Methods
 
-#orocrm.contact.address.id.label:
-#orocrm.contact.address.city.label:
-#orocrm.contact.address.country.label:
-#orocrm.contact.address.created.label:
-#orocrm.contact.address.first_name.label:
-#orocrm.contact.address.label.label:
-#orocrm.contact.address.last_name.label:
-#orocrm.contact.address.middle_name.label:
-#orocrm.contact.address.name_prefix.label:
-#orocrm.contact.address.name_suffix.label:
-#orocrm.contact.address.organization.label:
-#orocrm.contact.address.owner.label:
-#orocrm.contact.address.postal_code.label:
-#orocrm.contact.address.primary.label:
-#orocrm.contact.address.state.label:
-#orocrm.contact.address.state_text.label:
-#orocrm.contact.address.street.label:
-#orocrm.contact.address.street2.label:
-#orocrm.contact.address.types.label:
-#orocrm.contact.address.updated.label:
+orocrm.contact.method.label.label:  Label
+orocrm.contact.method.name.label:   Name
+
+#
+# Entity oroCRM\Bundle\ContactBundle\Entity\Source
+#
+orocrm.contact.source.entity_label:        Contact Source
+orocrm.contact.source.entity_plural_label: Contact Sources
+
+orocrm.contact.source.label.label:  Label
+orocrm.contact.source.name.label:   Name

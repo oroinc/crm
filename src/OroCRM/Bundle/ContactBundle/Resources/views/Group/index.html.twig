@@ -1,14 +1,14 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% set gridName = 'contact-groups-grid' %}
-{% set pageTitle = 'orocrm.contact.group.label'|trans %}
+{% set pageTitle = 'orocrm.contact.group.entity_plural_label'|trans %}
 
 {% block navButtons %}
     {% if resource_granted('orocrm_contact_group_create') %}
         {{ UI.addButton({
             'path' : path('orocrm_contact_group_create'),
-            'title' : 'Create contact group',
-            'label' : 'Create contact group'
+            'title' : 'Create '~'orocrm.contact.group.entity_label'|trans|lower,
+            'label' : 'Create '~'orocrm.contact.group.entity_label'|trans|lower
         }) }}
     {% endif %}
 {% endblock %}
