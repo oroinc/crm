@@ -89,13 +89,14 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 //read headers
                 $headers = $data;
             }
+            $randomUser = count($this->users)-1;
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-                $user = $this->users[rand(0, count($this->users)-1)];
+                $user = $this->users[rand(0, $randomUser)];
                 $this->setSecurityContext($user);
 
                 $data = array_combine($headers, array_values($data));
 
-                $lead = $this->createLead($data);
+                $lead = $this->createLead($data, $user);
 
                 $this->persist($this->em, $lead);
 
@@ -145,6 +146,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                             )
                         );
                     }
+                    $this->persist($this->em, $salesFlow);
                 }
             }
 
@@ -164,11 +166,12 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     }
     /**
      * @param  array $data
+     * @param User $user
+     *
      * @return Lead
      */
-    protected function createLead(array $data)
+    protected function createLead(array $data, $user)
     {
-        $user = $this->users[rand(0, count($this->users)-1)];
         $lead = new Lead();
         $defaultStatus = $this->em->find('OroCRMSalesBundle:LeadStatus', 'new');
         $lead->setStatus($defaultStatus);
@@ -231,7 +234,11 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         foreach ($data as $key => $value) {
             $workflowItem->getData()->set($key, $value);
         }
-        $workflowManager->transit($workflowItem, $transition);
+
+        $workflow = $workflowManager->getWorkflow($workflowItem);
+        /** @var EntityManager $em */
+        $workflow->transit($workflowItem, $transition);
+        $workflowItem->setUpdated();
     }
 
     /**

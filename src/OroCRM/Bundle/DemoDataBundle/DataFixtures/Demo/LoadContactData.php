@@ -92,12 +92,6 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
      */
     protected $contactRepository;
 
-    /** @var  TagManager */
-    protected $tagManager;
-
-    /** @var EntityRepository */
-    protected $tagsRepository;
-
     /**
      * {@inheritDoc}
      */
@@ -106,7 +100,6 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
         $this->container = $container;
 
         $this->userManager = $container->get('oro_user.manager');
-        $this->tagManager = $container->get('oro_tag.tag.manager');
         $this->contactManager = $container->get('doctrine.orm.entity_manager');
     }
 
@@ -115,23 +108,21 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $manager)
     {
-        $this->initSupportingEntities();
+        $this->initSupportingEntities($manager);
         $this->loadContacts();
     }
 
-    protected function initSupportingEntities()
+    /**
+     * @param ObjectManager $manager
+     */
+    protected function initSupportingEntities(ObjectManager $manager)
     {
-        $userStorageManager = $this->userManager->getStorageManager();
-        $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        $this->users = $manager->getRepository('OroUserBundle:User')->findAll();
+        $this->countries = $manager->getRepository('OroAddressBundle:Country')->findAll();
 
-        $this->users = $userStorageManager->getRepository('OroUserBundle:User')->findAll();
-        $this->countries = $userStorageManager->getRepository('OroAddressBundle:Country')->findAll();
-
-        $this->accounts = $this->contactManager->getRepository('OroCRMAccountBundle:Account')->findAll();
-        $this->contactGroups = $this->contactManager->getRepository('OroCRMContactBundle:Group')->findAll();
-        $this->contactSources = $this->contactManager->getRepository('OroCRMContactBundle:Source')->findAll();
-
-        $this->tagsRepository = $entityManager->getRepository('OroTagBundle:Tag');
+        $this->accounts = $manager->getRepository('OroCRMAccountBundle:Account')->findAll();
+        $this->contactGroups = $manager->getRepository('OroCRMContactBundle:Group')->findAll();
+        $this->contactSources = $manager->getRepository('OroCRMContactBundle:Source')->findAll();
     }
 
     /**
@@ -148,6 +139,9 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
                 //read headers
                 $headers = $data;
             }
+            $randomUser = count($this->users)-1;
+            $randomContactGroup = count($this->contactGroups)-1;
+            $randomContactSource = count($this->contactSources)-1;
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 $data = array_combine($headers, array_values($data));
                 //find accounts
@@ -165,16 +159,16 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
                 /** @var Account $account */
                 $contact->addAccount($account);
 
-                $group = $this->contactGroups[rand(0, count($this->contactGroups)-1)];
+                $group = $this->contactGroups[rand(0, $randomContactGroup)];
                 $contact->addGroup($group);
 
-                $user = $this->users[rand(0, count($this->users)-1)];
+                $user = $this->users[rand(0, $randomUser)];
 
                 $contact->setAssignedTo($user);
                 $contact->setReportsTo($contact);
                 $contact->setOwner($user);
 
-                $source = $this->contactSources[rand(0, count($this->contactSources)-1)];
+                $source = $this->contactSources[rand(0, $randomContactSource)];
                 $contact->setSource($source);
                 $account->setDefaultContact($contact);
 
