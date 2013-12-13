@@ -1,5 +1,5 @@
 datagrid:
-    dashboard-my-contacts-grid:
+    dashboard-my-contacts-activity-grid:
         source:
             type: orm
             acl_resource: orocrm_call_view
@@ -38,21 +38,6 @@ datagrid:
                 label: orocrm.contact.datagrid.email
             primaryPhone:
                 label: orocrm.contact.datagrid.phone
-        properties:
-            id: ~
-            update_link:
-                type:       url
-                route:      orocrm_contact_update
-                params:     [ id ]
-
-        actions:
-            update:
-                type: navigate
-                acl_resource: orocrm_contact_update
-                label: orocrm.contact.datagrid.update
-                icon: edit
-                link: update_link
-                rowAction: true
         options:
             toolbarOptions:
                 hide: true

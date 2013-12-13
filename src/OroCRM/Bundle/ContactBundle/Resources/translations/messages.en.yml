@@ -26,6 +26,6 @@ orocrm.contact.controller.contact_group.saved.message: "Contact Group saved"
 oro.importexport.import.orocrm_contact.add_or_replace: Add and Replace
 orocrm:
     dashboard:
-        my_contacts:
-            title: My contacts
+        my_contacts_activity:
+            title: Last Actions With Contacts
             view_all: View all

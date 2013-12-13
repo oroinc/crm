@@ -9,6 +9,6 @@ orocrm:
           account_email: Email
           account_phone: Phone
     dashboard:
-        my_accounts:
-            title: My accounts
+        my_accounts_activity:
+            title: Last Actions With Accounts
             view_all: View all

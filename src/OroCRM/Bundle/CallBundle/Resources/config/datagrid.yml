@@ -26,20 +26,6 @@ datagrid:
                 where:
                     and:
                       - ownerUser.id = @oro_security.security_facade->geLoggedUserId
-        properties:
-            id: ~
-            update_link:
-                type:       url
-                route:      orocrm_call_update
-                params:     [ id ]
-        actions:
-            update:
-                type:          navigate
-                acl_resource:  orocrm_call_create
-                label:         Update
-                icon:          edit
-                link:          update_link
-                rowAction:     true
         columns:
             callDirection:
                 type: twig
@@ -57,7 +43,10 @@ datagrid:
             phone:
                 label: orocrm.call.datagrid.phone
             subject:
+                type: twig
                 label: orocrm.call.datagrid.subject
+                frontend_type: html
+                template: OroCRMCallBundle:Call:Datagrid/Property/callSubject.html.twig
         options:
             toolbarOptions:
                 hide: true

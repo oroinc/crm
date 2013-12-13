@@ -1,5 +1,5 @@
 datagrid:
-    dashboard-my-accounts-grid:
+    dashboard-my-accounts-activity-grid:
         source:
             type: orm
             acl_resource: orocrm_call_view
@@ -31,35 +31,14 @@ datagrid:
             visitDate: { history.: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
         columns:
             name:
-                label:   orocrm.account.datagrid.account_name
+                type: twig
+                label: orocrm.account.datagrid.account_name
+                frontend_type: html
+                template: OroCRMAccountBundle:Account:Datagrid/Property/accountName.html.twig
             contactEmail:
                 label:   orocrm.account.datagrid.account_email
             contactPhone:
                 label:   orocrm.account.datagrid.account_phone
-        properties:
-            id: ~
-            view_link:
-                type:       url
-                route:      orocrm_account_view
-                params:     [ id ]
-            update_link:
-                type:       url
-                route:      orocrm_account_update
-                params:     [ id ]
-        actions:
-            view:
-                type:          navigate
-                acl_resource:  orocrm_account_view
-                label:         View
-                icon:          user
-                link:          view_link
-                rowAction:     true
-            update:
-                type:          navigate
-                acl_resource:  orocrm_account_update
-                label:         Update
-                icon:          edit
-                link:          update_link
         options:
             toolbarOptions:
                 hide: true
