@@ -1,0 +1,38 @@
+oro_dashboard_config:
+    widgets:
+        quick_launchpad:
+            items:
+                leads:
+                    label:      Leads
+                    icon:       phone-sign
+                    route:      orocrm_sales_lead_index
+                    acl:        orocrm_sales_lead_view
+                opportunities:
+                    label:      Opportunities
+                    icon:       usd
+                    route:      orocrm_sales_opportunity_index
+                    acl:        orocrm_sales_opportunity_view
+        leads_launchpad:
+            route:      oro_dashboard_widget
+            route_parameters: { bundle: OroCRMSalesBundle, name: leadLaunchpad }
+            acl:        orocrm_sales_lead_view
+        opportunities_launchpad:
+            route:      oro_dashboard_widget
+            route_parameters: { bundle: OroCRMSalesBundle, name: opportunityLaunchpad }
+            acl:        orocrm_sales_opportunity_view
+
+    dashboards:
+        main:
+            widgets:
+                quick_launchpad:
+                    items:
+                        leads:
+                            position:   20
+                        opportunities:
+                            position:   40
+        quick_launchpad:
+            widgets:
+                leads_launchpad:
+                    position:   30
+                opportunities_launchpad:
+                    position:   40

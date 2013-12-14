@@ -1,0 +1,31 @@
+oro_dashboard_config:
+    widgets:
+        quick_launchpad:
+            items:
+                accounts:
+                    label:      Accounts
+                    icon:       suitcase
+                    route:      orocrm_account_index
+                    acl:        orocrm_account_view
+        my_accounts_activity:
+            route:      oro_dashboard_widget
+            route_parameters: { bundle: OroCRMAccountBundle, name: myAccountsActivity }
+            acl:        orocrm_account_view
+        accounts_launchpad:
+            route:      oro_dashboard_widget
+            route_parameters: { bundle: OroCRMAccountBundle, name: accountLaunchpad }
+            acl:        orocrm_account_view
+
+    dashboards:
+        main:
+            widgets:
+                quick_launchpad:
+                    items:
+                        accounts:
+                            position:   10
+                my_accounts_activity:
+                    position:   40
+        quick_launchpad:
+            widgets:
+                accounts_launchpad:
+                    position:   10
