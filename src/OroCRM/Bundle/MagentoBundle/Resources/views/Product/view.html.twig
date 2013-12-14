@@ -1,0 +1,28 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+
+{% oro_title_set({params : {"%product.name%": entity.name} }) %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('orocrm_magento_product_index'),
+        'indexLabel': 'Products'|trans,
+        'entityTitle': entity.name
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    <div class="customer-info-col-set well-small dark-bg">
+        <div class="row-fluid well-small-bottom clearfix">
+            {{
+                oro_widget_render({
+                    'widgetType': 'block',
+                    'url':         path('orocrm_magento_product_info', {id: entity.id}),
+                    'title':      'Product Information'|trans
+                })
+            }}
+        </div>
+    </div>
+{% endblock content_data %}

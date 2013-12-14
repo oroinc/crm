@@ -59,9 +59,12 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, O
 
     /** @var Tag[] */
     protected $tagsUser;
+    protected $randomUser;
+    protected $randomUserTag;
 
     /** @var Tag[] */
     protected $tagsAccount;
+    protected $randomAccountTag;
 
     /**
      * {@inheritDoc}
@@ -80,23 +83,24 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, O
      */
     public function load(ObjectManager $manager)
     {
-        $this->initSupportingEntities();
+        $this->initSupportingEntities($manager);
         $this->loadUsersTags();
         $this->loadAccountsTags();
         $this->loadContactsTags();
     }
 
-    protected function initSupportingEntities()
+    /**
+     * @param ObjectManager $manager
+     */
+    protected function initSupportingEntities(ObjectManager $manager)
     {
-        $userStorageManager = $this->userManager->getStorageManager();
-        $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        $this->users = $manager->getRepository('OroUserBundle:User')->findAll();
+        $this->randomUser = count($this->users)-1;
 
-        $this->users = $userStorageManager->getRepository('OroUserBundle:User')->findAll();
+        $this->accounts = $manager->getRepository('OroCRMAccountBundle:Account')->findAll();
+        $this->contacts = $manager->getRepository('OroCRMContactBundle:Contact')->findAll();
 
-        $this->accounts = $this->contactManager->getRepository('OroCRMAccountBundle:Account')->findAll();
-        $this->contacts = $this->contactManager->getRepository('OroCRMContactBundle:Contact')->findAll();
-
-        $this->tagsRepository = $entityManager->getRepository('OroTagBundle:Tag');
+        $this->tagsRepository = $manager->getRepository('OroTagBundle:Tag');
     }
 
     /**
@@ -116,12 +120,13 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, O
     public function loadUsersTags()
     {
         $this->tagsUser = $this->createTags(array('Friends', 'Developer', 'Wholesale'));
+        $this->randomUserTag = count($this->tagsUser)-1;
         foreach ($this->users as $user) {
             $securityContext = $this->container->get('security.context');
-            $token = new UsernamePasswordToken($user, '123123q', 'main');
+            $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
             $securityContext->setToken($token);
 
-            $ownTag = array($this->tagsUser[rand(0, count($this->tagsUser)-1)]);
+            $ownTag = array($this->tagsUser[rand(0, $this->randomUserTag)]);
             $user->setTags(
                 array(
                     'owner' => $ownTag,
@@ -129,7 +134,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, O
                 )
             );
             $this->persist($this->userManager->getStorageManager(), $user);
-            $this->tagManager->saveTagging($user);
+            $this->tagManager->saveTagging($user, false);
         }
         $this->flush($this->userManager->getStorageManager());
     }
@@ -150,16 +155,18 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, O
                 '#discontinued',
                 'Premium')
         );
+        $this->randomAccountTag = count($this->tagsAccount)-1;
+        $this->randomUser = count($this->users)-1;
         foreach ($this->accounts as $account) {
-            $user = $this->users[rand(0, count($this->users)-1)];
+            $user = $this->users[rand(0, $this->randomUser)];
 
             $securityContext = $this->container->get('security.context');
-            $token = new UsernamePasswordToken($user, '123123q', 'main');
+            $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
             $securityContext->setToken($token);
 
             $ownTags = array(
-                $this->tagsUser[rand(0, count($this->tagsUser)-1)],
-                $this->tagsAccount[rand(0, count($this->tagsAccount)-1)]
+                $this->tagsUser[rand(0, $this->randomUserTag)],
+                $this->tagsAccount[rand(0, $this->randomAccountTag)]
             );
 
             $account->setTags(
@@ -169,7 +176,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, O
                 )
             );
             $this->persist($this->contactManager, $account);
-            $this->tagManager->saveTagging($account);
+            $this->tagManager->saveTagging($account, false);
         }
         $this->flush($this->contactManager);
     }
@@ -177,15 +184,15 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, O
     public function loadContactsTags()
     {
         foreach ($this->contacts as $contact) {
-            $user = $this->users[rand(0, count($this->users)-1)];
+            $user = $this->users[rand(0, $this->randomUser)];
 
             $securityContext = $this->container->get('security.context');
-            $token = new UsernamePasswordToken($user, '123123q', 'main');
+            $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
             $securityContext->setToken($token);
 
             $ownTags = array(
-                $this->tagsUser[rand(0, count($this->tagsUser)-1)],
-                $this->tagsAccount[rand(0, count($this->tagsAccount)-1)]
+                $this->tagsUser[rand(0, $this->randomUserTag)],
+                $this->tagsAccount[rand(0, $this->randomAccountTag-1)]
             );
 
             $contact->setTags(
@@ -195,7 +202,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, O
                 )
             );
             $this->persist($this->contactManager, $contact);
-            $this->tagManager->saveTagging($contact);
+            $this->tagManager->saveTagging($contact, false);
         }
         $this->flush($this->contactManager);
     }

@@ -2,13 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 class CustomerTest extends AbstractEntityTestCase
 {
-    const TEST_ORIGINAL_ID = 123;
-    const TEST_IS_ACTIVE   = false;
-    const TEST_STRING      = 'string';
+    const TEST_ORIGIN_ID = 123;
+    const TEST_IS_ACTIVE = false;
+    const TEST_STRING    = 'string';
 
     /**
      * {@inheritDoc}
@@ -38,7 +36,7 @@ class CustomerTest extends AbstractEntityTestCase
             'store'      => ['store', $store, $store],
             'contact'    => ['contact', $contact, $contact],
             'account'    => ['account', $account, $account],
-            'originalId' => ['originalId', self::TEST_ORIGINAL_ID, self::TEST_ORIGINAL_ID],
+            'originId'   => ['originId', self::TEST_ORIGIN_ID, self::TEST_ORIGIN_ID],
             'vat'        => ['vat', self::TEST_STRING . 'vat', self::TEST_STRING . 'vat'],
             'isActive'   => ['isActive', self::TEST_IS_ACTIVE, self::TEST_IS_ACTIVE],
         ];
@@ -48,11 +46,10 @@ class CustomerTest extends AbstractEntityTestCase
     {
         $this->entity->setFirstName(self::TEST_STRING . 'first');
         $this->entity->setLastName(self::TEST_STRING . 'last');
-        $this->assertEquals('stringfirst stringlast', (string)$this->entity);
 
         $this->entity->addAddress($this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Address'));
 
         $this->assertInstanceOf('Doctrine\Common\Collections\Collection', $this->entity->getAddresses());
-        $this->assertFalse($this->entity->getAddressByOriginalId(1));
+        $this->assertFalse($this->entity->getAddressByOriginId(1));
     }
 }
