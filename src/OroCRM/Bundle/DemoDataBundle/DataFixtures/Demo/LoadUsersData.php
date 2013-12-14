@@ -28,17 +28,8 @@ class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, 
     /** @var UserManager */
     protected $userManager;
 
-    /** @var UserRepository */
-    protected $userRepository;
-
-    /** @var  TagManager */
-    protected $tagManager;
-
     /** @var EntityRepository */
     protected $roles;
-
-    /** @var EntityRepository */
-    protected $tags;
 
     /**
      * {@inheritDoc}
@@ -48,12 +39,9 @@ class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, 
         $this->container = $container;
 
         $this->userManager = $container->get('oro_user.manager');
-        $this->userRepository = $this->userManager->getRepository();
-        $this->tagManager = $container->get('oro_tag.tag.manager');
 
         $entityManager = $container->get('doctrine.orm.entity_manager');
         $this->roles = $entityManager->getRepository('OroUserBundle:Role');
-        $this->tags = $entityManager->getRepository('OroTagBundle:Tag');
     }
 
     /**
@@ -102,8 +90,6 @@ class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, 
 
     /**
      * Creates a user
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      *
      * @param  string    $username
      * @param  string    $email
