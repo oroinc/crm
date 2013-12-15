@@ -144,14 +144,9 @@ services:
 
     orocrm_magento.importexport.normalizer.cart:
         class: %orocrm_magento.importexport.normalizer.cart.class%
-<<<<<<< HEAD
         arguments:
             - @doctrine.orm.default_entity_manager
             - @orocrm_magento.importexport.data_converter.mage_address
-=======
-        calls:
-            - [setAddressDataConverter, ["@orocrm_magento.importexport.data_converter.address"]]
->>>>>>> feature/CRM-646-orders
         tags:
             - { name: oro_importexport.normalizer }
 

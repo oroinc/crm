@@ -109,7 +109,7 @@ class OrderConnector extends AbstractApiBasedConnector implements MagentoConnect
         $result->store_website_id   = $store['website']['id'];
         $result->store_website_code = $store['website']['code'];
         $result->store_website_name = $store['website']['name'];
-        
+
         $result->payment_method = isset($result->payment, $result->payment->method) ? $result->payment->method : null;
 
         $result = ConverterUtils::objectToArray($result);
