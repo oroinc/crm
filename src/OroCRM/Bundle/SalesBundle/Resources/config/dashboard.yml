@@ -7,29 +7,45 @@ oro_dashboard_config:
                     icon:       phone-sign
                     route:      orocrm_sales_lead_index
                     acl:        orocrm_sales_lead_view
+                    position:   20
                 opportunities:
                     label:      Opportunities
                     icon:       usd
                     route:      orocrm_sales_opportunity_index
                     acl:        orocrm_sales_opportunity_view
+                    position:   40
         leads_launchpad:
-            route:      oro_dashboard_widget
-            route_parameters: { bundle: OroCRMSalesBundle, name: leadLaunchpad }
+            label:      Leads
+            icon:       phone
+            route:      oro_dashboard_itemized_widget
+            route_parameters: { bundle: OroDashboardBundle, name: launchpad }
             acl:        orocrm_sales_lead_view
+            items:
+                index:
+                    label:      List
+                    route:      orocrm_sales_lead_index
+                    acl:        orocrm_sales_lead_view
+                create:
+                    label:      Create lead
+                    route:      orocrm_sales_lead_create
+                    acl:        orocrm_sales_lead_create
         opportunities_launchpad:
-            route:      oro_dashboard_widget
-            route_parameters: { bundle: OroCRMSalesBundle, name: opportunityLaunchpad }
+            label:      Opportunities
+            icon:       usd
+            route:      oro_dashboard_itemized_widget
+            route_parameters: { bundle: OroDashboardBundle, name: launchpad }
             acl:        orocrm_sales_opportunity_view
+            items:
+                index:
+                    label:      List
+                    route:      orocrm_sales_opportunity_index
+                    acl:        orocrm_sales_opportunity_view
+                create:
+                    label:      Create opportunity
+                    route:      orocrm_sales_opportunity_create
+                    acl:        orocrm_sales_opportunity_create
 
     dashboards:
-        main:
-            widgets:
-                quick_launchpad:
-                    items:
-                        leads:
-                            position:   20
-                        opportunities:
-                            position:   40
         quick_launchpad:
             widgets:
                 leads_launchpad:
