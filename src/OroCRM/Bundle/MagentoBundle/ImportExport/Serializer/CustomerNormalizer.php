@@ -105,7 +105,7 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
             $mappedData['birthday'] = substr($mappedData['birthday'], 0, 10);
         }
 
-        $resultObject->setChannel($context['channel']);
+        $resultObject->setChannel($this->getChannelFromContext($context));
         $this->setScalarFieldsValues($resultObject, $mappedData);
         $this->setObjectFieldsValues($resultObject, $mappedData);
 

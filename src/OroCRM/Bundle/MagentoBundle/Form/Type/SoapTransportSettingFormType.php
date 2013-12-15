@@ -48,7 +48,7 @@ class SoapTransportSettingFormType extends AbstractType
 
         $registry = $this->registry;
         $closure = function($data, FormInterface $form) use ($registry) {
-            if ($data !== true
+            if ($data != true
                 && $form->getParent()
                 && $form->getParent()->getConfig()->getType()->getInnerType() instanceof ChannelType) {
                 $connectors = $form->getParent()->get('connectors');

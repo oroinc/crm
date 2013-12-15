@@ -15,9 +15,9 @@ class CartConnector
     const JOB_VALIDATE_IMPORT = 'mage_cart_import_validation';
     const JOB_IMPORT          = 'mage_cart_import';
 
-    const ACTION_CART_LIST    = 'salesQuoteList';
-    const ACTION_CART_INFO    = 'shoppingCartInfo';
-    const PAGE_SIZE           = 10;
+    const ACTION_CART_LIST = 'salesQuoteList';
+    const ACTION_CART_INFO = 'shoppingCartInfo';
+    const PAGE_SIZE        = 10;
 
     /** @var int */
     protected $currentPage = 1;
@@ -47,20 +47,20 @@ class CartConnector
         }
 
         // fill related entities data
-        $store = $this->getStoreDataById($result->store_id);
-        $result->store_code = $store['code'];
-        $result->store_name = $store['name'];
-        $result->store_website_id = $store['website']['id'];
+        $store                      = $this->getStoreDataById($result->store_id);
+        $result->store_code         = $store['code'];
+        $result->store_name         = $store['name'];
+        $result->store_website_id   = $store['website']['id'];
         $result->store_website_code = $store['website']['code'];
         $result->store_website_name = $store['website']['name'];
 
-        $customer_group = $this->getCustomerGroupDataById($result->customer_group_id);
+        $customer_group              = $this->getCustomerGroupDataById($result->customer_group_id);
         $result->customer_group_code = $customer_group['customer_group_code'];
         $result->customer_group_name = $customer_group['name'];
 
         $result = ConverterUtils::objectToArray($result);
 
-        return (array) $result;
+        return (array)$result;
     }
 
     /**
@@ -70,7 +70,9 @@ class CartConnector
      */
     protected function getNextItem()
     {
-        $store = $this->getStoreDataByWebsiteId($this->transportSettings->getWebsiteId());
+        $store   = $this->getStoreDataByWebsiteId(
+            $this->transportSettings->get('website_id')
+        );
         $filters = [
             'complex_filter' => [
                 [
@@ -98,13 +100,14 @@ class CartConnector
     /**
      * @param array $filters
      * @param array $limits
+     *
      * @return mixed
      */
     public function getQuoteList($filters = [], $limits = [])
     {
         if (empty($limits)) {
             $limits = [
-                'page' => 1,
+                'page'     => 1,
                 'pageSize' => 15,
             ];
         }
@@ -120,9 +123,7 @@ class CartConnector
     public function getQuoteInfo($quoteId)
     {
         return $this->call(self::ACTION_CART_INFO, $quoteId);
-
     }
-
 
     /**
      * {@inheritdoc}
@@ -143,7 +144,7 @@ class CartConnector
      */
     protected function getStoreDataById($id)
     {
-        $store = $this->dependencies[self::ALIAS_STORES][$id];
+        $store            = $this->dependencies[self::ALIAS_STORES][$id];
         $store['website'] = $this->dependencies[self::ALIAS_WEBSITES][$store['website_id']];
 
         return $store;

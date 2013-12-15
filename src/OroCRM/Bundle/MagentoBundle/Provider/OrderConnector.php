@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Doctrine\ORM\EntityManager;
+
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
@@ -20,10 +22,11 @@ class OrderConnector extends AbstractApiBasedConnector implements MagentoConnect
     public function __construct(
         ContextRegistry $contextRegistry,
         LoggerStrategy $logger,
+        EntityManager $em,
         StoreConnector $storeConnector,
         CustomerConnector $customerConnector
     ) {
-        parent::__construct($contextRegistry, $logger, $storeConnector);
+        parent::__construct($contextRegistry, $logger, $em, $storeConnector);
         $this->customerConnector = $customerConnector;
     }
 

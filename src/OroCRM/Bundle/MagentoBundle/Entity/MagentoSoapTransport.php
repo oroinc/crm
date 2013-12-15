@@ -260,7 +260,7 @@ class MagentoSoapTransport extends Transport
                 'api_key'         => $this->getApiKey(),
                 'wsdl_url'        => $this->getWsdlUrl(),
                 'sync_range'      => $this->getSyncRange(),
-                'website_id'      => $this->getWebsites(),
+                'website_id'      => $this->getWebsiteId(),
                 'start_sync_date' => $this->getSyncStartDate(),
             ]
         );
