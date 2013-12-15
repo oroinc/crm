@@ -3,21 +3,19 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
+use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
-class CartConnector
-    extends AbstractConnector
-    implements MagentoConnectorInterface, ExtensionAwareInterface
+class CartConnector extends AbstractConnector implements MagentoConnectorInterface, ExtensionAwareInterface
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart';
     const CONNECTOR_LABEL     = 'orocrm.magento.connector.cart.label';
     const JOB_VALIDATE_IMPORT = 'mage_cart_import_validation';
     const JOB_IMPORT          = 'mage_cart_import';
 
-    const ACTION_CART_LIST = 'salesQuoteList';
-    const ACTION_CART_INFO = 'shoppingCartInfo';
-    const PAGE_SIZE        = 10;
+    const PAGE_SIZE = 10;
 
     /** @var int */
     protected $currentPage = 1;
@@ -33,6 +31,18 @@ class CartConnector
 
     /** @var StoreConnector */
     protected $storeConnector;
+
+    public function __construct(
+        ContextRegistry $contextRegistry,
+        LoggerStrategy $logger,
+        CustomerConnector $customerConnector,
+        StoreConnector $storeConnector
+    ) {
+        parent::__construct($contextRegistry, $logger);
+
+        $this->customerConnector = $customerConnector;
+        $this->storeConnector    = $storeConnector;
+    }
 
     /**
      * {@inheritdoc}
@@ -201,21 +211,5 @@ class CartConnector
                     break;
             }
         }
-    }
-
-    /**
-     * @param CustomerConnector $customerConnector
-     */
-    public function setCustomerConnector(CustomerConnector $customerConnector)
-    {
-        $this->customerConnector = $customerConnector;
-    }
-
-    /**
-     * @param StoreConnector $storeConnector
-     */
-    public function setStoreConnector(StoreConnector $storeConnector)
-    {
-        $this->storeConnector = $storeConnector;
     }
 }

@@ -35,6 +35,7 @@ class CartItemDataConverter extends AbstractTableDataConverter
      */
     protected function getBackendHeader()
     {
-        // TODO: Implement getBackendHeader() method. [export]
+        // will be implemented for bidirectional sync
+        throw new \Exception('Normalization is not implemented!');
     }
 }

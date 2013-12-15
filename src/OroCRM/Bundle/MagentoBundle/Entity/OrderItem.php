@@ -49,6 +49,13 @@ class OrderItem extends BaseOrderItem
     protected $originalPrice;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="discount_percent", type="float", nullable=true)
+     */
+    protected $discountPercent;
+
+    /**
      * @param float $originalPrice
      *
      * @return $this
@@ -126,5 +133,25 @@ class OrderItem extends BaseOrderItem
     public function getIsVirtual()
     {
         return $this->isVirtual;
+    }
+
+    /**
+     * @param float $discountPercent
+     *
+     * @return $this
+     */
+    public function setDiscountPercent($discountPercent)
+    {
+        $this->discountPercent = $discountPercent;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountPercent()
+    {
+        return $this->discountPercent;
     }
 }

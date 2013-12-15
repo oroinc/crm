@@ -24,17 +24,15 @@ class AddressDataConverter extends AbstractTableDataConverter
             'created_at' => 'created',
             'updated_at' => 'updated',
             'postcode'   => 'postalCode',
-            'customer_id'=> 'customerId',
         ];
     }
 
     /**
-     * Get maximum backend header for current entity
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function getBackendHeader()
     {
-        // TODO: Implement getBackendHeader() method. [export]
+        // will be implemented for bidirectional sync
+        throw new \Exception('Normalization is not implemented!');
     }
 }

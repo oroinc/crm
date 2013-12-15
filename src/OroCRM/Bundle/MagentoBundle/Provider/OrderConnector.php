@@ -4,9 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
 
-use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
+use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
 class OrderConnector extends AbstractApiBasedConnector implements MagentoConnectorInterface
 {
@@ -30,16 +30,6 @@ class OrderConnector extends AbstractApiBasedConnector implements MagentoConnect
         $this->customerConnector = $customerConnector;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function initializeFromContext(ContextInterface $context)
-    {
-        parent::initializeFromContext($context);
-
-        // init helper connectors
-        $this->customerConnector->setStepExecution($this->getStepExecution());
-    }
 
     /**
      * {@inheritdoc}
@@ -110,9 +100,21 @@ class OrderConnector extends AbstractApiBasedConnector implements MagentoConnect
      */
     public function getData($id, $dependenciesInclude = false, $onlyAttributes = null)
     {
-        $result = $this->call(MagentoConnectorInterface::ACTION_ORDER_LIST, [$id, $onlyAttributes]);
+        $result = $this->call(MagentoConnectorInterface::ACTION_ORDER_INFO, [$id, $onlyAttributes]);
 
-        return [];
+        // fill related entities data, needed to create full representation of magento store state in this time
+        // flat array structure will be converted by data converter
+        $store                      = $this->getStoreDataById($result->store_id);
+        $result->store_code         = $store['code'];
+        $result->store_website_id   = $store['website']['id'];
+        $result->store_website_code = $store['website']['code'];
+        $result->store_website_name = $store['website']['name'];
+        
+        $result->payment_method = isset($result->payment, $result->payment->method) ? $result->payment->method : null;
+
+        $result = ConverterUtils::objectToArray($result);
+
+        return (array)$result;
     }
 
 
@@ -130,25 +132,12 @@ class OrderConnector extends AbstractApiBasedConnector implements MagentoConnect
     }
 
     /**
-     * @param $id
-     *
-     * @return array
-     */
-    protected function getCustomerGroupDataById($id)
-    {
-        return $this->dependencies[self::ALIAS_GROUPS][$id];
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function loadDependencies()
     {
-        foreach ([self::ALIAS_GROUPS, self::ALIAS_STORES, self::ALIAS_WEBSITES] as $item) {
+        foreach ([self::ALIAS_STORES, self::ALIAS_WEBSITES] as $item) {
             switch ($item) {
-                case self::ALIAS_GROUPS:
-                    $this->dependencies[self::ALIAS_GROUPS] = $this->customerConnector->getCustomerGroups();
-                    break;
                 case self::ALIAS_STORES:
                     $this->dependencies[self::ALIAS_STORES] = $this->storeConnector->getStores();
                     break;

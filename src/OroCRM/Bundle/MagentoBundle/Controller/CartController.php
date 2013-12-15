@@ -18,7 +18,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 class CartController extends Controller
 {
     /**
-     * @Route("/index")
+     * @Route("/")
      * @AclAncestor("orocrm_magento_cart_view")
      * @Template()
      */
