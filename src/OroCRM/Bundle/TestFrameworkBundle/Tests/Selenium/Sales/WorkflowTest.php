@@ -122,6 +122,7 @@ class WorkflowTest extends \PHPUnit_Extensions_Selenium2TestCase
         $login->openOpportunities()
             ->filterBy('Opportunity Name', $opportunityName)
             ->open(array($opportunityName))
+            ->checkStatus('In Progress')
             ->openWorkflow()
             ->develop()
             ->setBudget('100')

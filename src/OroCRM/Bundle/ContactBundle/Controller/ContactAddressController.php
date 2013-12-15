@@ -62,14 +62,6 @@ class ContactAddressController extends Controller
     }
 
     /**
-     * @return ApiEntityManager
-     */
-    protected function getManager()
-    {
-        return $this->get('orocrm_contact.contact.manager');
-    }
-
-    /**
      * @param Contact $contact
      * @param ContactAddress $address
      * @return array
