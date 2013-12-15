@@ -22,7 +22,7 @@ class SoapController extends Controller
      */
     public function checkAction(Request $request)
     {
-        $transport = $this->get('orocrm_magento.mage.soap_transport');
+        $transport = $this->get('orocrm_magento.soap_transport');
 
         /*
          * Transport setting entity should be set to form

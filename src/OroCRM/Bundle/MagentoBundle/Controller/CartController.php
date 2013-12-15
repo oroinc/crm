@@ -18,9 +18,9 @@ use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 class CartController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/{id}", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_cart_view")
-     * @Template()
+     * @Template
      */
     public function indexAction()
     {
@@ -35,7 +35,7 @@ class CartController extends Controller
      *      permission="VIEW",
      *      class="OroCRMMagentoBundle:Cart"
      * )
-     * @Template()
+     * @Template
      */
     public function viewAction(Cart $cart)
     {
@@ -45,7 +45,7 @@ class CartController extends Controller
     /**
      * @Route("/info/{id}", name="orocrm_cart_widget_info", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_cart_view")
-     * @Template()
+     * @Template
      */
     public function infoAction(Cart $cart)
     {
@@ -55,9 +55,9 @@ class CartController extends Controller
     /**
      * @Route("/widget/grid/{id}", name="orocrm_cart_widget_items", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_cart_view")
-     * @Template("OroCRMMagentoBundle:Cart:cartItems.html.twig")
+     * @Template
      */
-    public function gridAction(Cart $cart)
+    public function itemsAction(Cart $cart)
     {
         return ['entity' => $cart];
     }

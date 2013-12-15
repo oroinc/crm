@@ -10,16 +10,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
 /**
- * @Route("/customer")
+ * @Route("/order")
  */
-class CustomerController extends Controller
+class OrderController extends Controller
 {
     /**
      * @Route("/{id}", requirements={"id"="\d+"}))
-     * @AclAncestor("orocrm_magento_customer_view")
+     * @AclAncestor("orocrm_magento_order_view")
      * @Template
      */
     public function indexAction()
@@ -30,25 +30,35 @@ class CustomerController extends Controller
     /**
      * @Route("/view/{id}", requirements={"id"="\d+"}))
      * @Acl(
-     *      id="orocrm_magento_customer_view",
+     *      id="orocrm_magento_order_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMMagentoBundle:Customer"
+     *      class="OroCRMMagentoBundle:Order"
      * )
      * @Template
      */
-    public function viewAction(Customer $customer)
+    public function viewAction(Order $order)
     {
-        return ['entity' => $customer];
+        return ['entity' => $order];
     }
 
     /**
      * @Route("/info/{id}", requirements={"id"="\d+"}))
-     * @AclAncestor("orocrm_magento_customer_view")
+     * @AclAncestor("orocrm_magento_order_view")
      * @Template
      */
-    public function infoAction(Customer $customer)
+    public function infoAction(Order $order)
     {
-        return ['entity' => $customer];
+        return ['entity' => $order];
+    }
+
+    /**
+     * @Route("/widget/grid/{id}", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_order_view")
+     * @Template
+     */
+    public function itemsAction(Order $order)
+    {
+        return ['entity' => $order];
     }
 }

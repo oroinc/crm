@@ -2,10 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 
-use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
-use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\IntegrationBundle\Provider\ConnectorTypeInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -15,6 +11,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\IntegrationBundle\Provider\TransportTypeInterface;
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
+use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorTypeInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber;
 
 class SoapTransportSettingFormType extends AbstractType
@@ -33,7 +33,8 @@ class SoapTransportSettingFormType extends AbstractType
     public function __construct(
         TransportTypeInterface $transport,
         SoapSettingsFormSubscriber $subscriber,
-        TypesRegistry $registry) {
+        TypesRegistry $registry
+    ) {
         $this->transport  = $transport;
         $this->subscriber = $subscriber;
         $this->registry   = $registry;
@@ -47,13 +48,14 @@ class SoapTransportSettingFormType extends AbstractType
         $builder->addEventSubscriber($this->subscriber);
 
         $registry = $this->registry;
-        $closure = function($data, FormInterface $form) use ($registry) {
+        $closure  = function ($data, FormInterface $form) use ($registry) {
             if ($data != true
                 && $form->getParent()
-                && $form->getParent()->getConfig()->getType()->getInnerType() instanceof ChannelType) {
+                && $form->getParent()->getConfig()->getType()->getInnerType() instanceof ChannelType
+            ) {
                 $connectors = $form->getParent()->get('connectors');
-                if ($connectors ) {
-                    $config = $connectors ->getConfig()->getOptions();
+                if ($connectors) {
+                    $config = $connectors->getConfig()->getOptions();
                     unset($config['choice_list']);
                     unset($config['choices']);
                 } else {
@@ -64,19 +66,23 @@ class SoapTransportSettingFormType extends AbstractType
                     $config['auto_initialize'] = false;
                 }
 
-                $types = $registry->getRegisteredConnectorsTypes('magento');
-                $allowedTypes = $types->filter(function(ConnectorTypeInterface $connector) {
-                    return !$connector instanceof ExtensionAwareInterface;
-                });
+                $types        = $registry->getRegisteredConnectorsTypes('magento');
+                $allowedTypes = $types->filter(
+                    function (ConnectorTypeInterface $connector) {
+                        return !$connector instanceof ExtensionAwareInterface;
+                    }
+                );
 
-                $allowedTypeKeys = $allowedTypes->getKeys();
-                $allowedTypeValues = $allowedTypes->map(function(ConnectorTypeInterface $connector) {
-                       return $connector->getLabel();
-                    })->toArray();
+                $allowedTypeKeys   = $allowedTypes->getKeys();
+                $allowedTypeValues = $allowedTypes->map(
+                    function (ConnectorTypeInterface $connector) {
+                        return $connector->getLabel();
+                    }
+                )->toArray();
 
                 $allowedTypesChoices = array_combine($allowedTypeKeys, $allowedTypeValues);
                 $form->getParent()
-                    ->add('connectors', 'choice', array_merge($config, ['choices'=> $allowedTypesChoices]));
+                    ->add('connectors', 'choice', array_merge($config, ['choices' => $allowedTypesChoices]));
             }
         };
 
@@ -105,20 +111,26 @@ class SoapTransportSettingFormType extends AbstractType
         )->add(
             $builder->create('websites', 'hidden')
                 ->addViewTransformer(new ArrayToJsonTransformer())
-            )->add(
-                $builder->create('isExtensionInstalled', 'hidden')
-                    ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use($closure) {
+        )->add(
+            $builder->create('isExtensionInstalled', 'hidden')
+                ->addEventListener(
+                    FormEvents::PRE_SET_DATA,
+                    function (FormEvent $event) use ($closure) {
                         $form = $event->getForm()->getParent();
                         $data = $event->getData();
 
                         $closure($data, $form);
-                    })->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use($closure) {
+                    }
+                )->addEventListener(
+                    FormEvents::PRE_SUBMIT,
+                    function (FormEvent $event) use ($closure) {
                         $form = $event->getForm()->getParent();
                         $data = $event->getData();
 
                         $closure($data, $form);
-                    })
-            );
+                    }
+                )
+        );
     }
 
     /**

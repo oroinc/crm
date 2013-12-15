@@ -81,8 +81,8 @@ services:
           - @doctrine.orm.default_entity_manager
           - @orocrm_magento.mage.store_connector
           - @orocrm_magento.mage.customer_connector
-#        tags:
-#          - { name: oro_integration.connector, type: order, channel_type: magento }
+        tags:
+          - { name: oro_integration.connector, type: order, channel_type: magento }
 
     orocrm_magento.mage.store_connector: # helper for customer, cart connectors only
         class: %orocrm_magento.mage.store_connector.class%
@@ -146,7 +146,7 @@ services:
         class: %orocrm_magento.importexport.normalizer.cart.class%
         arguments:
             - @doctrine.orm.default_entity_manager
-            - @orocrm_magento.importexport.data_converter.mage_address
+            - @orocrm_magento.importexport.data_converter.address
         tags:
             - { name: oro_importexport.normalizer }
 

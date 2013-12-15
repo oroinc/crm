@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
-use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport;
+use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 use Oro\Bundle\IntegrationBundle\Provider\TransportTypeInterface;
 
 /**
@@ -16,7 +16,7 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportTypeInterface;
  *
  * @package OroCRM\Bundle\MagentoBundle
  */
-class MageSoapTransport extends SOAPTransport implements TransportTypeInterface
+class SoapTransport extends BaseSOAPTransport implements TransportTypeInterface
 {
     /** @var string */
     protected $sessionId;

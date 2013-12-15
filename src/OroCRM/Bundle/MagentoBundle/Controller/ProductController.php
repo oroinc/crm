@@ -20,7 +20,7 @@ class ProductController extends Controller
     /**
      * @Route("/")
      * @AclAncestor("orocrm_magento_product_view")
-     * @Template()
+     * @Template
      */
     public function indexAction()
     {
@@ -35,7 +35,7 @@ class ProductController extends Controller
      *      permission="VIEW",
      *      class="OroCRMMagentoBundle:Product"
      * )
-     * @Template()
+     * @Template
      */
     public function viewAction(Product $customer)
     {
@@ -45,7 +45,7 @@ class ProductController extends Controller
     /**
      * @Route("/info/{id}", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_product_view")
-     * @Template()
+     * @Template
      */
     public function infoAction(Product $customer)
     {
