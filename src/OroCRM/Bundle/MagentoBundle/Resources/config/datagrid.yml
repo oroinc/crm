@@ -12,7 +12,6 @@ datagrid:
                     - c.createdAt
                     - c.updatedAt
                     - cg.name as groupName
-                    - ch.name as channelName
                     - cw.name as websiteName
                 from:
                     - { table: OroCRMMagentoBundle:Customer , alias: c }
@@ -20,7 +19,9 @@ datagrid:
                     left:
                         - { join: c.group, alias: cg }
                         - { join: c.website, alias: cw }
-                        - { join: c.channel, alias: ch }
+                where:
+                    and:
+                        - c.channel = :channelId
         columns:
             firstName:
                 label: orocrm.magento.datagrid.columns.first_name
@@ -30,8 +31,6 @@ datagrid:
                 label: orocrm.magento.datagrid.columns.email
             groupName:
                 label: orocrm.magento.datagrid.columns.group
-            channelName:
-                label: orocrm.magento.datagrid.columns.channel
             websiteName:
                 label: orocrm.magento.datagrid.columns.website
             createdAt:
@@ -52,7 +51,6 @@ datagrid:
                 lastName:    { data_name: c.lastName }
                 email:       { data_name: c.email }
                 groupName:   { data_name: cg.name }
-                channelName: { data_name: channelName }
                 websiteName: { data_name: cw.name }
                 createdAt:   { data_name: c.createdAt }
                 updatedAt:   { data_name: c.updatedAt }
@@ -76,13 +74,6 @@ datagrid:
                     options:
                         field_options:
                           class: OroCRMMagentoBundle:CustomerGroup
-                          property: name
-                channelName:
-                    type: entity
-                    data_name: cw
-                    options:
-                        field_options:
-                          class: OroIntegrationBundle:Channel
                           property: name
                 websiteName:
                     type: entity
@@ -124,7 +115,6 @@ datagrid:
                     - c.grandTotal
                     - c.createdAt
                     - c.updatedAt
-                    - ch.name as channelName
                     - cw.name as websiteName
                 from:
                     - { table: OroCRMMagentoBundle:Cart , alias: c }
@@ -144,8 +134,6 @@ datagrid:
                 label: orocrm.magento.datagrid.columns.grand_total
             email:
                 label: orocrm.magento.datagrid.columns.email
-            channelName:
-                label: orocrm.magento.datagrid.columns.channel
             websiteName:
                 label: orocrm.magento.datagrid.columns.website
             createdAt:
@@ -167,7 +155,6 @@ datagrid:
                 email:                { data_name: c.email }
                 subTotal:    { data_name: c.subTotal }
                 grandTotal:  { data_name: c.grandTotal }
-                channelName: { data_name: channelName }
                 websiteName: { data_name: cw.name }
                 createdAt:   { data_name: c.createdAt }
                 updatedAt:   { data_name: c.updatedAt }
@@ -178,13 +165,6 @@ datagrid:
                 email:
                     type: string
                     data_name: c.email
-                channelName:
-                    type: entity
-                    data_name: cw
-                    options:
-                        field_options:
-                          class: OroIntegrationBundle:Channel
-                          property: name
                 websiteName:
                     type: entity
                     data_name: cw
@@ -311,7 +291,6 @@ datagrid:
             query:
                 select:
                     - p
-                    - pch.name as channelName
                 from:
                     - { table: OroCRMMagentoBundle:Product , alias: p }
                 join:
@@ -335,8 +314,6 @@ datagrid:
                 label: orocrm.magento.datagrid.columns.websites
                 type:  callback
                 callable: OroCRM\Bundle\MagentoBundle\Converter\WebsiteCollectionToString::getConverterCallback
-            channelName:
-                label: orocrm.magento.datagrid.columns.channel
             createdAt:
                 label: orocrm.magento.datagrid.columns.created_at
                 frontend_type: datetime
@@ -356,7 +333,6 @@ datagrid:
                 type:          { data_name: p.type }
                 price:         { data_name: p.price }
                 specialPrice:  { data_name: p.specialPrice }
-                channelName:   { data_name: channelName }
                 createdAt:     { data_name: p.createdAt }
                 updatedAt:     { data_name: p.updatedAt }
         filters:
@@ -380,13 +356,6 @@ datagrid:
                     data_name:        p.specialPrice
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                channelName:
-                    type: entity
-                    data_name: pch
-                    options:
-                        field_options:
-                          class: OroIntegrationBundle:Channel
-                          property: name
                 websites:
                     type: entity
                     data_name: pw
@@ -413,3 +382,19 @@ datagrid:
                 rowAction:    true
         options:
             entityHint: product
+
+
+    magento-order-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_magento_order_view
+            query:
+                select:
+                    - o.id
+                    - o.createdAt
+                    - o.updatedAt
+                from:
+                    - { table: OroCRMMagentoBundle:Order, alias: o }
+                join:
+                    left:
+                        - { join: o.store, alias: cs }

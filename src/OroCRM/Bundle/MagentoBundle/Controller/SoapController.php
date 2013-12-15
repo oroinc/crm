@@ -38,9 +38,9 @@ class SoapController extends Controller
         $form->submit($request);
 
         /** @var MagentoSoapTransport $transportEntity */
-        $transportEntity = $form->getData();
-        $websites        = [];
-        $isExtensioInstalled = false;
+        $transportEntity      = $form->getData();
+        $websites             = [];
+        $isExtensionInstalled = false;
         try {
             $result = $transport->init($transportEntity->getSettingsBag());
             if ($result) {
@@ -48,7 +48,7 @@ class SoapController extends Controller
                 $websites = $this->get('orocrm_magento.converter.stores_to_website')->convert($stores);
 
                 // @TODO FIXME
-                $isExtensioInstalled = true;
+                $isExtensionInstalled = true;
             }
         } catch (\Exception $e) {
             $result = false;
@@ -56,9 +56,9 @@ class SoapController extends Controller
 
         return new JsonResponse(
             [
-                'success' => $result,
-                'websites' => $websites,
-                'isExtensioInstalled' => $isExtensioInstalled
+                'success'             => $result,
+                'websites'            => $websites,
+                'isExtensioInstalled' => $isExtensionInstalled
             ]
         );
     }

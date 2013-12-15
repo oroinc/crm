@@ -15,7 +15,7 @@ use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 /**
  * @TODO FIXME should be refactored to use only call of transport with generalized filter
  */
-abstract class AbstractApiBasedConnector extends AbstractConnector
+abstract class AbstractApiBasedConnector extends AbstractConnector implements MagentoConnectorInterface
 {
     const DEFAULT_SYNC_RANGE = '1 month';
 

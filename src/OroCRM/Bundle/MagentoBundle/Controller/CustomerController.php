@@ -22,9 +22,9 @@ class CustomerController extends Controller
      * @AclAncestor("orocrm_magento_customer_view")
      * @Template
      */
-    public function indexAction()
+    public function indexAction($id)
     {
-        return [];
+        return ['channelId' => $id];
     }
 
     /**

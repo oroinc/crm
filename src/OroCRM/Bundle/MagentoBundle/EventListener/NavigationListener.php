@@ -86,7 +86,8 @@ class NavigationListener
                             [
                                 'route'           => self::$map[$key]['route'],
                                 'routeParameters' => ['id' => $entry['id']],
-                                'label'           => $entry['label']
+                                'label'           => $entry['label'],
+                                'check_access'    => false
                             ]
                         );
                     }

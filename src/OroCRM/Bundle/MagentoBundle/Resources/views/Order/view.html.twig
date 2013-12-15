@@ -20,27 +20,33 @@
     {% set dataSubBlocks = [
         oro_widget_render({
             'widgetType': 'block',
-            'url':         path('orocrm_cart_widget_info', {id: entity.id}),
+            'url':         path('orocrm_order_widget_info', {id: entity.id}),
             'template':   '<div class="row-fluid <%= contentClasses.join(\' \') %>"></div>'
         })
     ] %}
-    {% set subblocks = [{ 'title': null, 'data' : dataSubBlocks }] %}
-    {% if entity.shippingAddress is not empty %}
-        {% set subblocks = subblocks|merge([{ 'title': 'Shipping Address', 'data' : addressView.renderAddress(entity.shippingAddress) }]) %}
-    {% endif %}
-    {% if entity.billingAddress is not empty %}
-        {% set subblocks = subblocks|merge([{ 'title': 'Billing Address', 'data' : addressView.renderAddress(entity.billingAddress) }]) %}
-    {% endif %}
 
     {% set dataBlocks =
         [
             {
-                'title': 'Cart Information'|trans,
+                'title': 'Order Information'|trans,
                 'class': 'active',
-                'subblocks': subblocks
+                'subblocks': [
+                    {
+                        'title': null,
+                        'data' : dataSubBlocks
+                    },
+                    {
+                        'title': 'Shipping Address',
+                        'data' : [ addressView.renderAddress(entity.shippingAddress) ]
+                    },
+                    {
+                        'title': 'Billing Address',
+                        'data' : [ addressView.renderAddress(entity.billingAddress) ]
+                    }
+                ]
             },
             {
-                'title': 'Cart Items'|trans,
+                'title': 'Order Items'|trans,
                 'subblocks': [
                     {
                         'title': null,
@@ -48,7 +54,7 @@
                             oro_widget_render({
                                 'widgetType': 'block',
                                 'contentClasses': [],
-                                'url': path('orocrm_cart_widget_items', {id: entity.id}),
+                                'url': path('orocrm_order_widget_items', {id: entity.id}),
                                 'template': '<div class="row-fluid <%= contentClasses.join(\' \') %>"></div>'
                             })
                         ]

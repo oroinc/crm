@@ -17,7 +17,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerNormalizer;
 use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 
-class AddOrUpdateCustomer extends BaseStrategy
+class CustomerStrategy extends BaseStrategy
 {
     const ENTITY_NAME             = 'OroCRMMagentoBundle:Customer';
     const GROUP_ENTITY_NAME       = 'OroCRMMagentoBundle:CustomerGroup';

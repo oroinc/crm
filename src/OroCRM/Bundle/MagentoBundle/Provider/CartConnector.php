@@ -145,6 +145,10 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
         // init helper connectors
         $this->storeConnector->setStepExecution($this->getStepExecution());
         $this->customerConnector->setStepExecution($this->getStepExecution());
+
+        // restore empty state
+        $this->currentPage = 1;
+        $this->quoteQueue = $this->dependencies = [];
     }
 
     /**

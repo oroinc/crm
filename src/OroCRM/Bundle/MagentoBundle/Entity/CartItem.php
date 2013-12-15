@@ -58,7 +58,7 @@ class CartItem extends BaseCartItem
     /**
      * @var string
      *
-     * @ORM\Column(name="tax_class_id", type="string", length=255)
+     * @ORM\Column(name="tax_class_id", type="string", length=255, nullable=true)
      */
     protected $taxClassId;
 

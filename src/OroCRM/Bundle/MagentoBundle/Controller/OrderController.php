@@ -22,9 +22,9 @@ class OrderController extends Controller
      * @AclAncestor("orocrm_magento_order_view")
      * @Template
      */
-    public function indexAction()
+    public function indexAction($id)
     {
-        return [];
+        return ['channelId' => $id];
     }
 
     /**

@@ -18,13 +18,13 @@ use OroCRM\Bundle\MagentoBundle\Entity\Product;
 class ProductController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/{id}", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_product_view")
      * @Template
      */
-    public function indexAction()
+    public function indexAction($id)
     {
-        return [];
+        return ['channelId' => $id];
     }
 
     /**

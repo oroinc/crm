@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-class CustomerConnector extends AbstractApiBasedConnector implements CustomerConnectorInterface
+class CustomerConnector extends AbstractApiBasedConnector
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer';
     const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';

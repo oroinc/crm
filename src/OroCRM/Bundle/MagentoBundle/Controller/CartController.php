@@ -22,9 +22,9 @@ class CartController extends Controller
      * @AclAncestor("orocrm_magento_cart_view")
      * @Template
      */
-    public function indexAction()
+    public function indexAction($id)
     {
-        return [];
+        return ['channelId' => $id];
     }
 
     /**

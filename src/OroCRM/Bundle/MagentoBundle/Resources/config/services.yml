@@ -14,6 +14,7 @@ parameters:
 
     # additional services
     orocrm_magento.converter.stores_to_website.class:                     OroCRM\Bundle\MagentoBundle\Converter\StoreListToWebsiteConverter
+    orocrm_magento.provider.datagrid_helper.class:                        OroCRM\Bundle\MagentoBundle\Provider\GridHelper
 
 services:
     orocrm_magento.soap_transport:
@@ -52,6 +53,15 @@ services:
             - @router
         tags:
             - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
+
+    orocrm_magento.event_listener.grid_listener:
+            class: %oro_datagrid.event_listener.base_orm_relation.class%
+            arguments:
+                - 'channelId'
+                - @oro_datagrid.datagrid.request_params
+                - false
+            tags:
+                - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-customers-grid, method: onBuildAfter }
 
     # additional services
     orocrm_magento.converter.stores_to_website:
