@@ -35,7 +35,9 @@
                         {{ form_widget(form.phoneNumber) }}
                         {{ form_row(form.direction, {'label': 'Direction'|trans}) }}
                         {{ form_row(form.duration, {'label': 'Duration'|trans}) }}
-                        {{ form_row(form.callStatus) }}
+                        <div class="hide">
+                            {{ form_row(form.callStatus) }}
+                        </div>
                     </div>
                     {{ form_rest(form) }}
                     <div class="widget-actions form-actions">
