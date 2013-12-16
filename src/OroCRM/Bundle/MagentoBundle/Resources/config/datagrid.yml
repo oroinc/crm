@@ -438,6 +438,42 @@ datagrid:
                 status:                 { data_name: o.status }
                 createdAt:              { data_name: o.createdAt }
                 updatedAt:              { data_name: o.updatedAt }
+        filters:
+            columns:
+                incrementId:
+                    type:             string
+                    data_name:        o.incrementId
+                totalPaidAmount:
+                    type:             number
+                    data_name:        o.totalPaidAmount
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                totalInvoicedAmount:
+                    type:             number
+                    data_name:        o.totalInvoicedAmount
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                shippingAmount:
+                    type:             number
+                    data_name:        o.shippingAmount
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                subtotalAmount:
+                    type:             number
+                    data_name:        o.subtotalAmount
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                status:
+                    type:             string
+                    data_name:        o.status
+                createdAt:
+                    type:             datetime
+                    data_name:        o.createdAt
+                    enabled:          false
+                updatedAt:
+                    type:             datetime
+                    data_name:        o.updatedAt
+                    enabled:          false
         actions:
             view:
                 type:         navigate

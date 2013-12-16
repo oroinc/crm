@@ -56,7 +56,6 @@ class Order extends BaseOrder
      * @ORM\OneToMany(targetEntity="OrderAddress",
      *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
-     * @ORM\OrderBy({"primary" = "DESC"})
      */
     protected $addresses;
 
