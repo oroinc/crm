@@ -51,6 +51,7 @@ class CartDataConverter extends AbstractTableDataConverter
             'quote_currency_code' => 'quoteCurrencyCode',
             'shipping_address_id' => 'shipping_address:originId',
             'billing_address_id'  => 'billing_address:originId',
+            'payment'             => 'paymentDetails',
         ];
     }
 

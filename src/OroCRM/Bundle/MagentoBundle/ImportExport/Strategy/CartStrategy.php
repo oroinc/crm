@@ -138,7 +138,12 @@ class CartStrategy extends BaseStrategy
 
         foreach ($addresses as $addressName) {
             $addressGetter = 'get'.$addressName;
+            $setter = 'set'.$addressName;
             $address = $importedCart->$addressGetter();
+
+            if (!$address) {
+                continue;
+            }
 
             // at this point imported address region have code equal to region_id in magento db field
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
@@ -151,7 +156,7 @@ class CartStrategy extends BaseStrategy
             }
 
             $this->updateAddressCountryRegion($address, $mageRegionId);
-            $newCart->{'set'.$addressName}($address);
+            $newCart->$setter($address);
         }
 
         return $this;

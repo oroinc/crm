@@ -102,14 +102,14 @@ class Cart extends BaseCart
     /**
      * @var float
      *
-     * @ORM\Column(name="store_to_base_rate", type="decimal", nullable=false)
+     * @ORM\Column(name="store_to_base_rate", type="float", nullable=false)
      */
     protected $storeToBaseRate;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="store_to_quote_rate", type="decimal", nullable=true)
+     * @ORM\Column(name="store_to_quote_rate", type="float", nullable=true)
      */
     protected $storeToQuoteRate;
 
@@ -149,6 +149,13 @@ class Cart extends BaseCart
      * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $billingAddress;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="payment_details", type="string", length=255, nullable=true)
+     */
+    protected $paymentDetails;
 
     /**
      * @var CartStatus
@@ -263,6 +270,22 @@ class Cart extends BaseCart
     public function getQuoteCurrencyCode()
     {
         return $this->quoteCurrencyCode;
+    }
+
+    /**
+     * @param string $paymentDetails
+     */
+    public function setPaymentDetails($paymentDetails)
+    {
+        $this->paymentDetails = $paymentDetails;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentDetails()
+    {
+        return $this->paymentDetails;
     }
 
     /**
