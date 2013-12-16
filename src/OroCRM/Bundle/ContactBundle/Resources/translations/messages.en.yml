@@ -111,7 +111,7 @@ orocrm:
         contactemail:
             entity_label:        Contact Email
             entity_plural_label: Contact Emails
-            entity_description:  Represent contact's group
+            entity_description:  Represent contact's email
             id.label:      Id
             email.label:   Email
             owner.label:   Owner
@@ -123,6 +123,7 @@ orocrm:
         contactphone:
             entity_label:        Contact Phone
             entity_plural_label: Contact Phones
+            entity_description:  Represent contact's phone
             id.label:      Id
             owner.label:   Owner
             phone.label:   Phone
@@ -145,6 +146,7 @@ orocrm:
         method:
             entity_label:        Contact Method
             entity_plural_label: Contact Methods
+            entity_description:  Represent contact's method
             label.label: Label
             name.label:  Name
 
@@ -152,7 +154,8 @@ orocrm:
         # Entity oroCRM\Bundle\ContactBundle\Entity\Source
         #
         source:
-          entity_label:        Contact Source
-          entity_plural_label: Contact Sources
-          label.label:  Label
-          name.label:   Name
+            entity_label:        Contact Source
+            entity_plural_label: Contact Sources
+            entity_description:  Represent contact's source
+            label.label:  Label
+            name.label:   Name

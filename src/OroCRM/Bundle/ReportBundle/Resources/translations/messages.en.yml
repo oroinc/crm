@@ -1,4 +1,5 @@
 orocrm:
+
     query_designer:
         aggregates:
             opportunity_by_workflow_item_close_revenue:
@@ -25,10 +26,17 @@ orocrm:
                 inProgressCount:   Number In Progress
                 totalOps:          Total
 
-
         controller:
             report:
                 wonCount:          Number Won
                 lostCount:         Number Lost
                 inProgressCount:   Number In Progress
                 totalOps:          Total
+
+        opportunitybyworkflowitem:
+            entity_label:        Opportunity With Workflow
+            entity_plural_label: Opportunities With Workflow
+            entity_description:  ''
+            id.label:            Id
+            opportunity.label:   Opportunity
+            workflow_item.label: Workflow item
