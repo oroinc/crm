@@ -14,6 +14,7 @@ class OrderDataConverter extends AbstractTableDataConverter
         return [
             'increment_id'        => 'incrementId',
             'store_id'            => 'store:originId',
+            'store_storename'     => 'store:name',
             'store_code'          => 'store:code',
             'store_website_id'    => 'store:website:originId',
             'store_website_code'  => 'store:website:code',
@@ -21,13 +22,13 @@ class OrderDataConverter extends AbstractTableDataConverter
             'customer_id'         => 'owner:originId',
             'is_virtual'          => 'isVirtual',
             'customer_is_guest'   => 'isGuest',
-            'gift_message_body'   => 'giftMessage',
+            'gift_message'        => 'giftMessage',
             'remote_ip'           => 'remoteIp',
             'store_name'          => 'storeName',
             'total_paid'          => 'totalPaidAmount',
-            'total_invoiced'      => 'totalInvoiced',
-            'total_refunded'      => 'totalRefunded',
-            'total_canceled'      => 'totalCanceled',
+            'total_invoiced'      => 'totalInvoicedAmount',
+            'total_refunded'      => 'totalRefundedAmount',
+            'total_canceled'      => 'totalCanceledAmount',
             'quote_id'            => 'cart:originId',
             'payment_method'      => 'paymentMethod',
             'order_currency_code' => 'currency',
@@ -37,8 +38,11 @@ class OrderDataConverter extends AbstractTableDataConverter
             'tax_amount'          => 'taxAmount',
             'discount_amount'     => 'discountAmount',
             'grand_total'         => 'totalAmount',
+            'payment'             => 'paymentDetails',
+            'shipping_address'    => 'addresses:0',
+            'billing_address'     => 'addresses:1',
             'created_at'          => 'createdAt',
-            'updated_at'          => 'updatedAt'
+            'updated_at'          => 'updatedAt',
         ];
     }
 

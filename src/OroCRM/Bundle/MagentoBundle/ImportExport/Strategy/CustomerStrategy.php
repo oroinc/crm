@@ -260,27 +260,4 @@ class CustomerStrategy extends BaseStrategy
 
         return $this;
     }
-
-    /**
-     * @param AbstractTypedAddress $address
-     *
-     * @return $this
-     */
-    protected function updateAddressTypes(AbstractTypedAddress $address)
-    {
-        // update address type
-        $types = $address->getTypeNames();
-        if (empty($types)) {
-            return $this;
-        }
-
-        $address->getTypes()->clear();
-        $loadedTypes = $this->getEntityRepository('OroAddressBundle:AddressType')->findBy(['name' => $types]);
-
-        foreach ($loadedTypes as $type) {
-            $address->addType($type);
-        }
-
-        return $this;
-    }
 }

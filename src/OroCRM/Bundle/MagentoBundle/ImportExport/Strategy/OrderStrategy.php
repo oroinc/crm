@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 
 class OrderStrategy extends BaseStrategy
 {
@@ -27,21 +28,22 @@ class OrderStrategy extends BaseStrategy
                 $entity,
                 ['id', 'store', 'items', 'customer', 'addresses']
             );
-            $entity = $existingEntity;
+        } else {
+            $existingEntity = $entity;
         }
 
         if (!$entity->getStore() || !$entity->getStore()->getId()) {
             $entity->setStore($this->storeStrategy->process($entity->getStore()));
         }
 
-        $this->processCustomer($entity)
-            ->processCart($entity);
+        $this->processCustomer($existingEntity);
+        $this->processCart($existingEntity);
+        $this->processAddresses($existingEntity, $entity);
 
-        $this->validateAndUpdateContext($entity);
+        $this->validateAndUpdateContext($existingEntity);
 
-        return $entity;
+        return $existingEntity;
     }
-
 
     protected function processCustomer(Order $entity)
     {
@@ -55,9 +57,6 @@ class OrderStrategy extends BaseStrategy
         } else {
             $entity->setOwner(null);
         }
-
-
-        return $this;
     }
 
     protected function processCart(Order $entity)
@@ -73,8 +72,28 @@ class OrderStrategy extends BaseStrategy
             // @TODO decide to import new one or not
             $entity->setCart(null);
         }
+    }
 
-        return $this;
+    protected function processAddresses(Order $entityToUpdate, Order $entityToImport)
+    {
+        /** @var OrderAddress $address */
+        foreach ($entityToImport->getAddresses() as $k => $address) {
+            // at this point imported address region have code equal to region_id in magento db field
+            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
+
+            $existingAddress = $entityToUpdate->getAddresses()->get($k);
+            if ($existingAddress) {
+                $this->strategyHelper->importEntity($existingAddress, $address, ['id', 'region', 'country']);
+                $address = $existingAddress;
+            }
+
+            $this
+                ->updateAddressCountryRegion($address, $mageRegionId)
+                ->updateAddressTypes($address);
+
+            $address->setOwner($entityToUpdate);
+            $entityToUpdate->getAddresses()->set($k, $address);
+        }
     }
 
     /**

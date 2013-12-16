@@ -97,7 +97,7 @@ class AbstractNormalizer implements SerializerAwareInterface
      *
      * @return array
      */
-    protected function denormalizeCreatedUpdated($data, $format, $context)
+    protected function denormalizeCreatedUpdated($data, $format, $context = [])
     {
         $dateTimeFormat    = ['type' => 'datetime', 'format' => 'Y-m-d H:i:s'];
         $data['createdAt'] = $this->serializer->denormalize(
@@ -114,6 +114,52 @@ class AbstractNormalizer implements SerializerAwareInterface
         );
 
         return $data;
+    }
+
+    /**
+     * @param array $paymentDetails
+     *
+     * @return string
+     */
+    public function denormalizePaymentDetails($paymentDetails)
+    {
+        if (!empty($paymentDetails['cc_last4'])) {
+            $paymentDetails = sprintf(
+                "Card [%s, %s], exp [%s/%s], %s",
+                $paymentDetails['cc_type'],
+                $paymentDetails['cc_last4'],
+                $paymentDetails['cc_exp_month'],
+                $paymentDetails['cc_exp_year'],
+                $paymentDetails['method']
+            );
+        } else {
+            $result = [];
+            foreach ($paymentDetails as $key => $value) {
+                $result[] = sprintf("%s: %s", $key, $value);
+            }
+            $paymentDetails = implode(' / ', $result);
+        }
+
+        return $paymentDetails;
+    }
+
+    /**
+     * @param array  $data
+     * @param string $name
+     * @param string $type
+     * @param mixed  $format
+     * @param array  $context
+     *
+     * @return null|object
+     */
+    protected function denormalizeObject(array $data, $name, $type, $format = null, $context = array())
+    {
+        $result = null;
+        if (!empty($data[$name])) {
+            $result = $this->serializer->denormalize($data[$name], $type, $format, $context);
+        }
+
+        return $result;
     }
 
     /**

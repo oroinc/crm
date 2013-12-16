@@ -112,28 +112,6 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
         return $cart;
     }
 
-    public function denormalizePaymentDetails($paymentDetails)
-    {
-        if (!empty($paymentDetails['cc_last4'])) {
-            $paymentDetails = sprintf(
-                "Card [%s, %s], exp [%s/%s], %s",
-                $paymentDetails['cc_type'],
-                $paymentDetails['cc_last4'],
-                $paymentDetails['cc_exp_month'],
-                $paymentDetails['cc_exp_year'],
-                $paymentDetails['method']
-            );
-        } else {
-            $result = [];
-            foreach ($paymentDetails as $key => $value) {
-                $result[] = sprintf("%s: %s", $key, $value);
-            }
-            $paymentDetails = implode(' / ', $result);
-        }
-
-        return $paymentDetails;
-    }
-
     /**
      * @param $data
      * @param $format

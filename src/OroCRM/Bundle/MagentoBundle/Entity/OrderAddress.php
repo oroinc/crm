@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @ORM\Table("orocrm_magento_order_address")
@@ -48,6 +47,17 @@ class OrderAddress extends AbstractTypedAddress
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     protected $phone;
+
+    /**
+     * Unset no used fields from mapping
+     * Name parts unused due to magento api does not bring it up
+     */
+    protected $label;
+    protected $namePrefix;
+    protected $middleName;
+    protected $nameSuffix;
+    protected $created;
+    protected $updated;
 
     /**
      * @param Order $owner

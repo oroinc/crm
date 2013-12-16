@@ -106,6 +106,7 @@ class OrderConnector extends AbstractApiBasedConnector implements MagentoConnect
         // flat array structure will be converted by data converter
         $store                      = $this->getStoreDataById($result->store_id);
         $result->store_code         = $store['code'];
+        $result->store_storename    = $result->store_name;
         $result->store_website_id   = $store['website']['id'];
         $result->store_website_code = $store['website']['code'];
         $result->store_website_name = $store['website']['name'];
