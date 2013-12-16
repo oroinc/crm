@@ -1,8 +1,6 @@
 {% extends 'OroDashboardBundle:Dashboard:widget.html.twig' %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
-{% set widgetName = 'my-accounts-activity' %}
-{% set widgetTitle = 'orocrm.dashboard.my_accounts_activity.title'|trans %}
 {% set gridName = 'dashboard-my-accounts-activity-grid' %}
 
 {% block content %}
@@ -11,9 +9,9 @@
 
 {% block actions %}
     {% set actions = [{
-    'url': path('orocrm_account_index'),
-    'icon': 'briefcase',
-    'label': 'orocrm.dashboard.my_accounts_activity.view_all'|trans
+        'url': path('orocrm_account_index'),
+        'icon': 'suitcase',
+        'label': 'orocrm.dashboard.my_accounts_activity.view_all'|trans
     }] %}
 
     {{ parent() }}
