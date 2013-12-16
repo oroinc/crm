@@ -56,6 +56,8 @@ class OrderAddress extends AbstractTypedAddress
     protected $namePrefix;
     protected $middleName;
     protected $nameSuffix;
+    protected $street2;
+    protected $primary;
     protected $created;
     protected $updated;
 
