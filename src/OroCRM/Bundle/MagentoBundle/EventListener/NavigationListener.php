@@ -20,22 +20,25 @@ class NavigationListener
 
     protected static $map = [
         'cart'     => [
-            'parent' => 'sales_tab',
-            'prefix' => self::CART_MENU_ITEM,
-            'label'  => 'Shopping Carts',
-            'route'  => 'orocrm_magento_cart_index'
+            'parent'       => 'sales_tab',
+            'prefix'       => self::CART_MENU_ITEM,
+            'label'        => 'Shopping Carts',
+            'route'        => 'orocrm_magento_cart_index',
+            'extra_routes' => '/^orocrm_magento_cart_(index|view)$/'
         ],
         'order'    => [
-            'parent' => 'sales_tab',
-            'prefix' => self::ORDER_MENU_ITEM,
-            'label'  => 'Orders',
-            'route'  => 'orocrm_magento_order_index'
+            'parent'       => 'sales_tab',
+            'prefix'       => self::ORDER_MENU_ITEM,
+            'label'        => 'Orders',
+            'route'        => 'orocrm_magento_order_index',
+            'extra_routes' => '/^orocrm_magento_order_(index|view)$/'
         ],
         'customer' => [
-            'parent' => 'customers_tab',
-            'prefix' => self::CUSTOMER_MENU_ITEM,
-            'label'  => 'Channels',
-            'route'  => 'orocrm_magento_customer_index'
+            'parent'       => 'customers_tab',
+            'prefix'       => self::CUSTOMER_MENU_ITEM,
+            'label'        => 'Channels',
+            'route'        => 'orocrm_magento_customer_index',
+            'extra_routes' => '/^orocrm_magento_customer_(index|view)$/'
         ]
     ];
 
@@ -87,7 +90,8 @@ class NavigationListener
                                 'route'           => self::$map[$key]['route'],
                                 'routeParameters' => ['id' => $entry['id']],
                                 'label'           => $entry['label'],
-                                'check_access'    => false
+                                'check_access'    => false,
+                                'extras'          => ['routes' => self::$map[$key]['extra_routes']]
                             ]
                         );
                     }

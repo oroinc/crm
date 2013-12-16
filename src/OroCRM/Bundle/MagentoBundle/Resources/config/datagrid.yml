@@ -123,6 +123,9 @@ datagrid:
                         - { join: c.store, alias: cs }
                         - { join: cs.website, alias: cw }
                         - { join: c.channel, alias: ch }
+                where:
+                    and:
+                        - c.channel = :channelId
         columns:
             itemsQty:
                 label: orocrm.magento.datagrid.columns.qty
@@ -390,11 +393,27 @@ datagrid:
             acl_resource: orocrm_magento_order_view
             query:
                 select:
-                    - o.id
-                    - o.createdAt
-                    - o.updatedAt
+                    - o
                 from:
                     - { table: OroCRMMagentoBundle:Order, alias: o }
-                join:
-                    left:
-                        - { join: o.store, alias: cs }
+                where:
+                    and:
+                        - o.channel = :channelId
+        columns:
+            incrementId:
+                label: orocrm.magento.datagrid.columns.increment_id
+            storeName:
+                label: orocrm.magento.datagrid.columns.store_name
+            totalPaid:
+                label: orocrm.magento.datagrid.columns.total_paid
+                frontend_type: decimal
+            totalInvoiced:
+                label: orocrm.magento.datagrid.columns.total_invoiced
+                frontend_type: decimal
+            subtotalAmount:
+                label: orocrm.magento.datagrid.columns.subtotal_amount
+                frontend_type: decimal
+            status:
+                label: orocrm.magento.datagrid.columns.status
+        options:
+            entityHint: order

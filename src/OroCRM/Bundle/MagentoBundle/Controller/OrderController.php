@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
 /**
@@ -22,9 +23,9 @@ class OrderController extends Controller
      * @AclAncestor("orocrm_magento_order_view")
      * @Template
      */
-    public function indexAction($id)
+    public function indexAction(Channel $channel)
     {
-        return ['channelId' => $id];
+        return ['channelId' => $channel->getId()];
     }
 
     /**

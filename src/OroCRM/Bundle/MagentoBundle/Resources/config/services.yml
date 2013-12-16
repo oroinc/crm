@@ -62,6 +62,8 @@ services:
                 - false
             tags:
                 - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-customers-grid, method: onBuildAfter }
+                - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-cart-grid, method: onBuildAfter }
+                - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-order-grid, method: onBuildAfter }
 
     # additional services
     orocrm_magento.converter.stores_to_website:

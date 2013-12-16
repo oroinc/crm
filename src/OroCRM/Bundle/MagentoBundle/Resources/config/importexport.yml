@@ -120,6 +120,7 @@ services:
     orocrm_magento.importexport.normalizer.order:
         class: %orocrm_magento.importexport.normalizer.order.class%
         arguments:
+            - @doctrine.orm.entity_manager
             - @orocrm_magento.importexport.data_converter.order_address
         tags:
             - { name: oro_importexport.normalizer }
@@ -220,7 +221,7 @@ services:
         parent: oro_importexport.processor.import_abstract
         calls:
              - [setDataConverter, [@orocrm_magento.importexport.data_converter.order]]
-             - [setStrategy, [@orocrm_magento.import.strategy.region.add_or_update]]
+             - [setStrategy, [@orocrm_magento.import.strategy.order.add_or_update]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.order.entity.class%, alias: orocrm_magento.add_or_update_order }
             - { name: oro_importexport.processor, type: import_validation, entity: %orocrm_magento.order.entity.class%, alias: orocrm_magento.add_or_order }

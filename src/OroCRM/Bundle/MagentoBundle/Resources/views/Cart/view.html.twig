@@ -3,6 +3,8 @@
 {% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
+{% oro_title_set({params : {"%cart.id%":  entity.originId} }) %}
+
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,

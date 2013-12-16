@@ -5,34 +5,36 @@ orocrm:
                 view:
                     label: View
             columns:
-                first_name:   First Name
-                last_name:    Last Name
-                email:        Email
-                phone:        Phone
-                group:        Group
-                channel:      Channel
-                website:      Website
-                created_at:   Created At
-                updated_at:   Updated At
-                name:         Name
-                sku:          Sku
-                type:         Type
-                specialPrice: Special Price
-                price:        Price
-                price_incl_tax: Price Incl Tax
-                websites:     Websites
-                qty:          Qty
-                items_qty:    Items qty
-                currency:     Currency
-                sub_total:    Sub Total
-                grand_total:  Grand Total
-                gift_message: Gift message
-                row_total:    Row Total
-                tax_amount:   Tax Amount
-                discount_amount: Discount Amount
-                weight:       Weight
-                added_on:    Added On
-                updated_on:   Updated On
+                first_name:       First Name
+                last_name:        Last Name
+                email:            Email
+                phone:            Phone
+                group:            Group
+                channel:          Channel
+                website:          Website
+                created_at:       Created At
+                updated_at:       Updated At
+                name:             Name
+                sku:              Sku
+                type:             Type
+                specialPrice:     Special Price
+                price:            Price
+                price_incl_tax:   Price Incl Tax
+                websites:         Websites
+                qty:              Qty
+                items_qty:        Items qty
+                currency:         Currency
+                sub_total:        Sub Total
+                grand_total:      Grand Total
+                gift_message:     Gift message
+                row_total:        Row Total
+                tax_amount:       Tax Amount
+                discount_amount:  Discount Amount
+                weight:           Weight
+                added_on:         Added On
+                updated_on:       Updated On
+                increment_id:     Increment ID
+                store_name:       Store name
         channel_type:
             label:  Magento
         transport:

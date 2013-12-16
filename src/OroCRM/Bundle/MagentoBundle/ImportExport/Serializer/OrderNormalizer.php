@@ -2,7 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Doctrine\ORM\EntityManager;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
@@ -11,20 +12,22 @@ use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\OrderAddressDataConverter
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AddressDataConverter;
-
 class OrderNormalizer extends AbstractNormalizer implements NormalizerInterface, DenormalizerInterface
 {
     const ORDER_TYPE   = 'OroCRM\Bundle\MagentoBundle\Entity\Order';
     const ADDRESS_TYPE = 'OroCRM\Bundle\MagentoBundle\Entity\OrderAddress';
 
     /** @var OrderAddressDataConverter */
-    protected $addressDataConverter;
+    protected $addressConverter;
 
-    public function __construct(OrderAddressDataConverter $addressDataConverter)
-    {
-        $this->addressDataConverter = $addressDataConverter;
+    public function __construct(
+        EntityManager $em,
+        OrderAddressDataConverter $addressConverter
+    ) {
+        parent::__construct($em);
+        $this->addressConverter = $addressConverter;
     }
+
 
     /**
      * {@inheritdoc}
@@ -56,13 +59,12 @@ class OrderNormalizer extends AbstractNormalizer implements NormalizerInterface,
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $channel = $context['channel'];
+        $channel = $this->getChannelFromContext($context);
         $data    = is_array($data) ? $data : [];
 
         $website = $this->serializer
             ->denormalize($data['store']['website'], StoreConnector::WEBSITE_TYPE, $format, $context);
         $website->setChannel($channel);
-
 
         $data['store'] = $this->serializer->denormalize(
             $data['store'],
@@ -77,7 +79,9 @@ class OrderNormalizer extends AbstractNormalizer implements NormalizerInterface,
 
         $data['shippingAddress'] = $this->denormalizeAddress($data, 'shipping', $format, $context);
         $data['billingAddress']  = $this->denormalizeAddress($data, 'billing', $format, $context);
-        // todo  and store and items and address denormalization
+
+        // todo items denormalization
+        unset($data['items']);
 
         $order = new Order();
         $this->fillResultObject($order, $data);
@@ -99,7 +103,7 @@ class OrderNormalizer extends AbstractNormalizer implements NormalizerInterface,
     protected function denormalizeAddress($data, $type, $format, $context)
     {
         $key  = $type . '_address';
-        $data = $this->addressDataConverter->convertToImportFormat($data[$key]);
+        $data = $this->addressConverter->convertToImportFormat($data[$key]);
 
         return $this->serializer
             ->denormalize($data, self::ADDRESS_TYPE, $format, $context);

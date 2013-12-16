@@ -11,6 +11,7 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 /**
  * @Route("/customer")
@@ -22,9 +23,9 @@ class CustomerController extends Controller
      * @AclAncestor("orocrm_magento_customer_view")
      * @Template
      */
-    public function indexAction($id)
+    public function indexAction(Channel $channel)
     {
-        return ['channelId' => $id];
+        return ['channelId' => $channel->getId()];
     }
 
     /**

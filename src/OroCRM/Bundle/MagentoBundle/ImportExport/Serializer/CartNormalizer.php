@@ -3,17 +3,15 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Doctrine\ORM\EntityManager;
-use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
-use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AddressDataConverter;
+
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-use Oro\Bundle\AddressBundle\Entity\Address;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
+use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AddressDataConverter;
 
 class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, DenormalizerInterface
 {

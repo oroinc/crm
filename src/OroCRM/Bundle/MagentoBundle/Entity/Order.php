@@ -132,7 +132,7 @@ class Order extends BaseOrder
     protected $totalCanceledAmount = 0;
 
     /**
-     * @TODO Add real cart here
+     * @ORM\OneToOne(targetEntity="Cart", cascade={"persist"})
      */
     protected $cart;
 
@@ -361,5 +361,25 @@ class Order extends BaseOrder
     public function getRemoteIp()
     {
         return $this->remoteIp;
+    }
+
+    /**
+     * @param Cart $cart
+     *
+     * @return $this
+     */
+    public function setCart($cart = null)
+    {
+        $this->cart = $cart;
+
+        return $this;
+    }
+
+    /**
+     * @return Cart
+     */
+    public function getCart()
+    {
+        return $this->cart;
     }
 }
