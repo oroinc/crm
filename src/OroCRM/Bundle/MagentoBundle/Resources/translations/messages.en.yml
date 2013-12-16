@@ -34,7 +34,11 @@ orocrm:
                 added_on:         Added On
                 updated_on:       Updated On
                 increment_id:     Increment ID
-                store_name:       Store name
+                total_paid:       Total Paid
+                total_invoiced:   Total Invoiced
+                subtotal_amount:  Subtotal Amount
+                shipping_amount:  Shipping Amount
+                status:           Status
         channel_type:
             label:  Magento
         transport:

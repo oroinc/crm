@@ -402,18 +402,49 @@ datagrid:
         columns:
             incrementId:
                 label: orocrm.magento.datagrid.columns.increment_id
-            storeName:
-                label: orocrm.magento.datagrid.columns.store_name
-            totalPaid:
+            totalPaidAmount:
                 label: orocrm.magento.datagrid.columns.total_paid
                 frontend_type: decimal
-            totalInvoiced:
+            totalInvoicedAmount:
                 label: orocrm.magento.datagrid.columns.total_invoiced
+                frontend_type: decimal
+            shippingAmount:
+                label: orocrm.magento.datagrid.columns.shipping_amount
                 frontend_type: decimal
             subtotalAmount:
                 label: orocrm.magento.datagrid.columns.subtotal_amount
                 frontend_type: decimal
             status:
                 label: orocrm.magento.datagrid.columns.status
+            createdAt:
+                label: orocrm.magento.datagrid.columns.added_on
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.magento.datagrid.columns.updated_on
+                frontend_type: datetime
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: orocrm_magento_order_view
+                params: [ id ]
+        sorters:
+            columns:
+                incrementId:            { data_name: o.incrementId }
+                totalPaidAmount:        { data_name: o.totalPaidAmount }
+                totalInvoicedAmount:    { data_name: o.totalInvoicedAmount }
+                shippingAmount:         { data_name: o.shippingAmount }
+                subtotalAmount:         { data_name: o.subtotalAmount }
+                status:                 { data_name: o.status }
+                createdAt:              { data_name: o.createdAt }
+                updatedAt:              { data_name: o.updatedAt }
+        actions:
+            view:
+                type:         navigate
+                label:        orocrm.magento.datagrid.actions.view.label
+                link:         view_link
+                icon:         book
+                acl_recource: orocrm_magento_order_view
+                rowAction:    true
         options:
             entityHint: order
