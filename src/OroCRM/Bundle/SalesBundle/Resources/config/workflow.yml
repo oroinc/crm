@@ -26,15 +26,18 @@ workflows:
                     class: OroCRM\Bundle\SalesBundle\Entity\Lead
                     managed_entity: true
             opportunity_name:
-                label: 'Opportunity name'
+                #label:  'Opportunity name'
+                label: orocrm.sales.opportunity.name.label
                 type: string
             account:
-                label: 'Account'
+                #label: 'Account'
+                label:  orocrm.account.entity_label
                 type: entity
                 options:
                     class: OroCRM\Bundle\AccountBundle\Entity\Account
             company_name:
-                label: 'Company name'
+                #label: 'Company name'
+                label: orocrm.sales.lead.company_name.label
                 type: string
         transitions:
             qualify:

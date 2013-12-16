@@ -1,6 +1,6 @@
 OroCRM\Bundle\AccountBundle\Entity\Account:
     alias: orocrm_account
-    label: Accounts
+    label: orocrm.account.entity_plural_label
     title_fields: [name]
     route:
         name: orocrm_account_view

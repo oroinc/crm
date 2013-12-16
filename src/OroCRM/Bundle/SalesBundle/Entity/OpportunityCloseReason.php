@@ -8,11 +8,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_sales_opportunity_close_reason")
- * @Config(
- *  defaultValues={
- *      "entity"={"label"="Opportunity Close Reason", "plural_label"="Opportunity Close Reasons"}
- *  }
- * )
+ * @Config()
  */
 class OpportunityCloseReason
 {

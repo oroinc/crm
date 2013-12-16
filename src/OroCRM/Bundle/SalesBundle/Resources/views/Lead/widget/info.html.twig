@@ -13,27 +13,27 @@
 </style>
 <div class="widget-content form-horizontal lead-info box-content row-fluid">
     <div class="responsive-block">
-        {{ _self.renderRow('First Name'|trans, entity.firstName) }}
-        {{ _self.renderRow('Last Name'|trans, entity.lastName) }}
+        {{ _self.renderRow('orocrm.sales.lead.first_name.label'|trans, entity.firstName) }}
+        {{ _self.renderRow('orocrm.sales.lead.last_name.label'|trans, entity.lastName) }}
 
         {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
             {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name ~ '</a>' %}
         {%- else -%}
             {% set contactView = entity.contact ? entity.contact : '' %}
         {%- endif -%}
-        {{ _self.renderRow('Contact'|trans, contactView) }}
+        {{ _self.renderRow('orocrm.sales.lead.contact.label'|trans, contactView) }}
 
-        {{ _self.renderRow('Job Title'|trans, entity.jobTitle) }}
+        {{ _self.renderRow('orocrm.sales.lead.job_title.label'|trans, entity.jobTitle) }}
 
         {%- if resource_granted('orocrm_account_view') and entity.account -%}
             {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.account.id}) ~ '">' ~ entity.account ~ '</a>' %}
         {%- else -%}
             {% set accountView = entity.account ? entity.account : '' %}
         {%- endif -%}
-        {{ _self.renderRow('Account'|trans, accountView) }}
-        {{ _self.renderRow('Company Name'|trans, entity.companyName) }}
-        {{ _self.renderRow('Industry'|trans, entity.industry) }}
-        {{ _self.renderRow('Number Of Employees'|trans, entity.numberOfEmployees) }}
+        {{ _self.renderRow('orocrm.sales.lead.account.label'|trans, accountView) }}
+        {{ _self.renderRow('orocrm.sales.lead.company_name.label'|trans, entity.companyName) }}
+        {{ _self.renderRow('orocrm.sales.lead.industry.label'|trans, entity.industry) }}
+        {{ _self.renderRow('orocrm.sales.lead.number_of_employees.label'|trans, entity.numberOfEmployees) }}
 
         {% if dynamic|length %}
             {% for label, item in dynamic %}
@@ -57,8 +57,8 @@
         {% endif %}
     </div>
     <div class="responsive-block">
-        {{ _self.renderRow('Email'|trans, entity.email ? '<a href="mailto:' ~ entity.email ~ '">' ~ entity.email ~ '</a>' : '') }}
-        {{ _self.renderRow('Phone'|trans, entity.phoneNumber ? '<a href="tel:' ~ entity.phoneNumber ~ '">' ~ entity.phoneNumber ~ '</a>' : '') }}
-        {{ _self.renderRow('Website'|trans, entity.website ? '<a href="' ~ entity.website ~ '" class="no-hash">' ~ entity.website ~ '</a>' : '') }}
+        {{ _self.renderRow('orocrm.sales.lead.email.label'|trans, entity.email ? '<a href="mailto:' ~ entity.email ~ '">' ~ entity.email ~ '</a>' : '') }}
+        {{ _self.renderRow('orocrm.sales.lead.phone_number.label'|trans, entity.phoneNumber ? '<a href="tel:' ~ entity.phoneNumber ~ '">' ~ entity.phoneNumber ~ '</a>' : '') }}
+        {{ _self.renderRow('orocrm.sales.lead.website.label'|trans, entity.website ? '<a href="' ~ entity.website ~ '" class="no-hash">' ~ entity.website ~ '</a>' : '') }}
     </div>
 </div>

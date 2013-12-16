@@ -3,3 +3,21 @@ orocrm.account.datagrid.account_name: Account name
 orocrm.account.form.choose_account: Choose an account...
 orocrm.account.form.select_contacts: Select contacts
 orocrm.account.controller.account.saved.message: "Account saved"
+
+#
+# Account's entities
+#
+orocrm:
+    account:
+        entity_label:        Account
+        entity_plural_label: Accounts
+        entity_description:  Represent account
+        id.label:               Id
+        name.label:             Account name
+        created_at.label:       Created
+        updated_at.label:       Updated
+        owner.label:            Owner
+        shipping_address.label: Shipping Address
+        billing_address.label:  Billing Address
+        contacts.label:         Contacts
+        default_contact.label:  Default contact

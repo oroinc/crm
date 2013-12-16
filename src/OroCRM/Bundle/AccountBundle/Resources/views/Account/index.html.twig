@@ -1,14 +1,14 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% set gridName = 'accounts-grid' %}
-{% set pageTitle = 'Accounts' %}
+{% set pageTitle = 'orocrm.account.entity_plural_label'|trans %}
 
 {% block navButtons %}
     {% if resource_granted('orocrm_account_create') %}
         {{ UI.addButton({
             'path' : path('orocrm_account_create'),
-            'title' : 'Create account',
-            'label' : 'Create account'
+            'title' : 'Create ' ~ 'orocrm.account.entity_label'|trans|lower,
+            'label' : 'Create ' ~ 'orocrm.account.entity_label'|trans|lower
         }) }}
     {% endif %}
 {% endblock %}

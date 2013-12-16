@@ -21,7 +21,6 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  *  routeName="orocrm_sales_opportunity_index",
  *  routeView="orocrm_sales_opportunity_view",
  *  defaultValues={
- *      "entity"={"label"="Opportunity", "plural_label"="Opportunities"},
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",

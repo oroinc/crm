@@ -1,13 +1,13 @@
 oro_menu_config:
     items:
         customers_tab:
-            label: 'Customers'
+            label: Customers
             uri: '#'
             extras:
                 position: 10
         account_list:
-            label: 'Accounts'
-            route: 'orocrm_account_index'
+            label: orocrm.account.entity_plural_label
+            route: orocrm_account_index
             extras:
                 routes: ['orocrm_account_*']
                 description: List of accounts
