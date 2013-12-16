@@ -14,18 +14,28 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
          */
         route: 'orocrm_magento_soap_check',
         url:   null,
+        id: null,
 
         resultTemplate: _.template(
             '<div class="alert alert-<%= type %> connection-status"><%= message %></div>'
         ),
 
         initialize: function (options) {
-            var id = options.transportEntityId || null;
-            this.url = routing.generate(this.route, {id: id});
+            this.id = options.transportEntityId || null;
+            this.url = this.getUrl();
 
             if (!options.websiteSelectEl || !options.websitesListEl, !options.isExtensionInstalledEl) {
                 throw  new TypeError('Missing required options');
             }
+        },
+
+        getUrl: function(type) {
+            var params = {id: this.id};
+            if (type !== undefined) {
+                params.type = type;
+            }
+
+            return routing.generate(this.route, params);
         },
 
         /**
@@ -35,6 +45,13 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
          */
         processClick: function (e) {
             var data = this.$el.parents('form').serializeArray();
+            var typeData = _.filter(data, function (field) {
+                return field.name.indexOf('[type]') !== -1;
+            });
+            if (typeData.length) {
+                typeData = typeData[0].value;
+            }
+
             data = _.filter(data, function (field) {
                 return field.name.indexOf('[transport]') !== -1;
             });
@@ -46,7 +63,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
             if (navigation) {
                 navigation.loadingMask.show();
             }
-            $.post(this.url, data, _.bind(this.responseHandler, this), 'json')
+            $.post(this.getUrl(typeData), data, _.bind(this.responseHandler, this), 'json')
                 .always(_.bind(function (respose, status) {
                     if (navigation) {
                         navigation.loadingMask.hide();
@@ -78,6 +95,16 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
                 });
                 $websiteSelectEl.trigger('change');
                 $isExtensionInstalledEl.val(res.isExtensioInstalled || false ? 1 : 0);
+            }
+
+            if (success && res.notSupported) {
+                var connectors = res.notSupported;
+                var form = this.$el.parents('form');
+                for (var key in connectors) {
+                    form.find('#oro_integration_channel_form_connectors [value=' + key + ']')
+                        .parent('div')
+                        .remove();
+                }
             }
 
             this.renderResult(success ? 'success' : 'error', message);

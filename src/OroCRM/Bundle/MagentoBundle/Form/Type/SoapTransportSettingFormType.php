@@ -4,18 +4,14 @@ namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\IntegrationBundle\Provider\TransportTypeInterface;
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
-use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\IntegrationBundle\Provider\ConnectorTypeInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
+
 use OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber;
+use OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapConnectorsFormSubscriber;
 
 class SoapTransportSettingFormType extends AbstractType
 {
@@ -47,44 +43,7 @@ class SoapTransportSettingFormType extends AbstractType
     {
         $builder->addEventSubscriber($this->subscriber);
 
-        $registry = $this->registry;
-        $closure  = function ($data, FormInterface $form) use ($registry) {
-            if ($data != true
-                && $form->getParent()
-                && $form->getParent()->getConfig()->getType()->getInnerType() instanceof ChannelType
-            ) {
-                $connectors = $form->getParent()->get('connectors');
-                if ($connectors) {
-                    $config = $connectors->getConfig()->getOptions();
-                    unset($config['choice_list']);
-                    unset($config['choices']);
-                } else {
-                    $config = [];
-                }
-
-                if (array_key_exists('auto_initialize', $config)) {
-                    $config['auto_initialize'] = false;
-                }
-
-                $types        = $registry->getRegisteredConnectorsTypes('magento');
-                $allowedTypes = $types->filter(
-                    function (ConnectorTypeInterface $connector) {
-                        return !$connector instanceof ExtensionAwareInterface;
-                    }
-                );
-
-                $allowedTypeKeys   = $allowedTypes->getKeys();
-                $allowedTypeValues = $allowedTypes->map(
-                    function (ConnectorTypeInterface $connector) {
-                        return $connector->getLabel();
-                    }
-                )->toArray();
-
-                $allowedTypesChoices = array_combine($allowedTypeKeys, $allowedTypeValues);
-                $form->getParent()
-                    ->add('connectors', 'choice', array_merge($config, ['choices' => $allowedTypesChoices]));
-            }
-        };
+        $subscriber = new SoapConnectorsFormSubscriber($this->registry);
 
         $builder->add('wsdlUrl', 'text', ['label' => 'SOAP WSDL Url', 'required' => true]);
         $builder->add('apiUser', 'text', ['label' => 'SOAP API User', 'required' => true]);
@@ -112,24 +71,9 @@ class SoapTransportSettingFormType extends AbstractType
             $builder->create('websites', 'hidden')
                 ->addViewTransformer(new ArrayToJsonTransformer())
         )->add(
-            $builder->create('isExtensionInstalled', 'hidden')
-                ->addEventListener(
-                    FormEvents::PRE_SET_DATA,
-                    function (FormEvent $event) use ($closure) {
-                        $form = $event->getForm()->getParent();
-                        $data = $event->getData();
-
-                        $closure($data, $form);
-                    }
-                )->addEventListener(
-                    FormEvents::PRE_SUBMIT,
-                    function (FormEvent $event) use ($closure) {
-                        $form = $event->getForm()->getParent();
-                        $data = $event->getData();
-
-                        $closure($data, $form);
-                    }
-                )
+            $builder
+                ->create('isExtensionInstalled', 'hidden')
+                ->addEventSubscriber($subscriber)
         );
     }
 

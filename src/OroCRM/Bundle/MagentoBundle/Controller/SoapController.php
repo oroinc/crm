@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
 use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
@@ -39,7 +40,7 @@ class SoapController extends Controller
 
         /** @var MagentoSoapTransport $transportEntity */
         $transportEntity      = $form->getData();
-        $websites             = [];
+        $websites             = $supportedConnectors = [];
         $isExtensionInstalled = false;
         try {
             $result = $transport->init($transportEntity->getSettingsBag());
@@ -47,8 +48,25 @@ class SoapController extends Controller
                 $stores   = $transport->call(StoreConnector::ACTION_STORE_LIST);
                 $websites = $this->get('orocrm_magento.converter.stores_to_website')->convert($stores);
 
-                // @TODO FIXME
-                $isExtensionInstalled = true;
+                $isExtensionInstalled = $transport->call(StoreConnector::ACTION_PING);
+                $isExtensionInstalled = !empty($isExtensionInstalled->version);
+
+                if ($type = $request->get('type', false)) {
+                    $connectors = $this->get('oro_integration.manager.types_registry')
+                        ->getRegisteredConnectorsTypes($type);
+
+                    if ($isExtensionInstalled) {
+                        $connectors = $connectors->filter(
+                            function (AbstractConnector $item) use ($isExtensionInstalled) {
+                                return $item->isExtensionRequired() && !$isExtensionInstalled;
+                            }
+                        );
+                    }
+
+
+
+
+                }
             }
         } catch (\Exception $e) {
             $result = false;
@@ -56,9 +74,9 @@ class SoapController extends Controller
 
         return new JsonResponse(
             [
-                'success'             => $result,
-                'websites'            => $websites,
-                'isExtensioInstalled' => $isExtensionInstalled
+                'success'              => $result,
+                'websites'             => $websites,
+                'isExtensioInstalled' => $isExtensionInstalled,
             ]
         );
     }
