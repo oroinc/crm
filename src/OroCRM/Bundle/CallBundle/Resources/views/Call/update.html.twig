@@ -32,10 +32,10 @@
         form_row(form.relatedAccount, {label: 'orocrm.call.related_account.label'|trans}),
         form_row(form.relatedContact, {label: 'orocrm.call.related_contact.label'|trans}),
         form_row(form.contactPhoneNumber, {label: 'orocrm.call.contact_phone_number.label'|trans}),
-        form_widget(form.phoneNumber),
+        form_widget(form.phoneNumber, {label: 'orocrm.call.phone_number.label'|trans}),
         form_row(form.direction, {label: 'orocrm.call.direction.label'|trans}),
         form_row(form.duration, {label: 'orocrm.call.duration.label'|trans}),
-        form_row(form.callStatus, {label: ''|trans}),
+        form_row(form.callStatus, {label: 'orocrm.call.call_status.label'|trans}),
         form_rest(form)
     ]) %}
 
@@ -89,7 +89,7 @@
         {% set breadcrumbs = {
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_call_index'),
-            'indexLabel': 'orocrm.call.entity_label'|trans,
+            'indexLabel': 'orocrm.call.entity_plural_label'|trans,
             'entityTitle': 'Log call'|trans
         }
         %}

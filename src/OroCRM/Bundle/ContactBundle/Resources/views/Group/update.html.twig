@@ -65,7 +65,7 @@
         {% set gridData = dataGrid.renderGrid(gridName, gridParams, { cssClass: 'inner-grid' }) %}
         {% set dataBlocks = dataBlocks|merge(
             [{
-                'title' : 'Contacts',
+                'title' : 'orocrm.contact.entity_plural_label'|trans,
                 'subblocks':
                 [
                     {

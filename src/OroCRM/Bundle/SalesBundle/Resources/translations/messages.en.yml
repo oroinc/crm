@@ -11,36 +11,11 @@ orocrm:
                 InProgressCount:
                     name: In Progress Count
                     hint: Number of 'in progress' items
-
-orocrm.sales.opportunity.datagrid.name: Opportunity Name
-orocrm.sales.opportunity.datagrid.contact_name: Potential Customer
-orocrm.sales.opportunity.datagrid.close_date: Close Date
-orocrm.sales.opportunity.datagrid.probability: Probability
-orocrm.sales.opportunity.datagrid.status: Status
-orocrm.sales.opportunity.datagrid.email: Email
-orocrm.sales.opportunity.datagrid.view: View
-orocrm.sales.opportunity.datagrid.update: Update
-orocrm.sales.opportunity.datagrid.delete: Delete
-
-orocrm.sales_lead.datagrid.status: Status
-orocrm.sales_lead.datagrid.name: Lead Name
-orocrm.sales_lead.datagrid.first_name: First Name
-orocrm.sales_lead.datagrid.last_name: Last Name
-orocrm.sales_lead.datagrid.email: Email
-orocrm.sales_lead.datagrid.phone: Phone
-orocrm.sales_lead.datagrid.country: Country
-orocrm.sales_lead.datagrid.region: Region
-orocrm.sales_lead.datagrid.postal_code: Postal Code
-orocrm.sales_lead.datagrid.view: View
-orocrm.sales_lead.datagrid.update: Update
-orocrm.sales_lead.datagrid.delete: Delete
-
-orocrm.sales.controller.lead.saved.message: "Lead saved"
-orocrm.sales.controller.opportunity.saved.message: "Opportunity saved"
-
-
-orocrm:
     sales:
+        controller:
+            lead.saved.message: "Lead saved"
+            opportunity.saved.message: "Opportunity saved"
+
         #
         # OroCRM/Bundle/SalesBundle/Entity/LeadStatus.php
         #
@@ -76,9 +51,15 @@ orocrm:
             updated_at.label:     Updated
             status.label:         Status
             close_reason.label:   Close reason
-            contact.label:        Contact
+            contact.label:        Potential Customer
             account.label:        Account
             owner.label:          Owner
+
+            datagrid:
+                view: View
+                update: Update
+                delete: Delete
+
         #
         # OroCRM/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
@@ -115,3 +96,12 @@ orocrm:
             account.label:        Account
             owner.label:          Owner
             address.label:        Address
+
+            datagrid:
+                country: Country
+                region: Region
+                postal_code: Postal Code
+                view: View
+                update: Update
+                delete: Delete
+
