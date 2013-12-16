@@ -23,18 +23,20 @@
             <form id="{{ form.vars.name }}" action="{{ path('orocrm_call_create', {'no_redirect': true }) }}" method="post">
                 <fieldset class="form form-horizontal">
                     <div class="span6">
-                        {% if form.owner is defined %}{{ form_row(form.owner) }}{% endif %}
-                        {{ form_row(form.subject, {'label': 'Subject'|trans}) }}
-                        {{ form_row(form.notes, {'label': 'Notes'|trans}) }}
-                        {{ form_row(form.callDateTime, {'label': 'Call Date & Time'|trans}) }}
+                        {% if form.owner is defined %}
+                            {{ form_row(form.owner, {label: 'orocrm.call.owner.label'|trans}) }}
+                        {% endif %}
+                        {{ form_row(form.subject, {'label': 'orocrm.call.subject.label'|trans}) }}
+                        {{ form_row(form.notes, {'label': 'orocrm.call.notes.label'|trans}) }}
+                        {{ form_row(form.callDateTime, {'label': 'orocrm.call.call_date_time.label'|trans}) }}
                     </div>
                     <div class="span6">
-                        {{ form_row(form.relatedAccount, {'label': 'Related To'|trans}) }}
-                        {{ form_row(form.relatedContact, {'label': 'Related Contact'|trans}) }}
-                        {{ form_row(form.contactPhoneNumber, {'label': 'Phone Number'|trans}) }}
+                        {{ form_row(form.relatedAccount, {'label': 'orocrm.call.related_account.label'|trans}) }}
+                        {{ form_row(form.relatedContact, {'label': 'orocrm.call.related_contact.label'|trans}) }}
+                        {{ form_row(form.contactPhoneNumber, {'label': 'orocrm.call.contact_phone_number.label'|trans}) }}
                         {{ form_widget(form.phoneNumber) }}
-                        {{ form_row(form.direction, {'label': 'Direction'|trans}) }}
-                        {{ form_row(form.duration, {'label': 'Duration'|trans}) }}
+                        {{ form_row(form.direction, {'label': 'orocrm.call.direction.label'|trans}) }}
+                        {{ form_row(form.duration, {'label': 'orocrm.call.duration.label'|trans}) }}
                         {{ form_row(form.callStatus) }}
                     </div>
                     {{ form_rest(form) }}
