@@ -81,6 +81,15 @@ class Opportunity extends ExtendOpportunity
     protected $account;
 
     /**
+     * @var Lead
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead")
+     * @ORM\JoinColumn(name="lead_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
+     **/
+    protected $lead;
+
+    /**
      * @var User
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
@@ -182,6 +191,24 @@ class Opportunity extends ExtendOpportunity
     public function getAccount()
     {
         return $this->account;
+    }
+
+    /**
+     * @param Lead $lead
+     * @return Opportunity
+     */
+    public function setLead($lead)
+    {
+        $this->lead = $lead;
+        return $this;
+    }
+
+    /**
+     * @return Lead
+     */
+    public function getLead()
+    {
+        return $this->lead;
     }
 
     /**
