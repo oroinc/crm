@@ -216,6 +216,7 @@ workflows:
                             name: $opportunity_name
                             contact: $lead.contact
                             account: $account
+                            lead: $lead
                     - @find_entity: # set status "In progress" to opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
