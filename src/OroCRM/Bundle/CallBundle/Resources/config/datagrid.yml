@@ -24,11 +24,11 @@ datagrid:
             accountName:
                 label: orocrm.call.datagrid.account_name
             subject:
-                label: orocrm.call.datagrid.subject
+                label: orocrm.call.subject.label
             phone:
-                label: orocrm.call.datagrid.phone
+                label: orocrm.call.phone_number.label
             dateTime:
-                label: orocrm.call.datagrid.date_time
+                label: orocrm.call.call_date_time.label
                 frontend_type: datetime
         filters:
             columns:
@@ -114,11 +114,11 @@ datagrid:
             accountName:
                 label: orocrm.call.datagrid.account_name
             subject:
-                label: orocrm.call.datagrid.subject
+                label: orocrm.call.subject.label
             phone:
-                label: orocrm.call.datagrid.phone
+                label: orocrm.call.phone_number.label
             dateTime:
-                label: orocrm.call.datagrid.date_time
+                label: orocrm.call.call_date_time.label
                 frontend_type: datetime
         filters:
             columns:

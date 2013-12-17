@@ -20,9 +20,6 @@ orocrm:
         datagrid:
             contact_name: 'Contact name'
             account_name: 'Account name'
-            subject: 'Subject'
-            phone: 'Phone'
-            date_time: 'Call date'
 
         #
         # OroCRM/Bundle/CallBundle/Entity/Call

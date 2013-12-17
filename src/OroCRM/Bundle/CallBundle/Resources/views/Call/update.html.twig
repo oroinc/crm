@@ -16,9 +16,9 @@
     {% set id = 'call-log' %}
 
     {% if form.vars.value.id %}
-        {% set title = 'Edit'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans %}
+        {% set title = 'Edit'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower %}
     {% else %}
-        {% set title = 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans %}
+        {% set title = 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower %}
     {% endif %}
 
     {% set formFields = [] %}

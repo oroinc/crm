@@ -39,22 +39,22 @@ datagrid:
                 params:     [ id ]
         columns:
             name:
-                label:   orocrm.account.datagrid.account_name
+                label:   orocrm.account.name.label
             contactFirstName:
-                label:   First Name
+                label:   orocrm.contact.first_name.label
             contactLastName:
-                label:   Last Name
+                label:   orocrm.contact.last_name.label
             contactEmail:
-                label:   Email
+                label:   orocrm.contact.contactemail.email.label
             contactPhone:
-                label:   Phone
+                label:   orocrm.contact.contactphone.phone.label
             ownerName:
-                label:   Owner
+                label:   orocrm.account.owner.label
             createdAt:
-                label:   Created At
+                label:   orocrm.account.created_at.label
                 frontend_type: datetime
             updatedAt:
-                label:    Updated At
+                label:   orocrm.account.updated_at.label
                 frontend_type: datetime
         sorters:
             columns:
@@ -179,30 +179,30 @@ datagrid:
                         - :account MEMBER OF c.accounts
         columns:
             first_name:
-                label: orocrm.contact.datagrid.first_name
+                label: orocrm.contact.first_name.label
                 data_name: firstName
             last_name:
-                label: orocrm.contact.datagrid.last_name
+                label: orocrm.contact.last_name.label
                 data_name: lastName
             primaryEmail:
-                label: orocrm.contact.datagrid.email
+                label: orocrm.contact.email.label
             primaryPhone:
-                label: orocrm.contact.datagrid.phone
+                label: orocrm.contact.contactphone.phone.label
             groupLabelsAsString:
-                label: orocrm.contact.datagrid.groups
+                label: orocrm.contact.groups.label
             contactSourceLabel:
-                label: orocrm.contact.datagrid.source
+                label: orocrm.contact.source.label
             countryName:
-                label: orocrm.contact.datagrid.country
+                label: orocrm.contact.contactaddress.country.label
             regionLabel:
-                label: orocrm.contact.datagrid.region
+                label: orocrm.contact.contactaddress.state.label
             addressPostalCode:
-                label: orocrm.contact.datagrid.postal_code
+                label: orocrm.contact.contactaddress.postal_code.label
             createdAt:
-                label: orocrm.contact.datagrid.created_at
+                label: orocrm.contact.created_at.label
                 frontend_type: datetime
             updatedAt:
-                label: orocrm.contact.datagrid.updated_at
+                label: orocrm.contact.updated_at.label
                 frontend_type: datetime
         sorters:
             columns:

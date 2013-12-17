@@ -56,9 +56,9 @@
 
 {% block content_data %}
     {% set id = 'navbarAccountsUpdate' %}
-    {% set dataSubBlocks = [UI.attibuteRow('orocrm.account.name.label'|trans, entity.name)] %}
+    {% set dataSubBlocks = [UI.attibuteRow('orocrm.account.name.label', entity.name)] %}
     {% if resource_granted('oro_tag_view_tag_cloud') %}
-        {% set dataSubBlocks = dataSubBlocks|merge([UI.renderAttribute('Tags', _tag.renderView(entity))]) %}
+        {% set dataSubBlocks = dataSubBlocks|merge([UI.renderAttribute('oro.tag.entity_plural_label', _tag.renderView(entity))]) %}
     {% endif %}
 
     {% set dataBlocks =
@@ -160,7 +160,7 @@
 
     {% if resource_granted('orocrm_call_view') %}
         {% set dataBlocks = dataBlocks|merge([{
-            'title' : 'Calls',
+            'title' : 'orocrm.call.entity_plural_label'|trans,
             'subblocks': [
                 {
                     'title' : null,
