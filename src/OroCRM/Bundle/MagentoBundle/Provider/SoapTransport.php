@@ -61,6 +61,23 @@ class SoapTransport extends BaseSOAPTransport implements TransportTypeInterface
     }
 
     /**
+     * Return true if oro extension available on remote instance
+     *
+     * @return bool
+     */
+    public function isExtensionAvailable()
+    {
+        try {
+            $isExtensionInstalled = $this->call(StoreConnector::ACTION_PING);
+            $isExtensionInstalled = !empty($isExtensionInstalled->version);
+        } catch (\Exception $e) {
+            $isExtensionInstalled = false;
+        }
+
+        return $isExtensionInstalled;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getLabel()

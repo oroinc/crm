@@ -60,8 +60,7 @@ class SoapConnectorsFormSubscriber implements EventSubscriberInterface
      */
     protected function closure($data, FormInterface $form)
     {
-        if ($data != true
-            && $form->getParent()
+        if ($form->getParent()
             && $form->getParent()->getConfig()->getType()->getInnerType() instanceof ChannelType
         ) {
             $connectors = $form->getParent()->get('connectors');
@@ -77,21 +76,13 @@ class SoapConnectorsFormSubscriber implements EventSubscriberInterface
                 $config['auto_initialize'] = false;
             }
 
-            $types        = $this->typeRegistry->getRegisteredConnectorsTypes('magento');
-            $allowedTypes = $types->filter(
-                function (ConnectorTypeInterface $connector) {
-                    return !$connector instanceof ExtensionAwareInterface;
+            $allowedTypesChoices = $this->typeRegistry->getAvailableConnectorsTypesChoiceList(
+                'magento',
+                function (ConnectorTypeInterface $connector) use ($data) {
+                    return $connector instanceof ExtensionAwareInterface ? $data : true;
                 }
             );
 
-            $allowedTypeKeys   = $allowedTypes->getKeys();
-            $allowedTypeValues = $allowedTypes->map(
-                function (ConnectorTypeInterface $connector) {
-                    return $connector->getLabel();
-                }
-            )->toArray();
-
-            $allowedTypesChoices = array_combine($allowedTypeKeys, $allowedTypeValues);
             $form->getParent()
                 ->add('connectors', 'choice', array_merge($config, ['choices' => $allowedTypesChoices]));
         }

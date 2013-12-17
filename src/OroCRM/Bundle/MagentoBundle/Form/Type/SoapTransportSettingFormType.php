@@ -43,8 +43,6 @@ class SoapTransportSettingFormType extends AbstractType
     {
         $builder->addEventSubscriber($this->subscriber);
 
-        $subscriber = new SoapConnectorsFormSubscriber($this->registry);
-
         $builder->add('wsdlUrl', 'text', ['label' => 'SOAP WSDL Url', 'required' => true]);
         $builder->add('apiUser', 'text', ['label' => 'SOAP API User', 'required' => true]);
         $builder->add('apiKey', 'password', ['label' => 'SOAP API Key', 'required' => true]);
@@ -73,7 +71,7 @@ class SoapTransportSettingFormType extends AbstractType
         )->add(
             $builder
                 ->create('isExtensionInstalled', 'hidden')
-                ->addEventSubscriber($subscriber)
+                ->addEventSubscriber(new SoapConnectorsFormSubscriber($this->registry))
         );
     }
 

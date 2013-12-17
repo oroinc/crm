@@ -15,9 +15,18 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
         route: 'orocrm_magento_soap_check',
         url:   null,
         id: null,
+        connectorsEl: '#oro_integration_channel_form_connectors',
 
         resultTemplate: _.template(
             '<div class="alert alert-<%= type %> connection-status"><%= message %></div>'
+        ),
+
+        connectorTemplate: _.template(
+            '<div class="oro-clearfix">' +
+                '<input type="checkbox" id="oro_integration_channel_form_connectors_<%= i %>" ' +
+                    'name="oro_integration_channel_form[connectors][]" value="<%= name %>">' +
+                '<label for="oro_integration_channel_form_connectors_<%= i %>"><%= label %></label>' +
+            '</div>'
         ),
 
         initialize: function (options) {
@@ -94,16 +103,17 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
                     $websiteSelectEl.append($("<option />").val(website.id).text(website.label));
                 });
                 $websiteSelectEl.trigger('change');
-                $isExtensionInstalledEl.val(res.isExtensioInstalled || false ? 1 : 0);
+                $isExtensionInstalledEl.val(res.isExtensionInstalled || false ? 1 : 0);
             }
 
-            if (success && res.notSupported) {
-                var connectors = res.notSupported;
+            if (success && res.connectors) {
+                var connectors = res.connectors;
                 var form = this.$el.parents('form');
+                form.find(this.connectorsEl).empty();
+                var i = 0;
                 for (var key in connectors) {
-                    form.find('#oro_integration_channel_form_connectors [value=' + key + ']')
-                        .parent('div')
-                        .remove();
+                    form.find(this.connectorsEl).append(this.connectorTemplate({name: key, label: connectors[key], i: i}));
+                    i++;
                 }
             }
 

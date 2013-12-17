@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller;
 
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorTypeInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -40,32 +42,25 @@ class SoapController extends Controller
 
         /** @var MagentoSoapTransport $transportEntity */
         $transportEntity      = $form->getData();
-        $websites             = $supportedConnectors = [];
+        $websites             = $allowedTypesChoices = [];
         $isExtensionInstalled = false;
         try {
             $result = $transport->init($transportEntity->getSettingsBag());
             if ($result) {
                 $stores   = $transport->call(StoreConnector::ACTION_STORE_LIST);
                 $websites = $this->get('orocrm_magento.converter.stores_to_website')->convert($stores);
+                $isExtensionInstalled = $transport->isExtensionAvailable();
 
-                $isExtensionInstalled = $transport->call(StoreConnector::ACTION_PING);
-                $isExtensionInstalled = !empty($isExtensionInstalled->version);
-
-                if ($type = $request->get('type', false)) {
-                    $connectors = $this->get('oro_integration.manager.types_registry')
-                        ->getRegisteredConnectorsTypes($type);
-
-                    if ($isExtensionInstalled) {
-                        $connectors = $connectors->filter(
-                            function (AbstractConnector $item) use ($isExtensionInstalled) {
-                                return $item->isExtensionRequired() && !$isExtensionInstalled;
-                            }
-                        );
-                    }
-
-
-
-
+                $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')
+                    ->getAvailableConnectorsTypesChoiceList(
+                        'magento',
+                        function (ConnectorTypeInterface $connector) use ($isExtensionInstalled) {
+                            return $connector instanceof ExtensionAwareInterface ? $isExtensionInstalled : true;
+                        }
+                    );
+                $translator = $this->get('translator');
+                foreach ($allowedTypesChoices as $name => $val) {
+                    $allowedTypesChoices[$name] = $translator->trans($val);
                 }
             }
         } catch (\Exception $e) {
@@ -76,7 +71,8 @@ class SoapController extends Controller
             [
                 'success'              => $result,
                 'websites'             => $websites,
-                'isExtensioInstalled' => $isExtensionInstalled,
+                'isExtensionInstalled'  => $isExtensionInstalled,
+                'connectors'           => $allowedTypesChoices,
             ]
         );
     }
