@@ -5,6 +5,7 @@ orocrm:
                 view:
                     label: View
             columns:
+                originId:         ID
                 first_name:       First Name
                 last_name:        Last Name
                 email:            Email
