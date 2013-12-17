@@ -36,7 +36,7 @@ class DashboardController extends Controller
     /**
      * @Route(
      *      "/opportunity_state/{widget}",
-     *      name="orocrm_sales_dashboard_opportunity_by_state",
+     *      name="orocrm_sales_dashboard_opportunity_by_state_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
      * @Template("OroCRMSalesBundle:Dashboard:opportunityByState.html.twig")
