@@ -7,6 +7,7 @@
     {% if resource_granted('orocrm_sales_opportunity_update') %}
         {{ UI.button({
             'path' : path('orocrm_sales_opportunity_update', { 'id': entity.id }),
+            'aClass': 'edit-button',
             'iClass' : 'icon-edit ',
             'title' : 'Update opportunity',
             'label' : 'Edit'

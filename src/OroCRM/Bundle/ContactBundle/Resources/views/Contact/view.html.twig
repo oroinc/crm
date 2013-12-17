@@ -33,6 +33,7 @@
     {% if resource_granted('orocrm_contact_update') %}
         {{ UI.button({
             'path' : path('orocrm_contact_update', { 'id': entity.id }),
+            'aClass': 'edit-button',
             'iClass' : 'icon-edit ',
             'title' : 'Update contact'|trans,
             'label' : 'Edit'|trans

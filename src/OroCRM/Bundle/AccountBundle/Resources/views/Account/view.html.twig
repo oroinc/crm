@@ -18,6 +18,7 @@
     {% if resource_granted('orocrm_account_update') %}
         {{ UI.button({
             'path': path('orocrm_account_update', {'id': entity.id}),
+            'aClass': 'edit-button',
             'iClass': 'icon-edit',
             'title': 'Edit account'|trans,
             'label': 'Edit'|trans
