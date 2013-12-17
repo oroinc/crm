@@ -14,56 +14,66 @@ use Doctrine\ORM\Mapping as ORM;
 class CallDirection
 {
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="name", type="string", length=32)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="direction", type="string", length=255)
+     * @ORM\Column(name="label", type="string", length=255, unique=true)
      */
-    protected $direction;
+    protected $label;
 
     /**
-     * Get id
-     *
-     * @return integer 
+     * @param string $name
      */
-    public function getId()
+    public function __construct($name)
     {
-        return $this->id;
+        $this->name = $name;
     }
 
     /**
-     * Set direction
+     * Get type name
      *
-     * @param string $direction
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set address type label
+     *
+     * @param string $label
      * @return CallDirection
      */
-    public function setDirection($direction)
+    public function setLabel($label)
     {
-        $this->direction = $direction;
-    
+        $this->label = $label;
+
         return $this;
     }
 
     /**
-     * Get direction
+     * Get address type label
      *
-     * @return string 
+     * @return string
      */
-    public function getDirection()
+    public function getLabel()
     {
-        return $this->direction;
+        return $this->label;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
-        return $this->direction;
+        return (string) $this->label;
     }
 }
