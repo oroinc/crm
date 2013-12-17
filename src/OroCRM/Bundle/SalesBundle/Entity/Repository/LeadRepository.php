@@ -3,9 +3,24 @@
 namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Oro\Bundle\EntityBundle\ORM\EntityConfigAwareRepositoryInterface;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 
-class LeadRepository extends EntityRepository
+class LeadRepository extends EntityRepository implements EntityConfigAwareRepositoryInterface
 {
+    /**
+     * @var ConfigManager
+     */
+    protected $entityConfigManager;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEntityConfigManager(ConfigManager $entityConfigManager)
+    {
+        $this->entityConfigManager = $entityConfigManager;
+    }
+
     /**
      * Returns top $limit opportunities and grouped by lead source and calculate
      * a fraction of opportunities for each lead source
@@ -15,11 +30,18 @@ class LeadRepository extends EntityRepository
      */
     public function getOpportunitiesByLeadSource($limit = 10)
     {
+        $leadSourceFieldId = $this->entityConfigManager
+            ->getConfigFieldModel($this->getClassName(), "extend_source")
+            ->getId();
+
         // get top $limit - 1 rows
         $qb     = $this->createQueryBuilder('l')
-            ->select('count(o.id) as itemCount, l.industry as label')
+            ->select('count(o.id) as itemCount, opt.id as source_id, opt.label as label')
             ->leftJoin('l.opportunities', 'o')
-            ->groupBy('l.industry')
+            ->leftJoin('OroEntityConfigBundle:OptionSetRelation', 'osr', 'WITH', 'osr.entity_id = l.id')
+            ->leftJoin('osr.field', 'f', 'WITH', 'f.id = ' . $leadSourceFieldId)
+            ->leftJoin('osr.option', 'opt')
+            ->groupBy('opt.id, opt.label')
             ->setMaxResults($limit - 1);
         $result = $qb->getQuery()->getArrayResult();
 
@@ -32,22 +54,26 @@ class LeadRepository extends EntityRepository
                 $hasUnclassifiedSource = true;
                 $row['label']         = 'Unclassified';
             } else {
-                $sources[] = $row['label'];
+                $sources[] = $row['source_id'];
             }
             $totalItemCount += $row['itemCount'];
         }
 
         // get Others if needed
-        if ($result === $limit - 1) {
+        if (count($result) === $limit - 1) {
             $qb = $this->createQueryBuilder('l')
                 ->select('count(o.id) as itemCount')
-                ->leftJoin('l.opportunities', 'o');
-            $qb->where($qb->expr()->notIn('l.industry', $sources));
+                ->leftJoin('l.opportunities', 'o')
+                ->leftJoin('OroEntityConfigBundle:OptionSetRelation', 'osr', 'WITH', 'osr.entity_id = l.id')
+                ->leftJoin('osr.field', 'f', 'WITH', 'f.id = ' . $leadSourceFieldId)
+                ->leftJoin('osr.option', 'opt');
+            $qb->where($qb->expr()->notIn('opt.id', $sources));
             if (!$hasUnclassifiedSource) {
-                $qb->orWhere($qb->expr()->isNull('l.industry'));
+                $qb->orWhere($qb->expr()->isNull('opt.id'));
             }
             $others   = $qb->getQuery()->getArrayResult();
             if (!empty($others)) {
+                $others = reset($others);
                 $result[] = array_merge(['label' => 'Others'], $others);
                 $totalItemCount += $others['itemCount'];
             }

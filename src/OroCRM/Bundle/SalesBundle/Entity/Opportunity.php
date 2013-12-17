@@ -83,7 +83,7 @@ class Opportunity extends ExtendOpportunity
     /**
      * @var Lead
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead", inversedBy="opportunities")
      * @ORM\JoinColumn(name="lead_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      **/
