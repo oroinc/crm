@@ -108,6 +108,7 @@ datagrid:
             query:
                 select:
                     - c.id
+                    - c.originId
                     - c.email
                     - c.itemsQty
                     - c.quoteCurrencyCode
@@ -127,6 +128,8 @@ datagrid:
                     and:
                         - c.channel = :channelId
         columns:
+            originId:
+                label: orocrm.magento.datagrid.columns.originId
             itemsQty:
                 label: orocrm.magento.datagrid.columns.qty
             quoteCurrencyCode:
@@ -153,6 +156,7 @@ datagrid:
                 params: [ id ]
         sorters:
             columns:
+                originId:             { data_name: c.originId }
                 itemsQty:             { data_name: c.itemsQty }
                 quoteCurrencyCode:    { data_name: c.quoteCurrencyCode }
                 email:                { data_name: c.email }
@@ -165,6 +169,9 @@ datagrid:
                 grandTotal:  DESC
         filters:
             columns:
+                originId:
+                    type: number
+                    data_name: c.originId
                 email:
                     type: string
                     data_name: c.email
