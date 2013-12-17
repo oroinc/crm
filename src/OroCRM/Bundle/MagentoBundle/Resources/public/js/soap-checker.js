@@ -15,7 +15,6 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
         route: 'orocrm_magento_soap_check',
         url:   null,
         id: null,
-        connectorsEl: '#oro_integration_channel_form_connectors',
 
         resultTemplate: _.template(
             '<div class="alert alert-<%= type %> connection-status"><%= message %></div>'
@@ -33,7 +32,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
             this.id = options.transportEntityId || null;
             this.url = this.getUrl();
 
-            if (!options.websiteSelectEl || !options.websitesListEl, !options.isExtensionInstalledEl) {
+            if (!options.websiteSelectEl || !options.websitesListEl, !options.isExtensionInstalledEl, !options.connectorsEl) {
                 throw  new TypeError('Missing required options');
             }
         },
@@ -109,10 +108,10 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
             if (success && res.connectors) {
                 var connectors = res.connectors;
                 var form = this.$el.parents('form');
-                form.find(this.connectorsEl).empty();
+                form.find(this.options.connectorsEl).empty();
                 var i = 0;
                 for (var key in connectors) {
-                    form.find(this.connectorsEl).append(this.connectorTemplate({name: key, label: connectors[key], i: i}));
+                    form.find(this.options.connectorsEl).append(this.connectorTemplate({name: key, label: connectors[key], i: i}));
                     i++;
                 }
             }

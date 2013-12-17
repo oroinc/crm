@@ -42,7 +42,8 @@
                 transportEntityId: {{ form.parent.vars.value ? form.parent.vars.value.id|json_encode|raw : 'null' }},
                 websiteSelectEl:   '#{{ form.vars.id }}',
                 websitesListEl:    '#{{ form.parent.websites.vars.id }}',
-                isExtensionInstalledEl: '#{{ form.parent.isExtensionInstalled.vars.id }}'
+                isExtensionInstalledEl: '#{{ form.parent.isExtensionInstalled.vars.id }}',
+                connectorsEl:      '#{{ form.parent.parent.connectors.vars.id }}'
             });
         });
     </script>
