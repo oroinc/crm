@@ -1,6 +1,5 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
-{% set params = {} %}
 
 {# TODO: Move this to OroUIBundle::macros.html.twig #}
 {% macro renderRow(label, value) %}
@@ -8,27 +7,62 @@
     {{ macros.renderAttribute(label, '<p class="control-label">' ~ value|default('N/A'|trans) ~ '</p>') }}
 {% endmacro %}
 
-<div class="widget-content cart-info-widget form-horizontal box-content row-fluid">
+<div class="widget-content order-info-widget form-horizontal box-content row-fluid">
     <div class="span6">
-        {% set email = entity.email %}
-        {% if entity.email != null %}
-            {% set email = '<a href="mailto: ' ~ email ~ '" title="' ~ email ~ '">' ~ email ~ '</a>'%}
-        {% endif %}
-        {{ _self.renderRow('Email'|trans, email) }}
         <div class="control-group">
-            <label class="control-label">{% trans %}Items qty{% endtrans %}</label>
-            <div class="controls">
-                <div class="clearfix-oro">
-                    <p class="control-label">
-                        {{ entity.itemsQty }}
-                    </p>
-                </div>
-            </div>
-            </div>
+            {{ _self.renderRow('Status'|trans, entity.status|trans) }}
+            {{ _self.renderRow('Currency'|trans, entity.currency|trans) }}
+            {{ _self.renderRow('Total Amount'|trans, entity.totalAmount|oro_format_decimal) }}
+            {{ _self.renderRow('Discount Amount'|trans, entity.discountAmount|oro_format_decimal) }}
+            {{ _self.renderRow('Tax Amount'|trans, entity.taxAmount|oro_format_decimal) }}
+            {{ _self.renderRow('Shipping Amount'|trans, entity.shippingAmount|oro_format_decimal) }}
+            {{ _self.renderRow('Total Paid Amount'|trans, entity.totalPaidAmount|oro_format_decimal) }}
+            {{ _self.renderRow('Total Invoiced Amount'|trans, entity.totalInvoicedAmount|oro_format_decimal) }}
+            {{ _self.renderRow('Total Refunded Amount'|trans, entity.totalRefundedAmount|oro_format_decimal) }}
+            {{ _self.renderRow('Total Canceled Amount'|trans, entity.totalCanceledAmount|oro_format_decimal) }}
+        </div>
     </div>
 
     <div class="span6">
+        {{ _self.renderRow('Remote Address'|trans, entity.remoteIp) }}
+        {{ _self.renderRow('Payment method'|trans, entity.paymentMethod|capitalize|trans) }}
+        {{ _self.renderRow('Payment details'|trans, entity.paymentDetails) }}
+        {{ _self.renderRow('Shipping method'|trans, entity.shippingMethod|capitalize|trans) }}
         {{ _self.renderRow('Website'|trans, entity.store.website.name) }}
         {{ _self.renderRow('Store'|trans, entity.store.name) }}
+        <div class="control-group">
+            <label class="control-label">{% trans %}Customer{% endtrans %}</label>
+            <div class="controls">
+                <div class="clearfix-oro">
+                    <p class="control-label">
+                        {% if entity.customer %}
+                            {% set customerViewGranted = resource_granted('orocrm_magento_customer_view') %}
+                            {%- if customerViewGranted -%}
+                                <a href="{{ path('orocrm_magento_customer_view', {'id': entity.customer.id}) }}">{{ entity.customer|oro_format_name|default('N/A'|trans) }}</a>
+                            {%- else -%}
+                                {{ entity.customer|oro_format_name|default('N/A'|trans) }}
+                            {%- endif -%}
+                        {% else %}
+                            {% trans %}N/A{% endtrans %}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{% trans %}Cart{% endtrans %}</label>
+            <div class="controls">
+                <div class="clearfix-oro">
+                    <p class="control-label">
+                        {% set cartViewGranted = resource_granted('orocrm_magento_cart_view') %}
+                        {% if entity.cart and cartViewGranted %}
+                            <a href="{{ path('orocrm_magento_cart_view', {'id': entity.cart.id}) }}">{{ 'view'|trans }}</a>
+                        {% else %}
+                            {% trans %}N/A{% endtrans %}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

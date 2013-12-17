@@ -44,8 +44,8 @@ class OrderController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", requirements={"id"="\d+"}))
-     * @AclAncestor("orocrm_magento_order_view")
+     * @Route("/info/{id}", name="orocrm_order_widget_info", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_cart_view")
      * @Template
      */
     public function infoAction(Order $order)
@@ -54,8 +54,8 @@ class OrderController extends Controller
     }
 
     /**
-     * @Route("/widget/grid/{id}", requirements={"id"="\d+"}))
-     * @AclAncestor("orocrm_magento_order_view")
+     * @Route("/widget/grid/{id}", name="orocrm_order_widget_items", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_cart_view")
      * @Template
      */
     public function itemsAction(Order $order)

@@ -9,16 +9,14 @@
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('orocrm_magento_cart_index', {id: entity.channel.id}),
-        'indexLabel': 'Cart'|trans,
-        'entityTitle': 'Cart'
+        'indexLabel': 'Carts'|trans,
+        'entityTitle': 'Cart #' ~ entity.originId
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
 
 {% block content_data %}
-
-
-    {% set id = 'navbarCartView' %}
+    {% set id = 'cartView' %}
     {% set dataSubBlocks = [
         oro_widget_render({
             'widgetType': 'block',
