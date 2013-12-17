@@ -3,7 +3,10 @@
 
 {% oro_title_set({params : {"%lead.name%": entity.name} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Lead' %}
-{% set title = form.vars.value.id ? entity.name ~ ' - ' ~ 'Update ' ~ 'orocrm.sales.lead.entity_label'|trans : 'New ' ~ 'orocrm.sales.lead.entity_label'|trans %}
+{% set title = form.vars.value.id
+    ? entity.name ~ ' - ' ~ 'Update ' ~ 'orocrm.sales.lead.entity_label'|trans
+    : 'New ' ~ 'orocrm.sales.lead.entity_label'|trans
+%}
 {% set formAction = form.vars.value.id ? path('orocrm_sales_lead_update', { 'id': form.vars.value.id }) : path('orocrm_sales_lead_create')  %}
 
 {% block head_script %}
@@ -95,21 +98,21 @@
         {% set formFields = formFields|merge([form_row(form.owner, {label: 'orocrm.sales.lead.owner.label'|trans})]) %}
     {% endif %}
     {% set formFields = formFields|merge([
-        form_row(form.name, {label: 'orocrm.sales.lead.name.label'|trans}),
-        form_row(form.namePrefix, {label: 'orocrm.sales.lead.name_prefix.label'|trans}),
-        form_row(form.firstName, {label: 'orocrm.sales.lead.first_name.label'|trans}),
-        form_row(form.middleName, {label: 'orocrm.sales.lead.middle_name.label'|trans}),
-        form_row(form.lastName, {label: 'orocrm.sales.lead.last_name.label'|trans}),
-        form_row(form.nameSuffix, {label: 'orocrm.sales.lead.name_suffix.label'|trans}),
-        form_row(form.contact, {label: 'orocrm.sales.lead.contact.label'|trans}),
-        form_row(form.jobTitle, {label: 'orocrm.sales.lead.job_title.label'|trans}),
-        form_row(form.phoneNumber, {label: 'orocrm.sales.lead.phone_number.label'|trans}),
-        form_row(form.email, {label: 'orocrm.sales.lead.email.label'|trans}),
-        form_row(form.account, {label: 'orocrm.sales.lead.account.label'|trans}),
-        form_row(form.companyName, {label: 'orocrm.sales.lead.company_name.label'|trans}),
-        form_row(form.website, {label: 'orocrm.sales.lead.website.label'|trans}),
-        form_row(form.numberOfEmployees, {label: 'orocrm.sales.lead.number_of_employees.label'|trans}),
-        form_row(form.industry, {label: 'orocrm.sales.lead.industry.label'|trans})
+        form_row(form.name),
+        form_row(form.namePrefix),
+        form_row(form.firstName),
+        form_row(form.middleName),
+        form_row(form.lastName),
+        form_row(form.nameSuffix),
+        form_row(form.contact),
+        form_row(form.jobTitle),
+        form_row(form.phoneNumber),
+        form_row(form.email),
+        form_row(form.account),
+        form_row(form.companyName),
+        form_row(form.website),
+        form_row(form.numberOfEmployees),
+        form_row(form.industry)
     ]) %}
 
     {% set dataBlocks = [{
