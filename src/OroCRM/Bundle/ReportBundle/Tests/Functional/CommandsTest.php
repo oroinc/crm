@@ -40,7 +40,7 @@ class CommandsTest extends WebTestCase
         $command = new ReportUpdateCommand();
         $command->setApplication($application);
         $commandTester = new CommandTester($command);
-        $commandTester->execute(array('command' => $command->getName()));
+        $commandTester->execute(array('command' => $command->getName(), '--env' => $kernel->getEnvironment()));
 
         $this->assertEquals("Update report transactional tables\r\nCompleted\r\n", $commandTester->getDisplay());
     }
