@@ -2,14 +2,15 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Form\EventListener;
 
-use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
-use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\IntegrationBundle\Provider\ConnectorTypeInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
+
+use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorTypeInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 
 class SoapConnectorsFormSubscriber implements EventSubscriberInterface
 {

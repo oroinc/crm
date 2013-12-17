@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller;
 
-use Oro\Bundle\IntegrationBundle\Provider\ConnectorTypeInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -12,8 +10,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorTypeInterface;
 
+use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 

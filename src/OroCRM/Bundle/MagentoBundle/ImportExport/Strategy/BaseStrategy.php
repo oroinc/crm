@@ -81,7 +81,7 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
      */
     protected function validateAndUpdateContext($entity)
     {
-        // validate contact
+        // validate entity
         $validationErrors = $this->strategyHelper->validateEntity($entity);
         if ($validationErrors) {
             $this->importExportContext->incrementErrorEntriesCount();

@@ -9,7 +9,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class OrderDenormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
-    const ORDER_TYPE              = 'OroCRM\Bundle\MagentoBundle\Entity\Order';
+    const ORDER_TYPE              = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Order';
     const ADDRESS_COLLECTION_TYPE = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\OrderAddress>';
 
     /**
@@ -28,8 +28,8 @@ class OrderDenormalizer extends AbstractNormalizer implements DenormalizerInterf
         $channel = $this->getChannelFromContext($context);
         $data    = is_array($data) ? $data : [];
 
-        $website = $this->serializer
-            ->denormalize($data['store']['website'], StoreConnector::WEBSITE_TYPE, $format, $context);
+        $website = $data['store']['website'];
+        $website = $this->serializer->denormalize($website, StoreConnector::WEBSITE_TYPE, $format, $context);
         $website->setChannel($channel);
 
         $data['store'] = $this->serializer->denormalize($data['store'], StoreConnector::STORE_TYPE, $format, $context);

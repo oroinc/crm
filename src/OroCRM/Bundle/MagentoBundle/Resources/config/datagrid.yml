@@ -484,3 +484,15 @@ datagrid:
                 rowAction:    true
         options:
             entityHint: order
+
+    magento-orderitem-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_magento_order_view
+            query:
+                select:
+                    - oi.id
+                from:
+                    - { table: OroCRMMagentoBundle:OrderItem , alias: oi }
+        options:
+            entityHint: order item

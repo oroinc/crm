@@ -4,6 +4,6 @@ oro_titles:
     orocrm_magento_cart_index:     Shopping Carts - Sales
     orocrm_magento_cart_view:      "Cart #%%cart.id%% - Shopping Carts - Sales"
     orocrm_magento_order_index:    Orders - Sales
-    orocrm_magento_order_view:     "Order #%%order.originalId%% - Orders - Sales"
+    orocrm_magento_order_view:     "Order #%%order.incrementId%% - Orders - Sales"
     orocrm_magento_product_index:  Products - Sales
     orocrm_magento_product_view:   %%product.name%% - Products - Sales

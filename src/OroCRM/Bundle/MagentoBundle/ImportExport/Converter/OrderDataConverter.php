@@ -19,7 +19,7 @@ class OrderDataConverter extends AbstractTableDataConverter
             'store_website_id'    => 'store:website:originId',
             'store_website_code'  => 'store:website:code',
             'store_website_name'  => 'store:website:name',
-            'customer_id'         => 'owner:originId',
+            'customer_id'         => 'customer:originId',
             'is_virtual'          => 'isVirtual',
             'customer_is_guest'   => 'isGuest',
             'gift_message'        => 'giftMessage',
