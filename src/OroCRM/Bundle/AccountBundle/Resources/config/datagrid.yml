@@ -236,21 +236,21 @@ datagrid:
                 editable: true
                 frontend_type: boolean
             first_name:
-                label: orocrm.contact.datagrid.first_name
+                label: orocrm.contact.first_name.label
                 data_name: firstName
             last_name:
-                label: orocrm.contact.datagrid.last_name
+                label: orocrm.contact.last_name.label
                 data_name: lastName
             primaryEmail:
-                label: orocrm.contact.datagrid.email
+                label: orocrm.contact.email.label
             primaryPhone:
-                label: orocrm.contact.datagrid.phone
+                label: orocrm.contact.contactphone.phone.label
             countryName:
-                label: orocrm.contact.datagrid.country
+                label: orocrm.contact.contactaddress.country.label
             regionLabel:
-                label: orocrm.contact.datagrid.region
+                label: orocrm.contact.contactaddress.state.label
             addressPostalCode:
-                label: orocrm.contact.datagrid.postal_code
+                label: orocrm.contact.contactaddress.postal_code.label
         properties:
             id: ~
         sorters:

@@ -1,5 +1,4 @@
 orocrm:
-
     query_designer:
         aggregates:
             opportunity_by_workflow_item_close_revenue:
