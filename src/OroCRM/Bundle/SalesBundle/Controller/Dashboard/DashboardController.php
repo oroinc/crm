@@ -15,17 +15,17 @@ class DashboardController extends Controller
      *      name="oro_sales_dashboard_opportunities_by_lead_source_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
-     * @Template("OroCRMSalesBundle:Dashboard:opportunitiesByLeadSourceChart.html.twig")
+     * @Template("OroDashboardBundle:Dashboard:pieChart.html.twig")
      */
     public function myCalendarAction($widget)
     {
-        $items = $this->getDoctrine()
+        $data = $this->getDoctrine()
             ->getRepository('OroCRMSalesBundle:Lead')
             ->getOpportunitiesByLeadIndustry();
 
         $result = array_merge(
             [
-                'items' => $items
+                'data' => $data
             ],
             $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
         );

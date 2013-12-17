@@ -10,13 +10,13 @@ class LeadRepository extends EntityRepository
      * Returns top $limit stats leads converted to opportunities and grouped by industry
      *
      * @param int $limit
-     * @return array [ratio, source]
+     * @return array [fraction, label]
      */
     public function getOpportunitiesByLeadIndustry($limit = 10)
     {
         // get top $limit - 1 rows
         $qb     = $this->createQueryBuilder('l')
-            ->select('count(o.id) as itemCount, l.industry as source')
+            ->select('count(o.id) as itemCount, l.industry as label')
             ->leftJoin('l.opportunities', 'o')
             ->groupBy('l.industry')
             ->setMaxResults($limit - 1);
@@ -27,11 +27,11 @@ class LeadRepository extends EntityRepository
         $totalItemCount = 0;
         $hasUnclassifiedSource = false;
         foreach ($result as &$row) {
-            if ($row['source'] === null) {
+            if ($row['label'] === null) {
                 $hasUnclassifiedSource = true;
-                $row['source']         = 'Unclassified';
+                $row['label']         = 'Unclassified';
             } else {
-                $sources[] = $row['source'];
+                $sources[] = $row['label'];
             }
             $totalItemCount += $row['itemCount'];
         }
@@ -47,22 +47,22 @@ class LeadRepository extends EntityRepository
             }
             $others   = $qb->getQuery()->getArrayResult();
             if (!empty($others)) {
-                $result[] = array_merge(['source' => 'Others'], $others);
+                $result[] = array_merge(['label' => 'Others'], $others);
                 $totalItemCount += $others['itemCount'];
             }
         }
 
-        // calculate percentage for each source
+        // calculate fraction for each source
         foreach ($result as &$row) {
-            $row['percentage'] = round($row['itemCount'] / $totalItemCount, 4);
+            $row['fraction'] = round($row['itemCount'] / $totalItemCount, 4);
         }
 
 
-        // sort alphabetically by source
+        // sort alphabetically by label
         usort(
             $result,
             function ($a, $b) {
-                return strcasecmp($a['source'], $b['source']);
+                return strcasecmp($a['label'], $b['label']);
             }
         );
 
