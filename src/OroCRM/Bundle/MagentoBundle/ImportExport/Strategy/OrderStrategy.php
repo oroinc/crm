@@ -2,12 +2,14 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 
 class OrderStrategy extends BaseStrategy
 {
-    const ENTITY_NAME = 'OroCRM\Bundle\MagentoBundle\Entity\Cart';
+    /** @var array */
+    protected static $attributesToUpdateManual = ['id', 'store', 'items', 'customer', 'addresses'];
 
     /** @var StoreStrategy */
     protected $storeStrategy;
@@ -17,17 +19,11 @@ class OrderStrategy extends BaseStrategy
      */
     public function process($entity)
     {
-        $existingEntity = $this->getEntityByCriteria(
-            ['incrementId' => $entity->getIncrementId(), 'channel' => $entity->getChannel()],
-            $entity
-        );
+        $criteria       = ['incrementId' => $entity->getIncrementId(), 'channel' => $entity->getChannel()];
+        $existingEntity = $this->getEntityByCriteria($criteria, $entity);
 
         if ($existingEntity) {
-            $this->strategyHelper->importEntity(
-                $existingEntity,
-                $entity,
-                ['id', 'store', 'items', 'customer', 'addresses']
-            );
+            $this->strategyHelper->importEntity($existingEntity, $entity, self::$attributesToUpdateManual);
         } else {
             $existingEntity = $entity;
         }
@@ -37,9 +33,8 @@ class OrderStrategy extends BaseStrategy
         $this->processCart($existingEntity);
         $this->processAddresses($existingEntity, $entity);
 
-        $this->validateAndUpdateContext($existingEntity);
-
-        return $existingEntity;
+        // check errors, update context increments
+        return $this->validateAndUpdateContext($existingEntity);
     }
 
     /**
@@ -50,20 +45,25 @@ class OrderStrategy extends BaseStrategy
         $entity->setStore($this->storeStrategy->process($entity->getStore()));
     }
 
+    /**
+     * If customer exists then add relation to it,
+     * do nothing otherwise
+     *
+     * @param Order $entity
+     */
     protected function processCustomer(Order $entity)
     {
-        $existingCustomer = $this->getEntityByCriteria(
-            ['originId' => $entity->getOwner()['originId'], 'channel' => $entity->getChannel()],
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer'
-        );
+        $customer = $entity->getCustomer();
+        $criteria = ['originId' => $customer['originId'], 'channel' => $entity->getChannel()];
 
-        if ($existingCustomer) {
-            $entity->setOwner($existingCustomer);
-        } else {
-            $entity->setOwner(null);
-        }
+        /** @var Customer|null $customer */
+        $customer = $this->getEntityByCriteria($criteria, 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer');
+        $entity->setCustomer($customer);
     }
 
+    /**
+     * @param Order $entity
+     */
     protected function processCart(Order $entity)
     {
         $existingCart = $this->getEntityByCriteria(
@@ -79,6 +79,10 @@ class OrderStrategy extends BaseStrategy
         }
     }
 
+    /**
+     * @param Order $entityToUpdate
+     * @param Order $entityToImport
+     */
     protected function processAddresses(Order $entityToUpdate, Order $entityToImport)
     {
         /** @var OrderAddress $address */
@@ -97,9 +101,8 @@ class OrderStrategy extends BaseStrategy
                 $address = $existingAddress;
             }
 
-            $this
-                ->updateAddressCountryRegion($address, $mageRegionId)
-                ->updateAddressTypes($address);
+            $this->updateAddressCountryRegion($address, $mageRegionId);
+            $this->updateAddressTypes($address);
 
             $address->setOwner($entityToUpdate);
             $entityToUpdate->getAddresses()->set($k, $address);

@@ -25,9 +25,10 @@
 
     <div class="span6">
         {{ _self.renderRow('Remote Address'|trans, entity.remoteIp) }}
-        {{ _self.renderRow('Payment method'|trans, entity.paymentMethod|capitalize|trans) }}
+        {{ _self.renderRow('Payment method'|trans, entity.paymentMethod|trans|capitalize) }}
         {{ _self.renderRow('Payment details'|trans, entity.paymentDetails) }}
-        {{ _self.renderRow('Shipping method'|trans, entity.shippingMethod|capitalize|trans) }}
+        {{ _self.renderRow('Shipping method'|trans, entity.shippingMethod|trans|capitalize) }}
+        {{ _self.renderRow('Gift message'|trans, entity.giftMessage) }}
         {{ _self.renderRow('Website'|trans, entity.store.website.name) }}
         {{ _self.renderRow('Store'|trans, entity.store.name) }}
         <div class="control-group">

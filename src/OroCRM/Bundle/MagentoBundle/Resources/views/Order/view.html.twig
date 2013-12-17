@@ -32,6 +32,34 @@
         }]
     %}
 
+    {% set orderAddresses = [] %}
+    {% if entity.addresses is not empty %}
+        {% for address in entity.addresses %}
+            {% set title = address.types.first and address.types.first.name == 'billing' ? 'Billing Address' : 'Shipping Address' %}
+            {% set orderAddresses = orderAddresses|merge([{'title': title|trans, 'data': [addressView.renderAddress(address)]}]) %}
+        {% endfor %}
+    {% endif %}
+
+    {% if (orderAddresses|length) %}
+        {% set dataBlocks = dataBlocks|merge([{'title' : 'Addresses'|trans, 'subblocks': orderAddresses}])%}
+    {% endif %}
+
+
+    {% set dataBlocks = dataBlocks|merge([{
+        'title': 'Order Items'|trans,
+            'subblocks': [{
+            'title': null,
+            'data': [
+                oro_widget_render({
+                    'widgetType': 'block',
+                    'contentClasses': [],
+                    'url': path('orocrm_order_widget_items', {id: entity.id}),
+                    'template': '<div class="row-fluid <%= contentClasses.join(\' \') %>"></div>'
+                })
+            ]
+        }]
+    }]) %}
+
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}
 {% endblock content_data %}
