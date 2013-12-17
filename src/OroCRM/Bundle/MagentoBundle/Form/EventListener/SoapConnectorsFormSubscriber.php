@@ -50,7 +50,7 @@ class SoapConnectorsFormSubscriber implements EventSubscriberInterface
      *
      * @param FormEvent $event
      */
-    public function postSubmit(FormEvent $event)
+    public function preSubmit(FormEvent $event)
     {
         $this->closure($event->getData(), $event->getForm()->getParent());
     }
