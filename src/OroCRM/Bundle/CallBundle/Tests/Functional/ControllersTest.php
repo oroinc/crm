@@ -38,10 +38,10 @@ class ControllersTest extends WebTestCase
         $crawler = $this->client->request('GET', $this->client->generate('orocrm_call_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_call_call_form[subject]'] = 'Test Call';
-        $form['orocrm_call_call_form[duration]'] = '00:00:05';
-        $form['orocrm_call_call_form[notes]'] = 'Call Notes';
-        $form['orocrm_call_call_form[phoneNumber]'] = '123-123-123';
+        $form['orocrm_call_form[subject]'] = 'Test Call';
+        $form['orocrm_call_form[duration]'] = '00:00:05';
+        $form['orocrm_call_form[notes]'] = 'Call Notes';
+        $form['orocrm_call_form[phoneNumber]'] = '123-123-123';
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -75,7 +75,7 @@ class ControllersTest extends WebTestCase
         );
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_call_call_form[subject]'] = 'Test Update Call';
+        $form['orocrm_call_form[subject]'] = 'Test Update Call';
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);

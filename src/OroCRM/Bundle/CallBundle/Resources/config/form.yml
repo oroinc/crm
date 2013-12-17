@@ -29,7 +29,7 @@ services:
         factory_method: createNamed
         factory_service: form.factory
         arguments:
-            - "call"
+            - "orocrm_call_form"
             - "orocrm_call_form"
 
     orocrm_call.call.form.api:
