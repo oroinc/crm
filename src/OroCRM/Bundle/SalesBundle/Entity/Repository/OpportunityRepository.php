@@ -8,17 +8,39 @@ use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 class OpportunityRepository extends EntityRepository
 {
     /**
+     * Get opportunities by state
+     *
      * @param $aclHelper AclHelper
      * @return array
+     *  [
+     *      'data' => [id, value]
+     *      'labels' => [id, label]
+     *  ]
      */
-    public function getOpportunitiesByStage($aclHelper)
+    public function getOpportunitiesByState($aclHelper)
     {
-        $qb = $this->createQueryBuilder('opp')
-             ->select('SUM(opp.budgetAmount) as budget', 'opp_status.label')
+        $dateEnd = new \DateTime('now', new \DateTimeZone('UTC'));
+        $dateStart = clone $dateEnd;
+        $dateStart = $dateStart->sub(new \DateInterval('P1M'));
+        $qb = $this->createQueryBuilder('opp');
+        $qb->select('opp_status.label', 'SUM(opp.budgetAmount) as budget')
              ->join('opp.status', 'opp_status')
+             ->where($qb->expr()->between('opp.createdAt', ':dateFrom', ':dateTo'))
+             ->setParameter('dateFrom', $dateStart)
+             ->setParameter('dateTo', $dateEnd)
              ->groupBy('opp_status.name');
 
-        return $aclHelper->apply($qb)
+        $data = $aclHelper->apply($qb)
              ->getArrayResult();
+
+        $resultData = [];
+        $labels = [];
+
+        foreach ($data as $index => $dataValue) {
+            $resultData[$index] = [$index, (double)$dataValue['budget']];
+            $labels[$index] = $dataValue['label'];
+        }
+
+        return ['data' => $resultData, 'labels' => $labels];
     }
 }
