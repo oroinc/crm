@@ -7,12 +7,13 @@ use Doctrine\ORM\EntityRepository;
 class LeadRepository extends EntityRepository
 {
     /**
-     * Returns top $limit stats leads converted to opportunities and grouped by industry
+     * Returns top $limit opportunities and grouped by lead source and calculate
+     * a fraction of opportunities for each lead source
      *
      * @param int $limit
      * @return array [fraction, label]
      */
-    public function getOpportunitiesByLeadIndustry($limit = 10)
+    public function getOpportunitiesByLeadSource($limit = 10)
     {
         // get top $limit - 1 rows
         $qb     = $this->createQueryBuilder('l')
@@ -54,7 +55,9 @@ class LeadRepository extends EntityRepository
 
         // calculate fraction for each source
         foreach ($result as &$row) {
-            $row['fraction'] = round($row['itemCount'] / $totalItemCount, 4);
+            $row['fraction'] = $totalItemCount > 0
+                ? round($row['itemCount'] / $totalItemCount, 4)
+                : 1;
         }
 
 

@@ -17,11 +17,11 @@ class DashboardController extends Controller
      * )
      * @Template("OroDashboardBundle:Dashboard:pieChart.html.twig")
      */
-    public function myCalendarAction($widget)
+    public function opportunitiesByLeadSourceAction($widget)
     {
         $data = $this->getDoctrine()
             ->getRepository('OroCRMSalesBundle:Lead')
-            ->getOpportunitiesByLeadIndustry();
+            ->getOpportunitiesByLeadSource();
 
         $result = array_merge(
             [
