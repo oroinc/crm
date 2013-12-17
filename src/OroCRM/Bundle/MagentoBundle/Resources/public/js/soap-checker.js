@@ -97,6 +97,8 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
                 $isExtensionInstalledEl.val(res.isExtensioInstalled || false ? 1 : 0);
             }
 
+            /*
+            // @TODO FIXME
             if (success && res.notSupported) {
                 var connectors = res.notSupported;
                 var form = this.$el.parents('form');
@@ -105,7 +107,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
                         .parent('div')
                         .remove();
                 }
-            }
+            }*/
 
             this.renderResult(success ? 'success' : 'error', message);
         },

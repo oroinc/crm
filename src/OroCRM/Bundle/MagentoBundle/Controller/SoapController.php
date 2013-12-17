@@ -56,16 +56,14 @@ class SoapController extends Controller
                         ->getRegisteredConnectorsTypes($type);
 
                     if ($isExtensionInstalled) {
+                        /*
                         $connectors = $connectors->filter(
                             function (AbstractConnector $item) use ($isExtensionInstalled) {
                                 return $item->isExtensionRequired() && !$isExtensionInstalled;
                             }
                         );
+                        */
                     }
-
-
-
-
                 }
             }
         } catch (\Exception $e) {
@@ -76,7 +74,7 @@ class SoapController extends Controller
             [
                 'success'              => $result,
                 'websites'             => $websites,
-                'isExtensioInstalled' => $isExtensionInstalled,
+                'isExtensionInstalled' => $isExtensionInstalled,
             ]
         );
     }

@@ -68,11 +68,13 @@ class NavigationListener
             $entries = [];
             /** @var Channel $channel */
             foreach ($channels as $channel) {
-                foreach ($channel->getConnectors() as $connector) {
-                    if (!isset($entries[$connector])) {
-                        $entries[$connector] = [];
+                if ($channel->getConnectors()) {
+                    foreach ($channel->getConnectors() as $connector) {
+                        if (!isset($entries[$connector])) {
+                            $entries[$connector] = [];
+                        }
+                        $entries[$connector][] = ['id' => $channel->getId(), 'label' => $channel->getName()];
                     }
-                    $entries[$connector][] = ['id' => $channel->getId(), 'label' => $channel->getName()];
                 }
             }
 
