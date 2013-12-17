@@ -15,7 +15,7 @@ class DashboardController extends Controller
      *      name="oro_sales_dashboard_opportunities_by_lead_source_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
-     * @Template("OroDashboardBundle:Dashboard:pieChartWidget.html.twig")
+     * @Template("OroDashboardBundle:Dashboard:pieChart.html.twig")
      */
     public function myCalendarAction($widget)
     {
