@@ -15,8 +15,3 @@ orocrm_sales_bundle_api:
         version:  latest|v1
     defaults:
         version:  latest
-
-orocrm_sales_dashboard:
-    resource:     "@OroCRMSalesBundle/Controller/Dashboard"
-    type:         annotation
-    prefix:       /dashboard
