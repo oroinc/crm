@@ -44,6 +44,10 @@ oro_dashboard_config:
                     label:      Create opportunity
                     route:      orocrm_sales_opportunity_create
                     acl:        orocrm_sales_opportunity_create
+        opportunities_by_stage:
+            label:      Opportunities by Stage
+            route:      orocrm_sales_dashboard_opportunity_by_stage
+            acl:        orocrm_sales_opportunity_view
 
     dashboards:
         quick_launchpad:
@@ -52,3 +56,7 @@ oro_dashboard_config:
                     position:   30
                 opportunities_launchpad:
                     position:   40
+        main:
+            widgets:
+                opportunities_by_stage:
+                    position: 80

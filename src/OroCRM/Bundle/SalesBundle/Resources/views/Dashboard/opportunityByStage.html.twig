@@ -1,0 +1,16 @@
+{% extends 'OroDashboardBundle:Dashboard:widget.html.twig' %}
+
+{% block content %}
+    <pre>
+    {{ dump(items) }}
+    </pre>
+
+    <script type="text/javascript">
+        require(['jquery'],
+                function($){
+                    $(function () {
+                        console.log('test');
+                    });
+                });
+    </script>
+{% endblock %}
