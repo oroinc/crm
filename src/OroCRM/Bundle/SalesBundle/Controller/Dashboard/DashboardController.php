@@ -19,13 +19,13 @@ class DashboardController extends Controller
      */
     public function myCalendarAction($widget)
     {
-        $items = $this->getDoctrine()
+        $data = $this->getDoctrine()
             ->getRepository('OroCRMSalesBundle:Lead')
             ->getOpportunitiesByLeadIndustry();
 
         $result = array_merge(
             [
-                'items' => $items
+                'data' => $data
             ],
             $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
         );
