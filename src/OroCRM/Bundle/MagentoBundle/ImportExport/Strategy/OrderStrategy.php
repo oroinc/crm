@@ -32,10 +32,7 @@ class OrderStrategy extends BaseStrategy
             $existingEntity = $entity;
         }
 
-        if (!$entity->getStore() || !$entity->getStore()->getId()) {
-            $entity->setStore($this->storeStrategy->process($entity->getStore()));
-        }
-
+        $this->processStore($existingEntity);
         $this->processCustomer($existingEntity);
         $this->processCart($existingEntity);
         $this->processAddresses($existingEntity, $entity);
@@ -43,6 +40,14 @@ class OrderStrategy extends BaseStrategy
         $this->validateAndUpdateContext($existingEntity);
 
         return $existingEntity;
+    }
+
+    /**
+     * @param Order $entity
+     */
+    protected function processStore(Order $entity)
+    {
+        $entity->setStore($this->storeStrategy->process($entity->getStore()));
     }
 
     protected function processCustomer(Order $entity)
@@ -78,6 +83,11 @@ class OrderStrategy extends BaseStrategy
     {
         /** @var OrderAddress $address */
         foreach ($entityToImport->getAddresses() as $k => $address) {
+            if (!$address->getCountry()) {
+                // skip addresses without country, we cant save it
+                $entityToUpdate->getAddresses()->offsetUnset($k);
+                continue;
+            }
             // at this point imported address region have code equal to region_id in magento db field
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
 

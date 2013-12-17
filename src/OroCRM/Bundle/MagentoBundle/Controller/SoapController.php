@@ -48,22 +48,25 @@ class SoapController extends Controller
                 $stores   = $transport->call(StoreConnector::ACTION_STORE_LIST);
                 $websites = $this->get('orocrm_magento.converter.stores_to_website')->convert($stores);
 
-                $isExtensionInstalled = $transport->call(StoreConnector::ACTION_PING);
-                $isExtensionInstalled = !empty($isExtensionInstalled->version);
+                try {
+                    $isExtensionInstalled = $transport->call(StoreConnector::ACTION_PING);
+                    $isExtensionInstalled = !empty($isExtensionInstalled->version);
 
-                if ($type = $request->get('type', false)) {
-                    $connectors = $this->get('oro_integration.manager.types_registry')
-                        ->getRegisteredConnectorsTypes($type);
+                    if ($type = $request->get('type', false)) {
+                        $connectors = $this->get('oro_integration.manager.types_registry')
+                            ->getRegisteredConnectorsTypes($type);
 
-                    if ($isExtensionInstalled) {
-                        /*
-                        $connectors = $connectors->filter(
-                            function (AbstractConnector $item) use ($isExtensionInstalled) {
-                                return $item->isExtensionRequired() && !$isExtensionInstalled;
-                            }
-                        );
-                        */
+                        if ($isExtensionInstalled) {
+                            /*
+                            $connectors = $connectors->filter(
+                                function (AbstractConnector $item) use ($isExtensionInstalled) {
+                                    return $item->isExtensionRequired() && !$isExtensionInstalled;
+                                }
+                            );
+                            */
+                        }
                     }
+                } catch (\Exception $e) {
                 }
             }
         } catch (\Exception $e) {
