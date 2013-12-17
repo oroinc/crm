@@ -71,7 +71,7 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
 
         $formOptions = $this->getDefaultOptions();
 
-        if ($data['relatedContact']) {
+        if (!empty($data['relatedContact'])) {
             $contact = $this->om
                             ->getRepository('OroCRMContactBundle:Contact')
                             ->find($data['relatedContact']);

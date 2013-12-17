@@ -19,8 +19,7 @@ class CallType extends AbstractType
     /**
      * Constructor.
      *
-     * @param \OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber $contactPhoneSubscriber
-     * @internal param \OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber $om
+     * @param ContactPhoneSubscriber $contactPhoneSubscriber
      */
     public function __construct(ContactPhoneSubscriber $contactPhoneSubscriber)
     {
@@ -73,8 +72,12 @@ class CallType extends AbstractType
             )
             ->add(
                 'callStatus',
-                'hidden',
-                array('property_path' => 'callStatus.status', 'label' => 'orocrm.call.call_status.label')
+                'entity',
+                array(
+                    'label' => 'orocrm.call.call_status.label',
+                    'class' => 'OroCRM\Bundle\CallBundle\Entity\CallStatus',
+                    'required' => true
+                )
             )
             ->add(
                 'duration',
@@ -104,7 +107,7 @@ class CallType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class'    => 'OroCRM\Bundle\CallBundle\Entity\Call',
+                'data_class' => 'OroCRM\Bundle\CallBundle\Entity\Call',
                 'error_mapping' => array(
                     '.' => 'contactPhoneNumber',
                 ),

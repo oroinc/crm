@@ -23,9 +23,7 @@
             <form id="{{ form.vars.name }}" action="{{ path('orocrm_call_create', {'no_redirect': true }) }}" method="post">
                 <fieldset class="form form-horizontal">
                     <div class="span6">
-                        {% if form.owner is defined %}
-                            {{ form_row(form.owner) }}
-                        {% endif %}
+                        {% if form.owner is defined %}{{ form_row(form.owner) }}{% endif %}
                         {{ form_row(form.subject) }}
                         {{ form_row(form.notes) }}
                         {{ form_row(form.callDateTime) }}
@@ -37,7 +35,9 @@
                         {{ form_widget(form.phoneNumber) }}
                         {{ form_row(form.direction) }}
                         {{ form_row(form.duration) }}
-                        {{ form_row(form.callStatus) }}
+                        <div class="hide">
+                            {{ form_row(form.callStatus) }}
+                        </div>
                     </div>
                     {{ form_rest(form) }}
                     <div class="widget-actions form-actions">

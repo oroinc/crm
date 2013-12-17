@@ -104,7 +104,7 @@ class Call
      * @var CallStatus
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\CallBundle\Entity\CallStatus")
-     * @ORM\JoinColumn(name="call_status_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="call_status_name", referencedColumnName="name", onDelete="SET NULL")
      */
     protected $callStatus;
 
@@ -119,7 +119,7 @@ class Call
      * @var CallDirection
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\CallBundle\Entity\CallDirection")
-     * @ORM\JoinColumn(name="call_direction_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="call_direction_name", referencedColumnName="name", onDelete="SET NULL")
      */
     protected $direction;
 
