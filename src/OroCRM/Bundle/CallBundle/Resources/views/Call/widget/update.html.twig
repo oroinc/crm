@@ -24,19 +24,19 @@
                 <fieldset class="form form-horizontal">
                     <div class="span6">
                         {% if form.owner is defined %}
-                            {{ form_row(form.owner, {label: 'orocrm.call.owner.label'|trans}) }}
+                            {{ form_row(form.owner) }}
                         {% endif %}
-                        {{ form_row(form.subject, {label: 'orocrm.call.subject.label'|trans}) }}
-                        {{ form_row(form.notes, {label: 'orocrm.call.notes.label'|trans}) }}
-                        {{ form_row(form.callDateTime, {label: 'orocrm.call.call_date_time.label'|trans}) }}
+                        {{ form_row(form.subject) }}
+                        {{ form_row(form.notes) }}
+                        {{ form_row(form.callDateTime) }}
                     </div>
                     <div class="span6">
-                        {{ form_row(form.relatedAccount, {label: 'orocrm.call.related_account.label'|trans}) }}
-                        {{ form_row(form.relatedContact, {label: 'orocrm.call.related_contact.label'|trans}) }}
-                        {{ form_row(form.contactPhoneNumber, {label: 'orocrm.call.contact_phone_number.label'|trans}) }}
+                        {{ form_row(form.relatedAccount) }}
+                        {{ form_row(form.relatedContact) }}
+                        {{ form_row(form.contactPhoneNumber|trans}) }}
                         {{ form_widget(form.phoneNumber) }}
-                        {{ form_row(form.direction, {label: 'orocrm.call.direction.label'|trans}) }}
-                        {{ form_row(form.duration, {label: 'orocrm.call.duration.label'|trans}) }}
+                        {{ form_row(form.direction) }}
+                        {{ form_row(form.duration) }}
                         {{ form_row(form.callStatus) }}
                     </div>
                     {{ form_rest(form) }}

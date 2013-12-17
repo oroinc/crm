@@ -42,25 +42,25 @@ class ContactType extends AbstractType
     {
         // basic plain fields
         $builder
-            ->add('namePrefix', 'text', array('required' => false))
-            ->add('firstName', 'text', array('required' => true))
-            ->add('middleName', 'text', array('required' => false))
-            ->add('lastName', 'text', array('required' => true))
-            ->add('nameSuffix', 'text', array('required' => false))
-            ->add('gender', 'oro_gender', array('required' => false))
-            ->add('birthday', 'oro_date', array('required' => false))
-            ->add('description', 'textarea', array('required' => false));
+            ->add('namePrefix', 'text', array('required' => false, 'label' => 'orocrm.contact.name_prefix.label'))
+            ->add('firstName', 'text', array('required' => true, 'label' => 'orocrm.contact.first_name.label'))
+            ->add('middleName', 'text', array('required' => false, 'label' => 'orocrm.contact.middle_name.label'))
+            ->add('lastName', 'text', array('required' => true, 'label' => 'orocrm.contact.last_name.label'))
+            ->add('nameSuffix', 'text', array('required' => false, 'label' => 'orocrm.contact.name_suffix.label'))
+            ->add('gender', 'oro_gender', array('required' => false, 'label' => 'orocrm.contact.gender.label'))
+            ->add('birthday', 'oro_date', array('required' => false, 'label' => 'orocrm.contact.birthday.label'))
+            ->add('description', 'textarea', array('required' => false, 'label' => 'orocrm.contact.description.label'));
 
         $builder
-            ->add('jobTitle', 'text', array('required' => false))
-            ->add('fax', 'text', array('required' => false))
-            ->add('skype', 'text', array('required' => false));
+            ->add('jobTitle', 'text', array('required' => false, 'label' => 'orocrm.contact.job_title.label'))
+            ->add('fax', 'text', array('required' => false, 'label' => 'orocrm.contact.fax.label'))
+            ->add('skype', 'text', array('required' => false, 'label' => 'orocrm.contact.skype.label'));
 
         $builder
-            ->add('twitter', 'text', array('required' => false))
-            ->add('facebook', 'text', array('required' => false))
-            ->add('googlePlus', 'text', array('required' => false))
-            ->add('linkedIn', 'text', array('required' => false));
+            ->add('twitter', 'text', array('required' => false, 'label' => 'orocrm.contact.twitter.label'))
+            ->add('facebook', 'text', array('required' => false, 'label' => 'orocrm.contact.facebook.label'))
+            ->add('googlePlus', 'text', array('required' => false, 'label' => 'orocrm.contact.google_plus.label'))
+            ->add('linkedIn', 'text', array('required' => false, 'label' => 'orocrm.contact.linked_in.label'));
     }
 
     /**
@@ -74,6 +74,7 @@ class ContactType extends AbstractType
             'source',
             'entity',
             array(
+                'label'       => 'orocrm.contact.source.label',
                 'class'       => 'OroCRMContactBundle:Source',
                 'property'    => 'label',
                 'required'    => false,
@@ -82,16 +83,25 @@ class ContactType extends AbstractType
         );
 
         // assigned to (user)
-        $builder->add('assignedTo', 'oro_user_select', array('required' => false));
+        $builder->add(
+            'assignedTo',
+            'oro_user_select',
+            array('required' => false, 'label' => 'orocrm.contact.assigned_to.label')
+        );
 
         // reports to (contact)
-        $builder->add('reportsTo', 'orocrm_contact_select', array('required' => false));
+        $builder->add(
+            'reportsTo',
+            'orocrm_contact_select',
+            array('required' => false, 'label' => 'orocrm.contact.reports_to.label')
+        );
 
         // contact method
         $builder->add(
             'method',
             'entity',
             array(
+                'label'       => 'orocrm.contact.method.label',
                 'class'       => 'OroCRMContactBundle:Method',
                 'property'    => 'label',
                 'required'    => false,
@@ -100,40 +110,47 @@ class ContactType extends AbstractType
         );
 
         // tags
-        $builder->add('tags', 'oro_tag_select');
+        $builder->add('tags', 'oro_tag_select', array('label' => 'oro.tag.entity_plural_label'));
 
         // addresses, emails and phones
-        $builder->add(
-            'addresses',
-            'oro_address_collection',
-            array(
-                'type' => 'oro_typed_address',
-                'required' => true,
-                'options' => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress')
+        $builder
+            ->add(
+                'addresses',
+                'oro_address_collection',
+                array(
+                    'label'    => '',
+                    'type'     => 'oro_typed_address',
+                    'required' => true,
+                    'options'  => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress')
+                )
             )
-        )->add(
-            'emails',
-            'oro_email_collection',
-            array(
-                'type' => 'oro_email',
-                'required' => false,
-                'options' => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactEmail')
+            ->add(
+                'emails',
+                'oro_email_collection',
+                array(
+                    'label'    => 'orocrm.contact.emails.label',
+                    'type'     => 'oro_email',
+                    'required' => false,
+                    'options'  => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactEmail')
+                )
             )
-        )->add(
-            'phones',
-            'oro_phone_collection',
-            array(
-                'type' => 'oro_phone',
-                'required' => false,
-                'options' => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone')
-            )
-        );
+            ->add(
+                'phones',
+                'oro_phone_collection',
+                array(
+                    'label'    => 'orocrm.contact.phones.label',
+                    'type'     => 'oro_phone',
+                    'required' => false,
+                    'options'  => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone')
+                )
+            );
 
         // groups
         $builder->add(
             'groups',
             'entity',
             array(
+                'label'    => 'orocrm.contact.groups.label',
                 'class'    => 'OroCRMContactBundle:Group',
                 'property' => 'label',
                 'multiple' => true,
@@ -143,25 +160,26 @@ class ContactType extends AbstractType
         );
 
         // accounts
-        $builder->add(
-            'appendAccounts',
-            'oro_entity_identifier',
-            array(
-                'class'    => 'OroCRMAccountBundle:Account',
-                'required' => false,
-                'mapped'   => false,
-                'multiple' => true,
-            )
-        )->add(
-            'removeAccounts',
-            'oro_entity_identifier',
-            array(
-                'class'    => 'OroCRMAccountBundle:Account',
-                'required' => false,
-                'mapped'   => false,
-                'multiple' => true,
-            )
-        );
+        $builder
+            ->add(
+                'appendAccounts',
+                'oro_entity_identifier',
+                array(
+                    'class'    => 'OroCRMAccountBundle:Account',
+                    'required' => false,
+                    'mapped'   => false,
+                    'multiple' => true,
+                )
+            )->add(
+                'removeAccounts',
+                'oro_entity_identifier',
+                array(
+                    'class'    => 'OroCRMAccountBundle:Account',
+                    'required' => false,
+                    'mapped'   => false,
+                    'multiple' => true,
+                )
+            );
     }
 
     /**
@@ -182,7 +200,7 @@ class ContactType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         /** @var Contact $contact */
-        $contact = $form->getData();
+        $contact                                       = $form->getData();
         $view->children['reportsTo']->vars['excluded'] = array_merge(
             $view->children['reportsTo']->vars['excluded'],
             array($contact->getId())

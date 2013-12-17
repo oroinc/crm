@@ -2,7 +2,10 @@
 {% set name = entity.name|default('N/A') %}
 {% oro_title_set({params : {"%opportunity.name%": name} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Opportunity' %}
-{% set title = form.vars.value.id ? name ~ ' - ' ~ 'Update ' ~ 'orocrm.sales.opportunity.entity_label'|trans : 'New ' ~ 'orocrm.sales.opportunity.entity_label'|trans %}
+{% set title = form.vars.value.id
+    ? name ~ ' - ' ~ 'Update' ~ ' ' ~ 'orocrm.sales.opportunity.entity_label'|trans
+    : 'New' ~ ' ' ~ 'orocrm.sales.opportunity.entity_label'|trans
+%}
 {% set formAction = form.vars.value.id
     ? path('orocrm_sales_opportunity_update', { 'id': form.vars.value.id })
     : path('orocrm_sales_opportunity_create')
@@ -10,7 +13,6 @@
 
 {% block head_script %}
     {{ parent() }}
-
     {% block stylesheets %}
         {{ form_stylesheet(form) }}
     {% endblock %}
@@ -75,16 +77,16 @@
         {% set formFields = formFields|merge([form_row(form.owner, {label: 'orocrm.sales.opportunity.owner.label'|trans})]) %}
     {% endif %}
     {% set formFields = formFields|merge([
-        form_row(form.name, {label: 'orocrm.sales.opportunity.name.label'|trans}),
-        form_row(form.contact, {label: 'orocrm.sales.opportunity.contact.label'|trans}),
-        form_row(form.account, {label: 'orocrm.sales.opportunity.account.label'|trans}),
-        form_row(form.probability, {label: 'orocrm.sales.opportunity.probability.label'|trans}),
-        form_row(form.budgetAmount, {label: 'orocrm.sales.opportunity.budget_amount.label'|trans}),
-        form_row(form.customerNeed, {label: 'orocrm.sales.opportunity.customer_need.label'|trans}),
-        form_row(form.proposedSolution, {label: 'orocrm.sales.opportunity.proposed_solution.label'|trans}),
-        form_row(form.closeReason, {label: 'orocrm.sales.opportunity.close_reason.label'|trans}),
-        form_row(form.closeRevenue, {label: 'orocrm.sales.opportunity.close_revenue.label'|trans}),
-        form_row(form.closeDate, {label: 'orocrm.sales.opportunity.close_date.label'|trans})
+        form_row(form.name),
+        form_row(form.contact),
+        form_row(form.account),
+        form_row(form.probability),
+        form_row(form.budgetAmount),
+        form_row(form.customerNeed),
+        form_row(form.proposedSolution),
+        form_row(form.closeReason),
+        form_row(form.closeRevenue),
+        form_row(form.closeDate)
     ]) %}
 
     {% set dataBlocks = [{

@@ -1,12 +1,12 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
-{% set title = 'New Account'|trans %}
+{% set title = 'New' ~ ' ' ~ 'orocrm.account.entity_label'|trans %}
 {% oro_title_set({params : {"%account.name%": form.vars.value.name|default('N/A')} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_AccountBundle_Entity_Account' %}
 {% set formAction = form.vars.value.id ? path('orocrm_account_update', { 'id': form.vars.value.id }) : path('orocrm_account_create')  %}
+
 {% block head_script %}
     {{ parent() }}
-
     {% block stylesheets %}
         {{ form_stylesheet(form) }}
     {% endblock %}
@@ -24,8 +24,7 @@
             'successMessage': 'Account deleted'|trans,
             'title': 'Delete ' ~ 'orocrm.account.entity_label'|trans,
             'label': 'Delete'
-        })
-        }}
+        }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
     {{ UI.button({'path' : path('orocrm_account_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
@@ -63,8 +62,8 @@
             {
                 'title': 'Basic Information'|trans,
                 'data': [
-                    form_row(form.name, {label: 'orocrm.account.name.label'}),
-                    form_row(form.tags, {label: 'oro.tag.entity_plural_label'})
+                    form_row(form.name),
+                    form_row(form.tags)
                 ]
             }
         ]

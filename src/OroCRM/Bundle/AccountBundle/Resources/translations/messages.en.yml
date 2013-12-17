@@ -1,7 +1,6 @@
 orocrm:
     account:
         form:
-            account_name: Account name
             choose_account: Choose an account...
             select_contacts: Select contacts
         controller:

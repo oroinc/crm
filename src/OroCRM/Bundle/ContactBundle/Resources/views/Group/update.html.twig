@@ -46,47 +46,42 @@
 
 {% block content_data %}
     {% set id = 'contact-group-profile' %}
-
     {% set dataBlocks = [{
-            'title': 'General',
-            'class': 'active',
-            'subblocks': [
-                {
-                    'title': 'Basic Information',
-                    'data': [
-                        form_row(form.label, {'label': 'orocrm.contact.group.label.label'|trans} )
-                    ]
-                }
-            ]
-        }]
-    %}
+        'title': 'General',
+        'class': 'active',
+        'subblocks': [
+            {
+                'title': 'Basic Information',
+                'data': [
+                    form_row(form.label)
+                ]
+            }
+        ]
+    }] %}
+
     {% if showContactsGrid %}
         {% set gridParams = form.vars.value.id ? {group: form.vars.value.id} : {} %}
         {% set gridData = dataGrid.renderGrid(gridName, gridParams, { cssClass: 'inner-grid' }) %}
-        {% set dataBlocks = dataBlocks|merge(
-            [{
-                'title' : 'orocrm.contact.entity_plural_label'|trans,
-                'subblocks':
-                [
-                    {
-                        'title' : null,
-                        'useSpan': false,
-                        'data' : [
-                            form_widget(form.appendContacts, {'id': 'groupAppendContacts'}),
-                            form_widget(form.removeContacts, {'id': 'groupRemoveContacts'}),
-                            gridData
-                        ]
-                    }
-                ]
-            }]
-        )
-        %}
+        {% set dataBlocks = dataBlocks|merge([{
+            'title' : 'orocrm.contact.entity_plural_label'|trans,
+            'subblocks':
+            [
+                {
+                    'title' : null,
+                    'useSpan': false,
+                    'data' : [
+                        form_widget(form.appendContacts, {'id': 'groupAppendContacts'}),
+                        form_widget(form.removeContacts, {'id': 'groupRemoveContacts'}),
+                        gridData
+                    ]
+                }
+            ]
+        }]) %}
     {% endif %}
-    {% set data =
-        {
-            'formErrors': form_errors(form)? form_errors(form) : null,
-            'dataBlocks': dataBlocks,
-        }
-    %}
+
+    {% set data = {
+        'formErrors': form_errors(form)? form_errors(form) : null,
+        'dataBlocks': dataBlocks,
+    } %}
     {{ parent() }}
 {% endblock content_data %}

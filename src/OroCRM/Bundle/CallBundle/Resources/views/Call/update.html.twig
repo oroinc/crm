@@ -14,28 +14,26 @@
 
 {% block content_data %}
     {% set id = 'call-log' %}
-
-    {% if form.vars.value.id %}
-        {% set title = 'Edit'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower %}
-    {% else %}
-        {% set title = 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower %}
-    {% endif %}
+    {% set title = form.vars.value.id
+        ? 'Edit'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower
+        : 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower
+    %}
 
     {% set formFields = [] %}
     {% if form.owner is defined %}
         {% set formFields = formFields|merge([form_row(form.owner, {label: 'orocrm.call.owner.label'|trans})]) %}
     {% endif %}
     {% set formFields = formFields|merge([
-        form_row(form.subject, {label: 'orocrm.call.subject.label'|trans}),
-        form_row(form.notes, {label: 'orocrm.call.notes.label'|trans}),
-        form_row(form.callDateTime, {label: 'orocrm.call.call_date_time.label'|trans}),
-        form_row(form.relatedAccount, {label: 'orocrm.call.related_account.label'|trans}),
-        form_row(form.relatedContact, {label: 'orocrm.call.related_contact.label'|trans}),
-        form_row(form.contactPhoneNumber, {label: 'orocrm.call.contact_phone_number.label'|trans}),
-        form_widget(form.phoneNumber, {label: 'orocrm.call.phone_number.label'|trans}),
-        form_row(form.direction, {label: 'orocrm.call.direction.label'|trans}),
-        form_row(form.duration, {label: 'orocrm.call.duration.label'|trans}),
-        form_row(form.callStatus, {label: 'orocrm.call.call_status.label'|trans}),
+        form_row(form.subject),
+        form_row(form.notes),
+        form_row(form.callDateTime),
+        form_row(form.relatedAccount),
+        form_row(form.relatedContact),
+        form_row(form.contactPhoneNumber),
+        form_widget(form.phoneNumber, {label: 'orocrm.call.contact_phone_numbel.label'}),
+        form_row(form.direction),
+        form_row(form.duration),
+        form_row(form.callStatus),
         form_rest(form)
     ]) %}
 
@@ -65,7 +63,7 @@
                     phonePlain: $('#{{ form.phoneNumber.vars.id }}')
                 });
             });
-        });            
+        });
     </script>
 
     {{ parent() }}

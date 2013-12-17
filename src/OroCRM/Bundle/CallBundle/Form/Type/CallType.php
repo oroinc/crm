@@ -19,7 +19,8 @@ class CallType extends AbstractType
     /**
      * Constructor.
      *
-     * @param ContactPhoneSubscriber $om
+     * @param \OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber $contactPhoneSubscriber
+     * @internal param \OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber $om
      */
     public function __construct(ContactPhoneSubscriber $contactPhoneSubscriber)
     {
@@ -35,23 +36,64 @@ class CallType extends AbstractType
         $builder->addEventSubscriber($this->contactPhoneSubscriber);
 
         $builder
-            ->add('relatedAccount', 'orocrm_account_select', array('required' => false))
-            ->add('subject', 'text', array('required' => true))
-            ->add('relatedContact', 'orocrm_contact_select', array('required' => false))
+            ->add(
+                'relatedAccount',
+                'orocrm_account_select',
+                array('required' => false, 'label' => 'orocrm.call.related_account.label')
+            )
+            ->add('subject', 'text', array('required' => true, 'label' => 'orocrm.call.subject.label'))
+            ->add(
+                'relatedContact',
+                'orocrm_contact_select',
+                array('required' => false, 'label' => 'orocrm.call.related_contact.label')
+            )
             ->add(
                 'contactPhoneNumber',
                 'entity',
-                array('class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone', 'required' => false)
+                array(
+                    'label'    => 'orocrm.call.contact_phone_number.label',
+                    'class'    => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone',
+                    'required' => false
+                )
             )
-            ->add('phoneNumber', 'text', array('required' => false, 'attr' => array('class' => 'hide')))
-            ->add('notes', 'textarea', array('required' => false))
-            ->add('callDateTime', 'oro_datetime', array('required' => true))
-            ->add('callStatus', 'hidden', array('property_path' => 'callStatus.status'))
-            ->add('duration', 'time', array('required' => false, 'widget' => 'single_text', 'with_seconds' => true))
+            ->add(
+                'phoneNumber',
+                'text',
+                array(
+                    'label'    => 'orocrm.call.phone_number.label',
+                    'required' => false,
+                    'attr'     => array('class' => 'hide')
+                )
+            )
+            ->add('notes', 'textarea', array('required' => false, 'label' => 'orocrm.call.notes.label'))
+            ->add(
+                'callDateTime',
+                'oro_datetime',
+                array('required' => true, 'label' => 'orocrm.call.call_date_time.label')
+            )
+            ->add(
+                'callStatus',
+                'hidden',
+                array('property_path' => 'callStatus.status', 'label' => 'orocrm.call.call_status.label')
+            )
+            ->add(
+                'duration',
+                'time',
+                array(
+                    'label'        => 'orocrm.call.duration.label',
+                    'required'     => false,
+                    'widget'       => 'single_text',
+                    'with_seconds' => true
+                )
+            )
             ->add(
                 'direction',
                 'entity',
-                array('class' => 'OroCRM\Bundle\CallBundle\Entity\CallDirection', 'required' => true)
+                array(
+                    'label'    => 'orocrm.call.direction.label',
+                    'class'    => 'OroCRM\Bundle\CallBundle\Entity\CallDirection',
+                    'required' => true
+                )
             );
     }
 
@@ -62,7 +104,7 @@ class CallType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\CallBundle\Entity\Call',
+                'data_class'    => 'OroCRM\Bundle\CallBundle\Entity\Call',
                 'error_mapping' => array(
                     '.' => 'contactPhoneNumber',
                 ),
