@@ -53,8 +53,11 @@ class OrderStrategy extends BaseStrategy
      */
     protected function processCustomer(Order $entity)
     {
-        $customer = $entity->getCustomer();
-        $criteria = ['originId' => $customer['originId'], 'channel' => $entity->getChannel()];
+        $customerId = is_object($entity->getCustomer())
+            ? $entity->getCustomer()->getOriginId()
+            : $entity->getCustomer()['originId'];
+
+        $criteria = ['originId' => $customerId, 'channel' => $entity->getChannel()];
 
         /** @var Customer|null $customer */
         $customer = $this->getEntityByCriteria($criteria, 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer');

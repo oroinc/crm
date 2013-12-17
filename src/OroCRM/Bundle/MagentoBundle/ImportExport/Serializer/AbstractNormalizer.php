@@ -117,6 +117,10 @@ class AbstractNormalizer implements SerializerAwareInterface
     }
 
     /**
+     * Format payment info
+     * Magento brings only CC payments info,
+     * for different types information could not be taken from order info
+     *
      * @param array $paymentDetails
      *
      * @return string
@@ -125,19 +129,12 @@ class AbstractNormalizer implements SerializerAwareInterface
     {
         if (!empty($paymentDetails['cc_last4'])) {
             $paymentDetails = sprintf(
-                "Card [%s, %s], exp [%s/%s], %s",
+                "Card [%s, %s]",
                 $paymentDetails['cc_type'],
-                $paymentDetails['cc_last4'],
-                $paymentDetails['cc_exp_month'],
-                $paymentDetails['cc_exp_year'],
-                $paymentDetails['method']
+                $paymentDetails['cc_last4']
             );
         } else {
-            $result = [];
-            foreach ($paymentDetails as $key => $value) {
-                $result[] = sprintf("%s: %s", $key, $value);
-            }
-            $paymentDetails = implode(' / ', $result);
+            $paymentDetails = null;
         }
 
         return $paymentDetails;

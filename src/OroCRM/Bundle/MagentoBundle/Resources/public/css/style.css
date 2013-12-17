@@ -4,7 +4,6 @@
 }
 .product-info-widget,
 .customer-info-widget,
-.cart-info-widget,
 .order-info-widget {
     min-height: 300px;
 }
