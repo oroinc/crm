@@ -42,6 +42,9 @@ class CommandsTest extends WebTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute(array('command' => $command->getName(), '--env' => $kernel->getEnvironment()));
 
-        $this->assertEquals("Update report transactional tables\r\nCompleted\r\n", $commandTester->getDisplay());
+        $this->assertEquals(
+            "Update report transactional tables" . PHP_EOL ."Completed" . PHP_EOL,
+            $commandTester->getDisplay()
+        );
     }
 }
