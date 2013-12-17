@@ -2,6 +2,11 @@ orocrm_sales_bundle:
     resource: "@OroCRMSalesBundle/Controller"
     type:     annotation
 
+orocrm_sales_dashboard:
+    resource:     "@OroCRMSalesBundle/Controller/Dashboard"
+    type:         annotation
+    prefix:       /dashboard
+
 orocrm_sales_bundle_api:
     resource: "@OroCRMSalesBundle/Resources/config/oro/routing_api.yml"
     type: rest

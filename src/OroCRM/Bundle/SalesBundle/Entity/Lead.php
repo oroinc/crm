@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
@@ -18,7 +19,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  * Lead
  *
  * @ORM\Table(name="orocrm_sales_lead")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\LeadRepository")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
@@ -206,6 +207,22 @@ class Lead extends ExtendLead implements FullNameInterface
      * @Oro\Versioned
      */
     protected $owner;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity",
+     *      mappedBy="lead", cascade={"persist"})
+     */
+    protected $opportunities;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->opportunities = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -667,6 +684,31 @@ class Lead extends ExtendLead implements FullNameInterface
     public function setAccount($account)
     {
         $this->account = $account;
+        return $this;
+    }
+
+    /**
+     * Get opportunities
+     *
+     * @return Opportunity[]
+     */
+    public function getOpportunities()
+    {
+        return $this->opportunities;
+    }
+
+    /**
+     * Add opportunity
+     *
+     * @param  Opportunity $opportunity
+     * @return Lead
+     */
+    public function addOpportunity(Opportunity $opportunity)
+    {
+        $this->opportunities[] = $opportunity;
+
+        $opportunity->setLead($this);
+
         return $this;
     }
 }
