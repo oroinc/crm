@@ -35,7 +35,7 @@ class DashboardController extends Controller
 
     /**
      * @Route(
-     *      "/opportunity_state/{widget}",
+     *      "/opportunity_state/chart/{widget}",
      *      name="orocrm_sales_dashboard_opportunity_by_state_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
