@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 
 class CartStrategy extends BaseStrategy
 {
@@ -13,6 +14,12 @@ class CartStrategy extends BaseStrategy
 
     /** @var StoreStrategy */
     protected $storeStrategy;
+
+    public function __construct(ImportStrategyHelper $strategyHelper, StoreStrategy $storeStrategy)
+    {
+        parent::__construct($strategyHelper);
+        $this->storeStrategy = $storeStrategy;
+    }
 
     /**
      * {@inheritdoc}
@@ -28,7 +35,7 @@ class CartStrategy extends BaseStrategy
             $this->strategyHelper->importEntity(
                 $existingEntity,
                 $newEntity,
-                ['id', 'store', 'cartItems', 'customer', 'shippingAddress', 'billingAddress']
+                ['id', 'store', 'status', 'cartItems', 'customer', 'shippingAddress', 'billingAddress']
             );
         } else {
             $existingEntity = $newEntity;
@@ -160,13 +167,5 @@ class CartStrategy extends BaseStrategy
         }
 
         return $this;
-    }
-
-    /**
-     * @param StoreStrategy $storeStrategy
-     */
-    public function setStoreStrategy(StoreStrategy $storeStrategy)
-    {
-        $this->storeStrategy = $storeStrategy;
     }
 }

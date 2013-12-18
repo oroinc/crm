@@ -36,6 +36,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  */
 class Cart extends BaseCart
 {
+    const STATUS_ACTIVE    = 'orocrm.magento.cart.status.active';
+    const STATUS_CONVERTED = 'orocrm.magento.cart.status.converted';
+
     use IntegrationEntityTrait, OriginTrait;
 
     /**
@@ -116,7 +119,7 @@ class Cart extends BaseCart
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     protected $email;
 
