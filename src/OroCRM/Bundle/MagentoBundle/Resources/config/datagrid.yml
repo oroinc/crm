@@ -236,6 +236,9 @@ datagrid:
                     - c.updatedAt
                 from:
                     - { table: OroCRMMagentoBundle:CartItem , alias: c }
+                where:
+                    and:
+                        - c.cart = :id
         columns:
             sku:
                 label: orocrm.magento.datagrid.columns.sku
