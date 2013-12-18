@@ -3,11 +3,11 @@ B2C Workflows
 
 Table of Contents
 -----------------
- - [Shopping Cart Flow](#shopping-cart-flow)
+ - [Abandoned Shopping Cart Flow](#abandoned-shopping-cart-flow)
  - [Order Follow Up Flow](#order-follow-up-flow)
 
-Shopping Cart Flow
-------------------
+Abandoned Shopping Cart Flow
+----------------------------
 
 This workflow is used to process shopping cart from external sources (f.e. from Magento) and to try
 to convert it to opportunity.
