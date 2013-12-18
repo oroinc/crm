@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\EntityConfigBundle\Config\Id\FieldConfigId;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -10,7 +11,7 @@ class LeadType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -30,6 +31,15 @@ class LeadType extends AbstractType
             ->add('website', 'url', array('required' => false))
             ->add('numberOfEmployees', 'number', array('required' => false))
             ->add('industry', 'text', array('required' => false))
+            ->add(
+                'extend_source',
+                'oro_option_select',
+                array(
+                    'required'        => false,
+                    'entityClassName' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
+                    'entityFieldName' => 'extend_source'
+                )
+            )
             ->add('address', 'oro_address', array('required' => false));
     }
 
@@ -40,7 +50,7 @@ class LeadType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
+                'data_class'         => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
                 'cascade_validation' => true,
             )
         );
