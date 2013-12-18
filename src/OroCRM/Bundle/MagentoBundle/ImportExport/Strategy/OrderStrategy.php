@@ -92,7 +92,12 @@ class OrderStrategy extends BaseStrategy
         $cart = $this->getEntityByCriteria($criteria, CartStrategy::ENTITY_NAME);
 
         if ($cart) {
-            $cart->setStatus(Cart::STATUS_CONVERTED);
+            $statusClass = 'OroCRMMagentoBundle:CartStatus';
+            $convertedStatus = $this->strategyHelper->getEntityManager($statusClass)->find($statusClass, 'converted');
+            if ($convertedStatus) {
+                $cart->setStatus($convertedStatus);
+            }
+
             $entity->setCart($cart);
         } else {
             $entity->setCart(null);

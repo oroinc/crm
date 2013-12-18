@@ -4,8 +4,8 @@ orocrm.call.phone.required.message: 'Phone number is required field'
 
 orocrm.call.form.call.other: 'Other...'
 
-orocrm.call.datagrid.contact_name: 'Contact name'
-orocrm.call.datagrid.account_name: 'Account name'
+orocrm.call.datagrid.contact_name: 'Contact'
+orocrm.call.datagrid.account_name: 'Account'
 orocrm.call.datagrid.subject: 'Subject'
 orocrm.call.datagrid.phone: 'Phone'
 orocrm.call.datagrid.date_time: 'Call date'

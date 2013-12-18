@@ -114,10 +114,10 @@ datagrid:
                     - c.quoteCurrencyCode as currency
                     - c.subTotal
                     - c.grandTotal
-                    - c.status
                     - c.createdAt
                     - c.updatedAt
                     - cw.name as websiteName
+                    - cstatus.label as statusLabel
                 from:
                     - { table: OroCRMMagentoBundle:Cart , alias: c }
                 join:
@@ -125,6 +125,7 @@ datagrid:
                         - { join: c.store, alias: cs }
                         - { join: cs.website, alias: cw }
                         - { join: c.channel, alias: ch }
+                        - { join: c.status, alias: cstatus }
                 where:
                     and:
                         - c.channel = :channelId
@@ -147,8 +148,7 @@ datagrid:
                 label: orocrm.magento.datagrid.columns.email
             websiteName:
                 label: orocrm.magento.datagrid.columns.website
-            status:
-                type:  translatable
+            statusLabel:
                 label: orocrm.magento.datagrid.columns.status
             createdAt:
                 label: orocrm.magento.datagrid.columns.created_at
@@ -170,7 +170,7 @@ datagrid:
                 subTotal:             { data_name: c.subTotal }
                 grandTotal:           { data_name: c.grandTotal }
                 websiteName:          { data_name: cw.name }
-                status:               { data_name: c.status }
+                statusLabel:          { data_name: cstatus.label }
                 createdAt:            { data_name: c.createdAt }
                 updatedAt:            { data_name: c.updatedAt }
             default:
@@ -190,14 +190,13 @@ datagrid:
                         field_options:
                           class: OroCRMMagentoBundle:Website
                           property: name
-                status:
-                    type:       choice
-                    data_name:  c.status
+                statusLabel:
+                    type: entity
+                    data_name: cstatus
                     options:
                         field_options:
-                            choices:
-                                'orocrm.magento.cart.status.active': OroCRM\Bundle\MagentoBundle\Entity\Cart::STATUS_ACTIVE
-                                'orocrm.magento.cart.status.converted': OroCRM\Bundle\MagentoBundle\Entity\Cart::STATUS_CONVERTED
+                            class: OroCRMMagentoBundle:CartStatus
+                            property: label
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt

@@ -208,6 +208,13 @@ class Lead extends ExtendLead implements FullNameInterface
     protected $owner;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="notes", type="text", nullable=true)
+     */
+    protected $notes;
+
+    /**
      * Get id
      *
      * @return integer
@@ -667,6 +674,24 @@ class Lead extends ExtendLead implements FullNameInterface
     public function setAccount($account)
     {
         $this->account = $account;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * @param string $notes
+     * @return Lead
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
         return $this;
     }
 }

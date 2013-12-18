@@ -20,7 +20,7 @@
     {% set dataSubBlocks = [
         oro_widget_render({
             'widgetType': 'block',
-            'url':         path('orocrm_cart_widget_info', {id: entity.id}),
+            'url':         path('orocrm_magento_cart_widget_info', {id: entity.id}),
             'template':   '<div class="row-fluid <%= contentClasses.join(\' \') %>"></div>'
         })
     ] %}
@@ -34,6 +34,7 @@
             }
         ]
     %}
+    
     {% set cartAddresses = [] %}
     {%  if entity.billingAddress is not empty %}
         {% set cartAddresses = cartAddresses|merge([{'title': 'Billing Address'|trans, 'data': [addressView.renderAddress(entity.billingAddress)]}]) %}
@@ -46,20 +47,49 @@
         {% set dataBlocks = dataBlocks|merge([{'title' : 'Addresses'|trans, 'subblocks': cartAddresses}])%}
     {% endif %}
 
-    {% set dataBlocks = dataBlocks|merge([{
-        'title': 'Cart Items'|trans,
-        'subblocks': [{
-            'title': null,
-            'data': [
-                oro_widget_render({
+    {% set dataBlocks = dataBlocks|merge([
+        {
+            'title': 'Customer Information'|trans,
+            'subblocks': [{
+                'title': null,
+                'data': [
+                    oro_widget_render({
                         'widgetType': 'block',
-                        'contentClasses': [],
-                        'url': path('orocrm_cart_widget_items', {id: entity.id}),
+                        'url': path('orocrm_magento_customer_info', {id: entity.customer.id}),
                         'template': '<div class="row-fluid <%= contentClasses.join(\' \') %>"></div>'
                     })
-            ]
-        }]
-    }]) %}
+                ]
+            }]
+        },
+        {
+            'title': 'Workflow Items'|trans,
+            'subblocks': [{
+                'title': null,
+                'data': [
+                    oro_widget_render({
+                        'widgetType': 'block',
+                        'url': path('oro_workflow_widget_workflow_items', {entityClass: oro_class_name(entity), entityId: entity.id}),
+                        'alias': 'bind_workflow_items',
+                        'template': '<div class="row-fluid <%= contentClasses.join(\' \') %>"></div>'
+                    })
+                ]
+            }]
+        },
+        {
+            'title': 'Cart Items'|trans,
+            'subblocks': [{
+                'title': null,
+                'data': [
+                    oro_widget_render({
+                        'widgetType': 'block',
+                        'contentClasses': [],
+                        'url': path('orocrm_magento_cart_widget_items', {id: entity.id}),
+                        'template': '<div class="row-fluid <%= contentClasses.join(\' \') %>"></div>'
+                    })
+                ]
+            }]
+        }
+    ]) %}
 
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}

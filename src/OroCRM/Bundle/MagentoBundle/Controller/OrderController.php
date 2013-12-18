@@ -19,7 +19,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Order;
 class OrderController extends Controller
 {
     /**
-     * @Route("/{id}", requirements={"id"="\d+"}))
+     * @Route("/{id}", name="orocrm_magento_order_index", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_order_view")
      * @Template
      */
@@ -29,7 +29,7 @@ class OrderController extends Controller
     }
 
     /**
-     * @Route("/view/{id}", requirements={"id"="\d+"}))
+     * @Route("/view/{id}", name="orocrm_magento_order_view", requirements={"id"="\d+"}))
      * @Acl(
      *      id="orocrm_magento_order_view",
      *      type="entity",
@@ -44,7 +44,7 @@ class OrderController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", name="orocrm_order_widget_info", requirements={"id"="\d+"}))
+     * @Route("/info/{id}", name="orocrm_magento_order_widget_info", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_cart_view")
      * @Template
      */
@@ -54,7 +54,7 @@ class OrderController extends Controller
     }
 
     /**
-     * @Route("/widget/grid/{id}", name="orocrm_order_widget_items", requirements={"id"="\d+"}))
+     * @Route("/widget/grid/{id}", name="orocrm_magento_order_widget_items", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_cart_view")
      * @Template
      */

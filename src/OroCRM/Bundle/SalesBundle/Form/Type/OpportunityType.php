@@ -35,7 +35,8 @@ class OpportunityType extends AbstractType
             ->add('budgetAmount', 'oro_money', array('required' => false))
             ->add('closeRevenue', 'oro_money', array('required' => false))
             ->add('customerNeed', 'text', array('required' => false))
-            ->add('proposedSolution', 'text', array('required' => false));
+            ->add('proposedSolution', 'text', array('required' => false))
+            ->add('notes', 'textarea', array('required' => false));
     }
 
     /**
