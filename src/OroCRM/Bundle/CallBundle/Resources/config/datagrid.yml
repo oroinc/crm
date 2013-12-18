@@ -12,7 +12,7 @@ datagrid:
                     - call.subject
                     - CONCAT(CASE WHEN call.phoneNumber IS NOT NULL THEN call.phoneNumber ELSE contactPhone.phone END, '') as phone
                     - call.callDateTime as dateTime
-                    - directionType.direction as callDirection
+                    - directionType.name as callDirection
                 from:
                     - { table: %orocrm_call.call.entity.class%, alias: call }
                 join:
