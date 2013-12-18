@@ -26,7 +26,6 @@ class OrderDenormalizer extends AbstractNormalizer implements DenormalizerInterf
     public function denormalize($data, $class, $format = null, array $context = array())
     {
         $channel = $this->getChannelFromContext($context);
-        $data    = is_array($data) ? $data : [];
 
         $website = $data['store']['website'];
         $website = $this->serializer->denormalize($website, StoreConnector::WEBSITE_TYPE, $format, $context);
@@ -40,8 +39,8 @@ class OrderDenormalizer extends AbstractNormalizer implements DenormalizerInterf
         $data['paymentDetails'] = $this->denormalizePaymentDetails($data['paymentDetails']);
         $data['addresses']      = $this->denormalizeObject($data, 'addresses', self::ADDRESS_COLLECTION_TYPE, $format);
 
-        // todo items denormalization
-        unset($data['items']);
+        $data['items'] = $this->serializer
+            ->denormalize($data['items'], OrderItemCompositeDenormalizer::COLLECTION_TYPE);
 
         $order = new Order();
         $this->fillResultObject($order, $data);

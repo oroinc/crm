@@ -74,7 +74,6 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
     {
         $channel    = $this->getChannelFromContext($context);
         $serializer = $this->serializer;
-        $data       = is_array($data) ? $data : [];
 
         $data['cartItems'] = $serializer->denormalize(
             $data['cartItems'],

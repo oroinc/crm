@@ -41,7 +41,7 @@ class OrderStrategy extends BaseStrategy
         $this->processCustomer($order);
         $this->processCart($order);
         $this->processAddresses($order, $importingOrder);
-        $this->processItems($order);
+        $this->processItems($order, $importingOrder);
 
         // check errors, update context increments
         return $this->validateAndUpdateContext($order);
@@ -80,11 +80,15 @@ class OrderStrategy extends BaseStrategy
      */
     protected function processCart(Order $entity)
     {
+        // cart could be array if comes new order or object if comes from DB
+        $cartId = is_object($entity->getCart())
+            ? $entity->getCart()->getOriginId()
+            : $entity->getCart()['originId'];
+
+        $criteria = ['originId' => $cartId, 'channel' => $entity->getChannel()];
+
         /** @var Cart $cart */
-        $cart = $this->getEntityByCriteria(
-            ['originId' => $entity->getCart()['originId'], 'channel' => $entity->getChannel()],
-            CartStrategy::ENTITY_NAME
-        );
+        $cart = $this->getEntityByCriteria($criteria, CartStrategy::ENTITY_NAME);
 
         if ($cart) {
             $cart->setStatus(Cart::STATUS_CONVERTED);
@@ -126,9 +130,10 @@ class OrderStrategy extends BaseStrategy
     }
 
     /**
-     * @param Order $order
+     * @param Order $entityToUpdate
+     * @param Order $entityToImport
      */
-    protected function processItems(Order $order)
+    protected function processItems(Order $entityToUpdate, Order $entityToImport)
     {
 
     }
