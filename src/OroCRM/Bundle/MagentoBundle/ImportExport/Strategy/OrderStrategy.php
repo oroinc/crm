@@ -2,12 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
-
-use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
+use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 
 class OrderStrategy extends BaseStrategy
 {
@@ -41,7 +42,7 @@ class OrderStrategy extends BaseStrategy
         $this->processCustomer($order);
         $this->processCart($order);
         $this->processAddresses($order, $importingOrder);
-        $this->processItems($order);
+        $this->processItems($order, $importingOrder);
 
         // check errors, update context increments
         return $this->validateAndUpdateContext($order);
@@ -80,11 +81,15 @@ class OrderStrategy extends BaseStrategy
      */
     protected function processCart(Order $entity)
     {
+        // cart could be array if comes new order or object if comes from DB
+        $cartId = is_object($entity->getCart())
+            ? $entity->getCart()->getOriginId()
+            : $entity->getCart()['originId'];
+
+        $criteria = ['originId' => $cartId, 'channel' => $entity->getChannel()];
+
         /** @var Cart $cart */
-        $cart = $this->getEntityByCriteria(
-            ['originId' => $entity->getCart()['originId'], 'channel' => $entity->getChannel()],
-            CartStrategy::ENTITY_NAME
-        );
+        $cart = $this->getEntityByCriteria($criteria, CartStrategy::ENTITY_NAME);
 
         if ($cart) {
             $statusClass = 'OroCRMMagentoBundle:CartStatus';
@@ -95,7 +100,6 @@ class OrderStrategy extends BaseStrategy
 
             $entity->setCart($cart);
         } else {
-            // @TODO decide to import new one or not
             $entity->setCart(null);
         }
     }
@@ -131,10 +135,50 @@ class OrderStrategy extends BaseStrategy
     }
 
     /**
-     * @param Order $order
+     * @param Order $entityToUpdate
+     * @param Order $entityToImport
      */
-    protected function processItems(Order $order)
+    protected function processItems(Order $entityToUpdate, Order $entityToImport)
     {
+        $importedOriginIds = $entityToImport->getItems()->map(
+            function (OrderItem $item) {
+                return $item->getOriginId();
+            }
+        )->toArray();
 
+        // insert new and update existing items
+        /** @var OrderItem $item - imported order item */
+        foreach ($entityToImport->getItems() as $item) {
+            $originId = $item->getOriginId();
+
+            $existingItem = $entityToUpdate->getItems()->filter(
+                function (OrderItem $item) use ($originId) {
+                    return $item->getOriginId() == $originId;
+                }
+            )->first();
+
+            if ($existingItem) {
+                $this->strategyHelper->importEntity($existingItem, $item, ['id', 'order']);
+                $item = $existingItem;
+            }
+
+            if (!$item->getOrder()) {
+                $item->setOrder($entityToUpdate);
+            }
+
+            if (!$entityToUpdate->getItems()->contains($item)) {
+                $entityToUpdate->getItems()->add($item);
+            }
+        }
+
+        // delete order items that not exists in remote order
+        $deleted = $entityToUpdate->getItems()->filter(
+            function (OrderItem $item) use ($importedOriginIds) {
+                return !in_array($item->getOriginId(), $importedOriginIds);
+            }
+        );
+        foreach ($deleted as $item) {
+            $entityToUpdate->getItems()->remove($item);
+        }
     }
 }

@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class OrderItem extends BaseOrderItem
 {
+    use OriginTrait;
+
     /**
      * @var Order
      *
@@ -54,6 +56,9 @@ class OrderItem extends BaseOrderItem
      * @ORM\Column(name="discount_percent", type="float", nullable=true)
      */
     protected $discountPercent;
+
+    /** Do not needed in magento order item, because magento api does not bring it up */
+    protected $cost;
 
     /**
      * @param float $originalPrice

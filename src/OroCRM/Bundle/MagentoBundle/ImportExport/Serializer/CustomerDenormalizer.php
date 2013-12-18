@@ -58,7 +58,6 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $data         = is_array($data) ? $data : [];
         $resultObject = new Customer();
 
         $mappedData = [];

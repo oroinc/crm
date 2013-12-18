@@ -39,7 +39,6 @@ class CartItemNormalizer extends AbstractNormalizer implements NormalizerInterfa
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $data = is_array($data) ? $data : [];
         $data = $this->itemConverter->convertToImportFormat($data);
 
         $data = $this->denormalizeCreatedUpdated($data, $format, $context);
