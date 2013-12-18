@@ -41,7 +41,7 @@ class RegionConnector extends AbstractConnector implements MagentoConnectorInter
             $this->logger->info(sprintf("%s loading country %s: ", $now->format('d-m-Y H:i:s'), $country['name']));
 
             $data = $this->getRegionsData($country['iso2_code']);
-            $this->logger->info(sprintf('Found %d regions to process', count($data)));
+            $this->logger->info(sprintf('found %d entities', count($data)));
 
             // will skip further processing
             if (empty($data)) {

@@ -123,7 +123,7 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
     {
         $group = $this->serializer->denormalize(
             $data['customer']['group'],
-            CustomerNormalizer::GROUPS_TYPE,
+            CustomerDenormalizer::GROUPS_TYPE,
             $format,
             $context
         );

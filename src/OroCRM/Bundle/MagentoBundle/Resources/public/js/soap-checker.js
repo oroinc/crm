@@ -12,9 +12,10 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
          * Check url
          * @property string
          */
-        route: 'orocrm_magento_soap_check',
-        url:   null,
-        id: null,
+        route:           'orocrm_magento_soap_check',
+        url:             null,
+        id:              null,
+        requiredOptions: ['websiteSelectEl', 'websitesListEl', 'isExtensionInstalledEl', 'connectorsEl'],
 
         resultTemplate: _.template(
             '<div class="alert alert-<%= type %> connection-status"><%= message %></div>'
@@ -32,12 +33,15 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
             this.id = options.transportEntityId || null;
             this.url = this.getUrl();
 
-            if (!options.websiteSelectEl || !options.websitesListEl, !options.isExtensionInstalledEl, !options.connectorsEl) {
-                throw  new TypeError('Missing required options');
+            var requiredMissed = this.requiredOptions.filter(function (option) {
+                return _.isUndefined(options[option]);
+            });
+            if (requiredMissed.length) {
+                throw new TypeError('Missing required option(s): ' + requiredMissed.join(','));
             }
         },
 
-        getUrl: function(type) {
+        getUrl: function (type) {
             var params = {id: this.id};
             if (type !== undefined) {
                 params.type = type;
