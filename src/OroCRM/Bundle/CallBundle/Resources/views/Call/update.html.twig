@@ -35,9 +35,7 @@
         form_row(form.contactPhoneNumber, {'label': 'Phone Number'|trans}),
         form_widget(form.phoneNumber),
         form_row(form.direction, {'label': 'Direction'|trans}),
-        form_row(form.duration, {'label': 'Duration'|trans}),
-        form_row(form.callStatus),
-        form_rest(form)
+        form_row(form.duration, {'label': 'Duration'|trans})
     ]) %}
 
     {% set dataBlocks = [{
@@ -54,6 +52,7 @@
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
         'dataBlocks': dataBlocks,
+        'hiddenData': form_row(form.callStatus)
     } %}
 
     <script type="text/javascript">

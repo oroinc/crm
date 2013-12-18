@@ -10,7 +10,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
  * @outputBuffering enabled
  * @db_isolation
  */
-class SoapAccountApiTest extends WebTestCase
+class SoapAccountTest extends WebTestCase
 {
     /** @var Client */
     protected $client;
@@ -30,7 +30,7 @@ class SoapAccountApiTest extends WebTestCase
     /**
      * @return array
      */
-    public function testCreateAccount()
+    public function testCreate()
     {
         $request = array (
             "name" => 'Account_name_' . mt_rand(),
@@ -47,10 +47,10 @@ class SoapAccountApiTest extends WebTestCase
 
     /**
      * @param $request
-     * @depends testCreateAccount
+     * @depends testCreate
      * @return array
      */
-    public function testGetAccounts($request)
+    public function testGet($request)
     {
         $accounts = $this->client->getSoap()->getAccounts(1, 1000);
         $accounts = ToolsAPI::classToArray($accounts);
@@ -72,9 +72,9 @@ class SoapAccountApiTest extends WebTestCase
 
     /**
      * @param $request
-     * @depends testCreateAccount
+     * @depends testCreate
      */
-    public function testUpdateAccount($request)
+    public function testUpdate($request)
     {
         $accountUpdate = $request;
         unset($accountUpdate['id']);
@@ -91,10 +91,10 @@ class SoapAccountApiTest extends WebTestCase
 
     /**
      * @param $request
-     * @depends testUpdateAccount
+     * @depends testUpdate
      * @throws \Exception|\SoapFault
      */
-    public function testDeleteAccount($request)
+    public function testDelete($request)
     {
         $result = $this->client->getSoap()->deleteAccount($request['id']);
         $this->assertTrue($result);
@@ -105,14 +105,5 @@ class SoapAccountApiTest extends WebTestCase
                 throw $e;
             }
         }
-    }
-
-    /**
-     * Data provider for API tests
-     * @return array
-     */
-    public function requestsApi()
-    {
-        return ToolsAPI::requestsApi(__DIR__ . DIRECTORY_SEPARATOR . 'Request');
     }
 }
