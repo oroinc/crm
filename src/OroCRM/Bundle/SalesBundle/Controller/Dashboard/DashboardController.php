@@ -32,4 +32,24 @@ class DashboardController extends Controller
 
         return $result;
     }
+
+    /**
+     * @Route(
+     *      "/opportunity_state/chart/{widget}",
+     *      name="orocrm_sales_dashboard_opportunity_by_state_chart",
+     *      requirements={"widget"="[\w_-]+"}
+     * )
+     * @Template("OroCRMSalesBundle:Dashboard:opportunityByState.html.twig")
+     */
+    public function opportunityByStateAction($widget)
+    {
+        return array_merge(
+            [
+                'items' => $this->getDoctrine()
+                        ->getRepository('OroCRMSalesBundle:Opportunity')
+                        ->getOpportunitiesByState($this->get('oro_security.acl_helper'))
+            ],
+            $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
+        );
+    }
 }

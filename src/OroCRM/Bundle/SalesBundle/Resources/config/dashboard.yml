@@ -48,6 +48,10 @@ oro_dashboard_config:
             label:      Opportunities By Lead Source
             route:      oro_sales_dashboard_opportunities_by_lead_source_chart
             acl:        orocrm_sales_opportunity_view
+        opportunities_by_state:
+            label:      Opportunities by State
+            route:      orocrm_sales_dashboard_opportunity_by_state_chart
+            acl:        orocrm_sales_opportunity_view
 
     dashboards:
         quick_launchpad:
@@ -60,3 +64,5 @@ oro_dashboard_config:
             widgets:
                 opportunities_by_lead_source_chart:
                     position:   80
+                opportunities_by_state:
+                    position: 90

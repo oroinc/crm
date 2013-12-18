@@ -13,7 +13,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
  * @ORM\Table(name="orocrm_sales_opportunity")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
