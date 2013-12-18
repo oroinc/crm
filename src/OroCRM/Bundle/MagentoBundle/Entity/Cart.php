@@ -24,7 +24,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * )
  * @Config(
  *  defaultValues={
- *      "entity"={"label"="Magento Cart", "plural_label"="Magento Carts"},
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""

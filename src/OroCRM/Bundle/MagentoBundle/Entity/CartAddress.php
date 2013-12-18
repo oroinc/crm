@@ -11,11 +11,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 /**
  * @ORM\Table("orocrm_magento_cart_address")
  * @ORM\HasLifecycleCallbacks()
- * @Config(
- *  defaultValues={
- *      "entity" = {"label"="Magento Cart Address", "plural_label"="Magento Cart Addresses"}
- *  }
- * )
+ * @Config()
  * @ORM\Entity
  * @Oro\Loggable
  */

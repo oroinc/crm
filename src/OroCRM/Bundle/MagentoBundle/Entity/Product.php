@@ -20,7 +20,6 @@ use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
  * )
  * @Config(
  *  defaultValues={
- *      "entity"={"label"="Magento Product", "plural_label"="Magento Products"},
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""

@@ -10,29 +10,30 @@
 <div class="widget-content order-info-widget form-horizontal box-content row-fluid">
     <div class="span6">
         <div class="control-group">
-            {{ _self.renderRow('Status'|trans, entity.status|trans) }}
-            {{ _self.renderRow('Currency'|trans, entity.currency|trans) }}
-            {{ _self.renderRow('Total Amount'|trans, entity.totalAmount|oro_format_decimal) }}
-            {{ _self.renderRow('Discount Amount'|trans, entity.discountAmount|oro_format_decimal) }}
-            {{ _self.renderRow('Tax Amount'|trans, entity.taxAmount|oro_format_decimal) }}
-            {{ _self.renderRow('Shipping Amount'|trans, entity.shippingAmount|oro_format_decimal) }}
-            {{ _self.renderRow('Total Paid Amount'|trans, entity.totalPaidAmount|oro_format_decimal) }}
-            {{ _self.renderRow('Total Invoiced Amount'|trans, entity.totalInvoicedAmount|oro_format_decimal) }}
-            {{ _self.renderRow('Total Refunded Amount'|trans, entity.totalRefundedAmount|oro_format_decimal) }}
-            {{ _self.renderRow('Total Canceled Amount'|trans, entity.totalCanceledAmount|oro_format_decimal) }}
+            {{ _self.renderRow('orocrm.magento.order.status.label'|trans, entity.status|trans) }}
+            {{ _self.renderRow('orocrm.magento.order.currency.label'|trans, entity.currency|trans) }}
+
+            {{ _self.renderRow('orocrm.magento.order.total_amount.label'|trans, entity.totalAmount|oro_format_decimal) }}
+            {{ _self.renderRow('orocrm.magento.order.discount_amount.label'|trans, entity.discountAmount|oro_format_decimal) }}
+            {{ _self.renderRow('orocrm.magento.order.tax_amount.label'|trans, entity.taxAmount|oro_format_decimal) }}
+            {{ _self.renderRow('orocrm.magento.order.shipping_amount.label'|trans, entity.shippingAmount|oro_format_decimal) }}
+            {{ _self.renderRow('orocrm.magento.order.total_paid_amount.label'|trans, entity.totalPaidAmount|oro_format_decimal) }}
+            {{ _self.renderRow('orocrm.magento.order.total_invoiced_amount.label'|trans, entity.totalInvoicedAmount|oro_format_decimal) }}
+            {{ _self.renderRow('orocrm.magento.order.total_refunded_amount.label'|trans, entity.totalRefundedAmount|oro_format_decimal) }}
+            {{ _self.renderRow('orocrm.magento.order.total_canceled_amount.label'|trans, entity.totalCanceledAmount|oro_format_decimal) }}
         </div>
     </div>
 
     <div class="span6">
-        {{ _self.renderRow('Remote Address'|trans, entity.remoteIp) }}
-        {{ _self.renderRow('Payment method'|trans, entity.paymentMethod|trans|capitalize) }}
-        {{ _self.renderRow('Payment details'|trans, entity.paymentDetails) }}
-        {{ _self.renderRow('Shipping method'|trans, entity.shippingMethod|trans|capitalize) }}
-        {{ _self.renderRow('Gift message'|trans, entity.giftMessage) }}
-        {{ _self.renderRow('Website'|trans, entity.store.website.name) }}
-        {{ _self.renderRow('Store'|trans, entity.store.name) }}
+        {{ _self.renderRow('orocrm.magento.order.remote_ip.label'|trans, entity.remoteIp) }}
+        {{ _self.renderRow('orocrm.magento.order.payment_method.label'|trans, entity.paymentMethod|trans|capitalize) }}
+        {{ _self.renderRow('orocrm.magento.order.payment_details.label'|trans, entity.paymentDetails) }}
+        {{ _self.renderRow('orocrm.magento.order.shipping_method.label'|trans, entity.shippingMethod|trans|capitalize) }}
+        {{ _self.renderRow('orocrm.magento.order.gift_message.label'|trans, entity.giftMessage) }}
+        {{ _self.renderRow('orocrm.magento.order.store_name.label'|trans, entity.store.website.name) }}
+        {{ _self.renderRow('orocrm.magento.order.store.label'|trans, entity.store.name) }}
         <div class="control-group">
-            <label class="control-label">{% trans %}Customer{% endtrans %}</label>
+            <label class="control-label">{{ 'orocrm.magento.order.customer.label'|trans }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
                     <p class="control-label">
@@ -51,7 +52,7 @@
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label">{% trans %}Cart{% endtrans %}</label>
+            <label class="control-label">{{ 'orocrm.magento.order.cart.label'|trans }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
                     <p class="control-label">

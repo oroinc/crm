@@ -21,7 +21,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * )
  * @Config(
  *  defaultValues={
- *      "entity"={"label"="Magento Order", "plural_label"="Magento Orders"},
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""

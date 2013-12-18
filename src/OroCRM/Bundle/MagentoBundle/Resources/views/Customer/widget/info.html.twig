@@ -12,9 +12,9 @@
         {% if entity.email != null %}
             {% set email = '<a href="mailto: ' ~ email ~ '" title="' ~ email ~ '">' ~ email ~ '</a>'%}
         {% endif %}
-        {{ _self.renderRow('Email'|trans, email) }}
+        {{ _self.renderRow('orocrm.magento.customer.email.label'|trans, email) }}
         <div class="control-group">
-            <label class="control-label">{% trans %}Birthday{% endtrans %}</label>
+            <label class="control-label">{{  'orocrm.magento.customer.birthday.label'|trans }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
                     <p class="control-label">
@@ -27,17 +27,17 @@
             </div>
         </div>
 
-        {{ _self.renderRow('Gender'|trans, oro_gender(entity.gender)) }}
-        {{ _self.renderRow('Tax/Vat'|trans, entity.vat) }}
+        {{ _self.renderRow('orocrm.magento.customer.gender.label'|trans, oro_gender(entity.gender)) }}
+        {{ _self.renderRow('orocrm.magento.customer.vat.label'|trans, entity.vat) }}
     </div>
 
     <div class="span6">
-        {{ _self.renderRow('Website'|trans, entity.website.name) }}
-        {{ _self.renderRow('Store'|trans, entity.store.name) }}
-        {{ _self.renderRow('Customer Group'|trans, entity.group.name) }}
+        {{ _self.renderRow('orocrm.magento.customer.website.label'|trans, entity.website.name) }}
+        {{ _self.renderRow('orocrm.magento.customer.store.label'|trans, entity.store.name) }}
+        {{ _self.renderRow('orocrm.magento.customer.group.label'|trans, entity.group.name) }}
 
         <div class="control-group">
-            <label class="control-label">{% trans %}Account{% endtrans %}</label>
+            <label class="control-label">{{ 'orocrm.magento.customer.account.label'|trans }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
                     <p class="control-label">
@@ -56,7 +56,7 @@
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label">{% trans %}Contact{% endtrans %}</label>
+            <label class="control-label">{{ 'orocrm.magento.customer.contact.label'|trans }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
                     <p class="control-label">

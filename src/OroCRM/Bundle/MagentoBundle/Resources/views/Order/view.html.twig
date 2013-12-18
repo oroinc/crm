@@ -9,8 +9,8 @@
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('orocrm_magento_order_index', {id: entity.channel.id}),
-        'indexLabel': 'Orders'|trans,
-        'entityTitle': 'Order #' ~ entity.incrementId
+        'indexLabel': 'orocrm.magento.order.entity_plural_label'|trans,
+        'entityTitle': 'orocrm.magento.order.entity_label'|trans ~ ' #' ~ entity.incrementId
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
@@ -35,18 +35,20 @@
     {% set orderAddresses = [] %}
     {% if entity.addresses is not empty %}
         {% for address in entity.addresses %}
-            {% set title = address.types.first and address.types.first.name == 'billing' ? 'Billing Address' : 'Shipping Address' %}
+            {% set title = address.types.first and address.types.first.name == 'billing'
+                ? 'orocrm.magento.cart.billing_address.label'|trans
+                : 'orocrm.magento.cart.shipping_address.label'|trans %}
             {% set orderAddresses = orderAddresses|merge([{'title': title|trans, 'data': [addressView.renderAddress(address)]}]) %}
         {% endfor %}
     {% endif %}
 
     {% if (orderAddresses|length) %}
-        {% set dataBlocks = dataBlocks|merge([{'title' : 'Addresses'|trans, 'subblocks': orderAddresses}])%}
+        {% set dataBlocks = dataBlocks|merge([{'title' : 'orocrm.magento.order.addresses.label'|trans, 'subblocks': orderAddresses}])%}
     {% endif %}
 
 
     {% set dataBlocks = dataBlocks|merge([{
-        'title': 'Order Items'|trans,
+        'title': 'orocrm.magento.order.items.label'|trans,
             'subblocks': [{
             'title': null,
             'data': [
