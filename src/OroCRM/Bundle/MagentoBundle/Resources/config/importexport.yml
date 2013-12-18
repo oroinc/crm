@@ -172,7 +172,7 @@ services:
         tags:
             - { name: oro_importexport.normalizer, priority: 200 }
 
-    orocrm_magento.importexport.denormalizer.order_address:
+    orocrm_magento.importexport.denormalizer.order_item:
         class: %orocrm_magento.importexport.denormalizer.order_item.class%
         arguments:
             - @doctrine.orm.default_entity_manager

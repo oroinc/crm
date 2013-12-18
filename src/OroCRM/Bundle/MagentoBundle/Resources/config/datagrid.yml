@@ -111,7 +111,7 @@ datagrid:
                     - c.originId
                     - c.email
                     - c.itemsQty
-                    - c.quoteCurrencyCode
+                    - c.quoteCurrencyCode as currency
                     - c.subTotal
                     - c.grandTotal
                     - c.createdAt
@@ -134,12 +134,16 @@ datagrid:
                 label: orocrm.magento.datagrid.columns.originId
             itemsQty:
                 label: orocrm.magento.datagrid.columns.qty
-            quoteCurrencyCode:
-                label: orocrm.magento.datagrid.columns.currency
             subTotal:
                 label: orocrm.magento.datagrid.columns.sub_total
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             grandTotal:
                 label: orocrm.magento.datagrid.columns.grand_total
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             email:
                 label: orocrm.magento.datagrid.columns.email
             websiteName:
@@ -162,7 +166,6 @@ datagrid:
             columns:
                 originId:             { data_name: c.originId }
                 itemsQty:             { data_name: c.itemsQty }
-                quoteCurrencyCode:    { data_name: c.quoteCurrencyCode }
                 email:                { data_name: c.email }
                 subTotal:             { data_name: c.subTotal }
                 grandTotal:           { data_name: c.grandTotal }
@@ -233,8 +236,12 @@ datagrid:
                     - c.productType
                     - c.createdAt
                     - c.updatedAt
+                    - co.quoteCurrencyCode as currency
                 from:
                     - { table: OroCRMMagentoBundle:CartItem , alias: c }
+                join:
+                    left:
+                        - { join: c.cart, alias: co }
                 where:
                     and:
                         - c.cart = :id
@@ -250,19 +257,29 @@ datagrid:
                 label: orocrm.magento.datagrid.columns.gift_message
             price:
                 label: orocrm.magento.datagrid.columns.price
-                frontend_type: decimal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             priceInclTax:
                 label: orocrm.magento.datagrid.columns.price_incl_tax
-                frontend_type: decimal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             rowTotal:
                 label: orocrm.magento.datagrid.columns.row_total
-                frontend_type: decimal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             taxAmount:
                 label: orocrm.magento.datagrid.columns.tax_amount
-                frontend_type: decimal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             discountAmount:
                 label: orocrm.magento.datagrid.columns.discount_amount
-                frontend_type: decimal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             weight:
                 label: orocrm.magento.datagrid.columns.weight
                 frontend_type: decimal
@@ -425,17 +442,25 @@ datagrid:
             incrementId:
                 label: orocrm.magento.datagrid.columns.increment_id
             totalPaidAmount:
-                label: orocrm.magento.datagrid.columns.total_paid
-                frontend_type: decimal
+                label:  orocrm.magento.datagrid.columns.total_paid
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             totalInvoicedAmount:
                 label: orocrm.magento.datagrid.columns.total_invoiced
-                frontend_type: decimal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             shippingAmount:
                 label: orocrm.magento.datagrid.columns.shipping_amount
-                frontend_type: decimal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             subtotalAmount:
                 label: orocrm.magento.datagrid.columns.subtotal_amount
-                frontend_type: decimal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             status:
                 label: orocrm.magento.datagrid.columns.status
             createdAt:
@@ -514,8 +539,12 @@ datagrid:
             query:
                 select:
                     - oi
+                    - o.currency
                 from:
                     - { table: OroCRMMagentoBundle:OrderItem , alias: oi }
+                join:
+                    left:
+                        - { join: oi.order, alias: o }
                 where:
                     and:
                         - oi.order = :id
@@ -534,25 +563,35 @@ datagrid:
                 frontend_type: decimal
             price:
                 label: orocrm.magento.datagrid.columns.price
-                frontend_type: decimal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             originalPrice:
                 label: orocrm.magento.datagrid.columns.originalPrice
-                frontend_type: decimal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             discountPercent:
                 label: orocrm.magento.datagrid.columns.discountPercent
                 frontend_type: percent
             discountAmount:
                 label: orocrm.magento.datagrid.columns.discountAmount
-                frontend_type: decimal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             taxPercent:
                 label: orocrm.magento.datagrid.columns.taxPercent
                 frontend_type: percent
             taxAmount:
                 label: orocrm.magento.datagrid.columns.taxAmount
-                frontend_type: decimal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             rowTotal:
                 label: orocrm.magento.datagrid.columns.rowTotal
-                frontend_type: decimal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
         sorters:
             columns:
                 sku:                 { data_name: oi.sku }
