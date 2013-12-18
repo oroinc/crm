@@ -1,6 +1,6 @@
 workflows:
-    b2c_flow_shopping_cart:
-        label: 'Shopping Cart flow'
+    b2c_flow_abandoned_shopping_cart:
+        label: 'Abandoned Shopping Cart'
         enabled: true
         type: wizard
         steps:
@@ -189,7 +189,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         call_date:
-                            form_type: oro_date
+                            form_type: oro_datetime
                             options:
                                 required: true
                                 constraints:
@@ -747,7 +747,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         call_date:
-                            form_type: oro_date
+                            form_type: oro_datetime
                             options:
                                 required: true
                                 constraints:
@@ -820,8 +820,8 @@ workflows:
                             conditions:
                                 @and:
                                     - @empty: $contact
-                                    - @not_empty: $order.owner.contact
-                            parameters: [$account, $order.owner.contact]
+                                    - @not_empty: $order.customer.contact
+                            parameters: [$contact, $order.customer.contact]
                         - @assign_value:
                             conditions:
                                 @and:
