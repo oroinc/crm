@@ -8,6 +8,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
+use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 
 class OrderStrategy extends BaseStrategy
 {
@@ -94,7 +95,6 @@ class OrderStrategy extends BaseStrategy
             $cart->setStatus(Cart::STATUS_CONVERTED);
             $entity->setCart($cart);
         } else {
-            // @TODO decide to import new one or not
             $entity->setCart(null);
         }
     }
@@ -135,6 +135,45 @@ class OrderStrategy extends BaseStrategy
      */
     protected function processItems(Order $entityToUpdate, Order $entityToImport)
     {
+        $importedOriginIds = $entityToImport->getItems()->map(
+            function (OrderItem $item) {
+                return $item->getOriginId();
+            }
+        )->toArray();
 
+        // insert new and update existing items
+        /** @var OrderItem $item - imported order item */
+        foreach ($entityToImport->getItems() as $item) {
+            $originId = $item->getOriginId();
+
+            $existingItem = $entityToUpdate->getItems()->filter(
+                function (OrderItem $item) use ($originId) {
+                    return $item->getOriginId() == $originId;
+                }
+            )->first();
+
+            if ($existingItem) {
+                $this->strategyHelper->importEntity($existingItem, $item, ['id', 'cart']);
+                $item = $existingItem;
+            }
+
+            if (!$item->getOrder()) {
+                $item->setOrder($entityToUpdate);
+            }
+
+            if (!$entityToUpdate->getItems()->contains($item)) {
+                $entityToUpdate->getItems()->add($item);
+            }
+        }
+
+        // delete cart items that not exists in remote cart
+        $deletedCartItems = $entityToUpdate->getItems()->filter(
+            function (OrderItem $item) use ($importedOriginIds) {
+                return !in_array($item->getOriginId(), $importedOriginIds);
+            }
+        );
+        foreach ($deletedCartItems as $item) {
+            $entityToUpdate->getItems()->remove($item);
+        }
     }
 }
