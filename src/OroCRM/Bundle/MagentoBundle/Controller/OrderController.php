@@ -10,17 +10,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Product;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
 /**
- * @Route("/product")
+ * @Route("/order")
  */
-class ProductController extends Controller
+class OrderController extends Controller
 {
     /**
      * @Route("/{id}", requirements={"id"="\d+"}))
-     * @AclAncestor("orocrm_magento_product_view")
+     * @AclAncestor("orocrm_magento_order_view")
      * @Template
      */
     public function indexAction(Channel $channel)
@@ -31,25 +31,35 @@ class ProductController extends Controller
     /**
      * @Route("/view/{id}", requirements={"id"="\d+"}))
      * @Acl(
-     *      id="orocrm_magento_product_view",
+     *      id="orocrm_magento_order_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMMagentoBundle:Product"
+     *      class="OroCRMMagentoBundle:Order"
      * )
      * @Template
      */
-    public function viewAction(Product $customer)
+    public function viewAction(Order $order)
     {
-        return ['entity' => $customer];
+        return ['entity' => $order];
     }
 
     /**
-     * @Route("/info/{id}", requirements={"id"="\d+"}))
-     * @AclAncestor("orocrm_magento_product_view")
+     * @Route("/info/{id}", name="orocrm_order_widget_info", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_cart_view")
      * @Template
      */
-    public function infoAction(Product $customer)
+    public function infoAction(Order $order)
     {
-        return ['entity' => $customer];
+        return ['entity' => $order];
+    }
+
+    /**
+     * @Route("/widget/grid/{id}", name="orocrm_order_widget_items", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_cart_view")
+     * @Template
+     */
+    public function itemsAction(Order $order)
+    {
+        return ['entity' => $order];
     }
 }

@@ -36,6 +36,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  */
 class Cart extends BaseCart
 {
+    const STATUS_ACTIVE    = 'orocrm.magento.cart.status.active';
+    const STATUS_CONVERTED = 'orocrm.magento.cart.status.converted';
+
     use IntegrationEntityTrait, OriginTrait;
 
     /**
@@ -116,7 +119,7 @@ class Cart extends BaseCart
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     protected $email;
 
@@ -156,6 +159,13 @@ class Cart extends BaseCart
      * @ORM\Column(name="payment_details", type="string", length=255, nullable=true)
      */
     protected $paymentDetails;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", length=50)
+     */
+    protected $status = self::STATUS_ACTIVE;
 
     /**
      * @return CartItem[]|Collection
@@ -278,5 +288,25 @@ class Cart extends BaseCart
     public function getPaymentDetails()
     {
         return $this->paymentDetails;
+    }
+
+    /**
+     * @param string $status
+     *
+     * @return $this
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }
