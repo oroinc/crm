@@ -19,7 +19,7 @@ class CallType extends AbstractType
     /**
      * Constructor.
      *
-     * @param ContactPhoneSubscriber $om
+     * @param ContactPhoneSubscriber $contactPhoneSubscriber
      */
     public function __construct(ContactPhoneSubscriber $contactPhoneSubscriber)
     {
@@ -46,7 +46,11 @@ class CallType extends AbstractType
             ->add('phoneNumber', 'text', array('required' => false, 'attr' => array('class' => 'hide')))
             ->add('notes', 'textarea', array('required' => false))
             ->add('callDateTime', 'oro_datetime', array('required' => true))
-            ->add('callStatus', 'hidden', array('property_path' => 'callStatus.status'))
+            ->add(
+                'callStatus',
+                'entity',
+                array('class' => 'OroCRM\Bundle\CallBundle\Entity\CallStatus', 'required' => true)
+            )
             ->add('duration', 'time', array('required' => false, 'widget' => 'single_text', 'with_seconds' => true))
             ->add(
                 'direction',

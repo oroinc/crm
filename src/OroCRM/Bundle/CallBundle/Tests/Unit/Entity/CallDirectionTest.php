@@ -11,7 +11,9 @@ class CallDirectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSet($property, $value, $expected)
     {
-        $obj = new CallDirection();
+        $directionName = 'forward';
+        $obj = new CallDirection($directionName);
+        $this->assertEquals($directionName, $obj->getName());
 
         call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
         $this->assertEquals($expected, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
@@ -20,7 +22,7 @@ class CallDirectionTest extends \PHPUnit_Framework_TestCase
     public function getSetDataProvider()
     {
         return array(
-            'direction' => array('direction', 1, 1),
+            'label' => array('label', 'my direction', 'my direction'),
         );
     }
 }
