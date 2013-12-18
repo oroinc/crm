@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\EntityBundle\ORM\EntityConfigAwareRepositoryInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class LeadRepository extends EntityRepository implements EntityConfigAwareRepositoryInterface
 {
@@ -25,10 +26,11 @@ class LeadRepository extends EntityRepository implements EntityConfigAwareReposi
      * Returns top $limit opportunities and grouped by lead source and calculate
      * a fraction of opportunities for each lead source
      *
-     * @param int $limit
+     * @param AclHelper $aclHelper
+     * @param int       $limit
      * @return array [fraction, label]
      */
-    public function getOpportunitiesByLeadSource($limit = 10)
+    public function getOpportunitiesByLeadSource(AclHelper $aclHelper, $limit = 10)
     {
         $leadSourceFieldId = $this->entityConfigManager
             ->getConfigFieldModel($this->getClassName(), "extend_source")
@@ -43,7 +45,7 @@ class LeadRepository extends EntityRepository implements EntityConfigAwareReposi
             ->leftJoin('osr.option', 'opt')
             ->groupBy('opt.id, opt.label')
             ->setMaxResults($limit - 1);
-        $result = $qb->getQuery()->getArrayResult();
+        $result = $aclHelper->apply($qb)->getArrayResult();
 
         // calculate total number of opportunities, update Unclassified source and collect other sources
         $sources               = [];
@@ -71,7 +73,7 @@ class LeadRepository extends EntityRepository implements EntityConfigAwareReposi
             if (!$hasUnclassifiedSource) {
                 $qb->orWhere($qb->expr()->isNull('opt.id'));
             }
-            $others   = $qb->getQuery()->getArrayResult();
+            $others   = $aclHelper->apply($qb)->getArrayResult();
             if (!empty($others)) {
                 $others = reset($others);
                 $result[] = array_merge(['label' => 'Others'], $others);

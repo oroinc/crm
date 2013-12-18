@@ -21,7 +21,7 @@ class DashboardController extends Controller
     {
         $data = $this->getDoctrine()
             ->getRepository('OroCRMSalesBundle:Lead')
-            ->getOpportunitiesByLeadSource();
+            ->getOpportunitiesByLeadSource($this->get('oro_security.acl_helper'));
 
         $result = array_merge(
             [
