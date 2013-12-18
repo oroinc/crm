@@ -243,14 +243,6 @@ class LeadController extends Controller
     }
 
     /**
-     * @return FlashBag
-     */
-    protected function getFlashBag()
-    {
-        return $this->get('session')->getFlashBag();
-    }
-
-    /**
      * @param Lead $entity
      *
      * @return array

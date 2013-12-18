@@ -14,7 +14,7 @@ class LoadCallStatusData extends AbstractFixture
      */
     protected $data = array(
         'in_progress' => 'In progress',
-        'completed'   => 'Completed',
+        'completed' => 'Completed',
     );
 
     /**

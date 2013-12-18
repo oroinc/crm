@@ -5,9 +5,12 @@ namespace OroCRM\Bundle\CallBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * CallDirection
+ *
  * @ORM\Table(name="orocrm_call_direction")
  * @ORM\Entity
  */
+
 class CallDirection
 {
     /**
@@ -34,7 +37,9 @@ class CallDirection
     }
 
     /**
-     * @return integer
+     * Get type name
+     *
+     * @return string
      */
     public function getName()
     {
@@ -42,6 +47,8 @@ class CallDirection
     }
 
     /**
+     * Set address type label
+     *
      * @param string $label
      * @return CallDirection
      */
@@ -53,6 +60,8 @@ class CallDirection
     }
 
     /**
+     * Get address type label
+     *
      * @return string
      */
     public function getLabel()
@@ -60,8 +69,11 @@ class CallDirection
         return $this->label;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
-        return $this->label;
+        return (string) $this->label;
     }
 }

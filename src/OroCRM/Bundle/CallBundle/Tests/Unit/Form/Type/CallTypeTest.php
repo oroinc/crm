@@ -49,7 +49,7 @@ class CallTypeTest extends FormIntegrationTestCase
             'phoneNumber' => 'text',
             'notes' => 'textarea',
             'callDateTime' => 'oro_datetime',
-            'callStatus' => 'hidden',
+            'callStatus' => 'entity',
             'duration' => 'time',
             'direction' => 'entity'
         );

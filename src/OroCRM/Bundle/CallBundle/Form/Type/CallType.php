@@ -5,6 +5,10 @@ namespace OroCRM\Bundle\CallBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
 
 use OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber;
 
@@ -42,16 +46,16 @@ class CallType extends AbstractType
             ->add('phoneNumber', 'text', array('required' => false, 'attr' => array('class' => 'hide')))
             ->add('notes', 'textarea', array('required' => false))
             ->add('callDateTime', 'oro_datetime', array('required' => true))
-            ->add('callStatus', 'hidden', array('property_path' => 'callStatus.name'))
+            ->add(
+                'callStatus',
+                'entity',
+                array('class' => 'OroCRM\Bundle\CallBundle\Entity\CallStatus', 'required' => true)
+            )
             ->add('duration', 'time', array('required' => false, 'widget' => 'single_text', 'with_seconds' => true))
             ->add(
                 'direction',
                 'entity',
-                array(
-                    'class' => 'OroCRM\Bundle\CallBundle\Entity\CallDirection',
-                    'property' => 'label',
-                    'required' => true
-                )
+                array('class' => 'OroCRM\Bundle\CallBundle\Entity\CallDirection', 'required' => true)
             );
     }
 

@@ -5,9 +5,12 @@ namespace OroCRM\Bundle\CallBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * CallStatus
+ *
  * @ORM\Table(name="orocrm_call_status")
  * @ORM\Entity
  */
+
 class CallStatus
 {
     /**
@@ -34,7 +37,9 @@ class CallStatus
     }
 
     /**
-     * @return integer
+     * Get type name
+     *
+     * @return string
      */
     public function getName()
     {
@@ -42,17 +47,21 @@ class CallStatus
     }
 
     /**
+     * Set address type label
+     *
      * @param string $label
      * @return CallStatus
      */
     public function setLabel($label)
     {
         $this->label = $label;
-    
+
         return $this;
     }
 
     /**
+     * Get address type label
+     *
      * @return string
      */
     public function getLabel()
@@ -60,8 +69,11 @@ class CallStatus
         return $this->label;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
-        return $this->label;
+        return (string) $this->label;
     }
 }

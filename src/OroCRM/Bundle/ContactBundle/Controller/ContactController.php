@@ -269,14 +269,6 @@ class ContactController extends Controller
     }
 
     /**
-     * @return FlashBag
-     */
-    protected function getFlashBag()
-    {
-        return $this->get('session')->getFlashBag();
-    }
-
-    /**
      * @return ApiEntityManager
      */
     protected function getManager()

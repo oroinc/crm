@@ -51,6 +51,7 @@ class ControllersTest extends WebTestCase
         $this->assertContains("Contact saved", $crawler->html());
     }
 
+
     public function testUpdate()
     {
         $result = ToolsAPI::getEntityGrid(
@@ -99,6 +100,42 @@ class ControllersTest extends WebTestCase
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
         $this->assertRegExp("/Contact_fname_updated\s+Contact_lname_updated - Contacts - Customers/", $crawler->html());
+    }
+
+    /**
+     * @depends testUpdate
+     * @param $id
+     */
+    public function testCreateEmail($id)
+    {
+        $crawler = $this->client->request(
+            'GET',
+            $this->client->generate(
+                'orocrm_contact_email_create',
+                array('contactId' => $id, '_widgetContainer' => 'dialog')
+            )
+        );
+        $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+
+        /** @var Form $form */
+        $form = $crawler->selectButton('Send')->form();
+        $form['oro_email_email[to]'] = 'test@test.exe';
+        $form['oro_email_email[subject]'] = 'Test Email';
+
+        $this->client->followRedirects(true);
+
+        $crawler = $this->client->request(
+            $form->getMethod(),
+            $form->getUri(),
+            array_merge($form->getPhpValues(), array('_widgetContainer' => 'dialog')),
+            $form->getPhpFiles()
+        );
+
+        $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+
+        $this->assertRegExp("/Unable to send the email/", $crawler->html());
     }
 
     /**
