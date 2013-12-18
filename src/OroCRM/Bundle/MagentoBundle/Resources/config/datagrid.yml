@@ -188,13 +188,12 @@ datagrid:
                           class: OroCRMMagentoBundle:Website
                           property: name
                 status:
-                    type:       choice
-                    data_name:  c.status
+                    type: entity
+                    data_name: c.status
                     options:
                         field_options:
-                            choices:
-                                'orocrm.magento.cart.status.active': OroCRM\Bundle\MagentoBundle\Entity\Cart::STATUS_ACTIVE
-                                'orocrm.magento.cart.status.converted': OroCRM\Bundle\MagentoBundle\Entity\Cart::STATUS_CONVERTED
+                            class: OroCRMMagentoBundle:CartStatus
+                            property: label
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt

@@ -1,9 +1,5 @@
 orocrm:
     magento:
-        cart:
-            status:
-                active:    Active
-                converted: Converted
         datagrid:
             actions:
                 view:
