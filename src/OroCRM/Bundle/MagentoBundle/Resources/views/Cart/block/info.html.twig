@@ -12,6 +12,6 @@
     </div>
     <div class="span6">
         {{ macros.renderProperty('Website'|trans, entity.store.website.name) }}
-        {{ macros.renderProperty('Store'|trans, entity.store.name) }}
+        {{ macros.renderProperty('Store'|trans, entity.store.name|nl2br) }}
     </div>
 </div>

@@ -19,11 +19,11 @@
 
 {% block workflow_title %}
     {% set titleParts = {
-        'indexPath':   path('orocrm_magento_order_index'),
+        'indexPath':   path('orocrm_magento_order_index', {id: workflowItem.data.order.channel.id}),
         'indexLabel': 'Orders'|trans,
         'additional': [
             {
-                'indexPath': path('orocrm_magento_order_view', {id:  workflowItem.data.order.id}),
+                'indexPath': path('orocrm_magento_order_view', {id: workflowItem.data.order.id}),
                 'indexLabel': 'Order #'|trans ~ workflowItem.data.order.id
             }
         ],
@@ -38,7 +38,7 @@
             {{
                 oro_widget_render({
                     'widgetType': 'block',
-                    'url': path('orocrm_magento_order_info', { id: workflowItem.data.order.id }),
+                    'url': path('orocrm_magento_order_widget_info', { id: workflowItem.data.order.id }),
                     'title': 'Order Information'|trans,
                     'alias': 'orer_info',
                     'contentClasses': ['form-horizontal']

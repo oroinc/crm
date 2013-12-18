@@ -346,19 +346,19 @@ workflows:
                             options:
                                 required: true
                                 constraints:
-                                  - NotBlank: ~
-                        account:
-                            form_type: orocrm_account_select
-                            options:
-                                required: true
-                                constraints:
                                     - NotBlank: ~
                         opportunity_owner:
                             form_type: oro_user_select
                             options:
                                 required: true
                                 constraints:
-                                  - NotBlank: ~
+                                    - NotBlank: ~
+                        account:
+                            form_type: orocrm_account_select
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
                         opportunity_budget:
                             form_type: oro_money
                             options:
@@ -368,7 +368,7 @@ workflows:
                             options:
                                 required: false
                     attribute_default_values:
-                        opportunity_budget: $shopping_cart.subtotal
+                        opportunity_budget: $shopping_cart.subTotal
                     init_actions:
                         - @assign_active_user: $opportunity_owner
                         - @format_name:
@@ -511,6 +511,9 @@ workflows:
                         - @not_empty:
                             parameters: $opportunity_owner
                             message: 'Owner must be set'
+                        - @not_empty:
+                            parameters: $account
+                            message: 'Account must be set'
                 post_actions:
                     - @find_entity: # Set cart status to converted_to_opportunity
                         class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
@@ -636,7 +639,7 @@ workflows:
                 label: 'Order'
                 type: entity
                 options:
-                    class: OroCRM\Bundle\B2CMockBundle\Entity\SaleOrder
+                    class: OroCRM\Bundle\MagentoBundle\Entity\Order
                     managed_entity: true
                     multiple: false
             call_collection:
@@ -778,14 +781,14 @@ workflows:
                             options:
                                 required: false
                     init_actions:
-                        # Assign either order owner primary phone or cart customer contact primary phone as phone
+                        # Assign either order customer primary phone or cart customer contact primary phone as phone
                         - @assign_value:
                             conditions:
                                 @and:
                                     - @empty: $phone_number
-                                    - @not_empty: $order.owner.contact
-                                    - @not_empty: $order.owner.contact.primaryPhone
-                            parameters: [$phone_number, $order.owner.contact.primaryPhone.phone]
+                                    - @not_empty: $order.customer.contact
+                                    - @not_empty: $order.customer.contact.primaryPhone
+                            parameters: [$phone_number, $order.customer.contact.primaryPhone.phone]
                         - @assign_value:
                             conditions:
                                 @and:
@@ -796,13 +799,13 @@ workflows:
                                     - @not_empty: $order.cart.customer.contact.primaryPhone
                             parameters: [$phone_number, $order.cart.customer.contact.primaryPhone.phone]
 
-                        # Assign either order owner account or order cart customer account as account
+                        # Assign either order customer account or order cart customer account as account
                         - @assign_value:
                             conditions:
                                 @and:
                                     - @empty: $account
-                                    - @not_empty: $order.owner.account
-                            parameters: [$account, $order.owner.account]
+                                    - @not_empty: $order.customer.account
+                            parameters: [$account, $order.customer.account]
                         - @assign_value:
                             conditions:
                                 @and:
@@ -891,9 +894,9 @@ workflows:
                             conditions:
                                 @and:
                                     - @empty: $email_to
-                                    - @not_empty: $order.owner
-                                    - @not_empty: $order.owner.email
-                            parameters: [$email_to, $order.owner.email]
+                                    - @not_empty: $order.customer
+                                    - @not_empty: $order.customer.email
+                            parameters: [$email_to, $order.customer.email]
                         - @assign_value: #Assign email to as shopping cart customer email
                             conditions:
                                 @and:
@@ -901,14 +904,14 @@ workflows:
                                     - @not_empty: $order.cart
                                     - @not_empty: $order.cart.email
                             parameters: [$email_to, $order.cart.email]
-                        - @assign_value: #Assign email to as shopping cart owner contact primary email
+                        - @assign_value: #Assign email to as shopping cart customer contact primary email
                             conditions:
                                 @and:
                                     - @empty: $email_to
-                                    - @not_empty: $order.owner
-                                    - @not_empty: $order.owner.customer.contact
-                                    - @not_empty: $order.owner.customer.contact.primaryEmail
-                            parameters: [$email_to, $order.owner.customer.contact.primaryEmail.email]
+                                    - @not_empty: $order.customer
+                                    - @not_empty: $order.customer.contact
+                                    - @not_empty: $order.customer.contact.primaryEmail
+                            parameters: [$email_to, $order.customer.contact.primaryEmail.email]
                         - @assign_value: #Assign email to as shopping cart customer email
                             conditions:
                                 @and:

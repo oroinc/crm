@@ -21,11 +21,11 @@
 
 {% block workflow_title %}
     {% set titleParts = {
-        'indexPath':   path('orocrm_magento_cart_index'),
+        'indexPath':   path('orocrm_magento_cart_index', {id: workflowItem.data.shopping_cart.channel.id}),
         'indexLabel': 'Carts'|trans,
         'additional': [
             {
-                'indexPath': path('orocrm_magento_cart_view', {id:  workflowItem.data.shopping_cart.id}),
+                'indexPath': path('orocrm_magento_cart_view', {id: workflowItem.data.shopping_cart.id}),
                 'indexLabel': 'Сart #'|trans ~ workflowItem.data.shopping_cart.id
             }
         ],
@@ -40,7 +40,7 @@
             {{
                 oro_widget_render({
                     'widgetType': 'block',
-                    'url': path('orocrm_magento_cart_info', { id: workflowItem.data.shopping_cart.id }),
+                    'url': path('orocrm_magento_cart_widget_info', { id: workflowItem.data.shopping_cart.id }),
                     'title': 'Cart Information'|trans,
                     'alias': 'shopping_cart_info',
                     'contentClasses': ['form-horizontal']

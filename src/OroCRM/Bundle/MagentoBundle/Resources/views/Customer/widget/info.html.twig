@@ -27,7 +27,7 @@
 
     <div class="span6">
         {{ macros.renderProperty('Website'|trans, entity.website.name) }}
-        {{ macros.renderProperty('Store'|trans, entity.store.name) }}
+        {{ macros.renderProperty('Store'|trans, entity.store.name|nl2br) }}
         {% if entity.group %}
             {{ macros.renderProperty('Customer Group'|trans, entity.group.name) }}
         {% endif %}

@@ -19,7 +19,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 class SoapController extends Controller
 {
     /**
-     * @Route("/check")
+     * @Route("/check", name="orocrm_magento_soap_check")
      * @AclAncestor("oro_integration_channel_update")
      */
     public function checkAction(Request $request)
