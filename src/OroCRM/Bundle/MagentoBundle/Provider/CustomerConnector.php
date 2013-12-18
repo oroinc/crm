@@ -68,9 +68,6 @@ class CustomerConnector extends AbstractApiBasedConnector
             }
         }
 
-        /**
-         * @TODO FIXME move to converter
-         */
         $result->group               = $this->dependencies[self::ALIAS_GROUPS][$result->group_id];
         $result->group['originId']   = $result->group['customer_group_id'];
         $result->store               = $this->dependencies[self::ALIAS_STORES][$result->store_id];

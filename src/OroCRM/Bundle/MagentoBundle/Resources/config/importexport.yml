@@ -21,8 +21,8 @@ parameters:
     orocrm_magento.mage.order_connector.class:                                  OroCRM\Bundle\MagentoBundle\Provider\OrderConnector
 
     # normalizers
-    orocrm_magento.importexport.normalizer.customer.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerNormalizer
-    orocrm_magento.importexport.normalizer.region.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\RegionNormalizer
+    orocrm_magento.importexport.denormalizer.customer.class:                    OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerDenormalizer
+    orocrm_magento.importexport.denormalizer.region.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\RegionDenormalizer
     orocrm_magento.importexport.relation_normalizer.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\RelationNormalizer
     orocrm_magento.importexport.typed_address_normalizer.class:                 OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\MagentoAddressNormalizer
     orocrm_magento.importexport.normalizer.cart.class:                          OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CartNormalizer
@@ -111,8 +111,8 @@ services:
 
 
     # Normalizers / Denormalizers
-    orocrm_magento.importexport.normalizer.customer:
-        class: %orocrm_magento.importexport.normalizer.customer.class%
+    orocrm_magento.importexport.denormalizer.customer:
+        class: %orocrm_magento.importexport.denormalizer.customer.class%
         arguments:
             - @doctrine.orm.default_entity_manager
         tags:
@@ -125,8 +125,8 @@ services:
         tags:
             - { name: oro_importexport.normalizer }
 
-    orocrm_magento.importexport.normalizer.region:
-        class: %orocrm_magento.importexport.normalizer.region.class%
+    orocrm_magento.importexport.denormalizer.region:
+        class: %orocrm_magento.importexport.denormalizer.region.class%
         arguments:
             - @doctrine.orm.default_entity_manager
         tags:
@@ -187,15 +187,15 @@ services:
         class: %orocrm_magento.import_strategy.cart.add_or_update.class%
         arguments:
             - @oro_importexport.strategy.import.helper
-        calls:
-            - [setStoreStrategy, ["@orocrm_magento.import.strategy.store"]]
+        arguments:
+            - @oro_importexport.strategy.import.helper
+            - @orocrm_magento.import.strategy.store
 
     orocrm_magento.import.strategy.order.add_or_update:
         class: %orocrm_magento.import_strategy.order.add_or_update.class%
         arguments:
             - @oro_importexport.strategy.import.helper
-        calls:
-            - [setStoreStrategy, ["@orocrm_magento.import.strategy.store"]]
+            - @orocrm_magento.import.strategy.store
 
     # Processors
     orocrm_magento.importexport.processor.import_customer:

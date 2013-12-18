@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 use Doctrine\Common\Collections\Collection;
 
@@ -13,13 +12,12 @@ use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
-
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 
-class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterface, DenormalizerInterface
+class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
     const ENTITY_NAME = 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
 
@@ -47,38 +45,6 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
     const GROUPS_TYPE         = 'OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup';
     const ADDRESSES_TYPE      = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactAddress>';
     const MAGE_ADDRESSES_TYPE = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\Address>';
-
-    /**
-     * For exporting customers
-     *
-     * @param Customer $object
-     * @param null     $format
-     * @param array    $context
-     *
-     * @return array
-     */
-    public function normalize($object, $format = null, array $context = array())
-    {
-        /*
-         * TODO: consider automatically converting to array
-         * (public props, or toArray method, or add all required fields here)
-         */
-        if (method_exists($object, 'toArray')) {
-            $result = $object->toArray($format, $context);
-        } else {
-            $result = array(
-                'customer_id' => $object->getId(),
-                'firstname'   => $object->getFirstName(),
-                'lastname'    => $object->getLastName(),
-                'email'       => $object->getEmail(),
-                'store_id'    => $object->getStore()->getId(),
-                'website_id'  => $object->getWebsite()->getId(),
-                // TODO: continue with other fields, use $importFieldsMap
-            );
-        }
-
-        return $result;
-    }
 
     /**
      * For importing customers
@@ -378,19 +344,6 @@ class CustomerNormalizer extends AbstractNormalizer implements NormalizerInterfa
         }
 
         return $result;
-    }
-
-    /**
-     * Used in export
-     *
-     * @param mixed $data
-     * @param null  $format
-     *
-     * @return bool
-     */
-    public function supportsNormalization($data, $format = null)
-    {
-        return $data instanceof Customer;
     }
 
     /**

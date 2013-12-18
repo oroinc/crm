@@ -4,21 +4,25 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\ORM\UnitOfWork;
 
+use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\RegionDenormalizer;
+
 class RegionStrategy extends BaseStrategy
 {
-    const ENTITY_NAME = 'OroCRMMagentoBundle:Region';
-
     /**
      * {@inheritdoc}
      */
     public function process($entity)
     {
-        $entity = $this->findAndReplaceEntity($entity, self::ENTITY_NAME, 'combinedCode');
+        $exclude = [];
+
+        if (!$entity->getName()) {
+            // do not update name if it's empty, due to bug in magento API
+            $exclude = ['name'];
+        }
+        $entity = $this->findAndReplaceEntity($entity, RegionDenormalizer::TYPE, 'combinedCode', $exclude);
 
         // validate and update context - increment counter or add validation error
-        $entity = $this->validateAndUpdateContext($entity);
-
-        return $entity;
+        return $this->validateAndUpdateContext($entity);
     }
 
     /**
@@ -31,10 +35,11 @@ class RegionStrategy extends BaseStrategy
         if ($validationErrors) {
             $this->importExportContext->incrementErrorEntriesCount();
             $this->strategyHelper->addValidationErrors($validationErrors, $this->importExportContext);
+
             return null;
         }
 
-        $uow = $this->strategyHelper->getEntityManager(self::ENTITY_NAME)->getUnitOfWork();
+        $uow = $this->strategyHelper->getEntityManager(RegionDenormalizer::TYPE)->getUnitOfWork();
         // increment context counter
         if ($uow->getEntityState($entity, UnitOfWork::STATE_NEW) === UnitOfWork::STATE_NEW) {
             $this->importExportContext->incrementAddCount();

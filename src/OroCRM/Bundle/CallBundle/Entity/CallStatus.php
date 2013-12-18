@@ -14,57 +14,66 @@ use Doctrine\ORM\Mapping as ORM;
 class CallStatus
 {
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="name", type="string", length=32)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="status", type="string", length=255)
+     * @ORM\Column(name="label", type="string", length=255, unique=true)
      */
-    protected $status;
-
+    protected $label;
 
     /**
-     * Get id
-     *
-     * @return integer 
+     * @param string $name
      */
-    public function getId()
+    public function __construct($name)
     {
-        return $this->id;
+        $this->name = $name;
     }
 
     /**
-     * Set status
+     * Get type name
      *
-     * @param string $status
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set address type label
+     *
+     * @param string $label
      * @return CallStatus
      */
-    public function setStatus($status)
+    public function setLabel($label)
     {
-        $this->status = $status;
-    
+        $this->label = $label;
+
         return $this;
     }
 
     /**
-     * Get status
+     * Get address type label
      *
-     * @return string 
+     * @return string
      */
-    public function getStatus()
+    public function getLabel()
     {
-        return $this->status;
+        return $this->label;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
-        return $this->status;
+        return (string) $this->label;
     }
 }

@@ -114,6 +114,7 @@ datagrid:
                     - c.quoteCurrencyCode
                     - c.subTotal
                     - c.grandTotal
+                    - c.status
                     - c.createdAt
                     - c.updatedAt
                     - cw.name as websiteName
@@ -142,6 +143,9 @@ datagrid:
                 label: orocrm.magento.datagrid.columns.email
             websiteName:
                 label: orocrm.magento.datagrid.columns.website
+            status:
+                type:  translatable
+                label: orocrm.magento.datagrid.columns.status
             createdAt:
                 label: orocrm.magento.datagrid.columns.created_at
                 frontend_type: datetime
@@ -160,13 +164,14 @@ datagrid:
                 itemsQty:             { data_name: c.itemsQty }
                 quoteCurrencyCode:    { data_name: c.quoteCurrencyCode }
                 email:                { data_name: c.email }
-                subTotal:    { data_name: c.subTotal }
-                grandTotal:  { data_name: c.grandTotal }
-                websiteName: { data_name: cw.name }
-                createdAt:   { data_name: c.createdAt }
-                updatedAt:   { data_name: c.updatedAt }
+                subTotal:             { data_name: c.subTotal }
+                grandTotal:           { data_name: c.grandTotal }
+                websiteName:          { data_name: cw.name }
+                status:               { data_name: c.status }
+                createdAt:            { data_name: c.createdAt }
+                updatedAt:            { data_name: c.updatedAt }
             default:
-                grandTotal:  DESC
+                updatedAt:  ASC
         filters:
             columns:
                 originId:
@@ -182,6 +187,14 @@ datagrid:
                         field_options:
                           class: OroCRMMagentoBundle:Website
                           property: name
+                status:
+                    type:       choice
+                    data_name:  c.status
+                    options:
+                        field_options:
+                            choices:
+                                'orocrm.magento.cart.status.active': OroCRM\Bundle\MagentoBundle\Entity\Cart::STATUS_ACTIVE
+                                'orocrm.magento.cart.status.converted': OroCRM\Bundle\MagentoBundle\Entity\Cart::STATUS_CONVERTED
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt

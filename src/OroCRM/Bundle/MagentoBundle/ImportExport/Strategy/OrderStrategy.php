@@ -2,9 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
+
+use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 
 class OrderStrategy extends BaseStrategy
 {
@@ -14,27 +17,34 @@ class OrderStrategy extends BaseStrategy
     /** @var StoreStrategy */
     protected $storeStrategy;
 
+    public function __construct(ImportStrategyHelper $strategyHelper, StoreStrategy $storeStrategy)
+    {
+        parent::__construct($strategyHelper);
+        $this->storeStrategy = $storeStrategy;
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function process($entity)
+    public function process($importingOrder)
     {
-        $criteria       = ['incrementId' => $entity->getIncrementId(), 'channel' => $entity->getChannel()];
-        $existingEntity = $this->getEntityByCriteria($criteria, $entity);
+        $criteria = ['incrementId' => $importingOrder->getIncrementId(), 'channel' => $importingOrder->getChannel()];
+        $order    = $this->getEntityByCriteria($criteria, $importingOrder);
 
-        if ($existingEntity) {
-            $this->strategyHelper->importEntity($existingEntity, $entity, self::$attributesToUpdateManual);
+        if ($order) {
+            $this->strategyHelper->importEntity($order, $importingOrder, self::$attributesToUpdateManual);
         } else {
-            $existingEntity = $entity;
+            $order = $importingOrder;
         }
-
-        $this->processStore($existingEntity);
-        $this->processCustomer($existingEntity);
-        $this->processCart($existingEntity);
-        $this->processAddresses($existingEntity, $entity);
+        /** @var Order $order */
+        $this->processStore($order);
+        $this->processCustomer($order);
+        $this->processCart($order);
+        $this->processAddresses($order, $importingOrder);
+        $this->processItems($order);
 
         // check errors, update context increments
-        return $this->validateAndUpdateContext($existingEntity);
+        return $this->validateAndUpdateContext($order);
     }
 
     /**
@@ -53,6 +63,7 @@ class OrderStrategy extends BaseStrategy
      */
     protected function processCustomer(Order $entity)
     {
+        // customer could be array if comes new order or object if comes from DB
         $customerId = is_object($entity->getCustomer())
             ? $entity->getCustomer()->getOriginId()
             : $entity->getCustomer()['originId'];
@@ -60,7 +71,7 @@ class OrderStrategy extends BaseStrategy
         $criteria = ['originId' => $customerId, 'channel' => $entity->getChannel()];
 
         /** @var Customer|null $customer */
-        $customer = $this->getEntityByCriteria($criteria, 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer');
+        $customer = $this->getEntityByCriteria($criteria, CustomerStrategy::ENTITY_NAME);
         $entity->setCustomer($customer);
     }
 
@@ -69,13 +80,15 @@ class OrderStrategy extends BaseStrategy
      */
     protected function processCart(Order $entity)
     {
-        $existingCart = $this->getEntityByCriteria(
+        /** @var Cart $cart */
+        $cart = $this->getEntityByCriteria(
             ['originId' => $entity->getCart()['originId'], 'channel' => $entity->getChannel()],
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart'
+            CartStrategy::ENTITY_NAME
         );
 
-        if ($existingCart) {
-            $entity->setCart($existingCart);
+        if ($cart) {
+            $cart->setStatus(Cart::STATUS_CONVERTED);
+            $entity->setCart($cart);
         } else {
             // @TODO decide to import new one or not
             $entity->setCart(null);
@@ -113,10 +126,10 @@ class OrderStrategy extends BaseStrategy
     }
 
     /**
-     * @param StoreStrategy $storeStrategy
+     * @param Order $order
      */
-    public function setStoreStrategy(StoreStrategy $storeStrategy)
+    protected function processItems(Order $order)
     {
-        $this->storeStrategy = $storeStrategy;
+
     }
 }

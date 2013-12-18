@@ -26,6 +26,33 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 class CallController extends RestController implements ClassResourceInterface
 {
     /**
+     * REST GET list
+     *
+     * @QueryParam(
+     *      name="page",
+     *      requirements="\d+",
+     *      nullable=true,
+     *      description="Page number, starting from 1. Defaults to 1."
+     * )
+     * @QueryParam(
+     *      name="limit",
+     *      requirements="\d+",
+     *      nullable=true,
+     *      description="Number of items per page. defaults to 10."
+     * )
+     * @ApiDoc(
+     *      description="Get all calls items",
+     *      resource=true
+     * )
+     * @AclAncestor("orocrm_call_view")
+     * @return Response
+     */
+    public function cgetAction()
+    {
+        return $this->handleGetListRequest();
+    }
+
+    /**
      * REST GET item
      *
      * @param string $id
@@ -110,7 +137,7 @@ class CallController extends RestController implements ClassResourceInterface
      */
     public function getForm()
     {
-        return $this->get('orocrm_call.form.call.api');
+        return $this->get('orocrm_call.call.form.api');
     }
 
     /**
@@ -118,6 +145,6 @@ class CallController extends RestController implements ClassResourceInterface
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_call.form.handler.call.api');
+        return $this->get('orocrm_call.call.form.handler.api');
     }
 }
