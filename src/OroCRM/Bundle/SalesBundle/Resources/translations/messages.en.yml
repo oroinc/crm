@@ -54,6 +54,7 @@ orocrm:
             contact.label:        Potential Customer
             account.label:        Account
             owner.label:          Owner
+            notes.label:          Notes
 
             datagrid:
                 view: View
@@ -96,6 +97,7 @@ orocrm:
             account.label:        Account
             owner.label:          Owner
             address.label:        Address
+            notes.label:          Notes
 
             datagrid:
                 country: Country

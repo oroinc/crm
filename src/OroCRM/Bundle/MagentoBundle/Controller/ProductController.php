@@ -19,7 +19,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 class ProductController extends Controller
 {
     /**
-     * @Route("/{id}", requirements={"id"="\d+"}))
+     * @Route("/{id}", name="orocrm_magento_product_index", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_product_view")
      * @Template
      */
@@ -29,7 +29,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/view/{id}", requirements={"id"="\d+"}))
+     * @Route("/view/{id}", name="orocrm_magento_product_view", requirements={"id"="\d+"}))
      * @Acl(
      *      id="orocrm_magento_product_view",
      *      type="entity",
@@ -44,7 +44,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", requirements={"id"="\d+"}))
+     * @Route("/info/{id}", name="orocrm_magento_product_info", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_product_view")
      * @Template
      */

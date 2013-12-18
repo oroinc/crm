@@ -51,7 +51,8 @@ class LeadType extends AbstractType
                 )
             )
             ->add('industry', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.industry.label'))
-            ->add('address', 'oro_address', array('required' => false));
+            ->add('address', 'oro_address', array('required' => false))
+            ->add('notes', 'textarea', array('required' => false, 'label' => 'orocrm.sales.lead.notes.label'));
     }
 
     /**

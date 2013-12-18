@@ -9,8 +9,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\CallBundle\Entity\CallStatus;
-use OroCRM\Bundle\CallBundle\Entity\CallDirection;
 
 /**
  * Call
@@ -257,7 +255,7 @@ class Call
     /**
      * Set direction
      *
-     * @param boolean $direction
+     * @param CallDirection $direction
      * @return Call
      */
     public function setDirection($direction)

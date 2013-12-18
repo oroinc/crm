@@ -3,8 +3,8 @@
 {% oro_title_set({params : {"%opportunity.name%": name} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Opportunity' %}
 {% set title = form.vars.value.id
-    ? name ~ ' - ' ~ 'Update' ~ ' ' ~ 'orocrm.sales.opportunity.entity_label'|trans
-    : 'New' ~ ' ' ~ 'orocrm.sales.opportunity.entity_label'|trans
+    ? name ~ ' - ' ~ 'Update'|trans ~ ' ' ~ 'orocrm.sales.opportunity.entity_label'|trans
+    : 'New'|trans ~ ' ' ~ 'orocrm.sales.opportunity.entity_label'|trans
 %}
 {% set formAction = form.vars.value.id
     ? path('orocrm_sales_opportunity_update', { 'id': form.vars.value.id })
@@ -86,7 +86,8 @@
         form_row(form.proposedSolution),
         form_row(form.closeReason),
         form_row(form.closeRevenue),
-        form_row(form.closeDate)
+        form_row(form.closeDate),
+        form_row(form.notes)
     ]) %}
 
     {% set dataBlocks = [{

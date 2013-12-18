@@ -4,8 +4,8 @@
 {% oro_title_set({params : {"%lead.name%": entity.name} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Lead' %}
 {% set title = form.vars.value.id
-    ? entity.name ~ ' - ' ~ 'Update ' ~ 'orocrm.sales.lead.entity_label'|trans
-    : 'New ' ~ 'orocrm.sales.lead.entity_label'|trans
+    ? entity.name ~ ' - ' ~ 'Update'|trans ~ ' ' ~ 'orocrm.sales.lead.entity_label'|trans
+    : 'New'|trans ~ ' ' ~ 'orocrm.sales.lead.entity_label'|trans
 %}
 {% set formAction = form.vars.value.id ? path('orocrm_sales_lead_update', { 'id': form.vars.value.id }) : path('orocrm_sales_lead_create')  %}
 
@@ -112,7 +112,8 @@
         form_row(form.companyName),
         form_row(form.website),
         form_row(form.numberOfEmployees),
-        form_row(form.industry)
+        form_row(form.industry),
+        form_row(form.notes)
     ]) %}
 
     {% set dataBlocks = [{

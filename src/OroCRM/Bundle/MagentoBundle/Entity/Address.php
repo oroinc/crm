@@ -137,7 +137,7 @@ class Address extends AbstractTypedAddress
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType",cascade={"persist"})
      * @ORM\JoinTable(
      *     name="orocrm_magento_customer_address_to_address_type",
-     *     joinColumns={@ORM\JoinColumn(name="customer_address_id", referencedColumnName="id")},
+     *     joinColumns={@ORM\JoinColumn(name="customer_address_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )
      **/

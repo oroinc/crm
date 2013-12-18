@@ -96,7 +96,9 @@ datagrid:
             query:
                 select:
                     - call.id
+                    - contact.id as contactId
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
+                    - account.id as accountId
                     - account.name as accountName
                     - call.subject
                     - CONCAT(CASE WHEN call.phoneNumber IS NOT NULL THEN call.phoneNumber ELSE contactPhone.phone END, '') as phone
@@ -111,10 +113,19 @@ datagrid:
         columns:
             contactName:
                 label: orocrm.call.datagrid.contact_name
+                type: twig
+                template: OroCRMCallBundle:Datagrid:Column/contactName.html.twig
+                frontend_type: html
             accountName:
                 label: orocrm.call.datagrid.account_name
+                type: twig
+                template: OroCRMCallBundle:Datagrid:Column/accountName.html.twig
+                frontend_type: html
             subject:
                 label: orocrm.call.subject.label
+                type: twig
+                template: OroCRMCallBundle:Datagrid:Column/subject.html.twig
+                frontend_type: html
             phone:
                 label: orocrm.call.phone_number.label
             dateTime:
@@ -153,5 +164,9 @@ datagrid:
                     data_name: call.callDateTime
             default:
                 dateTime: DESC
+        properties:
+            id: ~
+            contactId: ~
+            accountId: ~
         options:
             entityHint: calls

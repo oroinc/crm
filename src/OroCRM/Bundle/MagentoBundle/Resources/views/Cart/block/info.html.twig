@@ -1,12 +1,4 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
-{% set params = {} %}
-
-{# TODO: Move this to OroUIBundle::macros.html.twig #}
-{% macro renderRow(label, value) %}
-    {% import 'OroUIBundle::macros.html.twig' as macros %}
-    {{ macros.renderAttribute(label, '<p class="control-label">' ~ value|default('N/A'|trans) ~ '</p>') }}
-{% endmacro %}
 
 <div class="widget-content cart-info-widget form-horizontal box-content row-fluid">
     <div class="span6">
@@ -18,7 +10,6 @@
         {{ _self.renderRow('orocrm.magento.cart.items_qty.label'|trans, entity.itemsQty) }}
         {{ _self.renderRow('orocrm.magento.cart.status.label'|trans, entity.status|trans) }}
     </div>
-
     <div class="span6">
         {{ _self.renderRow('orocrm.magento.customer.website.label'|trans, entity.store.website.name) }}
         {{ _self.renderRow('orocrm.magento.cart.store.label'|trans, entity.store.name) }}

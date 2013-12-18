@@ -1,12 +1,6 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 {% import 'OroTagBundle::macros.html.twig' as _tag %}
 
-{# TODO: Move this to OroUIBundle::macros.html.twig #}
-{% macro renderRow(label, value) %}
-    {% import 'OroUIBundle::macros.html.twig' as macros %}
-    {{ macros.renderAttribute(label, '<p class="control-label">' ~ value|default('N/A'|trans) ~ '</p>') }}
-{% endmacro %}
-
 {% macro renderCollectionWithPrimaryElement(collection, isEmail) %}
     {% set primaryElement = null %}
     {% set secondaryElements = [] %}
@@ -83,7 +77,7 @@
             </div>
         </div>
 
-        {{ _self.renderRow('orocrm.contact.fax.label'|trans, entity.fax) }}
+        {{ macros.renderProperty('orocrm.contact.fax.label'|trans, entity.fax) }}
 
         <div class="control-group">
             <label class="control-label">{{ 'orocrm.contact.skype.label'|trans }}</label>
@@ -100,7 +94,7 @@
             </div>
         </div>
 
-        {{ _self.renderRow('orocrm.contact.method.label'|trans, entity.method) }}
+        {{ macros.renderProperty('orocrm.contact.method.label'|trans, entity.method) }}
 
         <div class="control-group">
             <label class="control-label">{{ 'orocrm.contact.social.label'|trans }}</label>
@@ -162,14 +156,15 @@
                     {% set item = data %}
                 {% endif %}
 
-                {{ _self.renderRow(label|trans, item) }}
-                {#{{ _self.renderRow(label|trans, item|dynamic) }}#}
+                {{ macros.renderProperty(label|trans, item) }}
+                {#{{ macros.renderProperty(label|trans, item|dynamic) }}#}
             {% endfor %}
         {% endif %}
     </div>
 
     <div class="responsive-block">
-        {{ _self.renderRow('orocrm.contact.job_title.label'|trans, entity.jobTitle) }}
+
+        {{ macros.renderProperty('orocrm.contact.job_title.label'|trans, entity.jobTitle) }}
 
         <div class="control-group">
             <label class="control-label">{{ 'orocrm.contact.accounts.label'|trans }}</label>
@@ -208,8 +203,8 @@
             </div>
         </div>
 
-        {{ _self.renderRow('orocrm.contact.gender.label'|trans, oro_gender(entity.gender)) }}
-        {{ _self.renderRow('orocrm.contact.source.label'|trans, entity.source) }}
+        {{ macros.renderProperty('orocrm.contact.gender.label'|trans, oro_gender(entity.gender)) }}
+        {{ macros.renderProperty('orocrm.contact.source.label'|trans, entity.source) }}
 
         <div class="control-group">
             <label class="control-label">{{ 'orocrm.contact.assigned_to.label'|trans }}</label>

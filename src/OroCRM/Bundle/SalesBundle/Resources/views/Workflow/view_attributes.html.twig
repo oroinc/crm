@@ -2,7 +2,7 @@
 
 {% block orocrm_contact_workflow_view_attribute_value %}
     {% set parentOutput = block('name_workflow_view_attribute_value') %}
-    {% if value is not empty %}
+    {% if resource_granted('orocrm_contact_view') %}
         <a href="{{ path('orocrm_contact_view', {'id': value.id})  }}">{{ parentOutput }}</a>
     {% else %}
         {{ parentOutput }}
@@ -10,9 +10,9 @@
 {% endblock %}
 
 {% block orocrm_account_workflow_view_attribute_value %}
-    {% if value is not empty %}
+    {% if resource_granted('orocrm_account_view') %}
         <a href="{{ path('orocrm_account_view', {'id': value.id})  }}">{{ value.name }}</a>
     {% else %}
-        N/A
+        {{ value.name }}
     {% endif %}
 {% endblock %}

@@ -63,7 +63,7 @@ class CartStrategy extends BaseStrategy
      * @param Cart     $newCart
      * @param Customer $customer
      *
-     * @return $this
+     * @return CartStrategy
      */
     protected function updateCustomer(Cart $newCart, Customer $customer)
     {
@@ -85,7 +85,7 @@ class CartStrategy extends BaseStrategy
      * @param Cart            $cart
      * @param ArrayCollection $cartItems imported items
      *
-     * @return $this
+     * @return CartStrategy
      */
     protected function updateCartItems(Cart $cart, ArrayCollection $cartItems)
     {
@@ -137,7 +137,7 @@ class CartStrategy extends BaseStrategy
      * @param Cart $newCart
      * @param Cart $importedCart
      *
-     * @return $this
+     * @return CartStrategy
      */
     protected function updateAddresses(Cart $newCart, Cart $importedCart)
     {
