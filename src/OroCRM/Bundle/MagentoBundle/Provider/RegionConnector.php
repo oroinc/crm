@@ -62,17 +62,9 @@ class RegionConnector extends AbstractConnector implements MagentoConnectorInter
      */
     protected function findCountriesToImport()
     {
-        $this->countriesBuffer = $this->getCountryList();
+        $this->countriesBuffer = $this->call('directoryCountryList');
 
         $this->logger->info(sprintf('found %d countries', count($this->countriesBuffer)));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCountryList()
-    {
-        return $this->call('directoryCountryList');
     }
 
     /**
