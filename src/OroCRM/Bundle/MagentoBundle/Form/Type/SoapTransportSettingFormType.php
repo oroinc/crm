@@ -8,7 +8,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\IntegrationBundle\Provider\TransportTypeInterface;
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+
 use OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber;
+use OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapConnectorsFormSubscriber;
 
 class SoapTransportSettingFormType extends AbstractType
 {
@@ -20,10 +23,17 @@ class SoapTransportSettingFormType extends AbstractType
     /** @var SoapSettingsFormSubscriber */
     protected $subscriber;
 
-    public function __construct(TransportTypeInterface $transport, SoapSettingsFormSubscriber $subscriber)
-    {
+    /** @var TypesRegistry */
+    protected $registry;
+
+    public function __construct(
+        TransportTypeInterface $transport,
+        SoapSettingsFormSubscriber $subscriber,
+        TypesRegistry $registry
+    ) {
         $this->transport  = $transport;
         $this->subscriber = $subscriber;
+        $this->registry   = $registry;
     }
 
     /**
@@ -55,10 +65,13 @@ class SoapTransportSettingFormType extends AbstractType
                 'required' => true,
                 'tooltip'  => 'List could be refreshed using connection settings filled above.',
             ]
-        );
-        $builder->add(
+        )->add(
             $builder->create('websites', 'hidden')
                 ->addViewTransformer(new ArrayToJsonTransformer())
+        )->add(
+            $builder
+                ->create('isExtensionInstalled', 'hidden')
+                ->addEventSubscriber(new SoapConnectorsFormSubscriber($this->registry))
         );
     }
 

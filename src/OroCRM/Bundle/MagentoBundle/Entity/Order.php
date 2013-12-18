@@ -16,7 +16,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @ORM\Entity
  * @ORM\Table(name="orocrm_magento_order",
  *     uniqueConstraints={
- *          @ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})
+ *          @ORM\UniqueConstraint(name="unq_increment_id_channel_id", columns={"increment_id", "channel_id"})
  *     }
  * )
  * @Config(
@@ -33,22 +33,22 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  */
 class Order extends BaseOrder
 {
-    use IntegrationEntityTrait, OriginTrait;
+    use IntegrationEntityTrait;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="increment_id", type="integer", options={"unsigned"=true}, nullable=false)
+     * @ORM\Column(name="increment_id", type="string", length=60, nullable=false)
      */
     protected $incrementId;
 
     /**
-     * @var ArrayCollection
+     * @var Customer
      *
      * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"})
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
-    protected $owner;
+    protected $customer;
 
     /**
      * @var ArrayCollection
@@ -56,7 +56,6 @@ class Order extends BaseOrder
      * @ORM\OneToMany(targetEntity="OrderAddress",
      *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
-     * @ORM\OrderBy({"primary" = "DESC"})
      */
     protected $addresses;
 
@@ -132,7 +131,7 @@ class Order extends BaseOrder
     protected $totalCanceledAmount = 0;
 
     /**
-     * @TODO Add real cart here
+     * @ORM\OneToOne(targetEntity="Cart", cascade={"persist"})
      */
     protected $cart;
 
@@ -144,7 +143,7 @@ class Order extends BaseOrder
     protected $items;
 
     /**
-     * @param integer $incrementId
+     * @param string $incrementId
      *
      * @return $this
      */
@@ -156,7 +155,7 @@ class Order extends BaseOrder
     }
 
     /**
-     * @return integer
+     * @return string
      */
     public function getIncrementId()
     {
@@ -361,5 +360,25 @@ class Order extends BaseOrder
     public function getRemoteIp()
     {
         return $this->remoteIp;
+    }
+
+    /**
+     * @param Cart $cart
+     *
+     * @return $this
+     */
+    public function setCart($cart = null)
+    {
+        $this->cart = $cart;
+
+        return $this;
+    }
+
+    /**
+     * @return Cart
+     */
+    public function getCart()
+    {
+        return $this->cart;
     }
 }

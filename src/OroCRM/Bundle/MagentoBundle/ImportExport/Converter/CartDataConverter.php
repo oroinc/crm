@@ -7,17 +7,7 @@ use Oro\Bundle\ImportExportBundle\Converter\AbstractTableDataConverter;
 class CartDataConverter extends AbstractTableDataConverter
 {
     /**
-     * Get list of rules that should be used to convert,
-     *
-     * Example: array(
-     *     'User Name' => 'userName', // key is frontend hint, value is backend hint
-     *     'User Group' => array(     // convert data using regular expression
-     *         self::FRONTEND_TO_BACKEND => array('User Group (\d+)', 'userGroup:$1'),
-     *         self::BACKEND_TO_FRONTEND => array('userGroup:(\d+)', 'User Group $1'),
-     *     )
-     * )
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function getHeaderConversionRules()
     {
@@ -56,12 +46,11 @@ class CartDataConverter extends AbstractTableDataConverter
     }
 
     /**
-     * Get maximum backend header for current entity
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function getBackendHeader()
     {
-        // TODO: Implement getBackendHeader() method. [export]
+        // will be implemented for bidirectional sync
+        throw new \Exception('Normalization is not implemented!');
     }
 }

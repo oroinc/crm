@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\UnitOfWork;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\BatchBundle\Item\InvalidItemException;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
@@ -47,10 +48,11 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
     }
 
     /**
-     * @param mixed  $entity
-     * @param string $entityName
+     * @param mixed        $entity
+     * @param string       $entityName
      * @param string|array $criteria
-     * @param array  $excludedProperties
+     * @param array        $excludedProperties
+     *
      * @return mixed
      */
     protected function findAndReplaceEntity($entity, $entityName, $criteria = 'id', $excludedProperties = [])
@@ -74,15 +76,17 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
 
     /**
      * @param object $entity
+     *
      * @return null|object
      */
     protected function validateAndUpdateContext($entity)
     {
-        // validate contact
+        // validate entity
         $validationErrors = $this->strategyHelper->validateEntity($entity);
         if ($validationErrors) {
             $this->importExportContext->incrementErrorEntriesCount();
             $this->strategyHelper->addValidationErrors($validationErrors, $this->importExportContext);
+
             return null;
         }
 
@@ -97,25 +101,26 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
     }
 
     /**
-     * @param mixed $entity
+     * @param mixed  $entity
      * @param string $entityIdField
      * @param string $entityClass
+     *
      * @return object|null
      */
     protected function getEntityOrNull($entity, $entityIdField, $entityClass)
     {
         $existingEntity = null;
-        $entityId = $entity->{'get'.ucfirst($entityIdField)}();
+        $entityId       = $entity->{'get' . ucfirst($entityIdField)}();
 
         if ($entityId) {
             $existingEntity = $this->getEntityByCriteria([$entityIdField => $entityId], $entityClass);
         }
 
-        return $existingEntity ?: null;
+        return $existingEntity ? : null;
     }
 
     /**
-     * @param array $criteria
+     * @param array         $criteria
      * @param object|string $entity object to get class from or class name
      *
      * @return object
@@ -133,6 +138,7 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
 
     /**
      * @param $entityName
+     *
      * @return \Doctrine\ORM\EntityManager
      */
     protected function getEntityManager($entityName)
@@ -142,6 +148,7 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
 
     /**
      * @param string $entityName
+     *
      * @return EntityRepository
      */
     protected function getEntityRepository($entityName)
@@ -166,7 +173,8 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
 
     /**
      * @param AbstractAddress $address
-     * @param int $mageRegionId
+     * @param int             $mageRegionId
+     *
      * @return $this
      *
      * @throws InvalidItemException
@@ -210,6 +218,29 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
                 $address->setRegion($this->regionsCache[$combinedCode]);
                 $address->setRegionText(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param AbstractTypedAddress $address
+     *
+     * @return $this
+     */
+    protected function updateAddressTypes(AbstractTypedAddress $address)
+    {
+        // update address type
+        $types = $address->getTypeNames();
+        if (empty($types)) {
+            return $this;
+        }
+
+        $address->getTypes()->clear();
+        $loadedTypes = $this->getEntityRepository('OroAddressBundle:AddressType')->findBy(['name' => $types]);
+
+        foreach ($loadedTypes as $type) {
+            $address->addType($type);
         }
 
         return $this;

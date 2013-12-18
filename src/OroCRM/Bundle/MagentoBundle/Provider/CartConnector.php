@@ -3,19 +3,19 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
+use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
-class CartConnector extends AbstractConnector implements MagentoConnectorInterface
+class CartConnector extends AbstractConnector implements MagentoConnectorInterface, ExtensionAwareInterface
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart';
     const CONNECTOR_LABEL     = 'orocrm.magento.connector.cart.label';
     const JOB_VALIDATE_IMPORT = 'mage_cart_import_validation';
     const JOB_IMPORT          = 'mage_cart_import';
 
-    const ACTION_CART_LIST    = 'salesQuoteList';
-    const ACTION_CART_INFO    = 'shoppingCartInfo';
-    const PAGE_SIZE           = 10;
+    const PAGE_SIZE = 10;
 
     /** @var int */
     protected $currentPage = 1;
@@ -32,6 +32,18 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
     /** @var StoreConnector */
     protected $storeConnector;
 
+    public function __construct(
+        ContextRegistry $contextRegistry,
+        LoggerStrategy $logger,
+        CustomerConnector $customerConnector,
+        StoreConnector $storeConnector
+    ) {
+        parent::__construct($contextRegistry, $logger);
+
+        $this->customerConnector = $customerConnector;
+        $this->storeConnector    = $storeConnector;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -45,20 +57,20 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
         }
 
         // fill related entities data
-        $store = $this->getStoreDataById($result->store_id);
-        $result->store_code = $store['code'];
-        $result->store_name = $store['name'];
-        $result->store_website_id = $store['website']['id'];
+        $store                      = $this->getStoreDataById($result->store_id);
+        $result->store_code         = $store['code'];
+        $result->store_name         = $store['name'];
+        $result->store_website_id   = $store['website']['id'];
         $result->store_website_code = $store['website']['code'];
         $result->store_website_name = $store['website']['name'];
 
-        $customer_group = $this->getCustomerGroupDataById($result->customer_group_id);
+        $customer_group              = $this->getCustomerGroupDataById($result->customer_group_id);
         $result->customer_group_code = $customer_group['customer_group_code'];
         $result->customer_group_name = $customer_group['name'];
 
         $result = ConverterUtils::objectToArray($result);
 
-        return (array) $result;
+        return (array)$result;
     }
 
     /**
@@ -68,7 +80,9 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
      */
     protected function getNextItem()
     {
-        $store = $this->getStoreDataByWebsiteId($this->transportSettings->getWebsiteId());
+        $store   = $this->getStoreDataByWebsiteId(
+            $this->transportSettings->get('website_id')
+        );
         $filters = [
             'complex_filter' => [
                 [
@@ -96,13 +110,14 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
     /**
      * @param array $filters
      * @param array $limits
+     *
      * @return mixed
      */
     public function getQuoteList($filters = [], $limits = [])
     {
         if (empty($limits)) {
             $limits = [
-                'page' => 1,
+                'page'     => 1,
                 'pageSize' => 15,
             ];
         }
@@ -118,9 +133,7 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
     public function getQuoteInfo($quoteId)
     {
         return $this->call(self::ACTION_CART_INFO, $quoteId);
-
     }
-
 
     /**
      * {@inheritdoc}
@@ -132,6 +145,10 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
         // init helper connectors
         $this->storeConnector->setStepExecution($this->getStepExecution());
         $this->customerConnector->setStepExecution($this->getStepExecution());
+
+        // restore empty state
+        $this->currentPage = 1;
+        $this->quoteQueue = $this->dependencies = [];
     }
 
     /**
@@ -141,7 +158,7 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
      */
     protected function getStoreDataById($id)
     {
-        $store = $this->dependencies[self::ALIAS_STORES][$id];
+        $store            = $this->dependencies[self::ALIAS_STORES][$id];
         $store['website'] = $this->dependencies[self::ALIAS_WEBSITES][$store['website_id']];
 
         return $store;
@@ -198,21 +215,5 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
                     break;
             }
         }
-    }
-
-    /**
-     * @param CustomerConnector $customerConnector
-     */
-    public function setCustomerConnector(CustomerConnector $customerConnector)
-    {
-        $this->customerConnector = $customerConnector;
-    }
-
-    /**
-     * @param StoreConnector $storeConnector
-     */
-    public function setStoreConnector(StoreConnector $storeConnector)
-    {
-        $this->storeConnector = $storeConnector;
     }
 }
