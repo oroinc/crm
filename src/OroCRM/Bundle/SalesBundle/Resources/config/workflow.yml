@@ -26,17 +26,14 @@ workflows:
                     class: OroCRM\Bundle\SalesBundle\Entity\Lead
                     managed_entity: true
             opportunity_name:
-                #label:  'Opportunity name'
                 label: orocrm.sales.opportunity.name.label
                 type: string
             account:
-                #label: 'Account'
                 label:  orocrm.account.entity_label
                 type: entity
                 options:
                     class: OroCRM\Bundle\AccountBundle\Entity\Account
             company_name:
-                #label: 'Company name'
                 label: orocrm.sales.lead.company_name.label
                 type: string
         transitions:
@@ -290,47 +287,47 @@ workflows:
                     - { attribute: close_date, view_type: date }
         attributes:
             opportunity:
-                label: 'Opportunity'
+                label: orocrm.sales.opportunity.entity_label
                 type: entity
                 options:
                     class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                     managed_entity: true
                     multiple: false
             contact:
-                label: 'Contact'
+                label: orocrm.sales.opportunity.contact.label
                 type: entity
                 options:
                     class: OroCRM\Bundle\ContactBundle\Entity\Contact
             account:
-                label: 'Account'
+                label: orocrm.sales.opportunity.account.label
                 type: entity
                 options:
                     class: OroCRM\Bundle\AccountBundle\Entity\Account
             probability:
-                label: 'Probability'
+                label: orocrm.sales.opportunity.probability.label
                 type: float
             budget_amount:
-                  label: 'Budget amount'
+                  label: orocrm.sales.opportunity.budget_amount.label
                   type: float
             customer_need:
-                label: 'Customer Need'
+                label: orocrm.sales.opportunity.customer_need.label
                 type: string
             proposed_solution:
-                label: 'Proposed Solution'
+                label: orocrm.sales.opportunity.proposed_solution.label
                 type: string
             close_reason_name: # auxiliary attribute to find close reason by its name
-                label: 'Close reason'
+                label: orocrm.sales.opportunity.close_reason.label
                 type: string
             close_reason:
-                label: 'Close reason'
+                label: orocrm.sales.opportunity.close_reason.label
                 type: entity
                 options:
                     class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
             close_revenue:
-                label: 'Close revenue'
+                label: orocrm.sales.opportunity.close_revenue.label
                 type: float
             close_date:
-                label: 'Close date'
+                label: orocrm.sales.opportunity.close_date.label
                 type: object
                 options:
                     class: DateTime
