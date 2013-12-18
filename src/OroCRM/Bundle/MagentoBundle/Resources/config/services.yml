@@ -14,8 +14,6 @@ parameters:
 
     # additional services
     orocrm_magento.converter.stores_to_website.class:                     OroCRM\Bundle\MagentoBundle\Converter\StoreListToWebsiteConverter
-    orocrm_magento.provider.datagrid_helper.class:                        OroCRM\Bundle\MagentoBundle\Provider\GridHelper
-
 services:
     orocrm_magento.soap_transport:
         class: %orocrm_magento.soap_transport.class%
@@ -73,6 +71,7 @@ services:
                 - false
             tags:
                 - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-cartitem-grid, method: onBuildAfter }
+                - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-orderitem-grid, method: onBuildAfter }
 
     # additional services
     orocrm_magento.converter.stores_to_website:

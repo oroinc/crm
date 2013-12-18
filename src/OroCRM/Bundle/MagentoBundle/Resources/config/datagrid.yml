@@ -514,8 +514,112 @@ datagrid:
             acl_resource: orocrm_magento_order_view
             query:
                 select:
-                    - oi.id
+                    - oi
                 from:
                     - { table: OroCRMMagentoBundle:OrderItem , alias: oi }
+                where:
+                    and:
+                        - oi.order = :id
+        columns:
+            sku:
+                label: orocrm.magento.datagrid.columns.sku
+            name:
+                label: orocrm.magento.datagrid.columns.name
+            qty:
+                label: orocrm.magento.datagrid.columns.qty
+                frontend_type: number
+            productType:
+                label: orocrm.magento.datagrid.columns.productType
+            weight:
+                label: orocrm.magento.datagrid.columns.weight
+                frontend_type: decimal
+            price:
+                label: orocrm.magento.datagrid.columns.price
+                frontend_type: decimal
+            originalPrice:
+                label: orocrm.magento.datagrid.columns.originalPrice
+                frontend_type: decimal
+            discountPercent:
+                label: orocrm.magento.datagrid.columns.discountPercent
+                frontend_type: percent
+            discountAmount:
+                label: orocrm.magento.datagrid.columns.discountAmount
+                frontend_type: decimal
+            taxPercent:
+                label: orocrm.magento.datagrid.columns.taxPercent
+                frontend_type: percent
+            taxAmount:
+                label: orocrm.magento.datagrid.columns.taxAmount
+                frontend_type: decimal
+            rowTotal:
+                label: orocrm.magento.datagrid.columns.rowTotal
+                frontend_type: decimal
+        sorters:
+            columns:
+                sku:                 { data_name: oi.sku }
+                name:                { data_name: oi.name }
+                qty:                 { data_name: oi.qty }
+                productType:         { data_name: oi.productType }
+                weight:              { data_name: oi.weight }
+                price:               { data_name: oi.price }
+                originalPrice:       { data_name: oi.originalPrice }
+                discountPercent:     { data_name: oi.discountPercent }
+                discountAmount:      { data_name: oi.discountAmount }
+                taxPercent:          { data_name: oi.taxPercent }
+                taxAmount:           { data_name: oi.taxAmount }
+                rowTotal:            { data_name: oi.rowTotal }
+        filters:
+            columns:
+                sku:
+                    type:             string
+                    data_name:        oi.sku
+                name:
+                    type:             string
+                    data_name:        oi.name
+                qty:
+                    type:             number
+                    data_name:        oi.qty
+                productType:
+                    type:             string
+                    enabled:          false
+                    data_name:        oi.productType
+                weight:
+                    type:             number
+                    data_name:        oi.weight
+                    enabled:          false
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                price:
+                    type:             number
+                    data_name:        oi.price
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                originalPrice:
+                    type:             number
+                    enabled:          false
+                    data_name:        oi.originalPrice
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                discountPercent:
+                    type:             percent
+                    data_name:        oi.discountPercent
+                discountAmount:
+                    type:             number
+                    data_name:        oi.discountAmount
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                taxPercent:
+                    type:             percent
+                    data_name:        oi.taxPercent
+                taxAmount:
+                    type:             number
+                    data_name:        oi.taxAmount
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                rowTotal:
+                    type:             number
+                    data_name:        oi.rowTotal
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
         options:
             entityHint: order item

@@ -44,6 +44,13 @@ orocrm:
                 subtotal_amount:  Subtotal Amount
                 shipping_amount:  Shipping Amount
                 status:           Status
+                productType:      Product type
+                originalPrice:    Original price
+                discountPercent:  Discount percent
+                discountAmount:   Discount amount
+                taxPercent:       Tax percent
+                taxAmount:        Tax amount
+                rowTotal:         Row total
         channel_type:
             label:  Magento
         transport:

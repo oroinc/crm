@@ -58,7 +58,7 @@ class OrderItem extends BaseOrderItem
     protected $discountPercent;
 
     /** Do not needed in magento order item, because magento api does not bring it up */
-    protected $price;
+    protected $cost;
 
     /**
      * @param float $originalPrice

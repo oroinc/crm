@@ -34,6 +34,12 @@ class OrderItemCompositeDenormalizer extends AbstractNormalizer implements Denor
         /** @var OrderItem $object */
         $object = new $className();
         $this->fillResultObject($object, $data);
+        if ($object->getDiscountPercent()) {
+            $object->setDiscountPercent($object->getDiscountPercent() / 100);
+        }
+        if ($object->getTaxPercent()) {
+            $object->setTaxPercent($object->getTaxPercent() / 100);
+        }
 
         return $object;
     }

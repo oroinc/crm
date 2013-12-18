@@ -2,12 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
-
-use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 
 class OrderStrategy extends BaseStrategy
@@ -153,7 +153,7 @@ class OrderStrategy extends BaseStrategy
             )->first();
 
             if ($existingItem) {
-                $this->strategyHelper->importEntity($existingItem, $item, ['id', 'cart']);
+                $this->strategyHelper->importEntity($existingItem, $item, ['id', 'order']);
                 $item = $existingItem;
             }
 
@@ -166,13 +166,13 @@ class OrderStrategy extends BaseStrategy
             }
         }
 
-        // delete cart items that not exists in remote cart
-        $deletedCartItems = $entityToUpdate->getItems()->filter(
+        // delete order items that not exists in remote order
+        $deleted = $entityToUpdate->getItems()->filter(
             function (OrderItem $item) use ($importedOriginIds) {
                 return !in_array($item->getOriginId(), $importedOriginIds);
             }
         );
-        foreach ($deletedCartItems as $item) {
+        foreach ($deleted as $item) {
             $entityToUpdate->getItems()->remove($item);
         }
     }
