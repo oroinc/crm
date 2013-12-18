@@ -23,8 +23,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *  }
  * )
  * @Config(
- *  routeName="orocrm_magento_cart_index",
- *  routeView="orocrm_magento_cart_view",
  *  defaultValues={
  *      "entity"={"label"="Magento Cart", "plural_label"="Magento Carts"},
  *      "security"={

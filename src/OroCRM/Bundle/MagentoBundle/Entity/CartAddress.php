@@ -13,7 +13,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *  defaultValues={
- *      "entity"={"label"="Magento Cart Address", "plural_label"="Magento Cart Addresses"}
+ *      "entity" = {"label"="Magento Cart Address", "plural_label"="Magento Cart Addresses"}
  *  }
  * )
  * @ORM\Entity

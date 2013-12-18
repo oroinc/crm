@@ -17,7 +17,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @ORM\Entity
  * @Config(
  *  defaultValues={
- *      "entity"={"label"="Integration Channel Transport", "plural_label"="Integration Channel Transports"}
+ *      "entity"= {"label"="Integration Channel Transport", "plural_label"="Integration Channel Transports"}
  *  }
  * )
  * @Oro\Loggable()

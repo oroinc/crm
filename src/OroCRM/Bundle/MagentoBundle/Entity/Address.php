@@ -16,7 +16,7 @@ use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *  defaultValues={
- *      "entity"={"label"="Magento Customer Address", "plural_label"="Magento Customer Addresses"}
+ *      "entity" ={"label"="Magento Customer Address", "plural_label"="Magento Customer Addresses"}
  *  }
  * )
  * @ORM\Entity

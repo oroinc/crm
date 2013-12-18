@@ -1,3 +1,5 @@
+"Website ID: %websiteId%, Stores: %storesList%": "Website ID: %websiteId%, Stores: %storesList%"
+
 orocrm:
     magento:
         cart:
@@ -68,4 +70,167 @@ orocrm:
             order:
                 label: Order connector
 
-"Website ID: %websiteId%, Stores: %storesList%": "Website ID: %websiteId%, Stores: %storesList%"
+
+        customer:
+            entity_label:        Magento Customer
+            entity_plural_label: Magento Customers
+            entity_description:  Represent magento customer
+
+            id.label:            Id
+            origin_id.label:     Origin Id
+            name_prefix.label:   Name prefix
+            first_name.label:    First name
+            middle_name.label:   Middle name
+            last_name.label:     Last name
+            name_suffix.label:   Name suffix
+            gender.label:        Gender
+            birthday.label:      Birthday
+            email.label:         Email
+            created_at.label:    Created at
+            updated_at.label:    Updated at
+            is_active.label:     Is active
+            vat.label:           Tax/Vat
+            website.label:       Website
+            store.label:         Store
+            group.label:         Customer Group
+            contact.label:       Contact
+            account.label:       Account
+            addresses.label:     
+            carts.label:
+            channel.label:
+
+
+orocrm.magento.product.entity_label:
+orocrm.magento.product.entity_plural_label:
+orocrm.magento.product.name.label:
+orocrm.magento.product.sku.label:
+orocrm.magento.product.type.label:
+orocrm.magento.product.special_price.label:
+orocrm.magento.product.price.label:
+orocrm.magento.product.created_at.label:
+orocrm.magento.product.updated_at.label:
+orocrm.magento.product.origin_id.label:
+orocrm.magento.product.id.label:
+orocrm.magento.product.cost.label:
+orocrm.magento.product.websites.label:
+orocrm.magento.product.channel.label:
+
+orocrm.magento.order.entity_label:
+orocrm.magento.order.entity_plural_label:
+orocrm.magento.order.increment_id.label:
+orocrm.magento.order.is_virtual.label:
+orocrm.magento.order.is_guest.label:
+orocrm.magento.order.gift_message.label:
+orocrm.magento.order.remote_ip.label:
+orocrm.magento.order.store_name.label:
+orocrm.magento.order.total_paid_amount.label:
+orocrm.magento.order.total_invoiced_amount.label:
+orocrm.magento.order.total_refunded_amount.label:
+orocrm.magento.order.total_canceled_amount.label:
+orocrm.magento.order.id.label:
+orocrm.magento.order.currency.label:
+orocrm.magento.order.payment_method.label:
+orocrm.magento.order.payment_details.label:
+orocrm.magento.order.subtotal_amount.label:
+orocrm.magento.order.shipping_amount.label:
+orocrm.magento.order.shipping_method.label:
+orocrm.magento.order.tax_amount.label:
+orocrm.magento.order.discount_amount.label:
+orocrm.magento.order.discount_percent.label:
+orocrm.magento.order.total_amount.label:
+orocrm.magento.order.status.label:
+orocrm.magento.order.created_at.label:
+orocrm.magento.order.updated_at.label:
+orocrm.magento.order.customer.label:
+orocrm.magento.order.addresses.label:
+orocrm.magento.order.store.label:
+orocrm.magento.order.cart.label:
+orocrm.magento.order.items.label:
+orocrm.magento.order.channel.label:
+
+orocrm.magento.magentosoaptransport.entity_label:
+orocrm.magento.magentosoaptransport.entity_plural_label:
+orocrm.magento.magentosoaptransport.id.label:
+orocrm.magento.magentosoaptransport.wsdl_url.label:
+orocrm.magento.magentosoaptransport.api_user.label:
+orocrm.magento.magentosoaptransport.api_key.label:
+orocrm.magento.magentosoaptransport.sync_start_date.label:
+orocrm.magento.magentosoaptransport.sync_range.label:
+orocrm.magento.magentosoaptransport.website_id.label:
+orocrm.magento.magentosoaptransport.websites.label:
+orocrm.magento.magentosoaptransport.is_extension_installed.label:
+
+orocrm.magento.address.entity_label:
+orocrm.magento.address.entity_plural_label:
+orocrm.magento.address.label.label:
+orocrm.magento.address.street.label:
+orocrm.magento.address.street2.label:
+orocrm.magento.address.city.label:
+orocrm.magento.address.postal_code.label:
+orocrm.magento.address.state_text.label:
+orocrm.magento.address.name_prefix.label:
+orocrm.magento.address.first_name.label:
+orocrm.magento.address.middle_name.label:
+orocrm.magento.address.last_name.label:
+orocrm.magento.address.name_suffix.label:
+orocrm.magento.address.primary.label:
+orocrm.magento.address.id.label:
+orocrm.magento.address.organization.label:
+orocrm.magento.address.created.label:
+orocrm.magento.address.updated.label:
+orocrm.magento.address.origin_id.label:
+orocrm.magento.address.owner.label:
+orocrm.magento.address.types.label:
+orocrm.magento.address.country.label:
+orocrm.magento.address.state.label:
+
+orocrm.magento.cart.entity_label:
+orocrm.magento.cart.entity_plural_label:
+orocrm.magento.cart.items_qty.label:
+orocrm.magento.cart.items_count.label:
+orocrm.magento.cart.base_currency_code.label:
+orocrm.magento.cart.store_currency_code.label:
+orocrm.magento.cart.quote_currency_code.label:
+orocrm.magento.cart.store_to_base_rate.label:
+orocrm.magento.cart.store_to_quote_rate.label:
+orocrm.magento.cart.email.label:
+orocrm.magento.cart.gift_message.label:
+orocrm.magento.cart.is_guest.label:
+orocrm.magento.cart.payment_details.label:
+orocrm.magento.cart.status.label:
+orocrm.magento.cart.id.label:
+orocrm.magento.cart.sub_total.label:
+orocrm.magento.cart.grand_total.label:
+orocrm.magento.cart.tax_amount.label:
+orocrm.magento.cart.created_at.label:
+orocrm.magento.cart.updated_at.label:
+orocrm.magento.cart.origin_id.label:
+orocrm.magento.cart.cart_items.label:
+orocrm.magento.cart.customer.label:
+orocrm.magento.cart.store.label:
+orocrm.magento.cart.shipping_address.label:
+orocrm.magento.cart.billing_address.label:
+orocrm.magento.cart.channel.label:
+
+
+
+orocrm.magento.cartaddress.entity_label:
+orocrm.magento.cartaddress.entity_plural_label:
+orocrm.magento.cartaddress.id.label:
+orocrm.magento.cartaddress.label.label:
+orocrm.magento.cartaddress.street.label:
+orocrm.magento.cartaddress.street2.label:
+orocrm.magento.cartaddress.city.label:
+orocrm.magento.cartaddress.postal_code.label:
+orocrm.magento.cartaddress.organization.label:
+orocrm.magento.cartaddress.state_text.label:
+orocrm.magento.cartaddress.name_prefix.label:
+orocrm.magento.cartaddress.first_name.label:
+orocrm.magento.cartaddress.middle_name.label:
+orocrm.magento.cartaddress.last_name.label:
+orocrm.magento.cartaddress.name_suffix.label:
+orocrm.magento.cartaddress.created.label:
+orocrm.magento.cartaddress.updated.label:
+orocrm.magento.cartaddress.origin_id.label:
+orocrm.magento.cartaddress.country.label:
+orocrm.magento.cartaddress.state.label:

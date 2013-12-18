@@ -19,8 +19,6 @@ use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_sku_channel_id", columns={"sku", "channel_id"})}
  * )
  * @Config(
- *  routeName="orocrm_magento_product_index",
- *  routeView="orocrm_magento_product_view",
  *  defaultValues={
  *      "entity"={"label"="Magento Product", "plural_label"="Magento Products"},
  *      "security"={
