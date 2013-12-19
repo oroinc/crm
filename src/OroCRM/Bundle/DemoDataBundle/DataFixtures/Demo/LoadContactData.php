@@ -9,11 +9,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Collections\Collection;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
-
-use Oro\Bundle\TagBundle\Entity\Tag;
-use Oro\Bundle\TagBundle\Entity\TagManager;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
@@ -27,7 +23,6 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 
-use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadContactData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
@@ -41,26 +36,6 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
      * @var Account[]
      */
     protected $accounts;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $accountRepository;
-
-    /**
-     * @var UserManager
-     */
-    protected $userManager;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $userRepository;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $countryRepository;
 
     /**
      * @var User[]
@@ -82,15 +57,8 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
      */
     protected $contactSources;
 
-    /**
-     * @var EntityManager
-     */
-    protected $contactManager;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $contactRepository;
+    /** @var  EntityManager */
+    protected $em;
 
     /**
      * {@inheritDoc}
@@ -98,9 +66,6 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
-
-        $this->userManager = $container->get('oro_user.manager');
-        $this->contactManager = $container->get('doctrine.orm.entity_manager');
     }
 
     /**
@@ -115,14 +80,18 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
     /**
      * @param ObjectManager $manager
      */
-    protected function initSupportingEntities(ObjectManager $manager)
+    protected function initSupportingEntities(ObjectManager $manager = null)
     {
-        $this->users = $manager->getRepository('OroUserBundle:User')->findAll();
-        $this->countries = $manager->getRepository('OroAddressBundle:Country')->findAll();
+        if ($manager) {
+            $this->em = $manager;
+        }
 
-        $this->accounts = $manager->getRepository('OroCRMAccountBundle:Account')->findAll();
-        $this->contactGroups = $manager->getRepository('OroCRMContactBundle:Group')->findAll();
-        $this->contactSources = $manager->getRepository('OroCRMContactBundle:Source')->findAll();
+        $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
+        $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
+
+        $this->accounts = $this->em->getRepository('OroCRMAccountBundle:Account')->findAll();
+        $this->contactGroups = $this->em->getRepository('OroCRMContactBundle:Group')->findAll();
+        $this->contactSources = $this->em->getRepository('OroCRMContactBundle:Source')->findAll();
     }
 
     /**
@@ -172,12 +141,11 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
                 $contact->setSource($source);
                 $account->setDefaultContact($contact);
 
-                $this->persist($this->contactManager, $contact);
-
-                $this->persist($this->contactManager, $account);
+                $this->persist($this->em, $contact);
+                $this->persist($this->em, $account);
             }
 
-            $this->flush($this->contactManager);
+            $this->flush($this->em);
             fclose($handle);
         }
     }
