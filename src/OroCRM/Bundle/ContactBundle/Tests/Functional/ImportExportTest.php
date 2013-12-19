@@ -21,11 +21,6 @@ class ImportExportTest extends WebTestCase
      */
     protected $client;
 
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    protected $batchJobManager;
-
     protected function setUp()
     {
         $this->client = static::createClient(array(), ToolsAPI::generateBasicHeader());
