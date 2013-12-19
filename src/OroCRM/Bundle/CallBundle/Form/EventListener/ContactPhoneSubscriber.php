@@ -95,8 +95,7 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
             'class' => 'OroCRMContactBundle:ContactPhone',
             'property' => 'phone',
             'empty_value' => 'orocrm.call.form.call.other',
-            'label' => 'orocrm.call.form.call.contactPhone',
+            'label' => 'orocrm.call.contact_phone_number.label',
             'required' => true);
-
     }
 }

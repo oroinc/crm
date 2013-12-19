@@ -1,10 +1,15 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
-{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
+{% form_theme form with ['OroCRMContactBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
 {% set fullname = entity|oro_format_name|default('N/A') %}
-{% oro_title_set({params : {"%contact.name%": fullname} }) %}
-{% set title = form.vars.value.id ? fullname ~ ' - ' ~ 'Update Contact'|trans : 'New Contact'|trans %}
+{% oro_title_set({
+    params : {"%contact.name%": fullname}
+}) %}
+{% set title = form.vars.value.id
+    ? fullname ~ ' - ' ~ 'Update'|trans ~ ' ' ~ 'orocrm.contact.entity_label'|trans|lower
+    : 'New'|trans ~ ' ' ~ 'orocrm.contact.entity_label'|trans|lower
+%}
 {% set audit_entity_class = 'OroCRM_Bundle_ContactBundle_Entity_Contact' %}
 {% set gridName = 'contact-accounts-grid' %}
 {% set formAction = form.vars.value.id ? path('orocrm_contact_update', { 'id': form.vars.value.id }) : path('orocrm_contact_create')  %}
@@ -17,12 +22,8 @@
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-contact',
             'dataId': form.vars.value.id,
-            'dataMessage': 'Are you sure you want to delete this contact?'|trans,
-            'successMessage': 'Contact deleted'|trans,
-            'title': 'Delete contact',
-            'label': 'Delete'
-        })
-        }}
+            'entity_label': 'orocrm.contact.entity_label'|trans,
+        }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
     {{ UI.button({'path' : path('orocrm_contact_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
@@ -35,7 +36,7 @@
         {% set breadcrumbs = {
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_contact_index'),
-            'indexLabel': 'Contacts'|trans,
+            'indexLabel': 'orocrm.contact.entity_plural_label'|trans,
             'entityTitle': fullname
         }
         %}
@@ -59,34 +60,32 @@
                 {
                     'title': 'Contact Information'|trans,
                     'data': [
-                        form_row(form.namePrefix, {'label': 'Name prefix'|trans}),
-                        form_row(form.firstName, {'label': 'First name'|trans}),
-                        form_row(form.middleName, {'label': 'Middle name'|trans}),
-                        form_row(form.lastName, {'label': 'Last name'|trans}),
-                        form_row(form.nameSuffix, {'label': 'Name suffix'|trans}),
-                        form_row(form.description, {'label': 'Description'|trans}),
-                        form_row(form.assignedTo, {'label': 'Assigned to'|trans}),
-                        form_row(form.reportsTo, {'label': 'Reports to'|trans}),
-
-                        form_row(form.emails, {'label': 'Emails'|trans}),
-                        form_row(form.phones, {'label': 'Phones'|trans}),
-                        form_row(form.fax, {'label': 'Fax'|trans}),
-                        form_row(form.skype, {'label': 'Skype'|trans}),
-                        form_row(form.method, {'label': 'Contact Method'|trans}),
-                        form_row(form.twitter, {'label': 'Twitter'|trans}),
-                        form_row(form.facebook, {'label': 'Facebook'|trans}),
-                        form_row(form.googlePlus, {'label': 'Google+'|trans}),
-                        form_row(form.linkedIn, {'label': 'LinkedIn'|trans}),
-                        form_row(form.jobTitle, {'label': 'Job Title'|trans}),
-                        form_row(form.birthday, {'label': 'Birthday'|trans}),
-                        form_row(form.gender, {'label': 'Gender'|trans}),
-                        form_row(form.source, {'label': 'Source'|trans}),
-
+                        form_row(form.namePrefix),
+                        form_row(form.firstName),
+                        form_row(form.middleName),
+                        form_row(form.lastName),
+                        form_row(form.nameSuffix),
+                        form_row(form.description),
+                        form_row(form.assignedTo),
+                        form_row(form.reportsTo),
+                        form_row(form.emails),
+                        form_row(form.phones),
+                        form_row(form.fax),
+                        form_row(form.skype),
+                        form_row(form.method),
+                        form_row(form.twitter),
+                        form_row(form.facebook),
+                        form_row(form.googlePlus),
+                        form_row(form.linkedIn),
+                        form_row(form.jobTitle),
+                        form_row(form.birthday),
+                        form_row(form.gender),
+                        form_row(form.source),
                         form_row(form.tags)
                     ]
                 },
                 {
-                    'title': 'Addresses'|trans,
+                    'title': 'orocrm.contact.addresses.label'|trans,
                     'data': [
                         form_widget(form.addresses),
                     ]
@@ -112,47 +111,40 @@
     {% endif %}
 
     {% if form.groups is defined and form.groups.children|length > 0 %}
-        {% set dataBlocks = dataBlocks|merge(
-            [{
-                'title' : 'Groups'|trans,
-                'subblocks':
-                [
-                    {
-                        'title' : '',
-                        'useSpan': false,
-                        'data' : [
-                            form_row(form.groups, { attr: { class: 'horizontal' } })
-                        ]
-                    }
-                ]
-            }]
-        )
-        %}
-    {% endif %}
-    {% set dataBlocks = dataBlocks|merge(
-        [{
-            'title' : 'Accounts'|trans,
+        {% set dataBlocks = dataBlocks|merge([{
+            'title' : 'orocrm.contact.groups.label'|trans,
             'subblocks':
             [
                 {
-                    'title' : null,
+                    'title' : '',
                     'useSpan': false,
                     'data' : [
-                        form_widget(form.appendAccounts, {'id': 'appendAccounts'}),
-                        form_widget(form.removeAccounts, {'id': 'removeAccounts'}),
-                        dataGrid.renderGrid(gridName, { contact: form.vars.value.id }, { cssClass: 'inner-grid' })
+                        form_row(form.groups, { attr: { class: 'horizontal' } })
                     ]
                 }
             ]
-        }]
-    )
-    %}
+        }]) %}
+    {% endif %}
 
-    {% set data =
-        {
-            'formErrors': form_errors(form)? form_errors(form) : null,
-            'dataBlocks': dataBlocks,
-        }
-    %}
+    {% set dataBlocks = dataBlocks|merge([{
+        'title' : 'orocrm.contact.accounts.label'|trans,
+        'subblocks':
+        [
+            {
+                'title' : null,
+                'useSpan': false,
+                'data' : [
+                    form_widget(form.appendAccounts, {'id': 'appendAccounts'}),
+                    form_widget(form.removeAccounts, {'id': 'removeAccounts'}),
+                    dataGrid.renderGrid(gridName, { contact: form.vars.value.id }, { cssClass: 'inner-grid' })
+                ]
+            }
+        ]
+    }]) %}
+
+    {% set data = {
+        'formErrors': form_errors(form)? form_errors(form) : null,
+        'dataBlocks': dataBlocks,
+    } %}
     {{ parent() }}
 {% endblock content_data %}

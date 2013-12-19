@@ -14,11 +14,7 @@ use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 /**
  * @ORM\Table("orocrm_magento_customer_address")
  * @ORM\HasLifecycleCallbacks()
- * @Config(
- *  defaultValues={
- *      "entity"={"label"="Magento Customer Address", "plural_label"="Magento Customer Addresses"}
- *  }
- * )
+ * @Config()
  * @ORM\Entity
  * @Oro\Loggable
  */

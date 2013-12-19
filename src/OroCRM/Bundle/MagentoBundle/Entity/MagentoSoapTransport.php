@@ -15,11 +15,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *
  * @package OroCRM\Bundle\MagentoBundle\Entity
  * @ORM\Entity
- * @Config(
- *  defaultValues={
- *      "entity"={"label"="Integration Channel Transport", "plural_label"="Integration Channel Transports"}
- *  }
- * )
+ * @Config()
  * @Oro\Loggable()
  */
 class MagentoSoapTransport extends Transport

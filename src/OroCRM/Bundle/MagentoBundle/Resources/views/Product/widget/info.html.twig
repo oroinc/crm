@@ -8,20 +8,20 @@
 
 <div class="widget-content product-info-widget form-horizontal box-content row-fluid">
     <div class="span6">
-        {{ _self.renderRow('Name'|trans, entity.name) }}
-        {{ _self.renderRow('SKU'|trans, entity.sku) }}
-        {{ _self.renderRow('Type'|trans, entity.type) }}
-        {{ _self.renderRow('Price'|trans, entity.price) }}
-        {{ _self.renderRow('Special Price'|trans, entity.specialPrice) }}
+        {{ _self.renderRow('orocrm.magento.product.name.label'|trans, entity.name) }}
+        {{ _self.renderRow('orocrm.magento.product.sku.label'|trans, entity.sku) }}
+        {{ _self.renderRow('orocrm.magento.product.type.label'|trans, entity.type) }}
+        {{ _self.renderRow('orocrm.magento.product.price.label'|trans, entity.price) }}
+        {{ _self.renderRow('orocrm.magento.product.special_price.label'|trans, entity.specialPrice) }}
     </div>
 
     <div class="span6">
-        {{ _self.renderRow('Channel'|trans, entity.channel.name) }}
+        {{ _self.renderRow('orocrm.magento.product.channel.label'|trans, entity.channel.name) }}
 
         {% set websites = [] %}
         {% for website in entity.websites %}
             {% set websites = websites|merge([website.name]) %}
         {% endfor %}
-        {{ _self.renderRow('Websites'|trans, websites|join(', ')) }}
+        {{ _self.renderRow('orocrm.magento.product.websites.label'|trans, websites|join(', ')) }}
     </div>
 </div>

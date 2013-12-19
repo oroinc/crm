@@ -2,7 +2,10 @@
 
 {% oro_title_set({params : {"%subject%": form.vars.value.subject|default('N/A') } }) %}
 
-{% set formAction = form.vars.value.id ? path('orocrm_call_update', { 'id': form.vars.value.id }) : path('orocrm_call_create')  %}
+{% set formAction = form.vars.value.id
+    ? path('orocrm_call_update', { 'id': form.vars.value.id })
+    : path('orocrm_call_create')
+%}
 
 {% block head_script %}
     {{ parent() }}
@@ -13,29 +16,26 @@
 {% endblock %}
 
 {% block content_data %}
-
     {% set id = 'call-log' %}
-
-    {% if form.vars.value.id %}
-        {% set title = 'Edit call'|trans %}
-    {% else %}
-        {% set title = 'Log call'|trans %}
-    {% endif %}
+    {% set title = form.vars.value.id
+        ? 'Edit'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower
+        : 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower
+    %}
 
     {% set formFields = [] %}
     {% if form.owner is defined %}
-        {% set formFields = formFields|merge([form_row(form.owner)]) %}
+        {% set formFields = formFields|merge([form_row(form.owner, {label: 'orocrm.call.owner.label'|trans})]) %}
     {% endif %}
     {% set formFields = formFields|merge([
-        form_row(form.subject, {'label': 'Subject'|trans}),
-        form_row(form.notes, {'label': 'Notes'|trans}),
-        form_row(form.callDateTime, {'label': 'Call Date & Time'|trans}),
-        form_row(form.relatedAccount, {'label': 'Related To'|trans}),
-        form_row(form.relatedContact, {'label': 'Related Contact'|trans}),
-        form_row(form.contactPhoneNumber, {'label': 'Phone Number'|trans}),
+        form_row(form.subject),
+        form_row(form.notes),
+        form_row(form.callDateTime),
+        form_row(form.relatedAccount),
+        form_row(form.relatedContact),
+        form_row(form.contactPhoneNumber),
         form_widget(form.phoneNumber),
-        form_row(form.direction, {'label': 'Direction'|trans}),
-        form_row(form.duration, {'label': 'Duration'|trans})
+        form_row(form.direction),
+        form_row(form.duration)
     ]) %}
 
     {% set dataBlocks = [{
@@ -65,7 +65,7 @@
                     phonePlain: $('#{{ form.phoneNumber.vars.id }}')
                 });
             });
-        });            
+        });
     </script>
 
     {{ parent() }}
@@ -81,7 +81,7 @@
         {% set breadcrumbs = {
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_call_index'),
-            'indexLabel': 'Calls'|trans,
+            'indexLabel': 'orocrm.call.entity_plural_label'|trans,
             'entityTitle': form.vars.value.subject|default('N/A')
         }
         %}
@@ -89,7 +89,7 @@
         {% set breadcrumbs = {
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_call_index'),
-            'indexLabel': 'Calls'|trans,
+            'indexLabel': 'orocrm.call.entity_plural_label'|trans,
             'entityTitle': 'Log call'|trans
         }
         %}
