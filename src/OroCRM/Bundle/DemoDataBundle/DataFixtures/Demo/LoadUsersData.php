@@ -77,8 +77,6 @@ class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, 
      */
     public function loadUsers()
     {
-        /** @var \Oro\Bundle\UserBundle\Entity\Role $role */
-        //$role = $this->roles->findOneBy(array('role' => 'ROLE_MANAGER'));
 
         for ($i = 0; $i < 50; ++$i) {
             $firstName = $this->generateFirstName();
