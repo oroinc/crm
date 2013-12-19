@@ -16,21 +16,19 @@
         }) }}
     {% endif %}
     {% if resource_granted('orocrm_account_update') %}
-        {{ UI.button({
+        {{ UI.editButton({
             'path': path('orocrm_account_update', {'id': entity.id}),
-            'iClass': 'icon-edit',
-            'title': 'Edit'|trans ~ ' ' ~ 'orocrm.account.entity_label'|trans,
-            'label': 'Edit'|trans
+            'entity_label': 'orocrm.account.entity_label'|trans
         }) }}
     {% endif %}
     {% if resource_granted('orocrm_account_remove') %}
         {{ UI.deleteButton({
-                'dataUrl': path('oro_api_delete_account', {'id': entity.id}),
-                'dataRedirect': path('orocrm_account_index'),
-                'aCss': 'no-hash remove-button',
-                'dataId': entity.id,
-                'id': 'btn-remove-account',
-                'entity_label': 'orocrm.account.entity_label'|trans
+            'dataUrl': path('oro_api_delete_account', {'id': entity.id}),
+            'dataRedirect': path('orocrm_account_index'),
+            'aCss': 'no-hash remove-button',
+            'dataId': entity.id,
+            'id': 'btn-remove-account',
+            'entity_label': 'orocrm.account.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock navButtons %}

@@ -28,11 +28,9 @@
         }) }}
     {% endif %}
     {% if resource_granted('orocrm_contact_update') %}
-        {{ UI.button({
-            'path' : path('orocrm_contact_update', { 'id': entity.id }),
-            'iClass' : 'icon-edit ',
-            'title' : 'Edit'|trans ~ ' ' ~ 'orocrm.contact.entity_label'|trans,
-            'label' : 'Edit'|trans
+        {{ UI.editButton({
+            'path': path('orocrm_account_update', {'id': entity.id}),
+            'entity_label': 'orocrm.contact.entity_label'|trans
         }) }}
     {% endif %}
     {% if resource_granted('orocrm_contact_delete') %}

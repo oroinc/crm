@@ -5,11 +5,9 @@
 
 {% block navButtons %}
     {% if resource_granted('orocrm_sales_opportunity_update') %}
-        {{ UI.button({
-            'path' : path('orocrm_sales_opportunity_update', { 'id': entity.id }),
-            'iClass' : 'icon-edit ',
-            'title' : 'Edit'|trans ~ ' ' ~ 'orocrm.sales.opportunity.entity_label'|trans|lower,
-            'label' : 'Edit'|trans
+        {{ UI.editButton({
+            'path': path('orocrm_account_update', {'id': entity.id}),
+            'entity_label': 'orocrm.sales.opportunity.entity_label'|trans|
         }) }}
     {% endif %}
     {% if resource_granted('orocrm_sales_opportunity_delete') %}
