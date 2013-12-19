@@ -15,7 +15,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
 
 /**
- * Lead
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  *
  * @ORM\Table(name="orocrm_sales_lead")
  * @ORM\Entity

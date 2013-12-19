@@ -101,7 +101,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 $this->persist($this->em, $lead);
 
                 $workFlow = $this->workflowManager->startWorkflow(
-                    'sales_lead',
+                    'b2b_flow_lead',
                     $lead,
                     'qualify',
                     array(
