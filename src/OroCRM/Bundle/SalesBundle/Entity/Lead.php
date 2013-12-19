@@ -15,7 +15,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
 
 /**
- * Lead
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  *
  * @ORM\Table(name="orocrm_sales_lead")
  * @ORM\Entity
@@ -206,6 +206,13 @@ class Lead extends ExtendLead implements FullNameInterface
      * @Oro\Versioned
      */
     protected $owner;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="notes", type="text", nullable=true)
+     */
+    protected $notes;
 
     /**
      * Get id
@@ -667,6 +674,24 @@ class Lead extends ExtendLead implements FullNameInterface
     public function setAccount($account)
     {
         $this->account = $account;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * @param string $notes
+     * @return Lead
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
         return $this;
     }
 }

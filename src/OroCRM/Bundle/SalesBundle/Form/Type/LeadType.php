@@ -30,7 +30,8 @@ class LeadType extends AbstractType
             ->add('website', 'url', array('required' => false))
             ->add('numberOfEmployees', 'number', array('required' => false))
             ->add('industry', 'text', array('required' => false))
-            ->add('address', 'oro_address', array('required' => false));
+            ->add('address', 'oro_address', array('required' => false))
+            ->add('notes', 'textarea', array('required' => false));
     }
 
     /**

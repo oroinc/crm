@@ -269,14 +269,6 @@ class ContactController extends Controller
     }
 
     /**
-     * @return FlashBag
-     */
-    protected function getFlashBag()
-    {
-        return $this->get('session')->getFlashBag();
-    }
-
-    /**
      * @return ApiEntityManager
      */
     protected function getManager()
@@ -312,5 +304,16 @@ class ContactController extends Controller
             'entity' => $entity,
             'form'   => $this->get('orocrm_contact.form.contact')->createView(),
         );
+    }
+
+    /**
+     * @Route("/widget/email/{contactId}", name="orocrm_contact_widget_email", requirements={"contactId"="\d+"})
+     * @ParamConverter("contact", options={"id"="contactId"})
+     * @Template("OroCRMContactBundle:Contact:email.html.twig")
+     * @AclAncestor("oro_email_view")
+     */
+    public function widgetEmailAction(Contact $contact)
+    {
+        return array('entity' => $contact);
     }
 }

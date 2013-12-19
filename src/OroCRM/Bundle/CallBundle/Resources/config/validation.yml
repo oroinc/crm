@@ -8,6 +8,8 @@ OroCRM\Bundle\CallBundle\Entity\Call:
             - Date: ~
         callStatus:
             - NotBlank: ~
+        direction:
+            - NotBlank: ~
 
     constraints:
         - Callback:

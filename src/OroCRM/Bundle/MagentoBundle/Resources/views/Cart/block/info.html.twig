@@ -1,0 +1,17 @@
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+
+<div class="widget-content cart-info-widget form-horizontal box-content row-fluid">
+    <div class="span6">
+        {% set email = entity.email %}
+        {% if entity.email != null %}
+            {% set email = '<a href="mailto: ' ~ email ~ '" title="' ~ email ~ '">' ~ email ~ '</a>'%}
+        {% endif %}
+        {{ macros.renderProperty('Email'|trans, email) }}
+        {{ macros.renderProperty('Items qty'|trans, entity.itemsQty) }}
+        {{ macros.renderProperty('Status'|trans, entity.status|trans) }}
+    </div>
+    <div class="span6">
+        {{ macros.renderProperty('Website'|trans, entity.store.website.name) }}
+        {{ macros.renderProperty('Store'|trans, entity.store.name|nl2br) }}
+    </div>
+</div>

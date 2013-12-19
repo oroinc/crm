@@ -12,20 +12,42 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
          * Check url
          * @property string
          */
-        route: 'orocrm_magento_soap_check',
-        url:   null,
+        route:           'orocrm_magento_soap_check',
+        url:             null,
+        id:              null,
+        requiredOptions: ['websiteSelectEl', 'websitesListEl', 'isExtensionInstalledEl', 'connectorsEl'],
 
         resultTemplate: _.template(
-            '<div class="alert alert-<%= type %> connection-status span5"><%= message %></div>'
+            '<div class="alert alert-<%= type %> connection-status"><%= message %></div>'
+        ),
+
+        connectorTemplate: _.template(
+            '<div class="oro-clearfix">' +
+                '<input type="checkbox" id="oro_integration_channel_form_connectors_<%= i %>" ' +
+                    'name="oro_integration_channel_form[connectors][]" value="<%= name %>">' +
+                '<label for="oro_integration_channel_form_connectors_<%= i %>"><%= label %></label>' +
+            '</div>'
         ),
 
         initialize: function (options) {
-            var id = options.transportEntityId || null;
-            this.url = routing.generate(this.route, {id: id});
+            this.id = options.transportEntityId || null;
+            this.url = this.getUrl();
 
-            if (!options.websiteSelectEl || !options.websitesListEl) {
-                throw  new TypeError('Missing required options');
+            var requiredMissed = this.requiredOptions.filter(function (option) {
+                return _.isUndefined(options[option]);
+            });
+            if (requiredMissed.length) {
+                throw new TypeError('Missing required option(s): ' + requiredMissed.join(','));
             }
+        },
+
+        getUrl: function (type) {
+            var params = {id: this.id};
+            if (type !== undefined) {
+                params.type = type;
+            }
+
+            return routing.generate(this.route, params);
         },
 
         /**
@@ -35,6 +57,13 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
          */
         processClick: function (e) {
             var data = this.$el.parents('form').serializeArray();
+            var typeData = _.filter(data, function (field) {
+                return field.name.indexOf('[type]') !== -1;
+            });
+            if (typeData.length) {
+                typeData = typeData[0].value;
+            }
+
             data = _.filter(data, function (field) {
                 return field.name.indexOf('[transport]') !== -1;
             });
@@ -46,7 +75,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
             if (navigation) {
                 navigation.loadingMask.show();
             }
-            $.post(this.url, data, _.bind(this.responseHandler, this), 'json')
+            $.post(this.getUrl(typeData), data, _.bind(this.responseHandler, this), 'json')
                 .always(_.bind(function (respose, status) {
                     if (navigation) {
                         navigation.loadingMask.hide();
@@ -68,7 +97,8 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
 
             if (success && res.websites) {
                 var $listEl = $(this.options.websitesListEl),
-                    $websiteSelectEl = $(this.options.websiteSelectEl);
+                    $websiteSelectEl = $(this.options.websiteSelectEl),
+                    $isExtensionInstalledEl = $(this.options.isExtensionInstalledEl);
 
                 $listEl.val(JSON.stringify(res.websites));
                 $websiteSelectEl.empty();
@@ -76,6 +106,18 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
                     $websiteSelectEl.append($("<option />").val(website.id).text(website.label));
                 });
                 $websiteSelectEl.trigger('change');
+                $isExtensionInstalledEl.val(res.isExtensionInstalled || false ? 1 : 0);
+            }
+
+            if (success && res.connectors) {
+                var connectors = res.connectors;
+                var form = this.$el.parents('form');
+                form.find(this.options.connectorsEl).empty();
+                var i = 0;
+                for (var key in connectors) {
+                    form.find(this.options.connectorsEl).append(this.connectorTemplate({name: key, label: connectors[key], i: i}));
+                    i++;
+                }
             }
 
             this.renderResult(success ? 'success' : 'error', message);

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePersonGroup;
+use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 
 /**
  * Class CustomerGroup
@@ -17,6 +18,8 @@ use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePersonGroup;
  */
 class CustomerGroup extends BasePersonGroup
 {
+    use IntegrationEntityTrait, OriginTrait;
+
     /**
      * @var string
      *

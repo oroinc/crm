@@ -6,4 +6,8 @@ orocrm_call_bundle:
 orocrm_call_api:
     resource: "@OroCRMCallBundle/Controller/Api/Rest/CallController.php"
     type:     rest
-    prefix:   /call
+    prefix:       api/rest/{version}/
+    requirements:
+        version:  latest|v1
+    defaults:
+        version:  latest

@@ -36,7 +36,7 @@ class SOAPTransportTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('api_key'));
 
         $this->transport = $this->getMock(
-            'OroCRM\Bundle\MagentoBundle\Provider\MageSoapTransport',
+            'OroCRM\Bundle\MagentoBundle\Provider\SoapTransport',
             ['getSoapClient'],
             [$this->encoder]
         );

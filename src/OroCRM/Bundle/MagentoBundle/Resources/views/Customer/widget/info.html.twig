@@ -1,11 +1,4 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% import 'OroTagBundle::macros.html.twig' as _tag %}
-
-{# TODO: Move this to OroUIBundle::macros.html.twig #}
-{% macro renderRow(label, value) %}
-    {% import 'OroUIBundle::macros.html.twig' as macros %}
-    {{ macros.renderAttribute(label, '<p class="control-label">' ~ value|default('N/A'|trans) ~ '</p>') }}
-{% endmacro %}
 
 <div class="widget-content customer-info-widget form-horizontal box-content row-fluid">
     <div class="span6">
@@ -13,7 +6,7 @@
         {% if entity.email != null %}
             {% set email = '<a href="mailto: ' ~ email ~ '" title="' ~ email ~ '">' ~ email ~ '</a>'%}
         {% endif %}
-        {{ _self.renderRow('Email'|trans, email) }}
+        {{ macros.renderProperty('Email'|trans, email) }}
         <div class="control-group">
             <label class="control-label">{% trans %}Birthday{% endtrans %}</label>
             <div class="controls">
@@ -28,14 +21,16 @@
             </div>
         </div>
 
-        {{ _self.renderRow('Gender'|trans, oro_gender(entity.gender)) }}
-        {{ _self.renderRow('Tax/Vat'|trans, entity.vat) }}
+        {{ macros.renderProperty('Gender'|trans, oro_gender(entity.gender)) }}
+        {{ macros.renderProperty('Tax/Vat'|trans, entity.vat) }}
     </div>
 
     <div class="span6">
-        {{ _self.renderRow('Website'|trans, entity.website.name) }}
-        {{ _self.renderRow('Store'|trans, entity.store.name) }}
-        {{ _self.renderRow('Customer Group'|trans, entity.group.name) }}
+        {{ macros.renderProperty('Website'|trans, entity.website.name) }}
+        {{ macros.renderProperty('Store'|trans, entity.store.name|nl2br) }}
+        {% if entity.group %}
+            {{ macros.renderProperty('Customer Group'|trans, entity.group.name) }}
+        {% endif %}
 
         <div class="control-group">
             <label class="control-label">{% trans %}Account{% endtrans %}</label>

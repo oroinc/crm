@@ -5,10 +5,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-
 use Doctrine\Common\DataFixtures\AbstractFixture;
-
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Collections\Collection;
@@ -16,47 +13,18 @@ use Doctrine\Common\Collections\Collection;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-
-use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
-
-use Oro\Bundle\TagBundle\Entity\Tag;
-use Oro\Bundle\TagBundle\Entity\TagManager;
-
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 class LoadAccountData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
-
     /**
      * @var ContainerInterface
      */
     protected $container;
 
-    /**
-     * @var EntityManager
-     */
-    protected $accountManager;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $accountRepository;
-
-    /**
-     * @var UserManager
-     */
-    protected $userManager;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $userRepository;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $countryRepository;
+    /** @var  EntityManager */
+    protected $em;
 
     /**
      * @var User[]
@@ -68,22 +36,12 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
      */
     protected $countries;
 
-    /** @var  TagManager */
-    protected $tagManager;
-
-    /** @var EntityRepository */
-    protected $tagsRepository;
-
     /**
      * {@inheritDoc}
      */
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
-
-        $this->accountManager = $container->get('doctrine.orm.entity_manager');
-        $this->userManager = $container->get('oro_user.manager');
-        $this->tagManager = $container->get('oro_tag.tag.manager');
     }
 
     /**
@@ -91,18 +49,21 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $manager)
     {
-        $this->initSupportingEntities();
+        $this->initSupportingEntities($manager);
         $this->loadAccounts();
     }
 
-    protected function initSupportingEntities()
+    /**
+     * @param ObjectManager $manager
+     */
+    protected function initSupportingEntities(ObjectManager $manager = null)
     {
-        $userStorageManager = $this->userManager->getStorageManager();
-        $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        if ($manager) {
+            $this->em = $manager;
+        }
 
-        $this->users = $userStorageManager->getRepository('OroUserBundle:User')->findAll();
-        $this->countries = $userStorageManager->getRepository('OroAddressBundle:Country')->findAll();
-        $this->tagsRepository = $entityManager->getRepository('OroTagBundle:Tag');
+        $this->users = $manager->getRepository('OroUserBundle:User')->findAll();
+        $this->countries = $manager->getRepository('OroAddressBundle:Country')->findAll();
     }
 
     /**
@@ -112,7 +73,7 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
      */
     public function loadAccounts()
     {
-         $companies = array();
+        $companies = array();
 
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR. "accounts.csv", "r");
         if ($handle) {
@@ -121,21 +82,21 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
                 //read headers
                 $headers = $data;
             }
+            $randomUser = count($this->users)-1;
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 $data = array_combine($headers, array_values($data));
                 if (!array_key_exists($data['Company'], $companies)) {
                     $account = $this->createAccount($data);
-                    $user = $this->users[rand(0, count($this->users)-1)];
-                    $account->setOwner($user);
+                    $account->setOwner($this->users[rand(0, $randomUser)]);
 
-                    $this->persist($this->accountManager, $account);
+                    $this->persist($this->em, $account);
 
                     $companies[$data['Company']] = $data['Company'];
                 }
             }
             fclose($handle);
         }
-        $this->flush($this->accountManager);
+        $this->flush($this->em);
     }
 
     /**

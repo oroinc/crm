@@ -5,9 +5,10 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
-use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
+use OroCRM\Bundle\MagentoBundle\Entity\Website;
+use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
+use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 
 class RelationNormalizer implements NormalizerInterface, DenormalizerInterface
 {
@@ -34,9 +35,9 @@ class RelationNormalizer implements NormalizerInterface, DenormalizerInterface
         /** @var Store|Website|CustomerGroup $result */
         $result = new $class();
 
-        foreach (['id', 'code', 'name'] as $name) {
+        foreach (['id', 'code', 'name', 'originId'] as $name) {
             $method = 'set'.ucfirst($name);
-            if (method_exists($result, $method) && !empty($data[$name])) {
+            if (method_exists($result, $method) && isset($data[$name])) {
                 $result->$method($data[$name]);
             }
         }
@@ -58,9 +59,9 @@ class RelationNormalizer implements NormalizerInterface, DenormalizerInterface
     public function supportsDenormalization($data, $type, $format = null)
     {
         $supportedEntities = [
-            CustomerNormalizer::STORE_TYPE,
-            CustomerNormalizer::WEBSITE_TYPE,
-            CustomerNormalizer::GROUPS_TYPE
+            StoreConnector::STORE_TYPE,
+            StoreConnector::WEBSITE_TYPE,
+            CustomerDenormalizer::GROUPS_TYPE
         ];
 
         return is_array($data) && class_exists($type) && in_array($type, $supportedEntities);
