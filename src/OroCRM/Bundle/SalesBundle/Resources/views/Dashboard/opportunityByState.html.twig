@@ -3,7 +3,7 @@
 {% block content %}
     <div class="chart-container">
         <div class="clearfix">
-            <div id="{{ widgetId }}-chart" class="pie-chart chart pull-left"></div>
+            <div id="{{ widgetId }}-chart" class="bar-chart chart pull-left"></div>
         </div>
     </div>
     <script type="text/javascript">
@@ -44,6 +44,8 @@
                             [chart],
                             {
                                 colors: {{ chartColors|json_encode|raw }},
+                                fontColor: {{ chartFontColor|json_encode|raw }},
+                                fontSize: {{ chartFontSize|json_encode|raw }},
                                 bars : {
                                     show : true,
                                     horizontal : false,
@@ -75,9 +77,11 @@
                         );
                     };
 
-                    setChartSize();
-                    drawChart();
-                    setChartContainerSize();
+                    $(function () {
+                        setChartSize();
+                        drawChart();
+                        setChartContainerSize();
+                    });
 
                     $(window).resize(function () {
                         if (setChartSize()) {

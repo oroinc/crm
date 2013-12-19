@@ -1,5 +1,7 @@
 datagrid:
     dashboard-my-accounts-activity-grid:
+        options:
+            entityHint: account
         source:
             type: orm
             acl_resource: orocrm_call_view
