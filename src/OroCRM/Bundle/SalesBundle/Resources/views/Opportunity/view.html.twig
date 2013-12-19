@@ -5,25 +5,23 @@
 
 {% block navButtons %}
     {% if resource_granted('orocrm_sales_opportunity_update') %}
-        {{ UI.button({
+        {{ UI.editButton({
             'path' : path('orocrm_sales_opportunity_update', { 'id': entity.id }),
-            'iClass' : 'icon-edit ',
             'title' : 'Update opportunity',
             'label' : 'Edit'
         }) }}
     {% endif %}
     {% if resource_granted('orocrm_sales_opportunity_delete') %}
         {{ UI.deleteButton({
-                'dataUrl': path('oro_api_delete_opportunity', {'id': entity.id}) ,
-                'dataRedirect': path('orocrm_sales_opportunity_index'),
-                'aCss': 'no-hash remove-button',
-                'id': 'btn-remove-contact',
-                'dataId': entity.id,
-                'dataMessage': 'Are you sure you want to delete this opportunity?',
-                'title': 'Delete Opportunity',
-                'label': 'Delete'
-            })
-        }}
+            'dataUrl': path('oro_api_delete_opportunity', {'id': entity.id}) ,
+            'dataRedirect': path('orocrm_sales_opportunity_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-contact',
+            'dataId': entity.id,
+            'dataMessage': 'Are you sure you want to delete this opportunity?',
+            'title': 'Delete Opportunity',
+            'label': 'Delete'
+        }) }}
     {% endif %}
 {% endblock navButtons %}
 
