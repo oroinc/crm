@@ -6,7 +6,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Symfony\Component\DomCrawler\Form;
-use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 
 /**
  * @outputBuffering enabled
@@ -52,6 +51,10 @@ class ControllersTest extends WebTestCase
     }
 
 
+    /**
+     * @depend testCreate
+     * @return int
+     */
     public function testUpdate()
     {
         $result = ToolsAPI::getEntityGrid(
@@ -159,5 +162,66 @@ class ControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 404, 'text/html; charset=UTF-8');
+    }
+
+    /**
+     * @depends testCreate
+     */
+    public function testMassAction()
+    {
+        for ($i = 1; $i <=5; $i++) {
+            $crawler = $this->client->request('GET', $this->client->generate('orocrm_contact_create'));
+            /** @var Form $form */
+            $form = $crawler->selectButton('Save and Close')->form();
+            $form['orocrm_contact_form[firstName]'] = 'Contact_fname' . ToolsAPI::randomGen(5);
+            $form['orocrm_contact_form[lastName]'] = 'Contact_lname' . ToolsAPI::randomGen(5);
+            $form['orocrm_contact_form[owner]'] = '1';
+
+            $this->client->followRedirects(true);
+            $crawler = $this->client->submit($form);
+
+            $result = $this->client->getResponse();
+            ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+            $this->assertContains("Contact saved", $crawler->html());
+        }
+
+        $result = ToolsAPI::getEntityGrid(
+            $this->client,
+            'contacts-grid',
+            array()
+        );
+
+        ToolsAPI::assertJsonResponse($result, 200);
+        $result = ToolsAPI::jsonToArray($result->getContent());
+        $id = array();
+        foreach ($result['data'] as $value) {
+            $id[] = $value['id'];
+        }
+        $id = implode(',', $id);
+        $this->client->request(
+            'GET',
+            $this->client->generate(
+                'oro_datagrid_mass_action',
+                array('gridName' => 'contacts-grid', 'actionName' => 'delete', 'values' => $id, 'inset' => 1)
+            )
+        );
+
+        $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 200);
+        $result = ToolsAPI::jsonToArray($result->getContent());
+
+        $this->assertTrue($result['successful']);
+        $this->assertEquals("5 entities were removed", $result['message']);
+        $this->assertEquals(5, $result['count']);
+
+        $result = ToolsAPI::getEntityGrid(
+            $this->client,
+            'contacts-grid',
+            array()
+        );
+
+        ToolsAPI::assertJsonResponse($result, 200);
+        $result = ToolsAPI::jsonToArray($result->getContent());
+        $this->assertEmpty($result['data']);
     }
 }
