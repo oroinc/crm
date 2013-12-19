@@ -33,7 +33,7 @@ class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, 
     protected $userManager;
 
     /** @var Role */
-    protected $roles;
+    protected $role;
 
     /** @var  EntityManager */
     protected $em;
