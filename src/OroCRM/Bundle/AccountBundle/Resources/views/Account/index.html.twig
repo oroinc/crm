@@ -7,8 +7,7 @@
     {% if resource_granted('orocrm_account_create') %}
         {{ UI.addButton({
             'path' : path('orocrm_account_create'),
-            'title' : 'Create ' ~ 'orocrm.account.entity_label'|trans|lower,
-            'label' : 'Create ' ~ 'orocrm.account.entity_label'|trans|lower
+            'entity_label': 'orocrm.account.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock %}

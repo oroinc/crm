@@ -8,8 +8,7 @@
         <div class="btn-group">
             {{ UI.addButton({
                 'path' : path('orocrm_call_create'),
-                'title' : 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower,
-                'label' : 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower
+                'entity_label': 'orocrm.call.entity_label'|trans,
             }) }}
         </div>
     {% endif %}

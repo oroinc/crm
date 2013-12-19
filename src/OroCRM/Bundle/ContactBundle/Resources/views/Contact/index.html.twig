@@ -19,7 +19,7 @@
         entityClass: 'OroCRM\\Bundle\\ContactBundle\\Entity\\Contact',
         importProcessor: 'orocrm_contact.import_validation',
         exportProcessor: 'orocrm_contact',
-        imortTitle: 'Import'|trans ~ ' ' ~ 'orocrm.contact.entity_plural_label'|trans,
+        imortTitle: 'Import'|trans ~ ' ' ~ 'orocrm.contact.entity_plural_label'|trans|lower,
         dataGridName: gridName
     } %}
 
@@ -27,8 +27,7 @@
     <div class="btn-group">
         {{ UI.addButton({
             'path' : path('orocrm_contact_create'),
-            'title' : 'Create'|trans ~ ' ' ~ 'orocrm.contact.entity_label'|trans|lower,
-            'label' : 'Create'|trans ~ ' ' ~ 'orocrm.contact.entity_label'|trans|lower
+            'entity_label': 'orocrm.contact.entity_label'|trans,
         }) }}
     </div>
     {% endif %}

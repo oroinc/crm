@@ -7,8 +7,7 @@
     {% if resource_granted('orocrm_contact_group_create') %}
         {{ UI.addButton({
             'path' : path('orocrm_contact_group_create'),
-            'title' : 'Create '~'orocrm.contact.group.entity_label'|trans|lower,
-            'label' : 'Create '~'orocrm.contact.group.entity_label'|trans|lower
+            'entity_label' :'orocrm.contact.group.entity_label'|trans,
         }) }}
     {% endif %}
 {% endblock %}

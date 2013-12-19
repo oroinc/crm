@@ -7,8 +7,7 @@
     {% if resource_granted('orocrm_sales_lead_create') %}
         {{ UI.addButton({
             'path' : path('orocrm_sales_lead_create'),
-            'title' : 'Create ' ~ 'orocrm.sales.lead.entity_label'|trans,
-            'label' : 'Create ' ~ 'orocrm.sales.lead.entity_label'|trans
+            'entity_label': 'orocrm.sales.lead.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock %}

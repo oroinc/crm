@@ -25,11 +25,8 @@
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-lead',
             'dataId': form.vars.value.id,
-            'dataMessage': 'Are you sure you want to delete this lead?',
-            'title': 'Delete ' ~ 'orocrm.sales.lead.entity_label'|trans,
-            'label': 'Delete'
-        })
-        }}
+            'entity_label': 'orocrm.sales.lead.entity_label'|trans
+        }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
     {{ UI.button({'path' : path('orocrm_sales_lead_index'), 'title' : 'Cancel', 'label' : 'Cancel'}) }}
@@ -66,8 +63,7 @@
             'indexPath':   path('orocrm_sales_lead_index'),
             'indexLabel': 'orocrm.sales.lead.entity_plural_label'|trans,
             'entityTitle': entity.name
-        }
-        %}
+        } %}
         {{ parent() }}
     {% else %}
         {% include 'OroUIBundle::page_title_block.html.twig' %}
