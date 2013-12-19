@@ -6,20 +6,23 @@
 
 {% block navButtons %}
     {% if resource_granted('orocrm_sales_lead_update') %}
-        {{ UI.button({'path' : path('orocrm_sales_lead_update', { 'id': entity.id }), 'iClass' : 'icon-edit ', 'title' : 'Update lead', 'label' : 'Edit'}) }}
+        {{ UI.editButton({
+            'path': path('orocrm_sales_lead_update', { 'id': entity.id }),
+            'title': 'Update lead',
+            'label': 'Edit'
+        }) }}
     {% endif %}
     {% if resource_granted('orocrm_sales_lead_delete') %}
         {{ UI.deleteButton({
-                'dataUrl': path('oro_api_delete_lead', {'id': entity.id}) ,
-                'dataRedirect': path('orocrm_sales_lead_index'),
-                'aCss': 'no-hash remove-button',
-                'id': 'btn-remove-lead',
-                'dataId': entity.id,
-                'dataMessage': 'Are you sure you want to delete this lead?',
-                'title': 'Delete Lead',
-                'label': 'Delete'
-            })
-        }}
+            'dataUrl': path('oro_api_delete_lead', {'id': entity.id}) ,
+            'dataRedirect': path('orocrm_sales_lead_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-lead',
+            'dataId': entity.id,
+            'dataMessage': 'Are you sure you want to delete this lead?',
+            'title': 'Delete Lead',
+            'label': 'Delete'
+        }) }}
     {% endif %}
 {% endblock navButtons %}
 

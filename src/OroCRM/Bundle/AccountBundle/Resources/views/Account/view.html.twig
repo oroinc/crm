@@ -16,26 +16,24 @@
         }) }}
     {% endif %}
     {% if resource_granted('orocrm_account_update') %}
-        {{ UI.button({
+        {{ UI.editButton({
             'path': path('orocrm_account_update', {'id': entity.id}),
-            'iClass': 'icon-edit',
-            'title': 'Edit account'|trans,
-            'label': 'Edit'|trans
+            'title': 'Edit account',
+            'label': 'Edit'
         }) }}
     {% endif %}
     {% if resource_granted('orocrm_account_remove') %}
         {{ UI.deleteButton({
-                'dataUrl': path('oro_api_delete_account', {'id': entity.id}),
-                'dataRedirect': path('orocrm_account_index'),
-                'aCss': 'no-hash remove-button',
-                'dataId': entity.id,
-                'id': 'btn-remove-account',
-                'dataMessage': 'Are you sure you want to delete this account?'|trans,
-                'successMessage': 'Account deleted'|trans,
-                'title': 'Delete account'|trans,
-                'label': 'Delete'|trans
-            })
-        }}
+            'dataUrl': path('oro_api_delete_account', {'id': entity.id}),
+            'dataRedirect': path('orocrm_account_index'),
+            'aCss': 'no-hash remove-button',
+            'dataId': entity.id,
+            'id': 'btn-remove-account',
+            'dataMessage': 'Are you sure you want to delete this account?',
+            'successMessage': 'Account deleted',
+            'title': 'Delete account',
+            'label': 'Delete'
+        }) }}
     {% endif %}
 {% endblock navButtons %}
 
