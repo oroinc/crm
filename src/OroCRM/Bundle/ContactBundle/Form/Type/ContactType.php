@@ -66,6 +66,7 @@ class ContactType extends AbstractType
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function buildRelationFields(FormBuilderInterface $builder, array $options)
     {
@@ -113,37 +114,36 @@ class ContactType extends AbstractType
         $builder->add('tags', 'oro_tag_select', array('label' => 'oro.tag.entity_plural_label'));
 
         // addresses, emails and phones
-        $builder
-            ->add(
-                'addresses',
-                'oro_address_collection',
-                array(
-                    'label'    => '',
-                    'type'     => 'oro_typed_address',
-                    'required' => true,
-                    'options'  => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress')
-                )
+        $builder->add(
+            'addresses',
+            'oro_address_collection',
+            array(
+                'label'    => '',
+                'type'     => 'oro_typed_address',
+                'required' => true,
+                'options'  => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress')
             )
-            ->add(
-                'emails',
-                'oro_email_collection',
-                array(
-                    'label'    => 'orocrm.contact.emails.label',
-                    'type'     => 'oro_email',
-                    'required' => false,
-                    'options'  => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactEmail')
-                )
+        );
+        $builder->add(
+            'emails',
+            'oro_email_collection',
+            array(
+                'label'    => 'orocrm.contact.emails.label',
+                'type'     => 'oro_email',
+                'required' => false,
+                'options'  => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactEmail')
             )
-            ->add(
-                'phones',
-                'oro_phone_collection',
-                array(
-                    'label'    => 'orocrm.contact.phones.label',
-                    'type'     => 'oro_phone',
-                    'required' => false,
-                    'options'  => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone')
-                )
-            );
+        );
+        $builder->add(
+            'phones',
+            'oro_phone_collection',
+            array(
+                'label'    => 'orocrm.contact.phones.label',
+                'type'     => 'oro_phone',
+                'required' => false,
+                'options'  => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone')
+            )
+        );
 
         // groups
         $builder->add(
@@ -160,26 +160,26 @@ class ContactType extends AbstractType
         );
 
         // accounts
-        $builder
-            ->add(
-                'appendAccounts',
-                'oro_entity_identifier',
-                array(
-                    'class'    => 'OroCRMAccountBundle:Account',
-                    'required' => false,
-                    'mapped'   => false,
-                    'multiple' => true,
-                )
-            )->add(
-                'removeAccounts',
-                'oro_entity_identifier',
-                array(
-                    'class'    => 'OroCRMAccountBundle:Account',
-                    'required' => false,
-                    'mapped'   => false,
-                    'multiple' => true,
-                )
-            );
+        $builder->add(
+            'appendAccounts',
+            'oro_entity_identifier',
+            array(
+                'class'    => 'OroCRMAccountBundle:Account',
+                'required' => false,
+                'mapped'   => false,
+                'multiple' => true,
+            )
+        );
+        $builder->add(
+            'removeAccounts',
+            'oro_entity_identifier',
+            array(
+                'class'    => 'OroCRMAccountBundle:Account',
+                'required' => false,
+                'mapped'   => false,
+                'multiple' => true,
+            )
+        );
     }
 
     /**
