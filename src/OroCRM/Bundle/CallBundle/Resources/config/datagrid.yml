@@ -1,5 +1,7 @@
 datagrid:
     dashboard-recent-calls-grid:
+        options:
+            entityHint: calls
         source:
             type: orm
             acl_resource: orocrm_call_view
