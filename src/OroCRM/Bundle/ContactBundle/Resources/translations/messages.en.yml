@@ -1,5 +1,10 @@
 oro.importexport.import.orocrm_contact.add_or_replace: Add and Replace
 orocrm:
+    dashboard:
+        my_contacts_activity:
+            title: Last Actions With Contacts
+            view_all: View all
+
     contact:
         controller:
             contact.saved.message: "Contact saved"
@@ -19,6 +24,7 @@ orocrm:
             view: View
             update: Update
             delete: Delete
+
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\Contact
         #

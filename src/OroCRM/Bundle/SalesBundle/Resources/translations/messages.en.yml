@@ -11,6 +11,7 @@ orocrm:
                 InProgressCount:
                     name: In Progress Count
                     hint: Number of 'in progress' items
+
     sales:
         controller:
             lead.saved.message: "Lead saved"
@@ -97,6 +98,7 @@ orocrm:
             account.label:        Account
             owner.label:          Owner
             address.label:        Address
+            extend_source.label:  Source
             notes.label:          Notes
 
             datagrid:
@@ -106,4 +108,3 @@ orocrm:
                 view: View
                 update: Update
                 delete: Delete
-

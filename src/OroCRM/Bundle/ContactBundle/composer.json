@@ -15,6 +15,7 @@
         "oro/user-bundle": "dev-master",
         "oro/address-bundle": "dev-master",
         "oro/email-bundle": "dev-master",
+        "oro/dashboard-bundle": "dev-master",
         "orocrm/account-bundle": "dev-master"
     },
     "autoload": {
