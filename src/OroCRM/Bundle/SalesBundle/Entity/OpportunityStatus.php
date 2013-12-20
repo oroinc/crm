@@ -8,11 +8,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_sales_opportunity_status")
- * @Config(
- *  defaultValues={
- *      "entity"={"label"="Opportunity Status", "plural_label"="Opportunity Statuses"}
- *  }
- * )
+ * @Config()
  */
 class OpportunityStatus
 {

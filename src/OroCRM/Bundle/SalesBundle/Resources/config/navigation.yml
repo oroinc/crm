@@ -1,31 +1,31 @@
 oro_menu_config:
     items:
         sales_tab:
-            label: 'Sales'
-            uri: '#'
+            label: Sales
+            uri:   '#'
             extras:
                 position: 20
 
         lead_list:
-            label: 'Leads'
+            label: orocrm.sales.lead.entity_plural_label
             route: orocrm_sales_lead_index
             extras:
                 routes: ['/^orocrm_sales_lead/']
                 description: List of leads
         opportunity_list:
-            label: 'Opportunities'
+            label: orocrm.sales.opportunity.entity_plural_label
             route: orocrm_sales_opportunity_index
             extras:
                 routes: ['/^orocrm_sales_opportunity/']
                 description: List of opportunities
 
         shortcut_list_leads:
-            label: 'Show leads list'
+            label: Show leads list
             route: orocrm_sales_lead_index
             extras:
                 description: List of leads
         shortcut_list_opportunities:
-            label: 'Show opportunities list'
+            label: Show opportunities list
             route: orocrm_sales_opportunity_index
             extras:
                 description: List of opportunities

@@ -14,11 +14,7 @@ use Oro\Bundle\EmailBundle\Entity\EmailInterface;
  * @ORM\Table("orocrm_contact_email", indexes={
  *      @ORM\Index(name="primary_email_idx", columns={"email", "is_primary"})
  * })
- * @Config(
- *  defaultValues={
- *      "entity"={"label"="Contact Email", "plural_label"="Contact Emails"}
- *  }
- * )
+ * @Config()
  */
 class ContactEmail extends AbstractEmail implements EmailInterface
 {

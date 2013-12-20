@@ -9,25 +9,26 @@
 <div class="widget-content opportunity-info form-horizontal box-content row-fluid">
 
     <div class="responsive-block">
-        {{ macros.renderProperty('Opportunity name'|trans, entity.name) }}
-        {{ macros.renderProperty('Status'|trans, entity.status) }}
+        {{ macros.renderProperty('orocrm.sales.opportunity.name.label'|trans, entity.name) }}
+        {{ macros.renderProperty('orocrm.sales.opportunity.status.label'|trans, entity.status) }}
 
         {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
             {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name ~ '</a>' %}
         {%- else -%}
             {% set contactView = entity.contact ? entity.contact|oro_format_name : '' %}
         {%- endif -%}
-        {{ macros.renderProperty('Contact'|trans, contactView) }}
+
+        {{ macros.renderProperty('orocrm.sales.opportunity.contact.label'|trans, contactView) }}
 
         {%- if resource_granted('orocrm_account_view') and entity.account -%}
             {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.account.id}) ~ '">' ~ entity.account.__toString() ~ '</a>' %}
         {%- else -%}
             {% set accountView = entity.account ? entity.account.__toString() : '' %}
         {%- endif -%}
-        {{ macros.renderProperty('Account'|trans, accountView) }}
 
-        {{ macros.renderProperty('Probability'|trans, entity.probability|length ? entity.probability|oro_format_percent : '') }}
-        {{ macros.renderProperty('Budget amount'|trans, entity.budgetAmount|length ? entity.budgetAmount|oro_format_currency, '') }}
+        {{ macros.renderProperty('orocrm.sales.opportunity.account.label'|trans, accountView) }}
+        {{ macros.renderProperty('orocrm.sales.opportunity.probability.label'|trans, entity.probability|length ? entity.probability|oro_format_percent : '') }}
+        {{ macros.renderProperty('orocrm.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount|length ? entity.budgetAmount|oro_format_currency, '') }}
 
         {% if dynamic|length %}
             {% for label, item in dynamic %}
@@ -51,11 +52,11 @@
         {% endif %}
     </div>
     <div class="responsive-block">
-        {{ macros.renderProperty('Customer need'|trans, entity.customerNeed) }}
-        {{ macros.renderProperty('Proposed solution'|trans, entity.proposedSolution) }}
-        {{ macros.renderProperty('Close reason'|trans, entity.closeReason) }}
-        {{ macros.renderProperty('Close revenue'|trans, entity.closeRevenue|length ? entity.closeRevenue|oro_format_currency, '') }}
-        {{ macros.renderProperty('Close date'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '') }}
-        {{ macros.renderProperty('Notes'|trans, entity.notes|nl2br) }}
+        {{ macros.renderProperty('orocrm.sales.opportunity.customer_need.label'|trans, entity.customerNeed) }}
+        {{ macros.renderProperty('orocrm.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution) }}
+        {{ macros.renderProperty('orocrm.sales.opportunity.close_reason.label'|trans, entity.closeReason) }}
+        {{ macros.renderProperty('orocrm.sales.opportunity.close_revenue.label'|trans, entity.closeRevenue|length ? entity.closeRevenue|oro_format_currency, '') }}
+        {{ macros.renderProperty('orocrm.sales.opportunity.close_date.label'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '') }}
+        {{ macros.renderProperty('orocrm.sales.opportunity.notes.label'|trans, entity.notes|nl2br) }}
     </div>
 </div>

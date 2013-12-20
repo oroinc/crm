@@ -9,7 +9,7 @@
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('orocrm_magento_cart_index', {id: entity.channel.id}),
-        'indexLabel': 'Carts'|trans,
+        'indexLabel': 'orocrm.magento.cart.entity_plural_label'|trans,
         'entityTitle': 'Cart #' ~ entity.originId
     } %}
     {{ parent() }}
@@ -37,10 +37,10 @@
     
     {% set cartAddresses = [] %}
     {%  if entity.billingAddress is not empty %}
-        {% set cartAddresses = cartAddresses|merge([{'title': 'Billing Address'|trans, 'data': [addressView.renderAddress(entity.billingAddress)]}]) %}
+        {% set cartAddresses = cartAddresses|merge([{'title': 'orocrm.magento.cart.billing_address.label'|trans, 'data': [addressView.renderAddress(entity.billingAddress)]}]) %}
     {% endif %}
     {%  if entity.shippingAddress is not empty %}
-        {% set cartAddresses = cartAddresses|merge([{'title': 'Shipping Address'|trans, 'data': [addressView.renderAddress(entity.shippingAddress)]}]) %}
+        {% set cartAddresses = cartAddresses|merge([{'title': 'orocrm.magento.cart.shipping_address.label'|trans, 'data': [addressView.renderAddress(entity.shippingAddress)]}]) %}
     {% endif %}
 
     {% if (cartAddresses|length) %}
@@ -81,7 +81,7 @@
             }]
         },
         {
-            'title': 'Cart Items'|trans,
+            'title': 'orocrm.magento.cart.cart_items.label'|trans,
             'subblocks': [{
                 'title': null,
                 'data': [

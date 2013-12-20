@@ -8,11 +8,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_sales_lead_status")
- * @Config(
- *  defaultValues={
- *      "entity"={"label"="Lead Status", "plural_label"="Lead Statuses"}
- *  }
- * )
+ * @Config()
  */
 class LeadStatus
 {

@@ -14,11 +14,7 @@ use Oro\Bundle\AddressBundle\Entity\AbstractPhone;
  *      @ORM\Index(name="primary_phone_idx", columns={"phone", "is_primary"})
  * })
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\ContactBundle\Entity\Repository\ContactPhoneRepository")
- * @Config(
- *  defaultValues={
- *      "entity"={"label"="Contact Phone", "plural_label"="Contact Phones"}
- *  }
- * )
+ * @Config()
  */
 class ContactPhone extends AbstractPhone
 {

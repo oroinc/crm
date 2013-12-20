@@ -43,14 +43,26 @@ class SoapTransportSettingFormType extends AbstractType
     {
         $builder->addEventSubscriber($this->subscriber);
 
-        $builder->add('wsdlUrl', 'text', ['label' => 'SOAP WSDL Url', 'required' => true]);
-        $builder->add('apiUser', 'text', ['label' => 'SOAP API User', 'required' => true]);
-        $builder->add('apiKey', 'password', ['label' => 'SOAP API Key', 'required' => true]);
+        $builder->add(
+            'wsdlUrl',
+            'text',
+            ['label' => 'orocrm.magento.magentosoaptransport.wsdl_url.label', 'required' => true]
+        );
+        $builder->add(
+            'apiUser',
+            'text',
+            ['label' => 'orocrm.magento.magentosoaptransport.api_user.label', 'required' => true]
+        );
+        $builder->add(
+            'apiKey',
+            'password',
+            ['label' => 'orocrm.magento.magentosoaptransport.api_key.label', 'required' => true]
+        );
         $builder->add(
             'syncStartDate',
             'oro_date',
             [
-                'label'      => 'Sync start date',
+                'label'      => 'orocrm.magento.magentosoaptransport.sync_start_date.label',
                 'required'   => true,
                 'tooltip'    => 'Provide the start date you wish to import data from.',
                 'empty_data' => new \DateTime('2007-01-01', new \DateTimeZone('UTC'))
@@ -61,14 +73,16 @@ class SoapTransportSettingFormType extends AbstractType
             'websiteId',
             'choice',
             [
-                'label'    => 'Website',
+                'label'    => 'orocrm.magento.magentosoaptransport.website_id.label',
                 'required' => true,
                 'tooltip'  => 'List could be refreshed using connection settings filled above.',
             ]
-        )->add(
+        );
+        $builder->add(
             $builder->create('websites', 'hidden')
-                ->addViewTransformer(new ArrayToJsonTransformer())
-        )->add(
+                    ->addViewTransformer(new ArrayToJsonTransformer())
+        );
+        $builder->add(
             $builder
                 ->create('isExtensionInstalled', 'hidden')
                 ->addEventSubscriber(new SoapConnectorsFormSubscriber($this->registry))

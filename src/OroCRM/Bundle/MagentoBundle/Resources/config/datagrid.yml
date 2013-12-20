@@ -24,20 +24,20 @@ datagrid:
                         - c.channel = :channelId
         columns:
             firstName:
-                label: orocrm.magento.datagrid.columns.first_name
+                label: orocrm.magento.customer.first_name.label
             lastName:
-                label: orocrm.magento.datagrid.columns.last_name
+                label: orocrm.magento.customer.last_name.label
             email:
-                label: orocrm.magento.datagrid.columns.email
+                label: orocrm.magento.customer.email.label
             groupName:
-                label: orocrm.magento.datagrid.columns.group
+                label: orocrm.magento.customer.group.label
             websiteName:
-                label: orocrm.magento.datagrid.columns.website
+                label: orocrm.magento.customer.website.label
             createdAt:
-                label: orocrm.magento.datagrid.columns.created_at
+                label: orocrm.magento.customer.created_at.label
                 frontend_type: datetime
             updatedAt:
-                label: orocrm.magento.datagrid.columns.updated_at
+                label: orocrm.magento.customer.updated_at.label
                 frontend_type: datetime
         properties:
             id: ~
@@ -131,30 +131,30 @@ datagrid:
                         - c.channel = :channelId
         columns:
             originId:
-                label: orocrm.magento.datagrid.columns.originId
+                label: orocrm.magento.cart.id.label
             itemsQty:
                 label: orocrm.magento.datagrid.columns.qty
             subTotal:
-                label: orocrm.magento.datagrid.columns.sub_total
+                label: orocrm.magento.cart.sub_total.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             grandTotal:
-                label: orocrm.magento.datagrid.columns.grand_total
+                label: orocrm.magento.cart.grand_total.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             email:
-                label: orocrm.magento.datagrid.columns.email
+                label: orocrm.magento.cart.email.label
             websiteName:
                 label: orocrm.magento.datagrid.columns.website
             statusLabel:
                 label: orocrm.magento.datagrid.columns.status
             createdAt:
-                label: orocrm.magento.datagrid.columns.created_at
+                label: orocrm.magento.cart.created_at.label
                 frontend_type: datetime
             updatedAt:
-                label: orocrm.magento.datagrid.columns.updated_at
+                label: orocrm.magento.cart.updated_at.label
                 frontend_type: datetime
         properties:
             id: ~
@@ -440,34 +440,34 @@ datagrid:
                         - o.channel = :channelId
         columns:
             incrementId:
-                label: orocrm.magento.datagrid.columns.increment_id
+                label: orocrm.magento.order.increment_id.label
             totalPaidAmount:
-                label:  orocrm.magento.datagrid.columns.total_paid
+                label:  orocrm.magento.order.total_paid_amount.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             totalInvoicedAmount:
-                label: orocrm.magento.datagrid.columns.total_invoiced
+                label: orocrm.magento.order.total_invoiced_amount.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             shippingAmount:
-                label: orocrm.magento.datagrid.columns.shipping_amount
+                label: orocrm.magento.order.shipping_amount.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             subtotalAmount:
-                label: orocrm.magento.datagrid.columns.subtotal_amount
+                label: orocrm.magento.order.subtotal_amount.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             status:
-                label: orocrm.magento.datagrid.columns.status
+                label: orocrm.magento.order.status.label
             createdAt:
-                label: orocrm.magento.datagrid.columns.added_on
+                label: orocrm.magento.order.created_at.label
                 frontend_type: datetime
             updatedAt:
-                label: orocrm.magento.datagrid.columns.updated_on
+                label: orocrm.magento.order.updated_at.label
                 frontend_type: datetime
         properties:
             id: ~

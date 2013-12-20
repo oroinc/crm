@@ -46,7 +46,7 @@ class AccountType extends AbstractType
             'name',
             'text',
             array(
-                'label' => 'orocrm.account.form.account_name',
+                'label' => 'orocrm.account.name.label',
                 'required' => true,
             )
         );
@@ -54,7 +54,10 @@ class AccountType extends AbstractType
         // tags
         $builder->add(
             'tags',
-            'oro_tag_select'
+            'oro_tag_select',
+            array(
+                'label' => 'oro.tag.entity_plural_label'
+            )
         );
 
         $builder->add(

@@ -35,27 +35,68 @@ class CallType extends AbstractType
         $builder->addEventSubscriber($this->contactPhoneSubscriber);
 
         $builder
-            ->add('relatedAccount', 'orocrm_account_select', array('required' => false))
-            ->add('subject', 'text', array('required' => true))
-            ->add('relatedContact', 'orocrm_contact_select', array('required' => false))
+            ->add(
+                'relatedAccount',
+                'orocrm_account_select',
+                array('required' => false, 'label' => 'orocrm.call.related_account.label')
+            )
+            ->add('subject', 'text', array('required' => true, 'label' => 'orocrm.call.subject.label'))
+            ->add(
+                'relatedContact',
+                'orocrm_contact_select',
+                array('required' => false, 'label' => 'orocrm.call.related_contact.label')
+            )
             ->add(
                 'contactPhoneNumber',
                 'entity',
-                array('class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone', 'required' => false)
+                array(
+                    'label'    => 'orocrm.call.contact_phone_number.label',
+                    'class'    => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone',
+                    'required' => false
+                )
             )
-            ->add('phoneNumber', 'text', array('required' => false, 'attr' => array('class' => 'hide')))
-            ->add('notes', 'textarea', array('required' => false))
-            ->add('callDateTime', 'oro_datetime', array('required' => true))
+            ->add(
+                'phoneNumber',
+                'text',
+                array(
+                    'label'    => 'orocrm.call.phone_number.label',
+                    'required' => false,
+                    'attr'     => array('class' => 'hide')
+                )
+            )
+            ->add('notes', 'textarea', array('required' => false, 'label' => 'orocrm.call.notes.label'))
+            ->add(
+                'callDateTime',
+                'oro_datetime',
+                array('required' => true, 'label' => 'orocrm.call.call_date_time.label')
+            )
             ->add(
                 'callStatus',
                 'entity',
-                array('class' => 'OroCRM\Bundle\CallBundle\Entity\CallStatus', 'required' => true)
+                array(
+                    'label' => 'orocrm.call.call_status.label',
+                    'class' => 'OroCRM\Bundle\CallBundle\Entity\CallStatus',
+                    'required' => true
+                )
             )
-            ->add('duration', 'time', array('required' => false, 'widget' => 'single_text', 'with_seconds' => true))
+            ->add(
+                'duration',
+                'time',
+                array(
+                    'label'        => 'orocrm.call.duration.label',
+                    'required'     => false,
+                    'widget'       => 'single_text',
+                    'with_seconds' => true
+                )
+            )
             ->add(
                 'direction',
                 'entity',
-                array('class' => 'OroCRM\Bundle\CallBundle\Entity\CallDirection', 'required' => true)
+                array(
+                    'label'    => 'orocrm.call.direction.label',
+                    'class'    => 'OroCRM\Bundle\CallBundle\Entity\CallDirection',
+                    'required' => true
+                )
             );
     }
 

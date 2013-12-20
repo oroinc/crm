@@ -11,11 +11,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @ORM\Entity
  * @ORM\Table(name="orocrm_report_opportunity_workflow_item")
  * @ORM\HasLifecycleCallbacks()
- * @Config(
- *  defaultValues={
- *      "entity"={"label"="Opportunity With Workflow", "plural_label"="Opportunities With Workflow"}
- *  }
- * )
+ * @Config()
  */
 class OpportunityByWorkflowItem
 {
