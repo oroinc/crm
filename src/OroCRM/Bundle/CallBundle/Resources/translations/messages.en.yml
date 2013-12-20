@@ -9,6 +9,11 @@
 'Phone number is required field': 'Phone number is required field'
 
 orocrm:
+    dashboard:
+        recent_calls:
+            title: Recent calls
+            view_all: View All
+
     call:
         phone.required.message: 'Phone number is required field'
         form.call.other: 'Other...'

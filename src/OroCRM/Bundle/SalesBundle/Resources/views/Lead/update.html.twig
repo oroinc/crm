@@ -91,7 +91,7 @@
 
     {% set formFields = [] %}
     {% if form.owner is defined %}
-        {% set formFields = formFields|merge([form_row(form.owner, {label: 'orocrm.sales.lead.owner.label'|trans})]) %}
+        {% set formFields = formFields|merge([form_row(form.owner)]) %}
     {% endif %}
     {% set formFields = formFields|merge([
         form_row(form.name),
@@ -109,6 +109,7 @@
         form_row(form.website),
         form_row(form.numberOfEmployees),
         form_row(form.industry),
+        form_row(form.extend_source),
         form_row(form.notes)
     ]) %}
 
