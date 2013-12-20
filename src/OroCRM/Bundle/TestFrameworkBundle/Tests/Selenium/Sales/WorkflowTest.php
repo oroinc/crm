@@ -41,7 +41,7 @@ class WorkflowTest extends \PHPUnit_Extensions_Selenium2TestCase
         $leadname = $this->createLead($login);
 
         $login->openLeads()
-            ->filterBy('Lead Name', $leadname)
+            ->filterBy('Lead name', $leadname)
             ->open(array($leadname))
             ->openWorkflow()
             ->qualify()
@@ -73,7 +73,7 @@ class WorkflowTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
             ->openLeads()
-            ->filterBy('Lead Name', $leadname)
+            ->filterBy('Lead name', $leadname)
             ->open(array($leadname))
             ->checkStatus('Qualified')
             ->reactivate()
@@ -93,7 +93,7 @@ class WorkflowTest extends \PHPUnit_Extensions_Selenium2TestCase
         $opportunityName = $this->createOpportunity($login);
 
         $login->openOpportunities()
-            ->filterBy('Opportunity Name', $opportunityName)
+            ->filterBy('Opportunity name', $opportunityName)
             ->open(array($opportunityName))
             ->openWorkflow()
             ->develop()
@@ -120,7 +120,7 @@ class WorkflowTest extends \PHPUnit_Extensions_Selenium2TestCase
         $opportunityName = $this->createOpportunity($login);
 
         $login->openOpportunities()
-            ->filterBy('Opportunity Name', $opportunityName)
+            ->filterBy('Opportunity name', $opportunityName)
             ->open(array($opportunityName))
             ->checkStatus('In Progress')
             ->openWorkflow()
