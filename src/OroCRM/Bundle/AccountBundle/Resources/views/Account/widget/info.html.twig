@@ -1,0 +1,47 @@
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroTagBundle::macros.html.twig' as tag %}
+
+{% macro renderAddress(address) %}
+    {% if address.label %}
+        <b>{{ address.label }}</b>
+        <br />
+    {% endif %}
+    {{ address|oro_format_address }}
+{% endmacro %}
+
+<div class="widget-content form-horizontal box-content row-fluid">
+    <div class="responsive-block">
+        {{ macros.renderProperty('orocrm.account.name.label'|trans, entity.name) }}
+        {% if dynamic|length %}
+            {% for label, item in dynamic %}
+                {% if item is iterable %}
+                    {% set data = '' %}
+                    {% for value in item.values %}
+                        {% if value.link is defined and value.link != false  %}
+                            {% set data = data ~ '<a href="' ~ value.link ~ '">' ~ value.title ~ '</a>' %}
+                        {% else %}
+                            {% set data = data ~ value.title %}
+                        {% endif %}
+                        {% if not loop.last %}
+                            {% set data = data ~ ', ' %}
+                        {% endif %}
+                    {% endfor %}
+                    {% set item = data %}
+                {% endif %}
+
+                {{ macros.renderProperty(label|trans, item) }}
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="responsive-block">
+        {% if entity.billingAddress is not empty %}
+            {{ macros.renderProperty('orocrm.account.billing_address.label'|trans, _self.renderAddress(entity.billingAddress)) }}
+        {% endif %}
+        {% if entity.shippingAddress is not empty %}
+            {{ macros.renderProperty('orocrm.account.shipping_address.label'|trans, _self.renderAddress(entity.shippingAddress)) }}
+        {% endif %}
+        {% if resource_granted('oro_tag_view_tag_cloud') %}
+            {{ macros.renderProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
+        {% endif %}
+    </div>
+</div>
