@@ -1,0 +1,44 @@
+oro_dashboard_config:
+    widgets:
+        quick_launchpad:
+            items:
+                contacts:
+                    label:      Contacts
+                    icon:       group
+                    route:      orocrm_contact_index
+                    acl:        orocrm_contact_view
+                    position:   30
+        my_contacts_activity:
+            label:      orocrm.dashboard.my_contacts_activity.title
+            route:      oro_dashboard_widget
+            route_parameters: { bundle: OroCRMContactBundle, name: myContactsActivity }
+            acl:        orocrm_contact_view
+        contacts_launchpad:
+            label:      Contacts
+            icon:       group
+            route:      oro_dashboard_itemized_widget
+            route_parameters: { bundle: OroDashboardBundle, name: launchpad }
+            acl:        orocrm_contact_view
+            items:
+                index:
+                    label:      List
+                    route:      orocrm_contact_index
+                    acl:        orocrm_contact_view
+                create:
+                    label:      Create contact
+                    route:      orocrm_contact_create
+                    acl:        orocrm_contact_create
+                group_index:
+                    label:      Manage groups
+                    route:      orocrm_contact_group_index
+                    acl:        orocrm_contact_group_view
+
+    dashboards:
+        main:
+            widgets:
+                my_contacts_activity:
+                    position:   60
+        quick_launchpad:
+            widgets:
+                contacts_launchpad:
+                    position:   20

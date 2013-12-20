@@ -1,0 +1,25 @@
+{
+    "name": "orocrm/sales-bundle",
+    "type": "symfony-bundle",
+    "description": "Oro CRM Sales",
+    "keywords": ["CRM", "Sales"],
+    "homepage": "https://github.com/orocrm/SalesBundle",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.1.*",
+
+        "oro/ui-bundle": "dev-master",
+        "oro/dashboard-bundle": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "target-dir": "OroCRM/Bundle/SalesBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

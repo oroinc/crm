@@ -1,0 +1,12 @@
+OroCRM\Bundle\SalesBundle\Entity\Lead:
+    fields:
+        extend_source:
+            type:                 optionSet
+            configs:
+                extend:
+                    set_expanded: false
+                entity:
+                    label:        Source
+
+            is_extend:            true
+
