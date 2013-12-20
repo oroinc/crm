@@ -3,7 +3,10 @@
 
 {% oro_title_set({params : {"%lead.name%": entity.name} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Lead' %}
-{% set title = form.vars.value.id ? entity.name ~ ' - ' ~ 'Update Lead'|trans : 'New Lead'|trans %}
+{% set title = form.vars.value.id
+    ? entity.name ~ ' - ' ~ 'Update'|trans ~ ' ' ~ 'orocrm.sales.lead.entity_label'|trans
+    : 'New'|trans ~ ' ' ~ 'orocrm.sales.lead.entity_label'|trans
+%}
 {% set formAction = form.vars.value.id ? path('orocrm_sales_lead_update', { 'id': form.vars.value.id }) : path('orocrm_sales_lead_create')  %}
 
 {% block head_script %}
@@ -22,11 +25,8 @@
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-lead',
             'dataId': form.vars.value.id,
-            'dataMessage': 'Are you sure you want to delete this lead?',
-            'title': 'Delete Lead',
-            'label': 'Delete'
-        })
-        }}
+            'entity_label': 'orocrm.sales.lead.entity_label'|trans
+        }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
     {{ UI.button({'path' : path('orocrm_sales_lead_index'), 'title' : 'Cancel', 'label' : 'Cancel'}) }}
@@ -39,7 +39,7 @@
     %}
         <div class="btn-group">
             <button type="button" class="btn btn-primary save-and-transit"
-                data-workflow="sales_lead"
+                data-workflow="b2b_flow_lead"
                 data-transition="qualify"
                 data-entity-class="{{ oro_class_name(entity) }}"
             >
@@ -61,15 +61,19 @@
         {% set breadcrumbs = {
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_sales_lead_index'),
-            'indexLabel': 'Leads',
+            'indexLabel': 'orocrm.sales.lead.entity_plural_label'|trans,
             'entityTitle': entity.name
-        }
-        %}
+        } %}
         {{ parent() }}
     {% else %}
         {% include 'OroUIBundle::page_title_block.html.twig' %}
     {% endif %}
 {% endblock pageHeader %}
+
+{% block stats %}
+    <li>{{ 'orocrm.sales.lead.created_at.label'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'orocrm.sales.lead.updated_at.label'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
+{% endblock stats %}
 
 {% block breadcrumbs %}
     {{ parent() }}
@@ -90,24 +94,23 @@
         {% set formFields = formFields|merge([form_row(form.owner)]) %}
     {% endif %}
     {% set formFields = formFields|merge([
-        form_row(form.name, {'label': 'Lead Name'}),
-        form_row(form.namePrefix, {'label': 'Name prefix'}),
-        form_row(form.firstName, {'label': 'First name'}),
-        form_row(form.middleName, {'label': 'Middle name'}),
-        form_row(form.lastName, {'label': 'Last name'}),
-        form_row(form.nameSuffix, {'label': 'Name suffix'}),
-        form_row(form.contact, {'label': 'Contact'}),
-        form_row(form.jobTitle, {'label': 'Job Title'}),
-
-        form_row(form.phoneNumber, {'label': 'Phone Number'}),
-        form_row(form.email, {'label': 'Email'}),
-
-        form_row(form.account, {'label': 'Account'}),
-        form_row(form.companyName, {'label': 'Company Name'}),
-        form_row(form.website, {'label': 'Website'}),
-        form_row(form.numberOfEmployees, {'label': 'Number Of Employees'}),
-        form_row(form.industry, {'label': 'Industry'}),
-        form_row(form.extend_source, {'label': 'orocrm.sales.lead.extend_source.label'})
+        form_row(form.name),
+        form_row(form.namePrefix),
+        form_row(form.firstName),
+        form_row(form.middleName),
+        form_row(form.lastName),
+        form_row(form.nameSuffix),
+        form_row(form.contact),
+        form_row(form.jobTitle),
+        form_row(form.phoneNumber),
+        form_row(form.email),
+        form_row(form.account),
+        form_row(form.companyName),
+        form_row(form.website),
+        form_row(form.numberOfEmployees),
+        form_row(form.industry),
+        form_row(form.extend_source)
+        form_row(form.notes)
     ]) %}
 
     {% set dataBlocks = [{
@@ -119,7 +122,7 @@
                     'data': formFields
                 },
                 {
-                    'title': 'Address',
+                    'title': 'orocrm.sales.lead.address.label'|trans,
                     'data': [
                         form_widget(form.address),
                     ]

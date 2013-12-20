@@ -2,16 +2,16 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AddressDataConverter;
+use Doctrine\ORM\EntityManager;
+
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-use Oro\Bundle\AddressBundle\Entity\Address;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
+use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AddressDataConverter;
 
 class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, DenormalizerInterface
 {
@@ -19,6 +19,15 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
 
     /** @var AddressDataConverter */
     protected $addressConverter;
+
+    public function __construct(
+        EntityManager $em,
+        AddressDataConverter $addressConverter
+    ) {
+        parent::__construct($em);
+        $this->addressConverter = $addressConverter;
+    }
+
 
     /**
      * {@inheritdoc}
@@ -63,9 +72,8 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $channel = $context['channel'];
+        $channel    = $this->getChannelFromContext($context);
         $serializer = $this->serializer;
-        $data         = is_array($data) ? $data : [];
 
         $data['cartItems'] = $serializer->denormalize(
             $data['cartItems'],
@@ -91,7 +99,7 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
         $data = $this->denormalizeCreatedUpdated($data, $format, $context);
 
         $data['shippingAddress'] = $this->denormalizeAddress($data, 'shipping', $format, $context);
-        $data['billingAddress'] = $this->denormalizeAddress($data, 'billing', $format, $context);
+        $data['billingAddress']  = $this->denormalizeAddress($data, 'billing', $format, $context);
 
         $data['paymentDetails'] = $this->denormalizePaymentDetails($data['paymentDetails']);
 
@@ -101,28 +109,6 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
         $cart->setChannel($channel);
 
         return $cart;
-    }
-
-    public function denormalizePaymentDetails($paymentDetails)
-    {
-        if (!empty($paymentDetails['cc_last4'])) {
-            $paymentDetails = sprintf(
-                "Card [%s, %s], exp [%s/%s], %s",
-                $paymentDetails['cc_type'],
-                $paymentDetails['cc_last4'],
-                $paymentDetails['cc_exp_month'],
-                $paymentDetails['cc_exp_year'],
-                $paymentDetails['method']
-            );
-        } else {
-            $result = [];
-            foreach ($paymentDetails as $key => $value) {
-                $result[] = sprintf("%s: %s", $key, $value);
-            }
-            $paymentDetails = implode(' / ', $result);
-        }
-
-        return $paymentDetails;
     }
 
     /**
@@ -136,11 +122,11 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
     {
         $group = $this->serializer->denormalize(
             $data['customer']['group'],
-            CustomerNormalizer::GROUPS_TYPE,
+            CustomerDenormalizer::GROUPS_TYPE,
             $format,
             $context
         );
-        $group->setChannel($context['channel']);
+        $group->setChannel($this->getChannelFromContext($context));
 
         $customer = new Customer();
         $this->fillResultObject($customer, $data['customer']);
@@ -162,7 +148,7 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
      */
     protected function denormalizeAddress($data, $type, $format, $context)
     {
-        $key = $type . '_address';
+        $key  = $type . '_address';
         $data = $this->addressConverter->convertToImportFormat($data[$key]);
 
         if (empty($data['country'])) {
@@ -172,13 +158,5 @@ class CartNormalizer extends AbstractNormalizer implements NormalizerInterface, 
                 ->denormalize($data, self::ADDRESS_TYPE, $format, $context)
                 ->setOriginId($data['originId']);
         }
-    }
-
-    /**
-     * @param AddressDataConverter $addressConverter
-     */
-    public function setAddressDataConverter(AddressDataConverter $addressConverter)
-    {
-        $this->addressConverter = $addressConverter;
     }
 }

@@ -1,3 +1,5 @@
+"Website ID: %websiteId%, Stores: %storesList%": "Website ID: %websiteId%, Stores: %storesList%"
+
 orocrm:
     magento:
         datagrid:
@@ -5,34 +7,48 @@ orocrm:
                 view:
                     label: View
             columns:
-                first_name:   First Name
-                last_name:    Last Name
-                email:        Email
-                phone:        Phone
-                group:        Group
-                channel:      Channel
-                website:      Website
-                created_at:   Created At
-                updated_at:   Updated At
-                name:         Name
-                sku:          Sku
-                type:         Type
-                specialPrice: Special Price
-                price:        Price
-                price_incl_tax: Price Incl Tax
-                websites:     Websites
-                qty:          Qty
-                items_qty:    Items qty
-                currency:     Currency
-                sub_total:    Sub Total
-                grand_total:  Grand Total
-                gift_message: Gift message
-                row_total:    Row Total
-                tax_amount:   Tax Amount
-                discount_amount: Discount Amount
-                weight:       Weight
-                added_on:    Added On
-                updated_on:   Updated On
+                originId:         ID
+                first_name:       First Name
+                last_name:        Last Name
+                email:            Email
+                phone:            Phone
+                group:            Group
+                channel:          Channel
+                website:          Website
+                created_at:       Created At
+                updated_at:       Updated At
+                name:             Name
+                sku:              Sku
+                type:             Type
+                specialPrice:     Special Price
+                price:            Price
+                price_incl_tax:   Price Incl Tax
+                websites:         Websites
+                qty:              Qty
+                items_qty:        Items qty
+                currency:         Currency
+                sub_total:        Sub Total
+                grand_total:      Grand Total
+                gift_message:     Gift message
+                row_total:        Row Total
+                tax_amount:       Tax Amount
+                discount_amount:  Discount Amount
+                weight:           Weight
+                added_on:         Added On
+                updated_on:       Updated On
+                increment_id:     Increment ID
+                total_paid:       Total Paid
+                total_invoiced:   Total Invoiced
+                subtotal_amount:  Subtotal Amount
+                shipping_amount:  Shipping Amount
+                status:           Status
+                productType:      Product type
+                originalPrice:    Original price
+                discountPercent:  Discount percent
+                discountAmount:   Discount amount
+                taxPercent:       Tax percent
+                taxAmount:        Tax amount
+                rowTotal:         Row total
         channel_type:
             label:  Magento
         transport:
@@ -50,4 +66,182 @@ orocrm:
             order:
                 label: Order connector
 
-"Website ID: %websiteId%, Stores: %storesList%": "Website ID: %websiteId%, Stores: %storesList%"
+        customer:
+            entity_label:        Customer
+            entity_plural_label: Customers
+            entity_description:  Represent magento customer
+
+            id.label:            Id
+            origin_id.label:     Origin Id
+            name_prefix.label:   Name prefix
+            first_name.label:    First name
+            middle_name.label:   Middle name
+            last_name.label:     Last name
+            name_suffix.label:   Name suffix
+            gender.label:        Gender
+            birthday.label:      Birthday
+            email.label:         Email
+            created_at.label:    Created at
+            updated_at.label:    Updated at
+            is_active.label:     Is active
+            vat.label:           Tax/Vat
+            website.label:       Website
+            store.label:         Store
+            group.label:         Customer Group
+            contact.label:       Contact
+            account.label:       Account
+            addresses.label:     Adresses
+            carts.label:         Carts
+            channel.label:       Channel
+
+        cart:
+            entity_label:         Cart
+            entity_plural_label:  Carts
+            entity_description:   Represent magento cart
+
+            id.label:                  Id
+            origin_id.label:           Origin Id
+            items_qty.label:           Items qty
+            items_count.label:         Items count
+            base_currency_code.label:  Base currency
+            store_currency_code.label: Store currency
+            quote_currency_code.label: Quote currency
+            store_to_base_rate.label:  Store to base rate
+            store_to_quote_rate.label: Store to quote rate
+            email.label:               Email
+            gift_message.label:        Gift message
+            is_guest.label:            Is guest
+            payment_details.label:     Payment
+            status:
+                label:                 Status
+                active:                Active
+                converted:             Converted
+            sub_total.label:           Sub total
+            grand_total.label:         Grand total
+            tax_amount.label:          Tax
+            created_at.label:          Created at
+            updated_at.label:          Updated at
+            cart_items.label:          Cart Items
+            customer.label:            Customer
+            store.label:               Store
+            shipping_address.label:    Shipping address
+            billing_address.label:     Billing address
+            channel.label:             Channel
+
+        magentosoaptransport:
+            entity_label:        Integration Channel Transport
+            entity_plural_label: Integration Channel Transports
+            entity_description:  Represent integration channel transport
+
+            id.label:                     Id
+            wsdl_url.label:               Soap wsdl url
+            api_user.label:               Soap api user
+            api_key.label:                Soap api key
+            sync_start_date.label:        Sync start date
+            sync_range.label:               Sync range
+            websites.label:                 Websites
+            website_id.label:               Website
+            is_extension_installed.label:   Is extension installed
+
+        order:
+            entity_label:        Order
+            entity_plural_label: Orders
+            entity_description:  Respresent Magento Order
+
+            id.label:           Id
+            increment_id.label: Increment Id
+            gift_message.label: Gift message
+            remote_ip.label:    Remote address
+            store_name.label:   Website
+            total_paid_amount.label:     Total paid
+            total_invoiced_amount.label: Total invoiced
+            total_refunded_amount.label: Total refunded
+            total_canceled_amount.label: Total canceled
+            currency.label:         Currency
+            payment_method.label:   Payment method
+            payment_details.label:  Payment details
+            subtotal_amount.label:  Subtotal amount
+            shipping_amount.label:  Shipping amount
+            shipping_method.label:  Shipping method
+            tax_amount.label:       Tax amount
+            discount_amount.label:  Discount amount
+            discount_percent.label: Discount percent
+            total_amount.label:     Total amount
+            status.label:           Status
+            created_at.label:       Added on
+            updated_at.label:       Updated on
+            customer.label:         Customer
+            addresses.label:        Addresses
+            store.label:            Store
+            cart.label:             Cart
+            items.label:            Order items
+            is_virtual.label:       Is virtual
+            is_guest.label:         Is guest
+            channel.label:          Channel
+
+        product:
+            entity_label:         Product
+            entity_plural_label:  Products
+            entity_description:   Represent magento product
+
+            id.label:             Id
+            origin_id.label:      Origin Id
+            name.label:           Name
+            sku.label:            Sku
+            type.label:           Product type
+            special_price.label:  Special price
+            price.label:          Price
+            cost.label:           Cost
+            websites.label:       Websites
+            channel.label:        Channel
+            created_at.label:     Created at
+            updated_at.label:     Updated at
+
+        address:
+            entity_label:        Magento Customer Address
+            entity_plural_label: Magento Customer Addresses
+            entity_description:  Represent Magento Customer Address
+            label.label:         Label
+            street.label:        Street
+            street2.label:       Street 2
+            city.label:          City
+            postal_code.label:   Zip/Postal code
+            state_text.label:    State
+            name_prefix.label:   Name prefix
+            first_name.label:    First name
+            middle_name.label:   Middle name
+            last_name.label:     Last name
+            name_suffix.label:   Name suffix
+            primary.label:       Primary
+            id.label:            Id
+            organization.label:  Organization
+            created.label:       Created at
+            updated.label:       Updated at
+            origin_id.label:     Origin id
+            owner.label:         Owner
+            types.label:         Types
+            country.label:       Country
+            state.label:         State
+
+        cartaddress:
+            entity_label:        Magento Cart Address
+            entity_plural_label: Magento Cart Addresses
+            entity_description:  Represent Magento Cart Address
+            id.label:            Id
+            label.label:         Label
+            street.label:        Street
+            street2.label:       Street 2
+            city.label:          City
+            postal_code.label:   Zip/Postal code
+            organization.label:  Organization
+            state_text.label:    State
+            name_prefix.label:   Name prefix
+            first_name.label:    First name
+            middle_name.label:   Middle name
+            last_name.label:     Last name
+            name_suffix.label:   Name suffix
+            created.label:       Created at
+            updated.label:       Updated at
+            origin_id.label:     Origin Id
+            country.label:       Country
+            state.label:         State

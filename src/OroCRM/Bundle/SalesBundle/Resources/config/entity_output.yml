@@ -1,9 +1,9 @@
 OroCRM\Bundle\SalesBundle\Entity\Lead:
     icon_class:                         icon-user
-    name:                               entity.lead.name
-    description:                        entity.lead.description
+    name:                               orocrm.sales.lead.entity_label
+    description:                        orocrm.sales.lead.entity_description
 
 OroCRM\Bundle\SalesBundle\Entity\Opportunity:
     icon_class:                         icon-user
-    name:                               entity.opportunity.name
-    description:                        entity.opportunity.description
+    name:                               orocrm.sales.opportunity.entity_label
+    description:                        orocrm.sales.opportunity.entity_description

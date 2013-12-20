@@ -6,31 +6,35 @@
 
 {% block navButtons %}
     {% if resource_granted('orocrm_sales_lead_update') %}
-        {{ UI.button({'path' : path('orocrm_sales_lead_update', { 'id': entity.id }), 'iClass' : 'icon-edit ', 'title' : 'Update lead', 'label' : 'Edit'}) }}
+        {{ UI.editButton({
+            'path' : path('orocrm_sales_lead_update', { 'id': entity.id }),
+            'entity_label': 'orocrm.sales.lead.entity_label'|trans
+        }) }}
     {% endif %}
     {% if resource_granted('orocrm_sales_lead_delete') %}
         {{ UI.deleteButton({
-                'dataUrl': path('oro_api_delete_lead', {'id': entity.id}) ,
-                'dataRedirect': path('orocrm_sales_lead_index'),
-                'aCss': 'no-hash remove-button',
-                'id': 'btn-remove-lead',
-                'dataId': entity.id,
-                'dataMessage': 'Are you sure you want to delete this lead?',
-                'title': 'Delete Lead',
-                'label': 'Delete'
-            })
-        }}
+            'dataUrl': path('oro_api_delete_lead', {'id': entity.id}),
+            'dataRedirect': path('orocrm_sales_lead_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-lead',
+            'dataId': entity.id,
+            'entity_label': 'orocrm.sales.lead.entity_label'|trans
+        }) }}
     {% endif %}
 {% endblock navButtons %}
 
+{% block stats %}
+    <li>{{ 'orocrm.sales.lead.created_at.label'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'orocrm.sales.lead.updated_at.label'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
+{% endblock stats %}
+
 {% block pageHeader %}
     {% set breadcrumbs = {
-            'entity': entity,
-            'indexPath': path('orocrm_sales_lead_index'),
-            'indexLabel': 'Leads',
-            'entityTitle': entity.name
-        }
-    %}
+        'entity': entity,
+        'indexPath': path('orocrm_sales_lead_index'),
+        'indexLabel': 'orocrm.sales.lead.entity_plural_label'|trans,
+        'entityTitle': entity.name
+    } %}
     {{ parent() }}
 {% endblock pageHeader %}
 

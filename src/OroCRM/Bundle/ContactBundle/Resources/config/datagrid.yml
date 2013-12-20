@@ -60,7 +60,7 @@ datagrid:
                   - { table: %orocrm_contact.group.entity.class%, alias: g }
         columns:
             label:
-                label: Label
+                label: orocrm.contact.group.label.label
         properties:
             id: ~
             update_link:
@@ -122,9 +122,9 @@ datagrid:
                 editable: true
                 frontend_type: boolean
             firstName:
-                label: orocrm.contact.datagrid.first_name
+                label: orocrm.contact.first_name.label
             lastName:
-                label: orocrm.contact.datagrid.last_name
+                label: orocrm.contact.last_name.label
         properties:
             id: ~
         filters:
@@ -187,28 +187,28 @@ datagrid:
                         - { join: address.state, alias: region }
         columns:
             firstName:
-                label: orocrm.contact.datagrid.first_name
+                label: orocrm.contact.first_name.label
             lastName:
-                label: orocrm.contact.datagrid.last_name
+                label: orocrm.contact.last_name.label
             primaryEmail:
-                label: orocrm.contact.datagrid.email
+                label: orocrm.contact.email.label
             primaryPhone:
-                label: orocrm.contact.datagrid.phone
+                label: orocrm.contact.contactphone.phone.label
             groupLabelsAsString:
-                label: orocrm.contact.datagrid.groups
+                label: orocrm.contact.groups.label
             contactSourceLabel:
-                label: orocrm.contact.datagrid.source
+                label: orocrm.contact.source.label
             countryName:
-                label: orocrm.contact.datagrid.country
+                label: orocrm.contact.contactaddress.country.label
             regionLabel:
-                label: orocrm.contact.datagrid.region
+                label: orocrm.contact.contactaddress.state.label
             addressPostalCode:
-                label: orocrm.contact.datagrid.postal_code
+                label: orocrm.contact.contactaddress.postal_code.label
             createdAt:
-                label: orocrm.contact.datagrid.created_at
+                label: orocrm.contact.created_at.label
                 frontend_type: datetime
             updatedAt:
-                label: orocrm.contact.datagrid.updated_at
+                label: orocrm.contact.updated_at.label
                 frontend_type: datetime
         properties:
             id: ~
@@ -387,22 +387,22 @@ datagrid:
                 editable: true
                 frontend_type: boolean
             name:
-                label:   orocrm.account.datagrid.account_name
+                label:   orocrm.account.name.label
             contactFirstName:
-                label:   First Name
+                label:   orocrm.contact.first_name.label
             contactLastName:
-                label:   Last Name
+                label:   orocrm.contact.last_name.label
             contactEmail:
-                label:   Email
+                label:   orocrm.contact.contactemail.email.label
             contactPhone:
-                label:   Phone
+                label:   orocrm.contact.contactphone.phone.label
             ownerName:
-                label:   Owner
+                label:   orocrm.contact.owner.label
             createdAt:
-                label:   Created At
+                label:   orocrm.contact.created_at.label
                 frontend_type: datetime
             updatedAt:
-                label:    Updated At
+                label:   orocrm.contact.updated_at.label
                 frontend_type: datetime
         sorters:
             columns:

@@ -1,0 +1,3 @@
+{% if record.getValue('contactId') %}
+    <a href="{{ path('orocrm_contact_view', { id : record.getValue('contactId') }) }}">{{ value }}</a>
+{% endif %}

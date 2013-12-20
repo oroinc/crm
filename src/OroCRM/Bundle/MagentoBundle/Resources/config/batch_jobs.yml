@@ -8,9 +8,12 @@ connector:
             steps:
                 import_validation:
                     title:     import_validation
-                    reader:    orocrm_magento.mage.customer_connector
-                    processor: oro_importexport.processor.import_validation_delegate
-                    writer:    oro_importexport.writer.doctrine_clear
+                    services:
+                        reader:    orocrm_magento.mage.customer_connector
+                        processor: oro_importexport.processor.import_validation_delegate
+                        writer:    oro_importexport.writer.doctrine_clear
+                    parameters:
+                        batch_size: 15
 
         mage_customer_import:
             title: "Entity Import from Magento SOAP API"
@@ -18,9 +21,12 @@ connector:
             steps:
                 import:
                     title:     import
-                    reader:    orocrm_magento.mage.customer_connector
-                    processor: oro_importexport.processor.import_delegate
-                    writer:    oro_integration.writer.persistent_batch_writer
+                    services:
+                        reader:    orocrm_magento.mage.customer_connector
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    oro_integration.writer.persistent_batch_writer
+                    parameters:
+                        batch_size: 15
 
         # Region import jobs
         mage_regions_import:
@@ -29,9 +35,12 @@ connector:
             steps:
                 import:
                     title:     import
-                    reader:    orocrm_magento.mage.region_connector
-                    processor: oro_importexport.processor.import_delegate
-                    writer:    oro_integration.writer.persistent_batch_writer
+                    services:
+                        reader:    orocrm_magento.mage.region_connector
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    oro_integration.writer.persistent_batch_writer
+                    parameters:
+                        batch_size: 15
 
         mage_regions_import_validation:
             title: "Validate Magento regions via SOAP API"
@@ -39,9 +48,12 @@ connector:
             steps:
                 import_validation:
                     title:     import_validation
-                    reader:    orocrm_magento.mage.region_connector
-                    processor: oro_importexport.processor.import_validation_delegate
-                    writer:    oro_importexport.writer.doctrine_clear
+                    services:
+                        reader:    orocrm_magento.mage.region_connector
+                        processor: oro_importexport.processor.import_validation_delegate
+                        writer:    oro_importexport.writer.doctrine_clear
+                    parameters:
+                        batch_size: 15
 
         # Magento orders import/update
         mage_order_import_validation:
@@ -50,9 +62,12 @@ connector:
             steps:
                 import_validation:
                     title:     import_validation
-                    reader:    orocrm_magento.mage.order_connector
-                    processor: oro_importexport.processor.import_validation_delegate
-                    writer:    oro_importexport.writer.doctrine_clear
+                    services:
+                        reader:    orocrm_magento.mage.order_connector
+                        processor: oro_importexport.processor.import_validation_delegate
+                        writer:    oro_importexport.writer.doctrine_clear
+                    parameters:
+                        batch_size: 15
 
         mage_order_import:
             title: "Order Import from Magento SOAP API"
@@ -60,27 +75,36 @@ connector:
             steps:
                 import:
                     title:     import
-                    reader:    orocrm_magento.mage.order_connector
-                    processor: oro_importexport.processor.import_delegate
-                    writer:    oro_integration.writer.persistent_batch_writer
+                    services:
+                        reader:    orocrm_magento.mage.order_connector
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    oro_integration.writer.persistent_batch_writer
+                    parameters:
+                        batch_size: 15
 
         # Cart import jobs
         mage_cart_import_validation:
-            title: "Import validation Magento carts (quote) from Magento"
+            title: "Import Validation Magento carts (quote) from Magento"
             type: import_validation
             steps:
                 import_validation:
                     title:     import_validation
-                    reader:    orocrm_magento.mage.cart_connector
-                    processor: oro_importexport.processor.import_validation_delegate
-                    writer:    oro_importexport.writer.doctrine_clear
+                    services:
+                        reader:    orocrm_magento.mage.cart_connector
+                        processor: oro_importexport.processor.import_validation_delegate
+                        writer:    oro_importexport.writer.doctrine_clear
+                    parameters:
+                        batch_size: 15
 
         mage_cart_import:
-            title: "Import validation Magento carts (quote) from Magento"
+            title: "Import Magento carts (quote) from Magento"
             type: import
             steps:
                 import:
                     title:     import
-                    reader:    orocrm_magento.mage.cart_connector
-                    processor: oro_importexport.processor.import_delegate
-                    writer:    oro_importexport.writer.entity
+                    services:
+                        reader:    orocrm_magento.mage.cart_connector
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    oro_importexport.writer.entity
+                    parameters:
+                        batch_size: 15

@@ -3,8 +3,9 @@
     float: none;
 }
 .product-info-widget,
-.customer-info-widget {
-    min-height: 300px;
+.customer-info-widget,
+.order-info-widget {
+    /*min-height: 300px;*/
 }
 .magento-website-selector-container .selector {
     float:left;

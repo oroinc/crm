@@ -1,23 +1,9 @@
-orocrm.call.controller.call.saved.message: 'Call logged successfully'
-orocrm.call.controller.call.deleted.message: 'Call deleted successfully'
-orocrm.call.phone.required.message: 'Phone number is required field'
-
-orocrm.call.form.call.other: 'Other...'
-
-orocrm.call.datagrid.contact_name: 'Contact name'
-orocrm.call.datagrid.account_name: 'Account name'
-orocrm.call.datagrid.subject: 'Subject'
-orocrm.call.datagrid.phone: 'Phone'
-orocrm.call.datagrid.date_time: 'Call date'
-
-'New Call': 'New Call'
-'Call': 'Call'
-'Calls': 'Calls'
+'New': 'New'
 'Create call': 'Create call'
 'Add call log': 'Add call log'
 'Update call log': 'Update call log'
 'Cancel': 'Cancel'
-'Log call': 'Log call'
+'Log': 'Log'
 'Call logged successfully': 'Call logged successfully'
 'Call deleted successfully': 'Call deleted successfully'
 'Phone number is required field': 'Phone number is required field'
@@ -27,3 +13,34 @@ orocrm:
         recent_calls:
             title: Recent calls
             view_all: View All
+
+    call:
+        phone.required.message: 'Phone number is required field'
+        form.call.other: 'Other...'
+
+        controller:
+            call.saved.message: 'Call logged successfully'
+            call.deleted.message: 'Call deleted successfully'
+
+        datagrid:
+            contact_name: 'Contact name'
+            account_name: 'Account name'
+
+        #
+        # OroCRM/Bundle/CallBundle/Entity/Call
+        #
+        entity_label:        Call
+        entity_plural_label: Calls
+        entity_description:  Represent call
+        id.label:              Id
+        subject.label:         Subject
+        related_contact.label: Related contact
+        related_account.label: Related to
+        phone_number.label:    Phone number
+        owner.label:           Owner
+        notes.label:           Notes
+        duration.label:        Duration
+        direction.label:       Direction
+        call_status.label:     Call status
+        call_date_time.label:  Call date & time
+        contact_phone_number.label: Phone number

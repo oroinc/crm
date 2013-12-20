@@ -10,19 +10,21 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorTypeInterface;
 
+use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
 class SoapController extends Controller
 {
     /**
-     * @Route("/check")
+     * @Route("/check", name="orocrm_magento_soap_check")
      * @AclAncestor("oro_integration_channel_update")
      */
     public function checkAction(Request $request)
     {
-        $transport = $this->get('orocrm_magento.mage.soap_transport');
+        $transport = $this->get('orocrm_magento.soap_transport');
 
         /*
          * Transport setting entity should be set to form
@@ -38,18 +40,39 @@ class SoapController extends Controller
         $form->submit($request);
 
         /** @var MagentoSoapTransport $transportEntity */
-        $transportEntity = $form->getData();
-        $websites        = [];
+        $transportEntity      = $form->getData();
+        $websites             = $allowedTypesChoices = [];
+        $isExtensionInstalled = false;
         try {
             $result = $transport->init($transportEntity->getSettingsBag());
             if ($result) {
                 $stores   = $transport->call(StoreConnector::ACTION_STORE_LIST);
                 $websites = $this->get('orocrm_magento.converter.stores_to_website')->convert($stores);
+                $isExtensionInstalled = $transport->isExtensionAvailable();
+
+                $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')
+                    ->getAvailableConnectorsTypesChoiceList(
+                        'magento',
+                        function (ConnectorTypeInterface $connector) use ($isExtensionInstalled) {
+                            return $connector instanceof ExtensionAwareInterface ? $isExtensionInstalled : true;
+                        }
+                    );
+                $translator = $this->get('translator');
+                foreach ($allowedTypesChoices as $name => $val) {
+                    $allowedTypesChoices[$name] = $translator->trans($val);
+                }
             }
         } catch (\Exception $e) {
             $result = false;
         }
 
-        return new JsonResponse(['success' => $result, 'websites' => $websites]);
+        return new JsonResponse(
+            [
+                'success'              => $result,
+                'websites'             => $websites,
+                'isExtensionInstalled'  => $isExtensionInstalled,
+                'connectors'           => $allowedTypesChoices,
+            ]
+        );
     }
 }

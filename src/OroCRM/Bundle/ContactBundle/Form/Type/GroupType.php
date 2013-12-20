@@ -18,6 +18,7 @@ class GroupType extends AbstractType
                 'label',
                 'text',
                 array(
+                    'label' => 'orocrm.contact.group.label.label',
                     'required' => true,
                 )
             )

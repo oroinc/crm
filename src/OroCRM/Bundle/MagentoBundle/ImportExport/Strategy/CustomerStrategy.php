@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -14,10 +13,10 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerNormalizer;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerDenormalizer;
 use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 
-class AddOrUpdateCustomer extends BaseStrategy
+class CustomerStrategy extends BaseStrategy
 {
     const ENTITY_NAME             = 'OroCRMMagentoBundle:Customer';
     const GROUP_ENTITY_NAME       = 'OroCRMMagentoBundle:CustomerGroup';
@@ -124,7 +123,7 @@ class AddOrUpdateCustomer extends BaseStrategy
         if (!isset($this->groupEntityCache[$group->getName()])) {
             $this->groupEntityCache[$group->getName()] = $this->findAndReplaceEntity(
                 $group,
-                CustomerNormalizer::GROUPS_TYPE,
+                CustomerDenormalizer::GROUPS_TYPE,
                 [
                     'name'     => $group->getName(),
                     'channel'  => $group->getChannel(),
@@ -257,29 +256,6 @@ class AddOrUpdateCustomer extends BaseStrategy
         }
 
         $entity->setAccount($account);
-
-        return $this;
-    }
-
-    /**
-     * @param AbstractTypedAddress $address
-     *
-     * @return $this
-     */
-    protected function updateAddressTypes(AbstractTypedAddress $address)
-    {
-        // update address type
-        $types = $address->getTypeNames();
-        if (empty($types)) {
-            return $this;
-        }
-
-        $address->getTypes()->clear();
-        $loadedTypes = $this->getEntityRepository('OroAddressBundle:AddressType')->findBy(['name' => $types]);
-
-        foreach ($loadedTypes as $type) {
-            $address->addType($type);
-        }
 
         return $this;
     }

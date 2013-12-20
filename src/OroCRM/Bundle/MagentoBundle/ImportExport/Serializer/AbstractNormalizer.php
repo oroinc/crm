@@ -2,10 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 
 class AbstractNormalizer implements SerializerAwareInterface
 {
@@ -14,8 +17,17 @@ class AbstractNormalizer implements SerializerAwareInterface
      */
     protected $serializer;
 
+    /** @var  ChannelRepository */
+    protected $channelRepository;
+
+    public function __construct(EntityManager $em)
+    {
+        $this->channelRepository = $em->getRepository('OroIntegrationBundle:Channel');
+    }
+
     /**
      * @param SerializerInterface $serializer
+     *
      * @throws \InvalidArgumentException
      */
     public function setSerializer(SerializerInterface $serializer)
@@ -37,6 +49,7 @@ class AbstractNormalizer implements SerializerAwareInterface
      * to camel case 'sampleKey'
      *
      * @param array $data
+     *
      * @return array
      */
     protected function convertToCamelCase($data)
@@ -59,11 +72,11 @@ class AbstractNormalizer implements SerializerAwareInterface
 
     /**
      * @param object $resultObject
-     * @param array $data
+     * @param array  $data
      */
     protected function fillResultObject($resultObject, $data)
     {
-        $reflObj = new \ReflectionObject($resultObject);
+        $reflObj                  = new \ReflectionObject($resultObject);
         $importedEntityProperties = $reflObj->getProperties();
 
         /** @var \ReflectionProperty $reflectionProperty */
@@ -84,9 +97,9 @@ class AbstractNormalizer implements SerializerAwareInterface
      *
      * @return array
      */
-    protected function denormalizeCreatedUpdated($data, $format, $context)
+    protected function denormalizeCreatedUpdated($data, $format, $context = [])
     {
-        $dateTimeFormat = ['type' => 'datetime', 'format' => 'Y-m-d H:i:s'];
+        $dateTimeFormat    = ['type' => 'datetime', 'format' => 'Y-m-d H:i:s'];
         $data['createdAt'] = $this->serializer->denormalize(
             $data['createdAt'],
             'DateTime',
@@ -101,5 +114,63 @@ class AbstractNormalizer implements SerializerAwareInterface
         );
 
         return $data;
+    }
+
+    /**
+     * Format payment info
+     * Magento brings only CC payments info,
+     * for different types information could not be taken from order info
+     *
+     * @param array $paymentDetails
+     *
+     * @return string
+     */
+    public function denormalizePaymentDetails($paymentDetails)
+    {
+        if (!empty($paymentDetails['cc_last4'])) {
+            $paymentDetails = sprintf(
+                "Card [%s, %s]",
+                $paymentDetails['cc_type'],
+                $paymentDetails['cc_last4']
+            );
+        } else {
+            $paymentDetails = null;
+        }
+
+        return $paymentDetails;
+    }
+
+    /**
+     * @param array  $data
+     * @param string $name
+     * @param string $type
+     * @param mixed  $format
+     * @param array  $context
+     *
+     * @return null|object
+     */
+    protected function denormalizeObject(array $data, $name, $type, $format = null, $context = array())
+    {
+        $result = null;
+        if (!empty($data[$name])) {
+            $result = $this->serializer->denormalize($data[$name], $type, $format, $context);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $context
+     *
+     * @return \Oro\Bundle\IntegrationBundle\Entity\Channel
+     * @throws \LogicException
+     */
+    protected function getChannelFromContext(array $context)
+    {
+        if (!isset($context['channel'])) {
+            throw new \LogicException('Context should contain reference to channel');
+        }
+
+        return $this->channelRepository->getOrLoadById($context['channel']);
     }
 }

@@ -15,11 +15,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *
  * @package OroCRM\Bundle\MagentoBundle\Entity
  * @ORM\Entity
- * @Config(
- *  defaultValues={
- *      "entity"={"label"="Integration Channel Transport", "plural_label"="Integration Channel Transports"}
- *  }
- * )
+ * @Config()
  * @Oro\Loggable()
  */
 class MagentoSoapTransport extends Transport
@@ -76,6 +72,13 @@ class MagentoSoapTransport extends Transport
      * @ORM\Column(name="websites", type="array")
      */
     protected $websites = [];
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_extension_installed", type="boolean")
+     */
+    protected $isExtensionInstalled = false;
 
     public function __construct()
     {
@@ -223,6 +226,26 @@ class MagentoSoapTransport extends Transport
     }
 
     /**
+     * @param boolean $isExtensionInstalled
+     *
+     * @return $this
+     */
+    public function setIsExtensionInstalled($isExtensionInstalled)
+    {
+        $this->isExtensionInstalled = $isExtensionInstalled;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsExtensionInstalled()
+    {
+        return $this->isExtensionInstalled;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSettingsBag()
@@ -233,7 +256,7 @@ class MagentoSoapTransport extends Transport
                 'api_key'         => $this->getApiKey(),
                 'wsdl_url'        => $this->getWsdlUrl(),
                 'sync_range'      => $this->getSyncRange(),
-                'website_id'      => $this->getWebsites(),
+                'website_id'      => $this->getWebsiteId(),
                 'start_sync_date' => $this->getSyncStartDate(),
             ]
         );

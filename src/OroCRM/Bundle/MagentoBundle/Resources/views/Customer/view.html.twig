@@ -7,8 +7,8 @@
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
-        'indexPath': path('orocrm_magento_customer_index'),
-        'indexLabel': 'Customers'|trans,
+        'indexPath': path('orocrm_magento_customer_index', {id: entity.channel.id}),
+        'indexLabel': 'orocrm.magento.customer.entity_plural_label'|trans,
         'entityTitle': fullname
     } %}
     {{ parent() }}

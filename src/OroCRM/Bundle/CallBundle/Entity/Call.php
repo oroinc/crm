@@ -9,8 +9,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\CallBundle\Entity\CallStatus;
-use OroCRM\Bundle\CallBundle\Entity\CallDirection;
 
 /**
  * Call
@@ -20,7 +18,6 @@ use OroCRM\Bundle\CallBundle\Entity\CallDirection;
  * @Config(
  *  routeName="orocrm_call_index",
  *  defaultValues={
- *      "entity"={"label"="Call", "plural_label"="Calls"},
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",
@@ -258,7 +255,7 @@ class Call
     /**
      * Set direction
      *
-     * @param boolean $direction
+     * @param CallDirection $direction
      * @return Call
      */
     public function setDirection($direction)

@@ -23,10 +23,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *  }
  * )
  * @Config(
- *  routeName="orocrm_magento_cart_index",
- *  routeView="orocrm_magento_cart_view",
  *  defaultValues={
- *      "entity"={"label"="Magento Cart", "plural_label"="Magento Carts"},
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
@@ -116,7 +113,7 @@ class Cart extends BaseCart
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     protected $email;
 
@@ -156,6 +153,19 @@ class Cart extends BaseCart
      * @ORM\Column(name="payment_details", type="string", length=255, nullable=true)
      */
     protected $paymentDetails;
+
+    /**
+     * @var CartStatus
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CartStatus")
+     * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
+     */
+    protected $status;
+
+    public function __construct()
+    {
+        $this->status = new CartStatus('open');
+    }
 
     /**
      * @return CartItem[]|Collection
@@ -278,5 +288,24 @@ class Cart extends BaseCart
     public function getPaymentDetails()
     {
         return $this->paymentDetails;
+    }
+
+    /**
+     * @param CartStatus $status
+     * @return Cart
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return CartStatus
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }
