@@ -226,14 +226,6 @@ class OpportunityController extends Controller
     }
 
     /**
-     * @return FlashBag
-     */
-    protected function getFlashBag()
-    {
-        return $this->get('session')->getFlashBag();
-    }
-
-    /**
      * @param Opportunity $entity
      * @return array
      */

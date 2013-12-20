@@ -2,9 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Doctrine\ORM\EntityManager;
+
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
@@ -12,7 +15,7 @@ use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 /**
  * @TODO FIXME should be refactored to use only call of transport with generalized filter
  */
-abstract class AbstractApiBasedConnector extends AbstractConnector
+abstract class AbstractApiBasedConnector extends AbstractConnector implements MagentoConnectorInterface
 {
     const DEFAULT_SYNC_RANGE = '1 month';
 
@@ -25,6 +28,9 @@ abstract class AbstractApiBasedConnector extends AbstractConnector
     /** @var StoreConnector */
     protected $storeConnector;
 
+    /** @var ChannelRepository */
+    protected $channelRepository;
+
     /** @var array */
     protected $entitiesIdsBuffer = [];
 
@@ -35,16 +41,19 @@ abstract class AbstractApiBasedConnector extends AbstractConnector
     protected $batchSize;
 
     /**
-     * @param ContextRegistry $contextRegistry
-     * @param StoreConnector  $storeConnector
-     * @param LoggerStrategy  $logger
+     * @param ContextRegistry             $contextRegistry
+     * @param LoggerStrategy              $logger
+     * @param \Doctrine\ORM\EntityManager $em
+     * @param StoreConnector              $storeConnector
      */
     public function __construct(
         ContextRegistry $contextRegistry,
         LoggerStrategy $logger,
+        EntityManager $em,
         StoreConnector $storeConnector
     ) {
         parent::__construct($contextRegistry, $logger);
+        $this->channelRepository = $em->getRepository('OroIntegrationBundle:Channel');
         $this->storeConnector = $storeConnector;
     }
 
@@ -56,7 +65,7 @@ abstract class AbstractApiBasedConnector extends AbstractConnector
         $this->dependencies      = [];
         $this->entitiesIdsBuffer = [];
         parent::initializeFromContext($context);
-        $settings = $this->transportSettings->getSettingsBag()->all();
+        $settings = $this->transportSettings->all();
 
         $startSyncDateKey = 'start_sync_date';
         if (empty($settings[$startSyncDateKey])) {
@@ -69,7 +78,8 @@ abstract class AbstractApiBasedConnector extends AbstractConnector
 
         $startSyncFrom = $settings[$startSyncDateKey];
         /** @var Channel $channel */
-        $channel = $context->getOption('channel');
+        $channel = $this->channelRepository
+            ->getOrLoadById($context->getOption('channel'));
         $status  = $channel->getStatusesForConnector($this->getType(), Status::STATUS_COMPLETED)->first();
         if (false !== $status) {
             /** @var Status $status */
@@ -203,7 +213,7 @@ abstract class AbstractApiBasedConnector extends AbstractConnector
 
         $filters                 = [
             $this->getBatchFilter(
-                $this->transportSettings->getWebsiteId(),
+                $this->transportSettings->get('website_id'),
                 $startDate,
                 $endDate
             )

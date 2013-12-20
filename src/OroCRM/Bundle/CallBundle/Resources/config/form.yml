@@ -1,15 +1,16 @@
 parameters:
-    orocrm_call.call.form.type.class: OroCRM\Bundle\CallBundle\Form\Type\CallType
-    orocrm_call.call.form.handler.class: OroCRM\Bundle\CallBundle\Form\Handler\CallHandler
+    orocrm_call.call.form.type.class:       OroCRM\Bundle\CallBundle\Form\Type\CallType
+    orocrm_call.call.form.handler.class:    OroCRM\Bundle\CallBundle\Form\Handler\CallHandler
     orocrm_call.call.form.subscriber.class: OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber
+
+    orocrm_call.call.form.type.api.class:   OroCRM\Bundle\CallBundle\Form\Type\CallApiType
+    orocrm_call.call.manager.api.class:     Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
 services:
     orocrm_call.call.form.subscriber:
         class: %orocrm_call.call.form.subscriber.class%
         arguments:
             - @doctrine.orm.entity_manager
-        tags:
-            - { name: form.type, alias: orocrm_call_form_subscriber }
 
     orocrm_call.call.form.type:
         class: %orocrm_call.call.form.type.class%
@@ -17,6 +18,28 @@ services:
             - @orocrm_call.call.form.subscriber
         tags:
             - { name: form.type, alias: orocrm_call_form }
+
+    orocrm_call.call.form.type.api:
+        class: %orocrm_call.call.form.type.api.class%
+        tags:
+            - { name: form.type, alias: orocrm_call_form_api }
+
+    orocrm_call.call.form:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - "orocrm_call_form"
+            - "orocrm_call_form"
+
+    orocrm_call.call.form.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - "call"
+            - "orocrm_call_form_api"
+            - null
 
     orocrm_call.call.form.handler:
         class: %orocrm_call.call.form.handler.class%
@@ -26,11 +49,16 @@ services:
             - @request
             - @doctrine.orm.entity_manager
 
-    orocrm_call.call.form:
-        class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+    orocrm_call.call.form.handler.api:
+        class: %orocrm_call.call.form.handler.class%
+        scope: request
         arguments:
-            - "orocrm_call_call_form"
-            - "orocrm_call_form"
+            - @orocrm_call.call.form.api
+            - @request
+            - @doctrine.orm.entity_manager
 
+    orocrm_call.call.manager.api:
+        class: %orocrm_call.call.manager.api.class%
+        arguments:
+            - %orocrm_call.call.entity.class%
+            - @doctrine.orm.entity_manager

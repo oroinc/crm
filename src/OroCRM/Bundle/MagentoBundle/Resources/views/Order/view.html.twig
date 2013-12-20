@@ -1,0 +1,99 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+{% oro_title_set({params : {"%order.incrementId%":  entity.incrementId} }) %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('orocrm_magento_order_index', {id: entity.channel.id}),
+        'indexLabel': 'orocrm.magento.order.entity_plural_label'|trans,
+        'entityTitle': 'orocrm.magento.order.entity_label'|trans ~ ' #' ~ entity.incrementId
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'orderView' %}
+    {% set dataSubBlocks = [
+        oro_widget_render({
+            'widgetType': 'block',
+            'url':         path('orocrm_magento_order_widget_info', {id: entity.id}),
+            'template':   '<div class="row-fluid <%= contentClasses.join(\' \') %>"></div>'
+        })
+    ] %}
+
+    {% set dataBlocks = [{
+        'title': 'Order Information'|trans,
+        'class': 'active',
+        'subblocks': [{ 'title': null, 'data' : dataSubBlocks }]
+    }] %}
+
+    {% set orderAddresses = [] %}
+    {% if entity.addresses is not empty %}
+        {% for address in entity.addresses %}
+            {% set title = address.types.first and address.types.first.name == 'billing'
+                ? 'orocrm.magento.cart.billing_address.label'|trans
+                : 'orocrm.magento.cart.shipping_address.label'|trans %}
+            {% set orderAddresses = orderAddresses|merge([{'title': title|trans, 'data': [addressView.renderAddress(address)]}]) %}
+        {% endfor %}
+    {% endif %}
+
+    {% if (orderAddresses|length) %}
+        {% set dataBlocks = dataBlocks|merge([{'title' : 'orocrm.magento.order.addresses.label'|trans, 'subblocks': orderAddresses}])%}
+    {% endif %}
+
+    {% if entity.customer %}
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title': 'Customer Information'|trans,
+                'subblocks': [{
+                    'title': null,
+                    'data': [
+                        oro_widget_render({
+                            'widgetType': 'block',
+                            'url': path('orocrm_magento_customer_info', {id: entity.customer.id}),
+                            'template': '<div class="row-fluid <%= contentClasses.join(\' \') %>"></div>'
+                        })
+                    ]
+                }]
+            }
+        ]) %}
+    {% endif %}
+
+    {% set dataBlocks = dataBlocks|merge([
+        {
+            'title': 'Workflow Items'|trans,
+            'subblocks': [{
+                'title': null,
+                'data': [
+                    oro_widget_render({
+                        'widgetType': 'block',
+                        'url': path('oro_workflow_widget_workflow_items', {entityClass: oro_class_name(entity), entityId: entity.id}),
+                        'alias': 'bind_workflow_items',
+                        'template': '<div class="row-fluid <%= contentClasses.join(\' \') %>"></div>'
+                    })
+                ]
+            }]
+        },
+        {
+            'title': 'orocrm.magento.order.items.label'|trans,
+            'subblocks': [{
+                'title': null,
+                'data': [
+                    oro_widget_render({
+                        'widgetType': 'block',
+                        'contentClasses': [],
+                        'url': path('orocrm_magento_order_widget_items', {id: entity.id}),
+                        'template': '<div class="row-fluid <%= contentClasses.join(\' \') %>"></div>'
+                    })
+                ]
+            }]
+        }
+    ]) %}
+
+    {% set data = {'dataBlocks': dataBlocks} %}
+    {{ parent() }}
+{% endblock content_data %}

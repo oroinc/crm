@@ -21,7 +21,6 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  *  routeName="orocrm_sales_opportunity_index",
  *  routeView="orocrm_sales_opportunity_view",
  *  defaultValues={
- *      "entity"={"label"="Opportunity", "plural_label"="Opportunities"},
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",
@@ -157,6 +156,13 @@ class Opportunity extends ExtendOpportunity
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="notes", type="text", nullable=true)
+     */
+    protected $notes;
 
     /**
      * @return int
@@ -435,6 +441,24 @@ class Opportunity extends ExtendOpportunity
     {
         $this->owner = $owningUser;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * @param string $notes
+     * @return Opportunity
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
         return $this;
     }
 }

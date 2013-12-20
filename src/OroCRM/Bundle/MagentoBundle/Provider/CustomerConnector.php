@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-class CustomerConnector extends AbstractApiBasedConnector implements CustomerConnectorInterface
+class CustomerConnector extends AbstractApiBasedConnector
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer';
     const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';
@@ -68,9 +68,6 @@ class CustomerConnector extends AbstractApiBasedConnector implements CustomerCon
             }
         }
 
-        /**
-         * @TODO FIXME move to converter
-         */
         $result->group               = $this->dependencies[self::ALIAS_GROUPS][$result->group_id];
         $result->group['originId']   = $result->group['customer_group_id'];
         $result->store               = $this->dependencies[self::ALIAS_STORES][$result->store_id];

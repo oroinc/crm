@@ -10,11 +10,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_contact_source")
- * @Config(
- *  defaultValues={
- *      "entity"={"label"="Contact Source", "plural_label"="Contact Sources"}
- *  }
- * )
+ * @Config()
  */
 class Source
 {

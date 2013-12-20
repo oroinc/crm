@@ -10,11 +10,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_contact_method")
- * @Config(
- *  defaultValues={
- *      "entity"={"label"="Contact Method", "plural_label"="Contact Methods"}
- *  }
- * )
+ * @Config()
  */
 class Method
 {

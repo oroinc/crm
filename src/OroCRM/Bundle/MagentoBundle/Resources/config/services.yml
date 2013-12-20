@@ -1,27 +1,34 @@
 parameters:
     # transport
-    orocrm_magento.mage.soap_transport.class:                             OroCRM\Bundle\MagentoBundle\Provider\MageSoapTransport
+    orocrm_magento.soap_transport.class:                                  OroCRM\Bundle\MagentoBundle\Provider\SoapTransport
 
     # providers
-    orocrm_magento.provider.channel_type.class:                           OroCRM\Bundle\MagentoBundle\Provider\MageChannelType
-    orocrm_magento.form.subscriber.soap_transport_setting.class:          OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
-    orocrm_magento.form.type.soap_transport_setting.class:                OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
-    orocrm_magento.converter.stores_to_website.class:                     OroCRM\Bundle\MagentoBundle\Converter\StoreListToWebsiteConverter
+    orocrm_magento.provider.channel_type.class:                           OroCRM\Bundle\MagentoBundle\Provider\ChannelType
 
+    # forms
+    orocrm_magento.form.type.soap_transport_setting.class:                OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
+    orocrm_magento.form.subscriber.soap_transport_setting.class:          OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
+
+    # event listeners
+    orocrm_magento.event_listener.navigation.class:                       OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener
+
+    # additional services
+    orocrm_magento.converter.stores_to_website.class:                     OroCRM\Bundle\MagentoBundle\Converter\StoreListToWebsiteConverter
 services:
-    orocrm_magento.mage.soap_transport:
-        class: %orocrm_magento.mage.soap_transport.class%
+    orocrm_magento.soap_transport:
+        class: %orocrm_magento.soap_transport.class%
         arguments:
             - @oro_security.encoder.mcrypt
         tags:
             - { name: oro_integration.transport, type: magento_soap, channel_type: magento }
 
-    # Providers and subscribers
+    # Providers
     orocrm_magento.provider.channel_type:
         class: %orocrm_magento.provider.channel_type.class%
         tags:
             - { name: oro_integration.channel, type: magento }
 
+    # forms
     orocrm_magento.form.subscriber.soap_transport_setting:
         class: %orocrm_magento.form.subscriber.soap_transport_setting.class%
         arguments:
@@ -30,11 +37,43 @@ services:
     orocrm_magento.form.type.soap_transport_setting:
         class: %orocrm_magento.form.type.soap_transport_setting.class%
         arguments:
-            - @orocrm_magento.mage.soap_transport
+            - @orocrm_magento.soap_transport
             - @orocrm_magento.form.subscriber.soap_transport_setting
+            - @oro_integration.manager.types_registry
         tags:
             - { name: form.type, alias: orocrm_magento_soap_transport_setting_form_type }
 
+    # event listeners
+    orocrm_magento.event_listener.navigation:
+        class: %orocrm_magento.event_listener.navigation.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @router
+        tags:
+            - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
+
+    orocrm_magento.event_listener.grid_listener:
+            class: %oro_datagrid.event_listener.base_orm_relation.class%
+            arguments:
+                - 'channelId'
+                - @oro_datagrid.datagrid.request_params
+                - false
+            tags:
+                - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-customers-grid, method: onBuildAfter }
+                - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-cart-grid, method: onBuildAfter }
+                - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-order-grid, method: onBuildAfter }
+
+    orocrm_magento.event_listener.cart_items_grid_listener:
+            class: %oro_datagrid.event_listener.base_orm_relation.class%
+            arguments:
+                - 'id'
+                - @oro_datagrid.datagrid.request_params
+                - false
+            tags:
+                - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-cartitem-grid, method: onBuildAfter }
+                - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-orderitem-grid, method: onBuildAfter }
+
+    # additional services
     orocrm_magento.converter.stores_to_website:
         class: %orocrm_magento.converter.stores_to_website.class%
         arguments:

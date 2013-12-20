@@ -13,8 +13,8 @@ class LoadCallDirectionData extends AbstractFixture
      * @var array
      */
     protected $data = array(
-        'incoming',
-        'outgoing',
+        'incoming' => 'Incoming',
+        'outgoing' => 'Outgoing',
     );
 
     /**
@@ -22,9 +22,9 @@ class LoadCallDirectionData extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        foreach ($this->data as $direction) {
-            $callDirection = new CallDirection();
-            $callDirection->setDirection($direction);
+        foreach ($this->data as $name => $label) {
+            $callDirection = new CallDirection($name);
+            $callDirection->setLabel($label);
             $manager->persist($callDirection);
         }
 

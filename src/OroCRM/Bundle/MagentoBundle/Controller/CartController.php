@@ -11,6 +11,7 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 /**
  * @Route("/cart")
@@ -18,24 +19,24 @@ use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 class CartController extends Controller
 {
     /**
-     * @Route("/index")
+     * @Route("/{id}", name="orocrm_magento_cart_index", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_cart_view")
-     * @Template()
+     * @Template
      */
-    public function indexAction()
+    public function indexAction(Channel $channel)
     {
-        return [];
+        return ['channelId' => $channel->getId()];
     }
 
     /**
-     * @Route("/view/{id}", requirements={"id"="\d+"}))
+     * @Route("/view/{id}", name="orocrm_magento_cart_view", requirements={"id"="\d+"}))
      * @Acl(
      *      id="orocrm_magento_cart_view",
      *      type="entity",
      *      permission="VIEW",
      *      class="OroCRMMagentoBundle:Cart"
      * )
-     * @Template()
+     * @Template
      */
     public function viewAction(Cart $cart)
     {
@@ -43,9 +44,9 @@ class CartController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", name="orocrm_cart_widget_info", requirements={"id"="\d+"}))
+     * @Route("/info/{id}", name="orocrm_magento_cart_widget_info", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_cart_view")
-     * @Template()
+     * @Template
      */
     public function infoAction(Cart $cart)
     {
@@ -53,11 +54,11 @@ class CartController extends Controller
     }
 
     /**
-     * @Route("/widget/grid/{id}", name="orocrm_cart_widget_items", requirements={"id"="\d+"}))
+     * @Route("/widget/grid/{id}", name="orocrm_magento_cart_widget_items", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_cart_view")
-     * @Template("OroCRMMagentoBundle:Cart:cartItems.html.twig")
+     * @Template
      */
-    public function gridAction(Cart $cart)
+    public function itemsAction(Cart $cart)
     {
         return ['entity' => $cart];
     }

@@ -6,8 +6,8 @@
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
-        'indexPath': path('orocrm_magento_product_index'),
-        'indexLabel': 'Products'|trans,
+        'indexPath': path('orocrm_magento_product_index', {id: entity.channel.id}),
+        'indexLabel': 'orocrm.magento.product.entity_plural_label'|trans,
         'entityTitle': entity.name
     } %}
     {{ parent() }}

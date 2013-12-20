@@ -1,15 +1,15 @@
 {% if resource_granted('orocrm_call_view') %}
     {% import 'OroUIBundle::macros.html.twig' as UI %}
 
-    {{ UI.scrollSubblock(
-        'Calls',
-        [
+    <div class="responsive-cell">
+        <h5 class="user-fiedset calls-grid-header"><span>{{ 'orocrm.call.entity_plural_label'|trans }}</span></h5>
+        {{
             oro_widget_render({
                 'widgetType': 'buttons',
                 'url': path('orocrm_call_widget_calls', {userId: app.request.get('id')}),
                 'alias': 'account_calls',
                 'cssClass': 'inner-grid',
             })
-        ]
-    ) }}
+        }}
+    </div>
 {% endif %}

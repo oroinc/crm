@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class OrderItem extends BaseOrderItem
 {
+    use OriginTrait;
+
     /**
      * @var Order
      *
@@ -47,6 +49,16 @@ class OrderItem extends BaseOrderItem
      * @ORM\Column(name="original_price", type="float", nullable=false)
      */
     protected $originalPrice;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="discount_percent", type="float", nullable=true)
+     */
+    protected $discountPercent;
+
+    /** Do not needed in magento order item, because magento api does not bring it up */
+    protected $cost;
 
     /**
      * @param float $originalPrice
@@ -126,5 +138,25 @@ class OrderItem extends BaseOrderItem
     public function getIsVirtual()
     {
         return $this->isVirtual;
+    }
+
+    /**
+     * @param float $discountPercent
+     *
+     * @return $this
+     */
+    public function setDiscountPercent($discountPercent)
+    {
+        $this->discountPercent = $discountPercent;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountPercent()
+    {
+        return $this->discountPercent;
     }
 }
