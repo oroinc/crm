@@ -423,10 +423,16 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
+                    attribute_default_values:
+                        close_revenue: $opportunity.closeRevenue
+                        close_date: $opportunity.closeDate
                     init_actions:
                         - @create_object:
-                            class: '\DateTime'
-                            attribute: $close_date
+                            conditions:
+                                @empty: $close_date
+                            parameters:
+                                class: '\DateTime'
+                                attribute: $close_date
             close_as_lost:
                 label: 'Close as Lost'
                 step_to: close
@@ -454,10 +460,19 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
+                    attribute_default_values:
+                        close_date: $opportunity.closeDate
                     init_actions:
+                        - @assign_value:
+                            conditions:
+                                @not_empty: $opportunity.closeReason
+                            parameters: [$close_reason_name, $opportunity.closeReason.name]
                         - @create_object:
-                            class: '\DateTime'
-                            attribute: $close_date
+                            conditions:
+                                @empty: $close_date
+                            parameters:
+                                class: '\DateTime'
+                                attribute: $close_date
             requalify:
                 label: 'Requalify'
                 message: 'Performing this transition will reset some data.'
