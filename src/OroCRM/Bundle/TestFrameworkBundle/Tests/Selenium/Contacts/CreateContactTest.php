@@ -141,7 +141,7 @@ class CreateContactTest extends Selenium2TestCase
             ->setAddressCity('City')
             ->setAddressPostalCode('Zip Code 000')
             ->setAddressCountry('Kazak')
-            ->setAddressState('Aqm')
+            ->setAddressRegion('Aqm')
             ->save()
             ->assertMessage('Contact saved')
             ->toGrid()

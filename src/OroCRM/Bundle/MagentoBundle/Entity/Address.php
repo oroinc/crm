@@ -73,12 +73,11 @@ class Address extends AbstractTypedAddress
     /**
      * @var string
      *
-     * @TODO Refactor in CRM-185
-     * @ORM\Column(name="state_text", type="string", length=255, nullable=true)
+     * @ORM\Column(name="region_text", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
      */
-    protected $stateText;
+    protected $regionText;
 
     /**
      * @var string
