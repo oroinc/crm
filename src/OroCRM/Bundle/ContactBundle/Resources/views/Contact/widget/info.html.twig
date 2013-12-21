@@ -1,5 +1,6 @@
-{% import 'OroUIBundle::macros.html.twig' as macros %}
-{% import 'OroTagBundle::macros.html.twig' as _tag %}
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroTagBundle::macros.html.twig' as tag %}
+{% import 'OroEntityExtendBundle::macros.html.twig' as entityExtend %}
 
 {% macro renderCollectionWithPrimaryElement(collection, isEmail) %}
     {% set primaryElement = null %}
@@ -77,7 +78,7 @@
             </div>
         </div>
 
-        {{ macros.renderProperty('orocrm.contact.fax.label'|trans, entity.fax) }}
+        {{ ui.renderProperty('orocrm.contact.fax.label'|trans, entity.fax) }}
 
         <div class="control-group">
             <label class="control-label">{{ 'orocrm.contact.skype.label'|trans }}</label>
@@ -94,7 +95,7 @@
             </div>
         </div>
 
-        {{ macros.renderProperty('orocrm.contact.method.label'|trans, entity.method) }}
+        {{ ui.renderProperty('orocrm.contact.method.label'|trans, entity.method) }}
 
         <div class="control-group">
             <label class="control-label">{{ 'orocrm.contact.social.label'|trans }}</label>
@@ -138,33 +139,12 @@
             </div>
         </div>
 
-        {% if dynamic|length %}
-            {% for label, item in dynamic %}
-                {% if item is iterable %}
-                    {% set data = '' %}
-                    {% for value in item.values %}
-                        {% if value.link is defined and value.link != false  %}
-                            {% set data = data ~ '<a href="' ~ value.link ~ '">' ~ value.title ~ '</a>' %}
-                        {% else %}
-                            {% set data = data ~ value.title %}
-                        {% endif %}
-                        {% if not loop.last %}
-                            {% set data = data ~ ', ' %}
-                        {% endif %}
-                    {% endfor %}
-
-                    {% set item = data %}
-                {% endif %}
-
-                {{ macros.renderProperty(label|trans, item) }}
-                {#{{ macros.renderProperty(label|trans, item|dynamic) }}#}
-            {% endfor %}
-        {% endif %}
+        {{ entityExtend.renderDynamicFields(dynamic) }}
     </div>
 
     <div class="responsive-block">
 
-        {{ macros.renderProperty('orocrm.contact.job_title.label'|trans, entity.jobTitle) }}
+        {{ ui.renderProperty('orocrm.contact.job_title.label'|trans, entity.jobTitle) }}
 
         <div class="control-group">
             <label class="control-label">{{ 'orocrm.contact.accounts.label'|trans }}</label>
@@ -203,8 +183,8 @@
             </div>
         </div>
 
-        {{ macros.renderProperty('orocrm.contact.gender.label'|trans, oro_gender(entity.gender)) }}
-        {{ macros.renderProperty('orocrm.contact.source.label'|trans, entity.source) }}
+        {{ ui.renderProperty('orocrm.contact.gender.label'|trans, oro_gender(entity.gender)) }}
+        {{ ui.renderProperty('orocrm.contact.source.label'|trans, entity.source) }}
 
         <div class="control-group">
             <label class="control-label">{{ 'orocrm.contact.assigned_to.label'|trans }}</label>
@@ -263,7 +243,7 @@
             <label class="control-label">{{ 'oro.tag.entity_plural_label'|trans  }}</label>
             <div class="controls">
                 <div class="clearfix-oro">
-                    {{ _tag.renderView(entity) }}
+                    {{ tag.renderView(entity) }}
                 </div>
             </div>
         </div>
