@@ -10,7 +10,8 @@
     {{ address|oro_format_address }}
 {% endmacro %}
 
-<div class="widget-content form-horizontal box-content row-fluid">
+<div class="widget-content">
+    <div class="row-fluid">
     <div class="responsive-block">
         {{ ui.renderProperty('orocrm.account.name.label'|trans, entity.name) }}
         {{ entityExtend.renderDynamicFields(dynamic) }}
@@ -22,8 +23,15 @@
         {% if entity.shippingAddress is not empty %}
             {{ ui.renderProperty('orocrm.account.shipping_address.label'|trans, _self.renderAddress(entity.shippingAddress)) }}
         {% endif %}
-        {% if resource_granted('oro_tag_view_tag_cloud') %}
-            {{ ui.renderProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
-        {% endif %}
     </div>
+    </div>
+
+    {% if resource_granted('oro_tag_view_tag_cloud') %}
+    <div class="clearfix">
+        <label class="title">{{ 'oro.tag.entity_plural_label'|trans  }}</label>
+        <div class="clearfix-oro container-fluid">
+            {{ tag.renderView(entity) }}
+        </div>
+    </div>
+    {% endif %}
 </div>
