@@ -1,74 +1,51 @@
-{% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEmailBundle::macros.html.twig' as email %}
 
 <div class="widget-content customer-info-widget form-horizontal box-content row-fluid">
     <div class="responsive-block">
-        {% set email = entity.email %}
-        {% if entity.email != null %}
-            {% set email = '<a href="mailto: ' ~ email ~ '" title="' ~ email ~ '">' ~ email ~ '</a>'%}
-        {% endif %}
-        {{ macros.renderProperty('orocrm.magento.customer.email.label'|trans, email) }}
-        <div class="control-group">
-            <label class="control-label">{{  'orocrm.magento.customer.birthday.label'|trans }}</label>
-            <div class="controls">
-                <div class="clearfix-oro">
-                    <p class="control-label">
-                        {{ entity.birthday is empty ? 'N/A'|trans : entity.birthday|oro_format_date }}
-                        {% if entity.birthday is not empty %}
-                            ({{ entity.birthday|age_string({'default': 'N/A'}) }})
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-        </div>
+        {%- set birthdayData -%}
+            {{ entity.birthday is not empty ? entity.birthday|oro_format_date : null }}
+            {%- if entity.birthday is not empty -%}
+                &nbsp;({{ entity.birthday|age_string({'default': 'N/A'}) }})
+            {%- endif -%}
+        {%- endset -%}
 
-        {{ macros.renderProperty('orocrm.magento.customer.gender.label'|trans, oro_gender(entity.gender)) }}
-        {{ macros.renderProperty('orocrm.magento.customer.vat.label'|trans, entity.vat) }}
+        {{ ui.renderProperty('orocrm.magento.customer.email.label'|trans, email.email_address_simple(entity.email)) }}
+        {{ ui.renderProperty('orocrm.magento.customer.birthday.label'|trans, birthdayData) }}
+        {{ ui.renderProperty('orocrm.magento.customer.gender.label'|trans, oro_gender(entity.gender)) }}
+        {{ ui.renderProperty('orocrm.magento.customer.vat.label'|trans, entity.vat) }}
     </div>
-
     <div class="responsive-block">
-        {{ macros.renderProperty('orocrm.magento.customer.website.label'|trans, entity.website.name) }}
-        {{ macros.renderProperty('orocrm.magento.customer.store.label'|trans, entity.store.name|nl2br) }}
+        {%- set accountData -%}
+            {% if entity.account %}
+                {% set accountViewGranted = resource_granted('orocrm_account_view') %}
+                {%- if accountViewGranted -%}
+                    <a href="{{ path('orocrm_account_view', {'id': entity.account.id}) }}">{{ entity.account }}</a>
+                {%- else -%}
+                    {{ entity.account }}
+                {%- endif -%}
+            {% endif %}
+        {%- endset -%}
+
+        {%- set contactData -%}
+            {% if entity.contact %}
+                {% set contactViewGranted = resource_granted('orocrm_contact_view') %}
+                {%- if contactViewGranted -%}
+                    <a href="{{ path('orocrm_contact_view', {'id': entity.contact.id}) }}">{{ entity.contact }}</a>
+                {%- else -%}
+                    {{ entity.contact }}
+                {%- endif -%}
+            {%- endif -%}
+        {%- endset -%}
+
+        {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.website.name) }}
+        {{ ui.renderProperty('orocrm.magento.customer.store.label'|trans, entity.store.name|nl2br) }}
+
         {% if entity.group %}
-            {{ macros.renderProperty('orocrm.magento.customer.group.label'|trans, entity.group.name) }}
+            {{ ui.renderProperty('orocrm.magento.customer.group.label'|trans, entity.group.name) }}
         {% endif %}
 
-        <div class="control-group">
-            <label class="control-label">{{ 'orocrm.magento.customer.account.label'|trans }}</label>
-            <div class="controls">
-                <div class="clearfix-oro">
-                    <p class="control-label">
-                        {% if entity.account %}
-                            {% set accountViewGranted = resource_granted('orocrm_account_view') %}
-                            {%- if accountViewGranted -%}
-                                <a href="{{ path('orocrm_account_view', {'id': entity.account.id}) }}">{{ entity.account }}</a>
-                            {%- else -%}
-                                {{ entity.account }}
-                            {%- endif -%}
-                        {% else %}
-                            {% trans %}N/A{% endtrans %}
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">{{ 'orocrm.magento.customer.contact.label'|trans }}</label>
-            <div class="controls">
-                <div class="clearfix-oro">
-                    <p class="control-label">
-                        {% if entity.contact %}
-                            {% set contactViewGranted = resource_granted('orocrm_contact_view') %}
-                            {%- if contactViewGranted -%}
-                                <a href="{{ path('orocrm_contact_view', {'id': entity.contact.id}) }}">{{ entity.contact }}</a>
-                            {%- else -%}
-                                {{ entity.contact }}
-                            {%- endif -%}
-                        {% else %}
-                            {% trans %}N/A{% endtrans %}
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-        </div>
+        {{ ui.renderProperty('orocrm.magento.customer.account.label'|trans, accountData) }}
+        {{ ui.renderProperty('orocrm.magento.customer.contact.label'|trans, contactData) }}
     </div>
 </div>

@@ -6,12 +6,12 @@
         {% if entity.email != null %}
             {% set email = '<a href="mailto: ' ~ email ~ '" title="' ~ email ~ '">' ~ email ~ '</a>'%}
         {% endif %}
-        {{ macros.renderProperty('orocrm.magento.cart.email.label'|trans, email) }}
-        {{ macros.renderProperty('orocrm.magento.cart.items_qty.label'|trans, entity.itemsQty) }}
-        {{ macros.renderProperty('orocrm.magento.cart.status.label'|trans, entity.status|trans) }}
+        {{ ui.renderProperty('orocrm.magento.cart.email.label'|trans, email) }}
+        {{ ui.renderProperty('orocrm.magento.cart.items_qty.label'|trans, entity.itemsQty) }}
+        {{ ui.renderProperty('orocrm.magento.cart.status.label'|trans, entity.status|trans) }}
     </div>
     <div class="responsive-block">
-        {{ macros.renderProperty('orocrm.magento.customer.website.label'|trans, entity.store.website.name) }}
-        {{ macros.renderProperty('orocrm.magento.cart.store.label'|trans, entity.store.name) }}
+        {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.store.website.name) }}
+        {{ ui.renderProperty('orocrm.magento.cart.store.label'|trans, entity.store.name) }}
     </div>
 </div>

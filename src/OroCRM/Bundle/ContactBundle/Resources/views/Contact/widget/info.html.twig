@@ -50,204 +50,107 @@
 
 <div class="widget-content contact-info form-horizontal box-content">
     <div class="responsive-block">
-        <div class="control-group">
-            <label class="control-label">{{ 'orocrm.contact.phones.label'|trans }}</label>
-            <div class="controls">
-                <div class="clearfix-oro">
-                    <div class="control-label">
-                        {% if entity.phones.count %}
-                            {{ _self.renderCollectionWithPrimaryElement(entity.phones, false) }}
-                        {% else %}
-                            {% trans %}N/A{% endtrans %}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
+        {%- set skypeData -%}
+            {%- if entity.skype -%}
+                {{ entity.skype }} {{ skype_button(entity.skype) }}
+            {%- endif -%}
+        {%- endset -%}
 
-        <div class="control-group">
-            <label class="control-label">{{ 'orocrm.contact.emails.label'|trans }}</label>
-            <div class="controls">
-                <div class="clearfix-oro">
-                    <div class="control-label email-field">
-                        {% if entity.emails.count %}
-                            {{ _self.renderCollectionWithPrimaryElement(entity.emails, true) }}
-                        {% else %}
-                            {% trans %}N/A{% endtrans %}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{ ui.renderProperty('orocrm.contact.fax.label'|trans, entity.fax) }}
-
-        <div class="control-group">
-            <label class="control-label">{{ 'orocrm.contact.skype.label'|trans }}</label>
-            <div class="controls">
-                <div class="clearfix-oro">
-                    <p class="control-label">
-                        {% if entity.skype %}
-                            {{ entity.skype }} {{ skype_button(entity.skype) }}
-                        {% else %}
-                            {% trans %}N/A{% endtrans %}
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        {{ ui.renderProperty('orocrm.contact.method.label'|trans, entity.method) }}
-
-        <div class="control-group">
-            <label class="control-label">{{ 'orocrm.contact.social.label'|trans }}</label>
-            <div class="controls">
-                <div class="control-label">
-                    {% if entity.twitter or entity.facebook or entity.googlePlus or entity.linkedIn %}
-                    <ul class="list-inline">
-                        {% if entity.twitter %}
-                            <li>
-                                <a class="no-hash" href="{{ _self.getSocialUrl('orocrm.contact.twitter.label'|trans, entity.twitter) }}" target="_blank" title="Twitter">
-                                    <i class="icon-twitter"></i>
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% if entity.facebook %}
-                            <li>
-                                <a class="no-hash" href="{{ _self.getSocialUrl('orocrm.contact.facebook.label'|trans, entity.facebook) }}" target="_blank" title="Facebook">
-                                    <i class="icon-facebook"></i>
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% if entity.googlePlus %}
-                            <li>
-                                <a class="no-hash" href="{{ _self.getSocialUrl('orocrm.contact.google_plus.label'|trans, entity.googlePlus) }}" target="_blank" title="Google+">
-                                    <i class="icon-google-plus"></i>
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% if entity.linkedIn %}
-                            <li>
-                                <a class="no-hash" href="{{ _self.getSocialUrl('orocrm.contact.linked_in.label'|trans, entity.linkedIn) }}" target="_blank" title="LinkedIn">
-                                    <i class="icon-linkedin"></i>
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                    {% else %}
-                        {% trans %}N/A{% endtrans %}
+        {%- set socialData -%}
+            {%- if entity.twitter or entity.facebook or entity.googlePlus or entity.linkedIn -%}
+                <ul class="list-inline">
+                    {% if entity.twitter %}
+                        <li>
+                            <a class="no-hash" href="{{ _self.getSocialUrl('twitter', entity.twitter) }}" target="_blank" title="Twitter">
+                                <i class="icon-twitter"></i>
+                            </a>
+                        </li>
                     {% endif %}
-                </div>
-            </div>
-        </div>
+                    {% if entity.facebook %}
+                        <li>
+                            <a class="no-hash" href="{{ _self.getSocialUrl('facebook', entity.facebook) }}" target="_blank" title="Facebook">
+                                <i class="icon-facebook"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if entity.googlePlus %}
+                        <li>
+                            <a class="no-hash" href="{{ _self.getSocialUrl('google_plus', entity.googlePlus) }}" target="_blank" title="Google+">
+                                <i class="icon-google-plus"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if entity.linkedIn %}
+                        <li>
+                            <a class="no-hash" href="{{ _self.getSocialUrl('linked_in', entity.linkedIn) }}" target="_blank" title="LinkedIn">
+                                <i class="icon-linkedin"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            {%- endif -%}
+        {%- endset -%}
+
+        {{ ui.renderProperty('orocrm.contact.phones.label'|trans, entity.phones.count ? _self.renderCollectionWithPrimaryElement(entity.phones, false) : null) }}
+        {{ ui.renderProperty('orocrm.contact.emails.label'|trans, entity.emails.count ? _self.renderCollectionWithPrimaryElement(entity.emails, true) : null) }}
+        {{ ui.renderProperty('orocrm.contact.fax.label'|trans, entity.fax) }}
+        {{ ui.renderProperty('orocrm.contact.skype.label'|trans, skypeData) }}
+        {{ ui.renderProperty('orocrm.contact.method.label'|trans, entity.method) }}
+        {{ ui.renderProperty('orocrm.contact.social.label'|trans, socialData) }}
 
         {{ entityExtend.renderDynamicFields(dynamic) }}
     </div>
 
     <div class="responsive-block">
+        {%- set accountsData -%}
+            {%- if entity.accounts.count -%}
+                {% set accountViewGranted = resource_granted('orocrm_account_view') %}
+                {%- for account in entity.accounts -%}
+                    {%- if accountViewGranted -%}
+                        <a href="{{ path('orocrm_account_view', {'id': account.id}) }}">{{ account }}</a>
+                    {%- else -%}
+                        {{ account }}
+                    {%- endif -%}
+                    {% if not loop.last %}, {% endif %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endset -%}
+
+        {%- set birthdayData -%}
+            {{ entity.birthday is not empty ? entity.birthday|oro_format_date : null }}
+            {%- if entity.birthday is not empty -%}
+                &nbsp;({{ entity.birthday|age_string({'default': 'N/A'}) }})
+            {%- endif -%}
+        {%- endset -%}
+
+        {%- set assignedToData -%}
+            {%- if entity.assignedTo -%}
+                {% if resource_granted('oro_user_user_view') %}
+                    <a href="{{ path('oro_user_view', {'id': entity.assignedTo.id}) }}">
+                        {{ entity.assignedTo }}
+                    </a>
+                {% else %}
+                    {{ entity.assignedTo }}
+                {% endif %}
+            {%- endif -%}
+        {%- endset -%}
+
+        {%- set reportsToData -%}
+            {%- if entity.reportsTo -%}
+                <a href="{{ path('orocrm_contact_view', {'id': entity.reportsTo.id}) }}">
+                    {{ entity.reportsTo }}
+                </a>
+            {%- endif -%}
+        {%- endset -%}
 
         {{ ui.renderProperty('orocrm.contact.job_title.label'|trans, entity.jobTitle) }}
-
-        <div class="control-group">
-            <label class="control-label">{{ 'orocrm.contact.accounts.label'|trans }}</label>
-            <div class="controls">
-                <div class="clearfix-oro">
-                    <p class="control-label">
-                        {% if entity.accounts.count > 0 %}
-                            {% set accountViewGranted = resource_granted('orocrm_account_view') %}
-                            {%- for account in entity.accounts -%}
-                                {%- if accountViewGranted -%}
-                                    <a href="{{ path('orocrm_account_view', {'id': account.id}) }}">{{ account }}</a>
-                                {%- else -%}
-                                    {{ account }}
-                                {%- endif -%}
-                                {% if not loop.last %}, {% endif %}
-                            {%- endfor -%}
-                        {% else %}
-                            {% trans %}N/A{% endtrans %}
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label">{{ 'orocrm.contact.birthday.label'|trans }}</label>
-            <div class="controls">
-                <div class="clearfix-oro">
-                    <p class="control-label">
-                        {{ entity.birthday is empty ? 'N/A'|trans : entity.birthday|oro_format_date }}
-                        {% if entity.birthday is not empty %}
-                            ({{ entity.birthday|age_string({'default': 'N/A'}) }})
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-        </div>
-
+        {{ ui.renderProperty('orocrm.contact.accounts.label'|trans, accountsData) }}
+        {{ ui.renderProperty('orocrm.contact.birthday.label'|trans, birthdayData) }}
         {{ ui.renderProperty('orocrm.contact.gender.label'|trans, oro_gender(entity.gender)) }}
         {{ ui.renderProperty('orocrm.contact.source.label'|trans, entity.source) }}
-
-        <div class="control-group">
-            <label class="control-label">{{ 'orocrm.contact.assigned_to.label'|trans }}</label>
-            <div class="controls">
-                <div class="clearfix-oro">
-                    <p class="control-label">
-                        {% if entity.assignedTo %}
-                            {% if resource_granted('oro_user_user_view') %}
-                                <a href="{{ path('oro_user_view', {'id': entity.assignedTo.id}) }}">
-                                    {{ entity.assignedTo }}
-                                </a>
-                            {% else %}
-                                {{ entity.assignedTo }}
-                            {% endif %}
-                        {% else %}
-                            {% trans %}N/A{% endtrans %}
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label">{{ 'orocrm.contact.reports_to.label'|trans }}</label>
-            <div class="controls">
-                <div class="clearfix-oro">
-                    <p class="control-label">
-                        {% if entity.reportsTo %}
-                            <a href="{{ path('orocrm_contact_view', {'id': entity.reportsTo.id}) }}">
-                                {{ entity.reportsTo }}
-                            </a>
-                        {% else %}
-                            {% trans %}N/A{% endtrans %}
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label">{{ 'orocrm.contact.groups.label'|trans }}</label>
-            <div class="controls">
-                <div class="clearfix-oro">
-                    <p class="control-label">
-                        {% if entity.groups.count > 0 %}
-                            {{ entity.groupLabels|join(', ') }}
-                        {% else %}
-                            {% trans %}N/A{% endtrans %}
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label">{{ 'oro.tag.entity_plural_label'|trans  }}</label>
-            <div class="controls">
-                <div class="clearfix-oro">
-                    {{ tag.renderView(entity) }}
-                </div>
-            </div>
-        </div>
+        {{ ui.renderProperty('orocrm.contact.assigned_to.label'|trans, assignedToData) }}
+        {{ ui.renderProperty('orocrm.contact.reports_to.label'|trans, reportsToData) }}
+        {{ ui.renderProperty('orocrm.contact.groups.label'|trans, entity.groups.count ? entity.groupLabels|join(', ') : null) }}
+        {{ ui.renderProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
     </div>
 </div>
