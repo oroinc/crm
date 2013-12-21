@@ -8,7 +8,7 @@
 {% endmacro %}
 
 <div class="widget-content order-info-widget form-horizontal box-content row-fluid">
-    <div class="span6">
+    <div class="responsive-block">
         <div class="control-group">
             {{ _self.renderRow('orocrm.magento.order.status.label'|trans, entity.status|trans) }}
             {{ _self.renderRow('orocrm.magento.order.currency.label'|trans, entity.currency|trans) }}
@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <div class="span6">
+    <div class="responsive-block">
         {{ _self.renderRow('orocrm.magento.order.remote_ip.label'|trans, entity.remoteIp) }}
         {{ _self.renderRow('orocrm.magento.order.payment_method.label'|trans, entity.paymentMethod|trans|capitalize) }}
         {{ _self.renderRow('orocrm.magento.order.payment_details.label'|trans, entity.paymentDetails) }}

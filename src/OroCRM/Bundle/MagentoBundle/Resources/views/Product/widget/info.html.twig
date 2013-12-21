@@ -7,7 +7,7 @@
 {% endmacro %}
 
 <div class="widget-content product-info-widget form-horizontal box-content row-fluid">
-    <div class="span6">
+    <div class="responsive-block">
         {{ _self.renderRow('orocrm.magento.product.name.label'|trans, entity.name) }}
         {{ _self.renderRow('orocrm.magento.product.sku.label'|trans, entity.sku) }}
         {{ _self.renderRow('orocrm.magento.product.type.label'|trans, entity.type) }}
@@ -15,7 +15,7 @@
         {{ _self.renderRow('orocrm.magento.product.special_price.label'|trans, entity.specialPrice) }}
     </div>
 
-    <div class="span6">
+    <div class="responsive-block">
         {{ _self.renderRow('orocrm.magento.product.channel.label'|trans, entity.channel.name) }}
 
         {% set websites = [] %}

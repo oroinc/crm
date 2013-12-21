@@ -1,7 +1,7 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
 <div class="widget-content cart-info-widget form-horizontal box-content row-fluid">
-    <div class="span6">
+    <div class="responsive-block">
         {% set email = entity.email %}
         {% if entity.email != null %}
             {% set email = '<a href="mailto: ' ~ email ~ '" title="' ~ email ~ '">' ~ email ~ '</a>'%}
@@ -10,7 +10,7 @@
         {{ macros.renderProperty('orocrm.magento.cart.items_qty.label'|trans, entity.itemsQty) }}
         {{ macros.renderProperty('orocrm.magento.cart.status.label'|trans, entity.status|trans) }}
     </div>
-    <div class="span6">
+    <div class="responsive-block">
         {{ macros.renderProperty('orocrm.magento.customer.website.label'|trans, entity.store.website.name) }}
         {{ macros.renderProperty('orocrm.magento.cart.store.label'|trans, entity.store.name) }}
     </div>
