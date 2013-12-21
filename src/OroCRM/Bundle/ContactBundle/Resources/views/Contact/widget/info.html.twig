@@ -3,6 +3,8 @@
 {% import 'OroEntityExtendBundle::macros.html.twig' as entityExtend %}
 
 {% macro renderCollectionWithPrimaryElement(collection, isEmail) %}
+    {% import 'OroEmailBundle::macros.html.twig' as email %}
+
     {% set primaryElement = null %}
     {% set secondaryElements = [] %}
 
@@ -19,7 +21,7 @@
             <li>
                 <strong>
                     {% if isEmail %}
-                        <a href="mailto:{{ primaryElement }}" title="{{ primaryElement }}">{{ primaryElement }}</a>
+                        {{ email.email_address_simple(primaryElement) }}
                     {% else %}
                         {{ primaryElement }}
                     {% endif %}
@@ -29,7 +31,7 @@
         {% for secondaryElement in secondaryElements %}
             <li>
                 {% if isEmail %}
-                    <a href="mailto:{{ secondaryElement }}">{{ secondaryElement }}</a>
+                    {{ email.email_address_simple(secondaryElement) }}
                 {% else %}
                     {{ secondaryElement }}
                 {% endif %}
