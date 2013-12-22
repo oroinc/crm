@@ -1,14 +1,7 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroAddressBundle::macros.html.twig' as address %}
 {% import 'OroTagBundle::macros.html.twig' as tag %}
 {% import 'OroEntityExtendBundle::macros.html.twig' as entityExtend %}
-
-{% macro renderAddress(address) %}
-    {% if address.label %}
-        <b>{{ address.label }}</b>
-        <br />
-    {% endif %}
-    {{ address|oro_format_address }}
-{% endmacro %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
@@ -18,10 +11,10 @@
         </div>
         <div class="responsive-block">
             {% if entity.billingAddress is not empty %}
-                {{ ui.renderProperty('orocrm.account.billing_address.label'|trans, _self.renderAddress(entity.billingAddress)) }}
+                {{ ui.renderProperty('orocrm.account.billing_address.label'|trans, address.renderAddress(entity.billingAddress)) }}
             {% endif %}
             {% if entity.shippingAddress is not empty %}
-                {{ ui.renderProperty('orocrm.account.shipping_address.label'|trans, _self.renderAddress(entity.shippingAddress)) }}
+                {{ ui.renderProperty('orocrm.account.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
             {% endif %}
         </div>
     </div>
