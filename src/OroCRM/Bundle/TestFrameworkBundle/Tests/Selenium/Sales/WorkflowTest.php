@@ -15,7 +15,7 @@ class WorkflowTest extends \PHPUnit_Extensions_Selenium2TestCase
         'city' => 'Address City',
         'zipCode' => '10001',
         'country' => 'United States',
-        'state' => 'New York'
+        'region' => 'New York'
     );
 
     protected function setUp()
