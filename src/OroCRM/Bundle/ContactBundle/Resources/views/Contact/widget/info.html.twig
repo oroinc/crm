@@ -2,7 +2,10 @@
 {% import 'OroTagBundle::macros.html.twig' as tag %}
 {% import 'OroEntityExtendBundle::macros.html.twig' as entityExtend %}
 
+entity.fax ?  : null
+
 {% macro renderCollectionWithPrimaryElement(collection, isEmail) %}
+    {% import 'OroUIBundle::macros.html.twig' as ui %}
     {% import 'OroEmailBundle::macros.html.twig' as email %}
 
     {% set primaryElement = null %}
@@ -23,7 +26,7 @@
                     {% if isEmail %}
                         {{ email.email_address_simple(primaryElement) }}
                     {% else %}
-                        {{ primaryElement }}
+                        {{ ui.renderPhone(primaryElement) }}
                     {% endif %}
                 </strong>
             </li>
@@ -33,7 +36,7 @@
                 {% if isEmail %}
                     {{ email.email_address_simple(secondaryElement) }}
                 {% else %}
-                    {{ secondaryElement }}
+                    {{ ui.renderPhone(secondaryElement) }}
                 {% endif %}
             </li>
         {% endfor %}
@@ -94,7 +97,7 @@
 
             {{ ui.renderProperty('orocrm.contact.phones.label'|trans, entity.phones.count ? _self.renderCollectionWithPrimaryElement(entity.phones, false) : null) }}
             {{ ui.renderProperty('orocrm.contact.emails.label'|trans, entity.emails.count ? _self.renderCollectionWithPrimaryElement(entity.emails, true) : null) }}
-            {{ ui.renderProperty('orocrm.contact.fax.label'|trans, entity.fax) }}
+            {{ ui.renderProperty('orocrm.contact.fax.label'|trans, entity.fax ? ui.renderPhone(entity.fax) : null) }}
             {{ ui.renderProperty('orocrm.contact.skype.label'|trans, skypeData) }}
             {{ ui.renderProperty('orocrm.contact.method.label'|trans, entity.method) }}
             {{ ui.renderProperty('orocrm.contact.social.label'|trans, socialData) }}

@@ -49,8 +49,7 @@
     {% set accountInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'url': path('orocrm_account_widget_info', {id: entity.id}),
-            'title': 'Account Information'|trans
+            'url': path('orocrm_account_widget_info', {id: entity.id})
         }) }}
     {% endset %}
     {% set dataBlocks = [
@@ -68,13 +67,12 @@
             {{ oro_widget_render({
                 'widgetType': 'block',
                 'url': path('orocrm_account_widget_contacts', {id: entity.id}),
-                'title': 'orocrm.account.contacts.label'|trans,
                 'cssClass': 'inner-grid'
             }) }}
         {% endset %}
         {% set dataBlocks = dataBlocks|merge([
             {
-                'title': 'Contact Information'|trans,
+                'title': 'orocrm.account.contacts.label'|trans,
                 'subblocks': [
                     {'data' : [accountContactsWidget]}
                 ]
@@ -87,14 +85,13 @@
             {{ oro_widget_render({
                 'widgetType': 'block',
                 'url': path('orocrm_call_widget_calls', {accountId: entity.id}),
-                'title': 'orocrm.call.entity_plural_label'|trans,
                 'alias': 'account_calls',
                 'cssClass': 'inner-grid'
             }) }}
         {% endset %}
         {% set dataBlocks = dataBlocks|merge([
             {
-                'title': 'Related Information'|trans,
+                'title': 'orocrm.call.entity_plural_label'|trans,
                 'subblocks': [
                     {'data' : [accountCallsWidget]}
                 ]

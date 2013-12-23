@@ -1,4 +1,5 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEmailBundle::macros.html.twig' as email %}
 {% import 'OroEntityExtendBundle::macros.html.twig' as entityExtend %}
 
 <div class="widget-content">
@@ -31,9 +32,9 @@
         </div>
 
         <div class="responsive-block">
-            {{ ui.renderProperty('orocrm.sales.lead.email.label'|trans, entity.email ? '<a href="mailto:' ~ entity.email ~ '">' ~ entity.email ~ '</a>' : '') }}
-            {{ ui.renderProperty('orocrm.sales.lead.phone_number.label'|trans, entity.phoneNumber ? '<a href="tel:' ~ entity.phoneNumber ~ '">' ~ entity.phoneNumber ~ '</a>' : '') }}
-            {{ ui.renderProperty('orocrm.sales.lead.website.label'|trans, entity.website ? '<a href="' ~ entity.website ~ '" class="no-hash">' ~ entity.website ~ '</a>' : '') }}
+            {{ ui.renderProperty('orocrm.sales.lead.email.label'|trans, entity.email ? email.email_address_simple(entity.email) : null) }}
+            {{ ui.renderProperty('orocrm.sales.lead.phone_number.label'|trans, entity.phoneNumber ? ui.renderPhone(entity.phoneNumber) : null) }}
+            {{ ui.renderProperty('orocrm.sales.lead.website.label'|trans, entity.website ? ui.renderUrl(entity.website, entity.website, 'no-hash') : null) }}
             {{ ui.renderProperty('orocrm.sales.lead.notes.label'|trans, entity.notes|nl2br) }}
         </div>
     </div>

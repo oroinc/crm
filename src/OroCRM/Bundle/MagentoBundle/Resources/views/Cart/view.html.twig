@@ -50,7 +50,6 @@
         {{ oro_widget_render({
             'widgetType': 'block',
             'url': path('orocrm_magento_cart_widget_items', {id: entity.id}),
-            'title': 'orocrm.magento.cart.cart_items.label'|trans,
             'cssClass': 'inner-grid'
         }) }}
     {% endset %}
@@ -62,8 +61,7 @@
             'subblocks': generalSubblocks
         },
         {
-            'title': 'Related Information'|trans,
-            'class': 'active',
+            'title': 'orocrm.magento.cart.cart_items.label'|trans,
             'subblocks': [
                 {'data' : [cartItemsWidget] }
             ]

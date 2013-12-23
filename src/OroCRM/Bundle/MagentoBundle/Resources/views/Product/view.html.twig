@@ -17,8 +17,7 @@
     {% set productInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'url':         path('orocrm_magento_product_info', {id: entity.id}),
-            'title':      'Product Information'|trans
+            'url':         path('orocrm_magento_product_info', {id: entity.id})
         }) }}
     {% endset %}
 

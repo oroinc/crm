@@ -147,7 +147,7 @@
             {{ oro_widget_render({
                 'widgetType': 'block',
                 'url': path('orocrm_contact_widget_email', {contactId: entity.id}),
-                'title': 'Emails'|trans,
+                'title': 'oro.email.entity_plural_label'|trans,
                 'alias': 'contact_emails'
             }) }}
         {% endset %}
@@ -173,7 +173,7 @@
     {% if relatedInformation is not empty %}
         {% set dataBlocks = dataBlocks|merge([
             {
-                'title': 'Related Information'|trans,
+                'title': 'Communications'|trans,
                 'subblocks': relatedInformation
             }
         ]) %}

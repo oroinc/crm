@@ -51,7 +51,6 @@
         {{ oro_widget_render({
             'widgetType': 'block',
             'url': path('orocrm_magento_order_widget_items', {id: entity.id}),
-            'title': 'orocrm.magento.order.items.label'|trans,
             'cssClass': 'inner-grid'
         }) }}
     {% endset %}
@@ -63,8 +62,7 @@
                 'subblocks': generalSubblocks
             },
         {
-            'title': 'Related Information'|trans,
-            'class': 'active',
+            'title': 'orocrm.magento.order.items.label'|trans,
             'subblocks': [
                 {'data' : [orderItemsWidget] }
             ]
