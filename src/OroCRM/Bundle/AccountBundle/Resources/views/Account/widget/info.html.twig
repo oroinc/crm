@@ -16,15 +16,10 @@
             {% if entity.shippingAddress is not empty %}
                 {{ ui.renderProperty('orocrm.account.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
             {% endif %}
-        </div>
-    </div>
 
-    {% if resource_granted('oro_tag_view_tag_cloud') %}
-    <div class="clearfix">
-        <label class="title">{{ 'oro.tag.entity_plural_label'|trans  }}</label>
-        <div class="clearfix-oro container-fluid">
-            {{ tag.renderView(entity) }}
+            {% if resource_granted('oro_tag_view_tag_cloud') %}
+                {{ ui.renderProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
+            {% endif %}
         </div>
     </div>
-    {% endif %}
 </div>
