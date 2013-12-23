@@ -43,10 +43,10 @@ datagrid:
                 frontend_type: html
                 template: OroCRMCallBundle:Call:Datagrid/Property/contactName.html.twig
             phone:
-                label: orocrm.call.datagrid.phone
+                label: orocrm.call.phone_number.label
             subject:
                 type: twig
-                label: orocrm.call.datagrid.subject
+                label: orocrm.call.subject.label
                 frontend_type: html
                 template: OroCRMCallBundle:Call:Datagrid/Property/callSubject.html.twig
         options:

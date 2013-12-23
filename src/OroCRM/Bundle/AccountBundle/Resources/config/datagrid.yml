@@ -34,13 +34,13 @@ datagrid:
         columns:
             name:
                 type: twig
-                label: orocrm.account.datagrid.account_name
+                label: orocrm.account.name.label
                 frontend_type: html
                 template: OroCRMAccountBundle:Account:Datagrid/Property/accountName.html.twig
             contactEmail:
-                label:   orocrm.account.datagrid.account_email
+                label: orocrm.contact.contactemail.email.label
             contactPhone:
-                label:   orocrm.account.datagrid.account_phone
+                label: orocrm.contact.contactphone.phone.label
         options:
             toolbarOptions:
                 hide: true
