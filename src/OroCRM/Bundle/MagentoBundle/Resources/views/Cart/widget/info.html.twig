@@ -11,6 +11,7 @@
             {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.store.website.name) }}
             {{ ui.renderProperty('orocrm.magento.cart.store.label'|trans, entity.store.name|nl2br) }}
         </div>
+
         <div class="responsive-block">
             {% if entity.billingAddress is not empty %}
                 {{ ui.renderProperty('orocrm.magento.cart.billing_address.label'|trans, address.renderAddress(entity.billingAddress)) }}
