@@ -25,6 +25,9 @@
                         $chart.closest('.clearfix').width($chart.width());
                     };
                     var drawChart = function () {
+                        if (!$chart.get(0).clientWidth) {
+                            return;
+                        }
                         var xLabels = {{ items.labels|json_encode|raw }};
                         var colors = {{ chartColors|json_encode|raw }};
 
