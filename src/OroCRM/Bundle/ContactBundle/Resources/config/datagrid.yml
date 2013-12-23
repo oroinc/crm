@@ -37,9 +37,9 @@ datagrid:
                 frontend_type: html
                 template: OroCRMContactBundle:Contact:Datagrid/Property/contactName.html.twig
             primaryEmail:
-                label: orocrm.contact.datagrid.email
+                label: orocrm.contact.email.label
             primaryPhone:
-                label: orocrm.contact.datagrid.phone
+                label: orocrm.contact.contactphone.phone.label
         options:
             toolbarOptions:
                 hide: true

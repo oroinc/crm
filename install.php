@@ -1,4 +1,7 @@
 <?php
 
-$command = 'app/console doctrine:schema:update --force';
+$opts = getopt('p:');
+
+$command = $opts['p'] . ' app/console doctrine:schema:update --force';
 system($command);
+
