@@ -9,6 +9,7 @@ orocrm:
         controller:
             contact.saved.message: "Contact saved"
             contact_group.saved.message: "Contact Group saved"
+
         #
         # Form
         #
@@ -24,6 +25,7 @@ orocrm:
             view: View
             update: Update
             delete: Delete
+            contact_name: Contact name
 
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\Contact
