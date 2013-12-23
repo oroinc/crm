@@ -103,7 +103,7 @@ orocrm:
 
             datagrid:
                 country: Country
-                region: Region
+                region: State
                 postal_code: Postal Code
                 view: View
                 update: Update

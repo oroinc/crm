@@ -58,7 +58,7 @@ orocrm:
             customer:
                 label: Customer connector
             region:
-                label: Regions connector
+                label: States connector
             cart:
                 label: Cart connector
             product:
