@@ -143,7 +143,7 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
 
         $address->setCountry($country);
         if (!$region->isEmpty()) {
-            $address->setState($region->first());
+            $address->setRegion($region->first());
         }
 
         $account->setShippingAddress($address);

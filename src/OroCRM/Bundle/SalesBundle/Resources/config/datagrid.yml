@@ -131,8 +131,8 @@ datagrid:
                     - address.postalCode as addressPostalCode
                     - >
                         CONCAT(
-                            CASE WHEN address.stateText IS NOT NULL
-                              THEN address.stateText
+                            CASE WHEN address.regionText IS NOT NULL
+                              THEN address.regionText
                               ELSE region.name
                             END, ''
                         ) as regionLabel
@@ -143,7 +143,7 @@ datagrid:
                         - { join: l.status, alias: status }
                         - { join: l.address, alias: address }
                         - { join: address.country, alias: country }
-                        - { join: address.state, alias: region }
+                        - { join: address.region, alias: region }
         columns:
             name:
                 label: orocrm.sales.lead.name.label

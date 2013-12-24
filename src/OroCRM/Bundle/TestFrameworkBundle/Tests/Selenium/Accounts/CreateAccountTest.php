@@ -63,7 +63,7 @@ class CreateAccountTest extends Selenium2TestCase
             ->setStreet('Street')
             ->setCity('City')
             ->setCountry('Kazak')
-            ->setState('Aqm')
+            ->setRegion('Aqm')
             ->setZipCode('Zip Code 000')
             ->save()
             ->assertMessage('Account saved')

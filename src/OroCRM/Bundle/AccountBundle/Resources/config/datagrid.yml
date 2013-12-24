@@ -184,7 +184,7 @@ datagrid:
                     - contactSource.label as contactSourceLabel
                     - email.email as primaryEmail
                     - phone.phone as primaryPhone
-                    - CONCAT(CASE WHEN address.stateText IS NOT NULL THEN address.stateText ELSE region.name END, '') as regionLabel
+                    - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionLabel
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                 from:
@@ -197,7 +197,7 @@ datagrid:
                         - { join: c.groups, alias: contactGroup }
                         - { join: c.source, alias: contactSource }
                         - { join: address.country, alias: country }
-                        - { join: address.state, alias: region }
+                        - { join: address.region, alias: region }
         sorters:
             columns:
                 first_name:
@@ -244,7 +244,7 @@ datagrid:
             countryName:
                 label: orocrm.contact.contactaddress.country.label
             regionLabel:
-                label: orocrm.contact.contactaddress.state.label
+                label: orocrm.contact.contactaddress.region.label
             addressPostalCode:
                 label: orocrm.contact.contactaddress.postal_code.label
             createdAt:
@@ -297,7 +297,7 @@ datagrid:
             countryName:
                 label: orocrm.contact.contactaddress.country.label
             regionLabel:
-                label: orocrm.contact.contactaddress.state.label
+                label: orocrm.contact.contactaddress.region.label
             addressPostalCode:
                 label: orocrm.contact.contactaddress.postal_code.label
         properties:
