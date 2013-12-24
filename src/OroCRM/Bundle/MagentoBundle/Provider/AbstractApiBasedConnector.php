@@ -18,9 +18,17 @@ use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 abstract class AbstractApiBasedConnector extends AbstractConnector implements MagentoConnectorInterface
 {
     const DEFAULT_SYNC_RANGE = '1 month';
+    const IMPORT_MODE_INITIAL = 'initial';
+    const IMPORT_MODE_UPDATE  = 'update';
 
     /** @var \DateTime */
     protected $lastSyncDate;
+
+    /** @var string Last id used for initial import, paginating by created_at assuming that ids always incremented */
+    protected $lastId = null;
+
+    /** @var string initial or update mode */
+    protected $mode;
 
     /** @var \DateInterval */
     protected $syncRange;
@@ -62,11 +70,15 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
      */
     protected function initializeFromContext(ContextInterface $context)
     {
+        parent::initializeFromContext($context);
+
+        // initialize deps
         $this->dependencies      = [];
         $this->entitiesIdsBuffer = [];
-        parent::initializeFromContext($context);
-        $settings = $this->transportSettings->all();
+        $settings                = $this->transportSettings->all();
+        $this->lastId            = $settings['last_id'];
 
+        // validate date boundary
         $startSyncDateKey = 'start_sync_date';
         if (empty($settings[$startSyncDateKey])) {
             throw new \LogicException('Start sync date can\'t be empty');
@@ -75,19 +87,22 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         if (!($settings[$startSyncDateKey] instanceof \DateTime)) {
             $settings[$startSyncDateKey] = new \DateTime($settings[$startSyncDateKey]);
         }
+        $this->lastSyncDate = $settings[$startSyncDateKey];
 
-        $startSyncFrom = $settings[$startSyncDateKey];
         /** @var Channel $channel */
-        $channel = $this->channelRepository
-            ->getOrLoadById($context->getOption('channel'));
+        $channel = $this->channelRepository->getOrLoadById($context->getOption('channel'));
+
+        // set start date and mode depending on status
         $status  = $channel->getStatusesForConnector($this->getType(), Status::STATUS_COMPLETED)->first();
         if (false !== $status) {
             /** @var Status $status */
-            $startSyncFrom = $status->getDate();
+            $this->lastSyncDate = $status->getDate();
+            $this->mode = self::IMPORT_MODE_UPDATE;
+        } else {
+            $this->mode = self::IMPORT_MODE_INITIAL;
         }
 
-        $this->lastSyncDate = $startSyncFrom;
-
+        // validate range
         if (empty($settings['sync_range'])) {
             $settings['sync_range'] = self::DEFAULT_SYNC_RANGE;
         }
@@ -97,6 +112,7 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
             $this->syncRange = \DateInterval::createFromDateString($settings['sync_range']);
         }
 
+        // set batch size
         if (!empty($settings['batch_size'])) {
             $this->batchSize = $settings['batch_size'];
         }
@@ -149,27 +165,19 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
 
     /**
      * @param int       $websiteId
-     * @param \DateTime $startDate
      * @param \DateTime $endDate
      * @param string    $format
      *
      * @return array
      */
-    protected function getBatchFilter($websiteId, \DateTime $startDate, \DateTime $endDate, $format = 'Y-m-d H:i:s')
+    protected function getBatchFilter($websiteId, \DateTime $endDate, $format = 'Y-m-d H:i:s')
     {
-        return [
+        $filter = [
             'complex_filter' => [
                 [
-                    'key'   => 'updated_at',
+                    'key'   => $this->mode == self::IMPORT_MODE_INITIAL ? 'created_at' : 'updated_at',
                     'value' => [
-                        'key'   => 'from',
-                        'value' => $startDate->format($format),
-                    ],
-                ],
-                [
-                    'key'   => 'updated_at',
-                    'value' => [
-                        'key'   => 'to',
+                        'key'   => $this->mode == self::IMPORT_MODE_INITIAL ? 'to' : 'from',
                         'value' => $endDate->format($format),
                     ],
                 ],
@@ -179,6 +187,18 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
                 ]
             ],
         ];
+
+        if (!is_null($this->lastId) && $this->mode == self::IMPORT_MODE_INITIAL) {
+            $filter['complex_filter'][] = [
+                'key'   => 'entity_id',
+                'value' => [
+                    'key'   => 'gt',
+                    'value' => $this->lastId,
+                ],
+            ];
+        }
+
+        return $filter;
     }
 
 
@@ -194,37 +214,42 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
             return false;
         }
 
-        $startDate = $this->lastSyncDate;
-        $endDate   = clone $this->lastSyncDate;
-        $endDate   = $endDate->add($this->syncRange);
-
-        if ($startDate >= $now) {
+        if ($this->lastSyncDate >= $now) {
             return null;
         }
 
         $this->logger->info(
             sprintf(
-                '[%s] Looking for entities from %s to %s ... ',
+                '[%s] Looking for entities created %s then %s and ID = %s ... ',
                 $now->format('d-m-Y H:i:s'),
-                $startDate->format('d-m-Y H:i:s'),
-                $endDate->format('d-m-Y H:i:s')
+                $this->mode == self::IMPORT_MODE_INITIAL ? 'less' : 'more',
+                $this->lastSyncDate->format('d-m-Y H:i:s'),
+                is_null($this->lastId) ? 0 : $this->lastId
             )
         );
 
-        $filters                 = [
+        $filters = [
             $this->getBatchFilter(
                 $this->transportSettings->get('website_id'),
-                $startDate,
-                $endDate
+                $this->lastSyncDate
             )
         ];
         $this->entitiesIdsBuffer = $this->getList($filters, $this->batchSize, true);
 
-        $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
-        $this->lastSyncDate = $endDate;
+        // first run, ignore all data in less then start sync date
+        if (is_null($this->lastId)) {
+            $this->lastId = array_pop($this->entitiesIdsBuffer);
+            $this->lastId = is_null($this->lastId) ? 0 : $this->lastId;
+            $this->entitiesIdsBuffer = [];
+        } else {
+            $k = count($this->entitiesIdsBuffer);
+            $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
+        }
+
+        $this->lastSyncDate->add($this->syncRange);
 
         // no more data to look for
-        if (empty($this->entitiesIdsBuffer) && $endDate >= $now) {
+        if (empty($this->entitiesIdsBuffer) && $this->lastSyncDate >= $now) {
             $result = null;
         } else {
             $result = true;

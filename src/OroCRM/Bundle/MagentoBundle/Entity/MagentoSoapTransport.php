@@ -46,15 +46,23 @@ class MagentoSoapTransport extends Transport
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="date")
+     * @ORM\Column(name="sync_start_date", type="date")
      * @Oro\Versioned()
      */
     protected $syncStartDate;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="last_id", type="integer", nullable=true)
+     * @Oro\Versioned()
+     */
+    protected $lastId;
+
+    /**
      * @var \DateInterval
      *
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(name="sync_range", type="string", length=50)
      */
     protected $syncRange;
 
@@ -246,6 +254,26 @@ class MagentoSoapTransport extends Transport
     }
 
     /**
+     * @param int $lastId
+     *
+     * @return $this
+     */
+    public function setLastId($lastId)
+    {
+        $this->lastId = $lastId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastId()
+    {
+        return $this->lastId;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSettingsBag()
@@ -258,6 +286,7 @@ class MagentoSoapTransport extends Transport
                 'sync_range'      => $this->getSyncRange(),
                 'website_id'      => $this->getWebsiteId(),
                 'start_sync_date' => $this->getSyncStartDate(),
+                'last_id'         => $this->getLastId(),
             ]
         );
     }
