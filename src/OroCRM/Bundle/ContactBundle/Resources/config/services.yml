@@ -6,8 +6,9 @@ parameters:
     orocrm_contact.form.type.contact_select.class:  OroCRM\Bundle\ContactBundle\Form\Type\ContactSelectType
     orocrm_contact.handler.group.class:             OroCRM\Bundle\ContactBundle\Form\Handler\GroupHandler
 
-    orocrm_contact.contact.manager.api.class:       Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-    orocrm_contact.form.type.contact.api.class:     OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType
+    orocrm_contact.contact.manager.api.class:         Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_contact.contact_address.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_contact.form.type.contact.api.class:       OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType
 
     orocrm_contact.group.entity.class:              OroCRM\Bundle\ContactBundle\Entity\Group
     orocrm_contact.group.manager.api.class:         Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
@@ -87,7 +88,7 @@ services:
             - @doctrine.orm.entity_manager
 
     orocrm_contact.contact_address.manager.api:
-        class: %oro_address.address.manager.api.class%
+        class: %orocrm_contact.contact_address.manager.api.class%
         arguments:
             - %orocrm_contact.contact_address.entity.class%
             - @doctrine.orm.entity_manager
