@@ -209,7 +209,7 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
 
         $address->setCountry($country);
         if (!$region->isEmpty()) {
-            $address->setState($region->first());
+            $address->setRegion($region->first());
         }
 
         $contact->addAddress($address);

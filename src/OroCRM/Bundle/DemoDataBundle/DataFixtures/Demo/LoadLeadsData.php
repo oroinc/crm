@@ -220,7 +220,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
         $address->setCountry($country);
         if (!$region->isEmpty()) {
-            $address->setState($region->first());
+            $address->setRegion($region->first());
         }
 
         $lead->setAddress($address);

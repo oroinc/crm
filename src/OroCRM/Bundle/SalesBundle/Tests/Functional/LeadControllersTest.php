@@ -62,7 +62,7 @@ class LeadControllersTest extends WebTestCase
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
         $doc->loadHTML(
-            '<select name="orocrm_sales_lead_form[address][state]" id="orocrm_sales_lead_form_address_state" ' .
+            '<select name="orocrm_sales_lead_form[address][region]" id="orocrm_sales_lead_form_address_region" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
             '<option value="US.CA">California</option> </select>'
@@ -71,7 +71,7 @@ class LeadControllersTest extends WebTestCase
         $form->set($field);
 
         $form['orocrm_sales_lead_form[address][country]'] = 'US';
-        $form['orocrm_sales_lead_form[address][state]'] = 'US.CA';
+        $form['orocrm_sales_lead_form[address][region]'] = 'US.CA';
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);

@@ -146,8 +146,8 @@ workflows:
                                             city: $lead.address.city
                                             postalCode: $lead.address.postalCode
                                             country: $lead.address.country
-                                            state: $lead.address.state
-                                            stateText: $lead.address.stateText
+                                            region: $lead.address.region
+                                            regionText: $lead.address.regionText
                                             namePrefix: $lead.namePrefix
                                             firstName: $lead.firstName
                                             middleName: $lead.middleName
