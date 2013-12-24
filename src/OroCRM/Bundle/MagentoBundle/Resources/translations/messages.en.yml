@@ -58,7 +58,7 @@ orocrm:
             customer:
                 label: Customer connector
             region:
-                label: Regions connector
+                label: States connector
             cart:
                 label: Cart connector
             product:
@@ -206,7 +206,7 @@ orocrm:
             street2.label:       Street 2
             city.label:          City
             postal_code.label:   Zip/Postal code
-            state_text.label:    State
+            region_text.label:   State
             name_prefix.label:   Name prefix
             first_name.label:    First name
             middle_name.label:   Middle name
@@ -221,7 +221,7 @@ orocrm:
             owner.label:         Owner
             types.label:         Types
             country.label:       Country
-            state.label:         State
+            region.label:        State
 
         cartaddress:
             entity_label:        Magento Cart Address
@@ -234,7 +234,7 @@ orocrm:
             city.label:          City
             postal_code.label:   Zip/Postal code
             organization.label:  Organization
-            state_text.label:    State
+            region_text.label:   State
             name_prefix.label:   Name prefix
             first_name.label:    First name
             middle_name.label:   Middle name
@@ -244,4 +244,4 @@ orocrm:
             updated.label:       Updated at
             origin_id.label:     Origin Id
             country.label:       Country
-            state.label:         State
+            region.label:        State

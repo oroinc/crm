@@ -87,8 +87,8 @@ orocrm:
             owner.label:         Owner
             postal_code.label:   Zip/postal code
             primary.label:       Primary
-            state.label:         State
-            state_text.label:    State
+            region.label:        State
+            region_text.label:   State
             street.label:        Street
             street2.label:       Street 2
             types.label:         Types
