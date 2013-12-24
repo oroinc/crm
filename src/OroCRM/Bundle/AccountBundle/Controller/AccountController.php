@@ -42,10 +42,7 @@ class AccountController extends Controller
      */
     public function viewAction(Account $account)
     {
-        return [
-            'entity'  => $account,
-            'dynamic' => $this->getDynamicFields($account)
-        ];
+        return ['entity'  => $account];
     }
 
     /**
@@ -277,5 +274,28 @@ class AccountController extends Controller
         return [
             'account' => $entity ? $entity->getId() : $entity
         ];
+    }
+
+    /**
+     * @Route("/widget/info/{id}", name="orocrm_account_widget_info", requirements={"id"="\d+"})
+     * @AclAncestor("orocrm_account_view")
+     * @Template
+     */
+    public function infoAction(Account $account)
+    {
+        return [
+            'entity'  => $account,
+            'dynamic' => $this->getDynamicFields($account)
+        ];
+    }
+
+    /**
+     * @Route("/widget/contacts/{id}", name="orocrm_account_widget_contacts", requirements={"id"="\d+"})
+     * @AclAncestor("orocrm_contact_view")
+     * @Template
+     */
+    public function contactsAction(Account $account)
+    {
+        return ['entity' => $account];
     }
 }

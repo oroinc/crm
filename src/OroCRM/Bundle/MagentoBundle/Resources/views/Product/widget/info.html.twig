@@ -1,27 +1,23 @@
-{% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroUIBundle::macros.html.twig' as ui %}
 
-{# TODO: Move this to OroUIBundle::macros.html.twig #}
-{% macro renderRow(label, value) %}
-    {% import 'OroUIBundle::macros.html.twig' as macros %}
-    {{ macros.renderAttribute(label, '<p class="control-label">' ~ value|default('N/A'|trans) ~ '</p>') }}
-{% endmacro %}
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderProperty('orocrm.magento.product.name.label'|trans, entity.name) }}
+            {{ ui.renderProperty('orocrm.magento.product.sku.label'|trans, entity.sku) }}
+            {{ ui.renderProperty('orocrm.magento.product.type.label'|trans, entity.type) }}
+            {{ ui.renderProperty('orocrm.magento.product.price.label'|trans, entity.price) }}
+            {{ ui.renderProperty('orocrm.magento.product.special_price.label'|trans, entity.specialPrice) }}
+        </div>
 
-<div class="widget-content product-info-widget form-horizontal box-content row-fluid">
-    <div class="span6">
-        {{ _self.renderRow('orocrm.magento.product.name.label'|trans, entity.name) }}
-        {{ _self.renderRow('orocrm.magento.product.sku.label'|trans, entity.sku) }}
-        {{ _self.renderRow('orocrm.magento.product.type.label'|trans, entity.type) }}
-        {{ _self.renderRow('orocrm.magento.product.price.label'|trans, entity.price) }}
-        {{ _self.renderRow('orocrm.magento.product.special_price.label'|trans, entity.specialPrice) }}
-    </div>
+        <div class="responsive-block">
+            {{ ui.renderProperty('orocrm.magento.product.channel.label'|trans, entity.channel.name) }}
 
-    <div class="span6">
-        {{ _self.renderRow('orocrm.magento.product.channel.label'|trans, entity.channel.name) }}
-
-        {% set websites = [] %}
-        {% for website in entity.websites %}
-            {% set websites = websites|merge([website.name]) %}
-        {% endfor %}
-        {{ _self.renderRow('orocrm.magento.product.websites.label'|trans, websites|join(', ')) }}
+            {% set websites = [] %}
+            {% for website in entity.websites %}
+                {% set websites = websites|merge([website.name]) %}
+            {% endfor %}
+            {{ ui.renderProperty('orocrm.magento.product.websites.label'|trans, websites|join(', ')) }}
+        </div>
     </div>
 </div>

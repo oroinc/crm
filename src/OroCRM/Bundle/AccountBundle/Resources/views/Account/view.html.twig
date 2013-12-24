@@ -1,8 +1,5 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
-{% import 'OroUIBundle::macros.html.twig' as macros %}
-{% import 'OroTagBundle::macros.html.twig' as _tag %}
-{% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
-{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
 {% oro_title_set({params : {"%account.name%": entity.name|default('N/A')} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_AccountBundle_Entity_Account' %}
 
@@ -49,129 +46,60 @@
 {% endblock stats %}
 
 {% block content_data %}
-    {% set id = 'navbarAccountsUpdate' %}
-    {% set dataSubBlocks = [UI.attibuteRow('orocrm.account.name.label', entity.name)] %}
-    {% if resource_granted('oro_tag_view_tag_cloud') %}
-        {% set dataSubBlocks = dataSubBlocks|merge([UI.renderAttribute('oro.tag.entity_plural_label', _tag.renderView(entity))]) %}
-    {% endif %}
+    {% set accountInformationWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('orocrm_account_widget_info', {id: entity.id})
+        }) }}
+    {% endset %}
+    {% set dataBlocks = [
+        {
+            'title': 'General Information'|trans,
+            'class': 'active',
+            'subblocks': [
+                {'data' : [accountInformationWidget]}
+            ]
+        }
+    ] %}
 
-    {% set dataBlocks =
-        [
+    {% if resource_granted('orocrm_contact_view') %}
+        {% set accountContactsWidget %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('orocrm_account_widget_contacts', {id: entity.id}),
+                'cssClass': 'inner-grid'
+            }) }}
+        {% endset %}
+        {% set dataBlocks = dataBlocks|merge([
             {
-                'title': 'General'|trans,
-                'class': 'active',
+                'title': 'orocrm.account.contacts.label'|trans,
                 'subblocks': [
-                    {
-                        'title': 'Basic Information'|trans,
-                        'data' : dataSubBlocks
-                    }
+                    {'data' : [accountContactsWidget]}
                 ]
             }
-        ]
-    %}
-
-    {% set accountAddresses = [] %}
-    {%  if entity.billingAddress is not empty %}
-        {% set accountAddresses = accountAddresses|merge([{'title': 'orocrm.account.billing_address.label'|trans, 'data': [addressView.renderAddress(entity.billingAddress)]}]) %}
+        ]) %}
     {% endif %}
-    {%  if entity.shippingAddress is not empty %}
-        {% set accountAddresses = accountAddresses|merge([{'title': 'orocrm.account.shipping_address.label'|trans, 'data': [addressView.renderAddress(entity.shippingAddress)]}]) %}
-    {% endif %}
-
-    {% if (accountAddresses|length) %}
-        {% set dataBlocks = dataBlocks|merge([{'title' : 'Addresses'|trans, 'subblocks': accountAddresses}])%}
-    {% endif %}
-
-    {#
-        EntityExtend fields START
-    #}
-    {% set additional = [ ] %}
-    {% set additional_fields = [ ] %}
-    {% macro attibuteRow(title, value) %}
-        {% import 'OroUIBundle::macros.html.twig' as UI %}
-        {% macro attribute_data(value) %}
-            <div class="clearfix-oro">
-                <p class="control-label">{{ value|raw }}</p>
-            </div>
-        {% endmacro %}
-        {{ UI.renderAttribute(title, _self.attribute_data(value)) }}
-    {% endmacro %}
-    {% if dynamic|length %}
-        {% for label, item in dynamic %}
-            {% if item is iterable %}
-                {% set data = '' %}
-                {% for value in item.values %}
-                    {% if value.link is defined and value.link != false  %}
-                        {% set data = data ~ '<a href="' ~ value.link ~ '">' ~ value.title ~ '</a>' %}
-                    {% else %}
-                        {% set data = data ~ value.title %}
-                    {% endif %}
-                    {% if not loop.last %}
-                        {% set data = data ~ ', ' %}
-                    {% endif %}
-                {% endfor %}
-                {% set item = data %}
-            {% endif %}
-
-            {% set additional = additional|merge([_self.attibuteRow(label|trans, item)]) %}
-        {% endfor %}
-
-        {% if additional|length %}
-            {% set col = 2 %}
-            {% set attributes = {} %}
-            {% set half = (additional|length / col)|ceil %}
-
-            {% for value in additional %}
-                {% set attributes = attributes | merge([value]) %}
-                {% if loop.index % half == 0  and not loop.last %}
-                    {% set additional_fields = additional_fields|merge([{'title' : null, 'data' : attributes}]) %}
-                    {% set attributes = {} %}
-                {% endif %}
-            {% endfor %}
-
-            {% set additional_fields = additional_fields|merge([{'title' : null, 'data' : attributes}]) %}
-        {% endif %}
-
-        {% set dataBlocks = dataBlocks|merge([ {
-            'title': 'Additional Information',
-            'subblocks': additional_fields
-        }] ) %}
-    {% endif %}
-    {#
-        EntityExtend fields END
-    #}
-
-    {% set dataBlocks = dataBlocks|merge([{
-        'title' : 'orocrm.account.contacts.label'|trans,
-        'subblocks': [
-            {
-                'title' : null,
-                'data' : [dataGrid.renderGrid('account-contacts-view-grid', {account: entity.id}, { cssClass: 'inner-grid' })],
-                'useSpan': false
-            }
-        ]
-    }]) %}
 
     {% if resource_granted('orocrm_call_view') %}
-        {% set dataBlocks = dataBlocks|merge([{
-            'title' : 'orocrm.call.entity_plural_label'|trans,
-            'subblocks': [
-                {
-                    'title' : null,
-                    'data' : [
-                        oro_widget_render({
-                            'widgetType': 'buttons',
-                            'url': path('orocrm_call_widget_calls', {accountId: entity.id}),
-                            'alias': 'account_calls',
-                            'cssClass': 'inner-grid',
-                        })
-                    ],
-                    'useSpan': false
-                }
-            ]
-        }]) %}
+        {% set accountCallsWidget %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('orocrm_call_widget_calls', {accountId: entity.id}),
+                'alias': 'account_calls',
+                'cssClass': 'inner-grid'
+            }) }}
+        {% endset %}
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title': 'orocrm.call.entity_plural_label'|trans,
+                'subblocks': [
+                    {'data' : [accountCallsWidget]}
+                ]
+            }
+        ]) %}
     {% endif %}
 
+    {% set id = 'accountView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}
 {% endblock content_data %}
