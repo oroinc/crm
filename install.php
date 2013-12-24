@@ -1,7 +1,8 @@
 <?php
 
 $opts = getopt('p:');
-
-$command = escapeshellarg($opts['p'] . ' app/console doctrine:schema:update --force --quiet');
+ob_start();
+$command = $opts['p'] . ' app/console doctrine:schema:update --force';
 system($command);
-
+$output = ob_get_contents();
+ob_end_clean(); //Use this instead of ob_flush()

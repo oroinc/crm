@@ -112,53 +112,74 @@
 {% endblock stats %}
 
 {% block content_data %}
-    <div class="contact-info-col-set well-small dark-bg">
-        <div class="clearfix">
-            <div class="responsive-cell contact-info-col">
-                {{
-                    oro_widget_render({
-                        'widgetType': 'block',
-                        'url': path('orocrm_contact_info', {id: entity.id}),
-                        'title': 'Contact Information'|trans
-                    })
-                }}
-            </div>
-            <div class="responsive-cell contact-info-col">
-                {{
-                    oro_widget_render({
-                        'widgetType': 'block',
-                        'contentClasses': [],
-                        'url': path('orocrm_contact_address_book', {id: entity.id}),
-                        'title': 'Address Book'|trans
-                    })
-                }}
-            </div>
+    {% set contactInformationWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('orocrm_contact_info', {id: entity.id}),
+            'title': 'Contact Information'|trans
+        }) }}
+    {% endset %}
 
-            {% if resource_granted('oro_email_view') %}
-                <div class="responsive-cell contact-info-col">
-                    {{
-                        oro_widget_render({
-                            'widgetType': 'block',
-                            'url': path('orocrm_contact_widget_email', {contactId: entity.id}),
-                            'title': 'Emails'|trans,
-                            'alias': 'contact_emails'
-                        })
-                    }}
-                </div>
-            {% endif %}
+    {% set addressBookWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'contentClasses': [],
+            'url': path('orocrm_contact_address_book', {id: entity.id}),
+            'title': 'Address Book'|trans
+        }) }}
+    {% endset %}
 
-            {% if resource_granted('orocrm_call_view') %}
-                <div class="responsive-cell contact-info-col">
-                    {{
-                        oro_widget_render({
-                            'widgetType': 'block',
-                            'url': path('orocrm_call_widget_calls', {contactId: entity.id}),
-                            'title': 'orocrm.call.entity_plural_label'|trans,
-                            'alias': 'contact_calls'
-                        })
-                    }}
-                </div>
-            {% endif %}
-        </div>
-    </div>
+    {% set dataBlocks = [
+        {
+            'title': 'General Information'|trans,
+            'class': 'active',
+            'subblocks': [
+                {'data' : [contactInformationWidget] },
+                {'data' : [addressBookWidget] },
+            ]
+        }
+    ] %}
+
+    {% set relatedInformation = [] %}
+
+    {% if resource_granted('oro_email_view') %}
+        {% set contactEmailsWidget %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('orocrm_contact_widget_email', {contactId: entity.id}),
+                'title': 'oro.email.entity_plural_label'|trans,
+                'alias': 'contact_emails'
+            }) }}
+        {% endset %}
+        {% set relatedInformation = relatedInformation|merge([
+            {'data' : [contactEmailsWidget]}
+        ]) %}
+    {% endif %}
+
+    {% if resource_granted('orocrm_call_view') %}
+        {% set contactCallsWidget %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('orocrm_call_widget_calls', {contactId: entity.id}),
+                'title': 'orocrm.call.entity_plural_label'|trans,
+                'alias': 'contact_calls'
+            }) }}
+        {% endset %}
+        {% set relatedInformation = relatedInformation|merge([
+            {'data' : [contactCallsWidget]}
+        ]) %}
+    {% endif %}
+
+    {% if relatedInformation is not empty %}
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title': 'Communications'|trans,
+                'subblocks': relatedInformation
+            }
+        ]) %}
+    {% endif %}
+
+    {% set id = 'contactView' %}
+    {% set data = {'dataBlocks': dataBlocks} %}
+    {{ parent() }}
 {% endblock content_data %}

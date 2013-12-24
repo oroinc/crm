@@ -229,16 +229,23 @@ workflows:
                             conditions:
                                 @and:
                                     - @empty: $phone_number
+                                    - @not_empty: $shopping_cart.customer
                                     - @not_empty: $shopping_cart.customer.contact
                                     - @not_empty: $shopping_cart.customer.contact.primaryPhone
                             parameters: [$phone_number, $shopping_cart.customer.contact.primaryPhone.phone]
                         - @assign_value:
                             conditions:
-                                @empty: $account
+                                @and:
+                                    - @empty: $account
+                                    - @not_empty: $shopping_cart.customer
+                                    - @not_empty: $shopping_cart.customer.account
                             parameters: [$account, $shopping_cart.customer.account]
                         - @assign_value:
                             conditions:
-                                @empty: $contact
+                                @and:
+                                    - @empty: $contact
+                                    - @not_empty: $shopping_cart.customer
+                                    - @not_empty: $shopping_cart.customer.contact
                             parameters: [$contact, $shopping_cart.customer.contact]
                         - @create_object:
                             class: '\DateTime'
@@ -308,12 +315,14 @@ workflows:
                             conditions:
                                 @and:
                                     - @empty: $email_to
+                                    - @not_empty: $shopping_cart.customer
                                     - @not_empty: $shopping_cart.customer.email
                             parameters: [$email_to, $shopping_cart.customer.email]
                         - @assign_value: #Assign email to as shopping cart customer contact primary email
                             conditions:
                                 @and:
                                     - @empty: $email_to
+                                    - @not_empty: $shopping_cart.customer
                                     - @not_empty: $shopping_cart.customer.contact
                                     - @not_empty: $shopping_cart.customer.contact.primaryEmail
                             parameters: [$email_to, $shopping_cart.customer.contact.primaryEmail.email]
@@ -380,6 +389,13 @@ workflows:
                             arguments:
                                 customer_name: $.result.formattedCustomerName
                                 shopping_cart_id: $shopping_cart.id
+                        - @assign_value:
+                            conditions:
+                                @and:
+                                    - @empty: $account
+                                    - @not_empty: $shopping_cart.customer
+                                    - @not_empty: $shopping_cart.customer.account
+                            parameters: [$account, $shopping_cart.customer.account]
             abandon:
                 label: 'Abandon'
                 message: 'You are going to abandon this shopping cart.'
@@ -531,7 +547,7 @@ workflows:
                             owner: $opportunity_owner
                             budgetAmount: $opportunity_budget
                             contact: $shopping_cart.customer.contact
-                            account: $shopping_cart.customer.account
+                            account: $account
                             status: $.result.opportunity_status
                             notes: $notes
 
@@ -786,6 +802,7 @@ workflows:
                             conditions:
                                 @and:
                                     - @empty: $phone_number
+                                    - @not_empty: $order.customer
                                     - @not_empty: $order.customer.contact
                                     - @not_empty: $order.customer.contact.primaryPhone
                             parameters: [$phone_number, $order.customer.contact.primaryPhone.phone]
@@ -804,6 +821,7 @@ workflows:
                             conditions:
                                 @and:
                                     - @empty: $account
+                                    - @not_empty: $order.customer
                                     - @not_empty: $order.customer.account
                             parameters: [$account, $order.customer.account]
                         - @assign_value:
@@ -820,6 +838,7 @@ workflows:
                             conditions:
                                 @and:
                                     - @empty: $contact
+                                    - @not_empty: $order.customer
                                     - @not_empty: $order.customer.contact
                             parameters: [$contact, $order.customer.contact]
                         - @assign_value:
@@ -917,6 +936,7 @@ workflows:
                                 @and:
                                     - @empty: $email_to
                                     - @not_empty: $order.cart
+                                    - @not_empty: $order.cart.customer
                                     - @not_empty: $order.cart.customer.email
                             parameters: [$email_to, $order.cart.customer.email]
                         - @assign_value: #Assign email to as shopping cart customer contact primary email
