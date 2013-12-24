@@ -1,0 +1,3 @@
+config:
+    paths:
+        'orocrm/call/info-opener': 'bundles/orocrmcall/js/info-opener.js'

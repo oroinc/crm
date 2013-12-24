@@ -1,10 +1,11 @@
 {% extends 'OroDashboardBundle:Dashboard:widget.html.twig' %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
-{% set gridName = 'dashboard-recent-calls-grid' %}
-
 {% block content %}
-    {{ dataGrid.renderGrid(gridName) }}
+    {{ dataGrid.renderGrid('dashboard-recent-calls-grid') }}
+    <script type="text/javascript">
+        require(['orocrm/call/info-opener']);
+    </script>
 {% endblock %}
 
 {% block actions %}
