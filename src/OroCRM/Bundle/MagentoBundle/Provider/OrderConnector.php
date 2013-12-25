@@ -34,42 +34,16 @@ class OrderConnector extends AbstractApiBasedConnector implements MagentoConnect
     /**
      * {@inheritdoc}
      */
-    protected function getBatchFilter($websiteId, \DateTime $startDate, \DateTime $endDate, $format = 'Y-m-d H:i:s')
+    protected function getBatchFilter($websiteId, \DateTime $endDate, $format = 'Y-m-d H:i:s')
     {
-        $store = array_filter(
-            $this->dependencies[self::ALIAS_STORES],
-            function ($store) use ($websiteId) {
-                return $store['website_id'] == $websiteId;
-            }
-        );
-        $store = reset($store);
-
-        if ($store === false) {
-            throw new \LogicException(sprintf('Could not resolve store dependency for website id: %d', $websiteId));
-        }
-
-        return [
-            'complex_filter' => [
-                [
-                    'key'   => 'updated_at',
-                    'value' => [
-                        'key'   => 'from',
-                        'value' => $startDate->format($format),
-                    ],
-                ],
-                [
-                    'key'   => 'updated_at',
-                    'value' => [
-                        'key'   => 'to',
-                        'value' => $endDate->format($format),
-                    ],
-                ],
-                [
-                    'key'   => 'store_id',
-                    'value' => ['key' => 'eq', 'value' => $store['store_id']]
-                ]
+        return parent::getBatchFilter(
+            [
+                'field' => 'store_id',
+                'value' => $this->getStoresByWebsiteId($websiteId)
             ],
-        ];
+            $endDate,
+            $format
+        );
     }
 
     /**
@@ -157,5 +131,13 @@ class OrderConnector extends AbstractApiBasedConnector implements MagentoConnect
     protected function getType()
     {
         return 'order';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getIdFieldName()
+    {
+        return 'increment_id';
     }
 }

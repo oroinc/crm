@@ -120,4 +120,12 @@ class CustomerConnector extends AbstractApiBasedConnector
     {
         return 'customer';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getIdFieldName()
+    {
+        return 'entity_id';
+    }
 }
