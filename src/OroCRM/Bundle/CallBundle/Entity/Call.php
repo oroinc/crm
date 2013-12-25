@@ -124,7 +124,7 @@ class Call
     public function __construct()
     {
         $this->callDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->duration = new \DateTime('00:00:00');
+        $this->duration = new \DateTime('00:00:00', new \DateTimeZone('UTC'));
     }
 
     /**
