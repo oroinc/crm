@@ -20,9 +20,6 @@ class CartConnector extends AbstractApiBasedConnector implements MagentoConnecto
     /** @var int */
     protected $currentPage = 1;
 
-    /** @var array */
-    protected $quoteQueue = [];
-
     /** @var array dependencies data: customer groups, stores */
     protected $dependencies = [];
 
@@ -162,7 +159,7 @@ class CartConnector extends AbstractApiBasedConnector implements MagentoConnecto
 
         // restore empty state
         $this->currentPage = 1;
-        $this->quoteQueue = $this->dependencies = [];
+        $this->dependencies = [];
     }
 
     /**
