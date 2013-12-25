@@ -19,13 +19,12 @@ class ControllersTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateBasicHeader());
         $this->client = static::createClient(
             array(),
             array_merge(ToolsAPI::generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
     }
-    
+
     public function testIndex()
     {
         $this->client->request('GET', $this->client->generate('orocrm_call_index'));
@@ -88,12 +87,10 @@ class ControllersTest extends WebTestCase
     }
 
     /**
-     * TODO "CRM-666"
      * @depends testUpdate
      */
     public function testDelete($id)
     {
-        $this->markTestSkipped("CRM-666");
         $this->client->request(
             'DELETE',
             $this->client->generate('oro_api_delete_call', array('id' => $id))
