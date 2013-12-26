@@ -6,8 +6,10 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 
@@ -36,7 +38,22 @@ class LoadDemoMagentoData extends AbstractFixture implements OrderedFixtureInter
 
         $om->persist($group);
 
-        $this->persistDemoCustomers($om, $website, $store, $group);
+        $transport = new MagentoSoapTransport();
+        $transport->setApiUser('api_user');
+        $transport->setApiKey('api_key');
+        $transport->setWsdlUrl('http://magento.domain');
+        $om->persist($transport);
+
+        $channel = new Channel();
+        $channel->setType('magento');
+        $channel->setConnectors(['customer']);
+        $channel->setName('Magento');
+
+        $channel->setTransport($transport);
+
+        $om->persist($channel);
+
+        $this->persistDemoCustomers($om, $website, $store, $group, $channel);
         $om->flush();
     }
 
@@ -44,10 +61,16 @@ class LoadDemoMagentoData extends AbstractFixture implements OrderedFixtureInter
      * @param ObjectManager                                     $om
      * @param Website                                           $website
      * @param Store                                             $store
-     * @param \OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup $group
+     * @param CustomerGroup $group
+     * @param Channel $channel
      */
-    protected function persistDemoCustomers(ObjectManager $om, Website $website, Store $store, CustomerGroup $group)
-    {
+    protected function persistDemoCustomers(
+        ObjectManager $om,
+        Website $website,
+        Store $store,
+        CustomerGroup $group,
+        Channel $channel
+    ) {
         for ($i = 0; $i < 50; ++$i) {
             $firstName = $this->generateFirstName();
             $lastName  = $this->generateLastName();
@@ -57,6 +80,7 @@ class LoadDemoMagentoData extends AbstractFixture implements OrderedFixtureInter
 
             $customer = new Customer();
             $customer->setWebsite($website)
+                ->setChannel($channel)
                 ->setStore($store)
                 ->setFirstName($firstName)
                 ->setLastName($lastName)
