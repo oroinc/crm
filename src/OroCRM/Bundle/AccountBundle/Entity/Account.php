@@ -54,7 +54,7 @@ class Account extends ExtendAccount implements Taggable
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
      */

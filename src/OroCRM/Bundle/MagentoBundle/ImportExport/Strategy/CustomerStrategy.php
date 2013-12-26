@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
 
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -226,35 +227,23 @@ class CustomerStrategy extends BaseStrategy
             return $this;
         }
 
-        // match account by name because name is unique
-        $matchedAccount = $this->getEntityByCriteria(
-            ['name' => $account->getName()],
-            $account
-        );
-        if ($matchedAccount) {
-            $account = $matchedAccount;
-        } else {
-            $addresses = [
-                AddressType::TYPE_SHIPPING => $account->getShippingAddress(),
-                AddressType::TYPE_BILLING  => $account->getBillingAddress()
-            ];
+        $addresses = [
+            AddressType::TYPE_SHIPPING => $account->getShippingAddress(),
+            AddressType::TYPE_BILLING  => $account->getBillingAddress()
+        ];
 
-            foreach ($addresses as $key => $address) {
-                if (empty($address)) {
-                    continue;
-                }
-
-                //$originAddressId = $address->getId();
-                $address->setId(null);
-                $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
-
-                $this->updateAddressCountryRegion($address, $mageRegionId);
-
-
-                $account->{'set' . ucfirst($key) . 'Address'}($address);
+        /** @var $address AbstractAddress|null */
+        foreach ($addresses as $key => $address) {
+            if (empty($address)) {
+                continue;
             }
-        }
 
+            $address->setId(null);
+            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
+            $this->updateAddressCountryRegion($address, $mageRegionId);
+
+            $account->{'set' . ucfirst($key) . 'Address'}($address);
+        }
         $entity->setAccount($account);
 
         return $this;
