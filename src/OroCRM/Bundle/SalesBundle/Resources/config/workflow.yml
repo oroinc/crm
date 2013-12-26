@@ -553,7 +553,7 @@ workflows:
                                 attribute: $close_date
             requalify:
                 label: 'Requalify'
-                message: 'Performing this transition will reset some data.'
+                message: 'Are you sure you want to restart Sales flow and reset data?'
                 step_to: qualify
                 is_start: true
                 is_unavailable_hidden: true
@@ -563,6 +563,7 @@ workflows:
                 transition_definition: requalify_definition
             edit:
                 label: 'Edit'
+                message: 'Are you sure you want to restart Sales flow?'
                 step_to: qualify
                 is_start: true
                 is_unavailable_hidden: true
