@@ -1,6 +1,6 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroTagBundle::macros.html.twig' as tag %}
-{% import 'OroEntityExtendBundle::macros.html.twig' as entityExtend %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 {% macro renderCollectionWithPrimaryElement(collection, isEmail) %}
     {% import 'OroUIBundle::macros.html.twig' as ui %}
@@ -100,7 +100,7 @@
             {{ ui.renderProperty('orocrm.contact.method.label'|trans, entity.method) }}
             {{ ui.renderProperty('orocrm.contact.social.label'|trans, socialData) }}
 
-            {{ entityExtend.renderDynamicFields(entity) }}
+            {{ entityConfig.renderDynamicFields(entity) }}
         </div>
 
         <div class="responsive-block">

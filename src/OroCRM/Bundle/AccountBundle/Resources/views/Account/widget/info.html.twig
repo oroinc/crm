@@ -1,13 +1,13 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroAddressBundle::macros.html.twig' as address %}
 {% import 'OroTagBundle::macros.html.twig' as tag %}
-{% import 'OroEntityExtendBundle::macros.html.twig' as entityExtend %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ ui.renderProperty('orocrm.account.name.label'|trans, entity.name) }}
-            {{ entityExtend.renderDynamicFields(entity) }}
+            {{ entityConfig.renderDynamicFields(entity) }}
         </div>
         <div class="responsive-block">
             {% if entity.billingAddress is not empty %}

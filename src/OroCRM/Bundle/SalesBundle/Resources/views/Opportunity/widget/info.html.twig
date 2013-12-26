@@ -1,5 +1,5 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
-{% import 'OroEntityExtendBundle::macros.html.twig' as entityExtend %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
@@ -25,7 +25,7 @@
             {{ ui.renderProperty('orocrm.sales.opportunity.probability.label'|trans, entity.probability|length ? entity.probability|oro_format_percent : '') }}
             {{ ui.renderProperty('orocrm.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount|length ? entity.budgetAmount|oro_format_currency, '') }}
 
-            {{ entityExtend.renderDynamicFields(entity) }}
+            {{ entityConfig.renderDynamicFields(entity) }}
         </div>
         <div class="responsive-block">
             {{ ui.renderProperty('orocrm.sales.opportunity.customer_need.label'|trans, entity.customerNeed) }}

@@ -1,6 +1,6 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroEmailBundle::macros.html.twig' as email %}
-{% import 'OroEntityExtendBundle::macros.html.twig' as entityExtend %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
@@ -28,7 +28,7 @@
             {{ ui.renderProperty('orocrm.sales.lead.industry.label'|trans, entity.industry) }}
             {{ ui.renderProperty('orocrm.sales.lead.number_of_employees.label'|trans, entity.numberOfEmployees) }}
 
-            {{ entityExtend.renderDynamicFields(entity) }}
+            {{ entityConfig.renderDynamicFields(entity) }}
         </div>
 
         <div class="responsive-block">
