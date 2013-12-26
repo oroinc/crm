@@ -49,7 +49,7 @@ class CartConnector extends AbstractApiBasedConnector implements MagentoConnecto
             'complex_filter' => [
                 [
                     'key'   => 'store_id',
-                    'value' => ['key' => 'in', 'value' => $stores]
+                    'value' => ['key' => 'in', 'value' => implode(',', $stores)]
                 ]
             ],
         ];
@@ -81,12 +81,10 @@ class CartConnector extends AbstractApiBasedConnector implements MagentoConnecto
 
         $this->logger->info(sprintf('Looking for entities at %d page ... ', $this->currentPage));
 
-        $filters = [
-            $this->getBatchFilter(
-                $this->transportSettings->get('website_id'),
-                $this->lastSyncDate
-            )
-        ];
+        $filters = $this->getBatchFilter(
+            $this->transportSettings->get('website_id'),
+            $this->lastSyncDate
+        );
 
         $this->entitiesIdsBuffer = $this->getList($filters, $this->batchSize, true);
         $this->currentPage++;
