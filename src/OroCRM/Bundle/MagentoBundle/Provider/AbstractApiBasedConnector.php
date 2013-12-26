@@ -171,33 +171,45 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
      */
     protected function getBatchFilter($websiteId, \DateTime $endDate, $format = 'Y-m-d H:i:s')
     {
-        if (!empty($websiteId['value']) && is_array($websiteId['value'])) {
-            $websiteId['value'] = implode(',', $websiteId['value']);
-            $operator = 'in';
+        if (!empty($websiteId['value'])) {
+            $operator   = 'in';
+            $storeValue = is_array($websiteId['value']) ? implode(',', $websiteId['value']) : $websiteId['value'];
+            $storeField = $websiteId['field'];
         } else {
-            $operator = 'eq';
+            $operator   = 'eq';
+            $storeValue = $websiteId;
+            $storeField = 'website_id';
+        }
+
+        $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
+        if ($initMode) {
+            $dateField = 'created_at';
+            $dateKey = 'to';
+        } else {
+            $dateField = 'updated_at';
+            $dateKey = 'from';
         }
 
         $filter = [
             'complex_filter' => [
                 [
-                    'key'   => $this->mode == self::IMPORT_MODE_INITIAL ? 'created_at' : 'updated_at',
+                    'key'   => $dateField,
                     'value' => [
-                        'key'   => $this->mode == self::IMPORT_MODE_INITIAL ? 'to' : 'from',
+                        'key'   => $dateKey,
                         'value' => $endDate->format($format),
                     ],
                 ],
                 [
-                    'key'   => !empty($websiteId['field']) ? $websiteId['field'] : 'website_id',
+                    'key'   => $storeField,
                     'value' => [
                         'key'   => $operator,
-                        'value' => !empty($websiteId['value']) ? $websiteId['value'] : $websiteId
+                        'value' => $storeValue
                     ]
                 ]
             ],
         ];
 
-        if (!is_null($this->lastId) && $this->mode == self::IMPORT_MODE_INITIAL) {
+        if (!is_null($this->lastId) && $initMode) {
             $filter['complex_filter'][] = [
                 'key'   => $this->getIdFieldName(),
                 'value' => [
@@ -223,13 +235,21 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
             return false;
         }
 
+        if ($this->mode == self::IMPORT_MODE_INITIAL) {
+            $dateMessage = 'created less';
+            $message = sprintf(' and ID > %s', $this->lastId);
+        } else {
+            $dateMessage = 'updated more';
+            $message = '';
+        }
+
         $this->logger->info(
             sprintf(
-                '[%s] Looking for entities %s then %s and ID > %s ... ',
+                '[%s] Looking for entities %s then %s%s ... ',
                 $now->format('d-m-Y H:i:s'),
-                $this->mode == self::IMPORT_MODE_INITIAL ? 'created less' : 'updated more',
+                $dateMessage,
                 $this->lastSyncDate->format('d-m-Y H:i:s'),
-                is_null($this->lastId) ? 0 : $this->lastId
+                $message
             )
         );
 
@@ -242,7 +262,7 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         $this->entitiesIdsBuffer = $this->getList($filters, $this->batchSize, true);
 
         // first run, ignore all data in less then start sync date
-        $wasNull = is_null($this->lastId);
+        $wasNull      = is_null($this->lastId);
         $this->lastId = end($this->entitiesIdsBuffer);
         reset($this->entitiesIdsBuffer);
         $this->lastId = $this->lastId === false ? 0 : $this->lastId;
