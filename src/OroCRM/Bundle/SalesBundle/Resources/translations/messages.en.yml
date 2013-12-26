@@ -32,7 +32,7 @@ orocrm:
         opportunitystatus:
             entity_label:         Opportunity Status
             entity_plural_label:  Opportunity Statuses
-            entity_label:         Represent opportunity status
+            entity_description:   Represent opportunity status
             name.label:           Name
             label.label:          Label
         #
