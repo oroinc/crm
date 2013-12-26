@@ -2,31 +2,14 @@
 
 namespace OroCRM\Bundle\AccountBundle\Controller;
 
-use Doctrine\Common\Util\ClassUtils;
-use Doctrine\Common\Util\Inflector;
-
-use Doctrine\ORM\PersistentCollection;
-use Doctrine\ORM\Query;
-
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
-use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
-use Oro\Bundle\EntityConfigBundle\Entity\Repository\OptionSetRelationRepository;
-use Oro\Bundle\EntityConfigBundle\Metadata\EntityMetadata;
-
-use Oro\Bundle\EntityExtendBundle\Extend\ExtendManager;
-
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 class AccountController extends Controller
 {
@@ -136,130 +119,6 @@ class AccountController extends Controller
     }
 
     /**
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * TODO: will be refactored via twig extension
-     */
-    protected function getDynamicFields(Account $entity)
-    {
-        /** @var \Oro\Bundle\EntityConfigBundle\Config\ConfigManager $configManager */
-        $configManager  = $this->get('oro_entity_config.config_manager');
-        $extendProvider = $this->get('oro_entity_config.provider.extend');
-        $entityProvider = $this->get('oro_entity_config.provider.entity');
-        $viewProvider   = $this->get('oro_entity_config.provider.view');
-
-        $fields = $extendProvider->filter(
-            function (ConfigInterface $config) use ($viewProvider, $extendProvider) {
-                $extendConfig = $extendProvider->getConfigById($config->getId());
-
-                return
-                    $config->is('owner', ExtendManager::OWNER_CUSTOM)
-                    && !$config->is('state', ExtendManager::STATE_NEW)
-                    && !$config->is('is_deleted')
-                    && $viewProvider->getConfigById($config->getId())->is('is_displayable')
-                    && !(
-                        in_array($extendConfig->getId()->getFieldType(), array('oneToMany', 'manyToOne', 'manyToMany'))
-                        && $extendProvider->getConfig($extendConfig->get('target_entity'))->is('is_deleted', true)
-                    );
-            },
-            get_class($entity)
-        );
-
-        $dynamicRow = array();
-
-        foreach ($fields as $field) {
-            $fieldName = $field->getId()->getFieldName();
-            $value = $entity->{'get' . ucfirst(Inflector::camelize($fieldName))}();
-
-            /** Prepare DateTime field type */
-            if ($value instanceof \DateTime) {
-                $configFormat = $this->get('oro_config.global')->get('oro_locale.date_format') ? : 'Y-m-d';
-                $value        = $value->format($configFormat);
-            }
-
-            /** Prepare OptionSet field type */
-            if ($field->getId()->getFieldType() == 'optionSet') {
-                /** @var OptionSetRelationRepository */
-                $osr = $configManager->getEntityManager()->getRepository(OptionSetRelation::ENTITY_NAME);
-
-                $model = $extendProvider->getConfigManager()->getConfigFieldModel(
-                    $field->getId()->getClassName(),
-                    $field->getId()->getFieldName()
-                );
-
-                $value = $osr->findByFieldId($model->getId(), $entity->getId());
-                array_walk(
-                    $value,
-                    function (&$item) {
-                        $item = ['title' => $item->getOption()->getLabel()];
-                    }
-                );
-
-                $value['values'] = $value;
-            }
-
-            /** Prepare Relation field type */
-            if ($value instanceof PersistentCollection) {
-                $collection     = $value;
-                $extendConfig   = $extendProvider->getConfigById($field->getId());
-                $titleFieldName = $extendConfig->get('target_title');
-
-                /** generate link for related entities collection */
-                $route       = false;
-                $routeParams = false;
-
-                if (class_exists($extendConfig->get('target_entity'))) {
-                    /** @var EntityMetadata $metadata */
-                    $metadata = $configManager->getEntityMetadata($extendConfig->get('target_entity'));
-                    if ($metadata && $metadata->routeView) {
-                        $route       = $metadata->routeView;
-                        $routeParams = array(
-                            'id' => null
-                        );
-                    }
-
-                    $relationExtendConfig = $extendProvider->getConfig($extendConfig->get('target_entity'));
-                    if ($relationExtendConfig->is('owner', ExtendManager::OWNER_CUSTOM)) {
-                        $route       = 'oro_entity_view';
-                        $routeParams = array(
-                            'entity_id' => str_replace('\\', '_', $extendConfig->get('target_entity')),
-                            'id'        => null
-                        );
-                    }
-                }
-
-                $value = array(
-                    'route'        => $route,
-                    'route_params' => $routeParams,
-                    'values'       => array()
-                );
-
-                foreach ($collection as $item) {
-                    $routeParams['id'] = $item->getId();
-
-                    $title = [];
-                    foreach ($titleFieldName as $fieldName) {
-                        $title[] = $item->{Inflector::camelize('get_' . $fieldName)}();
-                    }
-
-                    $value['values'][] = array(
-                        'id'    => $item->getId(),
-                        'link'  => $route ? $this->generateUrl($route, $routeParams) : false,
-                        'title' => implode(' ', $title)
-                    );
-                }
-            }
-
-            $fieldName = $field->getId()->getFieldName();
-            $dynamicRow[$entityProvider->getConfigById($field->getId())->get('label') ? : $fieldName]
-                       = $value;
-        }
-
-        return $dynamicRow;
-    }
-
-    /**
      * @Route(
      *      "/contact/select/{id}",
      *      name="orocrm_account_contact_select",
@@ -284,8 +143,7 @@ class AccountController extends Controller
     public function infoAction(Account $account)
     {
         return [
-            'entity'  => $account,
-            'dynamic' => $this->getDynamicFields($account)
+            'entity'  => $account
         ];
     }
 
