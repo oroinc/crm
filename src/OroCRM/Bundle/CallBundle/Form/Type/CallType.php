@@ -5,10 +5,6 @@ namespace OroCRM\Bundle\CallBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
 
 use OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber;
 
@@ -81,13 +77,8 @@ class CallType extends AbstractType
             )
             ->add(
                 'duration',
-                'time',
-                array(
-                    'label'        => 'orocrm.call.duration.label',
-                    'required'     => false,
-                    'widget'       => 'single_text',
-                    'with_seconds' => true
-                )
+                'oro_time_interval',
+                array('required' => false, 'label' => 'orocrm.call.duration.label')
             )
             ->add(
                 'direction',

@@ -27,7 +27,7 @@ datagrid:
                 where:
                     and:
                       - locate('/contact/', history.url) <> 0
-                      - history.user = @oro_security.security_facade->geLoggedUserId
+                      - history.user = @oro_security.security_facade->getLoggedUserId
         sorters:
             visitDate: { history.: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
         columns:
