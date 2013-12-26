@@ -45,7 +45,7 @@ class CallController extends Controller
      *      class="OroCRMCallBundle:Call"
      * )
      */
-    public function updateAction(Call $entity = null)
+    public function updateAction(Call $entity)
     {
         return $this->update($entity);
     }
@@ -108,7 +108,7 @@ class CallController extends Controller
             ->getRepository('OroCRMCallBundle:CallDirection')
             ->findOneByName('outgoing');
         $entity->setDirection($callDirection);
-        
+
         if ($contactId) {
             $repository = $this->getDoctrine()->getRepository('OroCRMContactBundle:Contact');
             $contact = $repository->find($contactId);
