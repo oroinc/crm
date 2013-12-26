@@ -181,38 +181,25 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
      */
     protected function updateAddressCountryRegion(AbstractAddress $address, $mageRegionId)
     {
-        /*
-         * @TODO review this implementation
-         */
         $countryCode = $address->getCountry()->getIso2Code();
 
         $country = $this->getAddressCountryByCode($address, $countryCode);
         $address->setCountry($country);
 
         if (!empty($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId])) {
-            $this->mageRegionsCache[$mageRegionId] = $this->getEntityRepository(
+            $this->mageRegionsCache[$mageRegionId] = $this->getEntityByCriteria(
+                ['regionId' => $mageRegionId],
                 'OroCRM\Bundle\MagentoBundle\Entity\Region'
-            )->findOneBy(['regionId' => $mageRegionId]);
+            );
         }
 
         if (!empty($this->mageRegionsCache[$mageRegionId])) {
             $mageRegion   = $this->mageRegionsCache[$mageRegionId];
             $combinedCode = $mageRegion->getCombinedCode();
 
-            // set ISO combined code
-            if ($address->getRegion()) {
-                $address->getRegion()->setCombinedCode($combinedCode);
-            } else {
-                $address->setRegionText($mageRegion->getName());
-            }
-
             $this->regionsCache[$combinedCode] = empty($this->regionsCache[$combinedCode]) ?
-                $this->getEntityOrNull(
-                    $address->getRegion(),
-                    'combinedCode',
-                    'Oro\Bundle\AddressBundle\Entity\Region'
-                ) :
-                $this->regionsCache[$combinedCode];
+                $this->getEntityByCriteria(['combinedCode' => $combinedCode], 'Oro\Bundle\AddressBundle\Entity\Region')
+                : $this->regionsCache[$combinedCode];
 
             // no region found in system db for corresponding magento region, use region text
             if (empty($this->regionsCache[$combinedCode])) {
