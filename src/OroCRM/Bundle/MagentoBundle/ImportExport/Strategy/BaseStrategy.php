@@ -200,7 +200,11 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
             $combinedCode = $mageRegion->getCombinedCode();
 
             // set ISO combined code
-            $address->getRegion()->setCombinedCode($combinedCode);
+            if ($address->getRegion()) {
+                $address->getRegion()->setCombinedCode($combinedCode);
+            } else {
+                $address->setRegionText($mageRegion->getName());
+            }
 
             $this->regionsCache[$combinedCode] = empty($this->regionsCache[$combinedCode]) ?
                 $this->getEntityOrNull(

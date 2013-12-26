@@ -86,7 +86,7 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         if (!($settings[$startSyncDateKey] instanceof \DateTime)) {
             $settings[$startSyncDateKey] = new \DateTime($settings[$startSyncDateKey]);
         }
-        $this->lastSyncDate = $settings[$startSyncDateKey];
+        $this->lastSyncDate = clone $settings[$startSyncDateKey];
 
         /** @var Channel $channel */
         $channel = $this->channelRepository->getOrLoadById($context->getOption('channel'));
@@ -223,13 +223,9 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
             return false;
         }
 
-        if ($this->lastSyncDate >= $now) {
-            return null;
-        }
-
         $this->logger->info(
             sprintf(
-                '[%s] Looking for entities %s then %s and ID = %s ... ',
+                '[%s] Looking for entities %s then %s and ID > %s ... ',
                 $now->format('d-m-Y H:i:s'),
                 $this->mode == self::IMPORT_MODE_INITIAL ? 'created less' : 'updated more',
                 $this->lastSyncDate->format('d-m-Y H:i:s'),
@@ -246,17 +242,16 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         $this->entitiesIdsBuffer = $this->getList($filters, $this->batchSize, true);
 
         // first run, ignore all data in less then start sync date
+        $wasNull = is_null($this->lastId);
         $this->lastId = end($this->entitiesIdsBuffer);
-        $this->lastId = $this->lastId != false ? $this->lastId : null;
-
-        // reset array pointer back to start
         reset($this->entitiesIdsBuffer);
+        $this->lastId = $this->lastId === false ? 0 : $this->lastId;
 
-        if (!is_null($this->lastId)) {
+        if ($wasNull) {
+            $this->entitiesIdsBuffer = [];
+        } else {
             $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
         }
-
-        $this->lastSyncDate->add($this->syncRange);
 
         // no more data to look for
         if (empty($this->entitiesIdsBuffer) && $this->lastSyncDate >= $now) {
@@ -264,6 +259,8 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         } else {
             $result = true;
         }
+
+        $this->lastSyncDate->add($this->syncRange);
 
         return $result;
     }
