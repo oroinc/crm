@@ -3,6 +3,12 @@
     "description": "OroCRM",
     "homepage": "https://github.com/orocrm/crm.git",
     "license": "The Open Software License version 3.0",
+    "authors": [
+        {
+            "name": "Oro, Inc",
+            "homepage": "http://www.orocrm.com"
+        }
+    ],
     "autoload": {
         "psr-0": {
             "OroCRM\\Bundle": "src/"
