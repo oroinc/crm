@@ -275,7 +275,14 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         }
 
         // no more data to look for
-        if (empty($this->entitiesIdsBuffer) && $this->lastSyncDate >= $now) {
+        if ($initMode) {
+            $lastSyncDate = $this->lastSyncDate;
+        } else {
+            $lastSyncDate = clone $this->lastSyncDate;
+            $lastSyncDate->add($this->syncRange);
+        }
+
+        if (empty($this->entitiesIdsBuffer) && $lastSyncDate >= $now) {
             $result = null;
         } else {
             $result = true;
