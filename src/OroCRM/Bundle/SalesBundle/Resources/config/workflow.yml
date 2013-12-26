@@ -267,14 +267,16 @@ workflows:
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 order: 10
                 allowed_transitions:
+                    - edit_qualify
                     - develop
                 view_attributes:
                     - { attribute: contact, view_type: orocrm_contact }
             develop:
                 label: 'Develop'
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
-                order: 10
+                order: 20
                 allowed_transitions:
+                    - edit_develop
                     - close_as_won
                     - close_as_lost
                 view_attributes:
@@ -296,6 +298,12 @@ workflows:
                     - { attribute: close_revenue, view_type: currency }
                     - { attribute: close_date, view_type: date }
         attributes:
+            opportunity_name:
+                label: orocrm.sales.opportunity.name.label
+                type: string
+            notes:
+                label: orocrm.sales.lead.notes.label
+                type: string
             opportunity:
                 label: orocrm.sales.opportunity.entity_label
                 type: entity
@@ -348,6 +356,75 @@ workflows:
                 is_start: true
                 is_hidden: true
                 transition_definition: qualify_definition
+            edit_qualify:
+                label: 'Edit'
+                step_to: qualify
+                is_unavailable_hidden: true
+                transition_definition: edit_qualify_definition
+                frontend_options:
+                    icon: 'icon-edit'
+                form_options:
+                    attribute_fields:
+                        opportunity_name:
+                            form_type: text
+                            options:
+                                required: true
+                                constraints:
+                                  - NotBlank: ~
+                        account:
+                            form_type: orocrm_account_select
+                            options:
+                                required: false
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false
+                    attribute_default_values:
+                        opportunity_name: $opportunity.name
+                        account: $opportunity.account
+                        notes: $opportunity.notes
+            edit_develop:
+                label: 'Edit'
+                step_to: develop
+                is_unavailable_hidden: true
+                transition_definition: develop_definition
+                frontend_options:
+                    icon: 'icon-edit'
+                form_options:
+                    attribute_fields:
+                        contact:
+                            form_type: orocrm_contact_select
+                            options:
+                                required: false
+                        account:
+                            form_type: orocrm_account_select
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        budget_amount:
+                            form_type: oro_money
+                            options:
+                                required: false
+                                constraints:
+                                    - Range:
+                                        min: 0
+                        probability:
+                            form_type: percent
+                            options:
+                                required: false
+                                constraints:
+                                    - Range:
+                                        min: 0
+                                        max: 100
+                        customer_need:
+                            form_type: text
+                            options:
+                                required: false
+                        proposed_solution:
+                            form_type: text
+                            options:
+                                required: false
             develop:
                 label: 'Develop'
                 step_to: develop
@@ -490,10 +567,15 @@ workflows:
                 is_start: true
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-pencil'
-                    class: 'btn-success'
+                    icon: 'icon-edit'
                 transition_definition: edit_definition
         transition_definitions:
+            edit_qualify_definition:
+                post_actions: # copy attributes to opportunity properties
+                    - @assign_value:
+                        - [$opportunity.name, $opportunity_name]
+                        - [$opportunity.account, $account]
+                        - [$opportunity.notes, $notes]
             qualify_definition:
                 conditions: # if opportunity.status = "in_progress"
                     @equal: [$opportunity.status.name, 'in_progress']
