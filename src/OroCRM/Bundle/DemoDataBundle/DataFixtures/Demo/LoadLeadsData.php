@@ -1,7 +1,6 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
-use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -16,12 +15,15 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
+use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
+use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
 
+use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
@@ -49,6 +51,9 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /** @var  EntityManager */
     protected $em;
 
+    /** @var  ConfigManager */
+    protected $configManager;
+
     /**
      * {@inheritDoc}
      */
@@ -56,6 +61,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $this->container = $container;
         $this->workflowManager = $container->get('oro_workflow.manager');
+        $this->configManager = $container->get('oro_entity_config.config_manager');
     }
 
     /**
@@ -65,6 +71,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $this->initSupportingEntities($manager);
         $this->loadLeads();
+        $this->loadSources();
     }
 
     protected function initSupportingEntities(ObjectManager $manager = null)
@@ -75,6 +82,34 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
         $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
         $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
+    }
+
+    public function loadSources()
+    {
+        /** @var FieldConfigModel $configFieldModel */
+        $configFieldModel = $this->configManager->getConfigFieldModel(
+            'OroCRM\Bundle\SalesBundle\Entity\Lead',
+            'extend_source'
+        );
+        /** @var OptionSet[] $sources */
+        $sources = $configFieldModel->getOptions()->toArray();
+        $randomSource = count($sources)-1;
+
+        $leads = $this->em->getRepository('OroCRMSalesBundle:Lead')->findAll();
+
+        foreach ($leads as $lead) {
+            /** @var Lead $lead */
+            $source = $sources[rand(0, $randomSource)];
+            $optionSetRelation = new OptionSetRelation();
+            $optionSetRelation->setData(
+                null,
+                $lead->getId(),
+                $configFieldModel,
+                $source
+            );
+            $this->persist($this->em, $optionSetRelation);
+        }
+        $this->flush($this->em);
     }
 
     public function loadLeads()
