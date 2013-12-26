@@ -45,7 +45,7 @@ class CartConnector extends AbstractApiBasedConnector implements MagentoConnecto
     {
         $stores = $this->getStoresByWebsiteId($websiteId);
 
-        return [
+        $filter = [
             'complex_filter' => [
                 [
                     'key'   => 'store_id',
@@ -53,6 +53,18 @@ class CartConnector extends AbstractApiBasedConnector implements MagentoConnecto
                 ]
             ],
         ];
+
+        if ($this->mode == static::IMPORT_MODE_UPDATE) {
+            $filter['complex_filter'][] = [
+                'key'   => 'updated_at',
+                'value' => [
+                    'key'   => 'from',
+                    'value' => $endDate->format($format),
+                ],
+            ];
+        }
+
+        return $filter;
     }
 
     /**
@@ -157,7 +169,6 @@ class CartConnector extends AbstractApiBasedConnector implements MagentoConnecto
 
         // restore empty state
         $this->currentPage = 1;
-        $this->dependencies = [];
     }
 
     /**
