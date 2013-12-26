@@ -127,7 +127,12 @@ class AbstractNormalizer implements SerializerAwareInterface
      */
     public function denormalizePaymentDetails($paymentDetails)
     {
-        if (!empty($paymentDetails['cc_last4'])) {
+        if (!empty($paymentDetails['cc_type'])) {
+            $paymentDetails['cc_type'] = trim($paymentDetails['cc_type']);
+            $paymentDetails['cc_last4'] = trim($paymentDetails['cc_last4']);
+        }
+
+        if (!empty($paymentDetails['cc_type']) && !empty($paymentDetails['cc_last4'])) {
             $paymentDetails = sprintf(
                 "Card [%s, %s]",
                 $paymentDetails['cc_type'],

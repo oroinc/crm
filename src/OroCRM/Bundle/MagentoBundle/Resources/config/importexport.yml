@@ -111,6 +111,7 @@ services:
           - @oro_integration.logger.strategy
           - @orocrm_magento.mage.customer_connector
           - @orocrm_magento.mage.store_connector
+          - @doctrine.orm.entity_manager
         tags:
           - { name: oro_integration.connector, type: cart, channel_type: magento }
 

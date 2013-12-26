@@ -2,13 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
-use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
-class CartConnector extends AbstractConnector implements MagentoConnectorInterface, ExtensionAwareInterface
+class CartConnector extends AbstractApiBasedConnector implements MagentoConnectorInterface, ExtensionAwareInterface
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart';
     const CONNECTOR_LABEL     = 'orocrm.magento.connector.cart.label';
@@ -20,41 +20,98 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
     /** @var int */
     protected $currentPage = 1;
 
-    /** @var array */
-    protected $quoteQueue = [];
-
     /** @var array dependencies data: customer groups, stores */
     protected $dependencies = [];
 
     /** @var CustomerConnector */
     protected $customerConnector;
 
-    /** @var StoreConnector */
-    protected $storeConnector;
-
     public function __construct(
         ContextRegistry $contextRegistry,
         LoggerStrategy $logger,
         CustomerConnector $customerConnector,
-        StoreConnector $storeConnector
+        StoreConnector $storeConnector,
+        EntityManager $em
     ) {
-        parent::__construct($contextRegistry, $logger);
+        parent::__construct($contextRegistry, $logger, $em, $storeConnector);
 
         $this->customerConnector = $customerConnector;
-        $this->storeConnector    = $storeConnector;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function doRead()
+    protected function getBatchFilter($websiteId, \DateTime $endDate, $format = 'Y-m-d H:i:s')
     {
-        $this->preLoadDependencies();
-        $result = $this->getNextItem();
+        $stores = $this->getStoresByWebsiteId($websiteId);
 
-        if (empty($result)) {
-            return null; // no more data
+        $filter = [
+            'complex_filter' => [
+                [
+                    'key'   => 'store_id',
+                    'value' => ['key' => 'in', 'value' => implode(',', $stores)]
+                ]
+            ],
+        ];
+
+        if ($this->mode == static::IMPORT_MODE_UPDATE) {
+            $filter['complex_filter'][] = [
+                'key'   => 'updated_at',
+                'value' => [
+                    'key'   => 'from',
+                    'value' => $endDate->format($format),
+                ],
+            ];
         }
+
+        return $filter;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getList($filters = [], $limit = null, $idsOnly = true)
+    {
+        $quoteQueue = $this->getQuoteList(
+            $filters,
+            ['page' => $this->currentPage, 'pageSize' => self::PAGE_SIZE]
+        );
+
+        return $quoteQueue;
+    }
+
+    /**
+     * Load entities ids list
+     *
+     * @return bool|null
+     */
+    protected function findEntitiesToProcess()
+    {
+        if (!empty($this->entitiesIdsBuffer)) {
+            return false;
+        }
+
+        $this->logger->info(sprintf('Looking for entities at %d page ... ', $this->currentPage));
+
+        $filters = $this->getBatchFilter(
+            $this->transportSettings->get('website_id'),
+            $this->lastSyncDate
+        );
+
+        $this->entitiesIdsBuffer = $this->getList($filters, $this->batchSize, true);
+        $this->currentPage++;
+
+        $this->logger->info(sprintf('%d records', count($this->entitiesIdsBuffer), $this->currentPage));
+
+        return empty($this->entitiesIdsBuffer) ? null : $this->entitiesIdsBuffer;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData($id, $dependenciesInclude = false, $onlyAttributes = null)
+    {
+        $result = $id;
 
         // fill related entities data
         $store                      = $this->getStoreDataById($result->store_id);
@@ -68,43 +125,7 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
         $result->customer_group_code = $customer_group['customer_group_code'];
         $result->customer_group_name = $customer_group['name'];
 
-        $result = ConverterUtils::objectToArray($result);
-
-        return (array)$result;
-    }
-
-    /**
-     * Return next quote data from loaded queue or remote API
-     *
-     * @return array
-     */
-    protected function getNextItem()
-    {
-        $store   = $this->getStoreDataByWebsiteId(
-            $this->transportSettings->get('website_id')
-        );
-        $filters = [
-            'complex_filter' => [
-                [
-                    'key'   => 'store_id',
-                    'value' => ['key' => 'eq', 'value' => $store['store_id']]
-                ]
-            ],
-        ];
-
-        if (empty($this->quoteQueue)) {
-            $this->logger->info(sprintf('Looking for entities at %d page ... ', $this->currentPage));
-
-            $this->quoteQueue = $this->getQuoteList(
-                $filters,
-                ['page' => $this->currentPage, 'pageSize' => self::PAGE_SIZE]
-            );
-
-            $this->logger->info(sprintf('%d records', count($this->quoteQueue), $this->currentPage));
-            $this->currentPage++;
-        }
-
-        return array_shift($this->quoteQueue);
+        return ConverterUtils::objectToArray($result);
     }
 
     /**
@@ -148,7 +169,6 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
 
         // restore empty state
         $this->currentPage = 1;
-        $this->quoteQueue = $this->dependencies = [];
     }
 
     /**
@@ -165,23 +185,6 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
     }
 
     /**
-     * @param int $websiteId
-     *
-     * @return mixed
-     */
-    protected function getStoreDataByWebsiteId($websiteId)
-    {
-        $store = array_filter(
-            $this->dependencies[self::ALIAS_STORES],
-            function ($store) use ($websiteId) {
-                return $store['website_id'] == $websiteId;
-            }
-        );
-
-        return reset($store);
-    }
-
-    /**
      * @param $id
      *
      * @return array
@@ -194,12 +197,8 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
     /**
      * Load stores and customer groups data
      */
-    public function preLoadDependencies()
+    public function loadDependencies()
     {
-        if (!empty($this->dependencies)) {
-            return;
-        }
-
         foreach ([self::ALIAS_GROUPS, self::ALIAS_STORES, self::ALIAS_WEBSITES] as $item) {
             switch ($item) {
                 case self::ALIAS_GROUPS:
@@ -215,5 +214,21 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
                     break;
             }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getType()
+    {
+        return 'cart';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getIdFieldName()
+    {
+        return 'entity_id';
     }
 }

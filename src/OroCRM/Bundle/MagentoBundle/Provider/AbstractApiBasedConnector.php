@@ -18,9 +18,17 @@ use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 abstract class AbstractApiBasedConnector extends AbstractConnector implements MagentoConnectorInterface
 {
     const DEFAULT_SYNC_RANGE = '1 month';
+    const IMPORT_MODE_INITIAL = 'initial';
+    const IMPORT_MODE_UPDATE  = 'update';
 
     /** @var \DateTime */
     protected $lastSyncDate;
+
+    /** @var string Last id used for initial import, paginating by created_at assuming that ids always incremented */
+    protected $lastId = null;
+
+    /** @var string initial or update mode */
+    protected $mode;
 
     /** @var \DateInterval */
     protected $syncRange;
@@ -49,8 +57,8 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
     public function __construct(
         ContextRegistry $contextRegistry,
         LoggerStrategy $logger,
-        EntityManager $em,
-        StoreConnector $storeConnector
+        EntityManager $em = null,
+        StoreConnector $storeConnector = null
     ) {
         parent::__construct($contextRegistry, $logger);
         $this->channelRepository = $em->getRepository('OroIntegrationBundle:Channel');
@@ -62,11 +70,14 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
      */
     protected function initializeFromContext(ContextInterface $context)
     {
+        parent::initializeFromContext($context);
+
+        // initialize deps
         $this->dependencies      = [];
         $this->entitiesIdsBuffer = [];
-        parent::initializeFromContext($context);
-        $settings = $this->transportSettings->all();
+        $settings                = $this->transportSettings->all();
 
+        // validate date boundary
         $startSyncDateKey = 'start_sync_date';
         if (empty($settings[$startSyncDateKey])) {
             throw new \LogicException('Start sync date can\'t be empty');
@@ -75,19 +86,22 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         if (!($settings[$startSyncDateKey] instanceof \DateTime)) {
             $settings[$startSyncDateKey] = new \DateTime($settings[$startSyncDateKey]);
         }
+        $this->lastSyncDate = clone $settings[$startSyncDateKey];
 
-        $startSyncFrom = $settings[$startSyncDateKey];
         /** @var Channel $channel */
-        $channel = $this->channelRepository
-            ->getOrLoadById($context->getOption('channel'));
+        $channel = $this->channelRepository->getOrLoadById($context->getOption('channel'));
+
+        // set start date and mode depending on status
         $status  = $channel->getStatusesForConnector($this->getType(), Status::STATUS_COMPLETED)->first();
         if (false !== $status) {
             /** @var Status $status */
-            $startSyncFrom = $status->getDate();
+            $this->lastSyncDate = clone $status->getDate();
+            $this->mode = self::IMPORT_MODE_UPDATE;
+        } else {
+            $this->mode = self::IMPORT_MODE_INITIAL;
         }
 
-        $this->lastSyncDate = $startSyncFrom;
-
+        // validate range
         if (empty($settings['sync_range'])) {
             $settings['sync_range'] = self::DEFAULT_SYNC_RANGE;
         }
@@ -97,6 +111,7 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
             $this->syncRange = \DateInterval::createFromDateString($settings['sync_range']);
         }
 
+        // set batch size
         if (!empty($settings['batch_size'])) {
             $this->batchSize = $settings['batch_size'];
         }
@@ -118,12 +133,12 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
             return null;
         }
 
-        // keep going till endDate >= NOW
         if (!empty($this->entitiesIdsBuffer)) {
             $entityId = array_shift($this->entitiesIdsBuffer);
+            $id = is_object($entityId) && !empty($entityId->entity_id) ? $entityId->entity_id : $entityId;
 
             $now = new \DateTime('now', new \DateTimeZone('UTC'));
-            $this->logger->info(sprintf('[%s] loading entity ID: %d', $now->format('d-m-Y H:i:s'), $entityId));
+            $this->logger->info(sprintf('[%s] loading entity ID: %d', $now->format('d-m-Y H:i:s'), $id));
 
             $data = $this->getData($entityId, true);
         } else {
@@ -148,37 +163,63 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
     }
 
     /**
-     * @param int       $websiteId
-     * @param \DateTime $startDate
+     * @param int|array $websiteId
      * @param \DateTime $endDate
      * @param string    $format
      *
      * @return array
      */
-    protected function getBatchFilter($websiteId, \DateTime $startDate, \DateTime $endDate, $format = 'Y-m-d H:i:s')
+    protected function getBatchFilter($websiteId, \DateTime $endDate, $format = 'Y-m-d H:i:s')
     {
-        return [
+        if (!empty($websiteId['value'])) {
+            $operator   = 'in';
+            $storeValue = is_array($websiteId['value']) ? implode(',', $websiteId['value']) : $websiteId['value'];
+            $storeField = $websiteId['field'];
+        } else {
+            $operator   = 'eq';
+            $storeValue = $websiteId;
+            $storeField = 'website_id';
+        }
+
+        $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
+        if ($initMode) {
+            $dateField = 'created_at';
+            $dateKey = 'to';
+        } else {
+            $dateField = 'updated_at';
+            $dateKey = 'from';
+        }
+
+        $filter = [
             'complex_filter' => [
                 [
-                    'key'   => 'updated_at',
+                    'key'   => $dateField,
                     'value' => [
-                        'key'   => 'from',
-                        'value' => $startDate->format($format),
-                    ],
-                ],
-                [
-                    'key'   => 'updated_at',
-                    'value' => [
-                        'key'   => 'to',
+                        'key'   => $dateKey,
                         'value' => $endDate->format($format),
                     ],
                 ],
                 [
-                    'key'   => 'website_id',
-                    'value' => ['key' => 'eq', 'value' => $websiteId]
+                    'key'   => $storeField,
+                    'value' => [
+                        'key'   => $operator,
+                        'value' => $storeValue
+                    ]
                 ]
             ],
         ];
+
+        if (!is_null($this->lastId) && $initMode) {
+            $filter['complex_filter'][] = [
+                'key'   => $this->getIdFieldName(),
+                'value' => [
+                    'key'   => 'gt',
+                    'value' => $this->lastId,
+                ],
+            ];
+        }
+
+        return $filter;
     }
 
 
@@ -194,41 +235,60 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
             return false;
         }
 
-        $startDate = $this->lastSyncDate;
-        $endDate   = clone $this->lastSyncDate;
-        $endDate   = $endDate->add($this->syncRange);
-
-        if ($startDate >= $now) {
-            return null;
+        $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
+        if ($initMode) {
+            $dateMessage = 'created less';
+            $message = sprintf(' and ID > %s', $this->lastId);
+        } else {
+            $dateMessage = 'updated more';
+            $message = '';
         }
 
         $this->logger->info(
             sprintf(
-                '[%s] Looking for entities from %s to %s ... ',
+                '[%s] Looking for entities %s then %s%s ... ',
                 $now->format('d-m-Y H:i:s'),
-                $startDate->format('d-m-Y H:i:s'),
-                $endDate->format('d-m-Y H:i:s')
+                $dateMessage,
+                $this->lastSyncDate->format('d-m-Y H:i:s'),
+                $message
             )
         );
 
-        $filters                 = [
+        $filters = [
             $this->getBatchFilter(
                 $this->transportSettings->get('website_id'),
-                $startDate,
-                $endDate
+                $this->lastSyncDate
             )
         ];
         $this->entitiesIdsBuffer = $this->getList($filters, $this->batchSize, true);
 
-        $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
-        $this->lastSyncDate = $endDate;
+        // first run, ignore all data in less then start sync date
+        $wasNull      = is_null($this->lastId);
+        $this->lastId = end($this->entitiesIdsBuffer);
+        reset($this->entitiesIdsBuffer);
+        $this->lastId = $this->lastId === false ? 0 : $this->lastId;
+
+        if ($wasNull && $initMode) {
+            $this->entitiesIdsBuffer = [];
+        } else {
+            $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
+        }
 
         // no more data to look for
-        if (empty($this->entitiesIdsBuffer) && $endDate >= $now) {
+        if ($initMode) {
+            $lastSyncDate = $this->lastSyncDate;
+        } else {
+            $lastSyncDate = clone $this->lastSyncDate;
+            $lastSyncDate->add($this->syncRange);
+        }
+
+        if (empty($this->entitiesIdsBuffer) && $lastSyncDate >= $now) {
             $result = null;
         } else {
             $result = true;
         }
+
+        $this->lastSyncDate->add($this->syncRange);
 
         return $result;
     }
@@ -236,21 +296,30 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
     /**
      * @param $websiteId
      *
+     * @return array
      * @throws \LogicException
      */
-    protected function getStoreByWebsiteId($websiteId)
+    protected function getStoresByWebsiteId($websiteId)
     {
-        $store = array_filter(
+        $stores = array_filter(
             $this->dependencies[self::ALIAS_STORES],
             function ($store) use ($websiteId) {
                 return $store['website_id'] == $websiteId;
             }
         );
-        $store = reset($store);
 
-        if ($store === false) {
+        if ($stores === false) {
             throw new \LogicException(sprintf('Could not resolve store dependency for website id: %d', $websiteId));
         }
+
+        $stores = array_map(
+            function ($item) {
+                return $item['store_id'];
+            },
+            $stores
+        );
+
+        return $stores;
     }
 
     /**
@@ -288,4 +357,11 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
      * @return string
      */
     abstract protected function getType();
+
+    /**
+     * Should return id field name for entity, e.g.: entity_id, order_id, increment_id, etc
+     *
+     * @return string
+     */
+    abstract protected function getIdFieldName();
 }

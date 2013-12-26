@@ -46,7 +46,7 @@ class MagentoSoapTransport extends Transport
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="date")
+     * @ORM\Column(name="sync_start_date", type="date")
      * @Oro\Versioned()
      */
     protected $syncStartDate;
@@ -54,7 +54,7 @@ class MagentoSoapTransport extends Transport
     /**
      * @var \DateInterval
      *
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(name="sync_range", type="string", length=50)
      */
     protected $syncRange;
 
