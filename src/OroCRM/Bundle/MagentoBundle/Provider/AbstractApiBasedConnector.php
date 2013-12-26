@@ -95,7 +95,7 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         $status  = $channel->getStatusesForConnector($this->getType(), Status::STATUS_COMPLETED)->first();
         if (false !== $status) {
             /** @var Status $status */
-            $this->lastSyncDate = $status->getDate();
+            $this->lastSyncDate = clone $status->getDate();
             $this->mode = self::IMPORT_MODE_UPDATE;
         } else {
             $this->mode = self::IMPORT_MODE_INITIAL;
@@ -235,7 +235,8 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
             return false;
         }
 
-        if ($this->mode == self::IMPORT_MODE_INITIAL) {
+        $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
+        if ($initMode) {
             $dateMessage = 'created less';
             $message = sprintf(' and ID > %s', $this->lastId);
         } else {
@@ -267,7 +268,7 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         reset($this->entitiesIdsBuffer);
         $this->lastId = $this->lastId === false ? 0 : $this->lastId;
 
-        if ($wasNull) {
+        if ($wasNull && $initMode) {
             $this->entitiesIdsBuffer = [];
         } else {
             $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
