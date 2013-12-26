@@ -5,8 +5,4 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
             configs:
                 extend:
                     set_expanded: false
-                entity:
-                    label:        Source
-
             is_extend:            true
-

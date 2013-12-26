@@ -23,6 +23,7 @@ orocrm:
         leadstatus:
             entity_label:         Lead Status
             entity_plural_label:  Lead Statuses
+            entity_description:   Represent lead status
             name.label:           Name
             label.label:          Label
         #
@@ -31,6 +32,7 @@ orocrm:
         opportunitystatus:
             entity_label:         Opportunity Status
             entity_plural_label:  Opportunity Statuses
+            entity_label:         Represent opportunity status
             name.label:           Name
             label.label:          Label
         #
@@ -56,6 +58,7 @@ orocrm:
             account.label:        Account
             owner.label:          Owner
             notes.label:          Notes
+            lead.label:           Lead
 
             datagrid:
                 view: View
@@ -68,6 +71,7 @@ orocrm:
         opportunityclosereason:
             entity_label:         Opportunity Close Reason
             entity_plural_label:  Opportunity Close Reasons
+            entity_description:   Represent opportunity close reason
             name.label:           Name
             label.label:          Label
         #
@@ -100,6 +104,7 @@ orocrm:
             address.label:        Address
             extend_source.label:  Source
             notes.label:          Notes
+            opportunities.label:  Opportunities
 
             datagrid:
                 country: Country

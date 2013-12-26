@@ -1,3 +1,15 @@
+entityTest:
+    fields:
+        extend_phone:
+            type:                 string
+
+entityTest2:
+    owner: Custom
+    fields:
+        extend_phone:
+            type:                 string
+
+
 OroCRM\Bundle\AccountBundle\Entity\Account:
     fields:
         extend_description:
@@ -15,6 +27,15 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
                     is_visible:   false
             owner:                Custom
             is_extend:            true
+
+        extend_phone1:
+            type:                 string
+            configs:
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
 
         extend_email:
             type:                 string
