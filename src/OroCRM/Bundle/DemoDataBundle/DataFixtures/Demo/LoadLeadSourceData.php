@@ -16,12 +16,12 @@ class LoadLeadSourceData extends AbstractFixture implements ContainerAwareInterf
      * @var array
      */
     protected $data = [
-        'Website' => true,
-        'Advertising' => true,
-        'Blogging' => true,
-        'Media' => true,
-        'Outbound' => true,
-        'Partner' => true
+        'Website' => false,
+        'Advertising' => false,
+        'Blogging' => false,
+        'Media' => false,
+        'Outbound' => false,
+        'Partner' => false
     ];
 
     /**
@@ -50,7 +50,7 @@ class LoadLeadSourceData extends AbstractFixture implements ContainerAwareInterf
             'extend_source'
         );
 
-        $priority = 0;
+        $priority = 1;
         foreach ($this->data as $optionSetLabel => $isDefault) {
             $priority++;
             $optionSet = new OptionSet();

@@ -61,7 +61,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $this->container = $container;
         $this->workflowManager = $container->get('oro_workflow.manager');
-        $this->configManager = $container->get('oro_entity_config.config_manager');
     }
 
     /**
@@ -86,6 +85,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
     public function loadSources()
     {
+        $this->configManager = $this->container->get('oro_entity_config.config_manager');
+
         /** @var FieldConfigModel $configFieldModel */
         $configFieldModel = $this->configManager->getConfigFieldModel(
             'OroCRM\Bundle\SalesBundle\Entity\Lead',
