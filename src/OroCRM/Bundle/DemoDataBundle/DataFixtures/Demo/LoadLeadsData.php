@@ -1,6 +1,7 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
+use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -61,6 +62,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $this->container = $container;
         $this->workflowManager = $container->get('oro_workflow.manager');
+        $this->configManager = $container->get('oro_entity_config.config_manager');
     }
 
     /**
@@ -85,13 +87,18 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
     public function loadSources()
     {
-        $this->configManager = $this->container->get('oro_entity_config.config_manager');
-
-        /** @var FieldConfigModel $configFieldModel */
-        $configFieldModel = $this->configManager->getConfigFieldModel(
-            'OroCRM\Bundle\SalesBundle\Entity\Lead',
-            'extend_source'
+        // TODO: Use cache manager instead of manual entity extracting (see git history)
+        // TODO: https://magecore.atlassian.net/browse/BAP-2706
+        $entityConfigModel = $this->em->getRepository(EntityConfigModel::ENTITY_NAME)->findOneBy(
+            array('className' => 'OroCRM\Bundle\SalesBundle\Entity\Lead')
         );
+        $configFieldModel = $this->em->getRepository(FieldConfigModel::ENTITY_NAME)->findOneBy(
+            array(
+                'entity'    => $entityConfigModel,
+                'fieldName' => 'extend_source'
+            )
+        );
+
         /** @var OptionSet[] $sources */
         $sources = $configFieldModel->getOptions()->toArray();
         $randomSource = count($sources)-1;
