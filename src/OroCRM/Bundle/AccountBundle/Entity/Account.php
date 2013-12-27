@@ -21,7 +21,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="orocrm_account")
+ * @ORM\Table(name="orocrm_account", indexes={@ORM\Index(name="account_name_idx", columns={"name"})})
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
