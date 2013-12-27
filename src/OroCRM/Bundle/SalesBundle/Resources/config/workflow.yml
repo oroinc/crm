@@ -291,8 +291,8 @@ workflows:
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 order: 30
                 allowed_transitions:
-                    - requalify
-                    - edit
+                    - requalify_lost
+                    - requalify_won
                 view_attributes:
                     - { attribute: close_reason, view_type: string }
                     - { attribute: close_revenue, view_type: currency }
@@ -551,7 +551,7 @@ workflows:
                             parameters:
                                 class: '\DateTime'
                                 attribute: $close_date
-            requalify:
+            requalify_lost:
                 label: 'Requalify'
                 message: 'Are you sure you want to restart Sales flow and reset data?'
                 step_to: qualify
@@ -560,16 +560,17 @@ workflows:
                 frontend_options:
                     icon: 'icon-backward'
                     class: 'btn-primary'
-                transition_definition: requalify_definition
-            edit:
-                label: 'Edit'
+                transition_definition: requalify_lost_definition
+            requalify_won:
+                label: 'Requalify'
                 message: 'Are you sure you want to restart Sales flow?'
                 step_to: qualify
                 is_start: true
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-edit'
-                transition_definition: edit_definition
+                    icon: 'icon-backward'
+                    class: 'btn-primary'
+                transition_definition: requalify_won_definition
         transition_definitions:
             edit_qualify_definition:
                 post_actions: # copy attributes to opportunity properties
@@ -686,7 +687,7 @@ workflows:
                         route: orocrm_sales_opportunity_view
                         route_parameters:
                             id: $opportunity.id
-            requalify_definition:
+            requalify_lost_definition:
                 conditions:
                     @equal: [$opportunity.status.name, 'lost']
                 post_actions:
@@ -705,7 +706,7 @@ workflows:
                         - [$opportunity.closeReason, $close_reason]
                         - [$opportunity.closeDate, $close_date]
                         - [$opportunity.closeRevenue, $close_revenue]
-            edit_definition:
+            requalify_won_definition:
                 conditions:
                     @equal: [$opportunity.status.name, 'won']
                 post_actions:
