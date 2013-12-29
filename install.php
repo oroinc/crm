@@ -1,6 +1,6 @@
 <?php
 /**
- * @OroScript("OROCrm Install")
+ * @OroScript("OroCRM Install")
  */
 
 /** @var $container \Symfony\Component\DependencyInjection\ContainerInterface */
