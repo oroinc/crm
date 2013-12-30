@@ -9,5 +9,5 @@
 $container->get('oro_email.entity.cache.clearer')->forceClear();
 $container->get('oro_email.entity.cache.warmer')->warmUp('');
 $commandExecutor
-    ->runCommand('doctrine:schema:update', array('--force'))
+    ->runCommand('doctrine:schema:update', array('--force', '--process-isolation'))
     ->runCommand('oro:search:create-index');
