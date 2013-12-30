@@ -1,0 +1,26 @@
+{% extends 'OroAddressBundle:Include:fields.html.twig' %}
+
+{% block oro_typed_address_rows %}
+    {{ form_row(form.types, {label: 'orocrm.contact.contactaddress.types.label'|trans}) }}
+    {{ form_row(form.primary, {label: 'orocrm.contact.contactaddress.primary.label'|trans}) }}
+    {{ block('oro_address_rows') }}
+{%  endblock %}
+
+{% block oro_address_rows %}
+    {{ form_row(form.id) }}
+    {{ form_row(form.label, {label: 'orocrm.contact.contactaddress.label.label'|trans}) }}
+    {{ form_row(form.namePrefix, {label: 'orocrm.contact.contactaddress.name_prefix.label'|trans}) }}
+    {{ form_row(form.firstName, {label: 'orocrm.contact.contactaddress.first_name.label'|trans}) }}
+    {{ form_row(form.middleName, {label: 'orocrm.contact.contactaddress.middle_name.label'|trans}) }}
+    {{ form_row(form.lastName, {label: 'orocrm.contact.contactaddress.last_name.label'|trans}) }}
+    {{ form_row(form.nameSuffix, {label: 'orocrm.contact.contactaddress.name_suffix.label'|trans}) }}
+    {{ form_row(form.organization, {label: 'orocrm.contact.contactaddress.organization.label'|trans}) }}
+    {{ form_row(form.country, {label: 'orocrm.contact.contactaddress.country.label'|trans}) }}
+    {{ form_row(form.street, {label: 'orocrm.contact.contactaddress.street.label'|trans}) }}
+    {{ form_row(form.street2, {label: 'orocrm.contact.contactaddress.street2.label'|trans}) }}
+    {{ form_row(form.city, {label: 'orocrm.contact.contactaddress.city.label'|trans}) }}
+    {{ form_row(form.region_text, {label: 'orocrm.contact.contactaddress.region_text.label'|trans}) }}
+    {{ form_row(form.region, {label: 'orocrm.contact.contactaddress.region.label'|trans}) }}
+    {{ form_row(form.postalCode, {label: 'orocrm.contact.contactaddress.postal_code.label'|trans}) }}
+    {{ form_rest(form) }}
+{%  endblock %}

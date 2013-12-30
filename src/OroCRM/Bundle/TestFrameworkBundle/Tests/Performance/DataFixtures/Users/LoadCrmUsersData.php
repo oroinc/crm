@@ -13,11 +13,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
 
-/**
- * @SuppressWarnings(PHPMD.TooManyMethods)
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * TODO: This class should be refactored (BAP-975)
- */
 class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterface
 {
     const USERS_NUMBER  = 200;
@@ -46,7 +41,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
         $this->userManager         = $container->get('oro_user.manager');
         $this->userRepository      = $this->userManager->getRepository();
         $this->role                = $this->userManager->getStorageManager()->getRepository('OroUserBundle:Role')
-            ->findBy(array('role' => 'ROLE_USER'));
+            ->findBy(array('role' => 'ROLE_ADMINISTRATOR'));
         $this->businessUnitManager = $container->get('oro_organization.business_unit_manager');
         $this->businessUnit        = $this->businessUnitManager->getBusinessUnitRepo()->findAll();
         $this->businessUnit        = $this->businessUnit[0];
@@ -84,7 +79,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
                 $birthday
             );
 
-            $user->setPlainPassword(self::USER_PASSWORD);
+            $user->setPlainPassword($username);
             $this->userManager->updatePassword($user);
 
             $this->persist($user);
@@ -102,8 +97,6 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
      * @param string $middleName
      * @param \DateTime $birthday
      * @return User
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * TODO: This method should be refactored (BAP-975)
      */
     private function createUser(
         $username,

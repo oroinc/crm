@@ -9,11 +9,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Collections\Collection;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
-
-use Oro\Bundle\TagBundle\Entity\Tag;
-use Oro\Bundle\TagBundle\Entity\TagManager;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
@@ -27,7 +23,6 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 
-use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadContactData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
@@ -41,26 +36,6 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
      * @var Account[]
      */
     protected $accounts;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $accountRepository;
-
-    /**
-     * @var UserManager
-     */
-    protected $userManager;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $userRepository;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $countryRepository;
 
     /**
      * @var User[]
@@ -82,21 +57,8 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
      */
     protected $contactSources;
 
-    /**
-     * @var EntityManager
-     */
-    protected $contactManager;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $contactRepository;
-
-    /** @var  TagManager */
-    protected $tagManager;
-
-    /** @var EntityRepository */
-    protected $tagsRepository;
+    /** @var  EntityManager */
+    protected $em;
 
     /**
      * {@inheritDoc}
@@ -104,10 +66,6 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
-
-        $this->userManager = $container->get('oro_user.manager');
-        $this->tagManager = $container->get('oro_tag.tag.manager');
-        $this->contactManager = $container->get('doctrine.orm.entity_manager');
     }
 
     /**
@@ -115,23 +73,25 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $manager)
     {
-        $this->initSupportingEntities();
+        $this->initSupportingEntities($manager);
         $this->loadContacts();
     }
 
-    protected function initSupportingEntities()
+    /**
+     * @param ObjectManager $manager
+     */
+    protected function initSupportingEntities(ObjectManager $manager = null)
     {
-        $userStorageManager = $this->userManager->getStorageManager();
-        $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        if ($manager) {
+            $this->em = $manager;
+        }
 
-        $this->users = $userStorageManager->getRepository('OroUserBundle:User')->findAll();
-        $this->countries = $userStorageManager->getRepository('OroAddressBundle:Country')->findAll();
+        $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
+        $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
 
-        $this->accounts = $this->contactManager->getRepository('OroCRMAccountBundle:Account')->findAll();
-        $this->contactGroups = $this->contactManager->getRepository('OroCRMContactBundle:Group')->findAll();
-        $this->contactSources = $this->contactManager->getRepository('OroCRMContactBundle:Source')->findAll();
-
-        $this->tagsRepository = $entityManager->getRepository('OroTagBundle:Tag');
+        $this->accounts = $this->em->getRepository('OroCRMAccountBundle:Account')->findAll();
+        $this->contactGroups = $this->em->getRepository('OroCRMContactBundle:Group')->findAll();
+        $this->contactSources = $this->em->getRepository('OroCRMContactBundle:Source')->findAll();
     }
 
     /**
@@ -148,6 +108,9 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
                 //read headers
                 $headers = $data;
             }
+            $randomUser = count($this->users)-1;
+            $randomContactGroup = count($this->contactGroups)-1;
+            $randomContactSource = count($this->contactSources)-1;
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 $data = array_combine($headers, array_values($data));
                 //find accounts
@@ -165,25 +128,24 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
                 /** @var Account $account */
                 $contact->addAccount($account);
 
-                $group = $this->contactGroups[rand(0, count($this->contactGroups)-1)];
+                $group = $this->contactGroups[rand(0, $randomContactGroup)];
                 $contact->addGroup($group);
 
-                $user = $this->users[rand(0, count($this->users)-1)];
+                $user = $this->users[rand(0, $randomUser)];
 
                 $contact->setAssignedTo($user);
                 $contact->setReportsTo($contact);
                 $contact->setOwner($user);
 
-                $source = $this->contactSources[rand(0, count($this->contactSources)-1)];
+                $source = $this->contactSources[rand(0, $randomContactSource)];
                 $contact->setSource($source);
                 $account->setDefaultContact($contact);
 
-                $this->persist($this->contactManager, $contact);
-
-                $this->persist($this->contactManager, $account);
+                $this->persist($this->em, $contact);
+                $this->persist($this->em, $account);
             }
 
-            $this->flush($this->contactManager);
+            $this->flush($this->em);
             fclose($handle);
         }
     }
@@ -247,7 +209,7 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
 
         $address->setCountry($country);
         if (!$region->isEmpty()) {
-            $address->setState($region->first());
+            $address->setRegion($region->first());
         }
 
         $contact->addAddress($address);

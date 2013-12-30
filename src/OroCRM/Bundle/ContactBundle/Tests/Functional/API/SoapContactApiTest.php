@@ -126,7 +126,7 @@ class SoapContactApiTest extends WebTestCase
         $result = $this->client->getSoap()->deleteContact($contactId);
         $this->assertTrue($result);
 
-        $this->setExpectedException('\SoapFault', 'Record #' . $contactId . ' can not be found');
+        $this->setExpectedException('\SoapFault', 'Record with ID "' . $contactId . '" can not be found');
         try {
             $this->client->getSoap()->getContact($contactId);
         } catch (\SoapFault $e) {

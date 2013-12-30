@@ -3,8 +3,6 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
         extend_description:
             type:                 text
             configs:
-                entity:
-                    label:        Description
                 datagrid:
                     is_visible:   false
             owner:                Custom
@@ -13,8 +11,6 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
         extend_phone:
             type:                 string
             configs:
-                entity:
-                    label:        Phone
                 datagrid:
                     is_visible:   false
             owner:                Custom
@@ -23,8 +19,6 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
         extend_email:
             type:                 string
             configs:
-                entity:
-                    label:        Email
                 datagrid:
                     is_visible:   false
             owner:                Custom
@@ -33,8 +27,6 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
         extend_fax:
             type:                 string
             configs:
-                entity:
-                    label:        Fax
                 datagrid:
                     is_visible:   false
             owner:                Custom
@@ -43,8 +35,6 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
         extend_website:
             type:                 string
             configs:
-                entity:
-                    label:        Website
                 datagrid:
                     is_visible:   false
             owner:                Custom
@@ -53,8 +43,6 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
         extend_employees:
             type:                 integer
             configs:
-                entity:
-                    label:        Employees
                 datagrid:
                     is_visible:   false
             owner:                Custom
@@ -63,8 +51,6 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
         extend_ownership:
             type:                 string
             configs:
-                entity:
-                    label:        Ownership
                 datagrid:
                     is_visible:   false
             owner:                Custom
@@ -73,8 +59,6 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
         extend_ticker_symbol:
             type:                 string
             configs:
-                entity:
-                    label:        Ticker Symbol
                 datagrid:
                     is_visible:   false
 
@@ -84,8 +68,6 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
         extend_rating:
             type:                 string
             configs:
-                entity:
-                    label:        Rating
                 datagrid:
                     is_visible:   false
 

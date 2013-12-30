@@ -24,7 +24,9 @@ class EntityTest extends Selenium2TestCase
 
     public function testEditExistEntity()
     {
-        $entityname = 'Contact';
+        $this->markTestIncomplete('Need to rewrite this test to use filter by Name. BAP-2605');
+
+        $entityname = 'Account';
         $fieldname = 'Test_field' . mt_rand();
         $login = new Login($this);
         $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
@@ -41,7 +43,7 @@ class EntityTest extends Selenium2TestCase
             ->assertMessage('Field saved')
             ->updateSchema()
             ->close()
-            ->openContacts()
+            ->openAccounts()
             ->add()
             ->openConfigEntity(false)
             ->checkEntityField($fieldname);

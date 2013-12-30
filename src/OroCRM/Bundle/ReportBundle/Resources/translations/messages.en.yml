@@ -1,4 +1,10 @@
 orocrm:
+    query_designer:
+        aggregates:
+            opportunity_by_workflow_item_close_revenue:
+                ClosedCloseRevenueSum:
+                    name: Sum (Closed)
+                    hint: Sum of all values for closed workflow items
     report:
         datagrid:
             columns:
@@ -19,19 +25,17 @@ orocrm:
                 inProgressCount:   Number In Progress
                 totalOps:          Total
 
-
-        form:
-            choose_report_type:    Choose a report type...
         controller:
             report:
-                saved:             Report saved
-                deleted:           Report deleted
                 wonCount:          Number Won
                 lostCount:         Number Lost
                 inProgressCount:   Number In Progress
                 totalOps:          Total
-        type:
-            table: Table
-"Reports": Reports
-"Delete report": Delete report
-"Are you sure you want to delete this report?": Are you sure you want to delete this report?
+
+        opportunitybyworkflowitem:
+            entity_label:        Opportunity With Workflow
+            entity_plural_label: Opportunities With Workflow
+            entity_description:  ''
+            id.label:            Id
+            opportunity.label:   Opportunity
+            workflow_item.label: Workflow item

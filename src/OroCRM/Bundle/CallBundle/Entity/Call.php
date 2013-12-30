@@ -9,8 +9,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\CallBundle\Entity\CallStatus;
-use OroCRM\Bundle\CallBundle\Entity\CallDirection;
 
 /**
  * Call
@@ -20,7 +18,6 @@ use OroCRM\Bundle\CallBundle\Entity\CallDirection;
  * @Config(
  *  routeName="orocrm_call_index",
  *  defaultValues={
- *      "entity"={"label"="Call", "plural_label"="Calls"},
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",
@@ -105,7 +102,7 @@ class Call
      * @var CallStatus
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\CallBundle\Entity\CallStatus")
-     * @ORM\JoinColumn(name="call_status_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="call_status_name", referencedColumnName="name", onDelete="SET NULL")
      */
     protected $callStatus;
 
@@ -120,14 +117,14 @@ class Call
      * @var CallDirection
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\CallBundle\Entity\CallDirection")
-     * @ORM\JoinColumn(name="call_direction_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="call_direction_name", referencedColumnName="name", onDelete="SET NULL")
      */
     protected $direction;
 
     public function __construct()
     {
         $this->callDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->duration = new \DateTime('00:00:00');
+        $this->duration = new \DateTime('00:00:00', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -258,7 +255,7 @@ class Call
     /**
      * Set direction
      *
-     * @param boolean $direction
+     * @param CallDirection $direction
      * @return Call
      */
     public function setDirection($direction)

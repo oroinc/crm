@@ -12,7 +12,6 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\ContactBundle\Entity\Group;
-use OroCRM\Bundle\ContactBundle\Datagrid\GroupContactDatagridManager;
 
 /**
  * @Route("/group")

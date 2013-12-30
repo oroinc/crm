@@ -18,7 +18,7 @@ class CreateContactTest extends Selenium2TestCase
         'city' => 'Address City',
         'postalCode' => '10001',
         'country' => 'United States',
-        'state' => 'New York'
+        'region' => 'New York'
     );
 
     protected $addressSecondary = array(
@@ -30,7 +30,7 @@ class CreateContactTest extends Selenium2TestCase
         'city' => 'Address1 City',
         'postalCode' => '10001',
         'country' => 'United States',
-        'state' => 'New York'
+        'region' => 'New York'
     );
 
     protected function setUp()
@@ -141,7 +141,7 @@ class CreateContactTest extends Selenium2TestCase
             ->setAddressCity('City')
             ->setAddressPostalCode('Zip Code 000')
             ->setAddressCountry('Kazak')
-            ->setAddressState('Aqm')
+            ->setAddressRegion('Aqm')
             ->save()
             ->assertMessage('Contact saved')
             ->toGrid()

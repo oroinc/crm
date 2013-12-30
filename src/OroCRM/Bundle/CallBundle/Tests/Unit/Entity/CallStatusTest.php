@@ -11,7 +11,9 @@ class CallStatusTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSet($property, $value, $expected)
     {
-        $obj = new CallStatus();
+        $statusName = 'completed';
+        $obj = new CallStatus($statusName);
+        $this->assertEquals($statusName, $obj->getName());
 
         call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
         $this->assertEquals($expected, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
@@ -20,7 +22,7 @@ class CallStatusTest extends \PHPUnit_Framework_TestCase
     public function getSetDataProvider()
     {
         return array(
-            'status' => array('status', 1, 1),
+            'label' => array('label', 'my status', 'my status'),
         );
     }
 }

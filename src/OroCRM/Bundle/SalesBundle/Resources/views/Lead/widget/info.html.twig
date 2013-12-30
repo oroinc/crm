@@ -1,64 +1,41 @@
-{% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEmailBundle::macros.html.twig' as email %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
-{# TODO: Move this to OroUIBundle::macros.html.twig #}
-{% macro renderRow(label, value) %}
-    {% import 'OroUIBundle::macros.html.twig' as macros %}
-    {{ macros.renderAttribute(label, '<p class="control-label">' ~ value|default('N/A'|trans) ~ '</p>') }}
-{% endmacro %}
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderProperty('orocrm.sales.lead.first_name.label'|trans, entity.firstName) }}
+            {{ ui.renderProperty('orocrm.sales.lead.last_name.label'|trans, entity.lastName) }}
 
-<style>
-    .lead-info {
-        min-height: 280px;
-    }
-</style>
-<div class="widget-content form-horizontal lead-info box-content row-fluid">
-    <div class="responsive-block">
-        {{ _self.renderRow('First Name'|trans, entity.firstName) }}
-        {{ _self.renderRow('Last Name'|trans, entity.lastName) }}
+            {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
+                {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name ~ '</a>' %}
+            {%- else -%}
+                {% set contactView = entity.contact ? entity.contact : '' %}
+            {%- endif -%}
 
-        {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
-            {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name ~ '</a>' %}
-        {%- else -%}
-            {% set contactView = entity.contact ? entity.contact : '' %}
-        {%- endif -%}
-        {{ _self.renderRow('Contact'|trans, contactView) }}
+            {{ ui.renderProperty('orocrm.sales.lead.contact.label'|trans, contactView) }}
+            {{ ui.renderProperty('orocrm.sales.lead.job_title.label'|trans, entity.jobTitle) }}
 
-        {{ _self.renderRow('Job Title'|trans, entity.jobTitle) }}
+            {%- if resource_granted('orocrm_account_view') and entity.account -%}
+                {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.account.id}) ~ '">' ~ entity.account ~ '</a>' %}
+            {%- else -%}
+                {% set accountView = entity.account ? entity.account : '' %}
+            {%- endif -%}
 
-        {%- if resource_granted('orocrm_account_view') and entity.account -%}
-            {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.account.id}) ~ '">' ~ entity.account ~ '</a>' %}
-        {%- else -%}
-            {% set accountView = entity.account ? entity.account : '' %}
-        {%- endif -%}
-        {{ _self.renderRow('Account'|trans, accountView) }}
-        {{ _self.renderRow('Company Name'|trans, entity.companyName) }}
-        {{ _self.renderRow('Industry'|trans, entity.industry) }}
-        {{ _self.renderRow('Number Of Employees'|trans, entity.numberOfEmployees) }}
+            {{ ui.renderProperty('orocrm.sales.lead.account.label'|trans, accountView) }}
+            {{ ui.renderProperty('orocrm.sales.lead.company_name.label'|trans, entity.companyName) }}
+            {{ ui.renderProperty('orocrm.sales.lead.industry.label'|trans, entity.industry) }}
+            {{ ui.renderProperty('orocrm.sales.lead.number_of_employees.label'|trans, entity.numberOfEmployees) }}
 
-        {% if dynamic|length %}
-            {% for label, item in dynamic %}
-                {% if item is iterable %}
-                    {% set data = '' %}
-                    {% for value in item.values %}
-                        {% if value.link is defined and value.link != false  %}
-                            {% set data = data ~ '<a href="' ~ value.link ~ '">' ~ value.title ~ '</a>' %}
-                        {% else %}
-                            {% set data = data ~ value.title %}
-                        {% endif %}
-                        {% if not loop.last %}
-                            {% set data = data ~ ', ' %}
-                        {% endif %}
-                    {% endfor %}
+            {{ entityConfig.renderDynamicFields(entity) }}
+        </div>
 
-                    {% set item = data %}
-                {% endif %}
-                {{ _self.renderRow(label|trans, item) }}
-            {% endfor %}
-        {% endif %}
-    </div>
-    <div class="responsive-block">
-        {{ _self.renderRow('Email'|trans, entity.email ? '<a href="mailto:' ~ entity.email ~ '">' ~ entity.email ~ '</a>' : '') }}
-        {{ _self.renderRow('Phone'|trans, entity.phoneNumber ? '<a href="tel:' ~ entity.phoneNumber ~ '">' ~ entity.phoneNumber ~ '</a>' : '') }}
-        {{ _self.renderRow('Website'|trans, entity.website ? '<a href="' ~ entity.website ~ '" class="no-hash">' ~ entity.website ~ '</a>' : '') }}
+        <div class="responsive-block">
+            {{ ui.renderProperty('orocrm.sales.lead.email.label'|trans, entity.email ? email.email_address_simple(entity.email) : null) }}
+            {{ ui.renderProperty('orocrm.sales.lead.phone_number.label'|trans, entity.phoneNumber ? ui.renderPhone(entity.phoneNumber) : null) }}
+            {{ ui.renderProperty('orocrm.sales.lead.website.label'|trans, entity.website ? ui.renderUrl(entity.website, entity.website, 'no-hash') : null) }}
+            {{ ui.renderProperty('orocrm.sales.lead.notes.label'|trans, entity.notes|nl2br) }}
+        </div>
     </div>
 </div>

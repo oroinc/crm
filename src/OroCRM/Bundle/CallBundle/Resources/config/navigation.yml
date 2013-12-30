@@ -1,7 +1,7 @@
 oro_menu_config:
     items:
         call_list:
-            label: 'Calls'
+            label: orocrm.call.entity_plural_label
             route: orocrm_call_index
             extras:
                 routes: ['orocrm_call_*']
@@ -24,6 +24,6 @@ oro_menu_config:
                 shortcut_call_list: ~
 
 oro_titles:
-    orocrm_call_index: Calls
+    orocrm_call_index: ~
     orocrm_call_update: %%subject%% - Edit
     orocrm_call_create: Log Call

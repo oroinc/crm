@@ -3,6 +3,12 @@
     "description": "OroCRM",
     "homepage": "https://github.com/orocrm/crm.git",
     "license": "The Open Software License version 3.0",
+    "authors": [
+        {
+            "name": "Oro, Inc",
+            "homepage": "http://www.orocrm.com"
+        }
+    ],
     "autoload": {
         "psr-0": {
             "OroCRM\\Bundle": "src/"
@@ -10,7 +16,12 @@
     },
     "require": {
         "php": ">=5.4.4",
-        "oro/platform": "1.0.0-beta5"
+        "oro/platform": "1.0.0-rc1"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
 }

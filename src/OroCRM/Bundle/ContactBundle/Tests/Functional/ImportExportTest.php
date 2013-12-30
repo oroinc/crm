@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 
+use Oro\Bundle\BatchBundle\Job\DoctrineJobRepository as BatchJobRepository;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
@@ -20,9 +21,28 @@ class ImportExportTest extends WebTestCase
      */
     protected $client;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->client = static::createClient(array(), ToolsAPI::generateBasicHeader());
+    }
+
+    protected function tearDown()
+    {
+        // clear DB from separate connection
+        $batchJobManager = $this->getBatchJobManager();
+        $batchJobManager->createQuery('DELETE OroBatchBundle:JobInstance')->execute();
+        $batchJobManager->createQuery('DELETE OroBatchBundle:JobExecution')->execute();
+        $batchJobManager->createQuery('DELETE OroBatchBundle:StepExecution')->execute();
+    }
+
+    /**
+     * @return \Doctrine\ORM\EntityManager
+     */
+    protected function getBatchJobManager()
+    {
+        /** @var BatchJobRepository $batchJobRepository */
+        $batchJobRepository = $this->client->getKernel()->getContainer()->get('oro_batch.job_repository');
+        return $batchJobRepository->getJobManager();
     }
 
     /**

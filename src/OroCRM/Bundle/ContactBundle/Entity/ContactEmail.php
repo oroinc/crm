@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractEmail;
 use Oro\Bundle\EmailBundle\Entity\EmailInterface;
@@ -13,6 +14,7 @@ use Oro\Bundle\EmailBundle\Entity\EmailInterface;
  * @ORM\Table("orocrm_contact_email", indexes={
  *      @ORM\Index(name="primary_email_idx", columns={"email", "is_primary"})
  * })
+ * @Config()
  */
 class ContactEmail extends AbstractEmail implements EmailInterface
 {

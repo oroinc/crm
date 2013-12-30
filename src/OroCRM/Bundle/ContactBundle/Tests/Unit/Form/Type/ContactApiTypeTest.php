@@ -6,8 +6,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType;
-use Oro\Bundle\AddressBundle\Form\EventListener\AddressCollectionTypeSubscriber;
-use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
 
 class ContactApiTypeTest extends \PHPUnit_Framework_TestCase
 {
