@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\EntityConfigBundle\Config\Id\FieldConfigId;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -10,27 +11,59 @@ class LeadType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text', array('required' => true))
-            ->add('namePrefix', 'text', array('required' => false))
-            ->add('firstName', 'text', array('required' => true))
-            ->add('middleName', 'text', array('required' => false))
-            ->add('lastName', 'text', array('required' => true))
-            ->add('nameSuffix', 'text', array('required' => false))
-            ->add('contact', 'orocrm_contact_select', array('required' => false))
-            ->add('jobTitle', 'text', array('required' => false))
-            ->add('phoneNumber', 'text', array('required' => false))
-            ->add('email', 'email', array('required' => false))
-            ->add('account', 'orocrm_account_select', array('required' => false))
-            ->add('companyName', 'text', array('required' => false))
-            ->add('website', 'url', array('required' => false))
-            ->add('numberOfEmployees', 'number', array('required' => false))
-            ->add('industry', 'text', array('required' => false))
-            ->add('address', 'oro_address', array('required' => false));
+            ->add('name', 'text', array('required' => true, 'label' => 'orocrm.sales.lead.name.label'))
+            ->add('namePrefix', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.name_prefix.label'))
+            ->add('firstName', 'text', array('required' => true, 'label' => 'orocrm.sales.lead.first_name.label'))
+            ->add('middleName', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.middle_name.label'))
+            ->add('lastName', 'text', array('required' => true, 'label' => 'orocrm.sales.lead.last_name.label'))
+            ->add('nameSuffix', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.name_suffix.label'))
+            ->add(
+                'contact',
+                'orocrm_contact_select',
+                array(
+                    'required' => false,
+                    'label' => 'orocrm.sales.lead.contact.label'
+                )
+            )
+            ->add('jobTitle', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.job_title.label'))
+            ->add('phoneNumber', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.phone_number.label'))
+            ->add('email', 'email', array('required' => false, 'label' => 'orocrm.sales.lead.email.label'))
+            ->add(
+                'account',
+                'orocrm_account_select',
+                array(
+                    'required' => false,
+                    'label' => 'orocrm.sales.lead.account.label'
+                )
+            )
+            ->add('companyName', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.company_name.label'))
+            ->add('website', 'url', array('required' => false, 'label' => 'orocrm.sales.lead.website.label'))
+            ->add(
+                'numberOfEmployees',
+                'number',
+                array(
+                    'required' => false,
+                    'label' => 'orocrm.sales.lead.number_of_employees.label'
+                )
+            )
+            ->add('industry', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.industry.label'))
+            ->add('address', 'oro_address', array('required' => false))
+            ->add(
+                'extend_source',
+                'oro_option_select',
+                array(
+                    'required'        => false,
+                    'label'           => 'orocrm.sales.lead.extend_source.label',
+                    'entityClassName' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
+                    'entityFieldName' => 'extend_source'
+                )
+            )
+            ->add('notes', 'textarea', array('required' => false, 'label' => 'orocrm.sales.lead.notes.label'));
     }
 
     /**
@@ -40,7 +73,7 @@ class LeadType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
+                'data_class'         => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
                 'cascade_validation' => true,
             )
         );

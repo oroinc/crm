@@ -2,7 +2,7 @@
 
 {% oro_title_set({
     params : {
-        '%section%': 'Opportunities'|trans,
+        '%section%': 'orocrm.sales.opportunity.entity_plural_label'|trans,
         '%entity%': workflowItem.data.opportunity.name,
         '%workflow_data%': workflow.label ~ ' (' ~ currentStep.label ~ ')',
     }
@@ -11,7 +11,7 @@
 {% block breadcrumb %}
     {% set breadcrumbs = [
         {label: 'Sales'|trans},
-        {label: 'Opportunities'|trans}
+        {label: 'orocrm.sales.opportunity.entity_plural_label'|trans}
     ] %}
     {{ parent() }}
 {% endblock %}
@@ -19,7 +19,7 @@
 {% block workflow_title %}
     {% set titleParts = {
         'indexPath':   path('orocrm_sales_opportunity_index'),
-        'indexLabel': 'Opportunities'|trans,
+        'indexLabel': 'orocrm.sales.opportunity.entity_plural_label'|trans,
         'additional': [
             {
                 'indexPath': path('orocrm_sales_opportunity_view', {id:  workflowItem.data.opportunity.id}),

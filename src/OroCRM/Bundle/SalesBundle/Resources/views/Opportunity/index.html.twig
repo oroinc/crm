@@ -1,14 +1,13 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% set gridName = 'sales-opportunity-grid' %}
-{% set pageTitle = 'Opportunities' %}
+{% set pageTitle = 'orocrm.sales.opportunity.entity_plural_label'|trans %}
 
 {% block navButtons %}
     {% if resource_granted('orocrm_sales_opportunity_create') %}
         {{ UI.addButton({
             'path' : path('orocrm_sales_opportunity_create'),
-            'title' : 'Create opportunity',
-            'label' : 'Create opportunity'
+            'entity_label': 'orocrm.sales.opportunity.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock %}

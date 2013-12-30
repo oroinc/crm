@@ -3,15 +3,15 @@
 namespace OroCRM\Bundle\ReportBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_report_opportunity_workflow_item")
  * @ORM\HasLifecycleCallbacks()
+ * @Config()
  */
 class OpportunityByWorkflowItem
 {

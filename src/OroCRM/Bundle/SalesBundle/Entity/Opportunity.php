@@ -13,7 +13,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
  * @ORM\Table(name="orocrm_sales_opportunity")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
@@ -21,7 +21,6 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  *  routeName="orocrm_sales_opportunity_index",
  *  routeView="orocrm_sales_opportunity_view",
  *  defaultValues={
- *      "entity"={"label"="Opportunity", "plural_label"="Opportunities"},
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",
@@ -79,6 +78,15 @@ class Opportunity extends ExtendOpportunity
      * @Oro\Versioned
      **/
     protected $account;
+
+    /**
+     * @var Lead
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead", inversedBy="opportunities")
+     * @ORM\JoinColumn(name="lead_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
+     **/
+    protected $lead;
 
     /**
      * @var User
@@ -159,6 +167,13 @@ class Opportunity extends ExtendOpportunity
     protected $updatedAt;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="notes", type="text", nullable=true)
+     */
+    protected $notes;
+
+    /**
      * @return int
      */
     public function getId()
@@ -182,6 +197,24 @@ class Opportunity extends ExtendOpportunity
     public function getAccount()
     {
         return $this->account;
+    }
+
+    /**
+     * @param Lead $lead
+     * @return Opportunity
+     */
+    public function setLead($lead)
+    {
+        $this->lead = $lead;
+        return $this;
+    }
+
+    /**
+     * @return Lead
+     */
+    public function getLead()
+    {
+        return $this->lead;
     }
 
     /**
@@ -435,6 +468,24 @@ class Opportunity extends ExtendOpportunity
     {
         $this->owner = $owningUser;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * @param string $notes
+     * @return Opportunity
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
         return $this;
     }
 }

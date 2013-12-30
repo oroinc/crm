@@ -24,19 +24,19 @@ datagrid:
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
         columns:
             name:
-                label: orocrm.sales.opportunity.datagrid.name
+                label: orocrm.sales.opportunity.name.label
             contactName:
-                label: orocrm.sales.opportunity.datagrid.contact_name
+                label: orocrm.sales.opportunity.contact.label
             closeDate:
-                label: orocrm.sales.opportunity.datagrid.close_date
+                label: orocrm.sales.opportunity.close_date.label
                 frontend_type: date
             probability:
-                label: orocrm.sales.opportunity.datagrid.probability
+                label: orocrm.sales.opportunity.probability.label
                 frontend_type: percent
             statusLabel:
-                label: orocrm.sales.opportunity.datagrid.status
+                label: orocrm.sales.opportunity.status.label
             primaryEmail:
-                label: orocrm.sales.opportunity.datagrid.email
+                label: orocrm.contact.email.label
         properties:
             id: ~
             view_link:
@@ -131,8 +131,8 @@ datagrid:
                     - address.postalCode as addressPostalCode
                     - >
                         CONCAT(
-                            CASE WHEN address.stateText IS NOT NULL
-                              THEN address.stateText
+                            CASE WHEN address.regionText IS NOT NULL
+                              THEN address.regionText
                               ELSE region.name
                             END, ''
                         ) as regionLabel
@@ -143,26 +143,26 @@ datagrid:
                         - { join: l.status, alias: status }
                         - { join: l.address, alias: address }
                         - { join: address.country, alias: country }
-                        - { join: address.state, alias: region }
+                        - { join: address.region, alias: region }
         columns:
             name:
-                label: orocrm.sales_lead.datagrid.name
+                label: orocrm.sales.lead.name.label
             statusLabel:
-                label: orocrm.sales_lead.datagrid.status
+                label: orocrm.sales.lead.status.label
             firstName:
-                label: orocrm.sales_lead.datagrid.first_name
+                label: orocrm.sales.lead.first_name.label
             lastName:
-                label: orocrm.sales_lead.datagrid.last_name
+                label: orocrm.sales.lead.last_name.label
             email:
-                label: orocrm.sales_lead.datagrid.email
+                label: orocrm.sales.lead.email.label
             phoneNumber:
-                label: orocrm.sales_lead.datagrid.phone
+                label: orocrm.sales.lead.phone_number.label
             countryName:
-                label: orocrm.sales_lead.datagrid.country
+                label: orocrm.sales.lead.datagrid.country
             regionLabel:
-                label: orocrm.sales_lead.datagrid.region
+                label: orocrm.sales.lead.datagrid.region
             addressPostalCode:
-                label: orocrm.sales_lead.datagrid.postal_code
+                label: orocrm.sales.lead.datagrid.postal_code
         properties:
             id: ~
             view_link:
@@ -205,20 +205,20 @@ datagrid:
             view:
                 type:          navigate
                 acl_resource:  orocrm_sales_lead_view
-                label:         orocrm.sales_lead.datagrid.view
+                label:         orocrm.sales.lead.datagrid.view
                 icon:          user
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
                 acl_resource:  orocrm_sales_lead_update
-                label:         orocrm.sales_lead.datagrid.update
+                label:         orocrm.sales.lead.datagrid.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
                 acl_resource:  orocrm_sales_lead_delete
-                label:         orocrm.sales_lead.datagrid.delete
+                label:         orocrm.sales.lead.datagrid.delete
                 icon:          trash
                 link:          delete_link
         filters:

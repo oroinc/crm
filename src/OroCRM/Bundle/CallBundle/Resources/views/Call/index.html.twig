@@ -1,6 +1,6 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
-{% set pageTitle = 'Calls' %}
+{% set pageTitle = 'orocrm.call.entity_plural_label'|trans %}
 {% set gridName = 'calls-grid' %}
 
 {% block navButtons %}
@@ -8,8 +8,8 @@
         <div class="btn-group">
             {{ UI.addButton({
                 'path' : path('orocrm_call_create'),
-                'title' : 'Log call'|trans,
-                'label' : 'Log call'|trans
+                'title' : 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans,
+                'label' : 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans
             }) }}
         </div>
     {% endif %}

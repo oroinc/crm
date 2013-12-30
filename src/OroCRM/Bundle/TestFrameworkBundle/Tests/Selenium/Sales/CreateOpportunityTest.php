@@ -85,7 +85,7 @@ class CreateOpportunityTest extends Selenium2TestCase
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
             ->openOpportunities()
-            ->filterBy('Opportunity Name', $name)
+            ->filterBy('Opportunity name', $name)
             ->open(array($name))
             ->edit()
             ->assertTitle($name . ' - Edit - Opportunities - Sales')
@@ -110,11 +110,11 @@ class CreateOpportunityTest extends Selenium2TestCase
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
             ->openOpportunities()
-            ->filterBy('Opportunity Name', $name)
+            ->filterBy('Opportunity name', $name)
             ->open(array($name))
             ->delete()
             ->assertTitle('Opportunities - Sales')
-            ->assertMessage('Item deleted')
+            ->assertMessage('Opportunity deleted')
             ->assertNoDataMessage('No opportunities exists');
     }
 }

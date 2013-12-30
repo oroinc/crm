@@ -1,25 +1,150 @@
-orocrm.contact.form.choose_contact: Choose a contact...
-orocrm.contact.form.choose_phone: Choose a phone...
-orocrm.contact.form.choose_contact_method: Choose a contact method...
-
-orocrm.contact.datagrid.contact_id: ID
-orocrm.contact.datagrid.first_name: First Name
-orocrm.contact.datagrid.last_name: Last Name
-orocrm.contact.datagrid.email: Email
-orocrm.contact.datagrid.phone: Phone
-orocrm.contact.datagrid.groups: Groups
-orocrm.contact.datagrid.source: Source
-orocrm.contact.datagrid.country: Country
-orocrm.contact.datagrid.region: State
-orocrm.contact.datagrid.postal_code: ZIP/Postal Code
-orocrm.contact.datagrid.created_at: Created At
-orocrm.contact.datagrid.updated_at: Updated At
-orocrm.contact.datagrid.selected_rows: Selected Rows
-orocrm.contact.datagrid.view: View
-orocrm.contact.datagrid.update: Update
-orocrm.contact.datagrid.delete: Delete
-
-orocrm.contact.controller.contact.saved.message: "Contact saved"
-orocrm.contact.controller.contact_group.saved.message: "Contact Group saved"
-
 oro.importexport.import.orocrm_contact.add_or_replace: Add and Replace
+orocrm:
+    dashboard:
+        my_contacts_activity:
+            title: Last Actions With Contacts
+            view_all: View all
+
+    contact:
+        controller:
+            contact.saved.message: "Contact saved"
+            contact_group.saved.message: "Contact Group saved"
+
+        #
+        # Form
+        #
+        form:
+            choose_contact: Choose a contact...
+            choose_phone: Choose a phone...
+            choose_contact_method: Choose a contact method...
+        #
+        # DataGrid
+        #
+        datagrid:
+            selected_rows: Selected Rows
+            view: View
+            update: Update
+            delete: Delete
+            contact_name: Contact name
+
+        #
+        # Entity oroCRM\Bundle\ContactBundle\Entity\Contact
+        #
+        entity_label:        Contact
+        entity_plural_label: Contacts
+        entity_description:  Represent contact
+        id.label:          Id
+        phones.label:      Phones
+        email.label:       Email
+        emails.label:      Emails
+        skype.label:       Skype
+        fax.label:         Fax
+        method.label:      Contact Method
+        social.label:      Social
+        name_prefix.label: Name prefix
+        first_name.label:  First name
+        middle_name.label: Middle name
+        last_name.label:   Last name
+        name_suffix.label: Name suffix
+        gender.label:      Gender
+        birthday.label:    Birthday
+        description.label: Description
+        job_title.label:   Job Title
+        twitter.label:     Twitter
+        facebook.label:    Facebook
+        google_plus.label: Google+
+        linked_in.label:   LinkedIn
+        created_at.label:  Created At
+        updated_at.label:  Updated At
+        source.label:      Source
+        owner.label:       Owner
+        assigned_to.label: Assigned to
+        reports_to.label:  Reports to
+        addresses.label:   Addresses
+        groups.label:      Groups
+        accounts.label:    Accounts
+        created_by.label:  Created By
+        updated_by.label:  Updated By
+
+        #
+        # Entity oroCRM\Bundle\ContactBundle\Entity\ContactAddress
+        #
+        contactaddress:
+            entity_label:        Contact Address
+            entity_plural_label: Contact Addresses
+            entity_description:  Represent contact's address
+            id.label:            Id
+            city.label:          City
+            country.label:       Country
+            created.label:       Created
+            first_name.label:    First name
+            label.label:         Label
+            last_name.label:     Last name
+            middle_name.label:   Middle name
+            name_prefix.label:   Name prefix
+            name_suffix.label:   Name suffix
+            organization.label:  Organization
+            owner.label:         Owner
+            postal_code.label:   Zip/postal code
+            primary.label:       Primary
+            region.label:        State
+            region_text.label:   State
+            street.label:        Street
+            street2.label:       Street 2
+            types.label:         Types
+            updated.label:       Updated
+
+        #
+        # Entity oroCRM\Bundle\ContactBundle\Entity\ContactEmail
+        #
+        contactemail:
+            entity_label:        Contact Email
+            entity_plural_label: Contact Emails
+            entity_description:  Represent contact's email
+            id.label:      Id
+            email.label:   Email
+            owner.label:   Owner
+            primary.label: Primary
+
+        #
+        # Entity oroCRM\Bundle\ContactBundle\Entity\ContactPhone
+        #
+        contactphone:
+            entity_label:        Contact Phone
+            entity_plural_label: Contact Phones
+            entity_description:  Represent contact's phone
+            id.label:      Id
+            owner.label:   Owner
+            phone.label:   Phone
+            primary.label: Primary
+
+        #
+        # Entity oroCRM\Bundle\ContactBundle\Entity\Group
+        #
+        group:
+            entity_label:        Contact Group
+            entity_plural_label: Contact Groups
+            entity_description:  Represent contact's group
+            id.label:    Id
+            owner.label: Owner
+            label.label: Label
+
+        #
+        # Entity oroCRM\Bundle\ContactBundle\Entity\Method
+        #
+        method:
+            entity_label:        Contact Method
+            entity_plural_label: Contact Methods
+            entity_description:  Represent contact's method
+            label.label: Label
+            name.label:  Name
+
+        #
+        # Entity oroCRM\Bundle\ContactBundle\Entity\Source
+        #
+        source:
+            entity_label:        Contact Source
+            entity_plural_label: Contact Sources
+            entity_description:  Represent contact's source
+            label.label:  Label
+            name.label:   Name

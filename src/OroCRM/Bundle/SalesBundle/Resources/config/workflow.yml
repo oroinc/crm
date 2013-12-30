@@ -1,6 +1,6 @@
 workflows:
     # Unqualified Sales Lead Workflow
-    sales_lead:
+    b2b_flow_lead:
         label: 'Unqualified Sales Lead'
         enabled: true
         type: entity
@@ -26,15 +26,18 @@ workflows:
                     class: OroCRM\Bundle\SalesBundle\Entity\Lead
                     managed_entity: true
             opportunity_name:
-                label: 'Opportunity name'
+                label: orocrm.sales.opportunity.name.label
                 type: string
             account:
-                label: 'Account'
+                label:  orocrm.account.entity_label
                 type: entity
                 options:
                     class: OroCRM\Bundle\AccountBundle\Entity\Account
             company_name:
-                label: 'Company name'
+                label: orocrm.sales.lead.company_name.label
+                type: string
+            notes:
+                label: orocrm.sales.lead.notes.label
                 type: string
         transitions:
             qualify:
@@ -61,10 +64,15 @@ workflows:
                             form_type: text
                             options:
                                 required: false
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false
                     attribute_default_values:
                         opportunity_name: $lead.name
                         account: $lead.account
                         company_name: $lead.companyName
+                        notes: $lead.notes
                     init_actions:
                         - @find_entity: # try to find account by company name
                             conditions:
@@ -106,9 +114,9 @@ workflows:
                         message: "Company name or account must be selected."
                 post_actions: # set lead.status = "qualified"
                     - @find_entity:
-                          class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
-                          identifier: 'qualified'
-                          attribute: $lead.status
+                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                        identifier: 'qualified'
+                        attribute: $lead.status
                     - @tree: # create Contact entity
                         conditions: # if contact not specified
                             @empty: $lead.contact
@@ -138,8 +146,8 @@ workflows:
                                             city: $lead.address.city
                                             postalCode: $lead.address.postalCode
                                             country: $lead.address.country
-                                            state: $lead.address.state
-                                            stateText: $lead.address.stateText
+                                            region: $lead.address.region
+                                            regionText: $lead.address.regionText
                                             namePrefix: $lead.namePrefix
                                             firstName: $lead.firstName
                                             middleName: $lead.middleName
@@ -216,12 +224,14 @@ workflows:
                             name: $opportunity_name
                             contact: $lead.contact
                             account: $account
+                            lead: $lead
+                            notes: $notes
                     - @find_entity: # set status "In progress" to opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
                         attribute: $.result.opportunity.status
                     - @start_workflow: # start workflow and create workflow item
-                        name: sales_flow_b2b
+                        name: 'b2b_flow_sales'
                         attribute: $.result.workflowItem
                         entity: $.result.opportunity
                         transition: qualify
@@ -247,7 +257,7 @@ workflows:
                         attribute: $lead.status
 
     # B2B Sales Workflow
-    sales_flow_b2b:
+    b2b_flow_sales:
         label: 'B2B Sales Flow'
         enabled: true
         type: wizard
@@ -257,14 +267,16 @@ workflows:
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 order: 10
                 allowed_transitions:
+                    - edit_qualify
                     - develop
                 view_attributes:
                     - { attribute: contact, view_type: orocrm_contact }
             develop:
                 label: 'Develop'
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
-                order: 10
+                order: 20
                 allowed_transitions:
+                    - edit_develop
                     - close_as_won
                     - close_as_lost
                 view_attributes:
@@ -279,55 +291,61 @@ workflows:
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 order: 30
                 allowed_transitions:
-                    - requalify
-                    - edit
+                    - requalify_lost
+                    - requalify_won
                 view_attributes:
                     - { attribute: close_reason, view_type: string }
                     - { attribute: close_revenue, view_type: currency }
                     - { attribute: close_date, view_type: date }
         attributes:
+            opportunity_name:
+                label: orocrm.sales.opportunity.name.label
+                type: string
+            notes:
+                label: orocrm.sales.lead.notes.label
+                type: string
             opportunity:
-                label: 'Opportunity'
+                label: orocrm.sales.opportunity.entity_label
                 type: entity
                 options:
                     class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                     managed_entity: true
                     multiple: false
             contact:
-                label: 'Contact'
+                label: orocrm.sales.opportunity.contact.label
                 type: entity
                 options:
                     class: OroCRM\Bundle\ContactBundle\Entity\Contact
             account:
-                label: 'Account'
+                label: orocrm.sales.opportunity.account.label
                 type: entity
                 options:
                     class: OroCRM\Bundle\AccountBundle\Entity\Account
             probability:
-                label: 'Probability'
+                label: orocrm.sales.opportunity.probability.label
                 type: float
             budget_amount:
-                  label: 'Budget amount'
+                  label: orocrm.sales.opportunity.budget_amount.label
                   type: float
             customer_need:
-                label: 'Customer Need'
+                label: orocrm.sales.opportunity.customer_need.label
                 type: string
             proposed_solution:
-                label: 'Proposed Solution'
+                label: orocrm.sales.opportunity.proposed_solution.label
                 type: string
             close_reason_name: # auxiliary attribute to find close reason by its name
-                label: 'Close reason'
+                label: orocrm.sales.opportunity.close_reason.label
                 type: string
             close_reason:
-                label: 'Close reason'
+                label: orocrm.sales.opportunity.close_reason.label
                 type: entity
                 options:
                     class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
             close_revenue:
-                label: 'Close revenue'
+                label: orocrm.sales.opportunity.close_revenue.label
                 type: float
             close_date:
-                label: 'Close date'
+                label: orocrm.sales.opportunity.close_date.label
                 type: object
                 options:
                     class: DateTime
@@ -338,6 +356,75 @@ workflows:
                 is_start: true
                 is_hidden: true
                 transition_definition: qualify_definition
+            edit_qualify:
+                label: 'Edit'
+                step_to: qualify
+                is_unavailable_hidden: true
+                transition_definition: edit_qualify_definition
+                frontend_options:
+                    icon: 'icon-edit'
+                form_options:
+                    attribute_fields:
+                        opportunity_name:
+                            form_type: text
+                            options:
+                                required: true
+                                constraints:
+                                  - NotBlank: ~
+                        account:
+                            form_type: orocrm_account_select
+                            options:
+                                required: false
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false
+                    attribute_default_values:
+                        opportunity_name: $opportunity.name
+                        account: $opportunity.account
+                        notes: $opportunity.notes
+            edit_develop:
+                label: 'Edit'
+                step_to: develop
+                is_unavailable_hidden: true
+                transition_definition: develop_definition
+                frontend_options:
+                    icon: 'icon-edit'
+                form_options:
+                    attribute_fields:
+                        contact:
+                            form_type: orocrm_contact_select
+                            options:
+                                required: false
+                        account:
+                            form_type: orocrm_account_select
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        budget_amount:
+                            form_type: oro_money
+                            options:
+                                required: false
+                                constraints:
+                                    - Range:
+                                        min: 0
+                        probability:
+                            form_type: percent
+                            options:
+                                required: false
+                                constraints:
+                                    - Range:
+                                        min: 0
+                                        max: 100
+                        customer_need:
+                            form_type: text
+                            options:
+                                required: false
+                        proposed_solution:
+                            form_type: text
+                            options:
+                                required: false
             develop:
                 label: 'Develop'
                 step_to: develop
@@ -414,10 +501,16 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
+                    attribute_default_values:
+                        close_revenue: $opportunity.closeRevenue
+                        close_date: $opportunity.closeDate
                     init_actions:
                         - @create_object:
-                            class: '\DateTime'
-                            attribute: $close_date
+                            conditions:
+                                @empty: $close_date
+                            parameters:
+                                class: '\DateTime'
+                                attribute: $close_date
             close_as_lost:
                 label: 'Close as Lost'
                 step_to: close
@@ -445,30 +538,46 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
+                    attribute_default_values:
+                        close_date: $opportunity.closeDate
                     init_actions:
+                        - @assign_value:
+                            conditions:
+                                @not_empty: $opportunity.closeReason
+                            parameters: [$close_reason_name, $opportunity.closeReason.name]
                         - @create_object:
-                            class: '\DateTime'
-                            attribute: $close_date
-            requalify:
+                            conditions:
+                                @empty: $close_date
+                            parameters:
+                                class: '\DateTime'
+                                attribute: $close_date
+            requalify_lost:
                 label: 'Requalify'
-                message: 'Performing this transition will reset some data.'
+                message: 'Are you sure you want to restart Sales flow and reset data?'
                 step_to: qualify
                 is_start: true
                 is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-backward'
                     class: 'btn-primary'
-                transition_definition: requalify_definition
-            edit:
-                label: 'Edit'
+                transition_definition: requalify_lost_definition
+            requalify_won:
+                label: 'Requalify'
+                message: 'Are you sure you want to restart Sales flow?'
                 step_to: qualify
                 is_start: true
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-pencil'
-                    class: 'btn-success'
-                transition_definition: edit_definition
+                    icon: 'icon-backward'
+                    class: 'btn-primary'
+                transition_definition: requalify_won_definition
         transition_definitions:
+            edit_qualify_definition:
+                post_actions: # copy attributes to opportunity properties
+                    - @assign_value:
+                        - [$opportunity.name, $opportunity_name]
+                        - [$opportunity.account, $account]
+                        - [$opportunity.notes, $notes]
             qualify_definition:
                 conditions: # if opportunity.status = "in_progress"
                     @equal: [$opportunity.status.name, 'in_progress']
@@ -578,7 +687,7 @@ workflows:
                         route: orocrm_sales_opportunity_view
                         route_parameters:
                             id: $opportunity.id
-            requalify_definition:
+            requalify_lost_definition:
                 conditions:
                     @equal: [$opportunity.status.name, 'lost']
                 post_actions:
@@ -597,7 +706,7 @@ workflows:
                         - [$opportunity.closeReason, $close_reason]
                         - [$opportunity.closeDate, $close_date]
                         - [$opportunity.closeRevenue, $close_revenue]
-            edit_definition:
+            requalify_won_definition:
                 conditions:
                     @equal: [$opportunity.status.name, 'won']
                 post_actions:

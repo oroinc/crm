@@ -34,10 +34,9 @@ class LoadAccountOpportunitiesData extends AbstractFixture implements ContainerA
     {
         $accounts      = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
         $opportunities = $om->getRepository('OroCRMSalesBundle:Opportunity')->findAll();
-
+        $randomAccounts = count($accounts) - 1;
         foreach ($opportunities as $opportunity) {
-            $index = array_rand($accounts);
-            $opportunity->setAccount($accounts[$index]);
+            $opportunity->setAccount($accounts[rand(0, $randomAccounts)]);
             $om->persist($opportunity);
         }
         $om->flush();

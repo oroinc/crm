@@ -101,14 +101,14 @@ class ContactAddressControllersTest extends WebTestCase
         $form['orocrm_contact_address_form[country]'] = 'AF';
 
         $doc->loadHTML(
-            '<select name="orocrm_contact_address_form[state]" id="orocrm_contact_address_form_state" ' .
+            '<select name="orocrm_contact_address_form[region]" id="orocrm_contact_address_form_region" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
-            '<option value="AF.01">Badakhshan</option> </select>'
+            '<option value="AF.BDS">Badakhshān</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
-        $form['orocrm_contact_address_form[state]'] = 'AF.01';
+        $form['orocrm_contact_address_form[region]'] = 'AF.BDS';
 
         $this->client->followRedirects(true);
         $this->client->submit($form);
@@ -123,7 +123,7 @@ class ContactAddressControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $result = ToolsAPI::jsonToArray($result->getContent());
-        $this->assertEquals('Badakhshan', $result['state']);
+        $this->assertEquals('Badakhshān', $result['region']);
 
         return $id;
     }
@@ -169,14 +169,14 @@ class ContactAddressControllersTest extends WebTestCase
         $form['orocrm_contact_address_form[country]'] = 'ZW';
 
         $doc->loadHTML(
-            '<select name="orocrm_contact_address_form[state]" id="orocrm_contact_address_form_state" ' .
+            '<select name="orocrm_contact_address_form[region]" id="orocrm_contact_address_form_region" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
-            '<option value="ZW.01">Manicaland</option> </select>'
+            '<option value="ZW.MA">Manicaland</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
-        $form['orocrm_contact_address_form[state]'] = 'ZW.01';
+        $form['orocrm_contact_address_form[region]'] = 'ZW.MA';
 
         $this->client->followRedirects(true);
         $this->client->submit($form);
@@ -191,6 +191,6 @@ class ContactAddressControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $result = ToolsAPI::jsonToArray($result->getContent());
-        $this->assertEquals('Manicaland', $result['state']);
+        $this->assertEquals('Manicaland', $result['region']);
     }
 }

@@ -11,7 +11,7 @@ class CallTypeTest extends FormIntegrationTestCase
     /**
      * @var CallType
      */
-    protected $formType;
+    protected $type;
 
     protected function setUp()
     {
@@ -49,8 +49,8 @@ class CallTypeTest extends FormIntegrationTestCase
             'phoneNumber' => 'text',
             'notes' => 'textarea',
             'callDateTime' => 'oro_datetime',
-            'callStatus' => 'hidden',
-            'duration' => 'time',
+            'callStatus' => 'entity',
+            'duration' => 'oro_time_interval',
             'direction' => 'entity'
         );
 

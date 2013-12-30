@@ -16,7 +16,7 @@ class CreateLeadTest extends Selenium2TestCase
         'city' => 'Address City',
         'zipCode' => '10001',
         'country' => 'United States',
-        'state' => 'New York'
+        'region' => 'New York'
     );
 
     protected function setUp()
@@ -78,7 +78,7 @@ class CreateLeadTest extends Selenium2TestCase
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
             ->openLeads()
-            ->filterBy('Name', $name)
+            ->filterBy('Lead name', $name)
             ->open(array($name))
             ->edit()
             ->assertTitle($name . ' - Edit - Leads - Sales')
@@ -103,11 +103,11 @@ class CreateLeadTest extends Selenium2TestCase
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
             ->openLeads()
-            ->filterBy('Name', $name)
+            ->filterBy('Lead name', $name)
             ->open(array($name))
             ->delete()
             ->assertTitle('Leads - Sales')
-            ->assertMessage('Item deleted')
+            ->assertMessage('Lead deleted')
             ->assertNoDataMessage('No leads exists');
     }
 }

@@ -253,7 +253,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
 
         $address->setCountry($country);
         if (!$region->isEmpty()) {
-            $address->setState($region->first());
+            $address->setRegion($region->first());
         }
 
         $account->setShippingAddress($address);
@@ -320,7 +320,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
 
         $address->setCountry($country);
         if (!$region->isEmpty()) {
-            $address->setState($region->first());
+            $address->setRegion($region->first());
         }
 
         $contact->addAddress($address);

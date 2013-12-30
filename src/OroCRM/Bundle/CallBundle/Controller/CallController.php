@@ -45,7 +45,7 @@ class CallController extends Controller
      *      class="OroCRMCallBundle:Call"
      * )
      */
-    public function updateAction(Call $entity = null)
+    public function updateAction(Call $entity)
     {
         return $this->update($entity);
     }
@@ -81,6 +81,16 @@ class CallController extends Controller
     }
 
     /**
+     * @Route("/widget/info/{id}", name="orocrm_call_widget_info", requirements={"id"="\d+"})
+     * @Template
+     * @AclAncestor("orocrm_call_view")
+     */
+    public function infoAction(Call $entity)
+    {
+        return array('entity' => $entity);
+    }
+
+    /**
      * @param int|null $contactId
      * @return Call
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
@@ -91,14 +101,14 @@ class CallController extends Controller
 
         $callStatus = $this->getDoctrine()
             ->getRepository('OroCRMCallBundle:CallStatus')
-            ->findOneByStatus('completed');
+            ->findOneByName('completed');
         $entity->setCallStatus($callStatus);
 
         $callDirection = $this->getDoctrine()
             ->getRepository('OroCRMCallBundle:CallDirection')
-            ->findOneByDirection('outgoing');
+            ->findOneByName('outgoing');
         $entity->setDirection($callDirection);
-        
+
         if ($contactId) {
             $repository = $this->getDoctrine()->getRepository('OroCRMContactBundle:Contact');
             $contact = $repository->find($contactId);
@@ -132,7 +142,16 @@ class CallController extends Controller
                     'success',
                     $this->get('translator')->trans('orocrm.call.controller.call.saved.message')
                 );
-                return $this->redirect($this->generateUrl('orocrm_call_index'));
+                //return $this->redirect($this->generateUrl('orocrm_call_index'));
+                return $this->get('oro_ui.router')->actionRedirect(
+                    array(
+                        'route' => 'orocrm_call_update',
+                        'parameters' => array('id' => $entity->getId()),
+                    ),
+                    array(
+                        'route' => 'orocrm_call_index'
+                    )
+                );
             }
             $saved = true;
         }

@@ -1,0 +1,62 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroAddressBundle::macros.html.twig' as address %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderProperty('orocrm.magento.order.status.label'|trans, entity.status|trans) }}
+            {{ ui.renderProperty('orocrm.magento.order.currency.label'|trans, entity.currency|trans) }}
+            {{ ui.renderProperty('orocrm.magento.order.total_amount.label'|trans, entity.totalAmount|oro_format_decimal) }}
+            {{ ui.renderProperty('orocrm.magento.order.discount_amount.label'|trans, entity.discountAmount|oro_format_decimal) }}
+            {{ ui.renderProperty('orocrm.magento.order.tax_amount.label'|trans, entity.taxAmount|oro_format_decimal) }}
+            {{ ui.renderProperty('orocrm.magento.order.shipping_amount.label'|trans, entity.shippingAmount|oro_format_decimal) }}
+            {{ ui.renderProperty('orocrm.magento.order.total_paid_amount.label'|trans, entity.totalPaidAmount|oro_format_decimal) }}
+            {{ ui.renderProperty('orocrm.magento.order.total_invoiced_amount.label'|trans, entity.totalInvoicedAmount|oro_format_decimal) }}
+            {{ ui.renderProperty('orocrm.magento.order.total_refunded_amount.label'|trans, entity.totalRefundedAmount|oro_format_decimal) }}
+            {{ ui.renderProperty('orocrm.magento.order.total_canceled_amount.label'|trans, entity.totalCanceledAmount|oro_format_decimal) }}
+            {{ ui.renderProperty('orocrm.magento.order.payment_method.label'|trans, entity.paymentMethod|trans|capitalize) }}
+            {{ ui.renderProperty('orocrm.magento.order.payment_details.label'|trans, entity.paymentDetails) }}
+        </div>
+
+        <div class="responsive-block">
+            {{ ui.renderProperty('orocrm.magento.order.shipping_method.label'|trans, entity.shippingMethod|trans|capitalize) }}
+            {{ ui.renderProperty('orocrm.magento.order.remote_ip.label'|trans, entity.remoteIp) }}
+            {{ ui.renderProperty('orocrm.magento.order.gift_message.label'|trans, entity.giftMessage) }}
+            {{ ui.renderProperty('orocrm.magento.order.store_name.label'|trans, entity.store.website.name) }}
+            {{ ui.renderProperty('orocrm.magento.order.store.label'|trans, entity.store.name|nl2br) }}
+
+            {% set customerData %}
+                {% if entity.customer %}
+                    {% set customerViewGranted = resource_granted('orocrm_magento_customer_view') %}
+                    {%- if customerViewGranted -%}
+                        <a href="{{ path('orocrm_magento_customer_view', {'id': entity.customer.id}) }}">{{ entity.customer|oro_format_name|default('N/A'|trans) }}</a>
+                    {%- else -%}
+                        {{ entity.customer|oro_format_name|default('N/A'|trans) }}
+                    {%- endif -%}
+                {% else %}
+                    {% trans %}N/A{% endtrans %}
+                {% endif %}
+            {% endset %}
+            {{ ui.renderProperty('orocrm.magento.order.customer.label'|trans, customerData) }}
+
+            {% set cartData %}
+                {% set cartViewGranted = resource_granted('orocrm_magento_cart_view') %}
+                {% if entity.cart and cartViewGranted %}
+                    <a href="{{ path('orocrm_magento_cart_view', {'id': entity.cart.id}) }}">{{ 'Cart #' ~ entity.cart.originId |trans }}</a>
+                {% else %}
+                    {% trans %}N/A{% endtrans %}
+                {% endif %}
+            {% endset %}
+            {{ ui.renderProperty('orocrm.magento.order.cart.label'|trans, cartData) }}
+
+            {% if entity.addresses is not empty %}
+                {% for orderAddress in entity.addresses %}
+                    {% set title = orderAddress.types.first and orderAddress.types.first.name == 'billing'
+                        ? 'orocrm.magento.cart.billing_address.label'|trans
+                        : 'orocrm.magento.cart.shipping_address.label'|trans %}
+                    {{ ui.renderProperty(title, address.renderAddress(orderAddress)) }}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>

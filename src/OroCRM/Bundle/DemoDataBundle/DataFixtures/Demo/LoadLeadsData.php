@@ -1,6 +1,7 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
+use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -15,27 +16,25 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-
-use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
+use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
+use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
 
+use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
+    const FLUSH_MAX = 5;
 
     /**
      * @var ContainerInterface
      */
     protected $container;
-
-    /**
-     * @var UserManager
-     */
-    protected $userManager;
 
     /**
      * @var User[]
@@ -53,14 +52,17 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /** @var  EntityManager */
     protected $em;
 
+    /** @var  ConfigManager */
+    protected $configManager;
+
     /**
      * {@inheritDoc}
      */
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
-        $this->userManager = $container->get('oro_user.manager');
         $this->workflowManager = $container->get('oro_workflow.manager');
+        $this->configManager = $container->get('oro_entity_config.config_manager');
     }
 
     /**
@@ -68,16 +70,54 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
      */
     public function load(ObjectManager $manager)
     {
-        $this->initSupportingEntities();
+        $this->initSupportingEntities($manager);
         $this->loadLeads();
+        $this->loadSources();
     }
 
-    protected function initSupportingEntities()
+    protected function initSupportingEntities(ObjectManager $manager = null)
     {
-        $this->em = $this->container->get('doctrine.orm.entity_manager');
-        $userStorageManager = $this->userManager->getStorageManager();
-        $this->users = $userStorageManager->getRepository('OroUserBundle:User')->findAll();
-        $this->countries = $userStorageManager->getRepository('OroAddressBundle:Country')->findAll();
+        if ($manager) {
+            $this->em = $manager;
+        }
+
+        $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
+        $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
+    }
+
+    public function loadSources()
+    {
+        // TODO: Use cache manager instead of manual entity extracting (see git history)
+        // TODO: https://magecore.atlassian.net/browse/BAP-2706
+        $entityConfigModel = $this->em->getRepository(EntityConfigModel::ENTITY_NAME)->findOneBy(
+            array('className' => 'OroCRM\Bundle\SalesBundle\Entity\Lead')
+        );
+        $configFieldModel = $this->em->getRepository(FieldConfigModel::ENTITY_NAME)->findOneBy(
+            array(
+                'entity'    => $entityConfigModel,
+                'fieldName' => 'extend_source'
+            )
+        );
+
+        /** @var OptionSet[] $sources */
+        $sources = $configFieldModel->getOptions()->toArray();
+        $randomSource = count($sources)-1;
+
+        $leads = $this->em->getRepository('OroCRMSalesBundle:Lead')->findAll();
+
+        foreach ($leads as $lead) {
+            /** @var Lead $lead */
+            $source = $sources[rand(0, $randomSource)];
+            $optionSetRelation = new OptionSetRelation();
+            $optionSetRelation->setData(
+                null,
+                $lead->getId(),
+                $configFieldModel,
+                $source
+            );
+            $this->persist($this->em, $optionSetRelation);
+        }
+        $this->flush($this->em);
     }
 
     public function loadLeads()
@@ -89,18 +129,20 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 //read headers
                 $headers = $data;
             }
+            $randomUser = count($this->users)-1;
+            $i = 0;
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-                $user = $this->users[rand(0, count($this->users)-1)];
+                $user = $this->users[rand(0, $randomUser)];
                 $this->setSecurityContext($user);
 
                 $data = array_combine($headers, array_values($data));
 
-                $lead = $this->createLead($data);
+                $lead = $this->createLead($data, $user);
 
                 $this->persist($this->em, $lead);
 
                 $workFlow = $this->workflowManager->startWorkflow(
-                    'sales_lead',
+                    'b2b_flow_lead',
                     $lead,
                     'qualify',
                     array(
@@ -145,6 +187,13 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                             )
                         );
                     }
+                    $this->persist($this->em, $salesFlow);
+                }
+                $i++;
+                if ($i % self::FLUSH_MAX == 0) {
+                    $this->flush($this->em);
+                    $this->em->clear();
+                    $this->initSupportingEntities();
                 }
             }
 
@@ -164,12 +213,14 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     }
     /**
      * @param  array $data
+     * @param User $user
+     *
      * @return Lead
      */
-    protected function createLead(array $data)
+    protected function createLead(array $data, $user)
     {
-        $user = $this->users[rand(0, count($this->users)-1)];
         $lead = new Lead();
+        /** @var LeadStatus $defaultStatus */
         $defaultStatus = $this->em->find('OroCRMSalesBundle:LeadStatus', 'new');
         $lead->setStatus($defaultStatus);
         $lead->setName($data['Company']);
@@ -212,7 +263,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
         $address->setCountry($country);
         if (!$region->isEmpty()) {
-            $address->setState($region->first());
+            $address->setRegion($region->first());
         }
 
         $lead->setAddress($address);
@@ -231,7 +282,11 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         foreach ($data as $key => $value) {
             $workflowItem->getData()->set($key, $value);
         }
-        $workflowManager->transit($workflowItem, $transition);
+
+        $workflow = $workflowManager->getWorkflow($workflowItem);
+        /** @var EntityManager $em */
+        $workflow->transit($workflowItem, $transition);
+        $workflowItem->setUpdated();
     }
 
     /**

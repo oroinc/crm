@@ -1,6 +1,8 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
+use Doctrine\ORM\EntityManager;
+use Oro\Bundle\UserBundle\Entity\Role;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -22,23 +24,19 @@ use Oro\Bundle\UserBundle\Entity\User;
  */
 class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
+    const FLUSH_MAX = 10;
+
     /** @var ContainerInterface */
     protected $container;
 
     /** @var UserManager */
     protected $userManager;
 
-    /** @var UserRepository */
-    protected $userRepository;
+    /** @var Role */
+    protected $role;
 
-    /** @var  TagManager */
-    protected $tagManager;
-
-    /** @var EntityRepository */
-    protected $roles;
-
-    /** @var EntityRepository */
-    protected $tags;
+    /** @var  EntityManager */
+    protected $em;
 
     /**
      * {@inheritDoc}
@@ -46,14 +44,19 @@ class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, 
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
+    }
 
-        $this->userManager = $container->get('oro_user.manager');
-        $this->userRepository = $this->userManager->getRepository();
-        $this->tagManager = $container->get('oro_tag.tag.manager');
+    /**
+     * @param ObjectManager $manager
+     */
+    protected function initSupportingEntities(ObjectManager $manager = null)
+    {
+        if ($manager) {
+            $this->em = $manager;
+        }
 
-        $entityManager = $container->get('doctrine.orm.entity_manager');
-        $this->roles = $entityManager->getRepository('OroUserBundle:Role');
-        $this->tags = $entityManager->getRepository('OroTagBundle:Tag');
+        $this->userManager = $this->container->get('oro_user.manager');
+        $this->role = $this->em->getRepository('OroUserBundle:Role')->findOneBy(array('role' => 'ROLE_MANAGER'));
     }
 
     /**
@@ -62,8 +65,10 @@ class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, 
      */
     public function load(ObjectManager $manager)
     {
+        $this->initSupportingEntities($manager);
         $this->loadUsers();
     }
+
 
     /**
      * Load users
@@ -72,8 +77,6 @@ class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, 
      */
     public function loadUsers()
     {
-        /** @var \Oro\Bundle\UserBundle\Entity\Role $role */
-        $role = $this->roles->findOneBy(array('role' => 'ROLE_MANAGER'));
 
         for ($i = 0; $i < 50; ++$i) {
             $firstName = $this->generateFirstName();
@@ -88,22 +91,24 @@ class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, 
                 $firstName,
                 $lastName,
                 $birthday,
-                $role
+                $this->role
             );
 
             $user->setPlainPassword($username);
             $this->userManager->updatePassword($user);
 
             $this->persist($user);
-
+            if ($i % self::FLUSH_MAX == 0) {
+                $this->flush();
+                $this->em->clear();
+                $this->initSupportingEntities();
+            }
         }
         $this->flush();
     }
 
     /**
      * Creates a user
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      *
      * @param  string    $username
      * @param  string    $email
@@ -236,7 +241,7 @@ class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, 
      */
     private function persist($object)
     {
-        $this->userManager->getStorageManager()->persist($object);
+        $this->em->persist($object);
     }
 
     /**
@@ -246,7 +251,7 @@ class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, 
      */
     private function flush()
     {
-        $this->userManager->getStorageManager()->flush();
+        $this->em->flush();
     }
 
     /**
