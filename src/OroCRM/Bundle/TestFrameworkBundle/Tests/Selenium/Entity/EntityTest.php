@@ -24,6 +24,8 @@ class EntityTest extends Selenium2TestCase
 
     public function testEditExistEntity()
     {
+        $this->markTestIncomplete('Need to rewrite this test to use filter by Name. BAP-2605');
+
         $entityname = 'Account';
         $fieldname = 'Test_field' . mt_rand();
         $login = new Login($this);
