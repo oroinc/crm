@@ -52,4 +52,56 @@ class DashboardController extends Controller
             $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
         );
     }
+
+    /**
+     * @Route(
+     *      "/my_salesflow_chart/chart/{widget}",
+     *      name="orocrm_sales_dashboard_salesflow_chart",
+     *      requirements={"widget"="[\w_-]+"}
+     * )
+     * @Template("OroCRMSalesBundle:Dashboard:salesflowChart.html.twig")
+     */
+    public function salesflowChartAction($widget)
+    {
+        return $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget);
+    }
+
+    /**
+     * @Route(
+     *      "/my_salesflow//{widget}/{activeTab}/{contentType}",
+     *      name="orocrm_sales_dashboard_my_salesflow_chart",
+     *      requirements={"widget"="[\w_-]+", "activeTab"="inbox|sent", "contentType"="full|tab"},
+     *      defaults={"activeTab" = "B2B", "contentType" = "full"}
+     * )
+     */
+    public function salesFlowAction($widget, $activeTab, $contentType)
+    {
+        $loggedUserId     = $this->getUser()->getId();
+        $renderMethod     = ($contentType === 'tab') ? 'render' : 'renderView';
+        $activeTabContent = $this->$renderMethod(
+            'OroCRMSalesBundle:Dashboard:salesflowChart.html.twig',
+            [
+                'loggedUserId' => $loggedUserId,
+                'gridName'     => sprintf('dashboard-recent-emails-%s-grid', $activeTab)
+            ]
+        );
+
+        if ($contentType === 'tab') {
+            return $activeTabContent;
+        } else {
+            $params = array_merge(
+                [
+                    'loggedUserId'     => $loggedUserId,
+                    'activeTab'        => $activeTab,
+                    'activeTabContent' => $activeTabContent
+                ],
+                $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
+            );
+
+            return $this->render(
+                'OroCRMSalesBundle:Dashboard:salesflow.html.twig',
+                $params
+            );
+        }
+    }
 }

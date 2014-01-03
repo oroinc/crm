@@ -1,0 +1,25 @@
+{% extends 'OroDashboardBundle:Dashboard:tabbedWidget.html.twig' %}
+
+{% block content %}
+    {% set tabs = [{
+        'url': path(
+            'oro_user_dashboard_recent_emails',
+            {'widget': widgetName, 'activeTab': 'B2B', 'contentType': 'tab'}
+        ),
+        'name': 'B2B',
+        'label': 'oro.dashboard.recent_emails.inbox'|trans
+    },
+    {
+        'url': path(
+            'oro_user_dashboard_recent_emails',
+            {'widget': widgetName, 'activeTab': 'B2C', 'contentType': 'tab'}
+        ),
+        'name': 'B2C',
+        'label': 'oro.dashboard.recent_emails.sent'|trans
+    }] %}
+
+    {{ parent() }}
+{% endblock %}
+
+{% block actions %}
+{% endblock %}
