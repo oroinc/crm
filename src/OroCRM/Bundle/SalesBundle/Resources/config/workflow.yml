@@ -287,7 +287,7 @@ workflows:
                     - { attribute: customer_need, view_type: string }
                     - { attribute: proposed_solution, view_type: string }
             close:
-                label: 'Close'
+                label: 'Closed'
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 order: 30
                 allowed_transitions:
