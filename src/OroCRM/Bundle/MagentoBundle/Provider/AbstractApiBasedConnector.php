@@ -131,7 +131,12 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
     {
         $this->preLoadDependencies();
 
-        $result = $this->findEntitiesToProcess();
+        if (empty($this->entitiesIdsBuffer)) {
+            $result = $this->findEntitiesToProcess();
+        } else {
+            $result = false;
+        }
+
         // no more data to look for
         if (is_null($result)) {
             return null;
@@ -235,12 +240,9 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
      */
     protected function findEntitiesToProcess()
     {
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
-        if (!empty($this->entitiesIdsBuffer)) {
-            return false;
-        }
-
+        $now      = new \DateTime('now', new \DateTimeZone('UTC'));
         $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
+
         if ($initMode) {
             $lastId      = $this->getLastId();
             $dateMessage = 'created less';
