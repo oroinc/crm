@@ -3,19 +3,19 @@
 {% block content %}
     {% set tabs = [{
         'url': path(
-            'oro_user_dashboard_recent_emails',
-            {'widget': widgetName, 'activeTab': 'B2B', 'contentType': 'tab'}
+            'orocrm_sales_dashboard_my_salesflow_chart',
+            {'widget': widgetName, 'activeTab': 'B2B', 'contentType': 'tab', '_wid': app.request.get('_wid')}
         ),
         'name': 'B2B',
-        'label': 'oro.dashboard.recent_emails.inbox'|trans
+        'label': 'oro.dashboard.my_sales_flow.b2b'|trans
     },
     {
         'url': path(
-            'oro_user_dashboard_recent_emails',
-            {'widget': widgetName, 'activeTab': 'B2C', 'contentType': 'tab'}
+            'orocrm_sales_dashboard_my_salesflow_chart',
+            {'widget': widgetName, 'activeTab': 'B2C', 'contentType': 'tab', '_wid': app.request.get('_wid')}
         ),
         'name': 'B2C',
-        'label': 'oro.dashboard.recent_emails.sent'|trans
+        'label': 'oro.dashboard.my_sales_flow.b2c'|trans
     }] %}
 
     {{ parent() }}

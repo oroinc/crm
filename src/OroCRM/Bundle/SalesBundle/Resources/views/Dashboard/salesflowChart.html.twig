@@ -1,4 +1,5 @@
-{% extends 'OroDashboardBundle:Dashboard:chartWidget.html.twig' %}
+{% set widgetId = app.request.get('_wid') %}
+{% set widgetContentId = 'widget-content-' ~ widgetId %}
 
 {% block content %}
     <div class="chart-container">

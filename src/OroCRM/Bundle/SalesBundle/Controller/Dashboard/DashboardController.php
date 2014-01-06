@@ -55,22 +55,9 @@ class DashboardController extends Controller
 
     /**
      * @Route(
-     *      "/my_salesflow_chart/chart/{widget}",
-     *      name="orocrm_sales_dashboard_salesflow_chart",
-     *      requirements={"widget"="[\w_-]+"}
-     * )
-     * @Template("OroCRMSalesBundle:Dashboard:salesflowChart.html.twig")
-     */
-    public function salesflowChartAction($widget)
-    {
-        return $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget);
-    }
-
-    /**
-     * @Route(
-     *      "/my_salesflow//{widget}/{activeTab}/{contentType}",
+     *      "/{widget}/{activeTab}/{contentType}",
      *      name="orocrm_sales_dashboard_my_salesflow_chart",
-     *      requirements={"widget"="[\w_-]+", "activeTab"="inbox|sent", "contentType"="full|tab"},
+     *      requirements={"widget"="[\w_-]+", "activeTab"="B2B|B2C", "contentType"="full|tab"},
      *      defaults={"activeTab" = "B2B", "contentType" = "full"}
      * )
      */
@@ -80,10 +67,7 @@ class DashboardController extends Controller
         $renderMethod     = ($contentType === 'tab') ? 'render' : 'renderView';
         $activeTabContent = $this->$renderMethod(
             'OroCRMSalesBundle:Dashboard:salesflowChart.html.twig',
-            [
-                'loggedUserId' => $loggedUserId,
-                'gridName'     => sprintf('dashboard-recent-emails-%s-grid', $activeTab)
-            ]
+            $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
         );
 
         if ($contentType === 'tab') {

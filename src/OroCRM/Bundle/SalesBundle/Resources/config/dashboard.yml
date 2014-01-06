@@ -74,5 +74,5 @@ oro_dashboard_config:
                     position:   80
                 opportunities_by_state:
                     position: 90
-                my_sales_flow_chart:
+                my_sales_flow:
                     position: 100
