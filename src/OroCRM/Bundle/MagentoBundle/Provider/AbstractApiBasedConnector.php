@@ -78,6 +78,7 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         // initialize deps
         $this->dependencies      = [];
         $this->entitiesIdsBuffer = [];
+        $this->lastId            = null;
         $settings                = $this->transportSettings->all();
 
         // validate date boundary
