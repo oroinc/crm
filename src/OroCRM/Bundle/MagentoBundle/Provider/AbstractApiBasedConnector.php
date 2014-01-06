@@ -271,7 +271,12 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         $lastId       = $this->getLastId();
         $wasNull      = is_null($lastId);
         $lastId       = end($this->entitiesIdsBuffer);
-        $this->lastId = $lastId ? $lastId : 0;
+
+        if (!empty($lastId)) {
+            $this->lastId = $lastId;
+        } elseif ($wasNull) {
+            $this->lastId = 0;
+        }
 
         // restore cursor
         reset($this->entitiesIdsBuffer);
