@@ -8,7 +8,7 @@ use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 class OpportunityRepository extends EntityRepository
 {
     /**
-     * Get opportunities by state
+     * Get opportunities by state by last month
      *
      * @param $aclHelper AclHelper
      * @return array
@@ -17,7 +17,7 @@ class OpportunityRepository extends EntityRepository
      *      'labels' => [id, label]
      *  ]
      */
-    public function getOpportunitiesByState($aclHelper)
+    public function getOpportunitiesByState(AclHelper $aclHelper)
     {
         $dateEnd = new \DateTime('now', new \DateTimeZone('UTC'));
         $dateStart = clone $dateEnd;
@@ -42,5 +42,39 @@ class OpportunityRepository extends EntityRepository
         }
 
         return ['data' => $resultData, 'labels' => $labels];
+    }
+
+    /**
+     * Get opportunities by lead status by last month
+     *
+     * @param $aclHelper
+     * @return array
+     *  key - label of lead status
+     *  value - sum of budgets
+     */
+    public function getOpportunitiesByStateForCahrt(AclHelper $aclHelper)
+    {
+        $dateEnd = new \DateTime('now', new \DateTimeZone('UTC'));
+        $dateStart = clone $dateEnd;
+        $dateStart = $dateStart->sub(new \DateInterval('P1M'));
+        $qb = $this->createQueryBuilder('opp');
+        $qb->select('lead_status.label', 'SUM(opp.budgetAmount) as budget')
+            ->join('opp.lead', 'lead')
+            ->join('lead.status', 'lead_status')
+            ->where($qb->expr()->between('opp.createdAt', ':dateFrom', ':dateTo'))
+            ->setParameter('dateFrom', $dateStart)
+            ->setParameter('dateTo', $dateEnd)
+            ->groupBy('lead_status.name');
+
+        $data = $aclHelper->apply($qb)
+            ->getArrayResult();
+
+        $resultData = [];
+
+        foreach ($data as $dataValue) {
+            $resultData[$dataValue['label']] = (double)$dataValue['budget'];
+        }
+
+        return $resultData;
     }
 }

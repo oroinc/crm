@@ -29,7 +29,7 @@
                             if (!$chart.get(0).clientWidth) {
                                 return;
                             }
-                            var data = new Array({'One': 300, 'two': 700, 'Tree': 240, 'four': 800, 'five': 500});
+                            var data = new Array({{ items|json_encode|raw }});
                             Flotr.draw(
                                 $chart.get(0),
                                 data,

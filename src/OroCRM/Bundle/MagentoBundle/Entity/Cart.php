@@ -13,7 +13,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * Class Cart
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository")
  * @ORM\Table(name="orocrm_magento_cart",
  *  indexes={
  *      @ORM\Index(name="magecart_origin_idx", columns={"origin_id"})

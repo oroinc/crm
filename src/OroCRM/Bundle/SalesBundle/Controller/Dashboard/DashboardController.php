@@ -67,7 +67,18 @@ class DashboardController extends Controller
         $renderMethod     = ($contentType === 'tab') ? 'render' : 'renderView';
         $activeTabContent = $this->$renderMethod(
             'OroCRMSalesBundle:Dashboard:salesflowChart.html.twig',
-            $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
+            array_merge(
+                [
+                    'items' => $activeTab == 'B2B'
+                            ? $this->getDoctrine()
+                                ->getRepository('OroCRMSalesBundle:Opportunity')
+                                ->getOpportunitiesByStateForCahrt($this->get('oro_security.acl_helper'))
+                            : $this->getDoctrine()
+                                ->getRepository('OroCRMMagentoBundle:Cart')
+                                ->getMagentoCartsByStates(),
+                ],
+                $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
+            )
         );
 
         if ($contentType === 'tab') {
