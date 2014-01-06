@@ -52,7 +52,7 @@ class OpportunityRepository extends EntityRepository
      *  key - label of lead status
      *  value - sum of budgets
      */
-    public function getOpportunitiesByStateForCahrt(AclHelper $aclHelper)
+    public function getOpportunitiesByLeads(AclHelper $aclHelper)
     {
         $dateEnd = new \DateTime('now', new \DateTimeZone('UTC'));
         $dateStart = clone $dateEnd;

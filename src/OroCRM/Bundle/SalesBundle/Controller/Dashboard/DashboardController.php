@@ -72,7 +72,7 @@ class DashboardController extends Controller
                     'items' => $activeTab == 'B2B'
                             ? $this->getDoctrine()
                                 ->getRepository('OroCRMSalesBundle:Opportunity')
-                                ->getOpportunitiesByStateForCahrt($this->get('oro_security.acl_helper'))
+                                ->getOpportunitiesByLeads($this->get('oro_security.acl_helper'))
                             : $this->getDoctrine()
                                 ->getRepository('OroCRMMagentoBundle:Cart')
                                 ->getMagentoCartsByStates(),
