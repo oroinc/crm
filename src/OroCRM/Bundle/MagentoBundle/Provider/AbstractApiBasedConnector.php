@@ -214,7 +214,7 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
                 'key'   => $this->getIdFieldName(),
                 'value' => [
                     'key'   => 'gt',
-                    'value' => $this->lastId,
+                    'value' => is_object($this->lastId) ? $this->entity_id : $this->lastId,
                 ],
             ];
         }
