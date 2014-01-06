@@ -264,12 +264,9 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
 
         // first run, ignore all data in less then start sync date
         $wasNull      = is_null($this->lastId);
-        $this->lastId = end($this->entitiesIdsBuffer);
+        $lastId = end($this->entitiesIdsBuffer);
         reset($this->entitiesIdsBuffer);
-
-        if ($this->lastId === false) {
-            $this->lastId = 0;
-        }
+        $this->lastId = $lastId ? $lastId : 0;
 
         if ($wasNull && $initMode) {
             $this->entitiesIdsBuffer = [];
