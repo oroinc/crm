@@ -57,9 +57,9 @@ class OrderConnector extends AbstractApiBasedConnector implements MagentoConnect
             $result = array_map(
                 function ($item) {
                     $inc = is_object($item) ? $item->increment_id : $item['increment_id'];
-                    $id = is_object($item) ? $item->order_id : $item['order_id'];
+                    $id  = is_object($item) ? $item->order_id : $item['order_id'];
 
-                    return (object) ['increment_id' => $inc, 'entity_id' => $id];
+                    return (object)['increment_id' => $inc, 'entity_id' => $id];
                 },
                 $result
             );

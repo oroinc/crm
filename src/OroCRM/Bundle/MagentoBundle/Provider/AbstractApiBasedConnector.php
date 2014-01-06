@@ -24,7 +24,10 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
     /** @var \DateTime */
     protected $lastSyncDate;
 
-    /** @var string Last id used for initial import, paginating by created_at assuming that ids always incremented */
+    /**
+     * @var string|\stdClass
+     * Last id used for initial import, paginating by created_at assuming that ids always incremented
+     */
     protected $lastId = null;
 
     /** @var string initial or update mode */
@@ -209,12 +212,13 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
             ],
         ];
 
-        if (!is_null($this->lastId) && $initMode) {
+        $lastId = $this->getLastId();
+        if (!is_null($lastId) && $initMode) {
             $filter['complex_filter'][] = [
                 'key'   => $this->getIdFieldName(),
                 'value' => [
                     'key'   => 'gt',
-                    'value' => is_object($this->lastId) ? $this->entity_id : $this->lastId,
+                    'value' => $lastId,
                 ],
             ];
         }
@@ -237,11 +241,12 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
 
         $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
         if ($initMode) {
+            $lastId      = $this->getLastId();
             $dateMessage = 'created less';
-            $message = sprintf(' and ID > %s', $this->lastId);
+            $message     = sprintf(' and ID > %s', $lastId);
         } else {
             $dateMessage = 'updated more';
-            $message = '';
+            $message     = '';
         }
 
         $this->logger->info(
@@ -263,10 +268,13 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         $this->entitiesIdsBuffer = $this->getList($filters, $this->batchSize, true);
 
         // first run, ignore all data in less then start sync date
-        $wasNull      = is_null($this->lastId);
-        $lastId = end($this->entitiesIdsBuffer);
-        reset($this->entitiesIdsBuffer);
+        $lastId       = $this->getLastId();
+        $wasNull      = is_null($lastId);
+        $lastId       = end($this->entitiesIdsBuffer);
         $this->lastId = $lastId ? $lastId : 0;
+
+        // restore cursor
+        reset($this->entitiesIdsBuffer);
 
         if ($wasNull && $initMode) {
             $this->entitiesIdsBuffer = [];
@@ -320,6 +328,16 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         );
 
         return $stores;
+    }
+
+    /**
+     * Retrieve last id in queue
+     *
+     * @return int|null
+     */
+    protected function getLastId()
+    {
+        return is_object($this->lastId) ? $this->lastId->entity_id : $this->lastId;
     }
 
     /**
