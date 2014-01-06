@@ -87,10 +87,6 @@ class CartConnector extends AbstractApiBasedConnector implements MagentoConnecto
      */
     protected function findEntitiesToProcess()
     {
-        if (!empty($this->entitiesIdsBuffer)) {
-            return false;
-        }
-
         $this->logger->info(sprintf('Looking for entities at %d page ... ', $this->currentPage));
 
         $filters = $this->getBatchFilter(
