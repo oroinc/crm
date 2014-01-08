@@ -2,6 +2,7 @@
 {% set widgetContentId = 'widget-content-' ~ widgetId %}
 
 {% block content %}
+    {% if items is not empty %}
     <div class="chart-container">
         <div class="clearfix">
             <div id="{{ widgetId }}-chart" class="bar-chart chart pull-left"></div>
@@ -63,4 +64,13 @@
                     });
                 });
     </script>
+    {% else %}
+        <div class="container-fluid">
+            <div class="grid-container">
+                <div class="no-data">
+                    <span>{{ 'No data'|trans }}</span>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

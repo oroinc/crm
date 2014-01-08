@@ -63,7 +63,6 @@ class DashboardController extends Controller
      */
     public function salesFlowAction($widget, $activeTab, $contentType)
     {
-        $loggedUserId     = $this->getUser()->getId();
         $renderMethod     = ($contentType === 'tab') ? 'render' : 'renderView';
         $activeTabContent = $this->$renderMethod(
             'OroCRMSalesBundle:Dashboard:salesflowChart.html.twig',
@@ -72,10 +71,17 @@ class DashboardController extends Controller
                     'items' => $activeTab == 'B2B'
                             ? $this->getDoctrine()
                                 ->getRepository('OroCRMSalesBundle:Opportunity')
-                                ->getOpportunitiesByLeads($this->get('oro_security.acl_helper'))
+                                ->getFunnelChartData(
+                                    'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                                    'budgetAmount',
+                                    $this->get('oro_security.acl_helper')
+                                )
                             : $this->getDoctrine()
-                                ->getRepository('OroCRMMagentoBundle:Cart')
-                                ->getMagentoCartsByStates(),
+                                ->getRepository('OroCRMSalesBundle:Opportunity')
+                                ->getFunnelChartData(
+                                    'OroCRM\Bundle\MagentoBundle\Entity\Cart',
+                                    'grandTotal'
+                                ),
                 ],
                 $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
             )
@@ -86,7 +92,7 @@ class DashboardController extends Controller
         } else {
             $params = array_merge(
                 [
-                    'loggedUserId'     => $loggedUserId,
+                    'loggedUserId'     => $this->getUser()->getId(),
                     'activeTab'        => $activeTab,
                     'activeTabContent' => $activeTabContent
                 ],

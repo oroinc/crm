@@ -45,34 +45,53 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * Get opportunities by lead status by last month
+     * Get funnel chart data
      *
-     * @param $aclHelper
+     * @param $entityClass
+     * @param $fieldName
+     * @param AclHelper $aclHelper
      * @return array
-     *  key - label of lead status
-     *  value - sum of budgets
+     *   key - label of lead status
+     *   value - sum of budgets
      */
-    public function getOpportunitiesByLeads(AclHelper $aclHelper)
+    public function getFunnelChartData($entityClass, $fieldName, AclHelper $aclHelper = null)
     {
+        $resultData = [];
         $dateEnd = new \DateTime('now', new \DateTimeZone('UTC'));
         $dateStart = clone $dateEnd;
         $dateStart = $dateStart->sub(new \DateInterval('P1M'));
-        $qb = $this->createQueryBuilder('opp');
-        $qb->select('lead_status.label', 'SUM(opp.budgetAmount) as budget')
-            ->join('opp.lead', 'lead')
-            ->join('lead.status', 'lead_status')
-            ->where($qb->expr()->between('opp.createdAt', ':dateFrom', ':dateTo'))
-            ->setParameter('dateFrom', $dateStart)
-            ->setParameter('dateTo', $dateEnd)
-            ->groupBy('lead_status.name');
+        $definition = $this->getEntityManager()
+            ->getRepository('OroWorkflowBundle:WorkflowDefinition')
+            ->findByEntityClass($entityClass);
 
-        $data = $aclHelper->apply($qb)
-            ->getArrayResult();
+        if (isset($definition[0])) {
+            $workFlow = $definition[0];
+            $qb = $this->getEntityManager()->createQueryBuilder();
+            $qb->select('wi.currentStepName', 'SUM(opp.' . $fieldName .') as budget')
+                ->from($entityClass, 'opp')
+                ->join('OroWorkflowBundle:WorkflowBindEntity', 'wbe', 'WITH', 'wbe.entityId = opp.id')
+                ->join('wbe.workflowItem', 'wi')
+                ->where($qb->expr()->between('opp.createdAt', ':dateFrom', ':dateTo'))
+                ->setParameter('dateFrom', $dateStart)
+                ->setParameter('dateTo', $dateEnd)
+                ->andWhere('wi.workflowName = :workFlowName')
+                ->setParameter('workFlowName', $workFlow->getName())
+                ->groupBy('wi.currentStepName');
 
-        $resultData = [];
+            $query = $aclHelper ? $aclHelper->apply($qb) : $qb->getQuery();
+            $data = $query->getArrayResult();
 
-        foreach ($data as $dataValue) {
-            $resultData[$dataValue['label']] = (double)$dataValue['budget'];
+            foreach ($workFlow->getConfiguration()['steps'] as $stepName => $config) {
+                foreach ($data as $dataValue) {
+                    if ($dataValue['currentStepName'] == $stepName) {
+                        $resultData[$config['label']] = (double)$dataValue['budget'];
+                    }
+                }
+
+                if (!isset($resultData[$config['label']])) {
+                    $resultData[$config['label']] = 0;
+                }
+            }
         }
 
         return $resultData;
