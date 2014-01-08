@@ -60,11 +60,6 @@
     {% endset %}
 
     {% set workflowItemsWidget %}
-        {# Primary workflow view variant 2 #}
-        <div class="clearfix">
-        {{ include('OroWorkflowBundle:Widget:entityPrimaryWorkflow.html.twig', {entity: entity}) }}
-        </div>
-
         <div class="clearfix">
         {{ oro_widget_render({
             'widgetType': 'block',
