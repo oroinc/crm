@@ -9,8 +9,9 @@
         </div>
     </div>
     <script type="text/javascript">
-        require(['jquery', 'flotr2', 'flotr2/funnel', 'oro/formatter/number'],
+        require(['jquery', 'flotr2', 'oro/formatter/number', 'flotr2/funnel'],
                 function($, Flotr, numberFormatter){
+                    var formatter = numberFormatter;
                     $(function () {
                         var $widgetContent = $('#{{ widgetContentId }}');
                         var $chart = $('#{{ widgetId }}-chart');
@@ -36,7 +37,8 @@
                                 data,
                                 {
                                     funnel : {
-                                        show : true
+                                        show : true,
+                                        formatter: formatter.formatCurrency
                                     },
                                     mouse: {
                                         track: true,
