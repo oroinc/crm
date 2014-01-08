@@ -208,11 +208,11 @@ class Cart extends BaseCart
     }
 
     /**
-     * @param Customer $customer
+     * @param Customer|null $customer
      *
      * @return $this
      */
-    public function setCustomer(Customer $customer)
+    public function setCustomer(Customer $customer = null)
     {
         $this->customer = $customer;
         return $this;
