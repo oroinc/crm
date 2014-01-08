@@ -29,6 +29,9 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
+ *      },
+ *      "workflow"={
+ *          "primary"="b2b_flow_sales"
  *      }
  *  }
  * )

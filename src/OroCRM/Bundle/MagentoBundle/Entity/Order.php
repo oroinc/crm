@@ -24,6 +24,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
+ *      },
+ *      "workflow"={
+ *          "primary"="b2c_flow_order_follow_up"
  *      }
  *  }
  * )
