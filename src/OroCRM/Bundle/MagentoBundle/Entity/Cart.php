@@ -212,7 +212,7 @@ class Cart extends BaseCart
      *
      * @return $this
      */
-    public function setCustomer(Customer $customer)
+    public function setCustomer(Customer $customer = null)
     {
         $this->customer = $customer;
         return $this;
@@ -259,11 +259,33 @@ class Cart extends BaseCart
     }
 
     /**
+     * @param string $email
+     *
+     * @return $this
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getItemsQty()
     {
         return $this->itemsQty;
+    }
+
+    /**
+     * @param float $itemsQty
+     *
+     * @return $this
+     */
+    public function setItemsQty($itemsQty)
+    {
+        $this->itemsQty = $itemsQty;
+        return $this;
     }
 
     /**
@@ -280,6 +302,17 @@ class Cart extends BaseCart
     public function getQuoteCurrencyCode()
     {
         return $this->quoteCurrencyCode;
+    }
+
+    /**
+     * @param string $quoteCurrencyCode
+     *
+     * @return $this
+     */
+    public function setQuoteCurrencyCode($quoteCurrencyCode)
+    {
+        $this->quoteCurrencyCode = $quoteCurrencyCode;
+        return $this;
     }
 
     /**
