@@ -10,7 +10,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_contact_method")
- * @Config()
  */
 class Method
 {
