@@ -96,4 +96,29 @@ class OpportunityRepository extends EntityRepository
 
         return $resultData;
     }
+
+    /**
+     * Get streamline funnel chart data
+     *
+     * @param $entityClass
+     * @param $fieldName
+     * @param AclHelper $aclHelper
+     * @return array
+     *   key - label of lead status
+     *   value - sum of budgets
+     */
+    public function getStreamlineFunnelChartData($entityClass, $fieldName, AclHelper $aclHelper = null)
+    {
+        $data = $this->getFunnelChartData($entityClass, $fieldName, $aclHelper);
+
+        $dataKeys = array_keys($data);
+
+        for ($i = count($dataKeys) - 1; $i >= 0; $i--) {
+            if (isset($dataKeys[$i - 1])) {
+                $data[$dataKeys[$i - 1]] += $data[$dataKeys[$i]];
+            }
+        }
+
+        return $data;
+    }
 }

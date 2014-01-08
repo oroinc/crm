@@ -55,54 +55,49 @@ class DashboardController extends Controller
 
     /**
      * @Route(
-     *      "/{widget}/{activeTab}/{contentType}",
-     *      name="orocrm_sales_dashboard_my_salesflow_chart",
-     *      requirements={"widget"="[\w_-]+", "activeTab"="B2B|B2C", "contentType"="full|tab"},
-     *      defaults={"activeTab" = "B2B", "contentType" = "full"}
+     *      "/sales_flow_b2b/chart/{widget}",
+     *      name="orocrm_sales_dashboard_sales_flow_b2b_chart",
+     *      requirements={"widget"="[\w_-]+"}
      * )
+     * @Template("OroCRMSalesBundle:Dashboard:salesFlowChart.html.twig")
      */
-    public function salesFlowAction($widget, $activeTab, $contentType)
+    public function mySalesFlowB2BAction($widget)
     {
-        $renderMethod     = ($contentType === 'tab') ? 'render' : 'renderView';
-        $activeTabContent = $this->$renderMethod(
-            'OroCRMSalesBundle:Dashboard:salesflowChart.html.twig',
-            array_merge(
-                [
-                    'items' => $activeTab == 'B2B'
-                            ? $this->getDoctrine()
-                                ->getRepository('OroCRMSalesBundle:Opportunity')
-                                ->getFunnelChartData(
-                                    'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
-                                    'budgetAmount',
-                                    $this->get('oro_security.acl_helper')
-                                )
-                            : $this->getDoctrine()
-                                ->getRepository('OroCRMSalesBundle:Opportunity')
-                                ->getFunnelChartData(
-                                    'OroCRM\Bundle\MagentoBundle\Entity\Cart',
-                                    'grandTotal'
-                                ),
-                ],
-                $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
-            )
+        return array_merge(
+            [
+                'items' => $this->getDoctrine()
+                        ->getRepository('OroCRMSalesBundle:Opportunity')
+                        ->getFunnelChartData(
+                            'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                            'budgetAmount',
+                            $this->get('oro_security.acl_helper')
+                        )
+            ],
+            $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
         );
+    }
 
-        if ($contentType === 'tab') {
-            return $activeTabContent;
-        } else {
-            $params = array_merge(
-                [
-                    'loggedUserId'     => $this->getUser()->getId(),
-                    'activeTab'        => $activeTab,
-                    'activeTabContent' => $activeTabContent
-                ],
-                $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
-            );
-
-            return $this->render(
-                'OroCRMSalesBundle:Dashboard:salesflow.html.twig',
-                $params
-            );
-        }
+    /**
+     * @Route(
+     *      "/sales_flow_b2b_streamline/chart/{widget}",
+     *      name="orocrm_sales_dashboard_sales_flow_b2b_streamline_chart",
+     *      requirements={"widget"="[\w_-]+"}
+     * )
+     * @Template("OroCRMSalesBundle:Dashboard:salesFlowChart.html.twig")
+     */
+    public function mySalesFlowB2BStreamlineAction($widget)
+    {
+        return array_merge(
+            [
+                'items' => $this->getDoctrine()
+                        ->getRepository('OroCRMSalesBundle:Opportunity')
+                        ->getStreamlineFunnelChartData(
+                            'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                            'budgetAmount',
+                            $this->get('oro_security.acl_helper')
+                        )
+            ],
+            $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
+        );
     }
 }

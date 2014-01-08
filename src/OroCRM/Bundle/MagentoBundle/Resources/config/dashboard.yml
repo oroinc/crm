@@ -1,0 +1,17 @@
+oro_dashboard_config:
+    widgets:
+        my_sales_flow_b2c_chart:
+            label: My Sales Flow B2C
+            route: orocrm_magento_dashboard_sales_flow_b2c_chart
+            acl:   orocrm_magento_cart_view
+        my_sales_flow_b2c_streamline_chart:
+            label: My Sales Flow B2C Streamline
+            route: orocrm_magento_dashboard_sales_flow_b2c_streamline_chart
+            acl:   orocrm_magento_cart_view
+    dashboards:
+        main:
+            widgets:
+                my_sales_flow_b2c_chart:
+                    position: 110
+                my_sales_flow_b2c_streamline_chart:
+                    position: 130
