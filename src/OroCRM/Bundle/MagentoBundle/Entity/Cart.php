@@ -308,4 +308,137 @@ class Cart extends BaseCart
     {
         return $this->status;
     }
+
+    /**
+     * @param string $baseCurrencyCode
+     *
+     * @return $this
+     */
+    public function setBaseCurrencyCode($baseCurrencyCode)
+    {
+        $this->baseCurrencyCode = $baseCurrencyCode;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseCurrencyCode()
+    {
+        return $this->baseCurrencyCode;
+    }
+
+    /**
+     * @param string $giftMessage
+     *
+     * @return $this
+     */
+    public function setGiftMessage($giftMessage)
+    {
+        $this->giftMessage = $giftMessage;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGiftMessage()
+    {
+        return $this->giftMessage;
+    }
+
+    /**
+     * @param float $isGuest
+     *
+     * @return $this
+     */
+    public function setIsGuest($isGuest)
+    {
+        $this->isGuest = $isGuest;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getIsGuest()
+    {
+        return $this->isGuest;
+    }
+
+    /**
+     * @param int $itemsCount
+     *
+     * @return $this
+     */
+    public function setItemsCount($itemsCount)
+    {
+        $this->itemsCount = $itemsCount;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getItemsCount()
+    {
+        return $this->itemsCount;
+    }
+
+    /**
+     * @param string $storeCurrencyCode
+     *
+     * @return $this
+     */
+    public function setStoreCurrencyCode($storeCurrencyCode)
+    {
+        $this->storeCurrencyCode = $storeCurrencyCode;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStoreCurrencyCode()
+    {
+        return $this->storeCurrencyCode;
+    }
+
+    /**
+     * @param float $storeToBaseRate
+     *
+     * @return $this
+     */
+    public function setStoreToBaseRate($storeToBaseRate)
+    {
+        $this->storeToBaseRate = $storeToBaseRate;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getStoreToBaseRate()
+    {
+        return $this->storeToBaseRate;
+    }
+
+    /**
+     * @param float $storeToQuoteRate
+     *
+     * @return $this
+     */
+    public function setStoreToQuoteRate($storeToQuoteRate)
+    {
+        $this->storeToQuoteRate = $storeToQuoteRate;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getStoreToQuoteRate()
+    {
+        return $this->storeToQuoteRate;
+    }
 }
