@@ -176,7 +176,15 @@ class Cart extends BaseCart
     }
 
     /**
-     * @param \OroCRM\Bundle\MagentoBundle\Entity\Store $store
+     * @param CartItem[]|Collection $cartItems
+     */
+    public function setCartItems(Collection $cartItems)
+    {
+        $this->cartItems = $cartItems;
+    }
+
+    /**
+     * @param Store $store
      */
     public function setStore($store)
     {
@@ -184,7 +192,7 @@ class Cart extends BaseCart
     }
 
     /**
-     * @return \OroCRM\Bundle\MagentoBundle\Entity\Store
+     * @return Store
      */
     public function getStore()
     {
@@ -192,7 +200,7 @@ class Cart extends BaseCart
     }
 
     /**
-     * @return mixed
+     * @return Customer
      */
     public function getCustomer()
     {
@@ -200,11 +208,11 @@ class Cart extends BaseCart
     }
 
     /**
-     * @param mixed $customer
+     * @param Customer $customer
      *
      * @return $this
      */
-    public function setCustomer($customer)
+    public function setCustomer(Customer $customer)
     {
         $this->customer = $customer;
         return $this;
