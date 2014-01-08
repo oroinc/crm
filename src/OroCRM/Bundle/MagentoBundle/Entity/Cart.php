@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
@@ -165,6 +166,7 @@ class Cart extends BaseCart
     public function __construct()
     {
         $this->status = new CartStatus('open');
+        $this->cartItems = new ArrayCollection();
     }
 
     /**
