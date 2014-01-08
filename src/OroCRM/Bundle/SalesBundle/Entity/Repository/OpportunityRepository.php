@@ -81,15 +81,17 @@ class OpportunityRepository extends EntityRepository
             $query = $aclHelper ? $aclHelper->apply($qb) : $qb->getQuery();
             $data = $query->getArrayResult();
 
-            foreach ($workFlow->getConfiguration()['steps'] as $stepName => $config) {
-                foreach ($data as $dataValue) {
-                    if ($dataValue['currentStepName'] == $stepName) {
-                        $resultData[$config['label']] = (double)$dataValue['budget'];
+            if (!empty($data)) {
+                foreach ($workFlow->getConfiguration()['steps'] as $stepName => $config) {
+                    foreach ($data as $dataValue) {
+                        if ($dataValue['currentStepName'] == $stepName) {
+                            $resultData[$config['label']] = (double)$dataValue['budget'];
+                        }
                     }
-                }
 
-                if (!isset($resultData[$config['label']])) {
-                    $resultData[$config['label']] = 0;
+                    if (!isset($resultData[$config['label']])) {
+                        $resultData[$config['label']] = 0;
+                    }
                 }
             }
         }
