@@ -1,7 +1,6 @@
 language: php
 
 php:
-    - 5.3
     - 5.4
     - 5.5
 
@@ -11,6 +10,6 @@ env:
 before_script:
   - composer self-update
   - phpenv config-add travis.php.ini
-  - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source
+  - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-dist
 
 script: phpunit --coverage-text
