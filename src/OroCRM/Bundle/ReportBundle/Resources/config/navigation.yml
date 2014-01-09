@@ -1,7 +1,7 @@
 oro_menu_config:
     items:
         static_reports_tab:
-            label: 'Static Reports'
+            label: 'Reports'
             uri: '#'
             extras:
                 position: 5
