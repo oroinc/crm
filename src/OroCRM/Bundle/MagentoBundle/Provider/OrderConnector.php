@@ -56,7 +56,10 @@ class OrderConnector extends AbstractApiBasedConnector implements MagentoConnect
         if ($idsOnly) {
             $result = array_map(
                 function ($item) {
-                    return is_object($item) ? $item->increment_id : $item['increment_id'];
+                    $inc = is_object($item) ? $item->increment_id : $item['increment_id'];
+                    $id  = is_object($item) ? $item->order_id : $item['order_id'];
+
+                    return (object)['increment_id' => $inc, 'entity_id' => $id];
                 },
                 $result
             );
@@ -74,7 +77,7 @@ class OrderConnector extends AbstractApiBasedConnector implements MagentoConnect
      */
     public function getData($id, $dependenciesInclude = false, $onlyAttributes = null)
     {
-        $result = $this->call(MagentoConnectorInterface::ACTION_ORDER_INFO, [$id, $onlyAttributes]);
+        $result = $this->call(MagentoConnectorInterface::ACTION_ORDER_INFO, [$id->increment_id, $onlyAttributes]);
 
         // fill related entities data, needed to create full representation of magento store state in this time
         // flat array structure will be converted by data converter
@@ -138,6 +141,6 @@ class OrderConnector extends AbstractApiBasedConnector implements MagentoConnect
      */
     protected function getIdFieldName()
     {
-        return 'increment_id';
+        return 'order_id';
     }
 }
