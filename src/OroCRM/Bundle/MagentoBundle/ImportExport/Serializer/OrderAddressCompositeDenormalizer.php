@@ -16,12 +16,12 @@ class OrderAddressCompositeDenormalizer extends TypedAddressNormalizer
     protected $additionalProperties = ['fax', 'phone'];
 
     /** @var OrderAddressDataConverter */
-    protected $converter;
+    protected $dataConverter;
 
-    public function __construct(AddressNormalizer $addressNormalizer, OrderAddressDataConverter $converter)
+    public function __construct(AddressNormalizer $addressNormalizer, OrderAddressDataConverter $dataConverter)
     {
         parent::__construct($addressNormalizer);
-        $this->converter = $converter;
+        $this->dataConverter = $dataConverter;
     }
 
     /**
@@ -29,7 +29,7 @@ class OrderAddressCompositeDenormalizer extends TypedAddressNormalizer
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $data = $this->converter->convertToImportFormat($data);
+        $data = $this->dataConverter->convertToImportFormat($data);
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         $result = parent::denormalize($data, $class, $format, $context);

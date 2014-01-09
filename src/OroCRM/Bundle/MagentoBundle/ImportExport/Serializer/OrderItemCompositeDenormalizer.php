@@ -15,12 +15,12 @@ class OrderItemCompositeDenormalizer extends AbstractNormalizer implements Denor
     const COLLECTION_TYPE = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\OrderItem>';
 
     /** @var OrderItemDataConverter */
-    protected $converter;
+    protected $dataConverter;
 
-    public function __construct(EntityManager $em, OrderItemDataConverter $converter)
+    public function __construct(EntityManager $em, OrderItemDataConverter $dataConverter)
     {
         parent::__construct($em);
-        $this->converter = $converter;
+        $this->dataConverter = $dataConverter;
     }
 
     /**
@@ -28,7 +28,7 @@ class OrderItemCompositeDenormalizer extends AbstractNormalizer implements Denor
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $data = $this->converter->convertToImportFormat($data);
+        $data = $this->dataConverter->convertToImportFormat($data);
 
         $className = self::TYPE;
         /** @var OrderItem $object */
