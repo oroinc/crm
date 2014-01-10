@@ -412,7 +412,6 @@ workflows:
                                 required: false
             reopen:
                 label: 'Reopen'
-                message: 'Performing this transition will reset call and email data.'
                 step_to: open
                 is_unavailable_hidden: true
                 frontend_options:
