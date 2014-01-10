@@ -34,7 +34,15 @@ class CartTest extends AbstractEntityTestCase
         $testStatus = new CartStatus('test');
 
         return array(
-            'status'  => array('status', $testStatus, $testStatus),
+            'status'            => array('status', $testStatus, $testStatus),
+            'storeToQuoteRate'  => array('storeToQuoteRate', 1, 1),
+            'storeToBaseRate'   => array('storeToBaseRate', 1, 1),
+            'storeCurrencyCode' => array('storeCurrencyCode', 'USD', 'USD'),
+            'baseCurrencyCode'  => array('baseCurrencyCode', 'USD', 'USD'),
+            'paymentDetails'    => array('paymentDetails', '', ''),
+            'itemsCount'        => array('itemsCount', 1, 1),
+            'isGuest'           => array('isGuest', 1, 1),
+            'giftMessage'       => array('giftMessage', 1, 1),
         );
     }
 }
