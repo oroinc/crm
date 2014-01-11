@@ -12,6 +12,4 @@ oro_dashboard_config:
         main:
             widgets:
                 my_sales_flow_b2c_chart:
-                    position: 110
-                my_sales_flow_b2c_streamline_chart:
                     position: 130

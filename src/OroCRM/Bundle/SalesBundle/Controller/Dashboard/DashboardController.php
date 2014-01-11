@@ -64,15 +64,21 @@ class DashboardController extends Controller
     public function mySalesFlowB2BAction($widget)
     {
         return array_merge(
-            [
-                'items' => $this->getDoctrine()
-                        ->getRepository('OroCRMSalesBundle:Opportunity')
-                        ->getFunnelChartData(
-                            'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
-                            'budgetAmount',
-                            $this->get('oro_security.acl_helper')
-                        )
-            ],
+            $this->getDoctrine()
+                ->getRepository('OroCRMSalesBundle:Opportunity')
+                ->getFunnelChartData(
+                    'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                    'budgetAmount',
+                    [
+                        'qualify',
+                        'develop'
+                    ],
+                    [
+                        'lost' => 'budgetAmount',
+                        'won' => 'closeRevenue'
+                    ],
+                    $this->get('oro_security.acl_helper')
+                ),
             $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
         );
     }
