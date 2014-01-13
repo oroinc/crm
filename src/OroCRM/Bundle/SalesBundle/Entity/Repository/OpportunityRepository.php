@@ -8,7 +8,7 @@ use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 class OpportunityRepository extends EntityRepository
 {
     /**
-     * Get opportunities by state by last month
+     * Get opportunities by state by current quarter
      *
      * @param $aclHelper AclHelper
      * @return array

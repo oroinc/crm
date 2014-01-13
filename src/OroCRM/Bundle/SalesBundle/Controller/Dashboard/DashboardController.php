@@ -89,28 +89,4 @@ class DashboardController extends Controller
             $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
         );
     }
-
-    /**
-     * @Route(
-     *      "/sales_flow_b2b_streamline/chart/{widget}",
-     *      name="orocrm_sales_dashboard_sales_flow_b2b_streamline_chart",
-     *      requirements={"widget"="[\w_-]+"}
-     * )
-     * @Template("OroCRMSalesBundle:Dashboard:salesFlowChart.html.twig")
-     */
-    public function mySalesFlowB2BStreamlineAction($widget)
-    {
-        return array_merge(
-            [
-                'items' => $this->getDoctrine()
-                        ->getRepository('OroCRMSalesBundle:Opportunity')
-                        ->getStreamlineFunnelChartData(
-                            'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
-                            'budgetAmount',
-                            $this->get('oro_security.acl_helper')
-                        )
-            ],
-            $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
-        );
-    }
 }
