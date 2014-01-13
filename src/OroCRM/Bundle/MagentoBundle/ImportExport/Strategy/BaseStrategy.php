@@ -20,7 +20,7 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
     protected $strategyHelper;
 
     /** @var ContextInterface */
-    protected $importExportContext;
+    protected $context;
 
     /** @var array */
     protected $regionsCache = [];
@@ -40,11 +40,11 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
     }
 
     /**
-     * @param ContextInterface $importExportContext
+     * @param ContextInterface $context
      */
-    public function setImportExportContext(ContextInterface $importExportContext)
+    public function setImportExportContext(ContextInterface $context)
     {
-        $this->importExportContext = $importExportContext;
+        $this->context = $context;
     }
 
     /**
@@ -84,17 +84,17 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
         // validate entity
         $validationErrors = $this->strategyHelper->validateEntity($entity);
         if ($validationErrors) {
-            $this->importExportContext->incrementErrorEntriesCount();
-            $this->strategyHelper->addValidationErrors($validationErrors, $this->importExportContext);
+            $this->context->incrementErrorEntriesCount();
+            $this->strategyHelper->addValidationErrors($validationErrors, $this->context);
 
             return null;
         }
 
         // increment context counter
         if ($entity->getId()) {
-            $this->importExportContext->incrementUpdateCount();
+            $this->context->incrementUpdateCount();
         } else {
-            $this->importExportContext->incrementAddCount();
+            $this->context->incrementAddCount();
         }
 
         return $entity;
