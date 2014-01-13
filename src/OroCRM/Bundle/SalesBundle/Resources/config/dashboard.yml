@@ -49,7 +49,7 @@ oro_dashboard_config:
             route:      oro_sales_dashboard_opportunities_by_lead_source_chart
             acl:        orocrm_sales_opportunity_view
         opportunities_by_state:
-            label:      Opportunities by State
+            label:      Opportunities by Status
             route:      orocrm_sales_dashboard_opportunity_by_state_chart
             acl:        orocrm_sales_opportunity_view
         my_sales_flow_b2b_chart:

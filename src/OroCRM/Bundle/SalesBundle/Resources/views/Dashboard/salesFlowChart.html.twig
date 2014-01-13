@@ -39,7 +39,15 @@
                                         show : true,
                                         formatter: formatter.formatCurrency,
                                         nozzleSteps: {{ nozzleSteps|json_encode|raw }},
-                                        colors: {{ chartColors|json_encode|raw }}
+                                        colors: {{ chartColors|json_encode|raw }},
+                                        tickFormatter: function (label, value) {
+                                            return label + ': ' + formatter.formatCurrency(value);
+                                        },
+                                        nozzleFormatter: function (label, value) {
+                                            return '"' + label
+                                                    + '" {{ 'from'|trans }} {{ quarterDate|oro_format_date }}: '
+                                                    + formatter.formatCurrency(value);
+                                        }
                                     },
                                     mouse: {
                                         track: true,

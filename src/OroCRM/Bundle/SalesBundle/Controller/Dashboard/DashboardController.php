@@ -63,7 +63,14 @@ class DashboardController extends Controller
      */
     public function mySalesFlowB2BAction($widget)
     {
+        $currentDate = new \DateTime('now', new \DateTimeZone('UTC'));
         return array_merge(
+            [
+                'quarterDate' =>  new \DateTime(
+                    $currentDate->format('Y') . '-01-' . ((ceil($currentDate->format('n') / 3) - 1) * 3 + 1),
+                    new \DateTimeZone('UTC')
+                )
+            ],
             $this->getDoctrine()
                 ->getRepository('OroCRMSalesBundle:Opportunity')
                 ->getFunnelChartData(

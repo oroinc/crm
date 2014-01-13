@@ -20,8 +20,10 @@ class OpportunityRepository extends EntityRepository
     public function getOpportunitiesByState(AclHelper $aclHelper)
     {
         $dateEnd = new \DateTime('now', new \DateTimeZone('UTC'));
-        $dateStart = clone $dateEnd;
-        $dateStart = $dateStart->sub(new \DateInterval('P1M'));
+        $dateStart = new \DateTime(
+            $dateEnd->format('Y') . '-01-' . ((ceil($dateEnd->format('n') / 3) - 1) * 3 + 1),
+            new \DateTimeZone('UTC')
+        );
         $data = $this->getOpportunitiesDataByState($aclHelper, $dateStart, $dateEnd);
 
         $resultData = [];
@@ -45,7 +47,7 @@ class OpportunityRepository extends EntityRepository
      * @param AclHelper $aclHelper
      * @return array
      *   items - array of data
-     *     key - label of lead status
+     *     key - labels
      *     value - sum of budgets
      *   nozzleSteps - array with nozzle steps labels
      */
@@ -84,7 +86,7 @@ class OpportunityRepository extends EntityRepository
      * @param AclHelper $aclHelper
      * @return array
      *   items - array of data
-     *     key - label of lead status
+     *     key - labels
      *     value - sum of budgets
      *   nozzleSteps - array with nozzle steps labels
      */

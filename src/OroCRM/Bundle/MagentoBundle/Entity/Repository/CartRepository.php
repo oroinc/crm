@@ -17,7 +17,7 @@ class CartRepository extends EntityRepository
      * @param AclHelper $aclHelper
      * @return array
      *   items - array of data
-     *     key - label of lead status
+     *     key - label
      *     value - sum of budgets
      *   nozzleSteps - array with nozzle steps labels
      */
