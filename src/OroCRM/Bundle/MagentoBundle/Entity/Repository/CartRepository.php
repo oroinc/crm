@@ -42,8 +42,10 @@ class CartRepository extends EntityRepository
 
         if (!empty($additionalNozzle)) {
             $dateEnd = new \DateTime('now', new \DateTimeZone('UTC'));
-            $dateStart = clone $dateEnd;
-            $dateStart = $dateStart->sub(new \DateInterval('P1M'));
+            $dateStart = new \DateTime(
+                $dateEnd->format('Y') . '-01-' . ceil($dateEnd->format('n') / 3),
+                new \DateTimeZone('UTC')
+            );
 
             $nozzleData = $workflowItemRepo
                 ->getFunnelChartData(

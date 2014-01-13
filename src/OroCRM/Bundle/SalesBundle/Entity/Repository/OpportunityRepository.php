@@ -141,8 +141,10 @@ class OpportunityRepository extends EntityRepository
         &$nozzleStepsLabels
     ) {
         $dateEnd = new \DateTime('now', new \DateTimeZone('UTC'));
-        $dateStart = clone $dateEnd;
-        $dateStart = $dateStart->sub(new \DateInterval('P1M'));
+        $dateStart = new \DateTime(
+            $dateEnd->format('Y') . '-01-' . ceil($dateEnd->format('n') / 3),
+            new \DateTimeZone('UTC')
+        );
 
         $budgetString = 'SUM(CASE ';
         foreach ($additionalNozzle as $stepName => $field) {
