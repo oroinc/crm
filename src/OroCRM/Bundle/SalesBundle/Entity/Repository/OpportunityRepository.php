@@ -93,7 +93,6 @@ class OpportunityRepository extends EntityRepository
         $data = $this->getFunnelChartData($entityClass, $fieldName, $aclHelper);
 
         $dataKeys = array_keys($data['items']);
-
         for ($i = count($dataKeys) - 1; $i >= 0; $i--) {
             if (isset($dataKeys[$i - 1])) {
                 $data['items'][$dataKeys[$i - 1]] += $data['items'][$dataKeys[$i]];
@@ -118,7 +117,6 @@ class OpportunityRepository extends EntityRepository
             $qb->where($qb->expr()->between('opp.createdAt', ':dateFrom', ':dateTo'))
                 ->setParameter('dateFrom', $dateStart)
                 ->setParameter('dateTo', $dateEnd);
-
         }
         $qb->groupBy('opp_status.name');
 
@@ -142,7 +140,7 @@ class OpportunityRepository extends EntityRepository
     ) {
         $dateEnd = new \DateTime('now', new \DateTimeZone('UTC'));
         $dateStart = new \DateTime(
-            $dateEnd->format('Y') . '-01-' . ceil($dateEnd->format('n') / 3),
+            $dateEnd->format('Y') . '-01-' . ((ceil($dateEnd->format('n') / 3) - 1) * 3 + 1),
             new \DateTimeZone('UTC')
         );
 

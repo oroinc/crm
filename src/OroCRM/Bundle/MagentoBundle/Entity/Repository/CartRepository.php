@@ -43,7 +43,7 @@ class CartRepository extends EntityRepository
         if (!empty($additionalNozzle)) {
             $dateEnd = new \DateTime('now', new \DateTimeZone('UTC'));
             $dateStart = new \DateTime(
-                $dateEnd->format('Y') . '-01-' . ceil($dateEnd->format('n') / 3),
+                $dateEnd->format('Y') . '-01-' . ((ceil($dateEnd->format('n') / 3) - 1) * 3 + 1),
                 new \DateTimeZone('UTC')
             );
 
