@@ -8,7 +8,7 @@
         'entity': entity,
         'indexPath': path('orocrm_magento_cart_index', {id: entity.channel.id}),
         'indexLabel': 'orocrm.magento.cart.entity_plural_label'|trans,
-        'entityTitle': 'Cart #' ~ entity.originId
+        'entityTitle': 'orocrm.magento.cart.entity_label'|trans ~ ' ' ~ entity.originId
     } %}
     {{ parent() }}
 {% endblock pageHeader %}

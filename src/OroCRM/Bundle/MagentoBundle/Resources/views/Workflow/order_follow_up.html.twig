@@ -3,7 +3,7 @@
 {% oro_title_set({
     params : {
         '%section%': 'Orders'|trans,
-        '%entity%': 'Order #'|trans ~ workflowItem.data.order.id,
+        '%entity%': 'Order '|trans ~ workflowItem.data.order.id,
         '%workflow_data%': workflow.label ~ ' (' ~ currentStep.label ~ ')',
     }
 }) %}
@@ -24,7 +24,7 @@
         'additional': [
             {
                 'indexPath': path('orocrm_magento_order_view', {id: workflowItem.data.order.id}),
-                'indexLabel': 'Order #'|trans ~ workflowItem.data.order.id
+                'indexLabel': 'Order '|trans ~ workflowItem.data.order.id
             }
         ],
         'entityTitle': workflow.label ~ ' (' ~ currentStep.label ~ ')'

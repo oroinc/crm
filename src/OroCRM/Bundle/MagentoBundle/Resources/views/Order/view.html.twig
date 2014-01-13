@@ -9,7 +9,7 @@
         'entity': entity,
         'indexPath': path('orocrm_magento_order_index', {id: entity.channel.id}),
         'indexLabel': 'orocrm.magento.order.entity_plural_label'|trans,
-        'entityTitle': 'orocrm.magento.order.entity_label'|trans ~ ' #' ~ entity.incrementId
+        'entityTitle': 'orocrm.magento.order.entity_label'|trans ~ ' ' ~ entity.incrementId
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
