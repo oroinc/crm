@@ -5,15 +5,15 @@
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ ui.renderProperty('orocrm.magento.order.status.label'|trans, entity.status|trans) }}
-            {{ ui.renderProperty('orocrm.magento.order.currency.label'|trans, entity.currency|trans) }}
-            {{ ui.renderProperty('orocrm.magento.order.total_amount.label'|trans, entity.totalAmount|oro_format_decimal) }}
-            {{ ui.renderProperty('orocrm.magento.order.discount_amount.label'|trans, entity.discountAmount|oro_format_decimal) }}
-            {{ ui.renderProperty('orocrm.magento.order.tax_amount.label'|trans, entity.taxAmount|oro_format_decimal) }}
-            {{ ui.renderProperty('orocrm.magento.order.shipping_amount.label'|trans, entity.shippingAmount|oro_format_decimal) }}
-            {{ ui.renderProperty('orocrm.magento.order.total_paid_amount.label'|trans, entity.totalPaidAmount|oro_format_decimal) }}
-            {{ ui.renderProperty('orocrm.magento.order.total_invoiced_amount.label'|trans, entity.totalInvoicedAmount|oro_format_decimal) }}
-            {{ ui.renderProperty('orocrm.magento.order.total_refunded_amount.label'|trans, entity.totalRefundedAmount|oro_format_decimal) }}
-            {{ ui.renderProperty('orocrm.magento.order.total_canceled_amount.label'|trans, entity.totalCanceledAmount|oro_format_decimal) }}
+            {{ ui.renderProperty('orocrm.magento.order.currency.label'|trans, entity.currency) }}
+            {{ ui.renderProperty('orocrm.magento.order.total_amount.label'|trans, entity.totalAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('orocrm.magento.order.discount_amount.label'|trans, entity.discountAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('orocrm.magento.order.tax_amount.label'|trans, entity.taxAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('orocrm.magento.order.shipping_amount.label'|trans, entity.shippingAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('orocrm.magento.order.total_paid_amount.label'|trans, entity.totalPaidAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('orocrm.magento.order.total_invoiced_amount.label'|trans, entity.totalInvoicedAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('orocrm.magento.order.total_refunded_amount.label'|trans, entity.totalRefundedAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('orocrm.magento.order.total_canceled_amount.label'|trans, entity.totalCanceledAmount|oro_format_currency({'currency': entity.currency})) }}
             {{ ui.renderProperty('orocrm.magento.order.payment_method.label'|trans, entity.paymentMethod|trans|capitalize) }}
             {{ ui.renderProperty('orocrm.magento.order.payment_details.label'|trans, entity.paymentDetails) }}
         </div>
