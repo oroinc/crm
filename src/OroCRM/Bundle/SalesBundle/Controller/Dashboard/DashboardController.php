@@ -13,7 +13,7 @@ class DashboardController extends Controller
      * @Route(
      *      "/opportunities_by_lead_source/chart/{widget}",
      *      name="oro_sales_dashboard_opportunities_by_lead_source_chart",
-     *      requirements={"widget"="[\w_-]+"}
+     *      requirements={"widget"="[\w-]+"}
      * )
      * @Template("OroDashboardBundle:Dashboard:pieChart.html.twig")
      */
@@ -37,7 +37,7 @@ class DashboardController extends Controller
      * @Route(
      *      "/opportunity_state/chart/{widget}",
      *      name="orocrm_sales_dashboard_opportunity_by_state_chart",
-     *      requirements={"widget"="[\w_-]+"}
+     *      requirements={"widget"="[\w-]+"}
      * )
      * @Template("OroCRMSalesBundle:Dashboard:opportunityByState.html.twig")
      */
