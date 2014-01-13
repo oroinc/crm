@@ -52,4 +52,41 @@ class DashboardController extends Controller
             $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
         );
     }
+
+    /**
+     * @Route(
+     *      "/sales_flow_b2b/chart/{widget}",
+     *      name="orocrm_sales_dashboard_sales_flow_b2b_chart",
+     *      requirements={"widget"="[\w_-]+"}
+     * )
+     * @Template("OroCRMSalesBundle:Dashboard:salesFlowChart.html.twig")
+     */
+    public function mySalesFlowB2BAction($widget)
+    {
+        $currentDate = new \DateTime('now', new \DateTimeZone('UTC'));
+        return array_merge(
+            [
+                'quarterDate' =>  new \DateTime(
+                    $currentDate->format('Y') . '-01-' . ((ceil($currentDate->format('n') / 3) - 1) * 3 + 1),
+                    new \DateTimeZone('UTC')
+                )
+            ],
+            $this->getDoctrine()
+                ->getRepository('OroCRMSalesBundle:Opportunity')
+                ->getFunnelChartData(
+                    'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                    'budgetAmount',
+                    [
+                        'qualify',
+                        'develop'
+                    ],
+                    [
+                        'lost' => 'budgetAmount',
+                        'won' => 'closeRevenue'
+                    ],
+                    $this->get('oro_security.acl_helper')
+                ),
+            $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
+        );
+    }
 }
