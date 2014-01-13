@@ -38,7 +38,8 @@
                                     funnel : {
                                         show : true,
                                         formatter: formatter.formatCurrency,
-                                        nozzleSteps: {{ nozzleSteps|json_encode|raw }}
+                                        nozzleSteps: {{ nozzleSteps|json_encode|raw }},
+                                        colors: {{ chartColors|json_encode|raw }}
                                     },
                                     mouse: {
                                         track: true,
