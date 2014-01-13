@@ -44,8 +44,8 @@
                                             return label + ': ' + formatter.formatCurrency(value);
                                         },
                                         nozzleFormatter: function (label, value) {
-                                            return '"' + label
-                                                    + '" {{ 'from'|trans }} {{ quarterDate|oro_format_date }}: '
+                                            return label
+                                                    + ' ({{ 'from'|trans }} {{ quarterDate|oro_format_date }}): '
                                                     + formatter.formatCurrency(value);
                                         }
                                     },
