@@ -1,41 +1,28 @@
 <?php
 
-namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium\Sales;
+namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
 
-use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Login;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
 
+/**
+ * Class CreateOpportunityTest
+ *
+ * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales
+ */
 class CreateOpportunityTest extends Selenium2TestCase
 {
-    protected $coverageScriptUrl = PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL_COVERAGE;
-
-    protected function setUp()
-    {
-        $this->setHost(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_HOST);
-        $this->setPort(intval(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PORT));
-        $this->setBrowser(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM2_BROWSER);
-        $this->setBrowserUrl(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL);
-    }
-
-    protected function tearDown()
-    {
-        $this->cookie()->clear();
-    }
-
     /**
      * @return string
      */
     public function testCreateOpportunity()
     {
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit();
+        $login = $this->login();
 
         $opportunityName = 'Opportunity_'.mt_rand();
         $accountName = $this->createAccount($login);
 
-        $login->openOpportunities()
+        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->add()
             ->setName($opportunityName)
             ->setAccount($accountName)
@@ -62,7 +49,7 @@ class CreateOpportunityTest extends Selenium2TestCase
     {
         $accountName = 'Account_'.mt_rand();
 
-        $login->openAccounts()
+        $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
             ->setAccountName($accountName)
             ->setOwner('admin')
@@ -80,11 +67,8 @@ class CreateOpportunityTest extends Selenium2TestCase
     {
         $newName = 'Update_' . $name;
 
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openOpportunities()
+        $login = $this->login();
+        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $name)
             ->open(array($name))
             ->edit()
@@ -105,11 +89,8 @@ class CreateOpportunityTest extends Selenium2TestCase
      */
     public function testDeleteOpportunity($name)
     {
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openOpportunities()
+        $login = $this->login();
+        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $name)
             ->open(array($name))
             ->delete()
