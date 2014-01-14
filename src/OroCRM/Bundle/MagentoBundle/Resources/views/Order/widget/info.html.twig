@@ -43,7 +43,7 @@
                 {% set cartViewGranted = resource_granted('orocrm_magento_cart_view') %}
                 {% if entity.cart and cartViewGranted %}
                     <a href="{{ path('orocrm_magento_cart_view', {'id': entity.cart.id}) }}">
-                        {{ 'orocrm.magento.cart.entity_label'|trans ~ ' ' ~  entity.cart.originId |trans }}
+                        {{ 'orocrm.magento.cart.entity_label'|trans ~ ' ' ~  entity.cart.originId }}
                     </a>
                 {% else %}
                     {% trans %}N/A{% endtrans %}
