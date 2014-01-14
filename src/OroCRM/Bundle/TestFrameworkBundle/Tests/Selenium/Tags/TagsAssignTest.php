@@ -2,139 +2,117 @@
 
 namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium;
 
-use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Login;
-use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Search;
+use Oro\Bundle\SearchBundle\Tests\Selenium\Pages\Search;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
+/**
+ * Class TagsAssignTest
+ *
+ * @package OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium
+ */
 class TagsAssignTest extends Selenium2TestCase
 {
-    protected $coverageScriptUrl = PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL_COVERAGE;
-
-    protected function setUp()
-    {
-        $this->setHost(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_HOST);
-        $this->setPort(intval(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PORT));
-        $this->setBrowser(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM2_BROWSER);
-        $this->setBrowserUrl(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL);
-    }
-
-    protected function tearDown()
-    {
-        $this->cookie()->clear();
-    }
-
     /**
      * @return string
      */
     public function testCreateTag()
     {
-        $tagname = 'Tag_'.mt_rand();
+        $tagName = 'Tag_'.mt_rand();
 
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openTags()
+        $login = $this->login();
+        $login->openTags('Oro\Bundle\TagBundle')
             ->add()
             ->assertTitle('Create Tag - Tags - System')
-            ->setTagname($tagname)
+            ->setTagName($tagName)
             ->setOwner('admin')
             ->save()
             ->assertMessage('Tag saved')
             ->assertTitle('Tags - System')
             ->close();
 
-        return $tagname;
+        return $tagName;
     }
 
     /**
      * @depends testCreateTag
-     * @param $tagname
+     * @param $tagName
      */
-    public function testAccountTag($tagname)
+    public function testAccountTag($tagName)
     {
-        $accountname = 'Account_'.mt_rand();
+        $accountName = 'Account_'.mt_rand();
 
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openAccounts()
+        $login = $this->login();
+
+        $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
-            ->setAccountName($accountname)
+            ->setAccountName($accountName)
             ->setOwner('admin')
-            ->verifyTag($tagname)
-            ->setTag('New_' . $tagname)
+            ->verifyTag($tagName)
+            ->setTag('New_' . $tagName)
             ->save()
             ->assertMessage('Account saved')
             ->toGrid()
             ->close()
-            ->filterBy('Account name', $accountname)
-            ->open(array($accountname))
-            ->verifyTag($tagname);
+            ->filterBy('Account name', $accountName)
+            ->open(array($accountName))
+            ->verifyTag($tagName);
     }
 
     /**
      * @depends testCreateTag
-     * @param $tagname
+     * @param $tagName
      */
-    public function testContactTag($tagname)
+    public function testContactTag($tagName)
     {
-        $contactname = 'Contact_'.mt_rand();
+        $contactName = 'Contact_'.mt_rand();
 
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openContacts()
+        $login = $this->login();
+        $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->add()
-            ->setFirstName($contactname . '_first')
-            ->setLastName($contactname . '_last')
+            ->setFirstName($contactName . '_first')
+            ->setLastName($contactName . '_last')
             ->setOwner('admin')
-            ->setEmail($contactname . '@mail.com')
-            ->verifyTag($tagname)
-            ->setTag('New_' . $tagname)
+            ->setEmail($contactName . '@mail.com')
+            ->verifyTag($tagName)
+            ->setTag('New_' . $tagName)
             ->save()
             ->assertMessage('Contact saved')
             ->toGrid()
             ->close()
-            ->filterBy('Email', $contactname . '@mail.com')
-            ->open(array($contactname))
-            ->verifyTag($tagname);
+            ->filterBy('Email', $contactName . '@mail.com')
+            ->open(array($contactName))
+            ->verifyTag($tagName);
     }
 
     /**
      * @depends testCreateTag
-     * @param $tagname
+     * @param $tagName
      */
-    public function testUserTag($tagname)
+    public function testUserTag($tagName)
     {
-        $username = 'User_'.mt_rand();
+        $userName = 'User_'.mt_rand();
 
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openUsers()
+        $login = $this->login();
+        $login->openUsers('Oro\Bundle\UserBundle')
             ->add()
-            ->setUsername($username)
+            ->setUsername($userName)
             ->setOwner('Main')
             ->enable()
             ->setFirstpassword('123123q')
             ->setSecondpassword('123123q')
-            ->setFirstName('First_'.$username)
-            ->setLastName('Last_'.$username)
-            ->setEmail($username.'@mail.com')
+            ->setFirstName('First_'.$userName)
+            ->setLastName('Last_'.$userName)
+            ->setEmail($userName.'@mail.com')
             ->setRoles(array('Manager'))
-            ->verifyTag($tagname)
-            ->setTag('New_' . $tagname)
+            ->verifyTag($tagName)
+            ->setTag('New_' . $tagName)
             ->save()
             ->assertMessage('User saved')
             ->toGrid()
             ->close()
-            ->filterBy('Username', $username)
-            ->open(array($username))
-            ->verifyTag($tagname);
+            ->filterBy('Username', $userName)
+            ->open(array($userName))
+            ->verifyTag($tagName);
     }
 
     /**
@@ -142,18 +120,15 @@ class TagsAssignTest extends Selenium2TestCase
      * @depends testAccountTag
      * @depends testContactTag
      * @depends testUserTag
-     * @param $tagname
+     * @param $tagName
      */
-    public function testTagSearch($tagname)
+    public function testTagSearch($tagName)
     {
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit();
-        $tagsearch = new Search($this);
-        $result = $tagsearch->search('New_' . $tagname)
+        $this->login();
+        $tagSearch = new Search($this);
+        $result = $tagSearch->search('New_' . $tagName)
             ->submit()
-            ->select('New_' . $tagname)
+            ->select('New_' . $tagName)
             ->assertEntity('User', 1)
             ->assertEntity('Contact', 1)
             ->assertEntity('Account', 1);

@@ -1,15 +1,18 @@
 <?php
 
-namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium\Sales;
+namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
 
-use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Accounts;
-use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Login;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
 
-class WorkflowTest extends \PHPUnit_Extensions_Selenium2TestCase
+/**
+ * Class WorkflowTest
+ *
+ * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales
+ */
+class WorkflowTest extends Selenium2TestCase
 {
-    protected $coverageScriptUrl = PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL_COVERAGE;
-
-    protected $address = array(
+     protected $address = array(
         'label' => 'Address Label',
         'street' => 'Address Street',
         'city' => 'Address City',
@@ -18,32 +21,16 @@ class WorkflowTest extends \PHPUnit_Extensions_Selenium2TestCase
         'region' => 'New York'
     );
 
-    protected function setUp()
-    {
-        $this->setHost(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_HOST);
-        $this->setPort(intval(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PORT));
-        $this->setBrowser(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM2_BROWSER);
-        $this->setBrowserUrl(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL);
-    }
-
-    protected function tearDown()
-    {
-        $this->cookie()->clear();
-    }
-
     public function testLeadWorkflow()
     {
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit();
+        $login = $this->login();
 
-        $leadname = $this->createLead($login);
+        $leadName = $this->createLead($login);
 
-        $login->openLeads()
-            ->filterBy('Lead name', $leadname)
-            ->open(array($leadname))
-            ->openWorkflow()
+        $login->openLeads('OroCRM\Bundle\SalesBundle')
+            ->filterBy('Lead name', $leadName)
+            ->open(array($leadName))
+            ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->qualify()
             ->submit()
             ->develop()
@@ -55,47 +42,41 @@ class WorkflowTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->closeAsWon()
             ->setCloseRevenue('100')
             ->submit()
-            ->openOpportunity(false)
+            ->openOpportunity('OroCRM\Bundle\SalesBundle', false)
             ->checkStatus('Won');
 
-        return $leadname;
+        return $leadName;
     }
 
     /**
-     * @param $leadname
+     * @param $leadName
      * @depends testLeadWorkflow
      * @return string
      */
-    public function testLeadWorkflowReactivate($leadname)
+    public function testLeadWorkflowReactivate($leadName)
     {
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openLeads()
-            ->filterBy('Lead name', $leadname)
-            ->open(array($leadname))
+        $login = $this->login();
+        $login->openLeads('OroCRM\Bundle\SalesBundle')
+            ->filterBy('Lead name', $leadName)
+            ->open(array($leadName))
             ->checkStatus('Qualified')
             ->reactivate()
-            ->openWorkflow()
+            ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->disqualify()
-            ->openLead()
+            ->openLead('OroCRM\Bundle\SalesBundle')
             ->checkStatus('Canceled');
     }
 
     public function testOpportunityWorkflowAsWon()
     {
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit();
+        $login = $this->login();
 
         $opportunityName = $this->createOpportunity($login);
 
-        $login->openOpportunities()
+        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $opportunityName)
             ->open(array($opportunityName))
-            ->openWorkflow()
+            ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->develop()
             ->setBudget('100')
             ->setProbability('100')
@@ -106,24 +87,21 @@ class WorkflowTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->closeAsWon()
             ->setCloseRevenue('100')
             ->submit()
-            ->openOpportunity(false)
+            ->openOpportunity('OroCRM\Bundle\SalesBundle', false)
             ->checkStatus('Won');
     }
 
     public function testOpportunityWorkflowAsLost()
     {
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit();
+        $login = $this->login();
 
         $opportunityName = $this->createOpportunity($login);
 
-        $login->openOpportunities()
+        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $opportunityName)
             ->open(array($opportunityName))
             ->checkStatus('In Progress')
-            ->openWorkflow()
+            ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->develop()
             ->setBudget('100')
             ->setProbability('100')
@@ -134,7 +112,7 @@ class WorkflowTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->closeAsLost()
             ->setCloseReason('Cancelled')
             ->submit()
-            ->openOpportunity(false)
+            ->openOpportunity('OroCRM\Bundle\SalesBundle', false)
             ->checkStatus('Lost');
     }
 
@@ -142,11 +120,11 @@ class WorkflowTest extends \PHPUnit_Extensions_Selenium2TestCase
      * @param Login $login
      * @return string
      */
-    protected function createLead($login)
+    protected function createLead(Login $login)
     {
         $name = 'Lead_'.mt_rand();
 
-        $login->openLeads()
+        $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->add()
             ->setName($name)
             ->setFirstName($name . '_first_name')
@@ -168,12 +146,12 @@ class WorkflowTest extends \PHPUnit_Extensions_Selenium2TestCase
      * @param Login $login
      * @return string
      */
-    protected function createOpportunity($login)
+    protected function createOpportunity(Login $login)
     {
         $opportunityName = 'Opportunity_'.mt_rand();
         $accountName = $this->createAccount($login);
 
-        $login->openOpportunities()
+        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->add()
             ->setName($opportunityName)
             ->setAccount($accountName)
@@ -200,7 +178,7 @@ class WorkflowTest extends \PHPUnit_Extensions_Selenium2TestCase
     {
         $accountName = 'Account_'.mt_rand();
 
-        $login->openAccounts()
+        $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
             ->setAccountName($accountName)
             ->setOwner('admin')
