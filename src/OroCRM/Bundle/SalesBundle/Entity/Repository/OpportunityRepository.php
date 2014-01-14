@@ -72,8 +72,13 @@ class OpportunityRepository extends EntityRepository
             $this->setAdditionalNozzleSteps($additionalNozzle, $aclHelper, $resultData, $nozzleStepsLabels);
         }
 
+        $sum = 0;
+        foreach ($resultData as $data) {
+            $sum += $data;
+        }
+
         return [
-            'items' => $resultData,
+            'items' => $sum > 0 ? $resultData : [],
             'nozzleSteps' => $nozzleStepsLabels
         ];
     }
