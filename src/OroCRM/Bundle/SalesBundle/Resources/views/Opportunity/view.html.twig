@@ -59,30 +59,27 @@
         }) }}
     {% endset %}
 
-    {% set workflowItemsWidget %}
-        {# Primary workflow view variant 2 #}
-        <div class="clearfix">
-        {{ include('OroWorkflowBundle:Widget:entityPrimaryWorkflow.html.twig', {entity: entity}) }}
-        </div>
+    {% set generalSubblocks = [{'data' : [opportunityInfoWidget] }] %}
 
-        <div class="clearfix">
-        {{ oro_widget_render({
-            'widgetType': 'block',
-            'url': path('oro_workflow_widget_workflow_items', {entityClass: oro_class_name(entity), entityId: entity.id}),
-            'title': 'oro.workflow.workflowitem.entity_plural_label'|trans,
-            'alias': 'bind_workflow_items'
-        }) }}
-        </div>
-    {% endset %}
+    {% if has_workflow_items(entity) %}
+        {% set workflowItemsWidget %}
+            <div class="clearfix">
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('oro_workflow_widget_workflow_items', {entityClass: oro_class_name(entity), entityId: entity.id}),
+                'title': 'oro.workflow.workflowitem.entity_plural_label'|trans,
+                'alias': 'bind_workflow_items'
+            }) }}
+            </div>
+        {% endset %}
+        {% set generalSubblocks = dataSubblocks|merge([{'data' : [workflowItemsWidget] }]) %}
+    {% endif %}
 
     {% set dataBlocks = [
     {
         'title': 'General Information'|trans,
         'class': 'active',
-        'subblocks': [
-            {'data' : [opportunityInfoWidget] },
-            {'data' : [workflowItemsWidget] },
-        ]
+        'subblocks': generalSubblocks
         }
     ] %}
 
