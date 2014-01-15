@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Doctrine\ORM\EntityManager;
+
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
@@ -127,10 +128,8 @@ class AbstractNormalizer implements SerializerAwareInterface
      */
     public function denormalizePaymentDetails($paymentDetails)
     {
-        if (!empty($paymentDetails['cc_type'])) {
-            $paymentDetails['cc_type'] = trim($paymentDetails['cc_type']);
-            $paymentDetails['cc_last4'] = trim($paymentDetails['cc_last4']);
-        }
+        $paymentDetails['cc_type']  = isset($paymentDetails['cc_type']) ? trim($paymentDetails['cc_type']) : null;
+        $paymentDetails['cc_last4'] = isset($paymentDetails['cc_last4']) ? trim($paymentDetails['cc_last4']) : null;
 
         if (!empty($paymentDetails['cc_type']) && !empty($paymentDetails['cc_last4'])) {
             $paymentDetails = sprintf(
