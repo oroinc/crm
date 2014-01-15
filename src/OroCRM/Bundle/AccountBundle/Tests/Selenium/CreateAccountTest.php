@@ -1,28 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium\Accounts;
+namespace OroCRM\Bundle\AccountBundle\Tests\Selenium\Accounts;
 
-use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Accounts;
-use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Login;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
+/**
+ * Class CreateAccountTest
+ *
+ * @package OroCRM\Bundle\AccountBundle\Tests\Selenium\Accounts
+ */
 class CreateAccountTest extends Selenium2TestCase
 {
-    protected $coverageScriptUrl = PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL_COVERAGE;
-
-    protected function setUp()
-    {
-        $this->setHost(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_HOST);
-        $this->setPort(intval(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PORT));
-        $this->setBrowser(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM2_BROWSER);
-        $this->setBrowserUrl(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL);
-    }
-
-    protected function tearDown()
-    {
-        $this->cookie()->clear();
-    }
-
     /**
      * @return string
      */
@@ -30,11 +18,8 @@ class CreateAccountTest extends Selenium2TestCase
     {
         $accountName = 'Account_'.mt_rand();
 
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openAccounts()
+        $login = $this->login();
+        $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
             ->setAccountName($accountName)
             ->setOwner('admin')
@@ -52,11 +37,8 @@ class CreateAccountTest extends Selenium2TestCase
      */
     public function testAccountAutocomplete($accountName)
     {
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openAccounts()
+        $login = $this->login();
+        $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
             ->setAccountName($accountName . '_autocomplete_test')
             ->setOwner('admin')
@@ -80,11 +62,8 @@ class CreateAccountTest extends Selenium2TestCase
     {
         $newAccountName = 'Update_' . $accountName;
 
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openAccounts()
+        $login = $this->login();
+        $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
             ->open(array($accountName))
             ->edit()
@@ -105,18 +84,15 @@ class CreateAccountTest extends Selenium2TestCase
      */
     public function testDeleteAccount($accountName)
     {
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openAccounts()
+        $login = $this->login();
+        $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
             ->open(array($accountName))
             ->delete()
             ->assertTitle('Accounts - Customers')
             ->assertMessage('Account deleted');
 
-        $login->openAccounts()
+        $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
             ->assertNoDataMessage('No account was found to match your search');
     }
