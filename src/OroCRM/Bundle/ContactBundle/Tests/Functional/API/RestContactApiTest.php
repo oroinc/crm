@@ -46,11 +46,6 @@ class RestContactApiTest extends WebTestCase
         $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
     }
 
-    public function tearDown()
-    {
-        unset($this->client);
-    }
-
     /**
      * @param array $actualAddresses
      */
