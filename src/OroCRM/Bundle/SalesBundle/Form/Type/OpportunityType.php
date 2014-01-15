@@ -46,7 +46,7 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'probability',
-                'percent',
+                'oro_percent',
                 array('required' => false, 'label' => 'orocrm.sales.opportunity.probability.label')
             )
             ->add(

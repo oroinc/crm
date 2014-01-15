@@ -1,3 +1,8 @@
+oro:
+    dashboard:
+        my_sales_flow:
+            b2b: B2B
+            b2c: B2C
 orocrm:
     query_designer:
         aggregates:

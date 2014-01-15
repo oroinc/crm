@@ -27,7 +27,7 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
     /**
      * @var ContextInterface
      */
-    protected $importExportContext;
+    protected $context;
 
     /**
      * @param ImportStrategyHelper $strategyHelper
@@ -46,7 +46,7 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
      */
     public function process($entity)
     {
-        if (!$this->importExportContext) {
+        if (!$this->context) {
             throw new LogicException('Strategy must have import/export context');
         }
 
@@ -79,9 +79,9 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function setImportExportContext(ContextInterface $importExportContext)
+    public function setImportExportContext(ContextInterface $context)
     {
-        $this->importExportContext = $importExportContext;
+        $this->context = $context;
     }
 
     /**
@@ -93,16 +93,16 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
         // validate contact
         $validationErrors = $this->strategyHelper->validateEntity($contact);
         if ($validationErrors) {
-            $this->importExportContext->incrementErrorEntriesCount();
-            $this->strategyHelper->addValidationErrors($validationErrors, $this->importExportContext);
+            $this->context->incrementErrorEntriesCount();
+            $this->strategyHelper->addValidationErrors($validationErrors, $this->context);
             return null;
         }
 
         // increment context counter
         if ($contact->getId()) {
-            $this->importExportContext->incrementReplaceCount();
+            $this->context->incrementReplaceCount();
         } else {
-            $this->importExportContext->incrementAddCount();
+            $this->context->incrementAddCount();
         }
 
         return $contact;

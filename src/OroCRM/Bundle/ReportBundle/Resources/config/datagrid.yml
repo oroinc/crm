@@ -46,6 +46,7 @@ datagrid:
                     data_name:        o.createdAt
         options:
             entityHint: report data
+            export: true
 
     orocrm_report-accounts-by_opportunities:
         pageTitle: "Accounts by opportunities"
@@ -112,6 +113,7 @@ datagrid:
                     data_name:   o.createdAt
         options:
             entityHint: report data
+            export: true
 
     orocrm_report-leads-by_date:
         pageTitle: "Number leads by date"
@@ -139,6 +141,7 @@ datagrid:
                 leadsCount:    { type: number, data_name: leadsCount, filter_by_having: true }
         options:
             entityHint: report data
+            export: true
 
     orocrm_report-opportunities-by_step:
         pageTitle: "Opportunities by step"
@@ -206,6 +209,7 @@ datagrid:
                             property: label
         options:
             entityHint: report data
+            export: true
 
     orocrm_report-opportunities-won_by_period:
         pageTitle: "Won opportunities by date period"
@@ -279,3 +283,4 @@ datagrid:
                 period: { value: monthPeriod }
         options:
             entityHint: report data
+            export: true

@@ -2,50 +2,33 @@
 
 namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium;
 
-use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Login;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
+/**
+ * Class EntityTest
+ *
+ * @package OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium
+ */
 class EntityTest extends Selenium2TestCase
 {
-    protected $coverageScriptUrl = PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL_COVERAGE;
-
-    protected function setUp()
-    {
-        $this->setHost(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_HOST);
-        $this->setPort(intval(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PORT));
-        $this->setBrowser(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM2_BROWSER);
-        $this->setBrowserUrl(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL);
-    }
-
-    protected function tearDown()
-    {
-        $this->cookie()->clear();
-    }
-
     public function testEditExistEntity()
     {
-        $this->markTestIncomplete('Need to rewrite this test to use filter by Name. BAP-2605');
-
-        $entityname = 'Account';
-        $fieldname = 'Test_field' . mt_rand();
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openConfigEntities()
-            ->filterBy('Label', $entityname)
-            ->open(array($entityname))
+        $entityName = 'Account';
+        $fieldName = 'Test_field' . mt_rand();
+        $login = $this->login();
+        $login->openConfigEntities('Oro\Bundle\EntityConfigBundle')
+            ->open(array($entityName))
             ->createField()
-            ->setFieldName($fieldname)
+            ->setFieldName($fieldName)
             ->setType('String')
             ->proceed()
             ->save()
             ->assertMessage('Field saved')
             ->updateSchema()
             ->close()
-            ->openAccounts()
+            ->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
-            ->openConfigEntity(false)
-            ->checkEntityField($fieldname);
+            ->openConfigEntity('Oro\Bundle\EntityConfigBundle', false)
+            ->checkEntityField($fieldName);
     }
 }

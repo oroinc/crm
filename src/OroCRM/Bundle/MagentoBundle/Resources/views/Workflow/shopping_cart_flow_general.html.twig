@@ -4,8 +4,8 @@
 
 {% oro_title_set({
     params : {
-        '%section%': 'Carts'|trans,
-        '%entity%': 'Cart #'|trans ~ workflowItem.data.shopping_cart.id,
+        '%section%': 'orocrm.magento.cart.entity_plural_label'|trans,
+        '%entity%':  'orocrm.magento.cart.entity_label'|trans ~ ' ' ~  workflowItem.data.shopping_cart.id,
         '%workflow_data%': workflow.label ~ ' (' ~ currentStep.label ~ ')',
     }
 }) %}
@@ -22,11 +22,11 @@
 {% block workflow_title %}
     {% set titleParts = {
         'indexPath':   path('orocrm_magento_cart_index', {id: workflowItem.data.shopping_cart.channel.id}),
-        'indexLabel': 'Carts'|trans,
+        'indexLabel': 'orocrm.magento.cart.entity_plural_label'|trans,
         'additional': [
             {
                 'indexPath': path('orocrm_magento_cart_view', {id: workflowItem.data.shopping_cart.id}),
-                'indexLabel': 'Сart #'|trans ~ workflowItem.data.shopping_cart.id
+                'indexLabel': 'orocrm.magento.cart.entity_label'|trans ~ ' ' ~ workflowItem.data.shopping_cart.id
             }
         ],
         'entityTitle': workflow.label ~ ' (' ~ currentStep.label ~ ')'

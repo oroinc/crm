@@ -7,8 +7,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
 class CreateContactTest extends Selenium2TestCase
 {
-    protected $coverageScriptUrl = PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL_COVERAGE;
-
     protected $addressPrimary = array(
         'types' => array('billing'),
         'primary' => true,
@@ -33,21 +31,6 @@ class CreateContactTest extends Selenium2TestCase
         'region' => 'New York'
     );
 
-    protected function setUp()
-    {
-        $this->setHost(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_HOST);
-        $this->setPort(intval(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PORT));
-        $this->setBrowser(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM2_BROWSER);
-        $this->setBrowserUrl(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL);
-        $this->prepareSession();
-        $this->url('/');
-    }
-
-    protected function tearDown()
-    {
-        $this->cookie()->clear();
-    }
-
     /**
      * @return string
      */
@@ -57,11 +40,8 @@ class CreateContactTest extends Selenium2TestCase
         $addressPrimary = array();
         $addressSecondary = array();
 
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openContacts()
+        $login = $this->login();
+        $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->add()
             ->setFirstName($contactName . '_first')
             ->setLastName($contactName . '_last')
@@ -89,14 +69,11 @@ class CreateContactTest extends Selenium2TestCase
 
     public function testAddAddress()
     {
-        $contactName = 'Contact_'.mt_rand();
+        $contactName = 'Contact_' . mt_rand();
         $addressPrimary = array();
 
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openContacts()
+        $login = $this->login();
+        $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->add()
             ->setFirstName($contactName . '_first')
             ->setLastName($contactName . '_last')
@@ -126,11 +103,8 @@ class CreateContactTest extends Selenium2TestCase
      */
     public function testContactAutocomplete($contactName)
     {
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openContacts()
+        $login = $this->login();
+        $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->add()
             ->setFirstName($contactName . '_first_autocomplete')
             ->setLastName($contactName . '_last_autocomplete')
@@ -140,8 +114,8 @@ class CreateContactTest extends Selenium2TestCase
             ->setAddressStreet('Street')
             ->setAddressCity('City')
             ->setAddressPostalCode('Zip Code 000')
-            ->setAddressCountry('Kazak')
-            ->setAddressRegion('Aqm')
+            ->typeAddressCountry('Kazak')
+            ->typeAddressRegion('Aqm')
             ->save()
             ->assertMessage('Contact saved')
             ->toGrid()
@@ -158,11 +132,8 @@ class CreateContactTest extends Selenium2TestCase
     {
         $newContactName = 'Update_' . $contactName;
 
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openContacts()
+        $login = $this->login();
+        $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', $contactName . '@mail.com')
             ->open(array($contactName))
             ->assertTitle($contactName . '_first ' . $contactName . '_last' . ' - Contacts - Customers')
@@ -184,18 +155,15 @@ class CreateContactTest extends Selenium2TestCase
      */
     public function testDeleteContact($contactName)
     {
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openContacts()
+        $login = $this->login();
+        $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', $contactName . '@mail.com')
             ->open(array($contactName))
             ->delete()
             ->assertTitle('Contacts - Customers')
             ->assertMessage('Contact deleted');
 
-        $login->openContacts()
+        $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', $contactName . '@mail.com')
             ->assertNoDataMessage('No contact was found to match your search');
     }

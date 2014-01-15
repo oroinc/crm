@@ -33,8 +33,8 @@ class RegionStrategy extends BaseStrategy
         // validate contact
         $validationErrors = $this->strategyHelper->validateEntity($entity);
         if ($validationErrors) {
-            $this->importExportContext->incrementErrorEntriesCount();
-            $this->strategyHelper->addValidationErrors($validationErrors, $this->importExportContext);
+            $this->context->incrementErrorEntriesCount();
+            $this->strategyHelper->addValidationErrors($validationErrors, $this->context);
 
             return null;
         }
@@ -42,9 +42,9 @@ class RegionStrategy extends BaseStrategy
         $uow = $this->strategyHelper->getEntityManager(RegionDenormalizer::TYPE)->getUnitOfWork();
         // increment context counter
         if ($uow->getEntityState($entity, UnitOfWork::STATE_NEW) === UnitOfWork::STATE_NEW) {
-            $this->importExportContext->incrementAddCount();
+            $this->context->incrementAddCount();
         } else {
-            $this->importExportContext->incrementUpdateCount();
+            $this->context->incrementUpdateCount();
         }
 
         return $entity;
