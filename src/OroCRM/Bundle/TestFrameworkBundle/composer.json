@@ -1,5 +1,5 @@
 {
-    "name": "oro/testframework-bundle",
+    "name": "orocrm/testframework-bundle",
     "type": "symfony-bundle",
     "description": "BAP TestFramework Bundle",
     "keywords": ["BAP", "Test", "Framework"],
@@ -7,7 +7,8 @@
     "license": "MIT",
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.1.*"
+        "symfony/symfony": "2.1.*",
+        "oro/testframework-bundle" : "dev-master"
     },
     "autoload": {
         "psr-0": { "OroCRM\\Bundle\\TestFrameworkBundle": "" }
