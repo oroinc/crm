@@ -137,7 +137,8 @@ class Contact extends AbstractPageEntity
     {
         $values = array();
         $types = $this->test->elements(
-            $this->test->using('xpath')->value("//input[@name = 'orocrm_contact_form[addresses][{$addressId}][types][]']")
+            $this->test->using('xpath')
+                ->value("//input[@name = 'orocrm_contact_form[addresses][{$addressId}][types][]']")
         );
         foreach ($types as $type) {
             /** @var \PHPUnit_Extensions_Selenium2TestCase_Element $type */
@@ -307,7 +308,9 @@ class Contact extends AbstractPageEntity
 
     public function getAddressCountry($addressId = 0)
     {
-        return $this->test->byXpath("//div[@id = 's2id_orocrm_contact_form_addresses_{$addressId}_country']/a/span")->text();
+        return $this->test
+            ->byXpath("//div[@id = 's2id_orocrm_contact_form_addresses_{$addressId}_country']/a/span")
+            ->text();
     }
 
     public function setAddressRegion($region, $addressId = 0)
@@ -356,7 +359,9 @@ class Contact extends AbstractPageEntity
 
     public function getAddressRegion($addressId = 0)
     {
-        return $this->test->byXpath("//div[@id = 's2id_orocrm_contact_form_addresses_{$addressId}_region']/a/span")->text();
+        return $this->test
+            ->byXpath("//div[@id = 's2id_orocrm_contact_form_addresses_{$addressId}_region']/a/span")
+            ->text();
     }
 
     public function setAddress($data, $addressId = 0)
