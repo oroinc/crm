@@ -278,59 +278,40 @@ workflows:
         attributes:
             opportunity_name:
                 label: orocrm.sales.opportunity.name.label
-                type: string
                 property_path: entity.name
             notes:
                 label: orocrm.sales.lead.notes.label
-                type: string
                 property_path: entity.notes
             contact:
                 label: orocrm.sales.opportunity.contact.label
-                type: entity
                 property_path: entity.contact
-                options:
-                    class: OroCRM\Bundle\ContactBundle\Entity\Contact
             account:
                 label: orocrm.sales.opportunity.account.label
-                type: entity
                 property_path: entity.account
-                options:
-                    class: OroCRM\Bundle\AccountBundle\Entity\Account
             probability:
                 label: orocrm.sales.opportunity.probability.label
-                type: float
                 property_path: entity.probability
             budget_amount:
                   label: orocrm.sales.opportunity.budget_amount.label
-                  type: float
                   property_path: entity.budgetAmount
             customer_need:
                 label: orocrm.sales.opportunity.customer_need.label
-                type: string
                 property_path: entity.customerNeed
             proposed_solution:
                 label: orocrm.sales.opportunity.proposed_solution.label
-                type: string
                 property_path: entity.proposedSolution
             close_reason_name: # auxiliary attribute to find close reason by its name
                 label: orocrm.sales.opportunity.close_reason.label
                 type: string
             close_reason:
                 label: orocrm.sales.opportunity.close_reason.label
-                type: entity
                 property_path: entity.closeReason
-                options:
-                    class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
             close_revenue:
                 label: orocrm.sales.opportunity.close_revenue.label
-                type: float
                 property_path: entity.closeRevenue
             close_date:
                 label: orocrm.sales.opportunity.close_date.label
-                type: object
                 property_path: entity.closeDate
-                options:
-                    class: DateTime
         transitions:
             qualify:
                 label: 'Qualify'

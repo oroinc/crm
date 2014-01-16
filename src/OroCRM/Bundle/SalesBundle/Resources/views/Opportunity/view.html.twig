@@ -60,21 +60,6 @@
     {% endset %}
 
     {% set generalSubblocks = [{'data' : [opportunityInfoWidget] }] %}
-
-    {% if has_workflow_items(entity) %}
-        {% set workflowItemsWidget %}
-            <div class="clearfix">
-            {{ oro_widget_render({
-                'widgetType': 'block',
-                'url': path('oro_workflow_widget_workflow_items', {entityClass: oro_class_name(entity), entityId: entity.id}),
-                'title': 'oro.workflow.workflowitem.entity_plural_label'|trans,
-                'alias': 'bind_workflow_items'
-            }) }}
-            </div>
-        {% endset %}
-        {% set generalSubblocks = dataSubblocks|merge([{'data' : [workflowItemsWidget] }]) %}
-    {% endif %}
-
     {% set dataBlocks = [
     {
         'title': 'General Information'|trans,
