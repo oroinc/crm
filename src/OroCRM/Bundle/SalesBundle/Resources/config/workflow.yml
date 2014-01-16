@@ -3,7 +3,6 @@ workflows:
     b2b_flow_lead:
         label: 'Unqualified Sales Lead'
         enabled: true
-        type: entity
         steps:
             new:
                 label: 'New'
@@ -260,43 +259,26 @@ workflows:
     b2b_flow_sales:
         label: 'B2B Sales Flow'
         enabled: true
-        type: wizard
         steps:
             qualify:
                 label: 'Qualify'
-                template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 order: 10
                 allowed_transitions:
                     - edit_qualify
                     - develop
-                view_attributes:
-                    - { attribute: contact, view_type: orocrm_contact }
             develop:
                 label: 'Develop'
-                template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 order: 20
                 allowed_transitions:
                     - edit_develop
                     - close_as_won
                     - close_as_lost
-                view_attributes:
-                    - { attribute: contact, view_type: orocrm_contact }
-                    - { attribute: account, view_type: orocrm_account }
-                    - { attribute: probability, view_type: percent }
-                    - { attribute: budget_amount, view_type: currency }
-                    - { attribute: customer_need, view_type: string }
-                    - { attribute: proposed_solution, view_type: string }
             close:
                 label: 'Closed'
-                template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 order: 30
                 allowed_transitions:
                     - requalify_lost
                     - requalify_won
-                view_attributes:
-                    - { attribute: close_reason, view_type: string }
-                    - { attribute: close_revenue, view_type: currency }
-                    - { attribute: close_date, view_type: date }
         attributes:
             opportunity:
                 label: orocrm.sales.opportunity.entity_label

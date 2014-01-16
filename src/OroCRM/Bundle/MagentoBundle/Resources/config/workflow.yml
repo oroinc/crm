@@ -2,21 +2,16 @@ workflows:
     b2c_flow_abandoned_shopping_cart:
         label: 'Abandoned Shopping Cart'
         enabled: true
-        type: wizard
         steps:
             open:
                 label: 'Open'
-                template: 'OroCRMMagentoBundle:Workflow:shopping_cart_flow_general.html.twig'
                 order: 10
                 allowed_transitions:
                     - log_call
                     - send_email
                     - convert_to_opportunity
-                view_attributes:
-                    - { attribute: notes, view_type: text }
             contacted:
                 label: 'Contacted'
-                template: 'OroCRMMagentoBundle:Workflow:shopping_cart_flow_general.html.twig'
                 order: 20
                 allowed_transitions:
                     - log_call
@@ -24,43 +19,21 @@ workflows:
                     - convert
                     - convert_to_opportunity
                     - abandon
-                view_attributes:
-                    - { attribute: email_to, label: 'Last contacted email', view_type: string, default: 'Not contacted' }
-                    - { path: $email.subject, label: 'Email subject', view_type: string }
-                    - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
-                    - { attribute: notes, view_type: text }
-
-                    - { path: $call.phone_number, label: 'Last contacted phone', view_type: string, default: 'Not contacted' }
-                    - { path: $call.subject, label: 'Call subject', view_type: string }
-                    - { path: $call.callDateTime, label: 'Call date', view_type: datetime }
-                    - { path: $call.relatedAccount, label: 'Related To', view_type: orocrm_account }
-                    - { path: $call.relatedContact, label: 'Related Contact', view_type: orocrm_contact }
-                    - { path: $call.direction.label, label: 'Direction', view_type: string }
-                    - { path: $call.duration, label: 'Duration', view_type: datetime_duration }
             abandoned:
                 label: 'Abandoned'
-                template: 'OroCRMMagentoBundle:Workflow:shopping_cart_flow_general.html.twig'
                 order: 30
                 allowed_transitions:
                     - reopen
-                view_attributes:
-                    - { attribute: notes, view_type: text }
             converted_to_opportunity:
                 label: 'Converted to opportunity'
-                template: 'OroCRMMagentoBundle:Workflow:shopping_cart_flow_opportunity.html.twig'
                 order: 30
                 allowed_transitions:
                     - reopen
-                view_attributes:
-                    - { attribute: notes, view_type: text }
             converted:
                 label: 'Converted'
-                template: 'OroCRMMagentoBundle:Workflow:shopping_cart_flow_general.html.twig'
                 order: 30
                 allowed_transitions:
                     - reopen
-                view_attributes:
-                    - { attribute: notes, view_type: text }
 
         attributes:
             # Interaction entities
@@ -591,64 +564,30 @@ workflows:
     b2c_flow_order_follow_up:
         label: 'Order Follow Up'
         enabled: true
-        type: wizard
         steps:
             not_contacted:
                 label: 'Not contacted'
-                template: 'OroCRMMagentoBundle:Workflow:order_follow_up.html.twig'
                 order: 10
                 allowed_transitions:
                     - send_email
                     - log_call
-                view_attributes:
-                    - { attribute: notes, view_type: text }
             emailed:
                 label: 'Emailed'
-                template: 'OroCRMMagentoBundle:Workflow:order_follow_up.html.twig'
                 order: 20
                 allowed_transitions:
                     - log_call
                     - record_feedback
-                view_attributes:
-                    - { attribute: email_to, label: 'Last contacted email', view_type: string, default: 'Not contacted' }
-                    - { path: $email.subject, label: 'Email subject', view_type: string }
-                    - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
-                    - { attribute: notes, view_type: text }
             called:
                 label: 'Called'
-                template: 'OroCRMMagentoBundle:Workflow:order_follow_up.html.twig'
                 order: 30
                 allowed_transitions:
                     - no_reply
                     - record_feedback
-                view_attributes:
-                    - { path: $call.phone_number, label: 'Last contacted phone', view_type: string, default: 'Not contacted' }
-                    - { path: $call.subject, label: 'Call subject', view_type: string }
-                    - { path: $call.callDateTime, label: 'Call date', view_type: datetime }
-                    - { path: $call.relatedAccount, label: 'Related To', view_type: orocrm_account }
-                    - { path: $call.relatedContact, label: 'Related Contact', view_type: orocrm_contact }
-                    - { path: $call.direction.label, label: 'Direction', view_type: string }
-                    - { path: $call.duration, label: 'Duration', view_type: datetime_duration }
-                    - { attribute: notes, view_type: text }
             contacted:
                 label: 'Contacted'
-                template: 'OroCRMMagentoBundle:Workflow:order_follow_up.html.twig'
                 order: 40
                 is_final: true
-                view_attributes:
-                    - { attribute: email_to, label: 'Last contacted email', view_type: string, default: 'Not contacted' }
-                    - { path: $email.subject, label: 'Email subject', view_type: string }
-                    - { path: $email.sentAt, label: 'Email send date', view_type: datetime }
-                    - { attribute: notes, view_type: text }
 
-                    - { path: $call.phone_number, label: 'Last contacted phone', view_type: string, default: 'Not contacted' }
-                    - { path: $call.subject, label: 'Call subject', view_type: string }
-                    - { path: $call.callDateTime, label: 'Call date', view_type: datetime }
-                    - { path: $call.relatedAccount, label: 'Related To', view_type: orocrm_account }
-                    - { path: $call.relatedContact, label: 'Related Contact', view_type: orocrm_contact }
-                    - { path: $call.direction.label, label: 'Direction', view_type: string }
-                    - { path: $call.duration, label: 'Duration', view_type: datetime_duration }
-                    - { attribute: feedback, view_type: text }
         attributes:
             order:
                 label: 'Order'
