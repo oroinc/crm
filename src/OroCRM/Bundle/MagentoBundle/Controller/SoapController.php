@@ -64,6 +64,7 @@ class SoapController extends Controller
             }
         } catch (\Exception $e) {
             $result = false;
+            $this->get('logger')->critical(sprintf('MageCheck error: %s: %s', $e->getCode(), $e->getMessage()));
         }
 
         return new JsonResponse(
