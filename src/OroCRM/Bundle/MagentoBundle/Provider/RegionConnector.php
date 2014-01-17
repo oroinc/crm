@@ -8,7 +8,6 @@ use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 class RegionConnector extends AbstractConnector implements MagentoConnectorInterface
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Region';
-    const JOB_VALIDATE_IMPORT = 'mage_regions_import_validation';
     const JOB_IMPORT          = 'mage_regions_import';
     const CONNECTOR_LABEL     = 'orocrm.magento.connector.region.label';
 

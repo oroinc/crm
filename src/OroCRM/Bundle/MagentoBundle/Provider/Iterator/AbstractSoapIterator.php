@@ -1,25 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
-use Doctrine\ORM\EntityManager;
-
-use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
-use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
-use Oro\Bundle\IntegrationBundle\Entity\Status;
-use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
-use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
-/**
- * @TODO FIXME should be refactored to use only call of transport with generalized filter
- */
-abstract class AbstractApiBasedConnector extends AbstractConnector implements MagentoConnectorInterface
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+
+abstract class AbstractSoapIterator implements DataIteratorInterface
 {
     const DEFAULT_SYNC_RANGE = '1 month';
-    const IMPORT_MODE_INITIAL = 'initial';
-    const IMPORT_MODE_UPDATE  = 'update';
 
     /** @var \DateTime */
     protected $lastSyncDate;
@@ -31,55 +21,36 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
     protected $lastId = null;
 
     /** @var string initial or update mode */
-    protected $mode;
+    protected $mode = self::IMPORT_MODE_INITIAL;
 
     /** @var \DateInterval */
     protected $syncRange;
 
-    /** @var StoreConnector */
-    protected $storeConnector;
+    /** @var SoapTransport */
+    protected $transport;
 
-    /** @var ChannelRepository */
-    protected $channelRepository;
-
-    /** @var array */
-    protected $entitiesIdsBuffer = [];
+    /** @var int */
+    protected $websiteId;
 
     /** @var array dependencies data: customer groups, stores, websites */
     protected $dependencies = [];
 
+    /** @var array */
+    protected $entitiesIdsBuffer = [];
+
     /** @var int */
     protected $batchSize;
 
-    /**
-     * @param ContextRegistry             $contextRegistry
-     * @param LoggerStrategy              $logger
-     * @param \Doctrine\ORM\EntityManager $em
-     * @param StoreConnector              $storeConnector
-     */
-    public function __construct(
-        ContextRegistry $contextRegistry,
-        LoggerStrategy $logger,
-        EntityManager $em = null,
-        StoreConnector $storeConnector = null
-    ) {
-        parent::__construct($contextRegistry, $logger);
-        $this->channelRepository = $em->getRepository('OroIntegrationBundle:Channel');
-        $this->storeConnector = $storeConnector;
-    }
+    /** @var bool */
+    protected $loaded = false;
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function initializeFromContext(ContextInterface $context)
+    public function __construct(SoapTransport $transport, Channel $channel)
     {
-        parent::initializeFromContext($context);
-
-        // initialize deps
-        $this->dependencies      = [];
-        $this->entitiesIdsBuffer = [];
-        $this->lastId            = null;
-        $settings                = $this->transportSettings->all();
+        $this->transport = $transport;
+        /** @var MagentoSoapTransport $transportEntity */
+        $transportEntity = $channel->getTransport();
+        $settings        = $transportEntity->getSettingsBag()->all();
+        $this->websiteId = $transportEntity->getWebsiteId();
 
         // validate date boundary
         $startSyncDateKey = 'start_sync_date';
@@ -87,50 +58,81 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
             throw new \LogicException('Start sync date can\'t be empty');
         }
 
-        if (!($settings[$startSyncDateKey] instanceof \DateTime)) {
-            $settings[$startSyncDateKey] = new \DateTime($settings[$startSyncDateKey]);
-        }
-        $this->lastSyncDate = clone $settings[$startSyncDateKey];
+        $this->setStartDate($settings[$startSyncDateKey]);
 
-        /** @var Channel $channel */
-        $channel = $this->channelRepository->getOrLoadById($context->getOption('channel'));
-
-        // set start date and mode depending on status
-        $status  = $channel->getStatusesForConnector($this->getType(), Status::STATUS_COMPLETED)->first();
-        if (false !== $status) {
-            /** @var Status $status */
-            $this->lastSyncDate = clone $status->getDate();
-            $this->mode = self::IMPORT_MODE_UPDATE;
-        } else {
-            $this->mode = self::IMPORT_MODE_INITIAL;
-        }
-
-        // validate range
-        if (empty($settings['sync_range'])) {
-            $settings['sync_range'] = self::DEFAULT_SYNC_RANGE;
-        }
-        if ($settings['sync_range'] instanceof \DateInterval) {
-            $this->syncRange = $settings['sync_range'];
-        } else {
-            $this->syncRange = \DateInterval::createFromDateString($settings['sync_range']);
-        }
+        $this->syncRange = \DateInterval::createFromDateString(self::DEFAULT_SYNC_RANGE);
 
         // set batch size
         if (!empty($settings['batch_size'])) {
             $this->batchSize = $settings['batch_size'];
         }
-
-        // init helper connector
-        $this->storeConnector->setStepExecution($this->getStepExecution());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function doRead()
+    public function setStartDate(\DateTime $date)
     {
-        $this->preLoadDependencies();
+        $this->lastSyncDate = clone $date;
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function current()
+    {
+        // TODO: Implement current() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function next()
+    {
+        // TODO: Implement next() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function key()
+    {
+        // TODO: Implement key() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function valid()
+    {
+        // TODO: Implement valid() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rewind()
+    {
+        if (false === $this->loaded) {
+            $this->preLoadDependencies();
+        }
+
+        $this->entitiesIdsBuffer = [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doRead()
+    {
         if (empty($this->entitiesIdsBuffer)) {
             $result = $this->findEntitiesToProcess();
         } else {
@@ -144,31 +146,13 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
 
         if (!empty($this->entitiesIdsBuffer)) {
             $entityId = array_shift($this->entitiesIdsBuffer);
-            $id = is_object($entityId) && !empty($entityId->entity_id) ? $entityId->entity_id : $entityId;
-
-            $now = new \DateTime('now', new \DateTimeZone('UTC'));
-            $this->logger->info(sprintf('[%s] loading entity ID: %d', $now->format('d-m-Y H:i:s'), $id));
-
-            $data = $this->getData($entityId, true);
+            $data     = $this->getData($entityId, true);
         } else {
             // empty record, nothing found but keep going
             $data = false;
         }
 
         return $data;
-    }
-
-    /**
-     * Pre-load dependencies
-     * Load method will be called only once
-     */
-    protected function preLoadDependencies()
-    {
-        if (!empty($this->dependencies)) {
-            return;
-        }
-
-        $this->loadDependencies();
     }
 
     /**
@@ -193,10 +177,10 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
         if ($initMode) {
             $dateField = 'created_at';
-            $dateKey = 'to';
+            $dateKey   = 'to';
         } else {
             $dateField = 'updated_at';
-            $dateKey = 'from';
+            $dateKey   = 'from';
         }
 
         $filter = [
@@ -232,7 +216,6 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         return $filter;
     }
 
-
     /**
      * Load entities ids list
      *
@@ -243,37 +226,15 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
         $now      = new \DateTime('now', new \DateTimeZone('UTC'));
         $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
 
-        if ($initMode) {
-            $lastId      = $this->getLastId();
-            $dateMessage = 'created less';
-            $message     = sprintf(' and ID > %s', $lastId);
-        } else {
-            $dateMessage = 'updated more';
-            $message     = '';
-        }
-
-        $this->logger->info(
-            sprintf(
-                '[%s] Looking for entities %s then %s%s ... ',
-                $now->format('d-m-Y H:i:s'),
-                $dateMessage,
-                $this->lastSyncDate->format('d-m-Y H:i:s'),
-                $message
-            )
-        );
-
-        $filters = [
-            $this->getBatchFilter(
-                $this->transportSettings->get('website_id'),
-                $this->lastSyncDate
-            )
+        $filters                 = [
+            $this->getBatchFilter($this->websiteId, $this->lastSyncDate)
         ];
         $this->entitiesIdsBuffer = $this->getList($filters, $this->batchSize, true);
 
         // first run, ignore all data in less then start sync date
-        $lastId       = $this->getLastId();
-        $wasNull      = is_null($lastId);
-        $lastId       = end($this->entitiesIdsBuffer);
+        $lastId  = $this->getLastId();
+        $wasNull = is_null($lastId);
+        $lastId  = end($this->entitiesIdsBuffer);
 
         if (!empty($lastId)) {
             $this->lastId = $lastId;
@@ -286,8 +247,6 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
 
         if ($wasNull && $initMode) {
             $this->entitiesIdsBuffer = [];
-        } else {
-            $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
         }
 
         // no more data to look for
@@ -349,6 +308,19 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
     }
 
     /**
+     * Pre-load dependencies
+     * Load method will be called only once
+     */
+    protected function preLoadDependencies()
+    {
+        if (!empty($this->dependencies)) {
+            return;
+        }
+
+        $this->loadDependencies();
+    }
+
+    /**
      * Get entities list
      *
      * @param array $filters
@@ -357,7 +329,7 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
      *
      * @return mixed
      */
-    abstract public function getList($filters = [], $limit = null, $idsOnly = true);
+    abstract protected function getList($filters = [], $limit = null, $idsOnly = true);
 
     /**
      * Get entity data by id
@@ -368,21 +340,7 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
      *
      * @return mixed
      */
-    abstract public function getData($id, $dependenciesInclude = false, $onlyAttributes = null);
-
-    /**
-     * Do real load for dependencies data
-     *
-     * @return void
-     */
-    abstract protected function loadDependencies();
-
-    /**
-     * Should return connector type string
-     *
-     * @return string
-     */
-    abstract protected function getType();
+    abstract protected function getData($id, $dependenciesInclude = false, $onlyAttributes = null);
 
     /**
      * Should return id field name for entity, e.g.: entity_id, order_id, increment_id, etc
@@ -390,4 +348,11 @@ abstract class AbstractApiBasedConnector extends AbstractConnector implements Ma
      * @return string
      */
     abstract protected function getIdFieldName();
+
+    /**
+     * Do real load for dependencies data
+     *
+     * @return void
+     */
+    abstract protected function loadDependencies();
 }

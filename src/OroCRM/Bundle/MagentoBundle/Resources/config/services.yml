@@ -1,6 +1,6 @@
 parameters:
     # transport
-    orocrm_magento.soap_transport.class:                                  OroCRM\Bundle\MagentoBundle\Provider\SoapTransport
+    orocrm_magento.transport.soap_transport.class:                        OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport
 
     # providers
     orocrm_magento.provider.channel_type.class:                           OroCRM\Bundle\MagentoBundle\Provider\ChannelType
@@ -15,8 +15,8 @@ parameters:
     # additional services
     orocrm_magento.converter.stores_to_website.class:                     OroCRM\Bundle\MagentoBundle\Converter\StoreListToWebsiteConverter
 services:
-    orocrm_magento.soap_transport:
-        class: %orocrm_magento.soap_transport.class%
+    orocrm_magento.transport.soap_transport:
+        class: %orocrm_magento.transport.soap_transport.class%
         arguments:
             - @oro_security.encoder.mcrypt
         tags:
@@ -37,7 +37,7 @@ services:
     orocrm_magento.form.type.soap_transport_setting:
         class: %orocrm_magento.form.type.soap_transport_setting.class%
         arguments:
-            - @orocrm_magento.soap_transport
+            - @orocrm_magento.transport.soap_transport
             - @orocrm_magento.form.subscriber.soap_transport_setting
             - @oro_integration.manager.types_registry
         tags:

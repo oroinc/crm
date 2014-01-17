@@ -12,7 +12,6 @@ class CartConnector extends AbstractApiBasedConnector implements MagentoConnecto
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart';
     const CONNECTOR_LABEL     = 'orocrm.magento.connector.cart.label';
-    const JOB_VALIDATE_IMPORT = 'mage_cart_import_validation';
     const JOB_IMPORT          = 'mage_cart_import';
 
     const PAGE_SIZE = 10;
