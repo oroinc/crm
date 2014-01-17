@@ -84,7 +84,7 @@ class ContactController extends Controller
 
     /**
      * Update user form
-     * @Route("/update/{id}", name="orocrm_contact_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="orocrm_contact_update", requirements={"id"="\d+"})
      *
      * @Template
      * @Acl(
@@ -94,7 +94,7 @@ class ContactController extends Controller
      *      class="OroCRMContactBundle:Contact"
      * )
      */
-    public function updateAction(Contact $entity = null)
+    public function updateAction(Contact $entity)
     {
         return $this->update($entity);
     }
