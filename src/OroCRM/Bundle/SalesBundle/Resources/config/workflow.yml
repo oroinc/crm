@@ -257,6 +257,7 @@ workflows:
         enabled: true
         entity: OroCRM\Bundle\SalesBundle\Entity\Opportunity
         entity_attribute: opportunity
+        steps_display_ordered: true
         steps:
             qualify:
                 label: 'Qualify'
