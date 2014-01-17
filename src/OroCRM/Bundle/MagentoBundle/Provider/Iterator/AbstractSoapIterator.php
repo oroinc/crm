@@ -38,6 +38,8 @@ abstract class AbstractSoapIterator implements DataIteratorInterface
     /** @var array */
     protected $entitiesIdsBuffer = [];
 
+    protected $current;
+
     /** @var int */
     protected $batchSize;
 
@@ -89,7 +91,7 @@ abstract class AbstractSoapIterator implements DataIteratorInterface
      */
     public function current()
     {
-        // TODO: Implement current() method.
+        return $this->current;
     }
 
     /**
@@ -97,7 +99,7 @@ abstract class AbstractSoapIterator implements DataIteratorInterface
      */
     public function next()
     {
-        // TODO: Implement next() method.
+        $this->current = $this->doRead();
     }
 
     /**
@@ -113,7 +115,7 @@ abstract class AbstractSoapIterator implements DataIteratorInterface
      */
     public function valid()
     {
-        // TODO: Implement valid() method.
+        return null !== $this->current;
     }
 
     /**
@@ -126,6 +128,7 @@ abstract class AbstractSoapIterator implements DataIteratorInterface
         }
 
         $this->entitiesIdsBuffer = [];
+        $this->next();
     }
 
     /**
