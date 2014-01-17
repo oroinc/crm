@@ -64,6 +64,28 @@ orocrm:
             owner.label:          Owner
             notes.label:          Notes
             lead.label:           Lead
+            workflow_item.label:  Workflow Item
+            workflow_step.label:  Workflow Step
+
+            datagrid:
+                view: View
+                update: Update
+                delete: Delete
+
+#
+        # OroCRM/Bundle/SalesBundle/Entity/SalesFlowOpportunity.php
+        #
+        salesflowopportunity:
+            entity_label:         Sales Flow Opportunity
+            entity_plural_label:  Sales Flow Opportunities
+            entity_description:   Separate entity to perform sales flow on opportunity
+            id.label:             Id
+            opportunity.label:    Opportunity
+            owner.label:          Owner
+            created_at.label:     Created
+            updated_at.label:     Updated
+            workflow_item.label:  Workflow Item
+            workflow_step.label:  Workflow Step
 
             datagrid:
                 view: View
@@ -110,6 +132,8 @@ orocrm:
             extend_source.label:  Source
             notes.label:          Notes
             opportunities.label:  Opportunities
+            workflow_item.label:  Workflow Item
+            workflow_step.label:  Workflow Step
 
             datagrid:
                 country: Country

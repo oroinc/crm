@@ -7,16 +7,16 @@
             {{ ui.renderProperty('orocrm.sales.opportunity.name.label'|trans, entity.name) }}
             {{ ui.renderProperty('orocrm.sales.opportunity.status.label'|trans, entity.status) }}
 
-            {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
-                {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name ~ '</a>' %}
+            {%- if entity.contact and resource_granted('VIEW', entity.contact) -%}
+                {% set contactView = ui.renderUrl(path('orocrm_contact_view', {'id': entity.contact.id}), entity.contact|oro_format_name) %}
             {%- else -%}
                 {% set contactView = entity.contact ? entity.contact|oro_format_name : '' %}
             {%- endif -%}
 
             {{ ui.renderProperty('orocrm.sales.opportunity.contact.label'|trans, contactView) }}
 
-            {%- if resource_granted('orocrm_account_view') and entity.account -%}
-                {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.account.id}) ~ '">' ~ entity.account.__toString() ~ '</a>' %}
+            {%- if entity.account and resource_granted('VIEW', entity.account)  -%}
+                {% set accountView = ui.renderUrl(path('orocrm_account_view', {'id': entity.account.id}), entity.account.__toString()) %}
             {%- else -%}
                 {% set accountView = entity.account ? entity.account.__toString() : '' %}
             {%- endif -%}
