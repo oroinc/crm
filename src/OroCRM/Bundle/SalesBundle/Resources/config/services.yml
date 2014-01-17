@@ -33,3 +33,11 @@ services:
         class: %orocrm_sales.lead.datagrid_helper.class%
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.sales-lead-datagrid, method: onBuildAfter }
+
+    orocrm_sales.form.autocomplete.contact.search_handler:
+        parent: oro_form.autocomplete.full_name.search_handler
+        arguments:
+            - %orocrm_sales.opportunity.class%
+            - ["name"]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: opportunities, acl_resource: orocrm_sales_opportunity_view }

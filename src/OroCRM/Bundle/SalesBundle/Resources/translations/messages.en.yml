@@ -22,6 +22,9 @@ orocrm:
             lead.saved.message: "Lead saved"
             opportunity.saved.message: "Opportunity saved"
 
+        form:
+            choose_opportunity: 'Choose an opportunity....'
+
         #
         # OroCRM/Bundle/SalesBundle/Entity/LeadStatus.php
         #
