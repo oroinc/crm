@@ -13,7 +13,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendSalesFlowOpportunity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_sales_flow_opportunity")
+ * @ORM\Table(name="orocrm_sales_sales_flow_opportunity")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
