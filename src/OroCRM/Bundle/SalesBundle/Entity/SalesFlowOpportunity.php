@@ -46,7 +46,7 @@ class SalesFlowOpportunity extends ExtendSalesFlowOpportunity
     /**
      * @var Opportunity
      *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity")
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity", inversedBy="salesFlowOpportunity")
      * @ORM\JoinColumn(name="opportunity_id", referencedColumnName="id", onDelete="CASCADE")
      * @Oro\Versioned
      */

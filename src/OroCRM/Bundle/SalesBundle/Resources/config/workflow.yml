@@ -258,8 +258,9 @@ workflows:
     b2b_flow_sales:
         label: 'B2B Sales Flow'
         enabled: true
-        entity: OroCRM\Bundle\SalesBundle\Entity\Opportunity
-        entity_attribute: opportunity
+        entity: OroCRM\Bundle\SalesBundle\Entity\SalesFlowOpportunity
+        entity_attribute: sales_flow_opportunity
+        start_step: qualify
         steps_display_ordered: true
         steps:
             qualify:
@@ -282,63 +283,69 @@ workflows:
                     - requalify_lost
                     - requalify_won
         attributes:
+            opportunity:
+                label: orocrm.sales.salesflowopportunity.opportunity.label
+                type: entity
+                property_path: sales_flow_opportunity.opportunity
+                options:
+                    class: OroCRM\Bundle\ContactBundle\Entity\Contact
             opportunity_name:
                 label: orocrm.sales.opportunity.name.label
                 type: string
-                property_path: opportunity.name
+                property_path: sales_flow_opportunity.opportunity.name
             notes:
                 label: orocrm.sales.lead.notes.label
                 type: string
-                property_path: opportunity.notes
+                property_path: sales_flow_opportunity.opportunity.notes
             contact:
                 label: orocrm.sales.opportunity.contact.label
                 type: entity
-                property_path: opportunity.contact
+                property_path: sales_flow_opportunity.opportunity.contact
                 options:
                     class: OroCRM\Bundle\ContactBundle\Entity\Contact
             account:
                 label: orocrm.sales.opportunity.account.label
                 type: entity
-                property_path: opportunity.account
+                property_path: sales_flow_opportunity.opportunity.account
                 options:
                     class: OroCRM\Bundle\AccountBundle\Entity\Account
             probability:
                 label: orocrm.sales.opportunity.probability.label
                 type: float
-                property_path: opportunity.probability
+                property_path: sales_flow_opportunity.opportunity.probability
             budget_amount:
-                  label: orocrm.sales.opportunity.budget_amount.label
-                  type: float
-                  property_path: opportunity.budgetAmount
+                label: orocrm.sales.opportunity.budget_amount.label
+                type: float
+                property_path: sales_flow_opportunity.opportunity.budgetAmount
             customer_need:
                 label: orocrm.sales.opportunity.customer_need.label
                 type: string
-                property_path: opportunity.customerNeed
+                property_path: sales_flow_opportunity.opportunity.customerNeed
             proposed_solution:
                 label: orocrm.sales.opportunity.proposed_solution.label
                 type: string
-                property_path: opportunity.proposedSolution
-            close_reason_name: # auxiliary attribute to find close reason by its name
+                property_path: sales_flow_opportunity.opportunity.proposedSolution
+            close_reason_name: # temporary attribute to find close reason by its name
                 label: orocrm.sales.opportunity.close_reason.label
                 type: string
             close_reason:
                 label: orocrm.sales.opportunity.close_reason.label
                 type: entity
-                property_path: opportunity.closeReason
+                property_path: sales_flow_opportunity.opportunity.closeReason
                 options:
                     class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
             close_revenue:
                 label: orocrm.sales.opportunity.close_revenue.label
                 type: float
-                property_path: opportunity.closeRevenue
+                property_path: sales_flow_opportunity.opportunity.closeRevenue
             close_date:
                 label: orocrm.sales.opportunity.close_date.label
                 type: object
-                property_path: opportunity.closeDate
+                property_path: sales_flow_opportunity.opportunity.closeDate
                 options:
                     class: DateTime
         transitions:
-            qualify:
+            __start__:
                 label: 'Qualify'
                 step_to: qualify
                 is_start: true
@@ -544,7 +551,9 @@ workflows:
                     class: 'btn-primary'
                 transition_definition: requalify_won_definition
         transition_definitions:
-            edit_qualify_definition: ~
+            edit_qualify_definition:
+                conditions: # if opportunity.status = "in_progress"
+                    @equal: [$opportunity.status.name, 'in_progress']
             qualify_definition:
                 conditions: # if opportunity.status = "in_progress"
                     @equal: [$opportunity.status.name, 'in_progress']
@@ -591,10 +600,6 @@ workflows:
                     - @assign_value:
                         - [$probability, 1]
                         - [$close_reason_name, 'won']
-                    - @redirect:
-                        route: orocrm_sales_opportunity_view
-                        route_parameters:
-                            id: $opportunity.id
             close_as_lost_definition:
                 pre_conditions: # opportunity.status = "in_progress", required data is entered and reason = "cancelled"
                     @equal:
@@ -620,10 +625,6 @@ workflows:
                     - @assign_value:
                         - [$probability, 0]
                         - [$close_revenue, 0]
-                    - @redirect:
-                        route: orocrm_sales_opportunity_view
-                        route_parameters:
-                            id: $opportunity.id
             requalify_lost_definition:
                 conditions:
                     @equal: [$opportunity.status.name, 'lost']

@@ -4,7 +4,5 @@ parameters:
 services:
     orocrm_sales.validator.opportunity_with_sales_flow:
         class: %orocrm_sales.validator.opportunity_with_sales_flow.class%
-        arguments:
-            - @doctrine
         tags:
             - { name: validator.constraint_validator, alias: orocrm_sales_validator_opportunity_with_sales_flow }

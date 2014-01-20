@@ -8,8 +8,6 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\UserBundle\Entity\User;
 
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
@@ -176,62 +174,11 @@ class Opportunity extends ExtendOpportunity
     protected $notes;
 
     /**
-     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
+     * @var SalesFLowOpportunity
      *
-     * @var WorkflowItem
-     *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
-     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\SalesFlowOpportunity", mappedBy="opportunity")
      */
-    protected $workflowItem;
-
-    /**
-     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
-     *
-     * @var WorkflowStep
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
-     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowStep;
-
-    /**
-     * @param WorkflowItem $workflowItem
-     * @return Lead
-     */
-    public function setWorkflowItem($workflowItem)
-    {
-        $this->workflowItem = $workflowItem;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowItem
-     */
-    public function getWorkflowItem()
-    {
-        return $this->workflowItem;
-    }
-
-    /**
-     * @param WorkflowItem $workflowStep
-     * @return Lead
-     */
-    public function setWorkflowStep($workflowStep)
-    {
-        $this->workflowStep = $workflowStep;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowStep
-     */
-    public function getWorkflowStep()
-    {
-        return $this->workflowStep;
-    }
+    protected $salesFlowOpportunity;
 
     /**
      * @return int
@@ -547,5 +494,23 @@ class Opportunity extends ExtendOpportunity
     {
         $this->notes = $notes;
         return $this;
+    }
+
+    /**
+     * @param SalesFLowOpportunity $salesFlowOpportunity
+     * @return Opportunity
+     */
+    public function setSalesFlowOpportunity($salesFlowOpportunity)
+    {
+        $this->salesFlowOpportunity = $salesFlowOpportunity;
+        return $this;
+    }
+
+    /**
+     * @return SalesFLowOpportunity
+     */
+    public function getSalesFlowOpportunity()
+    {
+        return $this->salesFlowOpportunity;
     }
 }

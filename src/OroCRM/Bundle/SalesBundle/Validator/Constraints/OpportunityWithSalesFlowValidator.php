@@ -6,28 +6,10 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-
-use OroCRM\Bundle\SalesBundle\Entity\Repository\SalesFlowOpportunityRepository;
 use OroCRM\Bundle\SalesBundle\Entity\SalesFlowOpportunity;
 
 class OpportunityWithSalesFlowValidator extends ConstraintValidator
 {
-    /**
-     * @var ManagerRegistry
-     */
-    protected $registry;
-
-    /**
-     * @param ManagerRegistry $registry
-     */
-    public function __construct(ManagerRegistry $registry)
-    {
-        $this->registry = $registry;
-    }
-
-
-
     /**
      * @param SalesFlowOpportunity|null $value
      * @param Constraint $constraint
@@ -48,10 +30,7 @@ class OpportunityWithSalesFlowValidator extends ConstraintValidator
             return;
         }
 
-        /** @var SalesFlowOpportunityRepository $repository */
-        $repository = $this->registry->getRepository('OroCRMSalesBundle:SalesFlowOpportunity');
-        $salesFlowOpportunity = $repository->findOneByOpportunity($opportunity);
-
+        $salesFlowOpportunity = $opportunity->getSalesFlowOpportunity();
         if (!$salesFlowOpportunity) {
             return;
         }

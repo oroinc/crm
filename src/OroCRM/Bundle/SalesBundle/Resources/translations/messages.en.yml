@@ -68,8 +68,7 @@ orocrm:
             owner.label:          Owner
             notes.label:          Notes
             lead.label:           Lead
-            workflow_item.label:  Workflow Item
-            workflow_step.label:  Workflow Step
+            sales_flow_opportunity.label: Sales Funnel
 
             datagrid:
                 view: View
