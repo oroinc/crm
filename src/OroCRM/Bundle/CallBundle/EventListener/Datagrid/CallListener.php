@@ -86,5 +86,16 @@ class CallListener
                 ->andWhere('(call.relatedAccount = :account OR :account MEMBER OF contact.accounts)')
                 ->setParameter('account', $account);
         }
+
+        if (array_key_exists('callIds', $parameters)) {
+            $callIds = $parameters['callIds'];
+            if (!is_array($callIds)) {
+                $callIds = explode(',', $callIds);
+            }
+            if (empty($callIds)) {
+                $callIds = array(0);
+            }
+            $queryBuilder->andWhere($queryBuilder->expr()->in('call.id', $callIds));
+        }
     }
 }

@@ -449,7 +449,7 @@ workflows:
                          body: $email_body
                      - @call_method:
                          method: 'addEmail'
-                         object: $cart.emails
+                         object: $cart
                          method_parameters: [$email]
 
             convert_definition:
