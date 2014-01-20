@@ -5,35 +5,30 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 class OrderBridgeIterator extends AbstractBridgeIterator
 {
     /**
-     * Get entities list
-     *
-     * @param array $filters
-     * @param null  $limit
-     * @param bool  $idsOnly
+     * Get entities ids list
      *
      * @return mixed
      */
-    protected function getList($filters = [], $limit = null, $idsOnly = true)
+    protected function getEntityIds()
     {
-        // TODO: Implement getList() method.
+        // TODO: Implement getEntityIds() method.
     }
 
     /**
      * Get entity data by id
      *
-     * @param int        $id
-     * @param bool       $dependenciesInclude
-     * @param array|null $onlyAttributes array of needed attributes or null to get all list
+     * @param mixed $id
      *
      * @return mixed
      */
-    protected function getData($id, $dependenciesInclude = false, $onlyAttributes = null)
+    protected function getEntity($id)
     {
-        // TODO: Implement getData() method.
+        // TODO: Implement getEntity() method.
     }
 
     /**
      * Should return id field name for entity, e.g.: entity_id, order_id, increment_id, etc
+     * Needed for complex filters for API calls
      *
      * @return string
      */
@@ -41,16 +36,4 @@ class OrderBridgeIterator extends AbstractBridgeIterator
     {
         // TODO: Implement getIdFieldName() method.
     }
-
-    /**
-     * Do real load for dependencies data
-     *
-     * @return void
-     */
-    protected function loadDependencies()
-    {
-        // TODO: Implement loadDependencies() method.
-    }
-
-
 }

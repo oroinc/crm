@@ -77,6 +77,9 @@ class OrderStrategy extends BaseStrategy
     }
 
     /**
+     * If cart exists then add relation to it,
+     * do nothing otherwise
+     *
      * @param Order $entity
      */
     protected function processCart(Order $entity)
@@ -88,20 +91,18 @@ class OrderStrategy extends BaseStrategy
 
         $criteria = ['originId' => $cartId, 'channel' => $entity->getChannel()];
 
-        /** @var Cart $cart */
+        /** @var Cart|null $cart */
         $cart = $this->getEntityByCriteria($criteria, CartStrategy::ENTITY_NAME);
 
         if ($cart) {
-            $statusClass = 'OroCRMMagentoBundle:CartStatus';
+            $statusClass     = 'OroCRMMagentoBundle:CartStatus';
             $convertedStatus = $this->strategyHelper->getEntityManager($statusClass)->find($statusClass, 'converted');
             if ($convertedStatus) {
                 $cart->setStatus($convertedStatus);
             }
-
-            $entity->setCart($cart);
-        } else {
-            $entity->setCart(null);
         }
+
+        $entity->setCart($cart);
     }
 
     /**

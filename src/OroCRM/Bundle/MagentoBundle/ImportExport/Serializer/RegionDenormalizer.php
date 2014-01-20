@@ -42,6 +42,7 @@ class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInter
             $resultObject->setCountryCode($data['countryCode']);
         }
 
+        // magento can bring empty name, region will be skipped in strategy
         if (isset($data['name'])) {
             $resultObject->setName($data['name']);
         }
