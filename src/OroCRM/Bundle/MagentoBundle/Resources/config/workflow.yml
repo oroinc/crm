@@ -538,6 +538,7 @@ workflows:
         label: 'Order Follow Up'
         enabled: true
         entity: OroCRM\Bundle\MagentoBundle\Entity\Order
+        entity_attribute: order
         steps:
             not_contacted:
                 label: 'Not contacted'
@@ -563,17 +564,6 @@ workflows:
                 is_final: true
 
         attributes:
-            call_collection:
-                label: 'Calls'
-                type: object
-                options:
-                    class: Doctrine\Common\Collections\ArrayCollection
-            email_collection:
-                label: 'Emails'
-                type: object
-                options:
-                    class: Doctrine\Common\Collections\ArrayCollection
-
             # Call related fields
             call:
                 label: 'Call log'
@@ -707,53 +697,53 @@ workflows:
                             conditions:
                                 @and:
                                     - @empty: $phone_number
-                                    - @not_empty: $entity.customer
-                                    - @not_empty: $entity.customer.contact
-                                    - @not_empty: $entity.customer.contact.primaryPhone
-                            parameters: [$phone_number, $entity.customer.contact.primaryPhone.phone]
+                                    - @not_empty: $order.customer
+                                    - @not_empty: $order.customer.contact
+                                    - @not_empty: $order.customer.contact.primaryPhone
+                            parameters: [$phone_number, $order.customer.contact.primaryPhone.phone]
                         - @assign_value:
                             conditions:
                                 @and:
                                     - @empty: $phone_number
-                                    - @not_empty: $entity.cart
-                                    - @not_empty: $entity.cart.customer
-                                    - @not_empty: $entity.cart.customer.contact
-                                    - @not_empty: $entity.cart.customer.contact.primaryPhone
-                            parameters: [$phone_number, $entity.cart.customer.contact.primaryPhone.phone]
+                                    - @not_empty: $order.cart
+                                    - @not_empty: $order.cart.customer
+                                    - @not_empty: $order.cart.customer.contact
+                                    - @not_empty: $order.cart.customer.contact.primaryPhone
+                            parameters: [$phone_number, $order.cart.customer.contact.primaryPhone.phone]
 
                         # Assign either order customer account or order cart customer account as account
                         - @assign_value:
                             conditions:
                                 @and:
                                     - @empty: $account
-                                    - @not_empty: $entity.customer
-                                    - @not_empty: $entity.customer.account
-                            parameters: [$account, $entity.customer.account]
+                                    - @not_empty: $order.customer
+                                    - @not_empty: $order.customer.account
+                            parameters: [$account, $order.customer.account]
                         - @assign_value:
                             conditions:
                                 @and:
                                     - @empty: $account
-                                    - @not_empty: $entity.cart
-                                    - @not_empty: $entity.cart.customer
-                                    - @not_empty: $entity.cart.customer.account
-                            parameters: [$account, $entity.cart.customer.account]
+                                    - @not_empty: $order.cart
+                                    - @not_empty: $order.cart.customer
+                                    - @not_empty: $order.cart.customer.account
+                            parameters: [$account, $order.cart.customer.account]
 
                         # Assign either order owner contact or order cart customer contact as contact
                         - @assign_value:
                             conditions:
                                 @and:
                                     - @empty: $contact
-                                    - @not_empty: $entity.customer
-                                    - @not_empty: $entity.customer.contact
-                            parameters: [$contact, $entity.customer.contact]
+                                    - @not_empty: $order.customer
+                                    - @not_empty: $order.customer.contact
+                            parameters: [$contact, $order.customer.contact]
                         - @assign_value:
                             conditions:
                                 @and:
                                     - @empty: $contact
-                                    - @not_empty: $entity.cart
-                                    - @not_empty: $entity.cart.customer
-                                    - @not_empty: $entity.cart.customer.contact
-                            parameters: [$contact, $entity.cart.customer.contact]
+                                    - @not_empty: $order.cart
+                                    - @not_empty: $order.cart.customer
+                                    - @not_empty: $order.cart.customer.contact
+                            parameters: [$contact, $order.cart.customer.contact]
 
                         - @create_object:
                             class: '\DateTime'
@@ -818,40 +808,40 @@ workflows:
                             conditions:
                                 @and:
                                     - @empty: $email_to
-                                    - @not_empty: $entity.customer
-                                    - @not_empty: $entity.customer.email
-                            parameters: [$email_to, $entity.customer.email]
+                                    - @not_empty: $order.customer
+                                    - @not_empty: $order.customer.email
+                            parameters: [$email_to, $order.customer.email]
                         - @assign_value: #Assign email to as shopping cart customer email
                             conditions:
                                 @and:
                                     - @empty: $email_to
-                                    - @not_empty: $entity.cart
-                                    - @not_empty: $entity.cart.email
-                            parameters: [$email_to, $entity.cart.email]
+                                    - @not_empty: $order.cart
+                                    - @not_empty: $order.cart.email
+                            parameters: [$email_to, $order.cart.email]
                         - @assign_value: #Assign email to as shopping cart customer contact primary email
                             conditions:
                                 @and:
                                     - @empty: $email_to
-                                    - @not_empty: $entity.customer
-                                    - @not_empty: $entity.customer.contact
-                                    - @not_empty: $entity.customer.contact.primaryEmail
-                            parameters: [$email_to, $entity.customer.contact.primaryEmail.email]
+                                    - @not_empty: $order.customer
+                                    - @not_empty: $order.customer.contact
+                                    - @not_empty: $order.customer.contact.primaryEmail
+                            parameters: [$email_to, $order.customer.contact.primaryEmail.email]
                         - @assign_value: #Assign email to as shopping cart customer email
                             conditions:
                                 @and:
                                     - @empty: $email_to
-                                    - @not_empty: $entity.cart
-                                    - @not_empty: $entity.cart.customer
-                                    - @not_empty: $entity.cart.customer.email
-                            parameters: [$email_to, $entity.cart.customer.email]
+                                    - @not_empty: $order.cart
+                                    - @not_empty: $order.cart.customer
+                                    - @not_empty: $order.cart.customer.email
+                            parameters: [$email_to, $order.cart.customer.email]
                         - @assign_value: #Assign email to as shopping cart customer contact primary email
                             conditions:
                                 @and:
                                     - @empty: $email_to
-                                    - @not_empty: $entity.cart
-                                    - @not_empty: $entity.cart.customer.contact
-                                    - @not_empty: $entity.cart.customer.contact.primaryEmail
-                            parameters: [$email_to, $entity.cart.customer.contact.primaryEmail.email]
+                                    - @not_empty: $order.cart
+                                    - @not_empty: $order.cart.customer.contact
+                                    - @not_empty: $order.cart.customer.contact.primaryEmail
+                            parameters: [$email_to, $order.cart.customer.contact.primaryEmail.email]
             no_reply:
                 label: 'No reply'
                 step_to: not_contacted
@@ -918,15 +908,9 @@ workflows:
                             callStatus: $call_status
                             duration: $call_duration
                             direction: $call_direction
-                    - @create_object:
-                        conditions:
-                            @empty: $call_collection
-                        parameters:
-                            class: Doctrine\Common\Collections\ArrayCollection
-                            attribute: $call_collection
                     - @call_method:
-                        method: 'add'
-                        object: $call_collection
+                        method: 'addCall'
+                        object: $order
                         method_parameters: [$call]
 
             send_email_definition:
@@ -951,15 +935,9 @@ workflows:
                         to: $email_to
                         subject: $email_subject
                         body: $email_body
-                    - @create_object:
-                        conditions:
-                            @empty: $email_collection
-                        parameters:
-                            class: Doctrine\Common\Collections\ArrayCollection
-                            attribute: $email_collection
                     - @call_method:
-                        method: 'add'
-                        object: $email_collection
+                        method: 'addEmail'
+                        object: $order
                         method_parameters: [$email]
             no_reply_definition: [] # do nothing
             record_feedback_definition: [] # do nothing
