@@ -15,18 +15,18 @@ connector:
 #                    parameters:
 #                        batch_size: 15
         # Region import jobs
-#        mage_regions_import:
-#            title: "Import Magento regions via SOAP API"
-#            type: import
-#            steps:
-#                import:
-#                    title:     import
-#                    services:
-#                        reader:    orocrm_magento.mage.region_connector
-#                        processor: oro_importexport.processor.import_delegate
-#                        writer:    oro_integration.writer.persistent_batch_writer
-#                    parameters:
-#                        batch_size: 15
+        mage_regions_import:
+            title: "Import Magento regions via SOAP API"
+            type: import
+            steps:
+                import:
+                    title:     import
+                    services:
+                        reader:    orocrm_magento.mage.region_connector
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    oro_integration.writer.persistent_batch_writer
+                    parameters:
+                        batch_size: 15
         # Magento orders import/update
         mage_order_import:
             title: "Order Import from Magento SOAP API"

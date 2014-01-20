@@ -19,7 +19,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /** @var \DateTime */
     protected $lastSyncDate;
 
-    /** @var int|\stdClass Last id used for initial import, paginating by created_at assuming that ids always incremented */
+    /** @var int|\stdClass Last id used for initial mode, paging by created_at assuming that ids always incremented */
     protected $lastId = null;
 
     /** @var string initial or update mode */
@@ -96,6 +96,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
             // there are intervals to retrieve entities there
         } while ($result === true);
 
+        var_dump($result);
         $this->current = $result;
     }
 

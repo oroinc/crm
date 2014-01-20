@@ -38,4 +38,11 @@ interface MagentoTransportInterface extends TransportInterface
      * @return \Iterator
      */
     public function getWebsites();
+
+    /**
+     * Retrieve regions list from magento
+     *
+     * @return \Iterator
+     */
+    public function getRegions();
 }

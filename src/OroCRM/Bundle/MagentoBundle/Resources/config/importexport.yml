@@ -80,14 +80,15 @@ services:
         tags:
           - { name: oro_integration.connector, type: order, channel_type: magento }
 
-#    orocrm_magento.mage.region_connector:
-#        class: %orocrm_magento.mage.region_connector.class%
-#        arguments:
-#          - @oro_importexport.context_registry
-#          - @oro_integration.logger.strategy
-#        tags:
-#          - { name: oro_integration.connector, type: region, channel_type: magento }
-#
+    orocrm_magento.mage.region_connector:
+        class: %orocrm_magento.mage.region_connector.class%
+        arguments:
+          - @oro_importexport.context_registry
+          - @oro_integration.logger.strategy
+          - @oro_integration.provider.connector_context_mediator
+        tags:
+          - { name: oro_integration.connector, type: region, channel_type: magento }
+
 #    orocrm_magento.mage.cart_connector:
 #        class: %orocrm_magento.mage.cart_connector.class%
 #        arguments:

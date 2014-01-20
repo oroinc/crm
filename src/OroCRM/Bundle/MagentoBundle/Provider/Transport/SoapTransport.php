@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
-
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
@@ -13,6 +11,8 @@ use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
 
 /**
  * Magento SOAP transport
@@ -33,6 +33,8 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_CART_LIST     = 'salesQuoteList';
     const ACTION_CART_INFO     = 'shoppingCartInfo';
     const ACTION_PING          = 'oroPing';
+    const ACTION_COUNTRY_LIST  = 'directoryCountryList';
+    const ACTION_REGION_LIST   = 'directoryRegionList';
 
     /** @var string */
     protected $sessionId;
@@ -123,6 +125,15 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     {
         return new WebsiteSoapIterator($this);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRegions()
+    {
+        return new RegionSoapIterator($this, $this->settings->all());
+    }
+
 
     /**
      * {@inheritdoc}

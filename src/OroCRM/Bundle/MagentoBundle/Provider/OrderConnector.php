@@ -3,17 +3,12 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\IntegrationBundle\Entity\Status;
-use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
-class OrderConnector extends AbstractConnector implements MagentoConnectorInterface
+class OrderConnector extends AbstractMagentoConnector
 {
     const CONNECTOR_TYPE = 'order';
-
-    /** @var MagentoTransportInterface */
-    protected $transport;
 
     /**
      * {@inheritdoc}
@@ -55,17 +50,5 @@ class OrderConnector extends AbstractConnector implements MagentoConnectorInterf
         }
 
         return $iterator;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function validateConfiguration()
-    {
-        parent::validateConfiguration();
-
-        if (!$this->transport instanceof MagentoTransportInterface) {
-            throw new \LogicException('Option "transport" should implement "MagentoTransportInterface"');
-        }
     }
 }
