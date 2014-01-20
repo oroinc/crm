@@ -6,9 +6,10 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
+use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
-class CartConnector extends AbstractApiBasedConnector implements MagentoConnectorInterface, ExtensionAwareInterface
+class CartConnector extends AbstractConnector implements MagentoConnectorInterface, ExtensionAwareInterface
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart';
     const CONNECTOR_LABEL     = 'orocrm.magento.connector.cart.label';
@@ -225,5 +226,45 @@ class CartConnector extends AbstractApiBasedConnector implements MagentoConnecto
     protected function getIdFieldName()
     {
         return 'entity_id';
+    }
+
+    /**
+     * Return source iterator to read from
+     *
+     * @return \Iterator
+     */
+    protected function getConnectorSource()
+    {
+        // TODO: Implement getConnectorSource() method.
+    }
+
+    /**
+     * Returns label for UI
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        // TODO: Implement getLabel() method.
+    }
+
+    /**
+     * Returns entity name that will be used for matching "import processor"
+     *
+     * @return string
+     */
+    public function getImportEntityFQCN()
+    {
+        // TODO: Implement getImportEntityFQCN() method.
+    }
+
+    /**
+     * Returns job name for import
+     *
+     * @return string
+     */
+    public function getImportJobName()
+    {
+        // TODO: Implement getImportJobName() method.
     }
 }

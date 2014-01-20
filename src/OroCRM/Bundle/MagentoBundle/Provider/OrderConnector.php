@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\DataIteratorInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 class OrderConnector extends AbstractConnector
@@ -48,9 +48,9 @@ class OrderConnector extends AbstractConnector
 
         // set start date and mode depending on status
         $status = $this->channel->getStatusesForConnector(self::CONNECTOR_TYPE, Status::STATUS_COMPLETED)->first();
-        if (false !== $status) {
+        if ($iterator instanceof UpdatedLoaderInterface && false !== $status) {
             /** @var Status $status */
-            $iterator->setMode(DataIteratorInterface::IMPORT_MODE_UPDATE);
+            $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
             $iterator->setStartDate($status->getDate());
         }
 

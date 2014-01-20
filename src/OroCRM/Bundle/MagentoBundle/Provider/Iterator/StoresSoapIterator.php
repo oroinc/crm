@@ -15,19 +15,17 @@ class StoresSoapIterator extends AbstractLoadeableSoapIterator
         $result = $this->transport->call(SOAPTransport::ACTION_STORE_LIST);
 
         if (!empty($result) && is_array($result)) {
-            array_unshift(
-                $result,
-                [
-                    'website_id' => 0,
-                    'code'       => 'admin',
-                    'name'       => 'Admin',
-                    'store_id'   => 0
-                ]
-            );
+            $adminStoreData = [
+                'website_id' => 0,
+                'code'       => 'admin',
+                'name'       => 'Admin',
+                'store_id'   => 0
+            ];
+            array_unshift($result, $adminStoreData);
 
             foreach ($result as $item) {
                 $item                    = (array)$item;
-                $data[$item['store_id']] = $item;
+                $data[$item['store_id']] = array_intersect_key($item, array_flip(array_keys($adminStoreData)));
             }
         }
 

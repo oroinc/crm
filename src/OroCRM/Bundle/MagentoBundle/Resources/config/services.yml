@@ -11,9 +11,6 @@ parameters:
 
     # event listeners
     orocrm_magento.event_listener.navigation.class:                       OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener
-
-    # additional services
-    orocrm_magento.converter.stores_to_website.class:                     OroCRM\Bundle\MagentoBundle\Converter\StoreListToWebsiteConverter
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -72,9 +69,3 @@ services:
             tags:
                 - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-cartitem-grid, method: onBuildAfter }
                 - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-orderitem-grid, method: onBuildAfter }
-
-    # additional services
-    orocrm_magento.converter.stores_to_website:
-        class: %orocrm_magento.converter.stores_to_website.class%
-        arguments:
-            - @translator

@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\DataIteratorInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 interface MagentoTransportInterface extends TransportInterface
 {
@@ -12,7 +12,7 @@ interface MagentoTransportInterface extends TransportInterface
     const WEBSITE_NAME_SEPARATOR = ', ';
 
     /**
-     * Return true if oro extension installed on remote instance
+     * Return true if oro bridge extension installed on remote instance
      *
      * @return bool
      */
@@ -21,16 +21,20 @@ interface MagentoTransportInterface extends TransportInterface
     /**
      * Retrieve orders from magento
      *
-     * @return DataIteratorInterface
+     * @return UpdatedLoaderInterface|\Iterator
      */
     public function getOrders();
 
     /**
+     * Retrieve store list from magento
+     *
      * @return \Iterator
      */
     public function getStores();
 
     /**
+     * Retrieve website list from magento
+     *
      * @return \Iterator
      */
     public function getWebsites();

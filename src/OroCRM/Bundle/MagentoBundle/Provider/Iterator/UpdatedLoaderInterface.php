@@ -2,13 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
-interface DataIteratorInterface extends \Iterator
+interface UpdatedLoaderInterface
 {
-    const ALIAS_GROUPS   = 'groups';
-    const ALIAS_STORES   = 'stores';
-    const ALIAS_WEBSITES = 'websites';
-    const ALIAS_REGIONS  = 'regions';
-
     const IMPORT_MODE_INITIAL = 'initial';
     const IMPORT_MODE_UPDATE  = 'update';
 

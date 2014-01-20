@@ -6,8 +6,6 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class WebsiteSoapIterator extends AbstractLoadeableSoapIterator
 {
-
-
     /**
      * {@inheritdoc}
      */

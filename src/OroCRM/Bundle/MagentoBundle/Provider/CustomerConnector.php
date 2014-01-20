@@ -2,7 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-class CustomerConnector extends AbstractApiBasedConnector
+use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
+
+class CustomerConnector extends AbstractConnector
 {
     const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer';
     const JOB_IMPORT          = 'mage_customer_import';
@@ -127,4 +129,46 @@ class CustomerConnector extends AbstractApiBasedConnector
     {
         return 'entity_id';
     }
+
+    /**
+     * Return source iterator to read from
+     *
+     * @return \Iterator
+     */
+    protected function getConnectorSource()
+    {
+        // TODO: Implement getConnectorSource() method.
+    }
+
+    /**
+     * Returns label for UI
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        // TODO: Implement getLabel() method.
+    }
+
+    /**
+     * Returns entity name that will be used for matching "import processor"
+     *
+     * @return string
+     */
+    public function getImportEntityFQCN()
+    {
+        // TODO: Implement getImportEntityFQCN() method.
+    }
+
+    /**
+     * Returns job name for import
+     *
+     * @return string
+     */
+    public function getImportJobName()
+    {
+        // TODO: Implement getImportJobName() method.
+    }
+
+
 }

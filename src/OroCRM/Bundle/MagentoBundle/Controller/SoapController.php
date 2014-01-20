@@ -51,11 +51,7 @@ class SoapController extends Controller
         $isExtensionInstalled = false;
         try {
             $transport->init($channel);
-            /**
-             * @TODO fix this
-             */
-            $stores               = $transport->call(SoapTransport::ACTION_STORE_LIST);
-            $websites             = $this->get('orocrm_magento.converter.stores_to_website')->convert($stores);
+            $websites             = $this->formatWebsiteChoices($transport->getWebsites());
             $isExtensionInstalled = $transport->isExtensionInstalled();
 
             $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')
@@ -83,5 +79,38 @@ class SoapController extends Controller
                 'connectors'           => $allowedTypesChoices,
             ]
         );
+    }
+
+    /**
+     * Example:
+     * [
+     *      WebsiteId => 'Website: WebsiteId, Stores: Store1, Store2'
+     * ]
+     *
+     * @param \Iterator $websitesSource
+     *
+     * @return array
+     */
+    protected function formatWebsiteChoices(\Iterator $websitesSource)
+    {
+        $translator = $this->get('translator');
+        $websites   = iterator_to_array($websitesSource);
+        $websites   = array_map(
+            function ($website) use ($translator) {
+                return [
+                    'id'    => $website['id'],
+                    'label' => $translator->trans(
+                            'Website ID: %websiteId%, Stores: %storesList%',
+                            [
+                                '%websiteId%'  => $website['id'],
+                                '%storesList%' => $website['name']
+                            ]
+                        )
+                ];
+            },
+            $websites
+        );
+
+        return $websites;
     }
 }

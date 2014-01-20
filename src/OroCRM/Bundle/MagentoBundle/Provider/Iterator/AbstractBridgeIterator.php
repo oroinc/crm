@@ -2,6 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
-abstract class AbstractBridgeIterator extends AbstractSoapIterator
+abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator
 {
 }

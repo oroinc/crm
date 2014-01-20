@@ -7,8 +7,13 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
-abstract class AbstractSoapIterator implements DataIteratorInterface
+abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderInterface
 {
+    const ALIAS_GROUPS   = 'groups';
+    const ALIAS_STORES   = 'stores';
+    const ALIAS_WEBSITES = 'websites';
+    const ALIAS_REGIONS  = 'regions';
+
     const DEFAULT_SYNC_RANGE = '1 month';
 
     /** @var \DateTime */
@@ -38,7 +43,11 @@ abstract class AbstractSoapIterator implements DataIteratorInterface
     /** @var array */
     protected $entitiesIdsBuffer = [];
 
+    /** @var null|\stdClass */
     protected $current;
+
+    /** @var int */
+    protected $currentKey;
 
     /** @var int */
     protected $batchSize;
@@ -99,7 +108,26 @@ abstract class AbstractSoapIterator implements DataIteratorInterface
      */
     public function next()
     {
-        $this->current = $this->doRead();
+        if (empty($this->entitiesIdsBuffer)) {
+            $result = $this->findEntitiesToProcess();
+        } else {
+            $result = false;
+        }
+
+        // no more data to look for
+        if (is_null($result)) {
+            return null;
+        }
+
+        if (!empty($this->entitiesIdsBuffer)) {
+            $entityId = array_shift($this->entitiesIdsBuffer);
+            $data     = $this->getData($entityId, true);
+        } else {
+            // empty record, nothing found but keep going
+            $data = false;
+        }
+
+        return $data;
     }
 
     /**
@@ -107,7 +135,7 @@ abstract class AbstractSoapIterator implements DataIteratorInterface
      */
     public function key()
     {
-        // TODO: Implement key() method.
+        return $this->currentKey;
     }
 
     /**
@@ -129,33 +157,6 @@ abstract class AbstractSoapIterator implements DataIteratorInterface
 
         $this->entitiesIdsBuffer = [];
         $this->next();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function doRead()
-    {
-        if (empty($this->entitiesIdsBuffer)) {
-            $result = $this->findEntitiesToProcess();
-        } else {
-            $result = false;
-        }
-
-        // no more data to look for
-        if (is_null($result)) {
-            return null;
-        }
-
-        if (!empty($this->entitiesIdsBuffer)) {
-            $entityId = array_shift($this->entitiesIdsBuffer);
-            $data     = $this->getData($entityId, true);
-        } else {
-            // empty record, nothing found but keep going
-            $data = false;
-        }
-
-        return $data;
     }
 
     /**

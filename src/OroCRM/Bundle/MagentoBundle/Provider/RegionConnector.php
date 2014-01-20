@@ -7,10 +7,6 @@ use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
 class RegionConnector extends AbstractConnector implements MagentoConnectorInterface
 {
-    const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Region';
-    const JOB_IMPORT          = 'mage_regions_import';
-    const CONNECTOR_LABEL     = 'orocrm.magento.connector.region.label';
-
     /** @var array */
     protected $countriesBuffer = false;
 
@@ -83,5 +79,39 @@ class RegionConnector extends AbstractConnector implements MagentoConnectorInter
         }
 
         return $this->regionsBuffer;
+    }
+
+    /**
+     * Return source iterator to read from
+     *
+     * @return \Iterator
+     */
+    protected function getConnectorSource()
+    {
+        // TODO: Implement getConnectorSource() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabel()
+    {
+        return 'orocrm.magento.connector.region.label';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getImportEntityFQCN()
+    {
+        return 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Region';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getImportJobName()
+    {
+        return 'mage_regions_import';
     }
 }

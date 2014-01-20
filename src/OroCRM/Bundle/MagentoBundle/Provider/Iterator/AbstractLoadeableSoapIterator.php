@@ -81,7 +81,8 @@ abstract class AbstractLoadeableSoapIterator implements \Iterator, \Countable
     protected function load()
     {
         if (false === $this->loaded) {
-            $this->data = $this->getData();
+            $this->data   = $this->getData();
+            $this->loaded = true;
         }
     }
 
