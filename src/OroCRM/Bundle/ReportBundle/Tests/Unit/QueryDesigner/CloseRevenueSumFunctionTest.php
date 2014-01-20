@@ -15,7 +15,7 @@ class CloseRevenueSumFunctionTest extends OrmQueryConverterTest
             'columns'          => [
                 ['name' => 'id', 'label' => 'id'],
                 [
-                    'name'  => 'opportunity,OroCRM\Bundle\SalesBundle\Entity\Opportunity::closeRevenue',
+                    'name'  => 'opportunity+OroCRM\Bundle\SalesBundle\Entity\Opportunity::closeRevenue',
                     'label' => 'SUM of closeRevenue',
                     'func'  => [
                         'name'       => 'ClosedCloseRevenueSum',
@@ -68,7 +68,7 @@ class CloseRevenueSumFunctionTest extends OrmQueryConverterTest
                     ],
                     'column_aliases' => [
                         'id'                                                                              => 'c1',
-                        'opportunity,OroCRM\Bundle\SalesBundle\Entity\Opportunity::closeRevenue'
+                        'opportunity+OroCRM\Bundle\SalesBundle\Entity\Opportunity::closeRevenue'
                         . '(ClosedCloseRevenueSum,opportunity_by_workflow_item_close_revenue,aggregates)' => 'c2'
                     ],
                 ],
