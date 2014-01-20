@@ -7,7 +7,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
@@ -51,9 +51,9 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /**
      * {@inheritdoc}
      */
-    public function init(Channel $channel)
+    public function init(Transport $transportEntity)
     {
-        parent::init($channel);
+        parent::init($transportEntity);
 
         $apiUser = $this->settings->get('api_user', false);
         $apiKey  = $this->settings->get('api_key', false);
@@ -99,10 +99,12 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getOrders()
     {
+        $settings = $this->settings->all();
+
         if ($this->isExtensionInstalled()) {
-            return new OrderBridgeIterator($this, $this->channel);
+            return new OrderBridgeIterator($this, $settings);
         } else {
-            return new OrderSoapIterator($this, $this->channel);
+            return new OrderSoapIterator($this, $settings);
         }
     }
 

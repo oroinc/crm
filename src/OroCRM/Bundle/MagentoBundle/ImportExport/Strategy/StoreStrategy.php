@@ -7,8 +7,6 @@ use OroCRM\Bundle\MagentoBundle\Entity\Website;
 
 class StoreStrategy extends BaseStrategy
 {
-    const ENTITY_NAME = 'OroCRMMagentoBundle:Store';
-
     /** @var array */
     protected $storeEntityCache = [];
 

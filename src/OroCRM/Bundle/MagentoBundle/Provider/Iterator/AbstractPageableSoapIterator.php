@@ -2,9 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderInterface
@@ -16,13 +13,13 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
 
     const DEFAULT_SYNC_RANGE = '1 month';
 
+    /** @var \DateTime needed to restore initial value on next rewinds */
+    protected $lastSyncDateInitialValue;
+
     /** @var \DateTime */
     protected $lastSyncDate;
 
-    /**
-     * @var string|\stdClass
-     * Last id used for initial import, paginating by created_at assuming that ids always incremented
-     */
+    /** @var int|\stdClass Last id used for initial import, paginating by created_at assuming that ids always incremented */
     protected $lastId = null;
 
     /** @var string initial or update mode */
@@ -49,19 +46,13 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /** @var int */
     protected $currentKey;
 
-    /** @var int */
-    protected $batchSize;
-
     /** @var bool */
     protected $loaded = false;
 
-    public function __construct(SoapTransport $transport, Channel $channel)
+    public function __construct(SoapTransport $transport, array $settings)
     {
         $this->transport = $transport;
-        /** @var MagentoSoapTransport $transportEntity */
-        $transportEntity = $channel->getTransport();
-        $settings        = $transportEntity->getSettingsBag()->all();
-        $this->websiteId = $transportEntity->getWebsiteId();
+        $this->websiteId = $settings['website_id'];
 
         // validate date boundary
         $startSyncDateKey = 'start_sync_date';
@@ -72,27 +63,6 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         $this->setStartDate($settings[$startSyncDateKey]);
 
         $this->syncRange = \DateInterval::createFromDateString(self::DEFAULT_SYNC_RANGE);
-
-        // set batch size
-        if (!empty($settings['batch_size'])) {
-            $this->batchSize = $settings['batch_size'];
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setStartDate(\DateTime $date)
-    {
-        $this->lastSyncDate = clone $date;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setMode($mode)
-    {
-        $this->mode = $mode;
     }
 
     /**
@@ -108,26 +78,25 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     public function next()
     {
-        if (empty($this->entitiesIdsBuffer)) {
-            $result = $this->findEntitiesToProcess();
-        } else {
-            $result = false;
-        }
+        do {
+            if (!empty($this->entitiesIdsBuffer)) {
+                $entityId = array_shift($this->entitiesIdsBuffer);
+                $result   = $this->getEntity($entityId, true);
+            } else {
+                $result = $this->findEntitiesToProcess();
+            }
 
-        // no more data to look for
-        if (is_null($result)) {
-            return null;
-        }
+            // no more data to look for
+            if (is_null($result)) {
+                break;
+            }
 
-        if (!empty($this->entitiesIdsBuffer)) {
-            $entityId = array_shift($this->entitiesIdsBuffer);
-            $data     = $this->getData($entityId, true);
-        } else {
-            // empty record, nothing found but keep going
-            $data = false;
-        }
+            // loop again if result is true
+            // true means that there are entities to process or
+            // there are intervals to retrieve entities there
+        } while ($result === true);
 
-        return $data;
+        $this->current = $result;
     }
 
     /**
@@ -152,33 +121,68 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     public function rewind()
     {
         if (false === $this->loaded) {
-            $this->preLoadDependencies();
+            $this->dependencies = $this->getDependencies();
         }
 
         $this->entitiesIdsBuffer = [];
+        $this->current           = null;
+        $this->lastSyncDate      = clone $this->lastSyncDateInitialValue;
         $this->next();
     }
 
     /**
-     * @param int|array $websiteId
-     * @param \DateTime $endDate
+     * {@inheritdoc}
+     */
+    public function setStartDate(\DateTime $date)
+    {
+        $this->lastSyncDate             = clone $date;
+        $this->lastSyncDateInitialValue = clone $date;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+    }
+
+    /**
+     * @param \DateTime $date
+     * @param array     $websiteIds
+     * @param array     $storeIds
      * @param string    $format
      *
      * @return array
      */
-    protected function getBatchFilter($websiteId, \DateTime $endDate, $format = 'Y-m-d H:i:s')
-    {
-        if (!empty($websiteId['value'])) {
-            $operator   = 'in';
-            $storeValue = is_array($websiteId['value']) ? implode(',', $websiteId['value']) : $websiteId['value'];
-            $storeField = $websiteId['field'];
-        } else {
-            $operator   = 'eq';
-            $storeValue = $websiteId;
-            $storeField = 'website_id';
+    protected function getBatchFilter(
+        \DateTime $date,
+        array $websiteIds = [],
+        array $storeIds = [],
+        $format = 'Y-m-d H:i:s'
+    ) {
+        $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
+        $filters  = ['complex_filter' => []];
+
+        if (!empty($websiteIds)) {
+            $filters['complex_filter'][] = [
+                'key'   => 'website_id',
+                'value' => [
+                    'key'   => 'in',
+                    'value' => implode(',', $websiteIds)
+                ]
+            ];
+        }
+        if (!empty($storeIds)) {
+            $filters['complex_filter'][] = [
+                'key'   => 'store_id',
+                'value' => [
+                    'key'   => 'in',
+                    'value' => implode(',', $storeIds)
+                ]
+            ];
         }
 
-        $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
         if ($initMode) {
             $dateField = 'created_at';
             $dateKey   = 'to';
@@ -187,53 +191,39 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
             $dateKey   = 'from';
         }
 
-        $filter = [
-            'complex_filter' => [
-                [
-                    'key'   => $dateField,
-                    'value' => [
-                        'key'   => $dateKey,
-                        'value' => $endDate->format($format),
-                    ],
-                ],
-                [
-                    'key'   => $storeField,
-                    'value' => [
-                        'key'   => $operator,
-                        'value' => $storeValue
-                    ]
-                ]
+        $filters['complex_filter'][] = [
+            'key'   => $dateField,
+            'value' => [
+                'key'   => $dateKey,
+                'value' => $date->format($format),
             ],
         ];
 
         $lastId = $this->getLastId();
         if (!is_null($lastId) && $initMode) {
-            $filter['complex_filter'][] = [
+            $filters['complex_filter'][] = [
                 'key'   => $this->getIdFieldName(),
                 'value' => [
                     'key'   => 'gt',
-                    'value' => $lastId,
+                    'value' => $this->getLastId()
                 ],
             ];
         }
 
-        return $filter;
+        return $filters;
     }
 
     /**
      * Load entities ids list
      *
-     * @return bool|null
+     * @return true|null true when there are ids retrieved
      */
     protected function findEntitiesToProcess()
     {
         $now      = new \DateTime('now', new \DateTimeZone('UTC'));
         $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
 
-        $filters                 = [
-            $this->getBatchFilter($this->websiteId, $this->lastSyncDate)
-        ];
-        $this->entitiesIdsBuffer = $this->getList($filters, $this->batchSize, true);
+        $this->entitiesIdsBuffer = $this->getEntityIds();
 
         // first run, ignore all data in less then start sync date
         $lastId  = $this->getLastId();
@@ -249,11 +239,11 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         // restore cursor
         reset($this->entitiesIdsBuffer);
 
+        // if init mode and it's first iteration we have to skip retrieved entities
         if ($wasNull && $initMode) {
             $this->entitiesIdsBuffer = [];
         }
 
-        // no more data to look for
         if ($initMode) {
             $lastSyncDate = $this->lastSyncDate;
         } else {
@@ -261,44 +251,10 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
             $lastSyncDate->add($this->syncRange);
         }
 
-        if (empty($this->entitiesIdsBuffer) && $lastSyncDate >= $now) {
-            $result = null;
-        } else {
-            $result = true;
-        }
-
+        //increment date for further filtering
         $this->lastSyncDate->add($this->syncRange);
 
-        return $result;
-    }
-
-    /**
-     * @param $websiteId
-     *
-     * @return array
-     * @throws \LogicException
-     */
-    protected function getStoresByWebsiteId($websiteId)
-    {
-        $stores = array_filter(
-            $this->dependencies[self::ALIAS_STORES],
-            function ($store) use ($websiteId) {
-                return $store['website_id'] == $websiteId;
-            }
-        );
-
-        if ($stores === false) {
-            throw new \LogicException(sprintf('Could not resolve store dependency for website id: %d', $websiteId));
-        }
-
-        $stores = array_map(
-            function ($item) {
-                return $item['store_id'];
-            },
-            $stores
-        );
-
-        return $stores;
+        return empty($this->entitiesIdsBuffer) && $lastSyncDate >= $now ? null : true;
     }
 
     /**
@@ -312,51 +268,61 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     }
 
     /**
-     * Pre-load dependencies
-     * Load method will be called only once
+     * Retrieve store ids for given website
+     *
+     * @param $websiteId
+     *
+     * @return array
+     * @throws \LogicException
      */
-    protected function preLoadDependencies()
+    protected function getStoresByWebsiteId($websiteId)
     {
-        if (!empty($this->dependencies)) {
-            return;
+        $stores = [];
+
+        foreach ((array)$this->dependencies[self::ALIAS_STORES] as $store) {
+            if ($store['website_id'] == $websiteId) {
+                $stores[] = $store['store_id'];
+            }
         }
 
-        $this->loadDependencies();
+        if (empty($stores)) {
+            throw new \LogicException(sprintf('Could not resolve store dependency for website id: %d', $websiteId));
+        }
+
+        return $stores;
     }
 
     /**
-     * Get entities list
+     * Get dependencies data
      *
-     * @param array $filters
-     * @param null  $limit
-     * @param bool  $idsOnly
+     * @return array
+     */
+    protected function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * Get entities ids list
      *
      * @return mixed
      */
-    abstract protected function getList($filters = [], $limit = null, $idsOnly = true);
+    abstract protected function getEntityIds();
 
     /**
      * Get entity data by id
      *
-     * @param int        $id
-     * @param bool       $dependenciesInclude
-     * @param array|null $onlyAttributes array of needed attributes or null to get all list
+     * @param mixed $id
      *
      * @return mixed
      */
-    abstract protected function getData($id, $dependenciesInclude = false, $onlyAttributes = null);
+    abstract protected function getEntity($id);
 
     /**
      * Should return id field name for entity, e.g.: entity_id, order_id, increment_id, etc
+     * Needed for complex filters for API calls
      *
      * @return string
      */
     abstract protected function getIdFieldName();
-
-    /**
-     * Do real load for dependencies data
-     *
-     * @return void
-     */
-    abstract protected function loadDependencies();
 }

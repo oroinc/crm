@@ -2,19 +2,17 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 
 use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
 class SoapController extends Controller
@@ -41,16 +39,11 @@ class SoapController extends Controller
         $form->submit($request);
 
         /** @var MagentoSoapTransport $transportEntity */
-        $transportEntity = $form->getData();
-        /**
-         * @TODO find better solution
-         */
-        $channel = new Channel();
-        $channel->setTransport($transportEntity);
+        $transportEntity      = $form->getData();
         $websites             = $allowedTypesChoices = [];
         $isExtensionInstalled = false;
         try {
-            $transport->init($channel);
+            $transport->init($transportEntity);
             $websites             = $this->formatWebsiteChoices($transport->getWebsites());
             $isExtensionInstalled = $transport->isExtensionInstalled();
 
@@ -100,12 +93,12 @@ class SoapController extends Controller
                 return [
                     'id'    => $website['id'],
                     'label' => $translator->trans(
-                            'Website ID: %websiteId%, Stores: %storesList%',
-                            [
-                                '%websiteId%'  => $website['id'],
-                                '%storesList%' => $website['name']
-                            ]
-                        )
+                        'Website ID: %websiteId%, Stores: %storesList%',
+                        [
+                            '%websiteId%'  => $website['id'],
+                            '%storesList%' => $website['name']
+                        ]
+                    )
                 ];
             },
             $websites

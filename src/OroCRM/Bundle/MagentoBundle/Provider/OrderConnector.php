@@ -8,7 +8,7 @@ use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
-class OrderConnector extends AbstractConnector
+class OrderConnector extends AbstractConnector implements MagentoConnectorInterface
 {
     const CONNECTOR_TYPE = 'order';
 
@@ -28,7 +28,7 @@ class OrderConnector extends AbstractConnector
      */
     public function getImportEntityFQCN()
     {
-        return 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Order';
+        return self::ORDER_TYPE;
     }
 
     /**
