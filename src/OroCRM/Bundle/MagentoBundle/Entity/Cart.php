@@ -7,8 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCart;
+use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+use OroCRM\Bundle\CallBundle\Entity\Call;
 
 /**
  * Class Cart
@@ -166,10 +170,178 @@ class Cart extends BaseCart
      */
     protected $status;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\CallBundle\Entity\Call")
+     * @ORM\JoinTable(name="orocrm_cart_calls",
+     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id")}
+     * )
+     */
+    protected $calls;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\EmailBundle\Entity\Email")
+     * @ORM\JoinTable(name="orocrm_cart_emails",
+     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id")}
+     * )
+     */
+    protected $emails;
+
+    /**
+     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
+     *
+     * @var WorkflowItem
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
+     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $workflowItem;
+
+    /**
+     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
+     *
+     * @var WorkflowStep
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
+     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $workflowStep;
+
+    /**
+     * @param WorkflowItem $workflowItem
+     * @return Cart
+     */
+    public function setWorkflowItem($workflowItem)
+    {
+        $this->workflowItem = $workflowItem;
+
+        return $this;
+    }
+
+    /**
+     * @return WorkflowItem
+     */
+    public function getWorkflowItem()
+    {
+        return $this->workflowItem;
+    }
+
+    /**
+     * @param WorkflowItem $workflowStep
+     * @return Cart
+     */
+    public function setWorkflowStep($workflowStep)
+    {
+        $this->workflowStep = $workflowStep;
+
+        return $this;
+    }
+
+    /**
+     * @return WorkflowStep
+     */
+    public function getWorkflowStep()
+    {
+        return $this->workflowStep;
+    }
+
     public function __construct()
     {
         $this->status = new CartStatus('open');
         $this->cartItems = new ArrayCollection();
+        $this->calls = new ArrayCollection();
+        $this->email = new ArrayCollection();
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCalls()
+    {
+        return $this->calls;
+    }
+
+    /**
+     * @param Call $call
+     * @return Cart
+     */
+    public function addCall(Call $call)
+    {
+        if (!$this->hasCall($call)) {
+            $this->getCalls()->add($call);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Call $call
+     * @return Cart
+     */
+    public function removeCall(Call $call)
+    {
+        if ($this->hasCall($call)) {
+            $this->getCalls()->removeElement($call);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Call $call
+     * @return bool
+     */
+    public function hasCall(Call $call)
+    {
+        return $this->getCalls()->contains($call);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getEmails()
+    {
+        return $this->emails;
+    }
+
+    /**
+     * @param Email $email
+     * @return Cart
+     */
+    public function addEmail(Email $email)
+    {
+        if (!$this->hasEmail($email)) {
+            $this->getEmails()->add($email);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Email $email
+     * @return Cart
+     */
+    public function removeEmail(Email $email)
+    {
+        if ($this->hasEmail($email)) {
+            $this->getEmails()->removeElement($email);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Email $email
+     * @return bool
+     */
+    public function hasEmail(Email $email)
+    {
+        return $this->getEmails()->contains($email);
     }
 
     /**

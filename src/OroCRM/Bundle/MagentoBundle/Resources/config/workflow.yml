@@ -3,6 +3,7 @@ workflows:
         label: 'Abandoned Shopping Cart'
         enabled: true
         entity: OroCRM\Bundle\MagentoBundle\Entity\Cart
+        entity_attribute: cart
         steps:
             open:
                 label: 'Open'
@@ -43,16 +44,6 @@ workflows:
                 type: entity
                 options:
                     class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
-            call_collection:
-                label: 'Calls'
-                type: object
-                options:
-                    class: Doctrine\Common\Collections\ArrayCollection
-            email_collection:
-                label: 'Emails'
-                type: object
-                options:
-                    class: Doctrine\Common\Collections\ArrayCollection
 
             # Call related fields
             call:
@@ -196,24 +187,24 @@ workflows:
                             conditions:
                                 @and:
                                     - @empty: $phone_number
-                                    - @not_empty: $entity.customer
-                                    - @not_empty: $entity.customer.contact
-                                    - @not_empty: $entity.customer.contact.primaryPhone
-                            parameters: [$phone_number, $entity.customer.contact.primaryPhone.phone]
+                                    - @not_empty: $cart.customer
+                                    - @not_empty: $cart.customer.contact
+                                    - @not_empty: $cart.customer.contact.primaryPhone
+                            parameters: [$phone_number, $cart.customer.contact.primaryPhone.phone]
                         - @assign_value:
                             conditions:
                                 @and:
                                     - @empty: $account
-                                    - @not_empty: $entity.customer
-                                    - @not_empty: $entity.customer.account
-                            parameters: [$account, $entity.customer.account]
+                                    - @not_empty: $cart.customer
+                                    - @not_empty: $cart.customer.account
+                            parameters: [$account, $cart.customer.account]
                         - @assign_value:
                             conditions:
                                 @and:
                                     - @empty: $contact
-                                    - @not_empty: $entity.customer
-                                    - @not_empty: $entity.customer.contact
-                            parameters: [$contact, $entity.customer.contact]
+                                    - @not_empty: $cart.customer
+                                    - @not_empty: $cart.customer.contact
+                            parameters: [$contact, $cart.customer.contact]
                         - @create_object:
                             class: '\DateTime'
                             attribute: $call_date
@@ -276,23 +267,23 @@ workflows:
                             conditions:
                                 @and:
                                     - @empty: $email_to
-                                    - @not_empty: $entity.email
-                            parameters: [$email_to, $entity.email]
+                                    - @not_empty: $cart.email
+                            parameters: [$email_to, $cart.email]
                         - @assign_value: #Assign email to as shopping cart customer email
                             conditions:
                                 @and:
                                     - @empty: $email_to
-                                    - @not_empty: $entity.customer
-                                    - @not_empty: $entity.customer.email
-                            parameters: [$email_to, $entity.customer.email]
+                                    - @not_empty: $cart.customer
+                                    - @not_empty: $cart.customer.email
+                            parameters: [$email_to, $cart.customer.email]
                         - @assign_value: #Assign email to as shopping cart customer contact primary email
                             conditions:
                                 @and:
                                     - @empty: $email_to
-                                    - @not_empty: $entity.customer
-                                    - @not_empty: $entity.customer.contact
-                                    - @not_empty: $entity.customer.contact.primaryEmail
-                            parameters: [$email_to, $entity.customer.contact.primaryEmail.email]
+                                    - @not_empty: $cart.customer
+                                    - @not_empty: $cart.customer.contact
+                                    - @not_empty: $cart.customer.contact.primaryEmail
+                            parameters: [$email_to, $cart.customer.contact.primaryEmail.email]
 
             convert:
                 label: 'Convert'
@@ -344,25 +335,25 @@ workflows:
                             options:
                                 required: false
                     attribute_default_values:
-                        opportunity_budget: $entity.subTotal
+                        opportunity_budget: $cart.subTotal
                     init_actions:
                         - @assign_active_user: $opportunity_owner
                         - @format_name:
                             attribute: $.result.formattedCustomerName
-                            object: $entity.customer
+                            object: $cart.customer
                         - @format_string:
                             attribute: $opportunity_name
                             string: '%customer_name% - %shopping_cart_id%'
                             arguments:
                                 customer_name: $.result.formattedCustomerName
-                                shopping_cart_id: $entity.id
+                                shopping_cart_id: $cart.id
                         - @assign_value:
                             conditions:
                                 @and:
                                     - @empty: $account
-                                    - @not_empty: $entity.customer
-                                    - @not_empty: $entity.customer.account
-                            parameters: [$account, $entity.customer.account]
+                                    - @not_empty: $cart.customer
+                                    - @not_empty: $cart.customer.account
+                            parameters: [$account, $cart.customer.account]
             abandon:
                 label: 'Abandon'
                 message: 'You are going to abandon this shopping cart.'
@@ -394,7 +385,7 @@ workflows:
         transition_definitions:
             log_call_definition:
                 pre_conditions:
-                    @equal: [$entity.status.name, 'open']
+                    @equal: [$cart.status.name, 'open']
                 conditions:
                     @and:
                         - @not_empty:
@@ -427,20 +418,14 @@ workflows:
                             callStatus: $call_status
                             duration: $call_duration
                             direction: $call_direction
-                    - @create_object:
-                        conditions:
-                            @empty: $call_collection
-                        parameters:
-                            class: Doctrine\Common\Collections\ArrayCollection
-                            attribute: $call_collection
                     - @call_method:
-                        method: 'add'
-                        object: $call_collection
+                        method: 'addCall'
+                        object: $cart
                         method_parameters: [$call]
 
             send_email_definition:
                 pre_conditions:
-                    @equal: [$entity.status.name, 'open']
+                    @equal: [$cart.status.name, 'open']
                 conditions:
                     @and:
                         - @not_empty:
@@ -462,29 +447,23 @@ workflows:
                          to: $email_to
                          subject: $email_subject
                          body: $email_body
-                     - @create_object:
-                         conditions:
-                             @empty: $email_collection
-                         parameters:
-                             class: Doctrine\Common\Collections\ArrayCollection
-                             attribute: $email_collection
                      - @call_method:
-                         method: 'add'
-                         object: $email_collection
+                         method: 'addEmail'
+                         object: $cart.emails
                          method_parameters: [$email]
 
             convert_definition:
                 pre_conditions:
-                    @equal: [$entity.status.name, 'open']
+                    @equal: [$cart.status.name, 'open']
                 post_actions:
                     - @find_entity: # Set cart status to converted
                         class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
                         identifier: 'converted'
-                        attribute: $entity.status
+                        attribute: $cart.status
 
             convert_to_opportunity_definition:
                 pre_conditions:
-                    @equal: [$entity.status.name, 'open']
+                    @equal: [$cart.status.name, 'open']
                 conditions:
                     @and:
                         - @not_empty:
@@ -500,7 +479,7 @@ workflows:
                     - @find_entity: # Set cart status to converted_to_opportunity
                         class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
                         identifier: 'converted_to_opportunity'
-                        attribute: $entity.status
+                        attribute: $cart.status
                     - @find_entity: # set status "In progress" to opportunity
                         class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
                         identifier: 'in_progress'
@@ -512,26 +491,26 @@ workflows:
                             name: $opportunity_name
                             owner: $opportunity_owner
                             budgetAmount: $opportunity_budget
-                            contact: $entity.customer.contact
+                            contact: $cart.customer.contact
                             account: $account
                             status: $.result.opportunity_status
                             notes: $notes
 
             abandon_definition:
                 pre_conditions:
-                    @equal: [$entity.status.name, 'open']
+                    @equal: [$cart.status.name, 'open']
                 post_actions:
                     - @find_entity: # Set cart status to lost
                         class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
                         identifier: 'lost'
-                        attribute: $entity.status
+                        attribute: $cart.status
 
             reopen_definition:
                 conditions:
                     @or:
-                        - @equal: [$entity.status.name, 'converted']
-                        - @equal: [$entity.status.name, 'converted_to_opportunity']
-                        - @equal: [$entity.status.name, 'lost']
+                        - @equal: [$cart.status.name, 'converted']
+                        - @equal: [$cart.status.name, 'converted_to_opportunity']
+                        - @equal: [$cart.status.name, 'lost']
                 post_actions:
                     - @assign_value: # Reset latest opportunity, call and email data
                         - [$opportunity, ~]
@@ -552,7 +531,7 @@ workflows:
                     - @find_entity: # Set cart status to open
                         class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
                         identifier: 'open'
-                        attribute: $entity.status
+                        attribute: $cart.status
 
     # Order Follow Up flow
     b2c_flow_order_follow_up:
