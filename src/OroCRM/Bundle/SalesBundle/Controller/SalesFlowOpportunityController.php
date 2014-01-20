@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller;
 
+use OroCRM\Bundle\SalesBundle\Form\Handler\SalesFlowOpportunityHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -46,7 +47,7 @@ class SalesFlowOpportunityController extends Controller
 
     /**
      * @Route("/create", name="orocrm_sales_sales_flow_opportunity_create")
-     * @Template("OroCRMSalesBundle:Opportunity:update.html.twig")
+     * @Template("OroCRMSalesBundle:SalesFlowOpportunity:update.html.twig")
      * @Acl(
      *      id="orocrm_sales_sales_flow_opportunity_create",
      *      type="entity",
@@ -97,7 +98,17 @@ class SalesFlowOpportunityController extends Controller
      */
     protected function update(SalesFlowOpportunity $entity)
     {
-        if ($this->get('orocrm_sales.opportunity.form.handler')->process($entity)) {
+        $form = $this->get('form.factory')->createNamed(
+            'orocrm_sales_sales_flow_opportunity_form',
+            'orocrm_sales_sales_flow_opportunity',
+            $entity
+        );
+
+        /** @var SalesFlowOpportunityHandler $formHandler */
+        $formHandler = $this->get('orocrm_sales.sales_flow_opportunity.form.handler');
+        $formHandler->setForm($form);
+
+        if ($formHandler->process()) {
             $this->get('session')->getFlashBag()->add(
                 'success',
                 $this->get('translator')->trans('orocrm.sales.controller.sales_flow_opportunity.saved.message')
@@ -105,11 +116,11 @@ class SalesFlowOpportunityController extends Controller
 
             return $this->get('oro_ui.router')->actionRedirect(
                 array(
-                    'route'      => 'orocrm_sales_opportunity_update',
+                    'route'      => 'orocrm_sales_sales_flow_opportunity_update',
                     'parameters' => array('id' => $entity->getId()),
                 ),
                 array(
-                    'route'      => 'orocrm_sales_opportunity_view',
+                    'route'      => 'orocrm_sales_sales_flow_opportunity_view',
                     'parameters' => array('id' => $entity->getId()),
                 )
             );
@@ -117,7 +128,7 @@ class SalesFlowOpportunityController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $this->get('orocrm_sales.opportunity.form')->createView(),
+            'form'   => $formHandler->getForm()->createView(),
         );
     }
 }

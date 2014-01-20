@@ -21,6 +21,7 @@ orocrm:
         controller:
             lead.saved.message: "Lead saved"
             opportunity.saved.message: "Opportunity saved"
+            sales_flow_opportunity.saved.message: "Sales Flow Opportunity saved"
 
         form:
             choose_opportunity: 'Choose an opportunity....'
