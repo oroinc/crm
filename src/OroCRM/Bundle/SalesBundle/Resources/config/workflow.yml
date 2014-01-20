@@ -8,15 +8,18 @@ workflows:
         steps:
             new:
                 label: 'New'
+                order: 10
                 allowed_transitions:
                     - qualify
                     - cancel
             qualified:
                 label: 'Qualified'
+                order: 20
                 allowed_transitions:
                     - reactivate
             cancelled:
                 label: 'Cancelled'
+                order: 20
                 allowed_transitions:
                     - reactivate
         attributes:

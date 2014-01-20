@@ -140,55 +140,55 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 $lead = $this->createLead($data, $user);
 
                 $this->persist($this->em, $lead);
-
-                $workFlow = $this->workflowManager->startWorkflow(
-                    'b2b_flow_lead',
-                    $lead,
-                    'qualify',
-                    array(
-                        'opportunity_name' => $lead->getName(),
-                        'company_name' => $lead->getCompanyName(),
-                        'account' => $lead->getAccount(),
-                    )
-                );
-                if ((bool) rand(0, 1)) {
-                    /** @var WorkflowItem $salesFlow */
-                    $salesFlow = $workFlow->getResult()->get('workflowItem');
-                    $this->transit(
-                        $this->workflowManager,
-                        $salesFlow,
-                        'develop',
-                        array(
-                            'budget_amount' => rand(10, 10000),
-                            'customer_need' => rand(10, 10000),
-                            'proposed_solution' => rand(10, 10000),
-                            'probability' => round(rand(50, 85) / 100.00, 2)
-                        )
-                    );
-                    if ((bool) rand(0, 1)) {
-                        $this->transit(
-                            $this->workflowManager,
-                            $salesFlow,
-                            'close_as_won',
-                            array(
-                                'close_revenue' => rand(100, 1000),
-                                'close_date' => new \DateTime('now'),
-                            )
-                        );
-                    } elseif ((bool) rand(0, 1)) {
-                        $this->transit(
-                            $this->workflowManager,
-                            $salesFlow,
-                            'close_as_lost',
-                            array(
-                                'close_reason_name' => 'cancelled',
-                                'close_revenue' => rand(100, 1000),
-                                'close_date' => new \DateTime('now'),
-                            )
-                        );
-                    }
-                    $this->persist($this->em, $salesFlow);
-                }
+                // TODO: fix Demo Data in BAP-2929
+//                $workFlow = $this->workflowManager->startWorkflow(
+//                    'b2b_flow_lead',
+//                    $lead,
+//                    'qualify',
+//                    array(
+//                        'opportunity_name' => $lead->getName(),
+//                        'company_name' => $lead->getCompanyName(),
+//                        'account' => $lead->getAccount(),
+//                    )
+//                );
+//                if ((bool) rand(0, 1)) {
+//                    /** @var WorkflowItem $salesFlow */
+//                    $salesFlow = $workFlow->getResult()->get('workflowItem');
+//                    $this->transit(
+//                        $this->workflowManager,
+//                        $salesFlow,
+//                        'develop',
+//                        array(
+//                            'budget_amount' => rand(10, 10000),
+//                            'customer_need' => rand(10, 10000),
+//                            'proposed_solution' => rand(10, 10000),
+//                            'probability' => round(rand(50, 85) / 100.00, 2)
+//                        )
+//                    );
+//                    if ((bool) rand(0, 1)) {
+//                        $this->transit(
+//                            $this->workflowManager,
+//                            $salesFlow,
+//                            'close_as_won',
+//                            array(
+//                                'close_revenue' => rand(100, 1000),
+//                                'close_date' => new \DateTime('now'),
+//                            )
+//                        );
+//                    } elseif ((bool) rand(0, 1)) {
+//                        $this->transit(
+//                            $this->workflowManager,
+//                            $salesFlow,
+//                            'close_as_lost',
+//                            array(
+//                                'close_reason_name' => 'cancelled',
+//                                'close_revenue' => rand(100, 1000),
+//                                'close_date' => new \DateTime('now'),
+//                            )
+//                        );
+//                    }
+//                    $this->persist($this->em, $salesFlow);
+//                }
                 $i++;
                 if ($i % self::FLUSH_MAX == 0) {
                     $this->flush($this->em);
