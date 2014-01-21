@@ -95,9 +95,9 @@ orocrm:
             channel.label:       Channel
 
         cart:
-            entity_label:         Cart
-            entity_plural_label:  Carts
-            entity_description:   Represent magento cart
+            entity_label:         Shopping Cart
+            entity_plural_label:  Shopping Carts
+            entity_description:   Represent magento shopping cart
 
             id.label:                  Id
             origin_id.label:           Origin Id

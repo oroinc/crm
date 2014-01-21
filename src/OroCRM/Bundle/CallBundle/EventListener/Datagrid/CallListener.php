@@ -92,9 +92,6 @@ class CallListener
             if (!is_array($callIds)) {
                 $callIds = explode(',', $callIds);
             }
-            if (empty($callIds)) {
-                $callIds = array(0);
-            }
             $queryBuilder->andWhere($queryBuilder->expr()->in('call.id', $callIds));
         }
     }

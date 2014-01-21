@@ -39,8 +39,7 @@
     {% set cartItemsWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'url': path('orocrm_magento_cart_widget_items', {id: entity.id}),
-            'cssClass': 'inner-grid'
+            'url': path('orocrm_magento_cart_widget_items', {id: entity.id})
         }) }}
     {% endset %}
 
@@ -65,7 +64,10 @@
         {% for email in entity.emails %}
             {% set emailIds = emailIds|merge([email.id]) %}
         {% endfor %}
-        {% set contactEmailsWidget %}
+        {% if emailIds is empty %}
+            {% set emailIds = [0] %}
+        {% endif %}
+        {% set cartEmailsWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
                 'url': path('oro_email_widget_emails', {emailIds : emailIds}),
@@ -74,7 +76,7 @@
             }) }}
         {% endset %}
         {% set relatedInformation = relatedInformation|merge([
-            {'data' : [contactEmailsWidget]}
+            {'data' : [cartEmailsWidget]}
         ]) %}
     {% endif %}
 
@@ -83,7 +85,10 @@
         {% for call in entity.calls %}
             {% set callIds = callIds|merge([call.id]) %}
         {% endfor %}
-        {% set contactCallsWidget %}
+        {% if callIds is empty %}
+            {% set callIds = [0] %}
+        {% endif %}
+        {% set cartCallsWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
                 'url': path('orocrm_call_widget_calls', {callIds : callIds}),
@@ -92,7 +97,7 @@
             }) }}
         {% endset %}
         {% set relatedInformation = relatedInformation|merge([
-            {'data' : [contactCallsWidget]}
+            {'data' : [cartCallsWidget]}
         ]) %}
     {% endif %}
 

@@ -15,7 +15,8 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
 /**
- * Class Cart
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository")
