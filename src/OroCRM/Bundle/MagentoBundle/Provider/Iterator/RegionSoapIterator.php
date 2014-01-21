@@ -33,6 +33,7 @@ class RegionSoapIterator extends AbstractPageableSoapIterator
             next($this->countriesBuffer);
 
             $this->entitiesIdsBuffer = $this->getEntityIds();
+            $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
         }
 
         return true;
