@@ -28,9 +28,9 @@ class OrderItemCompositeDenormalizer extends AbstractNormalizer implements Denor
     {
         $data = $this->dataConverter->convertToImportFormat($data);
 
-        $className = MagentoConnectorInterface::ORDER_ITEM_TYPE;
         /** @var OrderItem $object */
-        $object = new $className();
+        $className = MagentoConnectorInterface::ORDER_ITEM_TYPE;
+        $object    = new $className();
         $this->fillResultObject($object, $data);
         if ($object->getDiscountPercent()) {
             $object->setDiscountPercent($object->getDiscountPercent() / 100);

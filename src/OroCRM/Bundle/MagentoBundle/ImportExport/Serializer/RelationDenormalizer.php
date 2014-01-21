@@ -42,7 +42,7 @@ class RelationDenormalizer implements DenormalizerInterface
         $supportedEntities = [
             MagentoConnectorInterface::STORE_TYPE,
             MagentoConnectorInterface::WEBSITE_TYPE,
-            CustomerDenormalizer::GROUPS_TYPE
+            MagentoConnectorInterface::CUSTOMER_GROUPS_TYPE
         ];
 
         return is_array($data) && class_exists($type) && in_array($type, $supportedEntities);
