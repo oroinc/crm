@@ -2,11 +2,17 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
+use Psr\Log\NullLogger;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerAwareInterface;
+
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
-abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderInterface
+abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderInterface, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     const ALIAS_GROUPS   = 'groups';
     const ALIAS_STORES   = 'stores';
     const ALIAS_WEBSITES = 'websites';
@@ -64,7 +70,10 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         $this->setStartDate($settings[$startSyncDateKey]);
 
         $this->syncRange = \DateInterval::createFromDateString(self::DEFAULT_SYNC_RANGE);
+
+        $this->setLogger(new NullLogger());
         $this->filter = new BatchFilterBag();
+
     }
 
     /**
@@ -83,8 +92,10 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         do {
             if (!empty($this->entitiesIdsBuffer)) {
                 $entityId = array_shift($this->entitiesIdsBuffer);
+                $this->logger->info(sprintf('Loading entity by id: %s', $entityId));
                 $result   = $this->getEntity($entityId);
             } else {
+                $this->logger->info('Looking for next batch');
                 $result = $this->findEntitiesToProcess();
             }
 
@@ -213,6 +224,8 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         // if init mode and it's first iteration we have to skip retrieved entities
         if ($wasNull && $initMode) {
             $this->entitiesIdsBuffer = [];
+        } else {
+            $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
         }
 
         if ($initMode) {
