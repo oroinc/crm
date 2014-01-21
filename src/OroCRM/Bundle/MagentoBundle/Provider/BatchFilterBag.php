@@ -28,6 +28,8 @@ class BatchFilterBag
     /**
      * @param int|\stdClass $lastId
      * @param string        $idFieldName
+     *
+     * @return $this
      */
     public function addLastIdFilter($lastId, $idFieldName = 'entity_id')
     {
@@ -41,6 +43,8 @@ class BatchFilterBag
                 ],
             ]
         );
+
+        return $this;
     }
 
     /**
@@ -75,24 +79,46 @@ class BatchFilterBag
     }
 
     /**
-     * Add website or store filter, depending on $key param
-     *
-     * @param array  $websiteIds
-     * @param string $key website_id or store_id
+     * @param array $websiteIds
      *
      * @return $this
      */
-    public function addWebsiteFilter($websiteIds, $key = 'website_id')
+    public function addWebsiteFilter(array $websiteIds)
+    {
+        $this->addRelatedFilter('website_id', $websiteIds);
+
+        return $this;
+    }
+
+    /**
+     * @param array $storeIds
+     *
+     * @return $this
+     */
+    public function addStoreFilter(array $storeIds)
+    {
+        $this->addRelatedFilter('store_id', $storeIds);
+
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @param array  $itemIds
+     *
+     * @return $this
+     */
+    protected function addRelatedFilter($key, $itemIds)
     {
         $key = in_array($key, ['website_id', 'store_id']) ? $key : 'website_id';
 
         $this->addComplexFilter(
-            'website',
+            $key,
             [
                 'key'   => $key,
                 'value' => [
                     'key'   => 'in',
-                    'value' => implode(',', $websiteIds)
+                    'value' => implode(',', $itemIds)
                 ]
             ]
         );
@@ -140,12 +166,18 @@ class BatchFilterBag
      */
     public function reset($filterType = null, $filterName = null)
     {
-        if (is_null($filterType) && is_null($filterName) && isset($this->filters[$filterType])) {
+        if (is_null($filterType) && is_null($filterName)) {
             $this->filters = [
                 'complex_filter' => [],
                 'filter'         => [],
             ];
-        } else {
+        }
+
+        if (isset($this->filters[$filterType]) && is_null($filterName)) {
+            $this->filters[$filterType] = [];
+        }
+
+        if (isset($this->filters[$filterType][$filterName])) {
             unset($this->filters[$filterType][$filterName]);
         }
 
