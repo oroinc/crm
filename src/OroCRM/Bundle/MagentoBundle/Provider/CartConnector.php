@@ -2,40 +2,26 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
 class CartConnector extends AbstractConnector implements MagentoConnectorInterface, ExtensionAwareInterface
 {
-    const ENTITY_NAME         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart';
-    const CONNECTOR_LABEL     = 'orocrm.magento.connector.cart.label';
-    const JOB_IMPORT          = 'mage_cart_import';
-
     const PAGE_SIZE = 10;
 
     /** @var int */
     protected $currentPage = 1;
 
-    /** @var array dependencies data: customer groups, stores */
-    protected $dependencies = [];
-
-    /** @var CustomerConnector */
-    protected $customerConnector;
-
     public function __construct(
         ContextRegistry $contextRegistry,
         LoggerStrategy $logger,
-        CustomerConnector $customerConnector,
-        StoreConnector $storeConnector,
-        EntityManager $em
+        ConnectorContextMediator $contextMediator
     ) {
-        parent::__construct($contextRegistry, $logger, $em, $storeConnector);
-
-        $this->customerConnector = $customerConnector;
+        parent::__construct($contextRegistry, $logger, $contextMediator);
     }
 
     /**
@@ -212,13 +198,6 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getType()
-    {
-        return 'cart';
-    }
 
     /**
      * {@inheritdoc}
@@ -229,42 +208,42 @@ class CartConnector extends AbstractConnector implements MagentoConnectorInterfa
     }
 
     /**
-     * Return source iterator to read from
-     *
-     * @return \Iterator
+     * {@inheritdoc}
+     */
+    public function getLabel()
+    {
+        return 'orocrm.magento.connector.cart.label';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getImportEntityFQCN()
+    {
+        return self::CART_TYPE;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return 'cart';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getImportJobName()
+    {
+        return 'mage_cart_import';
+    }
+
+    /**
+     * {@inheritdoc}
      */
     protected function getConnectorSource()
     {
         // TODO: Implement getConnectorSource() method.
-    }
-
-    /**
-     * Returns label for UI
-     *
-     * @return string
-     */
-    public function getLabel()
-    {
-        // TODO: Implement getLabel() method.
-    }
-
-    /**
-     * Returns entity name that will be used for matching "import processor"
-     *
-     * @return string
-     */
-    public function getImportEntityFQCN()
-    {
-        // TODO: Implement getImportEntityFQCN() method.
-    }
-
-    /**
-     * Returns job name for import
-     *
-     * @return string
-     */
-    public function getImportJobName()
-    {
-        // TODO: Implement getImportJobName() method.
     }
 }

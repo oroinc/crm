@@ -33,7 +33,6 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
      */
     protected function getEntity($id)
     {
-        echo $id .PHP_EOL;
         $result = $this->transport->call(SoapTransport::ACTION_CUSTOMER_INFO, [$id]);
 
         $result->addresses = $this->getCustomerAddressData($id);
@@ -75,7 +74,6 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
     {
         return 'entity_id';
     }
-
 
     /**
      * {@inheritdoc}

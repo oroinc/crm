@@ -101,7 +101,9 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     public function key()
     {
-        return $this->current[$this->getIdFieldName()];
+        return is_object($this->current)
+            ? $this->current->{$this->getIdFieldName()}
+            : $this->current[$this->getIdFieldName()];
     }
 
     /**

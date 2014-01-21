@@ -7,14 +7,6 @@ class CustomerConnector extends AbstractMagentoConnector
     /**
      * {@inheritdoc}
      */
-    protected function getConnectorSource()
-    {
-        return $this->transport->getCustomers();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getLabel()
     {
         return 'orocrm.magento.connector.customer.label';
@@ -34,5 +26,21 @@ class CustomerConnector extends AbstractMagentoConnector
     public function getImportJobName()
     {
         return 'mage_customer_import';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return 'customer';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConnectorSource()
+    {
+        return $this->transport->getCustomers();
     }
 }

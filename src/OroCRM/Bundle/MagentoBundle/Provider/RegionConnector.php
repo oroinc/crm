@@ -31,6 +31,14 @@ class RegionConnector extends AbstractMagentoConnector
     /**
      * {@inheritdoc}
      */
+    public function getType()
+    {
+        return 'region';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getConnectorSource()
     {
         return $this->transport->getRegions();
