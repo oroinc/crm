@@ -72,7 +72,7 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
      */
     protected function getIdFieldName()
     {
-        return 'entity_id';
+        return 'customer_id';
     }
 
     /**

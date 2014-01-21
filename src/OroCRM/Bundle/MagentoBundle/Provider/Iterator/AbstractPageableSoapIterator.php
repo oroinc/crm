@@ -171,7 +171,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      * @return array
      */
     protected function getBatchFilter(
-        \DateTime $date = null,
+        \DateTime $date,
         array $websiteIds = [],
         array $storeIds = [],
         $format = 'Y-m-d H:i:s'
