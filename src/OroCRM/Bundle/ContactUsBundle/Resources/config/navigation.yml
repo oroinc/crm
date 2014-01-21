@@ -1,0 +1,10 @@
+oro_menu_config:
+    items:
+        contact_requests:
+            label: 'Contact Requests'
+            route: 'oro_contact_request_list'
+
+    tree:
+        application_menu:
+            children:
+                contact_requests: ~

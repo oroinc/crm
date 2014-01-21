@@ -1,0 +1,25 @@
+datagrid:
+    contact-requests-grid:
+        source:
+            type: orm
+            query:
+                select:
+                    - contact_request.name
+                    - contact_request.email
+                    - contact_request.phone
+                    - channel.name as channelName
+                from:
+                    - { table: OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest, alias: contact_request }
+                join:
+                    left:
+                        - { join: contact_request.channel, alias: channel }
+
+        columns:
+            name:
+                label: oro.contact_request.name
+            email:
+                label: oro.contact_request.email
+            phone:
+                label: oro.contact_request.phone
+            channelName:
+                label: oro.channel.name
