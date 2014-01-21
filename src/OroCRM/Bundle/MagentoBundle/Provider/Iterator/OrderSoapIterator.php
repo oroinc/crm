@@ -38,19 +38,21 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
     {
         $result = $this->transport->call(SoapTransport::ACTION_ORDER_INFO, [$id->increment_id]);
 
-        // fill related entities data, needed to create full representation of magento store state in this time
-        // flat array structure will be converted by data converter
-        $store                      = $this->dependencies[self::ALIAS_STORES][$result->store_id];
-        $website                    = $this->dependencies[self::ALIAS_WEBSITES][$store['website_id']];
-        $result->store_code         = $store['code'];
-        $result->store_storename    = $result->store_name;
-        $result->store_website_id   = $website['id'];
-        $result->store_website_code = $website['code'];
-        $result->store_website_name = $website['name'];
-
-        $result->payment_method = isset($result->payment, $result->payment->method) ? $result->payment->method : null;
+        $this->addDependencyData($result);
 
         return ConverterUtils::objectToArray($result);
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function addDependencyData($result)
+    {
+        parent::addDependencyData($result);
+        $result->payment_method = isset($result->payment, $result->payment->method) ? $result->payment->method : null;
+
+        return $this;
     }
 
     /**
