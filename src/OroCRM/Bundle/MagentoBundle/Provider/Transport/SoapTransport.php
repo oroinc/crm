@@ -13,6 +13,9 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
 
 /**
  * Magento SOAP transport
@@ -113,6 +116,28 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /**
      * {@inheritdoc}
      */
+    public function getCustomers()
+    {
+        $settings = $this->settings->all();
+
+        if ($this->isExtensionInstalled()) {
+            return new CustomerBridgeIterator($this, $settings);
+        } else {
+            return new CustomerSoapIterator($this, $settings);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomerGroups()
+    {
+        return new CustomerGroupSoapIterator($this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getStores()
     {
         return new StoresSoapIterator($this);
@@ -133,7 +158,6 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     {
         return new RegionSoapIterator($this, $this->settings->all());
     }
-
 
     /**
      * {@inheritdoc}

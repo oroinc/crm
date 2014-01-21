@@ -20,16 +20,17 @@ class RegionSoapIterator extends AbstractPageableSoapIterator
      */
     protected function findEntitiesToProcess()
     {
-        if ($this->countriesBuffer === null) {
+        if (empty($this->countriesBuffer)) {
             $this->countriesBuffer = $this->transport->call(SoapTransport::ACTION_COUNTRY_LIST);
         }
 
-        if (empty($this->countriesBuffer)) {
+        if (key($this->countriesBuffer) === null) {
             return null;
         }
 
-        if (empty($this->regionsBuffer)) {
-            $this->currentCountry = (array)array_shift($this->countriesBuffer);
+        if (empty($this->entitiesIdsBuffer)) {
+            $this->currentCountry = (array)current($this->countriesBuffer);
+            next($this->countriesBuffer);
 
             $this->entitiesIdsBuffer = $this->getEntityIds();
         }
@@ -45,14 +46,12 @@ class RegionSoapIterator extends AbstractPageableSoapIterator
         $iso2Code = $this->currentCountry['iso2_code'];
         $result   = (array)$this->transport->call(SoapTransport::ACTION_REGION_LIST, [$iso2Code]);
 
-        $regions = [];
+        $this->regionsBuffer = [];
         foreach ($result as $obj) {
-            $regions[$obj->code] = (array)$obj;
+            $this->regionsBuffer[$obj->code] = (array)$obj;
         }
 
-        $this->regionsBuffer = $regions;
-
-        return array_keys($regions);
+        return array_keys($this->regionsBuffer);
     }
 
     /**
@@ -60,8 +59,10 @@ class RegionSoapIterator extends AbstractPageableSoapIterator
      */
     protected function getEntity($id)
     {
-        $region                = $this->regionsBuffer[array_search($id, $this->regionsBuffer)];
+        $region                = $this->regionsBuffer[$id];
         $region['countryCode'] = $this->currentCountry['iso2_code'];
+
+        return $region;
     }
 
     /**

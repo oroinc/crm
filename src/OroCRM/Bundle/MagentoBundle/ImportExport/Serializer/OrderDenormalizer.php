@@ -40,7 +40,9 @@ class OrderDenormalizer extends AbstractNormalizer implements DenormalizerInterf
         $data['items'] = $this
             ->denormalizeObject($data, 'items', MagentoConnectorInterface::ORDER_ITEM_COLLECTION_TYPE);
 
-        $order = new Order();
+        /** @var Order $order */
+        $className = MagentoConnectorInterface::ORDER_TYPE;
+        $order     = new $className();
         $this->fillResultObject($order, $data);
 
         $order->setChannel($channel);

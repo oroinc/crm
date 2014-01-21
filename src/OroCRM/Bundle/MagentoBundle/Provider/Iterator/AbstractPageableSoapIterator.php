@@ -43,9 +43,6 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /** @var null|\stdClass */
     protected $current;
 
-    /** @var int */
-    protected $currentKey;
-
     /** @var bool */
     protected $loaded = false;
 
@@ -81,7 +78,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         do {
             if (!empty($this->entitiesIdsBuffer)) {
                 $entityId = array_shift($this->entitiesIdsBuffer);
-                $result   = $this->getEntity($entityId, true);
+                $result   = $this->getEntity($entityId);
             } else {
                 $result = $this->findEntitiesToProcess();
             }
@@ -96,7 +93,6 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
             // there are intervals to retrieve entities there
         } while ($result === true);
 
-        var_dump($result);
         $this->current = $result;
     }
 
@@ -105,7 +101,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     public function key()
     {
-        return $this->currentKey;
+        return $this->current[$this->getIdFieldName()];
     }
 
     /**

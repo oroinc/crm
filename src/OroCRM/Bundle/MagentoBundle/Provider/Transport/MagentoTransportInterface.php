@@ -26,6 +26,20 @@ interface MagentoTransportInterface extends TransportInterface
     public function getOrders();
 
     /**
+     * Retrieve customers from magento
+     *
+     * @return UpdatedLoaderInterface|\Iterator
+     */
+    public function getCustomers();
+
+    /**
+     * Retrieve customer groups list from magento
+     *
+     * @return \Iterator
+     */
+    public function getCustomerGroups();
+
+    /**
      * Retrieve store list from magento
      *
      * @return \Iterator

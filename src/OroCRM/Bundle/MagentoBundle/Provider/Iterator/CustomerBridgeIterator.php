@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
-class OrderBridgeIterator extends AbstractBridgeIterator
+class CustomerBridgeIterator extends AbstractBridgeIterator
 {
     /**
      * {@inheritdoc}

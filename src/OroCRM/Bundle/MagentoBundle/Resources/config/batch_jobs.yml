@@ -2,18 +2,18 @@ connector:
     name: oro_importexport
     jobs:
         # Customer import job
-#        mage_customer_import:
-#            title: "Entity Import from Magento SOAP API"
-#            type: import
-#            steps:
-#                import:
-#                    title:     import
-#                    services:
-#                        reader:    orocrm_magento.mage.customer_connector
-#                        processor: oro_importexport.processor.import_delegate
-#                        writer:    oro_integration.writer.persistent_batch_writer
-#                    parameters:
-#                        batch_size: 15
+        mage_customer_import:
+            title: "Entity Import from Magento SOAP API"
+            type: import
+            steps:
+                import:
+                    title:     import
+                    services:
+                        reader:    orocrm_magento.mage.customer_connector
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    oro_integration.writer.persistent_batch_writer
+                    parameters:
+                        batch_size: 15
         # Region import jobs
         mage_regions_import:
             title: "Import Magento regions via SOAP API"
