@@ -23,11 +23,8 @@ class ControllersCrmTest extends BaseControllersTest
             array_merge(ToolsAPI::generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
         if (!self::$fixturesLoaded) {
-            $disp = $this->client->getKernel()->getContainer()->get('oro_dataaudit.loggable.loggable_manager');
-            $disp->setEnabledHandle(false);
             $this->client->appendFixtures(__DIR__ . DIRECTORY_SEPARATOR . 'fixtures', array('LoadLead'));
             self::$fixturesLoaded = true;
-            $disp->setEnabledHandle(true);
         }
     }
 
