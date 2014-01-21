@@ -27,7 +27,7 @@ datagrid:
         totals:
             columns:
                 name:
-                    label: 'Totals'
+                    label: 'Total'
                 value:
                     query: SUM( o.closeRevenue )
                     formatter: decimal
@@ -84,7 +84,7 @@ datagrid:
         totals:
             columns:
                 name:
-                    label: 'Totals'
+                    label: 'Total'
                 wonCount:
                     query: SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) )
                 lostCount:
@@ -154,7 +154,7 @@ datagrid:
         totals:
             columns:
                 createdDate:
-                    label: Totals
+                    label: 'Total'
                 leadsCount:
                     query: COUNT(l.id)
         columns:
@@ -199,7 +199,7 @@ datagrid:
         totals:
             columns:
                 currentStepName:
-                    label: 'Totals'
+                    label: 'Total'
                 numberOfOpp:
                     query: COUNT(o.id)
                 closeRevenue:
@@ -292,7 +292,7 @@ datagrid:
         totals:
             columns:
                 period:
-                    label: 'Totals'
+                    label: 'Total'
                 cnt:
                     query: COUNT( o.id )
                 value:
