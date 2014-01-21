@@ -18,12 +18,13 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
         $result = $this->transport->call(SoapTransport::ACTION_ORDER_LIST, [$filters]);
         $result = is_array($result) ? $result : [];
 
-        $result = array_map(
-            function ($item) {
+        $idFieldName = $this->getIdFieldName();
+        $result      = array_map(
+            function ($item) use ($idFieldName) {
                 $inc = is_object($item) ? $item->increment_id : $item['increment_id'];
                 $id  = is_object($item) ? $item->order_id : $item['order_id'];
 
-                return (object)['increment_id' => $inc, 'entity_id' => $id];
+                return (object)['increment_id' => $inc, $idFieldName => $id];
             },
             $result
         );

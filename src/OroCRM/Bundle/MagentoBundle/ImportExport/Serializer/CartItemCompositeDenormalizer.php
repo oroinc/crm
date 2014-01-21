@@ -26,7 +26,7 @@ class CartItemCompositeDenormalizer extends AbstractNormalizer implements Denorm
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && $type == MagentoConnectorInterface::CART_TYPE;
+        return is_array($data) && $type == MagentoConnectorInterface::CART_ITEM_TYPE;
     }
 
     /**

@@ -75,6 +75,8 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     public function current()
     {
+        $this->logger->info(sprintf('Loading entity by id: %s', $this->key()));
+
         return $this->current;
     }
 
@@ -86,10 +88,8 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         do {
             if (!empty($this->entitiesIdsBuffer)) {
                 $entityId = array_shift($this->entitiesIdsBuffer);
-                $this->logger->info(sprintf('Loading entity by id: %s', $entityId));
                 $result   = $this->getEntity($entityId);
             } else {
-                $this->logger->info('Looking for next batch');
                 $result = $this->findEntitiesToProcess();
             }
 
@@ -232,6 +232,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         $now      = new \DateTime('now', new \DateTimeZone('UTC'));
         $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
 
+        $this->logger->info('Looking for batch');
         $this->entitiesIdsBuffer = $this->getEntityIds();
 
         // first run, ignore all data in less then start sync date
@@ -251,6 +252,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         // if init mode and it's first iteration we have to skip retrieved entities
         if ($wasNull && $initMode) {
             $this->entitiesIdsBuffer = [];
+            $this->logger->info('Pagination start point detected');
         } else {
             $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
         }
@@ -275,7 +277,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     protected function getLastId()
     {
-        return is_object($this->lastId) ? $this->lastId->entity_id : $this->lastId;
+        return is_object($this->lastId) ? $this->lastId->{$this->getIdFieldName()} : $this->lastId;
     }
 
     /**
