@@ -6,6 +6,7 @@ datagrid:
             acl_resource: oro_report_view
             query:
                 select:
+                    - a.id
                     - a.name
                     - SUM( o.closeRevenue ) as value
                 from:
@@ -21,6 +22,15 @@ datagrid:
         columns:
             name:   { label: orocrm.report.datagrid.columns.account_name }
             value:  { label: orocrm.report.datagrid.columns.total_value,  frontend_type: decimal }
+        properties:
+            id: ~
+        totals:
+            columns:
+                name:
+                    label: 'Total'
+                value:
+                    query: SUM( o.closeRevenue )
+                    formatter: decimal
         sorters:
             columns:
                 name:   { data_name: a.name }
@@ -69,6 +79,20 @@ datagrid:
                         - { join: o.status, alias: s }
                         - { join: o.closeReason, alias: cr }
                 groupBy:  a.id
+        properties:
+            id: ~
+        totals:
+            columns:
+                name:
+                    label: 'Total'
+                wonCount:
+                    query: SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) )
+                lostCount:
+                    query: SUM( (CASE WHEN (s.name='lost') THEN 1 ELSE 0 END) )
+                inProgressCount:
+                    query: SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) )
+                totalOps:
+                    query: COUNT(o.id)
         columns:
             name:             { label: orocrm.report.datagrid.columns.account_name }
             wonCount:         { label: orocrm.report.datagrid.columns.wonCount,  frontend_type: integer }
@@ -126,8 +150,13 @@ datagrid:
                     - SUBSTRING(l.createdAt, 1, 10) as createdDate
                 from:
                     - { table: OroCRMSalesBundle:Lead, alias: l }
-
                 groupBy: createdDate
+        totals:
+            columns:
+                createdDate:
+                    label: 'Total'
+                leadsCount:
+                    query: COUNT(l.id)
         columns:
             createdDate:    { label: orocrm.report.datagrid.columns.created_date, frontend_type: date }
             leadsCount:     { label: orocrm.report.datagrid.columns.leads_count,  frontend_type: integer }
@@ -167,6 +196,18 @@ datagrid:
                         - { join: owi.opportunity, alias: o }
                         - { join: owi.workflowItem, alias: wi }
                 groupBy:  "wi.currentStepName"
+        totals:
+            columns:
+                currentStepName:
+                    label: 'Total'
+                numberOfOpp:
+                    query: COUNT(o.id)
+                closeRevenue:
+                    query: SUM((CASE WHEN (wi.currentStepName='close') THEN o.closeRevenue ELSE 0 END))
+                    formatter: decimal
+                budgetAmount:
+                    query: SUM((CASE WHEN (o.budgetAmount IS NOT NULL) THEN o.budgetAmount ELSE 0 END))
+                    formatter: decimal
         columns:
             currentStepName: { label: orocrm.report.datagrid.columns.step }
             numberOfOpp:     { label: orocrm.report.datagrid.columns.nof_opportunities,  frontend_type: integer }
@@ -229,7 +270,11 @@ datagrid:
                           WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 7 AND 9 THEN '3'
                           ELSE '4'
                         END,
-                        CONCAT(' / ' , SUBSTRING( o.closeDate, 1, 4 ) ) as quarterPeriod
+                        CONCAT(
+                          ' / ',
+                          SUBSTRING( o.closeDate, 1, 4 )
+                        )
+                      ) as quarterPeriod
                     - SUBSTRING( o.closeDate, 1, 4 ) as yearPeriod
                     - SUM( o.closeRevenue ) as value
                     - COUNT( o.id ) as cnt
@@ -240,6 +285,19 @@ datagrid:
                     and:
                         - s.name = 'won'
                         - o.closeDate IS NOT NULL
+        properties:
+            monthPeriod: ~
+            quarterPeriod: ~
+            yearPeriod: ~
+        totals:
+            columns:
+                period:
+                    label: 'Total'
+                cnt:
+                    query: COUNT( o.id )
+                value:
+                    query: SUM( o.closeRevenue )
+
         columns:
             period:    { label: orocrm.report.datagrid.columns.period }
             cnt:       { label: orocrm.report.datagrid.columns.number_won, frontend_type: integer }

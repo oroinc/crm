@@ -18,6 +18,8 @@ use OroCRM\Bundle\ReportBundle\Command\ReportUpdateCommand;
  */
 class CommandsTest extends WebTestCase
 {
+    static protected $fixturesLoaded = false;
+
     /**
      * @var Client
      */
@@ -26,6 +28,10 @@ class CommandsTest extends WebTestCase
     public function setUp()
     {
         $this->client = static::createClient();
+        if (!self::$fixturesLoaded) {
+            $this->client->appendFixtures(__DIR__ . DIRECTORY_SEPARATOR . 'fixtures', array('LoadLead'));
+            self::$fixturesLoaded = true;
+        }
     }
 
     public function testReportUpdate()
