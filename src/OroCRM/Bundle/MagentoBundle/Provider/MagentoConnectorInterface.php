@@ -30,7 +30,8 @@ interface MagentoConnectorInterface extends ConnectorInterface
     const CUSTOMER_ADDRESS_TYPE   = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Address';
     const CUSTOMER_ADDRESSES_TYPE = 'ArrayCollection<OroCRM\\Bundle\\MagentoBundle\\Entity\\Address>';
 
-    const CART_TYPE         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\CartItem';
+    const CART_TYPE         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart';
+    const CART_ITEM_TYPE    = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\CartItem';
     const CART_ITEMS_TYPE   = 'ArrayCollection<OroCRM\\Bundle\\MagentoBundle\\Entity\\CartItem>';
     const CART_ADDRESS_TYPE = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\CartAddress';
 }

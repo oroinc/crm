@@ -93,7 +93,7 @@ class OrderStrategy extends BaseStrategy
         $criteria = ['originId' => $cartId, 'channel' => $entity->getChannel()];
 
         /** @var Cart|null $cart */
-        $cart = $this->getEntityByCriteria($criteria, MagentoConnectorInterface::CUSTOMER_TYPE);
+        $cart = $this->getEntityByCriteria($criteria, MagentoConnectorInterface::CART_TYPE);
 
         if ($cart) {
             $statusClass     = 'OroCRMMagentoBundle:CartStatus';
