@@ -25,18 +25,6 @@
             {{ ui.renderProperty('orocrm.sales.opportunity.probability.label'|trans, entity.probability|length ? entity.probability|oro_format_percent : '') }}
             {{ ui.renderProperty('orocrm.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount|length ? entity.budgetAmount|oro_format_currency, '') }}
 
-            {% set salesFunnelHint = null %}
-            {% if entity.salesFlowOpportunity %}
-                {% set salesFunnelHint = entity.salesFlowOpportunity.workflowStep
-                    ? entity.salesFlowOpportunity.workflowStep.label
-                    : entity.name
-                %}
-            {% endif %}
-            {% if salesFunnelHint and resource_granted('VIEW', entity.salesFlowOpportunity) %}
-                {% set salesFunnelHint = ui.renderUrl(path('orocrm_sales_sales_flow_opportunity_view', {'id': entity.salesFlowOpportunity.id}), salesFunnelHint) %}
-            {% endif %}
-            {{ ui.renderProperty('orocrm.sales.opportunity.sales_flow_opportunity.label'|trans, salesFunnelHint) }}
-
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
         <div class="responsive-block">
