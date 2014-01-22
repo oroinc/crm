@@ -2,7 +2,7 @@
 namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
 use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
-use OroCRM\Bundle\SalesBundle\Entity\SalesFlowOpportunity;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -174,11 +174,11 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             )
         );
         if ($this->getRandomBoolean()) {
-            /** @var SalesFlowOpportunity $salesFlowOpportunity */
-            $salesFlowOpportunity = $leadWorkflowItem->getResult()->get('sales_flow_opportunity');
+            /** @var Opportunity $opportunity */
+            $opportunity = $leadWorkflowItem->getResult()->get('opportunity');
             $salesFlowItem = $this->workflowManager->startWorkflow(
                 'b2b_flow_sales',
-                $salesFlowOpportunity,
+                $opportunity,
                 'develop',
                 array(
                     'budget_amount' => mt_rand(10, 10000),

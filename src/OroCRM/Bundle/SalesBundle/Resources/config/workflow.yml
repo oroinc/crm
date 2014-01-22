@@ -216,11 +216,8 @@ workflows:
                                         extendWebsite: $lead.website
                                         extendEmployees: $lead.numberOfEmployees
                     - @create_entity: # create an opportunity
-                        class: OroCRM\Bundle\SalesBundle\Entity\SalesFlowOpportunity
-                        attribute: $.result.sales_flow_opportunity
-                    - @create_entity: # create an opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
-                        attribute: $.result.sales_flow_opportunity.opportunity
+                        attribute: $.result.opportunity
                         data:
                             name: $opportunity_name
                             contact: $lead.contact
@@ -230,11 +227,11 @@ workflows:
                     - @find_entity: # set status "In progress" to opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
-                        attribute: $.result.sales_flow_opportunity.opportunity.status
+                        attribute: $.result.opportunity.status
                     - @redirect: # redirect to workflow item edit page
-                        route: 'orocrm_sales_sales_flow_opportunity_view'
+                        route: 'orocrm_opportunity_view'
                         route_parameters:
-                            id: $.result.sales_flow_opportunity.id
+                            id: $.result.opportunity.id
             cancel_definition: # if lead.status = "new"
                 conditions:
                     @equal: [$lead.status.name, 'new']
@@ -258,8 +255,8 @@ workflows:
     b2b_flow_sales:
         label: 'B2B Sales Flow'
         enabled: true
-        entity: OroCRM\Bundle\SalesBundle\Entity\SalesFlowOpportunity
-        entity_attribute: sales_flow_opportunity
+        entity: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+        entity_attribute: opportunity
         start_step: qualify
         steps_display_ordered: true
         steps:
@@ -283,65 +280,59 @@ workflows:
                     - requalify_lost
                     - requalify_won
         attributes:
-            opportunity:
-                label: orocrm.sales.salesflowopportunity.opportunity.label
-                type: entity
-                property_path: sales_flow_opportunity.opportunity
-                options:
-                    class: OroCRM\Bundle\ContactBundle\Entity\Contact
             opportunity_name:
                 label: orocrm.sales.opportunity.name.label
                 type: string
-                property_path: sales_flow_opportunity.opportunity.name
+                property_path: opportunity.name
             notes:
                 label: orocrm.sales.lead.notes.label
                 type: string
-                property_path: sales_flow_opportunity.opportunity.notes
+                property_path: opportunity.notes
             contact:
                 label: orocrm.sales.opportunity.contact.label
                 type: entity
-                property_path: sales_flow_opportunity.opportunity.contact
+                property_path: opportunity.contact
                 options:
                     class: OroCRM\Bundle\ContactBundle\Entity\Contact
             account:
                 label: orocrm.sales.opportunity.account.label
                 type: entity
-                property_path: sales_flow_opportunity.opportunity.account
+                property_path: opportunity.account
                 options:
                     class: OroCRM\Bundle\AccountBundle\Entity\Account
             probability:
                 label: orocrm.sales.opportunity.probability.label
                 type: float
-                property_path: sales_flow_opportunity.opportunity.probability
+                property_path: opportunity.probability
             budget_amount:
                 label: orocrm.sales.opportunity.budget_amount.label
                 type: float
-                property_path: sales_flow_opportunity.opportunity.budgetAmount
+                property_path: opportunity.budgetAmount
             customer_need:
                 label: orocrm.sales.opportunity.customer_need.label
                 type: string
-                property_path: sales_flow_opportunity.opportunity.customerNeed
+                property_path: opportunity.customerNeed
             proposed_solution:
                 label: orocrm.sales.opportunity.proposed_solution.label
                 type: string
-                property_path: sales_flow_opportunity.opportunity.proposedSolution
+                property_path: opportunity.proposedSolution
             close_reason_name: # temporary attribute to find close reason by its name
                 label: orocrm.sales.opportunity.close_reason.label
                 type: string
             close_reason:
                 label: orocrm.sales.opportunity.close_reason.label
                 type: entity
-                property_path: sales_flow_opportunity.opportunity.closeReason
+                property_path: opportunity.closeReason
                 options:
                     class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
             close_revenue:
                 label: orocrm.sales.opportunity.close_revenue.label
                 type: float
-                property_path: sales_flow_opportunity.opportunity.closeRevenue
+                property_path: opportunity.closeRevenue
             close_date:
                 label: orocrm.sales.opportunity.close_date.label
                 type: object
-                property_path: sales_flow_opportunity.opportunity.closeDate
+                property_path: opportunity.closeDate
                 options:
                     class: DateTime
         transitions:

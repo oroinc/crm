@@ -176,11 +176,62 @@ class Opportunity extends ExtendOpportunity
     protected $notes;
 
     /**
-     * @var SalesFLowOpportunity
+     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
      *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\SalesFlowOpportunity", mappedBy="opportunity")
+     * @var WorkflowItem
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
+     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $salesFlowOpportunity;
+    protected $workflowItem;
+
+    /**
+     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
+     *
+     * @var WorkflowStep
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
+     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $workflowStep;
+
+    /**
+     * @param WorkflowItem $workflowItem
+     * @return Opportunity
+     */
+    public function setWorkflowItem($workflowItem)
+    {
+        $this->workflowItem = $workflowItem;
+
+        return $this;
+    }
+
+    /**
+     * @return WorkflowItem
+     */
+    public function getWorkflowItem()
+    {
+        return $this->workflowItem;
+    }
+
+    /**
+     * @param WorkflowItem $workflowStep
+     * @return Opportunity
+     */
+    public function setWorkflowStep($workflowStep)
+    {
+        $this->workflowStep = $workflowStep;
+
+        return $this;
+    }
+
+    /**
+     * @return WorkflowStep
+     */
+    public function getWorkflowStep()
+    {
+        return $this->workflowStep;
+    }
 
     /**
      * @return int
@@ -496,23 +547,5 @@ class Opportunity extends ExtendOpportunity
     {
         $this->notes = $notes;
         return $this;
-    }
-
-    /**
-     * @param SalesFLowOpportunity $salesFlowOpportunity
-     * @return Opportunity
-     */
-    public function setSalesFlowOpportunity($salesFlowOpportunity)
-    {
-        $this->salesFlowOpportunity = $salesFlowOpportunity;
-        return $this;
-    }
-
-    /**
-     * @return SalesFLowOpportunity
-     */
-    public function getSalesFlowOpportunity()
-    {
-        return $this->salesFlowOpportunity;
     }
 }
