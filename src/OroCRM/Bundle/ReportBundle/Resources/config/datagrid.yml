@@ -178,14 +178,13 @@ datagrid:
             acl_resource: oro_report_view
             query:
                 from:
-                    - { table: OroCRMSalesBundle:SalesFlowOpportunity, alias: salesFlowOpportunity }
+                    - { table: OroCRMSalesBundle:Opportunity, alias: opportunity }
                 join:
                     inner:
-                        - { join: salesFlowOpportunity.opportunity, alias: opportunity }
-                        - { join: salesFlowOpportunity.workflowStep, alias: workflowStep }
+                        - { join: opportunity.workflowStep, alias: workflowStep }
                 select:
                     - workflowStep.label as stepLabel
-                    - COUNT(salesFlowOpportunity.id) as numberOfOpportunities
+                    - COUNT(opportunity.id) as numberOfOpportunities
                     - >
                       SUM(
                         CASE WHEN workflowStep.name='close' THEN opportunity.closeRevenue ELSE 0 END
@@ -200,7 +199,7 @@ datagrid:
                 stepLabel:
                     label: 'Total'
                 numberOfOpportunities:
-                    query: COUNT(salesFlowOpportunity.id)
+                    query: COUNT(opportunity.id)
                 closeRevenue:
                     query: SUM(CASE WHEN workflowStep.name='close' THEN opportunity.closeRevenue ELSE 0 END)
                     formatter: currency
