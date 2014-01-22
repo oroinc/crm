@@ -1,0 +1,45 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('orocrm_contact_request_index'),
+        'indexLabel': 'orocrm.contact_request.entity.plural_label'|trans,
+        'entityTitle': entity.name
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block navButtons %}
+    {{ UI.editButton({
+        'path': path('orocrm_contact_request_update', {'id': entity.id}),
+        'entity_label': 'oro.contact_request.entity.label'|trans,
+    }) }}
+    {{ UI.button({'path' : path('orocrm_contact_request_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
+{% endblock %}
+
+{% block content_data %}
+    {% set contactRequestInformationWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('orocrm_contact_request_info', {id: entity.id}),
+            'title': 'orocrm.contact_request.widget.info.title'|trans
+        }) }}
+    {% endset %}
+
+
+    {% set id = 'contactRequestView' %}
+    {% set data = {
+        'dataBlocks': [
+            {
+                'title': 'General',
+                'class': 'active',
+                'subblocks': [
+                    {'data': [contactRequestInformationWidget]}
+                ]
+            }
+        ]
+    } %}
+    {{ parent() }}
+{% endblock %}

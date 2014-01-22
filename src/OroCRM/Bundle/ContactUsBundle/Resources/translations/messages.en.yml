@@ -1,0 +1,28 @@
+orocrm:
+    contact_request:
+        entity:
+            label:  Contact Request
+            plural_label: Contact Requests
+        form: Contact Request
+
+        widget:
+            info:
+                title: Contact Request Details
+
+        datagrid:
+            update: Update
+            delete: Delete
+            view: View
+
+        name:
+            label: Name
+        email:
+            label: Email
+        phone:
+            label: Phone
+        comment:
+            label: Comment
+        channel_name:
+            label: Channel
+        created_at:
+            label: Created

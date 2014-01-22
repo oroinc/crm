@@ -2,9 +2,11 @@ oro_menu_config:
     items:
         contact_requests:
             label: 'Contact Requests'
-            route: 'oro_contact_request_list'
+            route: 'orocrm_contact_request_index'
 
     tree:
         application_menu:
             children:
-                contact_requests: ~
+                embedded_forms:
+                    children:
+                        contact_requests: ~

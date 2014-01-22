@@ -1,0 +1,12 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderProperty('orocrm.contact_request.name.label'|trans, entity.name) }}
+            {{ ui.renderProperty('orocrm.contact_request.email.label'|trans, entity.email) }}
+            {{ ui.renderProperty('orocrm.contact_request.phone.label'|trans, entity.phone) }}
+            {{ ui.renderProperty('orocrm.contact_request.comment.label'|trans, entity.comment) }}
+        </div>
+    </div>
+</div>

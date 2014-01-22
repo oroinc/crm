@@ -4,9 +4,11 @@ datagrid:
             type: orm
             query:
                 select:
+                    - contact_request.id
                     - contact_request.name
                     - contact_request.email
                     - contact_request.phone
+                    - contact_request.createdAt
                     - channel.name as channelName
                 from:
                     - { table: OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest, alias: contact_request }
@@ -16,10 +18,47 @@ datagrid:
 
         columns:
             name:
-                label: oro.contact_request.name
+                label: orocrm.contact_request.name.label
             email:
-                label: oro.contact_request.email
+                label: orocrm.contact_request.email.label
             phone:
-                label: oro.contact_request.phone
+                label: orocrm.contact_request.phone.label
             channelName:
-                label: oro.channel.name
+                label: orocrm.contact_request.channel_name.label
+            createdAt:
+                frontend_type: datetime
+                label: orocrm.contact_request.created_at.label
+
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_contact_request_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_contact_request_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      orocrm_contact_request_delete
+                params:     [ id ]
+
+        actions:
+            view:
+                type: navigate
+                label: orocrm.contact_request.datagrid.view
+                icon: user
+                link: view_link
+                rowAction: true
+            update:
+                 type: navigate
+                 label: orocrm.contact_request.datagrid.update
+                 icon: edit
+                 link: update_link
+            delete:
+                 type: delete
+                 label: orocrm.contact_request.datagrid.delete
+                 icon: trash
+                 link: delete_link
+
