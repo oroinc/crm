@@ -229,7 +229,7 @@ workflows:
                         identifier: 'in_progress'
                         attribute: $.result.opportunity.status
                     - @redirect: # redirect to workflow item edit page
-                        route: 'orocrm_opportunity_view'
+                        route: 'orocrm_sales_opportunity_view'
                         route_parameters:
                             id: $.result.opportunity.id
             cancel_definition: # if lead.status = "new"
