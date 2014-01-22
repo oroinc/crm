@@ -32,15 +32,22 @@ class OrderBridgeIterator extends AbstractBridgeIterator
             ]
         );
 
-        $resultIds = array_map(
+        $resultIdentifiers = array_map(
             function ($item) {
                 return (object)['increment_id' => $item->increment_id, 'entity_id' => $item->order_id];
             },
             $result
         );
+
+        $resultIds = array_map(
+            function ($item) {
+                return $item->order_id;
+            },
+            $result
+        );
         $this->entityBuffer = array_combine($resultIds, $result);
 
-        return $resultIds;
+        return $resultIdentifiers;
     }
 
     /**
