@@ -42,7 +42,6 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
         $this->addDependencyData($result);
 
         return ConverterUtils::objectToArray($result);
-
     }
 
     /**
@@ -52,8 +51,6 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
     {
         parent::addDependencyData($result);
         $result->payment_method = isset($result->payment, $result->payment->method) ? $result->payment->method : null;
-
-        return $this;
     }
 
     /**

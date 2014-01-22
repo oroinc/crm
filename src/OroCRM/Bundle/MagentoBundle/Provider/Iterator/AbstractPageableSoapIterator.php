@@ -279,9 +279,9 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     }
 
     /**
-     * @param \stdClass $result
+     * Adds dependencies to result entity
      *
-     * @return $this
+     * @param \stdClass $result
      */
     protected function addDependencyData($result)
     {
@@ -291,12 +291,10 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         $website                    = $this->dependencies[self::ALIAS_WEBSITES][$store['website_id']];
 
         $result->store_code         = $store['code'];
-        $result->store_storename    = $result->store_name;
+        $result->store_storename    = $store['name'];
         $result->store_website_id   = $website['id'];
         $result->store_website_code = $website['code'];
         $result->store_website_name = $website['name'];
-
-        return $this;
     }
 
     /**

@@ -25,7 +25,7 @@ class RegionConnector extends AbstractMagentoConnector
      */
     public function getImportJobName()
     {
-        return 'mage_regions_import';
+        return 'mage_region_import';
     }
 
     /**

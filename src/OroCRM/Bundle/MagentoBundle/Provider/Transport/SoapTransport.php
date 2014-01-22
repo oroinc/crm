@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
@@ -33,12 +34,12 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_STORE_LIST    = 'storeList';
     const ACTION_ORDER_LIST    = 'salesOrderList';
     const ACTION_ORDER_INFO    = 'salesOrderInfo';
-    const ACTION_CART_LIST     = 'salesQuoteList';
     const ACTION_CART_INFO     = 'shoppingCartInfo';
     const ACTION_COUNTRY_LIST  = 'directoryCountryList';
     const ACTION_REGION_LIST   = 'directoryRegionList';
+    const ACTION_PING          = 'oroPing';
 
-    const ACTION_PING              = 'oroPing';
+    const ACTION_ORO_CART_LIST     = 'salesQuoteList';
     const ACTION_ORO_ORDER_LIST    = 'oroOrderList';
     const ACTION_ORO_CUSTOMER_LIST = 'oroCustomerList';
 
@@ -114,6 +115,18 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         } else {
             return new OrderSoapIterator($this, $settings);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCarts()
+    {
+        if ($this->isExtensionInstalled()) {
+            return new CartsBridgeIterator($this, $this->settings->all());
+        }
+
+        throw new \LogicException('Could not retrieve carts via SOAP with out installed Oro Bridge module');
     }
 
     /**
