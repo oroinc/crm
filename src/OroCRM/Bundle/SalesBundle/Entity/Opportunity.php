@@ -176,13 +176,6 @@ class Opportunity extends ExtendOpportunity
     protected $notes;
 
     /**
-     * @var SalesFLowOpportunity
-     *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\SalesFlowOpportunity", mappedBy="opportunity")
-     */
-    protected $salesFlowOpportunity;
-
-    /**
      * @return int
      */
     public function getId()
@@ -496,23 +489,5 @@ class Opportunity extends ExtendOpportunity
     {
         $this->notes = $notes;
         return $this;
-    }
-
-    /**
-     * @param SalesFLowOpportunity $salesFlowOpportunity
-     * @return Opportunity
-     */
-    public function setSalesFlowOpportunity($salesFlowOpportunity)
-    {
-        $this->salesFlowOpportunity = $salesFlowOpportunity;
-        return $this;
-    }
-
-    /**
-     * @return SalesFLowOpportunity
-     */
-    public function getSalesFlowOpportunity()
-    {
-        return $this->salesFlowOpportunity;
     }
 }

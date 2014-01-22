@@ -2,9 +2,6 @@ parameters:
     orocrm_sales.opportunity.class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
     orocrm_sales.opportunity.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
-    orocrm_sales.sales_flow_opportunity.class: OroCRM\Bundle\SalesBundle\Entity\SalesFlowOpportunity
-    orocrm_sales.sales_flow_opportunity.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-
     orocrm_sales.lead.entity.class: OroCRM\Bundle\SalesBundle\Entity\Lead
     orocrm_sales.lead.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
@@ -15,12 +12,6 @@ services:
         class: %orocrm_sales.opportunity.manager.api.class%
         arguments:
             - %orocrm_sales.opportunity.class%
-            - @doctrine.orm.entity_manager
-
-    orocrm_sales.sales_flow_opportunity.manager.api:
-        class: %orocrm_sales.sales_flow_opportunity.manager.api.class%
-        arguments:
-            - %orocrm_sales.sales_flow_opportunity.class%
             - @doctrine.orm.entity_manager
 
     orocrm_sales.lead.manager.api:

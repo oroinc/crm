@@ -21,7 +21,6 @@ orocrm:
         controller:
             lead.saved.message: "Lead saved"
             opportunity.saved.message: "Opportunity saved"
-            sales_flow_opportunity.saved.message: "Sales Flow Opportunity saved"
 
         form:
             choose_opportunity: 'Choose an opportunity....'
@@ -68,27 +67,6 @@ orocrm:
             owner.label:          Owner
             notes.label:          Notes
             lead.label:           Lead
-            sales_flow_opportunity.label: Sales Funnel
-
-            datagrid:
-                view: View
-                update: Update
-                delete: Delete
-
-#
-        # OroCRM/Bundle/SalesBundle/Entity/SalesFlowOpportunity.php
-        #
-        salesflowopportunity:
-            entity_label:         Sales Flow Opportunity
-            entity_plural_label:  Sales Flow Opportunities
-            entity_description:   Separate entity to perform sales flow on opportunity
-            id.label:             Id
-            opportunity.label:    Opportunity
-            owner.label:          Owner
-            created_at.label:     Created
-            updated_at.label:     Updated
-            workflow_item.label:  Workflow Item
-            workflow_step.label:  Workflow Step
 
             datagrid:
                 view: View

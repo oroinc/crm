@@ -19,13 +19,6 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
         account:
             - NotBlank: ~
 
-OroCRM\Bundle\SalesBundle\Entity\SalesFlowOpportunity:
-    properties:
-        opportunity:
-            - NotBlank: ~
-    constraints:
-        - OroCRM\Bundle\SalesBundle\Validator\Constraints\OpportunityWithSalesFlow: ~
-
 OroCRM\Bundle\SalesBundle\Entity\Lead:
     properties:
         status:
