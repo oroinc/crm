@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\ContactUsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -33,6 +33,8 @@ class ContactRequest
      * @var string
      *
      * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank()
      */
     protected $name;
 
@@ -40,6 +42,9 @@ class ContactRequest
      * @var string
      *
      * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank()
+     * @Assert\Email()
      */
     protected $email;
 
@@ -47,6 +52,8 @@ class ContactRequest
      * @var string
      *
      * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank()
      */
     protected $phone;
 
@@ -54,6 +61,8 @@ class ContactRequest
      * @var string
      *
      * @ORM\Column(type="text")
+     *
+     * @Assert\NotBlank()
      */
     protected $comment;
 

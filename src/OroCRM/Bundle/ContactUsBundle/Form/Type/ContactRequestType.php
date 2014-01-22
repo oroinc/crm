@@ -24,6 +24,10 @@ class ContactRequestType extends AbstractType
             ->add('email')
             ->add('phone')
             ->add('comment', 'textarea')
+            ->add('channel', 'oro_entity_identifier', [
+                    'class' => 'OroIntegrationBundle:Channel',
+                    'multiple' => false
+                ])
             ->add('Send', 'submit');
     }
 
