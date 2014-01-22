@@ -6,7 +6,7 @@ use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
 abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator
 {
-    const DEFAULT_PAGE_SIZE = 50;
+    const DEFAULT_PAGE_SIZE = 100;
 
     /** @var int */
     protected $currentPage = 1;
@@ -15,16 +15,20 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator
     protected $entityBuffer = null;
 
     /**
-     * Load entities ids list
-     *
-     * @return true|null true when there are ids retrieved
+     * {@inheritdoc}
      */
     protected function findEntitiesToProcess()
     {
-        $result = parent::findEntitiesToProcess();
+        $this->logger->info('Looking for batch');
+        $this->entitiesIdsBuffer = $this->getEntityIds();
         $this->currentPage++;
 
-        return $result;
+        $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
+
+        // increment date for further filtering in update mode
+        $this->lastSyncDate->add($this->syncRange);
+
+        return empty($this->entitiesIdsBuffer) ? null : true;
     }
 
     /**

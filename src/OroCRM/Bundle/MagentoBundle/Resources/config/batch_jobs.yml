@@ -13,7 +13,7 @@ connector:
                         processor: oro_importexport.processor.import_delegate
                         writer:    oro_integration.writer.persistent_batch_writer
                     parameters:
-                        batch_size: 15
+                        batch_size: 100
         # Region import jobs
         mage_regions_import:
             title: "Import Magento regions via SOAP API"
@@ -26,7 +26,7 @@ connector:
                         processor: oro_importexport.processor.import_delegate
                         writer:    oro_integration.writer.persistent_batch_writer
                     parameters:
-                        batch_size: 15
+                        batch_size: 100
         # Magento orders import/update
         mage_order_import:
             title: "Order Import from Magento SOAP API"
@@ -39,7 +39,7 @@ connector:
                         processor: oro_importexport.processor.import_delegate
                         writer:    oro_integration.writer.persistent_batch_writer
                     parameters:
-                        batch_size: 15
+                        batch_size: 100
         # Cart import job
 #        mage_cart_import:
 #            title: "Import Magento carts (quote) from Magento"
@@ -52,4 +52,4 @@ connector:
 #                        processor: oro_importexport.processor.import_delegate
 #                        writer:    oro_importexport.writer.entity
 #                    parameters:
-#                        batch_size: 15
+#                        batch_size: 100

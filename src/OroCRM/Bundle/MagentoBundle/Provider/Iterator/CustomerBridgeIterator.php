@@ -11,14 +11,17 @@ class CustomerBridgeIterator extends AbstractBridgeIterator
      */
     protected function getEntityIds()
     {
-        $this->filter
-            ->addStoreFilter($this->getStoresByWebsiteId($this->websiteId))
-            ->addDateFilter($this->mode == self::IMPORT_MODE_INITIAL, $this->lastSyncDate);
+        $this->filter->addWebsiteFilter([$this->websiteId]);
+        if ($this->mode == self::IMPORT_MODE_UPDATE) {
+            $this->filter->addDateFilter(false, $this->lastSyncDate);
+        }
 
         $result = $this->transport->call(
             SoapTransport::ACTION_ORO_CUSTOMER_LIST,
-            [$this->filter->getAppliedFilters()],
-            ['page' => $this->getCurrentPage(), 'pageSize' => self::DEFAULT_PAGE_SIZE]
+            [
+                $this->filter->getAppliedFilters(),
+                ['page' => $this->getCurrentPage(), 'pageSize' => self::DEFAULT_PAGE_SIZE]
+            ]
         );
 
         $resultIds = array_map(
@@ -29,7 +32,7 @@ class CustomerBridgeIterator extends AbstractBridgeIterator
         );
         $this->entityBuffer = array_combine($resultIds, $result);
 
-        return $result;
+        return $resultIds;
     }
 
     protected function addDependencyData($result)
