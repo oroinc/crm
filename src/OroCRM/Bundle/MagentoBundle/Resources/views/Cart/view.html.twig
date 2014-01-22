@@ -36,6 +36,17 @@
         {% set generalSubblocks = generalSubblocks|merge([{'data' : [customerInformationWidget] }]) %}
     {% endif %}
 
+    {% if entity.opportunity %}
+        {% set opportunityInfoWidget %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('orocrm_sales_opportunity_info', { id: entity.opportunity.id }),
+                'title': 'Opportunity Information'
+            }) }}
+        {% endset %}
+        {% set generalSubblocks = generalSubblocks|merge([{'data' : [opportunityInfoWidget] }]) %}
+    {% endif %}
+
     {% set cartItemsWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',

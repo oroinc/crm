@@ -127,6 +127,7 @@ orocrm:
             shipping_address.label:    Shipping address
             billing_address.label:     Billing address
             channel.label:             Channel
+            opportunity.label:         Opportunity
 
         magentosoaptransport:
             entity_label:        Integration Channel Transport

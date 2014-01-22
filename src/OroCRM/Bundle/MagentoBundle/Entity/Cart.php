@@ -13,6 +13,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use OroCRM\Bundle\CallBundle\Entity\Call;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -170,6 +171,14 @@ class Cart extends BaseCart
      * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
      */
     protected $status;
+
+    /**
+     * @var Opportunity
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity")
+     * @ORM\JoinColumn(name="opportunity_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $opportunity;
 
     /**
      * @var ArrayCollection
@@ -388,7 +397,7 @@ class Cart extends BaseCart
     /**
      * @param Customer|null $customer
      *
-     * @return $this
+     * @return Cart
      */
     public function setCustomer(Customer $customer = null)
     {
@@ -439,7 +448,7 @@ class Cart extends BaseCart
     /**
      * @param string $email
      *
-     * @return $this
+     * @return Cart
      */
     public function setEmail($email)
     {
@@ -458,7 +467,7 @@ class Cart extends BaseCart
     /**
      * @param float $itemsQty
      *
-     * @return $this
+     * @return Cart
      */
     public function setItemsQty($itemsQty)
     {
@@ -485,7 +494,7 @@ class Cart extends BaseCart
     /**
      * @param string $quoteCurrencyCode
      *
-     * @return $this
+     * @return Cart
      */
     public function setQuoteCurrencyCode($quoteCurrencyCode)
     {
@@ -531,7 +540,7 @@ class Cart extends BaseCart
     /**
      * @param string $baseCurrencyCode
      *
-     * @return $this
+     * @return Cart
      */
     public function setBaseCurrencyCode($baseCurrencyCode)
     {
@@ -550,7 +559,7 @@ class Cart extends BaseCart
     /**
      * @param string $giftMessage
      *
-     * @return $this
+     * @return Cart
      */
     public function setGiftMessage($giftMessage)
     {
@@ -569,7 +578,7 @@ class Cart extends BaseCart
     /**
      * @param float $isGuest
      *
-     * @return $this
+     * @return Cart
      */
     public function setIsGuest($isGuest)
     {
@@ -588,7 +597,7 @@ class Cart extends BaseCart
     /**
      * @param int $itemsCount
      *
-     * @return $this
+     * @return Cart
      */
     public function setItemsCount($itemsCount)
     {
@@ -607,7 +616,7 @@ class Cart extends BaseCart
     /**
      * @param string $storeCurrencyCode
      *
-     * @return $this
+     * @return Cart
      */
     public function setStoreCurrencyCode($storeCurrencyCode)
     {
@@ -626,7 +635,7 @@ class Cart extends BaseCart
     /**
      * @param float $storeToBaseRate
      *
-     * @return $this
+     * @return Cart
      */
     public function setStoreToBaseRate($storeToBaseRate)
     {
@@ -645,7 +654,7 @@ class Cart extends BaseCart
     /**
      * @param float $storeToQuoteRate
      *
-     * @return $this
+     * @return Cart
      */
     public function setStoreToQuoteRate($storeToQuoteRate)
     {
@@ -659,5 +668,24 @@ class Cart extends BaseCart
     public function getStoreToQuoteRate()
     {
         return $this->storeToQuoteRate;
+    }
+
+    /**
+     * @return Opportunity
+     */
+    public function getOpportunity()
+    {
+        return $this->opportunity;
+    }
+
+    /**
+     * @param Opportunity $opportunity
+     * @return Cart
+     */
+    public function setOpportunity($opportunity)
+    {
+        $this->opportunity = $opportunity;
+        
+        return $this;
     }
 }
