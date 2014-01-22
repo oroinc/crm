@@ -77,7 +77,6 @@ datagrid:
                     inner:
                         - { join: o.account, alias: a }
                         - { join: o.status, alias: s }
-                        - { join: o.closeReason, alias: cr }
                 groupBy:  a.id
         properties:
             id: ~
