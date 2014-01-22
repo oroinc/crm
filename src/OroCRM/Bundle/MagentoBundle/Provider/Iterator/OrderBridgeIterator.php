@@ -9,12 +9,20 @@ class OrderBridgeIterator extends AbstractBridgeIterator
     /**
      * {@inheritdoc}
      */
-    protected function getEntityIds()
+    protected function applyFilter()
     {
         $this->filter->addStoreFilter($this->getStoresByWebsiteId($this->websiteId));
         if ($this->mode == self::IMPORT_MODE_UPDATE) {
             $this->filter->addDateFilter(false, $this->lastSyncDate);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getEntityIds()
+    {
+        $this->applyFilter();
 
         $result = $this->transport->call(
             SoapTransport::ACTION_ORO_ORDER_LIST,

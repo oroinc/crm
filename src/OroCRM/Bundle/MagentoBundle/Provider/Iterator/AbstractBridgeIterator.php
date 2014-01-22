@@ -14,6 +14,8 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator
     /** @var \stdClass[] Entities buffer got from pageable remote */
     protected $entityBuffer = null;
 
+    abstract protected function applyFilter();
+
     /**
      * {@inheritdoc}
      */
