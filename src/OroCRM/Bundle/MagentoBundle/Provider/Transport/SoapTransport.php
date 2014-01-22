@@ -35,9 +35,12 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_ORDER_INFO    = 'salesOrderInfo';
     const ACTION_CART_LIST     = 'salesQuoteList';
     const ACTION_CART_INFO     = 'shoppingCartInfo';
-    const ACTION_PING          = 'oroPing';
     const ACTION_COUNTRY_LIST  = 'directoryCountryList';
     const ACTION_REGION_LIST   = 'directoryRegionList';
+
+    const ACTION_PING              = 'oroPing';
+    const ACTION_ORO_ORDER_LIST    = 'oroOrderList';
+    const ACTION_ORO_CUSTOMER_LIST = 'oroCustomerList';
 
     /** @var string */
     protected $sessionId;

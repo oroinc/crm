@@ -2,22 +2,56 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+
 class OrderBridgeIterator extends AbstractBridgeIterator
 {
     /**
      * {@inheritdoc}
      */
-    protected function getEntityIds()
+    protected function applyFilter()
     {
-        // TODO: Implement getEntityIds() method.
+        $this->filter->addStoreFilter($this->getStoresByWebsiteId($this->websiteId));
+        if ($this->mode == self::IMPORT_MODE_UPDATE) {
+            $this->filter->addDateFilter(false, $this->lastSyncDate);
+        }
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getEntity($id)
+    protected function getEntityIds()
     {
-        // TODO: Implement getEntity() method.
+        $this->applyFilter();
+
+        $result = $this->transport->call(
+            SoapTransport::ACTION_ORO_ORDER_LIST,
+            [
+                $this->filter->getAppliedFilters(),
+                ['page' => $this->getCurrentPage(), 'pageSize' => self::DEFAULT_PAGE_SIZE]
+            ]
+        );
+
+        $resultIds = array_map(
+            function ($item) {
+                return (object)['increment_id' => $item->increment_id, 'entity_id' => $item->order_id];
+            },
+            $result
+        );
+        $this->entityBuffer = array_combine($resultIds, $result);
+
+        return $resultIds;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDependencies()
+    {
+        return [
+            self::ALIAS_STORES   => iterator_to_array($this->transport->getStores()),
+            self::ALIAS_WEBSITES => iterator_to_array($this->transport->getWebsites())
+        ];
     }
 
     /**
@@ -25,6 +59,6 @@ class OrderBridgeIterator extends AbstractBridgeIterator
      */
     protected function getIdFieldName()
     {
-        // TODO: Implement getIdFieldName() method.
+        return 'order_id';
     }
 }

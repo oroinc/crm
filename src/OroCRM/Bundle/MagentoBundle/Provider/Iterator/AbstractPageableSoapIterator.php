@@ -6,6 +6,7 @@ use Psr\Log\NullLogger;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 
+use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderInterface, LoggerAwareInterface
@@ -36,6 +37,9 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
 
     /** @var SoapTransport */
     protected $transport;
+
+    /** @var BatchFilterBag */
+    protected $filter;
 
     /** @var int */
     protected $websiteId;
@@ -68,6 +72,8 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         $this->syncRange = \DateInterval::createFromDateString(self::DEFAULT_SYNC_RANGE);
 
         $this->setLogger(new NullLogger());
+        $this->filter = new BatchFilterBag();
+
     }
 
     /**
@@ -170,56 +176,23 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         array $storeIds = [],
         $format = 'Y-m-d H:i:s'
     ) {
-        $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
-        $filters  = ['complex_filter' => []];
-
         if (!empty($websiteIds)) {
-            $filters['complex_filter'][] = [
-                'key'   => 'website_id',
-                'value' => [
-                    'key'   => 'in',
-                    'value' => implode(',', $websiteIds)
-                ]
-            ];
+            $this->filter->addWebsiteFilter($websiteIds);
         }
+
         if (!empty($storeIds)) {
-            $filters['complex_filter'][] = [
-                'key'   => 'store_id',
-                'value' => [
-                    'key'   => 'in',
-                    'value' => implode(',', $storeIds)
-                ]
-            ];
+            $this->filter->addStoreFilter($storeIds);
         }
 
-        if ($initMode) {
-            $dateField = 'created_at';
-            $dateKey   = 'to';
-        } else {
-            $dateField = 'updated_at';
-            $dateKey   = 'from';
-        }
-
-        $filters['complex_filter'][] = [
-            'key'   => $dateField,
-            'value' => [
-                'key'   => $dateKey,
-                'value' => $date->format($format),
-            ],
-        ];
+        $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
+        $this->filter->addDateFilter($initMode, $date, $format);
 
         $lastId = $this->getLastId();
         if (!is_null($lastId) && $initMode) {
-            $filters['complex_filter'][] = [
-                'key'   => $this->getIdFieldName(),
-                'value' => [
-                    'key'   => 'gt',
-                    'value' => $this->getLastId()
-                ],
-            ];
+            $this->filter->addLastIdFilter($lastId, $this->getIdFieldName());
         }
 
-        return $filters;
+        return $this->filter->getAppliedFilters();
     }
 
     /**
@@ -303,6 +276,27 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         }
 
         return $stores;
+    }
+
+    /**
+     * @param \stdClass $result
+     *
+     * @return $this
+     */
+    protected function addDependencyData($result)
+    {
+        // fill related entities data, needed to create full representation of magento store state in this time
+        // flat array structure will be converted by data converter
+        $store                      = $this->dependencies[self::ALIAS_STORES][$result->store_id];
+        $website                    = $this->dependencies[self::ALIAS_WEBSITES][$store['website_id']];
+
+        $result->store_code         = $store['code'];
+        $result->store_storename    = $result->store_name;
+        $result->store_website_id   = $website['id'];
+        $result->store_website_code = $website['code'];
+        $result->store_website_name = $website['name'];
+
+        return $this;
     }
 
     /**
