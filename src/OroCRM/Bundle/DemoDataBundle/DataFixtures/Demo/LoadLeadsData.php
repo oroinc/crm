@@ -2,6 +2,9 @@
 namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
 use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
+use Oro\Bundle\WorkflowBundle\Model\StepAssembler;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
+use OroCRM\Bundle\SalesBundle\Entity\SalesFlowOpportunity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -29,7 +32,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
-    const FLUSH_MAX = 5;
+    const FLUSH_MAX = 20;
 
     /**
      * @var ContainerInterface
@@ -46,7 +49,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
      */
     protected $countries;
 
-    /** @var  WorkflowManager */
+    /** @var WorkflowManager */
     protected $workflowManager;
 
     /** @var  EntityManager */
@@ -54,6 +57,14 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
     /** @var  ConfigManager */
     protected $configManager;
+
+    /** @var WorkflowRegistry */
+    protected $workflowRegistry;
+
+    /**
+     * @var StepAssembler
+     */
+    protected $stepAssembler;
 
     /**
      * {@inheritDoc}
@@ -63,6 +74,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $this->container = $container;
         $this->workflowManager = $container->get('oro_workflow.manager');
         $this->configManager = $container->get('oro_entity_config.config_manager');
+        $this->workflowRegistry = $container->get('oro_workflow.registry');
+        $this->stepAssembler = $container->get('oro_workflow.step_assembler');
     }
 
     /**
@@ -80,6 +93,9 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         if ($manager) {
             $this->em = $manager;
         }
+
+        $this->stepAssembler->resetStepEntities();
+        $this->workflowRegistry->resetAssembledWorkflows();
 
         $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
         $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
@@ -107,7 +123,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
         foreach ($leads as $lead) {
             /** @var Lead $lead */
-            $source = $sources[rand(0, $randomSource)];
+            $source = $sources[mt_rand(0, $randomSource)];
             $optionSetRelation = new OptionSetRelation();
             $optionSetRelation->setData(
                 null,
@@ -129,70 +145,27 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 //read headers
                 $headers = $data;
             }
-            $randomUser = count($this->users)-1;
+            $randomUser = count($this->users) - 1;
             $i = 0;
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-                $user = $this->users[rand(0, $randomUser)];
+                $user = $this->users[mt_rand(0, $randomUser)];
                 $this->setSecurityContext($user);
 
                 $data = array_combine($headers, array_values($data));
 
                 $lead = $this->createLead($data, $user);
-
                 $this->persist($this->em, $lead);
-                // TODO: fix Demo Data in BAP-2929
-//                $workFlow = $this->workflowManager->startWorkflow(
-//                    'b2b_flow_lead',
-//                    $lead,
-//                    'qualify',
-//                    array(
-//                        'opportunity_name' => $lead->getName(),
-//                        'company_name' => $lead->getCompanyName(),
-//                        'account' => $lead->getAccount(),
-//                    )
-//                );
-//                if ((bool) rand(0, 1)) {
-//                    /** @var WorkflowItem $salesFlow */
-//                    $salesFlow = $workFlow->getResult()->get('workflowItem');
-//                    $this->transit(
-//                        $this->workflowManager,
-//                        $salesFlow,
-//                        'develop',
-//                        array(
-//                            'budget_amount' => rand(10, 10000),
-//                            'customer_need' => rand(10, 10000),
-//                            'proposed_solution' => rand(10, 10000),
-//                            'probability' => round(rand(50, 85) / 100.00, 2)
-//                        )
-//                    );
-//                    if ((bool) rand(0, 1)) {
-//                        $this->transit(
-//                            $this->workflowManager,
-//                            $salesFlow,
-//                            'close_as_won',
-//                            array(
-//                                'close_revenue' => rand(100, 1000),
-//                                'close_date' => new \DateTime('now'),
-//                            )
-//                        );
-//                    } elseif ((bool) rand(0, 1)) {
-//                        $this->transit(
-//                            $this->workflowManager,
-//                            $salesFlow,
-//                            'close_as_lost',
-//                            array(
-//                                'close_reason_name' => 'cancelled',
-//                                'close_revenue' => rand(100, 1000),
-//                                'close_date' => new \DateTime('now'),
-//                            )
-//                        );
-//                    }
-//                    $this->persist($this->em, $salesFlow);
-//                }
+                // Flushing entity to get ID, as workflow now require connected entity identifier.
+                $this->em->flush($lead);
+
+                if ($this->getRandomBoolean()) {
+                    $this->loadSalesFlows($lead);
+                }
+
                 $i++;
                 if ($i % self::FLUSH_MAX == 0) {
                     $this->flush($this->em);
-                    $this->em->clear();
+                    //$this->em->clear();
                     $this->initSupportingEntities();
                 }
             }
@@ -200,6 +173,68 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             $this->flush($this->em);
             fclose($handle);
         }
+    }
+
+    /**
+     * @param Lead $lead
+     */
+    protected function loadSalesFlows(Lead $lead)
+    {
+        $leadWorkflowItem = $this->workflowManager->startWorkflow(
+            'b2b_flow_lead',
+            $lead,
+            'qualify',
+            array(
+                'opportunity_name' => $lead->getName(),
+                'company_name' => $lead->getCompanyName(),
+                'account' => $lead->getAccount(),
+            )
+        );
+        if ($this->getRandomBoolean()) {
+            /** @var SalesFlowOpportunity $salesFlowOpportunity */
+            $salesFlowOpportunity = $leadWorkflowItem->getResult()->get('sales_flow_opportunity');
+            $salesFlowItem = $this->workflowManager->startWorkflow(
+                'b2b_flow_sales',
+                $salesFlowOpportunity,
+                'develop',
+                array(
+                    'budget_amount' => mt_rand(10, 10000),
+                    'customer_need' => mt_rand(10, 10000),
+                    'proposed_solution' => mt_rand(10, 10000),
+                    'probability' => round(mt_rand(50, 85) / 100.00, 2)
+                )
+            );
+            if ($this->getRandomBoolean()) {
+                $this->transit(
+                    $this->workflowManager,
+                    $salesFlowItem,
+                    'close_as_won',
+                    array(
+                        'close_revenue' => mt_rand(100, 1000),
+                        'close_date' => new \DateTime('now'),
+                    )
+                );
+            } elseif ($this->getRandomBoolean()) {
+                $this->transit(
+                    $this->workflowManager,
+                    $salesFlowItem,
+                    'close_as_lost',
+                    array(
+                        'close_reason_name' => 'cancelled',
+                        'close_revenue' => mt_rand(100, 1000),
+                        'close_date' => new \DateTime('now'),
+                    )
+                );
+            }
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    protected function getRandomBoolean()
+    {
+        return (bool) mt_rand(0, 1);
     }
 
     /**
