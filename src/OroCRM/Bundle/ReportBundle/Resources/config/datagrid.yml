@@ -77,6 +77,7 @@ datagrid:
                     inner:
                         - { join: o.account, alias: a }
                         - { join: o.status, alias: s }
+                    left:
                         - { join: o.closeReason, alias: cr }
                 groupBy:  a.id
         properties:
@@ -179,54 +180,54 @@ datagrid:
             acl_resource: oro_report_view
             query:
                 from:
-                    - { table: OroCRMReportBundle:OpportunityByWorkflowItem, alias: owi }
+                    - { table: OroCRMSalesBundle:SalesFlowOpportunity, alias: salesFlowOpportunity }
+                join:
+                    inner:
+                        - { join: salesFlowOpportunity.opportunity, alias: opportunity }
+                        - { join: salesFlowOpportunity.workflowStep, alias: workflowStep }
                 select:
-                    - wi.currentStepName
-                    - COUNT(o.id) as numberOfOpp
+                    - workflowStep.label as stepLabel
+                    - COUNT(salesFlowOpportunity.id) as numberOfOpportunities
                     - >
                       SUM(
-                        (CASE WHEN (wi.currentStepName='close') THEN o.closeRevenue ELSE 0 END)
+                        CASE WHEN workflowStep.name='close' THEN opportunity.closeRevenue ELSE 0 END
                       ) as closeRevenue
                     - >
                       SUM(
-                        (CASE WHEN (o.budgetAmount IS NOT NULL) THEN o.budgetAmount ELSE 0 END)
+                        CASE WHEN opportunity.budgetAmount IS NOT NULL THEN opportunity.budgetAmount ELSE 0 END
                       ) as budgetAmount
-                join:
-                    inner:
-                        - { join: owi.opportunity, alias: o }
-                        - { join: owi.workflowItem, alias: wi }
-                groupBy:  "wi.currentStepName"
+                groupBy: stepLabel
         totals:
             columns:
-                currentStepName:
+                stepLabel:
                     label: 'Total'
-                numberOfOpp:
-                    query: COUNT(o.id)
+                numberOfOpportunities:
+                    query: COUNT(salesFlowOpportunity.id)
                 closeRevenue:
-                    query: SUM((CASE WHEN (wi.currentStepName='close') THEN o.closeRevenue ELSE 0 END))
-                    formatter: decimal
+                    query: SUM(CASE WHEN workflowStep.name='close' THEN opportunity.closeRevenue ELSE 0 END)
+                    formatter: currency
                 budgetAmount:
-                    query: SUM((CASE WHEN (o.budgetAmount IS NOT NULL) THEN o.budgetAmount ELSE 0 END))
-                    formatter: decimal
+                    query: SUM(CASE WHEN opportunity.budgetAmount IS NOT NULL THEN opportunity.budgetAmount ELSE 0 END)
+                    formatter: currency
         columns:
-            currentStepName: { label: orocrm.report.datagrid.columns.step }
-            numberOfOpp:     { label: orocrm.report.datagrid.columns.nof_opportunities,  frontend_type: integer }
-            closeRevenue:    { label: orocrm.report.datagrid.columns.close_revenue,  frontend_type: decimal }
-            budgetAmount:    { label: orocrm.report.datagrid.columns.budget_amount,  frontend_type: decimal }
+            stepLabel:             { label: orocrm.report.datagrid.columns.step }
+            numberOfOpportunities: { label: orocrm.report.datagrid.columns.number_of_opportunities, frontend_type: integer }
+            closeRevenue:          { label: orocrm.report.datagrid.columns.close_revenue, frontend_type: currency }
+            budgetAmount:          { label: orocrm.report.datagrid.columns.budget_amount, frontend_type: currency }
         sorters:
             columns:
-                currentStepName: { data_name: wi.currentStepName }
-                numberOfOpp:     { data_name: numberOfOpp }
-                closeRevenue:    { data_name: closeRevenue }
-                budgetAmount:    { data_name: budgetAmount }
+                stepLabel:             { data_name: stepLabel }
+                numberOfOpportunities: { data_name: numberOfOpportunities }
+                closeRevenue:          { data_name: closeRevenue }
+                budgetAmount:          { data_name: budgetAmount }
         filters:
             columns:
-                currentStepName:
+                stepLabel:
                     type: string
-                    data_name: wi.currentStepName
-                numberOfOpp:
+                    data_name: stepLabel
+                numberOfOpportunities:
                     type: number
-                    data_name: numberOfOpp
+                    data_name: numberOfOpportunities
                     filter_by_having: true
                 closeRevenue:
                     type: number
@@ -240,14 +241,6 @@ datagrid:
                     filter_by_having: true
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                workflowName:
-                    type: entity
-                    label: orocrm.report.datagrid.columns.workflow
-                    data_name: wi.workflowName
-                    options:
-                        field_options:
-                            class: OroWorkflowBundle:WorkflowDefinition
-                            property: label
         options:
             entityHint: report data
             export: true
