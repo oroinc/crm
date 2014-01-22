@@ -2,8 +2,6 @@
 namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
 use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
-use Oro\Bundle\WorkflowBundle\Model\StepAssembler;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
 use OroCRM\Bundle\SalesBundle\Entity\SalesFlowOpportunity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -32,7 +30,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
-    const FLUSH_MAX = 20;
+    const FLUSH_MAX = 50;
 
     /**
      * @var ContainerInterface
@@ -58,14 +56,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /** @var  ConfigManager */
     protected $configManager;
 
-    /** @var WorkflowRegistry */
-    protected $workflowRegistry;
-
-    /**
-     * @var StepAssembler
-     */
-    protected $stepAssembler;
-
     /**
      * {@inheritDoc}
      */
@@ -74,8 +64,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $this->container = $container;
         $this->workflowManager = $container->get('oro_workflow.manager');
         $this->configManager = $container->get('oro_entity_config.config_manager');
-        $this->workflowRegistry = $container->get('oro_workflow.registry');
-        $this->stepAssembler = $container->get('oro_workflow.step_assembler');
     }
 
     /**
@@ -93,9 +81,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         if ($manager) {
             $this->em = $manager;
         }
-
-        $this->stepAssembler->resetStepEntities();
-        $this->workflowRegistry->resetAssembledWorkflows();
 
         $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
         $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
@@ -155,18 +140,16 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
                 $lead = $this->createLead($data, $user);
                 $this->persist($this->em, $lead);
-                // Flushing entity to get ID, as workflow now require connected entity identifier.
-                $this->em->flush($lead);
 
                 if ($this->getRandomBoolean()) {
+                    // Flushing entity to get ID, as workflow now require connected entity identifier.
+                    $this->em->flush($lead);
                     $this->loadSalesFlows($lead);
                 }
 
                 $i++;
                 if ($i % self::FLUSH_MAX == 0) {
                     $this->flush($this->em);
-                    //$this->em->clear();
-                    $this->initSupportingEntities();
                 }
             }
 
