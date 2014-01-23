@@ -14,7 +14,20 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator
     /** @var \stdClass[] Entities buffer got from pageable remote */
     protected $entityBuffer = null;
 
-    abstract protected function applyFilter();
+    /**
+     * {@inheritdoc}
+     */
+    protected function applyFilter()
+    {
+        if ($this->mode == self::IMPORT_MODE_INITIAL) {
+            $dateField = 'created_at';
+            $dateKey   = 'to';
+        } else {
+            $dateField = 'updated_at';
+            $dateKey   = 'from';
+        }
+        $this->filter->addDateFilter($dateField, $dateKey, $this->lastSyncDate);
+    }
 
     /**
      * {@inheritdoc}
@@ -26,9 +39,6 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator
         $this->currentPage++;
 
         $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
-
-        // increment date for further filtering in update mode
-        $this->lastSyncDate->add($this->syncRange);
 
         return empty($this->entitiesIdsBuffer) ? null : true;
     }
