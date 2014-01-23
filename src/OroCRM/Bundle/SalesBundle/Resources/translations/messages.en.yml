@@ -67,6 +67,7 @@ orocrm:
             owner.label:          Owner
             notes.label:          Notes
             lead.label:           Lead
+            b2b_flow_sales.step.label: Step
 
             datagrid:
                 view: View
