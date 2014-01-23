@@ -12,9 +12,7 @@ class CartsBridgeIterator extends AbstractBridgeIterator
     protected function applyFilter()
     {
         $this->filter->addStoreFilter($this->getStoresByWebsiteId($this->websiteId));
-        if ($this->mode == self::IMPORT_MODE_UPDATE) {
-            $this->filter->addDateFilter(false, $this->lastSyncDate);
-        }
+        parent::applyFilter();
     }
 
     /**
