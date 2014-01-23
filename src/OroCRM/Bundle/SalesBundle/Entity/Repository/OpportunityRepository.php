@@ -24,14 +24,14 @@ class OpportunityRepository extends EntityRepository
      *      'labels' => [id, label]
      *  ]
      */
-    public function getOpportunitiesByState(AclHelper $aclHelper)
+    public function getOpportunitiesByStatus(AclHelper $aclHelper)
     {
         $dateEnd = new \DateTime('now', new \DateTimeZone('UTC'));
         $dateStart = new \DateTime(
             $dateEnd->format('Y') . '-01-' . ((ceil($dateEnd->format('n') / 3) - 1) * 3 + 1),
             new \DateTimeZone('UTC')
         );
-        $data = $this->getOpportunitiesDataByState($aclHelper, $dateStart, $dateEnd);
+        $data = $this->getOpportunitiesDataByStatus($aclHelper, $dateStart, $dateEnd);
 
         $resultData = [];
         $labels = [];
@@ -188,7 +188,7 @@ class OpportunityRepository extends EntityRepository
      * @param $dateEnd
      * @return array
      */
-    protected function getOpportunitiesDataByState(AclHelper $aclHelper, $dateStart = null, $dateEnd = null)
+    protected function getOpportunitiesDataByStatus(AclHelper $aclHelper, $dateStart = null, $dateEnd = null)
     {
         $qb = $this->createQueryBuilder('opp');
         $qb->select('opp_status.name', 'opp_status.label', 'SUM(opp.budgetAmount) as budget')
