@@ -137,6 +137,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     {
         if (false === $this->loaded) {
             $this->dependencies = $this->getDependencies();
+            $this->loaded = true;
         }
 
         $this->entitiesIdsBuffer = [];

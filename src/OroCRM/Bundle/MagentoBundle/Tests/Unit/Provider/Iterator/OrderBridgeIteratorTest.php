@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 class OrderBridgeIteratorTest extends BaseIteratorTestCase
 {
@@ -13,39 +14,16 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
         $this->iterator = new OrderBridgeIterator($this->transport, $this->settings);
     }
 
-    public function testIteration()
+    /**
+     * @dataProvider dataProvider
+     *
+     * @param string $orderArray
+     * @param string $storeData
+     * @param string $stores
+     * @param string $websites
+     */
+    public function testIteration($orderArray, $storeData, $stores, $websites)
     {
-        $orderArray = [
-            (object)['order_id' => 1, 'total' => 12.5, 'store_id' => 0, 'store_name' => 'admin'],
-            (object)['order_id' => 2, 'total' => 132,  'store_id' => 0, 'store_name' => 'admin'],
-            (object)['order_id' => 3, 'total' => 86,   'store_id' => 0, 'store_name' => 'admin']
-        ];
-
-        $storeData = [
-            'store_code'         => 'admin',
-            'store_storename'    => 'admin',
-            'store_website_id'   => 0,
-            'store_website_code' => 'admin',
-            'store_website_name' => 'Admin',
-        ];
-
-        $stores = [
-            [
-                'website_id' => 0,
-                'code'       => 'admin',
-                'name'       => 'Admin',
-                'store_id'   => 0
-            ]
-        ];
-
-        $websites = [
-            [
-                'id'   => 0,
-                'code' => 'admin',
-                'name' => 'Admin',
-            ]
-        ];
-
         $this->transport->expects($this->at(0))->method('getStores')
             ->will(
                 $this->returnValue(new \ArrayIterator($stores))
@@ -78,5 +56,54 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
             ],
             iterator_to_array($this->iterator)
         );
+    }
+
+    /**
+     * @dataProvider dataProvider
+     *
+     * @param string $orderArray
+     * @param string $storeData
+     * @param string $stores
+     * @param string $websites
+     */
+    public function testUpdateMode($orderArray, $storeData, $stores, $websites)
+    {
+        $this->iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
+        $this->testIteration($orderArray, $storeData, $stores, $websites);
+    }
+
+    public function dataProvider()
+    {
+        return [
+            'one test case' => [
+                [
+                    (object)['order_id' => 1, 'total' => 12.5, 'store_id' => 0, 'store_name' => 'admin'],
+                    (object)['order_id' => 2, 'total' => 132,  'store_id' => 0, 'store_name' => 'admin'],
+                    (object)['order_id' => 3, 'total' => 86,   'store_id' => 0, 'store_name' => 'admin']
+                ],
+                [
+                    'store_code'         => 'admin',
+                    'store_storename'    => 'admin',
+                    'store_website_id'   => 0,
+                    'store_website_code' => 'admin',
+                    'store_website_name' => 'Admin',
+                ],
+                [
+                    [
+                        'website_id' => 0,
+                        'code'       => 'admin',
+                        'name'       => 'Admin',
+                        'store_id'   => 0
+                    ]
+                ],
+                [
+                    [
+                        'id'   => 0,
+                        'code' => 'admin',
+                        'name' => 'Admin',
+                    ]
+                ]
+            ],
+        ];
     }
 }
