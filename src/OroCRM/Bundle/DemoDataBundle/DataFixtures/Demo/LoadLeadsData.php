@@ -142,8 +142,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 $this->persist($this->em, $lead);
 
                 if ($this->getRandomBoolean()) {
-                    // Flushing entity to get ID, as workflow now require connected entity identifier.
-                    $this->em->flush($lead);
                     $this->loadSalesFlows($lead);
                 }
 
