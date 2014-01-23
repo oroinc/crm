@@ -7,6 +7,6 @@ oro_menu_config:
     tree:
         application_menu:
             children:
-                embedded_forms:
+                customers_tab:
                     children:
                         contact_requests: ~
