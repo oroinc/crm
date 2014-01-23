@@ -3,20 +3,15 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
-class AbstractLoadeableSoapIteratorTest extends \PHPUnit_Framework_TestCase
+class AbstractLoadeableSoapIteratorTest extends BaseIteratorTestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject|AbstractLoadeableSoapIterator */
     protected $iterator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|SoapTransport */
-    protected $transport;
-
     public function setUp()
     {
-        $this->transport = $this->getMockBuilder('OroCRM\\Bundle\\MagentoBundle\\Provider\\Transport\\SoapTransport')
-            ->disableOriginalConstructor()->getMock();
+        parent::setUp();
 
         $this->iterator = $this
             ->getMockBuilder('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\AbstractLoadeableSoapIterator')
@@ -25,11 +20,6 @@ class AbstractLoadeableSoapIteratorTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->assertAttributeEquals($this->transport, 'transport', $this->iterator);
-    }
-
-    public function tearDown()
-    {
-        unset($this->iterator, $this->transport);
     }
 
     /**
