@@ -30,7 +30,7 @@ class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($filters['complex_filter']['lastid']);
 
         // add date filter in initial mode
-        $this->filter->addDateFilter(true, new \DateTime());
+        $this->filter->addDateFilter('created_at', 'to', new \DateTime());
         $filters = $this->filter->getAppliedFilters();
         $this->assertCount(2, $filters['complex_filter']);
         $this->assertNotEmpty($filters['complex_filter']['date']);
@@ -38,7 +38,7 @@ class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('to', $filters['complex_filter']['date']['value']['key']);
 
         // add date filter with update mode and check that it overwrite init mode date filter
-        $this->filter->addDateFilter(false, new \DateTime());
+        $this->filter->addDateFilter('updated_at', 'from', new \DateTime());
         $filters = $this->filter->getAppliedFilters();
         $this->assertCount(2, $filters['complex_filter']); // still should be two filters
         $this->assertContains('updated_at', $filters['complex_filter']['date']);
@@ -65,7 +65,7 @@ class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $filters['complex_filter']);
 
         // add date filter in initial mode
-        $this->filter->addDateFilter(true, new \DateTime());
+        $this->filter->addDateFilter('created_at', 'to', new \DateTime());
         $filters = $this->filter->getAppliedFilters();
         $this->assertCount(2, $filters['complex_filter']);
 
@@ -82,6 +82,15 @@ class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
         $filters = $this->filter->getAppliedFilters();
         $this->assertEmpty($filters['complex_filter']);
         $this->assertEmpty($filters['filter']);
+
+        // add dummy simple filter
+        $this->filter->addFilter('test', ['test' => true]);
+        $filters = $this->filter->getAppliedFilters();
+        $this->assertCount(1, $filters['filter']);
+
+        $this->filter->reset(BatchFilterBag::FILTER_TYPE_SIMPLE, 'test');
+        $filters = $this->filter->getAppliedFilters();
+        $this->assertFalse(isset($filters['filter']['test']));
 
     }
 }
