@@ -83,7 +83,7 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
                 ],
                 [
                     'store_code'         => 'admin',
-                    'store_storename'    => 'admin',
+                    'store_storename'    => 'Admin',
                     'store_website_id'   => 0,
                     'store_website_code' => 'admin',
                     'store_website_name' => 'Admin',
