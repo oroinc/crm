@@ -24,19 +24,20 @@ class ContactRequestType extends AbstractType
             ->add('email')
             ->add('phone')
             ->add('comment', 'textarea')
-            ->add('channel', 'oro_entity_identifier', [
+            ->add('channel', $options['channel_form_type'], [
                     'class' => 'OroIntegrationBundle:Channel',
-                    'multiple' => false
+                    'property' => 'name',
                 ])
-            ->add('Send', 'submit');
+            ->add('Submit', 'submit');
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
-                'data_class' => 'OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest'
-            )
+            [
+                'data_class' => 'OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest',
+                'channel_form_type' => 'entity'
+            ]
         );
     }
 }
