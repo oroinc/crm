@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
+use Oro\Bundle\IntegrationBundle\Entity\Status;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
 use Oro\Bundle\BatchBundle\Item\ExecutionContext;
@@ -42,6 +44,28 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 
         $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($this->getMock('\Iterator')));
+        $connector->setStepExecution($this->stepExecutionMock);
+    }
+
+    public function testInitializationInUpdatedMode()
+    {
+        $channel   = new Channel();
+        $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock, $channel);
+
+        $status = new Status();
+        $status->setCode($status::STATUS_COMPLETED);
+        $status->setConnector($connector->getType());
+        $channel->addStatus($status);
+
+        $this->transportMock->expects($this->once())->method('init');
+
+        $iterator = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
+        $iterator->expects($this->once())->method('setMode')
+            ->with($this->equalTo(UpdatedLoaderInterface::IMPORT_MODE_UPDATE));
+        $iterator->expects($this->once())->method('setStartDate')->with($this->equalTo($status->getDate()));
+        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+            ->will($this->returnValue($iterator));
+
         $connector->setStepExecution($this->stepExecutionMock);
     }
 
@@ -93,12 +117,13 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param mixed $transport
-     * @param mixed $stepExecutionMock
+     * @param mixed        $transport
+     * @param mixed        $stepExecutionMock
+     * @param null|Channel $channel
      *
      * @return AbstractMagentoConnector
      */
-    protected function getConnector($transport, $stepExecutionMock)
+    protected function getConnector($transport, $stepExecutionMock, $channel = null)
     {
         $contextRegistry     = new ContextRegistry();
         $contextMediatorMock = $this
@@ -106,7 +131,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
 
         $transportSettings = $this->getMockForAbstractClass('Oro\\Bundle\\IntegrationBundle\\Entity\\Transport');
-        $channel           = new Channel();
+        $channel           = $channel ? : new Channel();
         $channel->setTransport($transportSettings);
 
         $executionContext = new ExecutionContext();

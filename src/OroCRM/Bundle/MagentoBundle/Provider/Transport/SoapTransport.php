@@ -2,19 +2,19 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
 
@@ -39,7 +39,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_REGION_LIST   = 'directoryRegionList';
     const ACTION_PING          = 'oroPing';
 
-    const ACTION_ORO_CART_LIST     = 'salesQuoteList';
+    const ACTION_ORO_CART_LIST     = 'oroQuoteList';
     const ACTION_ORO_ORDER_LIST    = 'oroOrderList';
     const ACTION_ORO_CUSTOMER_LIST = 'oroCustomerList';
 
@@ -74,6 +74,8 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
             );
         }
 
+        // revert initial state
+        $this->isExtensionInstalled = null;
         /** @var string sessionId returned by Magento API login method */
         $this->sessionId = $this->client->login($apiUser, $apiKey);
     }
