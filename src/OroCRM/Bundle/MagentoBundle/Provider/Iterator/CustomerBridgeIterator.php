@@ -12,9 +12,7 @@ class CustomerBridgeIterator extends AbstractBridgeIterator
     protected function applyFilter()
     {
         $this->filter->addWebsiteFilter([$this->websiteId]);
-        if ($this->mode == self::IMPORT_MODE_UPDATE) {
-            $this->filter->addDateFilter(false, $this->lastSyncDate);
-        }
+        parent::applyFilter();
     }
 
     /**
