@@ -187,27 +187,30 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                     'probability' => round(mt_rand(50, 85) / 100.00, 2)
                 )
             );
+
             if ($this->getRandomBoolean()) {
-                $this->transit(
-                    $this->workflowManager,
-                    $salesFlowItem,
-                    'close_as_won',
-                    array(
-                        'close_revenue' => mt_rand(100, 1000),
-                        'close_date' => new \DateTime('now'),
-                    )
-                );
-            } elseif ($this->getRandomBoolean()) {
-                $this->transit(
-                    $this->workflowManager,
-                    $salesFlowItem,
-                    'close_as_lost',
-                    array(
-                        'close_reason_name' => 'cancelled',
-                        'close_revenue' => mt_rand(100, 1000),
-                        'close_date' => new \DateTime('now'),
-                    )
-                );
+                if ($this->getRandomBoolean()) {
+                    $this->transit(
+                        $this->workflowManager,
+                        $salesFlowItem,
+                        'close_as_won',
+                        array(
+                            'close_revenue' => mt_rand(100, 1000),
+                            'close_date' => new \DateTime('now'),
+                        )
+                    );
+                } else {
+                    $this->transit(
+                        $this->workflowManager,
+                        $salesFlowItem,
+                        'close_as_lost',
+                        array(
+                            'close_reason_name' => 'cancelled',
+                            'close_revenue' => mt_rand(100, 1000),
+                            'close_date' => new \DateTime('now'),
+                        )
+                    );
+                }
             }
         }
     }
