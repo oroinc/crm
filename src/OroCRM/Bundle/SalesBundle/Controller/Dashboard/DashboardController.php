@@ -41,13 +41,13 @@ class DashboardController extends Controller
      * )
      * @Template("OroCRMSalesBundle:Dashboard:opportunityByState.html.twig")
      */
-    public function opportunityByStateAction($widget)
+    public function opportunityByStatusAction($widget)
     {
         return array_merge(
             [
                 'items' => $this->getDoctrine()
                         ->getRepository('OroCRMSalesBundle:Opportunity')
-                        ->getOpportunitiesByState($this->get('oro_security.acl_helper'))
+                        ->getOpportunitiesByStatus($this->get('oro_security.acl_helper'))
             ],
             $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
         );
