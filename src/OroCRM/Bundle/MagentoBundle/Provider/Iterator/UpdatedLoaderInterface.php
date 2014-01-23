@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
-interface UpdatedLoaderInterface
+interface UpdatedLoaderInterface extends \Iterator
 {
     const IMPORT_MODE_INITIAL = 'initial';
     const IMPORT_MODE_UPDATE  = 'update';

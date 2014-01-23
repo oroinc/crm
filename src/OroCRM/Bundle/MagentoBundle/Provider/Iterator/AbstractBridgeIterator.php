@@ -19,6 +19,7 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator
      */
     protected function applyFilter()
     {
+        $dateKey = 'from';
         if ($this->mode == self::IMPORT_MODE_INITIAL) {
             $dateField = 'created_at';
         } else {

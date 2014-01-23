@@ -6,9 +6,9 @@ use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 
-use OroCRM\Bundle\MagentoBundle\Provider\RegionConnector;
+use OroCRM\Bundle\MagentoBundle\Provider\CartConnector;
 
-class RegionConnectorTest extends MagentoConnectorTestCase
+class CartConnectorTest extends MagentoConnectorTestCase
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class RegionConnectorTest extends MagentoConnectorTestCase
         LoggerStrategy $logger,
         ConnectorContextMediator $contextMediator
     ) {
-        return new RegionConnector($contextRegistry, $logger, $contextMediator);
+        return new CartConnector($contextRegistry, $logger, $contextMediator);
     }
 
     /**
@@ -26,7 +26,7 @@ class RegionConnectorTest extends MagentoConnectorTestCase
      */
     protected function getIteratorGetterMethodName()
     {
-        return 'getRegions';
+        return 'getCarts';
     }
 
     public function testPublicInterface()
@@ -37,9 +37,9 @@ class RegionConnectorTest extends MagentoConnectorTestCase
 
         $connector = $this->getConnectorInstance(new ContextRegistry(), new LoggerStrategy(), $contextMediatorMock);
 
-        $this->assertEquals('region', $connector->getType());
-        $this->assertEquals('mage_region_import', $connector->getImportJobName());
-        $this->assertEquals('OroCRM\\Bundle\\MagentoBundle\\Entity\\Region', $connector->getImportEntityFQCN());
-        $this->assertEquals('orocrm.magento.connector.region.label', $connector->getLabel());
+        $this->assertEquals('cart', $connector->getType());
+        $this->assertEquals('mage_cart_import', $connector->getImportJobName());
+        $this->assertEquals('OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart', $connector->getImportEntityFQCN());
+        $this->assertEquals('orocrm.magento.connector.cart.label', $connector->getLabel());
     }
 }

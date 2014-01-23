@@ -8,12 +8,13 @@ use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
 
@@ -33,12 +34,12 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_STORE_LIST    = 'storeList';
     const ACTION_ORDER_LIST    = 'salesOrderList';
     const ACTION_ORDER_INFO    = 'salesOrderInfo';
-    const ACTION_CART_LIST     = 'salesQuoteList';
     const ACTION_CART_INFO     = 'shoppingCartInfo';
     const ACTION_COUNTRY_LIST  = 'directoryCountryList';
     const ACTION_REGION_LIST   = 'directoryRegionList';
+    const ACTION_PING          = 'oroPing';
 
-    const ACTION_PING              = 'oroPing';
+    const ACTION_ORO_CART_LIST     = 'oroQuoteList';
     const ACTION_ORO_ORDER_LIST    = 'oroOrderList';
     const ACTION_ORO_CUSTOMER_LIST = 'oroCustomerList';
 
@@ -73,6 +74,8 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
             );
         }
 
+        // revert initial state
+        $this->isExtensionInstalled = null;
         /** @var string sessionId returned by Magento API login method */
         $this->sessionId = $this->client->login($apiUser, $apiKey);
     }
@@ -114,6 +117,18 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         } else {
             return new OrderSoapIterator($this, $settings);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCarts()
+    {
+        if ($this->isExtensionInstalled()) {
+            return new CartsBridgeIterator($this, $this->settings->all());
+        }
+
+        throw new \LogicException('Could not retrieve carts via SOAP with out installed Oro Bridge module');
     }
 
     /**

@@ -14,8 +14,8 @@ connector:
                         writer:    oro_integration.writer.persistent_batch_writer
                     parameters:
                         batch_size: 100
-        # Region import jobs
-        mage_regions_import:
+        # Region import job
+        mage_region_import:
             title: "Import Magento regions via SOAP API"
             type: import
             steps:
@@ -27,7 +27,7 @@ connector:
                         writer:    oro_integration.writer.persistent_batch_writer
                     parameters:
                         batch_size: 100
-        # Magento orders import/update
+        # Order import job
         mage_order_import:
             title: "Order Import from Magento SOAP API"
             type: import
@@ -41,15 +41,15 @@ connector:
                     parameters:
                         batch_size: 100
         # Cart import job
-#        mage_cart_import:
-#            title: "Import Magento carts (quote) from Magento"
-#            type: import
-#            steps:
-#                import:
-#                    title:     import
-#                    services:
-#                        reader:    orocrm_magento.mage.cart_connector
-#                        processor: oro_importexport.processor.import_delegate
-#                        writer:    oro_importexport.writer.entity
-#                    parameters:
-#                        batch_size: 100
+        mage_cart_import:
+            title: "Import Magento carts (quote) from Magento"
+            type: import
+            steps:
+                import:
+                    title:     import
+                    services:
+                        reader:    orocrm_magento.mage.cart_connector
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    oro_importexport.writer.entity
+                    parameters:
+                        batch_size: 100

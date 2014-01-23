@@ -15,7 +15,7 @@ class CartDataConverter extends AbstractTableDataConverter
             'entity_id'           => 'originId',
             'store_id'            => 'store:originId',
             'store_code'          => 'store:code',
-            'store_name'          => 'store:name',
+            'store_storename'     => 'store:name',
             'store_website_id'    => 'store:website:originId',
             'store_website_code'  => 'store:website:code',
             'store_website_name'  => 'store:website:name',
