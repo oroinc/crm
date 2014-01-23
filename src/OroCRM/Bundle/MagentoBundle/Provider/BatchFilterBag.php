@@ -2,6 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+/**
+ * Class BatchFilterBag
+ * Magento API filter container
+ *
+ * @package OroCRM:MagentoBundle
+ */
 class BatchFilterBag
 {
     const FILTER_TYPE_SIMPLE  = 'filter';

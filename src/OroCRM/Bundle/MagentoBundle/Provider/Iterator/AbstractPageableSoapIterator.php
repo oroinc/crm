@@ -142,6 +142,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         $this->entitiesIdsBuffer = [];
         $this->current           = null;
         $this->lastSyncDate      = clone $this->lastSyncDateInitialValue;
+        $this->filter->reset();
         $this->next();
     }
 
