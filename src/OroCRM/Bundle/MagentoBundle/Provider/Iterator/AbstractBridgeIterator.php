@@ -21,12 +21,11 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator
     {
         if ($this->mode == self::IMPORT_MODE_INITIAL) {
             $dateField = 'created_at';
-            $dateKey   = 'to';
         } else {
             $dateField = 'updated_at';
-            $dateKey   = 'from';
         }
-        $this->filter->addDateFilter($dateField, $dateKey, $this->lastSyncDate);
+
+        $this->filter->addDateFilter($dateField, 'from', $this->lastSyncDate);
     }
 
     /**

@@ -2,29 +2,15 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
 
-class WebsiteSoapIteratorTest extends \PHPUnit_Framework_TestCase
+class WebsiteSoapIteratorTest extends BaseIteratorTestCase
 {
-    /** @var StoresSoapIterator */
-    protected $iterator;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject|SoapTransport */
-    protected $transport;
-
     public function setUp()
     {
-        $this->transport = $this->getMockBuilder('OroCRM\\Bundle\\MagentoBundle\\Provider\\Transport\\SoapTransport')
-            ->disableOriginalConstructor()->getMock();
+        parent::setUp();
 
         $this->iterator = new WebsiteSoapIterator($this->transport);
-    }
-
-    public function tearDown()
-    {
-        unset($this->iterator, $this->transport);
     }
 
     /**
