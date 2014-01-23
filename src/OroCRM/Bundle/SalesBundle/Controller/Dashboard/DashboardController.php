@@ -74,8 +74,6 @@ class DashboardController extends Controller
             $this->getDoctrine()
                 ->getRepository('OroCRMSalesBundle:Opportunity')
                 ->getFunnelChartData(
-                    'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
-                    'budgetAmount',
                     [
                         'qualify',
                         'develop'

@@ -4,9 +4,16 @@ namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\WorkflowBundle\Entity\Repository\WorkflowStepRepository;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 class OpportunityRepository extends EntityRepository
 {
+    /**
+     * @var WorkflowStep[]
+     */
+    protected $workflowStepsByName;
+
     /**
      * Get opportunities by state by current quarter
      *
@@ -40,10 +47,8 @@ class OpportunityRepository extends EntityRepository
     /**
      * Get funnel chart data
      *
-     * @param $entityClass
-     * @param $fieldName
      * @param array $visibleSteps
-     * @param array $additionalNozzle
+     * @param array $nozzleStatuses
      * @param AclHelper $aclHelper
      * @return array
      *   items - array of data
@@ -52,24 +57,18 @@ class OpportunityRepository extends EntityRepository
      *   nozzleSteps - array with nozzle steps labels
      */
     public function getFunnelChartData(
-        $entityClass,
-        $fieldName,
-        $visibleSteps = [],
-        $additionalNozzle = [],
+        array $visibleSteps = array(),
+        array $nozzleStatuses = array(),
         AclHelper $aclHelper = null
     ) {
-        $resultData = $this->getEntityManager()
-            ->getRepository('OroWorkflowBundle:WorkflowItem')
-            ->getFunnelChartData(
-                $entityClass,
-                $fieldName,
-                $visibleSteps,
-                $aclHelper
-            );
-        $nozzleStepsLabels = [];
+        // calculate step data by workflow steps
+        $resultData = $this->getStepResultData($visibleSteps, $aclHelper);
 
-        if (!empty($additionalNozzle)) {
-            $this->setAdditionalNozzleSteps($additionalNozzle, $aclHelper, $resultData, $nozzleStepsLabels);
+        // add data for custom nozzle statuses
+        $nozzleStatusLabels = array();
+        if ($nozzleStatuses) {
+            list($resultData, $nozzleStatusLabels)
+                = $this->addNozzleStatusData($resultData, $nozzleStatuses, $aclHelper);
         }
 
         $sum = 0;
@@ -78,16 +77,90 @@ class OpportunityRepository extends EntityRepository
         }
 
         return [
-            'items' => $sum > 0 ? $resultData : [],
-            'nozzleSteps' => $nozzleStepsLabels
+            'items' => $sum > 0 ? $resultData : array(),
+            'nozzleSteps' => $nozzleStatusLabels
         ];
+    }
+
+    /**
+     * @return WorkflowStep[]
+     */
+    protected function getWorkflowStepsByName()
+    {
+        if (null === $this->workflowStepsByName) {
+            /** @var WorkflowStepRepository $workflowStepRepository */
+            $workflowStepRepository = $this->getEntityManager()->getRepository('OroWorkflowBundle:WorkflowStep');
+            $this->workflowStepsByName = $workflowStepRepository->findByRelatedEntityByName($this->getEntityName());
+        }
+
+        return $this->workflowStepsByName;
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @return array
+     */
+    protected function getStepData(AclHelper $aclHelper = null)
+    {
+        $queryBuilder = $this->createQueryBuilder('opportunity')
+            ->select('workflowStep.name as workflowStepName', 'SUM(opportunity.budgetAmount) as budget')
+            ->join('opportunity.workflowStep', 'workflowStep')
+            ->groupBy('workflowStep.name');
+
+        if ($aclHelper) {
+            $query = $aclHelper->apply($queryBuilder);
+        } else {
+            $query = $queryBuilder->getQuery();
+        }
+
+        $stepData = [];
+        foreach ($query->getArrayResult() as $record) {
+            $stepData[$record['workflowStepName']] = $record['budget'];
+        }
+
+        return $stepData;
+    }
+
+    /**
+     * @param array $visibleSteps
+     * @param AclHelper $aclHelper
+     * @return array
+     */
+    protected function getStepResultData(array $visibleSteps = array(), AclHelper $aclHelper = null)
+    {
+        $resultData = [];
+        $stepData = $this->getStepData($aclHelper);
+        if (!empty($stepData) || !empty($visibleSteps)) {
+            $workflowSteps = $this->getWorkflowStepsByName();
+
+            if (!empty($visibleSteps)) {
+                $steps = $visibleSteps;
+            } else {
+                $steps = array_keys($workflowSteps);
+            }
+
+            foreach ($steps as $stepName) {
+                if (!array_key_exists($stepName, $workflowSteps)) {
+                    continue;
+                }
+
+                $workflowStep = $workflowSteps[$stepName];
+                $stepLabel = $workflowStep->getLabel();
+
+                if (array_key_exists($stepName, $stepData)) {
+                    $resultData[$stepLabel] = (float)$stepData[$stepName];
+                } else {
+                    $resultData[$stepLabel] = 0;
+                }
+            }
+        }
+
+        return $resultData;
     }
 
     /**
      * Get streamline funnel chart data
      *
-     * @param $entityClass
-     * @param $fieldName
      * @param AclHelper $aclHelper
      * @return array
      *   items - array of data
@@ -95,9 +168,9 @@ class OpportunityRepository extends EntityRepository
      *     value - sum of budgets
      *   nozzleSteps - array with nozzle steps labels
      */
-    public function getStreamlineFunnelChartData($entityClass, $fieldName, AclHelper $aclHelper = null)
+    public function getStreamlineFunnelChartData(AclHelper $aclHelper = null)
     {
-        $data = $this->getFunnelChartData($entityClass, $fieldName, $aclHelper);
+        $data = $this->getFunnelChartData($aclHelper);
 
         $dataKeys = array_keys($data['items']);
         for ($i = count($dataKeys) - 1; $i >= 0; $i--) {
@@ -134,16 +207,15 @@ class OpportunityRepository extends EntityRepository
     /**
      * Set additional nozzle steps data for funnel chart
      *
-     * @param $additionalNozzle
+     * @param array $resultData
+     * @param array $additionalNozzle
      * @param AclHelper $aclHelper
-     * @param $resultData
-     * @param $nozzleStepsLabels
+     * @return array
      */
-    protected function setAdditionalNozzleSteps(
-        $additionalNozzle,
-        AclHelper $aclHelper,
-        &$resultData,
-        &$nozzleStepsLabels
+    protected function addNozzleStatusData(
+        array $resultData,
+        array $additionalNozzle,
+        AclHelper $aclHelper
     ) {
         $dateEnd = new \DateTime('now', new \DateTimeZone('UTC'));
         $dateStart = new \DateTime(
@@ -161,21 +233,23 @@ class OpportunityRepository extends EntityRepository
         $qb->select('opp_status.name', 'opp_status.label', $budgetString . 'as budget')
             ->join('opp.status', 'opp_status')
             ->where($qb->expr()->between('opp.createdAt', ':dateFrom', ':dateTo'))
+            ->groupBy('opp_status.name')
             ->setParameter('dateFrom', $dateStart)
             ->setParameter('dateTo', $dateEnd);
 
-        $qb->groupBy('opp_status.name');
-
-        $states = $aclHelper->apply($qb)
+        $statuses = $aclHelper->apply($qb)
             ->getArrayResult();
 
+        $nozzleStatusLabels = [];
         foreach (array_keys($additionalNozzle) as $nozzle) {
-            foreach ($states as $state) {
+            foreach ($statuses as $state) {
                 if ($state['name'] == $nozzle) {
                     $resultData[$state['label']] = (double)$state['budget'];
-                    $nozzleStepsLabels[] = $state['label'];
+                    $nozzleStatusLabels[] = $state['label'];
                 }
             }
         }
+
+        return array($resultData, $nozzleStatusLabels);
     }
 }
