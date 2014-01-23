@@ -54,22 +54,15 @@ class BatchFilterBag
     }
 
     /**
-     * @param boolean   $isInitMode
+     * @param string    $dateField
+     * @param string    $dateKey
      * @param \DateTime $date
      * @param string    $format
      *
      * @return $this
      */
-    public function addDateFilter($isInitMode, \DateTime $date, $format = 'Y-m-d H:i:s')
+    public function addDateFilter($dateField, $dateKey, \DateTime $date, $format = 'Y-m-d H:i:s')
     {
-        if ($isInitMode) {
-            $dateField = 'created_at';
-            $dateKey   = 'to';
-        } else {
-            $dateField = 'updated_at';
-            $dateKey   = 'from';
-        }
-
         $this->addComplexFilter(
             'date',
             [
@@ -91,7 +84,16 @@ class BatchFilterBag
      */
     public function addWebsiteFilter(array $websiteIds)
     {
-        $this->addRelatedFilter('website_id', $websiteIds);
+        $this->addComplexFilter(
+            'website_id',
+            [
+                'key'   => 'website_id',
+                'value' => [
+                    'key'   => 'in',
+                    'value' => implode(',', $websiteIds)
+                ]
+            ]
+        );
 
         return $this;
     }
@@ -103,28 +105,13 @@ class BatchFilterBag
      */
     public function addStoreFilter(array $storeIds)
     {
-        $this->addRelatedFilter('store_id', $storeIds);
-
-        return $this;
-    }
-
-    /**
-     * @param string $key
-     * @param array  $itemIds
-     *
-     * @return $this
-     */
-    protected function addRelatedFilter($key, $itemIds)
-    {
-        $key = in_array($key, ['website_id', 'store_id']) ? $key : 'website_id';
-
         $this->addComplexFilter(
-            $key,
+            'store_id',
             [
-                'key'   => $key,
+                'key'   => 'store_id',
                 'value' => [
                     'key'   => 'in',
-                    'value' => implode(',', $itemIds)
+                    'value' => implode(',', $storeIds)
                 ]
             ]
         );

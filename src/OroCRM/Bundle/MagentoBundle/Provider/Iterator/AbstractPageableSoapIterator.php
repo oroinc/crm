@@ -186,7 +186,14 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         }
 
         $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
-        $this->filter->addDateFilter($initMode, $date, $format);
+        if ($initMode) {
+            $dateField = 'created_at';
+            $dateKey   = 'to';
+        } else {
+            $dateField = 'updated_at';
+            $dateKey   = 'from';
+        }
+        $this->filter->addDateFilter($dateField, $dateKey, $date, $format);
 
         $lastId = $this->getLastId();
         if (!is_null($lastId) && $initMode) {

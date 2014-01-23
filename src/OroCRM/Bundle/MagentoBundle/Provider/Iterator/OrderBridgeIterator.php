@@ -12,9 +12,7 @@ class OrderBridgeIterator extends AbstractBridgeIterator
     protected function applyFilter()
     {
         $this->filter->addStoreFilter($this->getStoresByWebsiteId($this->websiteId));
-        if ($this->mode == self::IMPORT_MODE_UPDATE) {
-            $this->filter->addDateFilter(false, $this->lastSyncDate);
-        }
+        parent::applyFilter();
     }
 
     /**
@@ -32,13 +30,6 @@ class OrderBridgeIterator extends AbstractBridgeIterator
             ]
         );
 
-        $resultIdentifiers = array_map(
-            function ($item) {
-                return (object)['increment_id' => $item->increment_id, 'entity_id' => $item->order_id];
-            },
-            $result
-        );
-
         $resultIds = array_map(
             function ($item) {
                 return $item->order_id;
@@ -47,7 +38,7 @@ class OrderBridgeIterator extends AbstractBridgeIterator
         );
         $this->entityBuffer = array_combine($resultIds, $result);
 
-        return $resultIdentifiers;
+        return $resultIds;
     }
 
     /**
