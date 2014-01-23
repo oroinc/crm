@@ -6,6 +6,6 @@ oro_dashboard_config:
             acl:   orocrm_magento_cart_view
     dashboards:
         main:
-            widgets: []
-#                my_sales_flow_b2c_chart:
-#                    position: 130
+            widgets:
+                my_sales_flow_b2c_chart:
+                    position: 130
