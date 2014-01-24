@@ -29,6 +29,42 @@ datagrid:
                 frontend_type: datetime
                 label: orocrm.contact_request.created_at.label
 
+        sorters:
+            columns:
+                name:
+                    data_name: contact_request.name
+                email:
+                    data_name: contact_request.email
+                phone:
+                    data_name: contact_request.phone
+                channelName:
+                    data_name: channel.name
+                createdAt:
+                    data_name: contact_request.createdAt
+            default:
+                createdAt: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+
+        filters:
+            columns:
+                name:
+                    type:      string
+                    data_name: contact_request.name
+                email:
+                    type:      string
+                    data_name: contact_request.email
+                phone:
+                    type:      string
+                    data_name: contact_request.phone
+                channel:
+                    type: entity
+                    data_name: channel
+                    label: orocrm.contact_request.channel_name.label
+                    options:
+                        field_options:
+                          class: OroIntegrationBundle:Channel
+                          property: name
+
+
         properties:
             id: ~
             view_link:
