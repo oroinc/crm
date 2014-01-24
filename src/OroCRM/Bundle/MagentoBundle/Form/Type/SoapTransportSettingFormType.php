@@ -59,6 +59,11 @@ class SoapTransportSettingFormType extends AbstractType
             ['label' => 'orocrm.magento.magentosoaptransport.api_key.label', 'required' => true]
         );
         $builder->add(
+            'isWsiMode',
+            'checkbox',
+            ['label' => 'orocrm.magento.magentosoaptransport.wsi_mode.label', 'required' => false]
+        );
+        $builder->add(
             'syncStartDate',
             'oro_date',
             [

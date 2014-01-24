@@ -52,6 +52,9 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /** @var bool */
     protected $isExtensionInstalled;
 
+    /** @var bool */
+    protected $isWsiMode = false;
+
     public function __construct(Mcrypt $encoder)
     {
         $this->encoder = $encoder;
@@ -64,9 +67,11 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     {
         parent::init($transportEntity);
 
+        $wsiMode = $this->settings->get('wsi_mode', false);
         $apiUser = $this->settings->get('api_user', false);
         $apiKey  = $this->settings->get('api_key', false);
         $apiKey  = $this->encoder->decryptData($apiKey);
+
 
         if (!$apiUser || !$apiKey) {
             throw new InvalidConfigurationException(
@@ -76,16 +81,37 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
 
         // revert initial state
         $this->isExtensionInstalled = null;
+        $this->isWsiMode            = $wsiMode;
+
         /** @var string sessionId returned by Magento API login method */
-        $this->sessionId = $this->client->login($apiUser, $apiKey);
+        $this->sessionId = $this->call('login', ['username' => $apiUser, 'apiKey' => $apiKey]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function call($action, array $params = [])
+    public function call($action, $params = [])
     {
-        return parent::call($action, array_merge([$this->sessionId], $params));
+        if (null !== $this->sessionId) {
+            $params = array_merge(['sessionId' => $this->sessionId], (array)$params);
+        }
+
+        if ($this->isWsiMode) {
+            $result = parent::call($action, (object) $params);
+            if (!empty($result->result)) {
+                $result = $result->result;
+
+                if (isset($result->complexObjectArray)) {
+                    $result = $result->complexObjectArray;
+                }
+            } else {
+                $result = null;
+            }
+        } else {
+            $result = parent::call($action, $params);
+        }
+
+        return $result;
     }
 
     /**
