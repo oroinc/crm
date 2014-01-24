@@ -245,10 +245,16 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
             $lastSyncDate->add($this->syncRange);
         }
 
+        if (empty($this->entitiesIdsBuffer) && $lastSyncDate >= $now) {
+            $result = null;
+        } else {
+            $result = true;
+        }
+
         //increment date for further filtering
         $this->lastSyncDate->add($this->syncRange);
 
-        return empty($this->entitiesIdsBuffer) && $lastSyncDate >= $now ? null : true;
+        return $result;
     }
 
     /**
