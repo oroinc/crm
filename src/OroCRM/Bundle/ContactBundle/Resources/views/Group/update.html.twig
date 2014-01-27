@@ -23,7 +23,7 @@
         }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
-    {{ UI.button({'path' : path('orocrm_contact_group_index'), 'title' : 'Cancel', 'label' : 'Cancel'}) }}
+    {{ UI.cancelButton(path('orocrm_contact_group_index')) }}
     {% if form.vars.value.id or resource_granted('orocrm_contact_group_update') %}
         {{ UI.saveAndStayButton() }}
     {% endif %}
