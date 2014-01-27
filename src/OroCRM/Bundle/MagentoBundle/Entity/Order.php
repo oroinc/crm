@@ -169,6 +169,20 @@ class Order extends BaseOrder
     protected $emails;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="notes", type="text", nullable=true)
+     */
+    protected $notes;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="feedback", type="text", nullable=true)
+     */
+    protected $feedback;
+
+    /**
      * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
      *
      * @var WorkflowItem
@@ -556,5 +570,41 @@ class Order extends BaseOrder
     public function getCart()
     {
         return $this->cart;
+    }
+
+    /**
+     * @param string $notes
+     * @return Order
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * @param string $feedback
+     * @return Order
+     */
+    public function setFeedback($feedback)
+    {
+        $this->feedback = $feedback;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFeedback()
+    {
+        return $this->feedback;
     }
 }

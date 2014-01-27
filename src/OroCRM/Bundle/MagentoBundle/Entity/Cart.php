@@ -203,6 +203,13 @@ class Cart extends BaseCart
     protected $emails;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="notes", type="text", nullable=true)
+     */
+    protected $notes;
+
+    /**
      * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
      *
      * @var WorkflowItem
@@ -671,6 +678,17 @@ class Cart extends BaseCart
     }
 
     /**
+     * @param Opportunity $opportunity
+     * @return Cart
+     */
+    public function setOpportunity($opportunity)
+    {
+        $this->opportunity = $opportunity;
+
+        return $this;
+    }
+
+    /**
      * @return Opportunity
      */
     public function getOpportunity()
@@ -679,13 +697,20 @@ class Cart extends BaseCart
     }
 
     /**
-     * @param Opportunity $opportunity
+     * @param string $notes
      * @return Cart
      */
-    public function setOpportunity($opportunity)
+    public function setNotes($notes)
     {
-        $this->opportunity = $opportunity;
-        
+        $this->notes = $notes;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
     }
 }

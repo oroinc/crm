@@ -93,8 +93,9 @@ workflows:
 
             # Other workflow attributes
             notes:
-                label: 'Note'
+                label: 'Notes'
                 type: string
+                property_path: cart.notes
             opportunity_name:
                 label: 'Opportunity name'
                 type: string
@@ -613,11 +614,13 @@ workflows:
 
             # Other workflow attributes
             notes:
-                label: 'Note'
+                label: 'Notes'
                 type: string
+                property_path: order.notes
             feedback:
                 label: 'Feedback'
                 type: string
+                property_path: order.feedback
             account:
                 label: 'Account'
                 type: entity

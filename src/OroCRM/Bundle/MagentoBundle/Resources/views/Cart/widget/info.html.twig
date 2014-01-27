@@ -29,6 +29,9 @@
             {% if entity.shippingAddress is not empty %}
                 {{ ui.renderProperty('orocrm.magento.cart.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
             {% endif %}
+            {% if entity.notes is not empty %}
+                {{ ui.renderProperty('orocrm.magento.cart.notes.label'|trans, entity.notes|nl2br) }}
+            {% endif %}
         </div>
     </div>
 </div>
