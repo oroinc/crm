@@ -8,11 +8,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\IntegrationBundle\Provider\ConnectorTypeInterface;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 
 use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
 class SoapController extends Controller
@@ -23,7 +23,7 @@ class SoapController extends Controller
      */
     public function checkAction(Request $request)
     {
-        $transport = $this->get('orocrm_magento.soap_transport');
+        $transport = $this->get('orocrm_magento.transport.soap_transport');
 
         /*
          * Transport setting entity should be set to form
@@ -43,24 +43,22 @@ class SoapController extends Controller
         $websites             = $allowedTypesChoices = [];
         $isExtensionInstalled = false;
         try {
-            $result = $transport->init($transportEntity->getSettingsBag());
-            if ($result) {
-                $stores   = $transport->call(StoreConnector::ACTION_STORE_LIST);
-                $websites = $this->get('orocrm_magento.converter.stores_to_website')->convert($stores);
-                $isExtensionInstalled = $transport->isExtensionAvailable();
+            $transport->init($transportEntity);
+            $websites             = $this->formatWebsiteChoices($transport->getWebsites());
+            $isExtensionInstalled = $transport->isExtensionInstalled();
 
-                $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')
-                    ->getAvailableConnectorsTypesChoiceList(
-                        'magento',
-                        function (ConnectorTypeInterface $connector) use ($isExtensionInstalled) {
-                            return $connector instanceof ExtensionAwareInterface ? $isExtensionInstalled : true;
-                        }
-                    );
-                $translator = $this->get('translator');
-                foreach ($allowedTypesChoices as $name => $val) {
-                    $allowedTypesChoices[$name] = $translator->trans($val);
-                }
+            $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')
+                ->getAvailableConnectorsTypesChoiceList(
+                    'magento',
+                    function (ConnectorInterface $connector) use ($isExtensionInstalled) {
+                        return $connector instanceof ExtensionAwareInterface ? $isExtensionInstalled : true;
+                    }
+                );
+            $translator          = $this->get('translator');
+            foreach ($allowedTypesChoices as $name => $val) {
+                $allowedTypesChoices[$name] = $translator->trans($val);
             }
+            $result = true;
         } catch (\Exception $e) {
             $result = false;
             $this->get('logger')->critical(sprintf('MageCheck error: %s: %s', $e->getCode(), $e->getMessage()));
@@ -74,5 +72,38 @@ class SoapController extends Controller
                 'connectors'           => $allowedTypesChoices,
             ]
         );
+    }
+
+    /**
+     * Example:
+     * [
+     *      WebsiteId => 'Website: WebsiteId, Stores: Store1, Store2'
+     * ]
+     *
+     * @param \Iterator $websitesSource
+     *
+     * @return array
+     */
+    protected function formatWebsiteChoices(\Iterator $websitesSource)
+    {
+        $translator = $this->get('translator');
+        $websites   = iterator_to_array($websitesSource);
+        $websites   = array_map(
+            function ($website) use ($translator) {
+                return [
+                    'id'    => $website['id'],
+                    'label' => $translator->trans(
+                        'Website ID: %websiteId%, Stores: %storesList%',
+                        [
+                            '%websiteId%'  => $website['id'],
+                            '%storesList%' => $website['name']
+                        ]
+                    )
+                ];
+            },
+            $websites
+        );
+
+        return $websites;
     }
 }

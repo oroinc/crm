@@ -139,6 +139,7 @@ orocrm:
             api_key.label:                Soap api key
             sync_start_date.label:        Sync start date
             sync_range.label:               Sync range
+            wsi_mode.label:                 WS-I Compliance
             websites.label:                 Websites
             website_id.label:               Website
             is_extension_installed.label:   Is extension installed
