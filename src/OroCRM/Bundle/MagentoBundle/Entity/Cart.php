@@ -62,6 +62,7 @@ class Cart extends BaseCart
 
     /**
      * Total items qty
+     *
      * @var integer
      *
      * @ORM\Column(name="items_qty", type="integer", options={"unsigned"=true})
@@ -70,6 +71,7 @@ class Cart extends BaseCart
 
     /**
      * Items qty
+     *
      * @var integer
      *
      * @ORM\Column(name="items_count", type="integer", options={"unsigned"=true})
@@ -165,7 +167,7 @@ class Cart extends BaseCart
 
     public function __construct()
     {
-        $this->status = new CartStatus('open');
+        $this->status    = new CartStatus('open');
         $this->cartItems = new ArrayCollection();
     }
 
@@ -217,6 +219,7 @@ class Cart extends BaseCart
     public function setCustomer(Customer $customer = null)
     {
         $this->customer = $customer;
+
         return $this;
     }
 
@@ -268,6 +271,7 @@ class Cart extends BaseCart
     public function setEmail($email)
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -287,6 +291,7 @@ class Cart extends BaseCart
     public function setItemsQty($itemsQty)
     {
         $this->itemsQty = $itemsQty;
+
         return $this;
     }
 
@@ -314,6 +319,7 @@ class Cart extends BaseCart
     public function setQuoteCurrencyCode($quoteCurrencyCode)
     {
         $this->quoteCurrencyCode = $quoteCurrencyCode;
+
         return $this;
     }
 
@@ -335,6 +341,7 @@ class Cart extends BaseCart
 
     /**
      * @param CartStatus $status
+     *
      * @return Cart
      */
     public function setStatus($status)
@@ -360,6 +367,7 @@ class Cart extends BaseCart
     public function setBaseCurrencyCode($baseCurrencyCode)
     {
         $this->baseCurrencyCode = $baseCurrencyCode;
+
         return $this;
     }
 
@@ -379,6 +387,7 @@ class Cart extends BaseCart
     public function setGiftMessage($giftMessage)
     {
         $this->giftMessage = $giftMessage;
+
         return $this;
     }
 
@@ -398,6 +407,7 @@ class Cart extends BaseCart
     public function setIsGuest($isGuest)
     {
         $this->isGuest = $isGuest;
+
         return $this;
     }
 
@@ -417,6 +427,7 @@ class Cart extends BaseCart
     public function setItemsCount($itemsCount)
     {
         $this->itemsCount = $itemsCount;
+
         return $this;
     }
 
@@ -436,6 +447,7 @@ class Cart extends BaseCart
     public function setStoreCurrencyCode($storeCurrencyCode)
     {
         $this->storeCurrencyCode = $storeCurrencyCode;
+
         return $this;
     }
 
@@ -455,6 +467,7 @@ class Cart extends BaseCart
     public function setStoreToBaseRate($storeToBaseRate)
     {
         $this->storeToBaseRate = $storeToBaseRate;
+
         return $this;
     }
 
@@ -474,6 +487,7 @@ class Cart extends BaseCart
     public function setStoreToQuoteRate($storeToQuoteRate)
     {
         $this->storeToQuoteRate = $storeToQuoteRate;
+
         return $this;
     }
 
