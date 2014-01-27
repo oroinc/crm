@@ -26,7 +26,6 @@ class CloseRevenueSumFunctionTest extends OrmQueryConverterTest
             ],
             'grouping_columns' => [],
             'filters'          => [],
-            'filters_logic'    => ''
         ];
         $doctrine         = $this->getDoctrine(
             [
