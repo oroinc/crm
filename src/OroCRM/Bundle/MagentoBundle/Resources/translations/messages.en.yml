@@ -129,6 +129,7 @@ orocrm:
             channel.label:             Channel
             opportunity.label:         Opportunity
             notes.label:               Notes
+            b2c_flow_abandoned_shopping_cart.step.label: Step
 
         magentosoaptransport:
             entity_label:        Integration Channel Transport
@@ -182,6 +183,7 @@ orocrm:
             channel.label:          Channel
             notes.label:            Notes
             feedback.label:         Feedback
+            b2c_flow_order_follow_up.step.label: Step
 
         product:
             entity_label:         Product

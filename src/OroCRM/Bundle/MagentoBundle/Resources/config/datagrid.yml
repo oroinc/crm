@@ -118,14 +118,16 @@ datagrid:
                     - c.updatedAt
                     - cw.name as websiteName
                     - cstatus.label as statusLabel
+                    - step.label as stepLabel
                 from:
-                    - { table: OroCRMMagentoBundle:Cart , alias: c }
+                    - { table: %orocrm_magento.cart.entity.class% , alias: c }
                 join:
                     left:
                         - { join: c.store, alias: cs }
                         - { join: cs.website, alias: cw }
                         - { join: c.channel, alias: ch }
                         - { join: c.status, alias: cstatus }
+                        - { join: c.workflowStep, alias: step }
                 where:
                     and:
                         - c.channel = :channelId
@@ -150,6 +152,8 @@ datagrid:
                 label: orocrm.magento.datagrid.columns.website
             statusLabel:
                 label: orocrm.magento.datagrid.columns.status
+            stepLabel:
+                label: orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
             createdAt:
                 label: orocrm.magento.cart.created_at.label
                 frontend_type: datetime
@@ -171,6 +175,7 @@ datagrid:
                 grandTotal:           { data_name: c.grandTotal }
                 websiteName:          { data_name: cw.name }
                 statusLabel:          { data_name: cstatus.label }
+                stepLabel:            { data_name: step.label }
                 createdAt:            { data_name: c.createdAt }
                 updatedAt:            { data_name: c.updatedAt }
             default:
@@ -197,6 +202,13 @@ datagrid:
                         field_options:
                             class: OroCRMMagentoBundle:CartStatus
                             property: label
+                stepLabel:
+                    type: entity
+                    data_name: c.workflowStep
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %orocrm_magento.cart.entity.class%
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt
@@ -433,8 +445,12 @@ datagrid:
             query:
                 select:
                     - o
+                    - step.label as stepLabel
                 from:
-                    - { table: OroCRMMagentoBundle:Order, alias: o }
+                    - { table: %orocrm_magento.order.entity.class%, alias: o }
+                join:
+                    left:
+                        - { join: o.workflowStep, alias: step }
                 where:
                     and:
                         - o.channel = :channelId
@@ -463,6 +479,8 @@ datagrid:
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             status:
                 label: orocrm.magento.order.status.label
+            stepLabel:
+                label: orocrm.magento.order.b2c_flow_order_follow_up.step.label
             createdAt:
                 label: orocrm.magento.order.created_at.label
                 frontend_type: datetime
@@ -483,6 +501,7 @@ datagrid:
                 shippingAmount:         { data_name: o.shippingAmount }
                 subtotalAmount:         { data_name: o.subtotalAmount }
                 status:                 { data_name: o.status }
+                stepLabel:              { data_name: step.label }
                 createdAt:              { data_name: o.createdAt }
                 updatedAt:              { data_name: o.updatedAt }
         filters:
@@ -513,6 +532,13 @@ datagrid:
                 status:
                     type:             string
                     data_name:        o.status
+                stepLabel:
+                    type: entity
+                    data_name: o.workflowStep
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %orocrm_magento.order.entity.class%
                 createdAt:
                     type:             datetime
                     data_name:        o.createdAt
