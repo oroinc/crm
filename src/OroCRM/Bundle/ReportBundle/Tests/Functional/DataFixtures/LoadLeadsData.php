@@ -141,7 +141,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
                 $lead = $this->createLead($data, $user);
                 $this->persist($this->em, $lead);
-                $this->em->flush($lead);
 
                 $this->loadSalesFlows($lead);
 
