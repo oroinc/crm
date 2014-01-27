@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\B2CMockBundle\DataFixtures\ORM;
+namespace OroCRM\Bundle\MagentoBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
