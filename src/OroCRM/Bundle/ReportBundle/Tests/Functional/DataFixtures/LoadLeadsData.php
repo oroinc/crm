@@ -1,5 +1,6 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
+
+namespace OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures;
 
 use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
@@ -140,6 +141,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
                 $lead = $this->createLead($data, $user);
                 $this->persist($this->em, $lead);
+                $this->em->flush($lead);
 
                 $this->loadSalesFlows($lead);
 
