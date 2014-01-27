@@ -15,8 +15,8 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
     {
         $filters = $this->getBatchFilter($this->lastSyncDate, [], $this->getStoresByWebsiteId($this->websiteId));
 
-        $result = $this->transport->call(SoapTransport::ACTION_ORDER_LIST, [$filters]);
-        $result = is_array($result) ? $result : [];
+        $result = $this->transport->call(SoapTransport::ACTION_ORDER_LIST, $filters);
+        $result = $this->processCollectionResponse($result);
 
         $idFieldName = $this->getIdFieldName();
         $result      = array_map(
@@ -37,7 +37,8 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
      */
     protected function getEntity($id)
     {
-        $result = $this->transport->call(SoapTransport::ACTION_ORDER_INFO, [$id->increment_id]);
+        $result = $this->transport->call(SoapTransport::ACTION_ORDER_INFO, ['orderIncrementId' => $id->increment_id]);
+        $result->items = $this->processCollectionResponse($result->items);
 
         $this->addDependencyData($result);
 

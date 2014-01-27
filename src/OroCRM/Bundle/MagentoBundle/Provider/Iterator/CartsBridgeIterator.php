@@ -22,16 +22,17 @@ class CartsBridgeIterator extends AbstractBridgeIterator
     {
         $this->applyFilter();
 
-        $result = $this->transport->call(
-            SoapTransport::ACTION_ORO_CART_LIST,
-            [
-                $this->filter->getAppliedFilters(),
-                ['page' => $this->getCurrentPage(), 'pageSize' => self::DEFAULT_PAGE_SIZE]
-            ]
-        );
+        $filters          = $this->filter->getAppliedFilters();
+        $filters['pager'] = ['page' => $this->getCurrentPage(), 'pageSize' => self::DEFAULT_PAGE_SIZE];
 
+        $result = $this->transport->call(SoapTransport::ACTION_ORO_CART_LIST, $filters);
+        $result = $this->processCollectionResponse($result);
+
+        $that      = $this;
         $resultIds = array_map(
-            function ($item) {
+            function (&$item) use ($that) {
+                $item->items = $that->processCollectionResponse($item->items);
+
                 return $item->entity_id;
             },
             $result

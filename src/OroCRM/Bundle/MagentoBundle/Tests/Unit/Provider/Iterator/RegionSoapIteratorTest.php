@@ -3,28 +3,13 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
-class RegionSoapIteratorTest extends \PHPUnit_Framework_TestCase
+class RegionSoapIteratorTest extends BaseIteratorTestCase
 {
-    /** @var RegionSoapIterator */
-    protected $iterator;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject|SoapTransport */
-    protected $transport;
-
     public function setUp()
     {
-        $this->transport = $this->getMockBuilder('OroCRM\\Bundle\\MagentoBundle\\Provider\\Transport\\SoapTransport')
-            ->disableOriginalConstructor()->getMock();
-
-        $settings       = ['start_sync_date' => new \DateTime('NOW'), 'website_id' => 0];
-        $this->iterator = new RegionSoapIterator($this->transport, $settings);
-    }
-
-    public function tearDown()
-    {
-        unset($this->iterator, $this->transport);
+        parent::setUp();
+        $this->iterator = new RegionSoapIterator($this->transport, $this->settings);
     }
 
     public function testIteration()
@@ -53,7 +38,7 @@ class RegionSoapIteratorTest extends \PHPUnit_Framework_TestCase
         $i = 1;
         foreach ($regions as $countryCode => $regionsForCountry) {
             $this->transport->expects($this->at($i))->method('call')
-                ->with($this->equalTo('directoryRegionList'), $this->equalTo([$countryCode]))
+                ->with($this->equalTo('directoryRegionList'), $this->equalTo(['country' => $countryCode]))
                 ->will($this->returnValue($regionsForCountry));
 
             $i++;

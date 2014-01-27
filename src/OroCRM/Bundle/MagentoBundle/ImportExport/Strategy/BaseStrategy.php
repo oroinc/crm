@@ -209,6 +209,10 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
                 $address->setRegion($this->regionsCache[$combinedCode]);
                 $address->setRegionText(null);
             }
+        } elseif ($address->getRegionText()) {
+            $address->setRegion(null);
+        } else {
+            throw new InvalidItemException('Unable to handle region for address', [$address]);
         }
 
         return $this;

@@ -68,9 +68,7 @@ class CustomerStrategy extends BaseStrategy
         $newEntity->getAccount()->setDefaultContact($newEntity->getContact());
 
         // validate and update context - increment counter or add validation error
-        $this->validateAndUpdateContext($newEntity);
-
-        return $newEntity;
+        return $this->validateAndUpdateContext($newEntity);
     }
 
     /**

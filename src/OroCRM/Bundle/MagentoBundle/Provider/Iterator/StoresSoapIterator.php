@@ -13,6 +13,7 @@ class StoresSoapIterator extends AbstractLoadeableSoapIterator
     {
         $data   = [];
         $result = $this->transport->call(SOAPTransport::ACTION_STORE_LIST);
+        $result = $this->processCollectionResponse($result);
 
         if (!empty($result) && is_array($result)) {
             $adminStoreData = [

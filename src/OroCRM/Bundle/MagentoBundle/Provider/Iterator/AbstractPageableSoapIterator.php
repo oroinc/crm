@@ -137,6 +137,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     {
         if (false === $this->loaded) {
             $this->dependencies = $this->getDependencies();
+            $this->loaded       = true;
         }
 
         $this->entitiesIdsBuffer = [];
@@ -301,14 +302,43 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     {
         // fill related entities data, needed to create full representation of magento store state in this time
         // flat array structure will be converted by data converter
-        $store                      = $this->dependencies[self::ALIAS_STORES][$result->store_id];
-        $website                    = $this->dependencies[self::ALIAS_WEBSITES][$store['website_id']];
+        $store   = $this->dependencies[self::ALIAS_STORES][$result->store_id];
+        $website = $this->dependencies[self::ALIAS_WEBSITES][$store['website_id']];
 
         $result->store_code         = $store['code'];
         $result->store_storename    = $store['name'];
         $result->store_website_id   = $website['id'];
         $result->store_website_code = $website['code'];
         $result->store_website_name = $website['name'];
+    }
+
+    /**
+     * Do modifications with response for collection requests
+     * Fix issues related to specific results in WSI mode
+     *
+     * @param mixed $response
+     *
+     * @return array
+     */
+    protected function processCollectionResponse($response)
+    {
+        if (!is_array($response)) {
+            if ($response && is_object($response)) {
+                // response is object, but might be empty in case when no data in WSI mode
+                $data = get_object_vars($response);
+                if (empty($data)) {
+                    $response = [];
+                } else {
+                    // single result in WSI mode
+                    $response = [$response];
+                }
+            } else {
+                // for empty results in Soap V2
+                $response = [];
+            }
+        }
+
+        return $response;
     }
 
     /**

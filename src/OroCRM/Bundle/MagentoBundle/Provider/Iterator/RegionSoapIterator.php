@@ -45,7 +45,7 @@ class RegionSoapIterator extends AbstractPageableSoapIterator
     protected function getEntityIds()
     {
         $iso2Code = $this->currentCountry['iso2_code'];
-        $result   = (array)$this->transport->call(SoapTransport::ACTION_REGION_LIST, [$iso2Code]);
+        $result   = (array)$this->transport->call(SoapTransport::ACTION_REGION_LIST, ['country' => $iso2Code]);
 
         $this->regionsBuffer = [];
         foreach ($result as $obj) {

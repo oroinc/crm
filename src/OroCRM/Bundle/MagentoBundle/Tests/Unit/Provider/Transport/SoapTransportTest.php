@@ -23,7 +23,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
     protected $settings;
 
     /** @var string */
-    protected $sessionId;
+    protected $sessionId = 'someId';
 
     /** @var string */
     protected $encryptedApiKey = 'encKey';
@@ -47,7 +47,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
 
         $this->soapClientMock = $this->getMockBuilder('\SoapClient')
             ->disableOriginalConstructor()
-            ->setMethods(['login', '__soapCall'])
+            ->setMethods(['__soapCall'])
             ->getMock();
 
         $this->settings        = new ParameterBag();
@@ -64,7 +64,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
     /**
      * Init settings bag
      */
-    protected function initSettings()
+    protected function initSettings($wsiMode = false)
     {
         $testUsername = 'apiUsername';
 
@@ -78,9 +78,14 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ->method('getSoapClient')
             ->will($this->returnValue($this->soapClientMock));
 
-        $this->soapClientMock->expects($this->once())->method('login')
-            ->with($testUsername, $this->decryptedApiKey)
-            ->will($this->returnValue($this->sessionId));
+        $params = ['username' => $testUsername, 'apiKey' => $this->decryptedApiKey];
+        $params = $wsiMode ? [(object)$params] : $params;
+
+        $result = $wsiMode ? (object)['result' => $this->sessionId] : $this->sessionId;
+
+        $this->soapClientMock->expects($this->at(0))->method('__soapCall')
+            ->with('login', $params)
+            ->will($this->returnValue($result));
     }
 
 
@@ -120,7 +125,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
 
         $this->soapClientMock->expects($this->once())
             ->method('__soapCall')
-            ->with($action, [$this->sessionId])
+            ->with($action, ['sessionId' => $this->sessionId])
             ->will($this->returnValue(true));
 
         $result = $this->transport->call($action);
@@ -155,7 +160,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
 
         $this->soapClientMock->expects($this->any())
             ->method('__soapCall')
-            ->with(SoapTransport::ACTION_PING, [$this->sessionId])
+            ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
             ->will($this->returnValue((object)['version' => $isExtensionInstalled]));
 
         $result = $this->transport->{$iteratorGetter}();
@@ -246,20 +251,20 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
     public function testIsExtensionInstalled($expectedResult, $soapResult, $throwsException = false)
     {
         $this->initSettings();
-        $this->transport->init($this->transportEntity);
 
         if ($throwsException) {
-            $this->soapClientMock->expects($this->once())
+            $this->soapClientMock->expects($this->at(1))
                 ->method('__soapCall')
-                ->with(SoapTransport::ACTION_PING, [$this->sessionId])
+                ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
                 ->will($this->throwException(new \Exception()));
         } else {
-            $this->soapClientMock->expects($this->once())
+            $this->soapClientMock->expects($this->at(1))
                 ->method('__soapCall')
-                ->with(SoapTransport::ACTION_PING, [$this->sessionId])
+                ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
                 ->will($this->returnValue($soapResult));
         }
 
+        $this->transport->init($this->transportEntity);
 
         $result1 = $this->transport->isExtensionInstalled();
         $result2 = $this->transport->isExtensionInstalled();
@@ -286,6 +291,125 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             'good result with out version'                   => [
                 false,
                 (object)[null]
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider wsiDataProvider
+     *
+     * @param mixed     $actionParams
+     * @param mixed     $expectedParams
+     * @param \stdClass $remoteResponse
+     * @param mixed     $expectedData
+     */
+    public function testWSICompatibility($actionParams, $expectedParams, $remoteResponse, $expectedData)
+    {
+        $this->settings->set('wsi_mode', true);
+        $this->initSettings(true);
+
+        $testActionName = 'testAction';
+        $this->soapClientMock->expects($this->at(1))->method('__soapCall')
+            ->with($this->equalTo($testActionName), $this->equalTo([(object)$expectedParams]))
+            ->will($this->returnValue($remoteResponse));
+
+        $this->transport->init($this->transportEntity);
+
+        $result = $this->transport->call($testActionName, $actionParams);
+        $this->assertEquals($expectedData, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function wsiDataProvider()
+    {
+        return [
+            'returns bad result'                         => [
+                [],
+                (object)['sessionId' => $this->sessionId],
+                false,
+                null
+            ],
+            'returns single object'                      => [
+                ['orderId' => 123],
+                (object)['sessionId' => $this->sessionId, 'orderId' => 123],
+                (object)['result' => (object)['entity_id' => 123, 'subtotal' => 123.32]],
+                (object)['entity_id' => 123, 'subtotal' => 123.32]
+            ],
+            'returns collection of data'                 => [
+                [],
+                (object)['sessionId' => $this->sessionId],
+                (object)[
+                    'result' => (object)[
+                            'complexObjectArray' => [
+                                (object)[
+                                    'entity_id' => 123,
+                                    'subtotal'  => 123.32
+                                ]
+                            ]
+                        ]
+                ],
+                [
+                    (object)[
+                        'entity_id' => 123,
+                        'subtotal'  => 123.32
+                    ]
+                ]
+            ],
+            'returns single object in collection action' => [
+                [],
+                (object)['sessionId' => $this->sessionId],
+                (object)[
+                    'result' => (object)[
+                            'complexObjectArray' =>
+                                (object)[
+                                    'entity_id' => 123,
+                                    'subtotal'  => 123.32
+                                ]
+
+                        ]
+                ],
+                (object)[
+                    'entity_id' => 123,
+                    'subtotal'  => 123.32
+                ]
+            ],
+            'returns single object with nested data'     => [
+                ['orderId' => 123],
+                (object)['sessionId' => $this->sessionId, 'orderId' => 123],
+                (object)[
+                    'result' => (object)[
+                            'entity_id' => 123,
+                            'subtotal'  => 123.32,
+                            'items'     => (object)[
+                                    'complexObjectArray' => [
+                                        (object)[
+                                            'parent_id' => 123,
+                                            'id'        => 12
+                                        ],
+                                        (object)[
+                                            'parent_id' => 123,
+                                            'id'        => 13
+                                        ]
+                                    ]
+                                ],
+                        ]
+                ],
+                (object)[
+                    'entity_id' => 123,
+                    'subtotal'  => 123.32,
+                    'items'     => [
+                        (object)[
+                            'parent_id' => 123,
+                            'id'        => 12
+                        ],
+                        (object)[
+                            'parent_id' => 123,
+                            'id'        => 13
+                        ]
+                    ]
+                ]
             ]
         ];
     }
