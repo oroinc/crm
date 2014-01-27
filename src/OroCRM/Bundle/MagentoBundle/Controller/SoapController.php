@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorTypeInterface;
@@ -64,13 +63,14 @@ class SoapController extends Controller
             }
         } catch (\Exception $e) {
             $result = false;
+            $this->get('logger')->critical(sprintf('MageCheck error: %s: %s', $e->getCode(), $e->getMessage()));
         }
 
         return new JsonResponse(
             [
                 'success'              => $result,
                 'websites'             => $websites,
-                'isExtensionInstalled'  => $isExtensionInstalled,
+                'isExtensionInstalled' => $isExtensionInstalled,
                 'connectors'           => $allowedTypesChoices,
             ]
         );

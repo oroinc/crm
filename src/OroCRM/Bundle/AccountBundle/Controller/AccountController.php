@@ -48,7 +48,7 @@ class AccountController extends Controller
     /**
      * Edit user form
      *
-     * @Route("/update/{id}", name="orocrm_account_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="orocrm_account_update", requirements={"id"="\d+"})
      * @Template
      * @Acl(
      *      id="orocrm_account_update",
@@ -57,7 +57,7 @@ class AccountController extends Controller
      *      class="OroCRMAccountBundle:Account"
      * )
      */
-    public function updateAction(Account $entity = null)
+    public function updateAction(Account $entity)
     {
         return $this->update($entity);
     }
