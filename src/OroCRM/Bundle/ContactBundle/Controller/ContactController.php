@@ -159,15 +159,10 @@ class ContactController extends Controller
                 $this->get('translator')->trans('orocrm.contact.controller.contact.saved.message')
             );
 
-            return $this->get('oro_ui.router')->actionRedirect(
-                array(
-                    'route'      => 'orocrm_contact_update',
-                    'parameters' => array('id' => $entity->getId()),
-                ),
-                array(
-                    'route'      => 'orocrm_contact_view',
-                    'parameters' => array('id' => $entity->getId())
-                )
+            return $this->get('oro_ui.router')->redirectAfterSave(
+                ['route' => 'orocrm_contact_update', 'parameters' => ['id' => $entity->getId()]],
+                ['route' => 'orocrm_contact_view', 'parameters' => ['id' => $entity->getId()]],
+                $entity
             );
         }
 
