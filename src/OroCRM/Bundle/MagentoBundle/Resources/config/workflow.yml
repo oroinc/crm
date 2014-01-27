@@ -4,6 +4,7 @@ workflows:
         enabled: true
         entity: OroCRM\Bundle\MagentoBundle\Entity\Cart
         entity_attribute: cart
+        start_step: open
         steps:
             open:
                 label: 'Open'
@@ -532,6 +533,7 @@ workflows:
         enabled: true
         entity: OroCRM\Bundle\MagentoBundle\Entity\Order
         entity_attribute: order
+        start_step: not_contacted
         steps:
             not_contacted:
                 label: 'Not contacted'
