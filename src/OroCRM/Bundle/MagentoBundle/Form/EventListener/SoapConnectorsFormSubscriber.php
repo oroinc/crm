@@ -9,7 +9,8 @@ use Symfony\Component\Form\FormInterface;
 
 use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\IntegrationBundle\Provider\ConnectorTypeInterface;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
+
 use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 
 class SoapConnectorsFormSubscriber implements EventSubscriberInterface
@@ -79,7 +80,7 @@ class SoapConnectorsFormSubscriber implements EventSubscriberInterface
 
             $allowedTypesChoices = $this->typeRegistry->getAvailableConnectorsTypesChoiceList(
                 'magento',
-                function (ConnectorTypeInterface $connector) use ($data) {
+                function (ConnectorInterface $connector) use ($data) {
                     return $connector instanceof ExtensionAwareInterface ? $data : true;
                 }
             );

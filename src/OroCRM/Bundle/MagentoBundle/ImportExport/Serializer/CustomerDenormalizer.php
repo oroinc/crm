@@ -4,47 +4,41 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-use Doctrine\Common\Collections\Collection;
-
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 
 class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
-    const ENTITY_NAME = 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
+    protected $importFieldsMap
+        = [
+            'customer_id' => 'origin_id',
+            'firstname'   => 'first_name',
+            'lastname'    => 'last_name',
+            'middlename'  => 'middle_name',
+            'prefix'      => 'name_prefix',
+            'suffix'      => 'name_suffix',
+            'dob'         => 'birthday',
+            'taxvat'      => 'vat',
+        ];
 
-    protected $importFieldsMap = [
-        'customer_id' => 'origin_id',
-        'firstname'   => 'first_name',
-        'lastname'    => 'last_name',
-        'middlename'  => 'middle_name',
-        'prefix'      => 'name_prefix',
-        'suffix'      => 'name_suffix',
-        'dob'         => 'birthday',
-        'taxvat'      => 'vat',
-    ];
-
-    static protected $objectFields = array(
-        'store',
-        'website',
-        'group',
-        'addresses',
-        'updatedAt',
-        'createdAt',
-        'birthday',
-    );
-
-    const GROUPS_TYPE         = 'OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup';
-    const ADDRESSES_TYPE      = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactAddress>';
-    const MAGE_ADDRESSES_TYPE = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\Address>';
+    static protected $objectFields
+        = [
+            'store',
+            'website',
+            'group',
+            'addresses',
+            'updatedAt',
+            'createdAt',
+            'birthday'
+        ];
 
     /**
      * For importing customers
@@ -110,7 +104,7 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
         $data['addresses'] = $data['contact']['addresses'];
 
         /** @var Contact $contact */
-        $contact = $this->denormalizeObject($data, 'contact', ContactNormalizer::CONTACT_TYPE, $format, $context);
+        $contact = $this->denormalizeObject($data, 'contact', ContactNormalizer::CONTACT_TYPE);
 
         /** @var Account $account */
         $account = $this->denormalizeObject(
@@ -123,11 +117,11 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
         unset($data['account']);
 
         /** @var Website $website */
-        $website = $this->denormalizeObject($data, 'website', StoreConnector::WEBSITE_TYPE, $format, $context);
+        $website = $this->denormalizeObject($data, 'website', MagentoConnectorInterface::WEBSITE_TYPE);
         $website->setChannel($object->getChannel());
 
         /** @var Store $store */
-        $store = $this->denormalizeObject($data, 'store', StoreConnector::STORE_TYPE, $format, $context);
+        $store = $this->denormalizeObject($data, 'store', MagentoConnectorInterface::STORE_TYPE);
         $store->setWebsite($website);
         $store->setChannel($object->getChannel());
 
@@ -143,7 +137,7 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
             );
         }
 
-        $group = $this->denormalizeObject($data, 'group', static::GROUPS_TYPE, $format, $context);
+        $group = $this->denormalizeObject($data, 'group', MagentoConnectorInterface::CUSTOMER_GROUPS_TYPE);
         $group->setChannel($object->getChannel());
 
         $object
@@ -171,29 +165,11 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
                 )
             );
 
-        $addresses = $this->denormalizeObject($data, 'addresses', static::MAGE_ADDRESSES_TYPE, $format, $context);
+        $addresses = $this->denormalizeObject($data, 'addresses', MagentoConnectorInterface::CUSTOMER_ADDRESSES_TYPE);
         if (!empty($addresses)) {
             $object->resetAddresses($addresses);
         }
     }
-
-    /**
-     * @param       $collection
-     * @param mixed $format
-     * @param array $context
-     *
-     * @return mixed
-     */
-    protected function normalizeCollection($collection, $format = null, array $context = array())
-    {
-        $result = array();
-        if ($collection instanceof Collection && !$collection->isEmpty()) {
-            $result = $this->serializer->normalize($collection, $format, $context);
-        }
-
-        return $result;
-    }
-
 
     /**
      * @param $data
@@ -286,7 +262,7 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
             'updatedAt' => 'updated',
             'postcode'  => 'postalCode'
         ];
-        $namesMap = [
+        $namesMap         = [
             'firstname'  => 'first_name',
             'lastname'   => 'last_name',
             'middlename' => 'middle_name',
@@ -356,7 +332,7 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && $type == self::ENTITY_NAME;
+        return is_array($data) && $type == MagentoConnectorInterface::CUSTOMER_TYPE;
     }
 
     /**
