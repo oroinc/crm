@@ -72,7 +72,6 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         $apiKey  = $this->settings->get('api_key', false);
         $apiKey  = $this->encoder->decryptData($apiKey);
 
-
         if (!$apiUser || !$apiKey) {
             throw new InvalidConfigurationException(
                 "Magento SOAP transport require 'api_key' and 'api_user' settings to be defined."
@@ -97,18 +96,46 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         }
 
         if ($this->isWsiMode) {
-            $result = parent::call($action, (object) $params);
-            if (!empty($result->result)) {
-                $result = $result->result;
-
-                if (isset($result->complexObjectArray)) {
-                    $result = $result->complexObjectArray;
-                }
-            } else {
-                $result = null;
-            }
+            $result = parent::call($action, [(object) $params]);
+            $result = $this->parseWSIResponse($result);
         } else {
             $result = parent::call($action, $params);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Parse WSI response and nested data
+     *
+     * @param mixed $result
+     * @param bool  $defaultNull if not found in result node return null
+     *
+     * @return null
+     */
+    protected function parseWSIResponse($result, $defaultNull = true)
+    {
+        if (is_object($result)) {
+            if (!empty($result->result)) {
+                $result = $result->result;
+            }
+
+            if (isset($result->complexObjectArray)) {
+                $result = $result->complexObjectArray;
+            }
+
+            $objectArray = is_array($result) ? $result : [$result];
+            foreach ($objectArray as $singleObject) {
+                if (is_object($singleObject)) {
+                    $vars = get_object_vars($singleObject);
+
+                    foreach ($vars as $var => $value) {
+                        $singleObject->$var = $this->parseWSIResponse($singleObject->$var, false);
+                    }
+                }
+            }
+        } elseif ($defaultNull) {
+            $result = null;
         }
 
         return $result;
@@ -128,7 +155,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
             }
         }
 
-        return $this->isExtensionInstalled;
+        return false; //$this->isExtensionInstalled;
     }
 
     /**

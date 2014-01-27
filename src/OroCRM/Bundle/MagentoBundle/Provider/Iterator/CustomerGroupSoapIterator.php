@@ -12,7 +12,7 @@ class CustomerGroupSoapIterator extends AbstractLoadeableSoapIterator
     protected function getData()
     {
         $result = $this->transport->call(SoapTransport::ACTION_GROUP_LIST);
-        $result = is_array($result) ? $result : [];
+        $result = $this->processCollectionResponse($result);
 
         $data = [];
         foreach ($result as $group) {

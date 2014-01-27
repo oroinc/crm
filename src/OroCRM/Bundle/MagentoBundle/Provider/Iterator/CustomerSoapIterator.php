@@ -15,8 +15,8 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
     {
         $filters = $this->getBatchFilter($this->lastSyncDate, [$this->websiteId]);
 
-        $result = $this->transport->call(SoapTransport::ACTION_CUSTOMER_LIST, [$filters]);
-        $result = is_array($result) ? $result : [];
+        $result = $this->transport->call(SoapTransport::ACTION_CUSTOMER_LIST, $filters);
+        $result = $this->processCollectionResponse($result);
 
         $result = array_map(
             function ($item) {
@@ -33,7 +33,7 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
      */
     protected function getEntity($id)
     {
-        $result = $this->transport->call(SoapTransport::ACTION_CUSTOMER_INFO, [$id]);
+        $result = $this->transport->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $id]);
 
         $result->addresses = $this->getCustomerAddressData($id);
         foreach ($result->addresses as $key => $val) {
@@ -80,6 +80,9 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
      */
     public function getCustomerAddressData($customerId)
     {
-        return $this->transport->call(SoapTransport::ACTION_ADDRESS_LIST, [$customerId]);
+        $result = $this->transport->call(SoapTransport::ACTION_ADDRESS_LIST, ['customerId' => $customerId]);
+        $result = $this->processCollectionResponse($result);
+
+        return $result;
     }
 }

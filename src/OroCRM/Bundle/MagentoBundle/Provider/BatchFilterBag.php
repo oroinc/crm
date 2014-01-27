@@ -28,7 +28,16 @@ class BatchFilterBag
      */
     public function getAppliedFilters()
     {
-        return $this->filters;
+        $filters = [];
+
+        if (!empty($this->filters[self::FILTER_TYPE_SIMPLE])) {
+            $filters[self::FILTER_TYPE_SIMPLE] = array_values($this->filters[self::FILTER_TYPE_SIMPLE]);
+        }
+        if (!empty($this->filters[self::FILTER_TYPE_COMPLEX])) {
+            $filters[self::FILTER_TYPE_COMPLEX] = array_values($this->filters[self::FILTER_TYPE_COMPLEX]);
+        }
+
+        return ['filters' => $filters];
     }
 
     /**
