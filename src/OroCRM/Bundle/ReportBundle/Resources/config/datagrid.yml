@@ -21,7 +21,7 @@ datagrid:
                 groupBy:  a.id
         columns:
             name:   { label: orocrm.report.datagrid.columns.account_name }
-            value:  { label: orocrm.report.datagrid.columns.total_value,  frontend_type: decimal }
+            value:  { label: orocrm.report.datagrid.columns.total_value,  frontend_type: currency }
         properties:
             id: ~
         totals:
@@ -30,7 +30,7 @@ datagrid:
                     label: 'Total'
                 value:
                     query: SUM( o.closeRevenue )
-                    formatter: decimal
+                    formatter: currency
         sorters:
             columns:
                 name:   { data_name: a.name }
@@ -238,6 +238,14 @@ datagrid:
                     filter_by_having: true
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                workflowName:
+                    type: entity
+                    label: orocrm.report.datagrid.columns.workflow
+                    data_name: wi.workflowName
+                    options:
+                        field_options:
+                            class: OroWorkflowBundle:WorkflowDefinition
+                            property: label
         options:
             entityHint: report data
             export: true
@@ -287,11 +295,12 @@ datagrid:
                     query: COUNT( o.id )
                 value:
                     query: SUM( o.closeRevenue )
+                    formatter: currency
 
         columns:
             period:    { label: orocrm.report.datagrid.columns.period }
             cnt:       { label: orocrm.report.datagrid.columns.number_won, frontend_type: integer }
-            value:     { label: orocrm.report.datagrid.columns.total_value, forntend_type: decimal }
+            value:     { label: orocrm.report.datagrid.columns.total_value, frontend_type: currency }
         sorters:
             columns:
                 period:     { data_name: period }
