@@ -155,7 +155,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
             }
         }
 
-        return false; //$this->isExtensionInstalled;
+        return $this->isExtensionInstalled;
     }
 
     /**

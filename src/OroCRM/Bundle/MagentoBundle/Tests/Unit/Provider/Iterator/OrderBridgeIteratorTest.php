@@ -43,9 +43,9 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
             ->will($this->returnValue([]));
 
         $orders = [
-            array_merge((array)$orderArray[0], $storeData),
-            array_merge((array)$orderArray[1], $storeData),
-            array_merge((array)$orderArray[2], $storeData),
+            array_merge((array)$orderArray[0], $storeData, ['items' => []]),
+            array_merge((array)$orderArray[1], $storeData, ['items' => []]),
+            array_merge((array)$orderArray[2], $storeData, ['items' => []]),
         ];
 
         $this->assertEquals(
@@ -77,9 +77,24 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
         return [
             'one test case' => [
                 [
-                    (object)['order_id' => 1, 'total' => 12.5, 'store_id' => 0, 'store_name' => 'admin'],
-                    (object)['order_id' => 2, 'total' => 132,  'store_id' => 0, 'store_name' => 'admin'],
-                    (object)['order_id' => 3, 'total' => 86,   'store_id' => 0, 'store_name' => 'admin']
+                    (object)['order_id'   => 1,
+                             'total'      => 12.5,
+                             'store_id'   => 0,
+                             'store_name' => 'admin',
+                             'items'      => (object)[]
+                    ],
+                    (object)['order_id'   => 2,
+                             'total'      => 132,
+                             'store_id'   => 0,
+                             'store_name' => 'admin',
+                             'items'      => (object)[]
+                    ],
+                    (object)['order_id'   => 3,
+                             'total'      => 86,
+                             'store_id'   => 0,
+                             'store_name' => 'admin',
+                             'items'      => (object)[]
+                    ]
                 ],
                 [
                     'store_code'         => 'admin',

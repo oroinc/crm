@@ -70,6 +70,7 @@ class CustomerBridgeIteratorTest extends BaseIteratorTestCase
                         'store_name'  => 'admin',
                         'group_id'    => 0,
                         'website_id'  => 0,
+                        'addresses'   => [],
                     ],
                     (object)[
                         'customer_id' => 2,
@@ -78,6 +79,7 @@ class CustomerBridgeIteratorTest extends BaseIteratorTestCase
                         'store_name'  => 'admin',
                         'group_id'    => 0,
                         'website_id'  => 0,
+                        'addresses'   => [],
                     ],
                     (object)[
                         'customer_id' => 3,
@@ -86,6 +88,7 @@ class CustomerBridgeIteratorTest extends BaseIteratorTestCase
                         'store_name'  => 'admin',
                         'group_id'    => 0,
                         'website_id'  => 0,
+                        'addresses'   => [],
                     ]
                 ],
                 // $storeData
