@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block navButtons %}
-    {% if form.vars.value.id and resource_granted('orocrm_sales_lead_delete', form.vars.value) %}
+    {% if form.vars.value.id and resource_granted('DELETE', form.vars.value) %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_api_delete_lead', {'id': form.vars.value.id}),
             'dataRedirect': path('orocrm_sales_lead_index'),
