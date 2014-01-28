@@ -38,7 +38,10 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
      */
     public function getDependencies()
     {
-        return ['OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadBusinessUnitData'];
+        return [
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadGroupData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadBusinessUnitData'
+        ];
     }
 
     public function setContainer(ContainerInterface $container = null)
