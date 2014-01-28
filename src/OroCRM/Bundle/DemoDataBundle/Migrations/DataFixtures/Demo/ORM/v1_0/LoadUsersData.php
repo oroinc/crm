@@ -18,6 +18,7 @@ use Oro\Bundle\TagBundle\Entity\TagManager;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
+use Oro\Bundle\UserBundle\Migrations\DataFixtures\ORM\v1_0\LoadRolesData;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -65,7 +66,9 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
         }
 
         $this->userManager = $this->container->get('oro_user.manager');
-        $this->role = $this->em->getRepository('OroUserBundle:Role')->findOneBy(array('role' => 'ROLE_MANAGER'));
+        $this->role = $this->em->getRepository('OroUserBundle:Role')->findOneBy(
+            array('role' => LoadRolesData::ROLE_MANAGER)
+        );
     }
 
     /**

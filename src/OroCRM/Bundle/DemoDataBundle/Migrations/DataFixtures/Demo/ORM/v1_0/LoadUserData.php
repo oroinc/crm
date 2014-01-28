@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\DataAuditBundle\Tests\Unit\Fixture\Repository\UserRepository;
 use Oro\Bundle\TagBundle\Entity\TagManager;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
+use Oro\Bundle\UserBundle\Migrations\DataFixtures\ORM\v1_0\LoadRolesData;
 
 class LoadUserData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -55,9 +56,9 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
     public function load(ObjectManager $manager)
     {
         /** @var \Oro\Bundle\UserBundle\Entity\Role $marketingRole */
-        $marketingRole = $this->roles->findOneBy(array('role' => 'ROLE_MANAGER'));
+        $marketingRole = $this->roles->findOneBy(array('role' => LoadRolesData::ROLE_MANAGER));
         /** @var \Oro\Bundle\UserBundle\Entity\Role $saleRole */
-        $saleRole = $this->roles->findOneBy(array('role' => 'ROLE_MANAGER'));
+        $saleRole = $this->roles->findOneBy(array('role' => LoadRolesData::ROLE_MANAGER));
         /** @var \Oro\Bundle\UserBundle\Entity\Group $salesGroup */
         $salesGroup = $this->group->findOneBy(array('name' => 'Executive Sales'));
         /** @var \Oro\Bundle\UserBundle\Entity\Group $marketingGroup */
