@@ -1,8 +1,8 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\Calendar;
+namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
@@ -16,7 +16,7 @@ use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
+class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
     /** @var ContainerInterface */
     private $container;
@@ -26,14 +26,6 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
 
     /** @var CalendarRepository */
     protected $calendar;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDependencies()
-    {
-        return ['OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadUsersData'];
-    }
 
     public function setContainer(ContainerInterface $container = null)
     {
@@ -239,5 +231,10 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     private function flush($manager)
     {
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 300;
     }
 }

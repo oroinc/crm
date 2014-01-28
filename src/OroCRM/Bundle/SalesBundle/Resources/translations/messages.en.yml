@@ -22,6 +22,9 @@ orocrm:
             lead.saved.message: "Lead saved"
             opportunity.saved.message: "Opportunity saved"
 
+        form:
+            choose_opportunity: 'Choose an opportunity....'
+
         #
         # OroCRM/Bundle/SalesBundle/Entity/LeadStatus.php
         #
@@ -64,6 +67,7 @@ orocrm:
             owner.label:          Owner
             notes.label:          Notes
             lead.label:           Lead
+            b2b_flow_sales.step.label: Step
 
             datagrid:
                 view: View
@@ -110,6 +114,8 @@ orocrm:
             extend_source.label:  Source
             notes.label:          Notes
             opportunities.label:  Opportunities
+            workflow_item.label:  Workflow Item
+            workflow_step.label:  Workflow Step
 
             datagrid:
                 country: Country

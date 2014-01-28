@@ -1,10 +1,4 @@
 orocrm:
-    query_designer:
-        aggregates:
-            opportunity_by_workflow_item_close_revenue:
-                ClosedCloseRevenueSum:
-                    name: Sum (Closed)
-                    hint: Sum of all values for closed workflow items
     report:
         datagrid:
             columns:
@@ -16,7 +10,7 @@ orocrm:
                 period:            Period
                 number_won:        Number won
                 step:              Step
-                nof_opportunities: Number of opportunities
+                number_of_opportunities: Number of opportunities
                 close_revenue:     Close Revenue
                 budget_amount:     Budget Amount
                 workflow:          Workflow

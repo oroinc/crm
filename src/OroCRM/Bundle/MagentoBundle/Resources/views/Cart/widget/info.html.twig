@@ -10,6 +10,16 @@
             {{ ui.renderProperty('orocrm.magento.cart.status.label'|trans, entity.status|trans) }}
             {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.store.website.name) }}
             {{ ui.renderProperty('orocrm.magento.cart.store.label'|trans, entity.store.name|nl2br) }}
+
+            {% if entity.opportunity %}
+                {%- if entity.opportunity and resource_granted('VIEW', entity.opportunity) -%}
+                    {% set opportunityView = ui.renderUrl(path('orocrm_sales_opportunity_view', {'id': entity.opportunity.id}), entity.opportunity.name) %}
+                {%- else -%}
+                    {% set opportunityView = entity.opportunity.name %}
+                {%- endif -%}
+
+                {{ ui.renderProperty('orocrm.magento.cart.opportunity.label'|trans, opportunityView) }}
+            {% endif %}
         </div>
 
         <div class="responsive-block">
@@ -18,6 +28,9 @@
             {% endif %}
             {% if entity.shippingAddress is not empty %}
                 {{ ui.renderProperty('orocrm.magento.cart.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
+            {% endif %}
+            {% if entity.notes is not empty %}
+                {{ ui.renderProperty('orocrm.magento.cart.notes.label'|trans, entity.notes|nl2br) }}
             {% endif %}
         </div>
     </div>

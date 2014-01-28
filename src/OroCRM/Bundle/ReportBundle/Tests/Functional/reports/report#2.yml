@@ -12,12 +12,11 @@ request:
                 {"name":"opportunities+OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity::name","label":"Opportunity name","func":null,"sorting":""},
                 {"name":"status+OroCRM\\Bundle\\SalesBundle\\Entity\\LeadStatus::label","label":"Label","func":null,"sorting":""},
                 {"name":"contact+OroCRM\\Bundle\\ContactBundle\\Entity\\Contact::emails+OroCRM\\Bundle\\ContactBundle\\Entity\\ContactEmail::email",
-                "label":"Email","func":null,"sorting":""}],"grouping_columns":[],"filters":[],"filters_logic":""}
+                "label":"Email","func":null,"sorting":""}],"grouping_columns":[],"filters":[]}
         oro_report_form[description]: ""
         oro_report_form[entity]: OroCRM\Bundle\SalesBundle\Entity\Lead
         oro_report_form[filter][columnName]: ""
         oro_report_form[filter][criterion]: ""
-        oro_report_form[filters_logic]: ""
         oro_report_form[name]: "leads by account"
         oro_report_form[type]: TABLE
 response:
