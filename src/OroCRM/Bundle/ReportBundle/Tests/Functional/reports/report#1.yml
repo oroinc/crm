@@ -11,13 +11,11 @@ request:
                 {"name":"owner+Oro\\Bundle\\OrganizationBundle\\Entity\\BusinessUnit::name","label":"Name","func":null,"sorting":""},
                 {"name":"roles+Oro\\Bundle\\UserBundle\\Entity\\Role::role","label":"Role","func":null,"sorting":""},
                 {"name":"email","label":"Email","func":null,"sorting":"DESC"}],"grouping_columns":[],
-                "filters":[{"columnName":"username","criterion":{"filter":"string","data":{"value":"admin","type":"1"}}}],
-                "filters_logic":"1"}
+                "filters":[{"columnName":"username","criterion":{"filter":"string","data":{"value":"admin","type":"1"}}}]}
         oro_report_form[description]: ""
         oro_report_form[entity]: Oro\Bundle\UserBundle\Entity\User
         oro_report_form[filter][columnName]: ""
         oro_report_form[filter][criterion]: ""
-        oro_report_form[filters_logic]: 1
         oro_report_form[name]: Admin
         oro_report_form[type]: TABLE
 response:
