@@ -2,19 +2,20 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\TypedAddressNormalizer;
+
+use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class MagentoAddressNormalizer extends TypedAddressNormalizer
 {
-    const ADDRESS_TYPE = 'OroCRM\Bundle\MagentoBundle\Entity\Address';
-
     /**
      * @param mixed  $data
      * @param string $class
      * @param mixed  $format
      * @param array  $context
      *
-     * @return TypedAddressNormalizer
+     * @return AbstractTypedAddress
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
@@ -33,6 +34,6 @@ class MagentoAddressNormalizer extends TypedAddressNormalizer
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && class_exists($type) && static::ADDRESS_TYPE == $type;
+        return is_array($data) && class_exists($type) && MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE == $type;
     }
 }

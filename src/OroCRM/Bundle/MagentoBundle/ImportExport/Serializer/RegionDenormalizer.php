@@ -5,11 +5,10 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
+use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
-    const TYPE = 'OroCRM\Bundle\MagentoBundle\Entity\Region';
-
     /**
      * For importing regions
      *
@@ -18,7 +17,7 @@ class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInter
      * @param null   $format
      * @param array  $context
      *
-     * @return object|Region
+     * @return bool|Region
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
@@ -26,7 +25,8 @@ class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInter
             return false;
         }
 
-        $className    = self::TYPE;
+        /** @var Region $resultObject */
+        $className    = MagentoConnectorInterface::REGION_TYPE;
         $resultObject = new $className();
 
         if (isset($data['region_id'])) {
@@ -42,6 +42,7 @@ class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInter
             $resultObject->setCountryCode($data['countryCode']);
         }
 
+        // magento can bring empty name, region will be skipped in strategy
         if (isset($data['name'])) {
             $resultObject->setName($data['name']);
         }
@@ -60,6 +61,6 @@ class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInter
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && $type == self::TYPE;
+        return is_array($data) && $type == MagentoConnectorInterface::REGION_TYPE;
     }
 }

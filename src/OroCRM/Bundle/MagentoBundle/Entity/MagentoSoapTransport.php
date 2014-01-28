@@ -80,6 +80,13 @@ class MagentoSoapTransport extends Transport
      */
     protected $isExtensionInstalled = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_wsi_mode", type="boolean")
+     */
+    protected $isWsiMode = false;
+
     public function __construct()
     {
         $this->setSyncStartDate(new \DateTime('2007-01-01', new \DateTimeZone('UTC')));
@@ -246,6 +253,26 @@ class MagentoSoapTransport extends Transport
     }
 
     /**
+     * @param boolean $isWsiMode
+     *
+     * @return $this
+     */
+    public function setIsWsiMode($isWsiMode)
+    {
+        $this->isWsiMode = $isWsiMode;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsWsiMode()
+    {
+        return $this->isWsiMode;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSettingsBag()
@@ -256,6 +283,7 @@ class MagentoSoapTransport extends Transport
                 'api_key'         => $this->getApiKey(),
                 'wsdl_url'        => $this->getWsdlUrl(),
                 'sync_range'      => $this->getSyncRange(),
+                'wsi_mode'        => $this->getIsWsiMode(),
                 'website_id'      => $this->getWebsiteId(),
                 'start_sync_date' => $this->getSyncStartDate(),
             ]

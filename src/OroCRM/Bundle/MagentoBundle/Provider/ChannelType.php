@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use Oro\Bundle\IntegrationBundle\Provider\ChannelTypeInterface;
+use Oro\Bundle\IntegrationBundle\Provider\ChannelInterface;
 
-class ChannelType implements ChannelTypeInterface
+class ChannelType implements ChannelInterface
 {
     const TYPE = 'magento';
 

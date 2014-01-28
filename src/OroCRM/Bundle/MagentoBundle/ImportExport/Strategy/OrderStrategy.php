@@ -9,6 +9,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
+use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class OrderStrategy extends BaseStrategy
 {
@@ -72,11 +73,14 @@ class OrderStrategy extends BaseStrategy
         $criteria = ['originId' => $customerId, 'channel' => $entity->getChannel()];
 
         /** @var Customer|null $customer */
-        $customer = $this->getEntityByCriteria($criteria, CustomerStrategy::ENTITY_NAME);
+        $customer = $this->getEntityByCriteria($criteria, MagentoConnectorInterface::CUSTOMER_TYPE);
         $entity->setCustomer($customer);
     }
 
     /**
+     * If cart exists then add relation to it,
+     * do nothing otherwise
+     *
      * @param Order $entity
      */
     protected function processCart(Order $entity)
@@ -88,20 +92,18 @@ class OrderStrategy extends BaseStrategy
 
         $criteria = ['originId' => $cartId, 'channel' => $entity->getChannel()];
 
-        /** @var Cart $cart */
-        $cart = $this->getEntityByCriteria($criteria, CartStrategy::ENTITY_NAME);
+        /** @var Cart|null $cart */
+        $cart = $this->getEntityByCriteria($criteria, MagentoConnectorInterface::CART_TYPE);
 
         if ($cart) {
-            $statusClass = 'OroCRMMagentoBundle:CartStatus';
+            $statusClass     = 'OroCRMMagentoBundle:CartStatus';
             $convertedStatus = $this->strategyHelper->getEntityManager($statusClass)->find($statusClass, 'converted');
             if ($convertedStatus) {
                 $cart->setStatus($convertedStatus);
             }
-
-            $entity->setCart($cart);
-        } else {
-            $entity->setCart(null);
         }
+
+        $entity->setCart($cart);
     }
 
     /**

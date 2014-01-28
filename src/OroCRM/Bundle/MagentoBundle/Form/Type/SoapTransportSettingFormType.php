@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Oro\Bundle\IntegrationBundle\Provider\TransportTypeInterface;
+use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 
@@ -17,7 +17,7 @@ class SoapTransportSettingFormType extends AbstractType
 {
     const NAME = 'orocrm_magento_soap_transport_setting_form_type';
 
-    /** @var TransportTypeInterface */
+    /** @var TransportInterface */
     protected $transport;
 
     /** @var SoapSettingsFormSubscriber */
@@ -27,7 +27,7 @@ class SoapTransportSettingFormType extends AbstractType
     protected $registry;
 
     public function __construct(
-        TransportTypeInterface $transport,
+        TransportInterface $transport,
         SoapSettingsFormSubscriber $subscriber,
         TypesRegistry $registry
     ) {
@@ -59,6 +59,11 @@ class SoapTransportSettingFormType extends AbstractType
             ['label' => 'orocrm.magento.magentosoaptransport.api_key.label', 'required' => true]
         );
         $builder->add(
+            'isWsiMode',
+            'checkbox',
+            ['label' => 'orocrm.magento.magentosoaptransport.wsi_mode.label', 'required' => false]
+        );
+        $builder->add(
             'syncStartDate',
             'oro_date',
             [
@@ -80,7 +85,7 @@ class SoapTransportSettingFormType extends AbstractType
         );
         $builder->add(
             $builder->create('websites', 'hidden')
-                    ->addViewTransformer(new ArrayToJsonTransformer())
+                ->addViewTransformer(new ArrayToJsonTransformer())
         );
         $builder->add(
             $builder
