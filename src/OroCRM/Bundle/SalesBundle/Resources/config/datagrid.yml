@@ -14,6 +14,7 @@ datagrid:
                     - o.probability
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
                     - status.label as statusLabel
+                    - step.label as stepLabel
                     - email.email as primaryEmail
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: o }
@@ -21,6 +22,7 @@ datagrid:
                     left:
                         - { join: o.contact , alias: contact }
                         - { join: o.status, alias: status }
+                        - { join: o.workflowStep, alias: step }
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
         columns:
             name:
@@ -35,6 +37,8 @@ datagrid:
                 frontend_type: percent
             statusLabel:
                 label: orocrm.sales.opportunity.status.label
+            stepLabel:
+                label: orocrm.sales.opportunity.b2b_flow_sales.step.label
             primaryEmail:
                 label: orocrm.contact.email.label
         properties:
@@ -63,6 +67,8 @@ datagrid:
                     data_name: o.probability
                 statusLabel:
                     data_name: status.label
+                stepLabel:
+                    data_name: step.label
                 primaryEmail:
                     data_name: email.email
         filters:
@@ -87,6 +93,13 @@ datagrid:
                         field_options:
                             class: OroCRMSalesBundle:OpportunityStatus
                             property: label
+                stepLabel:
+                    type: entity
+                    data_name: o.workflowStep
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %orocrm_sales.opportunity.class%
                 primaryEmail:
                     type: string
                     data_name: email.email
@@ -111,6 +124,7 @@ datagrid:
                 label:         orocrm.sales.opportunity.datagrid.delete
                 icon:          trash
                 link:          delete_link
+
     sales-lead-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
         options:

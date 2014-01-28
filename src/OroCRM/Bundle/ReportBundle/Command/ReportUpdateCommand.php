@@ -43,32 +43,9 @@ class ReportUpdateCommand extends ContainerAwareCommand implements CronCommandIn
     {
         $output->writeln($this->getDescription());
 
-        $data = $this->getData();
-        $this->importData('orocrm_report_opportunity_workflow_item', $data);
-
+        // place for custom report logic
 
         $output->writeln('Completed');
-    }
-
-    /**
-     * Get ids
-     */
-    protected function getData()
-    {
-        $query = "SELECT op.id as opportunity_id, wfbe.workflow_item_id FROM oro_workflow_bind_entity as wfbe
-          LEFT JOIN orocrm_sales_opportunity op ON op.id = wfbe.entity_id
-          WHERE entity_class = 'OroCRM\\\Bundle\\\SalesBundle\\\Entity\\\Opportunity'
-        ";
-
-        $conn = $this->getConn();
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-
-        $data = $stmt->fetchAll(Query::HYDRATE_ARRAY);
-
-        $stmt->closeCursor();
-
-        return $data;
     }
 
     /**
