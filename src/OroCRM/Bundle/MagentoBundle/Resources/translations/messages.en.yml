@@ -95,9 +95,9 @@ orocrm:
             channel.label:       Channel
 
         cart:
-            entity_label:         Cart
-            entity_plural_label:  Carts
-            entity_description:   Represent magento cart
+            entity_label:         Shopping Cart
+            entity_plural_label:  Shopping Carts
+            entity_description:   Represent magento shopping cart
 
             id.label:                  Id
             origin_id.label:           Origin Id
@@ -127,6 +127,9 @@ orocrm:
             shipping_address.label:    Shipping address
             billing_address.label:     Billing address
             channel.label:             Channel
+            opportunity.label:         Opportunity
+            notes.label:               Notes
+            b2c_flow_abandoned_shopping_cart.step.label: Step
 
         magentosoaptransport:
             entity_label:        Integration Channel Transport
@@ -179,6 +182,9 @@ orocrm:
             is_virtual.label:       Is virtual
             is_guest.label:         Is guest
             channel.label:          Channel
+            notes.label:            Notes
+            feedback.label:         Feedback
+            b2c_flow_order_follow_up.step.label: Step
 
         product:
             entity_label:         Product

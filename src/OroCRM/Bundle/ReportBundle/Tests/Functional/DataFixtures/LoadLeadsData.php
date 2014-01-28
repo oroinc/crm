@@ -1,7 +1,9 @@
 <?php
-namespace OroCRM\Bundle\ReportBundle\Tests;
+
+namespace OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures;
 
 use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -29,7 +31,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
-    const FLUSH_MAX = 5;
+    const FLUSH_MAX = 50;
 
     /**
      * @var ContainerInterface
@@ -46,7 +48,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
      */
     protected $countries;
 
-    /** @var  WorkflowManager */
+    /** @var WorkflowManager */
     protected $workflowManager;
 
     /** @var  EntityManager */
@@ -107,7 +109,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
         foreach ($leads as $lead) {
             /** @var Lead $lead */
-            $source = $sources[rand(0, $randomSource)];
+            $source = $sources[mt_rand(0, $randomSource)];
             $optionSetRelation = new OptionSetRelation();
             $optionSetRelation->setData(
                 null,
@@ -129,77 +131,93 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 //read headers
                 $headers = $data;
             }
-            $randomUser = count($this->users)-1;
+            $randomUser = count($this->users) - 1;
             $i = 0;
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-                $user = $this->users[rand(0, $randomUser)];
+                $user = $this->users[mt_rand(0, $randomUser)];
                 $this->setSecurityContext($user);
 
                 $data = array_combine($headers, array_values($data));
 
                 $lead = $this->createLead($data, $user);
-
                 $this->persist($this->em, $lead);
 
-                $workFlow = $this->workflowManager->startWorkflow(
-                    'b2b_flow_lead',
-                    $lead,
-                    'qualify',
-                    array(
-                        'opportunity_name' => $lead->getName(),
-                        'company_name' => $lead->getCompanyName(),
-                        'account' => $lead->getAccount(),
-                    )
-                );
-                if ((bool) rand(0, 1)) {
-                    /** @var WorkflowItem $salesFlow */
-                    $salesFlow = $workFlow->getResult()->get('workflowItem');
-                    $this->transit(
-                        $this->workflowManager,
-                        $salesFlow,
-                        'develop',
-                        array(
-                            'budget_amount' => rand(10, 10000),
-                            'customer_need' => rand(10, 10000),
-                            'proposed_solution' => rand(10, 10000),
-                            'probability' => round(rand(50, 85) / 100.00, 2)
-                        )
-                    );
-                    if ((bool) rand(0, 1)) {
-                        $this->transit(
-                            $this->workflowManager,
-                            $salesFlow,
-                            'close_as_won',
-                            array(
-                                'close_revenue' => rand(100, 1000),
-                                'close_date' => new \DateTime('now'),
-                            )
-                        );
-                    } elseif ((bool) rand(0, 1)) {
-                        $this->transit(
-                            $this->workflowManager,
-                            $salesFlow,
-                            'close_as_lost',
-                            array(
-                                'close_reason_name' => 'cancelled',
-                                'close_revenue' => rand(100, 1000),
-                                'close_date' => new \DateTime('now'),
-                            )
-                        );
-                    }
-                    $this->persist($this->em, $salesFlow);
-                }
+                $this->loadSalesFlows($lead);
+
                 $i++;
                 if ($i % self::FLUSH_MAX == 0) {
                     $this->flush($this->em);
-                    $this->em->clear();
-                    $this->initSupportingEntities();
                 }
             }
 
             $this->flush($this->em);
             fclose($handle);
         }
+    }
+
+    /**
+     * @param Lead $lead
+     */
+    protected function loadSalesFlows(Lead $lead)
+    {
+        $leadWorkflowItem = $this->workflowManager->startWorkflow(
+            'b2b_flow_lead',
+            $lead,
+            'qualify',
+            array(
+                'opportunity_name' => $lead->getName(),
+                'company_name' => $lead->getCompanyName(),
+                'account' => $lead->getAccount(),
+            )
+        );
+        if ($this->getRandomBoolean()) {
+            /** @var Opportunity $opportunity */
+            $opportunity = $leadWorkflowItem->getResult()->get('opportunity');
+            $salesFlowItem = $this->workflowManager->startWorkflow(
+                'b2b_flow_sales',
+                $opportunity,
+                'develop',
+                array(
+                    'budget_amount' => mt_rand(10, 10000),
+                    'customer_need' => mt_rand(10, 10000),
+                    'proposed_solution' => mt_rand(10, 10000),
+                    'probability' => round(mt_rand(50, 85) / 100.00, 2)
+                )
+            );
+
+            if ($this->getRandomBoolean()) {
+                if ($this->getRandomBoolean()) {
+                    $this->transit(
+                        $this->workflowManager,
+                        $salesFlowItem,
+                        'close_as_won',
+                        array(
+                            'close_revenue' => mt_rand(100, 1000),
+                            'close_date' => new \DateTime('now'),
+                        )
+                    );
+                } else {
+                    $this->transit(
+                        $this->workflowManager,
+                        $salesFlowItem,
+                        'close_as_lost',
+                        array(
+                            'close_reason_name' => 'cancelled',
+                            'close_revenue' => mt_rand(100, 1000),
+                            'close_date' => new \DateTime('now'),
+                        )
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    protected function getRandomBoolean()
+    {
+        return (bool) mt_rand(0, 1);
     }
 
     /**

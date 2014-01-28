@@ -29,7 +29,7 @@ class CommandsTest extends WebTestCase
     {
         $this->client = static::createClient();
         if (!self::$fixturesLoaded) {
-            $this->client->appendFixtures(__DIR__ . DIRECTORY_SEPARATOR . 'fixtures', array('LoadLead'));
+            $this->client->appendFixtures(__DIR__ . DIRECTORY_SEPARATOR . 'DataFixtures', array('LoadLead'));
             self::$fixturesLoaded = true;
         }
     }
