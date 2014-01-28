@@ -17,7 +17,6 @@ request:
         oro_report_form[entity]: OroCRM\Bundle\SalesBundle\Entity\Lead
         oro_report_form[filter][columnName]: ""
         oro_report_form[filter][criterion]: ""
-        oro_report_form[filters_logic]: ""
         oro_report_form[name]: "leads by account"
         oro_report_form[type]: TABLE
 response:

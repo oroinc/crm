@@ -16,7 +16,6 @@ request:
         oro_report_form[entity]: Oro\Bundle\UserBundle\Entity\User
         oro_report_form[filter][columnName]: ""
         oro_report_form[filter][criterion]: ""
-        oro_report_form[filters_logic]: 1
         oro_report_form[name]: Admin
         oro_report_form[type]: TABLE
 response:
