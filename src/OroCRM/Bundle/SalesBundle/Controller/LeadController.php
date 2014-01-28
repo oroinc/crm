@@ -123,15 +123,10 @@ class LeadController extends Controller
                 $this->get('translator')->trans('orocrm.sales.controller.lead.saved.message')
             );
 
-            return $this->get('oro_ui.router')->actionRedirect(
-                array(
-                    'route'      => 'orocrm_sales_lead_update',
-                    'parameters' => array('id' => $entity->getId()),
-                ),
-                array(
-                    'route'      => 'orocrm_sales_lead_view',
-                    'parameters' => array('id' => $entity->getId()),
-                )
+            return $this->get('oro_ui.router')->redirectAfterSave(
+                ['route' => 'orocrm_sales_lead_update', 'parameters' => ['id' => $entity->getId()]],
+                ['route' => 'orocrm_sales_lead_view', 'parameters' => ['id' => $entity->getId()]],
+                $entity
             );
         }
 

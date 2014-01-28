@@ -101,15 +101,10 @@ class AccountController extends Controller
                 $this->get('translator')->trans('orocrm.account.controller.account.saved.message')
             );
 
-            return $this->get('oro_ui.router')->actionRedirect(
-                array(
-                    'route' => 'orocrm_account_update',
-                    'parameters' => array('id' => $entity->getId()),
-                ),
-                array(
-                    'route' => 'orocrm_account_view',
-                    'parameters' => array('id' => $entity->getId())
-                )
+            return $this->get('oro_ui.router')->redirectAfterSave(
+                ['route' => 'orocrm_account_update', 'parameters' => ['id' => $entity->getId()]],
+                ['route' => 'orocrm_account_view', 'parameters' => ['id' => $entity->getId()]],
+                $entity
             );
         }
 
