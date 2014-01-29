@@ -1,6 +1,7 @@
 datagrid:
     contact-requests-grid:
         source:
+#            acl_resource: orocrm_contactus_request_view
             type: orm
             query:
                 select:
@@ -18,16 +19,16 @@ datagrid:
 
         columns:
             name:
-                label: orocrm.contact_request.name.label
+                label: orocrm.contactus.contactrequest.name.label
             email:
-                label: orocrm.contact_request.email.label
+                label: orocrm.contactus.contactrequest.email.label
             phone:
-                label: orocrm.contact_request.phone.label
+                label: orocrm.contactus.contactrequest.phone.label
             channelName:
-                label: orocrm.contact_request.channel_name.label
+                label: orocrm.contactus.contactrequest.channel.label
             createdAt:
                 frontend_type: datetime
-                label: orocrm.contact_request.created_at.label
+                label: orocrm.contactus.contactrequest.created_at.label
 
         sorters:
             columns:
@@ -42,7 +43,7 @@ datagrid:
                 createdAt:
                     data_name: contact_request.createdAt
             default:
-                createdAt: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+                createdAt: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
 
         filters:
             columns:
@@ -58,43 +59,49 @@ datagrid:
                 channel:
                     type: entity
                     data_name: channel
-                    label: orocrm.contact_request.channel_name.label
+                    label: orocrm.contactus.contactrequest.channel.label
                     options:
                         field_options:
                           class: OroIntegrationBundle:Channel
                           property: name
+                createdAt:
+                    type: datetime
+                    data_name: contact_request.createdAt
 
 
         properties:
             id: ~
             view_link:
                 type:       url
-                route:      orocrm_contact_request_view
+                route:      orocrm_contactus_request_view
                 params:     [ id ]
             update_link:
                 type:       url
-                route:      orocrm_contact_request_update
+                route:      orocrm_contactus_request_update
                 params:     [ id ]
             delete_link:
                 type:       url
-                route:      orocrm_contact_request_delete
+                route:      orocrm_contactus_request_delete
                 params:     [ id ]
 
         actions:
             view:
+                acl_resource: oro_embedded_form_view
                 type: navigate
-                label: orocrm.contact_request.datagrid.view
+                label: orocrm.contactus.contactrequest.datagrid.view
                 icon: user
                 link: view_link
                 rowAction: true
             update:
-                 type: navigate
-                 label: orocrm.contact_request.datagrid.update
-                 icon: edit
-                 link: update_link
+                acl_resource: oro_embedded_form_edit
+                type: navigate
+                label: orocrm.contactus.contactrequest.datagrid.update
+                icon: edit
+                link: update_link
             delete:
-                 type: delete
-                 label: orocrm.contact_request.datagrid.delete
-                 icon: trash
-                 link: delete_link
+                acl_resource: oro_embedded_form_delete
+                type: delete
+                label: orocrm.contactus.contactrequest.datagrid.delete
+                icon: trash
+                link: delete_link
 

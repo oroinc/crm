@@ -6,10 +6,22 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="oro_contact_request")
  * @ORM\HasLifecycleCallbacks()
+ * @Config(
+ *  routeName="orocrm_contactus_request_index",
+ *  defaultValues={
+ *      "security"={
+ *          "type"="ACL",
+ *          "permissions"="All",
+ *          "group_name"=""
+ *      }
+ *  }
+ * )
  */
 class ContactRequest
 {

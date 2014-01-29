@@ -11,16 +11,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Oro\Bundle\SecurityBundle\Annotation as Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 class ContactRequestController extends Controller
 {
     /**
-     * @Route("/view/{id}", name="orocrm_contact_request_view", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="orocrm_contactus_request_view", requirements={"id"="\d+"})
      * @Template
-     * @Security\Acl(
-     *      id="orocrm_contact_request_view",
+     * @Acl(
+     *      id="orocrm_contactus_request_view",
      *      type="entity",
      *      permission="VIEW",
      *      class="OroCRMContactUsBundle:ContactRequest"
@@ -33,10 +34,10 @@ class ContactRequestController extends Controller
         ];
     }
 
-
     /**
-     * @Route(name="orocrm_contact_request_index")
+     * @Route(name="orocrm_contactus_request_index")
      * @Template
+     * @AclAncestor("orocrm_contactus_request_view")
      */
     public function indexAction()
     {
@@ -44,8 +45,9 @@ class ContactRequestController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", name="orocrm_contact_request_info", requirements={"id"="\d+"})
+     * @Route("/info/{id}", name="orocrm_contactus_request_info", requirements={"id"="\d+"})
      * @Template
+     * @AclAncestor("orocrm_contactus_request_view")
      */
     public function infoAction(ContactRequest $contactRequest)
     {
@@ -55,8 +57,14 @@ class ContactRequestController extends Controller
     }
 
     /**
-     * @Route("/update/{id}", name="orocrm_contact_request_update", requirements={"id"="\d+"})
+     * @Route("/update/{id}", name="orocrm_contactus_request_update", requirements={"id"="\d+"})
      * @Template
+     * @Acl(
+     *      id="orocrm_contactus_request_edit",
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMContactUsBundle:ContactRequest"
+     * )
      */
     public function updateAction(ContactRequest $contactRequest)
     {
@@ -64,8 +72,14 @@ class ContactRequestController extends Controller
     }
 
     /**
-     * @Route("/create", name="orocrm_contact_request_create")
+     * @Route("/create", name="orocrm_contactus_request_create")
      * @Template("OroCRMContactUsBundle:ContactRequest:update.html.twig")
+     * @Acl(
+     *      id="orocrm_contactus_request_create",
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMContactUsBundle:ContactRequest"
+     * )
      */
     public function createAction()
     {
@@ -73,7 +87,13 @@ class ContactRequestController extends Controller
     }
 
     /**
-     * @Route("/delete/{id}", name="orocrm_contact_request_delete", requirements={"id"="\d+"})
+     * @Route("/delete/{id}", name="orocrm_contactus_request_delete", requirements={"id"="\d+"})
+     * @Acl(
+     *      id="orocrm_contactus_request_delete",
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMContactUsBundle:ContactRequest"
+     * )
      */
     public function deleteAction(ContactRequest $contactRequest)
     {
@@ -115,11 +135,11 @@ class ContactRequestController extends Controller
 
             return $this->get('oro_ui.router')->actionRedirect(
                 [
-                    'route' => 'orocrm_contact_request_update',
+                    'route' => 'orocrm_contactus_request_update',
                     'parameters' => ['id' => $contactRequest->getId()],
                 ],
                 [
-                    'route' => 'orocrm_contact_request_index'
+                    'route' => 'orocrm_contactus_request_index'
                 ]
             );
 

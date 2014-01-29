@@ -5,4 +5,4 @@ services:
     orocrm_contact_us.embedded_form:
         class: %orocrm_contact_us.embedded_form.class%
         tags:
-            - { name: oro_embedded_form, label: orocrm.contact_request.form }
+            - { name: oro_embedded_form, label: orocrm.contactus.contactrequest.entity_label }

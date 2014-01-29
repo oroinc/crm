@@ -1,21 +1,23 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 
-{% set formAction = form.vars.value.id ? path('orocrm_contact_request_update', { 'id': form.vars.value.id }) : path('orocrm_contact_request_create') %}
+{% set formAction = form.vars.value.id ? path('orocrm_contactus_request_update', { 'id': form.vars.value.id }) : path('orocrm_contactus_request_create') %}
 
 {% block navButtons %}
-    {% if form.vars.value.id %}
+    {% if form.vars.value.id and resource_granted('orocrm_contactus_request_delete') %}
         {{ UI.deleteButton({
-            'dataUrl': path('orocrm_contact_request_delete', {'id': form.vars.value.id}),
-            'dataRedirect': path('orocrm_contact_request_index'),
+            'dataUrl': path('orocrm_contactus_request_delete', {'id': form.vars.value.id}),
+            'dataRedirect': path('orocrm_contactus_request_index'),
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-contact-request-form',
             'dataId': form.vars.value.id,
-            'entity_label': 'oro.contact_request.entity.label'|trans,
+            'entity_label': 'orocrm.contactus.contactrequest.entity_label'|trans,
         }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
-    {{ UI.button({'path' : path('orocrm_contact_request_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
-    {{ UI.saveAndStayButton() }}
+    {{ UI.button({'path' : path('orocrm_contactus_request_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
+    {% if resource_granted('orocrm_contactus_request_edit') %}
+        {{ UI.saveAndStayButton() }}
+    {% endif %}
     {{ UI.saveAndCloseButton() }}
 {% endblock %}
 
@@ -23,8 +25,8 @@
     {% if form.vars.value.id %}
         {% set breadcrumbs = {
             'entity':      form.vars.value,
-            'indexPath':   path('orocrm_contact_request_index'),
-            'indexLabel': 'orocrm.contact_request.entity.plural_label'|trans,
+            'indexPath':   path('orocrm_contactus_request_index'),
+            'indexLabel': 'orocrm.contactus.contactrequest.entity_plural_label'|trans,
             'entityTitle': form.vars.value.name
         } %}
         {{ parent() }}
@@ -41,7 +43,7 @@
         'class': 'active',
         'subblocks': [
             {
-                'title': 'orocrm.contact_request.form'|trans,
+                'title': 'orocrm.contactus.contactrequest.entity_label'|trans,
                 'data': [
                     form_row(form.channel),
                     form_row(form.name),
