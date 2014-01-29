@@ -3,13 +3,24 @@
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\Doctrine;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadAccountOpportunitiesData extends AbstractFixture implements ContainerAwareInterface
+class LoadAccountOpportunitiesData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies()
+    {
+        return [
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadLeadsData',
+        ];
+    }
+
     /**
      * {@inheritDoc}
      */
