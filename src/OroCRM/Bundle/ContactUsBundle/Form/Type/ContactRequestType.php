@@ -25,13 +25,12 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface
             ->add('email')
             ->add('phone')
             ->add('comment', 'textarea')
-            ->add('channel', $options['channel_form_type'], [
-                    'class' => 'OroIntegrationBundle:Channel',
-                    'property' => 'name',
-                ])
             ->add('Submit', 'submit');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
@@ -40,6 +39,14 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface
                 'channel_form_type' => 'entity'
             ]
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParent()
+    {
+        return 'oro_channel_aware_form';
     }
 
     /**
