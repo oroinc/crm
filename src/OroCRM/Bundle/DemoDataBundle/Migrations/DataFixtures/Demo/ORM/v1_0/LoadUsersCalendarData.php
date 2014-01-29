@@ -32,7 +32,10 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
      */
     public function getDependencies()
     {
-        return ['OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadUsersData'];
+        return [
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadUsersData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadUserData'
+        ];
     }
 
     public function setContainer(ContainerInterface $container = null)
