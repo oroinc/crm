@@ -38,7 +38,7 @@ class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInter
             $code = $data['code'];
             $resultObject->setCode($code);
 
-            $combinedCode = $data['countryCode'] . BAPRegion::SEPARATOR . $code;
+            $combinedCode = BAPRegion::getRegionCombinedCode($data['countryCode'], $code);
             $resultObject->setCombinedCode($combinedCode);
             $resultObject->setCountryCode($data['countryCode']);
         }
