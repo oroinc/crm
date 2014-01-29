@@ -66,9 +66,8 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadGroupData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadAccountData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadContactGroupData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadLeadSourceData'
         ];
     }
 

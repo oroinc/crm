@@ -2,6 +2,7 @@
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Oro\Bundle\TagBundle\Entity\Tag;
 use Oro\Bundle\TagBundle\Entity\TagManager;
 
@@ -18,7 +19,7 @@ use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-class LoadTagsData extends AbstractFixture implements ContainerAwareInterface
+class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     /**
      * @var ContainerInterface
@@ -57,6 +58,18 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface
 
     /** @var  EntityManager */
     protected $em;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies()
+    {
+        return [
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadUsersData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadAccountData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadContactData'
+        ];
+    }
 
     /**
      * {@inheritDoc}

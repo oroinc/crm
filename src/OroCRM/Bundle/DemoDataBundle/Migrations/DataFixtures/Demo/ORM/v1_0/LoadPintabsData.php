@@ -7,13 +7,14 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory;
 
-class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
+class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     /**
      * @var ContainerInterface
@@ -35,6 +36,16 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
 
     /** @var  EntityManager */
     protected $em;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies()
+    {
+        return [
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadUserData'
+        ];
+    }
 
     /**
      * {@inheritDoc}
