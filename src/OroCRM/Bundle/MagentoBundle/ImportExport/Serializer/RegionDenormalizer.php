@@ -6,6 +6,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 
 class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
@@ -37,7 +38,7 @@ class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInter
             $code = $data['code'];
             $resultObject->setCode($code);
 
-            $combinedCode = $data['countryCode'] . '.' . $code;
+            $combinedCode = $data['countryCode'] . BAPRegion::SEPARATOR . $code;
             $resultObject->setCombinedCode($combinedCode);
             $resultObject->setCountryCode($data['countryCode']);
         }
