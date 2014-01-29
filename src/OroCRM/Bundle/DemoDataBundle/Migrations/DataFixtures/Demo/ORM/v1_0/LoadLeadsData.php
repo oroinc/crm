@@ -33,6 +33,18 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     const FLUSH_MAX = 50;
 
     /**
+     * @var array
+     */
+    protected $leadSources = [
+        'Website' => false,
+        'Advertising' => false,
+        'Blogging' => false,
+        'Media' => false,
+        'Outbound' => false,
+        'Partner' => false
+    ];
+
+    /**
      * @var ContainerInterface
      */
     protected $container;
@@ -56,6 +68,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /** @var  ConfigManager */
     protected $configManager;
 
+    protected $leadExtendSourceConfigFieldModel;
+
     /**
      * {@inheritdoc}
      */
@@ -63,7 +77,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     {
         return [
             'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadUsersData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadLeadSourceData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadAccountData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadAclData'
         ];
@@ -85,6 +98,12 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     public function load(ObjectManager $manager)
     {
         $this->initSupportingEntities($manager);
+
+        // TODO: We have to load lead sources here because when we do it in separate fixture an entity
+        // config model is duplicated for Lead entity. Seems it because Doctrine ORMExecutor calls
+        // "clear" method after loading each fixture
+        $this->loadLeadSources();
+
         $this->loadLeads();
         $this->loadSources();
     }
@@ -97,24 +116,38 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
         $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
         $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
+
+        /** @var ConfigManager $configManager */
+        $configManager = $this->container->get('oro_entity_config.config_manager');
+
+        $this->leadExtendSourceConfigFieldModel = $configManager->getConfigFieldModel(
+            'OroCRM\Bundle\SalesBundle\Entity\Lead',
+            'extend_source'
+        );
+    }
+
+    public function loadLeadSources()
+    {
+        $priority = 1;
+        foreach ($this->leadSources as $optionSetLabel => $isDefault) {
+            $priority++;
+            $optionSet = new OptionSet();
+            $optionSet
+                ->setLabel($optionSetLabel)
+                ->setIsDefault($isDefault)
+                ->setPriority($priority)
+                ->setField($this->leadExtendSourceConfigFieldModel);
+
+            $this->em->persist($optionSet);
+        }
+
+        $this->em->flush();
     }
 
     public function loadSources()
     {
-        // TODO: Use cache manager instead of manual entity extracting (see git history)
-        // TODO: https://magecore.atlassian.net/browse/BAP-2706
-        $entityConfigModel = $this->em->getRepository(EntityConfigModel::ENTITY_NAME)->findOneBy(
-            array('className' => 'OroCRM\Bundle\SalesBundle\Entity\Lead')
-        );
-        $configFieldModel = $this->em->getRepository(FieldConfigModel::ENTITY_NAME)->findOneBy(
-            array(
-                'entity'    => $entityConfigModel,
-                'fieldName' => 'extend_source'
-            )
-        );
-
         /** @var OptionSet[] $sources */
-        $sources = $configFieldModel->getOptions()->toArray();
+        $sources = $this->leadExtendSourceConfigFieldModel->getOptions()->toArray();
         $randomSource = count($sources)-1;
 
         $leads = $this->em->getRepository('OroCRMSalesBundle:Lead')->findAll();
@@ -126,7 +159,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             $optionSetRelation->setData(
                 null,
                 $lead->getId(),
-                $configFieldModel,
+                $this->leadExtendSourceConfigFieldModel,
                 $source
             );
             $this->persist($this->em, $optionSetRelation);
