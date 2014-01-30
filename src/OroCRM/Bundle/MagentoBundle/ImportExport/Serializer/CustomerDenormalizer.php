@@ -196,9 +196,13 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
             }
 
             foreach ($types as $type) {
+                $account[$type]['namePrefix'] = $address['prefix'];
                 $account[$type]['firstName'] = $address['firstname'];
+                $account[$type]['middleName'] = $address['middlename'];
                 $account[$type]['lastName']  = $address['lastname'];
-                $account[$type]['street']    = $address['street'];
+                $account[$type]['nameSuffix'] = $address['suffix'];
+                $account[$type]['organization'] = $address['company'];
+                list($account[$type]['street'], $account[$type]['street2']) = explode("\n", $address['street']);
                 $account[$type]['city']      = $address['city'];
 
                 $account[$type]['postalCode'] = $address['postcode'];
@@ -246,6 +250,7 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
             'middleName' => null,
             'namePrefix' => null,
             'nameSuffix' => null,
+            'organization' => null,
             'postalCode' => null,
             'country'    => null,
             'region'     => null,
@@ -255,6 +260,7 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
             'types'      => []
         ];
         $addressFieldsMap = [
+            'company'   => 'organization',
             'region'    => 'regionText',
             'regionId'  => 'region',
             'countryId' => 'country',
@@ -286,6 +292,7 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
             if (!empty($address['isDefaultBilling'])) {
                 $address['types'][] = AddressType::TYPE_BILLING;
             }
+            list($address['street'], $address['street2']) = explode("\n", $address['street']);
 
             if (!empty($address['telephone'])
                 && !in_array($address['telephone'], $contact['phones'])

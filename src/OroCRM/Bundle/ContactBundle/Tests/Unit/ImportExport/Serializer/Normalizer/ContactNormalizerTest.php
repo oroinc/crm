@@ -109,6 +109,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     ->setId(1)
                     ->setNamePrefix('name_prefix')
                     ->setFirstName('first_name')
+                    ->setMiddleName('middle_name')
                     ->setLastName('last_name')
                     ->setNameSuffix('name_suffix')
                     ->setGender('male')
@@ -121,6 +122,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     'id' => 1,
                     'namePrefix' => 'name_prefix',
                     'firstName' => 'first_name',
+                    'middleName' => 'middle_name',
                     'lastName' => 'last_name',
                     'nameSuffix' => 'name_suffix',
                     'gender' => 'male',
@@ -150,6 +152,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     'id' => null,
                     'namePrefix' => null,
                     'firstName' => null,
+                    'middleName' => null,
                     'lastName' => null,
                     'nameSuffix' => null,
                     'gender' => null,
