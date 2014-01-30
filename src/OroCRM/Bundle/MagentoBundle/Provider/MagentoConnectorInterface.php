@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
+
 /**
  * Interface MagentoConnectorInterface
  *
@@ -9,21 +11,27 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
  * This interface should be implemented by magento related connectors
  * Contains just general constants
  */
-interface MagentoConnectorInterface
+interface MagentoConnectorInterface extends ConnectorInterface
 {
-    const ALIAS_GROUPS   = 'groups';
-    const ALIAS_STORES   = 'stores';
-    const ALIAS_WEBSITES = 'websites';
-    const ALIAS_REGIONS  = 'regions';
+    const STORE_TYPE   = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Store';
+    const WEBSITE_TYPE = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Website';
 
-    const ACTION_CUSTOMER_LIST = 'customerCustomerList';
-    const ACTION_CUSTOMER_INFO = 'customerCustomerInfo';
-    const ACTION_ADDRESS_LIST  = 'customerAddressList';
-    const ACTION_GROUP_LIST    = 'customerGroupList';
-    const ACTION_STORE_LIST    = 'storeList';
-    const ACTION_ORDER_LIST    = 'salesOrderList';
-    const ACTION_ORDER_INFO    = 'salesOrderInfo';
-    const ACTION_CART_LIST     = 'salesQuoteList';
-    const ACTION_CART_INFO     = 'shoppingCartInfo';
-    const ACTION_PING          = 'oroPing';
+    const ORDER_TYPE                    = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Order';
+    const ORDER_ADDRESS_TYPE            = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\OrderAddress';
+    const ORDER_ADDRESS_COLLECTION_TYPE = 'ArrayCollection<OroCRM\\Bundle\\MagentoBundle\\Entity\\OrderAddress>';
+    const ORDER_ITEM_TYPE               = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\OrderItem';
+    const ORDER_ITEM_COLLECTION_TYPE    = 'ArrayCollection<OroCRM\\Bundle\\MagentoBundle\\Entity\\OrderItem>';
+
+    const REGION_TYPE = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Region';
+
+    const CUSTOMER_TYPE           = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer';
+    const CUSTOMER_GROUPS_TYPE    = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\CustomerGroup';
+    const CONTACT_ADDRESSES_TYPE  = 'ArrayCollection<OroCRM\\Bundle\\ContactBundle\\Entity\\ContactAddress>';
+    const CUSTOMER_ADDRESS_TYPE   = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Address';
+    const CUSTOMER_ADDRESSES_TYPE = 'ArrayCollection<OroCRM\\Bundle\\MagentoBundle\\Entity\\Address>';
+
+    const CART_TYPE         = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart';
+    const CART_ITEM_TYPE    = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\CartItem';
+    const CART_ITEMS_TYPE   = 'ArrayCollection<OroCRM\\Bundle\\MagentoBundle\\Entity\\CartItem>';
+    const CART_ADDRESS_TYPE = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\CartAddress';
 }

@@ -31,8 +31,6 @@ class DashboardController extends Controller
             $this->getDoctrine()
                 ->getRepository('OroCRMMagentoBundle:Cart')
                 ->getFunnelChartData(
-                    'OroCRM\Bundle\MagentoBundle\Entity\Cart',
-                    'grandTotal',
                     [
                         'open',
                         'contacted'

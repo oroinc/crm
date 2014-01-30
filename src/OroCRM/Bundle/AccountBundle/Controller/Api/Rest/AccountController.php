@@ -110,7 +110,7 @@ class AccountController extends RestController implements ClassResourceInterface
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_account_remove",
+     *      id="orocrm_account_delete",
      *      type="entity",
      *      permission="DELETE",
      *      class="OroCRMAccountBundle:Account"

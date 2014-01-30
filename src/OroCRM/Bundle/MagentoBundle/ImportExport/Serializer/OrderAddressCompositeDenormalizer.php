@@ -6,12 +6,12 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
 use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\TypedAddressNormalizer;
+
+use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\OrderAddressDataConverter;
 
 class OrderAddressCompositeDenormalizer extends TypedAddressNormalizer
 {
-    const TYPE = 'OroCRM\\Bundle\\MagentoBundle\\Entity\\OrderAddress';
-
     /** @var array */
     protected $additionalProperties = ['fax', 'phone'];
 
@@ -29,7 +29,7 @@ class OrderAddressCompositeDenormalizer extends TypedAddressNormalizer
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $data = $this->dataConverter->convertToImportFormat($data);
+        $data             = $this->dataConverter->convertToImportFormat($data);
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         $result = parent::denormalize($data, $class, $format, $context);
@@ -50,6 +50,6 @@ class OrderAddressCompositeDenormalizer extends TypedAddressNormalizer
         return
             is_array($data)
             && class_exists($type)
-            && static::TYPE == $type;
+            && MagentoConnectorInterface::ORDER_ADDRESS_TYPE == $type;
     }
 }

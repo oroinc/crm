@@ -142,15 +142,11 @@ class CallController extends Controller
                     'success',
                     $this->get('translator')->trans('orocrm.call.controller.call.saved.message')
                 );
-                //return $this->redirect($this->generateUrl('orocrm_call_index'));
-                return $this->get('oro_ui.router')->actionRedirect(
-                    array(
-                        'route' => 'orocrm_call_update',
-                        'parameters' => array('id' => $entity->getId()),
-                    ),
-                    array(
-                        'route' => 'orocrm_call_index'
-                    )
+
+                return $this->get('oro_ui.router')->redirectAfterSave(
+                    ['route' => 'orocrm_call_update', 'parameters' => ['id' => $entity->getId()]],
+                    ['route' => 'orocrm_call_index'],
+                    $entity
                 );
             }
             $saved = true;

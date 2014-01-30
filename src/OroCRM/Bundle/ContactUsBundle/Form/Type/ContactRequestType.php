@@ -37,7 +37,6 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface, 
         $resolver->setDefaults(
             [
                 'data_class' => 'OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest',
-                'channel_form_type' => 'entity'
             ]
         );
     }

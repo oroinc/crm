@@ -59,6 +59,14 @@
                     {{ ui.renderProperty(title, address.renderAddress(orderAddress)) }}
                 {% endfor %}
             {% endif %}
+
+            {% if entity.feedback is not empty %}
+                {{ ui.renderProperty('orocrm.magento.order.feedback.label'|trans, entity.feedback|nl2br) }}
+            {% endif %}
+
+            {% if entity.notes is not empty %}
+                {{ ui.renderProperty('orocrm.magento.order.notes.label'|trans, entity.notes|nl2br) }}
+            {% endif %}
         </div>
     </div>
 </div>
