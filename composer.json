@@ -16,15 +16,10 @@
     },
     "require": {
         "php": ">=5.4.4",
-        "oro/platform": "dev-release"
+        "oro/platform": "1.0.0-rc2"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/laboro/platform.git"
-        }
-    ],
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
