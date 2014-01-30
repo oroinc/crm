@@ -38,9 +38,15 @@ class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInter
             $code = $data['code'];
             $resultObject->setCode($code);
 
-            $combinedCode = BAPRegion::getRegionCombinedCode($data['countryCode'], $code);
+            // Some magento region codes are already combined
+            $countryCode = $data['countryCode'];
+            if (strpos($code, $countryCode . BAPRegion::SEPARATOR) === 0) {
+                $combinedCode = $code;
+            } else {
+                $combinedCode = BAPRegion::getRegionCombinedCode($countryCode, $code);
+            }
             $resultObject->setCombinedCode($combinedCode);
-            $resultObject->setCountryCode($data['countryCode']);
+            $resultObject->setCountryCode($countryCode);
         }
 
         // magento can bring empty name, region will be skipped in strategy

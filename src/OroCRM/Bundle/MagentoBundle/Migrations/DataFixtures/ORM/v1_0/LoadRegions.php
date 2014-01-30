@@ -42,7 +42,11 @@ class LoadRegions extends AbstractFixture
      */
     protected function getRegion(array $regionData)
     {
-        $combinedCode = BAPRegion::getRegionCombinedCode($regionData['country_id'], $regionData['code']);
+        if (strpos($regionData['code'], $regionData['country_id'] . BAPRegion::SEPARATOR) === 0) {
+            $combinedCode = $regionData['code'];
+        } else {
+            $combinedCode = BAPRegion::getRegionCombinedCode($regionData['country_id'], $regionData['code']);
+        }
 
         /** @var $region Region */
         $region = $this->regionRepository->findOneBy(array('combinedCode' => $combinedCode));
