@@ -7,13 +7,11 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
+use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\OrderItemDataConverter;
 
 class OrderItemCompositeDenormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
-    const TYPE            = 'OroCRM\Bundle\MagentoBundle\Entity\OrderItem';
-    const COLLECTION_TYPE = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\OrderItem>';
-
     /** @var OrderItemDataConverter */
     protected $dataConverter;
 
@@ -30,9 +28,9 @@ class OrderItemCompositeDenormalizer extends AbstractNormalizer implements Denor
     {
         $data = $this->dataConverter->convertToImportFormat($data);
 
-        $className = self::TYPE;
         /** @var OrderItem $object */
-        $object = new $className();
+        $className = MagentoConnectorInterface::ORDER_ITEM_TYPE;
+        $object    = new $className();
         $this->fillResultObject($object, $data);
         if ($object->getDiscountPercent()) {
             $object->setDiscountPercent($object->getDiscountPercent() / 100);
@@ -49,6 +47,6 @@ class OrderItemCompositeDenormalizer extends AbstractNormalizer implements Denor
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && $type == self::TYPE;
+        return is_array($data) && $type == MagentoConnectorInterface::ORDER_ITEM_TYPE;
     }
 }

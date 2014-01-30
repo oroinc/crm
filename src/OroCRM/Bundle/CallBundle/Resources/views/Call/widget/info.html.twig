@@ -26,6 +26,6 @@
         {{ ui.renderProperty('Direction'|trans, entity.direction ? entity.direction.label : null) }}
 
         {# Don't use time formatting here because it's a time interval #}
-        {{ ui.renderProperty('Duration'|trans, entity.duration|date('H:i:s')) }}
+        {{ ui.renderProperty('Duration'|trans, entity.duration|oro_format_duration) }}
     </div>
 </div>

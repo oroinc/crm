@@ -49,3 +49,35 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
             name:                   name
             target_type:            text
             target_fields:          [name]
+        -
+            name:                   account
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name: name
+                    target_type: text
+                    target_fields: [name]
+        -
+            name:                   contact
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name: namePrefix
+                    target_type: text
+                    target_fields: [namePrefix]
+                -
+                    name: firstName
+                    target_type: text
+                    target_fields: [firstName]
+                -
+                    name: middleName
+                    target_type: text
+                    target_fields: [middleName]
+                -
+                    name: lastName
+                    target_type: text
+                    target_fields: [lastName]
+                -
+                    name: nameSuffix
+                    target_type: text
+                    target_fields: [nameSuffix]

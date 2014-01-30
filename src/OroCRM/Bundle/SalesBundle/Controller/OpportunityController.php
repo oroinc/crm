@@ -107,15 +107,10 @@ class OpportunityController extends Controller
                 $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message')
             );
 
-            return $this->get('oro_ui.router')->actionRedirect(
-                array(
-                    'route'      => 'orocrm_sales_opportunity_update',
-                    'parameters' => array('id' => $entity->getId()),
-                ),
-                array(
-                    'route'      => 'orocrm_sales_opportunity_view',
-                    'parameters' => array('id' => $entity->getId()),
-                )
+            return $this->get('oro_ui.router')->redirectAfterSave(
+                ['route' => 'orocrm_sales_opportunity_update', 'parameters' => ['id' => $entity->getId()]],
+                ['route' => 'orocrm_sales_opportunity_view', 'parameters' => ['id' => $entity->getId()]],
+                $entity
             );
         }
 

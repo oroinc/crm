@@ -7,11 +7,17 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCart;
+use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+use OroCRM\Bundle\CallBundle\Entity\Call;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
- * Class Cart
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository")
@@ -28,6 +34,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
+ *      },
+ *      "workflow"={
+ *          "primary"="b2c_flow_abandoned_shopping_cart"
  *      }
  *  }
  * )
@@ -62,6 +71,7 @@ class Cart extends BaseCart
 
     /**
      * Total items qty
+     *
      * @var integer
      *
      * @ORM\Column(name="items_qty", type="integer", options={"unsigned"=true})
@@ -70,6 +80,7 @@ class Cart extends BaseCart
 
     /**
      * Items qty
+     *
      * @var integer
      *
      * @ORM\Column(name="items_count", type="integer", options={"unsigned"=true})
@@ -163,10 +174,193 @@ class Cart extends BaseCart
      */
     protected $status;
 
+    /**
+     * @var Opportunity
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity")
+     * @ORM\JoinColumn(name="opportunity_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $opportunity;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\CallBundle\Entity\Call")
+     * @ORM\JoinTable(name="orocrm_magento_cart_calls",
+     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id")}
+     * )
+     */
+    protected $calls;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\EmailBundle\Entity\Email")
+     * @ORM\JoinTable(name="orocrm_magento_cart_emails",
+     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id")}
+     * )
+     */
+    protected $emails;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="notes", type="text", nullable=true)
+     */
+    protected $notes;
+
+    /**
+     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
+     *
+     * @var WorkflowItem
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
+     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $workflowItem;
+
+    /**
+     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
+     *
+     * @var WorkflowStep
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
+     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $workflowStep;
+
+    /**
+     * @param WorkflowItem $workflowItem
+     * @return Cart
+     */
+    public function setWorkflowItem($workflowItem)
+    {
+        $this->workflowItem = $workflowItem;
+
+        return $this;
+    }
+
+    /**
+     * @return WorkflowItem
+     */
+    public function getWorkflowItem()
+    {
+        return $this->workflowItem;
+    }
+
+    /**
+     * @param WorkflowItem $workflowStep
+     * @return Cart
+     */
+    public function setWorkflowStep($workflowStep)
+    {
+        $this->workflowStep = $workflowStep;
+
+        return $this;
+    }
+
+    /**
+     * @return WorkflowStep
+     */
+    public function getWorkflowStep()
+    {
+        return $this->workflowStep;
+    }
+
     public function __construct()
     {
-        $this->status = new CartStatus('open');
+        $this->status    = new CartStatus('open');
         $this->cartItems = new ArrayCollection();
+        $this->calls = new ArrayCollection();
+        $this->email = new ArrayCollection();
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCalls()
+    {
+        return $this->calls;
+    }
+
+    /**
+     * @param Call $call
+     * @return Cart
+     */
+    public function addCall(Call $call)
+    {
+        if (!$this->hasCall($call)) {
+            $this->getCalls()->add($call);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Call $call
+     * @return Cart
+     */
+    public function removeCall(Call $call)
+    {
+        if ($this->hasCall($call)) {
+            $this->getCalls()->removeElement($call);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Call $call
+     * @return bool
+     */
+    public function hasCall(Call $call)
+    {
+        return $this->getCalls()->contains($call);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getEmails()
+    {
+        return $this->emails;
+    }
+
+    /**
+     * @param Email $email
+     * @return Cart
+     */
+    public function addEmail(Email $email)
+    {
+        if (!$this->hasEmail($email)) {
+            $this->getEmails()->add($email);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Email $email
+     * @return Cart
+     */
+    public function removeEmail(Email $email)
+    {
+        if ($this->hasEmail($email)) {
+            $this->getEmails()->removeElement($email);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Email $email
+     * @return bool
+     */
+    public function hasEmail(Email $email)
+    {
+        return $this->getEmails()->contains($email);
     }
 
     /**
@@ -212,11 +406,12 @@ class Cart extends BaseCart
     /**
      * @param Customer|null $customer
      *
-     * @return $this
+     * @return Cart
      */
     public function setCustomer(Customer $customer = null)
     {
         $this->customer = $customer;
+
         return $this;
     }
 
@@ -263,11 +458,12 @@ class Cart extends BaseCart
     /**
      * @param string $email
      *
-     * @return $this
+     * @return Cart
      */
     public function setEmail($email)
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -282,11 +478,12 @@ class Cart extends BaseCart
     /**
      * @param float $itemsQty
      *
-     * @return $this
+     * @return Cart
      */
     public function setItemsQty($itemsQty)
     {
         $this->itemsQty = $itemsQty;
+
         return $this;
     }
 
@@ -309,11 +506,12 @@ class Cart extends BaseCart
     /**
      * @param string $quoteCurrencyCode
      *
-     * @return $this
+     * @return Cart
      */
     public function setQuoteCurrencyCode($quoteCurrencyCode)
     {
         $this->quoteCurrencyCode = $quoteCurrencyCode;
+
         return $this;
     }
 
@@ -335,6 +533,7 @@ class Cart extends BaseCart
 
     /**
      * @param CartStatus $status
+     *
      * @return Cart
      */
     public function setStatus($status)
@@ -355,11 +554,12 @@ class Cart extends BaseCart
     /**
      * @param string $baseCurrencyCode
      *
-     * @return $this
+     * @return Cart
      */
     public function setBaseCurrencyCode($baseCurrencyCode)
     {
         $this->baseCurrencyCode = $baseCurrencyCode;
+
         return $this;
     }
 
@@ -374,11 +574,12 @@ class Cart extends BaseCart
     /**
      * @param string $giftMessage
      *
-     * @return $this
+     * @return Cart
      */
     public function setGiftMessage($giftMessage)
     {
         $this->giftMessage = $giftMessage;
+
         return $this;
     }
 
@@ -393,11 +594,12 @@ class Cart extends BaseCart
     /**
      * @param float $isGuest
      *
-     * @return $this
+     * @return Cart
      */
     public function setIsGuest($isGuest)
     {
         $this->isGuest = $isGuest;
+
         return $this;
     }
 
@@ -412,11 +614,12 @@ class Cart extends BaseCart
     /**
      * @param int $itemsCount
      *
-     * @return $this
+     * @return Cart
      */
     public function setItemsCount($itemsCount)
     {
         $this->itemsCount = $itemsCount;
+
         return $this;
     }
 
@@ -431,11 +634,12 @@ class Cart extends BaseCart
     /**
      * @param string $storeCurrencyCode
      *
-     * @return $this
+     * @return Cart
      */
     public function setStoreCurrencyCode($storeCurrencyCode)
     {
         $this->storeCurrencyCode = $storeCurrencyCode;
+
         return $this;
     }
 
@@ -450,11 +654,12 @@ class Cart extends BaseCart
     /**
      * @param float $storeToBaseRate
      *
-     * @return $this
+     * @return Cart
      */
     public function setStoreToBaseRate($storeToBaseRate)
     {
         $this->storeToBaseRate = $storeToBaseRate;
+
         return $this;
     }
 
@@ -469,11 +674,12 @@ class Cart extends BaseCart
     /**
      * @param float $storeToQuoteRate
      *
-     * @return $this
+     * @return Cart
      */
     public function setStoreToQuoteRate($storeToQuoteRate)
     {
         $this->storeToQuoteRate = $storeToQuoteRate;
+
         return $this;
     }
 
@@ -483,5 +689,42 @@ class Cart extends BaseCart
     public function getStoreToQuoteRate()
     {
         return $this->storeToQuoteRate;
+    }
+
+    /**
+     * @param Opportunity $opportunity
+     * @return Cart
+     */
+    public function setOpportunity($opportunity)
+    {
+        $this->opportunity = $opportunity;
+
+        return $this;
+    }
+
+    /**
+     * @return Opportunity
+     */
+    public function getOpportunity()
+    {
+        return $this->opportunity;
+    }
+
+    /**
+     * @param string $notes
+     * @return Cart
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
     }
 }

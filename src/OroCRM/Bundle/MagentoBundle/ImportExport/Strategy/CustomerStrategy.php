@@ -14,15 +14,10 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerDenormalizer;
-use OroCRM\Bundle\MagentoBundle\Provider\StoreConnector;
+use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class CustomerStrategy extends BaseStrategy
 {
-    const ENTITY_NAME             = 'OroCRMMagentoBundle:Customer';
-    const GROUP_ENTITY_NAME       = 'OroCRMMagentoBundle:CustomerGroup';
-    const ADDRESS_RELATION_ENTITY = 'OroCRMMagentoBundle:AddressRelation';
-
     /** @var array */
     protected $storeEntityCache = [];
 
@@ -73,9 +68,7 @@ class CustomerStrategy extends BaseStrategy
         $newEntity->getAccount()->setDefaultContact($newEntity->getContact());
 
         // validate and update context - increment counter or add validation error
-        $this->validateAndUpdateContext($newEntity);
-
-        return $newEntity;
+        return $this->validateAndUpdateContext($newEntity);
     }
 
     /**
@@ -96,11 +89,11 @@ class CustomerStrategy extends BaseStrategy
         if (!isset($this->websiteEntityCache[$website->getCode()])) {
             $this->websiteEntityCache[$website->getCode()] = $this->findAndReplaceEntity(
                 $website,
-                StoreConnector::WEBSITE_TYPE,
+                MagentoConnectorInterface::WEBSITE_TYPE,
                 [
-                    'code'     => $website->getCode(),
-                    'channel'  => $website->getChannel(),
-                    'originId' => $website->getOriginId()
+                'code'     => $website->getCode(),
+                'channel'  => $website->getChannel(),
+                'originId' => $website->getOriginId()
                 ],
                 $doNotUpdateFields
             );
@@ -110,11 +103,11 @@ class CustomerStrategy extends BaseStrategy
         if (!isset($this->storeEntityCache[$store->getCode()])) {
             $this->storeEntityCache[$store->getCode()] = $this->findAndReplaceEntity(
                 $store,
-                StoreConnector::STORE_TYPE,
+                MagentoConnectorInterface::STORE_TYPE,
                 [
-                    'code'     => $store->getCode(),
-                    'channel'  => $store->getChannel(),
-                    'originId' => $store->getOriginId()
+                'code'     => $store->getCode(),
+                'channel'  => $store->getChannel(),
+                'originId' => $store->getOriginId()
                 ],
                 $doNotUpdateFields
             );
@@ -124,11 +117,11 @@ class CustomerStrategy extends BaseStrategy
         if (!isset($this->groupEntityCache[$group->getName()])) {
             $this->groupEntityCache[$group->getName()] = $this->findAndReplaceEntity(
                 $group,
-                CustomerDenormalizer::GROUPS_TYPE,
+                MagentoConnectorInterface::CUSTOMER_GROUPS_TYPE,
                 [
-                    'name'     => $group->getName(),
-                    'channel'  => $group->getChannel(),
-                    'originId' => $group->getOriginId()
+                'name'     => $group->getName(),
+                'channel'  => $group->getChannel(),
+                'originId' => $group->getOriginId()
                 ],
                 $doNotUpdateFields
             );
