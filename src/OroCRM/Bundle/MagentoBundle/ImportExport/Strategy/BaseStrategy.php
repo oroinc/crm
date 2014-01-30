@@ -13,6 +13,8 @@ use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
+use OroCRM\Bundle\MagentoBundle\Entity\Region;
+use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 
 abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
 {
@@ -194,12 +196,14 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
         }
 
         if (!empty($this->mageRegionsCache[$mageRegionId])) {
+            /** @var Region $mageRegion */
             $mageRegion   = $this->mageRegionsCache[$mageRegionId];
             $combinedCode = $mageRegion->getCombinedCode();
+            $regionCode = $mageRegion->getCode();
 
-            $this->regionsCache[$combinedCode] = empty($this->regionsCache[$combinedCode]) ?
-                $this->getEntityByCriteria(['combinedCode' => $combinedCode], 'Oro\Bundle\AddressBundle\Entity\Region')
-                : $this->regionsCache[$combinedCode];
+            if (empty($this->regionsCache[$combinedCode])) {
+                $this->regionsCache[$combinedCode] = $this->loadRegionByCode($combinedCode, $countryCode, $regionCode);
+            }
 
             // no region found in system db for corresponding magento region, use region text
             if (empty($this->regionsCache[$combinedCode])) {
@@ -216,6 +220,54 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $combinedCode
+     * @param string $countryCode
+     * @param string $code
+     * @return BAPRegion
+     */
+    protected function loadRegionByCode($combinedCode, $countryCode, $code)
+    {
+        $regionClass = 'Oro\Bundle\AddressBundle\Entity\Region';
+        $countryClass = 'Oro\Bundle\AddressBundle\Entity\Country';
+
+        // Simply search region by combinedCode
+        $region = $this->getEntityByCriteria(
+            array(
+                'combinedCode' => $combinedCode
+            ),
+            $regionClass
+        );
+        if (!$region) {
+            // Some region codes in magento are filled by region names
+            $entityManager = $this->getEntityManager($countryClass);
+            $country = $entityManager->getReference($countryClass, $countryCode);
+            $region = $this->getEntityByCriteria(
+                array(
+                    'country' => $country,
+                    'name' => $combinedCode
+                ),
+                $regionClass
+            );
+        }
+        if (!$region) {
+            // Some numeric regions codes may be padded by 0 in ISO format and not padded in magento
+            // As example FR-1 in magento and FR-01 in ISO
+            $region = $this->getEntityByCriteria(
+                array(
+                    'combinedCode' =>
+                        BAPRegion::getRegionCombinedCode(
+                            $countryCode,
+                            str_pad($code, 2, '0', STR_PAD_LEFT)
+                        )
+                ),
+                $regionClass
+            );
+        }
+
+        return $region;
     }
 
     /**

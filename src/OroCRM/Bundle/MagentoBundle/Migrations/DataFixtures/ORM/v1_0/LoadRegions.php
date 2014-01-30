@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
+use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 
 class LoadRegions extends AbstractFixture
 {
@@ -41,7 +42,11 @@ class LoadRegions extends AbstractFixture
      */
     protected function getRegion(array $regionData)
     {
-        $combinedCode = sprintf('%s.%s', $regionData['country_id'], $regionData['code']);
+        if (strpos($regionData['code'], $regionData['country_id'] . BAPRegion::SEPARATOR) === 0) {
+            $combinedCode = $regionData['code'];
+        } else {
+            $combinedCode = BAPRegion::getRegionCombinedCode($regionData['country_id'], $regionData['code']);
+        }
 
         /** @var $region Region */
         $region = $this->regionRepository->findOneBy(array('combinedCode' => $combinedCode));

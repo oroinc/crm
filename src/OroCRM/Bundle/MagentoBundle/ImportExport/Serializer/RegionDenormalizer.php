@@ -6,6 +6,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 
 class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
@@ -37,9 +38,15 @@ class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInter
             $code = $data['code'];
             $resultObject->setCode($code);
 
-            $combinedCode = $data['countryCode'] . '.' . $code;
+            // Some magento region codes are already combined
+            $countryCode = $data['countryCode'];
+            if (strpos($code, $countryCode . BAPRegion::SEPARATOR) === 0) {
+                $combinedCode = $code;
+            } else {
+                $combinedCode = BAPRegion::getRegionCombinedCode($countryCode, $code);
+            }
             $resultObject->setCombinedCode($combinedCode);
-            $resultObject->setCountryCode($data['countryCode']);
+            $resultObject->setCountryCode($countryCode);
         }
 
         // magento can bring empty name, region will be skipped in strategy
