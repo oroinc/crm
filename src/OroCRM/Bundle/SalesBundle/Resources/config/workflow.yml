@@ -447,11 +447,10 @@ workflows:
                             conditions:
                                 @not_empty: $close_reason
                             parameters: [$close_reason_name, $close_reason.name]
-                        - @create_object:
+                        - @create_datetime:
                             conditions:
                                 @empty: $close_date
                             parameters:
-                                class: '\DateTime'
                                 attribute: $close_date
             requalify_lost:
                 label: 'Requalify'

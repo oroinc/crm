@@ -204,7 +204,6 @@ workflows:
                             attribute: $call_date
                         - @create_datetime:
                             time: '00:00:00'
-                            timezone: 'UTC'
                             attribute: $call_duration
             send_email:
                 label: 'Send email'
@@ -745,7 +744,6 @@ workflows:
                             attribute: $call_date
                         - @create_datetime:
                             time: '00:00:00'
-                            timezone: 'UTC'
                             attribute: $call_duration
             send_email:
                 label: 'Send email'
