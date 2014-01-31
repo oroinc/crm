@@ -202,13 +202,21 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
                 $account[$type]['lastName']  = $address['lastname'];
                 $account[$type]['nameSuffix'] = $address['suffix'];
                 $account[$type]['organization'] = $address['company'];
-                list($account[$type]['street'], $account[$type]['street2']) = explode("\n", $address['street']);
+                if (strpos($address['street'], "\n") !== false) {
+                    list($account[$type]['street'], $account[$type]['street2']) = explode("\n", $address['street']);
+                } else {
+                    $account[$type]['street'] = $address['street'];
+                }
                 $account[$type]['city']      = $address['city'];
 
                 $account[$type]['postalCode'] = $address['postcode'];
                 $account[$type]['country']    = $address['country_id'];
-                $account[$type]['regionText'] = isset($address['region']) ? $address['region'] : null;
-                $account[$type]['region']     = isset($address['region_id']) ? $address['region_id'] : null;
+                if (isset($address['region'])) {
+                    $account[$type]['regionText'] = $address['region'];
+                }
+                if (isset($address['region_id'])) {
+                    $account[$type]['region'] = $address['region_id'];
+                }
                 $account[$type]['created']    = $address['created_at'];
                 $account[$type]['updated']    = $address['updated_at'];
             }
@@ -292,7 +300,9 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
             if (!empty($address['isDefaultBilling'])) {
                 $address['types'][] = AddressType::TYPE_BILLING;
             }
-            list($address['street'], $address['street2']) = explode("\n", $address['street']);
+            if (strpos($address['street'], "\n") !== false) {
+                list($address['street'], $address['street2']) = explode("\n", $address['street']);
+            }
 
             if (!empty($address['telephone'])
                 && !in_array($address['telephone'], $contact['phones'])
