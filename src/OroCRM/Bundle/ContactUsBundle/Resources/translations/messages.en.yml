@@ -30,3 +30,7 @@ orocrm:
                 view: View
 
             embedded_form: Contact Us
+
+    contact_request:
+        entity:
+            saved: Contact request has been saved successfully

@@ -95,7 +95,7 @@ datagrid:
             update:
                 acl_resource: oro_embedded_form_edit
                 type: navigate
-                label: orocrm.contactus.contactrequest.datagrid.update
+                label: Edit
                 icon: edit
                 link: update_link
             delete:
