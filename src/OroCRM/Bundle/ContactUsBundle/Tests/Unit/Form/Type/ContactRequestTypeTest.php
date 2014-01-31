@@ -20,7 +20,7 @@ class ContactRequestTypeTest extends \PHPUnit_Framework_TestCase
             'email' => null,
             'phone' => null,
             'comment' => 'textarea',
-            'Submit' => 'submit',
+            'submit' => 'submit',
         );
 
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
@@ -87,39 +87,112 @@ class ContactRequestTypeTest extends \PHPUnit_Framework_TestCase
     {
         $type = new ContactRequestType();
         $expectedCss = <<<CSS
-form {
-  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+ul, li {
+     list-style: none;
+     overflow: hidden;
+     clear: both;
+     margin: 0;
+ }
+.page-title {
+    width: 100%;
+    overflow: hidden;
+    border-bottom: 1px solid #ccc;
+    margin: 0 0 25px;
+}
+ .page-title h1{
+     margin: 0;
+     font-size: 20px;
+     color: #0a263c;
+ }
+
+.fieldset {
+    border: 1px solid #bbafa0;
+    background: #fbfaf6;
+    padding: 22px 25px 12px 33px;
+    margin: 28px 0;
 }
 
-label {
-  display: block;
-  margin-bottom: 5px;
-  cursor: pointer;
+.fieldset .legend {
+    float: left;
+    font-size: 13px;
+    line-height: 20px;
+    border: 1px solid #f19900;
+    background: #f9f3e3;
+    color: #e76200;
+    margin: -33px 0 0 -10px;
+    padding: 0 8px;
+    position: relative;
 }
 
-label, input, button, select, textarea {
-font-size: 13px;
-font-weight: normal;
-line-height: 20px;
+.form-list .control-group {
+    margin-bottom: 0px;
 }
 
-textarea, input[type="text"] {
-background-color: #fff;
-border: 1px solid #ccc;
+.form-list li.fields .control-group {
+    float: left;
+    width: 275px;
 }
 
-label.validation-error {
-  color: #C81717 !important;
+.form-list label {
+    float: left;
+    color: #666;
+    font-weight: bold;
+    position: relative;
+    z-index: 0;
+    margin-bottom: 0;
+}
+.form-list .controls {
+    display: block;
+    clear: both;
+    width: 260px;
 }
 
-.validation-error .error {
-  border: 1px solid #e9322d;
-  outline: 0;
-  outline: thin dotted \9;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(211,33,33,0.6);
-  -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(211,33,33,0.6);
-  box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(211,33,33,0.6);
-  color: #555;
+.form-list input[type="text"],
+.form-list input[type="email"] {
+    width: 254px;
+    padding: 3px;
+    margin-bottom: 3px;
+
+}
+
+.form-list li.wide .controls {
+    width: 550px;
+}
+
+.form-list li.wide textarea {
+    width: 100%;
+    padding: 3px;
+    margin-bottom: 3px;
+}
+
+.buttons-set {
+    clear: both;
+    margin: 4em 0 0;
+    padding: 8px 10px 0;
+    border-top: 1px solid #e4e4e4;
+    text-align: right;
+}
+
+.buttons-set p.required {
+    margin: 0 0 10px;
+    font-size: 11px;
+    text-align: right;
+    color: #EB340A;
+}
+
+.buttons-set button {
+    float: right;
+    margin-left: 5px;
+    display: block;
+    height: 19px;
+    border: 1px solid #de5400;
+    background: #f18200;
+    padding: 0 8px;
+    font: bold 12px/19px Arial, Helvetica, sans-serif;
+    text-align: center;
+    white-space: nowrap;
+    color: #fff;
+    box-sizing: content-box;
 }
 CSS;
 
@@ -128,4 +201,3 @@ CSS;
 
 
 }
- 
