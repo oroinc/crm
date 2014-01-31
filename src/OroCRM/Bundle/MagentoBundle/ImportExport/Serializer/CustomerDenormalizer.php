@@ -17,28 +17,52 @@ use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormal
 
 class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
-    protected $importFieldsMap
-        = [
-            'customer_id' => 'origin_id',
-            'firstname'   => 'first_name',
-            'lastname'    => 'last_name',
-            'middlename'  => 'middle_name',
-            'prefix'      => 'name_prefix',
-            'suffix'      => 'name_suffix',
-            'dob'         => 'birthday',
-            'taxvat'      => 'vat',
-        ];
+    /**
+     * @var array
+     */
+    protected $importFieldsMap = array(
+        'customer_id' => 'origin_id',
+        'firstname'   => 'first_name',
+        'lastname'    => 'last_name',
+        'middlename'  => 'middle_name',
+        'prefix'      => 'name_prefix',
+        'suffix'      => 'name_suffix',
+        'dob'         => 'birthday',
+        'taxvat'      => 'vat',
+    );
 
-    static protected $objectFields
-        = [
-            'store',
-            'website',
-            'group',
-            'addresses',
-            'updatedAt',
-            'createdAt',
-            'birthday'
-        ];
+    /**
+     * @var array
+     */
+    protected $addressBapToMageMapping = array(
+        'namePrefix' => 'prefix',
+        'firstName' => 'firstname',
+        'middleName' => 'middlename',
+        'lastName' => 'lastname',
+        'nameSuffix' => 'suffix',
+        'organization' => 'company',
+        'street' => 'street',
+        'city' => 'city',
+        'postalCode' => 'postcode',
+        'country' => 'country_id',
+        'regionText' => 'region',
+        'region' => 'region_id',
+        'created' => 'created_at',
+        'updated' => 'updated_at'
+    );
+
+    /**
+     * @var array
+     */
+    static protected $objectFields = array(
+        'store',
+        'website',
+        'group',
+        'addresses',
+        'updatedAt',
+        'createdAt',
+        'birthday'
+    );
 
     /**
      * For importing customers
@@ -172,57 +196,27 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
     }
 
     /**
+     * @todo Move to converter CRM-789
      * @param $data
-     *
      * @return array
      */
     protected function formatAccountData($data)
     {
-        /**
-         * @TODO FIXME move to converter
-         */
-
-        $account = [];
-
-        $account['name'] = sprintf("%s %s", $data['first_name'], $data['last_name']);
+        $account = array(
+            'name' => sprintf("%s %s", $data['first_name'], $data['last_name'])
+        );
 
         foreach ($data['addresses'] as $address) {
-            $types = [];
+            $addressTypes = array();
             if (!empty($address['is_default_shipping'])) {
-                $types[] = AddressType::TYPE_SHIPPING . '_address';
+                $addressTypes[] = AddressType::TYPE_SHIPPING . '_address';
             }
             if (!empty($address['is_default_billing'])) {
-                $types[] = AddressType::TYPE_BILLING . '_address';
+                $addressTypes[] = AddressType::TYPE_BILLING . '_address';
             }
 
-            foreach ($types as $type) {
-                $account[$type]['namePrefix'] = $address['prefix'];
-                $account[$type]['firstName'] = $address['firstname'];
-                $account[$type]['middleName'] = $address['middlename'];
-                $account[$type]['lastName']  = $address['lastname'];
-                $account[$type]['nameSuffix'] = $address['suffix'];
-                $account[$type]['organization'] = $address['company'];
-                if (strpos($address['street'], "\n") !== false) {
-                    list($account[$type]['street'], $account[$type]['street2']) = explode("\n", $address['street']);
-                } else {
-                    $account[$type]['street'] = $address['street'];
-                }
-                $account[$type]['city']      = $address['city'];
-
-                $account[$type]['postalCode'] = $address['postcode'];
-                $account[$type]['country']    = $address['country_id'];
-                if (isset($address['region'])) {
-                    $account[$type]['regionText'] = $address['region'];
-                } else {
-                    $account[$type]['regionText'] = null;
-                }
-                if (isset($address['region_id'])) {
-                    $account[$type]['region'] = $address['region_id'];
-                } else {
-                    $account[$type]['region'] = null;
-                }
-                $account[$type]['created']    = $address['created_at'];
-                $account[$type]['updated']    = $address['updated_at'];
+            foreach ($addressTypes as $addressType) {
+                $account[$addressType] = $this->getBapAddressData($address);
             }
         }
 
@@ -230,18 +224,14 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
     }
 
     /**
+     * @todo Move to converter CRM-789
      * @param $data
-     *
      * @return array
      */
     protected function formatContactData($data)
     {
-        /**
-         * @TODO FIXME move to converter
-         */
-
-        $contact           = $this->convertToCamelCase($data);
-        $contactFieldNames = [
+        $contact = $this->convertToCamelCase($data);
+        $contactFieldNames = array(
             'firstName'  => null,
             'lastName'   => null,
             'middleName' => null,
@@ -252,74 +242,67 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
             'birthday'   => null,
             'phones'     => [],
             'emails'     => [],
-        ];
+        );
         // fill default values
         $contact = array_merge($contactFieldNames, $contact);
 
-        $addressFields    = [
-            'firstName'  => null,
-            'lastName'   => null,
-            'middleName' => null,
-            'namePrefix' => null,
-            'nameSuffix' => null,
-            'organization' => null,
-            'postalCode' => null,
-            'country'    => null,
-            'region'     => null,
-            'regionText' => null,
-            'created'    => null,
-            'updated'    => null,
-            'types'      => []
-        ];
-        $addressFieldsMap = [
-            'company'   => 'organization',
-            'region'    => 'regionText',
-            'regionId'  => 'region',
-            'countryId' => 'country',
-            'createdAt' => 'created',
-            'updatedAt' => 'updated',
-            'postcode'  => 'postalCode'
-        ];
-        $namesMap         = [
-            'firstname'  => 'first_name',
-            'lastname'   => 'last_name',
-            'middlename' => 'middle_name',
-            'prefix'     => 'name_prefix',
-            'suffix'     => 'name_suffix',
-        ];
-
         foreach ($contact['addresses'] as $key => $address) {
-            // process keys that will not be camelized correctly
-            $address = $this->mapParams($namesMap, $address);
-            $address = $this->convertToCamelCase($address);
-            $address = $this->mapParams($addressFieldsMap, $address);
-            $address = array_merge($addressFields, $address);
-            //merge firstName and lastName from contact in case when it's not filled in address
-            $address = array_merge(array_intersect_key(array_flip(['firstName', 'lastName']), $contact), $address);
+            $bapAddress = $this->getBapAddressData(
+                $address,
+                array(
+                    'firstName' => $contact['firstName'],
+                    'lastName' => $contact['lastName']
+                )
+            );
 
             // prepare address types
-            if (!empty($address['isDefaultShipping'])) {
-                $address['types'][] = AddressType::TYPE_SHIPPING;
+            if (!empty($address['is_default_shipping'])) {
+                $bapAddress['types'][] = AddressType::TYPE_SHIPPING;
             }
-            if (!empty($address['isDefaultBilling'])) {
-                $address['types'][] = AddressType::TYPE_BILLING;
-            }
-            if (strpos($address['street'], "\n") !== false) {
-                list($address['street'], $address['street2']) = explode("\n", $address['street']);
+            if (!empty($address['is_default_billing'])) {
+                $bapAddress['types'][] = AddressType::TYPE_BILLING;
             }
 
-            if (!empty($address['telephone'])
-                && !in_array($address['telephone'], $contact['phones'])
-            ) {
+            if (!empty($address['telephone']) && !in_array($address['telephone'], $contact['phones'])) {
                 $contact['phones'][] = $address['telephone'];
             }
-            $contact['addresses'][$key] = $address;
+            $contact['addresses'][$key] = $bapAddress;
         }
 
         $contact['emails'][] = $contact['email'];
         unset($contact['email']);
 
         return $contact;
+    }
+
+    /**
+     * Get BAP address data based on magento address data.
+     *
+     * @param array $address
+     * @param array $defaultValues
+     * @return array
+     */
+    protected function getBapAddressData(array $address, array $defaultValues = array())
+    {
+        $bapAddress = array();
+        foreach ($this->addressBapToMageMapping as $bapKey => $mageKey) {
+            if (array_key_exists($mageKey, $address)) {
+                $bapAddress[$bapKey] = $address[$mageKey];
+            } else {
+                $bapAddress[$bapKey] = null;
+            }
+
+            if (array_key_exists($bapKey, $defaultValues) && empty($bapAddress[$bapKey])) {
+                $bapAddress[$bapKey] = $defaultValues[$bapKey];
+            }
+        }
+
+        // Magento API return address as $street1 . "\n" . $street2
+        if (strpos($bapAddress['street'], "\n") !== false) {
+            list($bapAddress['street'], $bapAddress['street2']) = explode("\n", $bapAddress['street']);
+        }
+
+        return $bapAddress;
     }
 
     /**
@@ -354,27 +337,5 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
     public function supportsDenormalization($data, $type, $format = null)
     {
         return is_array($data) && $type == MagentoConnectorInterface::CUSTOMER_TYPE;
-    }
-
-    /**
-     * Process params mapping
-     *
-     * @param array $map
-     * @param array $params
-     *
-     * @return array
-     */
-    protected function mapParams($map, $params)
-    {
-        $keys = [];
-        foreach (array_keys($params) as $key) {
-            if (isset($map[$key])) {
-                $keys[] = $map[$key];
-            } else {
-                $keys[] = $key;
-            }
-        }
-
-        return array_combine($keys, array_values($params));
     }
 }
