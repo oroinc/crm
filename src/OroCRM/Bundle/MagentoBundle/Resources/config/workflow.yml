@@ -166,7 +166,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         call_duration:
-                            form_type: time
+                            form_type: oro_time_interval
                             options:
                                 required: false
                                 widget: single_text
@@ -200,13 +200,10 @@ workflows:
                                     - @not_empty: $cart.customer
                                     - @not_empty: $cart.customer.contact
                             parameters: [$contact, $cart.customer.contact]
-                        - @create_object:
-                            class: '\DateTime'
+                        - @create_datetime:
                             attribute: $call_date
-                        - @create_object:
-                            class: '\DateTime'
-                            arguments:
-                                - '00:00:00'
+                        - @create_datetime:
+                            time: '00:00:00'
                             attribute: $call_duration
             send_email:
                 label: 'Send email'
@@ -680,7 +677,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         call_duration:
-                            form_type: time
+                            form_type: oro_time_interval
                             options:
                                 required: false
                                 widget: single_text
@@ -743,13 +740,10 @@ workflows:
                                     - @not_empty: $order.cart.customer.contact
                             parameters: [$contact, $order.cart.customer.contact]
 
-                        - @create_object:
-                            class: '\DateTime'
+                        - @create_datetime:
                             attribute: $call_date
-                        - @create_object:
-                            class: '\DateTime'
-                            arguments:
-                                - '00:00:00'
+                        - @create_datetime:
+                            time: '00:00:00'
                             attribute: $call_duration
             send_email:
                 label: 'Send email'
