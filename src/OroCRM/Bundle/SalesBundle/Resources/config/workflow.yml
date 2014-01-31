@@ -410,11 +410,10 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                     init_actions:
-                        - @create_object:
+                        - @create_datetime:
                             conditions:
                                 @empty: $close_date
                             parameters:
-                                class: '\DateTime'
                                 attribute: $close_date
             close_as_lost:
                 label: 'Close as Lost'
