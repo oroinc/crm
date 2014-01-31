@@ -1,0 +1,12 @@
+oro_menu_config:
+    items:
+        contact_requests:
+            label: 'Contact Requests'
+            route: 'orocrm_contactus_request_index'
+
+    tree:
+        application_menu:
+            children:
+                customers_tab:
+                    children:
+                        contact_requests: ~

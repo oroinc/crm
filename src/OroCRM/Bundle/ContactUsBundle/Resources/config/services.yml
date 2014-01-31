@@ -1,0 +1,8 @@
+parameters:
+    orocrm_contact_us.embedded_form.class: OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType
+
+services:
+    orocrm_contact_us.embedded_form:
+        class: %orocrm_contact_us.embedded_form.class%
+        tags:
+            - { name: oro_embedded_form, label: orocrm.contactus.contactrequest.entity_label }

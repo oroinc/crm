@@ -1,0 +1,36 @@
+orocrm:
+    contactus:
+        contactrequest:
+            entity_label: Contact Us Request
+            entity_plural_label: Contact Requests
+            id:
+                label: ID
+            name:
+                label: Name
+            email:
+                label: Email
+            phone:
+                label: Phone
+            comment:
+                label: Comment
+            channel:
+                label: Channel
+            created_at:
+                label: Created
+            updated_at:
+                label: Updated
+
+            widget:
+                info:
+                    title: Contact Request Details
+
+            datagrid:
+                update: Update
+                delete: Delete
+                view: View
+
+            embedded_form: Contact Us
+
+    contact_request:
+        entity:
+            saved: Contact request has been saved successfully

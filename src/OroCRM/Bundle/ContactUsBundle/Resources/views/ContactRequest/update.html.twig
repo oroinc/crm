@@ -1,0 +1,63 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+
+{% set formAction = form.vars.value.id ? path('orocrm_contactus_request_update', { 'id': form.vars.value.id }) : path('orocrm_contactus_request_create') %}
+
+{% block navButtons %}
+    {% if form.vars.value.id and resource_granted('orocrm_contactus_request_delete') %}
+        {{ UI.deleteButton({
+            'dataUrl': path('orocrm_contactus_request_delete', {'id': form.vars.value.id}),
+            'dataRedirect': path('orocrm_contactus_request_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-contact-request-form',
+            'dataId': form.vars.value.id,
+            'entity_label': 'orocrm.contactus.contactrequest.entity_label'|trans,
+        }) }}
+        {{ UI.buttonSeparator() }}
+    {% endif %}
+    {{ UI.button({'path' : path('orocrm_contactus_request_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
+    {% if resource_granted('orocrm_contactus_request_edit') %}
+        {{ UI.saveAndStayButton() }}
+    {% endif %}
+    {{ UI.saveAndCloseButton() }}
+{% endblock %}
+
+{% block pageHeader %}
+    {% if form.vars.value.id %}
+        {% set breadcrumbs = {
+            'entity':      form.vars.value,
+            'indexPath':   path('orocrm_contactus_request_index'),
+            'indexLabel': 'orocrm.contactus.contactrequest.entity_plural_label'|trans,
+            'entityTitle': form.vars.value.name
+        } %}
+        {{ parent() }}
+    {% else %}
+        {% include 'OroUIBundle::page_title_block.html.twig' %}
+    {% endif %}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'contact-request-form' %}
+
+    {% set dataBlocks = [{
+        'title': 'General'|trans,
+        'class': 'active',
+        'subblocks': [
+            {
+                'title': 'orocrm.contactus.contactrequest.entity_label'|trans,
+                'data': [
+                    form_row(form.channel),
+                    form_row(form.name),
+                    form_row(form.email),
+                    form_row(form.phone),
+                    form_row(form.comment)
+                ]
+            }
+        ]
+    }] %}
+
+    {% set data = {
+        'formErrors': form_errors(form)? form_errors(form) : null,
+        'dataBlocks': dataBlocks,
+    } %}
+    {{ parent() }}
+{% endblock content_data %}
