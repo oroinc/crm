@@ -31,6 +31,7 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
         'id',
         'namePrefix',
         'firstName',
+        'middleName',
         'lastName',
         'nameSuffix',
         'gender',
