@@ -213,9 +213,13 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
                 $account[$type]['country']    = $address['country_id'];
                 if (isset($address['region'])) {
                     $account[$type]['regionText'] = $address['region'];
+                } else {
+                    $account[$type]['regionText'] = null;
                 }
                 if (isset($address['region_id'])) {
                     $account[$type]['region'] = $address['region_id'];
+                } else {
+                    $account[$type]['region'] = null;
                 }
                 $account[$type]['created']    = $address['created_at'];
                 $account[$type]['updated']    = $address['updated_at'];
