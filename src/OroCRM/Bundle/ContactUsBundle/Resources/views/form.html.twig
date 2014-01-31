@@ -1,0 +1,24 @@
+<div class="page-title">
+    <h1>Contact Us</h1>
+</div>
+{{ form_start(form, {'attr': {'id': form.vars.name, 'novalidate': 'novalidate' }}) }}
+<div class="fieldset">
+    <h2 class="legend">Contact Information</h2>
+    <ul class="form-list">
+        <li class="fields">
+            {{ form_row(form.name) }}
+            {{ form_row(form.email) }}
+        </li>
+        <li>
+            {{ form_row(form.phone) }}
+        </li>
+        <li class="wide">
+            {{ form_row(form.comment) }}
+        </li>
+    </ul>
+</div>
+<div class="buttons-set">
+    <p class="required">* Required Fields</p>
+    {{ form_widget(form.submit) }}
+</div>
+{{ form_end(form) }}

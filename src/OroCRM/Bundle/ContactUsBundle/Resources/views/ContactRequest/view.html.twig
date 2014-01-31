@@ -1,0 +1,59 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('orocrm_contactus_request_index'),
+        'indexLabel': 'orocrm.contactus.contactrequest.entity_plural_label'|trans,
+        'entityTitle': entity.name
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block navButtons %}
+    {% if resource_granted('orocrm_contactus_request_delete') %}
+        {{ UI.deleteButton({
+            'dataUrl': path('orocrm_contactus_request_delete', {'id': entity.id}),
+            'dataRedirect': path('orocrm_contactus_request_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-contact-request-form',
+            'dataId': entity.id,
+            'entity_label': 'orocrm.contactus.contactrequest.entity_label'|trans,
+        }) }}
+        {{ UI.buttonSeparator() }}
+    {% endif %}
+
+    {{ UI.button({'path' : path('orocrm_contactus_request_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
+    {% if resource_granted('orocrm_contactus_request_edit') %}
+        {{ UI.editButton({
+            'path': path('orocrm_contactus_request_update', {'id': entity.id}),
+            'entity_label': 'orocrm.contactus.contactrequest.entity_label'|trans,
+        }) }}
+    {% endif %}
+{% endblock %}
+
+{% block content_data %}
+    {% set contactRequestInformationWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('orocrm_contactus_request_info', {id: entity.id}),
+            'title': 'orocrm.contactus.contactrequest.widget.info.title'|trans
+        }) }}
+    {% endset %}
+
+
+    {% set id = 'contactRequestView' %}
+    {% set data = {
+        'dataBlocks': [
+            {
+                'title': 'General',
+                'class': 'active',
+                'subblocks': [
+                    {'data': [contactRequestInformationWidget]}
+                ]
+            }
+        ]
+    } %}
+    {{ parent() }}
+{% endblock %}

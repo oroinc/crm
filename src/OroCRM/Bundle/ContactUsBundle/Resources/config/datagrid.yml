@@ -1,0 +1,107 @@
+datagrid:
+    contact-requests-grid:
+        source:
+#            acl_resource: orocrm_contactus_request_view
+            type: orm
+            query:
+                select:
+                    - contact_request.id
+                    - contact_request.name
+                    - contact_request.email
+                    - contact_request.phone
+                    - contact_request.createdAt
+                    - channel.name as channelName
+                from:
+                    - { table: OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest, alias: contact_request }
+                join:
+                    left:
+                        - { join: contact_request.channel, alias: channel }
+
+        columns:
+            name:
+                label: orocrm.contactus.contactrequest.name.label
+            email:
+                label: orocrm.contactus.contactrequest.email.label
+            phone:
+                label: orocrm.contactus.contactrequest.phone.label
+            channelName:
+                label: orocrm.contactus.contactrequest.channel.label
+            createdAt:
+                frontend_type: datetime
+                label: orocrm.contactus.contactrequest.created_at.label
+
+        sorters:
+            columns:
+                name:
+                    data_name: contact_request.name
+                email:
+                    data_name: contact_request.email
+                phone:
+                    data_name: contact_request.phone
+                channelName:
+                    data_name: channel.name
+                createdAt:
+                    data_name: contact_request.createdAt
+            default:
+                createdAt: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
+
+        filters:
+            columns:
+                name:
+                    type:      string
+                    data_name: contact_request.name
+                email:
+                    type:      string
+                    data_name: contact_request.email
+                phone:
+                    type:      string
+                    data_name: contact_request.phone
+                channel:
+                    type: entity
+                    data_name: channel
+                    label: orocrm.contactus.contactrequest.channel.label
+                    options:
+                        field_options:
+                          class: OroIntegrationBundle:Channel
+                          property: name
+                createdAt:
+                    type: datetime
+                    data_name: contact_request.createdAt
+
+
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_contactus_request_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_contactus_request_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      orocrm_contactus_request_delete
+                params:     [ id ]
+
+        actions:
+            view:
+                acl_resource: oro_embedded_form_view
+                type: navigate
+                label: orocrm.contactus.contactrequest.datagrid.view
+                icon: user
+                link: view_link
+                rowAction: true
+            update:
+                acl_resource: oro_embedded_form_edit
+                type: navigate
+                label: Edit
+                icon: edit
+                link: update_link
+            delete:
+                acl_resource: oro_embedded_form_delete
+                type: delete
+                label: orocrm.contactus.contactrequest.datagrid.delete
+                icon: trash
+                link: delete_link
+

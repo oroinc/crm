@@ -1,0 +1,5 @@
+oro_embedded_form:
+    resource: "@OroCRMContactUsBundle/Controller"
+    type: annotation
+    prefix: /contact-us
+
