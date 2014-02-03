@@ -68,4 +68,3 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($updatedAt, $request->getUpdatedAt());
     }
 }
- 
