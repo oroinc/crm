@@ -198,6 +198,4 @@ CSS;
 
         $this->assertEquals($expectedCss, $type->getDefaultCss());
     }
-
-
 }

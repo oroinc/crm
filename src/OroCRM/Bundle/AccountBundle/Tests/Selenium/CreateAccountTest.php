@@ -54,27 +54,34 @@ class CreateAccountTest extends Selenium2TestCase
     }
 
     /**
-     * @depends testCreateAccount
+     * depends testCreateAccount
      * @param $accountName
      * @return string
      */
-    public function testUpdateAccount($accountName)
+    public function testUpdateAccount($accountName = '123213')
     {
         $newAccountName = 'Update_' . $accountName;
 
         $login = $this->login();
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
+        $login = $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
             ->open(array($accountName))
             ->edit()
             ->assertTitle($accountName . ' - Edit - Accounts - Customers')
-            ->setAccountName($newAccountName)
+            ->setAccountName($newAccountName);
+            $login->getTest()->moveto($login->getTest()->byXPath("//button[@class = 'btn btn-medium add-btn']"));
+            $login->getTest()->byXPath("//button[@class = 'btn btn-medium add-btn']")->click();
+        $login->waitPageToLoad();
+        $login->waitForAjax();
+        file_put_contents('c:\dev\grid.html',$login->getTest()->source());
+        $this->assertTrue(false);
+        /*
             ->save()
             ->assertMessage('Account saved')
             ->toGrid()
             ->assertTitle('Accounts - Customers')
             ->close();
-
+        */
         return $newAccountName;
     }
 
