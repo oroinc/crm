@@ -13,4 +13,3 @@ class OroCRMContactUsExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($rc->isSubclassOf('Symfony\Component\HttpKernel\DependencyInjection\Extension'));
     }
 }
- 
