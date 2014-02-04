@@ -68,21 +68,13 @@ class CreateAccountTest extends Selenium2TestCase
             ->open(array($accountName))
             ->edit()
             ->assertTitle($accountName . ' - Edit - Accounts - Customers')
-            ->setAccountName($newAccountName);
-            $login->getTest()->moveto($login->getTest()->byXPath("//button[@class = 'btn btn-medium add-btn']"));
-            $login->getTest()->byXPath("//button[@class = 'btn btn-medium add-btn']")->click();
-        $login->waitPageToLoad();
-        $login->waitForAjax();
-        file_put_contents('c:\dev\grid.html',$login->getTest()->source());
-        $this->assertTrue(false);
-        /*
+            ->setAccountName($newAccountName)
             ->save()
             ->assertMessage('Account saved')
             ->toGrid()
             ->assertTitle('Accounts - Customers')
             ->close();
-        */
-        return $newAccountName;
+         return $newAccountName;
     }
 
     /**
