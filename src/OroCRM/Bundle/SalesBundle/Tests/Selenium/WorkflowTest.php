@@ -21,24 +21,19 @@ class WorkflowTest extends Selenium2TestCase
         'region' => 'New York'
     );
 
-    protected function setUp()
-    {
-        $this->markTestIncomplete('Should be fixed after all workflow improvements in scope of CRM-779');
-
-        parent::setUp();
-    }
-
     public function testLeadWorkflow()
     {
         $login = $this->login();
 
         $leadName = $this->createLead($login);
+        $accountName = $this->createAccount($login);
 
         $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->filterBy('Lead name', $leadName)
             ->open(array($leadName))
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->qualify()
+            ->setAccount($accountName)
             ->submit()
             ->develop()
             ->setBudget('100')
@@ -90,7 +85,7 @@ class WorkflowTest extends Selenium2TestCase
             ->setCustomerNeed('Some customer needs')
             ->setSolution('Some solution')
             ->submit()
-            ->assertTitle("B2B Sales Flow (Develop) - {$opportunityName} - Opportunities")
+            ->assertTitle("{$opportunityName} - Opportunities - Sales")
             ->closeAsWon()
             ->setCloseRevenue('100')
             ->submit()
@@ -115,7 +110,7 @@ class WorkflowTest extends Selenium2TestCase
             ->setCustomerNeed('Some customer needs')
             ->setSolution('Some solution')
             ->submit()
-            ->assertTitle("B2B Sales Flow (Develop) - {$opportunityName} - Opportunities")
+            ->assertTitle("{$opportunityName} - Opportunities - Sales")
             ->closeAsLost()
             ->setCloseReason('Cancelled')
             ->submit()
