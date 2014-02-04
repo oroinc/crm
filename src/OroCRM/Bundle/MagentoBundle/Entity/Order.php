@@ -74,14 +74,14 @@ class Order extends BaseOrder
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_virtual", type="boolean")
+     * @ORM\Column(name="is_virtual", type="boolean", nullable=true)
      */
     protected $isVirtual = false;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_guest", type="boolean")
+     * @ORM\Column(name="is_guest", type="boolean", nullable=true)
      */
     protected $isGuest = false;
 
@@ -102,35 +102,35 @@ class Order extends BaseOrder
     /**
      * @var string
      *
-     * @ORM\Column(name="store_name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="store_name", type="string", length=255, nullable=true)
      */
     protected $storeName;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="total_paid_amount", type="float")
+     * @ORM\Column(name="total_paid_amount", type="float", nullable=true)
      */
     protected $totalPaidAmount = 0;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="total_invoiced_amount", type="float")
+     * @ORM\Column(name="total_invoiced_amount", type="float", nullable=true)
      */
     protected $totalInvoicedAmount = 0;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="total_refunded_amount", type="float")
+     * @ORM\Column(name="total_refunded_amount", type="float", nullable=true)
      */
     protected $totalRefundedAmount = 0;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="total_canceled_amount", type="float")
+     * @ORM\Column(name="total_canceled_amount", type="float", nullable=true)
      */
     protected $totalCanceledAmount = 0;
 

@@ -25,7 +25,7 @@ class OrderItem extends BaseOrderItem
     /**
      * @var string
      *
-     * @ORM\Column(name="product_type", type="string", length=255, nullable=false)
+     * @ORM\Column(name="product_type", type="string", length=255, nullable=true)
      */
     protected $productType;
 
@@ -39,14 +39,14 @@ class OrderItem extends BaseOrderItem
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_virtual", type="boolean")
+     * @ORM\Column(name="is_virtual", type="boolean", nullable=true)
      */
     protected $isVirtual;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="original_price", type="float", nullable=false)
+     * @ORM\Column(name="original_price", type="float", nullable=true)
      */
     protected $originalPrice;
 

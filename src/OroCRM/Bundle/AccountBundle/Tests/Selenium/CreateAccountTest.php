@@ -54,16 +54,16 @@ class CreateAccountTest extends Selenium2TestCase
     }
 
     /**
-     * @depends testCreateAccount
+     * depends testCreateAccount
      * @param $accountName
      * @return string
      */
-    public function testUpdateAccount($accountName)
+    public function testUpdateAccount($accountName = '123213')
     {
         $newAccountName = 'Update_' . $accountName;
 
         $login = $this->login();
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
+        $login = $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
             ->open(array($accountName))
             ->edit()
@@ -74,8 +74,7 @@ class CreateAccountTest extends Selenium2TestCase
             ->toGrid()
             ->assertTitle('Accounts - Customers')
             ->close();
-
-        return $newAccountName;
+         return $newAccountName;
     }
 
     /**
