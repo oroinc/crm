@@ -51,6 +51,7 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface, 
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getDefaultCss()
     {
