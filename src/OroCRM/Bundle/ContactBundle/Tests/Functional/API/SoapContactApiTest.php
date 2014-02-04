@@ -48,6 +48,7 @@ class SoapContactApiTest extends WebTestCase
     {
         //$this->markTestIncomplete('Should be fixed in scope of BAP-1383');
 
+        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $result = $this->client->getSoap()->createContact($request);
         $this->assertInternalType('int', $result);
         $this->assertGreaterThan(0, $result, $this->client->getSoap()->__getLastResponse());
@@ -75,6 +76,7 @@ class SoapContactApiTest extends WebTestCase
         $contactId = $this->getContactIdByFirstName($request['firstName']);
 
         // test getContact
+        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $contact = $this->client->getSoap()->getContact($contactId);
         $contact = ToolsAPI::classToArray($contact);
 
@@ -83,6 +85,7 @@ class SoapContactApiTest extends WebTestCase
         $this->assertEquals($request['firstName'], $contact['firstName']);
 
         // get getContacts
+        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $contacts = $this->client->getSoap()->getContacts(1, 1000);
         $contacts = ToolsAPI::classToArray($contacts);
         $contactFound = array_filter(
@@ -104,9 +107,11 @@ class SoapContactApiTest extends WebTestCase
         $contactId = $this->getContactIdByFirstName($request['firstName']);
 
         $request['description'] .= '_Updated';
+        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $result = $this->client->getSoap()->updateContact($contactId, $request);
         $this->assertTrue($result);
 
+        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $contact = $this->client->getSoap()->getContact($contactId);
         $contact = ToolsAPI::classToArray($contact);
         $this->assertArrayHasKey('description', $contact);
@@ -123,11 +128,13 @@ class SoapContactApiTest extends WebTestCase
     {
         $contactId = $this->getContactIdByFirstName($request['firstName']);
 
+        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $result = $this->client->getSoap()->deleteContact($contactId);
         $this->assertTrue($result);
 
         $this->setExpectedException('\SoapFault', 'Record with ID "' . $contactId . '" can not be found');
         try {
+            $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
             $this->client->getSoap()->getContact($contactId);
         } catch (\SoapFault $e) {
             $this->assertEquals('NOT_FOUND', $e->faultcode);
