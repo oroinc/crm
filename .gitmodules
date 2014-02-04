@@ -1,0 +1,3 @@
+[submodule "OroCRMContactUsBundle"]
+    path = ./src/OroCRM/Bundle/ContactUsBundle
+    url = git@github.com:laboro/OroCRMContactUsBundle.git
