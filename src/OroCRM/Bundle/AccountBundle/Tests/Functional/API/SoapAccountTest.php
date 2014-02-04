@@ -38,6 +38,7 @@ class SoapAccountTest extends WebTestCase
             "owner" => '1',
         );
 
+        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $result = $this->client->getSoap()->createAccount($request);
         $this->assertTrue((bool) $result, $this->client->getSoap()->__getLastResponse());
 
@@ -52,6 +53,7 @@ class SoapAccountTest extends WebTestCase
      */
     public function testGet($request)
     {
+        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $accounts = $this->client->getSoap()->getAccounts(1, 1000);
         $accounts = ToolsAPI::classToArray($accounts);
         $accountName = $request['name'];
@@ -79,8 +81,12 @@ class SoapAccountTest extends WebTestCase
         $accountUpdate = $request;
         unset($accountUpdate['id']);
         $accountUpdate['name'] .= '_Updated';
+
+        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $result = $this->client->getSoap()->updateAccount($request['id'], $accountUpdate);
         $this->assertTrue($result);
+
+        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $account = $this->client->getSoap()->getAccount($request['id']);
         $account = ToolsAPI::classToArray($account);
 
@@ -96,8 +102,10 @@ class SoapAccountTest extends WebTestCase
      */
     public function testDelete($request)
     {
+        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $result = $this->client->getSoap()->deleteAccount($request['id']);
         $this->assertTrue($result);
+        
         try {
             $this->client->getSoap()->getAccount($request['id']);
         } catch (\SoapFault $e) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ReportBundle\Tests\Functional;
+namespace OroCRM\Bundle\ReportBundle\Tests\Functional;
 
 use Oro\Bundle\ReportBundle\Tests\Functional\ControllersTest as BaseControllersTest;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
