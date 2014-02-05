@@ -8,6 +8,7 @@ use Doctrine\ORM\UnitOfWork;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
+use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\BatchBundle\Item\InvalidItemException;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
@@ -63,14 +64,21 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
             $existingEntity = $this->getEntityByCriteria($criteria, $entity);
         } else {
             $existingEntity = $this->getEntityOrNull($entity, $criteria, $entityName);
-
         }
 
         if ($existingEntity) {
             $this->strategyHelper->importEntity($existingEntity, $entity, $excludedProperties);
             $entity = $existingEntity;
         } else {
-            $entity->setId(null);
+            $identifier = is_array($criteria) ? 'id' : $criteria;
+            $setterMethod = 'set' . ucfirst($identifier);
+            if (method_exists($entity, $setterMethod)) {
+                $entity->$setterMethod(null);
+            } elseif (property_exists($entity, $identifier)) {
+                $reflection = new \ReflectionProperty(ClassUtils::getClass($entity), $identifier);
+                $reflection->setAccessible(true);
+                $reflection->setValue($entity, null);
+            }
         }
 
         return $entity;
@@ -183,10 +191,16 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
      */
     protected function updateAddressCountryRegion(AbstractAddress $address, $mageRegionId)
     {
-        $countryCode = $address->getCountry()->getIso2Code();
+        if (!$address->getCountry()) {
+            return $this;
+        }
 
+        $countryCode = $address->getCountry()->getIso2Code();
         $country = $this->getAddressCountryByCode($address, $countryCode);
         $address->setCountry($country);
+        if (!$country) {
+            return $this;
+        }
 
         if (!empty($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId])) {
             $this->mageRegionsCache[$mageRegionId] = $this->getEntityByCriteria(
@@ -201,7 +215,7 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
             $combinedCode = $mageRegion->getCombinedCode();
             $regionCode = $mageRegion->getCode();
 
-            if (empty($this->regionsCache[$combinedCode])) {
+            if (array_key_exists($combinedCode, $this->regionsCache)) {
                 $this->regionsCache[$combinedCode] = $this->loadRegionByCode($combinedCode, $countryCode, $regionCode);
             }
 
@@ -298,21 +312,27 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
      * @param string          $countryCode
      *
      * @throws InvalidItemException
-     * @return object
+     * @return object|null
      */
     protected function getAddressCountryByCode(AbstractAddress $address, $countryCode)
     {
-        $this->countriesCache[$countryCode] = empty($this->countriesCache[$countryCode])
-            ? $this->findAndReplaceEntity(
+        if (!$address->getCountry()) {
+            return null;
+        }
+
+        if (array_key_exists($countryCode, $this->countriesCache)) {
+            if (!empty($this->countriesCache[$countryCode])) {
+                $this->countriesCache[$countryCode] = $this->merge($this->countriesCache[$countryCode]);
+            }
+        } else {
+            /** @var Country $country */
+            $country = $this->findAndReplaceEntity(
                 $address->getCountry(),
                 'Oro\Bundle\AddressBundle\Entity\Country',
                 'iso2Code',
                 ['iso2Code', 'iso3Code', 'name']
-            )
-            : $this->merge($this->countriesCache[$countryCode]);
-
-        if (empty($this->countriesCache[$countryCode])) {
-            throw new InvalidItemException(sprintf('Unable to find country by code "%s"', $countryCode), []);
+            );
+            $this->countriesCache[$countryCode] = $country->getIso2Code() ? $country : null;
         }
 
         return $this->countriesCache[$countryCode];

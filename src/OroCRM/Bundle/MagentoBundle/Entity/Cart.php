@@ -418,7 +418,7 @@ class Cart extends BaseCart
     /**
      * @param CartAddress $shippingAddress
      */
-    public function setShippingAddress(CartAddress $shippingAddress)
+    public function setShippingAddress($shippingAddress)
     {
         $this->shippingAddress = $shippingAddress;
     }
@@ -426,7 +426,7 @@ class Cart extends BaseCart
     /**
      * @param CartAddress $billingAddress
      */
-    public function setBillingAddress(CartAddress $billingAddress)
+    public function setBillingAddress($billingAddress)
     {
         $this->billingAddress = $billingAddress;
     }
