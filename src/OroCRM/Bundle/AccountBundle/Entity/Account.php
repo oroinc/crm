@@ -16,6 +16,7 @@ use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use Oro\Bundle\UserBundle\Entity\User;
 
@@ -37,6 +38,9 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
+ *      },
+ *      "merge"={
+ *          "merge_enable"=true
  *      }
  *  }
  * )
@@ -57,6 +61,7 @@ class Account extends ExtendAccount implements Taggable
      * @ORM\Column(type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"merge_enable"=true}})
      */
     protected $name;
 
@@ -65,6 +70,7 @@ class Account extends ExtendAccount implements Taggable
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Soap\ComplexType("string", nillable=true)
+     * @ConfigField(defaultValues={"merge"={"merge_enable"=true}})
      */
     protected $owner;
 
@@ -73,6 +79,14 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *  defaultValues={
+     *      "merge"={
+     *          "merge_enable"=true,
+     *          "merge_template"="some_template_here.html.twig"
+     *      }
+     *  }
+     * )
      */
     protected $shippingAddress;
 
@@ -81,6 +95,15 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(defaultValues={"merge"={"merge_enable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "merge"={
+     *          "merge_enable"=true,
+     *          "merge_template"="some_template_here.html.twig"
+     *      }
+     *  }
+     * )
      */
     protected $billingAddress;
 
@@ -91,6 +114,14 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", inversedBy="accounts")
      * @ORM\JoinTable(name="orocrm_account_to_contact")
+     * @ConfigField(
+     *  defaultValues={
+     *      "merge"={
+     *          "merge_enable"=true,
+     *          "merge_template"="some_template_here.html.twig"
+     *      }
+     *  }
+     * )
      */
     protected $contacts;
 
@@ -101,6 +132,14 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="default_contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *  defaultValues={
+     *      "merge"={
+     *          "merge_enable"=true,
+     *          "merge_template"="some_template_here.html.twig"
+     *      }
+     *  }
+     * )
      */
     protected $defaultContact;
 
@@ -122,6 +161,16 @@ class Account extends ExtendAccount implements Taggable
 
     /**
      * @var ArrayCollection $tags
+     * @ConfigField(
+     *  defaultValues={
+     *      "merge"={
+     *          "merge_enable"=true,
+     *          "merge_template"="some_template_here.html.twig",
+     *          "merge_setter"="some_service:setterMethod",
+     *          "merge_getter"="some_service:getterMethod"
+     *      }
+     *  }
+     * )
      */
     protected $tags;
 
