@@ -135,9 +135,7 @@ class RestContactApiTest extends WebTestCase
         $this->client->request(
             'POST',
             $this->client->generate('oro_api_post_contact'),
-            $request,
-            array(),
-            ToolsAPI::generateWsseHeader()
+            $request
         );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 201);
@@ -158,10 +156,7 @@ class RestContactApiTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_contacts'),
-            array(),
-            array(),
-            ToolsAPI::generateWsseHeader()
+            $this->client->generate('oro_api_get_contacts')
         );
         $result = $this->client->getResponse();
         $entities = ToolsAPI::jsonToArray($result->getContent());
@@ -230,19 +225,14 @@ class RestContactApiTest extends WebTestCase
         $this->client->request(
             'PUT',
             $this->client->generate('oro_api_put_contact', array('id' => $contact['id'])),
-            $request,
-            array(),
-            ToolsAPI::generateWsseHeader()
+            $request
         );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_contact', array('id' => $contact['id'])),
-            array(),
-            array(),
-            ToolsAPI::generateWsseHeader()
+            $this->client->generate('oro_api_get_contact', array('id' => $contact['id']))
         );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
@@ -268,20 +258,14 @@ class RestContactApiTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_contact', array('id' => $contact['id'])),
-            array(),
-            array(),
-            ToolsAPI::generateWsseHeader()
+            $this->client->generate('oro_api_delete_contact', array('id' => $contact['id']))
         );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_contact', array('id' => $contact['id'])),
-            array(),
-            array(),
-            ToolsAPI::generateWsseHeader()
+            $this->client->generate('oro_api_get_contact', array('id' => $contact['id']))
         );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 404);
