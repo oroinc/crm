@@ -1,6 +1,7 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0;
 
+use Oro\Bundle\WorkflowBundle\Model\Workflow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -149,7 +150,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 $this->persist($this->em, $lead);
 
                 $this->loadSalesFlows($lead);
-
                 $i++;
                 if ($i % self::FLUSH_MAX == 0) {
                     $this->flush($this->em);
@@ -166,7 +166,9 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
      */
     protected function loadSalesFlows(Lead $lead)
     {
-        $leadWorkflowItem = $this->workflowManager->startWorkflow(
+        $leadWorkflowItem = $this->startWorkflow(
+            $this->workflowManager,
+            $this->em,
             'b2b_flow_lead',
             $lead,
             'qualify',
@@ -179,7 +181,9 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         if ($this->getRandomBoolean()) {
             /** @var Opportunity $opportunity */
             $opportunity = $leadWorkflowItem->getResult()->get('opportunity');
-            $salesFlowItem = $this->workflowManager->startWorkflow(
+            $salesFlowItem = $this->startWorkflow(
+                $this->workflowManager,
+                $this->em,
                 'b2b_flow_sales',
                 $opportunity,
                 'develop',
@@ -311,6 +315,36 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         /** @var EntityManager $em */
         $workflow->transit($workflowItem, $transition);
         $workflowItem->setUpdated();
+    }
+
+    /**
+     * @param       $workflowManager
+     * @param       $em
+     * @param       $workflow
+     * @param       $entity
+     * @param null  $transition
+     * @param array $data
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function startWorkflow(
+        $workflowManager,
+        $em,
+        $workflow,
+        $entity,
+        $transition = null,
+        array $data = array()
+    ) {
+        /** @var Workflow $workflow */
+        $workflow = $workflowManager->getWorkflow($workflow);
+        try {
+            $workflowItem = $workflow->start($entity, $data, $transition);
+            $this->persist($em, $workflowItem);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+        return $workflowItem;
     }
 
     /**
