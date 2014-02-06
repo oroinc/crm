@@ -215,7 +215,7 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
             $combinedCode = $mageRegion->getCombinedCode();
             $regionCode = $mageRegion->getCode();
 
-            if (array_key_exists($combinedCode, $this->regionsCache)) {
+            if (!array_key_exists($combinedCode, $this->regionsCache)) {
                 $this->regionsCache[$combinedCode] = $this->loadRegionByCode($combinedCode, $countryCode, $regionCode);
             }
 
