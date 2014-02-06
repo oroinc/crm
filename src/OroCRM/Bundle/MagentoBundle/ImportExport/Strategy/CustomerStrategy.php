@@ -161,9 +161,13 @@ class CustomerStrategy extends BaseStrategy
             //$originAddressId = $address->getId();
             $address->setId(null);
 
-            $this
-                ->updateAddressCountryRegion($address, $mageRegionId)
-                ->updateAddressTypes($address);
+            $this->updateAddressCountryRegion($address, $mageRegionId);
+            if (!$address->getCountry()) {
+                $contact->removeAddress($address);
+                continue;
+            }
+
+            $this->updateAddressTypes($address);
         }
 
         $entity->setContact($contact);
@@ -186,16 +190,21 @@ class CustomerStrategy extends BaseStrategy
 
             $originAddressId = $address->getId();
             $address->setOriginId($originAddressId);
-            $existingAddress = $entity->getAddressByOriginId($originAddressId);
-
-            if ($existingAddress) {
-                $this->strategyHelper->importEntity($existingAddress, $address, ['id', 'region', 'country']);
-                $address = $existingAddress;
+            if ($originAddressId) {
+                $existingAddress = $entity->getAddressByOriginId($originAddressId);
+                if ($existingAddress) {
+                    $this->strategyHelper->importEntity($existingAddress, $address, ['id', 'region', 'country']);
+                    $address = $existingAddress;
+                }
             }
 
-            $this
-                ->updateAddressCountryRegion($address, $mageRegionId)
-                ->updateAddressTypes($address);
+            $this->updateAddressCountryRegion($address, $mageRegionId);
+            if (!$address->getCountry()) {
+                $entity->removeAddress($address);
+                continue;
+            }
+
+            $this->updateAddressTypes($address);
 
             $address->setOwner($entity);
             $entity->addAddress($address);
@@ -235,7 +244,11 @@ class CustomerStrategy extends BaseStrategy
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
             $this->updateAddressCountryRegion($address, $mageRegionId);
 
-            $account->{'set' . ucfirst($key) . 'Address'}($address);
+            if ($address->getCountry()) {
+                $account->{'set' . ucfirst($key) . 'Address'}($address);
+            } else {
+                $account->{'set' . ucfirst($key) . 'Address'}(null);
+            }
         }
         $entity->setAccount($account);
 

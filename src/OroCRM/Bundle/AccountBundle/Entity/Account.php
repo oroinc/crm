@@ -256,7 +256,7 @@ class Account extends ExtendAccount implements Taggable
      * @param Address $address
      * @return Account
      */
-    public function setShippingAddress(Address $address)
+    public function setShippingAddress($address)
     {
         $this->shippingAddress = $address;
 
@@ -279,7 +279,7 @@ class Account extends ExtendAccount implements Taggable
      * @param Address $address
      * @return Account
      */
-    public function setBillingAddress(Address $address)
+    public function setBillingAddress($address)
     {
         $this->billingAddress = $address;
 
