@@ -7,6 +7,8 @@ parameters:
 
     orocrm_sales.lead.datagrid_helper.class: Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
 
+    orocrm_sales.funnel.entity.class: OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
+
 services:
     orocrm_sales.opportunity.manager.api:
         class: %orocrm_sales.opportunity.manager.api.class%

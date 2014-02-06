@@ -124,3 +124,16 @@ orocrm:
                 view: View
                 update: Update
                 delete: Delete
+
+        funnel:
+            entity_label:         Sales Funnel
+            entity_plural_label:  Sales Funnels
+            created_at.label:     Created
+            updated_at.label:     Updated
+            name.label:           Name
+            start_date.label:      Start Date
+
+            datagrid:
+                view:   View
+                update: Update
+                delete: Delete

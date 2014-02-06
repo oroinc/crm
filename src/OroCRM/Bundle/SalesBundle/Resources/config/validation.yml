@@ -39,3 +39,11 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
             - Email: ~
         website:
             - Url: ~
+
+OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
+    properties:
+        name:
+            - NotBlank: ~
+        startDate:
+            - NotBlank: ~
+            - Date: ~

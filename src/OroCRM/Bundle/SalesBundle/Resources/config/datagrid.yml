@@ -277,3 +277,74 @@ datagrid:
                     type: string
                     data_name: addressPostalCode
                     enabled: false
+
+    sales-funnel-grid:
+        extended_entity_name: %orocrm_sales.funnel.entity.class%
+        options:
+            entityHint: sales funnels
+        source:
+            type: orm
+            acl_resource: orocrm_sales_funnel_view
+            query:
+                select:
+                    - sf.id
+                    - sf.name
+                    - sf.startDate
+                from:
+                    - { table: %orocrm_sales.funnel.entity.class%, alias: sf }
+        columns:
+            name:
+                label: orocrm.sales.funnel.name.label
+            startDate:
+                label: orocrm.sales.funnel.start_date.label
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_sales_funnel_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_sales_funnel_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_salesfunnel
+                params:     [ id ]
+        sorters:
+            multiple_sorting: true
+            columns:
+                name:
+                    data_name: sf.name
+                startDate:
+                    data_name: sf.startDate
+            default:
+                startDate: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_sales_funnel_view
+                label:         orocrm.sales.funnel.datagrid.view
+                icon:          user
+                link:          view_link
+                rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_sales_funnel_update
+                label:         orocrm.sales.funnel.datagrid.update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_sales_funnel_delete
+                label:         orocrm.sales.funnel.datagrid.delete
+                icon:          trash
+                link:          delete_link
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: sf.name
+                startDate:
+                    type:      date
+                    data_name: sf.startDate

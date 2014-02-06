@@ -1,0 +1,18 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEmailBundle::macros.html.twig' as email %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderProperty('orocrm.sales.funnel.name.label'|trans, entity.name) }}
+            {{ ui.renderProperty('orocrm.sales.funnel.start_date.label'|trans, entity.startDate|oro_format_date) }}
+
+            {{ entityConfig.renderDynamicFields(entity) }}
+        </div>
+
+        <div class="responsive-block">
+            <span>N/A</span>
+        </div>
+    </div>
+</div>

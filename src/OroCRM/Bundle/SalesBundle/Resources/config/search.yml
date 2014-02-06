@@ -81,3 +81,17 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
                     name: nameSuffix
                     target_type: text
                     target_fields: [nameSuffix]
+
+OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
+    alias:                          oro_crm_sales_funnel
+    title_fields:                   [name]
+    route:
+        name:                       orocrm_sales_funnel_view
+        parameters:
+            id:                     id
+    search_template:                OroCRMSalesBundle:SalesFunnel:searchResult.html.twig
+    fields:
+        -
+            name:                   name
+            target_type:            text
+            target_fields:          [name]
