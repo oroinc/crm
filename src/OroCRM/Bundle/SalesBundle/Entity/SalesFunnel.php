@@ -16,8 +16,8 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *  routeName="orocrm_sales_funnel_index",
- *  routeView="orocrm_sales_funnel_view",
+ *  routeName="orocrm_sales_salesfunnel_index",
+ *  routeView="orocrm_sales_salesfunnel_view",
  *  defaultValues={
  *      "ownership"={
  *          "owner_type"="USER",

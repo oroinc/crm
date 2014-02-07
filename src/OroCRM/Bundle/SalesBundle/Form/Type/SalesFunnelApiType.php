@@ -36,6 +36,6 @@ class SalesFunnelApiType extends SalesFunnelType
      */
     public function getName()
     {
-        return 'orocrm_sales_funnel_api';
+        return 'orocrm_sales_salesfunnel_api';
     }
 }

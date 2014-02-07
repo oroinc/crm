@@ -279,12 +279,12 @@ datagrid:
                     enabled: false
 
     sales-funnel-grid:
-        extended_entity_name: %orocrm_sales.funnel.entity.class%
+        extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
         options:
             entityHint: sales funnels
         source:
             type: orm
-            acl_resource: orocrm_sales_funnel_view
+            acl_resource: orocrm_sales_salesfunnel_view
             query:
                 select:
                     - sf.id
@@ -293,30 +293,30 @@ datagrid:
                     - lead.name as leadName
                     - opportunity.name as opportunityName
                 from:
-                    - { table: %orocrm_sales.funnel.entity.class%, alias: sf }
+                    - { table: %orocrm_sales.salesfunnel.entity.class%, alias: sf }
                 join:
                     left:
                         - { join: sf.lead, alias: lead }
                         - { join: sf.opportunity, alias: opportunity }
         columns:
             name:
-                label: orocrm.sales.funnel.name.label
+                label: orocrm.sales.salesfunnel.name.label
             startDate:
-                label: orocrm.sales.funnel.start_date.label
+                label: orocrm.sales.salesfunnel.start_date.label
                 frontend_type: date
             leadName:
-                label: orocrm.sales.funnel.lead.label
+                label: orocrm.sales.salesfunnel.lead.label
             opportunityName:
-                label: orocrm.sales.funnel.opportunity.label
+                label: orocrm.sales.salesfunnel.opportunity.label
         properties:
             id: ~
             view_link:
                 type:       url
-                route:      orocrm_sales_funnel_view
+                route:      orocrm_sales_salesfunnel_view
                 params:     [ id ]
             update_link:
                 type:       url
-                route:      orocrm_sales_funnel_update
+                route:      orocrm_sales_salesfunnel_update
                 params:     [ id ]
             delete_link:
                 type:       url
@@ -338,21 +338,21 @@ datagrid:
         actions:
             view:
                 type:          navigate
-                acl_resource:  orocrm_sales_funnel_view
-                label:         orocrm.sales.funnel.datagrid.view
+                acl_resource:  orocrm_sales_salesfunnel_view
+                label:         orocrm.sales.salesfunnel.datagrid.view
                 icon:          user
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
-                acl_resource:  orocrm_sales_funnel_update
-                label:         orocrm.sales.funnel.datagrid.update
+                acl_resource:  orocrm_sales_salesfunnel_update
+                label:         orocrm.sales.salesfunnel.datagrid.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
-                acl_resource:  orocrm_sales_funnel_delete
-                label:         orocrm.sales.funnel.datagrid.delete
+                acl_resource:  orocrm_sales_salesfunnel_delete
+                label:         orocrm.sales.salesfunnel.datagrid.delete
                 icon:          trash
                 link:          delete_link
         filters:

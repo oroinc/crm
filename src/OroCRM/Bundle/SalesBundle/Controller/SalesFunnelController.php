@@ -20,12 +20,12 @@ class SalesFunnelController extends Controller
     /**
      * @Route(
      *      "/{_format}",
-     *      name="orocrm_sales_funnel_index",
+     *      name="orocrm_sales_salesfunnel_index",
      *      requirements={"_format"="html|json"},
      *      defaults={"_format" = "html"}
      * )
      * @Template
-     * @AclAncestor("orocrm_sales_funnel_view")
+     * @AclAncestor("orocrm_sales_salesfunnel_view")
      */
     public function indexAction()
     {
@@ -33,10 +33,10 @@ class SalesFunnelController extends Controller
     }
 
     /**
-     * @Route("/view/{id}", name="orocrm_sales_funnel_view", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="orocrm_sales_salesfunnel_view", requirements={"id"="\d+"})
      * @Template
      * @Acl(
-     *      id="orocrm_sales_funnel_view",
+     *      id="orocrm_sales_salesfunnel_view",
      *      type="entity",
      *      permission="VIEW",
      *      class="OroCRMSalesBundle:SalesFunnel"
@@ -50,9 +50,9 @@ class SalesFunnelController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", name="orocrm_sales_funnel_info", requirements={"id"="\d+"})
+     * @Route("/info/{id}", name="orocrm_sales_salesfunnel_info", requirements={"id"="\d+"})
      * @Template
-     * @AclAncestor("orocrm_sales_funnel_view")
+     * @AclAncestor("orocrm_sales_salesfunnel_view")
      */
     public function infoAction(SalesFunnel $entity)
     {
@@ -62,10 +62,10 @@ class SalesFunnelController extends Controller
     }
 
     /**
-     * @Route("/create", name="orocrm_sales_funnel_create")
+     * @Route("/create", name="orocrm_sales_salesfunnel_create")
      * @Template("OroCRMSalesBundle:SalesFunnel:update.html.twig")
      * @Acl(
-     *      id="orocrm_sales_funnel_create",
+     *      id="orocrm_sales_salesfunnel_create",
      *      type="entity",
      *      permission="CREATE",
      *      class="OroCRMSalesBundle:SalesFunnel"
@@ -78,10 +78,10 @@ class SalesFunnelController extends Controller
     }
 
     /**
-     * @Route("/update/{id}", name="orocrm_sales_funnel_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="orocrm_sales_salesfunnel_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="orocrm_sales_funnel_update",
+     *      id="orocrm_sales_salesfunnel_update",
      *      type="entity",
      *      permission="EDIT",
      *      class="OroCRMSalesBundle:SalesFunnel"
@@ -98,22 +98,22 @@ class SalesFunnelController extends Controller
      */
     protected function update(SalesFunnel $entity)
     {
-        if ($this->get('orocrm_sales.funnel.form.handler')->process($entity)) {
+        if ($this->get('orocrm_sales.salesfunnel.form.handler')->process($entity)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
                 $this->get('translator')->trans('orocrm.sales.controller.sales_funnel.saved.message')
             );
 
             return $this->get('oro_ui.router')->redirectAfterSave(
-                array('route' => 'orocrm_sales_funnel_update', 'parameters' => array('id' => $entity->getId())),
-                array('route' => 'orocrm_sales_funnel_view', 'parameters' => array('id' => $entity->getId())),
+                array('route' => 'orocrm_sales_salesfunnel_update', 'parameters' => array('id' => $entity->getId())),
+                array('route' => 'orocrm_sales_salesfunnel_view', 'parameters' => array('id' => $entity->getId())),
                 $entity
             );
         }
 
         return array(
             'entity' => $entity,
-            'form' => $this->get('orocrm_sales.funnel.form')->createView(),
+            'form' => $this->get('orocrm_sales.salesfunnel.form')->createView(),
         );
     }
 }

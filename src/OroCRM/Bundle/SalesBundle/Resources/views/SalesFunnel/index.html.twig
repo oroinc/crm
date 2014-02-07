@@ -1,13 +1,13 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% set gridName = 'sales-funnel-grid' %}
-{% set pageTitle = 'orocrm.sales.funnel.entity_plural_label'|trans %}
+{% set pageTitle = 'orocrm.sales.salesfunnel.entity_plural_label'|trans %}
 
 {% block navButtons %}
-    {% if resource_granted('orocrm_sales_funnel_create') %}
+    {% if resource_granted('orocrm_sales_salesfunnel_create') %}
         {{ UI.addButton({
-            'path' : path('orocrm_sales_funnel_create'),
-            'entity_label': 'orocrm.sales.funnel.entity_label'|trans
+            'path' : path('orocrm_sales_salesfunnel_create'),
+            'entity_label': 'orocrm.sales.salesfunnel.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock %}

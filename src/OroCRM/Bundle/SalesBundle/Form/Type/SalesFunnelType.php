@@ -15,17 +15,17 @@ class SalesFunnelType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text', array('required' => true, 'label' => 'orocrm.sales.funnel.name.label'))
+            ->add('name', 'text', array('required' => true, 'label' => 'orocrm.sales.salesfunnel.name.label'))
             ->add(
                 'startDate',
                 'oro_date',
-                array('required' => true, 'label' => 'orocrm.sales.funnel.start_date.label')
+                array('required' => true, 'label' => 'orocrm.sales.salesfunnel.start_date.label')
             )
             ->add(
                 'lead',
                 'orocrm_sales_lead_select',
                 array(
-                    'label' => 'orocrm.sales.funnel.lead.label',
+                    'label' => 'orocrm.sales.salesfunnel.lead.label',
                     'configs' => array(
                         'placeholder' => 'orocrm.sales.form.choose_lead',
                         'extra_config' => 'grid',
@@ -40,7 +40,7 @@ class SalesFunnelType extends AbstractType
             ->add(
                 'opportunity',
                 'orocrm_sales_opportunity_select',
-                array('label' => 'orocrm.sales.funnel.opportunity.label')
+                array('label' => 'orocrm.sales.salesfunnel.opportunity.label')
             );
     }
 

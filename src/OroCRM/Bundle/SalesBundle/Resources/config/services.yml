@@ -7,8 +7,8 @@ parameters:
 
     orocrm_sales.lead.datagrid_helper.class: Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
 
-    orocrm_sales.funnel.entity.class: OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
-    orocrm_sales.funnel.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_sales.salesfunnel.entity.class: OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
+    orocrm_sales.salesfunnel.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
 services:
     orocrm_sales.opportunity.manager.api:
@@ -23,10 +23,10 @@ services:
             - %orocrm_sales.lead.entity.class%
             - @doctrine.orm.entity_manager
 
-    orocrm_sales.funnel.manager.api:
-        class: %orocrm_sales.funnel.manager.api.class%
+    orocrm_sales.salesfunnel.manager.api:
+        class: %orocrm_sales.salesfunnel.manager.api.class%
         arguments:
-            - %orocrm_sales.funnel.entity.class%
+            - %orocrm_sales.salesfunnel.entity.class%
             - @doctrine.orm.entity_manager
 
     orocrm_sales.lead.datagrid_helper:

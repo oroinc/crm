@@ -5,8 +5,8 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ ui.renderProperty('orocrm.sales.funnel.name.label'|trans, entity.name) }}
-            {{ ui.renderProperty('orocrm.sales.funnel.start_date.label'|trans, entity.startDate|oro_format_date) }}
+            {{ ui.renderProperty('orocrm.sales.salesfunnel.name.label'|trans, entity.name) }}
+            {{ ui.renderProperty('orocrm.sales.salesfunnel.start_date.label'|trans, entity.startDate|oro_format_date) }}
 
             {%- if entity.lead and resource_granted('VIEW', entity.lead) -%}
                 {% set leadView = ui.renderUrl(
@@ -16,7 +16,7 @@
             {%- else -%}
                 {% set leadView = entity.lead ? entity.lead.name : '' %}
             {%- endif -%}
-            {{ ui.renderProperty('orocrm.sales.funnel.lead.label'|trans, leadView) }}
+            {{ ui.renderProperty('orocrm.sales.salesfunnel.lead.label'|trans, leadView) }}
 
             {%- if entity.opportunity and resource_granted('VIEW', entity.opportunity) -%}
                 {% set opportunityView = ui.renderUrl(
@@ -26,7 +26,7 @@
             {%- else -%}
                 {% set opportunityView = entity.opportunity ? entity.opportunity.name : '' %}
             {%- endif -%}
-            {{ ui.renderProperty('orocrm.sales.funnel.opportunity.label'|trans, opportunityView) }}
+            {{ ui.renderProperty('orocrm.sales.salesfunnel.opportunity.label'|trans, opportunityView) }}
 
             {# TODO: Add step property rendering here (BAP-3084) #}
             {#{{ entityConfig.renderDynamicFields(entity) }}#}
