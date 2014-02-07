@@ -141,3 +141,5 @@ orocrm:
                 view:   View
                 update: Update
                 delete: Delete
+        salesfunnel:
+            entity_label:         Sales Funnel
