@@ -8,8 +8,10 @@ parameters:
     orocrm_sales.lead.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\LeadHandler
 
     orocrm_sales.form.type.opportunity_select.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunitySelectType
+    orocrm_sales.form.type.lead_select.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadSelectType
 
     orocrm_sales.funnel.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\SalesFunnelType
+    orocrm_sales.funnel.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\SalesFunnelApiType
     orocrm_sales.funnel.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler
 
 services:
@@ -102,10 +104,20 @@ services:
         tags:
             - { name: form.type, alias: orocrm_sales_opportunity_select }
 
+    orocrm_sales.form.type.lead_select:
+        class: %orocrm_sales.form.type.lead_select.class%
+        tags:
+            - { name: form.type, alias: "orocrm_sales_lead_select" }
+
     orocrm_sales.funnel.form.type:
         class: %orocrm_sales.funnel.form.type.class%
         tags:
             - { name: form.type, alias: "orocrm_sales_funnel" }
+
+    orocrm_sales.funnel.form.type.api:
+        class: %orocrm_sales.funnel.form.type.api.class%
+        tags:
+            - { name: form.type, alias: "orocrm_sales_funnel_api" }
 
     orocrm_sales.funnel.form:
         class: Symfony\Component\Form\Form
@@ -115,10 +127,26 @@ services:
             - "orocrm_sales_funnel_form"
             - "orocrm_sales_funnel"
 
+    orocrm_sales.funnel.form.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - "salesfunnel"
+            - "orocrm_sales_funnel_api"
+
     orocrm_sales.funnel.form.handler:
         class: %orocrm_sales.funnel.form.handler.class%
         scope: request
         arguments:
             - @orocrm_sales.funnel.form
+            - @request
+            - @doctrine.orm.entity_manager
+
+    orocrm_sales.funnel.form.handler.api:
+        class: %orocrm_sales.funnel.form.handler.class%
+        scope: request
+        arguments:
+            - @orocrm_sales.funnel.form.api
             - @request
             - @doctrine.orm.entity_manager

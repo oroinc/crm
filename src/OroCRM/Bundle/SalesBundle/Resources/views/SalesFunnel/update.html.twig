@@ -61,17 +61,6 @@
     <li>{{ 'orocrm.sales.funnel.updated_at.label'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
 {% endblock stats %}
 
-{% block breadcrumbs %}
-    {{ parent() }}
-    <div class="status-enabled pull-left">
-        {% if entity.status.name != 'canceled' %}
-            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
-        {% else %}
-            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled icon-circle"></i>{{ entity.status.label  }}</div>
-        {% endif %}
-    </div>
-{% endblock breadcrumbs %}
-
 {% block content_data %}
     {% set id = 'sales-funnel-management' %}
 
@@ -82,6 +71,8 @@
     {% set formFields = formFields|merge([
         form_row(form.name),
         form_row(form.startDate),
+        form_row(form.lead),
+        form_row(form.opportunity),
     ]) %}
 
     {% set dataBlocks = [{

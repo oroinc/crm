@@ -21,9 +21,11 @@ orocrm:
         controller:
             lead.saved.message: "Lead saved"
             opportunity.saved.message: "Opportunity saved"
+            sales_funnel.saved.message: "Sales funnel saved"
 
         form:
             choose_opportunity: 'Choose an opportunity....'
+            choose_lead: 'Choose a lead....'
 
         #
         # OroCRM/Bundle/SalesBundle/Entity/LeadStatus.php
@@ -131,7 +133,9 @@ orocrm:
             created_at.label:     Created
             updated_at.label:     Updated
             name.label:           Name
-            start_date.label:      Start Date
+            start_date.label:     Start Date
+            lead.label:           Lead
+            opportunity.label:    Opportunity
 
             datagrid:
                 view:   View

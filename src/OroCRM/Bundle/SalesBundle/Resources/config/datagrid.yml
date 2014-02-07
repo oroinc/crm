@@ -290,13 +290,24 @@ datagrid:
                     - sf.id
                     - sf.name
                     - sf.startDate
+                    - lead.name as leadName
+                    - opportunity.name as opportunityName
                 from:
                     - { table: %orocrm_sales.funnel.entity.class%, alias: sf }
+                join:
+                    left:
+                        - { join: sf.lead, alias: lead }
+                        - { join: sf.opportunity, alias: opportunity }
         columns:
             name:
                 label: orocrm.sales.funnel.name.label
             startDate:
                 label: orocrm.sales.funnel.start_date.label
+                frontend_type: date
+            leadName:
+                label: orocrm.sales.funnel.lead.label
+            opportunityName:
+                label: orocrm.sales.funnel.opportunity.label
         properties:
             id: ~
             view_link:
@@ -318,6 +329,10 @@ datagrid:
                     data_name: sf.name
                 startDate:
                     data_name: sf.startDate
+                leadName:
+                    data_name: leadName
+                opportunityName:
+                    data_name: opportunityName
             default:
                 startDate: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
         actions:
@@ -348,3 +363,9 @@ datagrid:
                 startDate:
                     type:      date
                     data_name: sf.startDate
+                leadName:
+                    type: string
+                    data_name: leadName
+                opportunityName:
+                    type: string
+                    data_name: opportunityName

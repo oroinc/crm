@@ -8,6 +8,7 @@ parameters:
     orocrm_sales.lead.datagrid_helper.class: Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
 
     orocrm_sales.funnel.entity.class: OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
+    orocrm_sales.funnel.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
 services:
     orocrm_sales.opportunity.manager.api:
@@ -22,15 +23,29 @@ services:
             - %orocrm_sales.lead.entity.class%
             - @doctrine.orm.entity_manager
 
+    orocrm_sales.funnel.manager.api:
+        class: %orocrm_sales.funnel.manager.api.class%
+        arguments:
+            - %orocrm_sales.funnel.entity.class%
+            - @doctrine.orm.entity_manager
+
     orocrm_sales.lead.datagrid_helper:
         class: %orocrm_sales.lead.datagrid_helper.class%
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.sales-lead-datagrid, method: onBuildAfter }
 
-    orocrm_sales.form.autocomplete.contact.search_handler:
-        parent: oro_form.autocomplete.full_name.search_handler
+    orocrm_sales.form.autocomplete.opportunity.search_handler:
+        parent: oro_form.autocomplete.search_handler
         arguments:
             - %orocrm_sales.opportunity.class%
             - ["name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: opportunities, acl_resource: orocrm_sales_opportunity_view }
+
+    orocrm_sales.form.autocomplete.lead.search_handler:
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - %orocrm_sales.lead.entity.class%
+            - ["name"]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: leads, acl_resource: orocrm_sales_lead_view }
