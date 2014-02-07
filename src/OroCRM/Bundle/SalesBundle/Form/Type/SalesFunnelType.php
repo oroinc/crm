@@ -24,7 +24,18 @@ class SalesFunnelType extends AbstractType
             ->add(
                 'lead',
                 'orocrm_sales_lead_select',
-                array('label' => 'orocrm.sales.funnel.lead.label')
+                array(
+                    'label' => 'orocrm.sales.funnel.lead.label',
+                    'placeholder' => '',
+                    'configs' => array(
+                        'extra_config' => 'grid',
+                        'grid' => array(
+                            'name' => 'sales-lead-grid'
+                        ),
+                        'minimumInputLength' => 0,
+                        'properties' => array('name'),
+                    )
+                )
             )
             ->add(
                 'opportunity',
