@@ -172,7 +172,7 @@ datagrid:
         mass_actions:
             merge:
                 type: merge
-                entity_name: %orocrm_contact.entity.class%
+                entity_name: %orocrm_account.account.entity.class%
                 label: merge
                 icon: edit
         options:
