@@ -150,4 +150,3 @@ services:
             - @orocrm_sales.funnel.form.api
             - @request
             - @doctrine.orm.entity_manager
-
