@@ -3,6 +3,11 @@
 {% set gridName = 'sales-funnel-grid' %}
 {% set pageTitle = 'orocrm.sales.salesfunnel.entity_plural_label'|trans %}
 
+{% block content %}
+    {% set buttonsPlaceholderData = {'entity_class': entityClass} %}
+    {{ parent() }}
+{% endblock %}
+
 {% block navButtons %}
     {% if resource_granted('orocrm_sales_salesfunnel_create') %}
         {{ UI.addButton({
