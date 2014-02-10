@@ -38,7 +38,6 @@ class SoapContactGroupApiTest extends WebTestCase
             "label" => 'Group name_' . mt_rand(),
             "owner" => '1'
         );
-        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $result = $this->client->getSoap()->createContactGroup($request);
         $this->assertTrue($result);
 
@@ -52,7 +51,6 @@ class SoapContactGroupApiTest extends WebTestCase
      */
     public function testGetContactGroups($request)
     {
-        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $groups = $this->client->getSoap()->getContactGroups(1, 1000);
         $groups = ToolsAPI::classToArray($groups);
         $groupLabel = $request['label'];
@@ -76,11 +74,9 @@ class SoapContactGroupApiTest extends WebTestCase
     public function testUpdateContact($request, $group)
     {
         $request['label'] .= '_Updated';
-        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $result = $this->client->getSoap()->updateContactGroup($group['id'], $request);
         $this->assertTrue($result);
 
-        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $group = $this->client->getSoap()->getContactGroup($group['id']);
         $group = ToolsAPI::classToArray($group);
         $this->assertEquals($request['label'], $group['label']);
@@ -93,15 +89,11 @@ class SoapContactGroupApiTest extends WebTestCase
      */
     public function testDeleteContactGroup($group)
     {
-        $this->client->setServerParameters(ToolsAPI::generateWsseHeader());
         $result = $this->client->getSoap()->deleteContactGroup($group['id']);
         $this->assertTrue($result);
-        try {
-            $this->client->getSoap()->getContactGroup($group['id']);
-        } catch (\SoapFault $e) {
-            if ($e->faultcode != 'NOT_FOUND') {
-                throw $e;
-            }
-        }
+
+        $this->setExpectedException('\SoapFault', 'Record with ID "' . $group['id'] . '" can not be found');
+
+        $this->client->getSoap()->getContactGroup($group['id']);
     }
 }

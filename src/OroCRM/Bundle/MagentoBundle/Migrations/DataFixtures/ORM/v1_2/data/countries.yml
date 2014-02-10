@@ -1,0 +1,180 @@
+AI:
+    iso2Code: AI
+    iso3Code: AIA
+    regions: {  }
+AN:
+    iso2Code: AN
+    iso3Code: ANT
+    regions: {  }
+AQ:
+    iso2Code: AQ
+    iso3Code: ATA
+    regions: {  }
+AS:
+    iso2Code: AS
+    iso3Code: ASM
+    regions: {  }
+AW:
+    iso2Code: AW
+    iso3Code: ABW
+    regions: {  }
+AX:
+    iso2Code: AX
+    iso3Code: ALA
+    regions: {  }
+BM:
+    iso2Code: BM
+    iso3Code: BMU
+    regions: {  }
+BV:
+    iso2Code: BV
+    iso3Code: BVT
+    regions: {  }
+CC:
+    iso2Code: CC
+    iso3Code: CCK
+    regions: {  }
+CK:
+    iso2Code: CK
+    iso3Code: COK
+    regions: {  }
+CX:
+    iso2Code: CX
+    iso3Code: CXR
+    regions: {  }
+EH:
+    iso2Code: EH
+    iso3Code: ESH
+    regions: {  }
+FK:
+    iso2Code: FK
+    iso3Code: FLK
+    regions: {  }
+FO:
+    iso2Code: FO
+    iso3Code: FRO
+    regions: {  }
+GF:
+    iso2Code: GF
+    iso3Code: GUF
+    regions: {  }
+GI:
+    iso2Code: GI
+    iso3Code: GIB
+    regions: {  }
+GP:
+    iso2Code: GP
+    iso3Code: GLP
+    regions: {  }
+GS:
+    iso2Code: GS
+    iso3Code: SGS
+    regions: {  }
+GU:
+    iso2Code: GU
+    iso3Code: GUM
+    regions: {  }
+HK:
+    iso2Code: HK
+    iso3Code: HKG
+    regions: {  }
+HM:
+    iso2Code: HM
+    iso3Code: HMD
+    regions: {  }
+IO:
+    iso2Code: IO
+    iso3Code: IOT
+    regions: {  }
+KY:
+    iso2Code: KY
+    iso3Code: CYM
+    regions: {  }
+LC:
+    iso2Code: LC
+    iso3Code: LCA
+    regions: {  }
+MC:
+    iso2Code: MC
+    iso3Code: MCO
+    regions: {  }
+MP:
+    iso2Code: MP
+    iso3Code: MNP
+    regions: {  }
+MQ:
+    iso2Code: MQ
+    iso3Code: MTQ
+    regions: {  }
+MS:
+    iso2Code: MS
+    iso3Code: MSR
+    regions: {  }
+NC:
+    iso2Code: NC
+    iso3Code: NCL
+    regions: {  }
+NF:
+    iso2Code: NF
+    iso3Code: NFK
+    regions: {  }
+NU:
+    iso2Code: NU
+    iso3Code: NIU
+    regions: {  }
+PF:
+    iso2Code: PF
+    iso3Code: PYF
+    regions: {  }
+PM:
+    iso2Code: PM
+    iso3Code: SPM
+    regions: {  }
+PN:
+    iso2Code: PN
+    iso3Code: PCN
+    regions: {  }
+PR:
+    iso2Code: PR
+    iso3Code: PRI
+    regions: {  }
+RE:
+    iso2Code: RE
+    iso3Code: REU
+    regions: {  }
+SJ:
+    iso2Code: SJ
+    iso3Code: SJM
+    regions: {  }
+TC:
+    iso2Code: TC
+    iso3Code: TCA
+    regions: {  }
+TF:
+    iso2Code: TF
+    iso3Code: ATF
+    regions: {  }
+TK:
+    iso2Code: TK
+    iso3Code: TKL
+    regions: {  }
+VA:
+    iso2Code: VA
+    iso3Code: VAT
+    regions: {  }
+VG:
+    iso2Code: VG
+    iso3Code: VGB
+    regions: {  }
+VI:
+    iso2Code: VI
+    iso3Code: VIR
+    regions: {  }
+WF:
+    iso2Code: WF
+    iso3Code: WLF
+    regions: {  }
+YT:
+    iso2Code: YT
+    iso3Code: MYT
+    regions: {  }
