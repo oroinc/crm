@@ -169,6 +169,13 @@ datagrid:
                 label:         Delete
                 icon:          trash
                 link:          delete_link
+        mass_actions:
+            merge:
+                type: merge
+                entity_name: %orocrm_account.account.entity.class%
+                data_identifier: a.id
+                label: merge
+                icon: edit
         options:
             entityHint: account
 

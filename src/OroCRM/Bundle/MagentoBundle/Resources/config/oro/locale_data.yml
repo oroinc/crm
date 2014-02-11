@@ -1,0 +1,166 @@
+AI:
+    currency_code: XCD
+    phone_prefix: +1-264
+    default_locale: en
+AS:
+    currency_code: USD
+    phone_prefix: +1-684
+    default_locale: en_AS
+AW:
+    currency_code: AWG
+    phone_prefix: '297'
+    default_locale: nl_AW
+AX:
+    currency_code: EUR
+    phone_prefix: +358-18
+    default_locale: sv_AX
+BM:
+    currency_code: BMD
+    phone_prefix: +1-441
+    default_locale: en_BM
+CC:
+    currency_code: AUD
+    phone_prefix: '61'
+    default_locale: ms
+CK:
+    currency_code: NZD
+    phone_prefix: '682'
+    default_locale: en
+CX:
+    currency_code: AUD
+    phone_prefix: '61'
+    default_locale: en
+EH:
+    currency_code: MAD
+    phone_prefix: '212'
+    default_locale: ar
+FK:
+    currency_code: FKP
+    phone_prefix: '500'
+    default_locale: en
+FO:
+    currency_code: DKK
+    phone_prefix: '298'
+    default_locale: fo
+GF:
+    currency_code: EUR
+    phone_prefix: '594'
+    default_locale: fr_GF
+GI:
+    currency_code: GIP
+    phone_prefix: '350'
+    default_locale: en_GI
+GP:
+    currency_code: EUR
+    phone_prefix: '590'
+    default_locale: fr_GP
+GS:
+    currency_code: GBP
+    default_locale: en
+GU:
+    currency_code: USD
+    phone_prefix: +1-671
+    default_locale: en_GU
+HK:
+    currency_code: HKD
+    phone_prefix: '852'
+    default_locale: zh_HK
+IO:
+    currency_code: USD
+    phone_prefix: '246'
+    default_locale: en
+KY:
+    currency_code: KYD
+    phone_prefix: +1-345
+    default_locale: en_KY
+LC:
+    currency_code: XCD
+    phone_prefix: +1-758
+    default_locale: en_LC
+MC:
+    currency_code: EUR
+    phone_prefix: '377'
+    default_locale: fr_MC
+MP:
+    currency_code: USD
+    phone_prefix: +1-670
+    default_locale: fil
+MQ:
+    currency_code: EUR
+    phone_prefix: '596'
+    default_locale: fr_MQ
+MS:
+    currency_code: XCD
+    phone_prefix: +1-664
+    default_locale: en
+NC:
+    currency_code: XPF
+    phone_prefix: '687'
+    default_locale: fr_NC
+NF:
+    currency_code: AUD
+    phone_prefix: '672'
+    default_locale: en
+NU:
+    currency_code: NZD
+    phone_prefix: '683'
+    default_locale: en
+PF:
+    currency_code: XPF
+    phone_prefix: '689'
+    default_locale: fr_PF
+PM:
+    currency_code: EUR
+    phone_prefix: '508'
+    default_locale: fr
+PN:
+    currency_code: NZD
+    phone_prefix: '870'
+    default_locale: en
+PR:
+    currency_code: USD
+    phone_prefix: +1-787
+    default_locale: en_PR
+RE:
+    currency_code: EUR
+    phone_prefix: '262'
+    default_locale: fr_RE
+SJ:
+    currency_code: NOK
+    phone_prefix: '47'
+    default_locale: no
+TC:
+    currency_code: USD
+    phone_prefix: +1-649
+    default_locale: en_TC
+TF:
+    currency_code: EUR
+    default_locale: fr
+TK:
+    currency_code: NZD
+    phone_prefix: '690'
+    default_locale: en
+VA:
+    currency_code: EUR
+    phone_prefix: '379'
+    default_locale: it
+VG:
+    currency_code: USD
+    phone_prefix: +1-284
+    default_locale: en_VG
+VI:
+    currency_code: USD
+    phone_prefix: +1-340
+    default_locale: en_VI
+WF:
+    currency_code: XPF
+    phone_prefix: '681'
+    default_locale: fr
+YT:
+    currency_code: EUR
+    phone_prefix: '262'
+    default_locale: fr_YT
+AN:
+    currency_code: ANG
+    phone_prefix: '599'
+    default_locale: nl
