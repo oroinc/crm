@@ -30,17 +30,34 @@ class SalesFunnelType extends AbstractType
                         'placeholder' => 'orocrm.sales.form.choose_lead',
                         'extra_config' => 'grid',
                         'grid' => array(
-                            'name' => 'sales-lead-grid'
+                            'name' => 'sales-funnel-lead-grid'
                         ),
                         'minimumInputLength' => 0,
-                        'properties' => array('name'),
+                        'properties' => array('searchIndex'),
+                        'result_template_twig' => 'OroCRMSalesBundle:Lead:Autocomplete/result.html.twig',
+                        'selection_template_twig' => 'OroCRMSalesBundle:Lead:Autocomplete/selection.html.twig'
+
                     )
                 )
             )
             ->add(
                 'opportunity',
                 'orocrm_sales_opportunity_select',
-                array('label' => 'orocrm.sales.salesfunnel.opportunity.label')
+                array(
+                    'label' => 'orocrm.sales.salesfunnel.opportunity.label',
+                    'configs' => array(
+                        'placeholder' => 'orocrm.sales.form.choose_opportunity',
+                        'extra_config' => 'grid',
+                        'grid' => array(
+                            'name' => 'sales-funnel-opportunity-grid'
+                        ),
+                        'minimumInputLength' => 0,
+                        'properties' => array('searchIndex'),
+                        'result_template_twig' => 'OroCRMSalesBundle:Opportunity:Autocomplete/result.html.twig',
+                        'selection_template_twig' => 'OroCRMSalesBundle:Opportunity:Autocomplete/selection.html.twig'
+
+                    )
+                )
             );
     }
 
