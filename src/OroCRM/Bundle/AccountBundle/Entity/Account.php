@@ -290,6 +290,19 @@ class Account extends ExtendAccount implements Taggable
     }
 
     /**
+     * Set contacts collection
+     *
+     * @param Collection $contacts
+     * @return Account
+     */
+    public function setContacts(Collection $contacts)
+    {
+        $this->contacts = $contacts;
+
+        return $this;
+    }
+
+    /**
      * Get shipping address
      *
      * @return Address
