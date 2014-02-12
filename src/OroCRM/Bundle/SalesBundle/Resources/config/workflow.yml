@@ -566,3 +566,113 @@ workflows:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
                         attribute: $opportunity.status
+
+    b2b_flow_sales_funnel:
+        label: 'B2B Sales Funnel Flow'
+        enabled: true
+        entity: OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
+        entity_attribute: sales_funnel
+        steps:
+            new_lead:
+                label: 'New Lead'
+                order: 10
+#            allowed_transitions:
+#                - qualify
+#                - disqualify
+#        disqualified_lead:
+#            label: 'Disqualified Lead'
+#            order: 20
+#            allowed_transitions:
+#                - reactivate_lead
+#        new_opportunity:
+#            label: 'New Opportunity'
+#            order: 20
+#            allowed_transitions:
+#                - start_opportunity
+#        developed_opportunity:
+#            label: 'Developed Opportunity'
+#            order: 30
+#            allowed_transitions:
+#                - close_as_won
+#                - close_as_lost
+#        lost_opportunity:
+#            label: 'Lost Opportunity'
+#            order: 40
+#            allowed_transitions:
+#                - reopen_lost_opportunity
+#        won_opportunity:
+#            label: 'Won Opportunity'
+#            order: 40
+#            allowed_transitions:
+#                - reopen_won_opportunity
+        attributes:
+            sales_funnel_name:
+                label: "Sales Funnel name"
+                type: string
+                property_path: sales_funnel.name
+            sales_funnel_start_date:
+                label: orocrm.sales.salesfunnel.start_date.label
+                type: object
+                property_path: sales_funnel.startDate
+                options:
+                    class: DateTime
+            sales_funnel_lead:
+                label: orocrm.sales.lead.entity_label
+                type: entity
+                property_path: sales_funnel.lead
+                options:
+                    class: OroCRM\Bundle\SalesBundle\Entity\Lead
+            sales_funnel_owner:
+                label: "Owner"
+                type: entity
+                property_path: sales_funnel.owner
+                options:
+                    class: Oro\Bundle\UserBundle\Entity\User
+        transitions:
+            start_lead:
+                label: 'Start from Lead'
+                step_to: new_lead
+                is_start: true
+                is_unavailable_hidden: true
+                form_options:
+                    attribute_fields:
+                        sales_funnel_name:
+                            form_type: text
+                            options:
+                                required: true
+                                constraints:
+                                  - NotBlank: ~
+                        sales_funnel_start_date:
+                            form_type: oro_date
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        sales_funnel_owner:
+                            form_type: oro_user_select
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        sales_funnel_lead:
+                            form_type: orocrm_sales_lead_select
+                            options:
+                                required: false
+                    init_actions:
+                        - @create_datetime:
+                            attribute: $sales_funnel_start_date
+                        - @assign_active_user:
+                            attribute: $sales_funnel_owner
+                transition_definition: start_lead_definition
+        transition_definitions:
+            start_lead_definition:
+                pre_conditions:
+                    @blank: [$sales_funnel.id]
+                post_actions:
+                    - @create_related_entity: ~
+#                    - @create_related_entity:
+#                        data:
+#                            name: $sales_funnel_name
+#                            startDate: $sales_funnel_start_date
+#                            owner: $sales_funnel_owner
+#                            lead: $sales_funnel_lead
