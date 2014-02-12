@@ -409,4 +409,9 @@ class Call
             );
         }
     }
+
+    public function __toString()
+    {
+        return (string)$this->subject;
+    }
 }

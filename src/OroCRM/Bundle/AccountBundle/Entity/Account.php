@@ -80,14 +80,7 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "merge"={
-     *          "enable"=true,
-     *          "template"="some_template_here.html.twig"
-     *      }
-     *  }
-     * )
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $shippingAddress;
 
@@ -97,14 +90,7 @@ class Account extends ExtendAccount implements Taggable
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(defaultValues={"merge"={"enable"=true}})
-     * @ConfigField(
-     *  defaultValues={
-     *      "merge"={
-     *          "enable"=true,
-     *          "template"="some_template_here.html.twig"
-     *      }
-     *  }
-     * )
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $billingAddress;
 
@@ -115,14 +101,7 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", inversedBy="accounts")
      * @ORM\JoinTable(name="orocrm_account_to_contact")
-     * @ConfigField(
-     *  defaultValues={
-     *      "merge"={
-     *          "enable"=true,
-     *          "template"="some_template_here.html.twig"
-     *      }
-     *  }
-     * )
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $contacts;
 
@@ -133,14 +112,7 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="default_contact_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "merge"={
-     *          "enable"=true,
-     *          "template"="some_template_here.html.twig"
-     *      }
-     *  }
-     * )
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $defaultContact;
 
@@ -162,16 +134,7 @@ class Account extends ExtendAccount implements Taggable
 
     /**
      * @var ArrayCollection $tags
-     * @ConfigField(
-     *  defaultValues={
-     *      "merge"={
-     *          "enable"=true,
-     *          "template"="some_template_here.html.twig",
-     *          "setter"="some_service:setterMethod",
-     *          "getter"="some_service:getterMethod"
-     *      }
-     *  }
-     * )
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $tags;
 
