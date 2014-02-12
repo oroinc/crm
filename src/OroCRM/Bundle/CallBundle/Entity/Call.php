@@ -63,8 +63,8 @@ class Call
      * @ConfigField(
      *  defaultValues={
      *      "merge"={
-     *          "merge_relation_enable"=true,
-     *          "merge_relation_label"="orocrm.call.entity_plural_label"
+     *          "relation_enable"=true,
+     *          "relation_label"="orocrm.call.entity_plural_label"
      *      }
      *  }
      * )

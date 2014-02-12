@@ -40,8 +40,8 @@ use Oro\Bundle\UserBundle\Entity\User;
  *          "group_name"=""
  *      },
  *      "merge"={
- *          "merge_enable"=true,
- *          "merge_max_entities"=5
+ *          "enable"=true,
+ *          "max_entities"=5
  *      }
  *  }
  * )
@@ -62,7 +62,7 @@ class Account extends ExtendAccount implements Taggable
      * @ORM\Column(type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"merge"={"merge_enable"=true}})
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $name;
 
@@ -71,7 +71,7 @@ class Account extends ExtendAccount implements Taggable
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Soap\ComplexType("string", nillable=true)
-     * @ConfigField(defaultValues={"merge"={"merge_enable"=true}})
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $owner;
 
@@ -83,8 +83,8 @@ class Account extends ExtendAccount implements Taggable
      * @ConfigField(
      *  defaultValues={
      *      "merge"={
-     *          "merge_enable"=true,
-     *          "merge_template"="some_template_here.html.twig"
+     *          "enable"=true,
+     *          "template"="some_template_here.html.twig"
      *      }
      *  }
      * )
@@ -96,12 +96,12 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(defaultValues={"merge"={"merge_enable"=true}})
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      * @ConfigField(
      *  defaultValues={
      *      "merge"={
-     *          "merge_enable"=true,
-     *          "merge_template"="some_template_here.html.twig"
+     *          "enable"=true,
+     *          "template"="some_template_here.html.twig"
      *      }
      *  }
      * )
@@ -118,8 +118,8 @@ class Account extends ExtendAccount implements Taggable
      * @ConfigField(
      *  defaultValues={
      *      "merge"={
-     *          "merge_enable"=true,
-     *          "merge_template"="some_template_here.html.twig"
+     *          "enable"=true,
+     *          "template"="some_template_here.html.twig"
      *      }
      *  }
      * )
@@ -136,8 +136,8 @@ class Account extends ExtendAccount implements Taggable
      * @ConfigField(
      *  defaultValues={
      *      "merge"={
-     *          "merge_enable"=true,
-     *          "merge_template"="some_template_here.html.twig"
+     *          "enable"=true,
+     *          "template"="some_template_here.html.twig"
      *      }
      *  }
      * )
@@ -165,10 +165,10 @@ class Account extends ExtendAccount implements Taggable
      * @ConfigField(
      *  defaultValues={
      *      "merge"={
-     *          "merge_enable"=true,
-     *          "merge_template"="some_template_here.html.twig",
-     *          "merge_setter"="some_service:setterMethod",
-     *          "merge_getter"="some_service:getterMethod"
+     *          "enable"=true,
+     *          "template"="some_template_here.html.twig",
+     *          "setter"="some_service:setterMethod",
+     *          "getter"="some_service:getterMethod"
      *      }
      *  }
      * )
