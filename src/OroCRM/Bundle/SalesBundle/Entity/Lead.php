@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -797,5 +798,16 @@ class Lead extends ExtendLead implements FullNameInterface
     public function getWorkflowStep()
     {
         return $this->workflowStep;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist(LifecycleEventArgs $eventArgs)
+    {
+        $em = $eventArgs->getEntityManager();
+        /** @var LeadStatus $defaultStatus */
+        $defaultStatus   = $em->getReference('OroCRMSalesBundle:LeadStatus', 'new');
+        $this->setStatus($defaultStatus);
     }
 }

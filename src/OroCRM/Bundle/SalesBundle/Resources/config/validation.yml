@@ -1,7 +1,5 @@
 OroCRM\Bundle\SalesBundle\Entity\Opportunity:
     properties:
-        status:
-            - NotBlank: ~
         name:
             - NotBlank: ~
             - Length:
@@ -21,8 +19,6 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
 
 OroCRM\Bundle\SalesBundle\Entity\Lead:
     properties:
-        status:
-            - NotBlank: ~
         name:
             - NotBlank: ~
             - Length:
@@ -35,7 +31,3 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
             - NotBlank: ~
             - Length:
                 max: 255
-        email:
-            - Email: ~
-        website:
-            - Url: ~

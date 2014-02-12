@@ -54,11 +54,11 @@ class CreateAccountTest extends Selenium2TestCase
     }
 
     /**
-     * depends testCreateAccount
+     * @depends testCreateAccount
      * @param $accountName
      * @return string
      */
-    public function testUpdateAccount($accountName = '123213')
+    public function testUpdateAccount($accountName)
     {
         $newAccountName = 'Update_' . $accountName;
 
