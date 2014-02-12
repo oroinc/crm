@@ -1,0 +1,11 @@
+OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 200
+        email:
+            - Email:    ~
+            - NotBlank: ~
+        message:
+            - NotBlank: ~
