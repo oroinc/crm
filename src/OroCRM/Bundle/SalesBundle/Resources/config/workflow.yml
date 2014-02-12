@@ -657,6 +657,10 @@ workflows:
                 frontend_options:
                     icon: 'icon-user'
                     class: 'btn-success'
+                    page:
+                        parent_route: 'orocrm_sales_salesfunnel_index'
+                        parent_label: 'Sales Funnels'
+                        title: 'New Sales Funnel'
                 form_options:
                     attribute_fields:
                         sales_funnel_name:
