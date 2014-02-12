@@ -587,24 +587,27 @@ workflows:
             new_opportunity:
                 label: 'New Opportunity'
                 order: 20
-#                allowed_transitions:
-#                - start_opportunity
-#        developed_opportunity:
-#            label: 'Developed Opportunity'
-#            order: 30
-#            allowed_transitions:
-#                - close_as_won
-#                - close_as_lost
-#        lost_opportunity:
-#            label: 'Lost Opportunity'
-#            order: 40
-#            allowed_transitions:
-#                - reopen_lost_opportunity
-#        won_opportunity:
-#            label: 'Won Opportunity'
-#            order: 40
-#            allowed_transitions:
-#                - reopen_won_opportunity
+                allowed_transitions:
+                    - develop
+                    - close_as_won
+                    - close_as_lost
+            developed_opportunity:
+                label: 'Developed Opportunity'
+                order: 30
+                allowed_transitions:
+                    - close_as_won
+                    - close_as_lost
+            won_opportunity:
+                label: 'Won Opportunity'
+                order: 40
+                allowed_transitions:
+                    - reopen
+            lost_opportunity:
+                label: 'Lost Opportunity'
+                order: 40
+                allowed_transitions:
+                    - reopen
+
         attributes:
             sales_funnel_name:
                 label: "Sales Funnel name"
@@ -628,6 +631,20 @@ workflows:
                 property_path: sales_funnel.lead
                 options:
                     class: OroCRM\Bundle\SalesBundle\Entity\Lead
+            new_notes:
+                label: orocrm.sales.lead.notes.label
+                type: string
+            new_opportunity_name:
+                label: orocrm.sales.opportunity.name.label
+                type: string
+            new_account:
+                label:  orocrm.account.entity_label
+                type: entity
+                options:
+                    class: OroCRM\Bundle\AccountBundle\Entity\Account
+            new_company_name:
+                label: orocrm.sales.lead.company_name.label
+                type: string
             opportunity:
                 label: orocrm.sales.salesfunnel.opportunity.label
                 type: entity
@@ -637,17 +654,59 @@ workflows:
             opportunity_name:
                 label: orocrm.sales.opportunity.name.label
                 type: string
-            account:
-                label:  orocrm.account.entity_label
-                type: entity
-                options:
-                    class: OroCRM\Bundle\AccountBundle\Entity\Account
-            company_name:
-                label: orocrm.sales.lead.company_name.label
-                type: string
-            notes:
+                property_path: sales_funnel.opportunity.name
+            opportunity_notes:
                 label: orocrm.sales.lead.notes.label
                 type: string
+                property_path: sales_funnel.opportunity.notes
+            contact:
+                label: orocrm.sales.opportunity.contact.label
+                type: entity
+                property_path: sales_funnel.opportunity.contact
+                options:
+                    class: OroCRM\Bundle\ContactBundle\Entity\Contact
+            account:
+                label: orocrm.sales.opportunity.account.label
+                type: entity
+                property_path: sales_funnel.opportunity.account
+                options:
+                    class: OroCRM\Bundle\AccountBundle\Entity\Account
+            probability:
+                label: orocrm.sales.opportunity.probability.label
+                type: float
+                property_path: sales_funnel.opportunity.probability
+            budget_amount:
+                label: orocrm.sales.opportunity.budget_amount.label
+                type: float
+                property_path: sales_funnel.opportunity.budgetAmount
+            customer_need:
+                label: orocrm.sales.opportunity.customer_need.label
+                type: string
+                property_path: sales_funnel.opportunity.customerNeed
+            proposed_solution:
+                label: orocrm.sales.opportunity.proposed_solution.label
+                type: string
+                property_path: sales_funnel.opportunity.proposedSolution
+            close_reason_name: # temporary attribute to find close reason by its name
+                label: orocrm.sales.opportunity.close_reason.label
+                type: string
+            close_reason:
+                label: orocrm.sales.opportunity.close_reason.label
+                type: entity
+                property_path: sales_funnel.opportunity.closeReason
+                options:
+                    class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+            close_revenue:
+                label: orocrm.sales.opportunity.close_revenue.label
+                type: float
+                property_path: sales_funnel.opportunity.closeRevenue
+            close_date:
+                label: orocrm.sales.opportunity.close_date.label
+                type: object
+                property_path: sales_funnel.opportunity.closeDate
+                options:
+                    class: DateTime
+
         transitions:
             start_from_lead:
                 label: 'Start from Lead'
@@ -655,7 +714,7 @@ workflows:
                 is_start: true
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-user'
+                    icon: 'icon-phone'
                     class: 'btn-success'
                     page:
                         parent_route: 'orocrm_sales_salesfunnel_index'
@@ -709,7 +768,7 @@ workflows:
                 is_start: true
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-briefcase'
+                    icon: 'icon-dollar'
                     class: 'btn-success'
                 form_options:
                     attribute_fields:
@@ -776,42 +835,164 @@ workflows:
                     class: 'btn-primary'
                 form_options:
                     attribute_fields:
-                        opportunity_name:
+                        new_opportunity_name:
                             form_type: text
                             options:
                                 required: true
                                 constraints:
                                   - NotBlank: ~
-                        account:
+                        new_account:
                             form_type: orocrm_account_select
                             options:
                                 required: false
-                        company_name:
+                        new_company_name:
                             form_type: text
                             options:
                                 required: false
-                        notes:
+                        new_notes:
                             form_type: textarea
                             options:
                                 required: false
                     attribute_default_values:
-                        opportunity_name: $lead.name
-                        account: $lead.account
-                        company_name: $lead.companyName
-                        notes: $lead.notes
+                        new_opportunity_name: $lead.name
+                        new_account: $lead.account
+                        new_company_name: $lead.companyName
+                        new_notes: $lead.notes
                     init_actions:
                         - @find_entity: # try to find account by company name
                             conditions:
                                 @and: # if account is empty and company name is specified
-                                    - @empty: $account
-                                    - @not_empty: $company_name
+                                    - @empty: $new_account
+                                    - @not_empty: $new_company_name
                             parameters:
                                 class: OroCRM\Bundle\AccountBundle\Entity\Account
-                                attribute: $account
+                                attribute: $new_account
                                 where:
-                                    name: $company_name
+                                    name: $new_company_name
                                 case_insensitive: true
                 transition_definition: qualify_definition
+            develop:
+                label: 'Develop'
+                step_to: developed_opportunity
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-play'
+                    class: 'btn-primary'
+                transition_definition: develop_definition
+                form_options:
+                    attribute_fields:
+                        contact:
+                            form_type: orocrm_contact_select
+                            options:
+                                required: false
+                        account:
+                            form_type: orocrm_account_select
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        budget_amount:
+                            form_type: oro_money
+                            options:
+                                required: false
+                                constraints:
+                                    - Range:
+                                        min: 0
+                        probability:
+                            form_type: percent
+                            options:
+                                required: false
+                                constraints:
+                                    - Range:
+                                        min: 0
+                                        max: 100
+                        customer_need:
+                            form_type: text
+                            options:
+                                required: false
+                        proposed_solution:
+                            form_type: text
+                            options:
+                                required: false
+            close_as_won:
+                label: 'Close as Won'
+                step_to: won_opportunity
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-ok-circle'
+                    class: 'btn-success'
+                transition_definition: close_as_won_definition
+                form_options:
+                    attribute_fields:
+                        close_revenue:
+                            form_type: oro_money
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                                    - Range:
+                                        min: 0
+                        close_date:
+                            form_type: oro_date
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                    init_actions:
+                        - @create_datetime:
+                            conditions:
+                                @empty: $close_date
+                            parameters:
+                                attribute: $close_date
+            close_as_lost:
+                label: 'Close as Lost'
+                step_to: lost_opportunity
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-remove-circle'
+                    class: 'btn-danger'
+                transition_definition: close_as_lost_definition
+                form_options:
+                    attribute_fields:
+                        close_reason_name:
+                            form_type: choice
+                            options:
+                                required: true
+                                empty_value: false
+                                choices:
+                                    outsold: 'Outsold'
+                                    cancelled: 'Cancelled'
+                                constraints:
+                                    - NotBlank: ~
+                        close_date:
+                            form_type: oro_date
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                    init_actions:
+                        - @assign_value:
+                            conditions:
+                                @not_empty: $close_reason
+                            parameters: [$close_reason_name, $close_reason.name]
+                        - @create_datetime:
+                            conditions:
+                                @empty: $close_date
+                            parameters:
+                                attribute: $close_date
+            reopen:
+                label: 'Reopen'
+                message: |+
+                    This action will reset the opportunity data and will bring the Sales Funnel workflow back to the New Opportunity step.
+
+                    Do you want to proceed?
+                step_to: new_opportunity
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-backward'
+                    class: 'btn-primary'
+                transition_definition: reopen_definition
+
         transition_definitions:
             start_definition:
                 post_actions:
@@ -847,7 +1028,7 @@ workflows:
                 conditions:
                     @or:
                         parameters:
-                            - @not_empty: $company_name
+                            - @not_empty: $new_company_name
                             - @not_empty: $account
                         message: "Company name or account must be selected."
                 post_actions: # set lead.status = "qualified"
@@ -935,13 +1116,13 @@ workflows:
                         conditions:
                             @and: # if account not selected and company name is selected
                                 - @empty: $account
-                                - @not_empty: $company_name
+                                - @not_empty: $new_company_name
                         actions:
                             - @find_entity: # try to find account by company name
                                 class: OroCRM\Bundle\AccountBundle\Entity\Account
                                 attribute: $account
                                 where:
-                                    name: $company_name
+                                    name: $new_company_name
                                 case_insensitive: true
                             - @create_entity: # if account not found - create new one
                                 conditions:
@@ -950,7 +1131,7 @@ workflows:
                                     class: OroCRM\Bundle\AccountBundle\Entity\Account
                                     attribute: $account
                                     data:
-                                        name: $company_name
+                                        name: $new_company_name
                                         extendPhone: $lead.phoneNumber
                                         extendEmail: $lead.email
                                         extendWebsite: $lead.website
@@ -959,12 +1140,100 @@ workflows:
                         class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $opportunity
                         data:
-                            name: $opportunity_name
+                            name: $new_opportunity_name
                             contact: $lead.contact
-                            account: $account
+                            account: $new_account
                             lead: $lead
-                            notes: $notes
+                            notes: $new_notes
                     - @find_entity: # set status "In progress" to opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
                         attribute: $opportunity.status
+            develop_definition:
+                pre_conditions: # if opportunity.status = "in_progress"
+                    @equal:
+                        message: 'Opportunity must be in status "In progress"'
+                        parameters: [$opportunity.status.name, 'in_progress']
+                conditions: # if opportunity.status = "in_progress"
+                    @and:
+                        - @greater_or_equal:
+                            message: 'Budget amout must be greater or equal to 0'
+                            parameters: [$budget_amount, 0]
+                        - @and:
+                            message: 'Probality must be between 0 and 100 percents'
+                            parameters:
+                                - @greater_or_equal: [$probability, 0]
+                                - @less_or_equal: [$probability, 1]
+            close_as_won_definition:
+                pre_conditions:
+                    @equal:
+                        message: 'Opportunity must be in status "In progress"'
+                        parameters: [$opportunity.status.name, 'in_progress']
+                conditions: # if opportunity.status = "in_progress" and required data is entered
+                    @and:
+                        - @not_empty:
+                            message: 'Close date must be set'
+                            parameters: $close_date
+                        - @not_empty:
+                            message: 'Close revenue must be set'
+                            parameters: $close_revenue
+                        - @greater_or_equal:
+                            message: 'Close revenue must be greater or equal to 0'
+                            parameters: [$close_revenue, 0]
+                post_actions: # update opportunity properties, set opportunity.status = "won"
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier: 'won'
+                        attribute: $opportunity.status
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+                        identifier: 'won'
+                        attribute: $close_reason
+                    - @assign_value:
+                        - [$probability, 1]
+                        - [$close_reason_name, 'won']
+            close_as_lost_definition:
+                pre_conditions: # opportunity.status = "in_progress" and required data is entered
+                    @equal:
+                        message: 'Opportunity must be in status "In progress"'
+                        parameters: [$opportunity.status.name, 'in_progress']
+                conditions:
+                    @and:
+                        - @not_empty:
+                            message: 'Close date must be set'
+                            parameters: $close_date
+                        - @not_empty:
+                            message: 'Close reason must be set'
+                            parameters: $close_reason_name
+                post_actions: # update opportunity properties, set opportunity.status = "lost"
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier: 'lost'
+                        attribute: $opportunity.status
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+                        identifier: $close_reason_name
+                        attribute: $close_reason
+                    - @assign_value:
+                        - [$probability, 0]
+                        - [$close_revenue, 0]
+            reopen_definition:
+                conditions:
+                    @or:
+                        message: 'Opportunity must be in status "Won" or "Lost"'
+                        parameters:
+                            - @equal: [$opportunity.status.name, 'won']
+                            - @equal: [$opportunity.status.name, 'lost']
+                post_actions:
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier: 'in_progress'
+                        attribute: $opportunity.status
+                    - @assign_value:
+                        - [$budget_amount, ~]
+                        - [$customer_need, ~]
+                        - [$proposed_solution, ~]
+                        - [$probability, ~]
+                        - [$close_revenue, ~]
+                        - [$close_reason, ~]
+                        - [$close_date, ~]
