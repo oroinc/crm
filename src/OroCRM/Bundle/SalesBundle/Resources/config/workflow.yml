@@ -576,14 +576,14 @@ workflows:
             new_lead:
                 label: 'New Lead'
                 order: 10
-#            allowed_transitions:
-#                - qualify
-#                - disqualify
-#        disqualified_lead:
-#            label: 'Disqualified Lead'
-#            order: 20
-#            allowed_transitions:
-#                - reactivate_lead
+                allowed_transitions:
+#                    - qualify
+                    - disqualify
+            disqualified_lead:
+                label: 'Disqualified Lead'
+                order: 20
+                allowed_transitions:
+                    - reactivate
 #        new_opportunity:
 #            label: 'New Opportunity'
 #            order: 20
@@ -616,24 +616,26 @@ workflows:
                 property_path: sales_funnel.startDate
                 options:
                     class: DateTime
-            sales_funnel_lead:
-                label: orocrm.sales.lead.entity_label
-                type: entity
-                property_path: sales_funnel.lead
-                options:
-                    class: OroCRM\Bundle\SalesBundle\Entity\Lead
             sales_funnel_owner:
-                label: "Owner"
+                label: orocrm.sales.salesfunnel.owner.label
                 type: entity
                 property_path: sales_funnel.owner
                 options:
                     class: Oro\Bundle\UserBundle\Entity\User
+            lead:
+                label: orocrm.sales.salesfunnel.lead.label
+                type: entity
+                property_path: sales_funnel.lead
+                options:
+                    class: OroCRM\Bundle\SalesBundle\Entity\Lead
         transitions:
             start_lead:
                 label: 'Start from Lead'
                 step_to: new_lead
                 is_start: true
                 is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-user'
                 form_options:
                     attribute_fields:
                         sales_funnel_name:
@@ -654,25 +656,64 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
-                        sales_funnel_lead:
+                        lead:
                             form_type: orocrm_sales_lead_select
                             options:
-                                required: false
+                                required: true
+                                configs:
+                                    placeholder: orocrm.sales.form.choose_lead
+                                    extra_config: grid
+                                    grid:
+                                        name: sales-funnel-lead-grid
+                                    minimumInputLength: 0
+                                    properties:
+                                        - searchIndex
+                                    result_template_twig: OroCRMSalesBundle:Lead:Autocomplete/result.html.twig
+                                    selection_template_twig: OroCRMSalesBundle:Lead:Autocomplete/selection.html.twig
+                                constraints:
+                                    - NotBlank: ~
                     init_actions:
                         - @create_datetime:
                             attribute: $sales_funnel_start_date
                         - @assign_active_user:
                             attribute: $sales_funnel_owner
                 transition_definition: start_lead_definition
+            disqualify:
+                label: 'Disqualify'
+                step_to: disqualified_lead
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-remove'
+                transition_definition: disqualify_definition
+            reactivate:
+                label: 'Reactivate'
+                step_to: new_lead
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-repeat'
+                transition_definition: reactivate_definition
         transition_definitions:
             start_lead_definition:
-                pre_conditions:
-                    @blank: [$sales_funnel.id]
                 post_actions:
-                    - @create_related_entity: ~
-#                    - @create_related_entity:
-#                        data:
-#                            name: $sales_funnel_name
-#                            startDate: $sales_funnel_start_date
-#                            owner: $sales_funnel_owner
-#                            lead: $sales_funnel_lead
+                    - @create_related_entity:
+                        conditions: # if Sales Funnel not exist yet
+                            @empty: [$sales_funnel.id]
+                        parameters: ~
+
+            disqualify_definition:
+                conditions: # if lead.status = "new"
+                    @equal: [$lead.status.name, 'new']
+                post_actions: # set lead.status = "canceled"
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                        identifier: 'canceled'
+                        attribute: $lead.status
+
+            reactivate_definition:
+                conditions: # if lead.status = "canceled"
+                    @equal: [$lead.status.name, 'canceled']
+                post_actions: # set lead.status = "new"
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                        identifier: 'new'
+                        attribute: $lead.status

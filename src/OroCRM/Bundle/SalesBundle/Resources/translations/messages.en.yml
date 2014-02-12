@@ -136,6 +136,7 @@ orocrm:
             start_date.label:     Start Date
             lead.label:           Lead
             opportunity.label:    Opportunity
+            owner.label:          Owner
 
             datagrid:
                 view:   View
