@@ -40,7 +40,8 @@ use Oro\Bundle\UserBundle\Entity\User;
  *          "group_name"=""
  *      },
  *      "merge"={
- *          "merge_enable"=true
+ *          "merge_enable"=true,
+ *          "merge_max_entities"=5
  *      }
  *  }
  * )
