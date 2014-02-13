@@ -3,6 +3,7 @@ datagrid:
         extended_entity_name: %orocrm_sales.opportunity.class%
         options:
             entityHint: opportunities
+            export: true
         source:
             type: orm
             acl_resource: orocrm_sales_opportunity_view
@@ -129,6 +130,7 @@ datagrid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
         options:
             entityHint: leads
+            export: true
         source:
             type: orm
             acl_resource: orocrm_sales_lead_view
