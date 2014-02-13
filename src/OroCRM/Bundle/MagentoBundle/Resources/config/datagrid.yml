@@ -228,6 +228,7 @@ datagrid:
                 rowAction:    true
         options:
             entityHint: cart
+            export: true
 
     magento-cartitem-grid:
         source:
@@ -438,7 +439,6 @@ datagrid:
         options:
             entityHint: product
 
-
     magento-order-grid:
         source:
             type: orm
@@ -558,6 +558,7 @@ datagrid:
                 rowAction:    true
         options:
             entityHint: order
+            export: true
 
     magento-orderitem-grid:
         source:
