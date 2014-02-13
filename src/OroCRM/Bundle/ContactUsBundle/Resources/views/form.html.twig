@@ -1,0 +1,25 @@
+{% form_theme form with ['OroCRMContactUsBundle::fields.html.twig'] %}
+
+{{ form_start(form, {'attr': {'id': form.vars.name, 'novalidate': 'novalidate' }}) }}
+<div class="wrapper">
+    <div class="row-group">
+        <div class="box">
+            {{ form_row(form.name) }}
+        </div>
+        <div class="box">
+            {{ form_row(form.email) }}
+        </div>
+    </div>
+    <div class="row-group">
+        <div class="box">
+            {{ form_row(form.phone) }}
+        </div>
+    </div>
+    <div class="row-group">
+        {{ form_row(form.message) }}
+    </div>
+    <div class="row-group">
+        {{ form_widget(form.submit) }}
+    </div>
+</div>
+{{ form_end(form) }}
