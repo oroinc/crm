@@ -28,6 +28,16 @@ class ControllersCrmTest extends BaseControllersTest
     }
 
     /**
+     * @param array $report
+     * @param array $reportResult
+     *
+     * @dataProvider requestsApi()
+     */
+    public function testExport($report, $reportResult)
+    {
+        $this->markTestSkipped("Skipped by BAP-2946");
+    }
+        /**
      * Data provider for SOAP API tests
      *
      * @return array

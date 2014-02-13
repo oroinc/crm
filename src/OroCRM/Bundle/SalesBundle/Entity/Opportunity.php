@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
@@ -501,16 +502,16 @@ class Opportunity extends ExtendOpportunity
     /**
      * @ORM\PrePersist
      */
-    public function prePersist()
+    public function beforeSave()
     {
         $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->preUpdate();
+        $this->beforeUpdate();
     }
 
     /**
      * @ORM\PreUpdate
      */
-    public function preUpdate()
+    public function beforeUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
@@ -550,5 +551,16 @@ class Opportunity extends ExtendOpportunity
     {
         $this->notes = $notes;
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist(LifecycleEventArgs $eventArgs)
+    {
+        $em = $eventArgs->getEntityManager();
+        /** @var LeadStatus $defaultStatus */
+        $defaultStatus   = $em->getReference('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
+        $this->setStatus($defaultStatus);
     }
 }
