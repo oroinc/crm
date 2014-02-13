@@ -4,8 +4,8 @@ OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest:
             - NotBlank: ~
             - Length:
                 max: 200
-        email:
+        emailAddress:
             - Email:    ~
             - NotBlank: ~
-        message:
+        comment:
             - NotBlank: ~

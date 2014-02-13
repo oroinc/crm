@@ -7,12 +7,12 @@ orocrm:
                 label: ID
             name:
                 label: Name
-            email:
+            email_address:
                 label: Email
             phone:
                 label: Phone
-            message:
-                label: Message
+            comment:
+                label: Comment
             channel:
                 label: Channel
             created_at:

@@ -7,7 +7,7 @@ datagrid:
                 select:
                     - cr.id
                     - cr.name
-                    - cr.email
+                    - cr.emailAddress
                     - cr.phone
                     - cr.createdAt
                     - channel.name as channelName
@@ -23,8 +23,8 @@ datagrid:
                 label: orocrm.contactus.contactrequest.name.label
             phone:
                 label: orocrm.contactus.contactrequest.phone.label
-            email:
-                label: orocrm.contactus.contactrequest.email.label
+            emailAddress:
+                label: orocrm.contactus.contactrequest.email_address.label
             createdAt:
                 frontend_type: datetime
                 label:         orocrm.contactus.contactrequest.created_at.label
@@ -36,8 +36,8 @@ datagrid:
                     data_name: cr.name
                 phone:
                     data_name: cr.phone
-                email:
-                    data_name: cr.email
+                emailAddress:
+                    data_name: cr.emailAddress
                 createdAt:
                     data_name: cr.createdAt
             default:
@@ -57,9 +57,9 @@ datagrid:
                 phone:
                     type:      string
                     data_name: cr.phone
-                email:
+                emailAddress:
                     type:      string
-                    data_name: cr.email
+                    data_name: cr.emailAddress
                 createdAt:
                     type:      datetime
                     data_name: cr.createdAt

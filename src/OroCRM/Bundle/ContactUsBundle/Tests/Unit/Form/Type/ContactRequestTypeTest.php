@@ -113,9 +113,9 @@ class ContactRequestTypeTest extends TypeTestCase
 
         $fields = [
             'name',
-            'email',
+            'email_address',
             'phone',
-            'message',
+            'comment',
             'submit'
         ];
         foreach ($fields as $field) {

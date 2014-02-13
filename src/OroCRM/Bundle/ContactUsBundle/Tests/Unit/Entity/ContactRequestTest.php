@@ -18,7 +18,7 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $name      = uniqid('name');
         $email     = uniqid('@');
         $phone     = uniqid('123123');
-        $message   = uniqid('message');
+        $comment   = uniqid('comment');
         $createdAt = new \DateTime();
         $updatedAt = new \DateTime();
         /** @var Channel $channel */
@@ -26,9 +26,9 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
 
         $request = new ContactRequest();
         $request->setName($name);
-        $request->setEmail($email);
+        $request->setEmailAddress($email);
         $request->setPhone($phone);
-        $request->setMessage($message);
+        $request->setComment($comment);
         $request->setCreatedAt($createdAt);
         $request->setUpdatedAt($updatedAt);
 
@@ -37,10 +37,10 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($request->getId());
         $this->assertSame($channel, $request->getChannel());
-        $this->assertEquals($email, $request->getEmail());
+        $this->assertEquals($email, $request->getEmailAddress());
         $this->assertEquals($name, $request->getName());
         $this->assertEquals($phone, $request->getPhone());
-        $this->assertEquals($message, $request->getMessage());
+        $this->assertEquals($comment, $request->getComment());
         $this->assertEquals($createdAt, $request->getCreatedAt());
         $this->assertEquals($updatedAt, $request->getUpdatedAt());
     }

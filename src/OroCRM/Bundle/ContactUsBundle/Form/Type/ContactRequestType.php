@@ -24,9 +24,13 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface, 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('name', 'text', ['required' => true, 'label' => 'orocrm.contactus.contactrequest.name.label']);
-        $builder->add('email', 'text', ['required' => true, 'label' => 'orocrm.contactus.contactrequest.email.label']);
+        $builder->add(
+            'email_address',
+            'text',
+            ['required' => true, 'label' => 'orocrm.contactus.contactrequest.email_address.label']
+        );
         $builder->add('phone', 'text', ['required' => false, 'label' => 'orocrm.contactus.contactrequest.phone.label']);
-        $builder->add('message', 'textarea', ['label' => 'orocrm.contactus.contactrequest.message.label']);
+        $builder->add('comment', 'textarea', ['label' => 'orocrm.contactus.contactrequest.comment.label']);
         $builder->add('submit', 'submit');
     }
 
@@ -157,7 +161,7 @@ CSS;
      */
     public function getDefaultSuccessMessage()
     {
-        return '<h3>Form has been submitted successfully</h3>{back_link}';
+        return '<p>Form has been submitted successfully</p>{back_link}';
     }
 
     /**

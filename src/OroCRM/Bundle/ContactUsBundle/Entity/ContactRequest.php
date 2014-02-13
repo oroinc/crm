@@ -45,9 +45,9 @@ class ContactRequest
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=100)
+     * @ORM\Column(name="email_address", type="string", length=100)
      */
-    protected $email;
+    protected $emailAddress;
 
     /**
      * @var string
@@ -59,9 +59,9 @@ class ContactRequest
     /**
      * @var string
      *
-     * @ORM\Column(name="message", type="text")
+     * @ORM\Column(name="comment", type="text")
      */
-    protected $message;
+    protected $comment;
 
     /**
      * @var \DateTime $created
@@ -102,19 +102,19 @@ class ContactRequest
     }
 
     /**
-     * @param string $email
+     * @param string $emailAddress
      */
-    public function setEmail($email)
+    public function setEmailAddress($emailAddress)
     {
-        $this->email = $email;
+        $this->emailAddress = $emailAddress;
     }
 
     /**
      * @return string
      */
-    public function getEmail()
+    public function getEmailAddress()
     {
-        return $this->email;
+        return $this->emailAddress;
     }
 
     /**
@@ -134,19 +134,19 @@ class ContactRequest
     }
 
     /**
-     * @param string $message
+     * @param string $comment
      */
-    public function setMessage($message)
+    public function setComment($comment)
     {
-        $this->message = $message;
+        $this->comment = $comment;
     }
 
     /**
      * @return string
      */
-    public function getMessage()
+    public function getComment()
     {
-        return $this->message;
+        return $this->comment;
     }
 
     /**
