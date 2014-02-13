@@ -1,1 +1,1 @@
-<%= name %> - <%= firstName %> <%= lastName %>
+<%= name %><%if (typeof firstName != 'undefined' && typeof lastName != 'undefined') { %> - <%= firstName %> <%= lastName %><% } %>
