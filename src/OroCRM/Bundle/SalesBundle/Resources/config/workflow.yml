@@ -1057,7 +1057,7 @@ workflows:
                     @or:
                         parameters:
                             - @not_empty: $new_company_name
-                            - @not_empty: $account
+                            - @not_empty: $new_account
                         message: "Company name or account must be selected."
                 post_actions: # set lead.status = "qualified"
                     - @find_entity:
@@ -1143,21 +1143,21 @@ workflows:
                     - @tree: # create and set Account
                         conditions:
                             @and: # if account not selected and company name is selected
-                                - @empty: $account
+                                - @empty: $new_account
                                 - @not_empty: $new_company_name
                         actions:
                             - @find_entity: # try to find account by company name
                                 class: OroCRM\Bundle\AccountBundle\Entity\Account
-                                attribute: $account
+                                attribute: $new_account
                                 where:
                                     name: $new_company_name
                                 case_insensitive: true
                             - @create_entity: # if account not found - create new one
                                 conditions:
-                                    @empty: $account
+                                    @empty: $new_account
                                 parameters:
                                     class: OroCRM\Bundle\AccountBundle\Entity\Account
-                                    attribute: $account
+                                    attribute: $new_account
                                     data:
                                         name: $new_company_name
                                         extendPhone: $lead.phoneNumber
