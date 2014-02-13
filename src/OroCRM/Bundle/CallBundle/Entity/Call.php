@@ -60,14 +60,7 @@ class Call
      * @var Account
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "merge"={
-     *          "relation_enable"=true,
-     *          "relation_label"="orocrm.call.entity_plural_label"
-     *      }
-     *  }
-     * )
+     * @ConfigField(defaultValues={"merge"={"relation_enable"=true}})
      */
     protected $relatedAccount;
 
