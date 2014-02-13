@@ -41,7 +41,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      },
  *      "merge"={
  *          "enable"=true,
- *          "max_entities"=5
+ *          "max_entities_count"=5
  *      }
  *  }
  * )
