@@ -409,6 +409,10 @@ class Account extends ExtendAccount implements Taggable
     {
         $this->defaultContact = $defaultContact;
 
+        if (!$this->contacts->contains($defaultContact)) {
+            $this->addContact($defaultContact);
+        }
+
         return $this;
     }
 
