@@ -735,6 +735,7 @@ workflows:
                 step_to: new_lead
                 is_start: true
                 is_unavailable_hidden: true
+                display_type: page
                 frontend_options:
                     icon: 'icon-phone'
                     class: 'btn-success'
@@ -789,9 +790,14 @@ workflows:
                 step_to: new_opportunity
                 is_start: true
                 is_unavailable_hidden: true
+                display_type: page
                 frontend_options:
                     icon: 'icon-dollar'
                     class: 'btn-success'
+                    page:
+                        parent_route: 'orocrm_sales_salesfunnel_index'
+                        parent_label: 'Sales Funnels'
+                        title: 'New Sales Funnel'
                 form_options:
                     attribute_fields:
                         sales_funnel_name:
