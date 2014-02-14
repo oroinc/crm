@@ -3,6 +3,7 @@ datagrid:
         extended_entity_name: %orocrm_sales.opportunity.class%
         options:
             entityHint: opportunities
+            export: true
         source:
             type: orm
             acl_resource: orocrm_sales_opportunity_view
@@ -12,6 +13,7 @@ datagrid:
                     - o.name
                     - o.closeDate
                     - o.probability
+                    - o.budgetAmount
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
                     - status.label as statusLabel
                     - step.label as stepLabel
@@ -32,13 +34,14 @@ datagrid:
             closeDate:
                 label: orocrm.sales.opportunity.close_date.label
                 frontend_type: date
+            budgetAmount:
+                label: orocrm.sales.opportunity.budget_amount.label
+                frontend_type: currency
             probability:
                 label: orocrm.sales.opportunity.probability.label
                 frontend_type: percent
             statusLabel:
                 label: orocrm.sales.opportunity.status.label
-            stepLabel:
-                label: orocrm.sales.opportunity.b2b_flow_sales.step.label
             primaryEmail:
                 label: orocrm.contact.email.label
         properties:
@@ -63,12 +66,12 @@ datagrid:
                     data_name: contactName
                 closeDate:
                     data_name: o.closeDate
+                budgetAmount:
+                    data_name: o.budgetAmount
                 probability:
                     data_name: o.probability
                 statusLabel:
                     data_name: status.label
-                stepLabel:
-                    data_name: step.label
                 primaryEmail:
                     data_name: email.email
         filters:
@@ -83,6 +86,9 @@ datagrid:
                 closeDate:
                     type: date
                     data_name: o.closeDate
+                budgetAmount:
+                    type: number
+                    data_name: o.budgetAmount
                 probability:
                     type: percent
                     data_name: o.probability
@@ -93,13 +99,6 @@ datagrid:
                         field_options:
                             class: OroCRMSalesBundle:OpportunityStatus
                             property: label
-                stepLabel:
-                    type: entity
-                    data_name: o.workflowStep
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_sales.opportunity.class%
                 primaryEmail:
                     type: string
                     data_name: email.email
@@ -129,6 +128,7 @@ datagrid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
         options:
             entityHint: leads
+            export: true
         source:
             type: orm
             acl_resource: orocrm_sales_lead_view
@@ -192,7 +192,6 @@ datagrid:
                 route:      oro_api_delete_lead
                 params:     [ id ]
         sorters:
-            multiple_sorting: true
             columns:
                 name:
                     data_name: l.name
@@ -277,3 +276,311 @@ datagrid:
                     type: string
                     data_name: addressPostalCode
                     enabled: false
+
+    sales-funnel-grid:
+        extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
+        options:
+            entityHint: sales activity
+        source:
+            type: orm
+            acl_resource: orocrm_sales_salesfunnel_view
+            query:
+                select:
+                    - salesFunnel.id
+                    - salesFunnel.name
+                    - salesFunnel.startDate
+                    - lead.name as leadName
+                    - opportunity.name as opportunityName
+                    - opportunity.budgetAmount as opportunityBudget
+                    - opportunity.probability as opportunityProbability
+                    - step.label as stepLabel
+                from:
+                    - { table: %orocrm_sales.salesfunnel.entity.class%, alias: salesFunnel }
+                join:
+                    left:
+                        - { join: salesFunnel.workflowStep, alias: step }
+                        - { join: salesFunnel.lead, alias: lead }
+                        - { join: salesFunnel.opportunity, alias: opportunity }
+        columns:
+            name:
+                label: orocrm.sales.salesfunnel.name.label
+            startDate:
+                label: orocrm.sales.salesfunnel.start_date.label
+                frontend_type: date
+            leadName:
+                label: orocrm.sales.salesfunnel.lead.label
+            opportunityName:
+                label: orocrm.sales.salesfunnel.opportunity.label
+            opportunityBudget:
+                label: orocrm.sales.opportunity.budget_amount.label
+                frontend_type: currency
+            opportunityProbability:
+                label: orocrm.sales.opportunity.probability.label
+                frontend_type: percent
+            stepLabel:
+                label: orocrm.sales.salesfunnel.workflow_step.label
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_sales_salesfunnel_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_sales_salesfunnel_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_salesfunnel
+                params:     [ id ]
+        sorters:
+            columns:
+                name:
+                    data_name: salesFunnel.name
+                startDate:
+                    data_name: salesFunnel.startDate
+                leadName:
+                    data_name: lead.name
+                opportunityName:
+                    data_name: opportunity.name
+                opportunityBudget:
+                    data_name: opportunity.budgetAmount
+                opportunityProbability:
+                    data_name: opportunity.probability
+                stepLabel:
+                    data_name: step.label
+            default:
+                startDate: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_sales_salesfunnel_view
+                label:         orocrm.sales.salesfunnel.datagrid.view
+                icon:          user
+                link:          view_link
+                rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_sales_salesfunnel_update
+                label:         orocrm.sales.salesfunnel.datagrid.update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_sales_salesfunnel_delete
+                label:         orocrm.sales.salesfunnel.datagrid.delete
+                icon:          trash
+                link:          delete_link
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: salesFunnel.name
+                startDate:
+                    type:      date
+                    data_name: salesFunnel.startDate
+                leadName:
+                    type: string
+                    data_name: lead.name
+                opportunityName:
+                    type: string
+                    data_name: opportunity.name
+                opportunityBudget:
+                    type: number
+                    data_name: opportunity.budgetAmount
+                opportunityProbability:
+                    type: percent
+                    data_name: opportunity.probability
+                stepLabel:
+                    type: entity
+                    data_name: salesFunnel.workflowStep
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %orocrm_sales.salesfunnel.entity.class%
+
+    # leads with "New" status for Sales Funnel flow
+    sales-funnel-lead-grid:
+        extended_entity_name: %orocrm_sales.lead.entity.class%
+        options:
+            entityHint: leads
+        source:
+            type: orm
+            acl_resource: orocrm_sales_lead_view
+            query:
+                select:
+                    - lead.id
+                    - lead.name
+                    - lead.firstName
+                    - lead.lastName
+                    - lead.email
+                    - lead.phoneNumber
+                    - country.name as countryName
+                    - address.postalCode as addressPostalCode
+                    - >
+                        CONCAT(
+                            CASE WHEN address.regionText IS NOT NULL
+                              THEN address.regionText
+                              ELSE region.name
+                            END, ''
+                        ) as regionLabel
+                    - CONCAT(lead.name, CONCAT(lead.firstName, lead.lastName)) as searchIndex
+                from:
+                    - { table: %orocrm_sales.lead.entity.class%, alias: lead }
+                join:
+                    left:
+                        - { join: lead.address, alias: address }
+                        - { join: address.country, alias: country }
+                        - { join: address.region, alias: region }
+                where:
+                    and:
+                        - lead.status = 'new'
+        columns:
+            name:
+                label: orocrm.sales.lead.name.label
+            firstName:
+                label: orocrm.sales.lead.first_name.label
+            lastName:
+                label: orocrm.sales.lead.last_name.label
+            email:
+                label: orocrm.sales.lead.email.label
+            phoneNumber:
+                label: orocrm.sales.lead.phone_number.label
+            countryName:
+                label: orocrm.sales.lead.datagrid.country
+            regionLabel:
+                label: orocrm.sales.lead.datagrid.region
+            addressPostalCode:
+                label: orocrm.sales.lead.datagrid.postal_code
+            searchIndex: # TODO: remove this field after complex form type implementation https://magecore.atlassian.net/browse/BAP-3146
+                label: 'Search Index'
+        properties:
+            id: ~
+        sorters:
+            columns:
+                name:
+                    data_name: lead.name
+                firstName:
+                    data_name: lead.firstName
+                lastName:
+                    data_name: lead.lastName
+                email:
+                    data_name: lead.email
+                phoneNumber:
+                    data_name: lead.phoneNumber
+                countryName:
+                    data_name: address.country
+                regionLabel:
+                    data_name: regionLabel
+                addressPostalCode:
+                    data_name: addressPostalCode
+            default:
+                firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+                lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+        filters:
+            columns:
+                 name:
+                     type: string
+                     data_name: lead.name
+                 firstName:
+                     type: string
+                     data_name: lead.firstName
+                 lastName:
+                     type: string
+                     data_name: lead.lastName
+                 email:
+                     type: string
+                     data_name: lead.email
+                 phoneNumber:
+                     type: string
+                     data_name: lead.phoneNumber
+                 countryName:
+                     type: entity
+                     data_name: address.country
+                     enabled: false
+                     options:
+                         field_options:
+                             class: OroAddressBundle:Country
+                             property: name
+                             query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                 regionLabel:
+                     type: string
+                     data_name: regionLabel
+                     enabled: false
+                 addressPostalCode:
+                     type: string
+                     data_name: addressPostalCode
+                     enabled: false
+                 searchIndex:
+                     type: string
+                     data_name: searchIndex
+                     enabled: true
+
+    # opportunities with "In progress" status for Sales Funnel flow
+    sales-funnel-opportunity-grid:
+        extended_entity_name: %orocrm_sales.opportunity.class%
+        options:
+            entityHint: opportunities
+        source:
+            type: orm
+            acl_resource: orocrm_sales_opportunity_view
+            query:
+                select:
+                    - opportunity.id
+                    - opportunity.name
+                    - opportunity.probability
+                    - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
+                    - email.email as primaryEmail
+                    - CONCAT(opportunity.name, CONCAT(contact.firstName, contact.lastName)) as searchIndex
+                from:
+                    - { table: %orocrm_sales.opportunity.class%, alias: opportunity }
+                join:
+                    left:
+                        - { join: opportunity.contact , alias: contact }
+                        - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+                where:
+                    and:
+                        - opportunity.status = 'in_progress'
+        columns:
+            name:
+                label: orocrm.sales.opportunity.name.label
+            contactName:
+                label: orocrm.sales.opportunity.contact.label
+            probability:
+                label: orocrm.sales.opportunity.probability.label
+                frontend_type: percent
+            primaryEmail:
+                label: orocrm.contact.email.label
+            searchIndex: # TODO: remove this field after complex form type implementation https://magecore.atlassian.net/browse/BAP-3146
+                label: 'Search Index'
+        properties:
+            id: ~
+        sorters:
+            columns:
+                name:
+                    data_name: opportunity.name
+                contactName:
+                    data_name: contactName
+                probability:
+                    data_name: opportunity.probability
+                primaryEmail:
+                    data_name: email.email
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: opportunity.name
+                contactName:
+                    type: string
+                    data_name: contactName
+                    filter_by_having: true
+                probability:
+                    type: percent
+                    data_name: opportunity.probability
+                primaryEmail:
+                    type: string
+                    data_name: email.email
+                    filter_by_having: true
+                searchIndex:
+                    type: string
+                    data_name: searchIndex

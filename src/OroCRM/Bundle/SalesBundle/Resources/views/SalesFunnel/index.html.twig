@@ -1,0 +1,9 @@
+{% extends 'OroUIBundle:actions:index.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% set gridName = 'sales-funnel-grid' %}
+{% set pageTitle = 'orocrm.sales.salesfunnel.entity_plural_label'|trans %}
+
+{% block content %}
+    {% set buttonsPlaceholderData = {'entity_class': entityClass} %}
+    {{ parent() }}
+{% endblock %}

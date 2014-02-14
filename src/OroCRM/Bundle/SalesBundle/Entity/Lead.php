@@ -38,6 +38,9 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
+ *      },
+ *      "workflow"={
+ *          "active_workflow"="b2b_flow_lead"
  *      }
  *  }
  * )

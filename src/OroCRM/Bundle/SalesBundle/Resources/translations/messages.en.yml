@@ -21,9 +21,11 @@ orocrm:
         controller:
             lead.saved.message: "Lead saved"
             opportunity.saved.message: "Opportunity saved"
+            sales_funnel.saved.message: "Sales activity saved"
 
         form:
             choose_opportunity: 'Choose an opportunity....'
+            choose_lead: 'Choose a lead....'
 
         #
         # OroCRM/Bundle/SalesBundle/Entity/LeadStatus.php
@@ -67,7 +69,8 @@ orocrm:
             owner.label:          Owner
             notes.label:          Notes
             lead.label:           Lead
-            b2b_flow_sales.step.label: Step
+            workflow_item.label:  Workflow Item
+            workflow_step.label:  Step
 
             datagrid:
                 view: View
@@ -115,12 +118,32 @@ orocrm:
             notes.label:          Notes
             opportunities.label:  Opportunities
             workflow_item.label:  Workflow Item
-            workflow_step.label:  Workflow Step
+            workflow_step.label:  Step
 
             datagrid:
                 country: Country
                 region: State
                 postal_code: Postal Code
                 view: View
+                update: Update
+                delete: Delete
+
+        salesfunnel:
+            entity_label:         Sales Activity
+            entity_plural_label:  Sales Activity
+            new_entity_label:     New Sales Activity
+            id.label:             Id
+            created_at.label:     Created
+            updated_at.label:     Updated
+            name.label:           Name
+            start_date.label:     Start Date
+            lead.label:           Lead
+            opportunity.label:    Opportunity
+            owner.label:          Owner
+            workflow_item.label:  Workflow Item
+            workflow_step.label:  Step
+
+            datagrid:
+                view:   View
                 update: Update
                 delete: Delete

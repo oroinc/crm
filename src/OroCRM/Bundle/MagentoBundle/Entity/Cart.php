@@ -36,7 +36,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *          "group_name"=""
  *      },
  *      "workflow"={
- *          "primary"="b2c_flow_abandoned_shopping_cart"
+ *          "active_workflow"="b2c_flow_abandoned_shopping_cart"
  *      }
  *  }
  * )
