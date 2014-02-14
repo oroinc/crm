@@ -42,7 +42,7 @@ abstract class AbstractContactRequest implements FirstNameInterface, LastNameInt
     /**
      * @var string
      *
-     * @ORM\Column(name="email_address", type="string", length=100)
+     * @ORM\Column(name="email_address", type="string", length=100, nullable=true)
      */
     protected $emailAddress;
 
