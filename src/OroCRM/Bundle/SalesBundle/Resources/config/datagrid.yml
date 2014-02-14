@@ -278,7 +278,7 @@ datagrid:
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
         options:
-            entityHint: sales activities
+            entityHint: sales activity
         source:
             type: orm
             acl_resource: orocrm_sales_salesfunnel_view

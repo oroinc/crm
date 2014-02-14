@@ -21,7 +21,7 @@ orocrm:
         controller:
             lead.saved.message: "Lead saved"
             opportunity.saved.message: "Opportunity saved"
-            sales_funnel.saved.message: "Sales funnel saved"
+            sales_funnel.saved.message: "Sales activity saved"
 
         form:
             choose_opportunity: 'Choose an opportunity....'
@@ -130,7 +130,7 @@ orocrm:
 
         salesfunnel:
             entity_label:         Sales Activity
-            entity_plural_label:  Sales Activities
+            entity_plural_label:  Sales Activity
             new_entity_label:     New Sales Activity
             id.label:             Id
             created_at.label:     Created

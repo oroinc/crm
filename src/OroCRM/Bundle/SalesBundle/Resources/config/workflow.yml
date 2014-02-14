@@ -1028,7 +1028,7 @@ workflows:
             reopen:
                 label: 'Reopen'
                 message: |+
-                    This action will reset the opportunity data and will bring the Sales Funnel workflow back to the New Opportunity step.
+                    This action will reset the opportunity data and will bring the Sales Activity workflow back to the New Opportunity step.
 
                     Do you want to proceed?
                 step_to: new_opportunity
