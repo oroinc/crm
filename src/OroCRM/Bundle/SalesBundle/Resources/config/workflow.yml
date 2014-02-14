@@ -591,6 +591,7 @@ workflows:
                         update: false
                         delete: false
                 allowed_transitions:
+                    - follow_up
                     - reactivate
             new_opportunity:
                 label: 'New Opportunity'
@@ -653,6 +654,10 @@ workflows:
                 property_path: sales_funnel.lead
                 options:
                     class: OroCRM\Bundle\SalesBundle\Entity\Lead
+            lead_notes:
+                label: orocrm.sales.lead.notes.label
+                type: string
+                property_path: sales_funnel.lead.notes
             new_notes:
                 label: orocrm.sales.lead.notes.label
                 type: string
@@ -847,6 +852,18 @@ workflows:
                 frontend_options:
                     icon: 'icon-remove'
                 transition_definition: disqualify_definition
+            follow_up:
+                label: 'Follow up'
+                step_to: disqualified_lead
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-comment'
+                form_options:
+                    attribute_fields:
+                        lead_notes:
+                            form_type: textarea
+                            options:
+                transition_definition: follow_up_definition
             reactivate:
                 label: 'Reactivate'
                 step_to: new_lead
@@ -1032,7 +1049,6 @@ workflows:
                         route: 'orocrm_sales_salesfunnel_view'
                         route_parameters:
                             id: $sales_funnel.id
-
             disqualify_definition:
                 conditions: # if lead.status = "new"
                     @equal: [$lead.status.name, 'new']
@@ -1041,7 +1057,9 @@ workflows:
                         class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
                         identifier: 'canceled'
                         attribute: $lead.status
-
+            follow_up_definition:
+                conditions: # if lead.status = "canceled"
+                    @equal: [$lead.status.name, 'canceled']
             reactivate_definition:
                 conditions: # if lead.status = "canceled"
                     @equal: [$lead.status.name, 'canceled']
