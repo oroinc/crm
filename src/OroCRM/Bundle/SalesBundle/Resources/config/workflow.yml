@@ -254,7 +254,7 @@ workflows:
     # B2B Sales Workflow
     b2b_flow_sales:
         label: 'B2B Sales Flow'
-        enabled: false
+        enabled: true
         entity: OroCRM\Bundle\SalesBundle\Entity\Opportunity
         entity_attribute: opportunity
         start_step: qualify
@@ -567,9 +567,9 @@ workflows:
                         identifier: 'in_progress'
                         attribute: $opportunity.status
 
-    # B2B Sales Funnel flow
+    # B2B Sales Activity flow
     b2b_flow_sales_funnel:
-        label: 'B2B Sales Funnel Flow'
+        label: 'B2B Sales Activity Flow'
         enabled: true
         entity: OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
         entity_attribute: sales_funnel
@@ -632,7 +632,7 @@ workflows:
 
         attributes:
             sales_funnel_name:
-                label: "Sales Funnel name"
+                label: "Sales Activity name"
                 type: string
                 property_path: sales_funnel.name
             sales_funnel_start_date:
@@ -741,8 +741,8 @@ workflows:
                     class: 'btn-success'
                     page:
                         parent_route: 'orocrm_sales_salesfunnel_index'
-                        parent_label: 'Sales Funnels'
-                        title: 'New Sales Funnel'
+                        parent_label: orocrm.sales.salesfunnel.entity_plural_label
+                        title: orocrm.sales.salesfunnel.new_entity_label
                 form_options:
                     attribute_fields:
                         sales_funnel_name:
@@ -796,8 +796,8 @@ workflows:
                     class: 'btn-success'
                     page:
                         parent_route: 'orocrm_sales_salesfunnel_index'
-                        parent_label: 'Sales Funnels'
-                        title: 'New Sales Funnel'
+                        parent_label: orocrm.sales.salesfunnel.entity_plural_label
+                        title: orocrm.sales.salesfunnel.new_entity_label
                 form_options:
                     attribute_fields:
                         sales_funnel_name:

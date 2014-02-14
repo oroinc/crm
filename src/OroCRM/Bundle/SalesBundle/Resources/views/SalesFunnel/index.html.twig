@@ -7,14 +7,3 @@
     {% set buttonsPlaceholderData = {'entity_class': entityClass} %}
     {{ parent() }}
 {% endblock %}
-
-{% block navButtons %}
-    {% if resource_granted('orocrm_sales_salesfunnel_create') %}
-        <div class="btn-group">
-        {{ UI.addButton({
-            'path' : path('orocrm_sales_salesfunnel_create'),
-            'entity_label': 'orocrm.sales.salesfunnel.entity_label'|trans
-        }) }}
-        </div>
-    {% endif %}
-{% endblock %}

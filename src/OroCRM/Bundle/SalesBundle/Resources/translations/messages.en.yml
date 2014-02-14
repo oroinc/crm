@@ -128,8 +128,9 @@ orocrm:
                 delete: Delete
 
         salesfunnel:
-            entity_label:         Sales Funnel
-            entity_plural_label:  Sales Funnels
+            entity_label:         Sales Activity
+            entity_plural_label:  Sales Activities
+            new_entity_label:     New Sales Activity
             created_at.label:     Created
             updated_at.label:     Updated
             name.label:           Name
