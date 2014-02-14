@@ -1,7 +1,5 @@
 datagrid:
     dashboard-my-accounts-activity-grid:
-        options:
-            entityHint: account
         source:
             type: orm
             acl_resource: orocrm_call_view
@@ -42,6 +40,7 @@ datagrid:
             contactPhone:
                 label: orocrm.contact.contactphone.phone.label
         options:
+            entityHint: account
             toolbarOptions:
                 hide: true
                 pageSize:
@@ -171,6 +170,7 @@ datagrid:
                 link:          delete_link
         options:
             entityHint: account
+            export: true
 
     base-account-contacts-grid:
         extended_entity_name: %orocrm_contact.entity.class%

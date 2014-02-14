@@ -31,3 +31,11 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
             - NotBlank: ~
             - Length:
                 max: 255
+
+OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
+    properties:
+        name:
+            - NotBlank: ~
+        startDate:
+            - NotBlank: ~
+            - Date: ~

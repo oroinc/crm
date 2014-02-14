@@ -5,3 +5,7 @@ orocrm_sales_opportunity_api:
 orocrm_sales_lead_api:
     resource: "@OroCRMSalesBundle/Controller/Api/Rest/LeadController.php"
     type:     rest
+
+orocrm_sales_salesfunnel_api:
+    resource: "@OroCRMSalesBundle/Controller/Api/Rest/SalesFunnelController.php"
+    type:     rest
