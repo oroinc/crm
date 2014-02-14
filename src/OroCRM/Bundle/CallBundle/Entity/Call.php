@@ -18,6 +18,9 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
  * @Config(
  *  routeName="orocrm_call_index",
  *  defaultValues={
+ *      "entity"={
+ *          "icon"="icon-phone"
+ *      },
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",
