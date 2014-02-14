@@ -12,6 +12,7 @@ datagrid:
                     - o.name
                     - o.closeDate
                     - o.probability
+                    - o.budgetAmount
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
                     - status.label as statusLabel
                     - step.label as stepLabel
@@ -32,13 +33,14 @@ datagrid:
             closeDate:
                 label: orocrm.sales.opportunity.close_date.label
                 frontend_type: date
+            budgetAmount:
+                label: orocrm.sales.opportunity.budget_amount.label
+                frontend_type: currency
             probability:
                 label: orocrm.sales.opportunity.probability.label
                 frontend_type: percent
             statusLabel:
                 label: orocrm.sales.opportunity.status.label
-            stepLabel:
-                label: orocrm.sales.opportunity.b2b_flow_sales.step.label
             primaryEmail:
                 label: orocrm.contact.email.label
         properties:
@@ -63,12 +65,12 @@ datagrid:
                     data_name: contactName
                 closeDate:
                     data_name: o.closeDate
+                budgetAmount:
+                    data_name: o.budgetAmount
                 probability:
                     data_name: o.probability
                 statusLabel:
                     data_name: status.label
-                stepLabel:
-                    data_name: step.label
                 primaryEmail:
                     data_name: email.email
         filters:
@@ -83,6 +85,9 @@ datagrid:
                 closeDate:
                     type: date
                     data_name: o.closeDate
+                budgetAmount:
+                    type: number
+                    data_name: o.budgetAmount
                 probability:
                     type: percent
                     data_name: o.probability
@@ -93,13 +98,6 @@ datagrid:
                         field_options:
                             class: OroCRMSalesBundle:OpportunityStatus
                             property: label
-                stepLabel:
-                    type: entity
-                    data_name: o.workflowStep
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_sales.opportunity.class%
                 primaryEmail:
                     type: string
                     data_name: email.email
@@ -192,7 +190,6 @@ datagrid:
                 route:      oro_api_delete_lead
                 params:     [ id ]
         sorters:
-            multiple_sorting: true
             columns:
                 name:
                     data_name: l.name
@@ -287,17 +284,21 @@ datagrid:
             acl_resource: orocrm_sales_salesfunnel_view
             query:
                 select:
-                    - sf.id
-                    - sf.name
-                    - sf.startDate
+                    - salesFunnel.id
+                    - salesFunnel.name
+                    - salesFunnel.startDate
                     - lead.name as leadName
                     - opportunity.name as opportunityName
+                    - opportunity.budgetAmount as opportunityBudget
+                    - opportunity.probability as opportunityProbability
+                    - step.label as stepLabel
                 from:
-                    - { table: %orocrm_sales.salesfunnel.entity.class%, alias: sf }
+                    - { table: %orocrm_sales.salesfunnel.entity.class%, alias: salesFunnel }
                 join:
                     left:
-                        - { join: sf.lead, alias: lead }
-                        - { join: sf.opportunity, alias: opportunity }
+                        - { join: salesFunnel.workflowStep, alias: step }
+                        - { join: salesFunnel.lead, alias: lead }
+                        - { join: salesFunnel.opportunity, alias: opportunity }
         columns:
             name:
                 label: orocrm.sales.salesfunnel.name.label
@@ -308,6 +309,14 @@ datagrid:
                 label: orocrm.sales.salesfunnel.lead.label
             opportunityName:
                 label: orocrm.sales.salesfunnel.opportunity.label
+            opportunityBudget:
+                label: orocrm.sales.opportunity.budget_amount.label
+                frontend_type: currency
+            opportunityProbability:
+                label: orocrm.sales.opportunity.probability.label
+                frontend_type: percent
+            stepLabel:
+                label: orocrm.sales.salesfunnel.workflow_step.label
         properties:
             id: ~
             view_link:
@@ -323,16 +332,21 @@ datagrid:
                 route:      oro_api_delete_salesfunnel
                 params:     [ id ]
         sorters:
-            multiple_sorting: true
             columns:
                 name:
-                    data_name: sf.name
+                    data_name: salesFunnel.name
                 startDate:
-                    data_name: sf.startDate
+                    data_name: salesFunnel.startDate
                 leadName:
-                    data_name: leadName
+                    data_name: lead.name
                 opportunityName:
-                    data_name: opportunityName
+                    data_name: opportunity.name
+                opportunityBudget:
+                    data_name: opportunity.budgetAmount
+                opportunityProbability:
+                    data_name: opportunity.probability
+                stepLabel:
+                    data_name: step.label
             default:
                 startDate: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
         actions:
@@ -359,16 +373,29 @@ datagrid:
             columns:
                 name:
                     type: string
-                    data_name: sf.name
+                    data_name: salesFunnel.name
                 startDate:
                     type:      date
-                    data_name: sf.startDate
+                    data_name: salesFunnel.startDate
                 leadName:
                     type: string
-                    data_name: leadName
+                    data_name: lead.name
                 opportunityName:
                     type: string
-                    data_name: opportunityName
+                    data_name: opportunity.name
+                opportunityBudget:
+                    type: number
+                    data_name: opportunity.budgetAmount
+                opportunityProbability:
+                    type: percent
+                    data_name: opportunity.probability
+                stepLabel:
+                    type: entity
+                    data_name: salesFunnel.workflowStep
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %orocrm_sales.salesfunnel.entity.class%
 
     # leads with "New" status for Sales Funnel flow
     sales-funnel-lead-grid:
@@ -428,7 +455,6 @@ datagrid:
         properties:
             id: ~
         sorters:
-            multiple_sorting: true
             columns:
                 name:
                     data_name: lead.name
