@@ -60,7 +60,7 @@ class Call
      * @var Account
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     * @ConfigField(defaultValues={"merge"={"relation_enable"=true}})
+     * @ConfigField(defaultValues={"merge"={"relation_enable"=true, "relation_cast_method"="getSubject"}})
      */
     protected $relatedAccount;
 
@@ -401,10 +401,5 @@ class Call
                 'orocrm.call.phone.required.message'
             );
         }
-    }
-
-    public function __toString()
-    {
-        return (string)$this->subject;
     }
 }

@@ -174,7 +174,6 @@ datagrid:
                 type: merge
                 entity_name: %orocrm_account.account.entity.class%
                 data_identifier: a.id
-                icon: random
         options:
             entityHint: account
 
