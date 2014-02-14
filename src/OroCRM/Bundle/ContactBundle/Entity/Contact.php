@@ -18,6 +18,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -45,6 +46,9 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
+ *      },
+ *      "merge"={
+ *          "enable"=true
  *      }
  *  }
  * )
@@ -70,6 +74,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $namePrefix;
 
@@ -79,6 +84,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="first_name", type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $firstName;
 
@@ -88,6 +94,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $middleName;
 
@@ -97,6 +104,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="last_name", type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $lastName;
 
@@ -106,6 +114,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $nameSuffix;
 
@@ -115,6 +124,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="gender", type="string", length=8, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $gender;
 
@@ -124,6 +134,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="birthday", type="datetime", nullable=true)
      * @Soap\ComplexType("date", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $birthday;
 
@@ -132,6 +143,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      * @Soap\ComplexType("string", nillable=true)
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $description;
 
@@ -140,6 +152,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Source")
      * @ORM\JoinColumn(name="source_name", referencedColumnName="name")
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      **/
     protected $source;
 
@@ -148,6 +161,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Method")
      * @ORM\JoinColumn(name="method_name", referencedColumnName="name")
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      **/
     protected $method;
 
@@ -157,6 +171,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Soap\ComplexType("string", nillable=true)
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $owner;
 
@@ -165,6 +180,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="assigned_to_user_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $assignedTo;
 
@@ -173,6 +189,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="reports_to_contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $reportsTo;
 
@@ -182,6 +199,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="job_title", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $jobTitle;
 
@@ -193,6 +211,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
      * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactEmail[]", nillable=true)
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $emails;
 
@@ -204,6 +223,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
      * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactPhone[]", nillable=true)
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $phones;
 
@@ -213,6 +233,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="fax", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $fax;
 
@@ -222,6 +243,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="skype", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $skype;
 
@@ -231,6 +253,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $twitter;
 
@@ -240,6 +263,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="facebook", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $facebook;
 
@@ -249,6 +273,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="google_plus", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $googlePlus;
 
@@ -258,6 +283,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="linkedin", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $linkedIn;
 
@@ -273,6 +299,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $addresses;
 
@@ -284,6 +311,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *      joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="contact_group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $groups;
 
@@ -292,6 +320,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", mappedBy="contacts")
      * @ORM\JoinTable(name="orocrm_contact_to_account")
+     * @ConfigField(defaultValues={"merge"={"enable"=true}})
      */
     protected $accounts;
 

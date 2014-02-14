@@ -331,6 +331,11 @@ datagrid:
                 icon: trash
                 link: delete_link
         mass_actions:
+            merge:
+                type: merge
+                entity_name: %orocrm_contact.entity.class%
+                data_identifier: c.id
+                icon: random
             delete:
                 type: delete
                 entity_name: %orocrm_contact.entity.class%
