@@ -254,7 +254,7 @@ workflows:
     # B2B Sales Workflow
     b2b_flow_sales:
         label: 'B2B Sales Flow'
-        enabled: true
+        enabled: false
         entity: OroCRM\Bundle\SalesBundle\Entity\Opportunity
         entity_attribute: opportunity
         start_step: qualify
