@@ -4,16 +4,16 @@ namespace OroCRM\Bundle\SalesBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class OpportunitySelectType extends AbstractType
+class LeadSelectType extends AbstractType
 {
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
             array(
                 'configs' => array(
-                    'placeholder' => 'orocrm.sales.form.choose_opportunity'
+                    'placeholder' => 'orocrm.sales.form.choose_lead'
                 ),
-                'autocomplete_alias' => 'opportunities'
+                'autocomplete_alias' => 'leads'
             )
         );
     }
@@ -28,6 +28,6 @@ class OpportunitySelectType extends AbstractType
      */
     public function getName()
     {
-        return 'orocrm_sales_opportunity_select';
+        return 'orocrm_sales_lead_select';
     }
 }

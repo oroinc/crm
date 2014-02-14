@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
-use Oro\Bundle\EntityConfigBundle\Config\Id\FieldConfigId;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
