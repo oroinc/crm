@@ -30,7 +30,7 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
  *          "group_name"=""
  *      },
  *      "workflow"={
- *          "primary"="b2c_flow_order_follow_up"
+ *          "active_workflow"="b2c_flow_order_follow_up"
  *      }
  *  }
  * )
