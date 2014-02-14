@@ -6,7 +6,8 @@ datagrid:
             query:
                 select:
                     - cr.id
-                    - cr.name
+                    - cr.firstName
+                    - cr.lastName
                     - cr.emailAddress
                     - cr.phone
                     - cr.createdAt
@@ -19,8 +20,10 @@ datagrid:
         columns:
             channelName:
                 label: orocrm.contactus.contactrequest.channel.label
-            name:
-                label: orocrm.contactus.contactrequest.name.label
+            firstName:
+                label: orocrm.contactus.contactrequest.first_name.label
+            lastName:
+                label: orocrm.contactus.contactrequest.last_name.label
             phone:
                 label: orocrm.contactus.contactrequest.phone.label
             emailAddress:
@@ -32,8 +35,10 @@ datagrid:
             columns:
                 channelName:
                     data_name: channel.name
-                name:
-                    data_name: cr.name
+                firstName:
+                    data_name: cr.firstName
+                lastName:
+                    data_name: cr.lastName
                 phone:
                     data_name: cr.phone
                 emailAddress:
@@ -51,9 +56,12 @@ datagrid:
                         field_options:
                           class:    OroIntegrationBundle:Channel
                           property: name
-                name:
+                firstName:
                     type:      string
-                    data_name: cr.name
+                    data_name: cr.firstName
+                lastName:
+                    type:      string
+                    data_name: cr.lastName
                 phone:
                     type:      string
                     data_name: cr.phone

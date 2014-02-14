@@ -1,13 +1,14 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as ui %}
-{% oro_title_set({ params : {"%request.clientName%": entity.name} }) %}
+{% set fullname = entity|oro_format_name|default('N/A') %}
+{% oro_title_set({ params : {"%request.clientName%": fullname} }) %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('orocrm_contactus_request_index'),
         'indexLabel': 'orocrm.contactus.contactrequest.entity_plural_label'|trans,
-        'entityTitle': entity.name
+        'entityTitle': fullname
     } %}
     {{ parent() }}
 {% endblock pageHeader %}

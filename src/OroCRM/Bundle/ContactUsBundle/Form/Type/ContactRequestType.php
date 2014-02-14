@@ -23,7 +23,16 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface, 
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', 'text', ['required' => true, 'label' => 'orocrm.contactus.contactrequest.name.label']);
+        $builder->add(
+            'first_name',
+            'text',
+            ['required' => true, 'label' => 'orocrm.contactus.contactrequest.first_name.label']
+        );
+        $builder->add(
+            'last_name',
+            'text',
+            ['required' => true, 'label' => 'orocrm.contactus.contactrequest.last_name.label']
+        );
         $builder->add(
             'email_address',
             'text',
@@ -41,7 +50,7 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface, 
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest',
+            'data_class' => 'OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest',
             ]
         );
     }
