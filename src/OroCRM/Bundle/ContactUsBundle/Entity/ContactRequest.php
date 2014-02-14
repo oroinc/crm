@@ -10,8 +10,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @ORM\Entity
  * @ORM\Table(name="orocrm_contactus_request")
  *
- * @TODO find better solution
- * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string", length=50)
  * @Config(
  *  routeName="orocrm_contactus_request_index",

@@ -10,6 +10,5 @@ OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest:
                 max: 100
         emailAddress:
             - Email:    ~
-            - NotBlank: ~
         comment:
             - NotBlank: ~
