@@ -19,6 +19,9 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
  *  routeName="orocrm_sales_salesfunnel_index",
  *  routeView="orocrm_sales_salesfunnel_view",
  *  defaultValues={
+ *      "entity"={
+ *          "icon"="icon-filter"
+ *      },
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",

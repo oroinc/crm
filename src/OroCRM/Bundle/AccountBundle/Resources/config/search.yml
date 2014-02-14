@@ -7,7 +7,6 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
         parameters:
             id: id
     search_template: OroCRMAccountBundle:Account:searchResult.html.twig
-    entity_icon_class: icon-home
     fields:
         -
             name: name
