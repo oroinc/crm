@@ -338,14 +338,6 @@ class Lead extends AbstractPageEntity
         return $this;
     }
 
-    public function reactivate()
-    {
-        $this->test->byXpath("//div[@class='btn-group']/a[@id='transition-b2b_flow_lead-reactivate']")->click();
-        $this->waitPageToLoad();
-        $this->waitForAjax();
-        return $this;
-    }
-
     public function edit()
     {
         $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit lead']")->click();
