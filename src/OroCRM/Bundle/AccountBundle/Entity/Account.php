@@ -29,7 +29,11 @@ use Oro\Bundle\UserBundle\Entity\User;
  *  routeName="orocrm_account_index",
  *  routeView="orocrm_account_view",
  *  defaultValues={
- *      "entity"={"label"="Account", "plural_label"="Accounts"},
+ *      "entity"={
+ *          "label"="Account",
+ *          "plural_label"="Accounts",
+ *          "icon"="icon-suitcase"
+ *      },
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",
