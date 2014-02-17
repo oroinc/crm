@@ -13,7 +13,11 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 /**
  * @ORM\Table("orocrm_contact_address")
  * @ORM\HasLifecycleCallbacks()
- * @Config()
+ * @Config(
+ *       defaultValues={
+ *          "entity"={"icon"="icon-map-marker"},
+ *      }
+ * )
  * @ORM\Entity
  */
 class ContactAddress extends AbstractTypedAddress
