@@ -44,7 +44,7 @@ class Workflow extends AbstractPageEntity
 
     public function setAccount($account)
     {
-        $this->test->byXpath("//div[@id='s2id_oro_workflow_transition_account']/a")->click();
+        $this->test->byXpath("//div[@id='s2id_oro_workflow_transition_new_account']/a")->click();
         $this->waitForAjax();
         $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($account);
         $this->waitForAjax();
@@ -106,7 +106,7 @@ class Workflow extends AbstractPageEntity
 
     public function getSolution()
     {
-        return $this->solution->value();
+        return $$this->test->byId('oro_workflow_transition_proposed_solution')->value();
     }
 
     public function setCloseRevenue($closeRevenue)
@@ -147,7 +147,9 @@ class Workflow extends AbstractPageEntity
 
     public function qualify()
     {
-        $this->test->byXpath("//div[@class='btn-group']/a[@id='transition-b2b_flow_lead-qualify']")->click();
+        $this->test->byXpath(
+            "//div[@class='btn-group']/a[@id='transition-b2b_flow_sales_funnel-qualify']"
+        )->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $this->assertElementPresent(
@@ -158,7 +160,31 @@ class Workflow extends AbstractPageEntity
 
     public function disqualify()
     {
-        $this->test->byXpath("//div[@class='btn-group']/a[@id='transition-b2b_flow_lead-cancel']")->click();
+        $this->test->byXpath(
+            "//div[@class='btn-group']/a[@id='transition-b2b_flow_sales_funnel-disqualify']"
+        )->click();
+        $this->waitPageToLoad();
+        $this->waitForAjax();
+        return $this;
+    }
+
+    public function reactivate()
+    {
+        $this->test->byXpath(
+            "//div[@class='btn-group']/a[@id='transition-b2b_flow_sales_funnel-reactivate']"
+        )->click();
+        $this->waitPageToLoad();
+        $this->waitForAjax();
+        return $this;
+    }
+
+    public function reopen()
+    {
+        $this->test->byXpath(
+            "//div[@class='btn-group']/a[@id='transition-b2b_flow_sales_funnel-reopen']"
+        )->click();
+        $this->waitForAjax();
+        $this->test->byXpath("//div[div[contains(., 'Reopen')]]//a[text()='OK']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         return $this;
@@ -166,7 +192,9 @@ class Workflow extends AbstractPageEntity
 
     public function develop()
     {
-        $this->test->byXpath("//div[@class='btn-group']/a[@id='transition-b2b_flow_sales-develop']")->click();
+        $this->test->byXpath(
+            "//div[@class='btn-group']/a[@id='transition-b2b_flow_sales_funnel-develop']"
+        )->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $this->assertElementPresent(
@@ -177,7 +205,9 @@ class Workflow extends AbstractPageEntity
 
     public function closeAsWon()
     {
-        $this->test->byXpath("//div[@class='btn-group']/a[@id='transition-b2b_flow_sales-close_as_won']")->click();
+        $this->test->byXpath(
+            "//div[@class='btn-group']/a[@id='transition-b2b_flow_sales_funnel-close_as_won']"
+        )->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         return $this;
@@ -185,9 +215,17 @@ class Workflow extends AbstractPageEntity
 
     public function closeAsLost()
     {
-        $this->test->byXpath("//div[@class='btn-group']/a[@id='transition-b2b_flow_sales-close_as_lost']")->click();
+        $this->test->byXpath(
+            "//div[@class='btn-group']/a[@id='transition-b2b_flow_sales_funnel-close_as_lost']"
+        )->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
+        return $this;
+    }
+
+    public function checkStep($step)
+    {
+        $this->assertElementPresent("//div[@class='widget-content']//li[normalize-space(.)='{$step}']");
         return $this;
     }
 

@@ -531,7 +531,14 @@ datagrid:
                     - opportunity.probability
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
                     - email.email as primaryEmail
-                    - CONCAT(opportunity.name, CONCAT(contact.firstName, contact.lastName)) as searchIndex
+                    - >
+                        CONCAT(
+                            opportunity.name,
+                            CASE WHEN contact IS NOT NULL
+                                THEN CONCAT(contact.firstName, contact.lastName)
+                                ELSE ''
+                            END
+                        ) as searchIndex
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: opportunity }
                 join:
