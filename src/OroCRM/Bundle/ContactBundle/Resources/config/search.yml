@@ -6,7 +6,6 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
         parameters:
             id: id
     search_template: OroCRMContactBundle:Contact:searchResult.html.twig
-    entity_icon_class: icon-envelope
     fields:
         -
             name:                   namePrefix

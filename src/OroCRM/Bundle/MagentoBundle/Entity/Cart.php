@@ -31,6 +31,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  * )
  * @Config(
  *  defaultValues={
+ *      "entity"={"icon"="icon-shopping-cart"},
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""

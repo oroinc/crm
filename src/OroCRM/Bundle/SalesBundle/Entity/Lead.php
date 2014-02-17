@@ -30,6 +30,9 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  *  routeName="orocrm_sales_lead_index",
  *  routeView="orocrm_sales_lead_view",
  *  defaultValues={
+ *      "entity"={
+ *          "icon"="icon-phone"
+ *      },
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",
