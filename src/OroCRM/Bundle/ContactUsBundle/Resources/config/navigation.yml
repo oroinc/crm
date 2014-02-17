@@ -4,6 +4,7 @@ oro_menu_config:
             label: orocrm.contactus.contactrequest.entity_plural_label
             route: orocrm_contactus_request_index
             extras:
+                position: 50
                 routes: ['orocrm_contactus_request_*']
     tree:
         application_menu:
