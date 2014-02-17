@@ -41,12 +41,12 @@ class ContactRequestHandler
      */
     public function process(ContactRequest $entity)
     {
-        $this->form->setData($entity);
+        $this->getForm()->setData($entity);
 
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
-            $this->form->submit($this->request);
+            $this->getForm()->submit($this->request);
 
-            if ($this->form->isValid()) {
+            if ($this->getForm()->isValid()) {
                 $this->em->persist($entity);
                 $this->em->flush();
 
@@ -55,5 +55,13 @@ class ContactRequestHandler
         }
 
         return false;
+    }
+
+    /**
+     * @return FormInterface
+     */
+    public function getForm()
+    {
+        return $this->form;
     }
 }

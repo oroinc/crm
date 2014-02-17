@@ -115,7 +115,9 @@ class ContactRequestController extends Controller
      */
     protected function update(ContactRequest $contactRequest)
     {
-        if ($this->get('orocrm_contact_us.contact_request.form.handler')->process($contactRequest)) {
+        $handler = $this->get('orocrm_contact_us.contact_request.form.handler');
+
+        if ($handler->process($contactRequest)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
                 $this->get('translator')->trans('orocrm.contactus.contactrequest.entity.saved')
@@ -136,7 +138,7 @@ class ContactRequestController extends Controller
 
         return [
             'entity' => $contactRequest,
-            'form'   => $this->get('orocrm_contact_us.contact_request.form')->createView()
+            'form'   => $handler->getForm()->createView()
         ];
     }
 }

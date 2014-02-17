@@ -112,14 +112,15 @@ class ContactRequestTypeTest extends TypeTestCase
         );
 
         $fields = [
-            'name',
-            'email_address',
+            'firstName',
+            'lastName',
+            'emailAddress',
             'phone',
             'comment',
             'submit'
         ];
         foreach ($fields as $field) {
-            $this->assertTrue($form->has($field));
+            $this->assertTrue($form->has($field), sprintf('Form should have: %s child', $field));
         }
     }
 }

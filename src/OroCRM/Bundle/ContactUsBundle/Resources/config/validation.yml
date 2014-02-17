@@ -12,3 +12,9 @@ OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest:
             - Email:    ~
         comment:
             - NotBlank: ~
+        preferredContactMethod:
+            - NotBlank: ~
+    constraints:
+        - Callback:
+            methods:
+                - [ OroCRM\Bundle\ContactUsBundle\Validator\ContactRequestCallbackValidator, validate]
