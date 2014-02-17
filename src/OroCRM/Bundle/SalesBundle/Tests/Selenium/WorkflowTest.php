@@ -21,6 +21,11 @@ class WorkflowTest extends Selenium2TestCase
         'region' => 'New York'
     );
 
+    public function setUp()
+    {
+        $this->markTestIncomplete("Due to CRM-828");
+    }
+
     public function testLeadWorkflow()
     {
         $login = $this->login();
