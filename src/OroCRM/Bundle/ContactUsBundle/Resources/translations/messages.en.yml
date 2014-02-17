@@ -1,0 +1,72 @@
+orocrm:
+    contactus:
+        contactrequest:
+            entity_label:        Contact Request
+            entity_plural_label: Contact Requests
+            id:
+                label: ID
+            first_name:
+                label: First name
+            last_name:
+                label: Last name
+            email_address:
+                label: Email
+            phone:
+                label: Phone
+            comment:
+                label: Comment
+            channel:
+                label: Channel
+            created_at:
+                label: Created
+            updated_at:
+                label: Updated
+
+            feedback:
+                label: Feedback
+            contact_reason:
+                label: Contact reason
+            choose_contact_reason:
+                label: Choose contact reason...
+            status:
+                label: Status
+            opportunity:
+                label: Opportunity
+            lead:
+                label: Lead
+            calls:
+                label: Calls
+            emails:
+                label: Emails
+            workflow_item:
+                label: Workflow item
+            workflow_step:
+                label: Workflow step
+            organization_name:
+                label: Organization name
+            preferred_contact_method:
+                label: Preferred contact method
+
+            datagrid:
+                update: Update
+                delete: Delete
+                view:   View
+
+            method:
+                email: Email
+                phone: Phone
+                both:  Both phone & email
+
+            widget:
+                info:
+                    title: Contact Request Details
+            entity:
+                saved: Contact request has been saved successfully
+
+        contactreason:
+            entity_label: Contact Reason
+            entity_plural_labe: Contact Reasons
+            id:
+                label: ID
+            label:
+                label: Label

@@ -9,6 +9,7 @@ oro_menu_config:
             label: orocrm.account.entity_plural_label
             route: orocrm_account_index
             extras:
+                position: 5
                 routes: ['orocrm_account_*']
                 description: List of accounts
 

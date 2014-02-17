@@ -4,6 +4,7 @@ oro_menu_config:
             label: orocrm.call.entity_plural_label
             route: orocrm_call_index
             extras:
+                position: 20
                 routes: ['orocrm_call_*']
                 description: List of calls
         shortcut_call_list:
