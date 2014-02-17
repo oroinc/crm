@@ -1,5 +1,7 @@
 OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest:
     properties:
+        channel:
+            - NotBlank: ~
         firstName:
             - NotBlank: ~
             - Length:
