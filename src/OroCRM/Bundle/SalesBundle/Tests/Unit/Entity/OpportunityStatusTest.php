@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Entity;
 
 use OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus;
 
-class LeadStatusTest extends \PHPUnit_Framework_TestCase
+class OpportunityStatusTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetName()
     {
