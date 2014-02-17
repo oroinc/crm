@@ -4,8 +4,13 @@
 <div class="wrapper">
     <div class="row-group">
         <div class="box">
-            {{ form_row(form.name) }}
+            {{ form_row(form.first_name) }}
         </div>
+        <div class="box">
+            {{ form_row(form.last_name) }}
+        </div>
+    </div>
+    <div class="row-group">
         <div class="box">
             {{ form_row(form.email_address) }}
         </div>

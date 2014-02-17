@@ -5,8 +5,10 @@ orocrm:
             entity_plural_label: Contact Requests
             id:
                 label: ID
-            name:
-                label: Name
+            first_name:
+                label: First name
+            last_name:
+                label: Last name
             email_address:
                 label: Email
             phone:

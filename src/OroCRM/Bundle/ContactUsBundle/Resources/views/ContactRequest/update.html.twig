@@ -1,7 +1,8 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 
 {% set formAction = form.vars.value.id ? path('orocrm_contactus_request_update', { 'id': form.vars.value.id }) : path('orocrm_contactus_request_create') %}
-{% oro_title_set({ params : {"%request.clientName%": entity.name} }) %}
+{% set fullname = form.vars.value|oro_format_name|default('N/A') %}
+{% oro_title_set({ params : {"%request.clientName%": fullname} }) %}
 
 {% block navButtons %}
     {% if form.vars.value.id and resource_granted('orocrm_contactus_request_delete') %}
@@ -28,7 +29,7 @@
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_contactus_request_index'),
             'indexLabel': 'orocrm.contactus.contactrequest.entity_plural_label'|trans,
-            'entityTitle': entity.name
+            'entityTitle': fullname
         } %}
         {{ parent() }}
     {% else %}
@@ -48,7 +49,8 @@
                 'title': 'Request Information'|trans,
                 'data': [
                     form_row(form.channel),
-                    form_row(form.name),
+                    form_row(form.first_name),
+                    form_row(form.last_name),
                     form_row(form.email_address),
                     form_row(form.phone),
                     form_row(form.comment)
