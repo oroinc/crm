@@ -6,6 +6,7 @@ use Symfony\Component\Validator\ExecutionContext;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
@@ -62,6 +63,7 @@ class Call
      * @var Account
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     * @ConfigField(defaultValues={"merge"={"relation_enable"=true, "relation_cast_method"="getSubject"}})
      */
     protected $relatedAccount;
 
@@ -133,7 +135,7 @@ class Call
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -149,14 +151,14 @@ class Call
     public function setSubject($subject)
     {
         $this->subject = $subject;
-    
+
         return $this;
     }
 
     /**
      * Get subject
      *
-     * @return string 
+     * @return string
      */
     public function getSubject()
     {
@@ -172,14 +174,14 @@ class Call
     public function setPhoneNumber($phoneNumber)
     {
         $this->phoneNumber = $phoneNumber;
-    
+
         return $this;
     }
 
     /**
      * Get phoneNumber
      *
-     * @return string 
+     * @return string
      */
     public function getPhoneNumber()
     {
@@ -195,14 +197,14 @@ class Call
     public function setNotes($notes)
     {
         $this->notes = $notes;
-    
+
         return $this;
     }
 
     /**
      * Get notes
      *
-     * @return string 
+     * @return string
      */
     public function getNotes()
     {
@@ -218,14 +220,14 @@ class Call
     public function setCallDateTime($callDateTime)
     {
         $this->callDateTime = $callDateTime;
-    
+
         return $this;
     }
 
     /**
      * Get callDateTime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCallDateTime()
     {
@@ -241,14 +243,14 @@ class Call
     public function setDuration($duration)
     {
         $this->duration = $duration;
-    
+
         return $this;
     }
 
     /**
      * Get duration
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDuration()
     {
@@ -264,14 +266,14 @@ class Call
     public function setDirection($direction)
     {
         $this->direction = $direction;
-    
+
         return $this;
     }
 
     /**
      * Get direction
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDirection()
     {
@@ -287,7 +289,7 @@ class Call
     public function setOwner(User $owner = null)
     {
         $this->owner = $owner;
-    
+
         return $this;
     }
 
@@ -310,7 +312,7 @@ class Call
     public function setRelatedContact(Contact $relatedContact = null)
     {
         $this->relatedContact = $relatedContact;
-    
+
         return $this;
     }
 
@@ -333,7 +335,7 @@ class Call
     public function setRelatedAccount(Account $relatedAccount = null)
     {
         $this->relatedAccount = $relatedAccount;
-    
+
         return $this;
     }
 
@@ -356,7 +358,7 @@ class Call
     public function setContactPhoneNumber(ContactPhone $contactPhoneNumber = null)
     {
         $this->contactPhoneNumber = $contactPhoneNumber;
-    
+
         return $this;
     }
 
@@ -379,7 +381,7 @@ class Call
     public function setCallStatus(CallStatus $callStatus = null)
     {
         $this->callStatus = $callStatus;
-    
+
         return $this;
     }
 
