@@ -1,0 +1,109 @@
+datagrid:
+    orcrm-contact-requests-grid:
+        source:
+            acl_resource: orocrm_contactus_request_view
+            type: orm
+            query:
+                select:
+                    - cr.id
+                    - cr.firstName
+                    - cr.lastName
+                    - cr.emailAddress
+                    - cr.phone
+                    - cr.createdAt
+                    - channel.name as channelName
+                from:
+                    - { table: OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest, alias: cr }
+                join:
+                    inner:
+                        - { join: cr.channel, alias: channel }
+        columns:
+            channelName:
+                label: orocrm.contactus.contactrequest.channel.label
+            firstName:
+                label: orocrm.contactus.contactrequest.first_name.label
+            lastName:
+                label: orocrm.contactus.contactrequest.last_name.label
+            phone:
+                label: orocrm.contactus.contactrequest.phone.label
+            emailAddress:
+                label: orocrm.contactus.contactrequest.email_address.label
+            createdAt:
+                frontend_type: datetime
+                label:         orocrm.contactus.contactrequest.created_at.label
+        sorters:
+            columns:
+                channelName:
+                    data_name: channel.name
+                firstName:
+                    data_name: cr.firstName
+                lastName:
+                    data_name: cr.lastName
+                phone:
+                    data_name: cr.phone
+                emailAddress:
+                    data_name: cr.emailAddress
+                createdAt:
+                    data_name: cr.createdAt
+            default:
+                createdAt: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
+        filters:
+            columns:
+                channelName:
+                    type:      entity
+                    data_name: channel
+                    options:
+                        field_options:
+                          class:    OroIntegrationBundle:Channel
+                          property: name
+                firstName:
+                    type:      string
+                    data_name: cr.firstName
+                lastName:
+                    type:      string
+                    data_name: cr.lastName
+                phone:
+                    type:      string
+                    data_name: cr.phone
+                emailAddress:
+                    type:      string
+                    data_name: cr.emailAddress
+                createdAt:
+                    type:      datetime
+                    data_name: cr.createdAt
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_contactus_request_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_contactus_request_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      orocrm_contactus_request_delete
+                params:     [ id ]
+        actions:
+            view:
+                acl_resource: orocrm_contactus_request_view
+                type:         navigate
+                label:        orocrm.contactus.contactrequest.datagrid.view
+                icon:         user
+                link:         view_link
+                rowAction:    true
+            update:
+                acl_resource: orocrm_contactus_request_edit
+                type:         navigate
+                label:        orocrm.contactus.contactrequest.datagrid.update
+                icon:         edit
+                link:         update_link
+            delete:
+                acl_resource: orocrm_contactus_request_delete
+                type:         delete
+                label:        orocrm.contactus.contactrequest.datagrid.delete
+                icon:         trash
+                link:         delete_link
+        options:
+            entityHint: contact request
