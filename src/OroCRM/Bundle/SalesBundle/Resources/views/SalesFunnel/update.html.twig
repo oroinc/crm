@@ -71,6 +71,8 @@
     {% set formFields = formFields|merge([
         form_row(form.name),
         form_row(form.startDate),
+        form_row(form.lead),
+        form_row(form.opportunity),
     ]) %}
 
     {% set dataBlocks = [{

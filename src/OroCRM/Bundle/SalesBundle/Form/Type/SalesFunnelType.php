@@ -21,6 +21,30 @@ class SalesFunnelType extends AbstractType
                 'oro_date',
                 array('required' => true, 'label' => 'orocrm.sales.salesfunnel.start_date.label')
             );
+
+        $builder->add(
+            'lead',
+            'oro_entity_create_or_select',
+            array(
+                'label' => 'Lead Information',
+                'class' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
+                'create_entity_form_type' => 'orocrm_sales_lead',
+                'grid_name' => 'sales-funnel-lead-grid',
+                'view_widgets' => array('some' => 'options'),
+            )
+        );
+
+        $builder->add(
+            'opportunity',
+            'oro_entity_create_or_select',
+            array(
+                'label' => 'Opportunity Information',
+                'class' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                'create_entity_form_type' => 'orocrm_sales_opportunity',
+                'grid_name' => 'sales-funnel-opportunity-grid',
+                'view_widgets' => array('some' => 'options'),
+            )
+        );
     }
 
     /**
