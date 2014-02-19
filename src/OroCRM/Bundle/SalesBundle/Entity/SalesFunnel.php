@@ -75,7 +75,7 @@ class SalesFunnel
     /**
      * @var Lead
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead", cascade={"persist"})
      * @ORM\JoinColumn(name="lead_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      */
@@ -84,7 +84,7 @@ class SalesFunnel
     /**
      * @var Opportunity
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity", cascade={"persist"})
      * @ORM\JoinColumn(name="opportunity_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      */

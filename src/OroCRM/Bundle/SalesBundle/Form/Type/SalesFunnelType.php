@@ -40,7 +40,6 @@ class SalesFunnelType extends AbstractType
                         'grid_row_to_route' => array(
                             'id' => 'id'
                         ),
-                        'widget_alias' => 'w1'
                     )
                 ),
             )
@@ -63,7 +62,6 @@ class SalesFunnelType extends AbstractType
                         'grid_row_to_route' => array(
                             'id' => 'id'
                         ),
-                        'widget_alias' => 'w2'
                     )
                 ),
             )
