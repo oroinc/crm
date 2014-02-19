@@ -129,6 +129,11 @@ class OrderStrategy extends BaseStrategy
             }
 
             $this->updateAddressCountryRegion($address, $mageRegionId);
+            if (!$address->getCountry()) {
+                $entityToUpdate->getAddresses()->offsetUnset($k);
+                continue;
+            }
+
             $this->updateAddressTypes($address);
 
             $address->setOwner($entityToUpdate);

@@ -14,7 +14,7 @@ class EntityTest extends Selenium2TestCase
     public function testEditExistEntity()
     {
         $entityName = 'Account';
-        $fieldName = 'Test_field' . mt_rand();
+        $fieldName = 'test_field' . mt_rand();
         $login = $this->login();
         $login->openConfigEntities('Oro\Bundle\EntityConfigBundle')
             ->open(array($entityName))
@@ -29,6 +29,6 @@ class EntityTest extends Selenium2TestCase
             ->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
             ->openConfigEntity('Oro\Bundle\EntityConfigBundle', false)
-            ->checkEntityField($fieldName);
+            ->checkEntityField(ucfirst($fieldName));
     }
 }

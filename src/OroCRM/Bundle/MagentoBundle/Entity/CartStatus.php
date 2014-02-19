@@ -30,8 +30,6 @@ class CartStatus
     }
 
     /**
-     * Get type name
-     *
      * @return string
      */
     public function getName()
@@ -40,8 +38,6 @@ class CartStatus
     }
 
     /**
-     * Set address type label
-     *
      * @param string $label
      * @return CartStatus
      */
@@ -53,8 +49,6 @@ class CartStatus
     }
 
     /**
-     * Get address type label
-     *
      * @return string
      */
     public function getLabel()

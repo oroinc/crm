@@ -7,3 +7,8 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
     icon_class:                         icon-user
     name:                               orocrm.sales.opportunity.entity_label
     description:                        orocrm.sales.opportunity.entity_description
+
+OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
+    icon_class:                         icon-user
+    name:                               orocrm.sales.salesfunnel.entity_label
+    description:                        orocrm.sales.salesfunnel.entity_description

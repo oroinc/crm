@@ -23,6 +23,7 @@ class ContactDataConverter extends AbstractTableDataConverter implements QueryBu
         'ID'          => 'id',
         'Name Prefix' => 'namePrefix',
         'First Name'  => 'firstName',
+        'Middle Name' => 'middleName',
         'Last Name'   => 'lastName',
         'Name Suffix' => 'nameSuffix',
         'Gender'      => 'gender',

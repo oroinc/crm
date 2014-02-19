@@ -79,8 +79,10 @@ class SoapAccountTest extends WebTestCase
         $accountUpdate = $request;
         unset($accountUpdate['id']);
         $accountUpdate['name'] .= '_Updated';
+
         $result = $this->client->getSoap()->updateAccount($request['id'], $accountUpdate);
         $this->assertTrue($result);
+
         $account = $this->client->getSoap()->getAccount($request['id']);
         $account = ToolsAPI::classToArray($account);
 
@@ -92,18 +94,13 @@ class SoapAccountTest extends WebTestCase
     /**
      * @param $request
      * @depends testUpdate
-     * @throws \Exception|\SoapFault
      */
     public function testDelete($request)
     {
         $result = $this->client->getSoap()->deleteAccount($request['id']);
         $this->assertTrue($result);
-        try {
-            $this->client->getSoap()->getAccount($request['id']);
-        } catch (\SoapFault $e) {
-            if ($e->faultcode != 'NOT_FOUND') {
-                throw $e;
-            }
-        }
+
+        $this->setExpectedException('\SoapFault', 'Record with ID "' . $request['id'] . '" can not be found');
+        $this->client->getSoap()->getAccount($request['id']);
     }
 }

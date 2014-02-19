@@ -21,57 +21,115 @@ class WorkflowTest extends Selenium2TestCase
         'region' => 'New York'
     );
 
-    protected function setUp()
-    {
-        $this->markTestIncomplete('Should be fixed after all workflow improvements in scope of CRM-779');
-
-        parent::setUp();
-    }
-
-    public function testLeadWorkflow()
+    public function testLeadWorkflowAsWon()
     {
         $login = $this->login();
 
         $leadName = $this->createLead($login);
+        $accountName = $this->createAccount($login);
+        $activityname = 'Activity name_' . mt_rand();
 
-        $login->openLeads('OroCRM\Bundle\SalesBundle')
-            ->filterBy('Lead name', $leadName)
-            ->open(array($leadName))
-            ->openWorkflow('OroCRM\Bundle\SalesBundle')
-            ->qualify()
+        $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
+            ->startFromLead()
+            ->setActivityName($activityname)
+            ->setLead($leadName)
             ->submit()
+            ->openWorkflow('OroCRM\Bundle\SalesBundle')
+            ->checkStep('New Lead')
+            ->qualify()
+            ->setAccount($accountName)
+            ->submit()
+            ->checkStep('New Opportunity')
             ->develop()
             ->setBudget('100')
             ->setProbability('100')
             ->setCustomerNeed('Some customer need')
             ->setSolution('Some solution')
             ->submit()
+            ->checkStep('Developed Opportunity')
             ->closeAsWon()
             ->setCloseRevenue('100')
             ->submit()
-            ->openOpportunity('OroCRM\Bundle\SalesBundle', false)
+            ->checkStep('Won Opportunity')
+            ->openOpportunities('OroCRM\Bundle\SalesBundle')
+            ->filterBy('Opportunity name', $leadName)
+            ->open(array($leadName))
             ->checkStatus('Won');
 
-        return $leadName;
+        return $activityname;
+    }
+
+    public function testLeadWorkflowAsLost()
+    {
+        $login = $this->login();
+
+        $leadName = $this->createLead($login);
+        $accountName = $this->createAccount($login);
+        $activityname = 'Activity name_' . mt_rand();
+
+        $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
+            ->startFromLead()
+            ->setActivityName($activityname)
+            ->setLead($leadName)
+            ->submit()
+            ->openWorkflow('OroCRM\Bundle\SalesBundle')
+            ->checkStep('New Lead')
+            ->qualify()
+            ->setAccount($accountName)
+            ->submit()
+            ->checkStep('New Opportunity')
+            ->develop()
+            ->setBudget('100')
+            ->setProbability('100')
+            ->setCustomerNeed('Some customer need')
+            ->setSolution('Some solution')
+            ->submit()
+            ->checkStep('Developed Opportunity')
+            ->closeAsLost()
+            ->setCloseReason('Cancelled')
+            ->submit()
+            ->checkStep('Lost Opportunity')
+            ->openOpportunities('OroCRM\Bundle\SalesBundle')
+            ->filterBy('Opportunity name', $leadName)
+            ->open(array($leadName))
+            ->checkStatus('Lost');
     }
 
     /**
-     * @param $leadName
-     * @depends testLeadWorkflow
+     * @param $activityname
+     * @depends testLeadWorkflowAsWon
      * @return string
      */
-    public function testLeadWorkflowReactivate($leadName)
+    public function testLeadWorkflowReopen($activityname)
     {
         $login = $this->login();
-        $login->openLeads('OroCRM\Bundle\SalesBundle')
-            ->filterBy('Lead name', $leadName)
-            ->open(array($leadName))
-            ->checkStatus('Qualified')
-            ->reactivate()
+        $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
+            ->filterBy('Name', $activityname)
+            ->open(array($activityname))
+            ->assertTitle($activityname . ' - Sales Activity - Sales')
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
+            ->reopen()
+            ->checkStep('New Opportunity');
+    }
+
+    public function testLeadWorkflowReactivate()
+    {
+        $login = $this->login();
+
+        $leadName = $this->createLead($login);
+        $activityname = 'Activity name_' . mt_rand();
+
+        $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
+            ->startFromLead()
+            ->setActivityName($activityname)
+            ->setLead($leadName)
+            ->submit()
+            ->openWorkflow('OroCRM\Bundle\SalesBundle')
+            ->checkStep('New Lead')
             ->disqualify()
-            ->openLead('OroCRM\Bundle\SalesBundle')
-            ->checkStatus('Canceled');
+            ->checkStep('Disqualified Lead')
+            ->reactivate()
+            ->checkStep('New Lead');
     }
 
     public function testOpportunityWorkflowAsWon()
@@ -79,22 +137,29 @@ class WorkflowTest extends Selenium2TestCase
         $login = $this->login();
 
         $opportunityName = $this->createOpportunity($login);
+        $activityname = 'Activity name_' . mt_rand();
 
-        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
-            ->filterBy('Opportunity name', $opportunityName)
-            ->open(array($opportunityName))
+        $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
+            ->startFromOpportunity()
+            ->setActivityName($activityname)
+            ->setOpportunity($opportunityName)
+            ->submit()
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
+            ->checkStep('New Opportunity')
             ->develop()
             ->setBudget('100')
             ->setProbability('100')
-            ->setCustomerNeed('Some customer needs')
+            ->setCustomerNeed('Some customer need')
             ->setSolution('Some solution')
             ->submit()
-            ->assertTitle("B2B Sales Flow (Develop) - {$opportunityName} - Opportunities")
+            ->checkStep('Developed Opportunity')
             ->closeAsWon()
             ->setCloseRevenue('100')
             ->submit()
-            ->openOpportunity('OroCRM\Bundle\SalesBundle', false)
+            ->checkStep('Won Opportunity')
+            ->openOpportunities('OroCRM\Bundle\SalesBundle')
+            ->filterBy('Opportunity name', $opportunityName)
+            ->open(array($opportunityName))
             ->checkStatus('Won');
     }
 
@@ -103,24 +168,49 @@ class WorkflowTest extends Selenium2TestCase
         $login = $this->login();
 
         $opportunityName = $this->createOpportunity($login);
+        $activityname = 'Activity name_' . mt_rand();
 
-        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
-            ->filterBy('Opportunity name', $opportunityName)
-            ->open(array($opportunityName))
-            ->checkStatus('In Progress')
+        $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
+            ->startFromOpportunity()
+            ->setActivityName($activityname)
+            ->setOpportunity($opportunityName)
+            ->submit()
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
+            ->checkStep('New Opportunity')
             ->develop()
             ->setBudget('100')
             ->setProbability('100')
-            ->setCustomerNeed('Some customer needs')
+            ->setCustomerNeed('Some customer need')
             ->setSolution('Some solution')
             ->submit()
-            ->assertTitle("B2B Sales Flow (Develop) - {$opportunityName} - Opportunities")
+            ->checkStep('Developed Opportunity')
             ->closeAsLost()
             ->setCloseReason('Cancelled')
             ->submit()
-            ->openOpportunity('OroCRM\Bundle\SalesBundle', false)
+            ->checkStep('Lost Opportunity')
+            ->openOpportunities('OroCRM\Bundle\SalesBundle')
+            ->filterBy('Opportunity name', $opportunityName)
+            ->open(array($opportunityName))
             ->checkStatus('Lost');
+
+        return $activityname;
+    }
+
+    /**
+     * @param $activityname
+     * @depends testOpportunityWorkflowAsLost
+     * @return string
+     */
+    public function testOpportunityWorkflowReopen($activityname)
+    {
+        $login = $this->login();
+        $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
+            ->filterBy('Name', $activityname)
+            ->open(array($activityname))
+            ->assertTitle($activityname . ' - Sales Activity - Sales')
+            ->openWorkflow('OroCRM\Bundle\SalesBundle')
+            ->reopen()
+            ->checkStep('New Opportunity');
     }
 
     /**

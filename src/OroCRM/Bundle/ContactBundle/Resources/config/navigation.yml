@@ -10,12 +10,14 @@ oro_menu_config:
             label: orocrm.contact.entity_plural_label
             route: orocrm_contact_index
             extras:
+                position: 10
                 routes: ['/^orocrm_contact_(?!group\w+|group\w+)\w+$/']
                 description: List of contacts
         contact_group_list:
             label: orocrm.contact.group.entity_plural_label
             route: orocrm_contact_group_index
             extras:
+                position: 45
                 routes: ['orocrm_contact_group_*']
                 description: List of contact groups
 

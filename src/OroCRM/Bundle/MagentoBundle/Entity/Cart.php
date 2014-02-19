@@ -31,12 +31,13 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  * )
  * @Config(
  *  defaultValues={
+ *      "entity"={"icon"="icon-shopping-cart"},
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
  *      },
  *      "workflow"={
- *          "primary"="b2c_flow_abandoned_shopping_cart"
+ *          "active_workflow"="b2c_flow_abandoned_shopping_cart"
  *      }
  *  }
  * )
@@ -418,7 +419,7 @@ class Cart extends BaseCart
     /**
      * @param CartAddress $shippingAddress
      */
-    public function setShippingAddress(CartAddress $shippingAddress)
+    public function setShippingAddress($shippingAddress)
     {
         $this->shippingAddress = $shippingAddress;
     }
@@ -426,7 +427,7 @@ class Cart extends BaseCart
     /**
      * @param CartAddress $billingAddress
      */
-    public function setBillingAddress(CartAddress $billingAddress)
+    public function setBillingAddress($billingAddress)
     {
         $this->billingAddress = $billingAddress;
     }

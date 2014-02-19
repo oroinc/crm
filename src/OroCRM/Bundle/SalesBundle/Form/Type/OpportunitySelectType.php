@@ -11,9 +11,7 @@ class OpportunitySelectType extends AbstractType
         $resolver->setDefaults(
             array(
                 'configs' => array(
-                    'placeholder' => 'orocrm.sales.form.choose_opportunity',
-                    'result_template_twig' => 'OroCRMSalesBundle:Opportunity:Autocomplete/result.html.twig',
-                    'selection_template_twig' => 'OroCRMSalesBundle:Opportunity:Autocomplete/selection.html.twig'
+                    'placeholder' => 'orocrm.sales.form.choose_opportunity'
                 ),
                 'autocomplete_alias' => 'opportunities'
             )

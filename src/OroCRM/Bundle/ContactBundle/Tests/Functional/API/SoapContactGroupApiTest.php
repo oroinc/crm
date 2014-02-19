@@ -76,6 +76,7 @@ class SoapContactGroupApiTest extends WebTestCase
         $request['label'] .= '_Updated';
         $result = $this->client->getSoap()->updateContactGroup($group['id'], $request);
         $this->assertTrue($result);
+
         $group = $this->client->getSoap()->getContactGroup($group['id']);
         $group = ToolsAPI::classToArray($group);
         $this->assertEquals($request['label'], $group['label']);
@@ -90,12 +91,9 @@ class SoapContactGroupApiTest extends WebTestCase
     {
         $result = $this->client->getSoap()->deleteContactGroup($group['id']);
         $this->assertTrue($result);
-        try {
-            $this->client->getSoap()->getContactGroup($group['id']);
-        } catch (\SoapFault $e) {
-            if ($e->faultcode != 'NOT_FOUND') {
-                throw $e;
-            }
-        }
+
+        $this->setExpectedException('\SoapFault', 'Record with ID "' . $group['id'] . '" can not be found');
+
+        $this->client->getSoap()->getContactGroup($group['id']);
     }
 }

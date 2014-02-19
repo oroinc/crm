@@ -132,7 +132,11 @@ class RestContactApiTest extends WebTestCase
                 'assignedTo'  => $user ? $user->getId() : null,
             )
         );
-        $this->client->request('POST', $this->client->generate('oro_api_post_contact'), $request);
+        $this->client->request(
+            'POST',
+            $this->client->generate('oro_api_post_contact'),
+            $request
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 201);
 
@@ -150,7 +154,10 @@ class RestContactApiTest extends WebTestCase
      */
     public function testGetContact($request)
     {
-        $this->client->request('GET', $this->client->generate('oro_api_get_contacts'));
+        $this->client->request(
+            'GET',
+            $this->client->generate('oro_api_get_contacts')
+        );
         $result = $this->client->getResponse();
         $entities = ToolsAPI::jsonToArray($result->getContent());
         $this->assertNotEmpty($entities);
@@ -223,7 +230,10 @@ class RestContactApiTest extends WebTestCase
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
 
-        $this->client->request('GET', $this->client->generate('oro_api_get_contact', array('id' => $contact['id'])));
+        $this->client->request(
+            'GET',
+            $this->client->generate('oro_api_get_contact', array('id' => $contact['id']))
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
@@ -253,7 +263,10 @@ class RestContactApiTest extends WebTestCase
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
 
-        $this->client->request('GET', $this->client->generate('oro_api_get_contact', array('id' => $contact['id'])));
+        $this->client->request(
+            'GET',
+            $this->client->generate('oro_api_get_contact', array('id' => $contact['id']))
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 404);
     }

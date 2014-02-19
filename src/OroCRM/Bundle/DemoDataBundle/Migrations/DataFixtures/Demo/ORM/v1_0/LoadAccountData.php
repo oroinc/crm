@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -15,7 +16,7 @@ use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
-class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
+class LoadAccountData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     /**
      * @var ContainerInterface
@@ -34,6 +35,16 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
      * @var Country[]
      */
     protected $countries;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies()
+    {
+        return [
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadUsersData'
+        ];
+    }
 
     /**
      * {@inheritDoc}
