@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\SalesBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\PropertyAccess\PropertyPath;
 
 class SalesFunnelType extends AbstractType
 {
@@ -30,7 +31,18 @@ class SalesFunnelType extends AbstractType
                 'class' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
                 'create_entity_form_type' => 'orocrm_sales_lead',
                 'grid_name' => 'sales-funnel-lead-grid',
-                'view_widgets' => array('some' => 'options'),
+                'view_widgets' => array(
+                    array(
+                        'route_name' => 'orocrm_sales_lead_info',
+                        'route_parameters' => array(
+                            'id' => new PropertyPath('id')
+                        ),
+                        'grid_row_to_route' => array(
+                            'id' => 'id'
+                        ),
+                        'widget_alias' => 'w1'
+                    )
+                ),
             )
         );
 
@@ -42,7 +54,18 @@ class SalesFunnelType extends AbstractType
                 'class' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
                 'create_entity_form_type' => 'orocrm_sales_opportunity',
                 'grid_name' => 'sales-funnel-opportunity-grid',
-                'view_widgets' => array('some' => 'options'),
+                'view_widgets' => array(
+                    array(
+                        'route_name' => 'orocrm_sales_opportunity_info',
+                        'route_parameters' => array(
+                            'id' => new PropertyPath('id')
+                        ),
+                        'grid_row_to_route' => array(
+                            'id' => 'id'
+                        ),
+                        'widget_alias' => 'w2'
+                    )
+                ),
             )
         );
     }
