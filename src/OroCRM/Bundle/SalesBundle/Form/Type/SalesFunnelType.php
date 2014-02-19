@@ -40,6 +40,16 @@ class SalesFunnelType extends AbstractType
                         'grid_row_to_route' => array(
                             'id' => 'id'
                         ),
+                    ),
+                    array(
+                        'route_name' => 'orocrm_sales_lead_address_book',
+                        'title' => 'Address',
+                        'route_parameters' => array(
+                            'id' => new PropertyPath('id')
+                        ),
+                        'grid_row_to_route' => array(
+                            'id' => 'id'
+                        ),
                     )
                 ),
             )
