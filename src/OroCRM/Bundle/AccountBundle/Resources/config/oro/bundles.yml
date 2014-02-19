@@ -1,2 +1,2 @@
 bundles:
-    - OroCRM\Bundle\AccountBundle\OroCRMAccountBundle
+    - { name: OroCRM\Bundle\AccountBundle\OroCRMAccountBundle, priority: 10 }
