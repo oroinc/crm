@@ -26,7 +26,7 @@
 
     <script type="text/javascript">
         {% set wid = app.request.get('_wid') %}
-        require(['jquery', 'routing', 'oro/datagrid/callback-listener', 'oro/widget-manager',
+        require(['jquery', 'routing', 'orodatagrid/js/datagrid/listener/callback-listener', 'oro/widget-manager',
             'oro/multiple-entity/model', 'oro/formatter/name'],
         function($, routing, CallbackListener, WidgetManager, MultipleEntityModel, nameFormatter) {
             var addedModels = {};
