@@ -769,19 +769,10 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         lead:
-                            form_type: orocrm_sales_lead_select
+                            form_type: orocrm_sales_lead_create_select
                             options:
                                 required: true
-                                configs:
-                                    placeholder: orocrm.sales.form.choose_lead
-                                    extra_config: grid
-                                    grid:
-                                        name: sales-funnel-lead-grid
-                                    minimumInputLength: 0
-                                    properties:
-                                        - searchIndex
-                                    result_template_twig: OroCRMSalesBundle:Lead:Autocomplete/result.html.twig
-                                    selection_template_twig: OroCRMSalesBundle:Lead:Autocomplete/selection.html.twig
+                                grid_name: 'sales-funnel-lead-grid'
                                 constraints:
                                     - NotBlank: ~
                     init_actions:
@@ -824,19 +815,10 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         opportunity:
-                            form_type: orocrm_sales_opportunity_select
+                            form_type: orocrm_sales_opportunity_create_select
                             options:
                                 required: true
-                                configs:
-                                    placeholder: orocrm.sales.form.choose_opportunity
-                                    extra_config: grid
-                                    grid:
-                                        name: sales-funnel-opportunity-grid
-                                    minimumInputLength: 0
-                                    properties:
-                                        - searchIndex
-                                    result_template_twig: OroCRMSalesBundle:Opportunity:Autocomplete/result.html.twig
-                                    selection_template_twig: OroCRMSalesBundle:Opportunity:Autocomplete/selection.html.twig
+                                grid_name: 'sales-funnel-opportunity-grid'
                                 constraints:
                                     - NotBlank: ~
                     init_actions:
