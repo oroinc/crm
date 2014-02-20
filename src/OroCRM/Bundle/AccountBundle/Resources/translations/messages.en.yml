@@ -5,6 +5,8 @@ orocrm:
             view_all: View all
 
     account:
+        placeholdes:
+            actions: Account actions
         form:
             choose_account: Choose an account...
             select_contacts: Select contacts

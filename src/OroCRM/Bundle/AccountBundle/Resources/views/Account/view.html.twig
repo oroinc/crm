@@ -4,14 +4,6 @@
 {% set audit_entity_class = 'OroCRM_Bundle_AccountBundle_Entity_Account' %}
 
 {% block navButtons %}
-    {% if resource_granted('orocrm_contact_create') %}
-        {{ UI.button({
-            'path': path('orocrm_contact_create', {'account': entity.id}),
-            'iClass': 'icon-user',
-            'title': 'Add'|trans ~ ' ' ~ 'orocrm.contact.entity_label'|trans|lower,
-            'label': 'Add'|trans ~ ' ' ~ 'orocrm.contact.entity_label'|trans|lower
-        }) }}
-    {% endif %}
     {% if resource_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path': path('orocrm_account_update', {'id': entity.id}),
@@ -28,6 +20,15 @@
             'entity_label': 'orocrm.account.entity_label'|trans
         }) }}
     {% endif %}
+
+    {% set html %}
+        {% placeholder orocrm_account_action_dropdown with {'id': entity.id} %}
+    {% endset %}
+
+    {{ UI.dropdown({
+        'label': 'orocrm.account.placeholdes.actions'|trans,
+        'html': html
+    }) }}
 {% endblock navButtons %}
 
 {% block pageHeader %}

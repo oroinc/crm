@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\SalesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -10,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 /**
@@ -72,6 +74,19 @@ class LeadController extends Controller
     public function createAction()
     {
         $lead = new Lead();
+        $accountId = $this->getRequest()->get('account');
+        if ($accountId) {
+            $repository = $this->getDoctrine()->getRepository('OroCRMAccountBundle:Account');
+            /** @var Account $account */
+            $account = $repository->find($accountId);
+            if ($account) {
+                /** @var Lead $lead */
+                $lead->setAccount($account);
+            } else {
+                throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
+            }
+        }
+
         return $this->update($lead);
     }
 
