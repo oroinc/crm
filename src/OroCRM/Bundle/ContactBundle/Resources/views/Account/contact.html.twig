@@ -2,7 +2,7 @@
 
 {% if resource_granted('orocrm_contact_create') %}
     {{ UI.dropdownItem({
-        'path': path('orocrm_contact_create', {'account': id}),
+        'path': path('orocrm_contact_create', {'account': entity.id}),
         'iClass': 'icon-user',
         'title': 'Add'|trans ~ ' ' ~ 'orocrm.contact.entity_label'|trans|lower,
         'label': 'Add'|trans ~ ' ' ~ 'orocrm.contact.entity_label'|trans|lower

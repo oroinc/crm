@@ -1,4 +1,4 @@
 config:
     paths:
         'orocrm/call/info-opener': 'bundles/orocrmcall/js/info-opener.js'
-        'orocrm/call/popup-buttton': 'bundles/orocrmcall/js/popup-buttton.js'
+        'orocrm/call/popup-buttton': 'bundles/orocrmcall/js/popup-button.js'

@@ -22,7 +22,7 @@
     {% endif %}
 
     {% set html %}
-        {% placeholder orocrm_account_action_dropdown with {'id': entity.id} %}
+        {% placeholder orocrm_account_action_dropdown with {'entity': entity} %}
     {% endset %}
 
     {{ UI.dropdown({

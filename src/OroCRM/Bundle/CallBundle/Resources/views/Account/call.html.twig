@@ -6,10 +6,10 @@
     </script>
 
     {{ UI.dropdownClientButton({
-        'dataUrl': path('orocrm_call_create', {'accountId': id}),
+        'dataUrl': path('orocrm_call_create', {'accountId': entity.id}),
         'aCss': 'no-hash log-call-button',
         'iCss': 'icon-phone',
-        'dataId': id,
+        'dataId': entity.id,
         'title' : 'Log call',
         'label' : 'Log call'
     }) }}
