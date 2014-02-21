@@ -48,7 +48,8 @@
     {{ JS.popupWidget({
         'class': 'log-call-button',
         'event': 'contactCallLogged',
-        'widgetAlias': 'contact_calls'
+        'widgetAlias': 'contact_calls',
+        'title': 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower
     }) }}
 {% endblock navButtons %}
 
