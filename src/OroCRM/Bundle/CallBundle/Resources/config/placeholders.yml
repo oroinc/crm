@@ -3,7 +3,12 @@ placeholders:
         items:
             user_calls:
                 order: 50
+    orocrm_account_action_dropdown:
+        items:
+            orocrm_account_action_dropdown_add_call: ~
 
 items:
     user_calls:
         template: OroCRMCallBundle:Call:user_calls.html.twig
+    orocrm_account_action_dropdown_add_call:
+        template: OroCRMCallBundle:Account:call.html.twig

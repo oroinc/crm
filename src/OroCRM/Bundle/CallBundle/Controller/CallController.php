@@ -30,8 +30,9 @@ class CallController extends Controller
     {
         $redirect = ($this->getRequest()->get('no_redirect')) ? false : true;
         $contactId = $this->getRequest()->get('contactId');
+        $accountId = $this->getRequest()->get('accountId');
 
-        $entity = $this->initEntity($contactId);
+        $entity = $this->initEntity($contactId, $accountId);
         return $this->update($entity, $redirect);
     }
 
@@ -95,7 +96,7 @@ class CallController extends Controller
      * @return Call
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    protected function initEntity($contactId = null)
+    protected function initEntity($contactId = null, $accountId = null)
     {
         $entity = new Call();
 
@@ -117,6 +118,17 @@ class CallController extends Controller
                 $entity->setContactPhoneNumber($contact->getPrimaryPhone());
             } else {
                 throw new NotFoundHttpException(sprintf('Contact with ID %s is not found', $contactId));
+            }
+        }
+
+        if ($accountId) {
+            $repository = $this->getDoctrine()->getRepository('OroCRMAccountBundle:Account');
+            /** @var Account $account */
+            $account = $repository->find($accountId);
+            if ($account) {
+                $entity->setRelatedAccount($account);
+            } else {
+                throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
             }
         }
 
