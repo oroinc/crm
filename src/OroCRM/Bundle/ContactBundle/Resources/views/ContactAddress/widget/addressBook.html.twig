@@ -11,7 +11,7 @@
     <div class="map-box" id="address-book"></div>
 
     <script type="text/javascript">
-    require(['jquery', 'underscore', 'routing', 'oroaddress/js/address-book', 'oro/widget-manager'],
+    require(['jquery', 'underscore', 'routing', 'oroaddress/js/address-book', 'oroui/js/widget-manager'],
     function($, _, routing, AddressBook, widgetManager) {
         widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget){
             /** @type oroaddress.AddressBook */
