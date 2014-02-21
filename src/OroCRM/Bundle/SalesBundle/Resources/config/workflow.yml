@@ -750,6 +750,12 @@ workflows:
                         title: orocrm.sales.salesfunnel.new_entity_label
                 form_options:
                     attribute_fields:
+                        sales_funnel_owner:
+                            form_type: oro_user_select
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
                         sales_funnel_name:
                             form_type: text
                             options:
@@ -758,12 +764,6 @@ workflows:
                                   - NotBlank: ~
                         sales_funnel_start_date:
                             form_type: oro_date
-                            options:
-                                required: true
-                                constraints:
-                                    - NotBlank: ~
-                        sales_funnel_owner:
-                            form_type: oro_user_select
                             options:
                                 required: true
                                 constraints:
@@ -780,6 +780,11 @@ workflows:
                             attribute: $sales_funnel_start_date
                         - @assign_active_user:
                             attribute: $sales_funnel_owner
+                        - @create_object:
+                            class: OroCRM\Bundle\SalesBundle\Entity\Lead
+                            attribute: $lead
+                            data:
+                                owner: $sales_funnel_owner
                 transition_definition: start_definition
             start_from_opportunity:
                 label: 'Start from Opportunity'
@@ -796,6 +801,12 @@ workflows:
                         title: orocrm.sales.salesfunnel.new_entity_label
                 form_options:
                     attribute_fields:
+                        sales_funnel_owner:
+                            form_type: oro_user_select
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
                         sales_funnel_name:
                             form_type: text
                             options:
@@ -804,12 +815,6 @@ workflows:
                                   - NotBlank: ~
                         sales_funnel_start_date:
                             form_type: oro_date
-                            options:
-                                required: true
-                                constraints:
-                                    - NotBlank: ~
-                        sales_funnel_owner:
-                            form_type: oro_user_select
                             options:
                                 required: true
                                 constraints:
@@ -826,6 +831,11 @@ workflows:
                             attribute: $sales_funnel_start_date
                         - @assign_active_user:
                             attribute: $sales_funnel_owner
+                        - @create_object:
+                            class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                            attribute: $opportunity
+                            data:
+                                owner: $sales_funnel_owner
                 transition_definition: start_definition
             disqualify:
                 label: 'Disqualify'
