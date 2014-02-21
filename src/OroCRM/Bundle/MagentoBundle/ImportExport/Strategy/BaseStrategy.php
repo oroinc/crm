@@ -2,8 +2,10 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\UnitOfWork;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
@@ -22,6 +24,9 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
     /** @var ImportStrategyHelper */
     protected $strategyHelper;
 
+    /** @var ManagerRegistry */
+    protected $managerRegistry;
+
     /** @var ContextInterface */
     protected $context;
 
@@ -36,10 +41,14 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
 
     /**
      * @param ImportStrategyHelper $strategyHelper
+     * @param ManagerRegistry      $managerRegistry
      */
-    public function __construct(ImportStrategyHelper $strategyHelper)
-    {
-        $this->strategyHelper = $strategyHelper;
+    public function __construct(
+        ImportStrategyHelper $strategyHelper,
+        ManagerRegistry $managerRegistry
+    ) {
+        $this->strategyHelper  = $strategyHelper;
+        $this->managerRegistry = $managerRegistry;
     }
 
     /**
@@ -51,10 +60,10 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
     }
 
     /**
-     * @param mixed        $entity
-     * @param string       $entityName
-     * @param string|array $criteria
-     * @param array        $excludedProperties
+     * @param mixed        $entity             New entity
+     * @param string       $entityName         Class name
+     * @param string|array $criteria           Fieldname to find existing entity
+     * @param array        $excludedProperties Excluded properties
      *
      * @return mixed
      */
@@ -70,7 +79,13 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
             $this->strategyHelper->importEntity($existingEntity, $entity, $excludedProperties);
             $entity = $existingEntity;
         } else {
-            $identifier = is_array($criteria) ? 'id' : $criteria;
+            /* @var ClassMetadataInfo $metadata */
+            $metadata = $this
+                ->managerRegistry
+                ->getManagerForClass($entityName)
+                ->getClassMetadata($entityName);
+
+            $identifier   = $metadata->getSingleIdentifierFieldName();
             $setterMethod = 'set' . ucfirst($identifier);
             if (method_exists($entity, $setterMethod)) {
                 $entity->$setterMethod(null);
