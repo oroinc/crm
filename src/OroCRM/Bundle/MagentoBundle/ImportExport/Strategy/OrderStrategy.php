@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
-
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
@@ -19,9 +17,11 @@ class OrderStrategy extends BaseStrategy
     /** @var StoreStrategy */
     protected $storeStrategy;
 
-    public function __construct(ImportStrategyHelper $strategyHelper, StoreStrategy $storeStrategy)
+    /**
+     * @param StoreStrategy $storeStrategy
+     */
+    public function setStoreStrategy(StoreStrategy $storeStrategy)
     {
-        parent::__construct($strategyHelper);
         $this->storeStrategy = $storeStrategy;
     }
 
