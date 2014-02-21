@@ -1,0 +1,3 @@
+config:
+    paths:
+        'orocrm/account/contacts-widget': 'bundles/orocrmaccount/js/contacts-widget.js'

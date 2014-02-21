@@ -1,0 +1,28 @@
+.contact-squads-wrapper {
+    position: relative;
+}
+.contact-squad-row {
+    padding: 5px 0;
+}
+.contact-squad:hover{
+    background-color: #EDF1FA;
+}
+.contact-squad {
+    background-color: #F6F6F6;
+    float: left;
+    margin: 3px;
+    padding: 10px 20px;
+    width: calc(50% - 6px);
+    cursor: pointer;
+}
+.contact-widget-wrapper{
+    padding: 0 0 0 20px;
+}
+.accounts-right-border {
+    border-right: 2px solid #F6F6F6;
+}
+.contact-widget-wrapper .title{
+    padding-top: 0;
+    padding-left: 3px;
+    font-size: 16px;
+}
