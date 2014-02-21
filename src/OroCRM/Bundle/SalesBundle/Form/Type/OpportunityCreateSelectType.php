@@ -19,12 +19,6 @@ class OpportunityCreateSelectType extends AbstractType
                 'view_widgets' => array(
                     array(
                         'route_name' => 'orocrm_sales_opportunity_info',
-                        'route_parameters' => array(
-                            'id' => new PropertyPath('id')
-                        ),
-                        'grid_row_to_route' => array(
-                            'id' => 'id'
-                        ),
                     )
                 ),
             )
