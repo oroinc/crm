@@ -1,16 +1,22 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import 'OroUIBundle:Js:macros.html.twig' as JS %}
 
 {% if resource_granted('orocrm_call_create') %}
-    <script type="text/javascript">
-        require(['orocrm/call/popup-buttton']);
-    </script>
+    {% set title = 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower %}
+
+    {{ JS.popupWidget({
+        'class': 'log-call-button',
+        'event': 'contactCallLogged',
+        'widgetAlias': 'contact_calls',
+        'title' : title,
+    }) }}
 
     {{ UI.dropdownClientButton({
         'dataUrl': path('orocrm_call_create', {'accountId': entity.id}),
         'aCss': 'no-hash log-call-button',
         'iCss': 'icon-phone',
         'dataId': entity.id,
-        'title' : 'Log call',
-        'label' : 'Log call'
+        'title' : title,
+        'label' : title
     }) }}
 {% endif %}

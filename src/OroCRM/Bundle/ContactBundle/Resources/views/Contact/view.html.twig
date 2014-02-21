@@ -1,6 +1,7 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroTagBundle::macros.html.twig' as _tag %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroUIBundle:Js:macros.html.twig' as JS %}
 
 {% set fullname = entity|oro_format_name|default('N/A'|trans) %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
@@ -44,9 +45,11 @@
         }) }}
     {% endif %}
 
-    <script type="text/javascript">
-        require(['orocrm/call/popup-buttton']);
-    </script>
+    {{ JS.popupWidget({
+        'class': 'log-call-button',
+        'event': 'contactCallLogged',
+        'widgetAlias': 'contact_calls'
+    }) }}
 {% endblock navButtons %}
 
 {% block pageHeader %}
