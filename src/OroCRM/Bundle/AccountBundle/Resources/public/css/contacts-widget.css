@@ -1,13 +1,13 @@
-.contact-squads-wrapper {
+.contact-box-wrapper {
     position: relative;
 }
-.contact-squad-row {
+.contact-box-row {
     padding: 5px 0;
 }
-.contact-squad:hover{
+.contact-box:hover{
     background-color: #EDF1FA;
 }
-.contact-squad {
+.contact-box {
     background-color: #F6F6F6;
     float: left;
     margin: 3px;
@@ -18,11 +18,14 @@
 .contact-widget-wrapper{
     padding: 0 0 0 20px;
 }
-.accounts-right-border {
-    border-right: 2px solid #F6F6F6;
-}
 .contact-widget-wrapper .title{
     padding-top: 0;
     padding-left: 3px;
     font-size: 16px;
+}
+.contact-box-name-link{
+    font-weight: bold;
+}
+.contact-box-row span:first-of-type{
+    padding-right: 5px;
 }

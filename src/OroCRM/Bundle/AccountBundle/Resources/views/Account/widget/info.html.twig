@@ -4,8 +4,8 @@
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content">
-    <div class="row-fluid form-horizontal">
-        <div class="responsive-block accounts-right-border">
+    <div class="row-fluid row-fluid-divider">
+        <div class="responsive-block form-horizontal">
             {{ ui.renderProperty('orocrm.account.name.label'|trans, entity.name) }}
             {{ entityConfig.renderDynamicFields(entity) }}
             {% if entity.billingAddress is not empty %}
@@ -22,11 +22,10 @@
         <div class="responsive-block contact-widget-wrapper">
             {% if resource_granted('orocrm_contact_view') %}
                 {{ oro_widget_render({
-                'widgetType': 'block',
-                'url': path('orocrm_account_widget_contacts', {id: entity.id}),
-                 'title': 'orocrm.account.contacts.label'|trans
+                    'widgetType': 'block',
+                    'url': path('orocrm_account_widget_contacts', {id: entity.id}),
+                    'title': 'orocrm.account.contacts.label'|trans
                 }) }}
-
             {% endif %}
         </div>
     </div>
