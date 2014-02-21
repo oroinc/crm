@@ -1,5 +1,5 @@
 /* global:define */
-define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/navigation', 'oro/messenger'],
+define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oronavigation/js/navigation', 'oro/messenger'],
     function ($, _, routing, Backbone, __, Navigation, messenger) {
         "use strict";
 
