@@ -424,7 +424,6 @@ datagrid:
                               ELSE region.name
                             END, ''
                         ) as regionLabel
-                    - CONCAT(lead.name, CONCAT(lead.firstName, lead.lastName)) as searchIndex
                 from:
                     - { table: %orocrm_sales.lead.entity.class%, alias: lead }
                 join:
@@ -452,8 +451,6 @@ datagrid:
                 label: orocrm.sales.lead.datagrid.region
             addressPostalCode:
                 label: orocrm.sales.lead.datagrid.postal_code
-            searchIndex: # TODO: remove this field after complex form type implementation https://magecore.atlassian.net/browse/BAP-3146
-                label: 'Search Index'
         properties:
             id: ~
         sorters:
@@ -511,10 +508,6 @@ datagrid:
                      type: string
                      data_name: addressPostalCode
                      enabled: false
-                 searchIndex:
-                     type: string
-                     data_name: searchIndex
-                     enabled: true
 
     # opportunities with "In progress" status for Sales Funnel flow
     sales-funnel-opportunity-grid:
@@ -531,14 +524,6 @@ datagrid:
                     - opportunity.probability
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
                     - email.email as primaryEmail
-                    - >
-                        CONCAT(
-                            opportunity.name,
-                            CASE WHEN contact IS NOT NULL
-                                THEN CONCAT(contact.firstName, contact.lastName)
-                                ELSE ''
-                            END
-                        ) as searchIndex
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: opportunity }
                 join:
@@ -558,8 +543,6 @@ datagrid:
                 frontend_type: percent
             primaryEmail:
                 label: orocrm.contact.email.label
-            searchIndex: # TODO: remove this field after complex form type implementation https://magecore.atlassian.net/browse/BAP-3146
-                label: 'Search Index'
         properties:
             id: ~
         sorters:
@@ -588,6 +571,3 @@ datagrid:
                     type: string
                     data_name: email.email
                     filter_by_having: true
-                searchIndex:
-                    type: string
-                    data_name: searchIndex
