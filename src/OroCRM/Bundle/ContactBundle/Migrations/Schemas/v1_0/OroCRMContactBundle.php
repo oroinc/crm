@@ -80,14 +80,14 @@ class OroCRMContactBundle implements Migration
         $table->addIndex(['region_code'], 'IDX_CACC16DBAEB327AF', []);
         /** End of generate table orocrm_contact_address **/
 
-        /** Generate table orocrm_contact_address_to_address_type **/
-        $table = $schema->createTable('orocrm_contact_address_to_address_type');
+        /** Generate table orocrm_contact_adr_to_adr_type **/
+        $table = $schema->createTable('orocrm_contact_adr_to_adr_type');
         $table->addColumn('contact_address_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->addColumn('type_name', 'string', ['default' => null, 'notnull' => true, 'length' => 16, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->setPrimaryKey(['contact_address_id', 'type_name']);
         $table->addIndex(['contact_address_id'], 'IDX_3FBCDDC6320EF6E2', []);
         $table->addIndex(['type_name'], 'IDX_3FBCDDC6892CBB0E', []);
-        /** End of generate table orocrm_contact_address_to_address_type **/
+        /** End of generate table orocrm_contact_adr_to_adr_type **/
 
         /** Generate table orocrm_contact_email **/
         $table = $schema->createTable('orocrm_contact_email');
@@ -137,14 +137,14 @@ class OroCRMContactBundle implements Migration
         $table->addUniqueIndex(['label'], 'UNIQ_A5B9108EA750E8');
         /** End of generate table orocrm_contact_source **/
 
-        /** Generate table orocrm_contact_to_contact_group **/
-        $table = $schema->createTable('orocrm_contact_to_contact_group');
+        /** Generate table orocrm_contact_to_contact_grp **/
+        $table = $schema->createTable('orocrm_contact_to_contact_grp');
         $table->addColumn('contact_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->addColumn('contact_group_id', 'smallint', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->setPrimaryKey(['contact_id', 'contact_group_id']);
         $table->addIndex(['contact_id'], 'IDX_885CCB12E7A1254A', []);
         $table->addIndex(['contact_group_id'], 'IDX_885CCB12647145D0', []);
-        /** End of generate table orocrm_contact_to_contact_group **/
+        /** End of generate table orocrm_contact_to_contact_grp **/
 
         /** Generate foreign keys for table orocrm_contact **/
         $table = $schema->getTable('orocrm_contact');
@@ -164,11 +164,11 @@ class OroCRMContactBundle implements Migration
         $table->addForeignKeyConstraint($schema->getTable('oro_dictionary_country'), ['country_code'], ['iso2_code'], ['onDelete' => null, 'onUpdate' => null]);
         /** End of generate foreign keys for table orocrm_contact_address **/
 
-        /** Generate foreign keys for table orocrm_contact_address_to_address_type **/
-        $table = $schema->getTable('orocrm_contact_address_to_address_type');
+        /** Generate foreign keys for table orocrm_contact_adr_to_adr_type **/
+        $table = $schema->getTable('orocrm_contact_adr_to_adr_type');
         $table->addForeignKeyConstraint($schema->getTable('oro_address_type'), ['type_name'], ['name'], ['onDelete' => null, 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('orocrm_contact_address'), ['contact_address_id'], ['id'], ['onDelete' => null, 'onUpdate' => null]);
-        /** End of generate foreign keys for table orocrm_contact_address_to_address_type **/
+        /** End of generate foreign keys for table orocrm_contact_adr_to_adr_type **/
 
         /** Generate foreign keys for table orocrm_contact_email **/
         $table = $schema->getTable('orocrm_contact_email');
@@ -185,11 +185,11 @@ class OroCRMContactBundle implements Migration
         $table->addForeignKeyConstraint($schema->getTable('orocrm_contact'), ['owner_id'], ['id'], ['onDelete' => null, 'onUpdate' => null]);
         /** End of generate foreign keys for table orocrm_contact_phone **/
 
-        /** Generate foreign keys for table orocrm_contact_to_contact_group **/
-        $table = $schema->getTable('orocrm_contact_to_contact_group');
+        /** Generate foreign keys for table orocrm_contact_to_contact_grp **/
+        $table = $schema->getTable('orocrm_contact_to_contact_grp');
         $table->addForeignKeyConstraint($schema->getTable('orocrm_contact_group'), ['contact_group_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('orocrm_contact'), ['contact_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
-        /** End of generate foreign keys for table orocrm_contact_to_contact_group **/
+        /** End of generate foreign keys for table orocrm_contact_to_contact_grp **/
 
         /** Generate foreign keys for table oro_email_address **/
         $table = $schema->getTable('oro_email_address');

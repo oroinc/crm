@@ -283,7 +283,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Group")
-     * @ORM\JoinTable(name="orocrm_contact_to_contact_group",
+     * @ORM\JoinTable(name="orocrm_contact_to_contact_grp",
      *      joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="contact_group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )

@@ -174,8 +174,8 @@ class OroCRMMagentoBundle implements Migration
         $table->addIndex(['channel_id'], 'IDX_2A61EE7D72F5A1AA', []);
         /** End of generate table orocrm_magento_customer **/
 
-        /** Generate table orocrm_magento_customer_address **/
-        $table = $schema->createTable('orocrm_magento_customer_address');
+        /** Generate table orocrm_magento_customer_addr **/
+        $table = $schema->createTable('orocrm_magento_customer_addr');
         $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
         $table->addColumn('region_code', 'string', ['default' => null, 'notnull' => false, 'length' => 16, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->addColumn('owner_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
@@ -200,16 +200,16 @@ class OroCRMMagentoBundle implements Migration
         $table->addIndex(['owner_id'], 'IDX_55153CAD7E3C61F9', []);
         $table->addIndex(['country_code'], 'IDX_55153CADF026BB7C', []);
         $table->addIndex(['region_code'], 'IDX_55153CADAEB327AF', []);
-        /** End of generate table orocrm_magento_customer_address **/
+        /** End of generate table orocrm_magento_customer_addr **/
 
-        /** Generate table orocrm_magento_customer_address_to_address_type **/
-        $table = $schema->createTable('orocrm_magento_customer_address_to_address_type');
+        /** Generate table orocrm_magento_cust_addr_type **/
+        $table = $schema->createTable('orocrm_magento_cust_addr_type');
         $table->addColumn('customer_address_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->addColumn('type_name', 'string', ['default' => null, 'notnull' => true, 'length' => 16, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->setPrimaryKey(['customer_address_id', 'type_name']);
         $table->addIndex(['customer_address_id'], 'IDX_65B2C97487EABF7', []);
         $table->addIndex(['type_name'], 'IDX_65B2C974892CBB0E', []);
-        /** End of generate table orocrm_magento_customer_address_to_address_type **/
+        /** End of generate table orocrm_magento_cust_addr_type **/
 
         /** Generate table orocrm_magento_customer_group **/
         $table = $schema->createTable('orocrm_magento_customer_group');
@@ -286,14 +286,14 @@ class OroCRMMagentoBundle implements Migration
         $table->addIndex(['region_code'], 'IDX_E31C6DECAEB327AF', []);
         /** End of generate table orocrm_magento_order_address **/
 
-        /** Generate table orocrm_magento_order_address_to_address_type **/
-        $table = $schema->createTable('orocrm_magento_order_address_to_address_type');
+        /** Generate table orocrm_magento_order_addr_type **/
+        $table = $schema->createTable('orocrm_magento_order_addr_type');
         $table->addColumn('order_address_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->addColumn('type_name', 'string', ['default' => null, 'notnull' => true, 'length' => 16, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->setPrimaryKey(['order_address_id', 'type_name']);
         $table->addIndex(['order_address_id'], 'IDX_7B667960466D5220', []);
         $table->addIndex(['type_name'], 'IDX_7B667960892CBB0E', []);
-        /** End of generate table orocrm_magento_order_address_to_address_type **/
+        /** End of generate table orocrm_magento_order_addr_type **/
 
         /** Generate table orocrm_magento_order_calls **/
         $table = $schema->createTable('orocrm_magento_order_calls');
@@ -354,14 +354,14 @@ class OroCRMMagentoBundle implements Migration
         $table->addIndex(['channel_id'], 'IDX_5A17298272F5A1AA', []);
         /** End of generate table orocrm_magento_product **/
 
-        /** Generate table orocrm_magento_product_to_website **/
-        $table = $schema->createTable('orocrm_magento_product_to_website');
+        /** Generate table orocrm_magento_prod_to_website **/
+        $table = $schema->createTable('orocrm_magento_prod_to_website');
         $table->addColumn('product_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->addColumn('website_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->setPrimaryKey(['product_id', 'website_id']);
         $table->addIndex(['product_id'], 'IDX_3A3EF4984584665A', []);
         $table->addIndex(['website_id'], 'IDX_3A3EF49818F45C82', []);
-        /** End of generate table orocrm_magento_product_to_website **/
+        /** End of generate table orocrm_magento_prod_to_website **/
 
         /** Generate table orocrm_magento_region **/
         $table = $schema->createTable('orocrm_magento_region');
@@ -448,18 +448,18 @@ class OroCRMMagentoBundle implements Migration
         $table->addForeignKeyConstraint($schema->getTable('orocrm_contact'), ['contact_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
         /** End of generate foreign keys for table orocrm_magento_customer **/
 
-        /** Generate foreign keys for table orocrm_magento_customer_address **/
-        $table = $schema->getTable('orocrm_magento_customer_address');
+        /** Generate foreign keys for table orocrm_magento_customer_addr **/
+        $table = $schema->getTable('orocrm_magento_customer_addr');
         $table->addForeignKeyConstraint($schema->getTable('oro_dictionary_region'), ['region_code'], ['combined_code'], ['onDelete' => null, 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_customer'), ['owner_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('oro_dictionary_country'), ['country_code'], ['iso2_code'], ['onDelete' => null, 'onUpdate' => null]);
-        /** End of generate foreign keys for table orocrm_magento_customer_address **/
+        /** End of generate foreign keys for table orocrm_magento_customer_addr **/
 
-        /** Generate foreign keys for table orocrm_magento_customer_address_to_address_type **/
-        $table = $schema->getTable('orocrm_magento_customer_address_to_address_type');
+        /** Generate foreign keys for table orocrm_magento_cust_addr_type **/
+        $table = $schema->getTable('orocrm_magento_cust_addr_type');
         $table->addForeignKeyConstraint($schema->getTable('oro_address_type'), ['type_name'], ['name'], ['onDelete' => null, 'onUpdate' => null]);
-        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_customer_address'), ['customer_address_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
-        /** End of generate foreign keys for table orocrm_magento_customer_address_to_address_type **/
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_customer_addr'), ['customer_address_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_cust_addr_type **/
 
         /** Generate foreign keys for table orocrm_magento_customer_group **/
         $table = $schema->getTable('orocrm_magento_customer_group');
@@ -483,11 +483,11 @@ class OroCRMMagentoBundle implements Migration
         $table->addForeignKeyConstraint($schema->getTable('oro_dictionary_country'), ['country_code'], ['iso2_code'], ['onDelete' => null, 'onUpdate' => null]);
         /** End of generate foreign keys for table orocrm_magento_order_address **/
 
-        /** Generate foreign keys for table orocrm_magento_order_address_to_address_type **/
-        $table = $schema->getTable('orocrm_magento_order_address_to_address_type');
+        /** Generate foreign keys for table orocrm_magento_order_addr_type **/
+        $table = $schema->getTable('orocrm_magento_order_addr_type');
         $table->addForeignKeyConstraint($schema->getTable('oro_address_type'), ['type_name'], ['name'], ['onDelete' => null, 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_order_address'), ['order_address_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
-        /** End of generate foreign keys for table orocrm_magento_order_address_to_address_type **/
+        /** End of generate foreign keys for table orocrm_magento_order_addr_type **/
 
         /** Generate foreign keys for table orocrm_magento_order_calls **/
         $table = $schema->getTable('orocrm_magento_order_calls');
@@ -511,11 +511,11 @@ class OroCRMMagentoBundle implements Migration
         $table->addForeignKeyConstraint($schema->getTable('oro_integration_channel'), ['channel_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
         /** End of generate foreign keys for table orocrm_magento_product **/
 
-        /** Generate foreign keys for table orocrm_magento_product_to_website **/
-        $table = $schema->getTable('orocrm_magento_product_to_website');
+        /** Generate foreign keys for table orocrm_magento_prod_to_website **/
+        $table = $schema->getTable('orocrm_magento_prod_to_website');
         $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_website'), ['website_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_product'), ['product_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
-        /** End of generate foreign keys for table orocrm_magento_product_to_website **/
+        /** End of generate foreign keys for table orocrm_magento_prod_to_website **/
 
         /** Generate foreign keys for table orocrm_magento_store **/
         $table = $schema->getTable('orocrm_magento_store');
