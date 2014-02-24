@@ -63,7 +63,7 @@ class Call
      * @var Account
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     * @ConfigField(defaultValues={"merge"={"relation_enable"=true, "relation_cast_method"="getSubject"}})
+     * @ConfigField(defaultValues={"merge"={"inverse_display"=true, "relation_cast_method"="getSubject"}})
      */
     protected $relatedAccount;
 
