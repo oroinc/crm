@@ -5,6 +5,7 @@ workflows:
         enabled: false
         entity: OroCRM\Bundle\SalesBundle\Entity\Lead
         entity_attribute: lead
+        start_step: new
         steps:
             new:
                 label: 'New'
