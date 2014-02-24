@@ -47,7 +47,7 @@ class OroCRMMagentoBundle implements Migration
         $table->addColumn('origin_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_96661A801023C4EE');
-        $table->addUniqueIndex(['origin_id', 'channel_id'], 'unq_origin_id_channel_id');
+        $table->addUniqueIndex(['origin_id', 'channel_id'], 'unq_cart_origin_id_channel_id');
         $table->addIndex(['customer_id'], 'IDX_96661A809395C3F3', []);
         $table->addIndex(['store_id'], 'IDX_96661A80B092A811', []);
         $table->addIndex(['shipping_address_id'], 'IDX_96661A804D4CFF2B', []);
