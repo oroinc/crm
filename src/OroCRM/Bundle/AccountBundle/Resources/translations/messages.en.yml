@@ -8,6 +8,9 @@ orocrm:
         phone: Phone
         email: Email
 
+    sales_widget:
+        title: Sales
+
     account:
         placeholdes:
             actions: Account actions

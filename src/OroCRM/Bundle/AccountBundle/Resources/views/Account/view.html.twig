@@ -64,6 +64,20 @@
     ] %}
 
 
+    {% set accountSalesWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('orocrm_account_widget_sales', {id: entity.id})
+        }) }}
+    {% endset %}
+    {% set dataBlocks = dataBlocks|merge([
+        {
+            'title': 'orocrm.sales_widget.title'|trans,
+            'subblocks': [
+                {'data' : [accountSalesWidget]}
+        ]
+        }
+    ]) %}
 
     {% if resource_granted('orocrm_call_view') %}
         {% set accountCallsWidget %}

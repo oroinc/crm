@@ -1,0 +1,15 @@
+{{ oro_widget_render({
+    'widgetType': 'block',
+    'url': path('orocrm_account_widget_opportunities', {id: entity.id}),
+    'title': 'orocrm.sales.opportunity.entity_plural_label'|trans
+}) }}
+{{ oro_widget_render({
+    'widgetType': 'block',
+    'url': path('orocrm_account_widget_leads', {id: entity.id}),
+    'title': 'orocrm.sales.lead.entity_plural_label'|trans
+}) }}
+{{ oro_widget_render({
+    'widgetType': 'block',
+    'url': path('orocrm_account_widget_orders', {id: entity.id}),
+    'title': 'orocrm.magento.order.entity_plural_label'|trans
+}) }}
