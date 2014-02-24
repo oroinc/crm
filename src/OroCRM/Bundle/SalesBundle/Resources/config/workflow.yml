@@ -278,6 +278,7 @@ workflows:
                 allowed_transitions:
                     - requalify_lost
                     - requalify_won
+                is_final: true
         attributes:
             opportunity_name:
                 label: orocrm.sales.opportunity.name.label
@@ -594,6 +595,7 @@ workflows:
                 allowed_transitions:
                     - follow_up
                     - reactivate
+                is_final: true
             new_opportunity:
                 label: 'New Opportunity'
                 order: 20
@@ -622,6 +624,7 @@ workflows:
                         delete: false
                 allowed_transitions:
                     - reopen
+                is_final: true
             lost_opportunity:
                 label: 'Lost Opportunity'
                 order: 40
@@ -631,6 +634,7 @@ workflows:
                         delete: false
                 allowed_transitions:
                     - reopen
+                is_final: true
 
         attributes:
             sales_funnel_name:

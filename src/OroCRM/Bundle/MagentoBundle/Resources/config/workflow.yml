@@ -27,16 +27,19 @@ workflows:
                 order: 30
                 allowed_transitions:
                     - reopen
+                is_final: true
             converted_to_opportunity:
                 label: 'Converted to opportunity'
                 order: 30
                 allowed_transitions:
                     - reopen
+                is_final: true
             converted:
                 label: 'Converted'
                 order: 30
                 allowed_transitions:
                     - reopen
+                is_final: true
 
         attributes:
             # Call related fields
