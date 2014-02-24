@@ -774,7 +774,8 @@ workflows:
                                 required: true
                                 grid_name: 'sales-funnel-lead-grid'
                                 constraints:
-                                    - NotBlank: ~
+                                    - NotBlank:
+                                        message: 'Lead must be set'
                     init_actions:
                         - @create_datetime:
                             attribute: $sales_funnel_start_date
@@ -825,7 +826,8 @@ workflows:
                                 required: true
                                 grid_name: 'sales-funnel-opportunity-grid'
                                 constraints:
-                                    - NotBlank: ~
+                                    - NotBlank:
+                                        message: 'Opportunity must be set'
                     init_actions:
                         - @create_datetime:
                             attribute: $sales_funnel_start_date
