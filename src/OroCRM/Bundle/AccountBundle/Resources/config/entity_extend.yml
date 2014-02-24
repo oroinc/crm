@@ -5,6 +5,8 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             configs:
                 datagrid:
                     is_visible:   false
+                merge:
+                    display:       true
             owner:                Custom
             is_extend:            true
 
@@ -13,6 +15,8 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             configs:
                 datagrid:
                     is_visible:   false
+                merge:
+                    display:       true
             owner:                Custom
             is_extend:            true
 
@@ -21,6 +25,8 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             configs:
                 datagrid:
                     is_visible:   false
+                merge:
+                    display:       true
             owner:                Custom
             is_extend:            true
 
@@ -29,6 +35,8 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             configs:
                 datagrid:
                     is_visible:   false
+                merge:
+                    display:       true
             owner:                Custom
             is_extend:            true
 
@@ -37,6 +45,8 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             configs:
                 datagrid:
                     is_visible:   false
+                merge:
+                    display:       true
             owner:                Custom
             is_extend:            true
 
@@ -45,6 +55,8 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             configs:
                 datagrid:
                     is_visible:   false
+                merge:
+                    display:       true
             owner:                Custom
             is_extend:            true
 
@@ -53,6 +65,8 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             configs:
                 datagrid:
                     is_visible:   false
+                merge:
+                    display:       true
             owner:                Custom
             is_extend:            true
 
@@ -61,7 +75,8 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             configs:
                 datagrid:
                     is_visible:   false
-
+                merge:
+                    display:       true
             owner:                Custom
             is_extend:            true
 
@@ -70,6 +85,7 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             configs:
                 datagrid:
                     is_visible:   false
-
+                merge:
+                    display:       true
             owner:                Custom
             is_extend:            true
