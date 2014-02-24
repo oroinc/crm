@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\AccountBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -149,6 +150,25 @@ class AccountController extends Controller
      */
     public function contactsAction(Account $account)
     {
-        return ['entity' => $account];
+        $defaultContact = $account->getDefaultContact();
+        $contacts = $account->getContacts();
+        $notDefaultContacts = array();
+        if (!isset($defaultContact)) {
+            $defaultContact = $contacts->count() > 0 ? $contacts[0] : null;
+        }
+        /**
+         * @var Contact $contact
+         */
+        foreach ($contacts as $contact) {
+            if ($contact->getId() == $defaultContact->getId()) {
+                continue;
+            }
+            $notDefaultContacts[] = $contact;
+        }
+
+        return array('entity'             => $account,
+                     'defaultContact'     => $defaultContact,
+                     'notDefaultContacts' => $notDefaultContacts
+        );
     }
 }

@@ -1,8 +1,11 @@
 <div class="widget-content">
     <div class="contact-box-wrapper">
-        {% for contact in entity.contacts|slice(0, 6) %}
-            {{ _self.render_contact_squad(contact, loop.first) }}
-        {% endfor %}
+        {% if defaultContact %}
+            {{ _self.render_contact_box(defaultContact, true) }}
+            {% for contact in notDefaultContacts|slice(0, 5) %}
+                {{ _self.render_contact_box(contact, false) }}
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 <script type="text/javascript">
@@ -10,7 +13,7 @@
                 ContactWidget.init();
             });
 </script>
-{% macro render_contact_squad(contact, isDefault) %}
+{% macro render_contact_box(contact, isDefault) %}
     <div class="contact-box">
         <div class="contact-box-row">
             <a class="contact-box-name-link contact-box-link" href="{{ url("orocrm_contact_view",{"id":contact.id}) }}">
