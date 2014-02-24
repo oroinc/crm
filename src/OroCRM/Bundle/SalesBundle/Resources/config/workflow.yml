@@ -750,6 +750,12 @@ workflows:
                         title: orocrm.sales.salesfunnel.new_entity_label
                 form_options:
                     attribute_fields:
+                        sales_funnel_owner:
+                            form_type: oro_user_select
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
                         sales_funnel_name:
                             form_type: text
                             options:
@@ -762,33 +768,24 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
-                        sales_funnel_owner:
-                            form_type: oro_user_select
-                            options:
-                                required: true
-                                constraints:
-                                    - NotBlank: ~
                         lead:
-                            form_type: orocrm_sales_lead_select
+                            form_type: orocrm_sales_lead_create_select
                             options:
                                 required: true
-                                configs:
-                                    placeholder: orocrm.sales.form.choose_lead
-                                    extra_config: grid
-                                    grid:
-                                        name: sales-funnel-lead-grid
-                                    minimumInputLength: 0
-                                    properties:
-                                        - searchIndex
-                                    result_template_twig: OroCRMSalesBundle:Lead:Autocomplete/result.html.twig
-                                    selection_template_twig: OroCRMSalesBundle:Lead:Autocomplete/selection.html.twig
+                                grid_name: 'sales-funnel-lead-grid'
                                 constraints:
-                                    - NotBlank: ~
+                                    - NotBlank:
+                                        message: 'Lead must be set'
                     init_actions:
                         - @create_datetime:
                             attribute: $sales_funnel_start_date
                         - @assign_active_user:
                             attribute: $sales_funnel_owner
+                        - @create_object:
+                            class: OroCRM\Bundle\SalesBundle\Entity\Lead
+                            attribute: $lead
+                            data:
+                                owner: $sales_funnel_owner
                 transition_definition: start_definition
             start_from_opportunity:
                 label: 'Start from Opportunity'
@@ -805,6 +802,12 @@ workflows:
                         title: orocrm.sales.salesfunnel.new_entity_label
                 form_options:
                     attribute_fields:
+                        sales_funnel_owner:
+                            form_type: oro_user_select
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
                         sales_funnel_name:
                             form_type: text
                             options:
@@ -817,33 +820,24 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
-                        sales_funnel_owner:
-                            form_type: oro_user_select
-                            options:
-                                required: true
-                                constraints:
-                                    - NotBlank: ~
                         opportunity:
-                            form_type: orocrm_sales_opportunity_select
+                            form_type: orocrm_sales_opportunity_create_select
                             options:
                                 required: true
-                                configs:
-                                    placeholder: orocrm.sales.form.choose_opportunity
-                                    extra_config: grid
-                                    grid:
-                                        name: sales-funnel-opportunity-grid
-                                    minimumInputLength: 0
-                                    properties:
-                                        - searchIndex
-                                    result_template_twig: OroCRMSalesBundle:Opportunity:Autocomplete/result.html.twig
-                                    selection_template_twig: OroCRMSalesBundle:Opportunity:Autocomplete/selection.html.twig
+                                grid_name: 'sales-funnel-opportunity-grid'
                                 constraints:
-                                    - NotBlank: ~
+                                    - NotBlank:
+                                        message: 'Opportunity must be set'
                     init_actions:
                         - @create_datetime:
                             attribute: $sales_funnel_start_date
                         - @assign_active_user:
                             attribute: $sales_funnel_owner
+                        - @create_object:
+                            class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                            attribute: $opportunity
+                            data:
+                                owner: $sales_funnel_owner
                 transition_definition: start_definition
             disqualify:
                 label: 'Disqualify'
