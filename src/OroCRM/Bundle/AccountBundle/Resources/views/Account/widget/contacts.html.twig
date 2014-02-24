@@ -2,7 +2,7 @@
     <div class="contact-box-wrapper">
         {% if defaultContact %}
             {{ _self.render_contact_box(defaultContact, true) }}
-            {% for contact in notDefaultContacts|slice(0, 5) %}
+            {% for contact in contactsWithoutDefault|slice(0, 5) %}
                 {{ _self.render_contact_box(contact, false) }}
             {% endfor %}
         {% endif %}
@@ -19,7 +19,7 @@
             <a class="contact-box-name-link contact-box-link" href="{{ url("orocrm_contact_view",{"id":contact.id}) }}">
                 {{ contact|oro_format_name }}
                 {% if isDefault %}
-                    (default)
+                    ({{ "orocrm.account.default_contact.label"|trans }})
                 {% endif %}
             </a>
         </div>

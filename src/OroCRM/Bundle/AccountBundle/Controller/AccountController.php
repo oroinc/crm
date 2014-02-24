@@ -152,7 +152,7 @@ class AccountController extends Controller
     {
         $defaultContact = $account->getDefaultContact();
         $contacts = $account->getContacts();
-        $notDefaultContacts = array();
+        $contactsWithoutDefault = array();
         if (!isset($defaultContact)) {
             $defaultContact = $contacts->count() > 0 ? $contacts[0] : null;
         }
@@ -163,12 +163,13 @@ class AccountController extends Controller
             if ($contact->getId() == $defaultContact->getId()) {
                 continue;
             }
-            $notDefaultContacts[] = $contact;
+            $contactsWithoutDefault[] = $contact;
         }
 
-        return array('entity'             => $account,
-                     'defaultContact'     => $defaultContact,
-                     'notDefaultContacts' => $notDefaultContacts
+        return array(
+            'entity'                 => $account,
+            'defaultContact'         => $defaultContact,
+            'contactsWithoutDefault' => $contactsWithoutDefault
         );
     }
 }
