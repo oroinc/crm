@@ -199,5 +199,7 @@ class OroCRMContactBundle implements Migration
         /** End of generate foreign keys for table oro_email_address **/
 
         // @codingStandardsIgnoreEnd
+
+        return [];
     }
 }

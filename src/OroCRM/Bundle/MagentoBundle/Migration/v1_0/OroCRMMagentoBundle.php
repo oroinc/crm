@@ -9,82 +9,527 @@ class OroCRMMagentoBundle implements Migration
 {
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function up(Schema $schema)
     {
-        return [
-            "CREATE TABLE orocrm_magento_cart (id INT AUTO_INCREMENT NOT NULL, channel_id SMALLINT DEFAULT NULL, workflow_item_id INT DEFAULT NULL, shipping_address_id INT DEFAULT NULL, status_name VARCHAR(32) DEFAULT NULL, workflow_step_id INT DEFAULT NULL, billing_address_id INT DEFAULT NULL, customer_id INT DEFAULT NULL, opportunity_id INT DEFAULT NULL, store_id INT DEFAULT NULL, items_qty INT UNSIGNED NOT NULL, items_count INT UNSIGNED NOT NULL, base_currency_code VARCHAR(32) NOT NULL, store_currency_code VARCHAR(32) NOT NULL, quote_currency_code VARCHAR(32) NOT NULL, store_to_base_rate DOUBLE PRECISION NOT NULL, store_to_quote_rate DOUBLE PRECISION DEFAULT NULL, email VARCHAR(255) DEFAULT NULL, gift_message VARCHAR(255) DEFAULT NULL, is_guest TINYINT(1) NOT NULL, payment_details VARCHAR(255) DEFAULT NULL, notes LONGTEXT DEFAULT NULL, sub_total DOUBLE PRECISION DEFAULT NULL, grand_total DOUBLE PRECISION DEFAULT NULL, tax_amount DOUBLE PRECISION DEFAULT NULL, createdAt DATETIME NOT NULL, updatedAt DATETIME NOT NULL, origin_id INT UNSIGNED DEFAULT NULL, UNIQUE INDEX UNIQ_96661A801023C4EE (workflow_item_id), UNIQUE INDEX unq_origin_id_channel_id (origin_id, channel_id), INDEX IDX_96661A809395C3F3 (customer_id), INDEX IDX_96661A80B092A811 (store_id), INDEX IDX_96661A804D4CFF2B (shipping_address_id), INDEX IDX_96661A8079D0C0E4 (billing_address_id), INDEX IDX_96661A806625D392 (status_name), INDEX IDX_96661A809A34590F (opportunity_id), INDEX IDX_96661A8071FE882C (workflow_step_id), INDEX IDX_96661A8072F5A1AA (channel_id), INDEX magecart_origin_idx (origin_id), PRIMARY KEY(id))",
-            "CREATE TABLE orocrm_magento_cart_address (id INT AUTO_INCREMENT NOT NULL, region_code VARCHAR(16) DEFAULT NULL, country_code VARCHAR(2) DEFAULT NULL, `label` VARCHAR(255) DEFAULT NULL, street VARCHAR(500) NOT NULL, street2 VARCHAR(500) DEFAULT NULL, city VARCHAR(255) NOT NULL, postal_code VARCHAR(20) NOT NULL, organization VARCHAR(255) DEFAULT NULL, region_text VARCHAR(255) DEFAULT NULL, name_prefix VARCHAR(255) DEFAULT NULL, first_name VARCHAR(255) DEFAULT NULL, middle_name VARCHAR(255) DEFAULT NULL, last_name VARCHAR(255) DEFAULT NULL, name_suffix VARCHAR(255) DEFAULT NULL, created DATETIME NOT NULL, updated DATETIME NOT NULL, origin_id INT UNSIGNED DEFAULT NULL, INDEX IDX_6978F651F026BB7C (country_code), INDEX IDX_6978F651AEB327AF (region_code), PRIMARY KEY(id))",
-            "CREATE TABLE orocrm_magento_cart_calls (cart_id INT NOT NULL, call_id INT NOT NULL, INDEX IDX_83A847751AD5CDBF (cart_id), INDEX IDX_83A8477550A89B2C (call_id), PRIMARY KEY(cart_id, call_id))",
-            "CREATE TABLE orocrm_magento_cart_emails (cart_id INT NOT NULL, email_id INT NOT NULL, INDEX IDX_11B0F84B1AD5CDBF (cart_id), INDEX IDX_11B0F84BA832C1C9 (email_id), PRIMARY KEY(cart_id, email_id))",
-            "CREATE TABLE orocrm_magento_cart_item (id INT AUTO_INCREMENT NOT NULL, cart_id INT DEFAULT NULL, product_id INT UNSIGNED NOT NULL, parent_item_id INT UNSIGNED DEFAULT NULL, free_shipping VARCHAR(255) NOT NULL, gift_message VARCHAR(255) DEFAULT NULL, tax_class_id VARCHAR(255) DEFAULT NULL, description LONGTEXT DEFAULT NULL, is_virtual TINYINT(1) NOT NULL, custom_price DOUBLE PRECISION DEFAULT NULL, price_incl_tax DOUBLE PRECISION DEFAULT NULL, row_total DOUBLE PRECISION NOT NULL, tax_amount DOUBLE PRECISION NOT NULL, product_type VARCHAR(255) NOT NULL, sku VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, qty DOUBLE PRECISION NOT NULL, price DOUBLE PRECISION NOT NULL, discount_amount DOUBLE PRECISION NOT NULL, tax_percent DOUBLE PRECISION NOT NULL, weight DOUBLE PRECISION DEFAULT NULL, createdAt DATETIME NOT NULL, updatedAt DATETIME NOT NULL, origin_id INT UNSIGNED DEFAULT NULL, INDEX IDX_A73DC8621AD5CDBF (cart_id), INDEX magecartitem_origin_idx (origin_id), INDEX magecartitem_sku_idx (sku), PRIMARY KEY(id))",
-            "CREATE TABLE orocrm_magento_cart_status (name VARCHAR(32) NOT NULL, `label` VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_26317505EA750E8 (`label`), PRIMARY KEY(name))",
-            "CREATE TABLE orocrm_magento_customer (id INT AUTO_INCREMENT NOT NULL, channel_id SMALLINT DEFAULT NULL, website_id INT DEFAULT NULL, account_id INT DEFAULT NULL, store_id INT DEFAULT NULL, customer_group_id INT DEFAULT NULL, contact_id INT DEFAULT NULL, name_prefix VARCHAR(255) DEFAULT NULL, first_name VARCHAR(255) DEFAULT NULL, middle_name VARCHAR(255) DEFAULT NULL, last_name VARCHAR(255) DEFAULT NULL, name_suffix VARCHAR(255) DEFAULT NULL, gender VARCHAR(8) DEFAULT NULL, birthday DATETIME DEFAULT NULL, email VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, is_active TINYINT(1) NOT NULL, vat VARCHAR(255) DEFAULT NULL, origin_id INT UNSIGNED DEFAULT NULL, UNIQUE INDEX unq_origin_id_channel_id (origin_id, channel_id), INDEX IDX_2A61EE7D18F45C82 (website_id), INDEX IDX_2A61EE7DB092A811 (store_id), INDEX IDX_2A61EE7DD2919A68 (customer_group_id), INDEX IDX_2A61EE7DE7A1254A (contact_id), INDEX IDX_2A61EE7D9B6B5FBA (account_id), INDEX IDX_2A61EE7D72F5A1AA (channel_id), PRIMARY KEY(id))",
-            "CREATE TABLE orocrm_magento_customer_address (id INT AUTO_INCREMENT NOT NULL, region_code VARCHAR(16) DEFAULT NULL, owner_id INT DEFAULT NULL, country_code VARCHAR(2) DEFAULT NULL, `label` VARCHAR(255) DEFAULT NULL, street VARCHAR(500) NOT NULL, street2 VARCHAR(500) DEFAULT NULL, city VARCHAR(255) NOT NULL, postal_code VARCHAR(20) NOT NULL, region_text VARCHAR(255) DEFAULT NULL, name_prefix VARCHAR(255) DEFAULT NULL, first_name VARCHAR(255) DEFAULT NULL, middle_name VARCHAR(255) DEFAULT NULL, last_name VARCHAR(255) DEFAULT NULL, name_suffix VARCHAR(255) DEFAULT NULL, is_primary TINYINT(1) DEFAULT NULL, organization VARCHAR(255) DEFAULT NULL, created DATETIME NOT NULL, updated DATETIME NOT NULL, origin_id INT UNSIGNED DEFAULT NULL, INDEX IDX_55153CAD7E3C61F9 (owner_id), INDEX IDX_55153CADF026BB7C (country_code), INDEX IDX_55153CADAEB327AF (region_code), PRIMARY KEY(id))",
-            "CREATE TABLE orocrm_magento_customer_address_to_address_type (customer_address_id INT NOT NULL, type_name VARCHAR(16) NOT NULL, INDEX IDX_65B2C97487EABF7 (customer_address_id), INDEX IDX_65B2C974892CBB0E (type_name), PRIMARY KEY(customer_address_id, type_name))",
-            "CREATE TABLE orocrm_magento_customer_group (id INT AUTO_INCREMENT NOT NULL, channel_id SMALLINT DEFAULT NULL, name VARCHAR(255) NOT NULL, origin_id INT UNSIGNED DEFAULT NULL, INDEX IDX_71E09CA872F5A1AA (channel_id), PRIMARY KEY(id))",
-            "CREATE TABLE orocrm_magento_order (id INT AUTO_INCREMENT NOT NULL, workflow_item_id INT DEFAULT NULL, cart_id INT DEFAULT NULL, workflow_step_id INT DEFAULT NULL, channel_id SMALLINT DEFAULT NULL, customer_id INT DEFAULT NULL, store_id INT DEFAULT NULL, increment_id VARCHAR(60) NOT NULL, is_virtual TINYINT(1) DEFAULT NULL, is_guest TINYINT(1) DEFAULT NULL, gift_message VARCHAR(255) DEFAULT NULL, remote_ip VARCHAR(255) DEFAULT NULL, store_name VARCHAR(255) DEFAULT NULL, total_paid_amount DOUBLE PRECISION DEFAULT NULL, total_invoiced_amount DOUBLE PRECISION DEFAULT NULL, total_refunded_amount DOUBLE PRECISION DEFAULT NULL, total_canceled_amount DOUBLE PRECISION DEFAULT NULL, notes LONGTEXT DEFAULT NULL, feedback LONGTEXT DEFAULT NULL, currency VARCHAR(10) DEFAULT NULL, payment_method VARCHAR(255) DEFAULT NULL, payment_details VARCHAR(255) DEFAULT NULL, subtotal_amount DOUBLE PRECISION DEFAULT NULL, shipping_amount DOUBLE PRECISION DEFAULT NULL, shipping_method VARCHAR(255) DEFAULT NULL, tax_amount DOUBLE PRECISION DEFAULT NULL, discount_amount DOUBLE PRECISION DEFAULT NULL, discount_percent DOUBLE PRECISION DEFAULT NULL, total_amount DOUBLE PRECISION DEFAULT NULL, status VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_4D09F3051AD5CDBF (cart_id), UNIQUE INDEX UNIQ_4D09F3051023C4EE (workflow_item_id), UNIQUE INDEX unq_increment_id_channel_id (increment_id, channel_id), INDEX IDX_4D09F3059395C3F3 (customer_id), INDEX IDX_4D09F305B092A811 (store_id), INDEX IDX_4D09F30571FE882C (workflow_step_id), INDEX IDX_4D09F30572F5A1AA (channel_id), PRIMARY KEY(id))",
-            "CREATE TABLE orocrm_magento_order_address (id INT AUTO_INCREMENT NOT NULL, region_code VARCHAR(16) DEFAULT NULL, owner_id INT DEFAULT NULL, country_code VARCHAR(2) DEFAULT NULL, fax VARCHAR(255) DEFAULT NULL, phone VARCHAR(255) DEFAULT NULL, street VARCHAR(500) NOT NULL, city VARCHAR(255) NOT NULL, postal_code VARCHAR(20) NOT NULL, organization VARCHAR(255) DEFAULT NULL, region_text VARCHAR(255) DEFAULT NULL, first_name VARCHAR(255) DEFAULT NULL, last_name VARCHAR(255) DEFAULT NULL, INDEX IDX_E31C6DEC7E3C61F9 (owner_id), INDEX IDX_E31C6DECF026BB7C (country_code), INDEX IDX_E31C6DECAEB327AF (region_code), PRIMARY KEY(id))",
-            "CREATE TABLE orocrm_magento_order_address_to_address_type (order_address_id INT NOT NULL, type_name VARCHAR(16) NOT NULL, INDEX IDX_7B667960466D5220 (order_address_id), INDEX IDX_7B667960892CBB0E (type_name), PRIMARY KEY(order_address_id, type_name))",
-            "CREATE TABLE orocrm_magento_order_calls (order_id INT NOT NULL, call_id INT NOT NULL, INDEX IDX_A885A348D9F6D38 (order_id), INDEX IDX_A885A3450A89B2C (call_id), PRIMARY KEY(order_id, call_id))",
-            "CREATE TABLE orocrm_magento_order_emails (order_id INT NOT NULL, email_id INT NOT NULL, INDEX IDX_10E2A9508D9F6D38 (order_id), INDEX IDX_10E2A950A832C1C9 (email_id), PRIMARY KEY(order_id, email_id))",
-            "CREATE TABLE orocrm_magento_order_items (id INT AUTO_INCREMENT NOT NULL, order_id INT DEFAULT NULL, product_type VARCHAR(255) DEFAULT NULL, product_options VARCHAR(255) DEFAULT NULL, is_virtual TINYINT(1) DEFAULT NULL, original_price DOUBLE PRECISION DEFAULT NULL, discount_percent DOUBLE PRECISION DEFAULT NULL, name VARCHAR(255) NOT NULL, sku VARCHAR(255) NOT NULL, qty INT NOT NULL, price DOUBLE PRECISION DEFAULT NULL, weight DOUBLE PRECISION DEFAULT NULL, tax_percent DOUBLE PRECISION DEFAULT NULL, tax_amount DOUBLE PRECISION DEFAULT NULL, discount_amount DOUBLE PRECISION DEFAULT NULL, row_total DOUBLE PRECISION DEFAULT NULL, origin_id INT UNSIGNED DEFAULT NULL, INDEX IDX_3135EFF68D9F6D38 (order_id), PRIMARY KEY(id))",
-            "CREATE TABLE orocrm_magento_product (id INT AUTO_INCREMENT NOT NULL, channel_id SMALLINT DEFAULT NULL, name VARCHAR(255) NOT NULL, sku VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, special_price DOUBLE PRECISION DEFAULT NULL, price DOUBLE PRECISION DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, origin_id INT UNSIGNED NOT NULL, cost DOUBLE PRECISION DEFAULT NULL, UNIQUE INDEX unq_sku_channel_id (sku, channel_id), INDEX IDX_5A17298272F5A1AA (channel_id), PRIMARY KEY(id))",
-            "CREATE TABLE orocrm_magento_product_to_website (product_id INT NOT NULL, website_id INT NOT NULL, INDEX IDX_3A3EF4984584665A (product_id), INDEX IDX_3A3EF49818F45C82 (website_id), PRIMARY KEY(product_id, website_id))",
-            "CREATE TABLE orocrm_magento_region (id INT AUTO_INCREMENT NOT NULL, combined_code VARCHAR(60) NOT NULL, code VARCHAR(32) NOT NULL, country_code VARCHAR(255) NOT NULL, region_id INT NOT NULL, name VARCHAR(255) DEFAULT NULL, UNIQUE INDEX unq_code (combined_code), INDEX idx_region (region_id), PRIMARY KEY(id))",
-            "CREATE TABLE orocrm_magento_store (id INT AUTO_INCREMENT NOT NULL, channel_id SMALLINT DEFAULT NULL, website_id INT NOT NULL, store_code VARCHAR(32) NOT NULL, store_name VARCHAR(255) NOT NULL, origin_id INT UNSIGNED DEFAULT NULL, UNIQUE INDEX unq_code_channel_id (store_code, channel_id), INDEX IDX_477738EA18F45C82 (website_id), INDEX IDX_477738EA72F5A1AA (channel_id), PRIMARY KEY(id))",
-            "CREATE TABLE orocrm_magento_website (id INT AUTO_INCREMENT NOT NULL, channel_id SMALLINT DEFAULT NULL, website_code VARCHAR(32) NOT NULL, website_name VARCHAR(255) NOT NULL, origin_id INT UNSIGNED DEFAULT NULL, UNIQUE INDEX unq_site_idx (website_code, origin_id, channel_id), INDEX IDX_CE3270C872F5A1AA (channel_id), PRIMARY KEY(id))",
+        // @codingStandardsIgnoreStart
 
-            "ALTER TABLE orocrm_magento_cart ADD CONSTRAINT FK_96661A8072F5A1AA FOREIGN KEY (channel_id) REFERENCES oro_integration_channel (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_cart ADD CONSTRAINT FK_96661A801023C4EE FOREIGN KEY (workflow_item_id) REFERENCES oro_workflow_item (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_cart ADD CONSTRAINT FK_96661A804D4CFF2B FOREIGN KEY (shipping_address_id) REFERENCES orocrm_magento_cart_address (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_cart ADD CONSTRAINT FK_96661A806625D392 FOREIGN KEY (status_name) REFERENCES orocrm_magento_cart_status (name) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_cart ADD CONSTRAINT FK_96661A8071FE882C FOREIGN KEY (workflow_step_id) REFERENCES oro_workflow_step (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_cart ADD CONSTRAINT FK_96661A8079D0C0E4 FOREIGN KEY (billing_address_id) REFERENCES orocrm_magento_cart_address (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_cart ADD CONSTRAINT FK_96661A809395C3F3 FOREIGN KEY (customer_id) REFERENCES orocrm_magento_customer (id) ON DELETE CASCADE",
-            "ALTER TABLE orocrm_magento_cart ADD CONSTRAINT FK_96661A809A34590F FOREIGN KEY (opportunity_id) REFERENCES orocrm_sales_opportunity (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_cart ADD CONSTRAINT FK_96661A80B092A811 FOREIGN KEY (store_id) REFERENCES orocrm_magento_store (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_cart_address ADD CONSTRAINT FK_6978F651AEB327AF FOREIGN KEY (region_code) REFERENCES oro_dictionary_region (combined_code)",
-            "ALTER TABLE orocrm_magento_cart_address ADD CONSTRAINT FK_6978F651F026BB7C FOREIGN KEY (country_code) REFERENCES oro_dictionary_country (iso2_code)",
-            "ALTER TABLE orocrm_magento_cart_calls ADD CONSTRAINT FK_83A8477550A89B2C FOREIGN KEY (call_id) REFERENCES orocrm_call (id)",
-            "ALTER TABLE orocrm_magento_cart_calls ADD CONSTRAINT FK_83A847751AD5CDBF FOREIGN KEY (cart_id) REFERENCES orocrm_magento_cart (id)",
-            "ALTER TABLE orocrm_magento_cart_emails ADD CONSTRAINT FK_11B0F84BA832C1C9 FOREIGN KEY (email_id) REFERENCES oro_email (id)",
-            "ALTER TABLE orocrm_magento_cart_emails ADD CONSTRAINT FK_11B0F84B1AD5CDBF FOREIGN KEY (cart_id) REFERENCES orocrm_magento_cart (id)",
-            "ALTER TABLE orocrm_magento_cart_item ADD CONSTRAINT FK_A73DC8621AD5CDBF FOREIGN KEY (cart_id) REFERENCES orocrm_magento_cart (id) ON DELETE CASCADE",
-            "ALTER TABLE orocrm_magento_customer ADD CONSTRAINT FK_2A61EE7D72F5A1AA FOREIGN KEY (channel_id) REFERENCES oro_integration_channel (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_customer ADD CONSTRAINT FK_2A61EE7D18F45C82 FOREIGN KEY (website_id) REFERENCES orocrm_magento_website (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_customer ADD CONSTRAINT FK_2A61EE7D9B6B5FBA FOREIGN KEY (account_id) REFERENCES orocrm_account (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_customer ADD CONSTRAINT FK_2A61EE7DB092A811 FOREIGN KEY (store_id) REFERENCES orocrm_magento_store (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_customer ADD CONSTRAINT FK_2A61EE7DD2919A68 FOREIGN KEY (customer_group_id) REFERENCES orocrm_magento_customer_group (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_customer ADD CONSTRAINT FK_2A61EE7DE7A1254A FOREIGN KEY (contact_id) REFERENCES orocrm_contact (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_customer_address ADD CONSTRAINT FK_55153CADAEB327AF FOREIGN KEY (region_code) REFERENCES oro_dictionary_region (combined_code)",
-            "ALTER TABLE orocrm_magento_customer_address ADD CONSTRAINT FK_55153CAD7E3C61F9 FOREIGN KEY (owner_id) REFERENCES orocrm_magento_customer (id) ON DELETE CASCADE",
-            "ALTER TABLE orocrm_magento_customer_address ADD CONSTRAINT FK_55153CADF026BB7C FOREIGN KEY (country_code) REFERENCES oro_dictionary_country (iso2_code)",
-            "ALTER TABLE orocrm_magento_customer_address_to_address_type ADD CONSTRAINT FK_65B2C974892CBB0E FOREIGN KEY (type_name) REFERENCES oro_address_type (name)",
-            "ALTER TABLE orocrm_magento_customer_address_to_address_type ADD CONSTRAINT FK_65B2C97487EABF7 FOREIGN KEY (customer_address_id) REFERENCES orocrm_magento_customer_address (id) ON DELETE CASCADE",
-            "ALTER TABLE orocrm_magento_customer_group ADD CONSTRAINT FK_71E09CA872F5A1AA FOREIGN KEY (channel_id) REFERENCES oro_integration_channel (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_order ADD CONSTRAINT FK_4D09F3051023C4EE FOREIGN KEY (workflow_item_id) REFERENCES oro_workflow_item (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_order ADD CONSTRAINT FK_4D09F3051AD5CDBF FOREIGN KEY (cart_id) REFERENCES orocrm_magento_cart (id)",
-            "ALTER TABLE orocrm_magento_order ADD CONSTRAINT FK_4D09F30571FE882C FOREIGN KEY (workflow_step_id) REFERENCES oro_workflow_step (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_order ADD CONSTRAINT FK_4D09F30572F5A1AA FOREIGN KEY (channel_id) REFERENCES oro_integration_channel (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_order ADD CONSTRAINT FK_4D09F3059395C3F3 FOREIGN KEY (customer_id) REFERENCES orocrm_magento_customer (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_order ADD CONSTRAINT FK_4D09F305B092A811 FOREIGN KEY (store_id) REFERENCES orocrm_magento_store (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_order_address ADD CONSTRAINT FK_E31C6DECAEB327AF FOREIGN KEY (region_code) REFERENCES oro_dictionary_region (combined_code)",
-            "ALTER TABLE orocrm_magento_order_address ADD CONSTRAINT FK_E31C6DEC7E3C61F9 FOREIGN KEY (owner_id) REFERENCES orocrm_magento_order (id) ON DELETE CASCADE",
-            "ALTER TABLE orocrm_magento_order_address ADD CONSTRAINT FK_E31C6DECF026BB7C FOREIGN KEY (country_code) REFERENCES oro_dictionary_country (iso2_code)",
-            "ALTER TABLE orocrm_magento_order_address_to_address_type ADD CONSTRAINT FK_7B667960892CBB0E FOREIGN KEY (type_name) REFERENCES oro_address_type (name)",
-            "ALTER TABLE orocrm_magento_order_address_to_address_type ADD CONSTRAINT FK_7B667960466D5220 FOREIGN KEY (order_address_id) REFERENCES orocrm_magento_order_address (id) ON DELETE CASCADE",
-            "ALTER TABLE orocrm_magento_order_calls ADD CONSTRAINT FK_A885A3450A89B2C FOREIGN KEY (call_id) REFERENCES orocrm_call (id)",
-            "ALTER TABLE orocrm_magento_order_calls ADD CONSTRAINT FK_A885A348D9F6D38 FOREIGN KEY (order_id) REFERENCES orocrm_magento_order (id)",
-            "ALTER TABLE orocrm_magento_order_emails ADD CONSTRAINT FK_10E2A950A832C1C9 FOREIGN KEY (email_id) REFERENCES oro_email (id)",
-            "ALTER TABLE orocrm_magento_order_emails ADD CONSTRAINT FK_10E2A9508D9F6D38 FOREIGN KEY (order_id) REFERENCES orocrm_magento_order (id)",
-            "ALTER TABLE orocrm_magento_order_items ADD CONSTRAINT FK_3135EFF68D9F6D38 FOREIGN KEY (order_id) REFERENCES orocrm_magento_order (id) ON DELETE CASCADE",
-            "ALTER TABLE orocrm_magento_product ADD CONSTRAINT FK_5A17298272F5A1AA FOREIGN KEY (channel_id) REFERENCES oro_integration_channel (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_product_to_website ADD CONSTRAINT FK_3A3EF49818F45C82 FOREIGN KEY (website_id) REFERENCES orocrm_magento_website (id) ON DELETE CASCADE",
-            "ALTER TABLE orocrm_magento_product_to_website ADD CONSTRAINT FK_3A3EF4984584665A FOREIGN KEY (product_id) REFERENCES orocrm_magento_product (id) ON DELETE CASCADE",
-            "ALTER TABLE orocrm_magento_store ADD CONSTRAINT FK_477738EA72F5A1AA FOREIGN KEY (channel_id) REFERENCES oro_integration_channel (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_magento_store ADD CONSTRAINT FK_477738EA18F45C82 FOREIGN KEY (website_id) REFERENCES orocrm_magento_website (id) ON DELETE CASCADE",
-            "ALTER TABLE orocrm_magento_website ADD CONSTRAINT FK_CE3270C872F5A1AA FOREIGN KEY (channel_id) REFERENCES oro_integration_channel (id) ON DELETE SET NULL"
-        ];
+        /** Generate table orocrm_magento_cart **/
+        $table = $schema->createTable('orocrm_magento_cart');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('channel_id', 'smallint', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('workflow_item_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('shipping_address_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('status_name', 'string', ['default' => null, 'notnull' => false, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('workflow_step_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('billing_address_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('customer_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('opportunity_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('store_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('items_qty', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('items_count', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('base_currency_code', 'string', ['default' => null, 'notnull' => true, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('store_currency_code', 'string', ['default' => null, 'notnull' => true, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('quote_currency_code', 'string', ['default' => null, 'notnull' => true, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('store_to_base_rate', 'float', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('store_to_quote_rate', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('email', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('gift_message', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('is_guest', 'boolean', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('payment_details', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('notes', 'text', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('sub_total', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('grand_total', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('tax_amount', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('createdAt', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('updatedAt', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('origin_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_96661A801023C4EE');
+        $table->addUniqueIndex(['origin_id', 'channel_id'], 'unq_origin_id_channel_id');
+        $table->addIndex(['customer_id'], 'IDX_96661A809395C3F3', []);
+        $table->addIndex(['store_id'], 'IDX_96661A80B092A811', []);
+        $table->addIndex(['shipping_address_id'], 'IDX_96661A804D4CFF2B', []);
+        $table->addIndex(['billing_address_id'], 'IDX_96661A8079D0C0E4', []);
+        $table->addIndex(['status_name'], 'IDX_96661A806625D392', []);
+        $table->addIndex(['opportunity_id'], 'IDX_96661A809A34590F', []);
+        $table->addIndex(['workflow_step_id'], 'IDX_96661A8071FE882C', []);
+        $table->addIndex(['channel_id'], 'IDX_96661A8072F5A1AA', []);
+        $table->addIndex(['origin_id'], 'magecart_origin_idx', []);
+        /** End of generate table orocrm_magento_cart **/
+
+        /** Generate table orocrm_magento_cart_address **/
+        $table = $schema->createTable('orocrm_magento_cart_address');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('region_code', 'string', ['default' => null, 'notnull' => false, 'length' => 16, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('country_code', 'string', ['default' => null, 'notnull' => false, 'length' => 2, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('label', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('street', 'string', ['default' => null, 'notnull' => true, 'length' => 500, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('street2', 'string', ['default' => null, 'notnull' => false, 'length' => 500, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('city', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('postal_code', 'string', ['default' => null, 'notnull' => true, 'length' => 20, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('organization', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('region_text', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name_prefix', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('first_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('middle_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('last_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name_suffix', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('created', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('updated', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('origin_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['country_code'], 'IDX_6978F651F026BB7C', []);
+        $table->addIndex(['region_code'], 'IDX_6978F651AEB327AF', []);
+        /** End of generate table orocrm_magento_cart_address **/
+
+        /** Generate table orocrm_magento_cart_calls **/
+        $table = $schema->createTable('orocrm_magento_cart_calls');
+        $table->addColumn('cart_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('call_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['cart_id', 'call_id']);
+        $table->addIndex(['cart_id'], 'IDX_83A847751AD5CDBF', []);
+        $table->addIndex(['call_id'], 'IDX_83A8477550A89B2C', []);
+        /** End of generate table orocrm_magento_cart_calls **/
+
+        /** Generate table orocrm_magento_cart_emails **/
+        $table = $schema->createTable('orocrm_magento_cart_emails');
+        $table->addColumn('cart_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('email_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['cart_id', 'email_id']);
+        $table->addIndex(['cart_id'], 'IDX_11B0F84B1AD5CDBF', []);
+        $table->addIndex(['email_id'], 'IDX_11B0F84BA832C1C9', []);
+        /** End of generate table orocrm_magento_cart_emails **/
+
+        /** Generate table orocrm_magento_cart_item **/
+        $table = $schema->createTable('orocrm_magento_cart_item');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('cart_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('product_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('parent_item_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('free_shipping', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('gift_message', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('tax_class_id', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('description', 'text', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('is_virtual', 'boolean', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('custom_price', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('price_incl_tax', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('row_total', 'float', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('tax_amount', 'float', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('product_type', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('sku', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('qty', 'float', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('price', 'float', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('discount_amount', 'float', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('tax_percent', 'float', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('weight', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('createdAt', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('updatedAt', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('origin_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['cart_id'], 'IDX_A73DC8621AD5CDBF', []);
+        $table->addIndex(['origin_id'], 'magecartitem_origin_idx', []);
+        $table->addIndex(['sku'], 'magecartitem_sku_idx', []);
+        /** End of generate table orocrm_magento_cart_item **/
+
+        /** Generate table orocrm_magento_cart_status **/
+        $table = $schema->createTable('orocrm_magento_cart_status');
+        $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('label', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['name']);
+        $table->addUniqueIndex(['label'], 'UNIQ_26317505EA750E8');
+        /** End of generate table orocrm_magento_cart_status **/
+
+        /** Generate table orocrm_magento_customer **/
+        $table = $schema->createTable('orocrm_magento_customer');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('channel_id', 'smallint', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('website_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('account_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('store_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('customer_group_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('contact_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name_prefix', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('first_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('middle_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('last_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name_suffix', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('gender', 'string', ['default' => null, 'notnull' => false, 'length' => 8, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('birthday', 'datetime', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('email', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('created_at', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('updated_at', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('is_active', 'boolean', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('vat', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('origin_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['origin_id', 'channel_id'], 'unq_origin_id_channel_id');
+        $table->addIndex(['website_id'], 'IDX_2A61EE7D18F45C82', []);
+        $table->addIndex(['store_id'], 'IDX_2A61EE7DB092A811', []);
+        $table->addIndex(['customer_group_id'], 'IDX_2A61EE7DD2919A68', []);
+        $table->addIndex(['contact_id'], 'IDX_2A61EE7DE7A1254A', []);
+        $table->addIndex(['account_id'], 'IDX_2A61EE7D9B6B5FBA', []);
+        $table->addIndex(['channel_id'], 'IDX_2A61EE7D72F5A1AA', []);
+        /** End of generate table orocrm_magento_customer **/
+
+        /** Generate table orocrm_magento_customer_address **/
+        $table = $schema->createTable('orocrm_magento_customer_address');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('region_code', 'string', ['default' => null, 'notnull' => false, 'length' => 16, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('owner_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('country_code', 'string', ['default' => null, 'notnull' => false, 'length' => 2, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('label', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('street', 'string', ['default' => null, 'notnull' => true, 'length' => 500, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('street2', 'string', ['default' => null, 'notnull' => false, 'length' => 500, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('city', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('postal_code', 'string', ['default' => null, 'notnull' => true, 'length' => 20, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('region_text', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name_prefix', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('first_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('middle_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('last_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name_suffix', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('is_primary', 'boolean', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('organization', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('created', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('updated', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('origin_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['owner_id'], 'IDX_55153CAD7E3C61F9', []);
+        $table->addIndex(['country_code'], 'IDX_55153CADF026BB7C', []);
+        $table->addIndex(['region_code'], 'IDX_55153CADAEB327AF', []);
+        /** End of generate table orocrm_magento_customer_address **/
+
+        /** Generate table orocrm_magento_customer_address_to_address_type **/
+        $table = $schema->createTable('orocrm_magento_customer_address_to_address_type');
+        $table->addColumn('customer_address_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('type_name', 'string', ['default' => null, 'notnull' => true, 'length' => 16, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['customer_address_id', 'type_name']);
+        $table->addIndex(['customer_address_id'], 'IDX_65B2C97487EABF7', []);
+        $table->addIndex(['type_name'], 'IDX_65B2C974892CBB0E', []);
+        /** End of generate table orocrm_magento_customer_address_to_address_type **/
+
+        /** Generate table orocrm_magento_customer_group **/
+        $table = $schema->createTable('orocrm_magento_customer_group');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('channel_id', 'smallint', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('origin_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['channel_id'], 'IDX_71E09CA872F5A1AA', []);
+        /** End of generate table orocrm_magento_customer_group **/
+
+        /** Generate table orocrm_magento_order **/
+        $table = $schema->createTable('orocrm_magento_order');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('channel_id', 'smallint', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('workflow_item_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('cart_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('workflow_step_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('customer_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('store_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('increment_id', 'string', ['default' => null, 'notnull' => true, 'length' => 60, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('is_virtual', 'boolean', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('is_guest', 'boolean', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('gift_message', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('remote_ip', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('store_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('total_paid_amount', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('total_invoiced_amount', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('total_refunded_amount', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('total_canceled_amount', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('notes', 'text', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('feedback', 'text', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('currency', 'string', ['default' => null, 'notnull' => false, 'length' => 10, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('payment_method', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('payment_details', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('subtotal_amount', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('shipping_amount', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('shipping_method', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('tax_amount', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('discount_amount', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('discount_percent', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('total_amount', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('status', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('created_at', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('updated_at', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['cart_id'], 'UNIQ_4D09F3051AD5CDBF');
+        $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_4D09F3051023C4EE');
+        $table->addUniqueIndex(['increment_id', 'channel_id'], 'unq_increment_id_channel_id');
+        $table->addIndex(['customer_id'], 'IDX_4D09F3059395C3F3', []);
+        $table->addIndex(['store_id'], 'IDX_4D09F305B092A811', []);
+        $table->addIndex(['workflow_step_id'], 'IDX_4D09F30571FE882C', []);
+        $table->addIndex(['channel_id'], 'IDX_4D09F30572F5A1AA', []);
+        /** End of generate table orocrm_magento_order **/
+
+        /** Generate table orocrm_magento_order_address **/
+        $table = $schema->createTable('orocrm_magento_order_address');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('region_code', 'string', ['default' => null, 'notnull' => false, 'length' => 16, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('owner_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('country_code', 'string', ['default' => null, 'notnull' => false, 'length' => 2, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('fax', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('phone', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('street', 'string', ['default' => null, 'notnull' => true, 'length' => 500, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('city', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('postal_code', 'string', ['default' => null, 'notnull' => true, 'length' => 20, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('organization', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('region_text', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('first_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('last_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['owner_id'], 'IDX_E31C6DEC7E3C61F9', []);
+        $table->addIndex(['country_code'], 'IDX_E31C6DECF026BB7C', []);
+        $table->addIndex(['region_code'], 'IDX_E31C6DECAEB327AF', []);
+        /** End of generate table orocrm_magento_order_address **/
+
+        /** Generate table orocrm_magento_order_address_to_address_type **/
+        $table = $schema->createTable('orocrm_magento_order_address_to_address_type');
+        $table->addColumn('order_address_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('type_name', 'string', ['default' => null, 'notnull' => true, 'length' => 16, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['order_address_id', 'type_name']);
+        $table->addIndex(['order_address_id'], 'IDX_7B667960466D5220', []);
+        $table->addIndex(['type_name'], 'IDX_7B667960892CBB0E', []);
+        /** End of generate table orocrm_magento_order_address_to_address_type **/
+
+        /** Generate table orocrm_magento_order_calls **/
+        $table = $schema->createTable('orocrm_magento_order_calls');
+        $table->addColumn('order_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('call_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['order_id', 'call_id']);
+        $table->addIndex(['order_id'], 'IDX_A885A348D9F6D38', []);
+        $table->addIndex(['call_id'], 'IDX_A885A3450A89B2C', []);
+        /** End of generate table orocrm_magento_order_calls **/
+
+        /** Generate table orocrm_magento_order_emails **/
+        $table = $schema->createTable('orocrm_magento_order_emails');
+        $table->addColumn('order_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('email_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['order_id', 'email_id']);
+        $table->addIndex(['order_id'], 'IDX_10E2A9508D9F6D38', []);
+        $table->addIndex(['email_id'], 'IDX_10E2A950A832C1C9', []);
+        /** End of generate table orocrm_magento_order_emails **/
+
+        /** Generate table orocrm_magento_order_items **/
+        $table = $schema->createTable('orocrm_magento_order_items');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('order_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('product_type', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('product_options', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('is_virtual', 'boolean', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('original_price', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('discount_percent', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('sku', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('qty', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('price', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('weight', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('tax_percent', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('tax_amount', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('discount_amount', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('row_total', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('origin_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['order_id'], 'IDX_3135EFF68D9F6D38', []);
+        /** End of generate table orocrm_magento_order_items **/
+
+        /** Generate table orocrm_magento_product **/
+        $table = $schema->createTable('orocrm_magento_product');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('channel_id', 'smallint', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('sku', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('type', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('special_price', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('price', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('created_at', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('updated_at', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('origin_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('cost', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['sku', 'channel_id'], 'unq_sku_channel_id');
+        $table->addIndex(['channel_id'], 'IDX_5A17298272F5A1AA', []);
+        /** End of generate table orocrm_magento_product **/
+
+        /** Generate table orocrm_magento_product_to_website **/
+        $table = $schema->createTable('orocrm_magento_product_to_website');
+        $table->addColumn('product_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('website_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['product_id', 'website_id']);
+        $table->addIndex(['product_id'], 'IDX_3A3EF4984584665A', []);
+        $table->addIndex(['website_id'], 'IDX_3A3EF49818F45C82', []);
+        /** End of generate table orocrm_magento_product_to_website **/
+
+        /** Generate table orocrm_magento_region **/
+        $table = $schema->createTable('orocrm_magento_region');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('combined_code', 'string', ['default' => null, 'notnull' => true, 'length' => 60, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('code', 'string', ['default' => null, 'notnull' => true, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('country_code', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('region_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['combined_code'], 'unq_code');
+        $table->addIndex(['region_id'], 'idx_region', []);
+        /** End of generate table orocrm_magento_region **/
+
+        /** Generate table orocrm_magento_store **/
+        $table = $schema->createTable('orocrm_magento_store');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('channel_id', 'smallint', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('website_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('store_code', 'string', ['default' => null, 'notnull' => true, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('store_name', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('origin_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['store_code', 'channel_id'], 'unq_code_channel_id');
+        $table->addIndex(['website_id'], 'IDX_477738EA18F45C82', []);
+        $table->addIndex(['channel_id'], 'IDX_477738EA72F5A1AA', []);
+        /** End of generate table orocrm_magento_store **/
+
+        /** Generate table orocrm_magento_website **/
+        $table = $schema->createTable('orocrm_magento_website');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('channel_id', 'smallint', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('website_code', 'string', ['default' => null, 'notnull' => true, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('website_name', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('origin_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => true, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['website_code', 'origin_id', 'channel_id'], 'unq_site_idx');
+        $table->addIndex(['channel_id'], 'IDX_CE3270C872F5A1AA', []);
+        /** End of generate table orocrm_magento_website **/
+
+        /** Generate foreign keys for table orocrm_magento_cart **/
+        $table = $schema->getTable('orocrm_magento_cart');
+        $table->addForeignKeyConstraint($schema->getTable('oro_integration_channel'), ['channel_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_workflow_item'), ['workflow_item_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_cart_address'), ['shipping_address_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_cart_status'), ['status_name'], ['name'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_workflow_step'), ['workflow_step_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_cart_address'), ['billing_address_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_customer'), ['customer_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_sales_opportunity'), ['opportunity_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_store'), ['store_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_cart **/
+
+        /** Generate foreign keys for table orocrm_magento_cart_address **/
+        $table = $schema->getTable('orocrm_magento_cart_address');
+        $table->addForeignKeyConstraint($schema->getTable('oro_dictionary_region'), ['region_code'], ['combined_code'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_dictionary_country'), ['country_code'], ['iso2_code'], ['onDelete' => null, 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_cart_address **/
+
+        /** Generate foreign keys for table orocrm_magento_cart_calls **/
+        $table = $schema->getTable('orocrm_magento_cart_calls');
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_call'), ['call_id'], ['id'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_cart'), ['cart_id'], ['id'], ['onDelete' => null, 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_cart_calls **/
+
+        /** Generate foreign keys for table orocrm_magento_cart_emails **/
+        $table = $schema->getTable('orocrm_magento_cart_emails');
+        $table->addForeignKeyConstraint($schema->getTable('oro_email'), ['email_id'], ['id'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_cart'), ['cart_id'], ['id'], ['onDelete' => null, 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_cart_emails **/
+
+        /** Generate foreign keys for table orocrm_magento_cart_item **/
+        $table = $schema->getTable('orocrm_magento_cart_item');
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_cart'), ['cart_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_cart_item **/
+
+        /** Generate foreign keys for table orocrm_magento_customer **/
+        $table = $schema->getTable('orocrm_magento_customer');
+        $table->addForeignKeyConstraint($schema->getTable('oro_integration_channel'), ['channel_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_website'), ['website_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_account'), ['account_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_store'), ['store_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_customer_group'), ['customer_group_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_contact'), ['contact_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_customer **/
+
+        /** Generate foreign keys for table orocrm_magento_customer_address **/
+        $table = $schema->getTable('orocrm_magento_customer_address');
+        $table->addForeignKeyConstraint($schema->getTable('oro_dictionary_region'), ['region_code'], ['combined_code'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_customer'), ['owner_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_dictionary_country'), ['country_code'], ['iso2_code'], ['onDelete' => null, 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_customer_address **/
+
+        /** Generate foreign keys for table orocrm_magento_customer_address_to_address_type **/
+        $table = $schema->getTable('orocrm_magento_customer_address_to_address_type');
+        $table->addForeignKeyConstraint($schema->getTable('oro_address_type'), ['type_name'], ['name'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_customer_address'), ['customer_address_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_customer_address_to_address_type **/
+
+        /** Generate foreign keys for table orocrm_magento_customer_group **/
+        $table = $schema->getTable('orocrm_magento_customer_group');
+        $table->addForeignKeyConstraint($schema->getTable('oro_integration_channel'), ['channel_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_customer_group **/
+
+        /** Generate foreign keys for table orocrm_magento_order **/
+        $table = $schema->getTable('orocrm_magento_order');
+        $table->addForeignKeyConstraint($schema->getTable('oro_integration_channel'), ['channel_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_workflow_item'), ['workflow_item_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_cart'), ['cart_id'], ['id'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_workflow_step'), ['workflow_step_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_customer'), ['customer_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_store'), ['store_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_order **/
+
+        /** Generate foreign keys for table orocrm_magento_order_address **/
+        $table = $schema->getTable('orocrm_magento_order_address');
+        $table->addForeignKeyConstraint($schema->getTable('oro_dictionary_region'), ['region_code'], ['combined_code'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_order'), ['owner_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_dictionary_country'), ['country_code'], ['iso2_code'], ['onDelete' => null, 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_order_address **/
+
+        /** Generate foreign keys for table orocrm_magento_order_address_to_address_type **/
+        $table = $schema->getTable('orocrm_magento_order_address_to_address_type');
+        $table->addForeignKeyConstraint($schema->getTable('oro_address_type'), ['type_name'], ['name'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_order_address'), ['order_address_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_order_address_to_address_type **/
+
+        /** Generate foreign keys for table orocrm_magento_order_calls **/
+        $table = $schema->getTable('orocrm_magento_order_calls');
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_call'), ['call_id'], ['id'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_order'), ['order_id'], ['id'], ['onDelete' => null, 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_order_calls **/
+
+        /** Generate foreign keys for table orocrm_magento_order_emails **/
+        $table = $schema->getTable('orocrm_magento_order_emails');
+        $table->addForeignKeyConstraint($schema->getTable('oro_email'), ['email_id'], ['id'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_order'), ['order_id'], ['id'], ['onDelete' => null, 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_order_emails **/
+
+        /** Generate foreign keys for table orocrm_magento_order_items **/
+        $table = $schema->getTable('orocrm_magento_order_items');
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_order'), ['order_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_order_items **/
+
+        /** Generate foreign keys for table orocrm_magento_product **/
+        $table = $schema->getTable('orocrm_magento_product');
+        $table->addForeignKeyConstraint($schema->getTable('oro_integration_channel'), ['channel_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_product **/
+
+        /** Generate foreign keys for table orocrm_magento_product_to_website **/
+        $table = $schema->getTable('orocrm_magento_product_to_website');
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_website'), ['website_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_product'), ['product_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_product_to_website **/
+
+        /** Generate foreign keys for table orocrm_magento_store **/
+        $table = $schema->getTable('orocrm_magento_store');
+        $table->addForeignKeyConstraint($schema->getTable('oro_integration_channel'), ['channel_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_website'), ['website_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_store **/
+
+        /** Generate foreign keys for table orocrm_magento_website **/
+        $table = $schema->getTable('orocrm_magento_website');
+        $table->addForeignKeyConstraint($schema->getTable('oro_integration_channel'), ['channel_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_magento_website **/
+
+        // @codingStandardsIgnoreEnd
+
+        return [];
     }
 }

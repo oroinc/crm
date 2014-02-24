@@ -57,5 +57,7 @@ class OroCRMAccountBundle implements Migration
         /** End of generate foreign keys for table orocrm_account_to_contact **/
 
         // @codingStandardsIgnoreEnd
+
+        return [];
     }
 }

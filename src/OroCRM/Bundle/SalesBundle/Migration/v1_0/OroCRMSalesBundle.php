@@ -9,31 +9,158 @@ class OroCRMSalesBundle implements Migration
 {
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function up(Schema $schema)
     {
-        return [
-            "CREATE TABLE orocrm_sales_lead (id INT AUTO_INCREMENT NOT NULL, workflow_step_id INT DEFAULT NULL, workflow_item_id INT DEFAULT NULL, status_name VARCHAR(32) DEFAULT NULL, account_id INT DEFAULT NULL, user_owner_id INT DEFAULT NULL, contact_id INT DEFAULT NULL, address_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, name_prefix VARCHAR(255) DEFAULT NULL, first_name VARCHAR(255) NOT NULL, middle_name VARCHAR(255) DEFAULT NULL, last_name VARCHAR(255) NOT NULL, name_suffix VARCHAR(255) DEFAULT NULL, job_title VARCHAR(255) DEFAULT NULL, phone_number VARCHAR(255) DEFAULT NULL, email VARCHAR(255) DEFAULT NULL, company_name VARCHAR(255) DEFAULT NULL, website VARCHAR(255) DEFAULT NULL, number_of_employees INT DEFAULT NULL, industry VARCHAR(255) DEFAULT NULL, createdAt DATETIME NOT NULL, updatedAt DATETIME DEFAULT NULL, notes LONGTEXT DEFAULT NULL, UNIQUE INDEX UNIQ_73DB46331023C4EE (workflow_item_id), INDEX IDX_73DB46336625D392 (status_name), INDEX IDX_73DB4633E7A1254A (contact_id), INDEX IDX_73DB46339B6B5FBA (account_id), INDEX IDX_73DB4633F5B7AF75 (address_id), INDEX IDX_73DB46339EB185F9 (user_owner_id), INDEX IDX_73DB463371FE882C (workflow_step_id), PRIMARY KEY(id))",
-            "CREATE TABLE orocrm_sales_lead_status (name VARCHAR(32) NOT NULL, `label` VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_4516951BEA750E8 (`label`), PRIMARY KEY(name))",
-            "CREATE TABLE orocrm_sales_opportunity (id INT AUTO_INCREMENT NOT NULL, workflow_step_id INT DEFAULT NULL, workflow_item_id INT DEFAULT NULL, lead_id INT DEFAULT NULL, status_name VARCHAR(32) DEFAULT NULL, account_id INT DEFAULT NULL, user_owner_id INT DEFAULT NULL, close_reason_name VARCHAR(32) DEFAULT NULL, contact_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, close_date DATE DEFAULT NULL, probability DOUBLE PRECISION DEFAULT NULL, budget_amount DOUBLE PRECISION DEFAULT NULL, close_revenue DOUBLE PRECISION DEFAULT NULL, customer_need VARCHAR(255) DEFAULT NULL, proposed_solution VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, notes LONGTEXT DEFAULT NULL, UNIQUE INDEX UNIQ_C0FE4AAC1023C4EE (workflow_item_id), INDEX IDX_C0FE4AAC6625D392 (status_name), INDEX IDX_C0FE4AACD81B931C (close_reason_name), INDEX IDX_C0FE4AACE7A1254A (contact_id), INDEX IDX_C0FE4AAC9B6B5FBA (account_id), INDEX IDX_C0FE4AAC55458D (lead_id), INDEX IDX_C0FE4AAC9EB185F9 (user_owner_id), INDEX IDX_C0FE4AAC71FE882C (workflow_step_id), PRIMARY KEY(id))",
-            "CREATE TABLE orocrm_sales_opportunity_close_reason (name VARCHAR(32) NOT NULL, `label` VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_FA526A41EA750E8 (`label`), PRIMARY KEY(name))",
-            "CREATE TABLE orocrm_sales_opportunity_status (name VARCHAR(32) NOT NULL, `label` VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_2DB212B5EA750E8 (`label`), PRIMARY KEY(name))",
+        // @codingStandardsIgnoreStart
 
-            "ALTER TABLE orocrm_sales_lead ADD CONSTRAINT FK_73DB463371FE882C FOREIGN KEY (workflow_step_id) REFERENCES oro_workflow_step (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_sales_lead ADD CONSTRAINT FK_73DB46331023C4EE FOREIGN KEY (workflow_item_id) REFERENCES oro_workflow_item (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_sales_lead ADD CONSTRAINT FK_73DB46336625D392 FOREIGN KEY (status_name) REFERENCES orocrm_sales_lead_status (name)",
-            "ALTER TABLE orocrm_sales_lead ADD CONSTRAINT FK_73DB46339B6B5FBA FOREIGN KEY (account_id) REFERENCES orocrm_account (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_sales_lead ADD CONSTRAINT FK_73DB46339EB185F9 FOREIGN KEY (user_owner_id) REFERENCES oro_user (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_sales_lead ADD CONSTRAINT FK_73DB4633E7A1254A FOREIGN KEY (contact_id) REFERENCES orocrm_contact (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_sales_lead ADD CONSTRAINT FK_73DB4633F5B7AF75 FOREIGN KEY (address_id) REFERENCES oro_address (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_sales_opportunity ADD CONSTRAINT FK_C0FE4AAC71FE882C FOREIGN KEY (workflow_step_id) REFERENCES oro_workflow_step (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_sales_opportunity ADD CONSTRAINT FK_C0FE4AAC1023C4EE FOREIGN KEY (workflow_item_id) REFERENCES oro_workflow_item (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_sales_opportunity ADD CONSTRAINT FK_C0FE4AAC55458D FOREIGN KEY (lead_id) REFERENCES orocrm_sales_lead (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_sales_opportunity ADD CONSTRAINT FK_C0FE4AAC6625D392 FOREIGN KEY (status_name) REFERENCES orocrm_sales_opportunity_status (name)",
-            "ALTER TABLE orocrm_sales_opportunity ADD CONSTRAINT FK_C0FE4AAC9B6B5FBA FOREIGN KEY (account_id) REFERENCES orocrm_account (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_sales_opportunity ADD CONSTRAINT FK_C0FE4AAC9EB185F9 FOREIGN KEY (user_owner_id) REFERENCES oro_user (id) ON DELETE SET NULL",
-            "ALTER TABLE orocrm_sales_opportunity ADD CONSTRAINT FK_C0FE4AACD81B931C FOREIGN KEY (close_reason_name) REFERENCES orocrm_sales_opportunity_close_reason (name)",
-            "ALTER TABLE orocrm_sales_opportunity ADD CONSTRAINT FK_C0FE4AACE7A1254A FOREIGN KEY (contact_id) REFERENCES orocrm_contact (id) ON DELETE SET NULL"
-        ];
+        /** Generate table orocrm_sales_lead **/
+        $table = $schema->createTable('orocrm_sales_lead');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('workflow_step_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('workflow_item_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('status_name', 'string', ['default' => null, 'notnull' => false, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('account_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('user_owner_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('contact_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('address_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name_prefix', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('first_name', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('middle_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('last_name', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name_suffix', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('job_title', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('phone_number', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('email', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('company_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('website', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('number_of_employees', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('industry', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('createdAt', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('updatedAt', 'datetime', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('notes', 'text', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_73DB46331023C4EE');
+        $table->addIndex(['status_name'], 'IDX_73DB46336625D392', []);
+        $table->addIndex(['contact_id'], 'IDX_73DB4633E7A1254A', []);
+        $table->addIndex(['account_id'], 'IDX_73DB46339B6B5FBA', []);
+        $table->addIndex(['address_id'], 'IDX_73DB4633F5B7AF75', []);
+        $table->addIndex(['user_owner_id'], 'IDX_73DB46339EB185F9', []);
+        $table->addIndex(['workflow_step_id'], 'IDX_73DB463371FE882C', []);
+        /** End of generate table orocrm_sales_lead **/
+
+        /** Generate table orocrm_sales_lead_status **/
+        $table = $schema->createTable('orocrm_sales_lead_status');
+        $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('label', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['name']);
+        $table->addUniqueIndex(['label'], 'UNIQ_4516951BEA750E8');
+        /** End of generate table orocrm_sales_lead_status **/
+
+        /** Generate table orocrm_sales_opportunity **/
+        $table = $schema->createTable('orocrm_sales_opportunity');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('workflow_step_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('workflow_item_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('lead_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('status_name', 'string', ['default' => null, 'notnull' => false, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('account_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('user_owner_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('close_reason_name', 'string', ['default' => null, 'notnull' => false, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('contact_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('close_date', 'date', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('probability', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('budget_amount', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('close_revenue', 'float', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('customer_need', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('proposed_solution', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('created_at', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('updated_at', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('notes', 'text', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_C0FE4AAC1023C4EE');
+        $table->addIndex(['status_name'], 'IDX_C0FE4AAC6625D392', []);
+        $table->addIndex(['close_reason_name'], 'IDX_C0FE4AACD81B931C', []);
+        $table->addIndex(['contact_id'], 'IDX_C0FE4AACE7A1254A', []);
+        $table->addIndex(['account_id'], 'IDX_C0FE4AAC9B6B5FBA', []);
+        $table->addIndex(['lead_id'], 'IDX_C0FE4AAC55458D', []);
+        $table->addIndex(['user_owner_id'], 'IDX_C0FE4AAC9EB185F9', []);
+        $table->addIndex(['workflow_step_id'], 'IDX_C0FE4AAC71FE882C', []);
+        /** End of generate table orocrm_sales_opportunity **/
+
+        /** Generate table orocrm_sales_opportunity_close_reason **/
+        $table = $schema->createTable('orocrm_sales_opportunity_close_reason');
+        $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('label', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['name']);
+        $table->addUniqueIndex(['label'], 'UNIQ_FA526A41EA750E8');
+        /** End of generate table orocrm_sales_opportunity_close_reason **/
+
+        /** Generate table orocrm_sales_opportunity_status **/
+        $table = $schema->createTable('orocrm_sales_opportunity_status');
+        $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('label', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['name']);
+        $table->addUniqueIndex(['label'], 'UNIQ_2DB212B5EA750E8');
+        /** End of generate table orocrm_sales_opportunity_status **/
+
+        /** Generate table orocrm_sales_funnel **/
+        $table = $schema->createTable('orocrm_sales_funnel');
+        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
+        $table->addColumn('workflow_step_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('workflow_item_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('lead_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('opportunity_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('user_owner_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('startDate', 'date', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('createdAt', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('updatedAt', 'datetime', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_E20C73441023C4EE');
+        $table->addIndex(['user_owner_id'], 'IDX_E20C73449EB185F9', []);
+        $table->addIndex(['lead_id'], 'IDX_E20C734455458D', []);
+        $table->addIndex(['opportunity_id'], 'IDX_E20C73449A34590F', []);
+        $table->addIndex(['workflow_step_id'], 'IDX_E20C734471FE882C', []);
+        /** End of generate table orocrm_sales_funnel **/
+
+        /** Generate foreign keys for table orocrm_sales_lead **/
+        $table = $schema->getTable('orocrm_sales_lead');
+        $table->addForeignKeyConstraint($schema->getTable('oro_workflow_step'), ['workflow_step_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_workflow_item'), ['workflow_item_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_sales_lead_status'), ['status_name'], ['name'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_account'), ['account_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_user'), ['user_owner_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_contact'), ['contact_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_address'), ['address_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_sales_lead **/
+
+        /** Generate foreign keys for table orocrm_sales_opportunity **/
+        $table = $schema->getTable('orocrm_sales_opportunity');
+        $table->addForeignKeyConstraint($schema->getTable('oro_workflow_step'), ['workflow_step_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_workflow_item'), ['workflow_item_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_sales_lead'), ['lead_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_sales_opportunity_status'), ['status_name'], ['name'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_account'), ['account_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_user'), ['user_owner_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_sales_opportunity_close_reason'), ['close_reason_name'], ['name'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_contact'), ['contact_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_sales_opportunity **/
+
+        /** Generate foreign keys for table orocrm_sales_funnel **/
+        $table = $schema->getTable('orocrm_sales_funnel');
+        $table->addForeignKeyConstraint($schema->getTable('oro_workflow_step'), ['workflow_step_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_workflow_item'), ['workflow_item_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_sales_lead'), ['lead_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_sales_opportunity'), ['opportunity_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_user'), ['user_owner_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        /** End of generate foreign keys for table orocrm_sales_funnel **/
+
+        // @codingStandardsIgnoreEnd
+
+        return [];
     }
 }

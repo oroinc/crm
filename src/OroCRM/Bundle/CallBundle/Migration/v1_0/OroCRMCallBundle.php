@@ -65,5 +65,7 @@ class OroCRMCallBundle implements Migration
         /** End of generate foreign keys for table orocrm_call **/
 
         // @codingStandardsIgnoreEnd
+
+        return [];
     }
 }
