@@ -3,14 +3,17 @@
 namespace OroCRM\Bundle\AccountBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class AccountController extends Controller
 {
@@ -210,5 +213,21 @@ class AccountController extends Controller
     public function ordersAction(Account $account)
     {
         return array('entity' => $account);
+    }
+
+    /**
+     * @Route("/widget/emails", name="orocrm_account_widget_emails", requirements={"id"="\d+"})
+     * @Template()
+     * @AclAncestor("oro_email_view")
+     *
+     * @param Request $request
+     *
+     * @return array
+     */
+    public function emailsAction(Request $request)
+    {
+        return [
+            'datagridParameters' => $request->query->all()
+        ];
     }
 }

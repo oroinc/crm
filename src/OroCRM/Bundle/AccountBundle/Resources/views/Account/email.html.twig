@@ -1,0 +1,23 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import 'OroUIBundle:Js:macros.html.twig' as JS %}
+
+{% if resource_granted('oro_email_create') %}
+    {% if entity.defaultContact is not empty %}
+        {% set title = 'Send'|trans ~ ' ' ~ 'oro.email.entity_label'|trans|lower %}
+
+        {{ JS.popupWidget({
+            'class': 'view-email-button',
+            'title' : title,
+            'multiple': true
+        }) }}
+
+        {{ UI.dropdownClientButton({
+            'dataUrl': path('orocrm_contact_email_create', { 'contactId': entity.defaultContact.id }) ,
+            'aCss': 'no-hash view-email-button',
+            'iCss': 'icon-envelope',
+            'dataId': entity.defaultContact.id,
+            'title' : title,
+            'label' : title
+        }) }}
+    {% endif %}
+{% endif %}

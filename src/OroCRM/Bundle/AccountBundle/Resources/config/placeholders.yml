@@ -1,0 +1,8 @@
+placeholders:
+    orocrm_account_action_dropdown:
+        items:
+            orocrm_account_action_dropdown_add_email: ~
+
+items:
+    orocrm_account_action_dropdown_add_email:
+        template: OroCRMAccountBundle:Account:email.html.twig
