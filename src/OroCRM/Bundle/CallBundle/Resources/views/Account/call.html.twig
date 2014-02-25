@@ -1,22 +1,30 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
-{% import 'OroUIBundle:Js:macros.html.twig' as JS %}
 
 {% if resource_granted('orocrm_call_create') %}
     {% set title = 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower %}
 
-    {{ JS.popupWidget({
-        'class': 'log-call-button',
-        'event': 'contactCallLogged',
-        'widgetAlias': 'contact_calls',
-        'title' : title,
-    }) }}
-
     {{ UI.dropdownClientButton({
         'dataUrl': path('orocrm_call_create', {'accountId': entity.id}),
-        'aCss': 'no-hash log-call-button',
+        'aCss': 'no-hash',
         'iCss': 'icon-phone',
         'dataId': entity.id,
         'title' : title,
-        'label' : title
+        'label' : title,
+        'widget' : {
+            'type' : 'dialog',
+            'multiple' : false,
+            'reload-widget-alias' : 'contact_calls',
+            'reload-widget-event' : 'contactCallLogged',
+            'options' : {
+                'dialogOptions' : {
+                    'title' : title,
+                    'allowMaximize': true,
+                    'allowMinimize': true,
+                    'dblclick': 'maximize',
+                    'maximizedHeightDecreaseBy': 'minimize-bar',
+                    'width': 1000
+                }
+            }
+        },
     }) }}
 {% endif %}
