@@ -422,7 +422,7 @@ class LoadDemoMagentoData extends AbstractFixture implements DependentFixtureInt
             $dictionary = array();
             $fileName   = __DIR__
                 . DIRECTORY_SEPARATOR
-                . '../../../../../../DemoDataBundle/Migrations/DataFixtures/Demo/ORM/v1_0/dictionaries' .
+                . '../../../../../DemoDataBundle/Migrations/DataFixtures/Demo/ORM/dictionaries' .
                 DIRECTORY_SEPARATOR . $name;
             foreach (file($fileName) as $item) {
                 $dictionary[] = trim($item);
