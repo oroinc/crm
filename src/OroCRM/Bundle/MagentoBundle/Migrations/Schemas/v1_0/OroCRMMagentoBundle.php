@@ -286,14 +286,14 @@ class OroCRMMagentoBundle implements Migration
         $table->addIndex(['region_code'], 'IDX_E31C6DECAEB327AF', []);
         /** End of generate table orocrm_magento_order_address **/
 
-        /** Generate table orocrm_magento_order_address_to_address_type **/
-        $table = $schema->createTable('orocrm_magento_order_address_to_address_type');
+        /** Generate table orocrm_magento_order_addr_type **/
+        $table = $schema->createTable('orocrm_magento_order_addr_type');
         $table->addColumn('order_address_id', 'integer', []);
         $table->addColumn('type_name', 'string', ['length' => 16]);
         $table->setPrimaryKey(['order_address_id', 'type_name']);
         $table->addIndex(['order_address_id'], 'IDX_7B667960466D5220', []);
         $table->addIndex(['type_name'], 'IDX_7B667960892CBB0E', []);
-        /** End of generate table orocrm_magento_order_address_to_address_type **/
+        /** End of generate table orocrm_magento_order_addr_type **/
 
         /** Generate table orocrm_magento_order_calls **/
         $table = $schema->createTable('orocrm_magento_order_calls');
@@ -483,11 +483,11 @@ class OroCRMMagentoBundle implements Migration
         $table->addForeignKeyConstraint($schema->getTable('oro_dictionary_country'), ['country_code'], ['iso2_code'], ['onDelete' => null, 'onUpdate' => null]);
         /** End of generate foreign keys for table orocrm_magento_order_address **/
 
-        /** Generate foreign keys for table orocrm_magento_order_address_to_address_type **/
-        $table = $schema->getTable('orocrm_magento_order_address_to_address_type');
+        /** Generate foreign keys for table orocrm_magento_order_addr_type **/
+        $table = $schema->getTable('orocrm_magento_order_addr_type');
         $table->addForeignKeyConstraint($schema->getTable('oro_address_type'), ['type_name'], ['name'], ['onDelete' => null, 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('orocrm_magento_order_address'), ['order_address_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
-        /** End of generate foreign keys for table orocrm_magento_order_address_to_address_type **/
+        /** End of generate foreign keys for table orocrm_magento_order_addr_type **/
 
         /** Generate foreign keys for table orocrm_magento_order_calls **/
         $table = $schema->getTable('orocrm_magento_order_calls');
