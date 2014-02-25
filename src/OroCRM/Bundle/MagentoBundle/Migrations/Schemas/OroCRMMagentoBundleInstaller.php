@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: alex
- * Date: 2/25/14
- * Time: 3:51 PM
- */
 
 namespace OroCRM\Bundle\MagentoBundle\Migrations\Schemas;
-
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\InstallerBundle\Migrations\Installation;
