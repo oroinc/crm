@@ -371,7 +371,7 @@ workflows:
                                     - Range:
                                         min: 0
                         probability:
-                            form_type: percent
+                            form_type: oro_percent
                             options:
                                 required: false
                                 constraints:
@@ -943,7 +943,7 @@ workflows:
                                     - Range:
                                         min: 0
                         probability:
-                            form_type: percent
+                            form_type: oro_percent
                             options:
                                 required: false
                                 constraints:
