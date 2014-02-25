@@ -16,30 +16,30 @@ class OroCRMContactUsBundle implements Migration
         // @codingStandardsIgnoreStart
         /** Generate table orocrm_contactus_contact_reason **/
         $table = $schema->createTable('orocrm_contactus_contact_reason');
-        $table->addColumn('id', 'smallint', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
-        $table->addColumn('label', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('id', 'smallint', ['autoincrement' => true]);
+        $table->addColumn('label', 'string', ['length' => 255]);
         $table->setPrimaryKey(['id']);
         /** End of generate table orocrm_contactus_contact_reason **/
 
         /** Generate table orocrm_contactus_request **/
         $table = $schema->createTable('orocrm_contactus_request');
-        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
-        $table->addColumn('channel_id', 'smallint', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('workflow_item_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('contact_reason_id', 'smallint', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('lead_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('workflow_step_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('opportunity_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('organization_name', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('preferred_contact_method', 'string', ['default' => null, 'notnull' => true, 'length' => 100, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('feedback', 'text', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('first_name', 'string', ['default' => null, 'notnull' => true, 'length' => 100, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('last_name', 'string', ['default' => null, 'notnull' => true, 'length' => 100, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('email_address', 'string', ['default' => null, 'notnull' => false, 'length' => 100, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('phone', 'string', ['default' => null, 'notnull' => false, 'length' => 100, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('comment', 'text', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('created_at', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('updated_at', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
+        $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
+        $table->addColumn('contact_reason_id', 'smallint', ['notnull' => false]);
+        $table->addColumn('lead_id', 'integer', ['notnull' => false]);
+        $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
+        $table->addColumn('opportunity_id', 'integer', ['notnull' => false]);
+        $table->addColumn('organization_name', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('preferred_contact_method', 'string', ['length' => 100]);
+        $table->addColumn('feedback', 'text', ['notnull' => false]);
+        $table->addColumn('first_name', 'string', ['length' => 100]);
+        $table->addColumn('last_name', 'string', ['length' => 100]);
+        $table->addColumn('email_address', 'string', ['notnull' => false, 'length' => 100]);
+        $table->addColumn('phone', 'string', ['notnull' => false, 'length' => 100]);
+        $table->addColumn('comment', 'text', []);
+        $table->addColumn('created_at', 'datetime', []);
+        $table->addColumn('updated_at', 'datetime', []);
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_342872E81023C4EE');
         $table->addIndex(['contact_reason_id'], 'IDX_342872E8374A36E9', []);
@@ -51,8 +51,8 @@ class OroCRMContactUsBundle implements Migration
 
         /** Generate table orocrm_contactus_request_calls **/
         $table = $schema->createTable('orocrm_contactus_request_calls');
-        $table->addColumn('request_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('call_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('request_id', 'integer', []);
+        $table->addColumn('call_id', 'integer', []);
         $table->setPrimaryKey(['request_id', 'call_id']);
         $table->addIndex(['request_id'], 'IDX_6F7A50CE427EB8A5', []);
         $table->addIndex(['call_id'], 'IDX_6F7A50CE50A89B2C', []);
@@ -60,8 +60,8 @@ class OroCRMContactUsBundle implements Migration
 
         /** Generate table orocrm_contactus_request_emails **/
         $table = $schema->createTable('orocrm_contactus_request_emails');
-        $table->addColumn('request_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('email_id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('request_id', 'integer', []);
+        $table->addColumn('email_id', 'integer', []);
         $table->setPrimaryKey(['request_id', 'email_id']);
         $table->addIndex(['request_id'], 'IDX_4DEF4058427EB8A5', []);
         $table->addIndex(['email_id'], 'IDX_4DEF4058A832C1C9', []);
