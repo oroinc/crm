@@ -17,18 +17,18 @@ class OroCRMCallBundle implements Migration
 
         /** Generate table orocrm_call **/
         $table = $schema->createTable('orocrm_call');
-        $table->addColumn('id', 'integer', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => true, 'comment' => '']);
-        $table->addColumn('call_direction_name', 'string', ['default' => null, 'notnull' => false, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('related_account_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('related_contact_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('call_status_name', 'string', ['default' => null, 'notnull' => false, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('owner_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('contact_phone_id', 'integer', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('subject', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('phone_number', 'string', ['default' => null, 'notnull' => false, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('notes', 'text', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('call_date_time', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('duration', 'time', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('call_direction_name', 'string', ['notnull' => false, 'length' => 32]);
+        $table->addColumn('related_account_id', 'integer', ['notnull' => false]);
+        $table->addColumn('related_contact_id', 'integer', ['notnull' => false]);
+        $table->addColumn('call_status_name', 'string', ['notnull' => false, 'length' => 32]);
+        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
+        $table->addColumn('contact_phone_id', 'integer', ['notnull' => false]);
+        $table->addColumn('subject', 'string', ['length' => 255]);
+        $table->addColumn('phone_number', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('notes', 'text', ['notnull' => false]);
+        $table->addColumn('call_date_time', 'datetime', []);
+        $table->addColumn('duration', 'time', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['owner_id'], 'IDX_1FBD1A247E3C61F9', []);
         $table->addIndex(['related_contact_id'], 'IDX_1FBD1A246D6C2DFA', []);
@@ -40,16 +40,16 @@ class OroCRMCallBundle implements Migration
 
         /** Generate table orocrm_call_direction **/
         $table = $schema->createTable('orocrm_call_direction');
-        $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('label', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name', 'string', ['length' => 32]);
+        $table->addColumn('label', 'string', ['length' => 255]);
         $table->setPrimaryKey(['name']);
         $table->addUniqueIndex(['label'], 'UNIQ_D0EB34BAEA750E8');
         /** End of generate table orocrm_call_direction **/
 
         /** Generate table orocrm_call_status **/
         $table = $schema->createTable('orocrm_call_status');
-        $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
-        $table->addColumn('label', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn('name', 'string', ['length' => 32]);
+        $table->addColumn('label', 'string', ['length' => 255]);
         $table->setPrimaryKey(['name']);
         $table->addUniqueIndex(['label'], 'UNIQ_FBA13581EA750E8');
         /** End of generate table orocrm_call_status **/
