@@ -14,6 +14,8 @@ orocrm:
     account:
         placeholdes:
             actions: Account actions
+        dataBlocks:
+            activity: Activity
         form:
             choose_account: Choose an account...
             select_contacts: Select contacts
