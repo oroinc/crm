@@ -1,12 +1,20 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schemas\v1_0;
+namespace OroCRM\Bundle\SalesBundle\Migrations\Schemas;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\InstallerBundle\Migrations\Migration;
+use Oro\Bundle\InstallerBundle\Migrations\Installation;
 
-class OroCRMSalesBundle implements Migration
+class OroCRMSalesBundleInstaller implements Installation
 {
+    /**
+     * @inheritdoc
+     */
+    public function getMigrationVersion()
+    {
+        return 'v1_1';
+    }
+
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -91,21 +99,21 @@ class OroCRMSalesBundle implements Migration
         $table->addIndex(['workflow_step_id'], 'IDX_C0FE4AAC71FE882C', []);
         /** End of generate table orocrm_sales_opportunity **/
 
-        /** Generate table orocrm_sales_opportunity_close_reason **/
-        $table = $schema->createTable('orocrm_sales_opportunity_close_reason');
+        /** Generate table orocrm_sales_opportunity_close **/
+        $table = $schema->createTable('orocrm_sales_opportunity_close');
         $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->addColumn('label', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->setPrimaryKey(['name']);
         $table->addUniqueIndex(['label'], 'UNIQ_FA526A41EA750E8');
-        /** End of generate table orocrm_sales_opportunity_close_reason **/
+        /** End of generate table orocrm_sales_opportunity_close **/
 
-        /** Generate table orocrm_sales_opportunity_status **/
-        $table = $schema->createTable('orocrm_sales_opportunity_status');
+        /** Generate table orocrm_sales_opportunity_stat **/
+        $table = $schema->createTable('orocrm_sales_opportunity_stat');
         $table->addColumn('name', 'string', ['default' => null, 'notnull' => true, 'length' => 32, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->addColumn('label', 'string', ['default' => null, 'notnull' => true, 'length' => 255, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->setPrimaryKey(['name']);
         $table->addUniqueIndex(['label'], 'UNIQ_2DB212B5EA750E8');
-        /** End of generate table orocrm_sales_opportunity_status **/
+        /** End of generate table orocrm_sales_opportunity_stat **/
 
         /** Generate table orocrm_sales_funnel **/
         $table = $schema->createTable('orocrm_sales_funnel');
@@ -143,10 +151,10 @@ class OroCRMSalesBundle implements Migration
         $table->addForeignKeyConstraint($schema->getTable('oro_workflow_step'), ['workflow_step_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('oro_workflow_item'), ['workflow_item_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('orocrm_sales_lead'), ['lead_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
-        $table->addForeignKeyConstraint($schema->getTable('orocrm_sales_opportunity_status'), ['status_name'], ['name'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_sales_opportunity_stat'), ['status_name'], ['name'], ['onDelete' => null, 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('orocrm_account'), ['account_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('oro_user'), ['user_owner_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
-        $table->addForeignKeyConstraint($schema->getTable('orocrm_sales_opportunity_close_reason'), ['close_reason_name'], ['name'], ['onDelete' => null, 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_sales_opportunity_close'), ['close_reason_name'], ['name'], ['onDelete' => null, 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('orocrm_contact'), ['contact_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
         /** End of generate foreign keys for table orocrm_sales_opportunity **/
 
