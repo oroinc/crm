@@ -33,7 +33,11 @@ class RestCallsTest extends WebTestCase
                 "callStatus" => 'completed'
             )
         );
-        $this->client->request('POST', $this->client->generate('oro_api_post_call'), $request);
+        $this->client->request(
+            'POST',
+            $this->client->generate('oro_api_post_call'),
+            $request
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 201);
 
@@ -51,7 +55,10 @@ class RestCallsTest extends WebTestCase
      */
     public function testGet($request)
     {
-        $this->client->request('GET', $this->client->generate('oro_api_get_calls'));
+        $this->client->request(
+            'GET',
+            $this->client->generate('oro_api_get_calls')
+        );
         $result = $this->client->getResponse();
         $result = ToolsAPI::jsonToArray($result->getContent());
         $id = $request['id'];
@@ -65,7 +72,10 @@ class RestCallsTest extends WebTestCase
         $this->assertNotEmpty($result);
         $this->assertEquals($request['call']['subject'], reset($result)['subject']);
 
-        $this->client->request('GET', $this->client->generate('oro_api_get_call', array('id' => $id)));
+        $this->client->request(
+            'GET',
+            $this->client->generate('oro_api_get_call', array('id' => $id))
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
         $result = ToolsAPI::jsonToArray($result->getContent());
@@ -89,7 +99,10 @@ class RestCallsTest extends WebTestCase
 
         ToolsAPI::assertJsonResponse($result, 204);
 
-        $this->client->request('GET', $this->client->generate('oro_api_get_call', array('id' => $request['id'])));
+        $this->client->request(
+            'GET',
+            $this->client->generate('oro_api_get_call', array('id' => $request['id']))
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
@@ -112,7 +125,10 @@ class RestCallsTest extends WebTestCase
         );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
-        $this->client->request('GET', $this->client->generate('oro_api_get_call', array('id' => $request['id'])));
+        $this->client->request(
+            'GET',
+            $this->client->generate('oro_api_get_call', array('id' => $request['id']))
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 404);
     }

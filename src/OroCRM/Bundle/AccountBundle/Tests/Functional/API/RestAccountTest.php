@@ -28,7 +28,11 @@ class RestAccountTest extends WebTestCase
                 "owner" => '1',
             )
         );
-        $this->client->request('POST', $this->client->generate('oro_api_post_account'), $request);
+        $this->client->request(
+            'POST',
+            $this->client->generate('oro_api_post_account'),
+            $request
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 201);
         $result = ToolsAPI::jsonToArray($result->getContent());
@@ -45,7 +49,10 @@ class RestAccountTest extends WebTestCase
      */
     public function testGet($request)
     {
-        $this->client->request('GET', $this->client->generate('oro_api_get_accounts'));
+        $this->client->request(
+            'GET',
+            $this->client->generate('oro_api_get_accounts')
+        );
         $result = $this->client->getResponse();
         $result = ToolsAPI::jsonToArray($result->getContent());
         $id = $request['id'];
@@ -59,7 +66,10 @@ class RestAccountTest extends WebTestCase
         $this->assertNotEmpty($result);
         $this->assertEquals($request['account']['name'], reset($result)['name']);
 
-        $this->client->request('GET', $this->client->generate('oro_api_get_account', array('id' => $request['id'])));
+        $this->client->request(
+            'GET',
+            $this->client->generate('oro_api_get_account', array('id' => $request['id']))
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
@@ -84,7 +94,10 @@ class RestAccountTest extends WebTestCase
 
         ToolsAPI::assertJsonResponse($result, 204);
 
-        $this->client->request('GET', $this->client->generate('oro_api_get_account', array('id' => $request['id'])));
+        $this->client->request(
+            'GET',
+            $this->client->generate('oro_api_get_account', array('id' => $request['id']))
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 

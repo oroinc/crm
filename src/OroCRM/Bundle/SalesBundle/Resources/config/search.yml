@@ -81,3 +81,49 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
                     name: nameSuffix
                     target_type: text
                     target_fields: [nameSuffix]
+
+OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
+    alias:                          oro_crm_sales_funnel
+    title_fields:                   [name]
+    route:
+        name:                       orocrm_sales_salesfunnel_view
+        parameters:
+            id:                     id
+    search_template:                OroCRMSalesBundle:SalesFunnel:searchResult.html.twig
+    fields:
+        -
+            name:                   name
+            target_type:            text
+            target_fields:          [name]
+        -
+            name:                   lead
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name: namePrefix
+                    target_type: text
+                    target_fields: [namePrefix]
+                -
+                    name: firstName
+                    target_type: text
+                    target_fields: [firstName]
+                -
+                    name: middleName
+                    target_type: text
+                    target_fields: [middleName]
+                -
+                    name: lastName
+                    target_type: text
+                    target_fields: [lastName]
+                -
+                    name: nameSuffix
+                    target_type: text
+                    target_fields: [nameSuffix]
+        -
+            name:                   opportunity
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name: name
+                    target_type: text
+                    target_fields: [name]

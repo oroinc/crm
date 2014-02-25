@@ -1,0 +1,11 @@
+{% block form_row %}
+    {% spaceless %}
+        <div class="{% if attr.class is defined %} {{ attr.class }}{% endif %}{% if errors|length > 0 %} validation-error{% endif %}">
+            {% if label is not sameas(false) %}
+                {{ form_label(form, '' , { label_attr: label_attr }) }}
+            {% endif %}
+            {{ form_widget(form) }}
+            {{ form_errors(form) }}
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}

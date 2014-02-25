@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ReportBundle\Tests\Functional;
+namespace OroCRM\Bundle\ReportBundle\Tests\Functional;
 
 use Oro\Bundle\ReportBundle\Tests\Functional\ControllersTest as BaseControllersTest;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
@@ -28,6 +28,16 @@ class ControllersCrmTest extends BaseControllersTest
     }
 
     /**
+     * @param array $report
+     * @param array $reportResult
+     *
+     * @dataProvider requestsApi()
+     */
+    public function testExport($report, $reportResult)
+    {
+        $this->markTestSkipped("Skipped by BAP-2946");
+    }
+        /**
      * Data provider for SOAP API tests
      *
      * @return array

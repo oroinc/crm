@@ -2,7 +2,7 @@
     "name": "oro/crm",
     "description": "OroCRM",
     "homepage": "https://github.com/orocrm/crm.git",
-    "license": "The Open Software License version 3.0",
+    "license": "OSL-3.0",
     "authors": [
         {
             "name": "Oro, Inc",
@@ -16,7 +16,7 @@
     },
     "require": {
         "php": ">=5.4.4",
-        "oro/platform": "1.0.0-rc2"
+        "oro/platform": "1.0.0-rc3"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

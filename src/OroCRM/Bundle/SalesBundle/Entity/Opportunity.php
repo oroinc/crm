@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
@@ -23,6 +24,9 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  *  routeName="orocrm_sales_opportunity_index",
  *  routeView="orocrm_sales_opportunity_view",
  *  defaultValues={
+ *      "entity"={
+ *          "icon"="icon-usd"
+ *      },
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",
@@ -31,6 +35,9 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
+ *      },
+ *      "workflow"={
+ *          "active_workflow"="b2b_flow_sales"
  *      }
  *  }
  * )
@@ -498,16 +505,16 @@ class Opportunity extends ExtendOpportunity
     /**
      * @ORM\PrePersist
      */
-    public function prePersist()
+    public function beforeSave()
     {
         $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->preUpdate();
+        $this->beforeUpdate();
     }
 
     /**
      * @ORM\PreUpdate
      */
-    public function preUpdate()
+    public function beforeUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
@@ -547,5 +554,16 @@ class Opportunity extends ExtendOpportunity
     {
         $this->notes = $notes;
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist(LifecycleEventArgs $eventArgs)
+    {
+        $em = $eventArgs->getEntityManager();
+        /** @var LeadStatus $defaultStatus */
+        $defaultStatus   = $em->getReference('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
+        $this->setStatus($defaultStatus);
     }
 }

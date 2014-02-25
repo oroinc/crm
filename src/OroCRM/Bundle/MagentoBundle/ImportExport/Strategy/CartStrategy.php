@@ -5,8 +5,8 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 
 class CartStrategy extends BaseStrategy
 {
@@ -15,9 +15,11 @@ class CartStrategy extends BaseStrategy
     /** @var StoreStrategy */
     protected $storeStrategy;
 
-    public function __construct(ImportStrategyHelper $strategyHelper, StoreStrategy $storeStrategy)
+    /**
+     * @param StoreStrategy $storeStrategy
+     */
+    public function setStoreStrategy(StoreStrategy $storeStrategy)
     {
-        parent::__construct($strategyHelper);
         $this->storeStrategy = $storeStrategy;
     }
 
@@ -146,6 +148,7 @@ class CartStrategy extends BaseStrategy
         foreach ($addresses as $addressName) {
             $addressGetter = 'get'.$addressName;
             $setter = 'set'.$addressName;
+            /** @var CartAddress $address */
             $address = $importedCart->$addressGetter();
 
             if (!$address) {
@@ -163,7 +166,11 @@ class CartStrategy extends BaseStrategy
             }
 
             $this->updateAddressCountryRegion($address, $mageRegionId);
-            $newCart->$setter($address);
+            if ($address->getCountry()) {
+                $newCart->$setter($address);
+            } else {
+                $newCart->$setter(null);
+            }
         }
 
         return $this;

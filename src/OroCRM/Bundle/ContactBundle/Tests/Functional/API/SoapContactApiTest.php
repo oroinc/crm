@@ -46,8 +46,6 @@ class SoapContactApiTest extends WebTestCase
      */
     public function testCreateContact($request)
     {
-        //$this->markTestIncomplete('Should be fixed in scope of BAP-1383');
-
         $result = $this->client->getSoap()->createContact($request);
         $this->assertInternalType('int', $result);
         $this->assertGreaterThan(0, $result, $this->client->getSoap()->__getLastResponse());
@@ -117,7 +115,6 @@ class SoapContactApiTest extends WebTestCase
      * @param $request
      * @dataProvider requestsApi
      * @depends testCreateContact
-     * @throws \Exception|\SoapFault
      */
     public function testDeleteContact($request)
     {
@@ -127,12 +124,8 @@ class SoapContactApiTest extends WebTestCase
         $this->assertTrue($result);
 
         $this->setExpectedException('\SoapFault', 'Record with ID "' . $contactId . '" can not be found');
-        try {
-            $this->client->getSoap()->getContact($contactId);
-        } catch (\SoapFault $e) {
-            $this->assertEquals('NOT_FOUND', $e->faultcode);
-            throw $e;
-        }
+
+        $this->client->getSoap()->getContact($contactId);
     }
 
     /**

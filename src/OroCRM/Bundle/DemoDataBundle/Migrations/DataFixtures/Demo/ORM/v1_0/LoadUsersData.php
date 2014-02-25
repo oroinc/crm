@@ -45,7 +45,10 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
      */
     public function getDependencies()
     {
-        return ['OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadBusinessUnitData'];
+        return [
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadBusinessUnitData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadUserData',
+        ];
     }
 
     /**

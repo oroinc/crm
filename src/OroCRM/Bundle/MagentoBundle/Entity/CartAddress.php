@@ -11,7 +11,11 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 /**
  * @ORM\Table("orocrm_magento_cart_address")
  * @ORM\HasLifecycleCallbacks()
- * @Config()
+ * @Config(
+ *       defaultValues={
+ *          "entity"={"icon"="icon-map-marker"},
+ *      }
+ * )
  * @ORM\Entity
  * @Oro\Loggable
  */

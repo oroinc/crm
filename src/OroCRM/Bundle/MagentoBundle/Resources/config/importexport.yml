@@ -31,6 +31,7 @@ parameters:
     orocrm_magento.importexport.denormalizer.order_item.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\OrderItemCompositeDenormalizer
 
     # strategies
+    orocrm_magento.import_strategy.customer.base_strategy.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\BaseStrategy
     orocrm_magento.import_strategy.customer.add_or_update.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CustomerStrategy
     orocrm_magento.import_strategy.region.add_or_update.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\RegionStrategy
     orocrm_magento.import_strategy.cart.add_or_update.class:                    OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy
@@ -161,34 +162,36 @@ services:
             - { name: oro_importexport.normalizer }
 
     # Strategies
-    orocrm_magento.import.strategy.customer.add_or_update:
-        class: %orocrm_magento.import_strategy.customer.add_or_update.class%
+    orocrm_magento.import.strategy.base_strategy:
+        class: %orocrm_magento.import_strategy.customer.base_strategy.class%
+        abstract: true
         arguments:
             - @oro_importexport.strategy.import.helper
+            - @doctrine
+
+    orocrm_magento.import.strategy.customer.add_or_update:
+        class: %orocrm_magento.import_strategy.customer.add_or_update.class%
+        parent: orocrm_magento.import.strategy.base_strategy
 
     orocrm_magento.import.strategy.region.add_or_update:
         class: %orocrm_magento.import_strategy.region.add_or_update.class%
-        arguments:
-            - @oro_importexport.strategy.import.helper
+        parent: orocrm_magento.import.strategy.base_strategy
 
     orocrm_magento.import.strategy.store:
         class: %orocrm_magento.import_strategy.store.class%
-        arguments:
-            - @oro_importexport.strategy.import.helper
+        parent: orocrm_magento.import.strategy.base_strategy
 
     orocrm_magento.import.strategy.cart.add_or_update:
         class: %orocrm_magento.import_strategy.cart.add_or_update.class%
-        arguments:
-            - @oro_importexport.strategy.import.helper
-        arguments:
-            - @oro_importexport.strategy.import.helper
-            - @orocrm_magento.import.strategy.store
+        parent: orocrm_magento.import.strategy.base_strategy
+        calls:
+             - [setStoreStrategy, [@orocrm_magento.import.strategy.store]]
 
     orocrm_magento.import.strategy.order.add_or_update:
         class: %orocrm_magento.import_strategy.order.add_or_update.class%
-        arguments:
-            - @oro_importexport.strategy.import.helper
-            - @orocrm_magento.import.strategy.store
+        parent: orocrm_magento.import.strategy.base_strategy
+        calls:
+             - [setStoreStrategy, [@orocrm_magento.import.strategy.store]]
 
     # Processors
     orocrm_magento.importexport.processor.import_customer:

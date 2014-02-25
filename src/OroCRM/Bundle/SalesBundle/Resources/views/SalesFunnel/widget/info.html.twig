@@ -1,0 +1,35 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEmailBundle::macros.html.twig' as email %}
+{#{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}#}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderProperty('orocrm.sales.salesfunnel.name.label'|trans, entity.name) }}
+            {{ ui.renderProperty('orocrm.sales.salesfunnel.start_date.label'|trans, entity.startDate|oro_format_date) }}
+
+            {%- if entity.lead and resource_granted('VIEW', entity.lead) -%}
+                {% set leadView = ui.renderUrl(
+                path('orocrm_sales_lead_view', {'id': entity.lead.id}),
+                entity.lead.name)
+                %}
+            {%- else -%}
+                {% set leadView = entity.lead ? entity.lead.name : '' %}
+            {%- endif -%}
+            {{ ui.renderProperty('orocrm.sales.salesfunnel.lead.label'|trans, leadView) }}
+
+            {%- if entity.opportunity and resource_granted('VIEW', entity.opportunity) -%}
+                {% set opportunityView = ui.renderUrl(
+                    path('orocrm_sales_opportunity_view', {'id': entity.opportunity.id}),
+                    entity.opportunity.name)
+                %}
+            {%- else -%}
+                {% set opportunityView = entity.opportunity ? entity.opportunity.name : '' %}
+            {%- endif -%}
+            {{ ui.renderProperty('orocrm.sales.salesfunnel.opportunity.label'|trans, opportunityView) }}
+
+            {# TODO: Add step property rendering here (BAP-3084) #}
+            {#{{ entityConfig.renderDynamicFields(entity) }}#}
+        </div>
+    </div>
+</div>

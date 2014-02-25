@@ -59,9 +59,6 @@ class OpportunityController extends Controller
     public function createAction()
     {
         $entity        = new Opportunity();
-        $defaultStatus = $this->getDoctrine()->getManager()->find('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
-        $entity->setStatus($defaultStatus);
-
         return $this->update($entity);
     }
 

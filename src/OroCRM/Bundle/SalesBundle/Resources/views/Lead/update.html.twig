@@ -34,28 +34,6 @@
         {{ UI.saveAndStayButton() }}
     {% endif %}
     {{ UI.saveAndCloseButton() }}
-
-    {% if resource_granted('orocrm_sales_lead_create')
-        and resource_granted('oro_workflow')
-        and form.vars.value.id is empty
-    %}
-        <div class="btn-group">
-            <button type="button" class="btn btn-primary save-and-transit"
-                data-workflow="b2b_flow_lead"
-                data-transition="qualify"
-                data-entity-class="{{ oro_class_name(entity) }}"
-            >
-                {% trans %}Save and Qualify{% endtrans %}
-            </button>
-
-            <script type="text/javascript">
-                require(['jquery', 'oro/workflow-save-and-transit-handler'],
-                function($, saveAndTransitHandler) {
-                    $('.save-and-transit').click(saveAndTransitHandler);
-                });
-            </script>
-        </div>
-    {% endif %}
 {% endblock %}
 
 {% block pageHeader %}

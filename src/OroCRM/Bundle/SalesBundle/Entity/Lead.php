@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -29,6 +30,9 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  *  routeName="orocrm_sales_lead_index",
  *  routeView="orocrm_sales_lead_view",
  *  defaultValues={
+ *      "entity"={
+ *          "icon"="icon-phone"
+ *      },
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",
@@ -37,6 +41,9 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
+ *      },
+ *      "workflow"={
+ *          "active_workflow"="b2b_flow_lead"
  *      }
  *  }
  * )
@@ -797,5 +804,16 @@ class Lead extends ExtendLead implements FullNameInterface
     public function getWorkflowStep()
     {
         return $this->workflowStep;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist(LifecycleEventArgs $eventArgs)
+    {
+        $em = $eventArgs->getEntityManager();
+        /** @var LeadStatus $defaultStatus */
+        $defaultStatus   = $em->getReference('OroCRMSalesBundle:LeadStatus', 'new');
+        $this->setStatus($defaultStatus);
     }
 }

@@ -1,8 +1,7 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0;
 
-use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\WorkflowBundle\Model\Workflow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -21,28 +20,16 @@ use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
 
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     const FLUSH_MAX = 50;
-
-    /**
-     * @var array
-     */
-    protected $leadSources = [
-        'Website' => false,
-        'Advertising' => false,
-        'Blogging' => false,
-        'Media' => false,
-        'Outbound' => false,
-        'Partner' => false
-    ];
 
     /**
      * @var ContainerInterface
@@ -68,8 +55,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /** @var  ConfigManager */
     protected $configManager;
 
-    protected $leadExtendSourceConfigFieldModel;
-
     /**
      * {@inheritdoc}
      */
@@ -78,7 +63,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         return [
             'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadUsersData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadAccountData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadAclData'
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadAclData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadLeadSourceData'
         ];
     }
 
@@ -98,12 +84,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     public function load(ObjectManager $manager)
     {
         $this->initSupportingEntities($manager);
-
-        // TODO: We have to load lead sources here because when we do it in separate fixture an entity
-        // config model is duplicated for Lead entity. Seems it because Doctrine ORMExecutor calls
-        // "clear" method after loading each fixture
-        $this->loadLeadSources();
-
         $this->loadLeads();
         $this->loadSources();
     }
@@ -116,38 +96,20 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
         $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
         $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
-
-        /** @var ConfigManager $configManager */
-        $configManager = $this->container->get('oro_entity_config.config_manager');
-
-        $this->leadExtendSourceConfigFieldModel = $configManager->getConfigFieldModel(
-            'OroCRM\Bundle\SalesBundle\Entity\Lead',
-            'extend_source'
-        );
-    }
-
-    public function loadLeadSources()
-    {
-        $priority = 1;
-        foreach ($this->leadSources as $optionSetLabel => $isDefault) {
-            $priority++;
-            $optionSet = new OptionSet();
-            $optionSet
-                ->setLabel($optionSetLabel)
-                ->setIsDefault($isDefault)
-                ->setPriority($priority)
-                ->setField($this->leadExtendSourceConfigFieldModel);
-
-            $this->em->persist($optionSet);
-        }
-
-        $this->em->flush();
     }
 
     public function loadSources()
     {
+        /** @var ConfigManager $configManager */
+        $configManager = $this->container->get('oro_entity_config.config_manager');
+
+        $leadSourceConfigFieldModel = $configManager->getConfigFieldModel(
+            'OroCRM\Bundle\SalesBundle\Entity\Lead',
+            'extend_source'
+        );
+
         /** @var OptionSet[] $sources */
-        $sources = $this->leadExtendSourceConfigFieldModel->getOptions()->toArray();
+        $sources = $leadSourceConfigFieldModel->getOptions()->toArray();
         $randomSource = count($sources)-1;
 
         $leads = $this->em->getRepository('OroCRMSalesBundle:Lead')->findAll();
@@ -159,7 +121,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             $optionSetRelation->setData(
                 null,
                 $lead->getId(),
-                $this->leadExtendSourceConfigFieldModel,
+                $leadSourceConfigFieldModel,
                 $source
             );
             $this->persist($this->em, $optionSetRelation);
@@ -188,7 +150,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 $this->persist($this->em, $lead);
 
                 $this->loadSalesFlows($lead);
-
                 $i++;
                 if ($i % self::FLUSH_MAX == 0) {
                     $this->flush($this->em);
@@ -205,7 +166,9 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
      */
     protected function loadSalesFlows(Lead $lead)
     {
-        $leadWorkflowItem = $this->workflowManager->startWorkflow(
+        $leadWorkflowItem = $this->startWorkflow(
+            $this->workflowManager,
+            $this->em,
             'b2b_flow_lead',
             $lead,
             'qualify',
@@ -218,7 +181,9 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         if ($this->getRandomBoolean()) {
             /** @var Opportunity $opportunity */
             $opportunity = $leadWorkflowItem->getResult()->get('opportunity');
-            $salesFlowItem = $this->workflowManager->startWorkflow(
+            $salesFlowItem = $this->startWorkflow(
+                $this->workflowManager,
+                $this->em,
                 'b2b_flow_sales',
                 $opportunity,
                 'develop',
@@ -350,6 +315,36 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         /** @var EntityManager $em */
         $workflow->transit($workflowItem, $transition);
         $workflowItem->setUpdated();
+    }
+
+    /**
+     * @param       $workflowManager
+     * @param       $em
+     * @param       $workflow
+     * @param       $entity
+     * @param null  $transition
+     * @param array $data
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function startWorkflow(
+        $workflowManager,
+        $em,
+        $workflow,
+        $entity,
+        $transition = null,
+        array $data = array()
+    ) {
+        /** @var Workflow $workflow */
+        $workflow = $workflowManager->getWorkflow($workflow);
+        try {
+            $workflowItem = $workflow->start($entity, $data, $transition);
+            $this->persist($em, $workflowItem);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+        return $workflowItem;
     }
 
     /**
