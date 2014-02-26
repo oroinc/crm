@@ -19,9 +19,9 @@
             'widget' : {
                 'type' : 'dialog',
                 'multiple' : true,
-                'reload-widget-alias' : 'contact_emails',
-                'reload-widget-event' : 'emailSent',
+                'gridName' : 'contacts-email-grid',
                 'options' : {
+                    'alias': 'email-dialog',
                     'dialogOptions' : {
                         'title' : sendEmailTitle,
                         'allowMaximize': true,
@@ -46,9 +46,9 @@
             'widget' : {
                 'type' : 'dialog',
                 'multiple' : false,
-                'reload-widget-alias' : 'contact_calls',
-                'reload-widget-event' : 'contactCallLogged',
+                'gridName' : 'widget-calls-grid',
                 'options' : {
+                    'alias': 'call-dialog',
                     'dialogOptions' : {
                         'title' : logCallTitle,
                         'allowMaximize': true,

@@ -34,9 +34,9 @@
                     {{ UI.renderWidgetElementAttributes({
                         'type' : 'dialog',
                         'multiple' : false,
-                        'reload-widget-alias' : 'contact_calls',
-                        'reload-widget-event' : 'contactCallLogged',
+                        'gridName' : 'widget-calls-grid',
                         'options' : {
+                            'alias': 'call-dialog',
                             'dialogOptions' : {
                                 'title' : 'orocrm.call.log_call'|trans,
                                 'allowMaximize': true,
@@ -60,9 +60,9 @@
                     {{ UI.renderWidgetElementAttributes({
                         'type' : 'dialog',
                         'multiple' : true,
-                        'reload-widget-alias' : 'contact_emails',
-                        'reload-widget-event' : 'emailSent',
+                        'gridName' : 'account-email-grid',
                         'options' : {
+                            'alias': 'email-dialog',
                             'dialogOptions' : {
                                 'title' : 'oro.email.send_email'|trans,
                                 'allowMaximize': true,
