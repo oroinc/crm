@@ -340,13 +340,14 @@ class LoadDemoMagentoData extends AbstractFixture implements DependentFixtureInt
         $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
         $accountCount = count($accounts);
         $contactCount = count($contacts);
+
+        $buffer = range(0, 49);
+        shuffle($buffer);
         for ($i = 0; $i < 50; ++$i) {
             $birthday  = $this->generateBirthday();
 
-            $accountRandom = rand(0, $accountCount - 1);
-            $contactRandom = rand(0, $contactCount - 1);
             /** @var Contact $contact */
-            $contact = $contacts[$contactRandom];
+            $contact = $contacts[$buffer[$i]];
             $customer = new Customer();
             $customer->setWebsite($website)
                 ->setChannel($channel)
@@ -360,7 +361,7 @@ class LoadDemoMagentoData extends AbstractFixture implements DependentFixtureInt
                 ->setCreatedAt(new \DateTime('now'))
                 ->setUpdatedAt(new \DateTime('now'))
                 ->setOriginId($i + 1)
-                ->setAccount($accounts[$accountRandom])
+                ->setAccount($accounts[$buffer[$i]])
                 ->setContact($contact);
 
             $om->persist($customer);
