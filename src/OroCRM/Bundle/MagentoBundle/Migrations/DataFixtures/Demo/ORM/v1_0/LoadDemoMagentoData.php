@@ -338,8 +338,6 @@ class LoadDemoMagentoData extends AbstractFixture implements DependentFixtureInt
     ) {
         $accounts = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
         $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
-        $accountCount = count($accounts);
-        $contactCount = count($contacts);
 
         $buffer = range(0, 49);
         shuffle($buffer);
