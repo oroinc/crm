@@ -177,15 +177,6 @@ class AccountController extends Controller
     }
 
     /**
-     * @Route("/widget/sales/{id}", name="orocrm_account_widget_sales", requirements={"id"="\d+"})
-     * @Template
-     */
-    public function salesAction(Account $account)
-    {
-        return array('entity' => $account);
-    }
-
-    /**
      * @Route("/widget/leads/{id}", name="orocrm_account_widget_leads", requirements={"id"="\d+"})
      * @AclAncestor("orocrm_sales_lead_view")
      * @Template

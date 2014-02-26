@@ -15,22 +15,20 @@
     <div class="responsive-block">
         {% set tabs = {} %}
         {% set tabs = tabs|merge(
-            {
-                'orocrm_customer_orders_account_widget': {
-                    'widgetType': 'block',
-                    'tabTitle': "orocrm.magento.order.entity_plural_label"|trans,
-                    'url': path('orocrm_customer_orders_account_widget', {id: customer.id})
-                }
-            }
+            [{
+                'alias': 'orocrm_customer_orders_account_widget',
+                'widgetType': 'block',
+                'label': "orocrm.magento.order.entity_plural_label"|trans,
+                'url': path('orocrm_customer_orders_account_widget', {id: customer.id})
+            }]
         ) %}
         {% set tabs = tabs|merge(
-            {
-                'orocrm_account_customer_cart_widget': {
-                    'widgetType': 'block',
-                    'tabTitle': "orocrm.magento.cart.entity_plural_label"|trans,
-                    'url': path('orocrm_account_customer_cart_widget', {id: customer.id})
-                }
-            }
+            [{
+                'alias': 'orocrm_account_customer_cart_widget',
+                'widgetType': 'block',
+                'label': "orocrm.magento.cart.entity_plural_label"|trans,
+                'url': path('orocrm_account_customer_cart_widget', {id: customer.id})
+            }]
         ) %}
         {{ UI.tabPanel(tabs) }}
     </div>
