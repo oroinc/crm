@@ -62,4 +62,17 @@ class OrderController extends Controller
     {
         return ['entity' => $order];
     }
+
+    /**
+     * @Route(
+     *        "/account-widget/orders/{id}",
+     *        name="orocrm_customer_orders_account_widget",
+     *        requirements={"id"="\d+"}
+     * )
+     * @Template
+     */
+    public function customerOrdersAction($id)
+    {
+        return array('customerId' => $id);
+    }
 }

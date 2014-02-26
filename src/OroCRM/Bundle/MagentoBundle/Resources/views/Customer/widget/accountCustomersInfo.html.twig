@@ -1,0 +1,17 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+<div class="widget-content">
+    {% set tabs = {} %}
+    {% for customer in customers %}
+        {% set tabs = tabs|merge(
+            {
+                'orocrm_customer_info_widget': {
+                    'widgetType': 'block',
+                    'tabTitle': customer|oro_format_name,
+                    'url': path('orocrm_customer_info_widget', {id: customer.id})
+                }
+            }
+        ) %}
+    {% endfor %}
+    {{ UI.tabPanel(tabs) }}
+</div>

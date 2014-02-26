@@ -62,4 +62,14 @@ class CartController extends Controller
     {
         return ['entity' => $cart];
     }
+
+    /**
+     * @Route("/widget/account_cart/{id}", name="orocrm_account_customer_cart_widget", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_cart_view")
+     * @Template
+     */
+    public function accountCustomerCartInfoAction($id)
+    {
+        return array('customerId' => $id);
+    }
 }

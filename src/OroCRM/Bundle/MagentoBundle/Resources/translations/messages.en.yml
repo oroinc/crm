@@ -93,6 +93,7 @@ orocrm:
             addresses.label:     Adresses
             carts.label:         Carts
             channel.label:       Channel
+            name.label:                Name
 
         cart:
             entity_label:         Shopping Cart
@@ -252,3 +253,10 @@ orocrm:
             origin_id.label:     Origin Id
             country.label:       Country
             region.label:        State
+
+        account_orders_grid:
+            items: Items
+
+        account_carts_grid:
+            items: Items
+            total_amount: Total Amount

@@ -4,14 +4,22 @@ orocrm:
             title: Last Actions With Accounts
             view_all: View all
 
-    contact_widget:
-        phone: Phone
-        email: Email
-
-    sales_widget:
-        title: Sales
-
     account:
+        widgets:
+            account_order:
+                title: Orders
+            contacts:
+                phone: Phone
+                email: Email
+                title: Contacts
+            sales:
+                title: Sales
+            leads:
+                title: Leads
+            opportunities:
+                title: Opportunities
+            magento_channel:
+                title: Magento Chanel
         placeholdes:
             actions: Account actions
         dataBlocks:

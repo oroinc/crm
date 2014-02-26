@@ -1,0 +1,8 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+<div class="widget-content">
+    {{ oro_widget_render({
+        'widgetType': 'block',
+        'url': path('orocrm_customers_info_widget', {id: id})
+    }) }}
+</div>

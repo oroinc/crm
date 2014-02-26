@@ -1,0 +1,37 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import 'OroEmailBundle::macros.html.twig' as email %}
+
+<div class="widget-content row-fluid row-fluid-divider">
+    <div class="responsive-block form-horizontal">
+        {{ UI.renderProperty("orocrm.magento.customer.name.label"|trans, customer|oro_format_name) }}
+        {{ UI.renderProperty("orocrm.magento.customer.email.label"|trans, email.email_address_simple(customer.email)) }}
+        {{ UI.renderProperty("orocrm.magento.customer.group.label"|trans, customer.group.name) }}
+        {{ UI.renderProperty("orocrm.magento.customer.website.label"|trans, customer.website.name) }}
+        {{ UI.renderProperty("orocrm.magento.customer.store.label"|trans, customer.store.name) }}
+        {{ UI.renderProperty("orocrm.magento.customer.birthday.label"|trans, customer.birthday|oro_format_date ~ customer.birthday|age_string({'default': 'N/A'})) }}
+        {{ UI.renderProperty("orocrm.magento.customer.gender.label"|trans, oro_gender(customer.gender)) }}
+        {{ UI.renderProperty("orocrm.magento.customer.vat.label"|trans, customer.vat) }}
+    </div>
+    <div class="responsive-block">
+        {% set tabs = {} %}
+        {% set tabs = tabs|merge(
+            {
+                'orocrm_customer_orders_account_widget': {
+                    'widgetType': 'block',
+                    'tabTitle': "orocrm.magento.order.entity_plural_label"|trans,
+                    'url': path('orocrm_customer_orders_account_widget', {id: customer.id})
+                }
+            }
+        ) %}
+        {% set tabs = tabs|merge(
+            {
+                'orocrm_account_customer_cart_widget': {
+                    'widgetType': 'block',
+                    'tabTitle': "orocrm.magento.cart.entity_plural_label"|trans,
+                    'url': path('orocrm_account_customer_cart_widget', {id: customer.id})
+                }
+            }
+        ) %}
+        {{ UI.tabPanel(tabs) }}
+    </div>
+</div>
