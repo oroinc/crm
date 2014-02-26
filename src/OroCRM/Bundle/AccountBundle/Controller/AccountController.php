@@ -29,7 +29,7 @@ class AccountController extends Controller
      */
     public function viewAction(Account $account)
     {
-        return ['entity'  => $account];
+        return ['entity' => $account];
     }
 
     /**
@@ -142,7 +142,7 @@ class AccountController extends Controller
     public function infoAction(Account $account)
     {
         return [
-            'entity'  => $account
+            'entity' => $account
         ];
     }
 

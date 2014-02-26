@@ -52,4 +52,26 @@ class CustomerController extends Controller
     {
         return ['entity' => $customer];
     }
+
+    /**
+     * @Route("/widget/customers-info/{id}", name="orocrm_customers_info_widget", requirements={"id"="\d+"})
+     * @Template
+     */
+    public function accountCustomersInfoAction($id)
+    {
+        $customers = $this->getDoctrine()
+            ->getRepository('\OroCRM\Bundle\MagentoBundle\Entity\Customer')
+            ->findBy(array('account' => $id));
+
+        return array('customers' => $customers);
+    }
+
+    /**
+     * @Route("/widget/customer-info/{id}", name="orocrm_customer_info_widget", requirements={"id"="\d+"})
+     * @Template
+     */
+    public function accountCustomerInfoAction(Customer $customer)
+    {
+        return array('customer' => $customer);
+    }
 }

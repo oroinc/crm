@@ -1,0 +1,8 @@
+placeholders:
+    orocrm_account_customers_info:
+        items:
+            orocrm_account_customers_info_widget: ~
+
+items:
+    orocrm_account_customers_info_widget:
+        template: OroCRMMagentoBundle:Customer:accountsWidgetPlaceholder.html.twig

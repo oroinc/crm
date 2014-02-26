@@ -115,6 +115,37 @@
         }
     ]) %}
 
+    {% set accountCustomersInfoWidget %}
+        {% placeholder orocrm_account_customers_info with {'id': entity.id} %}
+    {% endset %}
+    {% set dataBlocks = dataBlocks|merge([
+        {
+            'title': 'orocrm.magento.channel_type.label',
+            'subblocks': [
+                {'data' : [accountCustomersInfoWidget]}
+            ]
+        }
+    ]) %}
+
+    {% if resource_granted('orocrm_call_view') %}
+        {% set accountCallsWidget %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('orocrm_call_widget_calls', {accountId: entity.id}),
+                'alias': 'account_calls',
+                'cssClass': 'inner-grid'
+            }) }}
+        {% endset %}
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title': 'orocrm.call.entity_plural_label'|trans,
+                'subblocks': [
+                    {'data' : [accountCallsWidget]}
+                ]
+            }
+        ]) %}
+    {% endif %}
+
     {% set id = 'accountView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}
