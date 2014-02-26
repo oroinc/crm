@@ -1,8 +1,10 @@
 <div class="widget-content">
     <div class="contact-box-wrapper">
         {% if defaultContact %}
-            {{ _self.render_contact_box(entity, defaultContact, true) }}
-            {% for contact in contactsWithoutDefault|slice(0, 5) %}
+            {% if defaultContact %}
+                {{ _self.render_contact_box(entity, defaultContact, true) }}
+            {% endif %}
+            {% for contact in contactsWithoutDefault %}
                 {{ _self.render_contact_box(entity, contact, false) }}
             {% endfor %}
         {% endif %}
