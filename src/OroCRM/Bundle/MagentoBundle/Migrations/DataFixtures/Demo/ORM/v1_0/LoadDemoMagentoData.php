@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -62,7 +63,7 @@ class LoadDemoMagentoData extends AbstractFixture implements DependentFixtureInt
         $channel = new Channel();
         $channel->setType('magento');
         $channel->setConnectors(['customer', 'cart', 'order']);
-        $channel->setName('Magento');
+        $channel->setName('Demo Web store');
 
         $channel->setTransport($transport);
 
@@ -70,24 +71,20 @@ class LoadDemoMagentoData extends AbstractFixture implements DependentFixtureInt
 
         $this->persistDemoCustomers($om, $website, $store, $group, $channel);
         $om->flush();
-        $this->persistDemoCarts($om, $website, $store, $group, $channel);
+        $this->persistDemoCarts($om, $store, $channel);
         $om->flush();
-        $this->persistDemoOrders($om, $website, $store, $group, $channel);
+        $this->persistDemoOrders($om, $store, $channel);
         $om->flush();
     }
 
     /**
      * @param ObjectManager                                     $om
-     * @param Website                                           $website
      * @param Store                                             $store
-     * @param CustomerGroup $group
      * @param Channel $channel
      */
     protected function persistDemoCarts(
         ObjectManager $om,
-        Website $website,
         Store $store,
-        CustomerGroup $group,
         Channel $channel
     ) {
         /** @var Customer[] $customers */
@@ -104,16 +101,12 @@ class LoadDemoMagentoData extends AbstractFixture implements DependentFixtureInt
 
     /**
      * @param ObjectManager                                     $om
-     * @param Website                                           $website
      * @param Store                                             $store
-     * @param CustomerGroup $group
      * @param Channel $channel
      */
     protected function persistDemoOrders(
         ObjectManager $om,
-        Website $website,
         Store $store,
-        CustomerGroup $group,
         Channel $channel
     ) {
         /** @var Cart[] $carts */
@@ -345,105 +338,32 @@ class LoadDemoMagentoData extends AbstractFixture implements DependentFixtureInt
     ) {
         $accounts = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
         $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
-        $accountCount = count($accounts);
-        $contactCount = count($contacts);
+
+        $buffer = range(0, 49);
+        shuffle($buffer);
         for ($i = 0; $i < 50; ++$i) {
-            $firstName = $this->generateFirstName();
-            $lastName  = $this->generateLastName();
             $birthday  = $this->generateBirthday();
-            $email     = $this->generateEmail($firstName, $lastName);
 
-            $accountRandom = rand(0, $accountCount - 1);
-            $contactRandom = rand(0, $contactCount - 1);
-
+            /** @var Contact $contact */
+            $contact = $contacts[$buffer[$i]];
             $customer = new Customer();
             $customer->setWebsite($website)
                 ->setChannel($channel)
                 ->setStore($store)
-                ->setFirstName($firstName)
-                ->setLastName($lastName)
-                ->setEmail($email)
+                ->setFirstName($contact->getFirstName())
+                ->setLastName($contact->getLastName())
+                ->setEmail($contact->getPrimaryEmail())
                 ->setBirthday($birthday)
                 ->setVat(self::VAT * 100.0)
                 ->setGroup($group)
                 ->setCreatedAt(new \DateTime('now'))
                 ->setUpdatedAt(new \DateTime('now'))
                 ->setOriginId($i + 1)
-                ->setAccount($accounts[$accountRandom])
-                ->setContact($contacts[$contactRandom]);
+                ->setAccount($accounts[$buffer[$i]])
+                ->setContact($contact);
 
             $om->persist($customer);
         }
-    }
-
-    /**
-     * Generates an email
-     *
-     * @param  string $firstName
-     * @param  string $lastName
-     *
-     * @return string
-     */
-    private function generateEmail($firstName, $lastName)
-    {
-        $uniqueString = substr(uniqid(rand()), -5, 5);
-        $domains      = array('yahoo.com', 'gmail.com', 'example.com', 'hotmail.com', 'aol.com', 'msn.com');
-        $randomIndex  = rand(0, count($domains) - 1);
-        $domain       = $domains[$randomIndex];
-
-        return sprintf("%s.%s_%s@%s", strtolower($firstName), strtolower($lastName), $uniqueString, $domain);
-    }
-
-    /**
-     * Generate a first name
-     *
-     * @return string
-     */
-    private function generateFirstName()
-    {
-        $firstNamesDictionary = $this->loadDictionary('first_names.txt');
-        $randomIndex          = rand(0, count($firstNamesDictionary) - 1);
-
-        return trim($firstNamesDictionary[$randomIndex]);
-    }
-
-    /**
-     * Loads dictionary from file by name
-     *
-     * @param  string $name
-     *
-     * @return array
-     */
-    private function loadDictionary($name)
-    {
-        static $dictionaries = array();
-
-        if (!isset($dictionaries[$name])) {
-            $dictionary = array();
-            $fileName   = __DIR__
-                . DIRECTORY_SEPARATOR
-                . '../../../../../../DemoDataBundle/Migrations/DataFixtures/Demo/ORM/v1_0/dictionaries' .
-                DIRECTORY_SEPARATOR . $name;
-            foreach (file($fileName) as $item) {
-                $dictionary[] = trim($item);
-            }
-            $dictionaries[$name] = $dictionary;
-        }
-
-        return $dictionaries[$name];
-    }
-
-    /**
-     * Generates a last name
-     *
-     * @return string
-     */
-    private function generateLastName()
-    {
-        $lastNamesDictionary = $this->loadDictionary('last_names.txt');
-        $randomIndex         = rand(0, count($lastNamesDictionary) - 1);
-
-        return trim($lastNamesDictionary[$randomIndex]);
     }
 
     /**
