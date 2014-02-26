@@ -49,6 +49,15 @@ class OroCRMSalesBundleInstaller implements Installation
         $table->addColumn('createdAt', 'datetime', ['default' => null, 'notnull' => true, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->addColumn('updatedAt', 'datetime', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
         $table->addColumn('notes', 'text', ['default' => null, 'notnull' => false, 'length' => null, 'precision' => 10, 'scale' => 0, 'fixed' => false, 'unsigned' => false, 'autoincrement' => false, 'comment' => '']);
+        $table->addColumn(
+            'extend_source',
+            'optionSet',
+            [
+                'oro_extend' => [
+                    'extend' => ['is_extend' => true, 'set_expanded' => false]
+                ]
+            ]
+        );
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_73DB46331023C4EE');
         $table->addIndex(['status_name'], 'IDX_73DB46336625D392', []);

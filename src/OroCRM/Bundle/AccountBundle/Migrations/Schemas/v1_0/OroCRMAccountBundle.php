@@ -25,6 +25,105 @@ class OroCRMAccountBundle implements Migration
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updatedAt', 'datetime', []);
+        $table->addColumn(
+            'extend_description',
+            'text',
+            [
+                'oro_extend' => [
+                    'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_phone',
+            'string',
+            [
+                'oro_extend' => [
+                    'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_email',
+            'string',
+            [
+                'oro_extend' => [
+                    'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_fax',
+            'string',
+            [
+                'oro_extend' => [
+                    'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_website',
+            'string',
+            [
+                'oro_extend' => [
+                    'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_employees',
+            'integer',
+            [
+                'oro_extend' => [
+                    'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_ownership',
+            'string',
+            [
+                'oro_extend' => [
+                    'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_ticker_symbol',
+            'string',
+            [
+                'oro_extend' => [
+                    'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_rating',
+            'string',
+            [
+                'oro_extend' => [
+                    'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
         $table->setPrimaryKey(['id']);
         $table->addIndex(['user_owner_id'], 'IDX_7166D3719EB185F9', []);
         $table->addIndex(['shipping_address_id'], 'IDX_7166D3714D4CFF2B', []);
@@ -44,16 +143,46 @@ class OroCRMAccountBundle implements Migration
 
         /** Generate foreign keys for table orocrm_account **/
         $table = $schema->getTable('orocrm_account');
-        $table->addForeignKeyConstraint($schema->getTable('orocrm_contact'), ['default_contact_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
-        $table->addForeignKeyConstraint($schema->getTable('oro_address'), ['shipping_address_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
-        $table->addForeignKeyConstraint($schema->getTable('oro_address'), ['billing_address_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
-        $table->addForeignKeyConstraint($schema->getTable('oro_user'), ['user_owner_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_contact'),
+            ['default_contact_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_address'),
+            ['shipping_address_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_address'),
+            ['billing_address_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_user'),
+            ['user_owner_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
         /** End of generate foreign keys for table orocrm_account **/
 
         /** Generate foreign keys for table orocrm_account_to_contact **/
         $table = $schema->getTable('orocrm_account_to_contact');
-        $table->addForeignKeyConstraint($schema->getTable('orocrm_contact'), ['contact_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
-        $table->addForeignKeyConstraint($schema->getTable('orocrm_account'), ['account_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_contact'),
+            ['contact_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_account'),
+            ['account_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
         /** End of generate foreign keys for table orocrm_account_to_contact **/
 
         // @codingStandardsIgnoreEnd
