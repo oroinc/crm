@@ -1,15 +1,33 @@
-{{ oro_widget_render({
-    'widgetType': 'block',
-    'url': path('orocrm_account_widget_opportunities', {id: entity.id}),
-    'title': 'orocrm.sales.opportunity.entity_plural_label'|trans
-}) }}
-{{ oro_widget_render({
-    'widgetType': 'block',
-    'url': path('orocrm_account_widget_leads', {id: entity.id}),
-    'title': 'orocrm.sales.lead.entity_plural_label'|trans
-}) }}
-{{ oro_widget_render({
-    'widgetType': 'block',
-    'url': path('orocrm_account_widget_orders', {id: entity.id}),
-    'title': 'orocrm.magento.order.entity_plural_label'|trans
-}) }}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% set tabs = {} %}
+
+{% set tabs = tabs|merge(
+    {
+        'orocrm_account_widget_leads': {
+            'widgetType': 'block',
+            'url': path('orocrm_account_widget_leads', {id: entity.id}),
+            'tabTitle': 'orocrm.account.widgets.leads.title'|trans
+        }
+    }
+) %}
+{% set tabs = tabs|merge(
+    {
+        'orocrm_account_widget_opportunities': {
+            'widgetType': 'block',
+            'url': path('orocrm_account_widget_opportunities', {id: entity.id}),
+            'tabTitle': 'orocrm.account.widgets.opportunities.title'|trans
+        }
+    }
+) %}
+
+{% set tabs = tabs|merge(
+    {
+        'orocrm_account_widget_orders': {
+            'widgetType': 'block',
+            'url': path('orocrm_account_widget_orders', {id: entity.id}),
+            'tabTitle': 'orocrm.account.widgets.account_order.title'|trans
+        }
+    }
+) %}
+
+{{ UI.tabPanel(tabs) }}

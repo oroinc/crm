@@ -785,3 +785,126 @@ datagrid:
                 grandTotal:           { data_name: c.grandTotal }
                 statusLabel:          { data_name: cstatus.label }
                 stepLabel:            { data_name: step.label }
+
+    account-orders-view-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_magento_order_view
+            query:
+                select:
+                    - o
+                    - step.label as stepLabel
+                from:
+                    - { table: %orocrm_magento.order.entity.class%, alias: o }
+                join:
+                    left:
+                        - { join: o.workflowStep, alias: step }
+                        - { join: o.customer, alias: customer }
+                where:
+                    and:
+                        - customer.account = :account
+        properties:
+           id: ~
+           view_link:
+               type: url
+               route: orocrm_magento_order_view
+               params: [ id ]
+        columns:
+           incrementId:
+               label: orocrm.magento.order.increment_id.label
+           totalPaidAmount:
+               label:  orocrm.magento.order.total_paid_amount.label
+               type:   localized_number
+               method: formatCurrency
+               context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+           totalInvoicedAmount:
+               label: orocrm.magento.order.total_invoiced_amount.label
+               type:   localized_number
+               method: formatCurrency
+               context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+           shippingAmount:
+               label: orocrm.magento.order.shipping_amount.label
+               type:   localized_number
+               method: formatCurrency
+               context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+           subtotalAmount:
+               label: orocrm.magento.order.subtotal_amount.label
+               type:   localized_number
+               method: formatCurrency
+               context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+           status:
+               label: orocrm.magento.order.status.label
+           stepLabel:
+               label: orocrm.magento.order.b2c_flow_order_follow_up.step.label
+           createdAt:
+               label: orocrm.magento.order.created_at.label
+               frontend_type: datetime
+           updatedAt:
+               label: orocrm.magento.order.updated_at.label
+               frontend_type: datetime
+        sorters:
+           columns:
+               incrementId:            { data_name: o.incrementId }
+               totalPaidAmount:        { data_name: o.totalPaidAmount }
+               totalInvoicedAmount:    { data_name: o.totalInvoicedAmount }
+               shippingAmount:         { data_name: o.shippingAmount }
+               subtotalAmount:         { data_name: o.subtotalAmount }
+               status:                 { data_name: o.status }
+               stepLabel:              { data_name: step.label }
+               createdAt:              { data_name: o.createdAt }
+               updatedAt:              { data_name: o.updatedAt }
+        filters:
+           columns:
+               incrementId:
+                   type:             string
+                   data_name:        o.incrementId
+               totalPaidAmount:
+                   type:             number
+                   data_name:        o.totalPaidAmount
+                   options:
+                       data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+               totalInvoicedAmount:
+                   type:             number
+                   data_name:        o.totalInvoicedAmount
+                   options:
+                       data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+               shippingAmount:
+                   type:             number
+                   data_name:        o.shippingAmount
+                   options:
+                       data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+               subtotalAmount:
+                   type:             number
+                   data_name:        o.subtotalAmount
+                   options:
+                       data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+               status:
+                   type:             string
+                   data_name:        o.status
+               stepLabel:
+                   type: entity
+                   data_name: o.workflowStep
+                   options:
+                       field_type: oro_workflow_step_select
+                       field_options:
+                           workflow_entity_class: %orocrm_magento.order.entity.class%
+               createdAt:
+                   type:             datetime
+                   data_name:        o.createdAt
+                   enabled:          false
+               updatedAt:
+                   type:             datetime
+                   data_name:        o.updatedAt
+                   enabled:          false
+        actions:
+           view:
+               type:         navigate
+               label:        orocrm.magento.datagrid.actions.view.label
+               link:         view_link
+               icon:         book
+               acl_recource: orocrm_magento_order_view
+               rowAction:    true
+        options:
+           entityHint: order
+           export: true
+

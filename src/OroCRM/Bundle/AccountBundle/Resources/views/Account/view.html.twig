@@ -72,7 +72,7 @@
     {% endset %}
     {% set dataBlocks = dataBlocks|merge([
         {
-            'title': 'orocrm.sales_widget.title'|trans,
+            'title': 'orocrm.account.widgets.sales.title'|trans,
             'subblocks': [
                 {'data' : [accountSalesWidget]}
         ]
@@ -120,7 +120,7 @@
     {% endset %}
     {% set dataBlocks = dataBlocks|merge([
         {
-            'title': 'orocrm.magento.channel_type.label',
+            'title': 'orocrm.account.widgets.magento_channel.title'|trans,
             'subblocks': [
                 {'data' : [accountCustomersInfoWidget]}
             ]

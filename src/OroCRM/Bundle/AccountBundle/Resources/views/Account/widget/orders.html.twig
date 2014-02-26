@@ -1,5 +1,1 @@
-{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
-
-<div class="widget-content">
-    {{ dataGrid.renderGrid('account-orders-view-grid', {account: entity.id}) }}
-</div>
+{% placeholder orocrm_account_orders with {'id': entity.id} %}

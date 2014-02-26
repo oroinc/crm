@@ -25,10 +25,10 @@
             </a>
         </div>
         <div class="contact-box-row">
-            <span>{{ "orocrm.contact_widget.phone"|trans }}:</span><span>{{ contact.getPrimaryPhone() }}</span>
+            <span>{{ "orocrm.account.widgets.contacts.phone"|trans }}:</span><span>{{ contact.getPrimaryPhone() }}</span>
         </div>
         <div class="contact-box-row">
-            <span>{{ "orocrm.contact_widget.email"|trans }}:</span>
+            <span>{{ "orocrm.account.widgets.contacts.email"|trans }}:</span>
             <a class="contact-box-link" data-id="{{ contact.id }}" data-url="{{ path('orocrm_contact_email_create', { 'contactId': contact.id }) }}"
                 href="javascript:void(0);"
                 {{ UI.renderWidgetElementAttributes({
