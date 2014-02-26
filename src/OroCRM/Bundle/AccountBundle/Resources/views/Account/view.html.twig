@@ -65,17 +65,41 @@
 
 
     {% set accountSalesWidget %}
-        {{ oro_widget_render({
-            'widgetType': 'block',
-            'url': path('orocrm_account_widget_sales', {id: entity.id})
-        }) }}
+        {% set tabs = {} %}
+        {% set tabs = tabs|merge(
+            [{
+                'alias': 'orocrm_account_widget_leads',
+                'widgetType': 'block',
+                'url': path('orocrm_account_widget_leads', {id: entity.id}),
+                'label': 'orocrm.account.widgets.leads.title'|trans
+            }]
+        ) %}
+        {% set tabs = tabs|merge(
+            [{
+                'alias': 'orocrm_account_widget_opportunities',
+                'widgetType': 'block',
+                'url': path('orocrm_account_widget_opportunities', {id: entity.id}),
+                'label': 'orocrm.account.widgets.opportunities.title'|trans
+            }]
+        ) %}
+
+        {% set tabs = tabs|merge(
+            [{
+                'alias': 'orocrm_account_widget_orders',
+                'widgetType': 'block',
+                'url': path('orocrm_account_widget_orders', {id: entity.id}),
+                'label': 'orocrm.account.widgets.account_order.title'|trans
+            }]
+        ) %}
+
+        {{ UI.tabPanel(tabs) }}
     {% endset %}
     {% set dataBlocks = dataBlocks|merge([
         {
             'title': 'orocrm.account.widgets.sales.title'|trans,
             'subblocks': [
                 {'data' : [accountSalesWidget]}
-        ]
+            ]
         }
     ]) %}
 
@@ -84,27 +108,27 @@
 
         {% if resource_granted('orocrm_call_view') %}
             {% set tabs = tabs|merge(
-                {
-                    'account_calls': {
-                        'widgetType': 'block',
-                        'url': path('orocrm_call_widget_calls', {accountId: entity.id})
-                    }
-                }
+                [{
+                    'alias': 'account_calls',
+                    'label': 'orocrm.call.entity_plural_label'|trans,
+                    'widgetType': 'block',
+                    'url': path('orocrm_call_widget_calls', {accountId: entity.id})
+                }]
             ) %}
         {% endif %}
 
         {% if resource_granted('oro_email_view') %}
             {% set tabs = tabs|merge(
-                {
-                    'account_emails': {
-                        'widgetType': 'block',
-                        'url': path('orocrm_account_widget_emails', {accountId: entity.id})
-                    }
-                }
+                [{
+                    'alias': 'account_emails',
+                    'label': 'oro.email.entity_plural_label'|trans,
+                    'widgetType': 'block',
+                    'url': path('orocrm_account_widget_emails', {accountId: entity.id})
+                }]
             ) %}
         {% endif %}
 
-        {{ UI.tabPanel(tabs, true) }}
+        {{ UI.tabPanel(tabs) }}
     {% endset %}
     {% set dataBlocks = dataBlocks|merge([
         {
@@ -126,25 +150,6 @@
             ]
         }
     ]) %}
-
-    {% if resource_granted('orocrm_call_view') %}
-        {% set accountCallsWidget %}
-            {{ oro_widget_render({
-                'widgetType': 'block',
-                'url': path('orocrm_call_widget_calls', {accountId: entity.id}),
-                'alias': 'account_calls',
-                'cssClass': 'inner-grid'
-            }) }}
-        {% endset %}
-        {% set dataBlocks = dataBlocks|merge([
-            {
-                'title': 'orocrm.call.entity_plural_label'|trans,
-                'subblocks': [
-                    {'data' : [accountCallsWidget]}
-                ]
-            }
-        ]) %}
-    {% endif %}
 
     {% set id = 'accountView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
