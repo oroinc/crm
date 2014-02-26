@@ -4,7 +4,7 @@
     {{ UI.dropdownItem({
         'path': path('orocrm_contact_create', {'account': entity.id}),
         'iClass': 'icon-user',
-        'title': 'Add'|trans ~ ' ' ~ 'orocrm.contact.entity_label'|trans|lower,
-        'label': 'Add'|trans ~ ' ' ~ 'orocrm.contact.entity_label'|trans|lower
+        'title': 'orocrm.contact.add_entity'|trans,
+        'label': 'orocrm.contact.add_entity'|trans
     }) }}
 {% endif %}

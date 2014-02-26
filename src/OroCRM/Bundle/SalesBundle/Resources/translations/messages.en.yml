@@ -52,6 +52,7 @@ orocrm:
             entity_label:         Opportunity
             entity_plural_label:  Opportunities
             entity_description:   Represent opportunity
+            add_entity:           Add opportunity
             id.label:             Id
             name.label:           Opportunity name
             close_date.label:     Close date
@@ -93,6 +94,7 @@ orocrm:
             entity_label:         Lead
             entity_plural_label:  Leads
             entity_description:   Represent lead
+            add_entity:           Add lead
             id.label:             Id
             name.label:           Lead name
             name_prefix.label:    Name prefix

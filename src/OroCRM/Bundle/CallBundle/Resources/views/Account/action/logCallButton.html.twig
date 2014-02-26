@@ -1,8 +1,7 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
 {% if resource_granted('orocrm_call_create') %}
-    {% set title = 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower %}
-
+    {% set title = 'orocrm.call.log_call'|trans %}
     {{ UI.dropdownClientButton({
         'dataUrl': path('orocrm_call_create', {'accountId': entity.id}),
         'aCss': 'no-hash',

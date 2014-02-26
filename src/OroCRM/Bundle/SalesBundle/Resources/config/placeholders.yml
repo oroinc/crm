@@ -6,6 +6,6 @@ placeholders:
 
 items:
     orocrm_account_action_dropdown_add_lead:
-        template: OroCRMSalesBundle:Account:lead.html.twig
+        template: OroCRMSalesBundle:Account:action/addLeadButton.html.twig
     orocrm_account_action_dropdown_add_opportuniy:
-        template: OroCRMSalesBundle:Account:opportunity.html.twig
+        template: OroCRMSalesBundle:Account:action/addOpportunityButton.html.twig

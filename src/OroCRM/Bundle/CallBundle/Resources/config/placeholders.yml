@@ -11,4 +11,4 @@ items:
     user_calls:
         template: OroCRMCallBundle:Call:user_calls.html.twig
     orocrm_account_action_dropdown_add_call:
-        template: OroCRMCallBundle:Account:call.html.twig
+        template: OroCRMCallBundle:Account:action/logCallButton.html.twig

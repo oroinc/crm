@@ -33,6 +33,8 @@ orocrm:
         entity_label:        Contact
         entity_plural_label: Contacts
         entity_description:  Represent contact
+
+        add_entity:        Add Contact
         id.label:          Id
         phones.label:      Phones
         email.label:       Email

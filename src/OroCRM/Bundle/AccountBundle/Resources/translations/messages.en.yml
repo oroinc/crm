@@ -24,9 +24,9 @@ orocrm:
         #
         # OroCRM/Bundle/AccountBundle/Entity/Account
         #
-        entity_label:        Account
-        entity_plural_label: Accounts
-        entity_description:  Represent account
+        entity_label:           Account
+        entity_plural_label:    Accounts
+        entity_description:     Represent account
         id.label:               Id
         name.label:             Account name
         created_at.label:       Created
@@ -35,7 +35,7 @@ orocrm:
         shipping_address.label: Shipping Address
         billing_address.label:  Billing Address
         contacts.label:         Contacts
-        default_contact.label:  Default contact
+        default_contact.label:  Default
 
         extend_website.label:       Website
         extend_ticker_symbol.label: Ticker Symbol
