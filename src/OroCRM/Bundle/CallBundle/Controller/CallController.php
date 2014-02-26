@@ -2,7 +2,8 @@
 
 namespace OroCRM\Bundle\CallBundle\Controller;
 
-use OroCRM\Bundle\CallBundle\Entity\Call;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -11,8 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class CallController extends Controller
 {
@@ -93,6 +94,7 @@ class CallController extends Controller
 
     /**
      * @param int|null $contactId
+     * @param int|null $accountId
      * @return Call
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
@@ -129,6 +131,10 @@ class CallController extends Controller
                 $entity->setRelatedAccount($account);
             } else {
                 throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
+            }
+
+            if (!$entity->getPhoneNumber() && method_exists($account, 'getExtendPhone') && $account->getExtendPhone()) {
+                $entity->setPhoneNumber($account->getExtendPhone());
             }
         }
 
