@@ -14,6 +14,7 @@
             });
 </script>
 {% macro render_contact_box(contact, isDefault) %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
     <div class="contact-box">
         <div class="contact-box-row">
             <a class="contact-box-name-link contact-box-link" href="{{ url("orocrm_contact_view",{"id":contact.id}) }}">
@@ -28,7 +29,25 @@
         </div>
         <div class="contact-box-row">
             <span>{{ "orocrm.contact_widget.email"|trans }}:</span>
-            <a class="contact-box-link view-email-button" data-id="{{ contact.id }}" data-url="{{ path('orocrm_contact_email_create', { 'contactId': contact.id }) }}" href="javascript:void(0);">{{ contact.getPrimaryEmail() }}</a>
+            <a class="contact-box-link" data-id="{{ contact.id }}" data-url="{{ path('orocrm_contact_email_create', { 'contactId': contact.id }) }}"
+                href="javascript:void(0);"
+                {{ UI.renderWidgetElementAttributes({
+                    'type' : 'dialog',
+                    'reload-event' : 'contactCallLogged',
+                    'reload-widget-alias' : 'contact_calls',
+                    'options' : {
+                        'dialogOptions' : {
+                            'title' : 'Send email'|trans,
+                            'allowMaximize': true,
+                            'allowMinimize': true,
+                            'dblclick': 'maximize',
+                            'maximizedHeightDecreaseBy': 'minimize-bar',
+                            'width': 1000
+                        }
+                    }
+               }) }}
+            >{{ contact.getPrimaryEmail() }}
+            </a>
         </div>
     </div>
 {% endmacro %}

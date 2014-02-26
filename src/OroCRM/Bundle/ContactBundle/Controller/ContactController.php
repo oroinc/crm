@@ -130,7 +130,6 @@ class ContactController extends Controller
         if ($contact->getPrimaryEmail()) {
             $query['to'] = $contact->getPrimaryEmail()->getEmail();
         }
-        $query['gridName'] = 'contacts-email-grid';
 
         return $this->forward(
             'OroEmailBundle:Email:create',
