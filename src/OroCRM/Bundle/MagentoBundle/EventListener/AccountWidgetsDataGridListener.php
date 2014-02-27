@@ -6,7 +6,7 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Datagrid\RequestParameters;
 
-class DataGridListener
+class AccountWidgetsDataGridListener
 {
     /**
      * @var array

@@ -2,12 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
-use OroCRM\Bundle\MagentoBundle\EventListener\DataGridListener;
+use OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener;
 
-class DataGridListenerTest extends \PHPUnit_Framework_TestCase
+class AccountWidgetsDataGridListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DataGridListener
+     * @var AccountWidgetsDataGridListener
      */
     protected $target;
 
@@ -64,7 +64,7 @@ class DataGridListenerTest extends \PHPUnit_Framework_TestCase
         $this->dataSource->expects($this->any())
             ->method('getQueryBuilder')
             ->will($this->returnValue($this->queryBuilder));
-        $this->target = new DataGridListener($this->requestParams, $params);
+        $this->target = new AccountWidgetsDataGridListener($this->requestParams, $params);
     }
 
     public function testOnBuildAfterSetParams()

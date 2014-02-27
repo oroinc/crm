@@ -1,17 +1,17 @@
 parameters:
     # transport
-    orocrm_magento.transport.soap_transport.class:                        OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport
+    orocrm_magento.transport.soap_transport.class:                          OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport
 
     # providers
-    orocrm_magento.provider.channel_type.class:                           OroCRM\Bundle\MagentoBundle\Provider\ChannelType
+    orocrm_magento.provider.channel_type.class:                             OroCRM\Bundle\MagentoBundle\Provider\ChannelType
 
     # forms
-    orocrm_magento.form.type.soap_transport_setting.class:                OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
-    orocrm_magento.form.subscriber.soap_transport_setting.class:          OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
+    orocrm_magento.form.type.soap_transport_setting.class:                  OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
+    orocrm_magento.form.subscriber.soap_transport_setting.class:            OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
 
     # event listeners
-    orocrm_magento.event_listener.navigation.class:                       OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener
-    orocrm.magento.event_listener.datagrid_listener.class:                OroCRM\Bundle\MagentoBundle\EventListener\DataGridListener
+    orocrm_magento.event_listener.navigation.class:                         OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener
+    orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
 
 services:
     orocrm_magento.transport.soap_transport:
@@ -63,7 +63,7 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-order-grid, method: onBuildAfter }
 
     orocrm_magento.event_listener.customer_order_grid_listener:
-        class: %orocrm.magento.event_listener.datagrid_listener.class%
+        class: %orocrm.magento.event_listener.account_widgets_data_grid_listener.class%
         arguments:
             - @oro_datagrid.datagrid.request_params
             - ['customerId', 'channelId']
