@@ -88,33 +88,6 @@ services:
         tags:
            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-contacts-update-grid, method: onBuildAfter }
 
-    orocrm_account.event_listener.account_contacts_view_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'account'
-            - @oro_datagrid.datagrid.request_params
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-leads-view-grid, method: onBuildAfter }
-
-    orocrm_account.event_listener.account_opportunities_view_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'account'
-            - @oro_datagrid.datagrid.request_params
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-opportunities-view-grid, method: onBuildAfter }
-
-    orocrm_account.event_listener.account_orders_view_listener:
-            class: %oro_datagrid.event_listener.base_orm_relation.class%
-            arguments:
-                - 'account'
-                - @oro_datagrid.datagrid.request_params
-                - false
-            tags:
-                - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-orders-view-grid, method: onBuildAfter }
-
     orocrm_account.event_listener.datagrid.account_email:
         class: %orocrm_account.event_listener.datagrid.account_email.class%
         arguments:

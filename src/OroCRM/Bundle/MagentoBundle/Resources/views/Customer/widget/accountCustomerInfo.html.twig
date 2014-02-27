@@ -1,10 +1,31 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
-{% import 'OroEmailBundle::macros.html.twig' as email %}
 
 <div class="widget-content row-fluid row-fluid-divider">
     <div class="responsive-block form-horizontal">
         {{ UI.renderProperty("orocrm.magento.customer.name.label"|trans, customer|oro_format_name) }}
-        {{ UI.renderProperty("orocrm.magento.customer.email.label"|trans, email.email_address_simple(customer.email)) }}
+
+        {% set customer_email %}
+        <a class="contact-box-link" data-url="{{ path('orocrm_customer_email_create', { 'id': customer.id }) }}"
+           href="javascript:void(0);"
+                {{ UI.renderWidgetElementAttributes({
+                    'type' : 'dialog',
+                    'multiple' : true,
+                    'gridName' : 'account-email-grid',
+                    'options' : {
+                        'alias': 'email-dialog',
+                        'dialogOptions' : {
+                            'title' : 'oro.email.send_email'|trans,
+                            'allowMaximize': true,
+                            'allowMinimize': true,
+                            'dblclick': 'maximize',
+                            'maximizedHeightDecreaseBy': 'minimize-bar',
+                            'width': 1000
+                        }
+                    }
+                }) }}
+                >{{ customer.email }}</a>
+        {% endset %}
+        {{ UI.renderProperty("orocrm.magento.customer.email.label"|trans, customer_email) }}
         {{ UI.renderProperty("orocrm.magento.customer.group.label"|trans, customer.group.name) }}
         {{ UI.renderProperty("orocrm.magento.customer.website.label"|trans, customer.website.name) }}
         {{ UI.renderProperty("orocrm.magento.customer.store.label"|trans, customer.store.name) }}

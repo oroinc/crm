@@ -84,4 +84,24 @@ class CustomerController extends Controller
     {
         return array('customer' => $customer, 'channelId' => $channelId);
     }
+
+    /**
+     * @Route(
+     *      "/{id}/email-create",
+     *      name="orocrm_customer_email_create",
+     *      requirements={"contactId"="\d+"}
+     * )
+     * @AclAncestor("oro_email_create")
+     */
+    public function createEmailAction(Customer $customer)
+    {
+        $query = $this->getRequest()->query->all();
+        $query['to'] = $customer->getEmail();
+
+        return $this->forward(
+            'OroEmailBundle:Email:create',
+            array(),
+            $query
+        );
+    }
 }
