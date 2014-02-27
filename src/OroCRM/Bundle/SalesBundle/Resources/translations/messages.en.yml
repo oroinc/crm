@@ -149,3 +149,6 @@ orocrm:
                 view:   View
                 update: Update
                 delete: Delete
+        widgets:
+            leads:         Leads
+            opportunities: Opportunities

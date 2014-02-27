@@ -150,3 +150,5 @@ orocrm:
             entity_description:  Represent contact's source
             label.label:  Label
             name.label:   Name
+        widgets:
+            account_contacts: Contacts

@@ -6,27 +6,15 @@ orocrm:
 
     account:
         widgets:
-            account_order:
-                title: Orders
-            contacts:
-                phone: Phone
-                email: Email
-                title: Contacts
-            sales:
-                title: Sales
-            leads:
-                title: Leads
-            opportunities:
-                title: Opportunities
-            magento_channel:
-                title: Magento Chanel
-            account_information:
-                tab_title: General
-                title: Account Information
-        placeholdes:
-            actions: Account actions
-        dataBlocks:
+            magento_channel: Magento Channel
+            account_information: Account Information
+
+        account_actions: Account actions
+
+        sections:
+            general: General
             activity: Activity
+            sales: Sales
         form:
             choose_account: Choose an account...
             select_contacts: Select contacts
@@ -47,6 +35,8 @@ orocrm:
         billing_address.label:  Billing Address
         contacts.label:         Contacts
         default_contact.label:  Default
+        phone.label: Phone
+        email.label: Email
 
         extend_website.label:       Website
         extend_ticker_symbol.label: Ticker Symbol
