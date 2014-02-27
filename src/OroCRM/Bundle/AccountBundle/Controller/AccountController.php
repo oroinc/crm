@@ -161,7 +161,7 @@ class AccountController extends Controller
 
         /** @var Contact $contact */
         foreach ($contacts as $contact) {
-            if ($contact->getId() == $defaultContact->getId()) {
+            if ($defaultContact && $contact->getId() == $defaultContact->getId()) {
                 continue;
             }
             $contactsWithoutDefault[] = $contact;
