@@ -45,7 +45,7 @@ class OroCRMSalesBundle implements Migration
             'extend_source',
             'optionSet',
             [
-                'oro_extend' => [
+                'oro_options' => [
                     'extend' => ['is_extend' => true, 'set_expanded' => false]
                 ]
             ]

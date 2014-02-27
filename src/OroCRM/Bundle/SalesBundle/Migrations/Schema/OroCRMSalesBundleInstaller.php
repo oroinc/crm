@@ -53,7 +53,7 @@ class OroCRMSalesBundleInstaller implements Installation
             'extend_source',
             'optionSet',
             [
-                'oro_extend' => [
+                'oro_options' => [
                     'extend' => ['is_extend' => true, 'set_expanded' => false]
                 ]
             ]

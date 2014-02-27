@@ -29,7 +29,7 @@ class OroCRMAccountBundle implements Migration
             'extend_description',
             'text',
             [
-                'oro_extend' => [
+                'oro_options' => [
                     'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
                     'datagrid' => ['is_visible' => false],
                     'merge'    => ['display' => true],
@@ -40,7 +40,7 @@ class OroCRMAccountBundle implements Migration
             'extend_phone',
             'string',
             [
-                'oro_extend' => [
+                'oro_options' => [
                     'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
                     'datagrid' => ['is_visible' => false],
                     'merge'    => ['display' => true],
@@ -51,7 +51,7 @@ class OroCRMAccountBundle implements Migration
             'extend_email',
             'string',
             [
-                'oro_extend' => [
+                'oro_options' => [
                     'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
                     'datagrid' => ['is_visible' => false],
                     'merge'    => ['display' => true],
@@ -62,7 +62,7 @@ class OroCRMAccountBundle implements Migration
             'extend_fax',
             'string',
             [
-                'oro_extend' => [
+                'oro_options' => [
                     'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
                     'datagrid' => ['is_visible' => false],
                     'merge'    => ['display' => true],
@@ -73,7 +73,7 @@ class OroCRMAccountBundle implements Migration
             'extend_website',
             'string',
             [
-                'oro_extend' => [
+                'oro_options' => [
                     'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
                     'datagrid' => ['is_visible' => false],
                     'merge'    => ['display' => true],
@@ -84,7 +84,7 @@ class OroCRMAccountBundle implements Migration
             'extend_employees',
             'integer',
             [
-                'oro_extend' => [
+                'oro_options' => [
                     'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
                     'datagrid' => ['is_visible' => false],
                     'merge'    => ['display' => true],
@@ -95,7 +95,7 @@ class OroCRMAccountBundle implements Migration
             'extend_ownership',
             'string',
             [
-                'oro_extend' => [
+                'oro_options' => [
                     'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
                     'datagrid' => ['is_visible' => false],
                     'merge'    => ['display' => true],
@@ -106,7 +106,7 @@ class OroCRMAccountBundle implements Migration
             'extend_ticker_symbol',
             'string',
             [
-                'oro_extend' => [
+                'oro_options' => [
                     'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
                     'datagrid' => ['is_visible' => false],
                     'merge'    => ['display' => true],
@@ -117,7 +117,7 @@ class OroCRMAccountBundle implements Migration
             'extend_rating',
             'string',
             [
-                'oro_extend' => [
+                'oro_options' => [
                     'extend'   => ['is_extend' => true, 'owner' => 'Custom'],
                     'datagrid' => ['is_visible' => false],
                     'merge'    => ['display' => true],
