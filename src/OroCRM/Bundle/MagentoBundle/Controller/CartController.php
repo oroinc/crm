@@ -64,12 +64,16 @@ class CartController extends Controller
     }
 
     /**
-     * @Route("/widget/account_cart/{id}", name="orocrm_account_customer_cart_widget", requirements={"id"="\d+"}))
+     * @Route(
+     *        "/widget/account_cart/{id}/{channelId}",
+     *         name="orocrm_account_customer_cart_widget",
+     *         requirements={"id"="\d+", "channelId"="\d+"}
+     * )
      * @AclAncestor("orocrm_magento_cart_view")
      * @Template
      */
-    public function accountCustomerCartInfoAction($id)
+    public function accountCustomerCartInfoAction($id, $channelId)
     {
-        return array('customerId' => $id);
+        return array('customerId' => $id, 'channelId' => $channelId);
     }
 }

@@ -57,14 +57,15 @@ class CustomerController extends Controller
      * @Route(
      *         "/widget/customers-info/{id}/{channelId}",
      *          name="orocrm_customers_info_widget",
-     *          requirements={"id"="\d+", "channelId"="\d+"})
+     *          requirements={"id"="\d+", "channelId"="\d+"}
+     * )
      * @Template
      */
     public function accountCustomersInfoAction($id, $channelId)
     {
         $customers = $this->getDoctrine()
             ->getRepository('\OroCRM\Bundle\MagentoBundle\Entity\Customer')
-            ->findBy(array('account' => $id));
+            ->findBy(array('account' => $id, 'channel' => $channelId));
 
         return array('customers' => $customers, 'channelId' => $channelId);
     }
@@ -73,7 +74,8 @@ class CustomerController extends Controller
      * @Route(
      *        "/widget/customer-info/{id}/{channelId}",
      *        name="orocrm_customer_info_widget",
-     *        requirements={"id"="\d+", "channelId"="\d+"})
+     *        requirements={"id"="\d+", "channelId"="\d+"}
+     * )
      * @Template
      */
     public function accountCustomerInfoAction(Customer $customer, $channelId)

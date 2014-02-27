@@ -14,14 +14,15 @@
     </div>
     <div class="responsive-block">
         {% set tabs = {} %}
-        {% set widgetId = 'customer: '~customer.id~'channel: '~channelId %}
+        {% set widgetId = 'customer_'~customer.id~'channel_'~channelId %}
         {% set orderTabAlias = 'orocrm_customer_orders_account_widget'~widgetId %}
         {% set tabs = tabs|merge(
             [{
                 'alias': orderTabAlias,
                 'widgetType': 'block',
+                'wid': widgetId,
                 'label': "orocrm.magento.order.entity_plural_label"|trans,
-                'url': path('orocrm_customer_orders_account_widget', {id: customer.id})
+                'url': path('orocrm_customer_orders_account_widget', {id: customer.id, channelId:channelId})
             }]
         ) %}
         {% set cartTabAlias = 'orocrm_account_customer_cart_widget'~widgetId %}
@@ -29,8 +30,9 @@
             [{
                 'alias': cartTabAlias,
                 'widgetType': 'block',
+                'wid': widgetId,
                 'label': "orocrm.magento.cart.entity_plural_label"|trans,
-                'url': path('orocrm_account_customer_cart_widget', {id: customer.id})
+                'url': path('orocrm_account_customer_cart_widget', {id: customer.id, channelId:channelId})
             }]
         ) %}
         {{ UI.tabPanel(tabs) }}

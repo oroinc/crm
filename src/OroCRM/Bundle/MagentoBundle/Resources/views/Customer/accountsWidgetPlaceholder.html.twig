@@ -1,9 +1,7 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
-<div class="widget-content">
-    {{ oro_widget_render({
-        'widgetType': 'block',
-        'wid': 'customers-info-widget-'~id~channelId,
-        'url': path('orocrm_customers_info_widget', {id: id, 'channelId':channelId})
-    }) }}
-</div>
+{{ oro_widget_render({
+    'widgetType': 'block',
+    'wid': 'customers-info-widget-'~id~'channel_'~channelId,
+    'url': path('orocrm_customers_info_widget', {id: id, 'channelId':channelId})
+}) }}

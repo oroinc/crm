@@ -11,6 +11,7 @@ parameters:
 
     # event listeners
     orocrm_magento.event_listener.navigation.class:                       OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener
+    orocrm.magento.event_listener.datagrid_listener.class:                OroCRM\Bundle\MagentoBundle\EventListener\DataGridListener
 
 services:
     orocrm_magento.transport.soap_transport:
@@ -62,11 +63,10 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-order-grid, method: onBuildAfter }
 
     orocrm_magento.event_listener.customer_order_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        class: %orocrm.magento.event_listener.datagrid_listener.class%
         arguments:
-            - 'customerId'
             - @oro_datagrid.datagrid.request_params
-            - false
+            - ['customerId', 'channelId']
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-customer-orders-view-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-customer-cart-view-grid, method: onBuildAfter }

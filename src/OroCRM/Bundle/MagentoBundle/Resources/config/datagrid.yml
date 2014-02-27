@@ -707,7 +707,7 @@ datagrid:
                         - { join: o.items, alias: items }
                 where:
                     and:
-                        - o.customer = :customerId
+                        - o.customer = :customerId AND o.channel = :channelId
                 groupBy: o.id
         columns:
             incrementId:
@@ -760,7 +760,7 @@ datagrid:
                         - { join: c.workflowStep, alias: step }
                 where:
                     and:
-                        - c.customer = :customerId
+                        - c.customer = :customerId AND c.channel = :channelId
                 groupBy: c.id
         columns:
             originId:

@@ -1,5 +1,5 @@
 placeholders:
-    orocrm_account_customers_info:
+    orocrm_account_customers_info_magento:
         items:
             orocrm_account_customers_info_widget: ~
     orocrm_account_orders:

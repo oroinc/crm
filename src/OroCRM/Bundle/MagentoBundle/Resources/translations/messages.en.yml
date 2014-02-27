@@ -93,7 +93,7 @@ orocrm:
             addresses.label:     Adresses
             carts.label:         Carts
             channel.label:       Channel
-            name.label:                Name
+            name.label:          Name
 
         cart:
             entity_label:         Shopping Cart
@@ -260,3 +260,6 @@ orocrm:
         account_carts_grid:
             items: Items
             total_amount: Total Amount
+
+        account_customers_widget:
+            not_exist: No customers exist

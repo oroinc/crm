@@ -140,16 +140,19 @@
     ]) %}
     {% for channel in channels %}
     {% set accountCustomersInfoWidget %}
-        {% placeholder orocrm_account_customers_info with {'id': entity.id, 'channelId':channel.id} %}
+        {% set placeHolderName = 'orocrm_account_customers_info_'~channel.type %}
+        {{ placeholder(placeHolderName, {'id': entity.id, 'channelId':channel.id}) }}
     {% endset %}
-    {% set dataBlocks = dataBlocks|merge([
-        {
-            'title': channel.name,
-            'subblocks': [
-                {'data' : [accountCustomersInfoWidget]}
-            ]
-        }
-    ]) %}
+    {% if accountCustomersInfoWidget|trim is not empty %}
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title': channel.name,
+                'subblocks': [
+                    {'data' : [accountCustomersInfoWidget]}
+                ]
+            }
+        ]) %}
+    {% endif %}
     {% endfor %}
     {% set id = 'accountView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
