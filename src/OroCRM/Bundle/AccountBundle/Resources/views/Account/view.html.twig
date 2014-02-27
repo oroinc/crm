@@ -54,6 +54,7 @@
             'url': path('orocrm_account_widget_info', {id: entity.id})
         }) }}
     {% endset %}
+
     {% set dataBlocks = [
         {
             'title': 'orocrm.account.widgets.account_information.tab_title'|trans,
@@ -64,9 +65,9 @@
         }
     ] %}
 
+    {% set accountSalesSection %}
+        {% set tabs = [] %}
 
-    {% set accountSalesWidget %}
-        {% set tabs = {} %}
         {% set tabs = tabs|merge(
             [{
                 'alias': 'orocrm_account_widget_leads',
@@ -75,6 +76,7 @@
                 'label': 'orocrm.account.widgets.leads.title'|trans,
             }]
         ) %}
+
         {% set tabs = tabs|merge(
             [{
                 'alias': 'orocrm_account_widget_opportunities',
@@ -95,16 +97,17 @@
 
         {{ UI.tabPanel(tabs) }}
     {% endset %}
+
     {% set dataBlocks = dataBlocks|merge([
         {
             'title': 'orocrm.account.widgets.sales.title'|trans,
             'subblocks': [
-                {'data' : [accountSalesWidget]}
+                {'data' : [accountSalesSection]}
             ]
         }
     ]) %}
 
-    {% set tabBlock %}
+    {% set accountActibitySection %}
         {% set tabs = {} %}
 
         {% if resource_granted('orocrm_call_view') %}
@@ -135,27 +138,32 @@
         {
             'title': 'orocrm.account.dataBlocks.activity'|trans,
             'subblocks': [
-                {'data' : [tabBlock]}
+                {'data' : [accountActibitySection]}
             ]
         }
     ]) %}
+
     {% for channel in channels %}
-    {% set accountCustomersInfoWidget %}
-        {% set placeHolderName = 'orocrm_account_customers_info_'~channel.type %}
-        {{ placeholder(placeHolderName, {'id': entity.id, 'channelId':channel.id}) }}
-    {% endset %}
-    {% if accountCustomersInfoWidget|trim is not empty %}
-        {% set dataBlocks = dataBlocks|merge([
-            {
-                'title': channel.name,
-                'subblocks': [
-                    {'data' : [accountCustomersInfoWidget]}
-                ]
-            }
-        ]) %}
-    {% endif %}
+        {% set accountCustomersInfoWidget %}
+            {% set placeHolderName = 'orocrm_account_customers_info_' ~ channel.type %}
+
+            {{ placeholder(placeHolderName, {'id': entity.id, 'channelId':channel.id}) }}
+        {% endset %}
+        {% if accountCustomersInfoWidget|trim is not empty %}
+            {% set dataBlocks = dataBlocks|merge([
+                {
+                    'title': channel.name,
+                    'subblocks': [
+                        {'data' : [accountCustomersInfoWidget]}
+                    ]
+                }
+            ]) %}
+        {% endif %}
     {% endfor %}
+
     {% set id = 'accountView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
+
     {{ parent() }}
+
 {% endblock content_data %}
