@@ -9,7 +9,6 @@ class OroCRMContactUsBundle implements Migration
 {
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function up(Schema $schema)
     {
@@ -29,12 +28,12 @@ class OroCRMContactUsBundle implements Migration
      * Generate table orocrm_contactus_contact_reason
      *
      * @param Schema $schema
-     * @param string $contactReason
+     * @param string $tableName
      */
-    public static function orocrmContactusContactReasonTable(Schema $schema, $contactReason = '')
+    public static function orocrmContactusContactReasonTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_contactus_contact_reason **/
-        $table = $schema->createTable($contactReason ? : 'orocrm_contactus_contact_reason');
+        $table = $schema->createTable($tableName ? : 'orocrm_contactus_contact_reason');
         $table->addColumn('id', 'smallint', ['autoincrement' => true]);
         $table->addColumn('label', 'string', ['length' => 255]);
         $table->setPrimaryKey(['id']);
@@ -100,7 +99,7 @@ class OroCRMContactUsBundle implements Migration
      * @param Schema $schema
      * @param string $tableName
      */
-    public static function orocrmContactusRequestEmailsTable(Schema $schema, $tableName = '')
+    public static function orocrmContactusRequestEmailsTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_contactus_request_emails **/
         $table = $schema->createTable($tableName ? : 'orocrm_contactus_request_emails');
@@ -116,9 +115,9 @@ class OroCRMContactUsBundle implements Migration
      * Generate foreign keys for table orocrm_contactus_request
      *
      * @param Schema $schema
-     * @param string $contactReason
+     * @param string $contactReasonTableName
      */
-    public static function orocrmContactusRequestForeignKeys(Schema $schema, $contactReason = '')
+    public static function orocrmContactusRequestForeignKeys(Schema $schema, $contactReasonTableName = null)
     {
         /** Generate foreign keys for table orocrm_contactus_request **/
         $table = $schema->getTable('orocrm_contactus_request');
@@ -135,7 +134,7 @@ class OroCRMContactUsBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable($contactReason ? : 'orocrm_contactus_contact_reason'),
+            $schema->getTable($contactReasonTableName ? : 'orocrm_contactus_contact_reason'),
             ['contact_reason_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
@@ -191,7 +190,7 @@ class OroCRMContactUsBundle implements Migration
      * @param Schema $schema
      * @param string $tableName
      */
-    public static function orocrmContactusRequestEmailsForeignKeys(Schema $schema, $tableName = '')
+    public static function orocrmContactusRequestEmailsForeignKeys(Schema $schema, $tableName = null)
     {
         /** Generate foreign keys for table orocrm_contactus_request_emails **/
         $table = $schema->getTable($tableName ? : 'orocrm_contactus_request_emails');

@@ -9,7 +9,6 @@ class OroCRMContactBundle implements Migration
 {
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function up(Schema $schema)
     {
@@ -122,7 +121,7 @@ class OroCRMContactBundle implements Migration
      * @param Schema $schema
      * @param string $tableName
      */
-    public static function orocrmContactAddressToAddressTypeTable(Schema $schema, $tableName = '')
+    public static function orocrmContactAddressToAddressTypeTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_contact_address_to_address_type **/
         $table = $schema->createTable($tableName ? : 'orocrm_contact_address_to_address_type');
@@ -226,12 +225,12 @@ class OroCRMContactBundle implements Migration
      * Generate table orocrm_contact_to_contact_group
      *
      * @param Schema $schema
-     * @param string $contactGroup
+     * @param string $tableName
      */
-    public static function orocrmContactToContactGroupTable(Schema $schema, $contactGroup = '')
+    public static function orocrmContactToContactGroupTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_contact_to_contact_group **/
-        $table = $schema->createTable($contactGroup ? : 'orocrm_contact_to_contact_group');
+        $table = $schema->createTable($tableName ? : 'orocrm_contact_to_contact_group');
         $table->addColumn('contact_id', 'integer', []);
         $table->addColumn('contact_group_id', 'smallint', []);
         $table->setPrimaryKey(['contact_id', 'contact_group_id']);
@@ -330,7 +329,7 @@ class OroCRMContactBundle implements Migration
      * @param Schema $schema
      * @param string $tableName
      */
-    public static function orocrmContactAddressToAddressTypeForeignKeys(Schema $schema, $tableName = '')
+    public static function orocrmContactAddressToAddressTypeForeignKeys(Schema $schema, $tableName = null)
     {
         /** Generate foreign keys for table orocrm_contact_address_to_address_type **/
         $table = $schema->getTable($tableName ? : 'orocrm_contact_address_to_address_type');
@@ -407,12 +406,12 @@ class OroCRMContactBundle implements Migration
      * Generate foreign keys for table orocrm_contact_to_contact_group
      *
      * @param Schema $schema
-     * @param string $contactGroup
+     * @param string $tableName
      */
-    public static function orocrmContactToContactGroupForeignKeys(Schema $schema, $contactGroup = '')
+    public static function orocrmContactToContactGroupForeignKeys(Schema $schema, $tableName = null)
     {
         /** Generate foreign keys for table orocrm_contact_to_contact_group **/
-        $table = $schema->getTable($contactGroup ? : 'orocrm_contact_to_contact_group');
+        $table = $schema->getTable($tableName ? : 'orocrm_contact_to_contact_group');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_contact_group'),
             ['contact_group_id'],

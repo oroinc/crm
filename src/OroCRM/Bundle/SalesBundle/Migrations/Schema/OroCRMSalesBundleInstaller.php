@@ -18,22 +18,21 @@ class OroCRMSalesBundleInstaller implements Installation
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function up(Schema $schema)
     {
         OroCRMSalesBundle::orocrmSalesLeadTable($schema);
         OroCRMSalesBundle::orocrmSalesLeadStatusTable($schema);
         OroCRMSalesBundle::orocrmSalesOpportunityTable($schema);
-        OroCRMSalesBundle::orocrmSalesOpportunityCloseReasonTable($schema, 'orocrm_sales_opportunity_close');
-        OroCRMSalesBundle::orocrmSalesOpportunityStatusTable($schema, 'orocrm_sales_opportunity_stat');
+        OroCRMSalesBundle::orocrmSalesOpportunityCloseReasonTable($schema, 'orocrm_sales_opport_close_rsn');
+        OroCRMSalesBundle::orocrmSalesOpportunityStatusTable($schema, 'orocrm_sales_opport_status');
         OroCRMSalesBundle::orocrmSalesFunnelTable($schema);
 
         OroCRMSalesBundle::orocrmSalesLeadForeignKeys($schema);
         OroCRMSalesBundle::orocrmSalesOpportunityForeignKeys(
             $schema,
-            'orocrm_sales_opportunity_close',
-            'orocrm_sales_opportunity_stat'
+            'orocrm_sales_opport_close_rsn',
+            'orocrm_sales_opport_status'
         );
         OroCRMSalesBundle::orocrmSalesFunnelForeignKeys($schema);
 

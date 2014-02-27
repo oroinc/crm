@@ -18,7 +18,6 @@ class OroCRMContactBundleInstaller implements Installation
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function up(Schema $schema)
     {
@@ -39,7 +38,7 @@ class OroCRMContactBundleInstaller implements Installation
         OroCRMContactBundle::orocrmContactGroupForeignKeys($schema);
         OroCRMContactBundle::orocrmContactPhoneForeignKeys($schema);
         OroCRMContactBundle::orocrmContactToContactGroupForeignKeys($schema, 'orocrm_contact_to_contact_grp');
-        OroCRMContactBundle::oroEmailAddressForeignKeys($schema, 'orocrm_contact_to_contact_grp');
+        OroCRMContactBundle::oroEmailAddressForeignKeys($schema);
 
         return [];
     }

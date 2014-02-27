@@ -13,8 +13,8 @@ class OroCRMSalesBundle implements Migration
     public function up(Schema $schema)
     {
         return [
-            "ALTER TABLE orocrm_sales_opportunity_close_reason RENAME TO orocrm_sales_opportunity_close;",
-            "ALTER TABLE orocrm_sales_opportunity_status RENAME TO orocrm_sales_opportunity_stat;",
+            "ALTER TABLE orocrm_sales_opportunity_close_reason RENAME TO orocrm_sales_opport_close_rsn;",
+            "ALTER TABLE orocrm_sales_opportunity_status RENAME TO orocrm_sales_opport_status;",
         ];
     }
 }
