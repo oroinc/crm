@@ -115,6 +115,7 @@ class AccountController extends Controller
         }
 
         return array(
+            'entity'   => $entity,
             'form'     => $this->get('orocrm_account.form.account')->createView()
         );
     }
@@ -152,15 +153,12 @@ class AccountController extends Controller
      * @Route("/widget/emails", name="orocrm_account_widget_emails", requirements={"id"="\d+"})
      * @Template()
      * @AclAncestor("oro_email_view")
-     *
-     * @param Request $request
-     *
-     * @return array
+     * @Template()
      */
-    public function emailsAction(Request $request)
+    public function emailsAction(Account $account)
     {
         return [
-            'datagridParameters' => $request->query->all()
+            'entity' => $account
         ];
     }
 }
