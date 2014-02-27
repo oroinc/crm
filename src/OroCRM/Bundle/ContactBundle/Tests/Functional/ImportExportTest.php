@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 
-use Oro\Bundle\BatchBundle\Job\DoctrineJobRepository as BatchJobRepository;
+use Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository as BatchJobRepository;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
@@ -30,9 +30,9 @@ class ImportExportTest extends WebTestCase
     {
         // clear DB from separate connection
         $batchJobManager = $this->getBatchJobManager();
-        $batchJobManager->createQuery('DELETE OroBatchBundle:JobInstance')->execute();
-        $batchJobManager->createQuery('DELETE OroBatchBundle:JobExecution')->execute();
-        $batchJobManager->createQuery('DELETE OroBatchBundle:StepExecution')->execute();
+        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobInstance')->execute();
+        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobExecution')->execute();
+        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:StepExecution')->execute();
     }
 
     /**
@@ -41,7 +41,7 @@ class ImportExportTest extends WebTestCase
     protected function getBatchJobManager()
     {
         /** @var BatchJobRepository $batchJobRepository */
-        $batchJobRepository = $this->client->getKernel()->getContainer()->get('oro_batch.job_repository');
+        $batchJobRepository = $this->client->getKernel()->getContainer()->get('akeneo_batch.job_repository');
         return $batchJobRepository->getJobManager();
     }
 
