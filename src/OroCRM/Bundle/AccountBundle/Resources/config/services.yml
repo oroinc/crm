@@ -7,7 +7,7 @@ parameters:
     orocrm_account.account.manager.api.class:       Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_account.type.account.api.class:          OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType
 
-    orocrm_account.event_listener.account_email_grid_listener.class:  OroCRM\Bundle\AccountBundle\EventListener\AccountEmailGridListener
+    orocrm_account.event_listener.datagrid.account_email.class:  OroCRM\Bundle\AccountBundle\EventListener\DataGrid\AccountEmailListener
 services:
     orocrm_account.form.account:
         class:                                      Symfony\Component\Form\Form
@@ -115,8 +115,8 @@ services:
             tags:
                 - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-orders-view-grid, method: onBuildAfter }
 
-    orocrm_account.event_listener.account_email_grid_listener:
-        class: %orocrm_account.event_listener.account_email_grid_listener.class%
+    orocrm_account.event_listener.datagrid.account_email:
+        class: %orocrm_account.event_listener.datagrid.account_email.class%
         arguments:
           - @oro_datagrid.datagrid.request_params
           - @doctrine.orm.entity_manager

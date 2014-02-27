@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\EventListener;
+namespace OroCRM\Bundle\AccountBundle\EventListener\DataGrid;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
@@ -12,7 +12,7 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\EmailBundle\Datagrid\EmailQueryFactory;
 use Oro\Bundle\EmailBundle\Entity\Util\EmailUtil;
 
-class AccountEmailGridListener
+class AccountEmailListener
 {
     /** @var EmailQueryFactory */
     protected $queryFactory;
@@ -47,12 +47,10 @@ class AccountEmailGridListener
 
             $emails = [];
 
-            if ($id = $this->requestParams->get('accountId')) {
-                $account = $this->em
-                    ->getRepository('OroCRMAccountBundle:Account')
-                    ->find($id);
+            if ($id = $this->requestParams->get('account')) {
+                $account = $this->em->getRepository('OroCRMAccountBundle:Account')->find($id);
 
-                if (method_exists($account, 'getExtendEmail')) {
+                if ($account && method_exists($account, 'getExtendEmail')) {
                     if ($email = $account->getExtendEmail()) {
                         $emails = EmailUtil::extractEmailAddresses($email);
                     }

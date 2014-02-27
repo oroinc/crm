@@ -206,18 +206,14 @@ class AccountController extends Controller
     }
 
     /**
-     * @Route("/widget/emails", name="orocrm_account_widget_emails", requirements={"id"="\d+"})
-     * @Template()
+     * @Route("/widget/emails/{id}", name="orocrm_account_widget_emails", requirements={"id"="\d+"})
      * @AclAncestor("oro_email_view")
-     *
-     * @param Request $request
-     *
-     * @return array
+     * @Template()
      */
-    public function emailsAction(Request $request)
+    public function emailsAction(Account $account)
     {
         return [
-            'datagridParameters' => $request->query->all()
+            'entity' => $account
         ];
     }
 }
