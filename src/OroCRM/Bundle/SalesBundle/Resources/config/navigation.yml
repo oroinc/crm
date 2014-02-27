@@ -47,6 +47,31 @@ oro_menu_config:
             extras:
                 description: Create new opportunity
                 isCustomAction: true
+
+        orocrm_account_widget_leads:
+            label: orocrm.sales.widgets.leads
+            route: orocrm_account_widget_leads
+            routeParameters:
+                id: 0
+            extras:
+                widgetType: block
+
+        orocrm_account_widget_opportunities:
+            label: orocrm.sales.widgets.opportunities
+            route: orocrm_account_widget_opportunities
+            routeParameters:
+                id: 0
+            extras:
+                widgetType: block
+
+        orocrm_account_widget_orders:
+            label: orocrm.magento.account_orders_widget
+            route: orocrm_account_widget_orders
+            routeParameters:
+                id: 0
+            extras:
+                widgetType: block
+
     tree:
         application_menu:
             children:
@@ -61,6 +86,12 @@ oro_menu_config:
                 shortcut_list_opportunities: ~
                 shortcut_new_lead: ~
                 shortcut_new_opportunity: ~
+
+        account_sales_tab:
+            children:
+                orocrm_account_widget_leads: ~
+                orocrm_account_widget_opportunities: ~
+                orocrm_account_widget_orders: ~
 
 oro_titles:
     orocrm_sales_opportunity_index: ~

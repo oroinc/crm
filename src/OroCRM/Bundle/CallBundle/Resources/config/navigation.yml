@@ -13,6 +13,12 @@ oro_menu_config:
             extras:
                 description: List of calls
 
+        account_calls:
+            label: orocrm.call.entity_plural_label
+            route: orocrm_call_widget_calls
+            extras:
+                widgetType: block
+
     tree:
         application_menu:
             children:
@@ -23,6 +29,10 @@ oro_menu_config:
             children:
                 # shortcut_new_call: ~
                 shortcut_call_list: ~
+
+        account_activity_tab:
+            children:
+                account_calls: ~
 
 oro_titles:
     orocrm_call_index: ~

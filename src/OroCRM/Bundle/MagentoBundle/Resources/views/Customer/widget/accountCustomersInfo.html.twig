@@ -1,22 +1,21 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 <div class="widget-content">
 {% if resource_granted("orocrm_magento_customer_view") %}
-    {% if customers|length>0 %}
-            {% set tabs = {} %}
-            {% for customer in customers %}
-                {% set widgetId = 'customer__'~customer.id~'channel__'~channelId %}
-                {% set tabAlias = 'orocrm_customer_info_widget_'~widgetId %}
-                {% set tabs = tabs|merge(
-                    [{
-                        'alias': tabAlias,
-                        'widgetType': 'block',
-                        'wid': widgetId,
-                        'label': customer|oro_format_name,
-                        'url': path('orocrm_customer_info_widget', {id: customer.id, channelId:channelId})
-                    }]
-                ) %}
-            {% endfor %}
-            {{ UI.tabPanel(tabs) }}
+    {% if customers|length > 0 %}
+        {% set tabs = [] %}
+        {% for customer in customers %}
+            {% set widgetId = 'customer__' ~ customer.id ~ 'channel__' ~ channelId %}
+            {% set tabs = tabs|merge([
+                {
+                    'alias': 'orocrm_customer_info_widget_' ~ widgetId,
+                    'widgetType': 'block',
+                    'wid': widgetId,
+                    'label': customer|oro_format_name,
+                    'url': path('orocrm_customer_info_widget', {id: customer.id, channelId:channelId})
+                }
+            ]) %}
+        {% endfor %}
+        {{ UI.tabPanel(tabs) }}
     {% else %}
         <div class="no-data">
             <span>{{ "orocrm.magento.account_customers_widget.not_exist"|trans }}</span>

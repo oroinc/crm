@@ -26,7 +26,7 @@
     {% endset %}
 
     {{ UI.dropdown({
-        'label': 'orocrm.account.account_actions'|trans,
+        'label': 'orocrm.account.placeholdes.actions'|trans,
         'html': html
     }) }}
 {% endblock navButtons %}
@@ -69,97 +69,44 @@
         {% endset %}
 
         {% set generalSectionBlocks = generalSectionBlocks|merge(
-            [{
-                'data' : [contactsInformationWidget]
-            }]
+            [{'data': [contactsInformationWidget]}]
         ) %}
     {% endif %}
+
+    {% set accountSalesSection %}
+        {{ UI.dynamicTabPanel('account_sales_tab', {'id': entity.id}) }}
+    {% endset %}
+
+    {% set activityBlock %}
+        {{ UI.dynamicTabPanel('account_activity_tab', {'id': entity.id}) }}
+    {% endset %}
 
     {% set dataBlocks = [
         {
             'title': 'orocrm.account.sections.general'|trans,
             'class': 'active',
             'subblocks': generalSectionBlocks
-        }
-    ] %}
-
-    {% set accountSalesSection %}
-        {% set tabs = [] %}
-
-        {% set tabs = tabs|merge(
-            [{
-                'alias': 'orocrm_account_widget_leads',
-                'widgetType': 'block',
-                'url': path('orocrm_account_widget_leads', {id: entity.id}),
-                'label': 'orocrm.sales.widgets.leads'|trans,
-            }]
-        ) %}
-
-        {% set tabs = tabs|merge(
-            [{
-                'alias': 'orocrm_account_widget_opportunities',
-                'widgetType': 'block',
-                'url': path('orocrm_account_widget_opportunities', {id: entity.id}),
-                'label': 'orocrm.sales.widgets.opportunities'|trans
-            }]
-        ) %}
-
-        {% set tabs = tabs|merge(
-            [{
-                'alias': 'orocrm_account_widget_orders',
-                'widgetType': 'block',
-                'url': path('orocrm_account_widget_orders', {id: entity.id}),
-                'label': 'orocrm.magento.account_orders_widget'|trans
-            }]
-        ) %}
-
-        {{ UI.tabPanel(tabs) }}
-    {% endset %}
-
-    {% set dataBlocks = dataBlocks|merge([
+        },
+        {
+            'title': 'orocrm.account.sections.general'|trans,
+            'class': 'active',
+            'subblocks': [
+                {'data' : [accountInformationWidget]}
+            ]
+        },
         {
             'title': 'orocrm.account.sections.sales'|trans,
             'subblocks': [
                 {'data' : [accountSalesSection]}
             ]
-        }
-    ]) %}
-
-    {% set accountActivitySection %}
-        {% set tabs = {} %}
-
-        {% if resource_granted('orocrm_call_view') %}
-            {% set tabs = tabs|merge(
-                [{
-                    'alias': 'account_calls',
-                    'label': 'orocrm.call.entity_plural_label'|trans,
-                    'widgetType': 'block',
-                    'url': path('orocrm_call_widget_calls', {accountId: entity.id})
-                }]
-            ) %}
-        {% endif %}
-
-        {% if resource_granted('oro_email_view') %}
-            {% set tabs = tabs|merge(
-                [{
-                    'alias': 'account_emails',
-                    'label': 'oro.email.entity_plural_label'|trans,
-                    'widgetType': 'block',
-                    'url': path('orocrm_account_widget_emails', {id: entity.id})
-                }]
-            ) %}
-        {% endif %}
-
-        {{ UI.tabPanel(tabs) }}
-    {% endset %}
-    {% set dataBlocks = dataBlocks|merge([
+        },
         {
             'title': 'orocrm.account.sections.activity'|trans,
             'subblocks': [
-                {'data' : [accountActivitySection]}
+                {'data' : [activityBlock]}
             ]
         }
-    ]) %}
+    ] %}
 
     {% for channel in channels %}
         {% set accountCustomersInfoWidget %}
@@ -178,10 +125,7 @@
             ]) %}
         {% endif %}
     {% endfor %}
-
     {% set id = 'accountView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
-
     {{ parent() }}
-
 {% endblock content_data %}
