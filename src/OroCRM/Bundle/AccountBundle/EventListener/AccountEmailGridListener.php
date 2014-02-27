@@ -52,7 +52,9 @@ class AccountEmailGridListener
                     ->find($id);
 
                 if (method_exists($account, 'getExtendEmail')) {
-                    $emails = EmailUtil::extractEmailAddresses($account->getExtendEmail());
+                    if ($email = $account->getExtendEmail()) {
+                        $emails = EmailUtil::extractEmailAddresses($email);
+                    }
                 }
             }
             $queryBuilder->setParameter(
