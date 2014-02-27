@@ -2,7 +2,7 @@
 <div class="widget-content">
     {% if saved %}
         <script type="text/javascript">
-        require(['oroui/js/widget-manager'],
+        require(['oro/widget-manager'],
         function(widgetManager) {
             widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
                 widget.trigger('formSave', {{ form.vars.value.id|json_encode|raw }});

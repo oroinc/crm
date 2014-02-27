@@ -151,7 +151,7 @@ datagrid:
         options:
             entityHint: contact
             requireJSModules:
-                - orodatagrid/js/datagrid/listener/column-form-listener
+                - oro/datagrid/column-form-listener
             columnListener:
                 dataField: id
                 columnName: hasGroup
@@ -454,7 +454,7 @@ datagrid:
         options:
             entityHint: account
             requireJSModules:
-              - orodatagrid/js/datagrid/listener/column-form-listener
+              - oro/datagrid/column-form-listener
             columnListener:
                 dataField: id
                 columnName: hasContact

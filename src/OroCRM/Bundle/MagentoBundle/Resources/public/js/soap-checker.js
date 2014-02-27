@@ -1,8 +1,7 @@
-/*global define*/
-define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/translator',
-        'oronavigation/js/navigation', 'oroui/js/messenger'
-    ], function ($, _, routing, Backbone, __, Navigation, messenger) {
-    "use strict";
+/* global:define */
+define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/navigation', 'oro/messenger'],
+    function ($, _, routing, Backbone, __, Navigation, messenger) {
+        "use strict";
 
     return Backbone.View.extend({
         events: {

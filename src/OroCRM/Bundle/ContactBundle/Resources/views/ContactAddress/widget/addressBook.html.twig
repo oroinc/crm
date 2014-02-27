@@ -11,10 +11,10 @@
     <div class="map-box" id="address-book"></div>
 
     <script type="text/javascript">
-    require(['jquery', 'underscore', 'routing', 'oroaddress/js/address-book', 'oroui/js/widget-manager'],
+    require(['jquery', 'underscore', 'routing', 'oro/address-book', 'oro/widget-manager'],
     function($, _, routing, AddressBook, widgetManager) {
         widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget){
-            /** @type oroaddress.AddressBook */
+            /** @type oro.AddressBook */
             var addressBook = new AddressBook({
                 el: '#address-book',
                 addressListUrl: {{ path('oro_api_get_contact_addresses', {'contactId': entity.id})|json_encode|raw }},

@@ -10,10 +10,10 @@
     <div class="map-box lead-map-box" id="address-book"></div>
 
     <script type="text/javascript">
-        require(['jquery', 'oroaddress/js/address-book', 'oroui/js/widget-manager'],
+        require(['jquery', 'oro/address-book', 'oro/widget-manager'],
         function($, AddressBook, widgetManager) {
             widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(){
-                /** @type oroaddress.AddressBook */
+                /** @type oro.AddressBook */
                 var addressBook = new AddressBook({
                     el: '#address-book',
                     addressListUrl: {{ path('oro_api_get_lead_address', {leadId: entity.id})|json_encode|raw }}

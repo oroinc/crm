@@ -1,5 +1,5 @@
 /* global require */
-require(['jquery', 'oroui/js/widget-manager', 'oro/dialog-widget'],
+require(['jquery', 'oro/widget-manager', 'oro/dialog-widget'],
 function($, WidgetManager, DialogWidget){
     'use strict';
     $(function () {
