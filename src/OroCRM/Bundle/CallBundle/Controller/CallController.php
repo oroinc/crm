@@ -171,6 +171,7 @@ class CallController extends Controller
         }
 
         return array(
+            'entity' => $entity,
             'saved' => $saved,
             'form' => $this->get('orocrm_call.call.form')->createView()
         );

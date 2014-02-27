@@ -224,7 +224,6 @@ datagrid:
         options:
             entityHint: contact
 
-
     account-contacts-update-grid:
         extend: base-account-contacts-grid
         source:
@@ -311,7 +310,6 @@ datagrid:
                 selectors:
                     included: '#appendContacts'
                     excluded: '#removeContacts'
-
 
     account-email-grid:
         extend: email-grid

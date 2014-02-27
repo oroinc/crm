@@ -38,8 +38,8 @@ class LeadController extends Controller
 
     /**
      * @Route("/info/{id}", name="orocrm_sales_lead_info", requirements={"id"="\d+"})
-     * @Template
      * @AclAncestor("orocrm_sales_lead_view")
+     * @Template()
      */
     public function infoAction(Lead $lead)
     {
@@ -50,8 +50,8 @@ class LeadController extends Controller
 
     /**
      * @Route("/address-book/{id}", name="orocrm_sales_lead_address_book", requirements={"id"="\d+"})
-     * @Template
      * @AclAncestor("orocrm_sales_lead_view")
+     * @Template()
      */
     public function addressBookAction(Lead $lead)
     {
