@@ -41,6 +41,15 @@ class OroCRMSalesBundle implements Migration
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updatedAt', 'datetime', ['notnull' => false]);
         $table->addColumn('notes', 'text', ['notnull' => false]);
+        $table->addColumn(
+            'extend_source',
+            'optionSet',
+            [
+                'oro_options' => [
+                    'extend' => ['is_extend' => true, 'set_expanded' => false]
+                ]
+            ]
+        );
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_73DB46331023C4EE');
         $table->addIndex(['status_name'], 'IDX_73DB46336625D392', []);
