@@ -115,6 +115,7 @@ class AccountController extends Controller
         }
 
         return array(
+            'entity'   => $entity,
             'form'     => $this->get('orocrm_account.form.account')->createView()
         );
     }
