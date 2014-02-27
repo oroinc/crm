@@ -27,7 +27,7 @@
             </a>
         </div>
         <div class="contact-box-row">
-            <span>{{ "orocrm.account.widgets.contacts.phone"|trans }}:</span>
+            <span>{{ "orocrm.account.phone.label"|trans }}:</span>
             {% if contact.primaryEmail %}
                 <a class="contact-box-link" data-url="{{ path('orocrm_call_create', { 'accountId': account.id, 'contactId': contact.id }) }}"
                     href="javascript:void(0);"
@@ -53,7 +53,7 @@
             {% endif %}
         </div>
         <div class="contact-box-row">
-            <span>{{ "orocrm.account.widgets.contacts.email"|trans }}:</span>
+            <span>{{ "orocrm.account.email.label"|trans }}:</span>
             {% if contact.primaryEmail %}
                 <a class="contact-box-link" data-url="{{ path('orocrm_contact_email_create', { 'contactId': contact.id }) }}"
                     href="javascript:void(0);"

@@ -38,14 +38,15 @@ class AccountEmailGridListener
      */
     public function onBuildAfter(BuildAfter $event)
     {
-        $datasource = $event->getDatagrid()->getDatasource();
-        if ($datasource instanceof OrmDatasource) {
+        $dataSource = $event->getDatagrid()->getDatasource();
+        if ($dataSource instanceof OrmDatasource) {
             /** @var QueryBuilder $query */
-            $queryBuilder = $datasource->getQueryBuilder();
+            $queryBuilder = $dataSource->getQueryBuilder();
 
             $this->queryFactory->prepareQuery($queryBuilder);
 
             $emails = [];
+
             if ($id = $this->requestParams->get('accountId')) {
                 $account = $this->em
                     ->getRepository('OroCRMAccountBundle:Account')
@@ -57,6 +58,7 @@ class AccountEmailGridListener
                     }
                 }
             }
+
             $queryBuilder->setParameter(
                 'email_addresses',
                 !empty($emails) ? $emails : null

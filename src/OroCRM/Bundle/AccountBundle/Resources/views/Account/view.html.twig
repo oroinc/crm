@@ -50,14 +50,14 @@
     {% set accountInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'title': 'orocrm.account.widgets.account_information.title'|trans,
+            'title': 'orocrm.account.widgets.account_information'|trans,
             'url': path('orocrm_account_widget_info', {id: entity.id})
         }) }}
     {% endset %}
 
     {% set dataBlocks = [
         {
-            'title': 'orocrm.account.widgets.account_information.tab_title'|trans,
+            'title': 'orocrm.account.sections.general'|trans,
             'class': 'active',
             'subblocks': [
                 {'data' : [accountInformationWidget]}
@@ -73,7 +73,7 @@
                 'alias': 'orocrm_account_widget_leads',
                 'widgetType': 'block',
                 'url': path('orocrm_account_widget_leads', {id: entity.id}),
-                'label': 'orocrm.account.widgets.leads.title'|trans,
+                'label': 'orocrm.account.widgets.leads'|trans,
             }]
         ) %}
 
@@ -82,7 +82,7 @@
                 'alias': 'orocrm_account_widget_opportunities',
                 'widgetType': 'block',
                 'url': path('orocrm_account_widget_opportunities', {id: entity.id}),
-                'label': 'orocrm.account.widgets.opportunities.title'|trans
+                'label': 'orocrm.account.widgets.opportunities'|trans
             }]
         ) %}
 
@@ -91,7 +91,7 @@
                 'alias': 'orocrm_account_widget_orders',
                 'widgetType': 'block',
                 'url': path('orocrm_account_widget_orders', {id: entity.id}),
-                'label': 'orocrm.account.widgets.account_order.title'|trans
+                'label': 'orocrm.account.widgets.account_orders'|trans
             }]
         ) %}
 
@@ -100,14 +100,14 @@
 
     {% set dataBlocks = dataBlocks|merge([
         {
-            'title': 'orocrm.account.widgets.sales.title'|trans,
+            'title': 'orocrm.account.sections.sales'|trans,
             'subblocks': [
                 {'data' : [accountSalesSection]}
             ]
         }
     ]) %}
 
-    {% set accountActibitySection %}
+    {% set accountActivitySection %}
         {% set tabs = {} %}
 
         {% if resource_granted('orocrm_call_view') %}
@@ -136,9 +136,9 @@
     {% endset %}
     {% set dataBlocks = dataBlocks|merge([
         {
-            'title': 'orocrm.account.dataBlocks.activity'|trans,
+            'title': 'orocrm.account.sections.activity'|trans,
             'subblocks': [
-                {'data' : [accountActibitySection]}
+                {'data' : [accountActivitySection]}
             ]
         }
     ]) %}
