@@ -14,17 +14,20 @@
     </div>
     <div class="responsive-block">
         {% set tabs = {} %}
+        {% set widgetId = 'customer: '~customer.id~'channel: '~channelId %}
+        {% set orderTabAlias = 'orocrm_customer_orders_account_widget'~widgetId %}
         {% set tabs = tabs|merge(
             [{
-                'alias': 'orocrm_customer_orders_account_widget',
+                'alias': orderTabAlias,
                 'widgetType': 'block',
                 'label': "orocrm.magento.order.entity_plural_label"|trans,
                 'url': path('orocrm_customer_orders_account_widget', {id: customer.id})
             }]
         ) %}
+        {% set cartTabAlias = 'orocrm_account_customer_cart_widget'~widgetId %}
         {% set tabs = tabs|merge(
             [{
-                'alias': 'orocrm_account_customer_cart_widget',
+                'alias': cartTabAlias,
                 'widgetType': 'block',
                 'label': "orocrm.magento.cart.entity_plural_label"|trans,
                 'url': path('orocrm_account_customer_cart_widget', {id: customer.id})

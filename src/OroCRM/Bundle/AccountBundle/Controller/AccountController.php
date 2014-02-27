@@ -29,7 +29,9 @@ class AccountController extends Controller
      */
     public function viewAction(Account $account)
     {
-        return ['entity' => $account];
+        $channels = $this->getDoctrine()->getRepository('OroIntegrationBundle:Channel')->findAll();
+
+        return array('entity' => $account, 'channels' => $channels);
     }
 
     /**

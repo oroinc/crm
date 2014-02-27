@@ -3,6 +3,7 @@
 <div class="widget-content">
     {{ oro_widget_render({
         'widgetType': 'block',
-        'url': path('orocrm_customers_info_widget', {id: id})
+        'wid': 'customers-info-widget-'~id~channelId,
+        'url': path('orocrm_customers_info_widget', {id: id, 'channelId':channelId})
     }) }}
 </div>

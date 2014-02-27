@@ -138,19 +138,19 @@
             ]
         }
     ]) %}
-
+    {% for channel in channels %}
     {% set accountCustomersInfoWidget %}
-        {% placeholder orocrm_account_customers_info with {'id': entity.id} %}
+        {% placeholder orocrm_account_customers_info with {'id': entity.id, 'channelId':channel.id} %}
     {% endset %}
     {% set dataBlocks = dataBlocks|merge([
         {
-            'title': 'orocrm.account.widgets.magento_channel.title'|trans,
+            'title': channel.name,
             'subblocks': [
                 {'data' : [accountCustomersInfoWidget]}
             ]
         }
     ]) %}
-
+    {% endfor %}
     {% set id = 'accountView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}

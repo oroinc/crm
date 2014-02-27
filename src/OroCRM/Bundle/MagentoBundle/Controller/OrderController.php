@@ -65,14 +65,14 @@ class OrderController extends Controller
 
     /**
      * @Route(
-     *        "/account-widget/orders/{id}",
+     *        "/account-widget/orders/{id}/{channelId}",
      *        name="orocrm_customer_orders_account_widget",
-     *        requirements={"id"="\d+"}
+     *        requirements={"id"="\d+", "channelId"="\d+"}
      * )
      * @Template
      */
-    public function customerOrdersAction($id)
+    public function customerOrdersAction($id, $channelId)
     {
-        return array('customerId' => $id);
+        return array('customerId' => $id, 'channelId' => $channelId);
     }
 }

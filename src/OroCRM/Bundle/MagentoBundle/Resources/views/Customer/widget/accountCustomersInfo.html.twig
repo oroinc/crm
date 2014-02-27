@@ -3,9 +3,11 @@
 <div class="widget-content">
     {% set tabs = {} %}
     {% for customer in customers %}
+        {% set widgetId = 'customer: '~customer.id~'channel: '~channelId %}
+        {% set tabAlias = 'orocrm_customer_info_widget_'~widgetId %}
         {% set tabs = tabs|merge(
             [{
-                'alias': 'orocrm_customer_info_widget',
+                'alias': tabAlias,
                 'widgetType': 'block',
                 'label': customer|oro_format_name,
                 'url': path('orocrm_customer_info_widget', {id: customer.id})
