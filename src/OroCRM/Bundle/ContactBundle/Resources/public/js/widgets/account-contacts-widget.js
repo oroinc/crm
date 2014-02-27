@@ -1,7 +1,7 @@
 /* global define */
 define(['jquery'], function ($) {
     /**
-     * @export  orocrm/contact/account-contacts-widget
+     * @export  orocrm/contact/widgets/account-contacts-widget
      * @class   oro.AccountContactWidgetHandler
      */
     return {

@@ -19,13 +19,13 @@ class AccountController extends Controller
 {
     /**
      * @Route("/view/{id}", name="orocrm_account_view", requirements={"id"="\d+"})
-     * @Template
      * @Acl(
      *      id="orocrm_account_view",
      *      type="entity",
      *      permission="VIEW",
      *      class="OroCRMAccountBundle:Account"
      * )
+     * @Template()
      */
     public function viewAction(Account $account)
     {
@@ -38,13 +38,13 @@ class AccountController extends Controller
      * Create account form
      *
      * @Route("/create", name="orocrm_account_create")
-     * @Template("OroCRMAccountBundle:Account:update.html.twig")
      * @Acl(
      *      id="orocrm_account_create",
      *      type="entity",
      *      permission="CREATE",
      *      class="OroCRMAccountBundle:Account"
      * )
+     * @Template("OroCRMAccountBundle:Account:update.html.twig")
      */
     public function createAction()
     {
@@ -55,13 +55,13 @@ class AccountController extends Controller
      * Edit user form
      *
      * @Route("/update/{id}", name="orocrm_account_update", requirements={"id"="\d+"})
-     * @Template
      * @Acl(
      *      id="orocrm_account_update",
      *      type="entity",
      *      permission="EDIT",
      *      class="OroCRMAccountBundle:Account"
      * )
+     * @Template()
      */
     public function updateAction(Account $entity)
     {
@@ -127,8 +127,8 @@ class AccountController extends Controller
      *      requirements={"id"="\d+"},
      *      defaults={"id"=0}
      * )
-     * @Template
      * @AclAncestor("orocrm_contact_view")
+     * @Template()
      */
     public function contactDatagridAction(Account $entity = null)
     {
@@ -140,7 +140,7 @@ class AccountController extends Controller
     /**
      * @Route("/widget/info/{id}", name="orocrm_account_widget_info", requirements={"id"="\d+"})
      * @AclAncestor("orocrm_account_view")
-     * @Template
+     * @Template()
      */
     public function infoAction(Account $account)
     {
@@ -150,8 +150,7 @@ class AccountController extends Controller
     }
 
     /**
-     * @Route("/widget/emails", name="orocrm_account_widget_emails", requirements={"id"="\d+"})
-     * @Template()
+     * @Route("/widget/emails/{id}", name="orocrm_account_widget_emails", requirements={"id"="\d+"})
      * @AclAncestor("oro_email_view")
      * @Template()
      */

@@ -96,6 +96,7 @@ class GroupController extends Controller
         }
 
         return array(
+            'entity'           => $entity,
             'form'             => $this->get('orocrm_contact.form.group')->createView(),
             'showContactsGrid' => count($this->get('orocrm_contact.contact.manager')->getList()) ? true : false
         );
