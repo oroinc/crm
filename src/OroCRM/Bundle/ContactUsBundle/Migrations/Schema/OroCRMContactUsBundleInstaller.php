@@ -3,7 +3,7 @@
 namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\InstallerBundle\Migrations\Installation;
+use Oro\Bundle\MigrationBundle\Migration\Installation;
 use OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_0\OroCRMContactUsBundle;
 
 class OroCRMContactUsBundleInstaller implements Installation
