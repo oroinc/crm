@@ -123,6 +123,16 @@ class LeadController extends Controller
     }
 
     /**
+     * @Route("/widget/account-leads/{id}", name="orocrm_account_widget_leads", requirements={"id"="\d+"})
+     * @AclAncestor("orocrm_sales_lead_view")
+     * @Template()
+     */
+    public function accountLeadsAction(Account $account)
+    {
+        return array('entity' => $account);
+    }
+
+    /**
      * @param Lead $entity
      *
      * @return array

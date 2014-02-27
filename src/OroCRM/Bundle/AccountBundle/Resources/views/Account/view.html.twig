@@ -54,13 +54,29 @@
             'url': path('orocrm_account_widget_info', {id: entity.id})
         }) }}
     {% endset %}
+    {% set accountInformationWidgetBloks = [{'data' : [accountInformationWidget]}]%}
+    {% if resource_granted('orocrm_contact_view') %}
+        {% set contactsInformationWidget %}
+            <div class="contact-widget-wrapper">
+                {{ oro_widget_render({
+                    'widgetType': 'block',
+                    'url': path('orocrm_account_widget_contacts', {id: entity.id}),
+                    'title': 'orocrm.account.widgets.contacts.title'|trans
+                }) }}
+            </div>
+        {% endset %}
+        {% set accountInformationWidgetBloks = accountInformationWidgetBloks|merge(
+            [{
+                'data' : [contactsInformationWidget]
+            }]
+        ) %}
+    {% endif %}
+
     {% set dataBlocks = [
         {
             'title': 'orocrm.account.widgets.account_information.tab_title'|trans,
             'class': 'active',
-            'subblocks': [
-                {'data' : [accountInformationWidget]}
-            ]
+            'subblocks': accountInformationWidgetBloks
         }
     ] %}
 

@@ -65,7 +65,7 @@ class OrderController extends Controller
 
     /**
      * @Route(
-     *        "/account-widget/orders/{id}/{channelId}",
+     *        "/account-widget/customer-orders/{id}/{channelId}",
      *        name="orocrm_customer_orders_account_widget",
      *        requirements={"id"="\d+", "channelId"="\d+"}
      * )
@@ -74,5 +74,19 @@ class OrderController extends Controller
     public function customerOrdersAction($id, $channelId)
     {
         return array('customerId' => $id, 'channelId' => $channelId);
+    }
+
+    /**
+     * @Route(
+     *        "/account-widget/account-orders/{id}/",
+     *        name="orocrm_account_widget_orders",
+     *        requirements={"id"="\d+"}
+     * )
+     * @AclAncestor("orocrm_magento_order_view")
+     * @Template
+     */
+    public function accountOrdersAction($id)
+    {
+        return array('id' => $id);
     }
 }

@@ -131,4 +131,18 @@ class OpportunityController extends Controller
             'form'   => $this->get('orocrm_sales.opportunity.form')->createView(),
         );
     }
+
+    /**
+     * @Route(
+     *        "/widget/account-opportunities/{id}",
+     *        name="orocrm_account_widget_opportunities",
+     *        requirements={"id"="\d+"}
+     * )
+     * @AclAncestor("orocrm_sales_opportunity_view")
+     * @Template()
+     */
+    public function accountOpportunitiesAction(Account $account)
+    {
+        return array('entity' => $account);
+    }
 }

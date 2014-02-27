@@ -172,6 +172,36 @@ class ContactController extends Controller
     }
 
     /**
+     * @Route("/widget/account-contacts/{id}", name="orocrm_account_widget_contacts", requirements={"id"="\d+"})
+     * @AclAncestor("orocrm_contact_view")
+     * @Template()
+     */
+    public function accountContactsAction(Account $account)
+    {
+        $defaultContact = $account->getDefaultContact();
+        $contacts = $account->getContacts();
+        $contactsWithoutDefault = array();
+
+        if (empty($defaultContact)) {
+            $contactsWithoutDefault = $contacts;
+        } else {
+            /** @var Contact $contact */
+            foreach ($contacts as $contact) {
+                if ($contact->getId() == $defaultContact->getId()) {
+                    continue;
+                }
+                $contactsWithoutDefault[] = $contact;
+            }
+        }
+
+        return array(
+            'entity'                 => $account,
+            'defaultContact'         => $defaultContact,
+            'contactsWithoutDefault' => $contactsWithoutDefault
+        );
+    }
+
+    /**
      * @Route("/widget/email/{contactId}", name="orocrm_contact_widget_email", requirements={"contactId"="\d+"})
      * @ParamConverter("contact", options={"id"="contactId"})
      * @Template("OroCRMContactBundle:Contact:email.html.twig")

@@ -149,62 +149,6 @@ class AccountController extends Controller
     }
 
     /**
-     * @Route("/widget/contacts/{id}", name="orocrm_account_widget_contacts", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_contact_view")
-     * @Template()
-     */
-    public function contactsAction(Account $account)
-    {
-        $defaultContact = $account->getDefaultContact();
-        $contacts = $account->getContacts();
-        $contactsWithoutDefault = array();
-
-        /** @var Contact $contact */
-        foreach ($contacts as $contact) {
-            if ($contact->getId() == $defaultContact->getId()) {
-                continue;
-            }
-            $contactsWithoutDefault[] = $contact;
-        }
-
-        return array(
-            'entity'                 => $account,
-            'defaultContact'         => $defaultContact,
-            'contactsWithoutDefault' => $contactsWithoutDefault
-        );
-    }
-
-    /**
-     * @Route("/widget/leads/{id}", name="orocrm_account_widget_leads", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_sales_lead_view")
-     * @Template()
-     */
-    public function leadsAction(Account $account)
-    {
-        return array('entity' => $account);
-    }
-
-    /**
-     * @Route("/widget/opportunities/{id}", name="orocrm_account_widget_opportunities", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_sales_opportunity_view")
-     * @Template()
-     */
-    public function opportunitiesAction(Account $account)
-    {
-        return array('entity' => $account);
-    }
-
-    /**
-     * @Route("/widget/orders/{id}", name="orocrm_account_widget_orders", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_magento_order_view")
-     * @Template()
-     */
-    public function ordersAction(Account $account)
-    {
-        return array('entity' => $account);
-    }
-
-    /**
      * @Route("/widget/emails", name="orocrm_account_widget_emails", requirements={"id"="\d+"})
      * @Template()
      * @AclAncestor("oro_email_view")
