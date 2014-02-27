@@ -59,6 +59,7 @@ class CustomerController extends Controller
      *          name="orocrm_customers_info_widget",
      *          requirements={"id"="\d+", "channelId"="\d+"}
      * )
+     * @AclAncestor("orocrm_magento_customer_view")
      * @Template
      */
     public function accountCustomersInfoAction($id, $channelId)
@@ -76,6 +77,7 @@ class CustomerController extends Controller
      *        name="orocrm_customer_info_widget",
      *        requirements={"id"="\d+", "channelId"="\d+"}
      * )
+     * @AclAncestor("orocrm_magento_customer_view")
      * @Template
      */
     public function accountCustomerInfoAction(Customer $customer, $channelId)

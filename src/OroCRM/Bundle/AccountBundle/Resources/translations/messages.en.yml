@@ -20,6 +20,9 @@ orocrm:
                 title: Opportunities
             magento_channel:
                 title: Magento Chanel
+            account_information:
+                tab_title: General
+                title: Account Information
         placeholdes:
             actions: Account actions
         dataBlocks:

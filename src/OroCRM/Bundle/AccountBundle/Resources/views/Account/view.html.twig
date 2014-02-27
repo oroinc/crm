@@ -50,12 +50,13 @@
     {% set accountInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
+            'title': 'orocrm.account.widgets.account_information.title'|trans,
             'url': path('orocrm_account_widget_info', {id: entity.id})
         }) }}
     {% endset %}
     {% set dataBlocks = [
         {
-            'title': 'General Information'|trans,
+            'title': 'orocrm.account.widgets.account_information.tab_title'|trans,
             'class': 'active',
             'subblocks': [
                 {'data' : [accountInformationWidget]}
