@@ -49,3 +49,21 @@ services:
             - ["name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: leads, acl_resource: orocrm_sales_lead_view }
+
+    orocrm_sales.event_listener.account_contacts_grid_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'account'
+            - @oro_datagrid.datagrid.request_params
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-leads-view-grid, method: onBuildAfter }
+
+    orocrm_sales.event_listener.account_opportunities_grid_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'account'
+            - @oro_datagrid.datagrid.request_params
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-opportunities-view-grid, method: onBuildAfter }

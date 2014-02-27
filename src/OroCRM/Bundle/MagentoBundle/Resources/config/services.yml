@@ -62,6 +62,15 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-cart-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-order-grid, method: onBuildAfter }
 
+    orocrm_magento.event_listener.account_orders_grid_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'account'
+            - @oro_datagrid.datagrid.request_params
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-orders-view-grid, method: onBuildAfter }
+
     orocrm_magento.event_listener.customer_order_grid_listener:
         class: %orocrm.magento.event_listener.account_widgets_data_grid_listener.class%
         arguments:
