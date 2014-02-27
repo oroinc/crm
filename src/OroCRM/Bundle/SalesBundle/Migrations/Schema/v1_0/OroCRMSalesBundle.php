@@ -10,7 +10,6 @@ class OroCRMSalesBundle implements Migration
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function up(Schema $schema)
     {
@@ -132,12 +131,12 @@ class OroCRMSalesBundle implements Migration
      * Generate table orocrm_sales_opportunity_close_reason
      *
      * @param Schema $schema
-     * @param $closeReason
+     * @param string $tableName
      */
-    public static function orocrmSalesOpportunityCloseReasonTable(Schema $schema, $closeReason)
+    public static function orocrmSalesOpportunityCloseReasonTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_sales_opportunity_close_reason **/
-        $table = $schema->createTable($closeReason ? : 'orocrm_sales_opportunity_close_reason');
+        $table = $schema->createTable($tableName ? : 'orocrm_sales_opportunity_close_reason');
         $table->addColumn('name', 'string', ['length' => 32]);
         $table->addColumn('label', 'string', ['length' => 255]);
         $table->setPrimaryKey(['name']);
@@ -149,12 +148,12 @@ class OroCRMSalesBundle implements Migration
      * Generate table orocrm_sales_opportunity_status
      *
      * @param Schema $schema
-     * @param $opportunityStatus
+     * @param string $tableName
      */
-    public static function orocrmSalesOpportunityStatusTable(Schema $schema, $opportunityStatus)
+    public static function orocrmSalesOpportunityStatusTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_sales_opportunity_status **/
-        $table = $schema->createTable($opportunityStatus ? : 'orocrm_sales_opportunity_status');
+        $table = $schema->createTable($tableName ? : 'orocrm_sales_opportunity_status');
         $table->addColumn('name', 'string', ['length' => 32]);
         $table->addColumn('label', 'string', ['length' => 255]);
         $table->setPrimaryKey(['name']);
@@ -248,11 +247,14 @@ class OroCRMSalesBundle implements Migration
      * Generate foreign keys for table orocrm_sales_opportunity
      *
      * @param Schema $schema
-     * @param $closeReason
-     * @param $opportunityStatus
+     * @param string $closeReasonTableName
+     * @param string $opportunityStatusTableName
      */
-    public static function orocrmSalesOpportunityForeignKeys(Schema $schema, $closeReason, $opportunityStatus)
-    {
+    public static function orocrmSalesOpportunityForeignKeys(
+        Schema $schema,
+        $closeReasonTableName = null,
+        $opportunityStatusTableName = null
+    ) {
         /** Generate foreign keys for table orocrm_sales_opportunity **/
         $table = $schema->getTable('orocrm_sales_opportunity');
         $table->addForeignKeyConstraint(
@@ -274,7 +276,7 @@ class OroCRMSalesBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable($opportunityStatus ? : 'orocrm_sales_opportunity_status'),
+            $schema->getTable($opportunityStatusTableName ? : 'orocrm_sales_opportunity_status'),
             ['status_name'],
             ['name'],
             ['onDelete' => null, 'onUpdate' => null]
@@ -292,7 +294,7 @@ class OroCRMSalesBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable($closeReason ? : 'orocrm_sales_opportunity_close_reason'),
+            $schema->getTable($closeReasonTableName ? : 'orocrm_sales_opportunity_close_reason'),
             ['close_reason_name'],
             ['name'],
             ['onDelete' => null, 'onUpdate' => null]

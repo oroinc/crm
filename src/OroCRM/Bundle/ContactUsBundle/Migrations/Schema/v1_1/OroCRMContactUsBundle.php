@@ -13,7 +13,7 @@ class OroCRMContactUsBundle implements Migration
     public function up(Schema $schema)
     {
         return [
-            "ALTER TABLE orocrm_contactus_contact_reason RENAME TO orocrm_contactus_contact_reas;",
+            "ALTER TABLE orocrm_contactus_contact_reason RENAME TO orocrm_contactus_contact_rsn;",
             "ALTER TABLE orocrm_contactus_request_emails RENAME TO orocrm_contactus_req_emails;",
         ];
     }
