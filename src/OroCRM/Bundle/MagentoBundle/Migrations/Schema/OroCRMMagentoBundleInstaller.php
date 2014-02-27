@@ -3,7 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\InstallerBundle\Migrations\Installation;
+use Oro\Bundle\MigrationBundle\Migration\Installation;
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle;
 
 class OroCRMMagentoBundleInstaller implements Installation
