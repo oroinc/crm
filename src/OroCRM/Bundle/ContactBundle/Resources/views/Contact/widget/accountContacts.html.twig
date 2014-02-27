@@ -26,7 +26,7 @@
         </div>
         <div class="contact-box-row">
             <span>{{ "orocrm.account.phone.label"|trans }}:</span>
-            {% if contact.primaryEmail %}
+            {% if contact.primaryPhone %}
                 <a class="contact-box-link" data-url="{{ path('orocrm_call_create', { 'accountId': account.id, 'contactId': contact.id }) }}"
                     href="javascript:void(0);"
                     {{ UI.renderWidgetElementAttributes({
