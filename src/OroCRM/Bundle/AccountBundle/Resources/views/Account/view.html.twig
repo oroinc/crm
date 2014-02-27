@@ -55,7 +55,7 @@
         }) }}
     {% endset %}
 
-    {% set accountInformationWidgetBloks = [{'data' : [accountInformationWidget]}]%}
+    {% set generalSection = [{'data' : [accountInformationWidget]}]%}
 
     {% if resource_granted('orocrm_contact_view') %}
         {% set contactsInformationWidget %}
@@ -68,7 +68,7 @@
             </div>
         {% endset %}
 
-        {% set accountInformationWidgetBloks = accountInformationWidgetBloks|merge(
+        {% set generalSection = generalSection|merge(
             [{
                 'data' : [contactsInformationWidget]
             }]
@@ -79,7 +79,7 @@
         {
             'title': 'orocrm.account.sections.general'|trans,
             'class': 'active',
-            'subblocks': accountInformationWidgetBloks
+            'subblocks': generalSection
         }
     ] %}
 
