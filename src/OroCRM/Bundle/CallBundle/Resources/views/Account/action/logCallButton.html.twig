@@ -1,29 +1,31 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
 {% if resource_granted('orocrm_call_create') %}
-    {% set title = 'orocrm.call.log_call'|trans %}
-    {{ UI.dropdownClientButton({
-        'dataUrl': path('orocrm_call_create', {'accountId': entity.id}),
-        'aCss': 'no-hash',
-        'iCss': 'icon-phone',
-        'dataId': entity.id,
-        'title' : title,
-        'label' : title,
-        'widget' : {
-            'type' : 'dialog',
-            'multiple' : false,
-            'reload-widget-alias' : 'contact_calls',
-            'reload-widget-event' : 'contactCallLogged',
-            'options' : {
-                'dialogOptions' : {
-                    'title' : title,
-                    'allowMaximize': true,
-                    'allowMinimize': true,
-                    'dblclick': 'maximize',
-                    'maximizedHeightDecreaseBy': 'minimize-bar',
-                    'width': 1000
+    {% if entity.extendPhone is defined and entity.extendPhone is not empty %}
+        {% set title = 'orocrm.call.log_call'|trans %}
+        {{ UI.dropdownClientButton({
+            'dataUrl': path('orocrm_call_create', {'accountId': entity.id}),
+            'aCss': 'no-hash',
+            'iCss': 'icon-phone',
+            'dataId': entity.id,
+            'title' : title,
+            'label' : title,
+            'widget' : {
+                'type' : 'dialog',
+                'multiple' : false,
+                'gridName' : 'widget-calls-grid',
+                'options' : {
+                    'alias': 'call-dialog',
+                    'dialogOptions' : {
+                        'title' : title,
+                        'allowMaximize': true,
+                        'allowMinimize': true,
+                        'dblclick': 'maximize',
+                        'maximizedHeightDecreaseBy': 'minimize-bar',
+                        'width': 1000
+                    }
                 }
-            }
-        },
-    }) }}
+            },
+        }) }}
+    {% endif %}
 {% endif %}

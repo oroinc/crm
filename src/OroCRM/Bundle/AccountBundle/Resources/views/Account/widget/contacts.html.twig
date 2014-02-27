@@ -1,23 +1,25 @@
 <div class="widget-content">
     <div class="contact-box-wrapper">
         {% if defaultContact %}
-            {{ _self.render_contact_box(defaultContact, true) }}
-            {% for contact in contactsWithoutDefault|slice(0, 5) %}
-                {{ _self.render_contact_box(contact, false) }}
+            {% if defaultContact %}
+                {{ _self.render_contact_box(entity, defaultContact, true) }}
+            {% endif %}
+            {% for contact in contactsWithoutDefault %}
+                {{ _self.render_contact_box(entity, contact, false) }}
             {% endfor %}
         {% endif %}
     </div>
 </div>
 <script type="text/javascript">
     require(['orocrm/account/contacts-widget'], function(ContactWidget){
-                ContactWidget.init();
-            });
+        ContactWidget.init();
+    });
 </script>
-{% macro render_contact_box(contact, isDefault) %}
+{% macro render_contact_box(account, contact, isDefault) %}
     {% import 'OroUIBundle::macros.html.twig' as UI %}
     <div class="contact-box">
         <div class="contact-box-row">
-            <a class="contact-box-name-link contact-box-link" href="{{ url("orocrm_contact_view",{"id":contact.id}) }}">
+            <a class="contact-box-name-link contact-box-link" href="{{ path('orocrm_contact_view',{'id': contact.id }) }}">
                 {{ contact|oro_format_name }}
                 {% if isDefault %}
                     ({{ "orocrm.account.default_contact.label"|trans }})
@@ -25,29 +27,56 @@
             </a>
         </div>
         <div class="contact-box-row">
-            <span>{{ "orocrm.account.widgets.contacts.phone"|trans }}:</span><span>{{ contact.getPrimaryPhone() }}</span>
+            <span>{{ "orocrm.account.widgets.contacts.phone"|trans }}:</span>
+            {% if contact.primaryEmail %}
+                <a class="contact-box-link" data-url="{{ path('orocrm_call_create', { 'accountId': account.id, 'contactId': contact.id }) }}"
+                    href="javascript:void(0);"
+                    {{ UI.renderWidgetElementAttributes({
+                        'type' : 'dialog',
+                        'multiple' : false,
+                        'gridName' : 'widget-calls-grid',
+                        'options' : {
+                            'alias': 'call-dialog',
+                            'dialogOptions' : {
+                                'title' : 'orocrm.call.log_call'|trans,
+                                'allowMaximize': true,
+                                'allowMinimize': true,
+                                'dblclick': 'maximize',
+                                'maximizedHeightDecreaseBy': 'minimize-bar',
+                                'width': 1000
+                            }
+                        }
+                   }) }}
+                >{{ contact.primaryPhone }}</a>
+            {% else %}
+                {{ 'N/A'|trans }}
+            {% endif %}
         </div>
         <div class="contact-box-row">
             <span>{{ "orocrm.account.widgets.contacts.email"|trans }}:</span>
-            <a class="contact-box-link" data-id="{{ contact.id }}" data-url="{{ path('orocrm_contact_email_create', { 'contactId': contact.id }) }}"
-                href="javascript:void(0);"
-                {{ UI.renderWidgetElementAttributes({
-                    'type' : 'dialog',
-                    'reload-event' : 'contactCallLogged',
-                    'reload-widget-alias' : 'contact_calls',
-                    'options' : {
-                        'dialogOptions' : {
-                            'title' : 'oro.email.send_email'|trans,
-                            'allowMaximize': true,
-                            'allowMinimize': true,
-                            'dblclick': 'maximize',
-                            'maximizedHeightDecreaseBy': 'minimize-bar',
-                            'width': 1000
+            {% if contact.primaryEmail %}
+                <a class="contact-box-link" data-url="{{ path('orocrm_contact_email_create', { 'contactId': contact.id }) }}"
+                    href="javascript:void(0);"
+                    {{ UI.renderWidgetElementAttributes({
+                        'type' : 'dialog',
+                        'multiple' : true,
+                        'gridName' : 'account-email-grid',
+                        'options' : {
+                            'alias': 'email-dialog',
+                            'dialogOptions' : {
+                                'title' : 'oro.email.send_email'|trans,
+                                'allowMaximize': true,
+                                'allowMinimize': true,
+                                'dblclick': 'maximize',
+                                'maximizedHeightDecreaseBy': 'minimize-bar',
+                                'width': 1000
+                            }
                         }
-                    }
-               }) }}
-            >{{ contact.getPrimaryEmail() }}
-            </a>
+                   }) }}
+                >{{ contact.primaryEmail }}</a>
+            {% else %}
+                {{ 'N/A'|trans }}
+            {% endif %}
         </div>
     </div>
 {% endmacro %}

@@ -51,9 +51,9 @@ class AccountEmailGridListener
                     ->getRepository('OroCRMAccountBundle:Account')
                     ->find($id);
 
-                if ($contact = $account->getDefaultContact()) {
-                    if ($contactEmails = $contact->getEmails()) {
-                        $emails = EmailUtil::extractEmailAddresses($contactEmails);
+                if (method_exists($account, 'getExtendEmail')) {
+                    if ($email = $account->getExtendEmail()) {
+                        $emails = EmailUtil::extractEmailAddresses($email);
                     }
                 }
             }
