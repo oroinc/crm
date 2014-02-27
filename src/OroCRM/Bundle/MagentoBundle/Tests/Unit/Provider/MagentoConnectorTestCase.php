@@ -6,7 +6,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Status;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
-use Oro\Bundle\BatchBundle\Item\ExecutionContext;
+use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
@@ -27,7 +27,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->transportMock     = $this
             ->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Transport\\MagentoTransportInterface');
-        $this->stepExecutionMock = $this->getMockBuilder('Oro\\Bundle\\BatchBundle\\Entity\\StepExecution')
+        $this->stepExecutionMock = $this->getMockBuilder('Akeneo\\Bundle\\BatchBundle\\Entity\\StepExecution')
             ->setMethods(['getExecutionContext'])
             ->disableOriginalConstructor()->getMock();
     }
