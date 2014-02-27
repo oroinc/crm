@@ -151,18 +151,8 @@ class OroCRMAccountBundle implements Migration
 
         /** Generate foreign keys for table orocrm_account_to_contact **/
         $table = $schema->getTable('orocrm_account_to_contact');
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_contact'),
-            ['contact_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_account'),
-            ['account_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]
-        );
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_contact'), ['contact_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('orocrm_account'), ['account_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
         /** End of generate foreign keys for table orocrm_account_to_contact **/
 
         // @codingStandardsIgnoreEnd
