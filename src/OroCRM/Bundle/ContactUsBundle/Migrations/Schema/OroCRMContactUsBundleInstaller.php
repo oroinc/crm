@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_0\OroCRMContactUsBundle;
 
 class OroCRMContactUsBundleInstaller implements Installation
@@ -19,7 +20,7 @@ class OroCRMContactUsBundleInstaller implements Installation
     /**
      * @inheritdoc
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema, QueryBag $queries)
     {
         OroCRMContactUsBundle::orocrmContactusContactReasonTable($schema, 'orocrm_contactus_contact_rsn');
         OroCRMContactUsBundle::orocrmContactusRequestTable($schema);
@@ -29,7 +30,5 @@ class OroCRMContactUsBundleInstaller implements Installation
         OroCRMContactUsBundle::orocrmContactusRequestForeignKeys($schema, 'orocrm_contactus_contact_rsn');
         OroCRMContactUsBundle::orocrmContactusRequestCallsForeignKeys($schema);
         OroCRMContactUsBundle::orocrmContactusRequestEmailsForeignKeys($schema, 'orocrm_contactus_req_emails');
-
-        return [];
     }
 }
