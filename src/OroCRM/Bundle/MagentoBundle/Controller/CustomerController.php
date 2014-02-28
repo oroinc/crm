@@ -85,7 +85,7 @@ class CustomerController extends Controller
      * @AclAncestor("orocrm_magento_customer_view")
      * @Template
      */
-    public function accountCustomerInfoAction(Customer $customer, Channel $channel)
+    public function customerInfoAction(Customer $customer, Channel $channel)
     {
         return array('customer' => $customer, 'channel' => $channel);
     }
