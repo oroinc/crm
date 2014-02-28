@@ -8,7 +8,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_contactus_contact_reas")
+ * @ORM\Table(name="orocrm_contactus_contact_rsn")
  * @Config()
  */
 class ContactReason
