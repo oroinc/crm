@@ -40,7 +40,7 @@
         {{ UI.renderProperty("orocrm.magento.customer.gender.label"|trans, oro_gender(customer.gender)) }}
         {{ UI.renderProperty("orocrm.magento.customer.vat.label"|trans, customer.vat) }}
     </div>
-    <div class="responsive-block">
+    <div class="responsive-block magento-without-border-tabs">
         {% set uniqueSuffix = '_customer__' ~ customer.id ~ '_channel__' ~ channel.id %}
         {% set tabs =
             [{
