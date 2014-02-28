@@ -1,7 +1,7 @@
 oro_menu_config:
     items:
         orocrm_magento_account_orders_tab:
-            label: orocrm.magento.account_orders_widget
+            label: orocrm.magento.order.entity_plural_label
             extras:
                 position: 30
                 widgetRoute: orocrm_magento_widget_account_orders

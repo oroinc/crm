@@ -505,6 +505,8 @@ datagrid:
                 stepLabel:              { data_name: step.label }
                 createdAt:              { data_name: o.createdAt }
                 updatedAt:              { data_name: o.updatedAt }
+            default:
+                createdAt:  DESC
         filters:
             columns:
                 incrementId:
@@ -713,7 +715,7 @@ datagrid:
             incrementId:
                 label: orocrm.magento.order.id.label
             itemsCount:
-                label: orocrm.magento.account_orders_grid.items
+                label: orocrm.magento.order.items_qty.label
             totalInvoicedAmount:
                 label: orocrm.magento.order.total_amount.label
                 type:   localized_number
@@ -766,9 +768,9 @@ datagrid:
                 groupBy: c.id
         columns:
             originId:
-                label: orocrm.magento.account_carts_grid.id
+                label: orocrm.magento.cart.id.label
             itemsCount:
-                label: orocrm.magento.account_carts_grid.items
+                label: orocrm.magento.cart.items_count.label
             grandTotal:
                 label:  orocrm.magento.cart.grand_total.label
                 type:   localized_number
@@ -829,11 +831,6 @@ datagrid:
         columns:
            incrementId:
                label: orocrm.magento.order.increment_id.label
-           totalPaidAmount:
-               label:  orocrm.magento.order.total_paid_amount.label
-               type:   localized_number
-               method: formatCurrency
-               context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
            totalInvoicedAmount:
                label: orocrm.magento.order.total_invoiced_amount.label
                type:   localized_number
@@ -862,7 +859,6 @@ datagrid:
         sorters:
            columns:
                incrementId:            { data_name: o.incrementId }
-               totalPaidAmount:        { data_name: o.totalPaidAmount }
                totalInvoicedAmount:    { data_name: o.totalInvoicedAmount }
                shippingAmount:         { data_name: o.shippingAmount }
                subtotalAmount:         { data_name: o.subtotalAmount }
@@ -870,16 +866,13 @@ datagrid:
                stepLabel:              { data_name: step.label }
                createdAt:              { data_name: o.createdAt }
                updatedAt:              { data_name: o.updatedAt }
+           default:
+               createdAt:  DESC
         filters:
            columns:
                incrementId:
                    type:             string
                    data_name:        o.incrementId
-               totalPaidAmount:
-                   type:             number
-                   data_name:        o.totalPaidAmount
-                   options:
-                       data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                totalInvoicedAmount:
                    type:             number
                    data_name:        o.totalInvoicedAmount

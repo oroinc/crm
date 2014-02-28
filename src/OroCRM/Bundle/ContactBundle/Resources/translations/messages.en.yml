@@ -152,3 +152,6 @@ orocrm:
             name.label:   Name
         widgets:
             account_contacts: Contacts
+
+        account:
+            no_contacts_exist: No contacts exist
