@@ -93,7 +93,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
          */
         responseHandler: function (res) {
             var success = res.success || false,
-                message = success ? __('Connection succeed, please choose website.') : __('Parameters are not valid!');
+                message = success ? __('Connection succeeded, please choose website.') : __('Parameters are not valid!');
 
             if (success && res.websites) {
                 var $listEl = $(this.options.websitesListEl),
