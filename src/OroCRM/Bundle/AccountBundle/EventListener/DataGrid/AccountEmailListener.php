@@ -47,8 +47,8 @@ class AccountEmailListener
 
             $emails = [];
 
-            if ($id = $this->requestParams->get('account')) {
-                $account = $this->em->getRepository('OroCRMAccountBundle:Account')->find($id);
+            if ($accountId = $this->requestParams->get('accountId')) {
+                $account = $this->em->getRepository('OroCRMAccountBundle:Account')->find($accountId);
 
                 if ($account && method_exists($account, 'getExtendEmail')) {
                     if ($email = $account->getExtendEmail()) {

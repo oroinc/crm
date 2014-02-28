@@ -3,7 +3,7 @@
 {% if resource_granted('oro_email_create') %}
     {% if entity.extendEmail is defined and entity.extendEmail is not empty %}
         {% set title = 'oro.email.send_email'|trans %}
-        {{ UI.dropdownClientButton({
+        {{ UI.dropdownClientItem({
             'dataUrl': path('oro_email_email_create', { 'to': entity.extendEmail }) ,
             'aCss': 'no-hash',
             'iCss': 'icon-envelope',

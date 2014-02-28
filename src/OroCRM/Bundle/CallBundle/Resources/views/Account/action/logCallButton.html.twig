@@ -3,7 +3,7 @@
 {% if resource_granted('orocrm_call_create') %}
     {% if entity.extendPhone is defined and entity.extendPhone is not empty %}
         {% set title = 'orocrm.call.log_call'|trans %}
-        {{ UI.dropdownClientButton({
+        {{ UI.dropdownClientItem({
             'dataUrl': path('orocrm_call_create', {'accountId': entity.id}),
             'aCss': 'no-hash',
             'iCss': 'icon-phone',

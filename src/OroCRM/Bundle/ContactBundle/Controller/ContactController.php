@@ -116,29 +116,6 @@ class ContactController extends Controller
     }
 
     /**
-     * @Route(
-     *      "/{contactId}/email-create",
-     *      name="orocrm_contact_email_create",
-     *      requirements={"contactId"="\d+"}
-     * )
-     * @AclAncestor("oro_email_create")
-     * @ParamConverter("contact", options={"id" = "contactId"})
-     */
-    public function createEmailAction(Contact $contact)
-    {
-        $query = $this->getRequest()->query->all();
-        if ($contact->getPrimaryEmail()) {
-            $query['to'] = $contact->getPrimaryEmail()->getEmail();
-        }
-
-        return $this->forward(
-            'OroEmailBundle:Email:create',
-            array(),
-            $query
-        );
-    }
-
-    /**
      * @return ApiEntityManager
      */
     protected function getManager()
