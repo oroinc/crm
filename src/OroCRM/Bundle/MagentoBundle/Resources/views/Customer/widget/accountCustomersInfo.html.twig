@@ -1,4 +1,3 @@
-{% import 'OroUIBundle::macros.html.twig' as UI %}
 <div class="widget-content">
 {% if resource_granted("orocrm_magento_customer_view") %}
     {% if customers|length > 0 %}
@@ -16,7 +15,7 @@
                 }
             ]) %}
         {% endfor %}
-        {{ UI.tabPanel(tabs) }}
+        {{ tabPanel(tabs) }}
     {% else %}
         <div class="no-data">
             <span>{{ "orocrm.magento.account_customers_widget.not_exist"|trans }}</span>

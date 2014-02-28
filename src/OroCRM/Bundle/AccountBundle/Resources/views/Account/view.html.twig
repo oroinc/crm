@@ -74,11 +74,11 @@
     {% endif %}
 
     {% set accountSalesSection %}
-        {{ UI.dynamicTabPanel('account_sales_tab', {'id': entity.id}) }}
+        {{ menuTabPanel('account_sales_tab_panel', {'id': entity.id}) }}
     {% endset %}
 
     {% set activityBlock %}
-        {{ UI.dynamicTabPanel('account_activity_tab', {'id': entity.id}) }}
+        {{ menuTabPanel('account_activity_tab_panel', {'id': entity.id}) }}
     {% endset %}
 
     {% set dataBlocks = [
