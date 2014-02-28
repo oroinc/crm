@@ -1,0 +1,65 @@
+workflows:
+    b2b_flow_lead:
+        transitions:
+            qualify:
+                label: 'Qualify'
+                step_to: qualified
+                is_start: true
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-ok'
+                    class: 'btn-primary'
+                form_options:
+                    attribute_fields:
+                        opportunity_name:
+                            form_type: text
+                            options:
+                                required: true
+                                constraints:
+                                  - NotBlank: ~
+                        account:
+                            form_type: orocrm_account_select
+                            options:
+                                required: false
+                        company_name:
+                            form_type: text
+                            options:
+                                required: false
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false
+                    attribute_default_values:
+                        opportunity_name: $lead.name
+                        account: $lead.account
+                        company_name: $lead.companyName
+                        notes: $lead.notes
+                    init_actions:
+                        - @find_entity: # try to find account by company name
+                            conditions:
+                                @and: # if account is empty and company name is specified
+                                    - @empty: $account
+                                    - @not_empty: $company_name
+                            parameters:
+                                class: OroCRM\Bundle\AccountBundle\Entity\Account
+                                attribute: $account
+                                where:
+                                    name: $company_name
+                                case_insensitive: true
+                transition_definition: qualify_definition
+            cancel:
+                label: 'Disqualify'
+                step_to: cancelled
+                is_start: true
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-remove'
+                transition_definition: cancel_definition
+            reactivate:
+                label: 'Reactivate'
+                step_to: new
+                is_start: true
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-repeat'
+                transition_definition: reactivate_definition

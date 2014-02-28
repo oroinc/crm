@@ -25,7 +25,6 @@ use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
 
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -148,8 +147,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
                 $lead = $this->createLead($data, $user);
                 $this->persist($this->em, $lead);
-
-                $this->loadSalesFlows($lead);
                 $i++;
                 if ($i % self::FLUSH_MAX == 0) {
                     $this->flush($this->em);
@@ -159,75 +156,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             $this->flush($this->em);
             fclose($handle);
         }
-    }
-
-    /**
-     * @param Lead $lead
-     */
-    protected function loadSalesFlows(Lead $lead)
-    {
-        $leadWorkflowItem = $this->startWorkflow(
-            $this->workflowManager,
-            $this->em,
-            'b2b_flow_lead',
-            $lead,
-            'qualify',
-            array(
-                'opportunity_name' => $lead->getName(),
-                'company_name' => $lead->getCompanyName(),
-                'account' => $lead->getAccount(),
-            )
-        );
-        if ($this->getRandomBoolean()) {
-            /** @var Opportunity $opportunity */
-            $opportunity = $leadWorkflowItem->getResult()->get('opportunity');
-            $salesFlowItem = $this->startWorkflow(
-                $this->workflowManager,
-                $this->em,
-                'b2b_flow_sales',
-                $opportunity,
-                'develop',
-                array(
-                    'budget_amount' => mt_rand(10, 10000),
-                    'customer_need' => mt_rand(10, 10000),
-                    'proposed_solution' => mt_rand(10, 10000),
-                    'probability' => round(mt_rand(50, 85) / 100.00, 2)
-                )
-            );
-
-            if ($this->getRandomBoolean()) {
-                if ($this->getRandomBoolean()) {
-                    $this->transit(
-                        $this->workflowManager,
-                        $salesFlowItem,
-                        'close_as_won',
-                        array(
-                            'close_revenue' => mt_rand(100, 1000),
-                            'close_date' => new \DateTime('now'),
-                        )
-                    );
-                } else {
-                    $this->transit(
-                        $this->workflowManager,
-                        $salesFlowItem,
-                        'close_as_lost',
-                        array(
-                            'close_reason_name' => 'cancelled',
-                            'close_revenue' => mt_rand(100, 1000),
-                            'close_date' => new \DateTime('now'),
-                        )
-                    );
-                }
-            }
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    protected function getRandomBoolean()
-    {
-        return (bool) mt_rand(0, 1);
     }
 
     /**
@@ -297,54 +225,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setAddress($address);
 
         return $lead;
-    }
-
-    /**
-     * @param WorkflowManager $workflowManager
-     * @param WorkflowItem    $workflowItem
-     * @param string          $transition
-     * @param array           $data
-     */
-    protected function transit($workflowManager, $workflowItem, $transition, array $data)
-    {
-        foreach ($data as $key => $value) {
-            $workflowItem->getData()->set($key, $value);
-        }
-
-        $workflow = $workflowManager->getWorkflow($workflowItem);
-        /** @var EntityManager $em */
-        $workflow->transit($workflowItem, $transition);
-        $workflowItem->setUpdated();
-    }
-
-    /**
-     * @param       $workflowManager
-     * @param       $em
-     * @param       $workflow
-     * @param       $entity
-     * @param null  $transition
-     * @param array $data
-     *
-     * @return mixed
-     * @throws \Exception
-     */
-    protected function startWorkflow(
-        $workflowManager,
-        $em,
-        $workflow,
-        $entity,
-        $transition = null,
-        array $data = array()
-    ) {
-        /** @var Workflow $workflow */
-        $workflow = $workflowManager->getWorkflow($workflow);
-        try {
-            $workflowItem = $workflow->start($entity, $data, $transition);
-            $this->persist($em, $workflowItem);
-        } catch (\Exception $e) {
-            throw $e;
-        }
-        return $workflowItem;
     }
 
     /**

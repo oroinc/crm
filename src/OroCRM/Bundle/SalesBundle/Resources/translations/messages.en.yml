@@ -135,7 +135,7 @@ orocrm:
             id.label:             Id
             created_at.label:     Created
             updated_at.label:     Updated
-            name.label:           Name
+            name.label:           Sales Funnel Name
             start_date.label:     Start Date
             lead.label:           Lead
             opportunity.label:    Opportunity

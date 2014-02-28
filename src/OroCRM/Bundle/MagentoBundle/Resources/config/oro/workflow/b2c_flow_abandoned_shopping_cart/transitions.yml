@@ -1,0 +1,257 @@
+workflows:
+    b2c_flow_abandoned_shopping_cart:
+        transitions:
+            log_call:
+                label: 'Log call'
+                step_to: contacted
+                is_start: true
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-phone'
+                transition_definition: log_call_definition
+                form_options:
+                    attribute_fields:
+                        phone_number:
+                            form_type: text
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        call_subject:
+                            form_type: text
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        call_date:
+                            form_type: oro_datetime
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        account:
+                            form_type: orocrm_account_select
+                            options:
+                                required: false
+                                label: 'Related to'
+                        contact:
+                            form_type: orocrm_contact_select
+                            options:
+                                required: false
+                                label: 'Related contact'
+                        call_direction:
+                            form_type: entity
+                            options:
+                                class: OroCRM\Bundle\CallBundle\Entity\CallDirection
+                                property: label
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        call_duration:
+                            form_type: oro_time_interval
+                            options:
+                                required: false
+                                widget: single_text
+                                with_seconds: true
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false
+                    attribute_default_values:
+                        call_subject: 'Shopping cart status refresh'
+                    init_actions:
+                        - @assign_value:
+                            conditions:
+                                @and:
+                                    - @empty: $phone_number
+                                    - @not_empty: $cart.customer
+                                    - @not_empty: $cart.customer.contact
+                                    - @not_empty: $cart.customer.contact.primaryPhone
+                            parameters: [$phone_number, $cart.customer.contact.primaryPhone.phone]
+                        - @assign_value:
+                            conditions:
+                                @and:
+                                    - @empty: $account
+                                    - @not_empty: $cart.customer
+                                    - @not_empty: $cart.customer.account
+                            parameters: [$account, $cart.customer.account]
+                        - @assign_value:
+                            conditions:
+                                @and:
+                                    - @empty: $contact
+                                    - @not_empty: $cart.customer
+                                    - @not_empty: $cart.customer.contact
+                            parameters: [$contact, $cart.customer.contact]
+                        - @create_datetime:
+                            attribute: $call_date
+                        - @create_datetime:
+                            time: '00:00:00'
+                            attribute: $call_duration
+            send_email:
+                label: 'Send email'
+                step_to: contacted
+                is_start: true
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-envelope-alt'
+                    dialog:
+                        dialogOptions:
+                            width: 700
+                transition_definition: send_email_definition
+                form_options:
+                    attribute_fields:
+                        email_from:
+                            form_type: oro_email_email_address
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                                    - Email: ~
+                        email_to:
+                            form_type: oro_email_email_address
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                                    - Email: ~
+                        email_subject:
+                            form_type: text
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        email_body:
+                            form_type: textarea
+                            options:
+                                required: true
+                                attr:
+                                    style: 'width: 90%;height: 200px;'
+                                constraints:
+                                    - NotBlank: ~
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false
+                                attr:
+                                    style: 'width: 90%;height: 60px'
+                    init_actions:
+                        - @assign_active_user: $.result.user
+                        - @assign_value: [$email_from, $.result.user.email]
+                        - @assign_value: #Assign email to as shopping cart email
+                            conditions:
+                                @and:
+                                    - @empty: $email_to
+                                    - @not_empty: $cart.email
+                            parameters: [$email_to, $cart.email]
+                        - @assign_value: #Assign email to as shopping cart customer email
+                            conditions:
+                                @and:
+                                    - @empty: $email_to
+                                    - @not_empty: $cart.customer
+                                    - @not_empty: $cart.customer.email
+                            parameters: [$email_to, $cart.customer.email]
+                        - @assign_value: #Assign email to as shopping cart customer contact primary email
+                            conditions:
+                                @and:
+                                    - @empty: $email_to
+                                    - @not_empty: $cart.customer
+                                    - @not_empty: $cart.customer.contact
+                                    - @not_empty: $cart.customer.contact.primaryEmail
+                            parameters: [$email_to, $cart.customer.contact.primaryEmail.email]
+
+            convert:
+                label: 'Convert'
+                step_to: converted
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-shopping-cart'
+                transition_definition: convert_definition
+                form_options:
+                    attribute_fields:
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false
+            convert_to_opportunity:
+                label: 'Convert to opportunity'
+                step_to: converted_to_opportunity
+                is_start: true
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-usd'
+                transition_definition: convert_to_opportunity_definition
+                form_options:
+                    attribute_fields:
+                        opportunity_name:
+                            form_type: text
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        opportunity_owner:
+                            form_type: oro_user_select
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        account:
+                            form_type: orocrm_account_select
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        opportunity_budget:
+                            form_type: oro_money
+                            options:
+                                required: false
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false
+                    attribute_default_values:
+                        opportunity_budget: $cart.subTotal
+                    init_actions:
+                        - @assign_active_user: $opportunity_owner
+                        - @format_name:
+                            attribute: $.result.formattedCustomerName
+                            object: $cart.customer
+                        - @format_string:
+                            attribute: $opportunity_name
+                            string: '%customer_name% - %shopping_cart_id%'
+                            arguments:
+                                customer_name: $.result.formattedCustomerName
+                                shopping_cart_id: $cart.id
+                        - @assign_value:
+                            conditions:
+                                @and:
+                                    - @empty: $account
+                                    - @not_empty: $cart.customer
+                                    - @not_empty: $cart.customer.account
+                            parameters: [$account, $cart.customer.account]
+            abandon:
+                label: 'Abandon'
+                message: 'You are going to abandon this shopping cart.'
+                step_to: abandoned
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-remove-circle'
+                transition_definition: abandon_definition
+                form_options:
+                    attribute_fields:
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false
+            reopen:
+                label: 'Reopen'
+                step_to: open
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-backward'
+                transition_definition: reopen_definition
+                form_options:
+                    attribute_fields:
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false
