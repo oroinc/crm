@@ -218,7 +218,7 @@ datagrid:
                 addressPostalCode:
                     data_name: addressPostalCode
             default:
-                createdAt:  ASC
+                createdAt:  DESC
         actions:
             view:
                 type:          navigate
@@ -577,18 +577,18 @@ datagrid:
                     data_name: email.email
                     filter_by_having: true
 
-    account-leads-view-grid:
+    sales-account-lead-grid:
         extend: sales-lead-grid
         source:
             query:
                 where:
                       and:
-                        - l.account = :account
+                        - l.account = :accountId
 
-    account-opportunities-view-grid:
+    sales-account-opportunity-grid:
         extend: sales-opportunity-grid
         source:
              query:
                  where:
                     and:
-                        - o.account = :account
+                        - o.account = :accountId
