@@ -160,7 +160,7 @@ class ContactController extends Controller
         $contactsWithoutDefault = array();
 
         if (empty($defaultContact)) {
-            $contactsWithoutDefault = $contacts;
+            $contactsWithoutDefault = $contacts->toArray();
         } else {
             /** @var Contact $contact */
             foreach ($contacts as $contact) {

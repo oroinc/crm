@@ -155,6 +155,7 @@ orocrm:
 
             id.label:           Id
             increment_id.label: "Order #"
+            items_qty.label:    Items qty
             gift_message.label: Gift message
             remote_ip.label:    Remote address
             store_name.label:   Website
@@ -254,14 +255,6 @@ orocrm:
             country.label:       Country
             region.label:        State
 
-        account_orders_grid:
-            items: Items
+        account:
+            no_customers_exist: No customers exist
 
-        account_carts_grid:
-            items: Items
-            id: Cart Id
-
-        account_customers_widget:
-            not_exist: No customers exist
-
-        account_orders_widget: Orders

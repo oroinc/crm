@@ -715,7 +715,7 @@ datagrid:
             incrementId:
                 label: orocrm.magento.order.id.label
             itemsCount:
-                label: orocrm.magento.account_orders_grid.items
+                label: orocrm.magento.order.items_qty.label
             totalInvoicedAmount:
                 label: orocrm.magento.order.total_amount.label
                 type:   localized_number
@@ -768,9 +768,9 @@ datagrid:
                 groupBy: c.id
         columns:
             originId:
-                label: orocrm.magento.account_carts_grid.id
+                label: orocrm.magento.cart.id.label
             itemsCount:
-                label: orocrm.magento.account_carts_grid.items
+                label: orocrm.magento.cart.items_count.label
             grandTotal:
                 label:  orocrm.magento.cart.grand_total.label
                 type:   localized_number

@@ -1,11 +1,15 @@
 <div class="widget-content">
     <div class="contact-box-wrapper">
-        {% if defaultContact %}
-            {{ _self.render_contact_box(entity, defaultContact, true) }}
+        {% if defaultContact or contactsWithoutDefault|length %}
+            {% if defaultContact %}
+                {{ _self.render_contact_box(entity, defaultContact, true) }}
+            {% endif %}
+            {% for contact in contactsWithoutDefault %}
+                {{ _self.render_contact_box(entity, contact, false) }}
+            {% endfor %}
+        {% else %}
+            <p>{{ "orocrm.contact.account.no_contacts_exist"|trans }}</p>
         {% endif %}
-        {% for contact in contactsWithoutDefault %}
-            {{ _self.render_contact_box(entity, contact, false) }}
-        {% endfor %}
     </div>
 </div>
 <script type="text/javascript">
