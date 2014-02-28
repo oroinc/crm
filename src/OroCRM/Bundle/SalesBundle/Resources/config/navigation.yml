@@ -51,20 +51,17 @@ oro_menu_config:
         orocrm_account_widget_leads_tab:
             label: orocrm.sales.widgets.leads
             extras:
-                widgetAlias: orocrm_account_widget_leads
                 widgetRoute: orocrm_account_widget_leads
 
         orocrm_account_widget_opportunities_tab:
             label: orocrm.sales.widgets.opportunities
             extras:
                 widgetRoute: orocrm_account_widget_opportunities
-                widgetAlias: orocrm_account_widget_opportunities
 
         orocrm_account_widget_orders_tab:
             label: orocrm.magento.account_orders_widget
             extras:
                 widgetRoute: orocrm_account_widget_orders
-                widgetAlias: orocrm_account_widget_orders
 
     tree:
         application_menu:
