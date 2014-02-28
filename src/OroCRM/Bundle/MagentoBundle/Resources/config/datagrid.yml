@@ -690,7 +690,7 @@ datagrid:
         options:
             entityHint: order item
 
-    account-customer-orders-view-grid:
+    magento-customer-order-grid:
         source:
             type: orm
             acl_resource: orocrm_magento_order_view
@@ -739,7 +739,7 @@ datagrid:
         properties:
             id: ~
 
-    account-customer-cart-view-grid:
+    magento-customer-cart-grid:
         source:
             type: orm
             acl_resource: orocrm_magento_cart_view
@@ -786,7 +786,7 @@ datagrid:
                 statusLabel:          { data_name: cstatus.label }
                 stepLabel:            { data_name: step.label }
 
-    account-orders-view-grid:
+    magento-account-order-grid:
         source:
             type: orm
             acl_resource: orocrm_magento_order_view
@@ -802,7 +802,7 @@ datagrid:
                         - { join: o.customer, alias: customer }
                 where:
                     and:
-                        - customer.account = :account
+                        - customer.account = :accountId
         properties:
            id: ~
            view_link:

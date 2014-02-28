@@ -108,24 +108,26 @@
         }
     ] %}
 
+    {# Render account channels #}
     {% for channel in channels %}
-        {% set accountCustomersInfoWidget %}
-            {% set placeHolderName = 'orocrm_account_customers_info_' ~ channel.type %}
-
-            {{ placeholder(placeHolderName, {'id': entity.id, 'channelId':channel.id}) }}
-        {% endset %}
-        {% if accountCustomersInfoWidget|trim is not empty %}
+        {%- set accountChannelInfoSection -%}
+            {% set placeHolderName = 'orocrm_account_channel_info_' ~ channel.type %}
+            {{ placeholder(placeHolderName, {'account': entity, 'channel': channel}) }}
+        {%- endset -%}
+        {% if accountChannelInfoSection %}
             {% set dataBlocks = dataBlocks|merge([
                 {
                     'title': channel.name,
                     'subblocks': [
-                        {'data' : [accountCustomersInfoWidget]}
+                        {'data' : [accountChannelInfoSection]}
                     ]
                 }
             ]) %}
         {% endif %}
     {% endfor %}
+
     {% set id = 'accountView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
+
     {{ parent() }}
 {% endblock content_data %}

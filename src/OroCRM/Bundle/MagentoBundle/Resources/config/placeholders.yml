@@ -1,13 +1,13 @@
 placeholders:
-    orocrm_account_customers_info_magento:
+    orocrm_account_channel_info_magento:
         items:
-            orocrm_account_customers_info_widget: ~
+            orocrm_magento_account_channel_info: ~
     orocrm_account_orders:
         items:
             orocrm_account_orders_grid: ~
 
 items:
-    orocrm_account_customers_info_widget:
-        template: OroCRMMagentoBundle:Customer:accountsWidgetPlaceholder.html.twig
+    orocrm_magento_account_channel_info:
+        template: OroCRMMagentoBundle:Account:сhannelInfo.html.twig
     orocrm_account_orders_grid:
         template: OroCRMMagentoBundle:Order:accountOrdersPlaceholder.html.twig

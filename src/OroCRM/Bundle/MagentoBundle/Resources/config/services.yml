@@ -65,11 +65,11 @@ services:
     orocrm_magento.event_listener.account_orders_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
-            - 'account'
+            - 'accountId'
             - @oro_datagrid.datagrid.request_params
             - false
         tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-orders-view-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-account-order-grid, method: onBuildAfter }
 
     orocrm_magento.event_listener.customer_order_grid_listener:
         class: %orocrm.magento.event_listener.account_widgets_data_grid_listener.class%
@@ -77,8 +77,8 @@ services:
             - @oro_datagrid.datagrid.request_params
             - ['customerId', 'channelId']
         tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-customer-orders-view-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-customer-cart-view-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-customer-order-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-customer-cart-grid, method: onBuildAfter }
 
     orocrm_magento.event_listener.cart_items_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
