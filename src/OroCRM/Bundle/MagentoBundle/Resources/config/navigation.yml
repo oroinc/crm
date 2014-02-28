@@ -5,6 +5,7 @@ oro_menu_config:
             extras:
                 position: 30
                 widgetRoute: orocrm_magento_widget_account_orders
+                widgetEvent: click.tab.data-api
 
     tree:
         account_sales_tab_panel:

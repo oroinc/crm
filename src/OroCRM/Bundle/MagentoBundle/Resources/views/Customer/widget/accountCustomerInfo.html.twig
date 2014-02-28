@@ -39,14 +39,12 @@
             [{
                 'alias': 'orocrm_magento_customer_orders' ~ uniqueSuffix,
                 'widgetType': 'block',
-                'widget-event': 'click.tab.data-api',
                 'label': "orocrm.magento.order.entity_plural_label"|trans,
                 'url': path('orocrm_magento_widget_customer_orders', {'customerId': customer.id, 'channelId': channel.id})
             },
             {
                 'alias': 'orocrm_magento_customer_carts_' ~ uniqueSuffix,
                 'widgetType': 'block',
-                'widget-event': 'click.tab.data-api',
                 'label': "orocrm.magento.cart.entity_plural_label"|trans,
                 'url': path('orocrm_magento_widget_customer_carts', {'customerId': customer.id, 'channelId': channel.id})
             }]

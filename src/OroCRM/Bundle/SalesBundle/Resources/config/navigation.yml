@@ -58,14 +58,12 @@ oro_menu_config:
             extras:
                 position: 10
                 widgetRoute: orocrm_sales_widget_account_leads
-                widget-event: click.tab.data-api
 
         orocrm_sales_account_opportunities_tab:
             label: orocrm.sales.widgets.opportunities
             extras:
                 position: 20
                 widgetRoute: orocrm_sales_widget_account_opportunities
-                widget-event: click.tab.data-api
 
     tree:
         application_menu:

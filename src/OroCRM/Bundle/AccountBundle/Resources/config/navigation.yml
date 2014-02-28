@@ -33,7 +33,6 @@ oro_menu_config:
                 position: 20
                 widgetRoute: orocrm_account_widget_emails
                 widgetAlias: account_emails
-                widget-event: click.tab.data-api
                 
     tree:
         application_menu:
