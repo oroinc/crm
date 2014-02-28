@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle;
 
 class OroCRMMagentoBundleInstaller implements Installation
@@ -19,7 +20,7 @@ class OroCRMMagentoBundleInstaller implements Installation
     /**
      * @inheritdoc
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema, QueryBag $queries)
     {
         OroCRMMagentoBundle::orocrmMagentoCartTable($schema);
         OroCRMMagentoBundle::orocrmMagentoCartAddressTable($schema);
@@ -66,7 +67,5 @@ class OroCRMMagentoBundleInstaller implements Installation
         OroCRMMagentoBundle::orocrmMagentoProductToWebsiteForeignKeys($schema, 'orocrm_magento_prod_to_website');
         OroCRMMagentoBundle::orocrmMagentoStoreForeignKeys($schema);
         OroCRMMagentoBundle::orocrmMagentoWebsiteForeignKeys($schema);
-
-        return [];
     }
 }

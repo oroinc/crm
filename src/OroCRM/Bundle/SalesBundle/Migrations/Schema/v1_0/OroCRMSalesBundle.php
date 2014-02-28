@@ -4,14 +4,14 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class OroCRMSalesBundle implements Migration
 {
-
     /**
      * @inheritdoc
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema, QueryBag $queries)
     {
         self::orocrmSalesLeadTable($schema);
         self::orocrmSalesLeadStatusTable($schema);
@@ -23,8 +23,6 @@ class OroCRMSalesBundle implements Migration
         self::orocrmSalesLeadForeignKeys($schema);
         self::orocrmSalesOpportunityForeignKeys($schema);
         self::orocrmSalesFunnelForeignKeys($schema);
-
-        return [];
     }
 
     /**

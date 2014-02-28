@@ -4,13 +4,14 @@ namespace OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class OroCRMContactBundle implements Migration
 {
     /**
      * @inheritdoc
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema, QueryBag $queries)
     {
         self::orocrmContactTable($schema);
         self::orocrmContactAddressTable($schema);
@@ -30,8 +31,6 @@ class OroCRMContactBundle implements Migration
         self::orocrmContactPhoneForeignKeys($schema);
         self::orocrmContactToContactGroupForeignKeys($schema);
         self::oroEmailAddressForeignKeys($schema);
-
-        return [];
     }
 
     /**

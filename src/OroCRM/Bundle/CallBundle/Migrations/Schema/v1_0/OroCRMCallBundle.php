@@ -4,14 +4,14 @@ namespace OroCRM\Bundle\CallBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class OroCRMCallBundle implements Migration
 {
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema, QueryBag $queries)
     {
         // @codingStandardsIgnoreStart
 
@@ -65,7 +65,5 @@ class OroCRMCallBundle implements Migration
         /** End of generate foreign keys for table orocrm_call **/
 
         // @codingStandardsIgnoreEnd
-
-        return [];
     }
 }
