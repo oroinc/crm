@@ -25,13 +25,12 @@ oro_menu_config:
             extras:
                 description: List of accounts
 
-        account_emails:
+        account_emails_tab:
             label: oro.email.entity_plural_label
-            route: orocrm_account_widget_emails
-            routeParameters:
-                id: 0
             extras:
-                widgetType: block
+                widgetRoute: orocrm_account_widget_emails
+                widgetAlias: account_emails
+
     tree:
         application_menu:
             children:
@@ -44,9 +43,9 @@ oro_menu_config:
                 shortcut_new_account: ~
                 shortcut_list_accounts: ~
 
-        account_activity_tab:
+        account_activity_tab_panel:
             children:
-                account_emails: ~
+                account_emails_tab: ~
 
 oro_titles:
     orocrm_account_index: ~
