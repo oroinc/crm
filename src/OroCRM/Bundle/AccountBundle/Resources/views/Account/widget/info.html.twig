@@ -4,19 +4,25 @@
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content">
-    {{ UI.renderProperty('orocrm.account.name.label'|trans, account.name) }}
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ UI.renderProperty('orocrm.account.name.label'|trans, account.name) }}
 
-    {{ entityConfig.renderDynamicFields(account) }}
+            {% if account.billingAddress is not empty %}
+                {{ UI.renderProperty('orocrm.account.billing_address.label'|trans, address.renderAddress(account.billingAddress)) }}
+            {% endif %}
 
-    {% if account.billingAddress is not empty %}
-        {{ UI.renderProperty('orocrm.account.billing_address.label'|trans, address.renderAddress(account.billingAddress)) }}
-    {% endif %}
+            {% if account.shippingAddress is not empty %}
+                {{ UI.renderProperty('orocrm.account.shipping_address.label'|trans, address.renderAddress(account.shippingAddress)) }}
+            {% endif %}
 
-    {% if account.shippingAddress is not empty %}
-        {{ UI.renderProperty('orocrm.account.shipping_address.label'|trans, address.renderAddress(account.shippingAddress)) }}
-    {% endif %}
+            {% if resource_granted('oro_tag_view_tag_cloud') %}
+                {{ UI.renderProperty('oro.tag.entity_plural_label'|trans, tag.renderView(account)) }}
+            {% endif %}
+        </div>
 
-    {% if resource_granted('oro_tag_view_tag_cloud') %}
-        {{ UI.renderProperty('oro.tag.entity_plural_label'|trans, tag.renderView(account)) }}
-    {% endif %}
+        <div class="responsive-block">
+            {{ entityConfig.renderDynamicFields(account) }}
+        </div>
+    </div>
 </div>
