@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\AccountBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -13,7 +12,6 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class AccountController extends Controller
 {

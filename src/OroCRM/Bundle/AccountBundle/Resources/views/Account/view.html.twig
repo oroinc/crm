@@ -25,7 +25,7 @@
         {% placeholder orocrm_account_action_dropdown with {'entity': entity} %}
     {% endset %}
 
-    {{ UI.dropdown({
+    {{ UI.dropdownButton({
         'label': 'orocrm.account.account_actions'|trans,
         'html': html
     }) }}
