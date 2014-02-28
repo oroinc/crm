@@ -43,6 +43,7 @@ class OroCRMMagentoBundleInstaller implements Installation
         OroCRMMagentoBundle::orocrmMagentoRegionTable($schema);
         OroCRMMagentoBundle::orocrmMagentoStoreTable($schema);
         OroCRMMagentoBundle::orocrmMagentoWebsiteTable($schema);
+        OroCRMMagentoBundle::updateOroIntegrationTransportTable($schema);
 
         OroCRMMagentoBundle::orocrmMagentoCartForeignKeys($schema);
         OroCRMMagentoBundle::orocrmMagentoCartAddressForeignKeys($schema);

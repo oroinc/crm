@@ -38,6 +38,7 @@ class OroCRMMagentoBundle implements Migration
         self::orocrmMagentoRegionTable($schema);
         self::orocrmMagentoStoreTable($schema);
         self::orocrmMagentoWebsiteTable($schema);
+        self::updateOroIntegrationTransportTable($schema);
 
         self::orocrmMagentoCartForeignKeys($schema);
         self::orocrmMagentoCartAddressForeignKeys($schema);
@@ -58,6 +59,20 @@ class OroCRMMagentoBundle implements Migration
         self::orocrmMagentoProductToWebsiteForeignKeys($schema);
         self::orocrmMagentoStoreForeignKeys($schema);
         self::orocrmMagentoWebsiteForeignKeys($schema);
+    }
+
+    public static function updateOroIntegrationTransportTable(Schema $schema)
+    {
+        $table = $schema->getTable('oro_integration_transport');
+        $table->addColumn('wsdl_url', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('api_user', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('api_key', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('sync_start_date', 'date', ['notnull' => false]);
+        $table->addColumn('sync_range', 'string', ['notnull' => false, 'length' => 50]);
+        $table->addColumn('website_id', 'integer', ['notnull' => false]);
+        $table->addColumn('websites', 'array', ['notnull' => false, 'comment' => '(DC2Type:array)']);
+        $table->addColumn('is_extension_installed', 'boolean', ['notnull' => false]);
+        $table->addColumn('is_wsi_mode', 'boolean', ['notnull' => false]);
     }
 
     /**
