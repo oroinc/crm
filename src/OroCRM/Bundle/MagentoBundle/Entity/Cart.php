@@ -26,7 +26,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *      @ORM\Index(name="magecart_origin_idx", columns={"origin_id"})
  *  },
  *  uniqueConstraints={
- *      @ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})
+ *      @ORM\UniqueConstraint(name="unq_cart_origin_id_channel_id", columns={"origin_id", "channel_id"})
  *  }
  * )
  * @Config(
