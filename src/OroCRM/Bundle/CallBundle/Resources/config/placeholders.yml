@@ -12,3 +12,4 @@ items:
         template: OroCRMCallBundle:Call:user_calls.html.twig
     orocrm_account_action_dropdown_add_call:
         template: OroCRMCallBundle:Account:action/logCallButton.html.twig
+        order: 40
