@@ -95,7 +95,7 @@ class ContactRequest extends AbstractContactRequest
      * @var ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\EmailBundle\Entity\Email")
-     * @ORM\JoinTable(name="orocrm_contactus_request_emails",
+     * @ORM\JoinTable(name="orocrm_contactus_req_emails",
      *      joinColumns={@ORM\JoinColumn(name="request_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", onDelete="CASCADE")}
      * )

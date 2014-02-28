@@ -69,7 +69,7 @@ orocrm:
         customer:
             entity_label:        Customer
             entity_plural_label: Customers
-            entity_description:  Represent magento customer
+            entity_description:  Represent Magento customer
 
             id.label:            Id
             origin_id.label:     Origin Id
@@ -98,7 +98,7 @@ orocrm:
         cart:
             entity_label:         Shopping Cart
             entity_plural_label:  Shopping Carts
-            entity_description:   Represent magento shopping cart
+            entity_description:   Represent Magento shopping cart
 
             id.label:                  Cart Id
             origin_id.label:           Origin Id
@@ -191,7 +191,7 @@ orocrm:
         product:
             entity_label:         Product
             entity_plural_label:  Products
-            entity_description:   Represent magento product
+            entity_description:   Represent Magento product
 
             id.label:             Id
             origin_id.label:      Origin Id
