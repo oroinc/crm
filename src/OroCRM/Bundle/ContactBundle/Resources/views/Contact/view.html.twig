@@ -10,7 +10,7 @@
     {% if resource_granted('oro_email_create') %}
         {% set sendEmailTitle = 'oro.email.send_email'|trans %}
         {{ UI.clientButton({
-            'dataUrl': path('orocrm_contact_email_create', { 'contactId': entity.id }) ,
+            'dataUrl': path('oro_email_email_create', {'to': entity.primaryEmail ? entity.primaryEmail.email : ''}) ,
             'aCss': 'no-hash',
             'iCss': 'icon-envelope',
             'dataId': entity.id,

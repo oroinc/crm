@@ -143,7 +143,7 @@ class AccountController extends Controller
     public function infoAction(Account $account)
     {
         return [
-            'entity' => $account
+            'account' => $account
         ];
     }
 
@@ -155,7 +155,7 @@ class AccountController extends Controller
     public function emailsAction(Account $account)
     {
         return [
-            'entity' => $account
+            'account' => $account
         ];
     }
 }
