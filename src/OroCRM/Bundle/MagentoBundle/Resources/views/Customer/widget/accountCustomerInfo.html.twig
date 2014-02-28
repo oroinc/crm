@@ -36,7 +36,7 @@
         {{ UI.renderProperty("orocrm.magento.customer.group.label"|trans, customer.group.name) }}
         {{ UI.renderProperty("orocrm.magento.customer.website.label"|trans, customer.website.name) }}
         {{ UI.renderProperty("orocrm.magento.customer.store.label"|trans, customer.store.name) }}
-        {{ UI.renderProperty("orocrm.magento.customer.birthday.label"|trans, customer.birthday|oro_format_date ~ customer.birthday|age_string({'default': 'N/A'})) }}
+        {{ UI.renderProperty("orocrm.magento.customer.birthday.label"|trans, customer.birthday|oro_format_date ~ ' ' ~ customer.birthday|age_string({'default': 'N/A'})) }}
         {{ UI.renderProperty("orocrm.magento.customer.gender.label"|trans, oro_gender(customer.gender)) }}
         {{ UI.renderProperty("orocrm.magento.customer.vat.label"|trans, customer.vat) }}
     </div>
