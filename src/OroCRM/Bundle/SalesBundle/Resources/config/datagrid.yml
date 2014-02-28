@@ -11,6 +11,7 @@ datagrid:
                 select:
                     - o.id
                     - o.name
+                    - o.createdAt
                     - o.closeDate
                     - o.probability
                     - o.budgetAmount
@@ -29,6 +30,9 @@ datagrid:
         columns:
             name:
                 label: orocrm.sales.opportunity.name.label
+            createdAt:
+                label: orocrm.sales.opportunity.created_at.label
+                frontend_type: datetime
             contactName:
                 label: orocrm.sales.opportunity.contact.label
             closeDate:
@@ -62,6 +66,8 @@ datagrid:
             columns:
                 name:
                     data_name: o.name
+                createdAt:
+                    data_name: o.createdAt
                 contactName:
                     data_name: contactName
                 closeDate:
@@ -74,11 +80,16 @@ datagrid:
                     data_name: status.label
                 primaryEmail:
                     data_name: email.email
+            default:
+                createdAt: DESC
         filters:
             columns:
                 name:
                     type: string
                     data_name: o.name
+                createdAt:
+                    type: datetime
+                    data_name: o.createdAt
                 contactName:
                     type: string
                     data_name: contactName
@@ -577,18 +588,18 @@ datagrid:
                     data_name: email.email
                     filter_by_having: true
 
-    account-leads-view-grid:
+    sales-account-lead-grid:
         extend: sales-lead-grid
         source:
             query:
                 where:
                       and:
-                        - l.account = :account
+                        - l.account = :accountId
 
-    account-opportunities-view-grid:
+    sales-account-opportunity-grid:
         extend: sales-opportunity-grid
         source:
              query:
                  where:
                     and:
-                        - o.account = :account
+                        - o.account = :accountId
