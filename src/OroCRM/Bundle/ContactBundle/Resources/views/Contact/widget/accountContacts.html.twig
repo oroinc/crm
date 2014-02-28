@@ -20,7 +20,7 @@
             <a class="contact-box-name-link contact-box-link" href="{{ path('orocrm_contact_view',{'id': contact.id }) }}">
                 {{ contact|oro_format_name }}
                 {% if isDefault %}
-                    ({{ "orocrm.account.default_contact.label"|trans }})
+                    <span class="label label-info">{{ "orocrm.account.default_contact.label"|trans }}</span>
                 {% endif %}
             </a>
         </div>
