@@ -7,7 +7,7 @@
         {% set customer_email %}
             <a class="contact-box-link" data-url="{{ path('oro_email_email_create', { 'to': customer.email }) }}"
                 href="javascript:void(0);"
-                {{ UI.renderWidgetElementAttributes({
+                {{ UI.renderWidgetDataAttributes({
                     'type' : 'dialog',
                     'multiple' : true,
                     'reload-grid-name' : 'account-email-grid',

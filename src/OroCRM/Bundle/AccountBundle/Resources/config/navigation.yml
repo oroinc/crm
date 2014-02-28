@@ -5,6 +5,7 @@ oro_menu_config:
             uri: '#'
             extras:
                 position: 10
+
         account_list:
             label: orocrm.account.entity_plural_label
             route: orocrm_account_index
@@ -19,6 +20,7 @@ oro_menu_config:
             extras:
                 description: Create new account instance
                 isCustomAction: true
+
         shortcut_list_accounts:
             label: Show accounts list
             route: orocrm_account_index
@@ -28,6 +30,7 @@ oro_menu_config:
         account_emails_tab:
             label: oro.email.entity_plural_label
             extras:
+                position: 20
                 widgetRoute: orocrm_account_widget_emails
                 widgetAlias: account_emails
 

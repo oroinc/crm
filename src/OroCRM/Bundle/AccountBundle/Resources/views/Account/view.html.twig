@@ -77,7 +77,7 @@
         {{ menuTabPanel('account_sales_tab_panel', {'id': entity.id}) }}
     {% endset %}
 
-    {% set activityBlock %}
+    {% set activitySection %}
         {{ menuTabPanel('account_activity_tab_panel', {'id': entity.id}) }}
     {% endset %}
 
@@ -88,13 +88,6 @@
             'subblocks': generalSectionBlocks
         },
         {
-            'title': 'orocrm.account.sections.general'|trans,
-            'class': 'active',
-            'subblocks': [
-                {'data' : [accountInformationWidget]}
-            ]
-        },
-        {
             'title': 'orocrm.account.sections.sales'|trans,
             'subblocks': [
                 {'data' : [accountSalesSection]}
@@ -103,7 +96,7 @@
         {
             'title': 'orocrm.account.sections.activity'|trans,
             'subblocks': [
-                {'data' : [activityBlock]}
+                {'data' : [activitySection]}
             ]
         }
     ] %}

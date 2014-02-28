@@ -29,7 +29,7 @@
             {% if contact.primaryPhone %}
                 <a class="contact-box-link" data-url="{{ path('orocrm_call_create', { 'accountId': account.id, 'contactId': contact.id }) }}"
                     href="javascript:void(0);"
-                    {{ UI.renderWidgetElementAttributes({
+                    {{ UI.renderWidgetDataAttributes({
                         'type' : 'dialog',
                         'multiple' : false,
                         'reload-grid-name' : 'widget-calls-grid',
@@ -55,7 +55,7 @@
             {% if contact.primaryEmail %}
                 <a class="contact-box-link" data-url="{{ path('orocrm_contact_email_create', { 'contactId': contact.id }) }}"
                     href="javascript:void(0);"
-                    {{ UI.renderWidgetElementAttributes({
+                    {{ UI.renderWidgetDataAttributes({
                         'type' : 'dialog',
                         'multiple' : true,
                         'reload-grid-name' : 'account-email-grid',
