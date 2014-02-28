@@ -39,6 +39,7 @@
             [{
                 'alias': 'orocrm_customer_orders_account_widget' ~ widgetId,
                 'widgetType': 'block',
+                'widget-event': 'click.tab.data-api',
                 'wid': widgetId,
                 'label': "orocrm.magento.order.entity_plural_label"|trans,
                 'url': path('orocrm_customer_orders_account_widget', {id: customer.id, channelId:channelId})
@@ -46,6 +47,7 @@
             {
                 'alias': 'orocrm_account_customer_cart_widget' ~ widgetId,
                 'widgetType': 'block',
+                'widget-event': 'click.tab.data-api',
                 'wid': widgetId,
                 'label': "orocrm.magento.cart.entity_plural_label"|trans,
                 'url': path('orocrm_account_customer_cart_widget', {id: customer.id, channelId:channelId})

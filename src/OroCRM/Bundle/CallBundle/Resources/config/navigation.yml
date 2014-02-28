@@ -18,6 +18,7 @@ oro_menu_config:
             route: orocrm_call_widget_calls
             extras:
                 widgetType: block
+                widget-event: click.tab.data-api
 
     tree:
         application_menu:

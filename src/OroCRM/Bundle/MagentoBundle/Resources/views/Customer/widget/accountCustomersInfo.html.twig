@@ -9,6 +9,7 @@
                 {
                     'alias': 'orocrm_customer_info_widget_' ~ widgetId,
                     'widgetType': 'block',
+                    'widget-event': 'click.tab.data-api',
                     'wid': widgetId,
                     'label': customer|oro_format_name,
                     'url': path('orocrm_customer_info_widget', {id: customer.id, channelId:channelId})

@@ -55,6 +55,7 @@ oro_menu_config:
                 id: 0
             extras:
                 widgetType: block
+                widget-event: click.tab.data-api
 
         orocrm_account_widget_opportunities:
             label: orocrm.sales.widgets.opportunities
@@ -63,6 +64,7 @@ oro_menu_config:
                 id: 0
             extras:
                 widgetType: block
+                widget-event: click.tab.data-api
 
         orocrm_account_widget_orders:
             label: orocrm.magento.account_orders_widget
@@ -71,6 +73,7 @@ oro_menu_config:
                 id: 0
             extras:
                 widgetType: block
+                widget-event: click.tab.data-api
 
     tree:
         application_menu:
