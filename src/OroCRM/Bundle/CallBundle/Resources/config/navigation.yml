@@ -17,7 +17,6 @@ oro_menu_config:
             label: orocrm.call.entity_plural_label
             extras:
                 widgetRoute: orocrm_call_widget_calls
-                widgetAlias: orocrm_call_widget_calls
 
     tree:
         application_menu:
