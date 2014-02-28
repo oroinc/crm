@@ -171,6 +171,21 @@ class ContactController extends Controller
             }
         }
 
+        /**
+         * Compare contacts to sort them alphabetically
+         *
+         * @param Contact $firstContact
+         * @param Contact $secondContact
+         * @return int
+         */
+        $compareFunction = function ($firstContact, $secondContact) {
+            $first = $firstContact->getLastName() . $firstContact->getFirstName() . $firstContact->getMiddleName();
+            $second = $secondContact->getLastName() . $secondContact->getFirstName() . $secondContact->getMiddleName();
+            return strnatcasecmp($first, $second);
+        };
+
+        usort($contactsWithoutDefault, $compareFunction);
+
         return array(
             'entity'                 => $account,
             'defaultContact'         => $defaultContact,
