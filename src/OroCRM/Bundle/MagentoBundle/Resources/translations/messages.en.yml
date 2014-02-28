@@ -100,7 +100,7 @@ orocrm:
             entity_plural_label:  Shopping Carts
             entity_description:   Represent magento shopping cart
 
-            id.label:                  Id
+            id.label:                  Cart Id
             origin_id.label:           Origin Id
             items_qty.label:           Items qty
             items_count.label:         Items count
@@ -259,7 +259,7 @@ orocrm:
 
         account_carts_grid:
             items: Items
-            total_amount: Total Amount
+            id: Cart Id
 
         account_customers_widget:
             not_exist: No customers exist

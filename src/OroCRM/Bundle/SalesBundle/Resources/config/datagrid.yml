@@ -218,7 +218,7 @@ datagrid:
                 addressPostalCode:
                     data_name: addressPostalCode
             default:
-                createdAt:  ASC
+                createdAt:  DESC
         actions:
             view:
                 type:          navigate

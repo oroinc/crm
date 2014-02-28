@@ -748,6 +748,8 @@ datagrid:
                     - c.id
                     - c.originId
                     - c.grandTotal
+                    - c.createdAt
+                    - c.updatedAt
                     - c.quoteCurrencyCode as currency
                     - cstatus.label as statusLabel
                     - step.label as stepLabel
@@ -764,14 +766,25 @@ datagrid:
                 groupBy: c.id
         columns:
             originId:
-                label: orocrm.magento.cart.id.label
+                label: orocrm.magento.account_carts_grid.id
             itemsCount:
                 label: orocrm.magento.account_carts_grid.items
             grandTotal:
-                label: orocrm.magento.account_carts_grid.total_amount
+                label:  orocrm.magento.cart.grand_total.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+            subTotal:
+                label: orocrm.magento.cart.sub_total.label
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+            createdAt:
+                label: orocrm.magento.cart.created_at.label
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.magento.cart.updated_at.label
+                frontend_type: datetime
             statusLabel:
                 label: orocrm.magento.datagrid.columns.status
             stepLabel:
@@ -783,9 +796,13 @@ datagrid:
                 originId:             { data_name: c.originId }
                 itemsCount:           { data_name: c.itemsCount }
                 grandTotal:           { data_name: c.grandTotal }
+                subTotal:             { data_name: c.subTotal }
+                createdAt:            { data_name: c.createdAt }
+                updatedAt:            { data_name: c.updatedAt }
                 statusLabel:          { data_name: cstatus.label }
                 stepLabel:            { data_name: step.label }
-
+            default:
+                updatedAt:  DESC
     magento-account-order-grid:
         source:
             type: orm
