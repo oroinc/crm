@@ -4,17 +4,20 @@ namespace OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_1;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class OroCRMContactBundle implements Migration
 {
     /**
      * @inheritdoc
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema, QueryBag $queries)
     {
-        return [
-            "ALTER TABLE orocrm_contact_to_contact_group RENAME TO orocrm_contact_to_contact_grp;",
-            "ALTER TABLE orocrm_contact_address_to_address_type RENAME TO orocrm_contact_adr_to_adr_type;",
-        ];
+        $queries->addSql(
+            $queries->getRenameTableSql('orocrm_contact_to_contact_group', 'orocrm_contact_to_contact_grp')
+        );
+        $queries->addSql(
+            $queries->getRenameTableSql('orocrm_contact_address_to_address_type', 'orocrm_contact_adr_to_adr_type')
+        );
     }
 }
