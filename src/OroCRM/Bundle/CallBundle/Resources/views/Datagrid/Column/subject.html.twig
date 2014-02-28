@@ -1,10 +1,26 @@
 {% if value %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
     {% set callId = record.getValue('id') %}
-    <a class="call-info-widget-link"
-       data-call-id="{{ callId }}"
-       data-call-info-widget-url="{{ path('orocrm_call_widget_info', {id : callId}) }}"
-       data-call-info-widget-title="{{ value|escape }}"
-       href="javascript: void(0);">
-        {{ value }}
-    </a>
+    {{ UI.clientLink({
+        'dataUrl': path('orocrm_call_widget_info', {id : callId}),
+        'aCss': 'no-hash',
+        'title' : value|escape,
+        'label' : value|escape,
+        'widget' : {
+            'type' : 'dialog',
+            'multiple' : false,
+            'options' : {
+                'alias': 'call_info_widget_' ~ callId,
+                'dialogOptions' : {
+                    'title' : value|escape,
+                    'allowMaximize': true,
+                    'allowMinimize': true,
+                    'dblclick': 'maximize',
+                    'maximizedHeightDecreaseBy': 'minimize-bar',
+                    'width': 600
+                }
+            }
+        },
+    }) }}
 {% endif %}

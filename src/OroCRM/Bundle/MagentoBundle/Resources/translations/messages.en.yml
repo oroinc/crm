@@ -34,9 +34,9 @@ orocrm:
                 tax_amount:       Tax Amount
                 discount_amount:  Discount Amount
                 weight:           Weight
-                added_on:         Added On
+                added_on:         Placed On
                 updated_on:       Updated On
-                increment_id:     Increment ID
+                increment_id:     "Order #"
                 total_paid:       Total Paid
                 total_invoiced:   Total Invoiced
                 subtotal_amount:  Subtotal Amount
@@ -93,13 +93,14 @@ orocrm:
             addresses.label:     Adresses
             carts.label:         Carts
             channel.label:       Channel
+            name.label:          Name
 
         cart:
             entity_label:         Shopping Cart
             entity_plural_label:  Shopping Carts
             entity_description:   Represent Magento shopping cart
 
-            id.label:                  Id
+            id.label:                  Cart Id
             origin_id.label:           Origin Id
             items_qty.label:           Items qty
             items_count.label:         Items count
@@ -153,7 +154,8 @@ orocrm:
             entity_description:  Respresent Magento Order
 
             id.label:           Id
-            increment_id.label: Increment Id
+            increment_id.label: "Order #"
+            items_qty.label:    Items qty
             gift_message.label: Gift message
             remote_ip.label:    Remote address
             store_name.label:   Website
@@ -172,7 +174,7 @@ orocrm:
             discount_percent.label: Discount percent
             total_amount.label:     Total amount
             status.label:           Status
-            created_at.label:       Added on
+            created_at.label:       Placed on
             updated_at.label:       Updated on
             customer.label:         Customer
             addresses.label:        Addresses
@@ -252,3 +254,7 @@ orocrm:
             origin_id.label:     Origin Id
             country.label:       Country
             region.label:        State
+
+        account:
+            no_customers_exist: No customers exist
+

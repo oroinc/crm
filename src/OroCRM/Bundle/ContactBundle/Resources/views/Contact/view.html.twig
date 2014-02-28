@@ -8,23 +8,57 @@
 
 {% block navButtons %}
     {% if resource_granted('oro_email_create') %}
+        {% set sendEmailTitle = 'oro.email.send_email'|trans %}
         {{ UI.clientButton({
-            'dataUrl': path('orocrm_contact_email_create', { 'contactId': entity.id }) ,
-            'aCss': 'no-hash view-email-button',
+            'dataUrl': path('oro_email_email_create', {'to': entity.primaryEmail ? entity.primaryEmail.email : ''}) ,
+            'aCss': 'no-hash',
             'iCss': 'icon-envelope',
             'dataId': entity.id,
-            'title' : 'Send email',
-            'label' : 'Send email'
+            'title' : sendEmailTitle,
+            'label' : sendEmailTitle,
+            'widget' : {
+                'type' : 'dialog',
+                'multiple' : true,
+                'reload-grid-name' : 'contacts-email-grid',
+                'options' : {
+                    'alias': 'email-dialog',
+                    'dialogOptions' : {
+                        'title' : sendEmailTitle,
+                        'allowMaximize': true,
+                        'allowMinimize': true,
+                        'dblclick': 'maximize',
+                        'maximizedHeightDecreaseBy': 'minimize-bar',
+                        'width': 1000
+                    }
+                }
+            }
         }) }}
     {% endif %}
     {% if resource_granted('orocrm_call_create') %}
+        {% set logCallTitle = 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower %}
         {{ UI.clientButton({
             'dataUrl': path('orocrm_call_create', { 'contactId': entity.id }) ,
-            'aCss': 'no-hash log-call-button',
+            'aCss': 'no-hash',
             'iCss': 'icon-phone',
             'dataId': entity.id,
-            'title' : 'Log call',
-            'label' : 'Log call'
+            'title' : logCallTitle,
+            'label' : logCallTitle,
+            'widget' : {
+                'type' : 'dialog',
+                'multiple' : false,
+                'reload-grid-name' : 'widget-calls-grid',
+                'options' : {
+                    'alias': 'call-dialog',
+                    'dialogOptions' : {
+                        'title' : logCallTitle,
+                        'allowMaximize': true,
+                        'allowMinimize': true,
+                        'dblclick': 'maximize',
+                        'maximizedHeightDecreaseBy': 'minimize-bar',
+                        'width': 1000
+                    }
+                }
+            }
         }) }}
     {% endif %}
     {% if resource_granted('EDIT', entity) %}
@@ -43,58 +77,6 @@
             'entity_label': 'orocrm.contact.entity_label'|trans,
         }) }}
     {% endif %}
-
-    {# Open dialog to log a call #}
-    <script type="text/javascript">
-        require(['jquery', 'underscore', 'oro/dialog-widget', 'oro/widget-manager'],
-        function($, _, DialogWidget, WidgetManager) {
-            'use strict';
-            $(function () {
-                $(document).on('click', '.log-call-button', function (e) {
-                    var element = $(this);
-                    var url = element.data('url');
-                    if (_.isUndefined(url)) {
-                        url = element.attr('href');
-                    }
-
-                    // only one instance of widget is allowed
-                    if (element.data('widget-opened')) {
-                        return;
-                    } else {
-                        element.data('widget-opened', true);
-                    }
-
-                    // create and open widget
-                    var widget = new DialogWidget({
-                        url: url,
-                        dialogOptions: {
-                            allowMaximize: true,
-                            allowMinimize: true,
-                            dblclick: 'maximize',
-                            maximizedHeightDecreaseBy: 'minimize-bar',
-                            width: 1000,
-                            title: element.attr('title')
-                        }
-                    });
-
-                    // reload widget with list of contact calls
-                    widget.on('contactCallLogged', function() {
-                        WidgetManager.getWidgetInstanceByAlias('contact_calls', function(contactCallsWidget) {
-                            contactCallsWidget.loadContent();
-                        });
-                    });
-
-                    widget.on('widgetRemove', function() {
-                        element.data('widget-opened', false);
-                    });
-
-                    widget.render();
-
-                    e.preventDefault();
-                });
-            });
-        });
-    </script>
 {% endblock navButtons %}
 
 {% block pageHeader %}
