@@ -138,6 +138,7 @@ datagrid:
                     - l.name
                     - l.firstName
                     - l.lastName
+                    - l.createdAt
                     - l.email
                     - l.phoneNumber
                     - status.label as statusLabel
@@ -167,6 +168,9 @@ datagrid:
                 label: orocrm.sales.lead.first_name.label
             lastName:
                 label: orocrm.sales.lead.last_name.label
+            createdAt:
+                label: orocrm.sales.lead.created_at.label
+                frontend_type: datetime
             email:
                 label: orocrm.sales.lead.email.label
             phoneNumber:
@@ -201,6 +205,8 @@ datagrid:
                     data_name: l.firstName
                 lastName:
                     data_name: l.lastName
+                createdAt:
+                    data_name: l.createdAt
                 email:
                     data_name: l.email
                 phoneNumber:
@@ -212,8 +218,7 @@ datagrid:
                 addressPostalCode:
                     data_name: addressPostalCode
             default:
-                firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
-                lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+                createdAt:  ASC
         actions:
             view:
                 type:          navigate

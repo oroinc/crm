@@ -109,7 +109,7 @@ orocrm:
             website.label:        Website
             number_of_employees.label: Number of employees
             industry.label:       Industry
-            created_at.label:     Created
+            created_at.label:     Created At
             updated_at.label:     Updated
             status.label:         Status
             contact.label:        Contact

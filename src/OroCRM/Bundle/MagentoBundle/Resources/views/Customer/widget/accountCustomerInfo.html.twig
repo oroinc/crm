@@ -4,9 +4,9 @@
     <div class="responsive-block form-horizontal">
 
         {% set customer_name_link %}
-        <a href="{{ path("orocrm_magento_customer_view", {'id':customer.id}) }}">
-            {{ customer|oro_format_name }}
-        </a>
+            <a href="{{ path("orocrm_magento_customer_view", {'id':customer.id}) }}">
+                {{ customer|oro_format_name }}
+            </a>
         {% endset %}
 
         {{ UI.renderProperty("orocrm.magento.customer.name.label"|trans, customer_name_link) }}
