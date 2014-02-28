@@ -5,9 +5,9 @@
         {{ UI.renderProperty("orocrm.magento.customer.name.label"|trans, customer|oro_format_name) }}
 
         {% set customer_email %}
-        <a class="contact-box-link" data-url="{{ path('orocrm_customer_email_create', { 'id': customer.id }) }}"
-           href="javascript:void(0);"
-                {{ UI.renderWidgetElementAttributes({
+            <a class="contact-box-link" data-url="{{ path('oro_email_email_create', { 'to': customer.email }) }}"
+                href="javascript:void(0);"
+                {{ UI.renderWidgetDataAttributes({
                     'type' : 'dialog',
                     'multiple' : true,
                     'reload-grid-name' : 'account-email-grid',
@@ -23,7 +23,7 @@
                         }
                     }
                 }) }}
-                >{{ customer.email }}</a>
+            >{{ customer.email }}</a>
         {% endset %}
         {{ UI.renderProperty("orocrm.magento.customer.email.label"|trans, customer_email) }}
         {{ UI.renderProperty("orocrm.magento.customer.group.label"|trans, customer.group.name) }}
@@ -34,23 +34,21 @@
         {{ UI.renderProperty("orocrm.magento.customer.vat.label"|trans, customer.vat) }}
     </div>
     <div class="responsive-block">
-        {% set widgetId = 'customer_' ~ customer.id ~ 'channel_' ~ channelId %}
+        {% set uniqueSuffix = '_customer__' ~ customer.id ~ '_channel__' ~ channel.id %}
         {% set tabs =
             [{
-                'alias': 'orocrm_customer_orders_account_widget' ~ widgetId,
+                'alias': 'orocrm_magento_customer_orders' ~ uniqueSuffix,
                 'widgetType': 'block',
                 'widget-event': 'click.tab.data-api',
-                'wid': widgetId,
                 'label': "orocrm.magento.order.entity_plural_label"|trans,
-                'url': path('orocrm_customer_orders_account_widget', {id: customer.id, channelId:channelId})
+                'url': path('orocrm_magento_widget_customer_orders', {'customerId': customer.id, 'channelId': channel.id})
             },
             {
-                'alias': 'orocrm_account_customer_cart_widget' ~ widgetId,
+                'alias': 'orocrm_magento_customer_carts_' ~ uniqueSuffix,
                 'widgetType': 'block',
                 'widget-event': 'click.tab.data-api',
-                'wid': widgetId,
                 'label': "orocrm.magento.cart.entity_plural_label"|trans,
-                'url': path('orocrm_account_customer_cart_widget', {id: customer.id, channelId:channelId})
+                'url': path('orocrm_magento_widget_customer_carts', {'customerId': customer.id, 'channelId': channel.id})
             }]
         %}
         {{ tabPanel(tabs) }}

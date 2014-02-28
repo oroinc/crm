@@ -1,17 +1,14 @@
 <div class="widget-content">
-{% if resource_granted("orocrm_magento_customer_view") %}
     {% if customers|length > 0 %}
         {% set tabs = [] %}
         {% for customer in customers %}
-            {% set widgetId = 'customer__' ~ customer.id ~ 'channel__' ~ channelId %}
             {% set tabs = tabs|merge([
                 {
-                    'alias': 'orocrm_customer_info_widget_' ~ widgetId,
+                    'alias': 'orocrm_magento_customer_info_' ~ 'customer__' ~ customer.id ~ 'channel__' ~ channel.id,
                     'widgetType': 'block',
                     'widget-event': 'click.tab.data-api',
-                    'wid': widgetId,
                     'label': customer|oro_format_name,
-                    'url': path('orocrm_customer_info_widget', {id: customer.id, channelId:channelId})
+                    'url': path('orocrm_magento_widget_customer_info', {'id': customer.id, 'channelId': channel.id})
                 }
             ]) %}
         {% endfor %}
@@ -21,5 +18,4 @@
             <span>{{ "orocrm.magento.account_customers_widget.not_exist"|trans }}</span>
         </div>
     {% endif %}
-{% endif %}
 </div>

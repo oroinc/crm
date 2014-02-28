@@ -1,5 +1,5 @@
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
 <div class="widget-content">
-    {{ dataGrid.renderGrid('account-orders-view-grid', {account: id}) }}
+    {{ dataGrid.renderGrid('magento-account-order-grid', {'accountId': account.id}) }}
 </div>

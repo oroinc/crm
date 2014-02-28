@@ -16,6 +16,7 @@ oro_menu_config:
         account_calls_tab:
             label: orocrm.call.entity_plural_label
             extras:
+                position: 10
                 widgetRoute: orocrm_call_widget_calls
                 widget-event: click.tab.data-api
 

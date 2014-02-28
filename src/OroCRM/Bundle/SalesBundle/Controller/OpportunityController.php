@@ -135,7 +135,7 @@ class OpportunityController extends Controller
     /**
      * @Route(
      *        "/widget/account-opportunities/{id}",
-     *        name="orocrm_account_widget_opportunities",
+     *        name="orocrm_sales_widget_account_opportunities",
      *        requirements={"id"="\d+"}
      * )
      * @AclAncestor("orocrm_sales_opportunity_view")

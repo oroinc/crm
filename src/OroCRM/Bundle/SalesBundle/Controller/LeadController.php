@@ -123,7 +123,7 @@ class LeadController extends Controller
     }
 
     /**
-     * @Route("/widget/account-leads/{id}", name="orocrm_account_widget_leads", requirements={"id"="\d+"})
+     * @Route("/widget/account-leads/{id}", name="orocrm_sales_widget_account_leads", requirements={"id"="\d+"})
      * @AclAncestor("orocrm_sales_lead_view")
      * @Template()
      */
