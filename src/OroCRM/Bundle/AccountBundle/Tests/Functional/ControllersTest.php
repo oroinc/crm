@@ -126,25 +126,6 @@ class ControllersTest extends WebTestCase
     /**
      * @depends testUpdate
      */
-    public function testContactViewGrid($id)
-    {
-        $result = ToolsAPI::getEntityGrid(
-            $this->client,
-            'account-contacts-view-grid',
-            array(
-                'account-contacts-view-grid[account]' => $id
-            )
-        );
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $this->assertEmpty($result['data']);
-        $this->assertEquals(0, $result['options']['totalRecords']);
-    }
-
-    /**
-     * @depends testUpdate
-     */
     public function testContactUpdateGrid($id)
     {
         $result = ToolsAPI::getEntityGrid(

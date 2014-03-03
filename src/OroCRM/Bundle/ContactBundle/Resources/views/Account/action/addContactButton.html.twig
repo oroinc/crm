@@ -1,0 +1,10 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% if resource_granted('orocrm_contact_create') %}
+    {{ UI.dropdownItem({
+        'path': path('orocrm_contact_create', {'account': entity.id}),
+        'title': 'orocrm.contact.add_entity'|trans,
+        'label': 'orocrm.contact.add_entity'|trans,
+        'iCss': 'icon-user'
+    }) }}
+{% endif %}

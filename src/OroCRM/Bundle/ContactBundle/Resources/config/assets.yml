@@ -1,0 +1,3 @@
+css:
+  orocrmaccount:
+      - 'bundles/orocrmcontact/css/account-contacts-widget.css'

@@ -12,7 +12,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 
 /**
- * @ORM\Table("orocrm_magento_customer_address")
+ * @ORM\Table("orocrm_magento_customer_addr")
  * @ORM\HasLifecycleCallbacks()
  * @Config()
  * @ORM\Entity
@@ -135,7 +135,7 @@ class Address extends AbstractTypedAddress
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType",cascade={"persist"})
      * @ORM\JoinTable(
-     *     name="orocrm_magento_customer_address_to_address_type",
+     *     name="orocrm_magento_cust_addr_type",
      *     joinColumns={@ORM\JoinColumn(name="customer_address_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )

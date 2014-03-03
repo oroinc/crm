@@ -7,6 +7,7 @@ parameters:
     orocrm_account.account.manager.api.class:       Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_account.type.account.api.class:          OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType
 
+    orocrm_account.event_listener.datagrid.account_email.class:  OroCRM\Bundle\AccountBundle\EventListener\DataGrid\AccountEmailListener
 services:
     orocrm_account.form.account:
         class:                                      Symfony\Component\Form\Form
@@ -79,15 +80,6 @@ services:
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: accounts, acl_resource: orocrm_account_view }
 
-    orocrm_account.event_listener.account_contacts_view_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'account'
-            - @oro_datagrid.datagrid.request_params
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-contacts-view-grid, method: onBuildAfter }
-
     orocrm_account.event_listener.account_contacts_update_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
@@ -95,3 +87,12 @@ services:
            - @oro_datagrid.datagrid.request_params
         tags:
            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-contacts-update-grid, method: onBuildAfter }
+
+    orocrm_account.event_listener.datagrid.account_email:
+        class: %orocrm_account.event_listener.datagrid.account_email.class%
+        arguments:
+          - @oro_datagrid.datagrid.request_params
+          - @doctrine.orm.entity_manager
+          - @oro_email.datagrid_query_factory
+        tags:
+          - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-email-grid, method: onBuildAfter }

@@ -20,3 +20,21 @@
     line-height: 26px;
     margin-left: 15px;
 }
+.magento-without-border-tabs .oro-tabs .tab-content{
+    border: none;
+}
+.magento-without-border-tabs .oro-tabs ul li a,
+.magento-without-border-tabs .oro-tabs ul li a:focus,
+.magento-without-border-tabs .oro-tabs ul li a:hover{
+    border-top: none;
+}
+.magento-without-border-tabs .oro-tabs ul li.active a:hover,
+.magento-without-border-tabs .oro-tabs ul li.active a:focus,
+.magento-without-border-tabs .oro-tabs ul li.active a {
+    border-left: none;
+}
+.magento-without-border-tabs .oro-tabs .nav-tabs > li:first-child > a,
+.magento-without-border-tabs .oro-tabs .nav-tabs > li:first-child > a:hover,
+.magento-without-border-tabs .oro-tabs .nav-tabs > li:first-child > a:focus {
+    border-left: none;
+}

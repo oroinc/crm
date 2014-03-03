@@ -11,6 +11,7 @@ datagrid:
                 select:
                     - o.id
                     - o.name
+                    - o.createdAt
                     - o.closeDate
                     - o.probability
                     - o.budgetAmount
@@ -29,6 +30,9 @@ datagrid:
         columns:
             name:
                 label: orocrm.sales.opportunity.name.label
+            createdAt:
+                label: orocrm.sales.opportunity.created_at.label
+                frontend_type: datetime
             contactName:
                 label: orocrm.sales.opportunity.contact.label
             closeDate:
@@ -62,6 +66,8 @@ datagrid:
             columns:
                 name:
                     data_name: o.name
+                createdAt:
+                    data_name: o.createdAt
                 contactName:
                     data_name: contactName
                 closeDate:
@@ -74,11 +80,16 @@ datagrid:
                     data_name: status.label
                 primaryEmail:
                     data_name: email.email
+            default:
+                createdAt: DESC
         filters:
             columns:
                 name:
                     type: string
                     data_name: o.name
+                createdAt:
+                    type: datetime
+                    data_name: o.createdAt
                 contactName:
                     type: string
                     data_name: contactName
@@ -138,6 +149,7 @@ datagrid:
                     - l.name
                     - l.firstName
                     - l.lastName
+                    - l.createdAt
                     - l.email
                     - l.phoneNumber
                     - status.label as statusLabel
@@ -167,6 +179,9 @@ datagrid:
                 label: orocrm.sales.lead.first_name.label
             lastName:
                 label: orocrm.sales.lead.last_name.label
+            createdAt:
+                label: orocrm.sales.lead.created_at.label
+                frontend_type: datetime
             email:
                 label: orocrm.sales.lead.email.label
             phoneNumber:
@@ -201,6 +216,8 @@ datagrid:
                     data_name: l.firstName
                 lastName:
                     data_name: l.lastName
+                createdAt:
+                    data_name: l.createdAt
                 email:
                     data_name: l.email
                 phoneNumber:
@@ -212,8 +229,7 @@ datagrid:
                 addressPostalCode:
                     data_name: addressPostalCode
             default:
-                firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
-                lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+                createdAt:  DESC
         actions:
             view:
                 type:          navigate
@@ -571,3 +587,19 @@ datagrid:
                     type: string
                     data_name: email.email
                     filter_by_having: true
+
+    sales-account-lead-grid:
+        extend: sales-lead-grid
+        source:
+            query:
+                where:
+                      and:
+                        - l.account = :accountId
+
+    sales-account-opportunity-grid:
+        extend: sales-opportunity-grid
+        source:
+             query:
+                 where:
+                    and:
+                        - o.account = :accountId
