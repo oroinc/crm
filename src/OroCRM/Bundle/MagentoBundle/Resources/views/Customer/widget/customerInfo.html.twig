@@ -1,7 +1,7 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
 <div class="widget-content row-fluid row-fluid-divider">
-    <div class="responsive-block form-horizontal">
+    <div class="responsive-cell form-horizontal">
 
         {% set customer_name_link %}
             <a href="{{ path("orocrm_magento_customer_view", {'id':customer.id}) }}">
@@ -40,7 +40,7 @@
         {{ UI.renderProperty("orocrm.magento.customer.gender.label"|trans, oro_gender(customer.gender)) }}
         {{ UI.renderProperty("orocrm.magento.customer.vat.label"|trans, customer.vat) }}
     </div>
-    <div class="responsive-block magento-without-border-tabs">
+    <div class="responsive-cell" id="magento-without-border-tabs">
         {% set uniqueSuffix = '_customer__' ~ customer.id ~ '_channel__' ~ channel.id %}
         {% set tabs =
             [{
