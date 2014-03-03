@@ -45,6 +45,9 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      },
  *      "merge"={
  *          "enable"=true
+ *      },
+ *      "form"={
+ *          "form_type"="orocrm_account_select"
  *      }
  *  }
  * )

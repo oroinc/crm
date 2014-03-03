@@ -22,13 +22,11 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         sales_funnel_name:
-                            form_type: text
                             options:
                                 required: true
                                 constraints:
                                   - NotBlank: ~
                         sales_funnel_start_date:
-                            form_type: oro_date
                             options:
                                 required: true
                                 constraints:
@@ -68,19 +66,16 @@ workflows:
                 form_options:
                     attribute_fields:
                         sales_funnel_owner:
-                            form_type: oro_user_select
                             options:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
                         sales_funnel_name:
-                            form_type: text
                             options:
                                 required: true
                                 constraints:
                                   - NotBlank: ~
                         sales_funnel_start_date:
-                            form_type: oro_date
                             options:
                                 required: true
                                 constraints:
@@ -119,8 +114,7 @@ workflows:
                     icon: 'icon-comment'
                 form_options:
                     attribute_fields:
-                        lead_notes:
-                            form_type: textarea
+                        lead_notes: ~
                 transition_definition: follow_up_definition
             reactivate:
                 label: 'Reactivate'
@@ -139,23 +133,14 @@ workflows:
                 form_options:
                     attribute_fields:
                         new_opportunity_name:
-                            form_type: text
                             options:
                                 required: true
                                 constraints:
                                   - NotBlank: ~
-                        new_account:
-                            form_type: orocrm_account_select
-                            options:
-                                required: false
-                        new_company_name:
-                            form_type: text
-                            options:
-                                required: false
+                        new_account: ~
+                        new_company_name: ~
                         new_notes:
                             form_type: textarea
-                            options:
-                                required: false
                     attribute_default_values:
                         new_opportunity_name: $lead.name
                         new_account: $lead.account
@@ -184,39 +169,16 @@ workflows:
                 transition_definition: develop_definition
                 form_options:
                     attribute_fields:
-                        contact:
-                            form_type: orocrm_contact_select
-                            options:
-                                required: false
+                        contact: ~
                         account:
-                            form_type: orocrm_account_select
                             options:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
-                        budget_amount:
-                            form_type: oro_money
-                            options:
-                                required: false
-                                constraints:
-                                    - Range:
-                                        min: 0
-                        probability:
-                            form_type: oro_percent
-                            options:
-                                required: false
-                                constraints:
-                                    - Range:
-                                        min: 0
-                                        max: 100
-                        customer_need:
-                            form_type: text
-                            options:
-                                required: false
-                        proposed_solution:
-                            form_type: text
-                            options:
-                                required: false
+                        budget_amount: ~
+                        probability: ~
+                        customer_need: ~
+                        proposed_solution: ~
             close_as_won:
                 label: 'Close as Won'
                 step_to: won_opportunity
@@ -228,15 +190,11 @@ workflows:
                 form_options:
                     attribute_fields:
                         close_revenue:
-                            form_type: oro_money
                             options:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
-                                    - Range:
-                                        min: 0
                         close_date:
-                            form_type: oro_date
                             options:
                                 required: true
                                 constraints:
@@ -268,7 +226,6 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         close_date:
-                            form_type: oro_date
                             options:
                                 required: true
                                 constraints:
