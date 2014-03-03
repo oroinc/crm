@@ -26,7 +26,7 @@ php composer.phar install
 Run unit tests
 --------------
 
-To run unit tests of any bundnles :
+To run unit tests of any bundles :
 
 ```bash
 phpunit

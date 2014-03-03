@@ -16,7 +16,7 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * Improved Workflow
  * Improved Dashboard
  * Magento import performance improvements
- * Other improvements in channnels, contacts
+ * Other improvements in channels, contacts
 
 CHANGELOG for 1.0.0-beta6
 ===================
