@@ -79,18 +79,31 @@ class SalesActivity extends AbstractPageEntity
         return $this;
     }
 
-    public function setOpportunity($opportunity)
+    public function selectEntity($entity, $opportunity)
     {
-        $this->opportunity = $this->test->byXpath("//div[@id='s2id_oro_workflow_transition_opportunity']/a");
+        $this->opportunity = $this->test->byXpath(
+            "//div[@class='responsive-section create-select-entity create clearfix']" .
+            "//button[normalize-space(.) = 'Select Existing']"
+        );
         $this->opportunity->click();
         $this->waitForAjax();
-        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($opportunity);
+        $this->test->byXpath("//div[@class='filter-container']//button[contains(., '{$entity} name')]")->click();
         $this->waitForAjax();
-        $this->assertElementPresent(
-            "//div[@id='select2-drop']//div[contains(., '{$opportunity}')]",
-            "Opportunity autocoplete doesn't return search value"
+        $this->filter = $this->test->byXpath(
+            "//div[@class='filter-criteria dropdown-menu'][@style='display: block;']//input[@type='text']"
         );
-        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$opportunity}')]")->click();
+        $this->waitForAjax();
+        $this->filter->clear();
+        $this->filter->value($opportunity);
+        $this->test->byXpath(
+            "//div[@class='filter-criteria dropdown-menu'][@style='display: block;']//button[contains(., 'Update')]"
+        )->click();
+        $this->waitForAjax();
+        $this->test->byXpath(
+            "//table[@class='grid table-hover table table-bordered table-condensed']//td[contains(., '{$opportunity}')]"
+        )->click();
+        $this->waitPageToLoad();
+        $this->waitForAjax();
 
         return $this;
     }
