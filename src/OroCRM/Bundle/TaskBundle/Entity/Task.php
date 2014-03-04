@@ -121,7 +121,7 @@ class Task
     protected $updatedAt;
 
     /**
-     * @var Priority
+     * @var TaskPriority
      *
      * @ORM\ManyToOne(targetEntity="TaskPriority")
      * @ORM\JoinColumn(name="priority_id", referencedColumnName="id", onDelete="SET NULL")
@@ -129,7 +129,7 @@ class Task
     protected $priority;
 
     /**
-     * @var Priority
+     * @var WorkflowStep
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", onDelete="SET NULL")
