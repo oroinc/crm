@@ -1,9 +1,9 @@
 <?php
 
-namespace Oro\Bundle\TaskBundle;
+namespace OroCRM\Bundle\TaskBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class OroTaskBundle extends Bundle
+class OroCRMTaskBundle extends Bundle
 {
 }
