@@ -1,0 +1,23 @@
+placeholders:
+    view_navButtons_before:
+        items:
+            create_task_contact_button: ~
+            create_task_user_button: ~
+
+    orocrm_account_action_dropdown:
+        items:
+            create_task_account_button:
+                order: 60
+
+items:
+    create_task_account_button:
+        template: OroCRMTaskBundle:Entities:createAccountTaskButton.html.twig
+
+    create_task_contact_button:
+        template: OroCRMTaskBundle:Entities:createContactTaskButton.html.twig
+        attribute_instance_of: [entity, %orocrm_contact.entity.class%]
+
+    create_task_user_button:
+        template: OroCRMTaskBundle:Entities:createUserTaskButton.html.twig
+        attribute_instance_of: [entity, %oro_user.entity.class%]
+

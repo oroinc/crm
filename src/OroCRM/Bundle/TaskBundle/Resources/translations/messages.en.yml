@@ -1,3 +1,4 @@
 orocrm:
     task:
         entity_label: Task
+        add_entity: Add task

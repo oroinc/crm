@@ -1,0 +1,2 @@
+parameters:
+    orocrm_task.entity.class: OroCRM\Bundle\TaskBundle\Entity\Task
