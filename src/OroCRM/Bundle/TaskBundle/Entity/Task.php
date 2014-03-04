@@ -27,6 +27,9 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *  routeName="orocrm_task_index",
  *  routeView="orocrm_task_view",
  *  defaultValues={
+ *      "entity"={
+ *          "icon"="icon-tasks"
+ *      },
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",

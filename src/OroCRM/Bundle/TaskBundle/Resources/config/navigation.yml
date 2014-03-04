@@ -4,29 +4,27 @@ oro_menu_config:
             label: orocrm.task.entity_plural_label
             route: orocrm_task_index
             extras:
-                position: 1
+                position: 4
                 routes: ['orocrm_task_*']
                 description: List of tasks
+        account_task_tab:
+            label: orocrm.task.widgets.account_tasks
+            extras:
+                position: 100
+                widgetRoute: orocrm_account_tasks_widget
+
     tree:
         application_menu:
             children:
                 customers_tab:
                     children:
                         task_list: ~
+        account_activity_tab_panel:
+            children:
+                account_task_tab: ~
 
 oro_titles:
     orocrm_task_index: ~
     orocrm_task_view: %%entity.subject%%
     orocrm_task_create: Create %%entityName%%
     orocrm_task_update: %%entity.subject%% - Edit
-oro_menu_config:
-    items:
-        account_task_tab:
-            label: orocrm.task.widgets.account_tasks
-            extras:
-                position: 100
-                widgetRoute: orocrm_account_tasks_widget
-    tree:
-        account_activity_tab_panel:
-            children:
-                account_task_tab: ~

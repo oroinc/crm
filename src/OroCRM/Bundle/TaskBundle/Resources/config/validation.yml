@@ -7,8 +7,8 @@ OroCRM\Bundle\TaskBundle\Entity\Task:
         dueDate:
             - NotBlank: ~
             - DateTime: ~
-#        priority:
-#            - NotBlank: ~
+        priority:
+            - NotBlank: ~
         assignedTo:
             - NotBlank: ~
         owner:
