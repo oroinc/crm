@@ -21,13 +21,6 @@ class WorkflowTest extends Selenium2TestCase
         'region' => 'New York'
     );
 
-    protected function setUp()
-    {
-        $this->markTestIncomplete('Need to update tests with create/select form type (BAP-3333)');
-
-        parent::setUp();
-    }
-
     public function testLeadWorkflowAsWon()
     {
         $login = $this->login();
@@ -39,7 +32,7 @@ class WorkflowTest extends Selenium2TestCase
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->startFromLead()
             ->setActivityName($activityname)
-            ->setLead($leadName)
+            ->selectEntity('Lead', $leadName)
             ->submit()
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->checkStep('New Lead')
@@ -77,7 +70,7 @@ class WorkflowTest extends Selenium2TestCase
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->startFromLead()
             ->setActivityName($activityname)
-            ->setLead($leadName)
+            ->selectEntity('Lead', $leadName)
             ->submit()
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->checkStep('New Lead')
@@ -129,7 +122,7 @@ class WorkflowTest extends Selenium2TestCase
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->startFromLead()
             ->setActivityName($activityname)
-            ->setLead($leadName)
+            ->selectEntity('Lead', $leadName)
             ->submit()
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->checkStep('New Lead')
@@ -149,7 +142,7 @@ class WorkflowTest extends Selenium2TestCase
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->startFromOpportunity()
             ->setActivityName($activityname)
-            ->setOpportunity($opportunityName)
+            ->selectEntity('Opportunity', $opportunityName)
             ->submit()
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->checkStep('New Opportunity')
@@ -180,7 +173,7 @@ class WorkflowTest extends Selenium2TestCase
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->startFromOpportunity()
             ->setActivityName($activityname)
-            ->setOpportunity($opportunityName)
+            ->selectEntity('Opportunity', $opportunityName)
             ->submit()
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->checkStep('New Opportunity')
