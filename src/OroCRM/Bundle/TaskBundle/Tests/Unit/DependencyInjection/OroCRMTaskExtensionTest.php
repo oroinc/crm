@@ -3,12 +3,12 @@
 namespace OroCRM\Bundle\TaskBundle\Tests\Unit\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use OroCRM\Bundle\TaskBundle\DependencyInjection\OroTaskExtension;
+use OroCRM\Bundle\TaskBundle\DependencyInjection\OroCRMTaskExtension;
 
-class OroTaskExtensionTest extends \PHPUnit_Framework_TestCase
+class OroCRMTaskExtensionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var OroTaskExtension
+     * @var OroCRMTaskExtension
      */
     private $extension;
 
@@ -20,7 +20,7 @@ class OroTaskExtensionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->container = new ContainerBuilder();
-        $this->extension = new OroTaskExtension();
+        $this->extension = new OroCRMTaskExtension();
     }
 
     public function testLoad()

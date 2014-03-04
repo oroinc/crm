@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\TaskBundle\Tests\Unit;
 
 use OroCRM\Bundle\TaskBundle\OroCRMTaskBundle;
 
-class OroTaskBundleTest extends \PHPUnit_Framework_TestCase
+class OroCRMTaskBundleTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructor()
     {
