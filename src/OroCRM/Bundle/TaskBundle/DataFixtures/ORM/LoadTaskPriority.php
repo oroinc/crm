@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\TaskBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use OroCRM\Bundle\TaskBundle\Entity\Priority;
+use OroCRM\Bundle\TaskBundle\Entity\TaskPriority;
 
 class LoadTaskPriority extends AbstractFixture
 {
@@ -22,7 +22,7 @@ class LoadTaskPriority extends AbstractFixture
     {
         foreach ($this->data as $priority) {
             if (!$this->isPriorityExist($manager, $priority['type'])) {
-                $entity = new Priority();
+                $entity = new TaskPriority();
                 $entity->setType($priority['type']);
                 $entity->setTitle($priority['title']);
                 $manager->persist($entity);
@@ -35,7 +35,7 @@ class LoadTaskPriority extends AbstractFixture
     private function isPriorityExist(ObjectManager $manager, $priorityType)
     {
         return count(
-            $manager->getRepository('OroCRMTaskBundle:Priority')
+            $manager->getRepository('OroCRMTaskBundle:TaskPriority')
                 ->findBy(array('type' => $priorityType))
         ) > 0;
     }

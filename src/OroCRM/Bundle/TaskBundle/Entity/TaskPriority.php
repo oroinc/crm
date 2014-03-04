@@ -8,9 +8,9 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_priority")
+ * @ORM\Table(name="orocrm_task_priority")
  */
-class Priority
+class TaskPriority
 {
     /**
      * @var integer

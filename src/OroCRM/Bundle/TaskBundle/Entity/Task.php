@@ -123,7 +123,7 @@ class Task
     /**
      * @var Priority
      *
-     * @ORM\ManyToOne(targetEntity="Priority")
+     * @ORM\ManyToOne(targetEntity="TaskPriority")
      * @ORM\JoinColumn(name="priority_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $priority;
