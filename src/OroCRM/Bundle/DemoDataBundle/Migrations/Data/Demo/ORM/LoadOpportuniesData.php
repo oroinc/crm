@@ -85,7 +85,7 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
     public function loadOpportunities()
     {
         $randomUser = count($this->users) - 1;
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             $user = $this->users[mt_rand(0, $randomUser)];
             $this->setSecurityContext($user);
             $contact = $this->contacts[array_rand($this->contacts)];
