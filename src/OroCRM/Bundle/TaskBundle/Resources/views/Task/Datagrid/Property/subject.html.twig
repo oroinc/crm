@@ -1,0 +1,5 @@
+{% if resource_granted('orocrm_task_view') %}
+    <a href="{{ path('orocrm_task_view', {id: record.getValue('id')}) }}">{{ value }}</a>
+{% else %}
+    {{ value }}
+{% endif %}

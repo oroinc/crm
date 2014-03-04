@@ -1,0 +1,91 @@
+datagrid:
+    tasks-grid:
+        source:
+            type: orm
+            acl_resource: ~ #orocrm_task_view
+            query:
+                select:
+                    - task.id
+                    - task.subject
+                    - task.description
+                    - task.dueDate
+                    - priority.title as priorityTitle
+                    - assignedTo.username as assignee
+                    - assignedTo.id as assigneeId
+                    - owner.username as reporter
+                    - owner.id as reporterId
+                    - task.createdAt
+                    - task.updatedAt
+                from:
+                    - { table: %orocrm_task.entity.class%, alias: task }
+                join:
+                    left:
+                        - { join: task.priority, alias: priority }
+                        - { join: task.assignedTo, alias: assignedTo }
+                        - { join: task.owner, alias: owner }
+        columns:
+            subject:
+                type: twig
+                label: orocrm.task.subject.label
+                frontend_type: html
+                template: OroCRMTaskBundle:Task:Datagrid/Property/subject.html.twig
+            dueDate:
+                label: orocrm.task.dueDate.label
+                frontend_type: datetime
+            priorityTitle:
+                label: orocrm.task.priority.label
+            assignee:
+                type: twig
+                label: orocrm.task.assignedTo.label
+                frontend_type: html
+                template: OroCRMTaskBundle:Task:Datagrid/Property/assignee.html.twig
+            reporter:
+                type: twig
+                label: orocrm.task.owner.label
+                frontend_type: html
+                template: OroCRMTaskBundle:Task:Datagrid/Property/reporter.html.twig
+            createdAt:
+                label:   orocrm.task.createdAt.label
+                frontend_type: datetime
+            updatedAt:
+                label:   orocrm.task.updatedAt.label
+                frontend_type: datetime
+        sorters:
+            columns:
+                subject:
+                    data_name: task.subject
+                dueDate:
+                    data_name: task.dueDate
+                priorityTitle:
+                    data_name: priorityTitle
+                assignee:
+                    data_name: assignee
+                reporter:
+                    data_name: reporter
+                createdAt:
+                    data_name: task.createdAt
+                updatedAt:
+                    data_name: task.updatedAt
+        filters:
+            columns:
+                subject:
+                    type:      string
+                    data_name: task.subject
+                dueDate:
+                    type:      datetime
+                    data_name: task.dueDate
+                priorityTitle:
+                    type:      string
+                    data_name: priorityTitle
+                assignee:
+                    type:      string
+                    data_name: assignee
+                reporter:
+                    type:      string
+                    data_name: reporter
+                createdAt:
+                    type:      datetime
+                    data_name: task.createdAt
+                updatedAt:
+                    type:      datetime
+                    data_name: task.updatedAt
