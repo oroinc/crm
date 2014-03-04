@@ -56,7 +56,7 @@ class SalesActivity extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$owner}')]",
-            "Owner autocoplete doesn't return search value"
+            "Owner autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$owner}')]")->click();
 
@@ -72,7 +72,7 @@ class SalesActivity extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$lead}')]",
-            "Lead autocoplete doesn't return search value"
+            "Lead autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$lead}')]")->click();
 
@@ -88,16 +88,18 @@ class SalesActivity extends AbstractPageEntity
         $this->opportunity->click();
         $this->waitForAjax();
         $this->test->byXpath("//div[@class='filter-container']//button[contains(., '{$entity} name')]")->click();
-        $this->waitForAjax();
-        $this->filter = $this->test->byXpath(
-            "//div[@class='filter-criteria dropdown-menu'][@style='display: block;']//input[@type='text']"
+
+        $criteria = $this->test->byXPath(
+            "//div[contains(@class, 'filter-box')]//div[contains(@class, 'filter-item')]"
+            . "[button[contains(.,'{$entity} name')]]/div[contains(@class, 'filter-criteria')]"
         );
-        $this->waitForAjax();
-        $this->filter->clear();
-        $this->filter->value($opportunity);
-        $this->test->byXpath(
-            "//div[@class='filter-criteria dropdown-menu'][@style='display: block;']//button[contains(., 'Update')]"
-        )->click();
+
+        $filter = $criteria->element($this->test->using('xpath')->value("div/div/div/input[@name='value']"));
+
+        $filter->clear();
+        $filter->value($opportunity);
+        $criteria->element($this->test->using('xpath')->value("div/button[contains(@class, 'filter-update')]"))
+            ->click();
         $this->waitForAjax();
         $this->test->byXpath(
             "//table[@class='grid table-hover table table-bordered table-condensed']//td[contains(., '{$opportunity}')]"
