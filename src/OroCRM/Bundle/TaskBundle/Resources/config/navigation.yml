@@ -1,3 +1,8 @@
+oro_titles:
+    orocrm_task_index: ~
+    orocrm_task_view: %%entity.subject%%
+    orocrm_task_create: Create %%entityName%%
+    orocrm_task_update: %%entity.subject%% - Edit
 oro_menu_config:
     items:
         account_task_tab:

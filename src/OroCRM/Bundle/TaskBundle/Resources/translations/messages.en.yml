@@ -1,6 +1,28 @@
 orocrm:
     task:
-        entity_label: Task
+        #
+        # OroCRM/Bundle/TaskBundle/Entity/Task
+        #
+        entity_label:               Task
+        entity_plural_label:        Tasks
+        entity_description:         Represent task
+        subject.label:              Subject
+        description.label:          Description
+        dueDate.label:              Due date
+        priority.label:             Priority
+        assignedTo.label:           Assignee
+        relatedAccount.label:       Account
+        relatedContact.label:       Contact
+        owner.label:                Reporter
+        createdAt.label:            Created At
+        updatedAt.label:            Updated At
+
+        block:
+            general: General Information
+            additional: Additional Information
+
+        saved_message: Task saved
+        
         widgets:
             account_tasks: Tasks
         contact_tasks_section: Tasks
