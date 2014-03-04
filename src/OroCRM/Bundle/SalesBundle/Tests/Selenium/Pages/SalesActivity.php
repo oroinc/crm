@@ -12,9 +12,9 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 class SalesActivity extends AbstractPageEntity
 {
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $activityname;
+    protected $activityName;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $startdate;
+    protected $startDate;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $owner;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
@@ -33,17 +33,17 @@ class SalesActivity extends AbstractPageEntity
      */
     public function setActivityName($name)
     {
-        $this->activityname = $this->test->byId('oro_workflow_transition_sales_funnel_name');
-        $this->activityname->clear();
-        $this->activityname->value($name);
+        $this->activityName = $this->test->byId('oro_workflow_transition_sales_funnel_name');
+        $this->activityName->clear();
+        $this->activityName->value($name);
         return $this;
     }
 
     public function setStartDate($date)
     {
-        $this->startdate = $this->test->byId('oro_workflow_transition_sales_funnel_name');
-        $this->startdate->clear();
-        $this->startdate->value($date);
+        $this->startDate = $this->test->byId('oro_workflow_transition_sales_funnel_name');
+        $this->startDate->clear();
+        $this->startDate->value($date);
         return $this;
     }
 

@@ -65,11 +65,11 @@ class WorkflowTest extends Selenium2TestCase
 
         $leadName = $this->createLead($login);
         $accountName = $this->createAccount($login);
-        $activityname = 'Activity name_' . mt_rand();
+        $activityName = 'Activity name_' . mt_rand();
 
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->startFromLead()
-            ->setActivityName($activityname)
+            ->setActivityName($activityName)
             ->selectEntity('Lead', $leadName)
             ->submit()
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
