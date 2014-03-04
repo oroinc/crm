@@ -81,4 +81,4 @@ class TaskType extends AbstractType
     {
         return 'orocrm_task';
     }
-} 
+}

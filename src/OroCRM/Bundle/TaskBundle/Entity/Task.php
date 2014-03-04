@@ -24,6 +24,8 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository")
  * @Config(
+ *  routeName="orocrm_task_index",
+ *  routeView="orocrm_task_view",
  *  defaultValues={
  *      "ownership"={
  *          "owner_type"="USER",

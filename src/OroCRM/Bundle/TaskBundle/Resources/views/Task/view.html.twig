@@ -2,7 +2,7 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
-{% oro_title_set({params : {"%entity.subject%": entity.subject }}) %}
+{% oro_title_set({params : {"%entity.subject%": entity.subject|default('N/A') }}) %}
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
@@ -67,24 +67,3 @@
 
     {{ parent() }}
 {% endblock content_data %}
-
-{% macro renderUser(entity) %}
-    {% if entity %}
-        {{ entity|oro_format_name }} -
-        {% if resource_granted('VIEW', entity) %}
-            <a href="{{ path('oro_user_view', {'id': entity.id}) }}">{{ entity }}</a>
-        {% else %}
-            {{ entity }}
-        {% endif %}
-    {% endif %}
-{% endmacro %}
-
-{% macro renderContact(entity) %}
-    {% if entity %}
-        {%- if resource_granted('VIEW', entity) -%}
-            <a href="{{ path('orocrm_contact_view', {'id': entity.id}) }}">{{ entity|oro_format_name }}</a>
-        {%- else -%}
-            {{ entity|oro_format_name }}
-        {%- endif -%}
-    {% endif %}
-{% endmacro %}
