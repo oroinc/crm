@@ -1,3 +1,7 @@
 orocrm:
     task:
         entity_label: Task
+        widgets:
+            account_tasks: Tasks
+        contact_tasks_section: Tasks
+        user_tasks_section: Tasks

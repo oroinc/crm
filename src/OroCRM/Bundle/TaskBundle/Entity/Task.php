@@ -80,7 +80,7 @@ class Task
     protected $description;
 
     /**
-     * @var \Datetime
+     * @var \DateTime
      *
      * @Oro\Versioned
      * @ORM\Column(name="due_date", type="datetime")
@@ -95,7 +95,7 @@ class Task
     protected $dueDate;
 
     /**
-     * @var \DateTime $created
+     * @var \DateTime $createdAt
      *
      * @ORM\Column(type="datetime")
      * @JMS\Type("DateTime")
@@ -108,7 +108,7 @@ class Task
     protected $createdAt;
 
     /**
-     * @var \DateTime $updated
+     * @var \DateTime $updatedAt
      *
      * @ORM\Column(type="datetime", nullable=true)
      * @JMS\Type("DateTime")
@@ -222,11 +222,11 @@ class Task
     }
 
     /**
-     * @param string $description
+     * @param string $subject
      */
-    public function setSubject($description)
+    public function setSubject($subject)
     {
-        $this->subject = $description;
+        $this->subject = $subject;
     }
 
     /**
@@ -254,7 +254,7 @@ class Task
     }
 
     /**
-     * @return \Datetime
+     * @return \DateTime
      */
     public function getDueDate()
     {
@@ -302,7 +302,7 @@ class Task
     }
 
     /**
-     * @return Priority
+     * @return TaskPriority
      */
     public function getPriority()
     {
@@ -310,11 +310,11 @@ class Task
     }
 
     /**
-     * @param Priority $priority
+     * @param TaskPriority $taskPriority
      */
-    public function setPriority(Priority $priority)
+    public function setPriority(TaskPriority $taskPriority)
     {
-        $this->priority = $priority;
+        $this->priority = $taskPriority;
     }
 
     /**
@@ -347,7 +347,7 @@ class Task
     }
 
     /**
-     * @param \Oro\Bundle\UserBundle\Entity\User $assignedTo
+     * @param User $assignedTo
      */
     public function setAssignedTo(User $assignedTo = null)
     {

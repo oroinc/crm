@@ -1,0 +1,11 @@
+oro_menu_config:
+    items:
+        account_task_tab:
+            label: orocrm.task.widgets.account_tasks
+            extras:
+                position: 100
+                widgetRoute: orocrm_account_tasks_widget
+    tree:
+        account_activity_tab_panel:
+            children:
+                account_task_tab: ~
