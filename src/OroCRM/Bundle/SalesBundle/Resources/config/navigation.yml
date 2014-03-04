@@ -12,12 +12,14 @@ oro_menu_config:
             extras:
                 routes: ['/^orocrm_sales_lead/']
                 description: List of leads
+
         opportunity_list:
             label: orocrm.sales.opportunity.entity_plural_label
             route: orocrm_sales_opportunity_index
             extras:
                 routes: ['/^orocrm_sales_opportunity/']
                 description: List of opportunities
+
         sales_salesfunnel_list:
             label: orocrm.sales.salesfunnel.entity_plural_label
             route: orocrm_sales_salesfunnel_index
@@ -30,23 +32,39 @@ oro_menu_config:
             route: orocrm_sales_lead_index
             extras:
                 description: List of leads
+
         shortcut_list_opportunities:
             label: Show opportunities list
             route: orocrm_sales_opportunity_index
             extras:
                 description: List of opportunities
+
         shortcut_new_lead:
             label: Create new lead
             route: orocrm_sales_lead_create
             extras:
                 description: Create new lead
                 isCustomAction: true
+
         shortcut_new_opportunity:
             label: Create new opportunity
             route: orocrm_sales_opportunity_create
             extras:
                 description: Create new opportunity
                 isCustomAction: true
+
+        orocrm_sales_account_leads_tab:
+            label: orocrm.sales.widgets.leads
+            extras:
+                position: 10
+                widgetRoute: orocrm_sales_widget_account_leads
+
+        orocrm_sales_account_opportunities_tab:
+            label: orocrm.sales.widgets.opportunities
+            extras:
+                position: 20
+                widgetRoute: orocrm_sales_widget_account_opportunities
+
     tree:
         application_menu:
             children:
@@ -61,6 +79,12 @@ oro_menu_config:
                 shortcut_list_opportunities: ~
                 shortcut_new_lead: ~
                 shortcut_new_opportunity: ~
+
+        account_sales_tab_panel:
+            children:
+                orocrm_sales_account_leads_tab: ~
+                orocrm_sales_account_opportunities_tab: ~
+                orocrm_magento_account_orders_tab: ~
 
 oro_titles:
     orocrm_sales_opportunity_index: ~

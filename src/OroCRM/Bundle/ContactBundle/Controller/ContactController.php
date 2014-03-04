@@ -116,30 +116,6 @@ class ContactController extends Controller
     }
 
     /**
-     * @Route(
-     *      "/{contactId}/email-create",
-     *      name="orocrm_contact_email_create",
-     *      requirements={"contactId"="\d+"}
-     * )
-     * @AclAncestor("oro_email_create")
-     * @ParamConverter("contact", options={"id" = "contactId"})
-     */
-    public function createEmailAction(Contact $contact)
-    {
-        $query = $this->getRequest()->query->all();
-        if ($contact->getPrimaryEmail()) {
-            $query['to'] = $contact->getPrimaryEmail()->getEmail();
-        }
-        $query['gridName'] = 'contacts-email-grid';
-
-        return $this->forward(
-            'OroEmailBundle:Email:create',
-            array(),
-            $query
-        );
-    }
-
-    /**
      * @return ApiEntityManager
      */
     protected function getManager()
@@ -169,6 +145,51 @@ class ContactController extends Controller
         return array(
             'entity' => $entity,
             'form'   => $this->get('orocrm_contact.form.contact')->createView(),
+        );
+    }
+
+    /**
+     * @Route("/widget/account-contacts/{id}", name="orocrm_account_widget_contacts", requirements={"id"="\d+"})
+     * @AclAncestor("orocrm_contact_view")
+     * @Template()
+     */
+    public function accountContactsAction(Account $account)
+    {
+        $defaultContact = $account->getDefaultContact();
+        $contacts = $account->getContacts();
+        $contactsWithoutDefault = array();
+
+        if (empty($defaultContact)) {
+            $contactsWithoutDefault = $contacts->toArray();
+        } else {
+            /** @var Contact $contact */
+            foreach ($contacts as $contact) {
+                if ($contact->getId() == $defaultContact->getId()) {
+                    continue;
+                }
+                $contactsWithoutDefault[] = $contact;
+            }
+        }
+
+        /**
+         * Compare contacts to sort them alphabetically
+         *
+         * @param Contact $firstContact
+         * @param Contact $secondContact
+         * @return int
+         */
+        $compareFunction = function ($firstContact, $secondContact) {
+            $first = $firstContact->getLastName() . $firstContact->getFirstName() . $firstContact->getMiddleName();
+            $second = $secondContact->getLastName() . $secondContact->getFirstName() . $secondContact->getMiddleName();
+            return strnatcasecmp($first, $second);
+        };
+
+        usort($contactsWithoutDefault, $compareFunction);
+
+        return array(
+            'entity'                 => $account,
+            'defaultContact'         => $defaultContact,
+            'contactsWithoutDefault' => $contactsWithoutDefault
         );
     }
 

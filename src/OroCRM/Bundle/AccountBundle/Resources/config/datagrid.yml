@@ -224,53 +224,6 @@ datagrid:
         options:
             entityHint: contact
 
-    account-contacts-view-grid:
-        extend: base-account-contacts-grid
-        source:
-            query:
-                where:
-                    and:
-                        - :account MEMBER OF c.accounts
-        columns:
-            first_name:
-                label: orocrm.contact.first_name.label
-                data_name: firstName
-            last_name:
-                label: orocrm.contact.last_name.label
-                data_name: lastName
-            primaryEmail:
-                label: orocrm.contact.email.label
-            primaryPhone:
-                label: orocrm.contact.contactphone.phone.label
-            groupLabelsAsString:
-                label: orocrm.contact.groups.label
-            contactSourceLabel:
-                label: orocrm.contact.source.label
-            countryName:
-                label: orocrm.contact.contactaddress.country.label
-            regionLabel:
-                label: orocrm.contact.contactaddress.region.label
-            addressPostalCode:
-                label: orocrm.contact.contactaddress.postal_code.label
-            createdAt:
-                label: orocrm.contact.created_at.label
-                frontend_type: datetime
-            updatedAt:
-                label: orocrm.contact.updated_at.label
-                frontend_type: datetime
-        sorters:
-            columns:
-                groupLabelsAsString:
-                    data_name: contactGroup.label
-                contactSourceLabel:
-                    data_name: contactSource.label
-                createdAt:
-                    data_name: c.createdAt
-                updatedAt:
-                    data_name: c.updatedAt
-            default:
-                firstName: ASC
-
     account-contacts-update-grid:
         extend: base-account-contacts-grid
         source:
@@ -357,3 +310,19 @@ datagrid:
                 selectors:
                     included: '#appendContacts'
                     excluded: '#removeContacts'
+
+    account-email-grid:
+        extend: email-grid
+        source:
+            query:
+                join:
+                    inner:
+                        -
+                            join: e.recipients
+                            alias: r
+                        -
+                            join: r.emailAddress
+                            alias: ra
+                where:
+                    and:
+                        - ra.email IN (:email_addresses)

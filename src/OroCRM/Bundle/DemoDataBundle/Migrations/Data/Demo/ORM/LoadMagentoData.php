@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\Demo\ORM;
+namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -19,9 +19,10 @@ use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
-class LoadDemoMagentoData extends AbstractFixture implements DependentFixtureInterface
+class LoadMagentoData extends AbstractFixture implements DependentFixtureInterface
 {
     const VAT = 0.0838;
+    const CHANNEL_NAME = 'Demo Web store';
 
     /**
      * {@inheritdoc}
@@ -63,7 +64,7 @@ class LoadDemoMagentoData extends AbstractFixture implements DependentFixtureInt
         $channel = new Channel();
         $channel->setType('magento');
         $channel->setConnectors(['customer', 'cart', 'order']);
-        $channel->setName('Demo Web store');
+        $channel->setName(self::CHANNEL_NAME);
 
         $channel->setTransport($transport);
 

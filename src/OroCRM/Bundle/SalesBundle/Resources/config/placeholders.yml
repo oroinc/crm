@@ -1,0 +1,14 @@
+placeholders:
+    orocrm_account_action_dropdown:
+        items:
+            orocrm_account_action_dropdown_add_opportuniy: ~
+            orocrm_account_action_dropdown_add_lead: ~
+
+items:
+    orocrm_account_action_dropdown_add_opportuniy:
+        template: OroCRMSalesBundle:Account:action/addOpportunityButton.html.twig
+        order: 20
+
+    orocrm_account_action_dropdown_add_lead:
+        template: OroCRMSalesBundle:Account:action/addLeadButton.html.twig
+        order: 30

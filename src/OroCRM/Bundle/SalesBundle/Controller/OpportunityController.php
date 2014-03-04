@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\SalesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -10,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
@@ -58,7 +60,20 @@ class OpportunityController extends Controller
      */
     public function createAction()
     {
-        $entity        = new Opportunity();
+        $entity = new Opportunity();
+        $accountId = $this->getRequest()->get('account');
+        if ($accountId) {
+            $repository = $this->getDoctrine()->getRepository('OroCRMAccountBundle:Account');
+            /** @var Account $account */
+            $account = $repository->find($accountId);
+            if ($account) {
+                /** @var Opportunity $entity */
+                $entity->setAccount($account);
+            } else {
+                throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
+            }
+        }
+
         return $this->update($entity);
     }
 
@@ -115,5 +130,19 @@ class OpportunityController extends Controller
             'entity' => $entity,
             'form'   => $this->get('orocrm_sales.opportunity.form')->createView(),
         );
+    }
+
+    /**
+     * @Route(
+     *        "/widget/account-opportunities/{id}",
+     *        name="orocrm_sales_widget_account_opportunities",
+     *        requirements={"id"="\d+"}
+     * )
+     * @AclAncestor("orocrm_sales_opportunity_view")
+     * @Template()
+     */
+    public function accountOpportunitiesAction(Account $account)
+    {
+        return array('entity' => $account);
     }
 }
