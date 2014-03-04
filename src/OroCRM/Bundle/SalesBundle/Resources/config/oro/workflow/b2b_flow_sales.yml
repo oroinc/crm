@@ -7,7 +7,6 @@ imports:
 workflows:
     b2b_flow_sales:
         label: 'B2B Sales Flow'
-        enabled: true
         entity: OroCRM\Bundle\SalesBundle\Entity\Opportunity
         entity_attribute: opportunity
         start_step: qualify

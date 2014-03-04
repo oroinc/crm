@@ -7,7 +7,6 @@ imports:
 workflows:
     b2c_flow_order_follow_up:
         label: 'Order Follow Up'
-        enabled: true
         entity: OroCRM\Bundle\MagentoBundle\Entity\Order
         entity_attribute: order
         start_step: not_contacted
