@@ -1,0 +1,4 @@
+oro_entity_merge:
+    resource:     "@OroCRMTaskBundle/Controller"
+    type:         annotation
+    prefix:       /
