@@ -49,7 +49,7 @@ class TaskTypeTest extends \PHPUnit_Framework_TestCase
                     'subject',
                     'description',
                     'dueDate',
-                    'priority',
+                    'taskPriority',
                     'assignedTo',
                     'relatedAccount',
                     'relatedContact',

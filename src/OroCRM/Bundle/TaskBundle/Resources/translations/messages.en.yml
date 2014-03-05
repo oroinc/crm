@@ -9,7 +9,7 @@ orocrm:
         subject.label:              Subject
         description.label:          Description
         dueDate.label:              Due date
-        priority.label:             Priority
+        taskPriority.label:         Priority
         assignedTo.label:           Assignee
         relatedAccount.label:       Account
         relatedContact.label:       Contact

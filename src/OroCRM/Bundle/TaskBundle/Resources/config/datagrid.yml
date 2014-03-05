@@ -33,7 +33,7 @@ datagrid:
                 label: orocrm.task.dueDate.label
                 frontend_type: datetime
             priority:
-                label: orocrm.task.priority.label
+                label: orocrm.task.taskPriority.label
             assignee:
                 type: twig
                 label: orocrm.task.assignedTo.label
