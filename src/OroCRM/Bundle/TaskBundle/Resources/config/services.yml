@@ -6,6 +6,8 @@ parameters:
     orocrm_task.form.type.task.class:     OroCRM\Bundle\TaskBundle\Form\Type\TaskType
     orocrm_task.form.type.api_task.class: OroCRM\Bundle\TaskBundle\Form\Type\TaskApiType
 
+    orocrm_task.task.manager.api.class:   Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_task.handler.task.class:       OroCRM\Bundle\TaskBundle\Form\Handler\TaskHandler
 services:
     orocrm_task.form.type.task:
         class: %orocrm_task.form.type.task.class%
@@ -44,3 +46,19 @@ services:
             - false
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.task-user-tasks-grid, method: onBuildAfter }
+
+    orocrm_task.task.manager.api:
+        class: %orocrm_task.task.manager.api.class%
+        arguments:
+            - %orocrm_task.entity.class%
+            - @doctrine.orm.entity_manager
+
+    orocrm_task.form.handler.task.api:
+        class: %orocrm_task.handler.task.class%
+        scope: request
+        arguments:
+            - @orocrm_account.form.account.api
+            - @request
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: oro_tag.tag_manager }

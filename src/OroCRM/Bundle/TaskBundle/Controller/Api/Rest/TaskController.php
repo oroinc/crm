@@ -2,8 +2,8 @@
 
 namespace OroCRM\Bundle\TaskBundle\Controller\Api\Rest;
 
-use OroCRM\Bundle\TaskBundle\Form\Type\TaskApiType;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -23,6 +23,7 @@ use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 use OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository;
+use OroCRM\Bundle\TaskBundle\Form\Type\TaskApiType;
 
 /**
  * @RouteResource("task")

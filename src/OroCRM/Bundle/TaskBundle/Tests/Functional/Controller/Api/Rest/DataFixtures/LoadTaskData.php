@@ -44,7 +44,7 @@ class LoadTaskData extends AbstractFixture implements ContainerAwareInterface
         }
 
         $task = new Task();
-        $task->setSubject('New task');
+        $task->setSubject('Acl task');
         $task->setDescription('New description');
         $task->setDueDate(new \DateTime());
         $task->setOwner($owner);
