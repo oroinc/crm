@@ -75,7 +75,7 @@ class Opportunity extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$contact}')]",
-            "Contact autocoplete doesn't return search value"
+            "Contact autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$contact}')]")->click();
 
@@ -97,7 +97,7 @@ class Opportunity extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$account}')]",
-            "Account autocoplete doesn't return search value"
+            "Account autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$account}')]")->click();
 
@@ -129,7 +129,7 @@ class Opportunity extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$owner}')]",
-            "Owner autocoplete doesn't return search value"
+            "Owner autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$owner}')]")->click();
 
