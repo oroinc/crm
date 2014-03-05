@@ -17,6 +17,7 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
 
 /**
  * @ORM\Entity
@@ -43,7 +44,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *  }
  * )
  */
-class Task
+class Task extends ExtendTask
 {
     /**
      * @var integer

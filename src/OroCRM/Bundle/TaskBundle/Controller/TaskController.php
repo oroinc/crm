@@ -27,7 +27,7 @@ class TaskController extends Controller
      *      defaults={"_format" = "html"}
      * )
      * @Acl(
-     *      id="orocrm_task_create",
+     *      id="orocrm_task_view",
      *      type="entity",
      *      class="OroCRMTaskBundle:Task",
      *      permission="VIEW"
