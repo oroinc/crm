@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\TaskBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
 
 use JMS\Serializer\Annotation as JMS;
 
@@ -434,6 +433,7 @@ class Task extends ExtendTask
     {
         $this->owner = $owner;
     }
+
 
     /**
      * @return \DateTime
