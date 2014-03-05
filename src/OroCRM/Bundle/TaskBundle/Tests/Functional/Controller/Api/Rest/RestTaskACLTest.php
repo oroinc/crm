@@ -28,7 +28,7 @@ class RestTaskACLTest extends WebTestCase
     public function setUp()
     {
         $this->client = static::createClient(
-            array(),
+            [],
             ToolsAPI::generateWsseHeader(self::USER_NAME, self::USER_PASSWORD)
         );
 
@@ -38,7 +38,7 @@ class RestTaskACLTest extends WebTestCase
                 ->get('doctrine')
                 ->getManager()
                 ->getRepository('OroCRMTaskBundle:Task')
-                ->findOneBySubject('New task')
+                ->findOneBySubject('Acl task')
                 ->getId();
         }
         self::$hasLoaded = true;
@@ -46,18 +46,24 @@ class RestTaskACLTest extends WebTestCase
 
     public function testCreate()
     {
-        $request = array(
-            'task' => array(
+        $request = [
+            'task' => [
                 'subject' => 'New task',
                 'description' => 'New description',
                 'dueDate' => '2014-03-04T20:00:00+0000',
                 'taskPriority' => 'high',
                 'assignedTo' => '1',
                 'owner' => '1'
-            )
-        );
+            ]
+        ];
 
-        $this->client->request('POST', $this->client->generate('oro_api_post_task'), $request);
+        $this->client->request(
+            'POST',
+            $this->client->generate('orocrm_api_post_task'),
+            $request,
+            [],
+            ToolsAPI::generateWsseHeader(self::USER_NAME, self::USER_PASSWORD)
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 403);
     }
@@ -67,7 +73,13 @@ class RestTaskACLTest extends WebTestCase
      */
     public function testCget()
     {
-        $this->client->request('GET', $this->client->generate('oro_api_get_tasks'));
+        $this->client->request(
+            'GET',
+            $this->client->generate('orocrm_api_get_tasks'),
+            [],
+            [],
+            ToolsAPI::generateWsseHeader(self::USER_NAME, self::USER_PASSWORD)
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 403);
     }
@@ -79,7 +91,10 @@ class RestTaskACLTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_task', array('id' => self::$taskId))
+            $this->client->generate('orocrm_api_get_task', ['id' => self::$taskId]),
+            [],
+            [],
+            ToolsAPI::generateWsseHeader(self::USER_NAME, self::USER_PASSWORD)
         );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 403);
@@ -90,11 +105,13 @@ class RestTaskACLTest extends WebTestCase
      */
     public function testPut()
     {
-        $updatedTask = array('subject' => 'Updated title');
+        $updatedTask = ['subject' => 'Updated title'];
         $this->client->request(
             'PUT',
-            $this->client->generate('oro_api_put_task', array('id' => self::$taskId)),
-            array('task' => $updatedTask)
+            $this->client->generate('orocrm_api_put_task', ['id' => self::$taskId]),
+            ['task' => $updatedTask],
+            [],
+            ToolsAPI::generateWsseHeader(self::USER_NAME, self::USER_PASSWORD)
         );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 403);
@@ -107,7 +124,10 @@ class RestTaskACLTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_task', array('id' => self::$taskId))
+            $this->client->generate('orocrm_api_delete_task', ['id' => self::$taskId]),
+            [],
+            [],
+            ToolsAPI::generateWsseHeader(self::USER_NAME, self::USER_PASSWORD)
         );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 403);
