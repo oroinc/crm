@@ -3,13 +3,19 @@ parameters:
     orocrm_task.entity.class:         OroCRM\Bundle\TaskBundle\Entity\Task
 
     #form
-    orocrm_task.form.type.task.class: OroCRM\Bundle\TaskBundle\Form\Type\TaskType
+    orocrm_task.form.type.task.class:     OroCRM\Bundle\TaskBundle\Form\Type\TaskType
+    orocrm_task.form.type.api_task.class: OroCRM\Bundle\TaskBundle\Form\Type\TaskApiType
 
 services:
     orocrm_task.form.type.task:
         class: %orocrm_task.form.type.task.class%
         tags:
             - { name: form.type, alias: orocrm_task }
+
+    orocrm_task.form.type.api_task:
+        class: %orocrm_task.form.type.api_task.class%
+        tags:
+            - { name: form.type, alias: orocrm_task_api }
 
     #data grid events
     orocrm_task.event_listener.account_tasks_grid_listener:

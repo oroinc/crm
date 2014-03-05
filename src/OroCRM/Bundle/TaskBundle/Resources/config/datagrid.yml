@@ -2,7 +2,7 @@ datagrid:
     tasks-grid:
         source:
             type: orm
-            acl_resource: ~ #orocrm_task_view
+            acl_resource: orocrm_task_view
             query:
                 select:
                     - task.id
@@ -33,7 +33,7 @@ datagrid:
                 label: orocrm.task.dueDate.label
                 frontend_type: datetime
             priorityLabel:
-                label: orocrm.task.priority.label
+                label: orocrm.task.taskPriority.label
             assignee:
                 type: twig
                 label: orocrm.task.assignedTo.label
@@ -89,6 +89,40 @@ datagrid:
                 updatedAt:
                     type:      datetime
                     data_name: task.updatedAt
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_task_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_task_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_task
+                params:     [ id ]
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_task_view
+                label:         View
+                icon:          user
+                link:          view_link
+                rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_task_update
+                label:         Update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_task_delete
+                label:         Delete
+                icon:          trash
+                link:          delete_link
 
     account_tasks_grid:
         extend: tasks-grid
