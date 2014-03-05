@@ -76,7 +76,7 @@ class OroCRMSalesBundle implements Migration, ExtendMigrationHelperAwareInterfac
         $table->addColumn('notes', 'text', ['notnull' => false]);
         $extendMigrationHelper->addOptionSet(
             $schema,
-            $table->getName(),
+            $table,
             'extend_source',
             [
                 'extend' => ['is_extend' => true, 'set_expanded' => false]
