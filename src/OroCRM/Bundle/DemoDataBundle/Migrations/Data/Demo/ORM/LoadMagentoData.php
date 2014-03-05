@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0;
+namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -29,7 +29,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
      */
     public function getDependencies()
     {
-        return ['OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadContactData'];
+        return ['OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData'];
     }
 
     /**

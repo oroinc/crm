@@ -26,7 +26,7 @@ use OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository;
 
 /**
  * @RouteResource("task")
- * @NamePrefix("oro_api_")
+ * @NamePrefix("orocrm_api_")
  */
 class TaskController extends FOSRestController implements ClassResourceInterface
 {

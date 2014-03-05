@@ -1,0 +1,12 @@
+imports:
+    - { resource: 'task_flow/steps.yml' }
+    - { resource: 'task_flow/attributes.yml' }
+    - { resource: 'task_flow/transitions.yml' }
+    - { resource: 'task_flow/transition_definitions.yml' }
+
+workflows:
+    task_flow:
+        label: 'Task Flow'
+        entity: OroCRM\Bundle\TaskBundle\Entity\Task
+        entity_attribute: task
+        start_step: open

@@ -16,6 +16,7 @@ datagrid:
                     - owner.id as reporterId
                     - task.createdAt
                     - task.updatedAt
+                    - workflowStep.label as workflowStepLabel
                 from:
                     - { table: %orocrm_task.entity.class%, alias: task }
                 join:
@@ -23,6 +24,7 @@ datagrid:
                         - { join: task.taskPriority, alias: taskPriority }
                         - { join: task.assignedTo, alias: assignedTo }
                         - { join: task.owner, alias: owner }
+                        - { join: task.workflowStep, alias: workflowStep }
         columns:
             subject:
                 type: twig
@@ -32,6 +34,8 @@ datagrid:
             dueDate:
                 label: orocrm.task.dueDate.label
                 frontend_type: datetime
+            workflowStepLabel:
+                label: orocrm.task.workflowStep.label
             priorityLabel:
                 label: orocrm.task.taskPriority.label
             assignee:
@@ -66,6 +70,8 @@ datagrid:
                     data_name: task.createdAt
                 updatedAt:
                     data_name: task.updatedAt
+            default:
+                createdAt: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
         filters:
             columns:
                 subject:
@@ -124,7 +130,7 @@ datagrid:
                 icon:          trash
                 link:          delete_link
 
-    account_tasks_grid:
+    task-account-tasks-grid:
         extend: tasks-grid
         source:
             query:
@@ -132,7 +138,7 @@ datagrid:
                       and:
                         - task.relatedAccount = :accountId
 
-    contact_tasks_grid:
+    task-contact-tasks-grid:
         extend: tasks-grid
         source:
             query:
@@ -140,7 +146,7 @@ datagrid:
                       and:
                         - task.relatedContact = :contactId
 
-    user_tasks_grid:
+    task-user-tasks-grid:
         extend: tasks-grid
         source:
             query:

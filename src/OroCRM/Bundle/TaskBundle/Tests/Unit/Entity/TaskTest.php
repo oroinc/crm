@@ -11,7 +11,7 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         new Task();
     }
 
-    public function testPrePersistShouldSetCreatedAt()
+    public function testPrePersist()
     {
         $entity = new Task();
         $entity->prePersist();
@@ -19,7 +19,7 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($entity->getCreatedAt()->format("m/d/Y"), date("m/d/Y"));
     }
 
-    public function testPreUpdateShouldSetUpdatedAt()
+    public function testPreUpdate()
     {
         $entity = new Task();
         $entity->preUpdate();
@@ -27,85 +27,69 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($entity->getUpdatedAt()->format("m/d/Y H:i"), date("m/d/Y H:i"));
     }
 
-    public function testGetOwnerIdReturnsCorrectValue()
+    public function testGetSetWorkflowItem()
     {
         $entity = new Task();
+        $workflowItem = $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowItem');
 
-        $this->assertNull($entity->getOwnerId());
+        $this->assertNull($entity->getWorkflowItem());
 
-        $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $expected = 42;
-        $user->expects($this->once())->method('getId')->will($this->returnValue($expected));
-        $entity->setOwner($user);
+        $entity->setWorkflowItem($workflowItem);
 
-        $this->assertEquals($expected, $entity->getOwnerId());
+        $this->assertEquals($workflowItem, $entity->getWorkflowItem());
     }
 
-    public function testSetOwnerChangeOwner()
+    public function testGetSetWorkflowStep()
     {
         $entity = new Task();
-        $this->assertNull($entity->getOwnerId());
-        $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $expected = 42;
-        $user->expects($this->once())->method('getId')->will($this->returnValue($expected));
-        $entity->setOwner($user);
+        $workflowStep = $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep');
 
-        $this->assertEquals($expected, $entity->getOwner()->getId());
+        $this->assertNull($entity->getStatus());
 
-        $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $expected = 21;
-        $user->expects($this->once())->method('getId')->will($this->returnValue($expected));
-        $entity->setOwner($user);
+        $entity->setWorkflowStep($workflowStep);
 
-        $this->assertEquals($expected, $entity->getOwner()->getId());
+        $this->assertEquals($workflowStep, $entity->getWorkflowStep());
     }
 
-    public function getSetStatusShouldChangeStatus()
+    public function testGetStatus()
     {
         $entity = new Task();
-        $status = $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep');
-        $expected = 'sample status';
-        $status->expects($this->once())->method('getName')->will($this->returnValue($expected));
-        $entity->setStatus($status);
+        $workflowStep = $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep');
 
-        $this->assertEquals($entity->getStatus()->getName(), $expected);
+        $this->assertNull($entity->getStatus());
 
-        $expected = 'new sample status';
-        $status->expects($this->once())->method('getName')->will($this->returnValue($expected));
-        $entity->setStatus($status);
+        $entity->setWorkflowStep($workflowStep);
 
-        $this->assertEquals($entity->getStatus()->getName(), $expected);
+        $this->assertEquals($workflowStep, $entity->getStatus());
     }
 
-    public function testGetStatusNameShouldReturnCorrectStatusName()
+    public function testGetStatusName()
     {
         $entity = new Task();
 
         $this->assertNull($entity->getStatusName());
 
-        $status = $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep');
+        $workflowStep = $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep');
         $expected = 'sample status';
-        $status->expects($this->once())->method('getName')->will($this->returnValue($expected));
-        $entity->setStatus($status);
+        $workflowStep->expects($this->once())->method('getName')->will($this->returnValue($expected));
+        $entity->setWorkflowStep($workflowStep);
 
         $this->assertEquals($entity->getStatusName(), $expected);
     }
 
-    public function testSetRelatedContactShouldChangeRelatedContact()
+    public function testSetRelatedContact()
     {
         $entity = new Task();
 
         $this->assertNull($entity->getRelatedContact());
 
         $contact = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $expected = 42;
-        $contact->expects($this->once())->method('getId')->will($this->returnValue($expected));
         $entity->setRelatedContact($contact);
 
-        $this->assertEquals($expected, $entity->getRelatedContact()->getId());
+        $this->assertEquals($contact, $entity->getRelatedContact());
     }
 
-    public function testGetRelatedContactIdShouldReturnCorrectValues()
+    public function testGetRelatedContactId()
     {
         $entity = new Task();
 
@@ -119,21 +103,19 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $entity->getRelatedContactId());
     }
 
-    public function testSetRelatedAccountShouldChangeRelatedAccount()
+    public function testSetRelatedAccount()
     {
         $entity = new Task();
 
         $this->assertNull($entity->getRelatedAccount());
 
         $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $expected = 42;
-        $account->expects($this->once())->method('getId')->will($this->returnValue($expected));
         $entity->setRelatedAccount($account);
 
-        $this->assertEquals($expected, $entity->getRelatedAccount()->getId());
+        $this->assertEquals($account, $entity->getRelatedAccount());
     }
 
-    public function testGetRelatedAccountIdShouldReturnCorrectValues()
+    public function testGetRelatedAccountId()
     {
         $entity = new Task();
 
@@ -147,21 +129,19 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $entity->getRelatedAccountId());
     }
 
-    public function testSetAssignedToShouldChangeAssignedTo()
+    public function testSetAssignedTo()
     {
         $entity = new Task();
 
         $this->assertNull($entity->getAssignedTo());
 
         $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $expected = 42;
-        $user->expects($this->once())->method('getId')->will($this->returnValue($expected));
         $entity->setAssignedTo($user);
 
-        $this->assertEquals($expected, $entity->getAssignedTo()->getId());
+        $this->assertEquals($user, $entity->getAssignedTo());
     }
 
-    public function testGetAssignedToIdShouldReturnCorrectValues()
+    public function testGetAssignedToId()
     {
         $entity = new Task();
 
@@ -175,21 +155,19 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $entity->getAssigneeToId());
     }
 
-    public function testSetOwnerShouldChangeOwner()
+    public function testSetOwner()
     {
         $entity = new Task();
 
         $this->assertNull($entity->getOwner());
 
         $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $expected = 42;
-        $user->expects($this->once())->method('getId')->will($this->returnValue($expected));
         $entity->setOwner($user);
 
-        $this->assertEquals($expected, $entity->getOwner()->getId());
+        $this->assertSame($user, $entity->getOwner());
     }
 
-    public function testGetOwnerIdShouldReturnCorrectValues()
+    public function testGetOwnerId()
     {
         $entity = new Task();
 
@@ -204,9 +182,7 @@ class TaskTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provider
-     * @param string $property
-     * @param mixed  $value
+     * @dataProvider settersAndGettersDataProvider
      */
     public function testSettersAndGetters($property, $value)
     {
@@ -216,7 +192,7 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($value, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
     }
 
-    public function provider()
+    public function settersAndGettersDataProvider()
     {
         $testTaskPriority = $this->getMockBuilder('OroCRM\Bundle\TaskBundle\Entity\TaskPriority')
             ->disableOriginalConstructor()

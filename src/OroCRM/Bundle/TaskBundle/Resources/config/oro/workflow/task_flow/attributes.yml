@@ -1,0 +1,3 @@
+workflows:
+    task_flow:
+        attributes: ~
