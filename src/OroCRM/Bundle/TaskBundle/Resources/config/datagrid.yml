@@ -50,6 +50,20 @@ datagrid:
             updatedAt:
                 label:   orocrm.task.updatedAt.label
                 frontend_type: datetime
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_task_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_task_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      orocrm_api_delete_task
+                params:     [ id ]
         sorters:
             columns:
                 subject:
@@ -66,6 +80,8 @@ datagrid:
                     data_name: task.createdAt
                 updatedAt:
                     data_name: task.updatedAt
+            default:
+                createdAt: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
         filters:
             columns:
                 subject:
@@ -89,6 +105,29 @@ datagrid:
                 updatedAt:
                     type:      datetime
                     data_name: task.updatedAt
+        actions:
+            view:
+                type: navigate
+                acl_resource: orocrm_task_view
+                label: orocrm.task.datagrid.view
+                icon: user
+                link: view_link
+                rowAction: true
+            update:
+                type: navigate
+                acl_resource: orocrm_task_update
+                label: orocrm.task.datagrid.update
+                icon: edit
+                link: update_link
+            delete:
+                type: delete
+                acl_resource: orocrm_task_delete
+                label: orocrm.task.datagrid.delete
+                icon: trash
+                link: delete_link
+        options:
+            entityHint: task
+            export: true
 
     task-account-tasks-grid:
         extend: tasks-grid
