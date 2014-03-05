@@ -12,9 +12,7 @@ class TaskPriorityTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provider
-     * @param string $property
-     * @param mixed  $value
+     * @dataProvider settersAndGettersDataProvider
      */
     public function testSettersAndGetters($property, $value)
     {
@@ -39,7 +37,7 @@ class TaskPriorityTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, (string)$entity);
     }
 
-    public function provider()
+    public function settersAndGettersDataProvider()
     {
         return array(
             array('label', 'Test LOW')
