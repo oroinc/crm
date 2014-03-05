@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\TaskBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
+
 use OroCRM\Bundle\TaskBundle\Entity\TaskPriority;
 
 class LoadTaskPriority extends AbstractFixture

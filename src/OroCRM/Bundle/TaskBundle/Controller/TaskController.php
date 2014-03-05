@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\TaskBundle\Controller;
 
-use OroCRM\Bundle\TaskBundle\Entity\Task;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -13,6 +12,7 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\TaskBundle\Entity\Task;
 
 /**
  * @Route("/task")
@@ -41,11 +41,11 @@ class TaskController extends Controller
 
     /**
      * @Route("/widget/account-tasks/{id}", name="orocrm_account_tasks_widget", requirements={"id"="\d+"})
-     * @Template()
+     * @AclAncestor("orocrm_task_index")
+     * @Template
      */
     public function accountTasksAction(Account $account)
     {
-        //todo: add acl
         return array('account' => $account);
     }
 
@@ -142,5 +142,4 @@ class TaskController extends Controller
     {
         return $this->update($task);
     }
-
 }

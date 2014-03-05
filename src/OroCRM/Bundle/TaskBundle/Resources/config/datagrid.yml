@@ -89,3 +89,9 @@ datagrid:
                 updatedAt:
                     type:      datetime
                     data_name: task.updatedAt
+
+    account_tasks_grid:
+        extend: tasks-grid
+
+    account_tasks_grid:
+        extend: tasks-grid

@@ -14,6 +14,7 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
@@ -95,7 +96,7 @@ class Task
     protected $dueDate;
 
     /**
-     * @var \DateTime $createdAt
+     * @var \DateTime
      *
      * @ORM\Column(type="datetime")
      * @JMS\Type("DateTime")
@@ -108,7 +109,7 @@ class Task
     protected $createdAt;
 
     /**
-     * @var \DateTime $updatedAt
+     * @var \DateTime
      *
      * @ORM\Column(type="datetime", nullable=true)
      * @JMS\Type("DateTime")
@@ -124,9 +125,9 @@ class Task
      * @var TaskPriority
      *
      * @ORM\ManyToOne(targetEntity="TaskPriority")
-     * @ORM\JoinColumn(name="priority_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="task_priority_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $priority;
+    protected $taskPriority;
 
     /**
      * @var WorkflowStep
@@ -203,7 +204,6 @@ class Task
      * )
      */
     protected $owner;
-
 
     /**
      * @param int $id
@@ -304,17 +304,17 @@ class Task
     /**
      * @return TaskPriority
      */
-    public function getPriority()
+    public function getTaskPriority()
     {
-        return $this->priority;
+        return $this->taskPriority;
     }
 
     /**
      * @param TaskPriority $taskPriority
      */
-    public function setPriority(TaskPriority $taskPriority)
+    public function setTaskPriority(TaskPriority $taskPriority)
     {
-        $this->priority = $taskPriority;
+        $this->taskPriority = $taskPriority;
     }
 
     /**
@@ -341,6 +341,9 @@ class Task
         return $this->assignedTo;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getAssigneeToId()
     {
         return $this->getAssignedTo() ? $this->getAssignedTo()->getId() : null;
@@ -362,6 +365,9 @@ class Task
         return $this->relatedAccount;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getRelatedAccountId()
     {
         return $this->getRelatedAccount() ? $this->getRelatedAccount()->getId() : null;
