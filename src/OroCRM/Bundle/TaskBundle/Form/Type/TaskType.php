@@ -4,9 +4,13 @@ namespace OroCRM\Bundle\TaskBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class TaskType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -77,6 +81,23 @@ class TaskType extends AbstractType
             );
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(
+            [
+                'data_class' => 'OroCRM\Bundle\TaskBundle\Entity\Task',
+                'intention' => 'task',
+                'cascade_validation' => true
+            ]
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'orocrm_task';

@@ -20,17 +20,11 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface
      */
     private $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
     }
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
         /** @var \Oro\Bundle\UserBundle\Entity\UserManager $userManager */
@@ -42,7 +36,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface
         $user = $userManager->createUser();
         $api = new UserApi();
 
-        $api->setApiKey('inavtive_key')
+        $api->setApiKey('user_api_key')
             ->setUser($user);
 
         $user
@@ -52,7 +46,8 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface
             ->setLastName('User')
             ->addRole($role[0])
             ->setEmail('simple@example.com')
-            ->setApi($api);
+            ->setApi($api)
+            ->setSalt('');
 
         $userManager->updateUser($user);
     }

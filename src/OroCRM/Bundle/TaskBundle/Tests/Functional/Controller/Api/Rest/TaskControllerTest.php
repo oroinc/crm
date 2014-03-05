@@ -11,30 +11,36 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
  * @db_isolation
  * @db_reindex
  */
-class RestTaskTest extends WebTestCase
+class TaskControllerTest extends WebTestCase
 {
     /** @var Client */
     protected $client;
 
     public function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        $this->client = static::createClient([], ToolsAPI::generateWsseHeader());
     }
 
     public function testCreate()
     {
-        $request = array(
-            'task' => array(
+        $this->markTestSkipped();
+
+        $request = [
+            'task' => [
                 'subject' => 'New task',
                 'description' => 'New description',
                 'dueDate' => '2014-03-04T20:00:00+0000',
                 'taskPriority' => 'high',
                 'assignedTo' => '1',
                 'owner' => '1'
-            )
-        );
+            ]
+        ];
 
-        $this->client->request('POST', $this->client->generate('oro_api_post_task'), $request);
+        $this->client->request(
+            'POST',
+            $this->client->generate('orocrm_api_post_task'),
+            $request
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 201);
 
@@ -50,9 +56,13 @@ class RestTaskTest extends WebTestCase
     {
         $this->markTestSkipped();
 
-        $this->markTestSkipped();
-
-        $this->client->request('GET', $this->client->generate('oro_api_get_tasks'));
+        $this->client->request(
+            'GET',
+            $this->client->generate('orocrm_api_get_tasks'),
+            [],
+            [],
+            ToolsAPI::generateWsseHeader()
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
@@ -70,7 +80,10 @@ class RestTaskTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_task', array('id' => $expectedTask['id']))
+            $this->client->generate('orocrm_api_get_task', ['id' => $expectedTask['id']])
+            [],
+            [],
+            ToolsAPI::generateWsseHeader()
         );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
@@ -85,17 +98,19 @@ class RestTaskTest extends WebTestCase
      */
     public function testPut($task)
     {
-        $updatedTask = array('title' => 'Updated title');
+        $updatedTask = ['subject' => 'Updated subject'];
         $this->client->request(
             'PUT',
-            $this->client->generate('oro_api_put_task', array('id' => $task['id'])),
-            array('task' => $updatedTask)
+            $this->client->generate('orocrm_api_put_task', ['id' => $task['id']]),
+            ['task' => $updatedTask],
+            [],
+            ToolsAPI::generateWsseHeader()
         );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
         $task = json_decode($result->getContent(), true);
-        $this->assertEquals($task['title'], $updatedTask['title']);
+        $this->assertEquals($task['subject'], $updatedTask['subject']);
     }
 
     /**
@@ -106,13 +121,19 @@ class RestTaskTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_task', array('id' => $task['id']))
+            $this->client->generate('orocrm_api_delete_task', ['id' => $task['id']]),
+            [],
+            [],
+            ToolsAPI::generateWsseHeader()
         );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_task', array('id' => $task['id']))
+            $this->client->generate('orocrm_api_get_task', ['id' => $task['id']]),
+            [],
+            [],
+            ToolsAPI::generateWsseHeader()
         );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 404);
