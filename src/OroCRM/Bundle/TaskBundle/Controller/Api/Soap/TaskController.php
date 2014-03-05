@@ -9,7 +9,7 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 
-class TaskControllerTest extends SoapController
+class TaskController extends SoapController
 {
     /**
      * @Soap\Method("getTasks")
@@ -68,7 +68,7 @@ class TaskControllerTest extends SoapController
      */
     public function getManager()
     {
-        return $this->container->get('orocrm_task.task.manager.api');
+        return $this->container->get('orocrm_task.manager.api');
     }
 
     /**
@@ -76,7 +76,7 @@ class TaskControllerTest extends SoapController
      */
     public function getForm()
     {
-        return $this->container->get('orocrm_task.form.type.api_task');
+        return $this->container->get('orocrm_task.form.type.task_api');
     }
 
     /**
@@ -84,6 +84,6 @@ class TaskControllerTest extends SoapController
      */
     public function getFormHandler()
     {
-        return $this->container->get('orocrm_task.form.handler.task.api');
+        return $this->container->get('orocrm_task.form.handler.task_api');
     }
 }

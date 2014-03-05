@@ -105,7 +105,7 @@ class TaskControllerACLTest extends WebTestCase
      */
     public function testPut()
     {
-        $updatedTask = ['subject' => 'Updated title'];
+        $updatedTask = ['subject' => 'Updated subject'];
         $this->client->request(
             'PUT',
             $this->client->generate('orocrm_api_put_task', ['id' => self::$taskId]),

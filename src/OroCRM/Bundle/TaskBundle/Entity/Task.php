@@ -285,7 +285,7 @@ class Task extends ExtendTask
     /**
      * @param \DateTime $dueDate
      */
-    public function setDueDate(\DateTime $dueDate)
+    public function setDueDate(\DateTime $dueDate = null)
     {
         $this->dueDate = $dueDate;
     }

@@ -25,9 +25,12 @@ class TaskApiType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
+                'data_class' => 'OroCRM\Bundle\TaskBundle\Entity\Task',
+                'intention' => 'task',
+                'cascade_validation' => true,
                 'csrf_protection' => false
-            )
+            ]
         );
     }
 
