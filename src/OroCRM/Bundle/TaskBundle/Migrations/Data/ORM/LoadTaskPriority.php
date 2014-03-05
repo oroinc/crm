@@ -11,9 +11,9 @@ class LoadTaskPriority extends AbstractFixture
 {
 
     protected $data = array(
-        array('title'=>'Low Priority', 'type' => 'low'),
-        array('title'=>'Normal Priority', 'type' => 'normal'),
-        array('title'=>'High Priority', 'type' => 'high')
+        array('label'=>'Low Priority', 'name' => 'low'),
+        array('label'=>'Normal Priority', 'name' => 'normal'),
+        array('label'=>'High Priority', 'name' => 'high')
     );
 
     /**
@@ -22,10 +22,9 @@ class LoadTaskPriority extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         foreach ($this->data as $priority) {
-            if (!$this->isPriorityExist($manager, $priority['type'])) {
-                $entity = new TaskPriority();
-                $entity->setType($priority['type']);
-                $entity->setTitle($priority['title']);
+            if (!$this->isPriorityExist($manager, $priority['name'])) {
+                $entity = new TaskPriority($priority['name']);
+                $entity->setLabel($priority['label']);
                 $manager->persist($entity);
             }
         }
@@ -33,11 +32,13 @@ class LoadTaskPriority extends AbstractFixture
         $manager->flush();
     }
 
+    /**
+     * @param ObjectManager $manager
+     * @param string $priorityType
+     * @return bool
+     */
     private function isPriorityExist(ObjectManager $manager, $priorityType)
     {
-        return count(
-            $manager->getRepository('OroCRMTaskBundle:TaskPriority')
-                ->findBy(array('type' => $priorityType))
-        ) > 0;
+        return count($manager->getRepository('OroCRMTaskBundle:TaskPriority')->find($priorityType)) > 0;
     }
 }

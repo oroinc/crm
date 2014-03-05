@@ -9,7 +9,7 @@ datagrid:
                     - task.subject
                     - task.description
                     - task.dueDate
-                    - taskPriority.title as priority
+                    - taskPriority.label as priorityLabel
                     - assignedTo.username as assignee
                     - assignedTo.id as assigneeId
                     - owner.username as reporter
@@ -32,8 +32,8 @@ datagrid:
             dueDate:
                 label: orocrm.task.dueDate.label
                 frontend_type: datetime
-            priority:
-                label: orocrm.task.taskPriority.label
+            priorityLabel:
+                label: orocrm.task.priority.label
             assignee:
                 type: twig
                 label: orocrm.task.assignedTo.label
@@ -70,8 +70,8 @@ datagrid:
                     data_name: task.subject
                 dueDate:
                     data_name: task.dueDate
-                priority:
-                    data_name: priority
+                priorityLabel:
+                    data_name: priorityLabel
                 assignee:
                     data_name: assignee
                 reporter:
@@ -90,9 +90,9 @@ datagrid:
                 dueDate:
                     type:      datetime
                     data_name: task.dueDate
-                priority:
+                priorityLabel:
                     type:      string
-                    data_name: priority
+                    data_name: priorityLabel
                 assignee:
                     type:      string
                     data_name: assignee
@@ -131,6 +131,24 @@ datagrid:
 
     account_tasks_grid:
         extend: tasks-grid
+        source:
+            query:
+                where:
+                      and:
+                        - task.relatedAccount = :accountId
 
-    account_tasks_grid:
+    contact_tasks_grid:
         extend: tasks-grid
+        source:
+            query:
+                where:
+                      and:
+                        - task.relatedContact = :contactId
+
+    user_tasks_grid:
+        extend: tasks-grid
+        source:
+            query:
+                where:
+                      and:
+                        - task.assignedTo = :userId

@@ -13,73 +13,66 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 class TaskPriority
 {
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="name", type="string", length=32)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     * @ORM\Column(name="label", type="string", length=255, unique=true)
      */
-    protected $title;
+    protected $label;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=255, nullable=false)
+     * @param string $name
      */
-    protected $type;
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * Get Task priority name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set Task priority label
+     *
+     * @param string $label
+     * @return TaskPriority
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * Get task priority label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
 
     /**
      * @return string
      */
     public function __toString()
     {
-        return $this->title;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-    
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
+        return (string) $this->label;
     }
 }

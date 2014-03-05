@@ -162,7 +162,7 @@
     {% endif %}
 
     {% set tasksInfo %}
-        {{ placeholder('orocrm_contact_tasks', {'contactId': entity.id}) }}
+        {{ placeholder('orocrm_contact_tasks', {'contact': entity}) }}
     {% endset %}
     {% if tasksInfo|trim is not empty %}
         {% set dataBlocks = dataBlocks|merge([

@@ -10,3 +10,31 @@ services:
         class: %orocrm_task.form.type.task.class%
         tags:
             - { name: form.type, alias: orocrm_task }
+
+    #data grid events
+    orocrm_task.event_listener.account_tasks_grid_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'accountId'
+            - @oro_datagrid.datagrid.request_params
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account_tasks_grid, method: onBuildAfter }
+
+    orocrm_task.event_listener.contact_tasks_grid_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'contactId'
+            - @oro_datagrid.datagrid.request_params
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.contact_tasks_grid, method: onBuildAfter }
+
+    orocrm_task.event_listener.user_tasks_grid_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'userId'
+            - @oro_datagrid.datagrid.request_params
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.user_tasks_grid, method: onBuildAfter }
