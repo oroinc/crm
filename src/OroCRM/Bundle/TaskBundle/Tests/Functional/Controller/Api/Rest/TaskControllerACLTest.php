@@ -12,7 +12,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
  * @outputBuffering enabled
  * @db_isolation
  */
-class RestTaskACLTest extends WebTestCase
+class TaskControllerACLTest extends WebTestCase
 {
     const USER_NAME = 'user_wo_permissions';
     const USER_PASSWORD = 'user_api_key';

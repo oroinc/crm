@@ -9,7 +9,7 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 
-class TaskController extends SoapController
+class TaskControllerTest extends SoapController
 {
     /**
      * @Soap\Method("getTasks")

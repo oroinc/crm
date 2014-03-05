@@ -10,7 +10,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
  * @outputBuffering enabled
  * @db_isolation
  */
-class SoapTaskTest extends WebTestCase
+class TaskControllerTest extends WebTestCase
 {
     /** @var Client */
     protected $client;

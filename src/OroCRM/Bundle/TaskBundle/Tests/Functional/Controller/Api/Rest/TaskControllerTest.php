@@ -11,7 +11,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
  * @db_isolation
  * @db_reindex
  */
-class RestTaskTest extends WebTestCase
+class TaskControllerTest extends WebTestCase
 {
     /** @var Client */
     protected $client;
