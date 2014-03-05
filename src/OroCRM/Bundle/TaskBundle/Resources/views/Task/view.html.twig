@@ -2,7 +2,7 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
-{% oro_title_set({params : {"%entity.subject%": entity.subject }}) %}
+{% oro_title_set({params : {"%entity.subject%": entity.subject|default('N/A') }}) %}
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
@@ -41,10 +41,58 @@
                 {{ UI.renderProperty('orocrm.task.description.label'|trans, entity.description) }}
                 {{ UI.renderProperty('orocrm.task.dueDate.label'|trans, entity.dueDate|oro_format_datetime) }}
                 {{ UI.renderProperty('orocrm.task.priority.label'|trans, entity.priority) }}
-                {{ UI.renderProperty('orocrm.task.assignedTo.label'|trans, entity.assignedTo) }}
-                {{ UI.renderProperty('orocrm.task.relatedAccount.label'|trans, entity.relatedAccount) }}
-                {{ UI.renderProperty('orocrm.task.relatedContact.label'|trans, entity.relatedContact) }}
-                {{ UI.renderProperty('orocrm.task.owner.label'|trans, entity.owner) }}
+
+                {%- set assignedToData -%}
+                    {%- if entity.assignedTo -%}
+                        {% if resource_granted('oro_user_user_view') %}
+                            <a href="{{ path('oro_user_view', {'id': entity.assignedTo.id}) }}">
+                                {{ entity.assignedTo }}
+                            </a>
+                        {% else %}
+                            {{ entity.assignedTo }}
+                        {% endif %}
+                    {%- endif -%}
+                {%- endset -%}
+                {{ UI.renderProperty('orocrm.task.assignedTo.label'|trans, assignedToData) }}
+
+                {%- set accountData -%}
+                    {%- if entity.relatedAccount -%}
+                        {% if resource_granted('orocrm_account_view') %}
+                            <a href="{{ path('orocrm_account_view', {'id': entity.relatedAccount.id}) }}">
+                                {{ entity.relatedAccount }}
+                            </a>
+                        {% else %}
+                            {{ entity.relatedAccount }}
+                        {% endif %}
+                    {%- endif -%}
+                {%- endset -%}
+                {{ UI.renderProperty('orocrm.task.relatedAccount.label'|trans, accountData) }}
+
+                {%- set contactData -%}
+                    {%- if entity.relatedContact -%}
+                        {% if resource_granted('orocrm_contact_view') %}
+                            <a href="{{ path('orocrm_contact_view', {'id': entity.relatedContact.id}) }}">
+                                {{ entity.relatedContact }}
+                            </a>
+                        {% else %}
+                            {{ entity.relatedContact }}
+                        {% endif %}
+                    {%- endif -%}
+                {%- endset -%}
+                {{ UI.renderProperty('orocrm.task.relatedContact.label'|trans, contactData) }}
+
+                {%- set ownerData -%}
+                    {%- if entity.owner -%}
+                        {% if resource_granted('oro_user_user_view') %}
+                            <a href="{{ path('oro_user_view', {'id': entity.owner.id}) }}">
+                                {{ entity.owner }}
+                            </a>
+                        {% else %}
+                            {{ entity.owner }}
+                        {% endif %}
+                    {%- endif -%}
+                {%- endset -%}
+                {{ UI.renderProperty('orocrm.task.owner.label'|trans, ownerData) }}
             </div>
             <div class="responsive-block">
                 {{ entityConfig.renderDynamicFields(entity) }}
@@ -67,24 +115,3 @@
 
     {{ parent() }}
 {% endblock content_data %}
-
-{% macro renderUser(entity) %}
-    {% if entity %}
-        {{ entity|oro_format_name }} -
-        {% if resource_granted('VIEW', entity) %}
-            <a href="{{ path('oro_user_view', {'id': entity.id}) }}">{{ entity }}</a>
-        {% else %}
-            {{ entity }}
-        {% endif %}
-    {% endif %}
-{% endmacro %}
-
-{% macro renderContact(entity) %}
-    {% if entity %}
-        {%- if resource_granted('VIEW', entity) -%}
-            <a href="{{ path('orocrm_contact_view', {'id': entity.id}) }}">{{ entity|oro_format_name }}</a>
-        {%- else -%}
-            {{ entity|oro_format_name }}
-        {%- endif -%}
-    {% endif %}
-{% endmacro %}
