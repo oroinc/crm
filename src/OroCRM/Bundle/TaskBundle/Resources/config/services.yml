@@ -19,7 +19,7 @@ services:
             - @oro_datagrid.datagrid.request_params
             - false
         tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account_tasks_grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.task-account-tasks-grid, method: onBuildAfter }
 
     orocrm_task.event_listener.contact_tasks_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
@@ -28,7 +28,7 @@ services:
             - @oro_datagrid.datagrid.request_params
             - false
         tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.contact_tasks_grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.task-contact-tasks-grid, method: onBuildAfter }
 
     orocrm_task.event_listener.user_tasks_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
@@ -37,4 +37,4 @@ services:
             - @oro_datagrid.datagrid.request_params
             - false
         tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.user_tasks_grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.task-user-tasks-grid, method: onBuildAfter }
