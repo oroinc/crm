@@ -28,6 +28,7 @@ orocrm:
             additional: Additional Information
 
         new_entity: New task
+        add_entity: Add task
         saved_message: Task saved
 
         widgets:

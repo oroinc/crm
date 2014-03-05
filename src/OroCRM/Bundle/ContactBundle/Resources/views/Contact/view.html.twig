@@ -161,18 +161,6 @@
         ]) %}
     {% endif %}
 
-    {% set tasksInfo %}
-        {{ placeholder('orocrm_contact_tasks', {'contact': entity}) }}
-    {% endset %}
-    {% if tasksInfo|trim is not empty %}
-        {% set dataBlocks = dataBlocks|merge([
-            {
-                'title': 'orocrm.task.contact_tasks_section'|trans,
-                'subblocks': [{'data': [tasksInfo]}]
-            }
-        ]) %}
-    {% endif %}
-
     {% set id = 'contactView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}

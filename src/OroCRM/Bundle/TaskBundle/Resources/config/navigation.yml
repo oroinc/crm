@@ -7,11 +7,12 @@ oro_menu_config:
                 position: 4
                 routes: ['orocrm_task_*']
                 description: List of tasks
+
         orocrm_task_account_tasks_tab:
             label: orocrm.task.widgets.account_tasks
             extras:
                 position: 100
-                widgetRoute: orocrm_account_tasks_widget
+                widgetRoute: orocrm_task_widget_account_tasks
 
     tree:
         application_menu:

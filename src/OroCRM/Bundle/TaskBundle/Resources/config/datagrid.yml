@@ -68,7 +68,7 @@ datagrid:
                 updatedAt:
                     data_name: task.updatedAt
             default:
-                createdAt: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
+                createdAt: DESC
         filters:
             columns:
                 subject:

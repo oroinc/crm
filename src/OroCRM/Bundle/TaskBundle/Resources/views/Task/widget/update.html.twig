@@ -5,7 +5,7 @@
                 'oroui/js/messenger', 'oroui/js/mediator'],
             function(_, __, widgetManager, messenger, mediator) {
                 widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
-                    messenger.notificationFlashMessage('success', __('Call logged successfully'));
+                    messenger.notificationFlashMessage('success', __('Task created successfully'));
                     mediator.trigger('widget_success:' + widget.getAlias());
                     mediator.trigger('widget_success:' + widget.getWid());
                     widget.remove();
@@ -13,7 +13,6 @@
             });
         </script>
     {% else %}
-
         {% if not form.vars.valid and form.vars.errors|length %}
             <div class="alert alert-error">
                 <div class="message">
@@ -22,46 +21,28 @@
             </div>
         {% endif %}
         <div class="form-container">
-            <form id="{{ form.vars.name }}" action="{{ path('orocrm_call_create', {'no_redirect': true }) }}" method="post">
+            <form id="{{ form.vars.name }}" action="{{ path('orocrm_task_create', {'no_redirect': true }) }}" method="post">
                 <fieldset class="form form-horizontal">
                     <div class="span6">
-                        {% if form.owner is defined %}{{ form_row(form.owner) }}{% endif %}
                         {{ form_row(form.subject) }}
-                        {{ form_row(form.notes) }}
-                        {{ form_row(form.callDateTime) }}
+                        {{ form_row(form.description) }}
                     </div>
                     <div class="span6">
+                        {{ form_row(form.taskPriority) }}
+                        {{ form_row(form.dueDate) }}
+                        {{ form_row(form.assignedTo) }}
+                        {{ form_row(form.owner) }}
                         {{ form_row(form.relatedAccount) }}
                         {{ form_row(form.relatedContact) }}
-                        {{ form_row(form.contactPhoneNumber) }}
-                        {{ form_widget(form.phoneNumber) }}
-                        {{ form_row(form.direction) }}
-                        {{ form_row(form.duration) }}
-                        <div class="hide">
-                            {{ form_row(form.callStatus) }}
-                        </div>
                     </div>
                     {{ form_rest(form) }}
                     <div class="widget-actions form-actions">
                         <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
-                        <button class="btn btn-primary" type="submit">{{ 'Log call'|trans }}</button>
+                        <button class="btn btn-primary" type="submit">{{ 'Create task'|trans }}</button>
                     </div>
                 </fieldset>
             </form>
             {{ oro_form_js_validation(form) }}
         </div>
-
-        <script type="text/javascript">
-            require(['jquery', 'orocrm/contactphone/view'],
-            function($, ContactPhoneView){
-                $(function() {
-                    new ContactPhoneView({
-                        contact: $('#{{ form.relatedContact.vars.id }}'),
-                        phoneSelector: $('#{{ form.contactPhoneNumber.vars.id }}'),
-                        phonePlain: $('#{{ form.phoneNumber.vars.id }}')
-                    });
-                });
-            });
-        </script>
     {% endif %}
 </div>
