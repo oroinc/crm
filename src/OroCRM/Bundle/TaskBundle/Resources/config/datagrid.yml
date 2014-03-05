@@ -2,7 +2,7 @@ datagrid:
     tasks-grid:
         source:
             type: orm
-            acl_resource: ~ #orocrm_task_view
+            acl_resource: orocrm_task_view
             query:
                 select:
                     - task.id
@@ -16,6 +16,7 @@ datagrid:
                     - owner.id as reporterId
                     - task.createdAt
                     - task.updatedAt
+                    - workflowStep.label as workflowStepLabel
                 from:
                     - { table: %orocrm_task.entity.class%, alias: task }
                 join:
@@ -23,6 +24,7 @@ datagrid:
                         - { join: task.taskPriority, alias: taskPriority }
                         - { join: task.assignedTo, alias: assignedTo }
                         - { join: task.owner, alias: owner }
+                        - { join: task.workflowStep, alias: workflowStep }
         columns:
             subject:
                 type: twig
@@ -32,8 +34,10 @@ datagrid:
             dueDate:
                 label: orocrm.task.dueDate.label
                 frontend_type: datetime
+            workflowStepLabel:
+                label: orocrm.task.workflowStep.label
             priorityLabel:
-                label: orocrm.task.priority.label
+                label: orocrm.task.taskPriority.label
             assignee:
                 type: twig
                 label: orocrm.task.assignedTo.label

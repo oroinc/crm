@@ -1,0 +1,2 @@
+imports:
+    - { resource: 'oro/workflow/task_flow.yml' } # Workflow for Task entity

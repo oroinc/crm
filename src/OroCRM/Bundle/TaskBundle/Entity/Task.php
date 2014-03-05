@@ -13,6 +13,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -40,7 +41,10 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *      "security"={
  *          "type"="ACL"
  *      },
- *      "dataaudit"={"auditable"=true}
+ *      "dataaudit"={"auditable"=true},
+ *      "workflow"={
+ *          "active_workflow"="task_flow"
+ *      }
  *  }
  * )
  */
@@ -102,46 +106,12 @@ class Task extends ExtendTask
     protected $dueDate;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime")
-     * @JMS\Type("DateTime")
-     * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
-     * )
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", nullable=true)
-     * @JMS\Type("DateTime")
-     * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
-     * )
-     */
-    protected $updatedAt;
-
-    /**
      * @var TaskPriority
      *
      * @ORM\ManyToOne(targetEntity="TaskPriority")
      * @ORM\JoinColumn(name="task_priority_name", referencedColumnName="name", onDelete="SET NULL")
      */
     protected $taskPriority;
-
-    /**
-     * @var WorkflowStep
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
-     * @ORM\JoinColumn(name="status_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $status;
 
     /**
      * @var User
@@ -212,6 +182,52 @@ class Task extends ExtendTask
     protected $owner;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     * @JMS\Type("DateTime")
+     * @ConfigField(
+     *  defaultValues={
+     *      "email"={"available_in_template"=true}
+     *  }
+     * )
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     * @JMS\Type("DateTime")
+     * @ConfigField(
+     *  defaultValues={
+     *      "email"={"available_in_template"=true}
+     *  }
+     * )
+     */
+    protected $updatedAt;
+
+    /**
+     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
+     *
+     * @var WorkflowItem
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
+     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $workflowItem;
+
+    /**
+     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
+     *
+     * @var WorkflowStep
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
+     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $workflowStep;
+
+    /**
      * @param int $id
      */
     public function setId($id)
@@ -276,22 +292,6 @@ class Task extends ExtendTask
     }
 
     /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
      * @param \DateTime $createdAt
      */
     public function setCreatedAt($createdAt)
@@ -328,15 +328,7 @@ class Task extends ExtendTask
      */
     public function getStatus()
     {
-        return $this->status;
-    }
-
-    /**
-     * @param WorkflowStep $status
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
+        return $this->workflowStep;
     }
 
     /**
@@ -441,6 +433,54 @@ class Task extends ExtendTask
     public function setOwner(User $owner = null)
     {
         $this->owner = $owner;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param WorkflowItem $workflowItem
+     */
+    public function setWorkflowItem($workflowItem)
+    {
+        $this->workflowItem = $workflowItem;
+    }
+
+    /**
+     * @return WorkflowItem
+     */
+    public function getWorkflowItem()
+    {
+        return $this->workflowItem;
+    }
+
+    /**
+     * @param WorkflowItem $workflowStep
+     */
+    public function setWorkflowStep($workflowStep)
+    {
+        $this->workflowStep = $workflowStep;
+    }
+
+    /**
+     * @return WorkflowStep
+     */
+    public function getWorkflowStep()
+    {
+        return $this->workflowStep;
     }
 
     /**
