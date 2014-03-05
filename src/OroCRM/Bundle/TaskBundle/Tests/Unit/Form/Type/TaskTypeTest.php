@@ -17,11 +17,11 @@ class TaskTypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $widgets
+     * @param array $widgets
      *
-     * @dataProvider widgetProvider
+     * @dataProvider formTypeProvider
      */
-    public function testBuildForm($widgets)
+    public function testBuildForm(array $widgets)
     {
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
@@ -41,7 +41,7 @@ class TaskTypeTest extends \PHPUnit_Framework_TestCase
         $this->formType->buildForm($builder, []);
     }
 
-    public function widgetProvider()
+    public function formTypeProvider()
     {
         return [
             'all' => [
@@ -49,7 +49,7 @@ class TaskTypeTest extends \PHPUnit_Framework_TestCase
                     'subject',
                     'description',
                     'dueDate',
-                    'priority',
+                    'taskPriority',
                     'assignedTo',
                     'relatedAccount',
                     'relatedContact',

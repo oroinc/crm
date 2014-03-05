@@ -9,7 +9,7 @@ orocrm:
         subject.label:              Subject
         description.label:          Description
         dueDate.label:              Due date
-        priority.label:             Priority
+        taskPriority.label:         Priority
         assignedTo.label:           Assignee
         relatedAccount.label:       Account
         relatedContact.label:       Contact
@@ -21,8 +21,9 @@ orocrm:
             general: General Information
             additional: Additional Information
 
+        new_entity: New task
         saved_message: Task saved
-        
+
         widgets:
             account_tasks: Tasks
         contact_tasks_section: Tasks

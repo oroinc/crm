@@ -1,8 +1,8 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 
 {% oro_title_set({params : {"%entity.subject%": entity.subject, "%entityName%": 'orocrm.task.entity_label'|trans }}) %}
-{% set title = 'New'|trans ~ ' ' ~ 'orocrm.task.entity_label'|trans|lower %}
-{% set entityId = form.vars.value.id %}
+{% set title = 'orocrm.task.new_entity'|trans %}
+{% set entityId = entity.id %}
 
 {% set formAction = entityId ? path('orocrm_task_update', { 'id': entityId}) : path('orocrm_task_create') %}
 
@@ -16,10 +16,10 @@
 {% block pageHeader %}
     {% if entityId %}
         {% set breadcrumbs = {
-            'entity': form.vars.value,
+            'entity': entity,
             'indexPath': path('orocrm_task_index'),
             'indexLabel': 'orocrm.task.entity_plural_label'|trans,
-            'entityTitle': form.vars.value.subject
+            'entityTitle': entity.subject
         } %}
         {{ parent() }}
     {% else %}
@@ -40,7 +40,7 @@
                     form_row(form.subject),
                     form_row(form.description),
                     form_row(form.dueDate),
-                    form_row(form.priority),
+                    form_row(form.taskPriority),
                     form_row(form.assignedTo),
                     form_row(form.relatedAccount),
                     form_row(form.relatedContact),

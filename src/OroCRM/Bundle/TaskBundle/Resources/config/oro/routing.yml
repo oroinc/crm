@@ -6,7 +6,7 @@ orocrm_task_bundle:
 orocrm_task_bundle_api:
     resource:     "@OroCRMTaskBundle/Controller/Api/Rest/TaskController.php"
     type:         rest
-    prefix:       api/rest/{version}/acme
+    prefix:       api/rest/{version}
     requirements:
         version:  latest|v1
     defaults:

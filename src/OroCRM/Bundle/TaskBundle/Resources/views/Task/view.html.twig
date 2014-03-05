@@ -40,7 +40,7 @@
                 {{ UI.renderProperty('orocrm.task.subject.label'|trans, entity.subject) }}
                 {{ UI.renderProperty('orocrm.task.description.label'|trans, entity.description) }}
                 {{ UI.renderProperty('orocrm.task.dueDate.label'|trans, entity.dueDate|oro_format_datetime) }}
-                {{ UI.renderProperty('orocrm.task.priority.label'|trans, entity.priority) }}
+                {{ UI.renderProperty('orocrm.task.taskPriority.label'|trans, entity.taskPriority) }}
 
                 {%- set assignedToData -%}
                     {%- if entity.assignedTo -%}
@@ -110,7 +110,7 @@
         }
     ] %}
 
-    {% set id = 'userView' %}
+    {% set id = 'taskView' %}
     {% set data = { 'dataBlocks': dataBlocks } %}
 
     {{ parent() }}
