@@ -3,17 +3,32 @@
 namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendMigrationHelper;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendMigrationHelperAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMSalesBundle implements Migration
+class OroCRMSalesBundle implements Migration, ExtendMigrationHelperAwareInterface
 {
+    /**
+     * @var ExtendMigrationHelper
+     */
+    protected $extendMigrationHelper;
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtendSchemaHelper(ExtendMigrationHelper $extendMigrationHelper)
+    {
+        $this->extendMigrationHelper = $extendMigrationHelper;
+    }
+
     /**
      * @inheritdoc
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::orocrmSalesLeadTable($schema);
+        self::orocrmSalesLeadTable($schema, $this->extendMigrationHelper);
         self::orocrmSalesLeadStatusTable($schema);
         self::orocrmSalesOpportunityTable($schema);
         self::orocrmSalesOpportunityCloseReasonTable($schema);
@@ -28,9 +43,10 @@ class OroCRMSalesBundle implements Migration
     /**
      * Generate table orocrm_sales_lead
      *
-     * @param Schema $schema
+     * @param Schema                $schema
+     * @param ExtendMigrationHelper $extendMigrationHelper
      */
-    public static function orocrmSalesLeadTable(Schema $schema)
+    public static function orocrmSalesLeadTable(Schema $schema, ExtendMigrationHelper $extendMigrationHelper)
     {
         /** Generate table orocrm_sales_lead **/
         $table = $schema->createTable('orocrm_sales_lead');
@@ -58,13 +74,12 @@ class OroCRMSalesBundle implements Migration
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updatedAt', 'datetime', ['notnull' => false]);
         $table->addColumn('notes', 'text', ['notnull' => false]);
-        $table->addColumn(
+        $extendMigrationHelper->addOptionSet(
+            $schema,
+            $table->getName(),
             'extend_source',
-            'optionSet',
             [
-                'oro_options' => [
-                    'extend' => ['is_extend' => true, 'set_expanded' => false]
-                ]
+                'extend' => ['is_extend' => true, 'set_expanded' => false]
             ]
         );
         $table->setPrimaryKey(['id']);
