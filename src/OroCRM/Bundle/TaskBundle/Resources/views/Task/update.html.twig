@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 
 {% oro_title_set({params : {"%entity.subject%": entity.subject, "%entityName%": 'orocrm.task.entity_label'|trans }}) %}
-{% set title = 'New'|trans ~ ' ' ~ 'orocrm.task.entity_label'|trans|lower %}
+{% set title = 'orocrm.task.new_entity'|trans %}
 {% set entityId = entity.id %}
 
 {% set formAction = entityId ? path('orocrm_task_update', { 'id': entityId}) : path('orocrm_task_create') %}

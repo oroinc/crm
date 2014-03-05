@@ -13,6 +13,7 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\TaskBundle\Entity\Task;
+use OroCRM\Bundle\TaskBundle\Form\Type\TaskType;
 
 /**
  * @Route("/task")
@@ -131,7 +132,7 @@ class TaskController extends Controller
     }
 
     /**
-     * @return \OroCRM\Bundle\TaskBundle\Form\Type\TaskType
+     * @return TaskType
      */
     protected function getFormType()
     {
