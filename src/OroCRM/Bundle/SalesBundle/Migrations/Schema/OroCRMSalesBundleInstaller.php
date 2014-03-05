@@ -3,25 +3,25 @@
 namespace OroCRM\Bundle\SalesBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\EntityExtendBundle\Migration\ExtendMigrationHelper;
-use Oro\Bundle\EntityExtendBundle\Migration\ExtendMigrationHelperAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_0\OroCRMSalesBundle;
 
-class OroCRMSalesBundleInstaller implements Installation, ExtendMigrationHelperAwareInterface
+class OroCRMSalesBundleInstaller implements Installation, ExtendExtensionAwareInterface
 {
     /**
-     * @var ExtendMigrationHelper
+     * @var ExtendExtension
      */
-    protected $extendMigrationHelper;
+    protected $extend;
 
     /**
      * @inheritdoc
      */
-    public function setExtendSchemaHelper(ExtendMigrationHelper $extendMigrationHelper)
+    public function setExtendExtension(ExtendExtension $extend)
     {
-        $this->extendMigrationHelper = $extendMigrationHelper;
+        $this->extend = $extend;
     }
 
     /**
@@ -37,7 +37,7 @@ class OroCRMSalesBundleInstaller implements Installation, ExtendMigrationHelperA
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        OroCRMSalesBundle::orocrmSalesLeadTable($schema, $this->extendMigrationHelper);
+        OroCRMSalesBundle::orocrmSalesLeadTable($schema, $this->extend);
         OroCRMSalesBundle::orocrmSalesLeadStatusTable($schema);
         OroCRMSalesBundle::orocrmSalesOpportunityTable($schema);
         OroCRMSalesBundle::orocrmSalesOpportunityCloseReasonTable($schema, 'orocrm_sales_opport_close_rsn');

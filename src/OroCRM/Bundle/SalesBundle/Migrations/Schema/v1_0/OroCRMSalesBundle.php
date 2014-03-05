@@ -3,24 +3,24 @@
 namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\EntityExtendBundle\Migration\ExtendMigrationHelper;
-use Oro\Bundle\EntityExtendBundle\Migration\ExtendMigrationHelperAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMSalesBundle implements Migration, ExtendMigrationHelperAwareInterface
+class OroCRMSalesBundle implements Migration, ExtendExtensionAwareInterface
 {
     /**
-     * @var ExtendMigrationHelper
+     * @var ExtendExtension
      */
-    protected $extendMigrationHelper;
+    protected $extend;
 
     /**
      * @inheritdoc
      */
-    public function setExtendSchemaHelper(ExtendMigrationHelper $extendMigrationHelper)
+    public function setExtendExtension(ExtendExtension $extend)
     {
-        $this->extendMigrationHelper = $extendMigrationHelper;
+        $this->extend = $extend;
     }
 
     /**
@@ -28,7 +28,7 @@ class OroCRMSalesBundle implements Migration, ExtendMigrationHelperAwareInterfac
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::orocrmSalesLeadTable($schema, $this->extendMigrationHelper);
+        self::orocrmSalesLeadTable($schema, $this->extend);
         self::orocrmSalesLeadStatusTable($schema);
         self::orocrmSalesOpportunityTable($schema);
         self::orocrmSalesOpportunityCloseReasonTable($schema);
@@ -43,10 +43,10 @@ class OroCRMSalesBundle implements Migration, ExtendMigrationHelperAwareInterfac
     /**
      * Generate table orocrm_sales_lead
      *
-     * @param Schema                $schema
-     * @param ExtendMigrationHelper $extendMigrationHelper
+     * @param Schema          $schema
+     * @param ExtendExtension $extend
      */
-    public static function orocrmSalesLeadTable(Schema $schema, ExtendMigrationHelper $extendMigrationHelper)
+    public static function orocrmSalesLeadTable(Schema $schema, ExtendExtension $extend)
     {
         /** Generate table orocrm_sales_lead **/
         $table = $schema->createTable('orocrm_sales_lead');
@@ -74,7 +74,7 @@ class OroCRMSalesBundle implements Migration, ExtendMigrationHelperAwareInterfac
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updatedAt', 'datetime', ['notnull' => false]);
         $table->addColumn('notes', 'text', ['notnull' => false]);
-        $extendMigrationHelper->addOptionSet(
+        $extend->addOptionSet(
             $schema,
             $table,
             'extend_source',
