@@ -130,7 +130,7 @@ class Task
      * @var TaskPriority
      *
      * @ORM\ManyToOne(targetEntity="TaskPriority")
-     * @ORM\JoinColumn(name="task_priority_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="task_priority_name", referencedColumnName="name", onDelete="SET NULL")
      */
     protected $taskPriority;
 
@@ -160,7 +160,7 @@ class Task
     protected $assignedTo;
 
     /**
-     * @var Collection
+     * @var Account
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="relatedAccount", referencedColumnName="id", onDelete="SET NULL")
@@ -177,7 +177,7 @@ class Task
     protected $relatedAccount;
 
     /**
-     * @var Collection
+     * @var Contact
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="relatedContact", referencedColumnName="id", onDelete="SET NULL")
