@@ -41,7 +41,7 @@ class TaskController extends Controller
 
     /**
      * @Route("/widget/account-tasks/{id}", name="orocrm_account_tasks_widget", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_task_index")
+     * @AclAncestor("orocrm_task_view")
      * @Template
      */
     public function accountTasksAction(Account $account)
@@ -63,6 +63,31 @@ class TaskController extends Controller
     {
         $task = new Task();
 
+        return $this->update($task);
+    }
+
+    /**
+     * @Route("/view/{id}", name="orocrm_task_view", requirements={"id"="\d+"})
+     * @AclAncestor("orocrm_task_view")
+     * @Template
+     */
+    public function viewAction(Task $task)
+    {
+        return array('entity' => $task);
+    }
+
+    /**
+     * @Route("/update/{id}", name="orocrm_task_update", requirements={"id"="\d+"})
+     * @Template
+     * @Acl(
+     *      id="orocrm_task_update",
+     *      type="entity",
+     *      class="OroCRMTaskBundle:Task",
+     *      permission="EDIT"
+     * )
+     */
+    public function updateAction(Task $task)
+    {
         return $this->update($task);
     }
 
@@ -111,35 +136,5 @@ class TaskController extends Controller
     protected function getFormType()
     {
         return $this->get('orocrm_task.form.type.task');
-    }
-
-    /**
-     * @Route("/view/{id}", name="orocrm_task_view", requirements={"id"="\d+"})
-     * @Acl(
-     *      id="orocrm_task_view",
-     *      type="entity",
-     *      class="OroCRMTaskBundle:Task",
-     *      permission="VIEW"
-     * )
-     * @Template
-     */
-    public function viewAction(Task $task)
-    {
-        return array('entity' => $task);
-    }
-
-    /**
-     * @Route("/update/{id}", name="orocrm_task_update", requirements={"id"="\d+"})
-     * @Template
-     * @Acl(
-     *      id="orocrm_task_update",
-     *      type="entity",
-     *      class="OroCRMTaskBundle:Task",
-     *      permission="EDIT"
-     * )
-     */
-    public function updateAction(Task $task)
-    {
-        return $this->update($task);
     }
 }
