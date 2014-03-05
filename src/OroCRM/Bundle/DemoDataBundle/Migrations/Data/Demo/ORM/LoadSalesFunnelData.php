@@ -124,7 +124,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
 
         $parameters = array_merge(array(
             'sales_funnel' => null,
-            'sales_funnel_name' => 'test',
+            'sales_funnel_name' => $entity->getName(),
             'sales_funnel_owner' => $owner,
             'sales_funnel_start_date' => new \DateTime('now'),
         ), $parameters);
@@ -145,7 +145,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
             $this->workflowManager->transit($salesFunnelItem, 'qualify');
         }
 
-        if ($this->getRandomBoolean()) {
+        if (rand(1, 100) > 10) {
             $salesFunnelItem->getData()
                 ->set('budget_amount', mt_rand(10, 10000))
                 ->set('customer_need', mt_rand(10, 10000))

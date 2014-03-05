@@ -24,13 +24,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
     /** @var ContainerInterface */
     private $container;
 
-    protected $subjects = array(
-        'Cold Call', 'Reminder of our scheduled meeting', 'Happy Birthday', 'The lease of office space'
-    );
-
-    protected $notes = array(
-        'note1', 'note2'
-    );
+    protected $templates;
 
     /**
      * {@inheritdoc}
@@ -50,14 +44,30 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
      */
     public function load(ObjectManager $om)
     {
-        $this->persistDemoEmails($om);
+        $this->loadEmailTemplates();
+        $this->loadEmailsDemo($om);
         $om->flush();
+    }
+
+    protected function loadEmailTemplates()
+    {
+        $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR. "emails.csv", "r");
+        if ($handle) {
+            $headers = array();
+            if (($data = fgetcsv($handle, 1000, ",")) !== false) {
+                //read headers
+                $headers = $data;
+            }
+            while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+                $this->templates[] = array_combine($headers, array_values($data));
+            }
+        }
     }
 
     /**
      * @param ObjectManager $om
      */
-    protected function persistDemoEmails(
+    protected function loadEmailsDemo(
         ObjectManager $om
     ) {
         $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
@@ -72,8 +82,9 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
                 ->getRepository('OroEmailBundle:InternalEmailOrigin')
                 ->findOneBy(array('name' => InternalEmailOrigin::BAP));
 
+            $randTemplate = array_rand($this->templates);
             $email = $emailsBuilder->email(
-                'Subject',
+                $this->templates[$randTemplate]['Subject'],
                 $contact->getOwner()->getEmail(),
                 $contact->getPrimaryEmail()->getEmail(),
                 new \DateTime('now'),
@@ -82,7 +93,12 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             );
 
             $email->setFolder($origin->getFolder(EmailFolder::SENT));
-            $emailBody = $emailsBuilder->body('Content', false, true);
+            $emailBody = $emailsBuilder->body(
+                "Hi,\n" . $this->templates[$randTemplate]['Text'],
+                false,
+                true
+            );
+
             $email->setEmailBody($emailBody);
             $emailsBuilder->getBatch()->persist($om);
         }
