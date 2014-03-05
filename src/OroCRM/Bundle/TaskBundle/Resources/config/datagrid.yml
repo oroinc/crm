@@ -90,7 +90,7 @@ datagrid:
                     type:      datetime
                     data_name: task.updatedAt
 
-    account_tasks_grid:
+    task-account-tasks-grid:
         extend: tasks-grid
         source:
             query:
@@ -98,7 +98,7 @@ datagrid:
                       and:
                         - task.relatedAccount = :accountId
 
-    contact_tasks_grid:
+    task-contact-tasks-grid:
         extend: tasks-grid
         source:
             query:
@@ -106,7 +106,7 @@ datagrid:
                       and:
                         - task.relatedContact = :contactId
 
-    user_tasks_grid:
+    task-user-tasks-grid:
         extend: tasks-grid
         source:
             query:
