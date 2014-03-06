@@ -150,4 +150,64 @@ class TaskController extends RestController implements ClassResourceInterface
     {
         return $this->get('orocrm_task.form.handler.task_api');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function transformEntityField($field, &$value)
+    {
+        switch ($field) {
+            case 'taskPriority':
+                if ($value) {
+                    $value = $value->getName();
+                }
+                break;
+            case 'assignedTo':
+                if ($value) {
+                    $value = $value->getId();
+                }
+                break;
+            case 'relatedAccount':
+                if ($value) {
+                    $value = $value->getId();
+                }
+                break;
+            case 'relatedContact':
+                if ($value) {
+                    $value = $value->getId();
+                }
+                break;
+            case 'owner':
+                if ($value) {
+                    $value = $value->getId();
+                }
+                break;
+            case 'workflowItem':
+                if ($value) {
+                    $value = $value->getId();
+                }
+                break;
+            case 'workflowStep':
+                if ($value) {
+                    $value = $value->getId();
+                }
+                break;
+            default:
+                parent::transformEntityField($field, $value);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function fixFormData(array &$data, $entity)
+    {
+        parent::fixFormData($data, $entity);
+
+        unset($data['id']);
+        unset($data['createdAt']);
+        unset($data['updatedAt']);
+
+        return true;
+    }
 }

@@ -44,6 +44,24 @@ class TaskController extends Controller
     }
 
     /**
+     * @Route("/widget/sidebar-tasks", name="orocrm_task_widget_sidebar_tasks")
+     * @AclAncestor("orocrm_task_view")
+     * @Template("OroCRMTaskBundle:Task/widget:tasksWidget.html.twig")
+     */
+    public function tasksWidgetAction()
+    {
+        $repository = $this->getDoctrine()->getRepository('OroCRM\Bundle\TaskBundle\Entity\Task');
+        //todo: change it to user id
+        $id = $this->getUser()->getId();
+
+        $order = array('dueDate' => 'asc');
+        //todo: add method to repository
+        $tasks = $repository->findBy(array('assignedTo' => 1), $order, 10, 0);
+
+        return array('tasks' => $tasks, 'id'=>$id);
+    }
+
+    /**
      * @Route("/widget/account-tasks/{id}", name="orocrm_task_widget_account_tasks", requirements={"id"="\d+"})
      * @AclAncestor("orocrm_task_view")
      * @Template
