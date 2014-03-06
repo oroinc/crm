@@ -100,13 +100,11 @@ class TaskController extends SoapController
      */
     protected function fixFormData(array &$data, $entity)
     {
-        foreach ($data as $key => $property) {
-            if (is_array($property) && isset($property['date'], $property['timezone'])) {
-                $date = str_replace(' ', 'T', $property['date']);
-                $timezone = str_replace(':', '', $property['timezone']);
-                $data[$key] = $date . $timezone;
-            }
-        }
+        parent::fixFormData($data, $entity);
+
+        unset($data['id']);
+        unset($data['createdAt']);
+        unset($data['updatedAt']);
 
         return true;
     }
