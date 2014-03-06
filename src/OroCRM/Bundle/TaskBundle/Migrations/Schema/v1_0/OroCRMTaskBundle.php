@@ -35,7 +35,7 @@ class OroCRMTaskBundle implements Migration
 
         $taskTable->addForeignKeyConstraint(
             $schema->getTable('oro_workflow_step'),
-            ['status_id'],
+            ['workflow_step_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
         );
@@ -85,7 +85,7 @@ class OroCRMTaskBundle implements Migration
         $table->addColumn('updatedAt', 'datetime');
 
         $table->addColumn('task_priority_name', 'string', ['notnull' => false, 'length' => 32]);
-        $table->addColumn('status_id', 'integer', ['notnull' => false]);
+        $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
         $table->addColumn('assigned_to_id', 'integer', ['notnull' => false]);
         $table->addColumn('related_account_id', 'integer', ['notnull' => false]);
         $table->addColumn('related_contact_id', 'integer', ['notnull' => false]);
