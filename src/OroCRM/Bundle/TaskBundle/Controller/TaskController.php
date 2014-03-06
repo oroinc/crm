@@ -56,9 +56,9 @@ class TaskController extends Controller
 
         $order = array('dueDate' => 'asc');
         //todo: add method to repository
-        $tasks = $repository->findBy(array('assignedTo' => 1), $order, 10, 0);
+        $tasks = $repository->findBy(array('assignedTo' => $id), $order, 10, 0);
 
-        return array('tasks' => $tasks, 'id'=>$id);
+        return array('tasks' => $tasks);
     }
 
     /**
