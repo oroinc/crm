@@ -5,9 +5,9 @@ parameters:
     #form
     orocrm_task.form.type.task.class:        OroCRM\Bundle\TaskBundle\Form\Type\TaskType
     orocrm_task.form.type.task_api.class:    OroCRM\Bundle\TaskBundle\Form\Type\TaskApiType
-
-    orocrm_task.manager.api.class:           Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_task.form.handler.task_api.class: OroCRM\Bundle\TaskBundle\Form\Handler\TaskHandler
+    orocrm_task.manager.api.class:           Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
 services:
     orocrm_task.form.type.task:
         class: %orocrm_task.form.type.task.class%

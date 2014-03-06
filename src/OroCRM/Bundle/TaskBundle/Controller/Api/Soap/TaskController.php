@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\TaskBundle\Controller\Api\Soap;
 
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormInterface;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
