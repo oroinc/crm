@@ -41,6 +41,7 @@ class OroCRMTaskBundle implements Migration
 
         $table->addColumn('name', 'string', ['notnull' => true, 'length' => 32]);
         $table->addColumn('label', 'string', ['notnull' => true, 'length' => 255]);
+        $table->addColumn('`order`', 'integer', ['notnull' => true]);
 
         $table->setPrimaryKey(['name']);
         $table->addUniqueIndex(['label'], 'UNIQ_DB8472D3EA750E8');

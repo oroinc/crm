@@ -11,7 +11,7 @@ orocrm:
         dueDate.label:              Due date
         workflowStep.label:         Status
         taskPriority.label:         Priority
-        assignedTo.label:           Assignee
+        assignedTo.label:           Assigned To
         relatedAccount.label:       Account
         relatedContact.label:       Contact
         owner.label:                Reporter

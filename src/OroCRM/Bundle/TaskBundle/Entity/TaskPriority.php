@@ -28,6 +28,13 @@ class TaskPriority
     protected $label;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="`order`", type="integer")
+     */
+    protected $order;
+
+    /**
      * @param string $name
      */
     public function __construct($name)
@@ -66,6 +73,29 @@ class TaskPriority
     public function getLabel()
     {
         return $this->label;
+    }
+
+    /**
+     * Get order
+     *
+     * @return integer
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * Set order
+     *
+     * @param string $order
+     * @return TaskPriority
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+
+        return $this;
     }
 
     /**
