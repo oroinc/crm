@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0;
+namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -62,7 +62,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
      */
     public function getDependencies()
     {
-        return ['OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadMagentoData',];
+        return ['OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadMagentoData',];
     }
 
     public function setContainer(ContainerInterface $container = null)

@@ -45,9 +45,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
      */
     protected $countries;
 
-    /** @var WorkflowManager */
-    protected $workflowManager;
-
     /** @var  EntityManager */
     protected $em;
 
@@ -73,7 +70,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
-        $this->workflowManager = $container->get('oro_workflow.manager');
         $this->configManager = $container->get('oro_entity_config.config_manager');
     }
 
@@ -147,6 +143,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
                 $lead = $this->createLead($data, $user);
                 $this->persist($this->em, $lead);
+
                 $i++;
                 if ($i % self::FLUSH_MAX == 0) {
                     $this->flush($this->em);

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0;
+namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -29,7 +29,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
      */
     public function getDependencies()
     {
-        return ['OroCRM\Bundle\DemoDataBundle\Migrations\DataFixtures\Demo\ORM\v1_0\LoadContactData'];
+        return ['OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData'];
     }
 
     /**
@@ -340,14 +340,17 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $accounts = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
         $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
 
-        $buffer = range(0, 49);
+        $buffer = range(0, 48);
         shuffle($buffer);
-        for ($i = 0; $i < 50; ++$i) {
+        for ($i = 0; $i < 49; ++$i) {
             $birthday  = $this->generateBirthday();
 
             /** @var Contact $contact */
             $contact = $contacts[$buffer[$i]];
             $customer = new Customer();
+            if (is_null($accounts[$buffer[$i]])) {
+                var_dump($buffer[$i]);
+            }
             $customer->setWebsite($website)
                 ->setChannel($channel)
                 ->setStore($store)
