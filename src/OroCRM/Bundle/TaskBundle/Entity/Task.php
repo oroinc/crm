@@ -303,7 +303,7 @@ class Task extends ExtendTask
     /**
      * @param TaskPriority $taskPriority
      */
-    public function setTaskPriority(TaskPriority $taskPriority)
+    public function setTaskPriority($taskPriority)
     {
         $this->taskPriority = $taskPriority;
     }
@@ -335,7 +335,7 @@ class Task extends ExtendTask
     /**
      * @param User $assignedTo
      */
-    public function setAssignedTo(User $assignedTo = null)
+    public function setAssignedTo($assignedTo = null)
     {
         $this->assignedTo = $assignedTo;
     }
@@ -359,7 +359,7 @@ class Task extends ExtendTask
     /**
      * @param Account $account
      */
-    public function setRelatedAccount(Account $account = null)
+    public function setRelatedAccount($account = null)
     {
         $this->relatedAccount = $account;
     }
@@ -383,7 +383,7 @@ class Task extends ExtendTask
     /**
      * @param Contact $contact
      */
-    public function setRelatedContact(Contact $contact = null)
+    public function setRelatedContact($contact = null)
     {
         $this->relatedContact = $contact;
     }
@@ -415,7 +415,7 @@ class Task extends ExtendTask
     /**
      * @param User $owner
      */
-    public function setOwner(User $owner = null)
+    public function setOwner($owner = null)
     {
         $this->owner = $owner;
     }

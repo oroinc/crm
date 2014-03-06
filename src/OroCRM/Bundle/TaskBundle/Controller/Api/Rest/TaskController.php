@@ -140,7 +140,7 @@ class TaskController extends RestController implements ClassResourceInterface
      */
     public function getForm()
     {
-        return $this->get('orocrm_task.form.type.task_api');
+        return $this->get('orocrm_task.form.api');
     }
 
     /**

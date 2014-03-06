@@ -50,7 +50,7 @@ class TaskControllerTest extends WebTestCase
         $result = $this->client->getSoap()->createTask($this->task);
         $this->assertTrue((bool) $result, $this->client->getSoap()->__getLastResponse());
 
-        return $result['id'];
+        return $result;
     }
 
     /**
@@ -93,7 +93,7 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * @param integer $id
-     * @depends testUpdate
+     * @depends testCreate
      */
     public function testDelete($id)
     {

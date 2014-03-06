@@ -17,7 +17,7 @@ class TaskSoap extends Task implements SoapEntityInterface
     protected $id;
 
     /**
-     * @Soap\ComplexType("string", nillable=true)
+     * @Soap\ComplexType("string", nillable=false)
      */
     protected $subject;
 
@@ -27,17 +27,17 @@ class TaskSoap extends Task implements SoapEntityInterface
     protected $description;
 
     /**
-     * @Soap\ComplexType("dateTime", nillable=true)
+     * @Soap\ComplexType("dateTime", nillable=false)
      */
     protected $dueDate;
 
     /**
-     * @Soap\ComplexType("string", nillable=true)
+     * @Soap\ComplexType("string", nillable=false)
      */
     protected $taskPriority;
 
     /**
-     * @Soap\ComplexType("int", nillable=true)
+     * @Soap\ComplexType("int", nillable=false)
      */
     protected $assignedTo;
 
@@ -52,7 +52,7 @@ class TaskSoap extends Task implements SoapEntityInterface
     protected $relatedContact;
 
     /**
-     * @Soap\ComplexType("int", nillable=true)
+     * @Soap\ComplexType("int", nillable=false)
      */
     protected $owner;
 
