@@ -306,14 +306,6 @@ class Task extends ExtendTask
     }
 
     /**
-     * @return WorkflowStep
-     */
-    public function getStatus()
-    {
-        return $this->workflowStep;
-    }
-
-    /**
      * @return User
      */
     public function getAssignedTo()
@@ -388,9 +380,9 @@ class Task extends ExtendTask
     /**
      * @return string
      */
-    public function getStatusName()
+    public function getWorkflowStepName()
     {
-        return $this->getStatus() ? $this->getStatus()->getName() : null;
+        return $this->getWorkflowStep() ? $this->getWorkflowStep()->getName() : null;
     }
 
     /**
