@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\TaskBundle\Form\Type;
 
+use Doctrine\ORM\EntityRepository;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -44,7 +46,10 @@ class TaskType extends AbstractType
                 [
                     'label' => 'orocrm.task.taskPriority.label',
                     'class' => 'OroCRM\Bundle\TaskBundle\Entity\TaskPriority',
-                    'required' => true
+                    'required' => true,
+                    'query_builder' => function (EntityRepository $repository) {
+                        return $repository->createQueryBuilder('priority')->orderBy('priority.order');
+                    }
                 ]
             )
             ->add(

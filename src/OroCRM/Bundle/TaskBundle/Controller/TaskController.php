@@ -105,6 +105,11 @@ class TaskController extends Controller
     {
         $task = new Task();
 
+        $defaultPriority = $this->getDoctrine()->getRepository('OroCRMTaskBundle:TaskPriority')->find('normal');
+        if ($defaultPriority) {
+            $task->setTaskPriority($defaultPriority);
+        }
+
         $accountId = $this->getRequest()->get('accountId');
         if ($accountId) {
             $account = $this->getDoctrine()->getRepository('OroCRMAccountBundle:Account')->find($accountId);
