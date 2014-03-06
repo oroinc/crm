@@ -15,7 +15,7 @@ class TaskController extends SoapController
      * @Soap\Method("getTasks")
      * @Soap\Param("page", phpType="int")
      * @Soap\Param("limit", phpType="int")
-     * @Soap\Result(phpType = "OroCRM\Bundle\TaskBundle\Entity\Task[]")
+     * @Soap\Result(phpType = "OroCRM\Bundle\TaskBundle\Entity\TaskSoap[]")
      */
     public function cgetAction($page = 1, $limit = 10)
     {
@@ -25,7 +25,7 @@ class TaskController extends SoapController
     /**
      * @Soap\Method("getTask")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "OroCRM\Bundle\TaskBundle\Entity\Task")
+     * @Soap\Result(phpType = "OroCRM\Bundle\TaskBundle\Entity\TaskSoap")
      */
     public function getAction($id)
     {
@@ -34,7 +34,7 @@ class TaskController extends SoapController
 
     /**
      * @Soap\Method("createTask")
-     * @Soap\Param("task", phpType = "OroCRM\Bundle\TaskBundle\Entity\Task")
+     * @Soap\Param("task", phpType = "OroCRM\Bundle\TaskBundle\Entity\TaskSoap")
      * @Soap\Result(phpType = "int")
      */
     public function createAction($task)
@@ -45,7 +45,7 @@ class TaskController extends SoapController
     /**
      * @Soap\Method("updateTask")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("task", phpType = "OroCRM\Bundle\TaskBundle\Entity\Task")
+     * @Soap\Param("task", phpType = "OroCRM\Bundle\TaskBundle\Entity\TaskSoap")
      * @Soap\Result(phpType = "boolean")
      */
     public function updateAction($id, $task)
