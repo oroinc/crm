@@ -16,6 +16,15 @@ class TaskControllerTest extends WebTestCase
     /** @var Client */
     protected $client;
 
+    protected $task = [
+        'subject' => 'New task',
+        'description' => 'New description',
+        'dueDate' => '2014-03-04T20:00:00+0000',
+        'taskPriority' => 'high',
+        'assignedTo' => '1',
+        'owner' => '1'
+    ];
+
     public function setUp()
     {
         $this->client = static::createClient([], ToolsAPI::generateWsseHeader());
@@ -23,17 +32,8 @@ class TaskControllerTest extends WebTestCase
 
     public function testCreate()
     {
-        $this->markTestSkipped();
-
         $request = [
-            'task' => [
-                'subject' => 'New task',
-                'description' => 'New description',
-                'dueDate' => '2014-03-04T20:00:00+0000',
-                'taskPriority' => 'high',
-                'assignedTo' => '1',
-                'owner' => '1'
-            ]
+            'task' => $this->task
         ];
 
         $this->client->request(
@@ -44,18 +44,16 @@ class TaskControllerTest extends WebTestCase
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 201);
 
-        $task = json_decode($result->getContent(), true);
-        $this->assertEquals($task['subject'], $request['task']['subject']);
+        $task = ToolsAPI::jsonToArray($result->getContent());
+
+        return $task['id'];
     }
 
     /**
      * @depends testCreate
-     * @return array
      */
     public function testCget()
     {
-        $this->markTestSkipped();
-
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_api_get_tasks'),
@@ -68,19 +66,17 @@ class TaskControllerTest extends WebTestCase
 
         $tasks = ToolsAPI::jsonToArray($result->getContent());
         $this->assertCount(1, $tasks);
-
-        return reset($tasks);
     }
 
     /**
-     * @depends testCget
-     * @param array $expectedTask
+     * @depends testCreate
+     * @param integer $id
      */
-    public function testGet($expectedTask)
+    public function testGet($id)
     {
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_api_get_task', ['id' => $expectedTask['id']])
+            $this->client->generate('orocrm_api_get_task', ['id' => $id]),
             [],
             [],
             ToolsAPI::generateWsseHeader()
@@ -88,40 +84,53 @@ class TaskControllerTest extends WebTestCase
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
-        $task = json_decode($result->getContent(), true);
-        $this->assertEquals($expectedTask, $task);
+        $task = ToolsAPI::jsonToArray($result->getContent());
+        $this->assertEquals($this->task['subject'], $task['subject']);
     }
 
     /**
-     * @depends testCget
-     * @param array $task
+     * @depends testCreate
+     * @param integer $id
      */
-    public function testPut($task)
+    public function testPut($id)
     {
-        $updatedTask = ['subject' => 'Updated subject'];
+        $updatedTask =  array_merge($this->task, ['subject' => 'Updated subject']);
         $this->client->request(
             'PUT',
-            $this->client->generate('orocrm_api_put_task', ['id' => $task['id']]),
-            ['task' => $updatedTask],
+            $this->client->generate('orocrm_api_put_task', ['id' => $id]),
+            ['task' =>$updatedTask],
             [],
             ToolsAPI::generateWsseHeader()
         );
         $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 204);
+
+        $this->client->request(
+            'GET',
+            $this->client->generate('orocrm_api_get_task', ['id' => $id])
+        );
+        $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
-        $task = json_decode($result->getContent(), true);
-        $this->assertEquals($task['subject'], $updatedTask['subject']);
+        $task = ToolsAPI::jsonToArray($result->getContent());
+        $this->assertEquals(
+            'Updated subject',
+            $task['subject']
+        );
+
+        $task = ToolsAPI::jsonToArray($result->getContent());
+        $this->assertEquals('Updated subject', $task['subject']);
     }
 
     /**
-     * @depends testCget
-     * @param array $task
+     * @depends testCreate
+     * @param integer $id
      */
-    public function testDelete($task)
+    public function testDelete($id)
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('orocrm_api_delete_task', ['id' => $task['id']]),
+            $this->client->generate('orocrm_api_delete_task', ['id' => $id]),
             [],
             [],
             ToolsAPI::generateWsseHeader()
@@ -130,7 +139,7 @@ class TaskControllerTest extends WebTestCase
         ToolsAPI::assertJsonResponse($result, 204);
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_api_get_task', ['id' => $task['id']]),
+            $this->client->generate('orocrm_api_get_task', ['id' => $id]),
             [],
             [],
             ToolsAPI::generateWsseHeader()

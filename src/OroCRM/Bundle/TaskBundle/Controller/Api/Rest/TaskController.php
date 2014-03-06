@@ -49,8 +49,8 @@ class TaskController extends RestController implements ClassResourceInterface
      */
     public function cgetAction()
     {
-        $page = (int) $this->getRequest()->get('page');
-        $limit = (int) $this->getRequest()->get('limit');
+        $page = (int) $this->getRequest()->get('page', 1);
+        $limit = (int) $this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
 
         return $this->handleGetListRequest($page, $limit);
     }
