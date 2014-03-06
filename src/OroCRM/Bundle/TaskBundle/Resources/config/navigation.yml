@@ -17,7 +17,7 @@ oro_menu_config:
     tree:
         application_menu:
             children:
-                customers_tab:
+                system_tab:
                     children:
                         task_list: ~
         account_activity_tab_panel:

@@ -5,9 +5,9 @@ parameters:
     #form
     orocrm_task.form.type.task.class:        OroCRM\Bundle\TaskBundle\Form\Type\TaskType
     orocrm_task.form.type.task_api.class:    OroCRM\Bundle\TaskBundle\Form\Type\TaskApiType
-
-    orocrm_task.manager.api.class:           Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_task.form.handler.task_api.class: OroCRM\Bundle\TaskBundle\Form\Handler\TaskHandler
+    orocrm_task.manager.api.class:           Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
 services:
     orocrm_task.form.type.task:
         class: %orocrm_task.form.type.task.class%
@@ -17,7 +17,7 @@ services:
     orocrm_task.form.type.task_api:
         class: %orocrm_task.form.type.task_api.class%
         tags:
-            - { name: form.type, alias: orocrm_task_api }
+            - { name: form.type, alias: task }
 
     #data grid events
     orocrm_task.event_listener.account_tasks_grid_listener:
@@ -67,4 +67,4 @@ services:
         factory_service: form.factory
         arguments:
             - 'task'
-            - 'orocrm_task_api'
+            - 'task'

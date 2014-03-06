@@ -12,13 +12,26 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
  */
 class TaskControllerTest extends WebTestCase
 {
-    /** @var Client */
+    /**
+     * @var Client
+     */
     protected $client;
+
+    /**
+     * @var array
+     */
+    protected $task = [
+        'subject' => 'New task',
+        'description' => 'New description',
+        'dueDate' => '2014-03-04T20:00:00+0000',
+        'taskPriority' => 'high',
+        'assignedTo' => 1,
+        'owner' => 1
+    ];
+
 
     public function setUp()
     {
-        $this->markTestSkipped();
-
         $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
         $this->client->soap(
             "http://localhost/api/soap",
@@ -30,78 +43,64 @@ class TaskControllerTest extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return integer
      */
     public function testCreate()
     {
-        $request = array (
-            "name" => 'Task_name_' . mt_rand(),
-            "owner" => '1',
-        );
-
-        $result = $this->client->getSoap()->createTask($request);
+        $result = $this->client->getSoap()->createTask($this->task);
         $this->assertTrue((bool) $result, $this->client->getSoap()->__getLastResponse());
 
-        $request['id'] = $result;
-        return $request;
+        return $result;
     }
 
     /**
-     * @param $request
      * @depends testCreate
-     * @return array
      */
-    public function testGet($request)
+    public function testCget()
     {
-        $tasks = $this->client->getSoap()->getTasks(1, 1000);
+        $tasks = $this->client->getSoap()->getTasks();
         $tasks = ToolsAPI::classToArray($tasks);
-        $taskName = $request['name'];
-        $task = $tasks['item'];
-        if (isset($task[0])) {
-            $task = array_filter(
-                $task,
-                function ($a) use ($taskName) {
-                    return $a['name'] == $taskName;
-                }
-            );
-            $task = reset($task);
-        }
-
-        $this->assertEquals($request['name'], $task['name']);
-        $this->assertEquals($request['id'], $task['id']);
+        $this->assertCount(1, $tasks);
     }
 
     /**
-     * @param $request
+     * @param integer $id
      * @depends testCreate
      */
-    public function testUpdate($request)
+    public function testGet($id)
     {
-        $taskUpdate = $request;
-        unset($taskUpdate['id']);
-        $taskUpdate['name'] .= '_Updated';
-
-        $result = $this->client->getSoap()->updateTask($request['id'], $taskUpdate);
-        $this->assertTrue($result);
-
-        $task = $this->client->getSoap()->getTask($request['id']);
+        $task = $this->client->getSoap()->getTask($id);
         $task = ToolsAPI::classToArray($task);
-
-        $this->assertEquals($taskUpdate['name'], $task['name']);
-
-        return $request;
+        $this->assertEquals($this->task['subject'], $task['subject']);
     }
 
     /**
-     * @param $request
-     * @depends testUpdate
+     * @param integer $id
+     * @depends testCreate
      */
-    public function testDelete($request)
+    public function testUpdate($id)
     {
-        $result = $this->client->getSoap()->deleteTask($request['id']);
+        $task =  array_merge($this->task, ['subject' => 'Updated subject']);
+
+        $result = $this->client->getSoap()->updateTask($id, $task);
         $this->assertTrue($result);
 
-        $this->setExpectedException('\SoapFault', 'Record with ID "' . $request['id'] . '" can not be found');
-        $this->client->getSoap()->getTask($request['id']);
+        $updatedTask = $this->client->getSoap()->getTask($id);
+        $updatedTask = ToolsAPI::classToArray($updatedTask);
+
+        $this->assertEquals($task['subject'], $updatedTask['subject']);
+    }
+
+    /**
+     * @param integer $id
+     * @depends testCreate
+     */
+    public function testDelete($id)
+    {
+        $result = $this->client->getSoap()->deleteTask($id);
+        $this->assertTrue($result);
+
+        $this->setExpectedException('\SoapFault', 'Record with ID "' . $id . '" can not be found');
+        $this->client->getSoap()->getTask($id);
     }
 }

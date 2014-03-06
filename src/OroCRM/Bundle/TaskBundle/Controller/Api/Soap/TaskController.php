@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\TaskBundle\Controller\Api\Soap;
 use Symfony\Component\Form\FormInterface;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
@@ -15,7 +17,8 @@ class TaskController extends SoapController
      * @Soap\Method("getTasks")
      * @Soap\Param("page", phpType="int")
      * @Soap\Param("limit", phpType="int")
-     * @Soap\Result(phpType = "OroCRM\Bundle\TaskBundle\Entity\Task[]")
+     * @Soap\Result(phpType = "OroCRM\Bundle\TaskBundle\Entity\TaskSoap[]")
+     * @AclAncestor("orocrm_task_view")
      */
     public function cgetAction($page = 1, $limit = 10)
     {
@@ -25,7 +28,8 @@ class TaskController extends SoapController
     /**
      * @Soap\Method("getTask")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "OroCRM\Bundle\TaskBundle\Entity\Task")
+     * @Soap\Result(phpType = "OroCRM\Bundle\TaskBundle\Entity\TaskSoap")
+     * @AclAncestor("orocrm_task_view")
      */
     public function getAction($id)
     {
@@ -34,8 +38,9 @@ class TaskController extends SoapController
 
     /**
      * @Soap\Method("createTask")
-     * @Soap\Param("task", phpType = "OroCRM\Bundle\TaskBundle\Entity\Task")
+     * @Soap\Param("task", phpType = "OroCRM\Bundle\TaskBundle\Entity\TaskSoap")
      * @Soap\Result(phpType = "int")
+     * @AclAncestor("orocrm_task_create")
      */
     public function createAction($task)
     {
@@ -45,8 +50,9 @@ class TaskController extends SoapController
     /**
      * @Soap\Method("updateTask")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("task", phpType = "OroCRM\Bundle\TaskBundle\Entity\Task")
+     * @Soap\Param("task", phpType = "OroCRM\Bundle\TaskBundle\Entity\TaskSoap")
      * @Soap\Result(phpType = "boolean")
+     * @AclAncestor("orocrm_task_update")
      */
     public function updateAction($id, $task)
     {
@@ -57,6 +63,7 @@ class TaskController extends SoapController
      * @Soap\Method("deleteTask")
      * @Soap\Param("id", phpType = "int")
      * @Soap\Result(phpType = "boolean")
+     * @AclAncestor("orocrm_task_delete")
      */
     public function deleteAction($id)
     {
@@ -76,7 +83,7 @@ class TaskController extends SoapController
      */
     public function getForm()
     {
-        return $this->container->get('orocrm_task.form.type.task_api');
+        return $this->container->get('orocrm_task.form.api');
     }
 
     /**
@@ -85,5 +92,19 @@ class TaskController extends SoapController
     public function getFormHandler()
     {
         return $this->container->get('orocrm_task.form.handler.task_api');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function fixFormData(array &$data, $entity)
+    {
+        parent::fixFormData($data, $entity);
+
+        unset($data['id']);
+        unset($data['createdAt']);
+        unset($data['updatedAt']);
+
+        return true;
     }
 }

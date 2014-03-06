@@ -4,13 +4,10 @@ namespace OroCRM\Bundle\TaskBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use JMS\Serializer\Annotation as JMS;
-
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
@@ -55,7 +52,6 @@ class Task extends ExtendTask
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @JMS\Type("integer")
      */
     protected $id;
 
@@ -70,7 +66,6 @@ class Task extends ExtendTask
      *      "email"={"available_in_template"=true}
      *  }
      * )
-     * @JMS\Type("string")
      */
     protected $subject;
 
@@ -85,7 +80,6 @@ class Task extends ExtendTask
      *      "email"={"available_in_template"=true}
      *  }
      * )
-     * @JMS\Type("string")
      */
     protected $description;
 
@@ -100,7 +94,6 @@ class Task extends ExtendTask
      *      "email"={"available_in_template"=true}
      *  }
      * )
-     * @JMS\Type("dateTime")
      */
     protected $dueDate;
 
@@ -118,8 +111,6 @@ class Task extends ExtendTask
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="assigned_to_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned("getUsername")
-     * @JMS\Type("integer")
-     * @JMS\Accessor(getter="getAssigneeToId")
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -135,8 +126,6 @@ class Task extends ExtendTask
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
-     * @JMS\Type("integer")
-     * @JMS\Accessor(getter="getRelatedAccountId")
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -152,8 +141,6 @@ class Task extends ExtendTask
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
-     * @JMS\Type("integer")
-     * @JMS\Accessor(getter="getRelatedContactId")
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -169,8 +156,6 @@ class Task extends ExtendTask
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned("getUsername")
-     * @JMS\Type("integer")
-     * @JMS\Accessor(getter="getOwnerId")
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -179,32 +164,6 @@ class Task extends ExtendTask
      * )
      */
     protected $owner;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime")
-     * @JMS\Type("DateTime")
-     * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
-     * )
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", nullable=true)
-     * @JMS\Type("DateTime")
-     * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
-     * )
-     */
-    protected $updatedAt;
 
     /**
      * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
@@ -225,6 +184,30 @@ class Task extends ExtendTask
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowStep;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     * @ConfigField(
+     *  defaultValues={
+     *      "email"={"available_in_template"=true}
+     *  }
+     * )
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     * @ConfigField(
+     *  defaultValues={
+     *      "email"={"available_in_template"=true}
+     *  }
+     * )
+     */
+    protected $updatedAt;
 
     /**
      * @param int $id
@@ -317,7 +300,7 @@ class Task extends ExtendTask
     /**
      * @param TaskPriority $taskPriority
      */
-    public function setTaskPriority(TaskPriority $taskPriority)
+    public function setTaskPriority($taskPriority)
     {
         $this->taskPriority = $taskPriority;
     }
@@ -349,7 +332,7 @@ class Task extends ExtendTask
     /**
      * @param User $assignedTo
      */
-    public function setAssignedTo(User $assignedTo = null)
+    public function setAssignedTo($assignedTo = null)
     {
         $this->assignedTo = $assignedTo;
     }
@@ -373,7 +356,7 @@ class Task extends ExtendTask
     /**
      * @param Account $account
      */
-    public function setRelatedAccount(Account $account = null)
+    public function setRelatedAccount($account = null)
     {
         $this->relatedAccount = $account;
     }
@@ -397,7 +380,7 @@ class Task extends ExtendTask
     /**
      * @param Contact $contact
      */
-    public function setRelatedContact(Contact $contact = null)
+    public function setRelatedContact($contact = null)
     {
         $this->relatedContact = $contact;
     }
@@ -429,26 +412,9 @@ class Task extends ExtendTask
     /**
      * @param User $owner
      */
-    public function setOwner(User $owner = null)
+    public function setOwner($owner = null)
     {
         $this->owner = $owner;
-    }
-
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 
     /**
@@ -481,6 +447,22 @@ class Task extends ExtendTask
     public function getWorkflowStep()
     {
         return $this->workflowStep;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 
     /**
