@@ -164,7 +164,7 @@ class Task extends ExtendTask
      * @var Account
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="relatedAccount", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      * @JMS\Type("integer")
      * @JMS\Accessor(getter="getRelatedAccountId")
@@ -181,7 +181,7 @@ class Task extends ExtendTask
      * @var Contact
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
-     * @ORM\JoinColumn(name="relatedContact", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      * @JMS\Type("integer")
      * @JMS\Accessor(getter="getRelatedContactId")
