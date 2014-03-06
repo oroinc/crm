@@ -2,7 +2,7 @@ datagrid:
     tasks-grid:
         source:
             type: orm
-            acl_resource: ~ #orocrm_task_view
+            acl_resource: orocrm_task_view
             query:
                 select:
                     - task.id
@@ -16,6 +16,7 @@ datagrid:
                     - owner.id as reporterId
                     - task.createdAt
                     - task.updatedAt
+                    - workflowStep.label as workflowStepLabel
                 from:
                     - { table: %orocrm_task.entity.class%, alias: task }
                 join:
@@ -23,17 +24,17 @@ datagrid:
                         - { join: task.taskPriority, alias: taskPriority }
                         - { join: task.assignedTo, alias: assignedTo }
                         - { join: task.owner, alias: owner }
+                        - { join: task.workflowStep, alias: workflowStep }
         columns:
             subject:
-                type: twig
                 label: orocrm.task.subject.label
-                frontend_type: html
-                template: OroCRMTaskBundle:Task:Datagrid/Property/subject.html.twig
             dueDate:
                 label: orocrm.task.dueDate.label
                 frontend_type: datetime
+            workflowStepLabel:
+                label: orocrm.task.workflowStep.label
             priorityLabel:
-                label: orocrm.task.priority.label
+                label: orocrm.task.taskPriority.label
             assignee:
                 type: twig
                 label: orocrm.task.assignedTo.label
@@ -50,20 +51,6 @@ datagrid:
             updatedAt:
                 label:   orocrm.task.updatedAt.label
                 frontend_type: datetime
-        properties:
-            id: ~
-            view_link:
-                type:       url
-                route:      orocrm_task_view
-                params:     [ id ]
-            update_link:
-                type:       url
-                route:      orocrm_task_update
-                params:     [ id ]
-            delete_link:
-                type:       url
-                route:      orocrm_api_delete_task
-                params:     [ id ]
         sorters:
             columns:
                 subject:
@@ -81,7 +68,7 @@ datagrid:
                 updatedAt:
                     data_name: task.updatedAt
             default:
-                createdAt: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
+                createdAt: DESC
         filters:
             columns:
                 subject:
@@ -105,29 +92,40 @@ datagrid:
                 updatedAt:
                     type:      datetime
                     data_name: task.updatedAt
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_task_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_task_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      orocrm_api_delete_task
+                params:     [ id ]
         actions:
             view:
-                type: navigate
-                acl_resource: orocrm_task_view
-                label: orocrm.task.datagrid.view
-                icon: user
-                link: view_link
-                rowAction: true
+                type:          navigate
+                acl_resource:  orocrm_task_view
+                label:         View
+                icon:          user
+                link:          view_link
+                rowAction:     true
             update:
-                type: navigate
-                acl_resource: orocrm_task_update
-                label: orocrm.task.datagrid.update
-                icon: edit
-                link: update_link
+                type:          navigate
+                acl_resource:  orocrm_task_update
+                label:         Update
+                icon:          edit
+                link:          update_link
             delete:
-                type: delete
-                acl_resource: orocrm_task_delete
-                label: orocrm.task.datagrid.delete
-                icon: trash
-                link: delete_link
-        options:
-            entityHint: task
-            export: true
+                type:          delete
+                acl_resource:  orocrm_task_delete
+                label:         Delete
+                icon:          trash
+                link:          delete_link
 
     task-account-tasks-grid:
         extend: tasks-grid

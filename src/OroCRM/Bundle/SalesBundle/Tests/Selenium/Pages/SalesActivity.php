@@ -12,9 +12,9 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 class SalesActivity extends AbstractPageEntity
 {
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $activityname;
+    protected $activityName;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $startdate;
+    protected $startDate;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $owner;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
@@ -33,17 +33,17 @@ class SalesActivity extends AbstractPageEntity
      */
     public function setActivityName($name)
     {
-        $this->activityname = $this->test->byId('oro_workflow_transition_sales_funnel_name');
-        $this->activityname->clear();
-        $this->activityname->value($name);
+        $this->activityName = $this->test->byId('oro_workflow_transition_sales_funnel_name');
+        $this->activityName->clear();
+        $this->activityName->value($name);
         return $this;
     }
 
     public function setStartDate($date)
     {
-        $this->startdate = $this->test->byId('oro_workflow_transition_sales_funnel_name');
-        $this->startdate->clear();
-        $this->startdate->value($date);
+        $this->startDate = $this->test->byId('oro_workflow_transition_sales_funnel_name');
+        $this->startDate->clear();
+        $this->startDate->value($date);
         return $this;
     }
 
@@ -56,7 +56,7 @@ class SalesActivity extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$owner}')]",
-            "Owner autocoplete doesn't return search value"
+            "Owner autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$owner}')]")->click();
 
@@ -72,25 +72,40 @@ class SalesActivity extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$lead}')]",
-            "Lead autocoplete doesn't return search value"
+            "Lead autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$lead}')]")->click();
 
         return $this;
     }
 
-    public function setOpportunity($opportunity)
+    public function selectEntity($entity, $opportunity)
     {
-        $this->opportunity = $this->test->byXpath("//div[@id='s2id_oro_workflow_transition_opportunity']/a");
+        $this->opportunity = $this->test->byXpath(
+            "//div[@class='responsive-section create-select-entity create clearfix']" .
+            "//button[normalize-space(.) = 'Select Existing']"
+        );
         $this->opportunity->click();
         $this->waitForAjax();
-        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($opportunity);
-        $this->waitForAjax();
-        $this->assertElementPresent(
-            "//div[@id='select2-drop']//div[contains(., '{$opportunity}')]",
-            "Opportunity autocoplete doesn't return search value"
+        $this->test->byXpath("//div[@class='filter-container']//button[contains(., '{$entity} name')]")->click();
+
+        $criteria = $this->test->byXPath(
+            "//div[contains(@class, 'filter-box')]//div[contains(@class, 'filter-item')]"
+            . "[button[contains(.,'{$entity} name')]]/div[contains(@class, 'filter-criteria')]"
         );
-        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$opportunity}')]")->click();
+
+        $filter = $criteria->element($this->test->using('xpath')->value("div/div/div/input[@name='value']"));
+
+        $filter->clear();
+        $filter->value($opportunity);
+        $criteria->element($this->test->using('xpath')->value("div/button[contains(@class, 'filter-update')]"))
+            ->click();
+        $this->waitForAjax();
+        $this->test->byXpath(
+            "//table[@class='grid table-hover table table-bordered table-condensed']//td[contains(., '{$opportunity}')]"
+        )->click();
+        $this->waitPageToLoad();
+        $this->waitForAjax();
 
         return $this;
     }

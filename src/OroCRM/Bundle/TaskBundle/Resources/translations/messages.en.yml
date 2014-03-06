@@ -9,6 +9,7 @@ orocrm:
         subject.label:              Subject
         description.label:          Description
         dueDate.label:              Due date
+        workflowStep.label:         Status
         taskPriority.label:         Priority
         assignedTo.label:           Assignee
         relatedAccount.label:       Account
@@ -17,11 +18,17 @@ orocrm:
         createdAt.label:            Created At
         updatedAt.label:            Updated At
 
+        datagrid:
+            view: View
+            update: Update
+            delete: Delete
+
         block:
             general: General Information
             additional: Additional Information
 
         new_entity: New task
+        add_entity: Add task
         saved_message: Task saved
 
         widgets:

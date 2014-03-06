@@ -2,47 +2,152 @@
 
 namespace OroCRM\Bundle\TaskBundle\Controller\Api\Rest;
 
-use FOS\Rest\Util\Codes;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Routing\ClassResourceInterface;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
+use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\RouteResource;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Routing\ClassResourceInterface;
+
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use OroCRM\Bundle\TaskBundle\Entity\Task;
+
+use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
 /**
  * @RouteResource("task")
  * @NamePrefix("orocrm_api_")
  */
-class TaskController extends FOSRestController implements ClassResourceInterface
+class TaskController extends RestController implements ClassResourceInterface
 {
     /**
-     * Delete task
+     * REST GET list
+     *
+     * @QueryParam(
+     *      name="page",
+     *      requirements="\d+",
+     *      nullable=true,
+     *      description="Page number, starting from 1. Defaults to 1."
+     * )
+     * @QueryParam(
+     *      name="limit",
+     *      requirements="\d+",
+     *      nullable=true,
+     *      description="Number of items per page. defaults to 10."
+     * )
+     * @ApiDoc(
+     *      description="Get all task items",
+     *      resource=true
+     * )
+     * @AclAncestor("orocrm_task_view")
+     * @return Response
+     */
+    public function cgetAction()
+    {
+        $page = (int) $this->getRequest()->get('page');
+        $limit = (int) $this->getRequest()->get('limit');
+
+        return $this->handleGetListRequest($page, $limit);
+    }
+
+    /**
+     * REST GET item
+     *
+     * @param string $id
      *
      * @ApiDoc(
-     *      description="Delete task",
-     *      resource=true,
-     *      requirements={
-     *          {"name"="id", "dataType"="integer"},
-     *      }
+     *      description="Get task item",
+     *      resource=true
+     * )
+     * @AclAncestor("orocrm_task_view")
+     * @return Response
+     */
+    public function getAction($id)
+    {
+        return $this->handleGetRequest($id);
+    }
+
+    /**
+     * REST PUT
+     *
+     * @param int $id Task item id
+     *
+     * @ApiDoc(
+     *      description="Update task",
+     *      resource=true
+     * )
+     * @AclAncestor("orocrm_task_update")
+     * @return Response
+     */
+    public function putAction($id)
+    {
+        return $this->handleUpdateRequest($id);
+    }
+
+    /**
+     * Create new task
+     *
+     * @ApiDoc(
+     *      description="Create new task",
+     *      resource=true
+     * )
+     * @AclAncestor("orocrm_task_create")
+     */
+    public function postAction()
+    {
+        return $this->handleCreateRequest();
+    }
+
+    /**
+     * REST DELETE
+     *
+     * @param int $id
+     *
+     * @ApiDoc(
+     *      description="Delete Task",
+     *      resource=true
      * )
      * @Acl(
      *      id="orocrm_task_delete",
      *      type="entity",
-     *      class="OroCRMTaskBundle:Task",
-     *      permission="DELETE"
+     *      permission="DELETE",
+     *      class="OroCRMTaskBundle:Task"
      * )
+     * @return Response
      */
-    public function deleteAction(Task $id)
+    public function deleteAction($id)
     {
-        $this->getDoctrine()->getManager()->remove($id);
-        $this->getDoctrine()->getManager()->flush();
+        return $this->handleDeleteRequest($id);
+    }
 
-        return $this->handleView($this->view(null, Codes::HTTP_NO_CONTENT));
+    /**
+     * Get entity Manager
+     *
+     * @return ApiEntityManager
+     */
+    public function getManager()
+    {
+        return $this->get('orocrm_task.manager.api');
+    }
+
+    /**
+     * @return FormInterface
+     */
+    public function getForm()
+    {
+        return $this->get('orocrm_task.form.type.task_api');
+    }
+
+    /**
+     * @return ApiFormHandler
+     */
+    public function getFormHandler()
+    {
+        return $this->get('orocrm_task.form.handler.task_api');
     }
 }
