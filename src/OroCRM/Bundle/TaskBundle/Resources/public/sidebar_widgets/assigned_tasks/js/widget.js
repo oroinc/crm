@@ -1,8 +1,8 @@
 /*jslint nomen: true, vars: true*/
 /*global define*/
 
-define(['jquery', 'underscore', 'backbone'],
-    function ($, _, Backbone) {
+define(['jquery', 'underscore', 'backbone', 'routing'],
+    function ($, _, Backbone, routing) {
         return { ContentView: Backbone.View.extend({
             template: _.template('<div class="tasks-list-wrapper" style="position: relative;"><%= content %></div>'),
 
@@ -14,7 +14,7 @@ define(['jquery', 'underscore', 'backbone'],
             render: function () {
                 var view = this;
 
-                $.get("http://local_oro/app_dev.php/task/widget/sidebar-tasks", {}, function(content){
+                $.get(routing.generate('orocrm_task_widget_sidebar_tasks'), {}, function(content){
                     view.$el.html(view.template({'content':content}));
                 });
                 return view;
