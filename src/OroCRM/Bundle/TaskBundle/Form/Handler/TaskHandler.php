@@ -11,7 +11,7 @@ use Oro\Bundle\TagBundle\Entity\TagManager;
 use Oro\Bundle\TagBundle\Form\Handler\TagHandlerInterface;
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 
-class TaskHandler implements TagHandlerInterface
+class TaskHandler
 {
     /**
      * @var FormInterface
@@ -27,11 +27,6 @@ class TaskHandler implements TagHandlerInterface
      * @var ObjectManager
      */
     protected $manager;
-
-    /**
-     * @var TagManager
-     */
-    protected $tagManager;
 
     /**
      *
@@ -78,14 +73,5 @@ class TaskHandler implements TagHandlerInterface
     {
         $this->manager->persist($entity);
         $this->manager->flush();
-        $this->tagManager->saveTagging($entity);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTagManager(TagManager $tagManager)
-    {
-        $this->tagManager = $tagManager;
     }
 }
