@@ -23,7 +23,7 @@ class LoadReportData extends AbstractFixture
             'type' => 'table',
             'owner' => 'Acme, General',
             'entity' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
-            'definition' => '{"filters":[{"columnName":"probability","criterion":{"filter":"number","data":{"value":0,"type":"4"}}},"AND",{"columnName":"probability","criterion":{"filter":"number","data":{"value":1,"type":"4"}}}],"grouping_columns":[{"name":"probability","oro_report_form[grouping][columnNames]":"probability"}],"columns":[{"name":"budgetAmount","label":"Budget amount","func":{"name":"Sum","group_type":"aggregates","group_name":"number"},"sorting":""},{"name":"probability","label":"Probability","func":{"name":"Max","group_type":"aggregates","group_name":"number"},"sorting":"DESC"}]}'
+            'definition' => '{"filters":[{"columnName":"probability","criterion":{"filter":"number","data":{"value":0,"type":"4"}}},"AND",{"columnName":"probability","criterion":{"filter":"number","data":{"value":1,"type":"4"}}}],"grouping_columns":[{"name":"probability","oro_report_form[grouping][columnNames]":"probability"}],"columns":[{"name":"budgetAmount","label":"Budget amount","func":{"name":"Sum","group_type":"aggregates","group_name":"number"},"sorting":""},{"name":"probability","label":"Probability","func":"","sorting":"DESC"}]}'
         ),
         array(
             'name' => 'Leads by Geography',
