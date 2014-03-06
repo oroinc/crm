@@ -87,7 +87,10 @@ class SalesActivity extends AbstractPageEntity
         );
         $this->opportunity->click();
         $this->waitForAjax();
-        $this->test->byXpath("//div[@class='filter-container']//button[contains(., '{$entity} name')]")->click();
+        $this->test->byXpath(
+            "//div[contains(@class, 'filter-box')]//div[contains(@class, 'filter-item')]" .
+            "/button[contains(., '{$entity} name')]"
+        )->click();
         $this->waitForAjax();
         $criteria = $this->test->byXPath(
             "//div[contains(@class, 'filter-box')]//div[contains(@class, 'filter-item')]"
