@@ -38,6 +38,6 @@ class TaskApiType extends TaskType
      */
     public function getName()
     {
-        return 'orocrm_task_api';
+        return 'task';
     }
 }

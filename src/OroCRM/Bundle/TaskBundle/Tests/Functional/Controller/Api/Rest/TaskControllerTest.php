@@ -13,16 +13,21 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
  */
 class TaskControllerTest extends WebTestCase
 {
-    /** @var Client */
+    /**
+     * @var Client
+     */
     protected $client;
 
+    /**
+     * @var array
+     */
     protected $task = [
         'subject' => 'New task',
         'description' => 'New description',
         'dueDate' => '2014-03-04T20:00:00+0000',
         'taskPriority' => 'high',
-        'assignedTo' => '1',
-        'owner' => '1'
+        'assignedTo' => 1,
+        'owner' => 1
     ];
 
     public function setUp()
@@ -119,7 +124,7 @@ class TaskControllerTest extends WebTestCase
         );
 
         $task = ToolsAPI::jsonToArray($result->getContent());
-        $this->assertEquals('Updated subject', $task['subject']);
+        $this->assertEquals($updatedTask['subject'], $task['subject']);
     }
 
     /**
