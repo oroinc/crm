@@ -13,9 +13,21 @@ class LoadTaskPriority extends AbstractFixture
      * @var array
      */
     protected $data = array(
-        array('label'=>'Low Priority', 'name' => 'low'),
-        array('label'=>'Normal Priority', 'name' => 'normal'),
-        array('label'=>'High Priority', 'name' => 'high')
+        array(
+            'label' => 'Low',
+            'name' => 'low',
+            'order' => 1,
+        ),
+        array(
+            'label' => 'Normal',
+            'name' => 'normal',
+            'order' => 2,
+        ),
+        array(
+            'label' => 'High',
+            'name' => 'high',
+            'order' => 3,
+        )
     );
 
     /**
@@ -27,6 +39,7 @@ class LoadTaskPriority extends AbstractFixture
             if (!$this->isPriorityExist($manager, $priority['name'])) {
                 $entity = new TaskPriority($priority['name']);
                 $entity->setLabel($priority['label']);
+                $entity->setOrder($priority['order']);
                 $manager->persist($entity);
             }
         }

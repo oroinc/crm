@@ -58,7 +58,7 @@ datagrid:
                 dueDate:
                     data_name: task.dueDate
                 priorityLabel:
-                    data_name: priorityLabel
+                    data_name: taskPriority.order
                 assignee:
                     data_name: assignee
                 reporter:
@@ -68,7 +68,8 @@ datagrid:
                 updatedAt:
                     data_name: task.updatedAt
             default:
-                createdAt: DESC
+                dueDate: ASC
+                priorityLabel: ASC
         filters:
             columns:
                 subject:
