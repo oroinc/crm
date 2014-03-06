@@ -9,7 +9,9 @@ use OroCRM\Bundle\TaskBundle\Entity\TaskPriority;
 
 class LoadTaskPriority extends AbstractFixture
 {
-
+    /**
+     * @var array
+     */
     protected $data = array(
         array('label'=>'Low Priority', 'name' => 'low'),
         array('label'=>'Normal Priority', 'name' => 'normal'),
