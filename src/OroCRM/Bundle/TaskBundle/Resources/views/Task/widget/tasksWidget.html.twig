@@ -1,0 +1,12 @@
+{%  if tasks|length>0 %}
+<table style="width: 100%; max-width: 300px; overflow: hidden;">
+    {% for task in tasks %}
+        <tr style="height: 30px">
+            <td>{{ loop.index }}.</td>
+            <td><a href="{{ path("orocrm_task_view", {'id':task.id}) }}">{{ task.subject }}</a></td>
+        </tr>
+    {% endfor %}
+</table>
+{% else %}
+    You do not assign a task
+{% endif %}
