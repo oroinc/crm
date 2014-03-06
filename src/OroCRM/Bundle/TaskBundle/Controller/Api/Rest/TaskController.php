@@ -196,4 +196,18 @@ class TaskController extends RestController implements ClassResourceInterface
                 parent::transformEntityField($field, $value);
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function fixFormData(array &$data, $entity)
+    {
+        parent::fixFormData($data, $entity);
+
+        unset($data['id']);
+        unset($data['createdAt']);
+        unset($data['updatedAt']);
+
+        return true;
+    }
 }
