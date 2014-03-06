@@ -78,6 +78,13 @@ datagrid:
                 dueDate:
                     type:      datetime
                     data_name: task.dueDate
+                workflowStepLabel:
+                    type:      entity
+                    data_name: task.workflowStep
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %orocrm_task.entity.class%
                 priorityLabel:
                     type:      string
                     data_name: priorityLabel
