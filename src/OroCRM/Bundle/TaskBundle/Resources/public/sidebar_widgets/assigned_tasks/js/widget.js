@@ -2,12 +2,23 @@
 /*global define*/
 define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/loading-mask'],
     function ($, _, Backbone, routing, LoadingMask) {
+        /**
+         * @export  orotask/widget/assigned-task
+         */
         return { ContentView: Backbone.View.extend({
             template: _.template('<div class="tasks-list-wrapper"><%= content %></div>'),
+            /**
+             * Render tasks widget (without reload from server)
+             * @returns {*}
+             */
             render: function () {
                 this.reloadTasks(true);
                 return this;
             },
+            /**
+             * Reload tasks list
+             * @param {bool} fromCache
+             */
             reloadTasks: function(fromCache){
                 var view = this;
                 var settings = this.model.get('settings');
