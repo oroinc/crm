@@ -45,18 +45,18 @@ class TaskController extends Controller
     }
 
     /**
-     * @Route("/widget/sidebar-tasks/{perPage}", name="orocrm_task_widget_sidebar_tasks")
+     * @Route("/widget/sidebar-tasks/{perPage}", name="orocrm_task_widget_sidebar_tasks", defaults={"perPage" = 10})
      * @AclAncestor("orocrm_task_view")
      * @Template("OroCRMTaskBundle:Task/widget:tasksWidget.html.twig")
      */
-    public function tasksWidgetAction()
+    public function tasksWidgetAction($perPage)
     {
         /**
          * @var TaskRepository $repository
          */
         $repository = $this->getRepository('OroCRM\Bundle\TaskBundle\Entity\Task');
         $id = $this->getUser()->getId();
-        $perPage = (int) $this->getRequest()->get('perPage', 10);
+        $perPage = (int)$perPage;
         $tasks = $repository->getTaskAssignedTo($id, $perPage);
 
         return array('tasks' => $tasks);

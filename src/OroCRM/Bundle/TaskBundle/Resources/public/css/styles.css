@@ -9,17 +9,17 @@
     margin-left: 5%;
     max-width: 80%;
 }
-.task-widget-row:hover{
+.task-widget-row:hover {
     background-color: #E8E8E8;
 }
 .task-widget-row{
-    display: block;
     padding: 3px 0;
     overflow: hidden;
 }
-.task-widget-row span{
+.task-widget-row a{
     display: block;
-    float: right;
-    overflow: hidden;
-    width: 87%;
+}
+.task-date-time{
+    color: #A0A0A0;
+    font-size: 10px;
 }
