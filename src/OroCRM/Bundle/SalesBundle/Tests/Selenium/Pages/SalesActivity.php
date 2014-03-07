@@ -86,6 +86,7 @@ class SalesActivity extends AbstractPageEntity
             "//button[normalize-space(.) = 'Select Existing']"
         );
         $this->opportunity->click();
+        $this->waitPageToLoad();
         $this->waitForAjax();
         $this->test->byXpath(
             "//div[contains(@class, 'filter-box')]//div[contains(@class, 'filter-item')]" .
