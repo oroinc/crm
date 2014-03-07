@@ -57,6 +57,8 @@ datagrid:
                     data_name: task.subject
                 dueDate:
                     data_name: task.dueDate
+                workflowStepLabel:
+                    data_name: workflowStep.stepOrder
                 priorityLabel:
                     data_name: taskPriority.order
                 assignee:
@@ -69,7 +71,6 @@ datagrid:
                     data_name: task.updatedAt
             default:
                 dueDate: ASC
-                priorityLabel: ASC
         filters:
             columns:
                 subject:
