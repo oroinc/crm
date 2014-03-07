@@ -183,8 +183,6 @@ class Order extends BaseOrder
     protected $feedback;
 
     /**
-     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
-     *
      * @var WorkflowItem
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
@@ -193,8 +191,6 @@ class Order extends BaseOrder
     protected $workflowItem;
 
     /**
-     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
-     *
      * @var WorkflowStep
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")

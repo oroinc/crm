@@ -214,8 +214,6 @@ class Opportunity extends ExtendOpportunity
     protected $notes;
 
     /**
-     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
-     *
      * @var WorkflowItem
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
@@ -224,8 +222,6 @@ class Opportunity extends ExtendOpportunity
     protected $workflowItem;
 
     /**
-     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
-     *
      * @var WorkflowStep
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
