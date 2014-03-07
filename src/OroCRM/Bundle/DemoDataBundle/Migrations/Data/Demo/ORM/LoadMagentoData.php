@@ -340,14 +340,17 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $accounts = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
         $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
 
-        $buffer = range(0, 49);
+        $buffer = range(0, 48);
         shuffle($buffer);
-        for ($i = 0; $i < 50; ++$i) {
+        for ($i = 0; $i < 49; ++$i) {
             $birthday  = $this->generateBirthday();
 
             /** @var Contact $contact */
             $contact = $contacts[$buffer[$i]];
             $customer = new Customer();
+            if (is_null($accounts[$buffer[$i]])) {
+                var_dump($buffer[$i]);
+            }
             $customer->setWebsite($website)
                 ->setChannel($channel)
                 ->setStore($store)

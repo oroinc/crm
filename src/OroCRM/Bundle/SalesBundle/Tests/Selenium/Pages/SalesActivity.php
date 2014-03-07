@@ -79,30 +79,30 @@ class SalesActivity extends AbstractPageEntity
         return $this;
     }
 
-    public function selectEntity($entity, $opportunity)
+    public function selectEntity($type, $entity)
     {
         $this->opportunity = $this->test->byXpath(
             "//div[@class='responsive-section create-select-entity create clearfix']" .
             "//button[normalize-space(.) = 'Select Existing']"
         );
         $this->opportunity->click();
+        $this->waitPageToLoad();
         $this->waitForAjax();
-        $this->test->byXpath("//div[@class='filter-container']//button[contains(., '{$entity} name')]")->click();
+        $this->test->byXpath("//div[@class='filter-container']//button[contains(., '{$type} name')]")->click();
+        $this->waitForAjax();
 
-        $criteria = $this->test->byXPath(
-            "//div[contains(@class, 'filter-box')]//div[contains(@class, 'filter-item')]"
-            . "[button[contains(.,'{$entity} name')]]/div[contains(@class, 'filter-criteria')]"
+        $filter = $this->test->byXpath(
+            "//div[contains(@class, 'filter-item oro-drop open-filter' )]//input"
         );
 
-        $filter = $criteria->element($this->test->using('xpath')->value("div/div/div/input[@name='value']"));
-
         $filter->clear();
-        $filter->value($opportunity);
-        $criteria->element($this->test->using('xpath')->value("div/button[contains(@class, 'filter-update')]"))
-            ->click();
+        $filter->value($entity);
+        $this->test->byXPath(
+            "//div[contains(@class, 'filter-item oro-drop open-filter' )]//button[contains(., 'Update')]"
+        )->click();
         $this->waitForAjax();
         $this->test->byXpath(
-            "//table[@class='grid table-hover table table-bordered table-condensed']//td[contains(., '{$opportunity}')]"
+            "//table[@class='grid table-hover table table-bordered table-condensed']//td[contains(., '{$entity}')]"
         )->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
@@ -115,7 +115,7 @@ class SalesActivity extends AbstractPageEntity
         $this->test->byXpath("//button[@id='save-and-transit']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
-        return $this;
+        return new Workflow($this->test);
     }
 
     public function edit()
