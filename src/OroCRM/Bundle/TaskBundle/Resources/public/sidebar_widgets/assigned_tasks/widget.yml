@@ -1,6 +1,6 @@
 title: "Tasks list"
 icon: "bundles/orocrmtask/sidebar_widgets/assigned_tasks/img/icon.ico"
-module: 'orocrm/sidebar/widget/assigned_tasks'
+module: "orocrm/sidebar/widget/assigned_tasks"
 placement: "both"
 settings:
     perPage: 10
