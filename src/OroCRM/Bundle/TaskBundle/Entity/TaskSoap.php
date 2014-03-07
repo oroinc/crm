@@ -17,7 +17,7 @@ class TaskSoap extends Task implements SoapEntityInterface
     protected $id;
 
     /**
-     * @Soap\ComplexType("string", nillable=false)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $subject;
 
@@ -27,17 +27,17 @@ class TaskSoap extends Task implements SoapEntityInterface
     protected $description;
 
     /**
-     * @Soap\ComplexType("dateTime", nillable=false)
+     * @Soap\ComplexType("dateTime", nillable=true)
      */
     protected $dueDate;
 
     /**
-     * @Soap\ComplexType("string", nillable=false)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $taskPriority;
 
     /**
-     * @Soap\ComplexType("int", nillable=false)
+     * @Soap\ComplexType("int", nillable=true)
      */
     protected $assignedTo;
 
@@ -52,7 +52,7 @@ class TaskSoap extends Task implements SoapEntityInterface
     protected $relatedContact;
 
     /**
-     * @Soap\ComplexType("int", nillable=false)
+     * @Soap\ComplexType("int", nillable=true)
      */
     protected $owner;
 
@@ -85,15 +85,28 @@ class TaskSoap extends Task implements SoapEntityInterface
         $this->subject = $task->subject;
         $this->description = $task->description;
         $this->dueDate = $task->dueDate;
-        $this->dueDate = $task->dueDate;
         $this->taskPriority = $task->taskPriority ? $task->taskPriority->getName() : null;
-        $this->assignedTo = $task->taskPriority ? $task->assignedTo->getId() : null;
-        $this->relatedAccount = $task->relatedAccount ? $task->relatedAccount->getId() : null;
-        $this->relatedContact = $task->relatedContact ? $task->relatedContact->getId() : null;
-        $this->owner = $task->owner ? $task->owner->getId() : null;
+        $task->assignedTo = $this->getEntityId($task->assignedTo);
+        $task->relatedAccount = $this->getEntityId($task->relatedAccount);
+        $task->relatedContact = $this->getEntityId($task->relatedContact);
+        $task->owner = $this->getEntityId($task->owner);
         $this->createdAt = $task->createdAt;
         $this->updatedAt = $task->updatedAt;
-        $this->workflowItem = $task->workflowItem ? $task->workflowItem->getId() : null;
-        $this->workflowStep = $task->workflowStep ? $task->workflowStep->getId() : null;
+        $task->workflowItem = $this->getEntityId($task->workflowItem);
+        $task->workflowStep = $this->getEntityId($task->workflowStep);
+    }
+
+    /**
+     * @param object $entity
+     *
+     * @return integer|null
+     */
+    protected function getEntityId($entity)
+    {
+        if ($entity) {
+            return $entity->getId();
+        }
+
+        return null;
     }
 }
