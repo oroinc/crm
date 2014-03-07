@@ -1,0 +1,11 @@
+.tasks-list-wrapper{
+    position: relative;
+}
+.widget-mask-wrapper{
+    min-height: 104px;
+    position: relative;
+}
+.widget-mask-wrapper .loading-mask .loading-frame .box{
+    margin-left: 5%;
+    max-width: 80%;
+}

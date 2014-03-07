@@ -1,12 +1,24 @@
+{{ perPage }}
 {%  if tasks|length>0 %}
 <table style="width: 100%; max-width: 300px; overflow: hidden;">
     {% for task in tasks %}
         <tr style="height: 30px">
             <td>{{ loop.index }}.</td>
-            <td><a href="{{ path("orocrm_task_view", {'id':task.id}) }}">{{ task.subject }}</a></td>
+            <td>
+                <i class="{{ _self.taskStatusMapper(task.workflowStep ? task.workflowStep.name : 'open') }}"></i>
+                <a href="{{ path("orocrm_task_view", {'id':task.id}) }}">{{ task.subject }}</a>
+            </td>
         </tr>
     {% endfor %}
 </table>
 {% else %}
     You do not assign a task
 {% endif %}
+{% macro taskStatusMapper(status) %}
+{% set iconStatusMap = { open: 'icon-folder-open-alt',
+                         in_progress: 'icon-play',
+                         closed: 'icon-ok'
+                       }
+%}
+    {{ iconStatusMap[status] }}
+{% endmacro %}

@@ -1,0 +1,3 @@
+css:
+   'OROCRMTask':
+        - 'bundles/orocrmtask/css/styles.css'
