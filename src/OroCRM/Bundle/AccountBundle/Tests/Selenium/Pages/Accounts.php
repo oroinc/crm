@@ -4,6 +4,13 @@ namespace OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
 
+/**
+ * Class Accounts
+ *
+ * @package OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages
+ * @method Accounts openAccounts openAccounts(string)
+ * {@inheritdoc}
+ */
 class Accounts extends AbstractPageFilteredGrid
 {
     const URL = 'account';
