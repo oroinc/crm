@@ -17,6 +17,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 use OroCRM\Bundle\TaskBundle\Form\Type\TaskType;
+use OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository;
 
 /**
  * @Route("/task")
@@ -50,7 +51,10 @@ class TaskController extends Controller
      */
     public function tasksWidgetAction()
     {
-        $repository = $this->getDoctrine()->getRepository('OroCRM\Bundle\TaskBundle\Entity\Task');
+        /**
+         * @var TaskRepository $repository
+         */
+        $repository = $this->getRepository('OroCRM\Bundle\TaskBundle\Entity\Task');
         $id = $this->getUser()->getId();
         $perPage = (int) $this->getRequest()->get('perPage', 10);
         $tasks = $repository->getTaskAssignedTo($id, $perPage);
@@ -102,14 +106,14 @@ class TaskController extends Controller
     {
         $task = new Task();
 
-        $defaultPriority = $this->getDoctrine()->getRepository('OroCRMTaskBundle:TaskPriority')->find('normal');
+        $defaultPriority = $this->getRepository('OroCRMTaskBundle:TaskPriority')->find('normal');
         if ($defaultPriority) {
             $task->setTaskPriority($defaultPriority);
         }
 
         $accountId = $this->getRequest()->get('accountId');
         if ($accountId) {
-            $account = $this->getDoctrine()->getRepository('OroCRMAccountBundle:Account')->find($accountId);
+            $account = $this->getRepository('OroCRMAccountBundle:Account')->find($accountId);
             if (!$account) {
                 throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
             }
@@ -118,7 +122,7 @@ class TaskController extends Controller
 
         $contactId = $this->getRequest()->get('contactId');
         if ($contactId) {
-            $contact = $this->getDoctrine()->getRepository('OroCRMContactBundle:Contact')->find($contactId);
+            $contact = $this->getRepository('OroCRMContactBundle:Contact')->find($contactId);
             if (!$contact) {
                 throw new NotFoundHttpException(sprintf('Contact with ID %s is not found', $contactId));
             }
@@ -127,7 +131,7 @@ class TaskController extends Controller
 
         $assignedToId = $this->getRequest()->get('assignedToId');
         if ($assignedToId) {
-            $assignedTo = $this->getDoctrine()->getRepository('OroUserBundle:User')->find($assignedToId);
+            $assignedTo = $this->getRepository('OroUserBundle:User')->find($assignedToId);
             if (!$assignedTo) {
                 throw new NotFoundHttpException(sprintf('User with ID %s is not found', $assignedToId));
             }
@@ -213,5 +217,14 @@ class TaskController extends Controller
     protected function getFormType()
     {
         return $this->get('orocrm_task.form.type.task');
+    }
+
+    /**
+     * @param string $entityName
+     * @return \Doctrine\Common\Persistence\ObjectRepository
+     */
+    protected function getRepository($entityName)
+    {
+        return $this->getDoctrine()->getRepository($entityName);
     }
 }

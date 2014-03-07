@@ -10,8 +10,8 @@ class TaskRepository extends EntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('task');
         return $queryBuilder->where("task.assignedTo = :assignedTo")
-            ->orderBy('task.dueDate', 'asc')
-            ->addOrderBy('task.workflowStep', 'asc')
+            ->orderBy('task.dueDate', 'ASC')
+            ->addOrderBy('task.workflowStep', 'ASC')
             ->setFirstResult(0)
             ->setMaxResults($limit)
             ->setParameters(array('assignedTo' => $userId))

@@ -14,10 +14,6 @@
     </div>
 {% endif %}
 {% macro taskStatusMapper(status) %}
-{% set iconStatusMap = { open: 'icon-folder-open-alt',
-                         in_progress: 'icon-play',
-                         closed: 'icon-ok'
-                       }
-%}
+    {% set iconStatusMap = { open: 'icon-folder-open-alt', in_progress: 'icon-play', closed: 'icon-ok' } %}
     {{ iconStatusMap[status] }}
 {% endmacro %}
