@@ -92,9 +92,10 @@ class SalesActivity extends AbstractPageEntity
         $this->waitForAjax();
 
         $filter = $this->test->byXpath(
-            "//div[contains(@class, 'filter-item oro-drop open-filter' )]//input"
+            "//div[contains(@class, 'filter-item oro-drop open-filter' )]//input[@name='value']"
         );
 
+        $filter->click();
         $filter->clear();
         $filter->value($entity);
         $this->test->byXPath(
