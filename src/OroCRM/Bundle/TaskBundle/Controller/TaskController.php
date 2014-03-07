@@ -52,10 +52,10 @@ class TaskController extends Controller
     {
         $repository = $this->getDoctrine()->getRepository('OroCRM\Bundle\TaskBundle\Entity\Task');
         $id = $this->getUser()->getId();
-        $perPage = $this->getRequest()->get('perPage', 10);
+        $perPage = (int) $this->getRequest()->get('perPage', 10);
         $tasks = $repository->getTaskAssignedTo($id, $perPage);
 
-        return array('tasks' => $tasks, 'perPage' => $perPage);
+        return array('tasks' => $tasks);
     }
 
     /**

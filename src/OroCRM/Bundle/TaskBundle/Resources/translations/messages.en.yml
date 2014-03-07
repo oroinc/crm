@@ -35,3 +35,6 @@ orocrm:
             account_tasks: Tasks
         contact_tasks_section: Tasks
         user_tasks_section: Tasks
+        assigned_tasks_widget:
+            no_task_exist: You do not assign a task
+            update_widget: Reload tasks

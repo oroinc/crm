@@ -1,33 +1,40 @@
 /*jslint nomen: true, vars: true*/
 /*global define*/
-
 define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/loading-mask'],
     function ($, _, Backbone, routing, LoadingMask) {
         return { ContentView: Backbone.View.extend({
             template: _.template('<div class="tasks-list-wrapper"><%= content %></div>'),
             render: function () {
+                this.reloadTasks(true);
+                return this;
+            },
+            reloadTasks: function(fromCache){
                 var view = this;
-
-                var settings = view.model.get('settings');
+                var settings = this.model.get('settings');
                 settings.perPage = settings.perPage ? settings.perPage : 10;
                 var url = routing.generate('orocrm_task_widget_sidebar_tasks', { 'perPage': settings.perPage });
 
+                if(!fromCache){
+                    url+="#"+Math.random();
+                }
+
                 var loadingMask = new LoadingMask();
-                this.$el.append($('<div class="widget-mask-wrapper"></div>'));
-                this.$el.find('.widget-mask-wrapper').append(loadingMask.render().$el);
+                view.$el.html('<div class="widget-mask-wrapper"></div>');
+                view.$el.find('.widget-mask-wrapper').append(loadingMask.render().$el);
                 loadingMask.show();
 
                 require(["text!"+url], function (content) {
                     view.$el.html(view.template({'content': content}));
                     loadingMask.hide();
+                    view.$el.find('.refresh-task-widget').click(function(){
+                        view.reloadTasks(false);
+                    });
                 });
-
-                return view;
             }
         }), SetupView: Backbone.View.extend({
             template: _.template(
-                '<h3><%= _.__("acme.task.assigned_tasks_widget.settings") %></h3>' +
-                    '<label for="perPage"><%= _.__("acme.task.assigned_tasks_widget.number_of_tasks") %></label>' +
+                '<h3><%= _.__("orocrm.task.assigned_tasks_widget.settings") %></h3>' +
+                    '<label for="perPage"><%= _.__("orocrm.task.assigned_tasks_widget.number_of_tasks") %></label>' +
                     '<input type="text" name="perPage" value="<%= settings.perPage %>"/>'
             ),
 

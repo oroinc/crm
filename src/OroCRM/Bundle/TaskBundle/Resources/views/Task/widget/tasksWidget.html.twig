@@ -1,18 +1,17 @@
-{{ perPage }}
+<a href="javascript:void(0);" title="{{ "orocrm.task.assigned_tasks_widget.update_widget"|trans }}" class="refresh-task-widget">
+    <i class="icon icon-refresh"></i>
+</a>
 {%  if tasks|length>0 %}
-<table style="width: 100%; max-width: 300px; overflow: hidden;">
     {% for task in tasks %}
-        <tr style="height: 30px">
-            <td>{{ loop.index }}.</td>
-            <td>
-                <i class="{{ _self.taskStatusMapper(task.workflowStep ? task.workflowStep.name : 'open') }}"></i>
-                <a href="{{ path("orocrm_task_view", {'id':task.id}) }}">{{ task.subject }}</a>
-            </td>
-        </tr>
+        <a href="{{ path("orocrm_task_view", {'id':task.id}) }}" class="task-widget-row">
+            <i class="{{ _self.taskStatusMapper(task.workflowStep ? task.workflowStep.name : 'open') }}"></i>
+            <span>{{ task.subject }}</span>
+        </a>
     {% endfor %}
-</table>
 {% else %}
-    You do not assign a task
+    <div>
+        {{ "orocrm.task.assigned_tasks_widget.no_task_exist"|trans }}
+    </div>
 {% endif %}
 {% macro taskStatusMapper(status) %}
 {% set iconStatusMap = { open: 'icon-folder-open-alt',
