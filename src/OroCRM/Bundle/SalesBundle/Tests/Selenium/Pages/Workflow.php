@@ -8,6 +8,8 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
  * Class Workflow
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
+ * @method Workflow openWorkflow openWorkflow(string)
+ * {@inheritdoc}
  */
 class Workflow extends AbstractPageEntity
 {
@@ -35,7 +37,7 @@ class Workflow extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$contact}')]",
-            "Owner autocomplete doesn't return search value"
+            "Contact autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$contact}')]")->click();
 
@@ -50,7 +52,7 @@ class Workflow extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$account}')]",
-            "Owner autocomplete doesn't return search value"
+            "Account autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$account}')]")->click();
 
@@ -225,7 +227,7 @@ class Workflow extends AbstractPageEntity
 
     public function checkStep($step)
     {
-        $this->assertElementPresent("//div[@class='widget-content']//li[normalize-space(.)='{$step}']");
+        $this->assertElementPresent("//div[@class='widget-content']//li[contains (.,'{$step}')]");
         return $this;
     }
 

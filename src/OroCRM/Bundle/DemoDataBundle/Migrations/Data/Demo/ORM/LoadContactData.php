@@ -174,6 +174,7 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
         $contact->setFirstName($data['GivenName']);
         $contact->setLastName($data['Surname']);
         $contact->setNamePrefix($data['Title']);
+        $contact->setGender($data['Gender']);
 
         $phone = new ContactPhone($data['TelephoneNumber']);
         $phone->setPrimary(true);
