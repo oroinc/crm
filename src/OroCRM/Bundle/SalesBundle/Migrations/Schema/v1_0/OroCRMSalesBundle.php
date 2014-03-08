@@ -13,14 +13,14 @@ class OroCRMSalesBundle extends Migration implements ExtendExtensionAwareInterfa
     /**
      * @var ExtendExtension
      */
-    protected $extend;
+    protected $extendExtension;
 
     /**
      * @inheritdoc
      */
-    public function setExtendExtension(ExtendExtension $extend)
+    public function setExtendExtension(ExtendExtension $extendExtension)
     {
-        $this->extend = $extend;
+        $this->extendExtension = $extendExtension;
     }
 
     /**
@@ -28,7 +28,7 @@ class OroCRMSalesBundle extends Migration implements ExtendExtensionAwareInterfa
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::orocrmSalesLeadTable($schema, $this->extend);
+        self::orocrmSalesLeadTable($schema, $this->extendExtension);
         self::orocrmSalesLeadStatusTable($schema);
         self::orocrmSalesOpportunityTable($schema);
         self::orocrmSalesOpportunityCloseReasonTable($schema);
@@ -44,9 +44,9 @@ class OroCRMSalesBundle extends Migration implements ExtendExtensionAwareInterfa
      * Generate table orocrm_sales_lead
      *
      * @param Schema          $schema
-     * @param ExtendExtension $extend
+     * @param ExtendExtension $extendExtension
      */
-    public static function orocrmSalesLeadTable(Schema $schema, ExtendExtension $extend)
+    public static function orocrmSalesLeadTable(Schema $schema, ExtendExtension $extendExtension)
     {
         /** Generate table orocrm_sales_lead **/
         $table = $schema->createTable('orocrm_sales_lead');
@@ -74,7 +74,7 @@ class OroCRMSalesBundle extends Migration implements ExtendExtensionAwareInterfa
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updatedAt', 'datetime', ['notnull' => false]);
         $table->addColumn('notes', 'text', ['notnull' => false]);
-        $extend->addOptionSet(
+        $extendExtension->addOptionSet(
             $schema,
             $table,
             'extend_source',

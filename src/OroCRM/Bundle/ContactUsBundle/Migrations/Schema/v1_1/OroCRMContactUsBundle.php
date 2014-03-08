@@ -5,19 +5,40 @@ namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_1;
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
+use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
 
-class OroCRMContactUsBundle extends Migration
+class OroCRMContactUsBundle extends Migration implements RenameExtensionAwareInterface
 {
+    /**
+     * @var RenameExtension
+     */
+    protected $renameExtension;
+
+    /**
+     * @inheritdoc
+     */
+    public function setRenameExtension(RenameExtension $renameExtension)
+    {
+        $this->renameExtension = $renameExtension;
+    }
+
     /**
      * @inheritdoc
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $queries->addSql(
-            $queries->getRenameTableSql('orocrm_contactus_contact_reason', 'orocrm_contactus_contact_rsn')
+        $queries->addQuery(
+            $this->renameExtension->getRenameTableQuery(
+                'orocrm_contactus_contact_reason',
+                'orocrm_contactus_contact_rsn'
+            )
         );
-        $queries->addSql(
-            $queries->getRenameTableSql('orocrm_contactus_request_emails', 'orocrm_contactus_req_emails')
+        $queries->addQuery(
+            $this->renameExtension->getRenameTableQuery(
+                'orocrm_contactus_request_emails',
+                'orocrm_contactus_req_emails'
+            )
         );
     }
 }

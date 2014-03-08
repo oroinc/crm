@@ -14,14 +14,14 @@ class OroCRMSalesBundleInstaller extends Installation implements ExtendExtension
     /**
      * @var ExtendExtension
      */
-    protected $extend;
+    protected $extendExtension;
 
     /**
      * @inheritdoc
      */
-    public function setExtendExtension(ExtendExtension $extend)
+    public function setExtendExtension(ExtendExtension $extendExtension)
     {
-        $this->extend = $extend;
+        $this->extendExtension = $extendExtension;
     }
 
     /**
@@ -37,7 +37,7 @@ class OroCRMSalesBundleInstaller extends Installation implements ExtendExtension
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        OroCRMSalesBundle::orocrmSalesLeadTable($schema, $this->extend);
+        OroCRMSalesBundle::orocrmSalesLeadTable($schema, $this->extendExtension);
         OroCRMSalesBundle::orocrmSalesLeadStatusTable($schema);
         OroCRMSalesBundle::orocrmSalesOpportunityTable($schema);
         OroCRMSalesBundle::orocrmSalesOpportunityCloseReasonTable($schema, 'orocrm_sales_opport_close_rsn');
