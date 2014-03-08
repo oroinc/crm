@@ -8,7 +8,7 @@ use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterf
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMSalesBundle implements Migration, ExtendExtensionAwareInterface
+class OroCRMSalesBundle extends Migration implements ExtendExtensionAwareInterface
 {
     /**
      * @var ExtendExtension

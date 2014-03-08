@@ -7,7 +7,7 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 
-class OroCRMAccountBundle implements Migration
+class OroCRMAccountBundle extends Migration
 {
     /**
      * @inheritdoc

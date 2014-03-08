@@ -7,7 +7,7 @@ use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle;
 
-class OroCRMMagentoBundleInstaller implements Installation
+class OroCRMMagentoBundleInstaller extends Installation
 {
     /**
      * @inheritdoc
