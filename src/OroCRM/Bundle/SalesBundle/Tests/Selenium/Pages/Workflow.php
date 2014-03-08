@@ -8,6 +8,8 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
  * Class Workflow
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
+ * @method Workflow openWorkflow openWorkflow(string)
+ * {@inheritdoc}
  */
 class Workflow extends AbstractPageEntity
 {

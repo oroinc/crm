@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\AccountBundle\Tests\Selenium\Accounts;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
 
 /**
  * Class CreateAccountTest
@@ -19,6 +20,7 @@ class CreateAccountTest extends Selenium2TestCase
         $accountName = 'Account_'.mt_rand();
 
         $login = $this->login();
+        /** @var Accounts $login */
         $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
             ->setAccountName($accountName)
@@ -38,6 +40,7 @@ class CreateAccountTest extends Selenium2TestCase
     public function testAccountAutocomplete($accountName)
     {
         $login = $this->login();
+        /** @var Accounts $login */
         $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
             ->setAccountName($accountName . '_autocomplete_test')
@@ -63,7 +66,8 @@ class CreateAccountTest extends Selenium2TestCase
         $newAccountName = 'Update_' . $accountName;
 
         $login = $this->login();
-        $login = $login->openAccounts('OroCRM\Bundle\AccountBundle')
+        /** @var Accounts $login */
+        $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
             ->open(array($accountName))
             ->edit()
@@ -84,6 +88,7 @@ class CreateAccountTest extends Selenium2TestCase
     public function testDeleteAccount($accountName)
     {
         $login = $this->login();
+        /** @var Accounts $login */
         $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
             ->open(array($accountName))

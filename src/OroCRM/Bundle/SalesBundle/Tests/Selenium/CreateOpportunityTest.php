@@ -96,6 +96,6 @@ class CreateOpportunityTest extends Selenium2TestCase
             ->delete()
             ->assertTitle('Opportunities - Sales')
             ->assertMessage('Opportunity deleted')
-            ->assertNoDataMessage('No opportunities exists');
+            ->assertNoDataMessage('No records found');
     }
 }
