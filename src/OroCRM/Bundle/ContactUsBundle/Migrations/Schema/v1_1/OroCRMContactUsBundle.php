@@ -28,17 +28,17 @@ class OroCRMContactUsBundle extends Migration implements RenameExtensionAwareInt
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $queries->addQuery(
-            $this->renameExtension->getRenameTableQuery(
-                'orocrm_contactus_contact_reason',
-                'orocrm_contactus_contact_rsn'
-            )
+        $this->renameExtension->renameTable(
+            $schema,
+            $queries,
+            'orocrm_contactus_contact_reason',
+            'orocrm_contactus_contact_rsn'
         );
-        $queries->addQuery(
-            $this->renameExtension->getRenameTableQuery(
-                'orocrm_contactus_request_emails',
-                'orocrm_contactus_req_emails'
-            )
+        $this->renameExtension->renameTable(
+            $schema,
+            $queries,
+            'orocrm_contactus_request_emails',
+            'orocrm_contactus_req_emails'
         );
     }
 }

@@ -28,23 +28,23 @@ class OroCRMMagentoBundle extends Migration implements RenameExtensionAwareInter
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $queries->addQuery(
-            $this->renameExtension->getRenameTableQuery(
-                'orocrm_magento_customer_address',
-                'orocrm_magento_customer_addr'
-            )
+        $this->renameExtension->renameTable(
+            $schema,
+            $queries,
+            'orocrm_magento_customer_address',
+            'orocrm_magento_customer_addr'
         );
-        $queries->addQuery(
-            $this->renameExtension->getRenameTableQuery(
-                'orocrm_magento_customer_address_to_address_type',
-                'orocrm_magento_cust_addr_type'
-            )
+        $this->renameExtension->renameTable(
+            $schema,
+            $queries,
+            'orocrm_magento_customer_address_to_address_type',
+            'orocrm_magento_cust_addr_type'
         );
-        $queries->addQuery(
-            $this->renameExtension->getRenameTableQuery(
-                'orocrm_magento_product_to_website',
-                'orocrm_magento_prod_to_website'
-            )
+        $this->renameExtension->renameTable(
+            $schema,
+            $queries,
+            'orocrm_magento_product_to_website',
+            'orocrm_magento_prod_to_website'
         );
     }
 }
