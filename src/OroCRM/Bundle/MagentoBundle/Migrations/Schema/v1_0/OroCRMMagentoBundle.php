@@ -10,7 +10,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
-class OroCRMMagentoBundle extends Migration
+class OroCRMMagentoBundle implements Migration
 {
     /**
      * @inheritdoc

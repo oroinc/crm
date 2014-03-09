@@ -9,7 +9,7 @@ use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_0\OroCRMSalesBundle;
 
-class OroCRMSalesBundleInstaller extends Installation implements ExtendExtensionAwareInterface
+class OroCRMSalesBundleInstaller implements Installation, ExtendExtensionAwareInterface
 {
     /**
      * @var ExtendExtension

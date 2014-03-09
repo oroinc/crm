@@ -8,7 +8,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
 
-class OroCRMMagentoBundle extends Migration implements RenameExtensionAwareInterface
+class OroCRMMagentoBundle implements Migration, RenameExtensionAwareInterface
 {
     /**
      * @var RenameExtension

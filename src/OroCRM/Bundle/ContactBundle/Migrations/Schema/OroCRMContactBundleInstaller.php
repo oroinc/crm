@@ -7,7 +7,7 @@ use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_0\OroCRMContactBundle;
 
-class OroCRMContactBundleInstaller extends Installation
+class OroCRMContactBundleInstaller implements Installation
 {
     /**
      * @inheritdoc
