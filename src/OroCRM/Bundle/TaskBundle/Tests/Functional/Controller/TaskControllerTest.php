@@ -101,7 +101,7 @@ class TaskControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains('Task updated - Tasks - Customers', $result->getContent());
+        $this->assertContains('Task updated - Tasks - System', $result->getContent());
     }
 
     /**
