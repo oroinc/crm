@@ -28,7 +28,7 @@ datagrid:
             total:
                 extend: grand_total
                 per_page: true
-                hide_on_full_dataset: true
+                hide_if_one_page: true
                 columns:
                     name:
                         label: 'Page totals'
@@ -93,7 +93,7 @@ datagrid:
             total:
                 extend: grand_total
                 per_page: true
-                hide_on_full_dataset: true
+                hide_if_one_page: true
                 columns:
                     name:
                         label: 'Page Totals'
@@ -171,7 +171,7 @@ datagrid:
             total:
                 extend: grand_total
                 per_page: true
-                hide_on_full_dataset: true
+                hide_if_one_page: true
                 columns:
                     createdDate:
                         label: 'Page Totals'
@@ -223,7 +223,7 @@ datagrid:
             total:
                 extend: grand_total
                 per_page: true
-                hide_on_full_dataset: true
+                hide_if_one_page: true
                 columns:
                     stepLabel:
                         label: 'Page Totals'
@@ -324,7 +324,7 @@ datagrid:
             total:
                 extend: grand_total
                 per_page: true
-                hide_on_full_dataset: true
+                hide_if_one_page: true
                 columns:
                     period:
                         label: 'Page Totals'
