@@ -345,7 +345,7 @@ datagrid:
 
     # contact email datagrid
     contacts-email-grid:
-        extend: email-grid
+        extends: email-grid
         source:
             query:
                 where:
