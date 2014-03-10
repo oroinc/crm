@@ -1,0 +1,2 @@
+bundles:
+    - { name: OroCRM\Bundle\TaskBundle\OroCRMTaskBundle, priority: 30 }
