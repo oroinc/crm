@@ -2,12 +2,15 @@
 
 namespace OroCRM\Bundle\TaskBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\ReminderBundle\Entity\RemindableInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
@@ -44,7 +47,7 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *  }
  * )
  */
-class Task extends ExtendTask
+class Task extends ExtendTask implements RemindableInterface
 {
     /**
      * @var integer
@@ -186,6 +189,11 @@ class Task extends ExtendTask
     protected $workflowStep;
 
     /**
+     * @var Collection
+     */
+    protected $reminders;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -208,6 +216,11 @@ class Task extends ExtendTask
      * )
      */
     protected $updatedAt;
+
+    public function __construct()
+    {
+        $this->reminders = new ArrayCollection();
+    }
 
     /**
      * @param int $id
@@ -439,6 +452,22 @@ class Task extends ExtendTask
     public function getWorkflowStep()
     {
         return $this->workflowStep;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getReminders()
+    {
+        return $this->reminders;
+    }
+
+    /**
+     * @param Collection $reminders
+     */
+    public function setReminders(Collection $reminders)
+    {
+        $this->reminders = $reminders;
     }
 
     /**
