@@ -26,7 +26,7 @@ datagrid:
             id: ~
         totals:
             total:
-                extend: grand_total
+                extends: grand_total
                 per_page: true
                 hide_if_one_page: true
                 columns:
@@ -91,7 +91,7 @@ datagrid:
             id: ~
         totals:
             total:
-                extend: grand_total
+                extends: grand_total
                 per_page: true
                 hide_if_one_page: true
                 columns:
@@ -169,7 +169,7 @@ datagrid:
                 groupBy: createdDate
         totals:
             total:
-                extend: grand_total
+                extends: grand_total
                 per_page: true
                 hide_if_one_page: true
                 columns:
@@ -221,7 +221,7 @@ datagrid:
                 groupBy: stepLabel
         totals:
             total:
-                extend: grand_total
+                extends: grand_total
                 per_page: true
                 hide_if_one_page: true
                 columns:
@@ -322,7 +322,7 @@ datagrid:
             yearPeriod: ~
         totals:
             total:
-                extend: grand_total
+                extends: grand_total
                 per_page: true
                 hide_if_one_page: true
                 columns:
