@@ -26,9 +26,17 @@ datagrid:
             id: ~
         totals:
             total:
+                extend: grand_total
+                per_page: true
+                hide_on_full_dataset: true
                 columns:
                     name:
-                        label: 'Total'
+                        label: 'Page totals'
+
+            grand_total:
+                columns:
+                    name:
+                        label: 'Grand Totals'
                     value:
                         query: SUM( o.closeRevenue )
                         formatter: currency
@@ -83,9 +91,16 @@ datagrid:
             id: ~
         totals:
             total:
+                extend: grand_total
+                per_page: true
+                hide_on_full_dataset: true
                 columns:
                     name:
-                        label: 'Total'
+                        label: 'Page Totals'
+            grand_total:
+                columns:
+                    name:
+                        label: 'Grand Totals'
                     wonCount:
                         query: SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) )
                     lostCount:
@@ -154,9 +169,16 @@ datagrid:
                 groupBy: createdDate
         totals:
             total:
+                extend: grand_total
+                per_page: true
+                hide_on_full_dataset: true
                 columns:
                     createdDate:
-                        label: 'Total'
+                        label: 'Page Totals'
+            grand_total:
+                columns:
+                    createdDate:
+                        label: 'Grand Totals'
                     leadsCount:
                         query: COUNT(l.id)
         columns:
@@ -199,9 +221,16 @@ datagrid:
                 groupBy: stepLabel
         totals:
             total:
+                extend: grand_total
+                per_page: true
+                hide_on_full_dataset: true
                 columns:
                     stepLabel:
-                        label: 'Total'
+                        label: 'Page Totals'
+            grand_total:
+                columns:
+                    stepLabel:
+                        label: 'Grand Totals'
                     numberOfOpportunities:
                         query: COUNT(opportunity.id)
                     closeRevenue:
@@ -293,9 +322,16 @@ datagrid:
             yearPeriod: ~
         totals:
             total:
+                extend: grand_total
+                per_page: true
+                hide_on_full_dataset: true
                 columns:
                     period:
-                        label: 'Total'
+                        label: 'Page Totals'
+            grand_total:
+                columns:
+                    period:
+                        label: 'Grand Totals'
                     cnt:
                         query: COUNT( o.id )
                     value:
