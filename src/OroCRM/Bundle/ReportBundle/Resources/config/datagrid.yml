@@ -38,7 +38,7 @@ datagrid:
                     name:
                         label: 'Grand Totals'
                     value:
-                        query: SUM( o.closeRevenue )
+                        sql_expression: SUM( o.closeRevenue )
                         formatter: currency
         sorters:
             columns:
@@ -102,13 +102,13 @@ datagrid:
                     name:
                         label: 'Grand Totals'
                     wonCount:
-                        query: SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) )
+                        sql_expression: SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) )
                     lostCount:
-                        query: SUM( (CASE WHEN (s.name='lost') THEN 1 ELSE 0 END) )
+                        sql_expression: SUM( (CASE WHEN (s.name='lost') THEN 1 ELSE 0 END) )
                     inProgressCount:
-                        query: SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) )
+                        sql_expression: SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) )
                     totalOps:
-                        query: COUNT(o.id)
+                        sql_expression: COUNT(o.id)
         columns:
             name:             { label: orocrm.report.datagrid.columns.account_name }
             wonCount:         { label: orocrm.report.datagrid.columns.wonCount,  frontend_type: integer }
@@ -180,7 +180,7 @@ datagrid:
                     createdDate:
                         label: 'Grand Totals'
                     leadsCount:
-                        query: COUNT(l.id)
+                        sql_expression: COUNT(l.id)
         columns:
             createdDate:    { label: orocrm.report.datagrid.columns.created_date, frontend_type: date }
             leadsCount:     { label: orocrm.report.datagrid.columns.leads_count,  frontend_type: integer }
@@ -232,12 +232,12 @@ datagrid:
                     stepLabel:
                         label: 'Grand Totals'
                     numberOfOpportunities:
-                        query: COUNT(opportunity.id)
+                        sql_expression: COUNT(opportunity.id)
                     closeRevenue:
-                        query: SUM(CASE WHEN workflowStep.name='close' THEN opportunity.closeRevenue ELSE 0 END)
+                        sql_expression: SUM(CASE WHEN workflowStep.name='close' THEN opportunity.closeRevenue ELSE 0 END)
                         formatter: currency
                     budgetAmount:
-                        query: SUM(CASE WHEN opportunity.budgetAmount IS NOT NULL THEN opportunity.budgetAmount ELSE 0 END)
+                        sql_expression: SUM(CASE WHEN opportunity.budgetAmount IS NOT NULL THEN opportunity.budgetAmount ELSE 0 END)
                         formatter: currency
         columns:
             stepLabel:             { label: orocrm.report.datagrid.columns.step }
@@ -333,9 +333,9 @@ datagrid:
                     period:
                         label: 'Grand Totals'
                     cnt:
-                        query: COUNT( o.id )
+                        sql_expression: COUNT( o.id )
                     value:
-                        query: SUM( o.closeRevenue )
+                        sql_expression: SUM( o.closeRevenue )
                         formatter: currency
 
         columns:
