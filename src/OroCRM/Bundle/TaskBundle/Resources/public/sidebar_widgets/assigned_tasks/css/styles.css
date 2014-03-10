@@ -1,25 +1,35 @@
-.tasks-list-wrapper{
+.tasks-list-wrapper {
     position: relative;
 }
-.widget-mask-wrapper{
+
+.widget-mask-wrapper {
     min-height: 104px;
     position: relative;
 }
-.widget-mask-wrapper .loading-mask .loading-frame .box{
-    margin-left: 5%;
+
+.widget-mask-wrapper .loading-mask .loading-frame .box {
+    margin-left: 7%;
     max-width: 80%;
 }
+
+.widget-mask-wrapper .loading-mask .loading-frame {
+    width: 172px;
+}
+
 .task-widget-row:hover {
     background-color: #E8E8E8;
 }
-.task-widget-row{
+
+.task-widget-row {
     padding: 3px 0;
     overflow: hidden;
 }
-.task-widget-row a{
+
+.task-widget-row a {
     display: block;
 }
-.task-date-time{
+
+.task-date-time {
     color: #A0A0A0;
     font-size: 10px;
 }
