@@ -1,0 +1,10 @@
+@name = task_reminder
+@entityName = OroCRM\Bundle\TaskBundle\Entity\Task
+@subject = Task Reminder
+@isSystem = 1
+@isEditable = 1
+
+<h1>{{ entity.subject }}</h1>
+<div>
+    <i>Due date:</i> {{ entity.dueDate|oro_format_datetime }}
+</div>
