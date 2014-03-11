@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium\Contacts;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Login;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 class CreateContactTest extends Selenium2TestCase
 {
@@ -41,6 +42,7 @@ class CreateContactTest extends Selenium2TestCase
         $addressSecondary = array();
 
         $login = $this->login();
+        /** @var Contacts $login */
         $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->add()
             ->setFirstName($contactName . '_first')
@@ -73,6 +75,7 @@ class CreateContactTest extends Selenium2TestCase
         $addressPrimary = array();
 
         $login = $this->login();
+        /** @var Contacts $login */
         $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->add()
             ->setFirstName($contactName . '_first')
@@ -104,6 +107,7 @@ class CreateContactTest extends Selenium2TestCase
     public function testContactAutocomplete($contactName)
     {
         $login = $this->login();
+        /** @var Contacts $login */
         $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->add()
             ->setFirstName($contactName . '_first_autocomplete')
@@ -133,6 +137,7 @@ class CreateContactTest extends Selenium2TestCase
         $newContactName = 'Update_' . $contactName;
 
         $login = $this->login();
+        /** @var Contacts $login */
         $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', $contactName . '@mail.com')
             ->open(array($contactName))
@@ -156,6 +161,7 @@ class CreateContactTest extends Selenium2TestCase
     public function testDeleteContact($contactName)
     {
         $login = $this->login();
+        /** @var Contacts $login */
         $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', $contactName . '@mail.com')
             ->open(array($contactName))

@@ -1,15 +1,22 @@
 placeholders:
-    oro_user_view_additional_data:
+    view_content_data_communications:
         items:
-            user_calls:
-                order: 50
+            orocrm_call_user_calls: ~
+            orocrm_call_contact_calls: ~
+
     orocrm_account_action_dropdown:
         items:
             orocrm_account_action_dropdown_add_call: ~
 
 items:
-    user_calls:
-        template: OroCRMCallBundle:Call:user_calls.html.twig
+    orocrm_call_user_calls:
+        template: OroCRMCallBundle:Call:userCalls.html.twig
+        attribute_instance_of: [entity, %oro_user.entity.class%]
+
+    orocrm_call_contact_calls:
+        template: OroCRMCallBundle:Call:contactCalls.html.twig
+        attribute_instance_of: [entity, %orocrm_contact.entity.class%]
+
     orocrm_account_action_dropdown_add_call:
         template: OroCRMCallBundle:Account:action/logCallButton.html.twig
         order: 40

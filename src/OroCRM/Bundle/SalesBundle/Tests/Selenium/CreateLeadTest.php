@@ -78,7 +78,7 @@ class CreateLeadTest extends Selenium2TestCase
      * @depends testUpdateLead
      * @param $name
      */
-    public function testDeleteAccount($name)
+    public function testDeleteLead($name)
     {
         $login = $this->login();
         $login->openLeads('OroCRM\Bundle\SalesBundle')
@@ -87,6 +87,6 @@ class CreateLeadTest extends Selenium2TestCase
             ->delete()
             ->assertTitle('Leads - Sales')
             ->assertMessage('Lead deleted')
-            ->assertNoDataMessage('No leads exists');
+            ->assertNoDataMessage('No records found');
     }
 }

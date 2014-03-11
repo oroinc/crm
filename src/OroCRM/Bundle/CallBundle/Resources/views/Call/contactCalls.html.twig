@@ -1,0 +1,13 @@
+{% if resource_granted('orocrm_call_view') %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
+    {% set contactCallsWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('orocrm_call_widget_calls', {contactId: entity.id}),
+            'title': 'orocrm.call.entity_plural_label'|trans,
+            'alias': 'contact_calls'
+        }) }}
+    {% endset %}
+    {{ UI.scrollSubblock(null, [contactCallsWidget]) }}
+{% endif %}
