@@ -43,7 +43,7 @@ class SalesActivities extends AbstractPageFilteredGrid
     {
         $workflow = $this->getEntity($entityData);
         $workflow->click();
-        $this->waitForAjax();
+        sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
 
