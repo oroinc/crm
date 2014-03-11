@@ -89,7 +89,7 @@ class TaskType extends AbstractType
                 'oro_reminder_collection',
                 [
                     'required' => true,
-                    'label' => 'orocrm.task.owner.label'
+                    'label' => 'oro.reminder.entity_plural_label'
                 ]
             );
     }
