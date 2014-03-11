@@ -73,7 +73,6 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                         $event->setStart(clone $day);
                         $day->setTime(18, 0, 0);
                         $event->setEnd(clone $day);
-                        $event->setReminder((bool) mt_rand(0, 1));
                         $event->setAllDay(true);
                         $calendar->addEvent($event);
                     }
@@ -85,7 +84,6 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                         $event->setStart(clone $day);
                         $day->setTime(12, 0, 0);
                         $event->setEnd(clone $day);
-                        $event->setReminder((bool) mt_rand(0, 1));
                         $event->setAllDay(false);
                         $calendar->addEvent($event);
                     }
@@ -97,7 +95,6 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                         $event->setStart(clone $day);
                         $day->setTime(18, 0, 0);
                         $event->setEnd(clone $day);
-                        $event->setReminder((bool) mt_rand(0, 1));
                         $event->setAllDay(false);
                         $calendar->addEvent($event);
                     }
@@ -109,7 +106,6 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                         $event->setStart(clone $day);
                         $day->setTime(12, 30, 0);
                         $event->setEnd(clone $day);
-                        $event->setReminder((bool) mt_rand(0, 1));
                         $event->setAllDay(false);
                         $calendar->addEvent($event);
                     }
@@ -122,7 +118,6 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                         $day->setTime(0, 0, 0);
                         $day->add(\DateInterval::createFromDateString('+3 days'));
                         $event->setEnd(clone $day);
-                        $event->setReminder((bool) mt_rand(0, 1));
                         $event->setAllDay(true);
                         $calendar->addEvent($event);
                     }
@@ -133,7 +128,6 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                     $event->setStart(clone $day);
                     $day->setTime(18, 0, 0);
                     $event->setEnd(clone $day);
-                    $event->setReminder(false);
                     $event->setAllDay(true);
                     $calendar->addEvent($event);
                 }
