@@ -137,7 +137,7 @@ datagrid:
                 link:          delete_link
 
     task-account-tasks-grid:
-        extend: tasks-grid
+        extends: tasks-grid
         source:
             query:
                 where:
@@ -145,7 +145,7 @@ datagrid:
                         - task.relatedAccount = :accountId
 
     task-contact-tasks-grid:
-        extend: tasks-grid
+        extends: tasks-grid
         source:
             query:
                 where:
@@ -153,7 +153,7 @@ datagrid:
                         - task.relatedContact = :contactId
 
     task-user-tasks-grid:
-        extend: tasks-grid
+        extends: tasks-grid
         source:
             query:
                 where:
