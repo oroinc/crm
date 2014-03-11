@@ -46,14 +46,14 @@ class OrderItem extends BaseOrderItem
     /**
      * @var float
      *
-     * @ORM\Column(name="original_price", type="float", nullable=true)
+     * @ORM\Column(name="original_price", type="money", nullable=true)
      */
     protected $originalPrice;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="discount_percent", type="float", nullable=true)
+     * @ORM\Column(name="discount_percent", type="percent", nullable=true)
      */
     protected $discountPercent;
 
