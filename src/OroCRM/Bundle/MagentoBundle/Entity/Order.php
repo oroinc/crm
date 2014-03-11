@@ -25,6 +25,7 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
  * )
  * @Config(
  *  defaultValues={
+ *      "entity"={"icon"="icon-list-alt"},
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
