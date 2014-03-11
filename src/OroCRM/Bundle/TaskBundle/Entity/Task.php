@@ -43,7 +43,10 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *      "dataaudit"={"auditable"=true},
  *      "workflow"={
  *          "active_workflow"="task_flow"
- *      }
+ *      },
+ *      "reminder"={
+ *          "reminder_template_name"="task_reminder"
+ *      },
  *  }
  * )
  */
