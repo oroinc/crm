@@ -1,6 +1,7 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\ReportBundle\Entity\Report;
 use Oro\Bundle\ReportBundle\Entity\ReportType;
@@ -10,7 +11,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Doctrine\ORM\EntityManager;
 
-class LoadReportData extends AbstractFixture
+class LoadReportData extends AbstractFixture implements DependentFixtureInterface
 {
     /** @var  EntityManager */
     protected $em;
@@ -35,6 +36,16 @@ class LoadReportData extends AbstractFixture
         ),
     );
     // @codingStandardsIgnoreEnd
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies()
+    {
+        return [
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadBusinessUnitData'
+        ];
+    }
 
     /**
      * {@inheritDoc}
