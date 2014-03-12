@@ -124,7 +124,7 @@ class Opportunity extends ExtendOpportunity
     /**
      * @var float
      *
-     * @ORM\Column(name="probability", type="money", nullable=true)
+     * @ORM\Column(name="probability", type="percent", nullable=true)
      * @Oro\Versioned
      */
     protected $probability;
