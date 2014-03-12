@@ -484,8 +484,6 @@ class Task extends ExtendTask implements RemindableInterface
         $result->setSubject($this->getSubject());
         $result->setExpireAt($this->getDueDate());
         $result->setRecipient($this->getAssignedTo());
-        $result->setRelatedRouteName('orocrm_task_view');
-        $result->setRelatedRouteParameters(array('id' => '%id%'));
 
         return $result;
     }
