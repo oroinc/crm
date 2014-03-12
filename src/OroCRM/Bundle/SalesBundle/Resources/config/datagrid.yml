@@ -589,7 +589,7 @@ datagrid:
                     filter_by_having: true
 
     sales-account-lead-grid:
-        extend: sales-lead-grid
+        extends: sales-lead-grid
         source:
             query:
                 where:
@@ -597,7 +597,7 @@ datagrid:
                         - l.account = :accountId
 
     sales-account-opportunity-grid:
-        extend: sales-opportunity-grid
+        extends: sales-opportunity-grid
         source:
              query:
                  where:
