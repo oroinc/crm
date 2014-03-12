@@ -104,8 +104,6 @@ class ContactRequest extends AbstractContactRequest
     protected $emails;
 
     /**
-     * TODO: Move field to custom entity config BAP-2923
-     *
      * @var WorkflowItem
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
@@ -114,8 +112,6 @@ class ContactRequest extends AbstractContactRequest
     protected $workflowItem;
 
     /**
-     * TODO: Move field to custom entity config BAP-2923
-     *
      * @var WorkflowStep
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
