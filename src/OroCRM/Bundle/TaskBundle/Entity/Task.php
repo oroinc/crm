@@ -11,6 +11,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\ReminderBundle\Entity\RemindableInterface;
+use Oro\Bundle\ReminderBundle\Model\ReminderData;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
@@ -458,7 +459,7 @@ class Task extends ExtendTask implements RemindableInterface
     }
 
     /**
-     * @return Collection
+     * {@inheritdoc}
      */
     public function getReminders()
     {
@@ -466,11 +467,27 @@ class Task extends ExtendTask implements RemindableInterface
     }
 
     /**
-     * @param Collection $reminders
+     * {@inheritdoc}
      */
     public function setReminders(Collection $reminders)
     {
         $this->reminders = $reminders;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getReminderData()
+    {
+        $result = new ReminderData();
+
+        $result->setSubject($this->getSubject());
+        $result->setExpireAt($this->getDueDate());
+        $result->setRecipient($this->getAssignedTo());
+        $result->setRelatedRouteName('orocrm_task_view');
+        $result->setRelatedRouteParameters(array('id' => '%id%'));
+
+        return $result;
     }
 
     /**
