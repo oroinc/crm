@@ -53,7 +53,7 @@
             var gridName = {{ gridName|json_encode|raw }};
 
             $(function () {
-                /** @type {oro.datagrid.CallbackListener} */
+                /** @type {orodatagrid.datagrid.listener.CallbackListener} */
                 new CallbackListener({
                     $gridContainer: $('#grid-' + gridName),
                     gridName: gridName,
