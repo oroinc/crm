@@ -1,0 +1,7 @@
+workflows:
+    task_flow:
+        transition_definitions:
+            start_progress_definition: ~
+            stop_progress_definition: ~
+            closed_definition: ~
+            reopen_definition: ~

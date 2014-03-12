@@ -1,0 +1,22 @@
+<a href="javascript:void(0);" title="{{ "orocrm.task.assigned_tasks_widget.update_widget"|trans }}" class="refresh-task-widget">
+    <i class="icon icon-refresh"></i>
+</a>
+{%  if tasks|length>0 %}
+    {% for task in tasks %}
+        <div class="task-widget-row">
+            <a href="{{ path("orocrm_task_view", {'id':task.id}) }}" >
+                <i class="{{ _self.taskStatusMapper(task.workflowStep ? task.workflowStep.name : 'open') }}"></i>
+                <span>{{ task.subject }}</span>
+            </a>
+            <span class="task-date-time">{{ task.dueDate|oro_format_datetime }}</span>
+        </div>
+    {% endfor %}
+{% else %}
+    <div>
+        {{ "orocrm.task.assigned_tasks_widget.no_task_exist"|trans }}
+    </div>
+{% endif %}
+{% macro taskStatusMapper(status) %}
+    {% set iconStatusMap = { open: 'icon-folder-open-alt', in_progress: 'icon-play', closed: 'icon-ok' } %}
+    {{ iconStatusMap[status] }}
+{% endmacro %}

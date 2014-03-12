@@ -1,5 +1,5 @@
 {% if resource_granted('orocrm_call_view') %}
-    {% import 'OroUIBundle::macros.html.twig' as ui %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
 
     {% set callsWidget %}
         {{ oro_widget_render({
@@ -10,5 +10,5 @@
             'cssClass': 'inner-grid',
         }) }}
     {% endset %}
-    {{ ui.scrollSubblock(null, [callsWidget]) }}
+    {{ UI.scrollSubblock(null, [callsWidget]) }}
 {% endif %}

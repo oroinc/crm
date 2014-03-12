@@ -1,0 +1,40 @@
+orocrm:
+    task:
+        #
+        # OroCRM/Bundle/TaskBundle/Entity/Task
+        #
+        entity_label:               Task
+        entity_plural_label:        Tasks
+        entity_description:         Represent task
+        subject.label:              Subject
+        description.label:          Description
+        dueDate.label:              Due date
+        workflowStep.label:         Status
+        taskPriority.label:         Priority
+        assignedTo.label:           Assigned To
+        relatedAccount.label:       Account
+        relatedContact.label:       Contact
+        owner.label:                Reporter
+        createdAt.label:            Created At
+        updatedAt.label:            Updated At
+
+        datagrid:
+            view: View
+            update: Update
+            delete: Delete
+
+        block:
+            general: General Information
+            additional: Additional Information
+
+        new_entity: New task
+        add_entity: Add task
+        saved_message: Task saved
+
+        widgets:
+            account_tasks: Tasks
+        contact_tasks_section: Tasks
+        user_tasks_section: Tasks
+        assigned_tasks_widget:
+            no_task_exist: You do not assign a task
+            update_widget: Reload tasks

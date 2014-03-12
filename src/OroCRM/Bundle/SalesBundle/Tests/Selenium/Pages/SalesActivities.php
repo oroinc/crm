@@ -8,6 +8,8 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  * Class SalesActivities
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
+ * @method SalesActivities openSalesActivities openSalesActivities(string)
+ * {@inheritdoc}
  */
 class SalesActivities extends AbstractPageFilteredGrid
 {
@@ -39,11 +41,12 @@ class SalesActivities extends AbstractPageFilteredGrid
 
     public function open($entityData = array())
     {
-        $contact = $this->getEntity($entityData);
-        $contact->click();
+        $workflow = $this->getEntity($entityData);
+        $workflow->click();
+        sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
 
-        return new SalesActivity($this->test);
+        return new Workflow($this->test);
     }
 }

@@ -4,6 +4,11 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
+use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
+use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
+use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
+use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesActivities;
+use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Workflow;
 
 /**
  * Class WorkflowTest
@@ -29,6 +34,7 @@ class WorkflowTest extends Selenium2TestCase
         $accountName = $this->createAccount($login);
         $activityName = 'Activity name_' . mt_rand();
 
+        /** @var SalesActivities $login */
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->startFromLead()
             ->setActivityName($activityName)
@@ -67,6 +73,7 @@ class WorkflowTest extends Selenium2TestCase
         $accountName = $this->createAccount($login);
         $activityName = 'Activity name_' . mt_rand();
 
+        /** @var SalesActivities $login */
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->startFromLead()
             ->setActivityName($activityName)
@@ -102,12 +109,12 @@ class WorkflowTest extends Selenium2TestCase
      */
     public function testLeadWorkflowReopen($activityName)
     {
+        /** @var SalesActivities $login */
         $login = $this->login();
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Name', $activityName)
             ->open(array($activityName))
             ->assertTitle($activityName . ' - Sales Activity - Sales')
-            ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->reopen()
             ->checkStep('New Opportunity');
     }
@@ -119,6 +126,7 @@ class WorkflowTest extends Selenium2TestCase
         $leadName = $this->createLead($login);
         $activityName = 'Activity name_' . mt_rand();
 
+        /** @var SalesActivities $login */
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->startFromLead()
             ->setActivityName($activityName)
@@ -139,6 +147,7 @@ class WorkflowTest extends Selenium2TestCase
         $opportunityName = $this->createOpportunity($login);
         $activityName = 'Activity name_' . mt_rand();
 
+        /** @var SalesActivities $login */
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->startFromOpportunity()
             ->setActivityName($activityName)
@@ -170,6 +179,7 @@ class WorkflowTest extends Selenium2TestCase
         $opportunityName = $this->createOpportunity($login);
         $activityName = 'Activity name_' . mt_rand();
 
+        /** @var SalesActivities $login */
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->startFromOpportunity()
             ->setActivityName($activityName)
@@ -204,11 +214,11 @@ class WorkflowTest extends Selenium2TestCase
     public function testOpportunityWorkflowReopen($activityName)
     {
         $login = $this->login();
+        /** @var SalesActivities $login */
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Name', $activityName)
             ->open(array($activityName))
             ->assertTitle($activityName . ' - Sales Activity - Sales')
-            ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->reopen()
             ->checkStep('New Opportunity');
     }
@@ -221,6 +231,7 @@ class WorkflowTest extends Selenium2TestCase
     {
         $name = 'Lead_'.mt_rand();
 
+        /** @var Leads $login */
         $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->add()
             ->setName($name)
@@ -248,6 +259,7 @@ class WorkflowTest extends Selenium2TestCase
         $opportunityName = 'Opportunity_'.mt_rand();
         $accountName = $this->createAccount($login);
 
+        /** @var Opportunities $login */
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->add()
             ->setName($opportunityName)
@@ -275,6 +287,7 @@ class WorkflowTest extends Selenium2TestCase
     {
         $accountName = 'Account_'.mt_rand();
 
+        /** @var Accounts $login */
         $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
             ->setAccountName($accountName)

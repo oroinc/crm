@@ -225,7 +225,7 @@ datagrid:
             entityHint: contact
 
     account-contacts-update-grid:
-        extend: base-account-contacts-grid
+        extends: base-account-contacts-grid
         source:
             query:
                 select:
@@ -312,7 +312,7 @@ datagrid:
                     excluded: '#removeContacts'
 
     account-email-grid:
-        extend: email-grid
+        extends: email-grid
         source:
             query:
                 join:
