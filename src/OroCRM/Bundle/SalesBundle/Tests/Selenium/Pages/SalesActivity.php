@@ -89,13 +89,10 @@ class SalesActivity extends AbstractPageEntity
         $this->waitPageToLoad();
         $this->waitForAjax();
         $this->test->byXpath("//div[@class='filter-container']//button[contains(., '{$type} name')]")->click();
-        $this->waitForAjax();
-
         $filter = $this->test->byXpath(
             "//div[contains(@class, 'filter-item oro-drop open-filter' )]//input[@name='value']"
         );
 
-        $filter->click();
         $filter->clear();
         $filter->value($entity);
         $this->test->byXPath(
@@ -105,6 +102,7 @@ class SalesActivity extends AbstractPageEntity
         $this->test->byXpath(
             "//table[@class='grid table-hover table table-bordered table-condensed']//td[contains(., '{$entity}')]"
         )->click();
+        sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
 
