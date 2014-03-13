@@ -44,7 +44,7 @@ class OrderItem extends BaseOrderItem
     protected $isVirtual;
 
     /**
-     * @var float
+     * @var double
      *
      * @ORM\Column(name="original_price", type="currency", nullable=true)
      */

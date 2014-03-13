@@ -60,7 +60,7 @@ class Product extends BaseProduct
     protected $type;
 
     /**
-     * @var float
+     * @var double
      *
      * @ORM\Column(name="special_price", type="currency", nullable=true)
      * @Oro\Versioned
@@ -68,7 +68,7 @@ class Product extends BaseProduct
     protected $specialPrice;
 
     /**
-     * @var float
+     * @var double
      *
      * @ORM\Column(name="price", type="currency", nullable=true)
      * @Oro\Versioned

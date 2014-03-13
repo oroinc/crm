@@ -77,28 +77,28 @@ class CartItem extends BaseCartItem
     protected $isVirtual;
 
     /**
-     * @var float
+     * @var double
      *
      * @ORM\Column(name="custom_price", type="currency", nullable=true)
      */
     protected $customPrice;
 
     /**
-     * @var float
+     * @var double
      *
      * @ORM\Column(name="price_incl_tax", type="currency", nullable=true)
      */
     protected $priceInclTax;
 
     /**
-     * @var float
+     * @var double
      *
      * @ORM\Column(name="row_total", type="currency")
      */
     protected $rowTotal;
 
     /**
-     * @var float
+     * @var double
      *
      * @ORM\Column(name="tax_amount", type="currency")
      */
