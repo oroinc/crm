@@ -132,7 +132,7 @@ class Opportunity extends ExtendOpportunity
     /**
      * @var float
      *
-     * @ORM\Column(name="budget_amount", type="money", nullable=true)
+     * @ORM\Column(name="budget_amount", type="currency", nullable=true)
      * @Oro\Versioned
      */
     protected $budgetAmount;
@@ -140,7 +140,7 @@ class Opportunity extends ExtendOpportunity
     /**
      * @var float
      *
-     * @ORM\Column(name="close_revenue", type="money", nullable=true)
+     * @ORM\Column(name="close_revenue", type="currency", nullable=true)
      * @Oro\Versioned
      */
     protected $closeRevenue;
