@@ -46,7 +46,8 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *          "active_workflow"="task_flow"
  *      },
  *      "reminder"={
- *          "reminder_template_name"="task_reminder"
+ *          "reminder_template_name"="task_reminder",
+ *          "reminder_flash_template_identifier"="task_template"
  *      },
  *  }
  * )

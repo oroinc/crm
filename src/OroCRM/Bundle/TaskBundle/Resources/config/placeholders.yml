@@ -1,4 +1,8 @@
 placeholders:
+    orocrm_reminder_reminder_templates:
+        items:
+            task_reminder_template: ~
+
     view_navButtons_before:
         items:
             create_task_contact_button: ~
@@ -23,6 +27,9 @@ placeholders:
             orocrm_user_tasks_grid: ~
 
 items:
+    task_reminder_template:
+        template: OroCRMTaskBundle:Task:reminderTemplate.html.twig
+
     create_task_account_button:
         template: OroCRMTaskBundle:Entities:createAccountTaskButton.html.twig
 
