@@ -27,7 +27,7 @@ class TaskTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $builder->expects($this->exactly(8))
+        $builder->expects($this->exactly(9))
             ->method('add')
             ->will($this->returnSelf());
 

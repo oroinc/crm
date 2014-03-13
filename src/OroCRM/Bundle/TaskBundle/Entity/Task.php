@@ -60,6 +60,12 @@ class Task extends ExtendTask implements RemindableInterface
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "email"={"available_in_template"=true}
+     *  }
+     * )
      */
     protected $id;
 
@@ -110,6 +116,12 @@ class Task extends ExtendTask implements RemindableInterface
      *
      * @ORM\ManyToOne(targetEntity="TaskPriority")
      * @ORM\JoinColumn(name="task_priority_name", referencedColumnName="name", onDelete="SET NULL")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "email"={"available_in_template"=true}
+     *  }
+     * )
      */
     protected $taskPriority;
 
