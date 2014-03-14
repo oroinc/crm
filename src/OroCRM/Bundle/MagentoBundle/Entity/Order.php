@@ -115,23 +115,23 @@ class Order extends BaseOrder
     protected $totalPaidAmount = 0;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="total_invoiced_amount", type="float", nullable=true)
+     * @ORM\Column(name="total_invoiced_amount", type="money", nullable=true)
      */
     protected $totalInvoicedAmount = 0;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="total_refunded_amount", type="float", nullable=true)
+     * @ORM\Column(name="total_refunded_amount", type="money", nullable=true)
      */
     protected $totalRefundedAmount = 0;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="total_canceled_amount", type="float", nullable=true)
+     * @ORM\Column(name="total_canceled_amount", type="money", nullable=true)
      */
     protected $totalCanceledAmount = 0;
 
