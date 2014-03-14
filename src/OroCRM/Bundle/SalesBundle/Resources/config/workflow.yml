@@ -748,7 +748,7 @@ workflows:
                     page:
                         parent_route: 'orocrm_sales_salesfunnel_index'
                         parent_label: orocrm.sales.salesfunnel.entity_plural_label
-                        title: orocrm.sales.salesfunnel.new_entity_label
+                        title: orocrm.sales.salesfunnel.new_entity
                 form_options:
                     attribute_fields:
                         sales_funnel_owner:
@@ -800,7 +800,7 @@ workflows:
                     page:
                         parent_route: 'orocrm_sales_salesfunnel_index'
                         parent_label: orocrm.sales.salesfunnel.entity_plural_label
-                        title: orocrm.sales.salesfunnel.new_entity_label
+                        title: orocrm.sales.salesfunnel.new_entity
                 form_options:
                     attribute_fields:
                         sales_funnel_owner:

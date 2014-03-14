@@ -3,8 +3,8 @@
 {% oro_title_set({params : {"%opportunity.name%": name} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Opportunity' %}
 {% set title = form.vars.value.id
-    ? name ~ ' - ' ~ 'Update'|trans ~ ' ' ~ 'orocrm.sales.opportunity.entity_label'|trans
-    : 'New'|trans ~ ' ' ~ 'orocrm.sales.opportunity.entity_label'|trans
+    ? name ~ ' - ' ~ 'orocrm.sales.opportunity.edit_entity'|trans
+    : 'orocrm.sales.opportunity.new_entity'|trans
 %}
 {% set formAction = form.vars.value.id
     ? path('orocrm_sales_opportunity_update', { 'id': form.vars.value.id })

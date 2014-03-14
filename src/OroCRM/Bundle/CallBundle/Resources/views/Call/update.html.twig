@@ -18,8 +18,8 @@
 {% block content_data %}
     {% set id = 'call-log' %}
     {% set title = form.vars.value.id
-        ? 'Edit'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower
-        : 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower
+        ? 'orocrm.call.edit_entity'|trans|lower
+        : 'orocrm.call.log_call'|trans|lower
     %}
 
     {% set formFields = [] %}

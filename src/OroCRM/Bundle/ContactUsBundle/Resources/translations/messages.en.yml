@@ -3,6 +3,7 @@ orocrm:
         contactrequest:
             entity_label:        Contact Request
             entity_plural_label: Contact Requests
+            new_entity:          New Contact Request
             id:
                 label: ID
             first_name:
