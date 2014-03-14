@@ -5,11 +5,13 @@ namespace OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_0;
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 
 class OroCRMAccountBundle implements Migration
 {
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function up(Schema $schema, QueryBag $queries)
     {
@@ -25,6 +27,105 @@ class OroCRMAccountBundle implements Migration
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updatedAt', 'datetime', []);
+        $table->addColumn(
+            'extend_description',
+            'text',
+            [
+                'oro_options' => [
+                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_phone',
+            'string',
+            [
+                'oro_options' => [
+                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_email',
+            'string',
+            [
+                'oro_options' => [
+                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_fax',
+            'string',
+            [
+                'oro_options' => [
+                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_website',
+            'string',
+            [
+                'oro_options' => [
+                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_employees',
+            'integer',
+            [
+                'oro_options' => [
+                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_ownership',
+            'string',
+            [
+                'oro_options' => [
+                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_ticker_symbol',
+            'string',
+            [
+                'oro_options' => [
+                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
+        $table->addColumn(
+            'extend_rating',
+            'string',
+            [
+                'oro_options' => [
+                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid' => ['is_visible' => false],
+                    'merge'    => ['display' => true],
+                ]
+            ]
+        );
         $table->setPrimaryKey(['id']);
         $table->addIndex(['user_owner_id'], 'IDX_7166D3719EB185F9', []);
         $table->addIndex(['shipping_address_id'], 'IDX_7166D3714D4CFF2B', []);

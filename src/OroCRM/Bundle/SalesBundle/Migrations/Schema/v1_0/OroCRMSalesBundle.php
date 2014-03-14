@@ -3,17 +3,32 @@
 namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMSalesBundle implements Migration
+class OroCRMSalesBundle implements Migration, ExtendExtensionAwareInterface
 {
+    /**
+     * @var ExtendExtension
+     */
+    protected $extendExtension;
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtendExtension(ExtendExtension $extendExtension)
+    {
+        $this->extendExtension = $extendExtension;
+    }
+
     /**
      * @inheritdoc
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::orocrmSalesLeadTable($schema);
+        self::orocrmSalesLeadTable($schema, $this->extendExtension);
         self::orocrmSalesLeadStatusTable($schema);
         self::orocrmSalesOpportunityTable($schema);
         self::orocrmSalesOpportunityCloseReasonTable($schema);
@@ -28,9 +43,10 @@ class OroCRMSalesBundle implements Migration
     /**
      * Generate table orocrm_sales_lead
      *
-     * @param Schema $schema
+     * @param Schema          $schema
+     * @param ExtendExtension $extendExtension
      */
-    public static function orocrmSalesLeadTable(Schema $schema)
+    public static function orocrmSalesLeadTable(Schema $schema, ExtendExtension $extendExtension)
     {
         /** Generate table orocrm_sales_lead **/
         $table = $schema->createTable('orocrm_sales_lead');
@@ -58,6 +74,14 @@ class OroCRMSalesBundle implements Migration
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updatedAt', 'datetime', ['notnull' => false]);
         $table->addColumn('notes', 'text', ['notnull' => false]);
+        $extendExtension->addOptionSet(
+            $schema,
+            $table,
+            'extend_source',
+            [
+                'extend' => ['is_extend' => true, 'set_expanded' => false]
+            ]
+        );
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_73DB46331023C4EE');
         $table->addIndex(['status_name'], 'IDX_73DB46336625D392', []);
