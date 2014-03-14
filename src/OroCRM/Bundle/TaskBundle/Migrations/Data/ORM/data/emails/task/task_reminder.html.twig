@@ -1,56 +1,14 @@
 @name = task_reminder
 @entityName = OroCRM\Bundle\TaskBundle\Entity\Task
-@subject = {{ entity.subject }} is due on {{ entity.dueDate|oro_format_datetime }}
+@subject = {{ entity.subject }} is due on {{ entity.dueDate|date('F j, Y, g:i A') }}
 @isSystem = 1
 @isEditable = 1
 
 <h3>{{ entity.subject }}</h3>
-<p>
-    <i>Description:</i>
-    {{ entity.description }}
-</p>
-<p>
-    <i>Priority:</i>
-    {{ entity.taskPriority }}
-</p>
-<p>
-    <i>Assigned To:</i>
-    <a href="http://demo.orocrm.com/user/view/{{ entity.assignedTo.id}}">
-        {{ entity.assignedTo }}
-    </a>
-</p>
-<p>
-    {% if entity.relatedAccount is not empty %}
-        <i>Account:</i>
-        <a href="http://demo.orocrm.com/account/view/{{ entity.relatedAccount.id }}">
-            {{ entity.relatedAccount }}
-        </a>
-    {% endif %}
-</p>
-
-<p>
-    {% if entity.relatedContact is not empty %}
-        <i>Contact:</i>
-        <a href="http://demo.orocrm.com/contact/view/{{  entity.relatedContact.id }}">
-            {{ entity.relatedContact }}
-        </a>
-    {% endif %}
-</p>
-
-<p>
-    <i>Reporter:</i>
-    <a href="http://demo.orocrm.com/user/view/{{ entity.owner.id}}">
-        {{ entity.owner }}
-    </a>
-</p>
-
-<p>
-    <i>Due date:</i>
-    {{ entity.dueDate|oro_format_datetime }}
-</p>
-
-<p>
-    <a href="http://demo.orocrm.com/task/view/{{ entity.id }}">
-        Open task
-    </a>
-</p>
+<p><i>Description:</i> {{ entity.description }}</p>
+<p><i>Priority:</i> {{ entity.taskPriority }}</p>
+<p><i>Assigned To:</i> {{ entity.assignedTo }}</p>
+<p><i>Account:</i> {{ entity.relatedAccount }}</p>
+<p><i>Contact:</i> {{ entity.relatedContact }}</p>
+<p><i>Reporter:</i> {{ entity.owner }}</p>
+<p><i>Due date:</i> {{ entity.dueDate|date('F j, Y, g:i A') }}</p>
