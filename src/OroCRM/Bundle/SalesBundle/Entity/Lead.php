@@ -42,8 +42,8 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  *          "type"="ACL",
  *          "group_name"=""
  *      },
- *      "workflow"={
- *          "active_workflow"="b2b_flow_lead"
+ *      "form"={
+ *          "form_type"="orocrm_sales_lead_select"
  *      }
  *  }
  * )
@@ -234,8 +234,6 @@ class Lead extends ExtendLead implements FullNameInterface
     protected $notes;
 
     /**
-     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
-     *
      * @var WorkflowItem
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
@@ -244,8 +242,6 @@ class Lead extends ExtendLead implements FullNameInterface
     protected $workflowItem;
 
     /**
-     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
-     *
      * @var WorkflowStep
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
