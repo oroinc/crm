@@ -12,7 +12,7 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 /**
  * @ORM\Table(name="orocrm_sales_funnel")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
