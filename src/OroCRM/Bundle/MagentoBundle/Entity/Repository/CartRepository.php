@@ -3,94 +3,86 @@
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\WorkflowBundle\Entity\Repository\WorkflowStepRepository;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+use Oro\Bundle\WorkflowBundle\Model\Workflow;
 
 class CartRepository extends EntityRepository
 {
     /**
-     * @var WorkflowStep[]
-     */
-    protected $workflowStepsByName;
-
-    /**
-     * @return WorkflowStep[]
-     */
-    protected function getWorkflowStepsByName()
-    {
-        if (null === $this->workflowStepsByName) {
-            /** @var WorkflowStepRepository $workflowStepRepository */
-            $workflowStepRepository = $this->getEntityManager()->getRepository('OroWorkflowBundle:WorkflowStep');
-            $this->workflowStepsByName = $workflowStepRepository->findByRelatedEntityByName($this->getEntityName());
-        }
-
-        return $this->workflowStepsByName;
-    }
-
-    /**
-     * Get funnel chart data
-     *
-     * @param array $visibleSteps
-     * @param array $nozzleSteps
+     * @param \DateTime $dateFrom
+     * @param \DateTime $dateTo
+     * @param Workflow $workflow
      * @param AclHelper $aclHelper
      * @return array
-     *   items - array of data
-     *     key - label
-     *     value - sum of budgets
-     *   nozzleSteps - array with nozzle steps labels
      */
     public function getFunnelChartData(
-        $visibleSteps = [],
-        $nozzleSteps = [],
+        \DateTime $dateFrom,
+        \DateTime $dateTo,
+        Workflow $workflow = null,
         AclHelper $aclHelper = null
     ) {
-        $nozzleStepsLabels = [];
-        $resultData = $this->getStepResultData($visibleSteps, $aclHelper);
-
-        if (!empty($nozzleSteps)) {
-            $dateEnd = new \DateTime('now', new \DateTimeZone('UTC'));
-            $dateStart = new \DateTime(
-                $dateEnd->format('Y') . '-01-' . ((ceil($dateEnd->format('n') / 3) - 1) * 3 + 1),
-                new \DateTimeZone('UTC')
-            );
-
-            $nozzleData = $this->getStepResultData($nozzleSteps, $aclHelper, $dateStart, $dateEnd);
-            $resultData = array_merge($resultData, $nozzleData);
-            $nozzleStepsLabels = array_keys($nozzleData);
+        if (!$workflow) {
+            return array('items' => array(), 'nozzleSteps' => array());
         }
 
-        $sum = 0;
-        foreach ($resultData as $data) {
-            $sum += $data;
+        $steps = $workflow->getStepManager()->getOrderedSteps();
+
+        // regular and final steps should be calculated separately
+        $regularSteps = array();
+        $finalSteps = array();
+        foreach ($steps as $step) {
+            if ($step->isFinal()) {
+                $finalSteps[] = $step->getName();
+            } else {
+                $regularSteps[] = $step->getName();
+            }
         }
 
-        return [
-            'items' => $sum > 0 ? $resultData : [],
-            'nozzleSteps' => $nozzleStepsLabels
-        ];
+        // regular steps should be calculated for whole period, final steps - for specified period
+        $regularStepsData = $this->getStepData($regularSteps, null, null, $aclHelper);
+        $finalStepsData = $this->getStepData($finalSteps, $dateFrom, $dateTo, $aclHelper);
+
+        // final calculation
+        $regularData = array();
+        $finalData = array();
+        foreach ($steps as $step) {
+            $stepName = $step->getName();
+            $stepLabel = $step->getLabel();
+            if ($step->isFinal()) {
+                $finalData[$stepLabel] = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
+            } else {
+                $regularData[$stepLabel] = isset($regularStepsData[$stepName]) ? $regularStepsData[$stepName] : 0;
+            }
+        }
+
+        return array('items' => array_merge($regularData, $finalData), 'nozzleSteps' => array_keys($finalData));
     }
 
     /**
+     * @param array $steps
      * @param AclHelper $aclHelper
-     * @param \DateTime $dateStart
-     * @param \DateTime $dateEnd
+     * @param \DateTime $dateFrom
+     * @param \DateTime $dateTo
      * @return array
      */
     protected function getStepData(
-        AclHelper $aclHelper = null,
-        \DateTime $dateStart = null,
-        \DateTime $dateEnd = null
+        array $steps,
+        \DateTime $dateFrom = null,
+        \DateTime $dateTo = null,
+        AclHelper $aclHelper = null
     ) {
         $queryBuilder = $this->createQueryBuilder('cart')
             ->select('workflowStep.name as workflowStepName', 'SUM(cart.grandTotal) as total')
             ->join('cart.workflowStep', 'workflowStep')
             ->groupBy('workflowStep.name');
 
-        if ($dateStart && $dateEnd) {
+        $queryBuilder->where($queryBuilder->expr()->in('workflowStep.name', $steps));
+
+        if ($dateFrom && $dateTo) {
             $queryBuilder->andWhere($queryBuilder->expr()->between('cart.createdAt', ':dateFrom', ':dateTo'))
-                ->setParameter('dateFrom', $dateStart)
-                ->setParameter('dateTo', $dateEnd);
+                ->setParameter('dateFrom', $dateFrom)
+                ->setParameter('dateTo', $dateTo);
         }
 
         if ($aclHelper) {
@@ -99,54 +91,11 @@ class CartRepository extends EntityRepository
             $query = $queryBuilder->getQuery();
         }
 
-        $stepData = [];
+        $stepData = array();
         foreach ($query->getArrayResult() as $record) {
-            $stepData[$record['workflowStepName']] = $record['total'];
+            $stepData[$record['workflowStepName']] = $record['total'] ? (float)$record['total'] : 0;
         }
 
         return $stepData;
-    }
-
-    /**
-     * @param array $requestedSteps
-     * @param AclHelper $aclHelper
-     * @param \DateTime $dateStart
-     * @param \DateTime $dateEnd
-     * @return array
-     */
-    protected function getStepResultData(
-        array $requestedSteps = array(),
-        AclHelper $aclHelper = null,
-        \DateTime $dateStart = null,
-        \DateTime $dateEnd = null
-    ) {
-        $resultData = [];
-        $stepData = $this->getStepData($aclHelper, $dateStart, $dateEnd);
-        if (!empty($stepData) || !empty($requestedSteps)) {
-            $workflowSteps = $this->getWorkflowStepsByName();
-
-            if (!empty($requestedSteps)) {
-                $steps = $requestedSteps;
-            } else {
-                $steps = array_keys($workflowSteps);
-            }
-
-            foreach ($steps as $stepName) {
-                if (!array_key_exists($stepName, $workflowSteps)) {
-                    continue;
-                }
-
-                $workflowStep = $workflowSteps[$stepName];
-                $stepLabel = $workflowStep->getLabel();
-
-                if (array_key_exists($stepName, $stepData)) {
-                    $resultData[$stepLabel] = (float)$stepData[$stepName];
-                } else {
-                    $resultData[$stepLabel] = 0;
-                }
-            }
-        }
-
-        return $resultData;
     }
 }
