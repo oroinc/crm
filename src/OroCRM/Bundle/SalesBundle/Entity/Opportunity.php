@@ -124,23 +124,23 @@ class Opportunity extends ExtendOpportunity
     /**
      * @var float
      *
-     * @ORM\Column(name="probability", type="float", nullable=true)
+     * @ORM\Column(name="probability", type="percent", nullable=true)
      * @Oro\Versioned
      */
     protected $probability;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="budget_amount", type="float", nullable=true)
+     * @ORM\Column(name="budget_amount", type="money", nullable=true)
      * @Oro\Versioned
      */
     protected $budgetAmount;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="close_revenue", type="float", nullable=true)
+     * @ORM\Column(name="close_revenue", type="money", nullable=true)
      * @Oro\Versioned
      */
     protected $closeRevenue;
