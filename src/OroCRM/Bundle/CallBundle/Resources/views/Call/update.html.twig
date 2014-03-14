@@ -73,10 +73,11 @@
 
 {% block navButtons %}    
     {{ UI.cancelButton(path('orocrm_call_index')) }}
+    {% set html = UI.saveAndCloseButton() %}
     {% if form.vars.value.id or resource_granted('orocrm_call_update') %}
-        {{ UI.saveAndStayButton() }}
+        {% set html = html ~ UI.saveAndStayButton() %}
     {% endif %}
-    {{ UI.saveAndCloseButton() }}
+    {{ UI.dropdownSaveButton({'html': html}) }}
 {% endblock %}
 
 {% block pageHeader %}

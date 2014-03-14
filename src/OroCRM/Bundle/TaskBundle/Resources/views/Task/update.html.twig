@@ -7,10 +7,11 @@
 {% set formAction = entityId ? path('orocrm_task_update', { 'id': entityId}) : path('orocrm_task_create') %}
 
 {% block navButtons %}
+    {% set html = UI.saveAndCloseButton() %}
     {% if resource_granted('orocrm_task_update') %}
-        {{ UI.saveAndStayButton() }}
+        {% set html = html ~ UI.saveAndStayButton() %}
     {% endif %}
-    {{ UI.saveAndCloseButton() }}
+    {{ UI.dropdownSaveButton({'html': html}) }}
 {% endblock navButtons %}
 
 {% block pageHeader %}
