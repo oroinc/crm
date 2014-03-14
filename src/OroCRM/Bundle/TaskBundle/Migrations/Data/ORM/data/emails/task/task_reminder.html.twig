@@ -15,14 +15,14 @@
 </p>
 <p>
     <i>Assigned To:</i>
-    <a href="{{ url('oro_user_view', {id: entity.assignedTo.id }) }}">
+    <a href="http://demo.orocrm.com/user/view/{{ entity.assignedTo.id}}">
         {{ entity.assignedTo }}
     </a>
 </p>
 <p>
     {% if entity.relatedAccount is not empty %}
         <i>Account:</i>
-        <a href="{{ url('orocrm_account_view', {id: entity.relatedAccount.id }) }}">
+        <a href="http://demo.orocrm.com/account/view/{{ entity.relatedAccount.id }}">
             {{ entity.relatedAccount }}
         </a>
     {% endif %}
@@ -31,7 +31,7 @@
 <p>
     {% if entity.relatedContact is not empty %}
         <i>Contact:</i>
-        <a href="{{ url('orocrm_contact_view', {id: entity.relatedContact.id }) }}">
+        <a href="http://demo.orocrm.com/contact/view/{{  entity.relatedContact.id }}">
             {{ entity.relatedContact }}
         </a>
     {% endif %}
@@ -39,7 +39,7 @@
 
 <p>
     <i>Reporter:</i>
-    <a href="{{ url('oro_user_view', {id: entity.owner.id }) }}">
+    <a href="http://demo.orocrm.com/user/view/{{ entity.owner.id}}">
         {{ entity.owner }}
     </a>
 </p>
@@ -50,7 +50,7 @@
 </p>
 
 <p>
-    <a href="{{ url('orocrm_task_view', {id: entity.id}) }}">
+    <a href="http://demo.orocrm.com/task/view/{{ entity.id }}">
         Open task
     </a>
 </p>
