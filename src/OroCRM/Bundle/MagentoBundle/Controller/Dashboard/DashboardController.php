@@ -7,6 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
+
 class DashboardController extends Controller
 {
     /**
@@ -19,28 +22,29 @@ class DashboardController extends Controller
      */
     public function mySalesFlowB2CAction($widget)
     {
-        $currentDate = new \DateTime('now', new \DateTimeZone('UTC'));
+        $dateTo = new \DateTime('now', new \DateTimeZone('UTC'));
+        $dateFrom = new \DateTime(
+            $dateTo->format('Y') . '-01-' . ((ceil($dateTo->format('n') / 3) - 1) * 3 + 1),
+            new \DateTimeZone('UTC')
+        );
+
+        /** @var WorkflowManager $workflowManager */
+        $workflowManager = $this->get('oro_workflow.manager');
+        $workflow = $workflowManager->getApplicableWorkflowByEntityClass(
+            'OroCRM\Bundle\MagentoBundle\Entity\Cart'
+        );
+
+        /** @var CartRepository $shoppingCartRepository */
+        $shoppingCartRepository = $this->getDoctrine()->getRepository('OroCRMMagentoBundle:Cart');
 
         return array_merge(
-            [
-                'quarterDate' =>  new \DateTime(
-                    $currentDate->format('Y') . '-01-' . ((ceil($currentDate->format('n') / 3) - 1) * 3 + 1),
-                    new \DateTimeZone('UTC')
-                )
-            ],
-            $this->getDoctrine()
-                ->getRepository('OroCRMMagentoBundle:Cart')
-                ->getFunnelChartData(
-                    [
-                        'open',
-                        'contacted'
-                    ],
-                    [
-                        'abandoned',
-                        'converted_to_opportunity',
-                        'converted'
-                    ]
-                ),
+            array('quarterDate' => $dateFrom),
+            $shoppingCartRepository->getFunnelChartData(
+                $dateFrom,
+                $dateTo,
+                $workflow,
+                $this->get('oro_security.acl_helper')
+            ),
             $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
         );
     }

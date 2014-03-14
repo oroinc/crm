@@ -60,17 +60,17 @@ class Product extends BaseProduct
     protected $type;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="special_price", type="float", nullable=true)
+     * @ORM\Column(name="special_price", type="money", nullable=true)
      * @Oro\Versioned
      */
     protected $specialPrice;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="price", type="float", nullable=true)
+     * @ORM\Column(name="price", type="money", nullable=true)
      * @Oro\Versioned
      */
     protected $price;

@@ -1,0 +1,146 @@
+<?php
+
+namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
+
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\WorkflowBundle\Model\Workflow;
+
+class SalesFunnelRepository extends EntityRepository
+{
+    /**
+     * @param \DateTime $dateFrom
+     * @param \DateTime $dateTo
+     * @param Workflow $workflow
+     * @param array $customStepCalculations
+     * @param AclHelper $aclHelper
+     * @return array
+     */
+    public function getFunnelChartData(
+        \DateTime $dateFrom,
+        \DateTime $dateTo,
+        Workflow $workflow = null,
+        array $customStepCalculations = array(),
+        AclHelper $aclHelper = null
+    ) {
+        if (!$workflow) {
+            return array('items' => array(), 'nozzleSteps' => array());
+        }
+
+        $steps = $workflow->getStepManager()->getOrderedSteps();
+
+        // regular and final steps should be calculated separately
+        $regularSteps = array();
+        $finalSteps = array();
+        foreach ($steps as $step) {
+            if ($step->isFinal()) {
+                $finalSteps[] = $step->getName();
+            } else {
+                $regularSteps[] = $step->getName();
+            }
+        }
+
+        // regular steps should be calculated for whole period, final steps - for specified period
+        $regularStepsData = $this->getStepData($regularSteps, null, null, $customStepCalculations, $aclHelper);
+        $finalStepsData = $this->getStepData($finalSteps, $dateFrom, $dateTo, $customStepCalculations, $aclHelper);
+
+        // final calculation
+        $regularData = array();
+        $finalData = array();
+        foreach ($steps as $step) {
+            $stepName = $step->getName();
+            $stepLabel = $step->getLabel();
+            if ($step->isFinal()) {
+                $finalData[$stepLabel] = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
+            } else {
+                $regularData[$stepLabel] = isset($regularStepsData[$stepName]) ? $regularStepsData[$stepName] : 0;
+            }
+        }
+
+        return array('items' => array_merge($regularData, $finalData), 'nozzleSteps' => array_keys($finalData));
+    }
+
+    /**
+     * @param array $steps
+     * @param \DateTime $dateFrom
+     * @param \DateTime $dateTo
+     * @param array $customStepCalculations
+     * @param AclHelper $aclHelper
+     * @return array
+     */
+    protected function getStepData(
+        array $steps,
+        \DateTime $dateFrom = null,
+        \DateTime $dateTo = null,
+        array $customStepCalculations = array(),
+        AclHelper $aclHelper = null
+    ) {
+        $stepData = array();
+
+        $budgetAmountQueryBuilder = $this->getTemplateQueryBuilder($dateFrom, $dateTo)
+            ->addSelect('SUM(opportunity.budgetAmount) as budgetAmount');
+        $budgetAmountQueryBuilder
+            ->andWhere($budgetAmountQueryBuilder->expr()->in('workflowStep.name', $steps));
+        $budgetAmountQuery = $this->getQuery($budgetAmountQueryBuilder, $aclHelper);
+
+        foreach ($budgetAmountQuery->getArrayResult() as $record) {
+            $stepData[$record['workflowStepName']] = $record['budgetAmount'] ? (float)$record['budgetAmount'] : 0;
+        }
+
+        foreach ($customStepCalculations as $step => $field) {
+            if (!in_array($step, $steps)) {
+                continue;
+            }
+
+            $customStepQueryBuilder = $this->getTemplateQueryBuilder($dateFrom, $dateTo)
+                ->addSelect('SUM(' . $field . ') as value')
+                ->andWhere('workflowStep.name = :workflowStep')
+                ->setParameter('workflowStep', $step);
+            $customStepQueryBuilder
+                ->andWhere($customStepQueryBuilder->expr()->in('workflowStep.name', $steps));
+            $customStepQuery = $this->getQuery($customStepQueryBuilder, $aclHelper);
+
+            foreach ($customStepQuery->getArrayResult() as $record) {
+                $stepData[$record['workflowStepName']] = $record['value'] ? (float)$record['value'] : 0;
+            }
+        }
+
+        return $stepData;
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param AclHelper $aclHelper
+     * @return Query
+     */
+    protected function getQuery(QueryBuilder $queryBuilder, AclHelper $aclHelper = null)
+    {
+        return $aclHelper ? $aclHelper->apply($queryBuilder) : $queryBuilder->getQuery();
+    }
+
+    /**
+     * @param \DateTime $dateFrom
+     * @param \DateTime $dataTo
+     * @return QueryBuilder
+     */
+    protected function getTemplateQueryBuilder(\DateTime $dateFrom = null, \DateTime $dataTo = null)
+    {
+        $queryBuilder = $this->createQueryBuilder('funnel')
+            ->select('workflowStep.name as workflowStepName')
+            ->join('funnel.opportunity', 'opportunity')
+            ->join('funnel.workflowStep', 'workflowStep')
+            ->groupBy('workflowStep.name');
+
+        if ($dateFrom && $dataTo) {
+            $queryBuilder
+                ->where($queryBuilder->expr()->between('funnel.createdAt', ':dateFrom', ':dateTo'))
+                ->setParameter('dateFrom', $dateFrom)
+                ->setParameter('dateTo', $dataTo);
+        }
+
+        return $queryBuilder;
+    }
+}

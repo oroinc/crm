@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
@@ -36,8 +37,8 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  *          "type"="ACL",
  *          "group_name"=""
  *      },
- *      "workflow"={
- *          "active_workflow"="b2b_flow_sales"
+ *      "form"={
+ *          "form_type"="orocrm_sales_opportunity_select"
  *      }
  *  }
  * )
@@ -124,24 +125,54 @@ class Opportunity extends ExtendOpportunity
     /**
      * @var float
      *
-     * @ORM\Column(name="probability", type="float", nullable=true)
+     * @ORM\Column(name="probability", type="percent", nullable=true)
      * @Oro\Versioned
+     * @ConfigField(
+     *  defaultValues={
+     *      "form"={
+     *          "form_type"="oro_percent",
+     *          "form_options"={
+     *              "constraints"={{"Range":{"min":0, "max":100}}},
+     *          }
+     *      }
+     *  }
+     * )
      */
     protected $probability;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="budget_amount", type="float", nullable=true)
+     * @ORM\Column(name="budget_amount", type="money", nullable=true)
      * @Oro\Versioned
+     * @ConfigField(
+     *  defaultValues={
+     *      "form"={
+     *          "form_type"="oro_money",
+     *          "form_options"={
+     *              "constraints"={{"Range":{"min":0}}},
+     *          }
+     *      }
+     *  }
+     * )
      */
     protected $budgetAmount;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="close_revenue", type="float", nullable=true)
+     * @ORM\Column(name="close_revenue", type="money", nullable=true)
      * @Oro\Versioned
+     * @ConfigField(
+     *  defaultValues={
+     *      "form"={
+     *          "form_type"="oro_money",
+     *          "form_options"={
+     *              "constraints"={{"Range":{"min":0}}},
+     *          }
+     *      }
+     *  }
+     * )
      */
     protected $closeRevenue;
 
@@ -183,8 +214,6 @@ class Opportunity extends ExtendOpportunity
     protected $notes;
 
     /**
-     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
-     *
      * @var WorkflowItem
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
@@ -193,8 +222,6 @@ class Opportunity extends ExtendOpportunity
     protected $workflowItem;
 
     /**
-     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
-     *
      * @var WorkflowStep
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")

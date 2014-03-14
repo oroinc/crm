@@ -1,0 +1,81 @@
+workflows:
+    b2c_flow_abandoned_shopping_cart:
+        attributes:
+            # Call related fields
+            call:
+                label: 'Call log'
+                type: entity
+                options:
+                    class: OroCRM\Bundle\CallBundle\Entity\Call
+            phone_number:
+                label: 'Phone number'
+                type: string
+            call_subject:
+                label: 'Call subject'
+                type: string
+            call_date:
+                label: 'Call date'
+                type: object
+                options:
+                    class: DateTime
+            call_direction:
+                label: 'Call direction'
+                type: entity
+                options:
+                    class: OroCRM\Bundle\CallBundle\Entity\CallDirection
+            call_status:
+                label: 'Call status'
+                type: entity
+                options:
+                    class: OroCRM\Bundle\CallBundle\Entity\CallStatus
+            call_duration:
+                label: 'Call duration'
+                type: object
+                options:
+                    class: DateTime
+
+            # Email related fields
+            email:
+                label: 'Email'
+                type: entity
+                options:
+                    class: Oro\Bundle\EmailBundle\Entity\Email
+            email_from:
+                label: 'Email sender'
+                type: string
+            email_to:
+                label: 'Email recipient'
+                type: string
+            email_subject:
+                label: 'Email subject'
+                type: string
+            email_body:
+                label: 'Email content'
+                type: string
+
+            # Other workflow attributes
+            notes:
+                label: 'Notes'
+                type: string
+                property_path: cart.notes
+            opportunity_name:
+                label: 'Opportunity name'
+                type: string
+            opportunity_owner:
+                label: 'Owner'
+                type: entity
+                options:
+                    class: Oro\Bundle\UserBundle\Entity\User
+            opportunity_budget:
+                label: 'Budget amount'
+                type: float
+            account:
+                label: 'Account'
+                type: entity
+                options:
+                    class: OroCRM\Bundle\AccountBundle\Entity\Account
+            contact:
+                label: 'Contact'
+                type: entity
+                options:
+                    class: OroCRM\Bundle\ContactBundle\Entity\Contact

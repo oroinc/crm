@@ -25,6 +25,7 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
  * )
  * @Config(
  *  defaultValues={
+ *      "entity"={"icon"="icon-list-alt"},
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
@@ -114,23 +115,23 @@ class Order extends BaseOrder
     protected $totalPaidAmount = 0;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="total_invoiced_amount", type="float", nullable=true)
+     * @ORM\Column(name="total_invoiced_amount", type="money", nullable=true)
      */
     protected $totalInvoicedAmount = 0;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="total_refunded_amount", type="float", nullable=true)
+     * @ORM\Column(name="total_refunded_amount", type="money", nullable=true)
      */
     protected $totalRefundedAmount = 0;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="total_canceled_amount", type="float", nullable=true)
+     * @ORM\Column(name="total_canceled_amount", type="money", nullable=true)
      */
     protected $totalCanceledAmount = 0;
 
@@ -183,8 +184,6 @@ class Order extends BaseOrder
     protected $feedback;
 
     /**
-     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
-     *
      * @var WorkflowItem
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
@@ -193,8 +192,6 @@ class Order extends BaseOrder
     protected $workflowItem;
 
     /**
-     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
-     *
      * @var WorkflowStep
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")

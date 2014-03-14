@@ -1,0 +1,12 @@
+imports:
+    - { resource: 'b2c_flow_order_follow_up/steps.yml' }
+    - { resource: 'b2c_flow_order_follow_up/attributes.yml' }
+    - { resource: 'b2c_flow_order_follow_up/transitions.yml' }
+    - { resource: 'b2c_flow_order_follow_up/transition_definitions.yml' }
+
+workflows:
+    b2c_flow_order_follow_up:
+        label: 'Order Follow Up'
+        entity: OroCRM\Bundle\MagentoBundle\Entity\Order
+        entity_attribute: order
+        start_step: not_contacted
