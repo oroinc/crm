@@ -79,28 +79,28 @@ class CartItem extends BaseCartItem
     /**
      * @var double
      *
-     * @ORM\Column(name="custom_price", type="currency", nullable=true)
+     * @ORM\Column(name="custom_price", type="money", nullable=true)
      */
     protected $customPrice;
 
     /**
      * @var double
      *
-     * @ORM\Column(name="price_incl_tax", type="currency", nullable=true)
+     * @ORM\Column(name="price_incl_tax", type="money", nullable=true)
      */
     protected $priceInclTax;
 
     /**
      * @var double
      *
-     * @ORM\Column(name="row_total", type="currency")
+     * @ORM\Column(name="row_total", type="money")
      */
     protected $rowTotal;
 
     /**
      * @var double
      *
-     * @ORM\Column(name="tax_amount", type="currency")
+     * @ORM\Column(name="tax_amount", type="money")
      */
     protected $taxAmount;
 

@@ -116,21 +116,21 @@ class Order extends BaseOrder
     /**
      * @var double
      *
-     * @ORM\Column(name="total_invoiced_amount", type="currency", nullable=true)
+     * @ORM\Column(name="total_invoiced_amount", type="money", nullable=true)
      */
     protected $totalInvoicedAmount = 0;
 
     /**
      * @var double
      *
-     * @ORM\Column(name="total_refunded_amount", type="currency", nullable=true)
+     * @ORM\Column(name="total_refunded_amount", type="money", nullable=true)
      */
     protected $totalRefundedAmount = 0;
 
     /**
      * @var double
      *
-     * @ORM\Column(name="total_canceled_amount", type="currency", nullable=true)
+     * @ORM\Column(name="total_canceled_amount", type="money", nullable=true)
      */
     protected $totalCanceledAmount = 0;
 

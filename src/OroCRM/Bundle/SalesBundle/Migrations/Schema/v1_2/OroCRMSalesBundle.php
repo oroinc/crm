@@ -16,7 +16,7 @@ class OroCRMSalesBundle implements Migration
     {
         $table = $schema->getTable('orocrm_sales_opportunity');
         $table->getColumn('probability')->setType(Type::getType('percent'));
-        $table->getColumn('budget_amount')->setType(Type::getType('currency'));
-        $table->getColumn('close_revenue')->setType(Type::getType('currency'));
+        $table->getColumn('budget_amount')->setType(Type::getType('money'));
+        $table->getColumn('close_revenue')->setType(Type::getType('money'));
     }
 }

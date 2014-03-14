@@ -46,7 +46,7 @@ class OrderItem extends BaseOrderItem
     /**
      * @var double
      *
-     * @ORM\Column(name="original_price", type="currency", nullable=true)
+     * @ORM\Column(name="original_price", type="money", nullable=true)
      */
     protected $originalPrice;
 
