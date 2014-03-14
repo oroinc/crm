@@ -7,8 +7,8 @@
     params : {"%contact.name%": fullname}
 }) %}
 {% set title = form.vars.value.id
-    ? fullname ~ ' - ' ~ 'Update'|trans ~ ' ' ~ 'orocrm.contact.entity_label'|trans|lower
-    : 'New'|trans ~ ' ' ~ 'orocrm.contact.entity_label'|trans|lower
+    ? fullname ~ ' - ' ~ 'orocrm.contact.edit_entity'|trans|lower
+    : 'orocrm.contact.new_entity'|trans|lower
 %}
 {% set audit_entity_class = 'OroCRM_Bundle_ContactBundle_Entity_Contact' %}
 {% set gridName = 'contact-accounts-grid' %}

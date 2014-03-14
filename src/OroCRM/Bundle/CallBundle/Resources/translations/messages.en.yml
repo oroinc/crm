@@ -32,6 +32,7 @@ orocrm:
         entity_label:          Call
         entity_plural_label:   Calls
         entity_description:    Represent call
+        edit_entity:           Edit Call
         log_call:              Log call
         id.label:              Id
         subject.label:         Subject
