@@ -2,12 +2,16 @@
 
 namespace OroCRM\Bundle\TaskBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\ReminderBundle\Entity\RemindableInterface;
+use Oro\Bundle\ReminderBundle\Model\ReminderData;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
@@ -40,11 +44,15 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *      "dataaudit"={"auditable"=true},
  *      "workflow"={
  *          "active_workflow"="task_flow"
- *      }
+ *      },
+ *      "reminder"={
+ *          "reminder_template_name"="task_reminder",
+ *          "reminder_flash_template_identifier"="task_template"
+ *      },
  *  }
  * )
  */
-class Task extends ExtendTask
+class Task extends ExtendTask implements RemindableInterface
 {
     /**
      * @var integer
@@ -52,6 +60,12 @@ class Task extends ExtendTask
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "email"={"available_in_template"=true}
+     *  }
+     * )
      */
     protected $id;
 
@@ -102,6 +116,12 @@ class Task extends ExtendTask
      *
      * @ORM\ManyToOne(targetEntity="TaskPriority")
      * @ORM\JoinColumn(name="task_priority_name", referencedColumnName="name", onDelete="SET NULL")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "email"={"available_in_template"=true}
+     *  }
+     * )
      */
     protected $taskPriority;
 
@@ -182,6 +202,11 @@ class Task extends ExtendTask
     protected $workflowStep;
 
     /**
+     * @var Collection
+     */
+    protected $reminders;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -204,6 +229,11 @@ class Task extends ExtendTask
      * )
      */
     protected $updatedAt;
+
+    public function __construct()
+    {
+        $this->reminders = new ArrayCollection();
+    }
 
     /**
      * @param int $id
@@ -435,6 +465,36 @@ class Task extends ExtendTask
     public function getWorkflowStep()
     {
         return $this->workflowStep;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getReminders()
+    {
+        return $this->reminders;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setReminders(Collection $reminders)
+    {
+        $this->reminders = $reminders;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getReminderData()
+    {
+        $result = new ReminderData();
+
+        $result->setSubject($this->getSubject());
+        $result->setExpireAt($this->getDueDate());
+        $result->setRecipient($this->getAssignedTo());
+
+        return $result;
     }
 
     /**
