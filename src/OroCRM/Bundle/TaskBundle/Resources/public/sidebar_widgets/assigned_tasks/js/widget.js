@@ -66,7 +66,7 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/loading-mask'],
 
                 onChange: function (e) {
                     var model = this.model;
-                    var perPage = this.$el.find('[name="perPage"]').val();
+                    var perPage = parseInt(this.$el.find('[name="perPage"]').val());
                     var settings = model.get('settings');
                     settings.perPage = perPage;
                     model.set({ settings: settings }, { silent: true });
