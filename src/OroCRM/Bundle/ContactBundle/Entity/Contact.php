@@ -18,6 +18,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -48,6 +49,9 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
+ *      },
+ *      "form"={
+ *          "form_type"="orocrm_contact_select"
  *      }
  *  }
  * )

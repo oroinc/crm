@@ -4,8 +4,8 @@
 {% oro_title_set({params : {"%sales_funnel.name%": entity.name} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_SalesFunnel' %}
 {% set title = form.vars.value.id
-    ? entity.name ~ ' - ' ~ 'Update'|trans ~ ' ' ~ 'orocrm.sales.salesfunnel.entity_label'|trans
-    : 'New'|trans ~ ' ' ~ 'orocrm.sales.salesfunnel.entity_label'|trans
+    ? entity.name ~ ' - ' ~ 'orocrm.sales.salesfunnel.edit_entity'|trans
+    : 'orocrm.sales.salesfunnel.new_entity'|trans
 %}
 {% set formAction = form.vars.value.id ? path('orocrm_sales_salesfunnel_update', { 'id': form.vars.value.id }) : path('orocrm_sales_salesfunnel_create')  %}
 

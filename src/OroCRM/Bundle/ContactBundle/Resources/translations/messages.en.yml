@@ -33,6 +33,10 @@ orocrm:
         entity_label:        Contact
         entity_plural_label: Contacts
         entity_description:  Represent contact
+        edit_entity:         Update Contact
+        new_entity:          New Contact
+
+        import: Import Contacts
 
         add_entity:        Add contact
         id.label:          Id
@@ -127,6 +131,7 @@ orocrm:
             entity_label:        Contact Group
             entity_plural_label: Contact Groups
             entity_description:  Represent contact's group
+            new_entity:          New Contact Group
             id.label:    Id
             owner.label: Owner
             label.label: Label

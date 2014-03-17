@@ -5,7 +5,7 @@
 {% endif %}
 {% set title = form.vars.value.id
     ? form.vars.value.name|default('N/A')
-    : 'New'|trans ~ ' ' ~ 'orocrm.contact.group.entity_label'|trans
+    : 'orocrm.contact.group.new_entity'|trans
 %}
 {% set audit_entity_class = 'OroCRM_Bundle_ContactBundle_Entity_Group' %}
 {% set gridName = 'contact-group-contacts-grid' %}

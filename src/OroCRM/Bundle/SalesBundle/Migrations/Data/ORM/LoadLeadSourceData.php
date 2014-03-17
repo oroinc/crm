@@ -15,7 +15,7 @@ class LoadLeadSourceData extends AbstractFixture implements ContainerAwareInterf
      * @var array
      */
     protected $data = [
-        'Internal' => true
+        'Demand Generation' => true
     ];
 
     /**

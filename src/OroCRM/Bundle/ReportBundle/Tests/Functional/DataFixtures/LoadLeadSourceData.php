@@ -16,12 +16,12 @@ class LoadLeadSourceData extends AbstractFixture implements ContainerAwareInterf
      * @var array
      */
     protected $data = [
-        'Website' => false,
-        'Advertising' => false,
-        'Blogging' => false,
-        'Media' => false,
-        'Outbound' => false,
-        'Partner' => false
+        'Website'     => false,
+        'Direct Mail' => false,
+        'Affiliate'   => false,
+        'Email Marketing'       => false,
+        'Outbound'    => false,
+        'Partner'     => false
     ];
 
     /**

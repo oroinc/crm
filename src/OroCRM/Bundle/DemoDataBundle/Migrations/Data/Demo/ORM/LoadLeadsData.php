@@ -25,7 +25,6 @@ use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
 
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {

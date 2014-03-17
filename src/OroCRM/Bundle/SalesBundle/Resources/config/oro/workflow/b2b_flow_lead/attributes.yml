@@ -1,0 +1,17 @@
+workflows:
+    b2b_flow_lead:
+        attributes:
+            opportunity_name:
+                label: orocrm.sales.opportunity.name.label
+                type: string
+            account:
+                label:  orocrm.account.entity_label
+                type: entity
+                options:
+                    class: OroCRM\Bundle\AccountBundle\Entity\Account
+            company_name:
+                label: orocrm.sales.lead.company_name.label
+                type: string
+            notes:
+                label: orocrm.sales.lead.notes.label
+                type: string

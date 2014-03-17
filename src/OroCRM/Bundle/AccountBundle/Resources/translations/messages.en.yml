@@ -26,6 +26,7 @@ orocrm:
         entity_label:               Account
         entity_plural_label:        Accounts
         entity_description:         Represent account
+        new_entity:                 New Account
         id.label:                   Id
         name.label:                 Account name
         created_at.label:           Created
