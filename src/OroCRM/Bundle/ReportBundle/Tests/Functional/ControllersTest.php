@@ -90,11 +90,11 @@ class ControllersTest extends WebTestCase
                 'accounts',
                 'Accounts by opportunities'
             ),
-            'by_step'          => array(
+            'by_status'        => array(
                 'orocrm_report-opportunities',
-                'by_step',
+                'by_status',
                 'opportunities',
-                'Opportunities by step'
+                'Opportunities by status'
             ),
             'won_by_period'    => array(
                 'orocrm_report-opportunities',
