@@ -37,7 +37,7 @@
                     {% trans %}N/A{% endtrans %}
                 {% endif %}
             {% endset %}
-            {{ ui.renderProperty('orocrm.magento.order.customer.label'|trans, customerData) }}
+            {{ ui.renderHtmlProperty('orocrm.magento.order.customer.label'|trans, customerData) }}
 
             {% set cartData %}
                 {% set cartViewGranted = resource_granted('orocrm_magento_cart_view') %}
@@ -49,14 +49,14 @@
                     {% trans %}N/A{% endtrans %}
                 {% endif %}
             {% endset %}
-            {{ ui.renderProperty('orocrm.magento.order.cart.label'|trans, cartData) }}
+            {{ ui.renderHtmlProperty('orocrm.magento.order.cart.label'|trans, cartData) }}
 
             {% if entity.addresses is not empty %}
                 {% for orderAddress in entity.addresses %}
                     {% set title = orderAddress.types.first and orderAddress.types.first.name == 'billing'
                         ? 'orocrm.magento.cart.billing_address.label'|trans
                         : 'orocrm.magento.cart.shipping_address.label'|trans %}
-                    {{ ui.renderProperty(title, address.renderAddress(orderAddress)) }}
+                    {{ ui.renderHtmlProperty(title, address.renderAddress(orderAddress)) }}
                 {% endfor %}
             {% endif %}
 

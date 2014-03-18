@@ -5,7 +5,7 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ ui.renderProperty('orocrm.magento.cart.email.label'|trans, email.email_address_simple(entity.email)) }}
+            {{ ui.renderHtmlProperty('orocrm.magento.cart.email.label'|trans, email.email_address_simple(entity.email)) }}
             {{ ui.renderProperty('orocrm.magento.cart.items_qty.label'|trans, entity.itemsQty) }}
             {{ ui.renderProperty('orocrm.magento.cart.status.label'|trans, entity.status|trans) }}
             {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.store.website.name) }}
@@ -24,10 +24,10 @@
 
         <div class="responsive-block">
             {% if entity.billingAddress is not empty %}
-                {{ ui.renderProperty('orocrm.magento.cart.billing_address.label'|trans, address.renderAddress(entity.billingAddress)) }}
+                {{ ui.renderHtmlProperty('orocrm.magento.cart.billing_address.label'|trans, address.renderAddress(entity.billingAddress)) }}
             {% endif %}
             {% if entity.shippingAddress is not empty %}
-                {{ ui.renderProperty('orocrm.magento.cart.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
+                {{ ui.renderHtmlProperty('orocrm.magento.cart.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
             {% endif %}
             {% if entity.notes is not empty %}
                 {{ ui.renderHtmlProperty('orocrm.magento.cart.notes.label'|trans, entity.notes|escape|nl2br) }}
