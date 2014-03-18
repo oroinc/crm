@@ -50,7 +50,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                     init_actions:
-                        - @create_datetime:
+                        - @create_date:
                             conditions:
                                 @empty: $close_date
                             parameters:
@@ -86,7 +86,7 @@ workflows:
                             conditions:
                                 @not_empty: $close_reason
                             parameters: [$close_reason_name, $close_reason.name]
-                        - @create_datetime:
+                        - @create_date:
                             conditions:
                                 @empty: $close_date
                             parameters:
