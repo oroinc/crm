@@ -10,7 +10,7 @@
             {% endif %}
 
             {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.website.name) }}
-            {{ ui.renderProperty('orocrm.magento.customer.store.label'|trans, entity.store.name|nl2br) }}
+            {{ ui.renderHtmlProperty('orocrm.magento.customer.store.label'|trans, entity.store.name|escape|nl2br) }}
         </div>
 
         <div class="responsive-block">

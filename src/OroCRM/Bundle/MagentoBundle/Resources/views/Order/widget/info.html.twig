@@ -23,15 +23,15 @@
             {{ ui.renderProperty('orocrm.magento.order.remote_ip.label'|trans, entity.remoteIp) }}
             {{ ui.renderProperty('orocrm.magento.order.gift_message.label'|trans, entity.giftMessage) }}
             {{ ui.renderProperty('orocrm.magento.order.store_name.label'|trans, entity.store.website.name) }}
-            {{ ui.renderProperty('orocrm.magento.order.store.label'|trans, entity.store.name|nl2br) }}
+            {{ ui.renderHtmlProperty('orocrm.magento.order.store.label'|trans, entity.store.name|escape|nl2br) }}
 
             {% set customerData %}
                 {% if entity.customer %}
                     {% set customerViewGranted = resource_granted('orocrm_magento_customer_view') %}
                     {%- if customerViewGranted -%}
-                        <a href="{{ path('orocrm_magento_customer_view', {'id': entity.customer.id}) }}">{{ entity.customer|oro_format_name|default('N/A'|trans) }}</a>
+                        <a href="{{ path('orocrm_magento_customer_view', {'id': entity.customer.id}) }}">{{ entity.customer|oro_format_name|default('N/A'|trans)|escape }}</a>
                     {%- else -%}
-                        {{ entity.customer|oro_format_name|default('N/A'|trans) }}
+                        {{ entity.customer|oro_format_name|default('N/A'|trans)|escape }}
                     {%- endif -%}
                 {% else %}
                     {% trans %}N/A{% endtrans %}
@@ -61,11 +61,11 @@
             {% endif %}
 
             {% if entity.feedback is not empty %}
-                {{ ui.renderProperty('orocrm.magento.order.feedback.label'|trans, entity.feedback|nl2br) }}
+                {{ ui.renderHtmlProperty('orocrm.magento.order.feedback.label'|trans, entity.feedback|escape|nl2br) }}
             {% endif %}
 
             {% if entity.notes is not empty %}
-                {{ ui.renderProperty('orocrm.magento.order.notes.label'|trans, entity.notes|nl2br) }}
+                {{ ui.renderHtmlProperty('orocrm.magento.order.notes.label'|trans, entity.notes|escape|nl2br) }}
             {% endif %}
         </div>
     </div>

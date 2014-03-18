@@ -9,7 +9,7 @@
             {{ ui.renderProperty('orocrm.magento.cart.items_qty.label'|trans, entity.itemsQty) }}
             {{ ui.renderProperty('orocrm.magento.cart.status.label'|trans, entity.status|trans) }}
             {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.store.website.name) }}
-            {{ ui.renderProperty('orocrm.magento.cart.store.label'|trans, entity.store.name|nl2br) }}
+            {{ ui.renderHtmlProperty('orocrm.magento.cart.store.label'|trans, entity.store.name|escape|nl2br) }}
 
             {% if entity.opportunity %}
                 {%- if entity.opportunity and resource_granted('VIEW', entity.opportunity) -%}
@@ -30,7 +30,7 @@
                 {{ ui.renderProperty('orocrm.magento.cart.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
             {% endif %}
             {% if entity.notes is not empty %}
-                {{ ui.renderProperty('orocrm.magento.cart.notes.label'|trans, entity.notes|nl2br) }}
+                {{ ui.renderHtmlProperty('orocrm.magento.cart.notes.label'|trans, entity.notes|escape|nl2br) }}
             {% endif %}
         </div>
     </div>
