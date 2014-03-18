@@ -20,6 +20,7 @@ oro_menu_config:
                 system_tab:
                     children:
                         task_list: ~
+
         account_activity_tab_panel:
             children:
                 orocrm_task_account_tasks_tab: ~
