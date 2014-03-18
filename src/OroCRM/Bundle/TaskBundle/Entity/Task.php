@@ -22,7 +22,10 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_task")
+ * @ORM\Table(
+ *      name="orocrm_task",
+ *      indexes={@ORM\Index(name="due_date_idx", columns={"due_date"})}
+ * )
  * @Oro\Loggable
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository")

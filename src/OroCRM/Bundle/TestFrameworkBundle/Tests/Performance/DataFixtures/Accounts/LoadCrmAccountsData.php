@@ -31,8 +31,8 @@ use Oro\Bundle\UserBundle\Entity\UserManager;
 
 class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInterface
 {
-    const FLUSH_MAX = 20;
-    const MAX_RECORDS = 10000;
+    const FLUSH_MAX = 500;
+    const MAX_RECORDS = 250000;
 
     protected $maxRecords;
 
@@ -149,62 +149,64 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     public function loadAccounts()
     {
-        $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . "data.csv", "r");
+        $loadedRecords = 0;
         $averageTime = 0.0;
-        if ($handle) {
-            $i = 0;
-            $headers = array();
-            if (($data = fgetcsv($handle, 1000, ",")) !== false) {
-                //read headers
-                $headers = $data;
-            }
+        while ($loadedRecords < $this->maxRecords) {
+            $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . "data.csv", "r");
             echo "\nLoading...\n";
-            while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-                $s = microtime(true);
-                $data = array_combine($headers, array_values($data));
-                $account = $this->createAccount($data);
-                $contact = $this->createContact($data);
-                $contact->addAccount($account);
-                $account->setDefaultContact($contact);
-
-                $group = $this->contactGroups[rand(0, count($this->contactGroups)-1)];
-                $contact->addGroup($group);
-
-                $user = $this->users[rand(0, count($this->users)-1)];
-                $contact->setAssignedTo($user);
-                $contact->setReportsTo($contact);
-                $contact->setOwner($user);
-
-                $source = $this->contactSources[rand(0, count($this->contactSources)-1)];
-                $contact->setSource($source);
-
-                $account->setOwner($user);
-
-                $this->persist($this->accountManager, $account);
-                $this->contactManager->persist($contact);
-
-                $i++;
-                if ($i % self::FLUSH_MAX == 0) {
-                    $this->flush($this->accountManager);
-                    $this->contactManager->flush();
-                    $this->contactManager->clear();
-
-                    $this->initSupportingEntities();
-
-                    $e = microtime(true);
-                    echo ">> {$i} " . ($e-$s) . "\n";
-                    $averageTime += ($e-$s);
+            if ($handle) {
+                $headers = array();
+                if (($data = fgetcsv($handle, 1000, ",")) !== false) {
+                    //read headers
+                    $headers = $data;
                 }
+                while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+                    $s = microtime(true);
+                    $data = array_combine($headers, array_values($data));
+                    $account = $this->createAccount($data);
+                    $contact = $this->createContact($data);
+                    $contact->addAccount($account);
+                    $account->setDefaultContact($contact);
 
-                if ($i % $this->maxRecords == 0) {
-                    break;
+                    $group = $this->contactGroups[rand(0, count($this->contactGroups)-1)];
+                    $contact->addGroup($group);
+
+                    $user = $this->users[rand(0, count($this->users)-1)];
+                    $contact->setAssignedTo($user);
+                    $contact->setReportsTo($contact);
+                    $contact->setOwner($user);
+
+                    $source = $this->contactSources[rand(0, count($this->contactSources)-1)];
+                    $contact->setSource($source);
+
+                    $account->setOwner($user);
+
+                    $this->persist($this->accountManager, $account);
+                    $this->contactManager->persist($contact);
+
+                    $loadedRecords++;
+                    if ($loadedRecords % self::FLUSH_MAX == 0) {
+                        $this->flush($this->accountManager);
+                        $this->contactManager->flush();
+                        $this->contactManager->clear();
+
+                        $this->initSupportingEntities();
+
+                        $e = microtime(true);
+                        echo ">> {$loadedRecords} " . ($e-$s) . "\n";
+                        $averageTime += ($e-$s);
+                    }
+
+                    if ($loadedRecords == $this->maxRecords) {
+                        break;
+                    }
                 }
+                fclose($handle);
             }
-            fclose($handle);
+            $this->flush($this->accountManager);
+            $this->contactManager->flush();
         }
-        $this->flush($this->accountManager);
-        $this->contactManager->flush();
-        $avg = $averageTime * self::FLUSH_MAX / $this->maxRecords;
+        $avg = $averageTime * self::FLUSH_MAX / $loadedRecords;
         echo ">> Average time: " . $avg . "\n";
         $this->container->averageTime = $avg;
     }
@@ -220,7 +222,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         /** @var $account Account */
         $account = new Account();
 
-        $account->setName($data['Username'] . $data['MiddleInitial'] . '_' . $data['Surname']);
+        $account->setName($data['Username'] . $data['MiddleInitial'] . '_' . $data['Surname'] . mt_rand(1, 99999));
 
         $isoCode = $data['Country'];
         $country = array_filter(
@@ -273,7 +275,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $contact = new Contact();
 
         $contact->setFirstName($data['GivenName']);
-        $contact->setLastName($data['Surname']);
+        $contact->setLastName($data['Surname'] . '_' . mt_rand(1, 999999));
         $contact->setNamePrefix($data['Title']);
 
         $phone = new ContactPhone($data['TelephoneNumber']);

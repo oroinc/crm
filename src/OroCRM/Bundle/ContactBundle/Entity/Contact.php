@@ -31,7 +31,10 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @ORM\Entity
- * @ORM\Table(name="orocrm_contact")
+ * @ORM\Table(
+ *      name="orocrm_contact",
+ *      indexes={@ORM\Index(name="concat_name_idx", columns={"first_name", "last_name"})}
+ * )
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
