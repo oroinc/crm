@@ -196,8 +196,8 @@ datagrid:
             entityHint: report data
             export: true
 
-    orocrm_report-opportunities-by_step:
-        pageTitle: "Opportunities by step"
+    orocrm_report-opportunities-by_status:
+        pageTitle: "Opportunities by status"
         source:
             type: orm
             acl_resource: oro_report_view
@@ -206,55 +206,59 @@ datagrid:
                     - { table: OroCRMSalesBundle:Opportunity, alias: opportunity }
                 join:
                     inner:
-                        - { join: opportunity.workflowStep, alias: workflowStep }
+                        - { join: opportunity.status, alias: status }
                 select:
-                    - workflowStep.label as stepLabel
+                    - status.label as statusLabel
                     - COUNT(opportunity.id) as numberOfOpportunities
                     - >
                       SUM(
-                        CASE WHEN workflowStep.name='close' THEN opportunity.closeRevenue ELSE 0 END
+                        CASE WHEN status.name IN ('won', 'lost') THEN opportunity.closeRevenue ELSE 0 END
                       ) as closeRevenue
                     - >
                       SUM(
                         CASE WHEN opportunity.budgetAmount IS NOT NULL THEN opportunity.budgetAmount ELSE 0 END
                       ) as budgetAmount
-                groupBy: stepLabel
+                groupBy: statusLabel
         totals:
             total:
                 extends: grand_total
                 per_page: true
                 hide_if_one_page: true
                 columns:
-                    stepLabel:
+                    statusLabel:
                         label: 'Page Totals'
             grand_total:
                 columns:
-                    stepLabel:
+                    statusLabel:
                         label: 'Grand Totals'
                     numberOfOpportunities:
                         expr: COUNT(opportunity.id)
                     closeRevenue:
-                        expr: SUM(CASE WHEN workflowStep.name='close' THEN opportunity.closeRevenue ELSE 0 END)
+                        expr: SUM(CASE WHEN status.name IN ('won', 'lost') THEN opportunity.closeRevenue ELSE 0 END)
                         formatter: currency
                     budgetAmount:
                         expr: SUM(CASE WHEN opportunity.budgetAmount IS NOT NULL THEN opportunity.budgetAmount ELSE 0 END)
                         formatter: currency
         columns:
-            stepLabel:             { label: orocrm.report.datagrid.columns.step }
+            statusLabel:           { label: orocrm.report.datagrid.columns.status }
             numberOfOpportunities: { label: orocrm.report.datagrid.columns.number_of_opportunities, frontend_type: integer }
             closeRevenue:          { label: orocrm.report.datagrid.columns.close_revenue, frontend_type: currency }
             budgetAmount:          { label: orocrm.report.datagrid.columns.budget_amount, frontend_type: currency }
         sorters:
             columns:
-                stepLabel:             { data_name: stepLabel }
+                statusLabel:           { data_name: statusLabel }
                 numberOfOpportunities: { data_name: numberOfOpportunities }
                 closeRevenue:          { data_name: closeRevenue }
                 budgetAmount:          { data_name: budgetAmount }
         filters:
             columns:
-                stepLabel:
-                    type: string
-                    data_name: stepLabel
+                statusLabel:
+                    type: entity
+                    data_name: opportunity.status
+                    options:
+                        field_options:
+                            class: OroCRMSalesBundle:OpportunityStatus
+                            property: label
                 numberOfOpportunities:
                     type: number
                     data_name: numberOfOpportunities
@@ -271,14 +275,6 @@ datagrid:
                     filter_by_having: true
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                workflowName:
-                    type: entity
-                    label: orocrm.report.datagrid.columns.workflow
-                    data_name: wi.workflowName
-                    options:
-                        field_options:
-                            class: OroWorkflowBundle:WorkflowDefinition
-                            property: label
         options:
             entityHint: report data
             export: true
