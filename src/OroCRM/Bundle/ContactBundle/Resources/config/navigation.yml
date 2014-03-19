@@ -17,8 +17,8 @@ oro_menu_config:
             label: orocrm.contact.group.entity_plural_label
             route: orocrm_contact_group_index
             extras:
-                position: 45
-                routes: ['orocrm_contact_group_*']
+                position:    30
+                routes:      ['orocrm_contact_group_*']
                 description: List of contact groups
 
         shortcut_new_contact:
