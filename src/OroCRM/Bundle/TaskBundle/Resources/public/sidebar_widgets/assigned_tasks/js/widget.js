@@ -29,7 +29,7 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/loading-mask'],
                     var url = routing.generate('orocrm_task_widget_sidebar_tasks', { 'perPage': settings.perPage });
 
                     if (!fromCache) {
-                        url += "#" + Math.random();
+                        url += '?r=' + Math.random();
                     }
 
                     var loadingMask = new LoadingMask();
@@ -66,7 +66,7 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/loading-mask'],
 
                 onChange: function (e) {
                     var model = this.model;
-                    var perPage = this.$el.find('[name="perPage"]').val();
+                    var perPage = parseInt(this.$el.find('[name="perPage"]').val());
                     var settings = model.get('settings');
                     settings.perPage = perPage;
                     model.set({ settings: settings }, { silent: true });
