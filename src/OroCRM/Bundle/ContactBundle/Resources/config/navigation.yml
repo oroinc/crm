@@ -44,6 +44,8 @@ oro_menu_config:
                 customers_tab:
                     children:
                         contact_list: ~
+                system_tab:
+                    children:
                         contact_group_list: ~
 
         shortcuts:

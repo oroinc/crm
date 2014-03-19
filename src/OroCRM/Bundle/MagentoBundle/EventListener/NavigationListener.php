@@ -36,7 +36,7 @@ class NavigationListener
         'customer' => [
             'parent'       => 'customers_tab',
             'prefix'       => self::CUSTOMER_MENU_ITEM,
-            'label'        => 'Channels',
+            'label'        => 'orocrm.magento.menu.web_customers',
             'route'        => 'orocrm_magento_customer_index',
             'extra_routes' => '/^orocrm_magento_customer_(index|view)$/'
         ]

@@ -11,13 +11,13 @@ oro_menu_config:
         orocrm_task_account_tasks_tab:
             label: orocrm.task.widgets.account_tasks
             extras:
-                position: 100
+                position: 10
                 widgetRoute: orocrm_task_widget_account_tasks
 
     tree:
         application_menu:
             children:
-                system_tab:
+                activities_tab:
                     children:
                         task_list: ~
         account_activity_tab_panel:
