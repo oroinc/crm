@@ -1,5 +1,10 @@
 oro_menu_config:
     items:
+        activities_tab:
+            label: Activities
+            uri: '#'
+            extras:
+                position: 30
         call_list:
             label: orocrm.call.entity_plural_label
             route: orocrm_call_index
@@ -22,7 +27,7 @@ oro_menu_config:
     tree:
         application_menu:
             children:
-                customers_tab:
+                activities_tab:
                     children:
                         call_list: ~
         shortcuts:
