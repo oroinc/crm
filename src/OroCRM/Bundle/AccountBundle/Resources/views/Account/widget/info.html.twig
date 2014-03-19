@@ -17,7 +17,7 @@
             {% endif %}
 
             {% if resource_granted('oro_tag_view_tag_cloud') %}
-                {{ UI.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(account)) }}
+                {{ UI.renderProperty('oro.tag.entity_plural_label'|trans, tag.renderView(account)) }}
             {% endif %}
         </div>
 
