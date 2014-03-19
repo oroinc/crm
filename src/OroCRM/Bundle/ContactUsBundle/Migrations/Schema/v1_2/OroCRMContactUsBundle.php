@@ -1,19 +1,19 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_2;
+namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_2;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMContactBundle implements Migration
+class OroCRMContactUsBundle implements Migration
 {
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_contact');
-        $table->addIndex(array('first_name', 'last_name'));
+        $table = $schema->getTable('orocrm_contactus_request');
+        $table->addIndex(array('created_at'));
     }
 }

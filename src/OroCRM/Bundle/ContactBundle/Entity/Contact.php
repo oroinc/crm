@@ -33,7 +33,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  * @ORM\Entity
  * @ORM\Table(
  *      name="orocrm_contact",
- *      indexes={@ORM\Index(name="concat_name_idx", columns={"first_name", "last_name"})}
+ *      indexes={@ORM\Index(columns={"first_name", "last_name"})}
  * )
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable

@@ -19,6 +19,9 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
  * @ORM\Table(name="orocrm_magento_order",
+ *     indexes={
+ *          @ORM\Index(columns={"created_at"})
+ *     },
  *     uniqueConstraints={
  *          @ORM\UniqueConstraint(name="unq_increment_id_channel_id", columns={"increment_id", "channel_id"})
  *     }
