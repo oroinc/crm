@@ -137,7 +137,7 @@ class AclTest extends Selenium2TestCase
             ->assertTitle('Contacts - Customers')
             ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create contact']")
             ->openContactGroups('OroCRM\Bundle\ContactBundle')
-            ->assertTitle('Contact Groups - Customers')
+            ->assertTitle('Contact Groups - System')
             ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create contact group']")
             ->openAclCheck('Oro\Bundle\SecurityBundle')
             ->assertAcl('account/create')
