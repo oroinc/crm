@@ -113,54 +113,51 @@ datagrid:
                     - c.email
                     - c.itemsQty
                     - c.quoteCurrencyCode as currency
-                    - c.subTotal
                     - c.grandTotal
                     - c.createdAt
                     - c.updatedAt
-                    - cw.name as websiteName
                     - cstatus.label as statusLabel
                     - step.label as stepLabel
+                    - customer.firstName as firstName
+                    - customer.lastName as lastName
                 from:
                     - { table: %orocrm_magento.cart.entity.class% , alias: c }
                 join:
                     left:
                         - { join: c.store, alias: cs }
-                        - { join: cs.website, alias: cw }
                         - { join: c.channel, alias: ch }
                         - { join: c.status, alias: cstatus }
                         - { join: c.workflowStep, alias: step }
+                        - { join: c.customer, alias: customer }
                 where:
                     and:
                         - c.channel = :channelId
         columns:
             originId:
                 label: orocrm.magento.cart.id.label
+            firstName:
+                label: orocrm.magento.datagrid.columns.first_name
+            lastName:
+                label: orocrm.magento.datagrid.columns.last_name
+            email:
+                label: orocrm.magento.cart.email.label
             itemsQty:
                 label: orocrm.magento.datagrid.columns.qty
-            subTotal:
-                label: orocrm.magento.cart.sub_total.label
-                type:   localized_number
-                method: formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             grandTotal:
                 label: orocrm.magento.cart.grand_total.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
-            email:
-                label: orocrm.magento.cart.email.label
-            websiteName:
-                label: orocrm.magento.datagrid.columns.website
-            statusLabel:
-                label: orocrm.magento.datagrid.columns.status
-            stepLabel:
-                label: orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
             createdAt:
                 label: orocrm.magento.cart.created_at.label
                 frontend_type: datetime
             updatedAt:
                 label: orocrm.magento.cart.updated_at.label
                 frontend_type: datetime
+            statusLabel:
+                label: orocrm.magento.datagrid.columns.status
+            stepLabel:
+                label: orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
         properties:
             id: ~
             view_link:
@@ -170,15 +167,15 @@ datagrid:
         sorters:
             columns:
                 originId:             { data_name: c.originId }
-                itemsQty:             { data_name: c.itemsQty }
+                firstName:            { data_name: customer.firstName }
+                lastName:             { data_name: customer.lastName }
                 email:                { data_name: c.email }
-                subTotal:             { data_name: c.subTotal }
+                itemsQty:             { data_name: c.itemsQty }
                 grandTotal:           { data_name: c.grandTotal }
-                websiteName:          { data_name: cw.name }
-                statusLabel:          { data_name: cstatus.label }
-                stepLabel:            { data_name: step.label }
                 createdAt:            { data_name: c.createdAt }
                 updatedAt:            { data_name: c.updatedAt }
+                statusLabel:          { data_name: cstatus.label }
+                stepLabel:            { data_name: step.label }
             default:
                 updatedAt:  ASC
         filters:
@@ -186,16 +183,15 @@ datagrid:
                 originId:
                     type: number
                     data_name: c.originId
+                firstName:
+                    type: string
+                    data_name: customer.firstName
+                lastName:
+                    type: string
+                    data_name: customer.lastName
                 email:
                     type: string
                     data_name: c.email
-                websiteName:
-                    type: entity
-                    data_name: cw
-                    options:
-                        field_options:
-                          class: OroCRMMagentoBundle:Website
-                          property: name
                 statusLabel:
                     type: entity
                     data_name: cstatus
