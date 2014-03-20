@@ -138,7 +138,8 @@ orocrm:
             workflow_step.label:       Workflow step
 
         cartitem:
-            entity_label:              Cart item
+            entity_label:              Shopping cart item
+            entity_plural_label:       Cart items
             created_at.label:          Created at
             updated_at.label:          Updated at
             custom_price.label:        Custom price
@@ -162,9 +163,11 @@ orocrm:
             tax_class_id.label:        Tax class id
             tax_percent.label:         Tax percent
             weight.label:              Weight
+            cart.label:                Cart
 
         orderitem:
             entity_label:              Order Item
+            entity_plural_label:       Order Items
             discount_amount.label:     Discount amount
             discount_percent.label:    Discount percent
             id.label:                  Cart item id
@@ -241,9 +244,6 @@ orocrm:
             calls.label:            Calls
             workflow_item.label:    Workflow item
             workflow_step.label:    Workflow step
-
-        order_item:
-
 
         product:
             entity_label:         Product
