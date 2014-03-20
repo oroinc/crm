@@ -26,7 +26,7 @@
             {%- else -%}
                 {% set opportunityView = entity.opportunity ? entity.opportunity.name : '' %}
             {%- endif -%}
-            {{ ui.renderProperty('orocrm.sales.salesfunnel.opportunity.label'|trans, opportunityView) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.salesfunnel.opportunity.label'|trans, opportunityView) }}
 
             {# TODO: Add step property rendering here (BAP-3084) #}
             {#{{ entityConfig.renderDynamicFields(entity) }}#}
