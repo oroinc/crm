@@ -31,8 +31,8 @@ use Oro\Bundle\UserBundle\Entity\UserManager;
 
 class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInterface
 {
-    const FLUSH_MAX = 500;
-    const MAX_RECORDS = 250000;
+    const FLUSH_MAX = 20;
+    const MAX_RECORDS = 10000;
 
     protected $maxRecords;
 
@@ -151,6 +151,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     {
         $loadedRecords = 0;
         $averageTime = 0.0;
+        $iteration = 0;
         while ($loadedRecords < $this->maxRecords) {
             $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . "data.csv", "r");
             echo "\nLoading...\n";
@@ -163,8 +164,8 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                 while (($data = fgetcsv($handle, 1000, ",")) !== false) {
                     $s = microtime(true);
                     $data = array_combine($headers, array_values($data));
-                    $account = $this->createAccount($data);
-                    $contact = $this->createContact($data);
+                    $account = $this->createAccount($data, $iteration);
+                    $contact = $this->createContact($data, $iteration);
                     $contact->addAccount($account);
                     $account->setDefaultContact($contact);
 
@@ -203,6 +204,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                 }
                 fclose($handle);
             }
+            $iteration++;
             $this->flush($this->accountManager);
             $this->contactManager->flush();
         }
@@ -215,14 +217,19 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      * Create an Account
      *
      * @param array $data
+     * @param int $iteration
      * @return Account
      */
-    private function createAccount(array $data)
+    private function createAccount(array $data, $iteration = 0)
     {
         /** @var $account Account */
         $account = new Account();
 
-        $account->setName($data['Username'] . $data['MiddleInitial'] . '_' . $data['Surname'] . mt_rand(1, 99999));
+        $name = $data['Username'] . $data['MiddleInitial'] . '_' . $data['Surname'];
+        if ($iteration) {
+            $name .= '_' . $iteration;
+        }
+        $account->setName($name);
 
         $isoCode = $data['Country'];
         $country = array_filter(
@@ -268,14 +275,19 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      * Create a Contact
      *
      * @param array $data
+     * @param int $iteration
      * @return Contact
      */
-    private function createContact(array $data)
+    private function createContact(array $data, $iteration = 0)
     {
         $contact = new Contact();
 
         $contact->setFirstName($data['GivenName']);
-        $contact->setLastName($data['Surname'] . '_' . mt_rand(1, 999999));
+        $lastName = $data['Surname'];
+        if ($iteration) {
+            $lastName .= '_' . $iteration;
+        }
+        $contact->setLastName($lastName);
         $contact->setNamePrefix($data['Title']);
 
         $phone = new ContactPhone($data['TelephoneNumber']);

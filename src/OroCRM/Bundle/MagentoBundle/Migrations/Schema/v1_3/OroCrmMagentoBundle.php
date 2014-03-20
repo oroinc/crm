@@ -14,12 +14,12 @@ class OroCrmMagentoBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $customerTable = $schema->getTable('orocrm_magento_customer');
-        $customerTable->addIndex(array('first_name', 'last_name'));
+        $customerTable->addIndex(array('first_name', 'last_name'), 'magecustomer_name_idx');
 
         $orderTable = $schema->getTable('orocrm_magento_order');
-        $orderTable->addIndex(array('created_at'));
+        $orderTable->addIndex(array('created_at'), 'mageorder_created_idx');
 
         $cartTable = $schema->getTable('orocrm_magento_cart');
-        $cartTable->addIndex(array('updatedAt'));
+        $cartTable->addIndex(array('updatedAt'), 'magecart_updated_idx');
     }
 }

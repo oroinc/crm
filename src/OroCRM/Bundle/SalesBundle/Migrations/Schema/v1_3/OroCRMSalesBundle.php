@@ -14,12 +14,12 @@ class OroCRMSalesBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $salesFunnelTable = $schema->getTable('orocrm_sales_funnel');
-        $salesFunnelTable->addIndex(array('startDate'));
+        $salesFunnelTable->addIndex(array('startDate'), 'sales_start_idx');
 
         $leadTable = $schema->getTable('orocrm_sales_lead');
-        $leadTable->addIndex(array('createdAt'));
+        $leadTable->addIndex(array('createdAt'), 'lead_created_idx');
 
         $opportunityTable = $schema->getTable('orocrm_sales_opportunity');
-        $opportunityTable->addIndex(array('created_at'));
+        $opportunityTable->addIndex(array('created_at'), 'opportunity_created_idx');
     }
 }

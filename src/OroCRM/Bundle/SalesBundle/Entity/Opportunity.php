@@ -18,7 +18,10 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
 
 /**
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
- * @ORM\Table(name="orocrm_sales_opportunity")
+ * @ORM\Table(
+ *      name="orocrm_sales_opportunity",
+ *      indexes={@ORM\Index(name="opportunity_created_idx",columns={"created_at"})}
+ * )
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(

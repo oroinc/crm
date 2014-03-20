@@ -14,6 +14,6 @@ class OroCRMTaskBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_task');
-        $table->addIndex(array('due_date'));
+        $table->addIndex(array('due_date'), 'task_due_date_idx');
     }
 }

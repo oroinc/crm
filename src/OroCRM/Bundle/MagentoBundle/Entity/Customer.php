@@ -22,7 +22,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * @ORM\Table(
  *      name="orocrm_magento_customer",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})},
- *      indexes={@ORM\Index(columns={"first_name", "last_name"})}
+ *      indexes={@ORM\Index(name="magecustomer_name_idx",columns={"first_name", "last_name"})}
  * )
  * @Config(
  *  defaultValues={

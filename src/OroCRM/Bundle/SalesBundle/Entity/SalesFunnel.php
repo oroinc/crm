@@ -13,7 +13,7 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 /**
  * @ORM\Table(
  *      name="orocrm_sales_funnel",
- *      indexes={@ORM\Index(columns={"startDate"})}
+ *      indexes={@ORM\Index(name="sales_start_idx",columns={"startDate"})}
  *
  * )
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository")

@@ -14,6 +14,6 @@ class OroCRMContactBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_contact');
-        $table->addIndex(array('first_name', 'last_name'));
+        $table->addIndex(array('first_name', 'last_name'), 'contact_name_idx');
     }
 }

@@ -18,7 +18,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  * @ORM\Entity
  * @ORM\Table(
  *      name="orocrm_contactus_request",
- *      indexes={@ORM\Index(columns={"created_at"})}
+ *      indexes={@ORM\Index(name="request_create_idx",columns={"created_at"})}
  * )
  *
  * @Config(
