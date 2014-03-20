@@ -94,6 +94,7 @@ orocrm:
             carts.label:         Carts
             channel.label:       Channel
             name.label:          Name
+            orders.label:        Customer orders
 
         cart:
             entity_label:         Shopping Cart
@@ -165,7 +166,7 @@ orocrm:
         orderitem:
             entity_label:              Order Item
             discount_amount.label:     Discount amount
-            discount_amount.label:     Discount percent
+            discount_percent.label:    Discount percent
             id.label:                  Cart item id
             is_virtual.label:          Is virtual
             name.label:                Name
@@ -197,8 +198,6 @@ orocrm:
             website_id.label:               Website
             is_extension_installed.label:   Is extension installed
 
-        orders:
-            label:               Orders
         order:
             entity_label:        Order
             entity_plural_label: Orders
