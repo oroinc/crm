@@ -138,7 +138,7 @@ orocrm:
             workflow_step.label:       Workflow step
 
         cartitem:
-            entity_label:              Shopping cart item
+            entity_label:              Shopping Cart Item
             entity_plural_label:       Cart items
             created_at.label:          Created at
             updated_at.label:          Updated at
@@ -164,6 +164,11 @@ orocrm:
             tax_percent.label:         Tax percent
             weight.label:              Weight
             cart.label:                Cart
+
+        cartstatus:
+            label.label:               Label
+            name.label:                Name
+            plural_label.label:        Cart statuses
 
         orderitem:
             entity_label:              Order Item
