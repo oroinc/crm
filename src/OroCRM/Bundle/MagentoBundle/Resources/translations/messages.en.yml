@@ -258,3 +258,4 @@ orocrm:
         account:
             no_customers_exist: No customers exist
 
+        menu.web_customers: Web Customers

@@ -120,18 +120,18 @@ class AccountController extends Controller
 
     /**
      * @Route(
-     *      "/contact/select/{id}",
-     *      name="orocrm_account_contact_select",
+     *      "/widget/contacts/{id}",
+     *      name="orocrm_account_widget_contacts_info",
      *      requirements={"id"="\d+"},
      *      defaults={"id"=0}
      * )
      * @AclAncestor("orocrm_contact_view")
      * @Template()
      */
-    public function contactDatagridAction(Account $entity = null)
+    public function contactsInfoAction(Account $account)
     {
         return [
-            'account' => $entity ? $entity->getId() : $entity
+            'account' => $account
         ];
     }
 
