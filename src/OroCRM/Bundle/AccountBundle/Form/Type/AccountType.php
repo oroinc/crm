@@ -109,7 +109,7 @@ class AccountType extends AbstractType
         /** @var Account $account */
         $account = $form->getData();
         $view->children['contacts']->vars['grid_url']
-            = $this->router->generate('orocrm_account_contact_select', array('id' => $account->getId()));
+            = $this->router->generate('orocrm_account_widget_contacts_info', array('id' => $account->getId()));
         $defaultContactId = $account->getDefaultContact() ? $account->getDefaultContact()->getId() : null;
         $view->children['contacts']->vars['initial_elements']
             = $this->getInitialElements($account->getContacts(), $defaultContactId);
