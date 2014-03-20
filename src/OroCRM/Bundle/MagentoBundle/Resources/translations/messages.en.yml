@@ -166,9 +166,10 @@ orocrm:
             cart.label:                Cart
 
         cartstatus:
+            entity_label:              Cart Status
+            entity_plural_label:       Cart Statuses
             label.label:               Label
             name.label:                Name
-            plural_label.label:        Cart statuses
 
         orderitem:
             entity_label:              Order Item

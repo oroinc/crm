@@ -209,7 +209,7 @@ class Customer extends BasePerson
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->orders = new ArrayCollection();
     }
 
