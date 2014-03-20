@@ -91,7 +91,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->router->expects($this->at(0))
             ->method('generate')
-            ->with('orocrm_account_contact_select', array('id' => 100))
+            ->with('orocrm_account_widget_contacts_info', array('id' => 100))
             ->will($this->returnValue('/test-path/100'));
         $this->router->expects($this->at(1))
             ->method('generate')

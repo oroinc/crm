@@ -29,7 +29,7 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/loading-mask'],
                     var url = routing.generate('orocrm_task_widget_sidebar_tasks', { 'perPage': settings.perPage });
 
                     if (!fromCache) {
-                        url += "#" + Math.random();
+                        url += '?r=' + Math.random();
                     }
 
                     var loadingMask = new LoadingMask();

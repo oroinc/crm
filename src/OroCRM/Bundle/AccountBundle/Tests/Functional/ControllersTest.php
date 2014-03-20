@@ -108,15 +108,10 @@ class ControllersTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_account_contact_select', array('_widgetContainer' => 'dialog'))
-        );
-        //just verify method OK
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_account_contact_select', array('id' => $id, '_widgetContainer' => 'dialog'))
+            $this->client->generate(
+                'orocrm_account_widget_contacts_info',
+                array('id' => $id, '_widgetContainer' => 'dialog')
+            )
         );
         //just verify method OK
         $result = $this->client->getResponse();
