@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,8 +20,10 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
- * @ORM\Table(name="orocrm_magento_customer",
- *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})}
+ * @ORM\Table(
+ *      name="orocrm_magento_customer",
+ *      uniqueConstraints={@ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})},
+ *      indexes={@ORM\Index(name="magecustomer_name_idx",columns={"first_name", "last_name"})}
  * )
  * @Config(
  *  defaultValues={
@@ -179,6 +182,15 @@ class Customer extends BasePerson
     protected $carts;
 
     /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Order",
+     *     mappedBy="customer", cascade={"all"}, orphanRemoval=true
+     * )
+     */
+    protected $orders;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(type="boolean", name="is_active")
@@ -192,6 +204,16 @@ class Customer extends BasePerson
      * @Oro\Versioned
      */
     protected $vat;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->orders = new ArrayCollection();
+    }
 
     /**
      * @param Website $website
