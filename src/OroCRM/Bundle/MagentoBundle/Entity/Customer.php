@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -179,6 +180,15 @@ class Customer extends BasePerson
     protected $carts;
 
     /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Order",
+     *     mappedBy="customer", cascade={"all"}, orphanRemoval=true
+     * )
+     */
+    protected $orders;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(type="boolean", name="is_active")
@@ -192,6 +202,16 @@ class Customer extends BasePerson
      * @Oro\Versioned
      */
     protected $vat;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->orders = new ArrayCollection();
+    }
 
     /**
      * @param Website $website
