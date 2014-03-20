@@ -20,8 +20,10 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
- * @ORM\Table(name="orocrm_magento_customer",
- *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})}
+ * @ORM\Table(
+ *      name="orocrm_magento_customer",
+ *      uniqueConstraints={@ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})},
+ *      indexes={@ORM\Index(name="magecustomer_name_idx",columns={"first_name", "last_name"})}
  * )
  * @Config(
  *  defaultValues={
