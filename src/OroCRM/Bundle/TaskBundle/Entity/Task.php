@@ -292,6 +292,14 @@ class Task extends ExtendTask implements RemindableInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isDueDateExpired()
+    {
+        return $this->getDueDate() &&  $this->getDueDate() < new \DateTime();
+    }
+
+    /**
      * @param \DateTime $dueDate
      */
     public function setDueDate(\DateTime $dueDate = null)
