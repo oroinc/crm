@@ -3,7 +3,9 @@
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCartItem;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * Class CartItem
@@ -14,6 +16,15 @@ use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCartItem;
  *      @ORM\Index(name="magecartitem_origin_idx", columns={"origin_id"}),
  *      @ORM\Index(name="magecartitem_sku_idx", columns={"sku"}),*
  * })
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"icon"="icon-shopping-cart"},
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
+ *  }
+ * )
  */
 class CartItem extends BaseCartItem
 {

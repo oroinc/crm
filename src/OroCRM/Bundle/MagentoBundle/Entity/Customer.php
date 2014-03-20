@@ -179,6 +179,15 @@ class Customer extends BasePerson
     protected $carts;
 
     /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Order",
+     *     mappedBy="customer", cascade={"all"}, orphanRemoval=true
+     * )
+     */
+    protected $orders;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(type="boolean", name="is_active")
