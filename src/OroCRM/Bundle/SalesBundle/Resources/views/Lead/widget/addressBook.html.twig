@@ -2,7 +2,7 @@
     {# JS template for address view #}
     <script type="text/html" id="template-addressbook-item">
         <address>
-            <%= formatted_address %>
+            <%= _.escape(formatted_address).replace(/\n/g, "<br/>") %>
         </address>
     </script>
 

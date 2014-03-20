@@ -1,1 +1,1 @@
-<%= highlight(name) %><%if (typeof firstName != 'undefined' && typeof lastName != 'undefined') { %> - <%= highlight(firstName) %> <%= highlight(lastName) %><% } %>
+<%= highlight(_.escape(name)) %><%if (typeof firstName != 'undefined' && typeof lastName != 'undefined') { %> - <%= highlight(_.escape(firstName)) %> <%= highlight(_.escape(lastName)) %><% } %>
