@@ -114,7 +114,7 @@ class WorkflowTest extends Selenium2TestCase
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Name', $activityName)
             ->open(array($activityName))
-            ->assertTitle($activityName . ' - Sales Activity - Sales')
+            ->assertTitle($activityName . ' - Sales Processes - Sales')
             ->reopen()
             ->checkStep('New Opportunity');
     }
@@ -218,7 +218,7 @@ class WorkflowTest extends Selenium2TestCase
         $login->openSalesActivities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Name', $activityName)
             ->open(array($activityName))
-            ->assertTitle($activityName . ' - Sales Activity - Sales')
+            ->assertTitle($activityName . ' - Sales Processes - Sales')
             ->reopen()
             ->checkStep('New Opportunity');
     }
