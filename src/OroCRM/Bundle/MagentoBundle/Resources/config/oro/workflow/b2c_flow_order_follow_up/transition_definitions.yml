@@ -35,7 +35,7 @@ workflows:
                             duration: $call_duration
                             direction: $call_direction
                     - @call_method:
-                        method: 'addCall'
+                        method: 'addRelatedCall'
                         object: $order
                         method_parameters: [$call]
 
@@ -62,7 +62,7 @@ workflows:
                         subject: $email_subject
                         body: $email_body
                     - @call_method:
-                        method: 'addEmail'
+                        method: 'addRelatedEmail'
                         object: $order
                         method_parameters: [$email]
             no_reply_definition: [] # do nothing

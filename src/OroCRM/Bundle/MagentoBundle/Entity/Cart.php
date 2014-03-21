@@ -193,7 +193,7 @@ class Cart extends BaseCart
      *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id")}
      * )
      */
-    protected $calls;
+    protected $relatedCalls;
 
     /**
      * @var ArrayCollection
@@ -204,7 +204,7 @@ class Cart extends BaseCart
      *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id")}
      * )
      */
-    protected $emails;
+    protected $relatedEmails;
 
     /**
      * @var string
@@ -231,6 +231,7 @@ class Cart extends BaseCart
 
     /**
      * @param WorkflowItem $workflowItem
+     *
      * @return Cart
      */
     public function setWorkflowItem($workflowItem)
@@ -250,6 +251,7 @@ class Cart extends BaseCart
 
     /**
      * @param WorkflowItem $workflowStep
+     *
      * @return Cart
      */
     public function setWorkflowStep($workflowStep)
@@ -269,28 +271,29 @@ class Cart extends BaseCart
 
     public function __construct()
     {
-        $this->status    = new CartStatus('open');
-        $this->cartItems = new ArrayCollection();
-        $this->calls = new ArrayCollection();
-        $this->email = new ArrayCollection();
+        $this->status        = new CartStatus('open');
+        $this->cartItems     = new ArrayCollection();
+        $this->relatedCalls  = new ArrayCollection();
+        $this->relatedEmails = new ArrayCollection();
     }
 
     /**
      * @return ArrayCollection
      */
-    public function getCalls()
+    public function getRelatedCalls()
     {
-        return $this->calls;
+        return $this->relatedCalls;
     }
 
     /**
      * @param Call $call
-     * @return Cart
+     *
+     * @return Order
      */
-    public function addCall(Call $call)
+    public function addRelatedCall(Call $call)
     {
-        if (!$this->hasCall($call)) {
-            $this->getCalls()->add($call);
+        if (!$this->hasRelatedCall($call)) {
+            $this->getRelatedCalls()->add($call);
         }
 
         return $this;
@@ -298,12 +301,13 @@ class Cart extends BaseCart
 
     /**
      * @param Call $call
-     * @return Cart
+     *
+     * @return Order
      */
-    public function removeCall(Call $call)
+    public function removeRelatedCall(Call $call)
     {
-        if ($this->hasCall($call)) {
-            $this->getCalls()->removeElement($call);
+        if ($this->hasRelatedCall($call)) {
+            $this->getRelatedCalls()->removeElement($call);
         }
 
         return $this;
@@ -311,29 +315,31 @@ class Cart extends BaseCart
 
     /**
      * @param Call $call
+     *
      * @return bool
      */
-    public function hasCall(Call $call)
+    public function hasRelatedCall(Call $call)
     {
-        return $this->getCalls()->contains($call);
+        return $this->getRelatedCalls()->contains($call);
     }
 
     /**
      * @return ArrayCollection
      */
-    public function getEmails()
+    public function getRelatedEmails()
     {
-        return $this->emails;
+        return $this->relatedEmails;
     }
 
     /**
      * @param Email $email
-     * @return Cart
+     *
+     * @return Order
      */
-    public function addEmail(Email $email)
+    public function addRelatedEmail(Email $email)
     {
-        if (!$this->hasEmail($email)) {
-            $this->getEmails()->add($email);
+        if (!$this->hasRelatedEmail($email)) {
+            $this->getRelatedEmails()->add($email);
         }
 
         return $this;
@@ -341,12 +347,13 @@ class Cart extends BaseCart
 
     /**
      * @param Email $email
-     * @return Cart
+     *
+     * @return Order
      */
-    public function removeEmail(Email $email)
+    public function removeRelatedEmail(Email $email)
     {
-        if ($this->hasEmail($email)) {
-            $this->getEmails()->removeElement($email);
+        if ($this->hasRelatedEmail($email)) {
+            $this->getRelatedEmails()->removeElement($email);
         }
 
         return $this;
@@ -354,11 +361,12 @@ class Cart extends BaseCart
 
     /**
      * @param Email $email
+     *
      * @return bool
      */
-    public function hasEmail(Email $email)
+    public function hasRelatedEmail(Email $email)
     {
-        return $this->getEmails()->contains($email);
+        return $this->getRelatedEmails()->contains($email);
     }
 
     /**
@@ -691,6 +699,7 @@ class Cart extends BaseCart
 
     /**
      * @param Opportunity $opportunity
+     *
      * @return Cart
      */
     public function setOpportunity($opportunity)
@@ -710,6 +719,7 @@ class Cart extends BaseCart
 
     /**
      * @param string $notes
+     *
      * @return Cart
      */
     public function setNotes($notes)
