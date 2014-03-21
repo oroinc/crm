@@ -287,9 +287,11 @@ datagrid:
                  regionLabel:
                     type: string
                     data_name: regionLabel
+                    filter_by_having: true
                     enabled: false
                  addressPostalCode:
                     type: string
+                    filter_by_having: true
                     data_name: addressPostalCode
                     enabled: false
 
@@ -519,10 +521,12 @@ datagrid:
                  regionLabel:
                      type: string
                      data_name: regionLabel
+                     filter_by_having: true
                      enabled: false
                  addressPostalCode:
                      type: string
                      data_name: addressPostalCode
+                     filter_by_having: true
                      enabled: false
 
     # opportunities with "In progress" status for Sales Funnel flow

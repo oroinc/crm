@@ -181,6 +181,24 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $entity->getOwnerId());
     }
 
+    public function testDueDateExpired()
+    {
+        $entity = new Task();
+
+        $nowDate = new \DateTime();
+        $oneDayInterval = new \DateInterval('P1D');
+
+        $this->assertFalse($entity->isDueDateExpired());
+
+        $dateInPast = $nowDate->sub($oneDayInterval);
+        $entity->setDueDate($dateInPast);
+        $this->assertTrue($entity->isDueDateExpired());
+
+        $dateInFuture = $nowDate->add($oneDayInterval);
+        $entity->setDueDate($dateInFuture);
+        $this->assertFalse($entity->isDueDateExpired());
+    }
+
     /**
      * @dataProvider settersAndGettersDataProvider
      */

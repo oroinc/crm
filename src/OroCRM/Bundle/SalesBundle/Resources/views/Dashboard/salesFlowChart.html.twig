@@ -1,12 +1,14 @@
 {% extends 'OroDashboardBundle:Dashboard:chartWidget.html.twig' %}
 
 {% block content %}
-    {% if items is not empty %}
+{% if items is not empty %}
     <div class="chart-container">
         <div class="clearfix">
             <div id="{{ widgetId }}-chart" class="bar-chart chart pull-left"></div>
         </div>
     </div>
+    {% if isDesktopVersion() %}
+    {# for desktop version #}
     <script type="text/javascript">
         require(['jquery', 'flotr2', 'orolocale/js/formatter/number', 'flotr2/funnel'],
                 function($, Flotr, numberFormatter){
@@ -76,12 +78,32 @@
                 });
     </script>
     {% else %}
-        <div class="container-fluid">
-            <div class="grid-container">
-                <div class="no-data">
-                    <span>{{ 'No data'|trans }}</span>
-                </div>
+    {# for mobile version #}
+    <div class="funnel-data">
+        <ul>
+            {% for label, value in items %}
+            {% if label not in nozzleSteps %}
+            <li>{{ label }}: <b>{{ value|oro_format_currency }}</b></li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        <h5>{{ 'from'|trans }} {{ quarterDate|oro_format_date }}</h5>
+        <ul>
+            {% for label, value in items %}
+            {% if label in nozzleSteps %}
+            <li>{{ label }}: <b>{{ value|oro_format_currency }}</b></li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+{% else %}
+    <div class="container-fluid">
+        <div class="grid-container">
+            <div class="no-data">
+                <span>{{ 'No data'|trans }}</span>
             </div>
         </div>
-    {% endif %}
+    </div>
+{% endif %}
 {% endblock %}
