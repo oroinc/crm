@@ -10,13 +10,13 @@
 
             {%- if entity.lead and resource_granted('VIEW', entity.lead) -%}
                 {% set leadView = ui.renderUrl(
-                path('orocrm_sales_lead_view', {'id': entity.lead.id}),
-                entity.lead.name)
+                    path('orocrm_sales_lead_view', {'id': entity.lead.id}),
+                    entity.lead.name)
                 %}
             {%- else -%}
                 {% set leadView = entity.lead ? entity.lead.name : '' %}
             {%- endif -%}
-            {{ ui.renderProperty('orocrm.sales.salesfunnel.lead.label'|trans, leadView) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.salesfunnel.lead.label'|trans, leadView) }}
 
             {%- if entity.opportunity and resource_granted('VIEW', entity.opportunity) -%}
                 {% set opportunityView = ui.renderUrl(
