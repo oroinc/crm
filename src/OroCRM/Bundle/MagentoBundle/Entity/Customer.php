@@ -372,6 +372,14 @@ class Customer extends BasePerson
     }
 
     /**
+     * @return Collection
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
      * @param int $originId
      *
      * @return Address|false
