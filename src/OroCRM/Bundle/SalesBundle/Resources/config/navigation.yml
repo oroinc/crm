@@ -10,21 +10,24 @@ oro_menu_config:
             label: orocrm.sales.lead.entity_plural_label
             route: orocrm_sales_lead_index
             extras:
-                routes: ['/^orocrm_sales_lead/']
+                position:    20
+                routes:      ['/^orocrm_sales_lead/']
                 description: List of leads
 
         opportunity_list:
             label: orocrm.sales.opportunity.entity_plural_label
             route: orocrm_sales_opportunity_index
             extras:
-                routes: ['/^orocrm_sales_opportunity/']
+                position:    30
+                routes:      ['/^orocrm_sales_opportunity/']
                 description: List of opportunities
 
         sales_salesfunnel_list:
             label: orocrm.sales.salesfunnel.entity_plural_label
             route: orocrm_sales_salesfunnel_index
             extras:
-                routes: ['/^orocrm_sales_salesfunnel/']
+                position:    10
+                routes:      ['/^orocrm_sales_salesfunnel/']
                 description: List of sales funnels
 
         shortcut_list_leads:

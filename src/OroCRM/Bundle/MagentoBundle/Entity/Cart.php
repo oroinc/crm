@@ -23,7 +23,8 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository")
  * @ORM\Table(name="orocrm_magento_cart",
  *  indexes={
- *      @ORM\Index(name="magecart_origin_idx", columns={"origin_id"})
+ *      @ORM\Index(name="magecart_origin_idx", columns={"origin_id"}),
+ *      @ORM\Index(name="magecart_updated_idx",columns={"updatedAt"})
  *  },
  *  uniqueConstraints={
  *      @ORM\UniqueConstraint(name="unq_cart_origin_id_channel_id", columns={"origin_id", "channel_id"})

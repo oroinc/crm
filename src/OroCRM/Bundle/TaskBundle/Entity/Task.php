@@ -22,7 +22,10 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_task")
+ * @ORM\Table(
+ *      name="orocrm_task",
+ *      indexes={@ORM\Index(name="task_due_date_idx",columns={"due_date"})}
+ * )
  * @Oro\Loggable
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository")
@@ -289,6 +292,14 @@ class Task extends ExtendTask implements RemindableInterface
     public function getDueDate()
     {
         return $this->dueDate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDueDateExpired()
+    {
+        return $this->getDueDate() &&  $this->getDueDate() < new \DateTime();
     }
 
     /**

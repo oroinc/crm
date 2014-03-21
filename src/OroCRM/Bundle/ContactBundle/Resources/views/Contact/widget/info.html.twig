@@ -93,12 +93,12 @@
                 {%- endif -%}
             {%- endset -%}
 
-            {{ ui.renderProperty('orocrm.contact.phones.label'|trans, entity.phones.count ? _self.renderCollectionWithPrimaryElement(entity.phones, false) : null) }}
-            {{ ui.renderProperty('orocrm.contact.emails.label'|trans, entity.emails.count ? _self.renderCollectionWithPrimaryElement(entity.emails, true) : null) }}
-            {{ ui.renderProperty('orocrm.contact.fax.label'|trans, entity.fax ? ui.renderPhone(entity.fax) : null) }}
-            {{ ui.renderProperty('orocrm.contact.skype.label'|trans, skypeData) }}
+            {{ ui.renderHtmlProperty('orocrm.contact.phones.label'|trans, entity.phones.count ? _self.renderCollectionWithPrimaryElement(entity.phones, false) : null) }}
+            {{ ui.renderHtmlProperty('orocrm.contact.emails.label'|trans, entity.emails.count ? _self.renderCollectionWithPrimaryElement(entity.emails, true) : null) }}
+            {{ ui.renderHtmlProperty('orocrm.contact.fax.label'|trans, entity.fax ? ui.renderPhone(entity.fax) : null) }}
+            {{ ui.renderHtmlProperty('orocrm.contact.skype.label'|trans, skypeData) }}
             {{ ui.renderProperty('orocrm.contact.method.label'|trans, entity.method) }}
-            {{ ui.renderProperty('orocrm.contact.social.label'|trans, socialData) }}
+            {{ ui.renderHtmlProperty('orocrm.contact.social.label'|trans, socialData) }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
@@ -120,9 +120,7 @@
 
             {%- set birthdayData -%}
                 {{ entity.birthday is not empty ? entity.birthday|oro_format_date : null }}
-                {%- if entity.birthday is not empty -%}
-                    &nbsp;({{ entity.birthday|age_string({'default': 'N/A'}) }})
-                {%- endif -%}
+                {% if entity.birthday is not empty %} ({{ entity.birthday|age_string({'default': 'N/A'}) }}){% endif %}
             {%- endset -%}
 
             {%- set assignedToData -%}
@@ -146,16 +144,16 @@
             {%- endset -%}
 
             {{ ui.renderProperty('orocrm.contact.job_title.label'|trans, entity.jobTitle) }}
-            {{ ui.renderProperty('orocrm.contact.accounts.label'|trans, accountsData) }}
+            {{ ui.renderHtmlProperty('orocrm.contact.accounts.label'|trans, accountsData) }}
             {{ ui.renderProperty('orocrm.contact.birthday.label'|trans, birthdayData) }}
             {{ ui.renderProperty('orocrm.contact.gender.label'|trans, oro_gender(entity.gender)) }}
             {{ ui.renderProperty('orocrm.contact.source.label'|trans, entity.source) }}
-            {{ ui.renderProperty('orocrm.contact.assigned_to.label'|trans, assignedToData) }}
-            {{ ui.renderProperty('orocrm.contact.reports_to.label'|trans, reportsToData) }}
+            {{ ui.renderHtmlProperty('orocrm.contact.assigned_to.label'|trans, assignedToData) }}
+            {{ ui.renderHtmlProperty('orocrm.contact.reports_to.label'|trans, reportsToData) }}
             {{ ui.renderProperty('orocrm.contact.groups.label'|trans, entity.groups.count ? entity.groupLabels|join(', ') : null) }}
 
             {% if resource_granted('oro_tag_view_tag_cloud') %}
-                {{ ui.renderProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
+                {{ ui.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
             {% endif %}
         </div>
     </div>

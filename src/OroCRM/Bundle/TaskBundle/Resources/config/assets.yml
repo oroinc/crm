@@ -1,3 +1,3 @@
 css:
-   'OROCRMTask':
-        - 'bundles/orocrmtask/sidebar_widgets/assigned_tasks/css/styles.css'
+   'orocrmtask':
+        - 'bundles/orocrmtask/sidebar_widgets/assigned_tasks/css/styles.less'

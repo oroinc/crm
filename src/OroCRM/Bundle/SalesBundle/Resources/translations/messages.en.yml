@@ -21,7 +21,7 @@ orocrm:
         controller:
             lead.saved.message: "Lead saved"
             opportunity.saved.message: "Opportunity saved"
-            sales_funnel.saved.message: "Sales activity saved"
+            sales_funnel.saved.message: "Sales process saved"
 
         form:
             choose_opportunity: 'Choose an opportunity....'
@@ -135,10 +135,10 @@ orocrm:
                 delete: Delete
 
         salesfunnel:
-            entity_label:         Sales Activity
-            entity_plural_label:  Sales Activity
-            new_entity:           New Sales Activity
-            edit_entity:          Update Sales Activity
+            entity_label:         Sales Process
+            entity_plural_label:  Sales Processes
+            new_entity:           New Sales Process
+            edit_entity:          Update Sales Process
             id.label:             Id
             created_at.label:     Created
             updated_at.label:     Updated
