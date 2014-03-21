@@ -1,36 +1,49 @@
 /*jslint nomen: true, vars: true*/
 /*global define*/
-define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/loading-mask'],
-    function ($, _, Backbone, routing, LoadingMask) {
+define(['jquery', 'underscore', 'backbone', 'routing', 'oronavigation/js/navigation', 'oroui/js/loading-mask'],
+    function ($, _, Backbone, routing, Navigation, LoadingMask) {
         /**
          * @export  orotask/widget/assigned-task
          */
         return {
             ContentView: Backbone.View.extend({
+                defaultPerPage: 5,
+
                 template: _.template('<div class="tasks-list-wrapper"><%= content %></div>'),
 
-                /**
-                 *
-                 * @returns {*}
-                 */
+                events: {
+                    'click .task-widget-row': 'onClickTask'
+                },
+
+                initialize: function () {
+                    this.on('refresh', this.reloadTasks);
+                    Backbone.View.prototype.initialize.apply(this, arguments);
+                },
+
                 render: function () {
                     this.reloadTasks(true);
                     return this;
                 },
 
-                /**
-                 *
-                 * @param {bool} fromCache
-                 */
+                onClickTask: function (event) {
+                    var taskUrl = $(event.currentTarget).data('url');
+                    var navigation = Navigation.getInstance();
+                    if (navigation) {
+                        navigation.setLocation(taskUrl);
+                    }
+                },
+
                 reloadTasks: function (fromCache) {
                     var view = this;
                     var settings = this.model.get('settings');
-                    settings.perPage = settings.perPage || 10;
-                    var url = routing.generate('orocrm_task_widget_sidebar_tasks', { 'perPage': settings.perPage });
+                    settings.perPage = settings.perPage || this.defaultPerPage;
 
+                    var routeParams = { perPage: settings.perPage };
                     if (!fromCache) {
-                        url += '?r=' + Math.random();
+                        routeParams.r = Math.random();
                     }
+
+                    var url = routing.generate('orocrm_task_widget_sidebar_tasks', routeParams);
 
                     var loadingMask = new LoadingMask();
                     view.$el.html('<div class="widget-mask-wrapper"></div>');
@@ -40,9 +53,6 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/loading-mask'],
                     require(["text!" + url], function (content) {
                         view.$el.html(view.template({'content': content}));
                         loadingMask.hide();
-                        view.$el.find('.refresh-task-widget').click(function () {
-                            view.reloadTasks(false);
-                        });
                     });
                 }
             }),
@@ -50,12 +60,21 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/loading-mask'],
             SetupView: Backbone.View.extend({
                 template: _.template(
                     '<h3><%= _.__("orocrm.task.assigned_tasks_widget.settings") %></h3>' +
-                        '<label for="perPage"><%= _.__("orocrm.task.assigned_tasks_widget.number_of_tasks") %></label>' +
-                        '<input type="text" name="perPage" value="<%= settings.perPage %>"/>'
+                    '<label for="perPage"><%= _.__("orocrm.task.assigned_tasks_widget.number_of_tasks") %></label>' +
+                    '<input type="text" name="perPage" value="<%= settings.perPage %>"/>'
                 ),
 
                 events: {
-                    'change [name="perPage"]': 'onChange'
+                    'keyup input': function (e) {
+                        if (e.which === 13) {
+                            this.onSubmit(e);
+                        }
+                    }
+                },
+
+                initialize: function () {
+                    this.on('ok', this.onSubmit);
+                    Backbone.View.prototype.initialize.apply(this, arguments);
                 },
 
                 render: function () {
@@ -64,13 +83,25 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/loading-mask'],
                     return view;
                 },
 
-                onChange: function (e) {
+                onSubmit: function () {
                     var model = this.model;
-                    var perPage = parseInt(this.$el.find('[name="perPage"]').val());
                     var settings = model.get('settings');
-                    settings.perPage = perPage;
-                    model.set({ settings: settings }, { silent: true });
-                    model.trigger('change');
+                    var perPageEl = this.$el.find('[name="perPage"]');
+                    var perPage = parseInt(perPageEl.val());
+
+                    if (_.isNaN(perPage) || perPage <= 0) {
+                        perPageEl.val(settings.perPage || this.defaultPerPage);
+                        perPageEl.focus();
+                        return;
+                    }
+
+                    if (settings.perPage != perPage) {
+                        settings.perPage = perPage;
+                        model.set({ settings: settings }, { silent: true });
+                        model.trigger('change');
+                    }
+
+                    this.trigger('close');
                 }
             })
         };
