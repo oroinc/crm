@@ -194,7 +194,7 @@ datagrid:
                     data_name: c.email
                 statusLabel:
                     type: entity
-                    data_name: cstatus
+                    data_name: c.status
                     options:
                         field_options:
                             class: OroCRMMagentoBundle:CartStatus
