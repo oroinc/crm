@@ -37,7 +37,7 @@ workflows:
                             duration: $call_duration
                             direction: $call_direction
                     - @call_method:
-                        method: 'addCall'
+                        method: 'addRelatedCall'
                         object: $cart
                         method_parameters: [$call]
 
@@ -66,7 +66,7 @@ workflows:
                          subject: $email_subject
                          body: $email_body
                      - @call_method:
-                         method: 'addEmail'
+                         method: 'addRelatedEmail'
                          object: $cart
                          method_parameters: [$email]
 

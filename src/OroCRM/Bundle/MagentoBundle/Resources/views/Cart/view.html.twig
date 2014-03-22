@@ -72,7 +72,7 @@
 
     {% if resource_granted('oro_email_view') %}
         {% set emailIds = [] %}
-        {% for email in entity.emails %}
+        {% for email in entity.getRelatedEmails %}
             {% set emailIds = emailIds|merge([email.id]) %}
         {% endfor %}
         {% if emailIds is empty %}
@@ -93,7 +93,7 @@
 
     {% if resource_granted('orocrm_call_view') %}
         {% set callIds = [] %}
-        {% for call in entity.calls %}
+        {% for call in entity.getRelatedCalls %}
             {% set callIds = callIds|merge([call.id]) %}
         {% endfor %}
         {% if callIds is empty %}
