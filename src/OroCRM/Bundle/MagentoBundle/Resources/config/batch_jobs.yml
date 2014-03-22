@@ -54,6 +54,6 @@ connector:
                     services:
                         reader:    orocrm_magento.mage.cart_connector
                         processor: oro_importexport.processor.import_delegate
-                        writer:    oro_importexport.writer.entity
+                        writer:    oro_integration.writer.persistent_batch_writer
                     parameters:
                         batch_size: 100
