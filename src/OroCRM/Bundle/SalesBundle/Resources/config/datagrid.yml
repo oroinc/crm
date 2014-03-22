@@ -93,7 +93,6 @@ datagrid:
                 contactName:
                     type: string
                     data_name: contactName
-                    filter_by_having: true
                 closeDate:
                     type: date
                     data_name: o.closeDate
@@ -113,7 +112,6 @@ datagrid:
                 primaryEmail:
                     type: string
                     data_name: email.email
-                    filter_by_having: true
         actions:
             view:
                 type:          navigate
@@ -287,11 +285,9 @@ datagrid:
                  regionLabel:
                     type: string
                     data_name: regionLabel
-                    filter_by_having: true
                     enabled: false
                  addressPostalCode:
                     type: string
-                    filter_by_having: true
                     data_name: addressPostalCode
                     enabled: false
 
@@ -521,12 +517,10 @@ datagrid:
                  regionLabel:
                      type: string
                      data_name: regionLabel
-                     filter_by_having: true
                      enabled: false
                  addressPostalCode:
                      type: string
                      data_name: addressPostalCode
-                     filter_by_having: true
                      enabled: false
 
     # opportunities with "In progress" status for Sales Funnel flow
@@ -583,14 +577,12 @@ datagrid:
                 contactName:
                     type: string
                     data_name: contactName
-                    filter_by_having: true
                 probability:
                     type: percent
                     data_name: opportunity.probability
                 primaryEmail:
                     type: string
                     data_name: email.email
-                    filter_by_having: true
 
     sales-account-lead-grid:
         extends: sales-lead-grid

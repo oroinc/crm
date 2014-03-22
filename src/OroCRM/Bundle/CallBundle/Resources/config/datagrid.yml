@@ -35,7 +35,6 @@ datagrid:
                 contactName:
                     type: string
                     data_name: contactName
-                    filter_by_having: true
                 accountName:
                     type: string
                     data_name: account.name
@@ -139,7 +138,6 @@ datagrid:
                     type: string
                     enabled: false
                     data_name: contactName
-                    filter_by_having: true
                 accountName:
                     type: string
                     enabled: false
