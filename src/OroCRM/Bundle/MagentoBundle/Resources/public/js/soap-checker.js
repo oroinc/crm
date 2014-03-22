@@ -96,7 +96,9 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
             var success = res.success || false,
                 message = success ? __('Connection succeeded, please choose website.') : __('Parameters are not valid!');
 
-            if (success && this.options.websitesModificationAllowed && res.websites) {
+            // websitesModificationAllowed might be undefined, but it should not be false
+            // false is equal - denied
+            if (success && this.options.websitesModificationAllowed !== false && res.websites) {
                 var $listEl = $(this.options.websitesListEl),
                     $websiteSelectEl = $(this.options.websiteSelectEl),
                     $isExtensionInstalledEl = $(this.options.isExtensionInstalledEl);
