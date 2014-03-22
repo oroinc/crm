@@ -39,8 +39,8 @@
             <div class="responsive-block">
                 {{ UI.renderProperty('orocrm.task.subject.label'|trans, entity.subject) }}
                 {{ UI.renderProperty('orocrm.task.description.label'|trans, entity.description) }}
-                {{ UI.renderProperty('orocrm.task.dueDate.label'|trans, entity.dueDate|oro_format_datetime) }}
-                {{ UI.renderProperty('orocrm.task.taskPriority.label'|trans, entity.taskPriority) }}
+                {{ UI.renderProperty('orocrm.task.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
+                {{ UI.renderProperty('orocrm.task.task_priority.label'|trans, entity.taskPriority) }}
 
                 {%- set assignedToData -%}
                     {%- if entity.assignedTo -%}
@@ -53,7 +53,7 @@
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.task.assignedTo.label'|trans, assignedToData) }}
+                {{ UI.renderHtmlProperty('orocrm.task.assigned_to.label'|trans, assignedToData) }}
 
                 {%- set accountData -%}
                     {%- if entity.relatedAccount -%}
@@ -66,7 +66,7 @@
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.task.relatedAccount.label'|trans, accountData) }}
+                {{ UI.renderHtmlProperty('orocrm.task.related_account.label'|trans, accountData) }}
 
                 {%- set contactData -%}
                     {%- if entity.relatedContact -%}
@@ -79,7 +79,7 @@
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.task.relatedContact.label'|trans, contactData) }}
+                {{ UI.renderHtmlProperty('orocrm.task.related_contact.label'|trans, contactData) }}
 
                 {%- set ownerData -%}
                     {%- if entity.owner -%}
