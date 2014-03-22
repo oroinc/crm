@@ -288,7 +288,7 @@ class Cart extends BaseCart
     /**
      * @param Call $call
      *
-     * @return Order
+     * @return Cart
      */
     public function addRelatedCall(Call $call)
     {
@@ -302,7 +302,7 @@ class Cart extends BaseCart
     /**
      * @param Call $call
      *
-     * @return Order
+     * @return Cart
      */
     public function removeRelatedCall(Call $call)
     {
@@ -334,7 +334,7 @@ class Cart extends BaseCart
     /**
      * @param Email $email
      *
-     * @return Order
+     * @return Cart
      */
     public function addRelatedEmail(Email $email)
     {
@@ -348,7 +348,7 @@ class Cart extends BaseCart
     /**
      * @param Email $email
      *
-     * @return Order
+     * @return Cart
      */
     public function removeRelatedEmail(Email $email)
     {
