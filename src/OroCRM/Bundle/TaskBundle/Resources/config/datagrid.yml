@@ -29,15 +29,15 @@ datagrid:
             subject:
                 label: orocrm.task.subject.label
             dueDate:
-                label: orocrm.task.dueDate.label
+                label: orocrm.task.due_date.label
                 frontend_type: datetime
             workflowStepLabel:
-                label: orocrm.task.workflowStep.label
+                label: orocrm.task.workflow_step.label
             priorityLabel:
-                label: orocrm.task.taskPriority.label
+                label: orocrm.task.task_priority.label
             assignee:
                 type: twig
-                label: orocrm.task.assignedTo.label
+                label: orocrm.task.assigned_to.label
                 frontend_type: html
                 template: OroCRMTaskBundle:Task:Datagrid/Property/assignee.html.twig
             reporter:
@@ -46,10 +46,10 @@ datagrid:
                 frontend_type: html
                 template: OroCRMTaskBundle:Task:Datagrid/Property/reporter.html.twig
             createdAt:
-                label:   orocrm.task.createdAt.label
+                label:   orocrm.task.created_at.label
                 frontend_type: datetime
             updatedAt:
-                label:   orocrm.task.updatedAt.label
+                label:   orocrm.task.updated_at.label
                 frontend_type: datetime
         sorters:
             columns:
