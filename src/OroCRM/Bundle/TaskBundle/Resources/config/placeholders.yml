@@ -1,5 +1,5 @@
 placeholders:
-    orocrm_reminder_reminder_templates:
+    oro_reminder_reminder_templates:
         items:
             task_reminder_template: ~
 

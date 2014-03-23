@@ -22,8 +22,10 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_task")
- * @Oro\Loggable
+ * @ORM\Table(
+ *      name="orocrm_task",
+ *      indexes={@ORM\Index(name="task_due_date_idx",columns={"due_date"})}
+ * )
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository")
  * @Config(
@@ -41,7 +43,6 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *      "security"={
  *          "type"="ACL"
  *      },
- *      "dataaudit"={"auditable"=true},
  *      "workflow"={
  *          "active_workflow"="task_flow"
  *      },
@@ -62,7 +63,6 @@ class Task extends ExtendTask implements RemindableInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ConfigField(
      *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
      *      "email"={"available_in_template"=true}
      *  }
      * )
@@ -73,10 +73,8 @@ class Task extends ExtendTask implements RemindableInterface
      * @var string
      *
      * @ORM\Column(name="subject", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
      *      "email"={"available_in_template"=true}
      *  }
      * )
@@ -87,10 +85,8 @@ class Task extends ExtendTask implements RemindableInterface
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
      *      "email"={"available_in_template"=true}
      *  }
      * )
@@ -100,11 +96,9 @@ class Task extends ExtendTask implements RemindableInterface
     /**
      * @var \DateTime
      *
-     * @Oro\Versioned
      * @ORM\Column(name="due_date", type="datetime")
      * @ConfigField(
      *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
      *      "email"={"available_in_template"=true}
      *  }
      * )
@@ -118,7 +112,6 @@ class Task extends ExtendTask implements RemindableInterface
      * @ORM\JoinColumn(name="task_priority_name", referencedColumnName="name", onDelete="SET NULL")
      * @ConfigField(
      *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
      *      "email"={"available_in_template"=true}
      *  }
      * )
@@ -130,10 +123,8 @@ class Task extends ExtendTask implements RemindableInterface
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="assigned_to_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned("getUsername")
      * @ConfigField(
      *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
      *      "email"={"available_in_template"=true}
      *  }
      * )
@@ -145,10 +136,8 @@ class Task extends ExtendTask implements RemindableInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
      *      "email"={"available_in_template"=true}
      *  }
      * )
@@ -160,10 +149,8 @@ class Task extends ExtendTask implements RemindableInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
      *      "email"={"available_in_template"=true}
      *  }
      * )
@@ -175,10 +162,8 @@ class Task extends ExtendTask implements RemindableInterface
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned("getUsername")
      * @ConfigField(
      *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
      *      "email"={"available_in_template"=true}
      *  }
      * )
@@ -289,6 +274,14 @@ class Task extends ExtendTask implements RemindableInterface
     public function getDueDate()
     {
         return $this->dueDate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDueDateExpired()
+    {
+        return $this->getDueDate() &&  $this->getDueDate() < new \DateTime();
     }
 
     /**

@@ -12,6 +12,7 @@
         {% set html = html ~ UI.saveAndStayButton() %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
+    {{ UI.cancelButton(path('orocrm_task_index')) }}
 {% endblock navButtons %}
 
 {% block pageHeader %}

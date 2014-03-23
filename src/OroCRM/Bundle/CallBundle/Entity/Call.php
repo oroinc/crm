@@ -14,7 +14,10 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 /**
  * Call
  *
- * @ORM\Table(name="orocrm_call")
+ * @ORM\Table(
+ *      name="orocrm_call",
+ *      indexes={@ORM\Index(name="call_dt_idx",columns={"call_date_time"})}
+ * )
  * @ORM\Entity
  * @Config(
  *  routeName="orocrm_call_index",

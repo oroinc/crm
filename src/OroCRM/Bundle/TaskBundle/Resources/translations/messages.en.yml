@@ -8,15 +8,17 @@ orocrm:
         entity_description:         Represent task
         subject.label:              Subject
         description.label:          Description
-        dueDate.label:              Due date
-        workflowStep.label:         Status
-        taskPriority.label:         Priority
-        assignedTo.label:           Assigned To
-        relatedAccount.label:       Account
-        relatedContact.label:       Contact
+        due_date.label:             Due date
+        workflow_step.label:        Status
+        task_priority.label:        Priority
+        assigned_to.label:          Assigned To
+        related_account.label:      Account
+        related_contact.label:      Contact
         owner.label:                Reporter
-        createdAt.label:            Created At
-        updatedAt.label:            Updated At
+        created_at.label:           Created At
+        updated_at.label:           Updated At
+        id.label:                   Id
+        workflow_item.label:        Workflow item
 
         datagrid:
             view: View

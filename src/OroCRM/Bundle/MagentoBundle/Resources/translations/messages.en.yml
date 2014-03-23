@@ -94,6 +94,7 @@ orocrm:
             carts.label:         Carts
             channel.label:       Channel
             name.label:          Name
+            orders.label:        Customer orders
 
         cart:
             entity_label:         Shopping Cart
@@ -110,6 +111,7 @@ orocrm:
             store_to_base_rate.label:  Store to base rate
             store_to_quote_rate.label: Store to quote rate
             email.label:               Email
+            emails.label:              Emails
             gift_message.label:        Gift message
             is_guest.label:            Is guest
             payment_details.label:     Payment
@@ -131,6 +133,63 @@ orocrm:
             opportunity.label:         Opportunity
             notes.label:               Notes
             b2c_flow_abandoned_shopping_cart.step.label: Step
+            calls.label:               Calls
+            workflow_item.label:       Workflow item
+            workflow_step.label:       Workflow step
+
+        cartitem:
+            entity_label:              Shopping Cart Item
+            entity_plural_label:       Cart items
+            created_at.label:          Created at
+            updated_at.label:          Updated at
+            custom_price.label:        Custom price
+            description.label:         Description
+            discount_amount.label:     Discount amount
+            free_shipping.label:       Free shipping
+            gift_message.label:        Gift message
+            id.label:                  Cart item id
+            is_virtual.label:          Is virtual
+            name.label:                Name
+            origin_id.label:           Origin cart id
+            parent_item_id.label:      Parent cart item id
+            price.label:               Price
+            price_incl_tax.label:      Price incl. tax
+            product_id.label:          Product id
+            product_type.label:        Product type
+            qty.label:                 Qty
+            row_total.label:           Row total
+            sku.label:                 Sku
+            tax_amount.label:          Tax amount
+            tax_class_id.label:        Tax class id
+            tax_percent.label:         Tax percent
+            weight.label:              Weight
+            cart.label:                Cart
+
+        cartstatus:
+            entity_label:              Shopping Cart Status
+            entity_plural_label:       Shopping Cart Statuses
+            label.label:               Label
+            name.label:                Name
+
+        orderitem:
+            entity_label:              Order Item
+            entity_plural_label:       Order Items
+            discount_amount.label:     Discount amount
+            discount_percent.label:    Discount percent
+            id.label:                  Cart item id
+            is_virtual.label:          Is virtual
+            name.label:                Name
+            origin_id.label:           Origin order item id
+            original_price.label:      Original price
+            price.label:               Price
+            product_options.label:     Product options
+            product_type.label:        Product type
+            qty.label:                 Qty
+            row_total.label:           Row total
+            tax_amount.label:          Tax amount
+            tax_percent.label:         Tax percent
+            weight.label:              Weight
+            sku.label:                 Sku
 
         magentosoaptransport:
             entity_label:        Integration Channel Transport
@@ -187,6 +246,10 @@ orocrm:
             notes.label:            Notes
             feedback.label:         Feedback
             b2c_flow_order_follow_up.step.label: Step
+            emails.label:           Emails
+            calls.label:            Calls
+            workflow_item.label:    Workflow item
+            workflow_step.label:    Workflow step
 
         product:
             entity_label:         Product

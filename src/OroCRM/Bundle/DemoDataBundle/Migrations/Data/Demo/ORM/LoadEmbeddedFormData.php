@@ -88,7 +88,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
     ) {
         /** @var Channel $channel */
         $channel = $om->getRepository('OroIntegrationBundle:Channel')
-            ->findOneBy(array('name' => LoadMagentoData::CHANNEL_NAME));
+            ->findOneBy(array('type' => 'magento'));
 
         $embeddedForm = new EmbeddedForm();
         /** @var ContactRequestType $contactUs */
@@ -109,7 +109,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
     ) {
         /** @var Channel $channel */
         $channel = $om->getRepository('OroIntegrationBundle:Channel')
-            ->findOneBy(array('name' => LoadMagentoData::CHANNEL_NAME));
+            ->findOneBy(array('type' => 'magento'));
 
         foreach ($this->contactRequests as $contactRequest) {
             $request = new ContactRequest();

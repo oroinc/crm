@@ -1,0 +1,60 @@
+OroCRMMagentoBundle:
+    main:
+        v1_0:
+            - OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM\LoadShoppingCartStatusData
+            - OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM\LoadRegions
+        v1_1:
+            - OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM\UpdateWorkflowStartStep
+        v1_2:
+            - OroCRM\Bundle\MagentoContactUsBundle\Migrations\Data\ORM\LoadWorkflowData
+    demo:
+        v1_0:
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadMagentoData
+
+OroCRMCallBundle:
+    main:
+        v1_0:
+            - OroCRM\Bundle\CallBundle\Migrations\Data\ORM\LoadCallDirectionData
+            - OroCRM\Bundle\CallBundle\Migrations\Data\ORM\LoadCallStatusData
+
+OroCRMContactUsBundle:
+    main:
+        v1_0:
+            - OroCRM\Bundle\ContactUsBundle\Migrations\Data\ORM\LoadContactReasonData
+
+OroCRMContactBundle:
+    main:
+        v1_0:
+            - OroCRM\Bundle\ContactBundle\Migrations\Data\ORM\LoadGroupData
+            - OroCRM\Bundle\ContactBundle\Migrations\Data\ORM\LoadMethodData
+            - OroCRM\Bundle\ContactBundle\Migrations\Data\ORM\LoadSourceData
+
+OroCRMSalesBundle:
+    main:
+        v1_0:
+            - OroCRM\Bundle\SalesBundle\Migrations\Data\ORM\LoadLeadSourceData
+            - OroCRM\Bundle\SalesBundle\Migrations\Data\ORM\LoadLeadStatusData
+            - OroCRM\Bundle\SalesBundle\Migrations\Data\ORM\LoadOpportunityCloseReasonData
+            - OroCRM\Bundle\SalesBundle\Migrations\Data\ORM\LoadOpportunityStatusData
+        v1_1:
+            - OroCRM\Bundle\SalesBundle\Migrations\Data\ORM\UpdateWorkflowStartStep
+
+OroCRMDemoDataBundle:
+    demo:
+        v1_0:
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountOpportunitiesData
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAclData
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadBusinessUnitData
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactGroupData
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadEmailData
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadEmailTemplates
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadGroupData
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadSourceData
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadPintabsData
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadTagsData
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUserData
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersCalendarData
+            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData
