@@ -120,6 +120,7 @@ orocrm:
             account.label:        Account
             owner.label:          Owner
             address.label:        Address
+            details.label:        Lead Details
             extend_source.label:  Source
             notes.label:          Notes
             opportunities.label:  Opportunities
