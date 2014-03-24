@@ -111,7 +111,7 @@ orocrm:
             store_to_base_rate.label:  Store to base rate
             store_to_quote_rate.label: Store to quote rate
             email.label:               Email
-            emails.label:              Emails
+            related_emails.label:      Emails
             gift_message.label:        Gift message
             is_guest.label:            Is guest
             payment_details.label:     Payment
@@ -133,7 +133,7 @@ orocrm:
             opportunity.label:         Opportunity
             notes.label:               Notes
             b2c_flow_abandoned_shopping_cart.step.label: Step
-            calls.label:               Calls
+            related_calls.label:       Calls
             workflow_item.label:       Workflow item
             workflow_step.label:       Workflow step
 
@@ -246,8 +246,8 @@ orocrm:
             notes.label:            Notes
             feedback.label:         Feedback
             b2c_flow_order_follow_up.step.label: Step
-            emails.label:           Emails
-            calls.label:            Calls
+            related_emails.label:   Emails
+            related_calls.label:    Calls
             workflow_item.label:    Workflow item
             workflow_step.label:    Workflow step
 

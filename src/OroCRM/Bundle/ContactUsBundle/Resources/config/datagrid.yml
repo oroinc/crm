@@ -51,11 +51,11 @@ datagrid:
             columns:
                 channelName:
                     type:      entity
-                    data_name: channel
+                    data_name: channel.id
                     options:
                         field_options:
-                          class:    OroIntegrationBundle:Channel
-                          property: name
+                            class:    OroIntegrationBundle:Channel
+                            property: name
                 firstName:
                     type:      string
                     data_name: cr.firstName

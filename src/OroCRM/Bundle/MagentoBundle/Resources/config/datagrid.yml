@@ -70,18 +70,18 @@ datagrid:
                     data_name: c.email
                 groupName:
                     type: entity
-                    data_name: cg
+                    data_name: cg.id
                     options:
                         field_options:
-                          class: OroCRMMagentoBundle:CustomerGroup
-                          property: name
+                            class: OroCRMMagentoBundle:CustomerGroup
+                            property: name
                 websiteName:
                     type: entity
-                    data_name: cw
+                    data_name: cw.id
                     options:
                         field_options:
-                          class: OroCRMMagentoBundle:Website
-                          property: name
+                            class: OroCRMMagentoBundle:Website
+                            property: name
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt
@@ -194,7 +194,7 @@ datagrid:
                     data_name: c.email
                 statusLabel:
                     type: entity
-                    data_name: cstatus
+                    data_name: c.status
                     options:
                         field_options:
                             class: OroCRMMagentoBundle:CartStatus
@@ -410,12 +410,12 @@ datagrid:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 websites:
                     type: entity
-                    data_name: pw
+                    data_name: pw.id
                     options:
                         field_options:
-                          class: OroCRMMagentoBundle:Website
-                          multiple: true
-                          property: name
+                            class: OroCRMMagentoBundle:Website
+                            multiple: true
+                            property: name
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt

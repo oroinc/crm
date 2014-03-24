@@ -1,4 +1,5 @@
 {% block _oro_integration_channel_form_transport_check_widget %}
+    {% set modificationAreAllowed = form.parent.websiteId.vars.disabled is not defined or form.parent.websiteId.vars.disabled == false %}
     <div class="control-group">
         <div class="controls">
             {{ form_widget(form, {attr: {class: 'btn btn-primary' }}) }}
@@ -7,12 +8,13 @@
                     "use strict";
 
                     new SoapChecker({
-                        el:                     '#{{ form.vars.id }}',
-                        transportEntityId:      {{ form.parent.vars.value ? form.parent.vars.value.id|json_encode|raw : 'null' }},
-                        websiteSelectEl:        '#{{ form.parent.websiteId.vars.id }}',
-                        websitesListEl:         '#{{ form.parent.websites.vars.id }}',
-                        isExtensionInstalledEl: '#{{ form.parent.isExtensionInstalled.vars.id }}',
-                        connectorsEl:           '#{{ form.parent.parent.connectors.vars.id }}'
+                        el:                          '#{{ form.vars.id }}',
+                        transportEntityId:           {{ form.parent.vars.value ? form.parent.vars.value.id|json_encode|raw : 'null' }},
+                        websiteSelectEl:             '#{{ form.parent.websiteId.vars.id }}',
+                        websitesListEl:              '#{{ form.parent.websites.vars.id }}',
+                        websitesModificationAllowed: {{ modificationAreAllowed|json_encode|raw }},
+                        isExtensionInstalledEl:      '#{{ form.parent.isExtensionInstalled.vars.id }}',
+                        connectorsEl:                '#{{ form.parent.parent.connectors.vars.id }}'
                     });
                 });
             </script>
@@ -28,25 +30,29 @@
             {% endif %}
             <div class="controls{% if errors|length > 0 %} validation-error{% endif %} magento-website-selector-container">
                 {{ form_widget(form) }}
-                <a href="javascript:void(0)" class="no-hash sync-website-list-link"><i class="icon icon-refresh"></i>{{ 'Sync website list'|trans }}</a>
+                {% if form.vars.disabled is not sameas(true) %}
+                    <a href="javascript:void(0)" class="no-hash sync-website-list-link">
+                        <i class="icon icon-refresh"></i>{{ 'Sync website list'|trans }}
+                    </a>
+                    <script type="text/javascript">
+                        require(['orocrm/magento/soap-checker'], function (SoapChecker) {
+                            "use strict";
+
+                            new SoapChecker({
+                                el:                        '.sync-website-list-link',
+                                transportEntityId:         {{ form.parent.vars.value ? form.parent.vars.value.id|json_encode|raw : 'null' }},
+                                websiteSelectEl:           '#{{ form.vars.id }}',
+                                websitesListEl:            '#{{ form.parent.websites.vars.id }}',
+                                isExtensionInstalledEl:    '#{{ form.parent.isExtensionInstalled.vars.id }}',
+                                connectorsEl:              '#{{ form.parent.parent.connectors.vars.id }}'
+                            });
+                        });
+                    </script>
+                {% endif %}
                 <div class="clear-fix"></div>
                 {{ form_errors(form) }}
             </div>
         </div>
     {% endspaceless %}
-    <script type="text/javascript">
-        require(['orocrm/magento/soap-checker'], function (SoapChecker) {
-            "use strict";
-
-            new SoapChecker({
-                el:                        '.sync-website-list-link',
-                transportEntityId:         {{ form.parent.vars.value ? form.parent.vars.value.id|json_encode|raw : 'null' }},
-                websiteSelectEl:           '#{{ form.vars.id }}',
-                websitesListEl:            '#{{ form.parent.websites.vars.id }}',
-                isExtensionInstalledEl:    '#{{ form.parent.isExtensionInstalled.vars.id }}',
-                connectorsEl:              '#{{ form.parent.parent.connectors.vars.id }}'
-            });
-        });
-    </script>
 {% endblock %}
 

@@ -89,15 +89,12 @@ datagrid:
                 priorityLabel:
                     type:      string
                     data_name: priorityLabel
-                    filter_by_having: true
                 assignee:
                     type:      string
                     data_name: assignee
-                    filter_by_having: true
                 reporter:
                     type:      string
                     data_name: reporter
-                    filter_by_having: true
                 createdAt:
                     type:      datetime
                     data_name: task.createdAt
