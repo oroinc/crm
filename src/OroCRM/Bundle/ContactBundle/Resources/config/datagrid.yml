@@ -272,20 +272,20 @@ datagrid:
                     data_name: phone.phone
                 groupLabelsAsString:
                     type: entity
-                    data_name: contactGroup
+                    data_name: contactGroup.id
                     enabled: false
                     options:
                         field_options:
-                          class: OroCRMContactBundle:Group
-                          property: label
+                            class: OroCRMContactBundle:Group
+                            property: label
                 contactSourceLabel:
                     type: entity
-                    data_name: contactSource
+                    data_name: contactSource.name
                     enabled: false
                     options:
                         field_options:
-                          class: OroCRMContactBundle:Source
-                          property: label
+                            class: OroCRMContactBundle:Source
+                            property: label
                 countryName:
                     type: entity
                     data_name: address.country
