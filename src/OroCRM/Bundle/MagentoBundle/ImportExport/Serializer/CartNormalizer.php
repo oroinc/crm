@@ -57,6 +57,9 @@ class CartNormalizer extends AbstractNormalizer implements DenormalizerInterface
 
         $data['paymentDetails'] = $this->denormalizePaymentDetails($data['paymentDetails']);
 
+        $isActive = isset($data['is_active']) ? (bool)$data['is_active'] : true;
+        $data['status'] = $this->denormalizeStatus($isActive);
+
         $cartClass = MagentoConnectorInterface::CART_TYPE;
         /** @var Cart $cart */
         $cart = new $cartClass();
@@ -111,5 +114,18 @@ class CartNormalizer extends AbstractNormalizer implements DenormalizerInterface
                 ->denormalize($data, MagentoConnectorInterface::CART_ADDRESS_TYPE)
                 ->setOriginId($data['originId']);
         }
+    }
+
+    /**
+     * Denormalize status based on isActive field
+     *
+     * @param bool $isActive
+     */
+    protected function denormalizeStatus($isActive)
+    {
+        $statusClass =  MagentoConnectorInterface::CART_STATUS_TYPE;
+        $status = new $statusClass($isActive ? 'open' : 'expired');
+
+        return $status;
     }
 }

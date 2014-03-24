@@ -12,6 +12,17 @@ class CartsBridgeIterator extends AbstractBridgeIterator
     protected function applyFilter()
     {
         $this->filter->addStoreFilter($this->getStoresByWebsiteId($this->websiteId));
+        // skip empty carts
+        $this->filter->addComplexFilter(
+            'grand_total',
+            [
+                'key'   => 'grand_total',
+                'value' => [
+                    'key'   => 'gt',
+                    'value' => 0,
+                ],
+            ]
+        );
         parent::applyFilter();
     }
 
