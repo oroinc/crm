@@ -21,7 +21,7 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oronavigation/js/navigat
                 },
 
                 render: function () {
-                    this.reloadTasks(true);
+                    this.reloadTasks();
                     return this;
                 },
 
@@ -33,16 +33,12 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oronavigation/js/navigat
                     }
                 },
 
-                reloadTasks: function (fromCache) {
+                reloadTasks: function () {
                     var view = this;
                     var settings = this.model.get('settings');
                     settings.perPage = settings.perPage || this.defaultPerPage;
 
-                    var routeParams = { perPage: settings.perPage };
-                    if (!fromCache) {
-                        routeParams.r = Math.random();
-                    }
-
+                    var routeParams = { perPage: settings.perPage, r: Math.random() };
                     var url = routing.generate('orocrm_task_widget_sidebar_tasks', routeParams);
 
                     var loadingMask = new LoadingMask();

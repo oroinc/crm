@@ -19,10 +19,11 @@ class LeadCreateSelectType extends AbstractType
                 'view_widgets' => array(
                     array(
                         'route_name' => 'orocrm_sales_lead_info',
+                        'title' => 'orocrm.sales.lead.details.label'
                     ),
                     array(
                         'route_name' => 'orocrm_sales_lead_address_book',
-                        'title' => 'Address',
+                        'title' => 'orocrm.sales.lead.address.label',
                     )
                 ),
             )
