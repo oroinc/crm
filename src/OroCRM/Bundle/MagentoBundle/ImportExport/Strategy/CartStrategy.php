@@ -39,7 +39,17 @@ class CartStrategy extends BaseStrategy
             $this->strategyHelper->importEntity(
                 $existingEntity,
                 $newEntity,
-                ['id', 'store', 'status', 'cartItems', 'customer', 'shippingAddress', 'billingAddress']
+                [
+                'id',
+                'store',
+                'status',
+                'cartItems',
+                'customer',
+                'shippingAddress',
+                'billingAddress',
+                'workflowItem',
+                'workflowStep'
+                ]
             );
         } else {
             $existingEntity = $newEntity;
@@ -192,7 +202,7 @@ class CartStrategy extends BaseStrategy
      */
     protected function updateCartStatus(Cart $existingEntity, CartStatus $status)
     {
-        // allow to modify status only for "open"
+        // allow to modify status only for "open" carts
         // because magento can only expire cart, so for different statuses this useless
         if ($existingEntity->getStatus()->getName() !== 'open') {
             $status = $existingEntity->getStatus();
