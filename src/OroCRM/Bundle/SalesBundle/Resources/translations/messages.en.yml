@@ -139,16 +139,17 @@ orocrm:
             entity_plural_label:  Sales Processes
             new_entity:           New Sales Process
             edit_entity:          Update Sales Process
-            id.label:             Id
+            id.label:             'Sales #'
             created_at.label:     Created
             updated_at.label:     Updated
-            name.label:           Sales Funnel Name
             start_date.label:     Start Date
             lead.label:           Lead
             opportunity.label:    Opportunity
             owner.label:          Owner
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
+
+            hint: 'Sales Process #%id%'
 
             datagrid:
                 view:   View

@@ -21,11 +21,6 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
-                        sales_funnel_name:
-                            options:
-                                required: true
-                                constraints:
-                                  - NotBlank: ~
                         sales_funnel_start_date:
                             options:
                                 required: true
@@ -70,11 +65,6 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
-                        sales_funnel_name:
-                            options:
-                                required: true
-                                constraints:
-                                  - NotBlank: ~
                         sales_funnel_start_date:
                             options:
                                 required: true
