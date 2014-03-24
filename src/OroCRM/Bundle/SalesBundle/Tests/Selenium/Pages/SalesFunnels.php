@@ -5,13 +5,13 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages;
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
 
 /**
- * Class SalesActivities
+ * Class SalesFunnels
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
- * @method SalesActivities openSalesActivities openSalesActivities(string)
+ * @method SalesFunnels openSalesFunnels openSalesFunnels(string)
  * {@inheritdoc}
  */
-class SalesActivities extends AbstractPageFilteredGrid
+class SalesFunnels extends AbstractPageFilteredGrid
 {
     const URL = 'salesfunnel';
 
@@ -27,7 +27,7 @@ class SalesActivities extends AbstractPageFilteredGrid
         $this->waitPageToLoad();
         $this->waitForAjax();
 
-        return new SalesActivity($this->test);
+        return new SalesFunnel($this->test);
     }
 
     public function startFromOpportunity()
@@ -35,8 +35,7 @@ class SalesActivities extends AbstractPageFilteredGrid
         $this->test->byXPath("//a[@title='Start from Opportunity']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
-
-        return new SalesActivity($this->test);
+        return new SalesFunnel($this->test);
     }
 
     public function open($entityData = array())

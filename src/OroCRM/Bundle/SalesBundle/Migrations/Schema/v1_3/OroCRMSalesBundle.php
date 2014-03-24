@@ -14,6 +14,7 @@ class OroCRMSalesBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $salesFunnelTable = $schema->getTable('orocrm_sales_funnel');
+        $salesFunnelTable->dropColumn('name');
         $salesFunnelTable->addIndex(array('startDate'), 'sales_start_idx');
 
         $leadTable = $schema->getTable('orocrm_sales_lead');
