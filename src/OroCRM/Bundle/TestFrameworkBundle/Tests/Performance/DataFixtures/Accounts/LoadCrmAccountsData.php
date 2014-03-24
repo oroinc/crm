@@ -149,62 +149,66 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     public function loadAccounts()
     {
-        $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . "data.csv", "r");
+        $loadedRecords = 0;
         $averageTime = 0.0;
-        if ($handle) {
-            $i = 0;
-            $headers = array();
-            if (($data = fgetcsv($handle, 1000, ",")) !== false) {
-                //read headers
-                $headers = $data;
-            }
+        $iteration = 0;
+        while ($loadedRecords < $this->maxRecords) {
+            $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . "data.csv", "r");
             echo "\nLoading...\n";
-            while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-                $s = microtime(true);
-                $data = array_combine($headers, array_values($data));
-                $account = $this->createAccount($data);
-                $contact = $this->createContact($data);
-                $contact->addAccount($account);
-                $account->setDefaultContact($contact);
-
-                $group = $this->contactGroups[rand(0, count($this->contactGroups)-1)];
-                $contact->addGroup($group);
-
-                $user = $this->users[rand(0, count($this->users)-1)];
-                $contact->setAssignedTo($user);
-                $contact->setReportsTo($contact);
-                $contact->setOwner($user);
-
-                $source = $this->contactSources[rand(0, count($this->contactSources)-1)];
-                $contact->setSource($source);
-
-                $account->setOwner($user);
-
-                $this->persist($this->accountManager, $account);
-                $this->contactManager->persist($contact);
-
-                $i++;
-                if ($i % self::FLUSH_MAX == 0) {
-                    $this->flush($this->accountManager);
-                    $this->contactManager->flush();
-                    $this->contactManager->clear();
-
-                    $this->initSupportingEntities();
-
-                    $e = microtime(true);
-                    echo ">> {$i} " . ($e-$s) . "\n";
-                    $averageTime += ($e-$s);
+            if ($handle) {
+                $headers = array();
+                if (($data = fgetcsv($handle, 1000, ",")) !== false) {
+                    //read headers
+                    $headers = $data;
                 }
+                while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+                    $s = microtime(true);
+                    $data = array_combine($headers, array_values($data));
+                    $account = $this->createAccount($data, $iteration);
+                    $contact = $this->createContact($data, $iteration);
+                    $contact->addAccount($account);
+                    $account->setDefaultContact($contact);
 
-                if ($i % $this->maxRecords == 0) {
-                    break;
+                    $group = $this->contactGroups[rand(0, count($this->contactGroups)-1)];
+                    $contact->addGroup($group);
+
+                    $user = $this->users[rand(0, count($this->users)-1)];
+                    $contact->setAssignedTo($user);
+                    $contact->setReportsTo($contact);
+                    $contact->setOwner($user);
+
+                    $source = $this->contactSources[rand(0, count($this->contactSources)-1)];
+                    $contact->setSource($source);
+
+                    $account->setOwner($user);
+
+                    $this->persist($this->accountManager, $account);
+                    $this->contactManager->persist($contact);
+
+                    $loadedRecords++;
+                    if ($loadedRecords % self::FLUSH_MAX == 0) {
+                        $this->flush($this->accountManager);
+                        $this->contactManager->flush();
+                        $this->contactManager->clear();
+
+                        $this->initSupportingEntities();
+
+                        $e = microtime(true);
+                        echo ">> {$loadedRecords} " . ($e-$s) . "\n";
+                        $averageTime += ($e-$s);
+                    }
+
+                    if ($loadedRecords == $this->maxRecords) {
+                        break;
+                    }
                 }
+                fclose($handle);
             }
-            fclose($handle);
+            $iteration++;
+            $this->flush($this->accountManager);
+            $this->contactManager->flush();
         }
-        $this->flush($this->accountManager);
-        $this->contactManager->flush();
-        $avg = $averageTime * self::FLUSH_MAX / $this->maxRecords;
+        $avg = $averageTime * self::FLUSH_MAX / $loadedRecords;
         echo ">> Average time: " . $avg . "\n";
         $this->container->averageTime = $avg;
     }
@@ -213,14 +217,19 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      * Create an Account
      *
      * @param array $data
+     * @param int $iteration
      * @return Account
      */
-    private function createAccount(array $data)
+    private function createAccount(array $data, $iteration = 0)
     {
         /** @var $account Account */
         $account = new Account();
 
-        $account->setName($data['Username'] . $data['MiddleInitial'] . '_' . $data['Surname']);
+        $name = $data['Username'] . $data['MiddleInitial'] . '_' . $data['Surname'];
+        if ($iteration) {
+            $name .= '_' . $iteration;
+        }
+        $account->setName($name);
 
         $isoCode = $data['Country'];
         $country = array_filter(
@@ -266,14 +275,19 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      * Create a Contact
      *
      * @param array $data
+     * @param int $iteration
      * @return Contact
      */
-    private function createContact(array $data)
+    private function createContact(array $data, $iteration = 0)
     {
         $contact = new Contact();
 
         $contact->setFirstName($data['GivenName']);
-        $contact->setLastName($data['Surname']);
+        $lastName = $data['Surname'];
+        if ($iteration) {
+            $lastName .= '_' . $iteration;
+        }
+        $contact->setLastName($lastName);
         $contact->setNamePrefix($data['Title']);
 
         $phone = new ContactPhone($data['TelephoneNumber']);

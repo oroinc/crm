@@ -1,7 +1,6 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -9,14 +8,14 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Oro\Bundle\UserBundle\Entity\User;
-
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
 
 class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -42,8 +41,6 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
 
     /** @var  EntityManager */
     protected $em;
-
-
 
     /**
      * {@inheritdoc}
@@ -142,7 +139,11 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
             ->set('new_company_name', $entity->getName());
 
         if ($entity instanceof Lead) {
-            $this->workflowManager->transit($salesFunnelItem, 'qualify');
+            if ($this->isTransitionAllowed($salesFunnelItem, 'qualify')) {
+                $this->workflowManager->transit($salesFunnelItem, 'qualify');
+            } else {
+                return;
+            }
         }
 
         if (rand(1, 100) > 10) {
@@ -152,21 +153,35 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
                 ->set('proposed_solution', mt_rand(10, 10000))
                 ->set('probability', $this->probabilities[array_rand($this->probabilities)]);
 
-            $this->workflowManager->transit($salesFunnelItem, 'develop');
-            if ($this->getRandomBoolean()) {
-                $salesFunnelItem->getData()
-                    ->set('close_revenue', mt_rand(10, 1000))
-                    ->set('close_date', new \DateTime());
-
+            if ($this->isTransitionAllowed($salesFunnelItem, 'develop')) {
+                $this->workflowManager->transit($salesFunnelItem, 'develop');
                 if ($this->getRandomBoolean()) {
-                    $this->workflowManager->transit($salesFunnelItem, 'close_as_won');
-                } else {
                     $salesFunnelItem->getData()
-                        ->set('close_reason_name', 'cancelled');
-                    $this->workflowManager->transit($salesFunnelItem, 'close_as_lost');
+                        ->set('close_revenue', mt_rand(10, 1000))
+                        ->set('close_date', new \DateTime());
+
+                    if ($this->getRandomBoolean() && $this->isTransitionAllowed($salesFunnelItem, 'close_as_won')) {
+                        $this->workflowManager->transit($salesFunnelItem, 'close_as_won');
+                    } elseif ($this->isTransitionAllowed($salesFunnelItem, 'close_as_lost')) {
+                        $salesFunnelItem->getData()
+                            ->set('close_reason_name', 'cancelled');
+                        $this->workflowManager->transit($salesFunnelItem, 'close_as_lost');
+                    }
                 }
             }
         }
+    }
+
+    /**
+     * @param WorkflowItem $workflowItem
+     * @param string $transition
+     * @return bool
+     */
+    protected function isTransitionAllowed(WorkflowItem $workflowItem, $transition)
+    {
+        $workflow = $this->workflowManager->getWorkflow($workflowItem);
+
+        return $workflow->isTransitionAllowed($workflowItem, $transition);
     }
 
     /**

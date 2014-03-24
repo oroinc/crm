@@ -130,18 +130,23 @@ datagrid:
                 contactFirstName:
                     type:      string
                     data_name: contactFirstName
+                    filter_by_having: true
                 contactLastName:
                     type:      string
                     data_name: contactLastName
+                    filter_by_having: true
                 contactEmail:
                     type:      string
                     data_name: contactEmail
+                    filter_by_having: true
                 contactPhone:
                     type:      string
                     data_name: contactPhone
+                    filter_by_having: true
                 ownerName:
                     type:      string
                     data_name: ownerName
+                    filter_by_having: true
                 createdAt:
                     type:      datetime
                     data_name: a.createdAt
@@ -296,10 +301,12 @@ datagrid:
                     type: string
                     data_name: regionLabel
                     enabled: false
+                    filter_by_having: true
                 addressPostalCode:
                     type: string
                     data_name: addressPostalCode
                     enabled: false
+                    filter_by_having: true
         options:
             routerEnabled: false
             requireJSModules:

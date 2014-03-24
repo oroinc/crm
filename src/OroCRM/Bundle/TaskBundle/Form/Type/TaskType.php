@@ -37,14 +37,14 @@ class TaskType extends AbstractType
                 'oro_datetime',
                 [
                     'required' => true,
-                    'label' => 'orocrm.task.dueDate.label'
+                    'label' => 'orocrm.task.due_date.label'
                 ]
             )
             ->add(
                 'taskPriority',
                 'entity',
                 [
-                    'label' => 'orocrm.task.taskPriority.label',
+                    'label' => 'orocrm.task.task_priority.label',
                     'class' => 'OroCRM\Bundle\TaskBundle\Entity\TaskPriority',
                     'required' => true,
                     'query_builder' => function (EntityRepository $repository) {
@@ -57,7 +57,7 @@ class TaskType extends AbstractType
                 'oro_user_select',
                 [
                     'required' => true,
-                    'label' => 'orocrm.task.assignedTo.label'
+                    'label' => 'orocrm.task.assigned_to.label'
                 ]
             )
             ->add(
@@ -65,7 +65,7 @@ class TaskType extends AbstractType
                 'orocrm_account_select',
                 [
                     'required' => false,
-                    'label' => 'orocrm.task.relatedAccount.label'
+                    'label' => 'orocrm.task.related_account.label'
                 ]
             )
             ->add(
@@ -73,7 +73,7 @@ class TaskType extends AbstractType
                 'orocrm_contact_select',
                 [
                     'required' => false,
-                    'label' => 'orocrm.task.relatedContact.label'
+                    'label' => 'orocrm.task.related_contact.label'
                 ]
             )
             ->add(

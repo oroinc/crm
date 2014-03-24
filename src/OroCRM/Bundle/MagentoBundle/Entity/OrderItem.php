@@ -3,12 +3,22 @@
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseOrderItem;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table("orocrm_magento_order_items")
  * @ORM\Entity
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"icon"="icon-list-alt"},
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
+ *  }
+ * )
  */
 class OrderItem extends BaseOrderItem
 {

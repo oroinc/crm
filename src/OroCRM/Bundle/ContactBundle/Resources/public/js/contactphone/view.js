@@ -42,7 +42,7 @@ function($, _, Backbone, ContactPhoneCollection) {
          */
         phonesSelectorTemplate: _.template(
             '<% _.each(contactPhones, function(phone) { %>' +
-                '<option <% if (phone.get("primary")) { %> selected="selected" <% } %> value=<%= phone.get("id") %>><%= phone.get("phone") %></option>' +
+                '<option <% if (phone.get("primary")) { %> selected="selected" <% } %> value=<%= phone.get("id") %>><%= _.escape(phone.get("phone")) %></option>' +
             '<% }); %>'
         ),
 
