@@ -165,7 +165,11 @@ class CartStrategy extends BaseStrategy
 
             $existingAddress = $newCart->$addressGetter();
             if ($existingAddress && $existingAddress->getOriginId() == $originAddressId) {
-                $this->strategyHelper->importEntity($existingAddress, $address, ['id', 'region', 'country']);
+                $this->strategyHelper->importEntity(
+                    $existingAddress,
+                    $address,
+                    ['id', 'region', 'country']
+                );
                 $address = $existingAddress;
             }
 

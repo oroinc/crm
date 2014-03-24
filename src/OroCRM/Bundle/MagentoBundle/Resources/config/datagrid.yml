@@ -177,7 +177,7 @@ datagrid:
                 statusLabel:          { data_name: cstatus.label }
                 stepLabel:            { data_name: step.label }
             default:
-                updatedAt:  ASC
+                updatedAt:  DESC
         filters:
             columns:
                 originId:

@@ -2,27 +2,15 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use Doctrine\ORM\EntityManager;
-
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AddressDataConverter;
 
 class CartNormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
-    /** @var AddressDataConverter */
-    protected $addressConverter;
-
-    public function __construct(EntityManager $em, AddressDataConverter $addressConverter)
-    {
-        parent::__construct($em);
-        $this->addressConverter = $addressConverter;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -52,8 +40,14 @@ class CartNormalizer extends AbstractNormalizer implements DenormalizerInterface
 
         $data = $this->denormalizeCreatedUpdated($data, $format, $context);
 
-        $data['shippingAddress'] = $this->denormalizeAddress($data, 'shipping');
-        $data['billingAddress']  = $this->denormalizeAddress($data, 'billing');
+        $data['shippingAddress'] = $this->serializer->denormalize(
+            $data['shipping_address'],
+            MagentoConnectorInterface::CART_ADDRESS_TYPE
+        );
+        $data['billingAddress']  = $this->serializer->denormalize(
+            $data['billing_address'],
+            MagentoConnectorInterface::CART_ADDRESS_TYPE
+        );
 
         $data['paymentDetails'] = $this->denormalizePaymentDetails($data['paymentDetails']);
 
@@ -94,26 +88,6 @@ class CartNormalizer extends AbstractNormalizer implements DenormalizerInterface
         }
 
         return $customer;
-    }
-
-    /**
-     * @param array  $data
-     * @param string $type shipping or billing
-     *
-     * @return CartAddress
-     */
-    protected function denormalizeAddress($data, $type)
-    {
-        $key  = $type . '_address';
-        $data = $this->addressConverter->convertToImportFormat($data[$key]);
-
-        if (empty($data['country'])) {
-            return null;
-        } else {
-            return $this->serializer
-                ->denormalize($data, MagentoConnectorInterface::CART_ADDRESS_TYPE)
-                ->setOriginId($data['originId']);
-        }
     }
 
     /**
