@@ -130,7 +130,6 @@ datagrid:
         filters:
             columns:
                 hasGroup:
-                    filter_by_having: true
                     data_name: hasGroup
                     type:  boolean
                 firstName:
@@ -298,12 +297,10 @@ datagrid:
                           query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
                 regionLabel:
                     type: string
-                    filter_by_having: true
                     data_name: regionLabel
                     enabled: false
                 addressPostalCode:
                     type: string
-                    filter_by_having: true
                     data_name: addressPostalCode
                     enabled: false
                 createdAt:
@@ -424,7 +421,6 @@ datagrid:
         filters:
             columns:
                 hasContact:
-                    filter_by_having: true
                     data_name: hasContact
                     type:      boolean
                 name:
@@ -432,23 +428,18 @@ datagrid:
                     data_name: a.name
                 contactFirstName:
                     type:      string
-                    filter_by_having: true
                     data_name: contactFirstName
                 contactLastName:
                     type:      string
-                    filter_by_having: true
                     data_name: contactLastName
                 contactEmail:
                     type:      string
-                    filter_by_having: true
                     data_name: contactEmail
                 contactPhone:
                     type:      string
-                    filter_by_having: true
                     data_name: contactPhone
                 ownerName:
                     type:      string
-                    filter_by_having: true
                     data_name: ownerName
                 createdAt:
                     type:      datetime
