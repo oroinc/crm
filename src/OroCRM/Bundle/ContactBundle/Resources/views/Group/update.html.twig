@@ -3,10 +3,6 @@
 {% if form.vars.value.id %}
     {% oro_title_set({params : {"%group.label%": form.vars.value.label} }) %}
 {% endif %}
-{% set title = form.vars.value.id
-    ? form.vars.value.name|default('N/A')
-    : 'orocrm.contact.group.new_entity'|trans
-%}
 {% set audit_entity_class = 'OroCRM_Bundle_ContactBundle_Entity_Group' %}
 {% set gridName = 'contact-group-contacts-grid' %}
 {% set formAction = form.vars.value.id ? path('orocrm_contact_group_update', { id: form.vars.value.id }) : path('orocrm_contact_group_create') %}
@@ -42,7 +38,7 @@
         %}
         {{ parent() }}
     {% else %}
-        {% include 'OroUIBundle::page_title_block.html.twig' %}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: 'orocrm.contact.group.new_entity'|trans } %}
     {% endif %}
 {% endblock pageHeader %}
 

@@ -34,7 +34,7 @@
         }) }}
     {% endif %}
     {% if resource_granted('orocrm_call_create') %}
-        {% set logCallTitle = 'orocrm.call.log_call'|trans|lower %}
+        {% set logCallTitle = 'orocrm.call.log_call'|trans %}
         {{ UI.clientButton({
             'dataUrl': path('orocrm_call_create', { 'contactId': entity.id }) ,
             'aCss': 'no-hash',

@@ -3,10 +3,6 @@
 
 {% oro_title_set({params : {"%lead.name%": entity.name} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Lead' %}
-{% set title = form.vars.value.id
-    ? entity.name ~ ' - ' ~ 'orocrm.sales.lead.edit_entity'|trans
-    : 'New'|trans ~ ' ' ~ 'orocrm.sales.lead.new_entity'|trans
-%}
 {% set formAction = form.vars.value.id ? path('orocrm_sales_lead_update', { 'id': form.vars.value.id }) : path('orocrm_sales_lead_create')  %}
 
 {% block head_script %}
@@ -47,7 +43,7 @@
         } %}
         {{ parent() }}
     {% else %}
-        {% include 'OroUIBundle::page_title_block.html.twig' %}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: 'orocrm.sales.lead.new_entity'|trans } %}
     {% endif %}
 {% endblock pageHeader %}
 
@@ -99,7 +95,7 @@
             'class': 'active',
             'subblocks': [
                 {
-                    'title': 'Lead Information',
+                    'title': 'orocrm.sales.lead.information',
                     'data': formFields
                 },
                 {
