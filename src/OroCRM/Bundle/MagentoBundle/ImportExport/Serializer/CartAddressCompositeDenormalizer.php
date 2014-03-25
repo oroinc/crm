@@ -45,6 +45,8 @@ class CartAddressCompositeDenormalizer extends OrderAddressCompositeDenormalizer
             $result->setCreatedAt($created);
             $result->setUpdatedAt($updated);
         }
+
+        return $result;
     }
 
     /**
