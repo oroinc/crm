@@ -15,10 +15,10 @@
                 {%- if entity.opportunity and resource_granted('VIEW', entity.opportunity) -%}
                     {% set opportunityView = ui.renderUrl(path('orocrm_sales_opportunity_view', {'id': entity.opportunity.id}), entity.opportunity.name) %}
                 {%- else -%}
-                    {% set opportunityView = entity.opportunity.name %}
+                    {% set opportunityView = entity.opportunity.name|escape %}
                 {%- endif -%}
 
-                {{ ui.renderProperty('orocrm.magento.cart.opportunity.label'|trans, opportunityView) }}
+                {{ ui.renderHtmlProperty('orocrm.magento.cart.opportunity.label'|trans, opportunityView) }}
             {% endif %}
         </div>
 
