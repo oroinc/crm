@@ -21,6 +21,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository")
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="orocrm_magento_cart",
  *  indexes={
  *      @ORM\Index(name="magecart_origin_idx", columns={"origin_id"}),
@@ -229,6 +230,25 @@ class Cart extends BaseCart
      */
     protected $workflowStep;
 
+    /*
+     * Denormalized data to process billing address person names for guest carts
+     * Or customer first/last name for logged in customer's cart
+     * Only for internal use on grid
+     */
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
+     */
+    protected $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
+     */
+    protected $lastName;
+
     /**
      * @param WorkflowItem $workflowItem
      *
@@ -423,18 +443,26 @@ class Cart extends BaseCart
 
     /**
      * @param CartAddress $shippingAddress
+     *
+     * @return $this
      */
-    public function setShippingAddress($shippingAddress)
+    public function setShippingAddress(CartAddress $shippingAddress = null)
     {
         $this->shippingAddress = $shippingAddress;
+
+        return $this;
     }
 
     /**
      * @param CartAddress $billingAddress
+     *
+     * @return $this
      */
-    public function setBillingAddress($billingAddress)
+    public function setBillingAddress(CartAddress $billingAddress = null)
     {
         $this->billingAddress = $billingAddress;
+
+        return $this;
     }
 
     /**
@@ -734,5 +762,44 @@ class Cart extends BaseCart
     public function getNotes()
     {
         return $this->notes;
+    }
+
+    /**
+     * Pre persist event listener
+     *
+     * @ORM\PrePersist
+     */
+    public function beforeSave()
+    {
+        $this->updateNames();
+    }
+
+    /**
+     * Pre update event handler
+     *
+     * @ORM\PreUpdate
+     */
+    public function doPreUpdate()
+    {
+        $this->updateNames();
+    }
+
+    /**
+     * Update denormalized names baased on current cart state
+     * See docblock for firstName property
+     */
+    protected function updateNames()
+    {
+        $firstName = $lastName = null;
+        if (null !== $this->getCustomer()) {
+            $firstName = $this->getCustomer()->getFirstName();
+            $lastName  = $this->getCustomer()->getLastName();
+        } elseif (null !== $this->getBillingAddress()) {
+            $firstName = $this->getBillingAddress()->getFirstName();
+            $lastName  = $this->getBillingAddress()->getLastName();
+        }
+
+        $this->firstName = $firstName;
+        $this->lastName  = $lastName;
     }
 }

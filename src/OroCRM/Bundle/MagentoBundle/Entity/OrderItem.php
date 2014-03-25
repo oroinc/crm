@@ -42,7 +42,7 @@ class OrderItem extends BaseOrderItem
     /**
      * @var string
      *
-     * @ORM\Column(name="product_options", type="string", length=255, nullable=true)
+     * @ORM\Column(name="product_options", type="text", nullable=true)
      */
     protected $productOptions;
 
