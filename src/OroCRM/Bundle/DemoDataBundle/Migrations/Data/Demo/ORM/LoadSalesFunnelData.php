@@ -125,6 +125,16 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
         ), $parameters);
 
         $salesFunnel = new SalesFunnel();
+
+        if (!$this->workflowManager->isStartTransitionAvailable(
+            'b2b_flow_sales_funnel',
+            $step,
+            $salesFunnel,
+            $parameters
+        )) {
+            return;
+        }
+
         $salesFunnelItem = $this->workflowManager->startWorkflow(
             'b2b_flow_sales_funnel',
             $salesFunnel,
