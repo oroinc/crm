@@ -50,7 +50,6 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
         return [
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadOpportunitiesData'
-
         ];
     }
 
@@ -121,7 +120,6 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
 
         $parameters = array_merge(array(
             'sales_funnel' => null,
-            'sales_funnel_name' => $entity->getName(),
             'sales_funnel_owner' => $owner,
             'sales_funnel_start_date' => new \DateTime('now'),
         ), $parameters);

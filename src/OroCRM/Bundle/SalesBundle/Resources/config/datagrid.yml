@@ -294,14 +294,13 @@ datagrid:
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
         options:
-            entityHint: sales activity
+            entityHint: sales process
         source:
             type: orm
             acl_resource: orocrm_sales_salesfunnel_view
             query:
                 select:
                     - salesFunnel.id
-                    - salesFunnel.name
                     - salesFunnel.startDate
                     - lead.name as leadName
                     - opportunity.name as opportunityName
@@ -316,8 +315,8 @@ datagrid:
                         - { join: salesFunnel.lead, alias: lead }
                         - { join: salesFunnel.opportunity, alias: opportunity }
         columns:
-            name:
-                label: orocrm.sales.salesfunnel.name.label
+            id:
+                label: orocrm.sales.salesfunnel.id.label
             startDate:
                 label: orocrm.sales.salesfunnel.start_date.label
                 frontend_type: date
@@ -334,7 +333,6 @@ datagrid:
             stepLabel:
                 label: orocrm.sales.salesfunnel.workflow_step.label
         properties:
-            id: ~
             view_link:
                 type:       url
                 route:      orocrm_sales_salesfunnel_view
@@ -349,8 +347,8 @@ datagrid:
                 params:     [ id ]
         sorters:
             columns:
-                name:
-                    data_name: salesFunnel.name
+                id:
+                    data_name: salesFunnel.id
                 startDate:
                     data_name: salesFunnel.startDate
                 leadName:
@@ -387,9 +385,10 @@ datagrid:
                 link:          delete_link
         filters:
             columns:
-                name:
+                id:
                     type: string
-                    data_name: salesFunnel.name
+                    data_name: salesFunnel.id
+                    type: number
                 startDate:
                     type:      date
                     data_name: salesFunnel.startDate

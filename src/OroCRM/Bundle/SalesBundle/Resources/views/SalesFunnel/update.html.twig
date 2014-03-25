@@ -1,10 +1,15 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
 
-{% oro_title_set({params : {"%sales_funnel.name%": entity.name} }) %}
+{% set salesFunnelHint = '' %}
+{% if entity %}
+    {% set salesFunnelHint = 'orocrm.sales.salesfunnel.hint'|trans({'%id%' : entity.id}) %}
+{% endif %}
+
+{% oro_title_set({params : {"%sales_funnel%": salesFunnelHint} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_SalesFunnel' %}
 {% set title = form.vars.value.id
-    ? entity.name ~ ' - ' ~ 'orocrm.sales.salesfunnel.edit_entity'|trans
+    ? salesFunnelHint ~ ' - ' ~ 'orocrm.sales.salesfunnel.edit_entity'|trans
     : 'orocrm.sales.salesfunnel.new_entity'|trans
 %}
 {% set formAction = form.vars.value.id ? path('orocrm_sales_salesfunnel_update', { 'id': form.vars.value.id }) : path('orocrm_sales_salesfunnel_create')  %}
@@ -49,7 +54,7 @@
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_sales_salesfunnel_index'),
             'indexLabel': 'orocrm.sales.salesfunnel.entity_plural_label'|trans,
-            'entityTitle': entity.name
+            'entityTitle': salesFunnelHint
         } %}
         {{ parent() }}
     {% else %}
@@ -70,7 +75,6 @@
         {% set formFields = formFields|merge([form_row(form.owner)]) %}
     {% endif %}
     {% set formFields = formFields|merge([
-        form_row(form.name),
         form_row(form.startDate),
     ]) %}
 
@@ -79,7 +83,6 @@
             'class': 'active',
             'subblocks': [
                 {
-                    'title': 'Sales Activity Information',
                     'data': formFields
                 }
             ]

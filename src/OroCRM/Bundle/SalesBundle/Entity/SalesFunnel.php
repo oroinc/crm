@@ -53,14 +53,6 @@ class SalesFunnel
     protected $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255)
-     * @Oro\Versioned
-     */
-    protected $name;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(type="date")
@@ -130,25 +122,6 @@ class SalesFunnel
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return SalesFunnel
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     /**
