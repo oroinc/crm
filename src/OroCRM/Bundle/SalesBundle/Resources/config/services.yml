@@ -31,8 +31,6 @@ services:
 
     orocrm_sales.lead.datagrid_helper:
         class: %orocrm_sales.lead.datagrid_helper.class%
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.sales-lead-datagrid, method: onResultBefore }
 
     orocrm_sales.form.autocomplete.opportunity.search_handler:
         parent: oro_form.autocomplete.search_handler
