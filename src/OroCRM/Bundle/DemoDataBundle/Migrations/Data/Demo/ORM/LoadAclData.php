@@ -33,6 +33,8 @@ class LoadAclData extends AbstractFixture implements ContainerAwareInterface
                     array('CREATE_SYSTEM', 'VIEW_SYSTEM', 'EDIT_SYSTEM', 'DELETE_SYSTEM'),
                 'Entity:OroCRMSalesBundle:Lead' =>
                     array('CREATE_SYSTEM', 'VIEW_SYSTEM', 'EDIT_SYSTEM', 'DELETE_SYSTEM'),
+                'Entity:OroCRMSalesBundle:SalesFunnel' =>
+                    array('CREATE_SYSTEM', 'VIEW_SYSTEM', 'EDIT_SYSTEM', 'DELETE_SYSTEM'),
                 'Entity:OroCRMContactBundle:Group' =>
                     array('CREATE_SYSTEM', 'VIEW_SYSTEM', 'EDIT_SYSTEM', 'DELETE_SYSTEM', 'ASSIGN_SYSTEM'),
                 'Entity:OroCRMContactBundle:Contact' =>
