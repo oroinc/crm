@@ -8,6 +8,7 @@ use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 
+use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
@@ -96,46 +97,10 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         }
 
         if ($this->isWsiMode) {
-            $result = parent::call($action, [(object) $params]);
-            $result = $this->parseWSIResponse($result);
+            $result = parent::call($action, [(object)$params]);
+            $result = WSIUtils::parseWSIResponse($result);
         } else {
             $result = parent::call($action, $params);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Parse WSI response and nested data
-     *
-     * @param mixed $result
-     * @param bool  $defaultNull if not found in result node return null
-     *
-     * @return null
-     */
-    protected function parseWSIResponse($result, $defaultNull = true)
-    {
-        if (is_object($result)) {
-            if (!empty($result->result)) {
-                $result = $result->result;
-            }
-
-            if (isset($result->complexObjectArray)) {
-                $result = $result->complexObjectArray;
-            }
-
-            $objectArray = is_array($result) ? $result : [$result];
-            foreach ($objectArray as $singleObject) {
-                if (is_object($singleObject)) {
-                    $vars = get_object_vars($singleObject);
-
-                    foreach ($vars as $var => $value) {
-                        $singleObject->$var = $this->parseWSIResponse($singleObject->$var, false);
-                    }
-                }
-            }
-        } elseif ($defaultNull) {
-            $result = null;
         }
 
         return $result;
