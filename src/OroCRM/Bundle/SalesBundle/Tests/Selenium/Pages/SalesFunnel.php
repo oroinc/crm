@@ -5,14 +5,12 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages;
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 /**
- * Class SalesActivity
+ * Class SalesFunnel
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
  */
-class SalesActivity extends AbstractPageEntity
+class SalesFunnel extends AbstractPageEntity
 {
-    /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $activityName;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $startDate;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
@@ -25,18 +23,6 @@ class SalesActivity extends AbstractPageEntity
     public function __construct($testCase, $redirect = true)
     {
         parent::__construct($testCase, $redirect);
-    }
-
-    /**
-     * @param string $name
-     * @return $this
-     */
-    public function setActivityName($name)
-    {
-        $this->activityName = $this->test->byId('oro_workflow_transition_sales_funnel_name');
-        $this->activityName->clear();
-        $this->activityName->value($name);
-        return $this;
     }
 
     public function setStartDate($date)
@@ -120,7 +106,7 @@ class SalesActivity extends AbstractPageEntity
     public function edit()
     {
         $this->test->byXpath(
-            "//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit sales activity']"
+            "//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit sales process']"
         )->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
@@ -133,6 +119,6 @@ class SalesActivity extends AbstractPageEntity
         $this->test->byXpath("//div[div[contains(., 'Delete Confirmation')]]//a[text()='Yes, Delete']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
-        return new SalesActivities($this->test, false);
+        return new SalesFunnels($this->test, false);
     }
 }

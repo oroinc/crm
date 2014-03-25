@@ -35,6 +35,9 @@
     <div class="row-fluid row-fluid-divider">
         <fieldset class="form-horizontal">
             <div class="responsive-block">
+                <h5 class="user-fiedset">
+                    <span>{{ 'orocrm.sales.lead.details.label'|trans }}</span>
+                </h5>
                 {% if form.owner is defined %}
                     {{ form_row(form.owner) }}
                 {% endif %}

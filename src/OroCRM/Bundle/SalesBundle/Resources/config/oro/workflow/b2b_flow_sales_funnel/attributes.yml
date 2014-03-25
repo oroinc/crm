@@ -1,8 +1,6 @@
 workflows:
     b2b_flow_sales_funnel:
         attributes:
-            sales_funnel_name:
-                property_path: sales_funnel.name
             sales_funnel_start_date:
                 property_path: sales_funnel.startDate
             sales_funnel_owner:

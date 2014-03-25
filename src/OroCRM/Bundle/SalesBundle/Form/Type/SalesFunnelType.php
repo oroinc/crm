@@ -15,7 +15,6 @@ class SalesFunnelType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text', array('required' => true, 'label' => 'orocrm.sales.salesfunnel.name.label'))
             ->add(
                 'startDate',
                 'oro_date',
