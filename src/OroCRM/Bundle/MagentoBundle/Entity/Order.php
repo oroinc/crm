@@ -53,7 +53,7 @@ class Order extends BaseOrder
     /**
      * @var Customer
      *
-     * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"}, inversedBy="orders")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $customer;

@@ -43,9 +43,9 @@ class LoadShoppingCartStatusData extends AbstractFixture implements
         // if version is null then it's first installation - load all statuses
         // if version is 0.0 then it's non-version fixture installed, load only new statuses
         if (!$this->version) {
-            $data = array_merge($data, $this->dataV0, $this->dataV1);
+            $data = array_merge($this->dataV0, $this->dataV1);
         } elseif ($this->version === '0.0') {
-            $data = array_merge($data, $this->dataV1);
+            $data = $this->dataV1;
         }
 
         foreach ($data as $name => $label) {

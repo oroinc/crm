@@ -48,10 +48,10 @@ class CartExpirationSyncCommand extends AbstractSyncCronCommand
     public function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var ChannelRepository $repository */
-        /** @var CartExpirationProcessor $processor */
         $channelId  = $input->getOption('channel-id');
         $repository = $this->getService('doctrine.orm.entity_manager')->getRepository('OroIntegrationBundle:Channel');
         $logger     = new OutputLogger($output);
+        /** @var CartExpirationProcessor $processor */
         $processor  = $this->getService('orocrm_magento.provider.cart_expiration_processor');
         $processor->setLogger($logger);
 

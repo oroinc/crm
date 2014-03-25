@@ -42,6 +42,18 @@ class CartExpirationProcessor
             throw new \LogicException('Could not retrieve carts via SOAP with out installed Oro Bridge module');
         }
 
+        $websiteId =
+        $stores = iterator_to_array($transport->getStores());
+        foreach ((array)$stores as $store) {
+            if ($store['website_id'] == $websiteId) {
+                $stores[] = $store['store_id'];
+            }
+        }
+
+        if (empty($stores)) {
+            throw new \LogicException(sprintf('Could not resolve store dependency for website id: %d', $websiteId));
+        }
+
         $settings  = $channel->getTransport()->getSettingsBag();
         $filterBag = new BatchFilterBag();
         $filterBag->addStoreFilter($this->getStoresByWebsiteId($this->websiteId));

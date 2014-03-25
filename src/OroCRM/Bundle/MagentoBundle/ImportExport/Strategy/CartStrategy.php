@@ -40,15 +40,15 @@ class CartStrategy extends BaseStrategy
                 $existingEntity,
                 $newEntity,
                 [
-                'id',
-                'store',
-                'status',
-                'cartItems',
-                'customer',
-                'shippingAddress',
-                'billingAddress',
-                'workflowItem',
-                'workflowStep'
+                    'id',
+                    'store',
+                    'status',
+                    'cartItems',
+                    'customer',
+                    'shippingAddress',
+                    'billingAddress',
+                    'workflowItem',
+                    'workflowStep'
                 ]
             );
         } else {

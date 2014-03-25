@@ -788,7 +788,7 @@ class Cart extends BaseCart
      * Update denormalized names baased on current cart state
      * See docblock for firstName property
      */
-    private function updateNames()
+    protected function updateNames()
     {
         $firstName = $lastName = null;
         if (null !== $this->getCustomer()) {
