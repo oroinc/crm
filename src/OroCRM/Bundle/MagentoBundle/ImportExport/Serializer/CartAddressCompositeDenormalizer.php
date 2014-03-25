@@ -32,14 +32,18 @@ class CartAddressCompositeDenormalizer extends OrderAddressCompositeDenormalizer
             return null;
         }
 
-        if (isset($data['created'], $data['updated'])) {
+        if (isset($data['created_at'], $data['updated_at'])) {
             $updated = $this->serializer->denormalize(
-                $data['updated'],
-                'DateTime'
+                $data['updated_at'],
+                'DateTime',
+                null,
+                ['type' => 'datetime', 'format' => 'Y-m-d H:i:s']
             );
             $created = $this->serializer->denormalize(
-                $data['created'],
-                'DateTime'
+                $data['created_at'],
+                'DateTime',
+                null,
+                ['type' => 'datetime', 'format' => 'Y-m-d H:i:s']
             );
 
             $result->setCreatedAt($created);
