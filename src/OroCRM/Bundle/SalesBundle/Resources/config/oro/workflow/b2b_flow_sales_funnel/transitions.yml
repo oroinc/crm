@@ -6,6 +6,7 @@ workflows:
                 step_to: new_lead
                 is_start: true
                 is_unavailable_hidden: true
+                acl_resource: orocrm_sales_salesfunnel_create
                 display_type: page
                 frontend_options:
                     icon: 'icon-phone'
@@ -50,6 +51,7 @@ workflows:
                 step_to: new_opportunity
                 is_start: true
                 is_unavailable_hidden: true
+                acl_resource: orocrm_sales_salesfunnel_create
                 display_type: page
                 frontend_options:
                     icon: 'icon-dollar'
