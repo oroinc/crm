@@ -21,7 +21,7 @@
         {{ ui.renderHtmlProperty('Related Contact'|trans, contactView) }}
 
         {% set phoneNumber = entity.contactPhoneNumber ? entity.contactPhoneNumber.phone : entity.phoneNumber %}
-        {{ ui.renderProperty('Phone Number'|trans, phoneNumber) }}
+        {{ ui.renderHtmlProperty('Phone Number'|trans, ui.renderPhone(phoneNumber)) }}
 
         {{ ui.renderProperty('Direction'|trans, entity.direction ? entity.direction.label : null) }}
 
