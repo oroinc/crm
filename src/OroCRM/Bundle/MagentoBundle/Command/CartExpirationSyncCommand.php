@@ -48,12 +48,8 @@ class CartExpirationSyncCommand extends AbstractSyncCronCommand
     public function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var ChannelRepository $repository */
-        $channelId  = $input->getOption('channel-id');
-        $repository = $this->getService('doctrine.orm.entity_manager')->getRepository('OroIntegrationBundle:Channel');
-        $logger     = new OutputLogger($output);
-        /** @var CartExpirationProcessor $processor */
-        $processor  = $this->getService('orocrm_magento.provider.cart_expiration_processor');
-        $processor->setLogger($logger);
+        $channelId = $input->getOption('channel-id');
+        $logger    = new OutputLogger($output);
 
         if ($this->isJobRunning($channelId)) {
             $logger->warning('Job already running. Terminating....');
@@ -61,6 +57,9 @@ class CartExpirationSyncCommand extends AbstractSyncCronCommand
             return 0;
         }
 
+        /** @var CartExpirationProcessor $processor */
+        $processor  = $this->getService('orocrm_magento.provider.cart_expiration_processor');
+        $repository = $this->getService('doctrine.orm.entity_manager')->getRepository('OroIntegrationBundle:Channel');
         if ($channelId) {
             $channel = $repository->getOrLoadById($channelId);
             if (!$channel) {
@@ -69,15 +68,16 @@ class CartExpirationSyncCommand extends AbstractSyncCronCommand
             $channels = [$channel];
         } else {
             $channels = $repository->getConfiguredChannelsForSync(ChannelType::TYPE);
-            $channels = array_filter(
-                $channels,
-                function (Channel $channel) {
-                    $connectors = $channel->getConnectors() ? : [];
-
-                    return in_array('cart', $connectors);
-                }
-            );
         }
+
+        $channels = array_filter(
+            $channels,
+            function (Channel $channel) {
+                $connectors = $channel->getConnectors() ? : [];
+
+                return in_array('cart', $connectors);
+            }
+        );
 
         /** @var Channel $channel */
         foreach ($channels as $channel) {

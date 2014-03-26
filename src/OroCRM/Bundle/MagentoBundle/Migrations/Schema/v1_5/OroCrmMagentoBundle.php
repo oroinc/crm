@@ -17,5 +17,8 @@ class OroCrmMagentoBundle implements Migration
         $table = $schema->getTable('orocrm_magento_cart');
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255]);
+        $table = $schema->getTable('orocrm_magento_order');
+        $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255]);
     }
 }

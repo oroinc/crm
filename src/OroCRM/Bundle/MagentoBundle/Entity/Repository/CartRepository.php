@@ -4,16 +4,21 @@ namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\WorkflowBundle\Model\Workflow;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+
+use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 
 class CartRepository extends EntityRepository
 {
     /**
      * @param \DateTime $dateFrom
      * @param \DateTime $dateTo
-     * @param Workflow $workflow
+     * @param Workflow  $workflow
      * @param AclHelper $aclHelper
+     *
      * @return array
      */
     public function getFunnelChartData(
@@ -30,7 +35,7 @@ class CartRepository extends EntityRepository
 
         // regular and final steps should be calculated separately
         $regularSteps = array();
-        $finalSteps = array();
+        $finalSteps   = array();
         foreach ($steps as $step) {
             if ($step->isFinal()) {
                 $finalSteps[] = $step->getName();
@@ -41,13 +46,13 @@ class CartRepository extends EntityRepository
 
         // regular steps should be calculated for whole period, final steps - for specified period
         $regularStepsData = $this->getStepData($regularSteps, null, null, $aclHelper);
-        $finalStepsData = $this->getStepData($finalSteps, $dateFrom, $dateTo, $aclHelper);
+        $finalStepsData   = $this->getStepData($finalSteps, $dateFrom, $dateTo, $aclHelper);
 
         // final calculation
         $regularData = array();
-        $finalData = array();
+        $finalData   = array();
         foreach ($steps as $step) {
-            $stepName = $step->getName();
+            $stepName  = $step->getName();
             $stepLabel = $step->getLabel();
             if ($step->isFinal()) {
                 $finalData[$stepLabel] = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
@@ -60,10 +65,11 @@ class CartRepository extends EntityRepository
     }
 
     /**
-     * @param array $steps
+     * @param array     $steps
      * @param AclHelper $aclHelper
      * @param \DateTime $dateFrom
      * @param \DateTime $dateTo
+     *
      * @return array
      */
     protected function getStepData(
@@ -97,5 +103,48 @@ class CartRepository extends EntityRepository
         }
 
         return $stepData;
+    }
+
+    /**
+     * Update statuses for carts to 'expired'
+     *
+     * @param array $ids
+     */
+    public function markExpired(array $ids)
+    {
+        $em = $this->getEntityManager();
+        foreach ($ids as $id) {
+            /** @var Cart $cart */
+            $cart = $em->getReference($this->getEntityName(), $id);
+            $cart->setStatus($em->getReference('OroCRMMagentoBundle:CartStatus', 'expired'));
+        }
+
+        $em->flush();
+    }
+
+    /**
+     * Returns iterator for fetching IDs pairs by channel and given status
+     * Each item in iteration will be array with following data:
+     * [
+     *      'id'        => ENTITY_ID,
+     *      'originId'  => ENTITY_ORIGIN_ID
+     * ]
+     *
+     * @param Channel $channel
+     * @param string  $status
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getCartsByChannelIdsIterator(Channel $channel, $status = 'open')
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->select('c.id, c.originId')
+            ->leftJoin('c.status', 'cstatus')
+            ->andWhere('c.channel = :channel')
+            ->andWhere('cstatus.name = :statusName')
+            ->setParameter('channel', $channel)
+            ->setParameter('statusName', $status);
+
+        return new BufferedQueryResultIterator($qb);
     }
 }

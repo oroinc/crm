@@ -48,7 +48,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  */
 class Cart extends BaseCart
 {
-    use IntegrationEntityTrait, OriginTrait;
+    use IntegrationEntityTrait, OriginTrait, NamesAwareTrait;
 
     /**
      * @var CartItem[]|Collection
@@ -231,25 +231,6 @@ class Cart extends BaseCart
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowStep;
-
-    /*
-     * Denormalized data to process billing address person names for guest carts
-     * Or customer first/last name for logged in customer's cart
-     * Only for internal use on grid
-     */
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
-     */
-    protected $firstName;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
-     */
-    protected $lastName;
 
     /**
      * @param WorkflowItem $workflowItem
@@ -784,24 +765,5 @@ class Cart extends BaseCart
     public function doPreUpdate()
     {
         $this->updateNames();
-    }
-
-    /**
-     * Update denormalized names baased on current cart state
-     * See docblock for firstName property
-     */
-    protected function updateNames()
-    {
-        $firstName = $lastName = null;
-        if (null !== $this->getCustomer()) {
-            $firstName = $this->getCustomer()->getFirstName();
-            $lastName  = $this->getCustomer()->getLastName();
-        } elseif (null !== $this->getBillingAddress()) {
-            $firstName = $this->getBillingAddress()->getFirstName();
-            $lastName  = $this->getBillingAddress()->getLastName();
-        }
-
-        $this->firstName = $firstName;
-        $this->lastName  = $lastName;
     }
 }
