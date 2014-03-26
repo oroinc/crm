@@ -26,6 +26,8 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *      indexes={@ORM\Index(name="magecustomer_name_idx",columns={"first_name", "last_name"})}
  * )
  * @Config(
+ *  routeName="orocrm_magento_customer_index",
+ *  routeView="orocrm_magento_customer_view",
  *  defaultValues={
  *      "security"={
  *          "type"="ACL",
