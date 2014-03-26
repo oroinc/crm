@@ -34,8 +34,7 @@
         } %}
         {{ parent() }}
     {% else %}
-        {% set title = 'orocrm.contactus.contactrequest.new_entity'|trans|lower %}
-        {% include 'OroUIBundle::page_title_block.html.twig' %}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: 'orocrm.contactus.contactrequest.new_entity'|trans } %}
     {% endif %}
 {% endblock pageHeader %}
 

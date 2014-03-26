@@ -2,10 +2,6 @@
 {% set name = entity.name|default('N/A') %}
 {% oro_title_set({params : {"%opportunity.name%": name} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Opportunity' %}
-{% set title = form.vars.value.id
-    ? name ~ ' - ' ~ 'orocrm.sales.opportunity.edit_entity'|trans
-    : 'orocrm.sales.opportunity.new_entity'|trans
-%}
 {% set formAction = form.vars.value.id
     ? path('orocrm_sales_opportunity_update', { 'id': form.vars.value.id })
     : path('orocrm_sales_opportunity_create')
@@ -48,7 +44,7 @@
         } %}
         {{ parent() }}
     {% else %}
-        {% include 'OroUIBundle::page_title_block.html.twig' %}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: 'orocrm.sales.opportunity.new_entity'|trans } %}
     {% endif %}
 {% endblock pageHeader %}
 

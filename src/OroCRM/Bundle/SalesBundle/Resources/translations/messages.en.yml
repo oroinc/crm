@@ -126,6 +126,7 @@ orocrm:
             opportunities.label:  Opportunities
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
+            information:          Lead Information
 
             datagrid:
                 country: Country
