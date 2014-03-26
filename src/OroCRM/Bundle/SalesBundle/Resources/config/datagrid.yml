@@ -168,6 +168,8 @@ datagrid:
                         - { join: l.address, alias: address }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+            hints:
+                - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
         columns:
             name:
                 label: orocrm.sales.lead.name.label
