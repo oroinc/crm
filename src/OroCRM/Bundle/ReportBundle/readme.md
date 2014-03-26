@@ -1,2 +1,4 @@
-OroCRM Report Bundle
-====================
+OroCRMReportBundle
+==================
+
+Base CRM Reports definitions.
