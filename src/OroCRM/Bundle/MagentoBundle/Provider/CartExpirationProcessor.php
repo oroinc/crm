@@ -52,8 +52,7 @@ class CartExpirationProcessor
     {
         $this->configure($channel);
 
-        $qb     = $this->em->getRepository('OroCRMMagentoBundle:Cart')->getCartsByChannelQB($channel);
-        $result = new BufferedQueryResultIterator($qb);
+        $result = $this->em->getRepository('OroCRMMagentoBundle:Cart')->getCartsByChannelIdsIterator($channel);
 
         $ids   = [];
         $count = 0;

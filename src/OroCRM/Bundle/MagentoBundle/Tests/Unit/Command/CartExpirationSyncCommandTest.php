@@ -138,6 +138,7 @@ class CartExpirationSyncCommandTest extends \PHPUnit_Framework_TestCase
             'Channel found, skip due to cart connector disabled' => [$channel1, 0, true],
             'Channel found, process'                             => [$channel2, 1, true],
             'No channels found'                                  => [[], 0, false],
+            'Channels found, process one'                        => [[$channel1, $channel2], 1, false],
         ];
     }
 

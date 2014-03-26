@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\WorkflowBundle\Model\Workflow;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 
@@ -122,14 +123,19 @@ class CartRepository extends EntityRepository
     }
 
     /**
-     * Returns query builder for fetching carts by channel and given status
+     * Returns iterator for fetching IDs pairs by channel and given status
+     * Each item in iteration will be array with following data:
+     * [
+     *      'id'        => ENTITY_ID,
+     *      'originId'  => ENTITY_ORIGIN_ID
+     * ]
      *
      * @param Channel $channel
      * @param string  $status
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getCartsByChannelQB(Channel $channel, $status = 'open')
+    public function getCartsByChannelIdsIterator(Channel $channel, $status = 'open')
     {
         $qb = $this->createQueryBuilder('c')
             ->select('c.id, c.originId')
@@ -139,6 +145,6 @@ class CartRepository extends EntityRepository
             ->setParameter('channel', $channel)
             ->setParameter('statusName', $status);
 
-        return $qb;
+        return new BufferedQueryResultIterator($qb);
     }
 }
