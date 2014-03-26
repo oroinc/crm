@@ -111,6 +111,8 @@ datagrid:
                     - c.id
                     - c.originId
                     - c.email
+                    - c.firstName
+                    - c.lastName
                     - c.itemsQty
                     - c.quoteCurrencyCode as currency
                     - c.grandTotal
@@ -118,8 +120,6 @@ datagrid:
                     - c.updatedAt
                     - cstatus.label as statusLabel
                     - step.label as stepLabel
-                    - customer.firstName as firstName
-                    - customer.lastName as lastName
                 from:
                     - { table: %orocrm_magento.cart.entity.class% , alias: c }
                 join:
@@ -128,7 +128,6 @@ datagrid:
                         - { join: c.channel, alias: ch }
                         - { join: c.status, alias: cstatus }
                         - { join: c.workflowStep, alias: step }
-                        - { join: c.customer, alias: customer }
                 where:
                     and:
                         - c.channel = :channelId
@@ -167,8 +166,8 @@ datagrid:
         sorters:
             columns:
                 originId:             { data_name: c.originId }
-                firstName:            { data_name: customer.firstName }
-                lastName:             { data_name: customer.lastName }
+                firstName:            { data_name: c.firstName }
+                lastName:             { data_name: c.lastName }
                 email:                { data_name: c.email }
                 itemsQty:             { data_name: c.itemsQty }
                 grandTotal:           { data_name: c.grandTotal }
@@ -177,7 +176,7 @@ datagrid:
                 statusLabel:          { data_name: cstatus.label }
                 stepLabel:            { data_name: step.label }
             default:
-                updatedAt:  ASC
+                updatedAt:  DESC
         filters:
             columns:
                 originId:
@@ -185,10 +184,10 @@ datagrid:
                     data_name: c.originId
                 firstName:
                     type: string
-                    data_name: customer.firstName
+                    data_name: c.firstName
                 lastName:
                     type: string
-                    data_name: customer.lastName
+                    data_name: c.lastName
                 email:
                     type: string
                     data_name: c.email

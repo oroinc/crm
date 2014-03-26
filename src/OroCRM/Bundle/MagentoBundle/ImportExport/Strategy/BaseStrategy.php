@@ -228,7 +228,7 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
             /** @var Region $mageRegion */
             $mageRegion   = $this->mageRegionsCache[$mageRegionId];
             $combinedCode = $mageRegion->getCombinedCode();
-            $regionCode = $mageRegion->getCode();
+            $regionCode   = $mageRegion->getCode();
 
             if (!array_key_exists($combinedCode, $this->regionsCache)) {
                 $this->regionsCache[$combinedCode] = $this->loadRegionByCode($combinedCode, $countryCode, $regionCode);
@@ -244,6 +244,9 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
             }
         } elseif ($address->getRegionText()) {
             $address->setRegion(null);
+        } elseif ($address->getCountry()) {
+            // unable to find corresponding region and region text is empty,
+            // it's correct case for UK addresses, if country present
         } else {
             throw new InvalidItemException('Unable to handle region for address', [$address]);
         }
