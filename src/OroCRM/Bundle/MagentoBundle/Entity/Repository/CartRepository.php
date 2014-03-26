@@ -121,6 +121,14 @@ class CartRepository extends EntityRepository
         $em->flush();
     }
 
+    /**
+     * Returns query builder for fetching carts by channel and given status
+     *
+     * @param Channel $channel
+     * @param string  $status
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
     public function getCartsByChannelQB(Channel $channel, $status = 'open')
     {
         $qb = $this->createQueryBuilder('c')
