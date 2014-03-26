@@ -8,7 +8,6 @@ use Psr\Log\LoggerAwareTrait;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
@@ -31,16 +30,21 @@ class CartExpirationProcessor
     /** @var array */
     protected $stores;
 
+    /** @var Int */
+    protected $batchSize;
+
     /**
      * Constructor
      *
      * @param ServiceLink   $registryLink
      * @param EntityManager $em
+     * @param int           $batchSize
      */
-    public function __construct(ServiceLink $registryLink, EntityManager $em)
+    public function __construct(ServiceLink $registryLink, EntityManager $em, $batchSize = self::DEFAULT_PAGE_SIZE)
     {
         $this->registryLink = $registryLink;
         $this->em           = $em;
+        $this->batchSize    = $batchSize;
     }
 
     /**
@@ -60,7 +64,7 @@ class CartExpirationProcessor
             $ids[$data['originId']] = $data['id'];
             $count++;
 
-            if (0 === $count % self::DEFAULT_PAGE_SIZE) {
+            if (0 === $count % $this->batchSize) {
                 $this->processBatch($ids);
                 $ids = [];
             }
@@ -91,7 +95,7 @@ class CartExpirationProcessor
             ]
         );
         $filters          = $filterBag->getAppliedFilters();
-        $filters['pager'] = ['page' => 1, 'pageSize' => self::DEFAULT_PAGE_SIZE];
+        $filters['pager'] = ['page' => 1, 'pageSize' => $this->batchSize];
 
         $result     = $this->transport->call(SoapTransport::ACTION_ORO_CART_LIST, $filters);
         $result     = WSIUtils::processCollectionResponse($result);
@@ -115,11 +119,8 @@ class CartExpirationProcessor
      */
     protected function configure(Channel $channel)
     {
-        /** @var MagentoTransportInterface $transport */
-        $transport = clone $this->registryLink->getService()
-            ->getTransportTypeBySettingEntity($channel->getTransport(), $channel->getType());
-        $transport->init($channel->getTransport());
-        $settings = $channel->getTransport()->getSettingsBag();
+        $transport = $this->getTransport($channel);
+        $settings  = $channel->getTransport()->getSettingsBag();
 
         if (!$transport->isExtensionInstalled()) {
             throw new \LogicException('Could not retrieve carts via SOAP with out installed Oro Bridge module');
@@ -141,5 +142,22 @@ class CartExpirationProcessor
 
         $this->transport = $transport;
         $this->stores    = $stores;
+    }
+
+    /**
+     * Retrieve and initialize real transport object
+     *
+     * @param Channel $channel
+     *
+     * @return MagentoTransportInterface
+     */
+    protected function getTransport(Channel $channel)
+    {
+        /** @var MagentoTransportInterface $transport */
+        $transport = clone $this->registryLink->getService()
+            ->getTransportTypeBySettingEntity($channel->getTransport(), $channel->getType());
+        $transport->init($channel->getTransport());
+
+        return $transport;
     }
 }

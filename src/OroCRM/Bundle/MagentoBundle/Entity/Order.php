@@ -31,7 +31,6 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
  *     }
  * )
  * @Config(
- *  routeName="orocrm_magento_order_index",
  *  routeView="orocrm_magento_order_view",
  *  defaultValues={
  *      "entity"={"icon"="icon-list-alt"},

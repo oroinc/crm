@@ -110,6 +110,8 @@ orocrm:
             quote_currency_code.label: Quote currency
             store_to_base_rate.label:  Store to base rate
             store_to_quote_rate.label: Store to quote rate
+            first_name.label:          First name
+            last_name.label:           Last name
             email.label:               Email
             related_emails.label:      Emails
             gift_message.label:        Gift message
@@ -222,6 +224,8 @@ orocrm:
             total_invoiced_amount.label: Total invoiced
             total_refunded_amount.label: Total refunded
             total_canceled_amount.label: Total canceled
+            first_name.label:       First name
+            last_name.label:        Last name
             currency.label:         Currency
             payment_method.label:   Payment method
             payment_details.label:  Payment details

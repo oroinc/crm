@@ -32,7 +32,6 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *  }
  * )
  * @Config(
- *  routeName="orocrm_magento_cart_index",
  *  routeView="orocrm_magento_cart_view",
  *  defaultValues={
  *      "entity"={"icon"="icon-shopping-cart"},
