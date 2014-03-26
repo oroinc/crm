@@ -128,7 +128,7 @@ class AccountController extends Controller
      * @AclAncestor("orocrm_contact_view")
      * @Template()
      */
-    public function contactsInfoAction(Account $account)
+    public function contactsInfoAction(Account $account = null)
     {
         return [
             'account' => $account
