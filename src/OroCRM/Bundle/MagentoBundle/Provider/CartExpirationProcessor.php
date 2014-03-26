@@ -4,11 +4,11 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
 
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Psr\Log\LoggerAwareTrait;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
@@ -17,8 +17,6 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 class CartExpirationProcessor
 {
-    use LoggerAwareTrait;
-
     const DEFAULT_PAGE_SIZE = 200;
 
     /** @var TypesRegistry */
@@ -33,6 +31,12 @@ class CartExpirationProcessor
     /** @var array */
     protected $stores;
 
+    /**
+     * Constructor
+     *
+     * @param ServiceLink   $registryLink
+     * @param EntityManager $em
+     */
     public function __construct(ServiceLink $registryLink, EntityManager $em)
     {
         $this->registryLink = $registryLink;
@@ -40,51 +44,67 @@ class CartExpirationProcessor
     }
 
     /**
-     * {@inheritdoc}
+     * Run cart expiration process for given channel
+     *
+     * @param Channel $channel
      */
     public function process(Channel $channel)
     {
         $this->configure($channel);
 
-        $qb = $this->em->getRepository('OroCRMMagentoBundle:Cart')->createQueryBuilder('c')
-            ->select('c.id')
-            ->where('c.channel = :channel')
-            ->setParameter('channel', $channel);
-
+        $qb     = $this->em->getRepository('OroCRMMagentoBundle:Cart')->getCartsByChannelQB($channel);
         $result = new BufferedQueryResultIterator($qb);
 
         $ids   = [];
         $count = 0;
-        foreach ($result as $id) {
-            $ids[] = $id;
+        foreach ($result as $data) {
+            $ids[$data['originId']] = $data['id'];
             $count++;
 
             if (0 === $count % self::DEFAULT_PAGE_SIZE) {
-
+                $this->processBatch($ids);
+                $ids = [];
             }
         }
 
         if (!empty($ids)) {
-
+            $this->processBatch($ids);
         }
+    }
+
+    /**
+     * Process search for removal carts in CRM and mark them as "expired"
+     *
+     * @param array $ids
+     */
+    protected function processBatch($ids)
+    {
         $filterBag = new BatchFilterBag();
-        $filterBag->addStoreFilter($stores);
+        $filterBag->addStoreFilter($this->stores);
+        $filterBag->addComplexFilter(
+            'entity_id',
+            [
+                'key'   => 'entity_id',
+                'value' => [
+                    'key'   => 'in',
+                    'value' => implode(',', array_keys($ids))
+                ]
+            ]
+        );
         $filters          = $filterBag->getAppliedFilters();
         $filters['pager'] = ['page' => 1, 'pageSize' => self::DEFAULT_PAGE_SIZE];
 
-        $result    = $transport->call(SoapTransport::ACTION_ORO_CART_LIST, $filters);
-        $result    = WSIUtils::processCollectionResponse($result);
-        $resultIds = array_map(
+        $result     = $this->transport->call(SoapTransport::ACTION_ORO_CART_LIST, $filters);
+        $result     = WSIUtils::processCollectionResponse($result);
+        $resultIds  = array_map(
             function (&$item) {
                 return (int)$item->entity_id;
             },
             $result
         );
-        var_dump($resultIds);
-    }
-
-    protected function processBatch($ids) {
-
+        $resultIds  = array_flip($resultIds);
+        $removedIds = array_values(array_diff_key($ids, $resultIds));
+        $this->em->getRepository('OroCRMMagentoBundle:Cart')->markExpired($removedIds);
     }
 
     /**
@@ -102,7 +122,7 @@ class CartExpirationProcessor
         $transport->init($channel->getTransport());
         $settings = $channel->getTransport()->getSettingsBag();
 
-        if (!$this->transport->isExtensionInstalled()) {
+        if (!$transport->isExtensionInstalled()) {
             throw new \LogicException('Could not retrieve carts via SOAP with out installed Oro Bridge module');
         }
 

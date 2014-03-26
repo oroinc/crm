@@ -442,8 +442,6 @@ datagrid:
                 select:
                     - o
                     - step.label as stepLabel
-                    - customer.firstName as firstName
-                    - customer.lastName as lastName
                     - customer.email as email
                 from:
                     - { table: %orocrm_magento.order.entity.class%, alias: o }
@@ -487,8 +485,8 @@ datagrid:
         sorters:
             columns:
                 incrementId:            { data_name: o.incrementId }
-                firstName:              { data_name: customer.firstName }
-                lastName:               { data_name: customer.lastName }
+                firstName:              { data_name: o.firstName }
+                lastName:               { data_name: o.lastName }
                 email:                  { data_name: customer.email }
                 totalPaidAmount:        { data_name: o.totalPaidAmount }
                 status:                 { data_name: o.status }
@@ -504,10 +502,10 @@ datagrid:
                     data_name:        o.incrementId
                 firstName:
                     type:             string
-                    data_name:        customer.firstName
+                    data_name:        o.firstName
                 lastName:
                     type:             string
-                    data_name:        customer.lastName
+                    data_name:        o.lastName
                 email:
                     type:             string
                     data_name:        customer.email

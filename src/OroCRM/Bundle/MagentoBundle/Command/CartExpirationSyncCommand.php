@@ -52,8 +52,7 @@ class CartExpirationSyncCommand extends AbstractSyncCronCommand
         $repository = $this->getService('doctrine.orm.entity_manager')->getRepository('OroIntegrationBundle:Channel');
         $logger     = new OutputLogger($output);
         /** @var CartExpirationProcessor $processor */
-        $processor  = $this->getService('orocrm_magento.provider.cart_expiration_processor');
-        $processor->setLogger($logger);
+        $processor = $this->getService('orocrm_magento.provider.cart_expiration_processor');
 
         if ($this->isJobRunning($channelId)) {
             $logger->warning('Job already running. Terminating....');

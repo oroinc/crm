@@ -5,12 +5,15 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseOrder;
-use Oro\Bundle\EmailBundle\Entity\Email;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EmailBundle\Entity\Email;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
+use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseOrder;
+
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
 /**
@@ -18,6 +21,7 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="orocrm_magento_order",
  *     indexes={
  *          @ORM\Index(name="mageorder_created_idx",columns={"created_at"})
@@ -41,7 +45,7 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
  */
 class Order extends BaseOrder
 {
-    use IntegrationEntityTrait;
+    use IntegrationEntityTrait, NamesAwareTrait;
 
     /**
      * @var string
@@ -618,5 +622,39 @@ class Order extends BaseOrder
     public function getFeedback()
     {
         return $this->feedback;
+    }
+
+    /**
+     * Pre persist event listener
+     *
+     * @ORM\PrePersist
+     */
+    public function beforeSave()
+    {
+        $this->updateNames();
+    }
+
+    /**
+     * Pre update event handler
+     *
+     * @ORM\PreUpdate
+     */
+    public function doPreUpdate()
+    {
+        $this->updateNames();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBillingAddress()
+    {
+        $addresses = $this->getAddresses()->filter(
+            function (AbstractTypedAddress $address) {
+                return $address->hasTypeWithName(AddressType::TYPE_BILLING);
+            }
+        );
+
+        return $addresses->first();
     }
 }
