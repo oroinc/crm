@@ -217,7 +217,7 @@ class Opportunity extends AbstractPageEntity
     public function edit()
     {
         $this->test
-            ->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit opportunity']")
+            ->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Opportunity']")
             ->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
