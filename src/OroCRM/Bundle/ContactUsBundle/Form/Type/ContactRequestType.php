@@ -65,6 +65,7 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface, 
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getDefaultCss()
     {
@@ -149,7 +150,6 @@ body {
     width: 99.5%;
     min-height: 75px;
     resize: vertical;
-    margin: 0 0 10px;
 }
 
 .row-group button {
@@ -161,6 +161,13 @@ body {
     background: -ms-linear-gradient(top, #ffffff, #f1f0f0);
     background: -o-linear-gradient(top, #ffffff, #f1f0f0);
     padding: 0 25px;
+    margin-top: 10px;
+}
+span.validation-failed {
+    color: #c81717;
+    display: block;
+    line-height: 1.1em;
+    margin: 3px 0 6px 0;
 }
 CSS;
     }
