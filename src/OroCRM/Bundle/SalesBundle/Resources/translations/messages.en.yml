@@ -52,8 +52,6 @@ orocrm:
             entity_label:         Opportunity
             entity_plural_label:  Opportunities
             entity_description:   Represent opportunity
-            edit_entity:          Update Opportunity
-            new_entity:           New Opportunity
             add_entity:           Add opportunity
             id.label:             Id
             name.label:           Opportunity name
@@ -96,8 +94,6 @@ orocrm:
             entity_label:         Lead
             entity_plural_label:  Leads
             entity_description:   Represent lead
-            edit_entity:          Update Lead
-            new_entity:           New Lead
             add_entity:           Add lead
             id.label:             Id
             name.label:           Lead name
@@ -140,7 +136,6 @@ orocrm:
             entity_label:         Sales Process
             entity_plural_label:  Sales Processes
             new_entity:           New Sales Process
-            edit_entity:          Update Sales Process
             id.label:             'Sales #'
             created_at.label:     Created
             updated_at.label:     Updated

@@ -74,7 +74,7 @@ class AclTest extends Selenium2TestCase
             ->setPassword('123123q')
             ->submit();
         $login->assertElementNotPresent(
-            "//div[@id='main-menu']/ul/li/a[normalize-space(.) = 'System']",
+            "//div[@id='main-menu']//span[normalize-space(.) = 'Configuration']",
             'Element present so ACL for Users do not work'
         );
         $login->assertElementNotPresent("//div[@id='search-div']", 'Element present so ACL for Search do not work');
