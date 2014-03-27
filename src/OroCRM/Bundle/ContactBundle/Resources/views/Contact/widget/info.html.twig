@@ -145,7 +145,7 @@
 
             {{ ui.renderProperty('orocrm.contact.job_title.label'|trans, entity.jobTitle) }}
             {{ ui.renderHtmlProperty('orocrm.contact.accounts.label'|trans, accountsData) }}
-            {{ ui.renderProperty('orocrm.contact.birthday.label'|trans, birthdayData) }}
+            {{ ui.renderProperty('orocrm.contact.birthday.label'|trans, entity.birthday ? birthdayData : null) }}
             {{ ui.renderProperty('orocrm.contact.gender.label'|trans, oro_gender(entity.gender)) }}
             {{ ui.renderProperty('orocrm.contact.source.label'|trans, entity.source) }}
             {{ ui.renderHtmlProperty('orocrm.contact.assigned_to.label'|trans, assignedToData) }}
