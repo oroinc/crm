@@ -1,4 +1,4 @@
 AccountBundle
 =============
 
-CRM Acconts
+CRM Accounts

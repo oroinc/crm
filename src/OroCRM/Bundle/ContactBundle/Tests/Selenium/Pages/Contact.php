@@ -82,7 +82,7 @@ class Contact extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$owner}')]",
-            "Owner autocoplete doesn't return search value"
+            "Owner autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$owner}')]")->click();
 
@@ -275,7 +275,7 @@ class Contact extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[normalize-space(.) = '{$value}']",
-            "Country's autocoplete doesn't return search value"
+            "Country's autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[normalize-space(.) = '{$value}']")->click();
         $this->waitForAjax();
@@ -298,7 +298,7 @@ class Contact extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$value}')]",
-            "Country's autocoplete doesn't return search value"
+            "Country's autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$value}')]")->click();
         $this->waitForAjax();
@@ -421,7 +421,7 @@ class Contact extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$assignedTo}')]",
-            "Assigned to autocoplete doesn't return search value"
+            "Assigned to autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$assignedTo}')]")->click();
 
@@ -436,7 +436,7 @@ class Contact extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$reportsTo}')]",
-            "Reports to autocoplete doesn't return search value"
+            "Reports to autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$reportsTo}')]")->click();
 

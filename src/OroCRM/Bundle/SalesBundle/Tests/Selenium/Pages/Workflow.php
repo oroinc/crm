@@ -35,7 +35,7 @@ class Workflow extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$contact}')]",
-            "Owner autocoplete doesn't return search value"
+            "Owner autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$contact}')]")->click();
 
@@ -50,7 +50,7 @@ class Workflow extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$account}')]",
-            "Owner autocoplete doesn't return search value"
+            "Owner autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$account}')]")->click();
 

@@ -2,7 +2,7 @@ Call Validators
 ------------------
 
 OroCRMCallBundle has validators that can be used to validate addresses and address collection.
-One custom constraint is used to have one of the phones entered (choosen from drop down or free field).
+One custom constraint is used to have one of the phones entered (chosen from drop down or free field).
 
 ### Example Of Usage
 
