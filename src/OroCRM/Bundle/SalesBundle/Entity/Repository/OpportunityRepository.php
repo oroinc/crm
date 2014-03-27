@@ -3,9 +3,10 @@
 namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\WorkflowBundle\Entity\Repository\WorkflowStepRepository;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+use OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus;
 
 class OpportunityRepository extends EntityRepository
 {
@@ -52,8 +53,19 @@ class OpportunityRepository extends EntityRepository
      */
     protected function getOpportunitiesDataByStatus(AclHelper $aclHelper, $dateStart = null, $dateEnd = null)
     {
+        $resultData = array();
+
+        /** @var OpportunityStatus[] $statuses */
+        $statuses = $this->getEntityManager()->getRepository('OroCRMSalesBundle:OpportunityStatus')->findAll();
+        foreach ($statuses as $status) {
+            $resultData[$status->getName()] = array(
+                'label' => $status->getLabel(),
+                'budget' => 0,
+            );
+        }
+
         $qb = $this->createQueryBuilder('opp');
-        $qb->select('opp_status.name', 'opp_status.label', 'SUM(opp.budgetAmount) as budget')
+        $qb->select('opp_status.name', 'SUM(opp.budgetAmount) as budget')
             ->join('opp.status', 'opp_status');
         if ($dateStart && $dateEnd) {
             $qb->where($qb->expr()->between('opp.createdAt', ':dateFrom', ':dateTo'))
@@ -61,8 +73,13 @@ class OpportunityRepository extends EntityRepository
                 ->setParameter('dateTo', $dateEnd);
         }
         $qb->groupBy('opp_status.name');
+        $groupedData = $aclHelper->apply($qb)->getArrayResult();
 
-        return $aclHelper->apply($qb)
-            ->getArrayResult();
+        foreach ($groupedData as $statusData) {
+            $statusName = $statusData['name'];
+            $resultData[$statusName]['budget'] = $statusData['budget'];
+        }
+
+        return array_values($resultData);
     }
 }
