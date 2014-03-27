@@ -44,7 +44,7 @@
             {{ ui.renderHtmlProperty('orocrm.magento.customer.account.label'|trans, accountData) }}
             {{ ui.renderHtmlProperty('orocrm.magento.customer.contact.label'|trans, contactData) }}
 
-            {{ ui.renderProperty('orocrm.magento.customer.birthday.label'|trans, birthdayData) }}
+            {{ ui.renderProperty('orocrm.magento.customer.birthday.label'|trans, entity.birthday ? birthdayData : null) }}
             {{ ui.renderProperty('orocrm.magento.customer.gender.label'|trans, oro_gender(entity.gender)) }}
             {{ ui.renderProperty('orocrm.magento.customer.vat.label'|trans, entity.vat) }}
 

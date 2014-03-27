@@ -27,7 +27,7 @@ class ReportGridListener
     /**
      * Need to change data name depends to filter value
      *
-     * Event: oro_datagrid.datgrid.build.before.orocrm_report-opportunities-won_by_period
+     * Event: oro_datagrid.datagrid.build.before.orocrm_report-opportunities-won_by_period
      *
      * @param BuildBefore $event
      */

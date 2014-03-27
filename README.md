@@ -7,18 +7,36 @@ This document contains information on how to download, install, and start
 using OroCRM. For a more detailed explanation, see the [Installation]
 chapter.
 
-## Installation
+Requirements
+------------
 
-OroCRM is a package that depends on Oro Platform and requires an application to run it.
-A [crm-application](https://github.com/orocrm/crm-application) is an example of such application which
-simplifies initial project setup and configuration.
+OroCRM requires Symfony 2.4, Doctrine 2 and PHP 5.4.4 or above.
 
-## Use as dependency in composer
+Installation
+------------
 
-In order to define dependency on OroCRM in your project just add this to composer.json file:
+```bash
+git clone https://github.com/orocrm/crm.git
+
+curl -s https://getcomposer.org/installer | php
+
+php composer.phar install
+```
+
+Run unit tests
+--------------
+
+To run unit tests of any bundles :
+
+```bash
+phpunit
+```
+
+Use as dependency in composer
+-----------------------------
 
 ```yaml
     "require": {
-        "oro/crm": "1.0.*"
+        "oro/crm": "dev-master",
     }
 ```

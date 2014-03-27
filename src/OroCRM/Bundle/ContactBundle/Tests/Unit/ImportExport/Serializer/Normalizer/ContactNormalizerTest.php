@@ -51,7 +51,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Serializer\Exception\InvalidArgumentException
      * @expectedExceptionMessage Serializer must implement
      */
-    public function testSetInvalidSerialzer()
+    public function testSetInvalidSerializer()
     {
         $this->normalizer->setSerializer($this->getMock('Symfony\Component\Serializer\SerializerInterface'));
     }
