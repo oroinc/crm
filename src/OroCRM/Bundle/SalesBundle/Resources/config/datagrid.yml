@@ -307,6 +307,7 @@ datagrid:
                     - lead.name as leadName
                     - opportunity.name as opportunityName
                     - opportunity.budgetAmount as opportunityBudget
+                    - opportunity.closeRevenue as opportunityRevenue
                     - opportunity.probability as opportunityProbability
                     - step.label as stepLabel
                 from:
@@ -328,6 +329,9 @@ datagrid:
                 label: orocrm.sales.salesfunnel.opportunity.label
             opportunityBudget:
                 label: orocrm.sales.opportunity.budget_amount.label
+                frontend_type: currency
+            opportunityRevenue:
+                label: orocrm.sales.opportunity.close_revenue.label
                 frontend_type: currency
             opportunityProbability:
                 label: orocrm.sales.opportunity.probability.label
@@ -359,6 +363,8 @@ datagrid:
                     data_name: opportunity.name
                 opportunityBudget:
                     data_name: opportunity.budgetAmount
+                opportunityRevenue:
+                    data_name: opportunity.closeRevenue
                 opportunityProbability:
                     data_name: opportunity.probability
                 stepLabel:
@@ -403,6 +409,9 @@ datagrid:
                 opportunityBudget:
                     type: number
                     data_name: opportunity.budgetAmount
+                opportunityRevenue:
+                    type: number
+                    data_name: opportunity.closeRevenue
                 opportunityProbability:
                     type: percent
                     data_name: opportunity.probability
