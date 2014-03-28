@@ -301,19 +301,3 @@ datagrid:
                 selectors:
                     included: '#appendContacts'
                     excluded: '#removeContacts'
-
-    account-email-grid:
-        extends: email-grid
-        source:
-            query:
-                join:
-                    inner:
-                        -
-                            join: e.recipients
-                            alias: r
-                        -
-                            join: r.emailAddress
-                            alias: ra
-                where:
-                    and:
-                        - ra.email IN (:email_addresses)

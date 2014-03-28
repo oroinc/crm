@@ -1,9 +1,0 @@
-placeholders:
-    orocrm_account_action_dropdown:
-        items:
-            orocrm_account_action_dropdown_send_email: ~
-
-items:
-    orocrm_account_action_dropdown_send_email:
-        template: OroCRMAccountBundle:Account:action/sendEmailButton.html.twig
-        order: 50

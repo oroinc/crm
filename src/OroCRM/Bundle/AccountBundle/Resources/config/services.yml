@@ -87,12 +87,3 @@ services:
            - @oro_datagrid.datagrid.request_params
         tags:
            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.account-contacts-update-grid, method: onBuildAfter }
-
-    orocrm_account.event_listener.datagrid.account_email:
-        class: %orocrm_account.event_listener.datagrid.account_email.class%
-        arguments:
-          - @oro_datagrid.datagrid.request_params
-          - @doctrine.orm.entity_manager
-          - @oro_email.datagrid_query_factory
-        tags:
-          - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.account-email-grid, method: onBuildAfter }
