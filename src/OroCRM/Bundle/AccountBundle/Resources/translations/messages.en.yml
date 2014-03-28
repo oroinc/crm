@@ -1,7 +1,7 @@
 orocrm:
     dashboard:
         my_accounts_activity:
-            title:                  Last Actions With Accounts
+            title:                  Recently accessed accounts
             view_all:               View all
 
     account:

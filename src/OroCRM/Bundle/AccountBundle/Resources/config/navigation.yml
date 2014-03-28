@@ -33,6 +33,7 @@ oro_menu_config:
                 position: 20
                 widgetRoute: orocrm_account_widget_emails
                 widgetAlias: account_emails
+                widgetAcl: oro_email_view
                 
     tree:
         application_menu:
