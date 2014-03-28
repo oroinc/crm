@@ -59,7 +59,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         return [
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAclData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadSourceData'
         ];
     }

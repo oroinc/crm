@@ -8,7 +8,7 @@ use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadAclData extends AbstractFixture implements ContainerAwareInterface
+class LoadAclData implements ContainerAwareInterface
 {
     /** @var ContainerInterface */
     private $container;
