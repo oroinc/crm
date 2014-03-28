@@ -26,7 +26,7 @@ class Contacts extends AbstractPageFilteredGrid
      */
     public function add()
     {
-        $this->test->byXPath("//a[@title='Create contact']")->click();
+        $this->test->byXPath("//a[@title='Create Contact']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $contact = new Contact($this->test);
