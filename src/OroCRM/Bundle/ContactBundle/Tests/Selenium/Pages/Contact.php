@@ -445,7 +445,7 @@ class Contact extends AbstractPageEntity
 
     public function edit()
     {
-        $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit contact']")->click();
+        $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Contact']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $this->init();

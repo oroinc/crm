@@ -18,7 +18,7 @@
 {% block content_data %}
     {% set id = 'call-log' %}
     {% set title = form.vars.value.id
-        ? 'orocrm.call.edit_entity'|trans
+        ? 'oro.ui.edit_entity'|trans({'%entityName%': 'orocrm.call.entity_label'|trans})
         : 'orocrm.call.log_call'|trans
     %}
 
