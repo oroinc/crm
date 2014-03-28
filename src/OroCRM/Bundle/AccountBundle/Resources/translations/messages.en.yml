@@ -42,9 +42,11 @@ orocrm:
         extend_website.label:       Website
         extend_ticker_symbol.label: Ticker Symbol
         extend_rating.label:        Rating
-        extend_phone.label:         Phone
         extend_ownership.label:     Ownership
-        extend_fax.label:           Fax
         extend_employees.label:     Employees
-        extend_email.label:         Email
         extend_description.label:   Description
+
+        contact:
+            name:                   Contact name
+            email:                  Contact email
+            phone:                  Contact phone

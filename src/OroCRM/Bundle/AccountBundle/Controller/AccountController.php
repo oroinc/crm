@@ -146,16 +146,4 @@ class AccountController extends Controller
             'account' => $account
         ];
     }
-
-    /**
-     * @Route("/widget/emails/{id}", name="orocrm_account_widget_emails", requirements={"id"="\d+"})
-     * @AclAncestor("oro_email_view")
-     * @Template()
-     */
-    public function emailsAction(Account $account)
-    {
-        return [
-            'account' => $account
-        ];
-    }
 }
