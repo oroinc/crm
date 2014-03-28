@@ -1,105 +1,120 @@
 {% extends 'OroDashboardBundle:Dashboard:chartWidget.html.twig' %}
 
 {% block content %}
-<div class="chart-container">
-    <div class="clearfix">
-        <div id="{{ widgetId }}-chart" class="bar-chart chart pull-left"></div>
+
+{% set hasData = false %}
+{% for value in items %}
+    {% if value and value > 0 %}
+        {% set hasData = true %}
+    {% endif %}
+{% endfor %}
+
+{% if hasData %}
+    <div class="chart-container">
+        <div class="clearfix">
+            <div id="{{ widgetId }}-chart" class="bar-chart chart pull-left"></div>
+        </div>
     </div>
-</div>
-{% if isDesktopVersion() %}
-{# for desktop version #}
-<script type="text/javascript">
-    require(['jquery', 'underscore', 'flotr2', 'orolocale/js/formatter/number', 'oroui/js/flotr2/funnel'],
-    function($, _, Flotr, numberFormatter){
-        var formatter = numberFormatter;
-        $(function () {
-            var $widgetContent = $('#{{ widgetContentId }}');
-            var $chart = $('#{{ widgetId }}-chart');
-            var setChartSize = function () {
-                var chartWidth = Math.round($widgetContent.width() * 0.9);
-                if (chartWidth != $chart.width()) {
-                    $chart.width(chartWidth);
-                    $chart.height(Math.min(Math.round(chartWidth * 0.4), 350));
-                    return true;
-                }
-                return false;
-            };
-            var setChartContainerSize = function () {
-                $chart.closest('.clearfix').width($chart.width());
-            };
-            var drawChart = function () {
-                if (!$chart.get(0).clientWidth) {
-                    return;
-                }
-                var data = {{ items|json_encode|raw }};
-                _.each(data, function(value, key) {
-                    if (value <= 0) {
-                        data[key] = 0.0001;
-                    }
-                });
-
-                Flotr.draw(
-                    $chart.get(0),
-                    new Array(data),
-                    {
-                        funnel : {
-                            show : true,
-                            formatter: formatter.formatCurrency,
-                            nozzleSteps: {{ nozzleSteps|json_encode|raw }},
-                            colors: {{ chartColors|json_encode|raw }},
-                            tickFormatter: function (label, value) {
-                                return label + ': ' + formatter.formatCurrency(value);
-                            },
-                            nozzleFormatter: function (label, value) {
-                                return label
-                                        + ' ({{ 'from'|trans }} {{ quarterDate|oro_format_date }}): '
-                                        + formatter.formatCurrency(value);
-                            }
-                        },
-                        mouse: {
-                            track: true,
-                            relative: true
-                        },
-                        grid: {
-                            outlineWidth: 0
+    {% if isDesktopVersion() %}
+        {# for desktop version #}
+        <script type="text/javascript">
+            require(['jquery', 'underscore', 'flotr2', 'orolocale/js/formatter/number', 'oroui/js/flotr2/funnel'],
+            function($, _, Flotr, numberFormatter){
+                var formatter = numberFormatter;
+                $(function () {
+                    var $widgetContent = $('#{{ widgetContentId }}');
+                    var $chart = $('#{{ widgetId }}-chart');
+                    var setChartSize = function () {
+                        var chartWidth = Math.round($widgetContent.width() * 0.9);
+                        if (chartWidth != $chart.width()) {
+                            $chart.width(chartWidth);
+                            $chart.height(Math.min(Math.round(chartWidth * 0.4), 350));
+                            return true;
                         }
-                    }
-                );
-            };
+                        return false;
+                    };
+                    var setChartContainerSize = function () {
+                        $chart.closest('.clearfix').width($chart.width());
+                    };
+                    var drawChart = function () {
+                        if (!$chart.get(0).clientWidth) {
+                            return;
+                        }
+                        var data = {{ items|json_encode|raw }};
+                        _.each(data, function(value, key) {
+                            if (value <= 0) {
+                                data[key] = 0.0001;
+                            }
+                        });
 
-            $(function () {
-                setChartSize();
-                drawChart();
-                setChartContainerSize();
-            });
+                        Flotr.draw(
+                            $chart.get(0),
+                            new Array(data),
+                            {
+                                funnel : {
+                                    show : true,
+                                    formatter: formatter.formatCurrency,
+                                    nozzleSteps: {{ nozzleSteps|json_encode|raw }},
+                                    colors: {{ chartColors|json_encode|raw }},
+                                    tickFormatter: function (label, value) {
+                                        return label + ': ' + formatter.formatCurrency(value);
+                                    },
+                                    nozzleFormatter: function (label, value) {
+                                        return label
+                                                + ' ({{ 'from'|trans }} {{ quarterDate|oro_format_date }}): '
+                                                + formatter.formatCurrency(value);
+                                    }
+                                },
+                                mouse: {
+                                    track: true,
+                                    relative: true
+                                },
+                                grid: {
+                                    outlineWidth: 0
+                                }
+                            }
+                        );
+                    };
 
-            $(window).resize(function () {
-                if (setChartSize()) {
-                    drawChart();
-                    setChartContainerSize();
-                }
+                    $(function () {
+                        setChartSize();
+                        drawChart();
+                        setChartContainerSize();
+                    });
+
+                    $(window).resize(function () {
+                        if (setChartSize()) {
+                            drawChart();
+                            setChartContainerSize();
+                        }
+                    });
+                });
             });
-        });
-    });
-</script>
+        </script>
+    {% else %}
+        {# for mobile version #}
+        <div class="funnel-data">
+            <ul>
+                {% for label, value in items %}
+                    {% if label not in nozzleSteps %}
+                        <li>{{ label }}: <b>{{ value|oro_format_currency }}</b></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <h5>{{ 'from'|trans }} {{ quarterDate|oro_format_date }}</h5>
+            <ul>
+                {% for label, value in items %}
+                    {% if label in nozzleSteps %}
+                        <li>{{ label }}: <b>{{ value|oro_format_currency }}</b></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 {% else %}
-{# for mobile version #}
-<div class="funnel-data">
-    <ul>
-        {% for label, value in items %}
-        {% if label not in nozzleSteps %}
-        <li>{{ label }}: <b>{{ value|oro_format_currency }}</b></li>
-        {% endif %}
-        {% endfor %}
-    </ul>
-    <h5>{{ 'from'|trans }} {{ quarterDate|oro_format_date }}</h5>
-    <ul>
-        {% for label, value in items %}
-        {% if label in nozzleSteps %}
-        <li>{{ label }}: <b>{{ value|oro_format_currency }}</b></li>
-        {% endif %}
-        {% endfor %}
-    </ul>
-</div>
+    <div class="clearfix no-data">
+        <span>{{ 'oro.dashboard.no_data_found'|trans }}</span>
+    </div>
 {% endif %}
+
 {% endblock %}
