@@ -60,7 +60,7 @@ orocrm:
             close_date.label:     Close date
             probability.label:    Probability
             budget_amount.label:  Budget amount
-            close_revenue.label:  Closed revenue
+            close_revenue.label:  Close revenue
             customer_need.label:  Customer need
             proposed_solution.label: Proposed solution
             created_at.label:     Created

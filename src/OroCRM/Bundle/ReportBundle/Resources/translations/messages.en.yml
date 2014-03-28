@@ -3,7 +3,7 @@ orocrm:
         datagrid:
             columns:
                 account_name:      Account name
-                total_value:       Closed revenue
+                total_value:       Close revenue
                 close_date:        Close date
                 created_date:      Created date
                 leads_count:       Leads count
@@ -11,7 +11,7 @@ orocrm:
                 number_won:        Number won
                 status:            Status
                 number_of_opportunities: Number of opportunities
-                close_revenue:     Closed Revenue
+                close_revenue:     Close Revenue
                 budget_amount:     Budget Amount
                 workflow:          Workflow
                 wonCount:          Number Won
