@@ -31,7 +31,9 @@ class DashboardController extends Controller
             ->getOpportunitiesByLeadSource($this->get('oro_security.acl_helper'));
 
         foreach ($data as $key => $sourceData) {
-            $data[$key]['label'] = $translator->trans($sourceData['label']);
+            if (!empty($sourceData['label'])) {
+                $data[$key]['label'] = $translator->trans($sourceData['label']);
+            }
         }
 
         $result = array_merge(

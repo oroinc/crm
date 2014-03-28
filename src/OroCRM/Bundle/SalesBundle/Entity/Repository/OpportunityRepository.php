@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
-use OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus;
 
 class OpportunityRepository extends EntityRepository
 {
@@ -53,33 +52,33 @@ class OpportunityRepository extends EntityRepository
      */
     protected function getOpportunitiesDataByStatus(AclHelper $aclHelper, $dateStart = null, $dateEnd = null)
     {
-        $resultData = array();
-
-        /** @var OpportunityStatus[] $statuses */
-        $statuses = $this->getEntityManager()->getRepository('OroCRMSalesBundle:OpportunityStatus')->findAll();
-        foreach ($statuses as $status) {
-            $resultData[$status->getName()] = array(
-                'label' => $status->getLabel(),
-                'budget' => 0,
-            );
-        }
-
-        $qb = $this->createQueryBuilder('opp');
-        $qb->select('opp_status.name', 'SUM(opp.budgetAmount) as budget')
-            ->join('opp.status', 'opp_status');
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $withSuffix = '';
         if ($dateStart && $dateEnd) {
-            $qb->where($qb->expr()->between('opp.createdAt', ':dateFrom', ':dateTo'))
-                ->setParameter('dateFrom', $dateStart)
+            $withSuffix = ' AND ' . $qb->expr()->between('opportunity.createdAt', ':dateFrom', ':dateTo');
+            $qb->setParameter('dateFrom', $dateStart)
                 ->setParameter('dateTo', $dateEnd);
         }
-        $qb->groupBy('opp_status.name');
+        $qb->select('status.name', 'status.label', 'SUM(opportunity.budgetAmount) as budget')
+            ->from('OroCRMSalesBundle:OpportunityStatus', 'status')
+            ->leftJoin(
+                'OroCRMSalesBundle:Opportunity',
+                'opportunity',
+                'WITH',
+                'status.name = opportunity.status' . $withSuffix
+            )
+            ->groupBy('status.name')
+            ->orderBy('status.name', 'ASC');
         $groupedData = $aclHelper->apply($qb)->getArrayResult();
 
+        $resultData = array();
         foreach ($groupedData as $statusData) {
-            $statusName = $statusData['name'];
-            $resultData[$statusName]['budget'] = $statusData['budget'];
+            if (!$statusData['budget']) {
+                $statusData['budget'] = 0;
+            }
+            $resultData[] = $statusData;
         }
 
-        return array_values($resultData);
+        return $resultData;
     }
 }
