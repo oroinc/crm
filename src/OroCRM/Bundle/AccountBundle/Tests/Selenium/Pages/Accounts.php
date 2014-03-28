@@ -26,7 +26,7 @@ class Accounts extends AbstractPageFilteredGrid
      */
     public function add()
     {
-        $this->test->byXPath("//a[@title='Create account']")->click();
+        $this->test->byXPath("//a[@title='Create Account']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $account = new Account($this->test);
