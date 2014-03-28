@@ -2,7 +2,7 @@ datagrid:
     dashboard-my-accounts-activity-grid:
         source:
             type: orm
-            acl_resource: orocrm_call_view
+            acl_resource: orocrm_account_view
             query:
                 select:
                     - a.id

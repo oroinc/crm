@@ -2,7 +2,7 @@ datagrid:
     dashboard-my-contacts-activity-grid:
         source:
             type: orm
-            acl_resource: orocrm_call_view
+            acl_resource: orocrm_contact_view
             query:
                 select:
                     - c.id
