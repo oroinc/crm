@@ -18,8 +18,9 @@
     {% if isDesktopVersion() %}
         {# for desktop version #}
         <script type="text/javascript">
-            require(['jquery', 'underscore', 'flotr2', 'orolocale/js/formatter/number', 'oroui/js/flotr2/funnel'],
-            function($, _, Flotr, numberFormatter){
+            require(['jquery', 'underscore', 'oroui/js/layout', 'flotr2',
+                'orolocale/js/formatter/number', 'oroui/js/flotr2/funnel'],
+            function($, _, layout, Flotr, numberFormatter){
                 var formatter = numberFormatter;
                 $(function () {
                     var $widgetContent = $('#{{ widgetContentId }}');
@@ -76,7 +77,7 @@
                         );
                     };
 
-                    $(function () {
+                    layout.onPageRendered(function () {
                         setChartSize();
                         drawChart();
                         setChartContainerSize();
