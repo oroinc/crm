@@ -45,6 +45,7 @@ class SoapController extends Controller
         try {
             $transport->init($transportEntity);
             $websites             = $this->formatWebsiteChoices($transport->getWebsites());
+
             $isExtensionInstalled = $transport->isExtensionInstalled();
 
             $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')

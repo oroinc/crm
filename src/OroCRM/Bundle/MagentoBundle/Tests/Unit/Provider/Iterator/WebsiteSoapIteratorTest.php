@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
 
 class WebsiteSoapIteratorTest extends BaseIteratorTestCase
@@ -43,14 +44,14 @@ class WebsiteSoapIteratorTest extends BaseIteratorTestCase
     public function iterationProvider()
     {
         return [
-            'bad data retrieved, should be empty array' => [[], []],
-            'data retrieved correctly'                  => [
+            'bad data retrieved, should be empty array'               => [[], []],
+            'data retrieved correctly, admin store should be skipped' => [
                 [
                     0 => [
                         'website_id' => 0,
                         'code'       => 'admin',
                         'name'       => 'Admin',
-                        'store_id'   => 0
+                        'store_id'   => StoresSoapIterator::ADMIN_STORE_ID
                     ],
                     2 => [
                         'store_id'   => 2,
@@ -60,11 +61,6 @@ class WebsiteSoapIteratorTest extends BaseIteratorTestCase
                     ]
                 ],
                 [
-                    0 => [
-                        'name' => 'Admin',
-                        'code' => 'admin',
-                        'id'   => 0
-                    ],
                     1 => [
                         'name' => 'B2C French',
                         'code' => 'fr_b2c',
@@ -72,7 +68,7 @@ class WebsiteSoapIteratorTest extends BaseIteratorTestCase
                     ]
                 ]
             ],
-            'multiple stores for website'               => [
+            'multiple stores for website'                             => [
                 [
                     1 => [
                         'store_id'   => 1,
