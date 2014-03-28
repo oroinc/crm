@@ -58,8 +58,7 @@ datagrid:
                     - a.name
                     - a.createdAt
                     - a.updatedAt
-                    - defaultContact.firstName as contactFirstName
-                    - defaultContact.lastName as contactLastName
+                    - CONCAT(defaultContact.firstName, CONCAT(' ', defaultContact.lastName)) as contactName
                     - defaultContactEmail.email as contactEmail
                     - defaultContactPhone.phone as contactPhone
                     - CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName)) as ownerName
@@ -88,14 +87,12 @@ datagrid:
         columns:
             name:
                 label:   orocrm.account.name.label
-            contactFirstName:
-                label:   orocrm.contact.first_name.label
-            contactLastName:
-                label:   orocrm.contact.last_name.label
+            contactName:
+                label:   orocrm.account.contact.name
             contactEmail:
-                label:   orocrm.contact.contactemail.email.label
+                label:   orocrm.account.contact.email
             contactPhone:
-                label:   orocrm.contact.contactphone.phone.label
+                label:   orocrm.account.contact.phone
             ownerName:
                 label:   orocrm.account.owner.label
             createdAt:
@@ -108,10 +105,8 @@ datagrid:
             columns:
                 name:
                     data_name: a.name
-                contactFirstName:
-                    data_name: contactFirstName
-                contactLastName:
-                    data_name: contactLastName
+                contactName:
+                    data_name: contactName
                 contactEmail:
                     data_name: contactEmail
                 contactPhone:
@@ -127,12 +122,9 @@ datagrid:
                 name:
                     type:      string
                     data_name: a.name
-                contactFirstName:
+                contactName:
                     type:      string
-                    data_name: contactFirstName
-                contactLastName:
-                    type:      string
-                    data_name: contactLastName
+                    data_name: contactName
                 contactEmail:
                     type:      string
                     data_name: contactEmail
@@ -309,19 +301,3 @@ datagrid:
                 selectors:
                     included: '#appendContacts'
                     excluded: '#removeContacts'
-
-    account-email-grid:
-        extends: email-grid
-        source:
-            query:
-                join:
-                    inner:
-                        -
-                            join: e.recipients
-                            alias: r
-                        -
-                            join: r.emailAddress
-                            alias: ra
-                where:
-                    and:
-                        - ra.email IN (:email_addresses)

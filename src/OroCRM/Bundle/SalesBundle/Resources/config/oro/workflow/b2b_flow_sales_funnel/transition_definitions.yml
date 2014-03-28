@@ -140,8 +140,6 @@ workflows:
                                     attribute: $new_account
                                     data:
                                         name: $new_company_name
-                                        extendPhone: $lead.phoneNumber
-                                        extendEmail: $lead.email
                                         extendWebsite: $lead.website
                                         extendEmployees: $lead.numberOfEmployees
                     - @create_entity: # create an opportunity

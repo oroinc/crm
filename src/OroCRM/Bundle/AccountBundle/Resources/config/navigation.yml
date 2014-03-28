@@ -27,14 +27,6 @@ oro_menu_config:
             extras:
                 description: List of accounts
 
-        account_emails_tab:
-            label: oro.email.entity_plural_label
-            extras:
-                position: 20
-                widgetRoute: orocrm_account_widget_emails
-                widgetAlias: account_emails
-                widgetAcl: oro_email_view
-                
     tree:
         application_menu:
             children:

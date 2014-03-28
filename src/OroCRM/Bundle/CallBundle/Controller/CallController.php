@@ -132,10 +132,6 @@ class CallController extends Controller
             } else {
                 throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
             }
-
-            if (!$entity->getPhoneNumber() && method_exists($account, 'getExtendPhone') && $account->getExtendPhone()) {
-                $entity->setPhoneNumber($account->getExtendPhone());
-            }
         }
 
         return $entity;

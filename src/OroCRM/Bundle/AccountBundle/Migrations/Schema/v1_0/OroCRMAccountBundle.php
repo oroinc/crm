@@ -40,42 +40,6 @@ class OroCRMAccountBundle implements Migration
             ]
         );
         $table->addColumn(
-            'extend_phone',
-            'string',
-            [
-                'oro_options' => [
-                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
-                    'merge'     => ['display' => true],
-                    'dataaudit' => ['auditable' => true]
-                ]
-            ]
-        );
-        $table->addColumn(
-            'extend_email',
-            'string',
-            [
-                'oro_options' => [
-                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
-                    'merge'     => ['display' => true],
-                    'dataaudit' => ['auditable' => true]
-                ]
-            ]
-        );
-        $table->addColumn(
-            'extend_fax',
-            'string',
-            [
-                'oro_options' => [
-                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
-                    'merge'     => ['display' => true],
-                    'dataaudit' => ['auditable' => true]
-                ]
-            ]
-        );
-        $table->addColumn(
             'extend_website',
             'string',
             [
