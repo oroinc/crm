@@ -53,6 +53,12 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
             ->getRepository('OroOrganizationBundle:BusinessUnit')
             ->findOneBy(['name' => LoadOrganizationAndBusinessUnitData::MAIN_BUSINESS_UNIT]);
 
+        if (!$defaultBusinessUnit) {
+            $defaultBusinessUnit = $manager
+                ->getRepository('OroOrganizationBundle:BusinessUnit')
+                ->findOneBy(['name' => 'Acme, General']);
+        }
+
         $fileName  = __DIR__ . '/CrmRoles/roles.yml';
         $fileName  = str_replace('/', DIRECTORY_SEPARATOR, $fileName);
         $rolesData = Yaml::parse($fileName);
