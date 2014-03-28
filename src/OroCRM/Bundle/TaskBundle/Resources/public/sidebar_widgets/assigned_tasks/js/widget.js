@@ -46,7 +46,7 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oronavigation/js/navigat
                     view.$el.find('.widget-mask-wrapper').append(loadingMask.render().$el);
                     loadingMask.show();
 
-                    require(["text!" + url], function (content) {
+                    $.get(url, function (content) {
                         view.$el.html(view.template({'content': content}));
                         loadingMask.hide();
                     });
