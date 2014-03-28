@@ -91,8 +91,8 @@ class LeadRepository extends EntityRepository implements EntityConfigAwareReposi
         }
 
         // calculate fraction for each source
-        foreach ($result as $key => $row) {
-            $result[$key]['fraction'] = $totalItemCount > 0
+        foreach ($result as &$row) {
+            $row['fraction'] = $totalItemCount > 0
                 ? round($row['itemCount'] / $totalItemCount, 4)
                 : 1;
         }
