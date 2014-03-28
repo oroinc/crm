@@ -23,6 +23,7 @@ oro_menu_config:
             extras:
                 position: 10
                 widgetRoute: orocrm_call_widget_calls
+                widgetAcl: orocrm_call_view
                 widgetRouteParametersMap:
                     accountId: id
 

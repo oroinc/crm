@@ -12,6 +12,7 @@ oro_menu_config:
             label: orocrm.task.widgets.account_tasks
             extras:
                 position: 10
+                widgetAcl: orocrm_task_view
                 widgetRoute: orocrm_task_widget_account_tasks
 
     tree:
