@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+
 use Oro\Bundle\EntityBundle\ORM\EntityConfigAwareRepositoryInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -54,7 +55,7 @@ class LeadRepository extends EntityRepository implements EntityConfigAwareReposi
         foreach ($result as &$row) {
             if ($row['label'] === null) {
                 $hasUnclassifiedSource = true;
-                $row['label']         = 'Unclassified';
+                $row['label'] = 'orocrm.sales.lead.extend_source.unclassified';
             } else {
                 $sources[] = $row['source_id'];
             }
@@ -76,18 +77,25 @@ class LeadRepository extends EntityRepository implements EntityConfigAwareReposi
             $others   = $aclHelper->apply($qb)->getArrayResult();
             if (!empty($others)) {
                 $others = reset($others);
-                $result[] = array_merge(['label' => 'Others'], $others);
+                $result[] = array_merge(['label' => 'orocrm.sales.lead.extend_source.others'], $others);
                 $totalItemCount += $others['itemCount'];
             }
         }
 
+        // if no data found
+        if (empty($result)) {
+            $result[] = array(
+                'itemCount' => 0,
+                'label' => 'orocrm.sales.lead.extend_source.none'
+            );
+        }
+
         // calculate fraction for each source
-        foreach ($result as &$row) {
-            $row['fraction'] = $totalItemCount > 0
+        foreach ($result as $key => $row) {
+            $result[$key]['fraction'] = $totalItemCount > 0
                 ? round($row['itemCount'] / $totalItemCount, 4)
                 : 1;
         }
-
 
         // sort alphabetically by label
         usort(

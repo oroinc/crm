@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\SalesBundle\Controller\Dashboard;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Translation\TranslatorInterface;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -22,14 +23,19 @@ class DashboardController extends Controller
      */
     public function opportunitiesByLeadSourceAction($widget)
     {
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+
         $data = $this->getDoctrine()
             ->getRepository('OroCRMSalesBundle:Lead')
             ->getOpportunitiesByLeadSource($this->get('oro_security.acl_helper'));
 
+        foreach ($data as $key => $sourceData) {
+            $data[$key]['label'] = $translator->trans($sourceData['label']);
+        }
+
         $result = array_merge(
-            [
-                'data' => $data
-            ],
+            ['data' => $data],
             $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
         );
 
