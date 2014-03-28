@@ -124,6 +124,11 @@ orocrm:
             workflow_step.label:  Step
             information:          Lead Information
 
+            extend_source:
+                unclassified:     Unclassified
+                others:           Others
+                none:             None
+
             datagrid:
                 country: Country
                 region: State

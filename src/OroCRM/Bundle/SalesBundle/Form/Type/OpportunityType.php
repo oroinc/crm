@@ -61,12 +61,12 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'customerNeed',
-                'text',
+                'textarea',
                 array('required' => false, 'label' => 'orocrm.sales.opportunity.customer_need.label')
             )
             ->add(
                 'proposedSolution',
-                'text',
+                'textarea',
                 array('required' => false, 'label' => 'orocrm.sales.opportunity.proposed_solution.label')
             )
             ->add(

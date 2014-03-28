@@ -168,12 +168,17 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
                         ->set('close_revenue', mt_rand(10, 1000))
                         ->set('close_date', new \DateTime());
 
-                    if ($this->getRandomBoolean() && $this->isTransitionAllowed($salesFunnelItem, 'close_as_won')) {
-                        $this->workflowManager->transit($salesFunnelItem, 'close_as_won');
-                    } elseif ($this->isTransitionAllowed($salesFunnelItem, 'close_as_lost')) {
+                    if ($this->getRandomBoolean()) {
+                        if ($this->isTransitionAllowed($salesFunnelItem, 'close_as_won')) {
+                            $this->workflowManager->transit($salesFunnelItem, 'close_as_won');
+                        }
+                    } else {
                         $salesFunnelItem->getData()
-                            ->set('close_reason_name', 'cancelled');
-                        $this->workflowManager->transit($salesFunnelItem, 'close_as_lost');
+                            ->set('close_reason_name', 'cancelled')
+                            ->set('close_date', new \DateTime('now', new \DateTimeZone('UTC')));
+                        if ($this->isTransitionAllowed($salesFunnelItem, 'close_as_lost')) {
+                            $this->workflowManager->transit($salesFunnelItem, 'close_as_lost');
+                        }
                     }
                 }
             }

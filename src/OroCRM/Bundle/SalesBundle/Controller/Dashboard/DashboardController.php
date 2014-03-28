@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\SalesBundle\Controller\Dashboard;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Translation\TranslatorInterface;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -22,14 +23,21 @@ class DashboardController extends Controller
      */
     public function opportunitiesByLeadSourceAction($widget)
     {
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+
         $data = $this->getDoctrine()
             ->getRepository('OroCRMSalesBundle:Lead')
             ->getOpportunitiesByLeadSource($this->get('oro_security.acl_helper'));
 
+        foreach ($data as $key => $sourceData) {
+            if (!empty($sourceData['label'])) {
+                $data[$key]['label'] = $translator->trans($sourceData['label']);
+            }
+        }
+
         $result = array_merge(
-            [
-                'data' => $data
-            ],
+            ['data' => $data],
             $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
         );
 
@@ -42,7 +50,7 @@ class DashboardController extends Controller
      *      name="orocrm_sales_dashboard_opportunity_by_state_chart",
      *      requirements={"widget"="[\w-]+"}
      * )
-     * @Template("OroCRMSalesBundle:Dashboard:opportunityByState.html.twig")
+     * @Template("OroCRMSalesBundle:Dashboard:opportunityByStatus.html.twig")
      */
     public function opportunityByStatusAction($widget)
     {

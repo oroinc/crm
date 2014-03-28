@@ -3,8 +3,8 @@
 namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\WorkflowBundle\Entity\Repository\WorkflowStepRepository;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 class OpportunityRepository extends EntityRepository
@@ -52,17 +52,33 @@ class OpportunityRepository extends EntityRepository
      */
     protected function getOpportunitiesDataByStatus(AclHelper $aclHelper, $dateStart = null, $dateEnd = null)
     {
-        $qb = $this->createQueryBuilder('opp');
-        $qb->select('opp_status.name', 'opp_status.label', 'SUM(opp.budgetAmount) as budget')
-            ->join('opp.status', 'opp_status');
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $withSuffix = '';
         if ($dateStart && $dateEnd) {
-            $qb->where($qb->expr()->between('opp.createdAt', ':dateFrom', ':dateTo'))
-                ->setParameter('dateFrom', $dateStart)
+            $withSuffix = ' AND ' . $qb->expr()->between('opportunity.createdAt', ':dateFrom', ':dateTo');
+            $qb->setParameter('dateFrom', $dateStart)
                 ->setParameter('dateTo', $dateEnd);
         }
-        $qb->groupBy('opp_status.name');
+        $qb->select('status.name', 'status.label', 'SUM(opportunity.budgetAmount) as budget')
+            ->from('OroCRMSalesBundle:OpportunityStatus', 'status')
+            ->leftJoin(
+                'OroCRMSalesBundle:Opportunity',
+                'opportunity',
+                'WITH',
+                'status.name = opportunity.status' . $withSuffix
+            )
+            ->groupBy('status.name')
+            ->orderBy('status.name', 'ASC');
+        $groupedData = $aclHelper->apply($qb)->getArrayResult();
 
-        return $aclHelper->apply($qb)
-            ->getArrayResult();
+        $resultData = array();
+        foreach ($groupedData as $statusData) {
+            if (!$statusData['budget']) {
+                $statusData['budget'] = 0;
+            }
+            $resultData[] = $statusData;
+        }
+
+        return $resultData;
     }
 }
