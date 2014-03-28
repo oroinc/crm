@@ -142,11 +142,13 @@ datagrid:
                 label: orocrm.magento.cart.email.label
             itemsQty:
                 label: orocrm.magento.datagrid.columns.qty
+                frontend_type: integer
             grandTotal:
                 label: orocrm.magento.cart.grand_total.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             createdAt:
                 label: orocrm.magento.cart.created_at.label
                 frontend_type: datetime
@@ -261,7 +263,7 @@ datagrid:
                 label: orocrm.magento.datagrid.columns.name
             qty:
                 label: orocrm.magento.datagrid.columns.qty
-                frontend_type: decimal
+                frontend_type: integer
             giftMessage:
                 label: orocrm.magento.datagrid.columns.gift_message
             price:
@@ -269,26 +271,31 @@ datagrid:
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             priceInclTax:
                 label: orocrm.magento.datagrid.columns.price_incl_tax
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             rowTotal:
                 label: orocrm.magento.datagrid.columns.row_total
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             taxAmount:
                 label: orocrm.magento.datagrid.columns.tax_amount
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             discountAmount:
                 label: orocrm.magento.datagrid.columns.discount_amount
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             weight:
                 label: orocrm.magento.datagrid.columns.weight
                 frontend_type: decimal
@@ -474,6 +481,7 @@ datagrid:
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             status:
                 label: orocrm.magento.order.status.label
             stepLabel:
@@ -580,11 +588,13 @@ datagrid:
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             originalPrice:
                 label: orocrm.magento.datagrid.columns.originalPrice
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             discountPercent:
                 label: orocrm.magento.datagrid.columns.discountPercent
                 frontend_type: percent
@@ -593,6 +603,7 @@ datagrid:
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             taxPercent:
                 label: orocrm.magento.datagrid.columns.taxPercent
                 frontend_type: percent
@@ -601,11 +612,13 @@ datagrid:
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             rowTotal:
                 label: orocrm.magento.datagrid.columns.rowTotal
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
         sorters:
             columns:
                 sku:                 { data_name: oi.sku }
@@ -700,23 +713,26 @@ datagrid:
                 label: orocrm.magento.order.id.label
             itemsCount:
                 label: orocrm.magento.order.items_qty.label
+                frontend_type: integer
             totalInvoicedAmount:
                 label: orocrm.magento.order.total_amount.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             totalPaidAmount:
                 label:  orocrm.magento.order.total_paid_amount.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             status:
                 label: orocrm.magento.order.status.label
             stepLabel:
                 label: orocrm.magento.order.b2c_flow_order_follow_up.step.label
         sorters:
             columns:
-                incrementId:               { data_name: o.incrementId }
+                incrementId:            { data_name: o.incrementId }
                 itemsCount:             { data_name: itemsCount }
                 totalPaidAmount:        { data_name: o.totalPaidAmount }
                 totalInvoicedAmount:    { data_name: o.totalInvoicedAmount }
@@ -755,16 +771,19 @@ datagrid:
                 label: orocrm.magento.cart.id.label
             itemsCount:
                 label: orocrm.magento.cart.items_count.label
+                frontend_type: integer
             grandTotal:
                 label:  orocrm.magento.cart.grand_total.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             subTotal:
                 label: orocrm.magento.cart.sub_total.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             createdAt:
                 label: orocrm.magento.cart.created_at.label
                 frontend_type: datetime
@@ -820,16 +839,19 @@ datagrid:
                type:   localized_number
                method: formatCurrency
                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+               align: right
            shippingAmount:
                label: orocrm.magento.order.shipping_amount.label
                type:   localized_number
                method: formatCurrency
                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+               align: right
            subtotalAmount:
                label: orocrm.magento.order.subtotal_amount.label
                type:   localized_number
                method: formatCurrency
                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+               align: right
            status:
                label: orocrm.magento.order.status.label
            stepLabel:
