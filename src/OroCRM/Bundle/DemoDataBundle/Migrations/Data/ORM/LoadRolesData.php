@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;

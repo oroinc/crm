@@ -95,8 +95,8 @@ ROLE_SALES_REP:
         action|oro_search: [EXECUTE]
         action|oro_config_system: []
         action|oro_tag_assign_unassign: []
-        action|oro_tag_unassign_global: [EXECUTE]
-        action|oro_tag_view_tag_cloud: []
+        action|oro_tag_unassign_global: []
+        action|oro_tag_view_tag_cloud: [EXECUTE]
         action|oro_workflow: []
 ROLE_ONLINE_SALES_REP:
     label: Online Sales Rep
