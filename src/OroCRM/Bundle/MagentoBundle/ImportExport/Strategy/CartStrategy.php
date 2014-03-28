@@ -30,6 +30,8 @@ class CartStrategy extends BaseStrategy
      */
     public function process($newEntity)
     {
+        /** @var Cart $newEntity */
+        /** @var Cart $existingEntity */
         $existingEntity = $this->getEntityByCriteria(
             ['originId' => $newEntity->getOriginId(), 'channel' => $newEntity->getChannel()],
             $newEntity
@@ -52,6 +54,13 @@ class CartStrategy extends BaseStrategy
                 ]
             );
         } else {
+            if (!$newEntity->getGrandTotal()) {
+                // newly created cart without items should be skipped
+                return false;
+            } elseif (!($newEntity->getBillingAddress() || $newEntity->getEmail())) {
+                // newly created cart without contact information should be skipped
+                return false;
+            }
             $existingEntity = $newEntity;
         }
 
@@ -143,7 +152,7 @@ class CartStrategy extends BaseStrategy
             }
         );
         foreach ($deletedCartItems as $item) {
-            $cart->getCartItems()->remove($item);
+            $cart->getCartItems()->removeElement($item);
         }
 
         return $this;
