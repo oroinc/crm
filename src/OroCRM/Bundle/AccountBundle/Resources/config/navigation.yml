@@ -39,10 +39,6 @@ oro_menu_config:
                 shortcut_new_account: ~
                 shortcut_list_accounts: ~
 
-        account_activity_tab_panel:
-            children:
-                account_emails_tab: ~
-
 oro_titles:
     orocrm_account_index: ~
     orocrm_account_view: %%account.name%%

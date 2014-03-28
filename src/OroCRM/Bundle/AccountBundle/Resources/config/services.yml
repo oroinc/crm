@@ -7,7 +7,6 @@ parameters:
     orocrm_account.account.manager.api.class:       Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_account.type.account.api.class:          OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType
 
-    orocrm_account.event_listener.datagrid.account_email.class:  OroCRM\Bundle\AccountBundle\EventListener\DataGrid\AccountEmailListener
 services:
     orocrm_account.form.account:
         class:                                      Symfony\Component\Form\Form
