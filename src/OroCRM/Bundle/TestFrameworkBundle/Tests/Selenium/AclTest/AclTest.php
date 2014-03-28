@@ -74,7 +74,7 @@ class AclTest extends Selenium2TestCase
             ->setPassword('123123q')
             ->submit();
         $login->assertElementNotPresent(
-            "//div[@id='main-menu']/ul/li/a[normalize-space(.) = 'System']",
+            "//div[@id='main-menu']//span[normalize-space(.) = 'Configuration']",
             'Element present so ACL for Users do not work'
         );
         $login->assertElementNotPresent("//div[@id='search-div']", 'Element present so ACL for Search do not work');
@@ -132,13 +132,13 @@ class AclTest extends Selenium2TestCase
             ->submit()
             ->openAccounts('OroCRM\Bundle\AccountBundle')
             ->assertTitle('Accounts - Customers')
-            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create account']")
+            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create Account']")
             ->openContacts('OroCRM\Bundle\ContactBundle')
             ->assertTitle('Contacts - Customers')
-            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create contact']")
+            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create Contact']")
             ->openContactGroups('OroCRM\Bundle\ContactBundle')
             ->assertTitle('Contact Groups - System')
-            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create contact group']")
+            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create Contact Group']")
             ->openAclCheck('Oro\Bundle\SecurityBundle')
             ->assertAcl('account/create')
             ->assertAcl('contact/create')

@@ -26,7 +26,7 @@ class Leads extends AbstractPageFilteredGrid
      */
     public function add()
     {
-        $this->test->byXPath("//a[@title='Create lead']")->click();
+        $this->test->byXPath("//a[@title='Create Lead']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $lead = new Lead($this->test);

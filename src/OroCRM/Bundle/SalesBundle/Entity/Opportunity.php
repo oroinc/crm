@@ -203,7 +203,7 @@ class Opportunity extends ExtendOpportunity
     /**
      * @var string
      *
-     * @ORM\Column(name="customer_need", type="string", length=255, nullable=true)
+     * @ORM\Column(name="customer_need", type="text", nullable=true)
      * @Oro\Versioned
      * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
@@ -212,7 +212,7 @@ class Opportunity extends ExtendOpportunity
     /**
      * @var string
      *
-     * @ORM\Column(name="proposed_solution", type="string", length=255, nullable=true)
+     * @ORM\Column(name="proposed_solution", type="text", nullable=true)
      * @Oro\Versioned
      * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */

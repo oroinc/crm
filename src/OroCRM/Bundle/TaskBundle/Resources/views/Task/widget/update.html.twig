@@ -40,7 +40,9 @@
                     </div>
                     <div class="widget-actions form-actions">
                         <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
-                        <button class="btn btn-primary" type="submit">{{ 'Create task'|trans }}</button>
+                        <button class="btn btn-primary" type="submit">
+                            {{ 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.task.entity_label'|trans}) }}
+                        </button>
                     </div>
                 </fieldset>
             </form>

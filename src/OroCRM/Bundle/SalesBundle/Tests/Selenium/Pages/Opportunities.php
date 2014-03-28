@@ -26,7 +26,7 @@ class Opportunities extends AbstractPageFilteredGrid
      */
     public function add()
     {
-        $this->test->byXPath("//a[@title='Create opportunity']")->click();
+        $this->test->byXPath("//a[@title='Create Opportunity']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $lead = new Opportunity($this->test);
