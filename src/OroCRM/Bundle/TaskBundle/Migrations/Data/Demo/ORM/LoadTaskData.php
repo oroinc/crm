@@ -88,11 +88,11 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         for ($i = 0; $i < self::FIXTURES_COUNT; ++$i) {
-            $owner = $this->getRandomEntity('OroUserBundle:User', $manager);
+            $reporter = $this->getRandomEntity('OroUserBundle:User', $manager);
             $assignedTo = $this->getRandomEntity('OroUserBundle:User', $manager);
             $taskPriority = $this->getRandomEntity('OroCRMTaskBundle:TaskPriority', $manager);
 
-            if (!$owner || !$taskPriority || !$assignedTo) {
+            if (!$reporter || !$taskPriority || !$assignedTo) {
                 // If we don't have users and task statuses we cannot load fixture tasks
                 break;
             }
@@ -108,8 +108,8 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
             $dueDate = new \DateTime();
             $dueDate->add(new \DateInterval(sprintf('P%dDT%dM', rand(0, 30), rand(0, 1440))));
             $task->setDueDate($dueDate);
-            $task->setOwner($owner);
-            $task->setAssignedTo($assignedTo);
+            $task->setReporter($reporter);
+            $task->setOwner($assignedTo);
             $task->setTaskPriority($taskPriority);
 
             $contact = $this->getRandomEntity('OroCRMContactBundle:Contact', $manager);

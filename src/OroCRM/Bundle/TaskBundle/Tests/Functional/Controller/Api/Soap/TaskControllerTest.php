@@ -25,8 +25,8 @@ class TaskControllerTest extends WebTestCase
         'description' => 'New description',
         'dueDate' => '2014-03-04T20:00:00+0000',
         'taskPriority' => 'high',
-        'assignedTo' => 1,
-        'owner' => 1
+        'owner' => 1,
+        'reporter' => 1
     ];
 
 

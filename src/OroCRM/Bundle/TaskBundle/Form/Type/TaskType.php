@@ -53,14 +53,6 @@ class TaskType extends AbstractType
                 ]
             )
             ->add(
-                'assignedTo',
-                'oro_user_select',
-                [
-                    'required' => true,
-                    'label' => 'orocrm.task.assigned_to.label'
-                ]
-            )
-            ->add(
                 'relatedAccount',
                 'orocrm_account_select',
                 [
@@ -81,7 +73,15 @@ class TaskType extends AbstractType
                 'oro_user_select',
                 [
                     'required' => true,
-                    'label' => 'orocrm.task.owner.label'
+                    'label' => 'orocrm.task.assigned_to.label'
+                ]
+            )
+            ->add(
+                'reporter',
+                'oro_user_select',
+                [
+                    'required' => true,
+                    'label' => 'orocrm.task.reporter.label'
                 ]
             )
             ->add(

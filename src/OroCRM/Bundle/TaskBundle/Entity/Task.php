@@ -122,14 +122,14 @@ class Task extends ExtendTask implements RemindableInterface
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="assigned_to_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *  defaultValues={
      *      "email"={"available_in_template"=true}
      *  }
      * )
      */
-    protected $assignedTo;
+    protected $owner;
 
     /**
      * @var Account
@@ -161,14 +161,14 @@ class Task extends ExtendTask implements RemindableInterface
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *  defaultValues={
      *      "email"={"available_in_template"=true}
      *  }
      * )
      */
-    protected $owner;
+    protected $reporter;
 
     /**
      * @var WorkflowItem
@@ -327,25 +327,25 @@ class Task extends ExtendTask implements RemindableInterface
     /**
      * @return User
      */
-    public function getAssignedTo()
+    public function getOwner()
     {
-        return $this->assignedTo;
+        return $this->owner;
     }
 
     /**
      * @return mixed|null
      */
-    public function getAssigneeToId()
+    public function getOwnerId()
     {
-        return $this->getAssignedTo() ? $this->getAssignedTo()->getId() : null;
+        return $this->getOwner() ? $this->getOwner()->getId() : null;
     }
 
     /**
-     * @param User $assignedTo
+     * @param User $owner
      */
-    public function setAssignedTo($assignedTo = null)
+    public function setOwner($owner = null)
     {
-        $this->assignedTo = $assignedTo;
+        $this->owner = $owner;
     }
 
     /**
@@ -407,25 +407,25 @@ class Task extends ExtendTask implements RemindableInterface
     /**
      * @return User
      */
-    public function getOwner()
+    public function getReporter()
     {
-        return $this->owner;
+        return $this->reporter;
     }
 
     /**
      * @return int
      */
-    public function getOwnerId()
+    public function getReporterId()
     {
-        return $this->getOwner() ? $this->getOwner()->getId() : null;
+        return $this->getReporter() ? $this->getReporter()->getId() : null;
     }
 
     /**
-     * @param User $owner
+     * @param User $reporter
      */
-    public function setOwner($owner = null)
+    public function setReporter($reporter = null)
     {
-        $this->owner = $owner;
+        $this->reporter = $reporter;
     }
 
     /**
@@ -485,7 +485,7 @@ class Task extends ExtendTask implements RemindableInterface
 
         $result->setSubject($this->getSubject());
         $result->setExpireAt($this->getDueDate());
-        $result->setRecipient($this->getAssignedTo());
+        $result->setRecipient($this->getOwner());
 
         return $result;
     }

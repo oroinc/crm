@@ -10,10 +10,10 @@ datagrid:
                     - task.description
                     - task.dueDate
                     - taskPriority.label as priorityLabel
-                    - assignedTo.username as assignee
-                    - assignedTo.id as assigneeId
-                    - owner.username as reporter
-                    - owner.id as reporterId
+                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
+                    - owner.id as ownerId
+                    - CONCAT(reporter.firstName, CONCAT(' ', reporter.lastName)) as reporterName
+                    - reporter.id as reporterId
                     - task.createdAt
                     - task.updatedAt
                     - workflowStep.label as workflowStepLabel
@@ -22,8 +22,8 @@ datagrid:
                 join:
                     left:
                         - { join: task.taskPriority, alias: taskPriority }
-                        - { join: task.assignedTo, alias: assignedTo }
                         - { join: task.owner, alias: owner }
+                        - { join: task.reporter, alias: reporter }
                         - { join: task.workflowStep, alias: workflowStep }
         columns:
             subject:
@@ -35,14 +35,14 @@ datagrid:
                 label: orocrm.task.workflow_step.label
             priorityLabel:
                 label: orocrm.task.task_priority.label
-            assignee:
+            ownerName:
                 type: twig
                 label: orocrm.task.assigned_to.label
                 frontend_type: html
-                template: OroCRMTaskBundle:Task:Datagrid/Property/assignee.html.twig
-            reporter:
+                template: OroCRMTaskBundle:Task:Datagrid/Property/owner.html.twig
+            reporterName:
                 type: twig
-                label: orocrm.task.owner.label
+                label: orocrm.task.reporter.label
                 frontend_type: html
                 template: OroCRMTaskBundle:Task:Datagrid/Property/reporter.html.twig
             createdAt:
@@ -61,10 +61,10 @@ datagrid:
                     data_name: workflowStep.stepOrder
                 priorityLabel:
                     data_name: taskPriority.order
-                assignee:
-                    data_name: assignee
-                reporter:
-                    data_name: reporter
+                ownerName:
+                    data_name: ownerName
+                reporterName:
+                    data_name: reporterName
                 createdAt:
                     data_name: task.createdAt
                 updatedAt:
@@ -158,4 +158,4 @@ datagrid:
             query:
                 where:
                       and:
-                        - task.assignedTo = :userId
+                        - task.owner = :userId

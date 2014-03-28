@@ -14,7 +14,7 @@ orocrm:
         assigned_to.label:          Assigned To
         related_account.label:      Account
         related_contact.label:      Contact
-        owner.label:                Reporter
+        reporter.label:             Reporter
         created_at.label:           Created At
         updated_at.label:           Updated At
         id.label:                   Id

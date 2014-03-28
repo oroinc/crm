@@ -39,7 +39,7 @@ class TaskSoap extends Task implements SoapEntityInterface
     /**
      * @Soap\ComplexType("int", nillable=true)
      */
-    protected $assignedTo;
+    protected $owner;
 
     /**
      * @Soap\ComplexType("int", nillable=true)
@@ -54,7 +54,7 @@ class TaskSoap extends Task implements SoapEntityInterface
     /**
      * @Soap\ComplexType("int", nillable=true)
      */
-    protected $owner;
+    protected $reporter;
 
     /**
      * @Soap\ComplexType("dateTime", nillable=true)
@@ -86,10 +86,10 @@ class TaskSoap extends Task implements SoapEntityInterface
         $this->description = $task->description;
         $this->dueDate = $task->dueDate;
         $this->taskPriority = $task->taskPriority ? $task->taskPriority->getName() : null;
-        $task->assignedTo = $this->getEntityId($task->assignedTo);
+        $task->owner = $this->getEntityId($task->owner);
         $task->relatedAccount = $this->getEntityId($task->relatedAccount);
         $task->relatedContact = $this->getEntityId($task->relatedContact);
-        $task->owner = $this->getEntityId($task->owner);
+        $task->reporter = $this->getEntityId($task->reporter);
         $this->createdAt = $task->createdAt;
         $this->updatedAt = $task->updatedAt;
         $task->workflowItem = $this->getEntityId($task->workflowItem);
