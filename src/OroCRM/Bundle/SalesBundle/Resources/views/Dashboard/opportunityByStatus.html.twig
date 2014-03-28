@@ -16,8 +16,8 @@
         </div>
     </div>
     <script type="text/javascript">
-        require(['jquery', 'flotr2', 'orolocale/js/formatter/number'],
-            function($, Flotr, numberFormatter){
+        require(['jquery', 'oroui/js/layout', 'flotr2', 'orolocale/js/formatter/number'],
+            function($, layout, Flotr, numberFormatter){
                 $(function () {
                     var $widgetContent = $('#{{ widgetContentId }}');
                     var $chart = $('#{{ widgetId }}-chart');
@@ -90,7 +90,7 @@
                         );
                     };
 
-                    $(function () {
+                    layout.onPageRendered(function () {
                         setChartSize();
                         drawChart();
                         setChartContainerSize();
