@@ -1,6 +1,15 @@
 {% extends 'OroDashboardBundle:Dashboard:chartWidget.html.twig' %}
 
 {% block content %}
+
+{% set hasData = false %}
+{% for status in items.data %}
+    {% if status[1] and status[1] > 0 %}
+        {% set hasData = true %}
+    {% endif %}
+{% endfor %}
+
+{% if hasData %}
     <div class="chart-container">
         <div class="clearfix">
             <div id="{{ widgetId }}-chart" class="bar-chart chart pull-left"></div>
@@ -96,4 +105,10 @@
                 });
             });
     </script>
+{% else %}
+    <div class="clearfix no-data">
+        <span>{{ 'oro.dashboard.no_data_found'|trans }}</span>
+    </div>
+{% endif %}
+
 {% endblock %}
