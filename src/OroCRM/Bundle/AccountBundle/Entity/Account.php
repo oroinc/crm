@@ -48,6 +48,9 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      },
  *      "form"={
  *          "form_type"="orocrm_account_select"
+ *      },
+ *      "dataaudit"={
+ *          "auditable"=true
  *      }
  *  }
  * )
@@ -68,7 +71,16 @@ class Account extends ExtendAccount implements Taggable
      * @ORM\Column(type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"merge"={"display"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *    "merge"={
+     *      "display"=true
+     *    },
+     *    "dataaudit"={
+     *      "auditable"=true
+     *    }
+     *   }
+     * )
      */
     protected $name;
 
@@ -77,7 +89,17 @@ class Account extends ExtendAccount implements Taggable
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Soap\ComplexType("string", nillable=true)
-     * @ConfigField(defaultValues={"merge"={"display"=true}})
+     * @Oro\Versioned
+     * @ConfigField(
+     *  defaultValues={
+     *    "merge"={
+     *      "display"=true
+     *    },
+     *    "dataaudit"={
+     *      "auditable"=true
+     *    }
+     *  }
+     * )
      */
     protected $owner;
 

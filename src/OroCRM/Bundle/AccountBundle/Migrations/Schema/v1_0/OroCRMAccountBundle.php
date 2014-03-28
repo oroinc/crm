@@ -32,9 +32,10 @@ class OroCRMAccountBundle implements Migration
             'text',
             [
                 'oro_options' => [
-                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid' => ['is_visible' => false],
-                    'merge'    => ['display' => true],
+                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid'  => ['is_visible' => false],
+                    'merge'     => ['display' => true],
+                    'dataaudit' => ['auditable' => true]
                 ]
             ]
         );
@@ -43,9 +44,10 @@ class OroCRMAccountBundle implements Migration
             'string',
             [
                 'oro_options' => [
-                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid' => ['is_visible' => false],
-                    'merge'    => ['display' => true],
+                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid'  => ['is_visible' => false],
+                    'merge'     => ['display' => true],
+                    'dataaudit' => ['auditable' => true]
                 ]
             ]
         );
@@ -54,9 +56,10 @@ class OroCRMAccountBundle implements Migration
             'string',
             [
                 'oro_options' => [
-                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid' => ['is_visible' => false],
-                    'merge'    => ['display' => true],
+                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid'  => ['is_visible' => false],
+                    'merge'     => ['display' => true],
+                    'dataaudit' => ['auditable' => true]
                 ]
             ]
         );
@@ -65,9 +68,10 @@ class OroCRMAccountBundle implements Migration
             'string',
             [
                 'oro_options' => [
-                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid' => ['is_visible' => false],
-                    'merge'    => ['display' => true],
+                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid'  => ['is_visible' => false],
+                    'merge'     => ['display' => true],
+                    'dataaudit' => ['auditable' => true]
                 ]
             ]
         );
@@ -76,9 +80,10 @@ class OroCRMAccountBundle implements Migration
             'string',
             [
                 'oro_options' => [
-                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid' => ['is_visible' => false],
-                    'merge'    => ['display' => true],
+                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid'  => ['is_visible' => false],
+                    'merge'     => ['display' => true],
+                    'dataaudit' => ['auditable' => true]
                 ]
             ]
         );
@@ -87,9 +92,10 @@ class OroCRMAccountBundle implements Migration
             'integer',
             [
                 'oro_options' => [
-                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid' => ['is_visible' => false],
-                    'merge'    => ['display' => true],
+                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid'  => ['is_visible' => false],
+                    'merge'     => ['display' => true],
+                    'dataaudit' => ['auditable' => true]
                 ]
             ]
         );
@@ -98,9 +104,10 @@ class OroCRMAccountBundle implements Migration
             'string',
             [
                 'oro_options' => [
-                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid' => ['is_visible' => false],
-                    'merge'    => ['display' => true],
+                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid'  => ['is_visible' => false],
+                    'merge'     => ['display' => true],
+                    'dataaudit' => ['auditable' => true]
                 ]
             ]
         );
@@ -109,9 +116,10 @@ class OroCRMAccountBundle implements Migration
             'string',
             [
                 'oro_options' => [
-                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid' => ['is_visible' => false],
-                    'merge'    => ['display' => true],
+                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid'  => ['is_visible' => false],
+                    'merge'     => ['display' => true],
+                    'dataaudit' => ['auditable' => true]
                 ]
             ]
         );
@@ -120,9 +128,10 @@ class OroCRMAccountBundle implements Migration
             'string',
             [
                 'oro_options' => [
-                    'extend'   => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid' => ['is_visible' => false],
-                    'merge'    => ['display' => true],
+                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'datagrid'  => ['is_visible' => false],
+                    'merge'     => ['display' => true],
+                    'dataaudit' => ['auditable' => true]
                 ]
             ]
         );
@@ -156,7 +165,6 @@ class OroCRMAccountBundle implements Migration
         $table->addForeignKeyConstraint($schema->getTable('orocrm_contact'), ['contact_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('orocrm_account'), ['account_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
         /** End of generate foreign keys for table orocrm_account_to_contact **/
-
         // @codingStandardsIgnoreEnd
     }
 }
