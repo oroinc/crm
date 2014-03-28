@@ -256,10 +256,6 @@ datagrid:
                 lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
         filters:
             columns:
-                selectrow:
-                    type: selectrow
-                    label: orocrm.contact.datagrid.selected_rows
-                    data_name: c.id
                 firstName:
                     type: string
                     data_name: c.firstName
