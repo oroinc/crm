@@ -89,12 +89,12 @@ datagrid:
                 priorityLabel:
                     type:      string
                     data_name: priorityLabel
-                assignee:
+                ownerName:
                     type:      string
-                    data_name: assignee
-                reporter:
+                    data_name: ownerName
+                reporterName:
                     type:      string
-                    data_name: reporter
+                    data_name: reporterName
                 createdAt:
                     type:      datetime
                     data_name: task.createdAt

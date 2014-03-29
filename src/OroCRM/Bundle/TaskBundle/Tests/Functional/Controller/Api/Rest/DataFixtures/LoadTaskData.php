@@ -31,7 +31,7 @@ class LoadTaskData extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $manager)
     {
-        $assignee = $reporter = $manager
+        $assignedTo = $reporter = $manager
             ->getRepository('OroUserBundle:User')
             ->findOneBy(
                 array(
@@ -48,7 +48,7 @@ class LoadTaskData extends AbstractFixture implements ContainerAwareInterface
         $task->setDescription('New description');
         $task->setDueDate(new \DateTime());
         $task->setReporter($reporter);
-        $task->setOwner($assignee);
+        $task->setOwner($assignedTo);
 
         $manager->persist($task);
         $manager->flush();
