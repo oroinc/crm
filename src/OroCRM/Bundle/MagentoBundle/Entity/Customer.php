@@ -95,7 +95,7 @@ class Customer extends BasePerson
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="birthday", type="datetime", nullable=true)
+     * @ORM\Column(name="birthday", type="date", nullable=true)
      * @Oro\Versioned
      */
     protected $birthday;
