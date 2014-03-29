@@ -9,7 +9,7 @@ OroCRM\Bundle\TaskBundle\Entity\Task:
             - DateTime: ~
         taskPriority:
             - NotBlank: ~
-        assignedTo:
-            - NotBlank: ~
         owner:
+            - NotBlank: ~
+        reporter:
             - NotBlank: ~

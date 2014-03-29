@@ -129,32 +129,6 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $entity->getRelatedAccountId());
     }
 
-    public function testSetAssignedTo()
-    {
-        $entity = new Task();
-
-        $this->assertNull($entity->getAssignedTo());
-
-        $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $entity->setAssignedTo($user);
-
-        $this->assertEquals($user, $entity->getAssignedTo());
-    }
-
-    public function testGetAssignedToId()
-    {
-        $entity = new Task();
-
-        $this->assertNull($entity->getAssigneeToId());
-
-        $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $expected = 42;
-        $user->expects($this->once())->method('getId')->will($this->returnValue($expected));
-        $entity->setAssignedTo($user);
-
-        $this->assertEquals($expected, $entity->getAssigneeToId());
-    }
-
     public function testSetOwner()
     {
         $entity = new Task();
@@ -164,7 +138,7 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
         $entity->setOwner($user);
 
-        $this->assertSame($user, $entity->getOwner());
+        $this->assertEquals($user, $entity->getOwner());
     }
 
     public function testGetOwnerId()
@@ -179,6 +153,32 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $entity->setOwner($user);
 
         $this->assertEquals($expected, $entity->getOwnerId());
+    }
+
+    public function testSetReporter()
+    {
+        $entity = new Task();
+
+        $this->assertNull($entity->getReporter());
+
+        $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
+        $entity->setReporter($user);
+
+        $this->assertSame($user, $entity->getReporter());
+    }
+
+    public function testGetReporterId()
+    {
+        $entity = new Task();
+
+        $this->assertNull($entity->getReporterId());
+
+        $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
+        $expected = 42;
+        $user->expects($this->once())->method('getId')->will($this->returnValue($expected));
+        $entity->setReporter($user);
+
+        $this->assertEquals($expected, $entity->getReporterId());
     }
 
     public function testDueDateExpired()

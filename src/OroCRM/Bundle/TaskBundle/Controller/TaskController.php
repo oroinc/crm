@@ -135,10 +135,25 @@ class TaskController extends Controller
             if (!$assignedTo) {
                 throw new NotFoundHttpException(sprintf('User with ID %s is not found', $assignedToId));
             }
-            $task->setAssignedTo($assignedTo);
+            $task->setOwner($assignedTo);
+        }
+
+        $reporter = $this->getCurrentUser();
+        if ($reporter) {
+            $task->setReporter($reporter);
         }
 
         return $this->update($task);
+    }
+
+    /**
+     * @return User
+     */
+    public function getCurrentUser()
+    {
+        $token = $this->container->get('security.context')->getToken();
+
+        return $token ? $token->getUser() : null;
     }
 
     /**

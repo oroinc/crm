@@ -63,10 +63,10 @@ class OroCRMTaskBundle implements Migration
         $table->addColumn('description', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('due_date', 'datetime');
         $table->addColumn('task_priority_name', 'string', ['notnull' => false, 'length' => 32]);
-        $table->addColumn('assigned_to_id', 'integer', ['notnull' => false]);
+        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('related_account_id', 'integer', ['notnull' => false]);
         $table->addColumn('related_contact_id', 'integer', ['notnull' => false]);
-        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
+        $table->addColumn('reporter_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
         $table->addColumn('createdAt', 'datetime');
@@ -74,10 +74,11 @@ class OroCRMTaskBundle implements Migration
 
         $table->setPrimaryKey(['id']);
         $table->addIndex(['task_priority_name'], 'IDX_814DEE3FD34C1E8E', []);
-        $table->addIndex(['assigned_to_id'], 'IDX_814DEE3FF4BD7827', []);
+        $table->addIndex(['owner_id'], 'IDX_814DEE3FF4BD7827', []);
         $table->addIndex(['related_account_id'], 'IDX_814DEE3FE774F01D', []);
         $table->addIndex(['related_contact_id'], 'IDX_814DEE3FD6204081', []);
-        $table->addIndex(['owner_id'], 'IDX_814DEE3F7E3C61F9', []);
+        $table->addIndex(['reporter_id'], 'IDX_814DEE3F7E3C61F9', []);
+        $table->addIndex(['due_date'], 'task_due_date_idx');
         $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_814DEE3F1023C4EE');
         $table->addIndex(['workflow_step_id'], 'IDX_814DEE3F71FE882C', []);
 
@@ -100,7 +101,7 @@ class OroCRMTaskBundle implements Migration
 
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
-            ['assigned_to_id'],
+            ['owner_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
         );
@@ -121,7 +122,7 @@ class OroCRMTaskBundle implements Migration
 
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
-            ['owner_id'],
+            ['reporter_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
         );

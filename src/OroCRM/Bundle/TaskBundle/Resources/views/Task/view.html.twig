@@ -42,19 +42,6 @@
                 {{ UI.renderProperty('orocrm.task.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
                 {{ UI.renderProperty('orocrm.task.task_priority.label'|trans, entity.taskPriority) }}
 
-                {%- set assignedToData -%}
-                    {%- if entity.assignedTo -%}
-                        {% if resource_granted('oro_user_user_view') %}
-                            <a href="{{ path('oro_user_view', {'id': entity.assignedTo.id}) }}">
-                                {{ entity.assignedTo|oro_format_name|escape }}
-                            </a>
-                        {% else %}
-                            {{ entity.assignedTo|oro_format_name|escape }}
-                        {% endif %}
-                    {%- endif -%}
-                {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.task.assigned_to.label'|trans, assignedToData) }}
-
                 {%- set accountData -%}
                     {%- if entity.relatedAccount -%}
                         {% if resource_granted('orocrm_account_view') %}
@@ -82,17 +69,30 @@
                 {{ UI.renderHtmlProperty('orocrm.task.related_contact.label'|trans, contactData) }}
 
                 {%- set ownerData -%}
-                    {%- if entity.owner -%}
+                {%- if entity.owner -%}
+                    {% if resource_granted('oro_user_user_view') %}
+                        <a href="{{ path('oro_user_view', {'id': entity.owner.id}) }}">
+                            {{ entity.owner|oro_format_name|escape }}
+                        </a>
+                    {% else %}
+                        {{ entity.owner|oro_format_name|escape }}
+                    {% endif %}
+                {%- endif -%}
+                {%- endset -%}
+                {{ UI.renderHtmlProperty('orocrm.task.assigned_to.label'|trans, ownerData) }}
+
+                {%- set reporterData -%}
+                    {%- if entity.reporter -%}
                         {% if resource_granted('oro_user_user_view') %}
-                            <a href="{{ path('oro_user_view', {'id': entity.owner.id}) }}">
-                                {{ entity.owner|escape }}
+                            <a href="{{ path('oro_user_view', {'id': entity.reporter.id}) }}">
+                                {{ entity.reporter|oro_format_name|escape }}
                             </a>
                         {% else %}
-                            {{ entity.owner|escape }}
+                            {{ entity.reporter|oro_format_name|escape }}
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.task.owner.label'|trans, ownerData) }}
+                {{ UI.renderHtmlProperty('orocrm.task.reporter.label'|trans, reporterData) }}
             </div>
             <div class="responsive-block">
                 {{ entityConfig.renderDynamicFields(entity) }}

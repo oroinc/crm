@@ -11,7 +11,7 @@ class TaskRepository extends EntityRepository
     public function getTaskAssignedTo($userId, $limit)
     {
         $queryBuilder = $this->createQueryBuilder('task');
-        return $queryBuilder->where('task.assignedTo = :assignedTo AND step.name != :step')
+        return $queryBuilder->where('task.owner = :assignedTo AND step.name != :step')
             ->innerJoin('task.workflowStep', 'step')
             ->orderBy('task.dueDate', 'ASC')
             ->addOrderBy('task.workflowStep', 'ASC')

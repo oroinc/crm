@@ -161,10 +161,10 @@ class TaskController extends RestController implements ClassResourceInterface
                     $value = $value->getName();
                 }
                 break;
-            case 'assignedTo':
+            case 'owner':
             case 'relatedAccount':
             case 'relatedContact':
-            case 'owner':
+            case 'reporter':
             case 'workflowItem':
             case 'workflowStep':
                 if ($value) {
