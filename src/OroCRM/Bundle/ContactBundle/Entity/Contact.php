@@ -140,7 +140,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="birthday", type="datetime", nullable=true)
+     * @ORM\Column(name="birthday", type="date", nullable=true)
      * @Soap\ComplexType("date", nillable=true)
      * @Oro\Versioned
      * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
