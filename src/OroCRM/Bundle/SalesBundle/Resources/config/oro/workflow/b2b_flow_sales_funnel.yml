@@ -1,0 +1,11 @@
+imports:
+    - { resource: 'b2b_flow_sales_funnel/steps.yml' }
+    - { resource: 'b2b_flow_sales_funnel/attributes.yml' }
+    - { resource: 'b2b_flow_sales_funnel/transitions.yml' }
+    - { resource: 'b2b_flow_sales_funnel/transition_definitions.yml' }
+
+workflows:
+    b2b_flow_sales_funnel:
+        label: 'B2B Sales Process Flow'
+        entity: OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
+        entity_attribute: sales_funnel

@@ -5,11 +5,11 @@
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ ui.renderProperty('orocrm.contactus.contactrequest.channel.label'|trans, entity.channel.name) }}
-            {{ ui.renderProperty('orocrm.contactus.contactrequest.first_name.label'|trans, entity.firstName|escape) }}
-            {{ ui.renderProperty('orocrm.contactus.contactrequest.last_name.label'|trans, entity.lastName|escape) }}
-            {{ ui.renderProperty('orocrm.contactus.contactrequest.email_address.label'|trans, email.email_address_simple(entity.emailAddress)) }}
-            {{ ui.renderProperty('orocrm.contactus.contactrequest.phone.label'|trans, entity.phone ? ui.renderPhone(entity.phone) : null) }}
-            {{ ui.renderProperty('orocrm.contactus.contactrequest.comment.label'|trans, entity.comment|escape) }}
+            {{ ui.renderProperty('orocrm.contactus.contactrequest.first_name.label'|trans, entity.firstName) }}
+            {{ ui.renderProperty('orocrm.contactus.contactrequest.last_name.label'|trans, entity.lastName) }}
+            {{ ui.renderHtmlProperty('orocrm.contactus.contactrequest.email_address.label'|trans, email.email_address_simple(entity.emailAddress)) }}
+            {{ ui.renderHtmlProperty('orocrm.contactus.contactrequest.phone.label'|trans, entity.phone ? ui.renderPhone(entity.phone) : null) }}
+            {{ ui.renderProperty('orocrm.contactus.contactrequest.comment.label'|trans, entity.comment) }}
         </div>
     </div>
 </div>

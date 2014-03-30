@@ -14,7 +14,10 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 /**
  * Call
  *
- * @ORM\Table(name="orocrm_call")
+ * @ORM\Table(
+ *      name="orocrm_call",
+ *      indexes={@ORM\Index(name="call_dt_idx",columns={"call_date_time"})}
+ * )
  * @ORM\Entity
  * @Config(
  *  routeName="orocrm_call_index",
@@ -63,7 +66,7 @@ class Call
      * @var Account
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     * @ConfigField(defaultValues={"merge"={"relation_enable"=true, "relation_cast_method"="getSubject"}})
+     * @ConfigField(defaultValues={"merge"={"inverse_display"=true, "relation_cast_method"="getSubject"}})
      */
     protected $relatedAccount;
 

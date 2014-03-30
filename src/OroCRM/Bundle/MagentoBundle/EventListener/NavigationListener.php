@@ -20,23 +20,25 @@ class NavigationListener
 
     protected static $map = [
         'cart'     => [
-            'parent'       => 'sales_tab',
-            'prefix'       => self::CART_MENU_ITEM,
-            'label'        => 'Shopping Carts',
-            'route'        => 'orocrm_magento_cart_index',
-            'extra_routes' => '/^orocrm_magento_cart_(index|view)$/'
+            'parent'         => 'sales_tab',
+            'prefix'         => self::CART_MENU_ITEM,
+            'label'          => 'Shopping Carts',
+            'route'          => 'orocrm_magento_cart_index',
+            'extra_routes'   => '/^orocrm_magento_cart_(index|view)$/',
+            'extra_position' => 40
         ],
         'order'    => [
-            'parent'       => 'sales_tab',
-            'prefix'       => self::ORDER_MENU_ITEM,
-            'label'        => 'Orders',
-            'route'        => 'orocrm_magento_order_index',
-            'extra_routes' => '/^orocrm_magento_order_(index|view)$/'
+            'parent'         => 'sales_tab',
+            'prefix'         => self::ORDER_MENU_ITEM,
+            'label'          => 'Orders',
+            'route'          => 'orocrm_magento_order_index',
+            'extra_routes'   => '/^orocrm_magento_order_(index|view)$/',
+            'extra_position' => 50
         ],
         'customer' => [
             'parent'       => 'customers_tab',
             'prefix'       => self::CUSTOMER_MENU_ITEM,
-            'label'        => 'Channels',
+            'label'        => 'orocrm.magento.menu.web_customers',
             'route'        => 'orocrm_magento_customer_index',
             'extra_routes' => '/^orocrm_magento_customer_(index|view)$/'
         ]

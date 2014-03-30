@@ -1,0 +1,50 @@
+placeholders:
+    oro_reminder_reminder_templates:
+        items:
+            task_reminder_template: ~
+
+    view_navButtons_before:
+        items:
+            create_task_contact_button: ~
+            create_task_user_button: ~
+
+    view_content_data_additional_information:
+        items:
+            orocrm_task_contact_tasks: ~
+            orocrm_task_user_tasks: ~
+
+    orocrm_account_action_dropdown:
+        items:
+            create_task_account_button:
+                order: 60
+
+    orocrm_contact_tasks:
+        items:
+            orocrm_contact_tasks_grid: ~
+
+    orocrm_user_tasks:
+        items:
+            orocrm_user_tasks_grid: ~
+
+items:
+    task_reminder_template:
+        template: OroCRMTaskBundle:Task:reminderTemplate.html.twig
+
+    create_task_account_button:
+        template: OroCRMTaskBundle:Entities:createAccountTaskButton.html.twig
+
+    create_task_contact_button:
+        template: OroCRMTaskBundle:Entities:createContactTaskButton.html.twig
+        attribute_instance_of: [entity, %orocrm_contact.entity.class%]
+
+    create_task_user_button:
+        template: OroCRMTaskBundle:Entities:createUserTaskButton.html.twig
+        attribute_instance_of: [entity, %oro_user.entity.class%]
+
+    orocrm_task_contact_tasks:
+        template: OroCRMTaskBundle:Task:contactTasks.html.twig
+        attribute_instance_of: [entity, %orocrm_contact.entity.class%]
+
+    orocrm_task_user_tasks:
+        template: OroCRMTaskBundle:Task:userTasks.html.twig
+        attribute_instance_of: [entity, %oro_user.entity.class%]

@@ -1,0 +1,29 @@
+.contact-box-wrapper {
+    position: relative;
+}
+.contact-box-row {
+    padding: 5px 0;
+}
+.contact-box:hover{
+    background-color: #EDF1FA;
+}
+.contact-box {
+    background-color: #F6F6F6;
+    float: left;
+    margin: 3px;
+    padding: 10px 20px;
+    width: calc(50% - 6px);
+    cursor: pointer;
+}
+.contact-widget-wrapper{
+    padding: 0 0 0 20px;
+}
+.contact-widget-wrapper .title{
+    padding-left: 3px;
+}
+.contact-box-name-link{
+    font-weight: bold;
+}
+.contact-box-row span:first-of-type{
+    padding-right: 5px;
+}

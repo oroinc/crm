@@ -8,6 +8,8 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  * Class Opportunities
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
+ * @method Opportunities openOpportunities openOpportunities(string)
+ * {@inheritdoc}
  */
 class Opportunities extends AbstractPageFilteredGrid
 {
@@ -19,9 +21,12 @@ class Opportunities extends AbstractPageFilteredGrid
         parent::__construct($testCase, $redirect);
     }
 
+    /**
+     * @return Opportunity
+     */
     public function add()
     {
-        $this->test->byXPath("//a[@title='Create opportunity']")->click();
+        $this->test->byXPath("//a[@title='Create Opportunity']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $lead = new Opportunity($this->test);
@@ -32,7 +37,6 @@ class Opportunities extends AbstractPageFilteredGrid
     {
         $contact = $this->getEntity($entityData);
         $contact->click();
-        sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
 

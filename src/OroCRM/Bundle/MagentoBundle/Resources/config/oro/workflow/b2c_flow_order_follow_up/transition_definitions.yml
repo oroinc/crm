@@ -1,0 +1,69 @@
+workflows:
+    b2c_flow_order_follow_up:
+        transition_definitions:
+            log_call_definition:
+                conditions:
+                    @and:
+                        - @not_empty:
+                            parameters: $phone_number
+                            message: 'Phone number must be set'
+                        - @not_empty:
+                            parameters: $call_subject
+                            message: 'Call subject must be set'
+                        - @not_empty:
+                            parameters: $call_date
+                            message: 'Call date must be set'
+                        - @not_empty:
+                            parameters: $call_direction
+                            message: 'Call direction must be chosen'
+                post_actions:
+                    - @find_entity: # Set call status to in_progress
+                        class: OroCRM\Bundle\CallBundle\Entity\CallStatus
+                        identifier: 'in_progress'
+                        attribute: $call_status
+                    - @create_entity: # create Call
+                        class: OroCRM\Bundle\CallBundle\Entity\Call
+                        attribute: $call
+                        data:
+                            relatedContact: $contact
+                            relatedAccount: $account
+                            subject: $call_subject
+                            phoneNumber: $phone_number
+                            notes: $notes
+                            callDateTime: $call_date
+                            callStatus: $call_status
+                            duration: $call_duration
+                            direction: $call_direction
+                    - @call_method:
+                        method: 'addRelatedCall'
+                        object: $order
+                        method_parameters: [$call]
+
+            send_email_definition:
+                conditions:
+                    @and:
+                        - @not_empty:
+                            parameters: $email_from
+                            message: 'Email sender must be set'
+                        - @not_empty:
+                            parameters: $email_to
+                            message: 'Email recipient must be set'
+                        - @not_empty:
+                            parameters: $email_subject
+                            message: 'Email subject must be set'
+                        - @not_empty:
+                            parameters: $email_body
+                            message: 'Email content must be chosen'
+                post_actions:
+                    - @send_email: # Send email
+                        attribute: $email
+                        from: $email_from
+                        to: $email_to
+                        subject: $email_subject
+                        body: $email_body
+                    - @call_method:
+                        method: 'addRelatedEmail'
+                        object: $order
+                        method_parameters: [$email]
+            no_reply_definition: [] # do nothing
+            record_feedback_definition: [] # do nothing

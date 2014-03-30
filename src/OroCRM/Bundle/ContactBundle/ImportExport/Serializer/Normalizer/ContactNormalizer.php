@@ -141,7 +141,7 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
     }
 
     /**
-     * @param mixed $object
+     * @param mixed $collection
      * @param mixed $format
      * @param array $context
      * @return mixed

@@ -31,8 +31,6 @@ services:
 
     orocrm_sales.lead.datagrid_helper:
         class: %orocrm_sales.lead.datagrid_helper.class%
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.sales-lead-datagrid, method: onBuildAfter }
 
     orocrm_sales.form.autocomplete.opportunity.search_handler:
         parent: oro_form.autocomplete.search_handler
@@ -49,3 +47,21 @@ services:
             - ["name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: leads, acl_resource: orocrm_sales_lead_view }
+
+    orocrm_sales.event_listener.account_contacts_grid_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'accountId'
+            - @oro_datagrid.datagrid.request_params
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-account-lead-grid, method: onBuildAfter }
+
+    orocrm_sales.event_listener.account_opportunities_grid_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'accountId'
+            - @oro_datagrid.datagrid.request_params
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-account-opportunity-grid, method: onBuildAfter }

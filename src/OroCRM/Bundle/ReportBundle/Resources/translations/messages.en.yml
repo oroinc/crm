@@ -9,7 +9,7 @@ orocrm:
                 leads_count:       Leads count
                 period:            Period
                 number_won:        Number won
-                step:              Step
+                status:            Status
                 number_of_opportunities: Number of opportunities
                 close_revenue:     Close Revenue
                 budget_amount:     Budget Amount

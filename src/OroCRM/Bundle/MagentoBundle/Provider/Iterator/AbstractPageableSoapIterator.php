@@ -6,6 +6,7 @@ use Psr\Log\NullLogger;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 
+use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
@@ -313,32 +314,13 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     }
 
     /**
-     * Do modifications with response for collection requests
-     * Fix issues related to specific results in WSI mode
-     *
      * @param mixed $response
      *
      * @return array
      */
     protected function processCollectionResponse($response)
     {
-        if (!is_array($response)) {
-            if ($response && is_object($response)) {
-                // response is object, but might be empty in case when no data in WSI mode
-                $data = get_object_vars($response);
-                if (empty($data)) {
-                    $response = [];
-                } else {
-                    // single result in WSI mode
-                    $response = [$response];
-                }
-            } else {
-                // for empty results in Soap V2
-                $response = [];
-            }
-        }
-
-        return $response;
+        return WSIUtils::processCollectionResponse($response);
     }
 
     /**

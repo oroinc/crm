@@ -2,7 +2,7 @@ datagrid:
     dashboard-my-contacts-activity-grid:
         source:
             type: orm
-            acl_resource: orocrm_call_view
+            acl_resource: orocrm_contact_view
             query:
                 select:
                     - c.id
@@ -130,7 +130,6 @@ datagrid:
         filters:
             columns:
                 hasGroup:
-                    filter_by_having: true
                     data_name: hasGroup
                     type:  boolean
                 firstName:
@@ -151,7 +150,7 @@ datagrid:
         options:
             entityHint: contact
             requireJSModules:
-                - oro/datagrid/column-form-listener
+                - orodatagrid/js/datagrid/listener/column-form-listener
             columnListener:
                 dataField: id
                 columnName: hasGroup
@@ -187,6 +186,8 @@ datagrid:
                         - { join: c.source, alias: contactSource }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+            hints:
+                - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
         columns:
             firstName:
                 label: orocrm.contact.first_name.label
@@ -255,10 +256,6 @@ datagrid:
                 lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
         filters:
             columns:
-                selectrow:
-                    type: selectrow
-                    label: orocrm.contact.datagrid.selected_rows
-                    data_name: c.id
                 firstName:
                     type: string
                     data_name: c.firstName
@@ -273,20 +270,20 @@ datagrid:
                     data_name: phone.phone
                 groupLabelsAsString:
                     type: entity
-                    data_name: contactGroup
+                    data_name: contactGroup.id
                     enabled: false
                     options:
                         field_options:
-                          class: OroCRMContactBundle:Group
-                          property: label
+                            class: OroCRMContactBundle:Group
+                            property: label
                 contactSourceLabel:
                     type: entity
-                    data_name: contactSource
+                    data_name: contactSource.name
                     enabled: false
                     options:
                         field_options:
-                          class: OroCRMContactBundle:Source
-                          property: label
+                            class: OroCRMContactBundle:Source
+                            property: label
                 countryName:
                     type: entity
                     data_name: address.country
@@ -345,7 +342,7 @@ datagrid:
 
     # contact email datagrid
     contacts-email-grid:
-        extend: email-grid
+        extends: email-grid
         source:
             query:
                 where:
@@ -422,7 +419,6 @@ datagrid:
         filters:
             columns:
                 hasContact:
-                    filter_by_having: true
                     data_name: hasContact
                     type:      boolean
                 name:
@@ -454,7 +450,7 @@ datagrid:
         options:
             entityHint: account
             requireJSModules:
-              - oro/datagrid/column-form-listener
+              - orodatagrid/js/datagrid/listener/column-form-listener
             columnListener:
                 dataField: id
                 columnName: hasContact

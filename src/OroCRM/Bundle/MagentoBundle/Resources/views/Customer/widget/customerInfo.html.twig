@@ -1,0 +1,64 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+<div class="widget-content row-fluid row-fluid-divider">
+    <div class="responsive-cell form-horizontal">
+
+        {% set customer_name_link %}
+            <a href="{{ path("orocrm_magento_customer_view", {'id':customer.id}) }}">
+                {{ customer|oro_format_name|escape }}
+            </a>
+        {% endset %}
+
+        {{ UI.renderHtmlProperty("orocrm.magento.customer.name.label"|trans, customer_name_link) }}
+
+        {% set customer_email %}
+            <a class="contact-box-link" data-url="{{ path('oro_email_email_create', { 'to': customer.email }) }}"
+                href="javascript:void(0);"
+                {{ UI.renderWidgetDataAttributes({
+                    'type' : 'dialog',
+                    'multiple' : true,
+                    'options' : {
+                        'alias': 'email-dialog',
+                        'dialogOptions' : {
+                            'title' : 'oro.email.send_email'|trans,
+                            'allowMaximize': true,
+                            'allowMinimize': true,
+                            'dblclick': 'maximize',
+                            'maximizedHeightDecreaseBy': 'minimize-bar',
+                            'width': 1000
+                        }
+                    }
+                }) }}
+            >{{ customer.email }}</a>
+        {% endset %}
+        {{ UI.renderHtmlProperty("orocrm.magento.customer.email.label"|trans, customer_email) }}
+        {{ UI.renderProperty("orocrm.magento.customer.group.label"|trans, customer.group.name) }}
+        {{ UI.renderProperty("orocrm.magento.customer.website.label"|trans, customer.website.name) }}
+        {{ UI.renderProperty("orocrm.magento.customer.store.label"|trans, customer.store.name) }}
+        {%- set birthdayData -%}
+            {{ customer.birthday is not empty ? customer.birthday|oro_format_date : null }}
+            {% if customer.birthday is not empty %} ({{ customer.birthday|age_string({'default': 'N/A'}) }}){% endif %}
+        {%- endset -%}
+        {{ UI.renderProperty("orocrm.magento.customer.birthday.label"|trans, customer.birthday ? birthdayData : null) }}
+        {{ UI.renderProperty("orocrm.magento.customer.gender.label"|trans, oro_gender(customer.gender)) }}
+        {{ UI.renderProperty("orocrm.magento.customer.vat.label"|trans, customer.vat) }}
+    </div>
+    <div class="responsive-cell" id="magento-without-border-tabs">
+        {% set uniqueSuffix = '_customer__' ~ customer.id ~ '_channel__' ~ channel.id %}
+        {% set tabs =
+            [{
+                'alias': 'orocrm_magento_customer_orders' ~ uniqueSuffix,
+                'widgetType': 'block',
+                'label': "orocrm.magento.order.entity_plural_label"|trans,
+                'url': path('orocrm_magento_widget_customer_orders', {'customerId': customer.id, 'channelId': channel.id})
+            },
+            {
+                'alias': 'orocrm_magento_customer_carts_' ~ uniqueSuffix,
+                'widgetType': 'block',
+                'label': "orocrm.magento.cart.entity_plural_label"|trans,
+                'url': path('orocrm_magento_widget_customer_carts', {'customerId': customer.id, 'channelId': channel.id})
+            }]
+        %}
+        {{ tabPanel(tabs) }}
+    </div>
+</div>

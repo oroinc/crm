@@ -1,0 +1,239 @@
+workflows:
+    b2c_flow_order_follow_up:
+        transitions:
+            log_call:
+                label: 'Log call'
+                step_to: called
+                is_start: true
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-phone'
+                transition_definition: log_call_definition
+                form_options:
+                    attribute_fields:
+                        phone_number:
+                            form_type: text
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        call_subject:
+                            form_type: text
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        call_date:
+                            form_type: oro_datetime
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        account:
+                            form_type: orocrm_account_select
+                            options:
+                                required: false
+                                label: 'Related to'
+                        contact:
+                            form_type: orocrm_contact_select
+                            options:
+                                required: false
+                                label: 'Related contact'
+                        call_direction:
+                            form_type: entity
+                            options:
+                                class: OroCRM\Bundle\CallBundle\Entity\CallDirection
+                                property: label
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        call_duration:
+                            form_type: oro_time_interval
+                            options:
+                                required: false
+                                widget: single_text
+                                with_seconds: true
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false
+                    init_actions:
+                        # Assign either order customer primary phone or cart customer contact primary phone as phone
+                        - @assign_value:
+                            conditions:
+                                @and:
+                                    - @empty: $phone_number
+                                    - @not_empty: $order.customer
+                                    - @not_empty: $order.customer.contact
+                                    - @not_empty: $order.customer.contact.primaryPhone
+                            parameters: [$phone_number, $order.customer.contact.primaryPhone.phone]
+                        - @assign_value:
+                            conditions:
+                                @and:
+                                    - @empty: $phone_number
+                                    - @not_empty: $order.cart
+                                    - @not_empty: $order.cart.customer
+                                    - @not_empty: $order.cart.customer.contact
+                                    - @not_empty: $order.cart.customer.contact.primaryPhone
+                            parameters: [$phone_number, $order.cart.customer.contact.primaryPhone.phone]
+
+                        # Assign either order customer account or order cart customer account as account
+                        - @assign_value:
+                            conditions:
+                                @and:
+                                    - @empty: $account
+                                    - @not_empty: $order.customer
+                                    - @not_empty: $order.customer.account
+                            parameters: [$account, $order.customer.account]
+                        - @assign_value:
+                            conditions:
+                                @and:
+                                    - @empty: $account
+                                    - @not_empty: $order.cart
+                                    - @not_empty: $order.cart.customer
+                                    - @not_empty: $order.cart.customer.account
+                            parameters: [$account, $order.cart.customer.account]
+
+                        # Assign either order owner contact or order cart customer contact as contact
+                        - @assign_value:
+                            conditions:
+                                @and:
+                                    - @empty: $contact
+                                    - @not_empty: $order.customer
+                                    - @not_empty: $order.customer.contact
+                            parameters: [$contact, $order.customer.contact]
+                        - @assign_value:
+                            conditions:
+                                @and:
+                                    - @empty: $contact
+                                    - @not_empty: $order.cart
+                                    - @not_empty: $order.cart.customer
+                                    - @not_empty: $order.cart.customer.contact
+                            parameters: [$contact, $order.cart.customer.contact]
+
+                        - @create_datetime:
+                            attribute: $call_date
+                        - @create_datetime:
+                            time: '00:00:00'
+                            attribute: $call_duration
+            send_email:
+                label: 'Send email'
+                step_to: emailed
+                is_start: true
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-envelope-alt'
+                    dialog:
+                        dialogOptions:
+                            width: 700
+                transition_definition: send_email_definition
+                form_options:
+                    attribute_fields:
+                        email_from:
+                            form_type: oro_email_email_address
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                                    - Email: ~
+                        email_to:
+                            form_type: oro_email_email_address
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                                    - Email: ~
+                        email_subject:
+                            form_type: text
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        email_body:
+                            form_type: textarea
+                            options:
+                                required: true
+                                attr:
+                                    style: 'width: 90%;height: 200px;'
+                                constraints:
+                                    - NotBlank: ~
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false
+                                attr:
+                                    style: 'width: 90%;height: 60px'
+                    init_actions:
+                        - @assign_active_user: $.result.user
+                        - @assign_value: [$email_from, $.result.user.email]
+
+                        - @assign_value: #Assign email to as order owner email
+                            conditions:
+                                @and:
+                                    - @empty: $email_to
+                                    - @not_empty: $order.customer
+                                    - @not_empty: $order.customer.email
+                            parameters: [$email_to, $order.customer.email]
+                        - @assign_value: #Assign email to as shopping cart customer email
+                            conditions:
+                                @and:
+                                    - @empty: $email_to
+                                    - @not_empty: $order.cart
+                                    - @not_empty: $order.cart.email
+                            parameters: [$email_to, $order.cart.email]
+                        - @assign_value: #Assign email to as shopping cart customer contact primary email
+                            conditions:
+                                @and:
+                                    - @empty: $email_to
+                                    - @not_empty: $order.customer
+                                    - @not_empty: $order.customer.contact
+                                    - @not_empty: $order.customer.contact.primaryEmail
+                            parameters: [$email_to, $order.customer.contact.primaryEmail.email]
+                        - @assign_value: #Assign email to as shopping cart customer email
+                            conditions:
+                                @and:
+                                    - @empty: $email_to
+                                    - @not_empty: $order.cart
+                                    - @not_empty: $order.cart.customer
+                                    - @not_empty: $order.cart.customer.email
+                            parameters: [$email_to, $order.cart.customer.email]
+                        - @assign_value: #Assign email to as shopping cart customer contact primary email
+                            conditions:
+                                @and:
+                                    - @empty: $email_to
+                                    - @not_empty: $order.cart
+                                    - @not_empty: $order.cart.customer.contact
+                                    - @not_empty: $order.cart.customer.contact.primaryEmail
+                            parameters: [$email_to, $order.cart.customer.contact.primaryEmail.email]
+            no_reply:
+                label: 'No reply'
+                step_to: not_contacted
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-repeat'
+                transition_definition: no_reply_definition
+                form_options:
+                    attribute_fields:
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false
+            record_feedback:
+                label: 'Record feedback'
+                step_to: contacted
+                is_start: true
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-ok'
+                    class: 'btn-primary'
+                transition_definition: record_feedback_definition
+                form_options:
+                    attribute_fields:
+                        feedback:
+                            form_type: textarea
+                            options:
+                                required: false
+                        notes:
+                            form_type: textarea
+                            options:
+                                required: false

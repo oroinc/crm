@@ -1,7 +1,12 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
-{% oro_title_set({params : {"%sales_funnel.name%": entity.name} }) %}
+{% set salesFunnelHint = '' %}
+{% if entity %}
+    {% set salesFunnelHint = 'orocrm.sales.salesfunnel.hint'|trans({'%id%' : entity.id}) %}
+{% endif %}
+
+{% oro_title_set({params : {"%sales_funnel%": salesFunnelHint} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_SalesFunnel' %}
 
 {% block navButtons %}
@@ -33,7 +38,7 @@
         'entity': entity,
         'indexPath': path('orocrm_sales_salesfunnel_index'),
         'indexLabel': 'orocrm.sales.salesfunnel.entity_plural_label'|trans,
-        'entityTitle': entity.name
+        'entityTitle': salesFunnelHint
     } %}
     {{ parent() }}
 {% endblock pageHeader %}

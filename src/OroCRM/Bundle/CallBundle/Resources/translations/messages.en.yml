@@ -29,9 +29,10 @@ orocrm:
         #
         # OroCRM/Bundle/CallBundle/Entity/Call
         #
-        entity_label:        Call
-        entity_plural_label: Calls
-        entity_description:  Represent call
+        entity_label:          Call
+        entity_plural_label:   Calls
+        entity_description:    Represent call
+        log_call:              Log call
         id.label:              Id
         subject.label:         Subject
         related_contact.label: Related contact

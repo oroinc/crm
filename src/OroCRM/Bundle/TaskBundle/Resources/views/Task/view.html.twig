@@ -1,0 +1,117 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+
+{% oro_title_set({params : {"%entity.subject%": entity.subject|default('N/A') }}) %}
+
+{% block navButtons %}
+    {% if resource_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path' : path('orocrm_task_update', { id: entity.id }),
+            'entity_label': 'orocrm.task.entity_label'|trans
+        }) }}
+    {% endif %}
+    {% if resource_granted('DELETE', entity) %}
+        {{ UI.deleteButton({
+            'dataUrl': path('orocrm_api_delete_task', {'id': entity.id}),
+            'dataRedirect': path('orocrm_task_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-user',
+            'dataId': entity.id,
+            'entity_label': 'orocrm.task.entity_label'|trans
+        }) }}
+    {% endif %}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('orocrm_task_index'),
+        'indexLabel': 'orocrm.task.entity_plural_label'|trans,
+        'entityTitle': entity.subject
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {%- set taskInformation -%}
+        <div class="row-fluid form-horizontal">
+            <div class="responsive-block">
+                {{ UI.renderProperty('orocrm.task.subject.label'|trans, entity.subject) }}
+                {{ UI.renderProperty('orocrm.task.description.label'|trans, entity.description) }}
+                {{ UI.renderProperty('orocrm.task.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
+                {{ UI.renderProperty('orocrm.task.task_priority.label'|trans, entity.taskPriority) }}
+
+                {%- set accountData -%}
+                    {%- if entity.relatedAccount -%}
+                        {% if resource_granted('orocrm_account_view') %}
+                            <a href="{{ path('orocrm_account_view', {'id': entity.relatedAccount.id}) }}">
+                                {{ entity.relatedAccount|escape }}
+                            </a>
+                        {% else %}
+                            {{ entity.relatedAccount|escape }}
+                        {% endif %}
+                    {%- endif -%}
+                {%- endset -%}
+                {{ UI.renderHtmlProperty('orocrm.task.related_account.label'|trans, accountData) }}
+
+                {%- set contactData -%}
+                    {%- if entity.relatedContact -%}
+                        {% if resource_granted('orocrm_contact_view') %}
+                            <a href="{{ path('orocrm_contact_view', {'id': entity.relatedContact.id}) }}">
+                                {{ entity.relatedContact|oro_format_name|escape }}
+                            </a>
+                        {% else %}
+                            {{ entity.relatedContact|oro_format_name|escape }}
+                        {% endif %}
+                    {%- endif -%}
+                {%- endset -%}
+                {{ UI.renderHtmlProperty('orocrm.task.related_contact.label'|trans, contactData) }}
+
+                {%- set ownerData -%}
+                {%- if entity.owner -%}
+                    {% if resource_granted('oro_user_user_view') %}
+                        <a href="{{ path('oro_user_view', {'id': entity.owner.id}) }}">
+                            {{ entity.owner|oro_format_name|escape }}
+                        </a>
+                    {% else %}
+                        {{ entity.owner|oro_format_name|escape }}
+                    {% endif %}
+                {%- endif -%}
+                {%- endset -%}
+                {{ UI.renderHtmlProperty('orocrm.task.assigned_to.label'|trans, ownerData) }}
+
+                {%- set reporterData -%}
+                    {%- if entity.reporter -%}
+                        {% if resource_granted('oro_user_user_view') %}
+                            <a href="{{ path('oro_user_view', {'id': entity.reporter.id}) }}">
+                                {{ entity.reporter|oro_format_name|escape }}
+                            </a>
+                        {% else %}
+                            {{ entity.reporter|oro_format_name|escape }}
+                        {% endif %}
+                    {%- endif -%}
+                {%- endset -%}
+                {{ UI.renderHtmlProperty('orocrm.task.reporter.label'|trans, reporterData) }}
+            </div>
+            <div class="responsive-block">
+                {{ entityConfig.renderDynamicFields(entity) }}
+            </div>
+        </div>
+    {%- endset -%}
+
+    {% set dataBlocks = [
+        {
+            'title': 'orocrm.task.block.general'|trans,
+            'class': 'active',
+            'subblocks': [
+                {'data' : [taskInformation]}
+            ]
+        }
+    ] %}
+
+    {% set id = 'taskView' %}
+    {% set data = { 'dataBlocks': dataBlocks } %}
+
+    {{ parent() }}
+{% endblock content_data %}

@@ -8,8 +8,8 @@ services:
         arguments:
           - @doctrine.orm.entity_manager
         tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.before.widget-calls-grid, method: onBuildBefore }
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.widget-calls-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.widget-calls-grid, method: onBuildBefore }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.widget-calls-grid, method: onBuildAfter }
 
 
 

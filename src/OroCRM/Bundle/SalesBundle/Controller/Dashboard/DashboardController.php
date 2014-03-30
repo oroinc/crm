@@ -3,9 +3,13 @@
 namespace OroCRM\Bundle\SalesBundle\Controller\Dashboard;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Translation\TranslatorInterface;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use OroCRM\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository;
 
 class DashboardController extends Controller
 {
@@ -19,14 +23,21 @@ class DashboardController extends Controller
      */
     public function opportunitiesByLeadSourceAction($widget)
     {
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+
         $data = $this->getDoctrine()
             ->getRepository('OroCRMSalesBundle:Lead')
             ->getOpportunitiesByLeadSource($this->get('oro_security.acl_helper'));
 
+        foreach ($data as $key => $sourceData) {
+            if (!empty($sourceData['label'])) {
+                $data[$key]['label'] = $translator->trans($sourceData['label']);
+            }
+        }
+
         $result = array_merge(
-            [
-                'data' => $data
-            ],
+            ['data' => $data],
             $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
         );
 
@@ -39,7 +50,7 @@ class DashboardController extends Controller
      *      name="orocrm_sales_dashboard_opportunity_by_state_chart",
      *      requirements={"widget"="[\w-]+"}
      * )
-     * @Template("OroCRMSalesBundle:Dashboard:opportunityByState.html.twig")
+     * @Template("OroCRMSalesBundle:Dashboard:opportunityByStatus.html.twig")
      */
     public function opportunityByStatusAction($widget)
     {
@@ -63,27 +74,32 @@ class DashboardController extends Controller
      */
     public function mySalesFlowB2BAction($widget)
     {
-        $currentDate = new \DateTime('now', new \DateTimeZone('UTC'));
+        $dateTo = new \DateTime('now', new \DateTimeZone('UTC'));
+        $dateFrom = new \DateTime(
+            $dateTo->format('Y') . '-01-' . ((ceil($dateTo->format('n') / 3) - 1) * 3 + 1),
+            new \DateTimeZone('UTC')
+        );
+
+        /** @var WorkflowManager $workflowManager */
+        $workflowManager = $this->get('oro_workflow.manager');
+        $workflow = $workflowManager->getApplicableWorkflowByEntityClass(
+            'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel'
+        );
+
+        $customStepCalculations = array('won_opportunity' => 'opportunity.closeRevenue');
+
+        /** @var SalesFunnelRepository $salesFunnerRepository */
+        $salesFunnerRepository = $this->getDoctrine()->getRepository('OroCRMSalesBundle:SalesFunnel');
+
         return array_merge(
-            [
-                'quarterDate' =>  new \DateTime(
-                    $currentDate->format('Y') . '-01-' . ((ceil($currentDate->format('n') / 3) - 1) * 3 + 1),
-                    new \DateTimeZone('UTC')
-                )
-            ],
-            $this->getDoctrine()
-                ->getRepository('OroCRMSalesBundle:Opportunity')
-                ->getFunnelChartData(
-                    [
-                        'qualify',
-                        'develop'
-                    ],
-                    [
-                        'lost' => 'budgetAmount',
-                        'won' => 'closeRevenue'
-                    ],
-                    $this->get('oro_security.acl_helper')
-                ),
+            array('quarterDate' => $dateFrom),
+            $salesFunnerRepository->getFunnelChartData(
+                $dateFrom,
+                $dateTo,
+                $workflow,
+                $customStepCalculations,
+                $this->get('oro_security.acl_helper')
+            ),
             $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
         );
     }

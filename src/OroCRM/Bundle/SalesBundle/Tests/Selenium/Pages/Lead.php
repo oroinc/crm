@@ -104,7 +104,7 @@ class Lead extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$contact}')]",
-            "Assigned to autocoplete doesn't return search value"
+            "Assigned to autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$contact}')]")->click();
     }
@@ -194,7 +194,7 @@ class Lead extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$owner}')]",
-            "Owner autocoplete doesn't return search value"
+            "Owner autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$owner}')]")->click();
 
@@ -270,7 +270,7 @@ class Lead extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[normalize-space(.) = '{$value}']",
-            "Country's autocoplete doesn't return search value"
+            "Country's autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[normalize-space(.) = '{$value}']")->click();
         $this->waitForAjax();
@@ -297,7 +297,7 @@ class Lead extends AbstractPageEntity
             $this->waitForAjax();
             $this->assertElementPresent(
                 "//div[@id='select2-drop']//div[normalize-space(.) = '{$value}']",
-                "Country's autocoplete doesn't return search value"
+                "Country's autocomplete doesn't return search value"
             );
             $this->test->byXpath("//div[@id='select2-drop']//div[normalize-space(.) = '{$value}']")->click();
         }
@@ -340,7 +340,7 @@ class Lead extends AbstractPageEntity
 
     public function edit()
     {
-        $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit lead']")->click();
+        $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Lead']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $this->init();

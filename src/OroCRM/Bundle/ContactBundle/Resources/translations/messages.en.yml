@@ -2,7 +2,7 @@ oro.importexport.import.orocrm_contact.add_or_replace: Add and Replace
 orocrm:
     dashboard:
         my_contacts_activity:
-            title: Last Actions With Contacts
+            title: Recently accessed contacts
             view_all: View all
 
     contact:
@@ -21,7 +21,6 @@ orocrm:
         # DataGrid
         #
         datagrid:
-            selected_rows: Selected Rows
             view: View
             update: Update
             delete: Delete
@@ -33,6 +32,10 @@ orocrm:
         entity_label:        Contact
         entity_plural_label: Contacts
         entity_description:  Represent contact
+
+        import: Import Contacts
+
+        add_entity:        Add contact
         id.label:          Id
         phones.label:      Phones
         email.label:       Email
@@ -148,3 +151,8 @@ orocrm:
             entity_description:  Represent contact's source
             label.label:  Label
             name.label:   Name
+        widgets:
+            account_contacts: Contacts
+
+        account:
+            no_contacts_exist: No contacts exist

@@ -18,8 +18,8 @@
 {% block content_data %}
     {% set id = 'call-log' %}
     {% set title = form.vars.value.id
-        ? 'Edit'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower
-        : 'Log'|trans ~ ' ' ~ 'orocrm.call.entity_label'|trans|lower
+        ? 'oro.ui.edit_entity'|trans({'%entityName%': 'orocrm.call.entity_label'|trans})
+        : 'orocrm.call.log_call'|trans
     %}
 
     {% set formFields = [] %}
@@ -71,12 +71,13 @@
     {{ parent() }}
 {% endblock content_data %}
 
-{% block navButtons %}    
+{% block navButtons %}
     {{ UI.cancelButton(path('orocrm_call_index')) }}
+    {% set html = UI.saveAndCloseButton() %}
     {% if form.vars.value.id or resource_granted('orocrm_call_update') %}
-        {{ UI.saveAndStayButton() }}
+        {% set html = html ~ UI.saveAndStayButton() %}
     {% endif %}
-    {{ UI.saveAndCloseButton() }}
+    {{ UI.dropdownSaveButton({'html': html}) }}
 {% endblock %}
 
 {% block pageHeader %}
@@ -93,9 +94,9 @@
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_call_index'),
             'indexLabel': 'orocrm.call.entity_plural_label'|trans,
-            'entityTitle': 'Log call'|trans
+            'entityTitle': 'orocrm.call.log_call'|trans
         }
         %}
     {% endif %}
-    {{ parent() }}    
+    {{ parent() }}
 {% endblock pageHeader %}

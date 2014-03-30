@@ -8,6 +8,8 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  * Class Contacts
  *
  * @package OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages
+ * @method Contacts openContacts openContacts(string)
+ * {@inheritdoc}
  */
 class Contacts extends AbstractPageFilteredGrid
 {
@@ -19,9 +21,12 @@ class Contacts extends AbstractPageFilteredGrid
         parent::__construct($testCase, $redirect);
     }
 
+    /**
+     * @return Contact
+     */
     public function add()
     {
-        $this->test->byXPath("//a[@title='Create contact']")->click();
+        $this->test->byXPath("//a[@title='Create Contact']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $contact = new Contact($this->test);

@@ -45,6 +45,12 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      },
  *      "merge"={
  *          "enable"=true
+ *      },
+ *      "form"={
+ *          "form_type"="orocrm_account_select"
+ *      },
+ *      "dataaudit"={
+ *          "auditable"=true
  *      }
  *  }
  * )
@@ -65,7 +71,16 @@ class Account extends ExtendAccount implements Taggable
      * @ORM\Column(type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"merge"={"enable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *    "merge"={
+     *      "display"=true
+     *    },
+     *    "dataaudit"={
+     *      "auditable"=true
+     *    }
+     *   }
+     * )
      */
     protected $name;
 
@@ -74,7 +89,17 @@ class Account extends ExtendAccount implements Taggable
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Soap\ComplexType("string", nillable=true)
-     * @ConfigField(defaultValues={"merge"={"enable"=true}})
+     * @Oro\Versioned
+     * @ConfigField(
+     *  defaultValues={
+     *    "merge"={
+     *      "display"=true
+     *    },
+     *    "dataaudit"={
+     *      "auditable"=true
+     *    }
+     *  }
+     * )
      */
     protected $owner;
 
@@ -83,7 +108,7 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(defaultValues={"merge"={"enable"=true}})
+     * @ConfigField(defaultValues={"merge"={"display"=true}})
      */
     protected $shippingAddress;
 
@@ -92,8 +117,7 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(defaultValues={"merge"={"enable"=true}})
-     * @ConfigField(defaultValues={"merge"={"enable"=true}})
+     * @ConfigField(defaultValues={"merge"={"display"=true}})
      */
     protected $billingAddress;
 
@@ -104,7 +128,7 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", inversedBy="accounts")
      * @ORM\JoinTable(name="orocrm_account_to_contact")
-     * @ConfigField(defaultValues={"merge"={"enable"=true}})
+     * @ConfigField(defaultValues={"merge"={"display"=true}})
      */
     protected $contacts;
 
@@ -115,7 +139,7 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="default_contact_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(defaultValues={"merge"={"enable"=true}})
+     * @ConfigField(defaultValues={"merge"={"display"=true}})
      */
     protected $defaultContact;
 
@@ -137,7 +161,7 @@ class Account extends ExtendAccount implements Taggable
 
     /**
      * @var ArrayCollection $tags
-     * @ConfigField(defaultValues={"merge"={"enable"=true}})
+     * @ConfigField(defaultValues={"merge"={"display"=true}})
      */
     protected $tags;
 

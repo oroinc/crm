@@ -1,16 +1,18 @@
 parameters:
     # transport
-    orocrm_magento.transport.soap_transport.class:                        OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport
+    orocrm_magento.transport.soap_transport.class:                          OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport
 
     # providers
-    orocrm_magento.provider.channel_type.class:                           OroCRM\Bundle\MagentoBundle\Provider\ChannelType
+    orocrm_magento.provider.channel_type.class:                             OroCRM\Bundle\MagentoBundle\Provider\ChannelType
+    orocrm_magento.provider.cart_expiration_processor.class:                OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor
 
     # forms
-    orocrm_magento.form.type.soap_transport_setting.class:                OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
-    orocrm_magento.form.subscriber.soap_transport_setting.class:          OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
+    orocrm_magento.form.type.soap_transport_setting.class:                  OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
+    orocrm_magento.form.subscriber.soap_transport_setting.class:            OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
 
     # event listeners
-    orocrm_magento.event_listener.navigation.class:                       OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener
+    orocrm_magento.event_listener.navigation.class:                         OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener
+    orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
 
 services:
     orocrm_magento.transport.soap_transport:
@@ -25,6 +27,12 @@ services:
         class: %orocrm_magento.provider.channel_type.class%
         tags:
             - { name: oro_integration.channel, type: magento }
+
+    orocrm_magento.provider.cart_expiration_processor:
+        class: %orocrm_magento.provider.cart_expiration_processor.class%
+        arguments:
+            - @oro_integration.manager.types_registry.link
+            - @doctrine.orm.entity_manager
 
     # forms
     orocrm_magento.form.subscriber.soap_transport_setting:
@@ -57,9 +65,27 @@ services:
             - @oro_datagrid.datagrid.request_params
             - false
         tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-customers-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-cart-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-order-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customers-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-cart-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-order-grid, method: onBuildAfter }
+
+    orocrm_magento.event_listener.account_orders_grid_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'accountId'
+            - @oro_datagrid.datagrid.request_params
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-account-order-grid, method: onBuildAfter }
+
+    orocrm_magento.event_listener.customer_order_grid_listener:
+        class: %orocrm.magento.event_listener.account_widgets_data_grid_listener.class%
+        arguments:
+            - @oro_datagrid.datagrid.request_params
+            - ['customerId', 'channelId']
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-order-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-cart-grid, method: onBuildAfter }
 
     orocrm_magento.event_listener.cart_items_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
@@ -68,5 +94,5 @@ services:
             - @oro_datagrid.datagrid.request_params
             - false
         tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-cartitem-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.magento-orderitem-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-cartitem-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-orderitem-grid, method: onBuildAfter }

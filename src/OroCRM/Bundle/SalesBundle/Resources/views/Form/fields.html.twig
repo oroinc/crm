@@ -1,0 +1,79 @@
+{% block orocrm_sales_opportunity_widget %}
+    <div class="row-fluid">
+        <fieldset class="form-horizontal">
+            <div class="responsive-block">
+                {% if form.owner is defined %}
+                    {{ form_row(form.owner) }}
+                {% endif %}
+                {{ form_row(form.name) }}
+                {{ form_row(form.contact) }}
+                {{ form_row(form.account) }}
+                {{ form_row(form.probability) }}
+                {{ form_row(form.budgetAmount) }}
+                {{ form_row(form.customerNeed) }}
+                {{ form_row(form.proposedSolution) }}
+                {{ form_row(form.closeReason) }}
+                {{ form_row(form.closeRevenue) }}
+                {{ form_row(form.closeDate) }}
+                {{ form_row(form.notes) }}
+
+                {% if form.additional is defined and form.additional.children|length > 0 %}
+                    <h5 class="user-fiedset">
+                        <span>{{ 'Additional'|trans }}</span>
+                    </h5>
+
+                    {% for value in form.additional %}
+                        {{ form_row(value) }}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </fieldset>
+    </div>
+{% endblock orocrm_sales_opportunity_widget %}
+
+{% block orocrm_sales_lead_widget %}
+    <div class="row-fluid row-fluid-divider">
+        <fieldset class="form-horizontal">
+            <div class="responsive-block">
+                <h5 class="user-fiedset">
+                    <span>{{ 'orocrm.sales.lead.details.label'|trans }}</span>
+                </h5>
+                {% if form.owner is defined %}
+                    {{ form_row(form.owner) }}
+                {% endif %}
+                {{ form_row(form.name) }}
+                {{ form_row(form.namePrefix) }}
+                {{ form_row(form.firstName) }}
+                {{ form_row(form.middleName) }}
+                {{ form_row(form.lastName) }}
+                {{ form_row(form.nameSuffix) }}
+                {{ form_row(form.contact) }}
+                {{ form_row(form.jobTitle) }}
+                {{ form_row(form.phoneNumber) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.account) }}
+                {{ form_row(form.companyName) }}
+                {{ form_row(form.website) }}
+                {{ form_row(form.numberOfEmployees) }}
+                {{ form_row(form.industry) }}
+                {{ form_row(form.extend_source) }}
+                {{ form_row(form.notes) }}
+
+                {% if form.additional is defined and form.additional.children|length > 0 %}
+                    <h5 class="user-fiedset">
+                        <span>{{ 'Additional'|trans }}</span>
+                    </h5>
+                    {% for value in form.additional %}
+                        {{ form_row(value) }}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="responsive-cell">
+                <h5 class="user-fiedset">
+                    <span>{{ 'orocrm.sales.lead.address.label'|trans }}</span>
+                </h5>
+                {{ form_widget(form.address) }}
+            </div>
+        </fieldset>
+    </div>
+{% endblock orocrm_sales_lead_widget %}

@@ -1,0 +1,114 @@
+{% extends 'OroDashboardBundle:Dashboard:chartWidget.html.twig' %}
+
+{% block content %}
+
+{% set hasData = false %}
+{% for status in items.data %}
+    {% if status[1] and status[1] > 0 %}
+        {% set hasData = true %}
+    {% endif %}
+{% endfor %}
+
+{% if hasData %}
+    <div class="chart-container">
+        <div class="clearfix">
+            <div id="{{ widgetId }}-chart" class="bar-chart chart pull-left"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        require(['jquery', 'oroui/js/layout', 'flotr2', 'orolocale/js/formatter/number'],
+            function($, layout, Flotr, numberFormatter){
+                $(function () {
+                    var $widgetContent = $('#{{ widgetContentId }}');
+                    var $chart = $('#{{ widgetId }}-chart');
+                    var setChartSize = function () {
+                        var chartWidth = Math.round($widgetContent.width() * 0.9);
+                        if (chartWidth != $chart.width()) {
+                            $chart.width(chartWidth);
+                            $chart.height(Math.min(Math.round(chartWidth * 0.4), 350));
+                            return true;
+                        }
+                        return false;
+                    };
+                    var setChartContainerSize = function () {
+                        $chart.closest('.clearfix').width($chart.width());
+                    };
+                    var drawChart = function () {
+                        if (!$chart.get(0).clientWidth) {
+                            return;
+                        }
+                        var xLabels = {{ items.labels|json_encode|raw }};
+                        var colors = {{ chartColors|json_encode|raw }};
+
+                        var chart = {
+                            data: {{ items.data|json_encode|raw }},
+                            color: colors[0],
+                            markers: {
+                                show: true,
+                                position: 'ct',
+                                labelFormatter: function (data) {
+                                    return numberFormatter.formatCurrency(data.y);
+                                }
+                            }
+                        };
+                        Flotr.draw(
+                            $chart.get(0),
+                            [chart],
+                            {
+                                colors: {{ chartColors|json_encode|raw }},
+                                fontColor: {{ chartFontColor|json_encode|raw }},
+                                fontSize: {{ chartFontSize|json_encode|raw }},
+                                bars : {
+                                    show : true,
+                                    horizontal : false,
+                                    shadowSize : 0,
+                                    barWidth : 0.5
+                                },
+                                mouse : {
+                                    track : true,
+                                    relative : true,
+                                    trackFormatter: function (data) {
+                                        return xLabels[parseInt(data.x)] + ': ' + numberFormatter.formatCurrency(data.y);
+                                    }
+                                },
+                                yaxis: {
+                                    min: 0,
+                                    tickFormatter: function (y) {
+                                        return numberFormatter.formatCurrency(y);
+                                    }
+                                },
+                                xaxis: {
+                                    noTicks: 2,
+                                    tickFormatter: function (x) {
+                                        return xLabels[parseInt(x)];
+                                    }
+                                },
+                                grid: {
+                                    verticalLines : false
+                                }
+                            }
+                        );
+                    };
+
+                    layout.onPageRendered(function () {
+                        setChartSize();
+                        drawChart();
+                        setChartContainerSize();
+                    });
+
+                    $(window).resize(function () {
+                        if (setChartSize()) {
+                            drawChart();
+                            setChartContainerSize();
+                        }
+                    });
+                });
+            });
+    </script>
+{% else %}
+    <div class="clearfix no-data">
+        <span>{{ 'oro.dashboard.no_data_found'|trans }}</span>
+    </div>
+{% endif %}
+
+{% endblock %}

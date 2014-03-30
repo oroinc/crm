@@ -1,0 +1,52 @@
+workflows:
+    b2b_flow_sales_funnel:
+        attributes:
+            sales_funnel_start_date:
+                property_path: sales_funnel.startDate
+            sales_funnel_owner:
+                property_path: sales_funnel.owner
+            lead:
+                property_path: sales_funnel.lead
+            lead_notes:
+                property_path: sales_funnel.lead.notes
+            new_notes:
+                label: orocrm.sales.lead.notes.label
+                type: string
+            new_opportunity_name:
+                label: orocrm.sales.opportunity.name.label
+                type: string
+            new_account:
+                label:  orocrm.account.entity_label
+                type: entity
+                options:
+                    class: OroCRM\Bundle\AccountBundle\Entity\Account
+            new_company_name:
+                label: orocrm.sales.lead.company_name.label
+                type: string
+            opportunity:
+                property_path: sales_funnel.opportunity
+            opportunity_name:
+                property_path: sales_funnel.opportunity.name
+            opportunity_notes:
+                property_path: sales_funnel.opportunity.notes
+            contact:
+                property_path: sales_funnel.opportunity.contact
+            account:
+                property_path: sales_funnel.opportunity.account
+            probability:
+                property_path: sales_funnel.opportunity.probability
+            budget_amount:
+                property_path: sales_funnel.opportunity.budgetAmount
+            customer_need:
+                property_path: sales_funnel.opportunity.customerNeed
+            proposed_solution:
+                property_path: sales_funnel.opportunity.proposedSolution
+            close_reason_name: # temporary attribute to find close reason by its name
+                label: orocrm.sales.opportunity.close_reason.label
+                type: string
+            close_reason:
+                property_path: sales_funnel.opportunity.closeReason
+            close_revenue:
+                property_path: sales_funnel.opportunity.closeRevenue
+            close_date:
+                property_path: sales_funnel.opportunity.closeDate

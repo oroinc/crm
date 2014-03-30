@@ -41,7 +41,7 @@ class SoapConnectorsFormSubscriber implements EventSubscriberInterface
      */
     public function preSet(FormEvent $event)
     {
-        $this->closure($event->getData(), $event->getForm()->getParent());
+        $this->modify($event->getData(), $event->getForm()->getParent());
     }
 
     /**
@@ -53,14 +53,14 @@ class SoapConnectorsFormSubscriber implements EventSubscriberInterface
      */
     public function preSubmit(FormEvent $event)
     {
-        $this->closure($event->getData(), $event->getForm()->getParent());
+        $this->modify($event->getData(), $event->getForm()->getParent());
     }
 
     /**
      * @param array         $data
      * @param FormInterface $form
      */
-    protected function closure($data, FormInterface $form)
+    protected function modify($data, FormInterface $form)
     {
         if ($form->getParent()
             && $form->getParent()->getConfig()->getType()->getInnerType() instanceof ChannelType

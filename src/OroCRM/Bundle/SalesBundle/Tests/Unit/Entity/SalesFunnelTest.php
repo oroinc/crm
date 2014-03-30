@@ -37,7 +37,6 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         return array(
-            'name' => array('name', 'test', 'test'),
             'startDate' => array('startDate', $now, $now),
             'lead' => array('lead', $lead, $lead),
             'opportunity' => array('opportunity', $opportunity, $opportunity),

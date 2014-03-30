@@ -1,0 +1,152 @@
+workflows:
+    b2c_flow_abandoned_shopping_cart:
+        transition_definitions:
+            log_call_definition:
+                pre_conditions:
+                    @equal: [$cart.status.name, 'open']
+                conditions:
+                    @and:
+                        - @not_empty:
+                            parameters: $phone_number
+                            message: 'Phone number must be set'
+                        - @not_empty:
+                            parameters: $call_subject
+                            message: 'Call subject must be set'
+                        - @not_empty:
+                            parameters: $call_date
+                            message: 'Call date must be set'
+                        - @not_empty:
+                            parameters: $call_direction
+                            message: 'Call direction must be chosen'
+                post_actions:
+                    - @find_entity: # Set call status to in_progress
+                        class: OroCRM\Bundle\CallBundle\Entity\CallStatus
+                        identifier: 'in_progress'
+                        attribute: $call_status
+                    - @create_entity: # create Call
+                        class: OroCRM\Bundle\CallBundle\Entity\Call
+                        attribute: $call
+                        data:
+                            relatedContact: $contact
+                            relatedAccount: $account
+                            subject: $call_subject
+                            phoneNumber: $phone_number
+                            notes: $notes
+                            callDateTime: $call_date
+                            callStatus: $call_status
+                            duration: $call_duration
+                            direction: $call_direction
+                    - @call_method:
+                        method: 'addRelatedCall'
+                        object: $cart
+                        method_parameters: [$call]
+
+            send_email_definition:
+                pre_conditions:
+                    @equal: [$cart.status.name, 'open']
+                conditions:
+                    @and:
+                        - @not_empty:
+                            parameters: $email_from
+                            message: 'Email sender must be set'
+                        - @not_empty:
+                            parameters: $email_to
+                            message: 'Email recipient must be set'
+                        - @not_empty:
+                            parameters: $email_subject
+                            message: 'Email subject must be set'
+                        - @not_empty:
+                            parameters: $email_body
+                            message: 'Email content must be chosen'
+                post_actions:
+                     - @send_email: # Send email
+                         attribute: $email
+                         from: $email_from
+                         to: $email_to
+                         subject: $email_subject
+                         body: $email_body
+                     - @call_method:
+                         method: 'addRelatedEmail'
+                         object: $cart
+                         method_parameters: [$email]
+
+            convert_definition:
+                pre_conditions:
+                    @equal: [$cart.status.name, 'open']
+                post_actions:
+                    - @find_entity: # Set cart status to converted
+                        class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
+                        identifier: 'converted'
+                        attribute: $cart.status
+
+            convert_to_opportunity_definition:
+                pre_conditions:
+                    @equal: [$cart.status.name, 'open']
+                conditions:
+                    @and:
+                        - @not_empty:
+                            parameters: $opportunity_name
+                            message: 'Opportunity name must be set'
+                        - @not_empty:
+                            parameters: $opportunity_owner
+                            message: 'Owner must be set'
+                        - @not_empty:
+                            parameters: $account
+                            message: 'Account must be set'
+                post_actions:
+                    - @find_entity: # Set cart status to converted_to_opportunity
+                        class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
+                        identifier: 'converted_to_opportunity'
+                        attribute: $cart.status
+                    - @find_entity:
+                        class:       OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier:  'in_progress'
+                        attribute:   $.result.opportunity_status
+                    - @create_entity: # create an opportunity
+                        class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                        attribute: $cart.opportunity
+                        data:
+                            name: $opportunity_name
+                            owner: $opportunity_owner
+                            budgetAmount: $opportunity_budget
+                            contact: $cart.customer.contact
+                            account: $account
+                            status: $.result.opportunity_status
+                            notes: $notes
+
+            abandon_definition:
+                pre_conditions:
+                    @equal: [$cart.status.name, 'open']
+                post_actions:
+                    - @find_entity: # Set cart status to lost
+                        class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
+                        identifier: 'lost'
+                        attribute: $cart.status
+
+            reopen_definition:
+                conditions:
+                    @or:
+                        - @equal: [$cart.status.name, 'converted']
+                        - @equal: [$cart.status.name, 'converted_to_opportunity']
+                        - @equal: [$cart.status.name, 'lost']
+                post_actions:
+                    - @assign_value: # Reset latest opportunity, call and email data
+                        - [$cart.opportunity, ~]
+                        - [$opportunity_name, ~]
+                        - [$opportunity_owner, ~]
+                        - [$opportunity_budget, ~]
+
+                        - [$call, ~]
+                        - [$call_subject, ~]
+                        - [$call_date, ~]
+                        - [$call_direction, ~]
+                        - [$call_status, ~]
+                        - [$call_duration, ~]
+
+                        - [$email, ~]
+                        - [$email_subject, ~]
+                        - [$email_body, ~]
+                    - @find_entity: # Set cart status to open
+                        class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
+                        identifier: 'open'
+                        attribute: $cart.status

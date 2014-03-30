@@ -1,0 +1,60 @@
+<?php
+
+namespace OroCRM\Bundle\MagentoBundle\Entity;
+
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+
+/**
+ * Class NamesAwareTrait
+ *
+ * @package OroCRM\Bundle\MagentoBundle\Entity
+ *
+ * Denormalized data to process billing address person names for guest carts/orders
+ * Or customer first/last name for logged in customer's cart
+ * Only for internal use on grid
+ */
+trait NamesAwareTrait
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
+     */
+    protected $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
+     */
+    protected $lastName;
+
+    /**
+     * Update denormalized names baased on current cart state
+     * See docblock for firstName property
+     */
+    protected function updateNames()
+    {
+        $firstName = $lastName = null;
+        if (null !== $this->getCustomer()) {
+            $firstName = $this->getCustomer()->getFirstName();
+            $lastName  = $this->getCustomer()->getLastName();
+        } elseif (null !== $this->getBillingAddress()) {
+            $firstName = $this->getBillingAddress()->getFirstName();
+            $lastName  = $this->getBillingAddress()->getLastName();
+        }
+
+        $this->firstName = $firstName;
+        $this->lastName  = $lastName;
+    }
+
+    /**
+     * @return Customer
+     */
+    abstract public function getCustomer();
+
+    /**
+     * @return AbstractAddress
+     */
+    abstract public function getBillingAddress();
+}

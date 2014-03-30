@@ -54,7 +54,7 @@ class Account extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$owner}')]",
-            "Owner autocoplete doesn't return search value"
+            "Owner autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$owner}')]")->click();
 
@@ -76,7 +76,7 @@ class Account extends AbstractPageEntity
             $this->waitForAjax();
             $this->assertElementPresent(
                 "//div[@id='select2-drop']//div[contains(., '{$tag}')]",
-                "Tag's autocoplete doesn't return entity"
+                "Tag's autocomplete doesn't return entity"
             );
             $tags->clear();
         } else {
@@ -106,7 +106,7 @@ class Account extends AbstractPageEntity
             $this->waitForAjax();
             $this->assertElementPresent(
                 "//div[@id='select2-drop']//div[contains(., '{$tag}')]",
-                "Tag's autocoplete doesn't return entity"
+                "Tag's autocomplete doesn't return entity"
             );
             $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$tag}')]")->click();
 
@@ -153,7 +153,7 @@ class Account extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$country}')]",
-            "Country's autocoplete doesn't return search value"
+            "Country's autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$country}')]")->click();
         $this->waitForAjax();
@@ -175,7 +175,7 @@ class Account extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$state}')]",
-            "Country's autocoplete doesn't return search value"
+            "Country's autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$state}')]")->click();
 
@@ -196,7 +196,7 @@ class Account extends AbstractPageEntity
 
     public function edit()
     {
-        $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit account']")->click();
+        $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Account']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $this->init();

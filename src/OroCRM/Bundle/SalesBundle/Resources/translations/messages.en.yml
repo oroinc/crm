@@ -21,7 +21,7 @@ orocrm:
         controller:
             lead.saved.message: "Lead saved"
             opportunity.saved.message: "Opportunity saved"
-            sales_funnel.saved.message: "Sales activity saved"
+            sales_funnel.saved.message: "Sales process saved"
 
         form:
             choose_opportunity: 'Choose an opportunity....'
@@ -52,6 +52,7 @@ orocrm:
             entity_label:         Opportunity
             entity_plural_label:  Opportunities
             entity_description:   Represent opportunity
+            add_entity:           Add opportunity
             id.label:             Id
             name.label:           Opportunity name
             close_date.label:     Close date
@@ -93,6 +94,7 @@ orocrm:
             entity_label:         Lead
             entity_plural_label:  Leads
             entity_description:   Represent lead
+            add_entity:           Add lead
             id.label:             Id
             name.label:           Lead name
             name_prefix.label:    Name prefix
@@ -107,18 +109,25 @@ orocrm:
             website.label:        Website
             number_of_employees.label: Number of employees
             industry.label:       Industry
-            created_at.label:     Created
+            created_at.label:     Created At
             updated_at.label:     Updated
             status.label:         Status
             contact.label:        Contact
             account.label:        Account
             owner.label:          Owner
             address.label:        Address
+            details.label:        Lead Details
             extend_source.label:  Source
             notes.label:          Notes
             opportunities.label:  Opportunities
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
+            information:          Lead Information
+
+            extend_source:
+                unclassified:     Unclassified
+                others:           Others
+                none:             None
 
             datagrid:
                 country: Country
@@ -129,13 +138,12 @@ orocrm:
                 delete: Delete
 
         salesfunnel:
-            entity_label:         Sales Activity
-            entity_plural_label:  Sales Activity
-            new_entity_label:     New Sales Activity
-            id.label:             Id
+            entity_label:         Sales Process
+            entity_plural_label:  Sales Processes
+            new_entity:           New Sales Process
+            id.label:             'Sales #'
             created_at.label:     Created
             updated_at.label:     Updated
-            name.label:           Name
             start_date.label:     Start Date
             lead.label:           Lead
             opportunity.label:    Opportunity
@@ -143,7 +151,12 @@ orocrm:
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
 
+            hint: 'Sales Process #%id%'
+
             datagrid:
                 view:   View
                 update: Update
                 delete: Delete
+        widgets:
+            leads:         Leads
+            opportunities: Opportunities

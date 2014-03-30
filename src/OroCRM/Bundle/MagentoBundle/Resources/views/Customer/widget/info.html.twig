@@ -4,13 +4,13 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ ui.renderProperty('orocrm.magento.customer.email.label'|trans, email.email_address_simple(entity.email)) }}
+            {{ ui.renderHtmlProperty('orocrm.magento.customer.email.label'|trans, email.email_address_simple(entity.email)) }}
             {% if entity.group %}
                 {{ ui.renderProperty('orocrm.magento.customer.group.label'|trans, entity.group.name) }}
             {% endif %}
 
             {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.website.name) }}
-            {{ ui.renderProperty('orocrm.magento.customer.store.label'|trans, entity.store.name|nl2br) }}
+            {{ ui.renderHtmlProperty('orocrm.magento.customer.store.label'|trans, entity.store.name|escape|nl2br) }}
         </div>
 
         <div class="responsive-block">
@@ -18,9 +18,9 @@
                 {% if entity.account %}
                     {% set accountViewGranted = resource_granted('orocrm_account_view') %}
                     {%- if accountViewGranted -%}
-                        <a href="{{ path('orocrm_account_view', {'id': entity.account.id}) }}">{{ entity.account }}</a>
+                        <a href="{{ path('orocrm_account_view', {'id': entity.account.id}) }}">{{ entity.account|escape }}</a>
                     {%- else -%}
-                        {{ entity.account }}
+                        {{ entity.account|escape }}
                     {%- endif -%}
                 {% endif %}
             {%- endset -%}
@@ -29,24 +29,22 @@
                 {% if entity.contact %}
                     {% set contactViewGranted = resource_granted('orocrm_contact_view') %}
                     {%- if contactViewGranted -%}
-                        <a href="{{ path('orocrm_contact_view', {'id': entity.contact.id}) }}">{{ entity.contact }}</a>
+                        <a href="{{ path('orocrm_contact_view', {'id': entity.contact.id}) }}">{{ entity.contact|oro_format_name|escape }}</a>
                     {%- else -%}
-                        {{ entity.contact }}
+                        {{ entity.contact|oro_format_name|escape }}
                     {%- endif -%}
                 {%- endif -%}
             {%- endset -%}
 
             {%- set birthdayData -%}
                 {{ entity.birthday is not empty ? entity.birthday|oro_format_date : null }}
-                {%- if entity.birthday is not empty -%}
-                    &nbsp;({{ entity.birthday|age_string({'default': 'N/A'}) }})
-                {%- endif -%}
+                {% if entity.birthday is not empty %} ({{ entity.birthday|age_string({'default': 'N/A'}) }}){% endif %}
             {%- endset -%}
 
-            {{ ui.renderProperty('orocrm.magento.customer.account.label'|trans, accountData) }}
-            {{ ui.renderProperty('orocrm.magento.customer.contact.label'|trans, contactData) }}
+            {{ ui.renderHtmlProperty('orocrm.magento.customer.account.label'|trans, accountData) }}
+            {{ ui.renderHtmlProperty('orocrm.magento.customer.contact.label'|trans, contactData) }}
 
-            {{ ui.renderProperty('orocrm.magento.customer.birthday.label'|trans, birthdayData) }}
+            {{ ui.renderProperty('orocrm.magento.customer.birthday.label'|trans, entity.birthday ? birthdayData : null) }}
             {{ ui.renderProperty('orocrm.magento.customer.gender.label'|trans, oro_gender(entity.gender)) }}
             {{ ui.renderProperty('orocrm.magento.customer.vat.label'|trans, entity.vat) }}
 

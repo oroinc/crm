@@ -108,38 +108,14 @@ class ControllersTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_account_contact_select', array('_widgetContainer' => 'dialog'))
-        );
-        //just verify method OK
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_account_contact_select', array('id' => $id, '_widgetContainer' => 'dialog'))
-        );
-        //just verify method OK
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-    }
-
-    /**
-     * @depends testUpdate
-     */
-    public function testContactViewGrid($id)
-    {
-        $result = ToolsAPI::getEntityGrid(
-            $this->client,
-            'account-contacts-view-grid',
-            array(
-                'account-contacts-view-grid[account]' => $id
+            $this->client->generate(
+                'orocrm_account_widget_contacts_info',
+                array('id' => $id, '_widgetContainer' => 'dialog')
             )
         );
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $this->assertEmpty($result['data']);
-        $this->assertEquals(0, $result['options']['totalRecords']);
+        //just verify method OK
+        $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
     }
 
     /**

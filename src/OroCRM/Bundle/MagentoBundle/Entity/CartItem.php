@@ -3,7 +3,9 @@
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCartItem;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * Class CartItem
@@ -14,6 +16,15 @@ use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCartItem;
  *      @ORM\Index(name="magecartitem_origin_idx", columns={"origin_id"}),
  *      @ORM\Index(name="magecartitem_sku_idx", columns={"sku"}),*
  * })
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"icon"="icon-shopping-cart"},
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
+ *  }
+ * )
  */
 class CartItem extends BaseCartItem
 {
@@ -77,30 +88,30 @@ class CartItem extends BaseCartItem
     protected $isVirtual;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="custom_price", type="float", nullable=true)
+     * @ORM\Column(name="custom_price", type="money", nullable=true)
      */
     protected $customPrice;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="price_incl_tax", type="float", nullable=true)
+     * @ORM\Column(name="price_incl_tax", type="money", nullable=true)
      */
     protected $priceInclTax;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="row_total", type="float")
+     * @ORM\Column(name="row_total", type="money")
      */
     protected $rowTotal;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="tax_amount", type="float")
+     * @ORM\Column(name="tax_amount", type="money")
      */
     protected $taxAmount;
 

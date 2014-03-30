@@ -37,6 +37,6 @@ Use as dependency in composer
 
 ```yaml
     "require": {
-        "oro/crm": "dev-master",
+        "oro/crm": "1.0.*",
     }
 ```

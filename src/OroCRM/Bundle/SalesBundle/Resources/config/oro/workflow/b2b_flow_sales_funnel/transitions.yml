@@ -1,0 +1,246 @@
+workflows:
+    b2b_flow_sales_funnel:
+        transitions:
+            start_from_lead:
+                label: 'Start from Lead'
+                step_to: new_lead
+                is_start: true
+                is_unavailable_hidden: true
+                acl_resource: orocrm_sales_salesfunnel_create
+                display_type: page
+                frontend_options:
+                    icon: 'icon-phone'
+                    class: 'btn-success'
+                    page:
+                        parent_route: 'orocrm_sales_salesfunnel_index'
+                        parent_label: orocrm.sales.salesfunnel.entity_plural_label
+                        title: orocrm.sales.salesfunnel.new_entity
+                form_options:
+                    attribute_fields:
+                        sales_funnel_owner:
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        sales_funnel_start_date:
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        lead:
+                            form_type: orocrm_sales_lead_create_select
+                            options:
+                                required: true
+                                grid_name: 'sales-funnel-lead-grid'
+                                constraints:
+                                    - NotBlank:
+                                        message: 'Lead must be set'
+                    init_actions:
+                        - @create_date:
+                            attribute: $sales_funnel_start_date
+                        - @assign_active_user:
+                            attribute: $sales_funnel_owner
+                        - @create_object:
+                            class: OroCRM\Bundle\SalesBundle\Entity\Lead
+                            attribute: $lead
+                            data:
+                                owner: $sales_funnel_owner
+                transition_definition: start_definition
+            start_from_opportunity:
+                label: 'Start from Opportunity'
+                step_to: new_opportunity
+                is_start: true
+                is_unavailable_hidden: true
+                acl_resource: orocrm_sales_salesfunnel_create
+                display_type: page
+                frontend_options:
+                    icon: 'icon-dollar'
+                    class: 'btn-success'
+                    page:
+                        parent_route: 'orocrm_sales_salesfunnel_index'
+                        parent_label: orocrm.sales.salesfunnel.entity_plural_label
+                        title: orocrm.sales.salesfunnel.new_entity
+                form_options:
+                    attribute_fields:
+                        sales_funnel_owner:
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        sales_funnel_start_date:
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        opportunity:
+                            form_type: orocrm_sales_opportunity_create_select
+                            options:
+                                required: true
+                                grid_name: 'sales-funnel-opportunity-grid'
+                                constraints:
+                                    - NotBlank:
+                                        message: 'Opportunity must be set'
+                    init_actions:
+                        - @create_date:
+                            attribute: $sales_funnel_start_date
+                        - @assign_active_user:
+                            attribute: $sales_funnel_owner
+                        - @create_object:
+                            class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                            attribute: $opportunity
+                            data:
+                                owner: $sales_funnel_owner
+                transition_definition: start_definition
+            disqualify:
+                label: 'Disqualify'
+                step_to: disqualified_lead
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-remove'
+                transition_definition: disqualify_definition
+            follow_up:
+                label: 'Follow up'
+                step_to: disqualified_lead
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-comment'
+                form_options:
+                    attribute_fields:
+                        lead_notes: ~
+                transition_definition: follow_up_definition
+            reactivate:
+                label: 'Reactivate'
+                step_to: new_lead
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-repeat'
+                transition_definition: reactivate_definition
+            qualify:
+                label: 'Qualify'
+                step_to: new_opportunity
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-ok'
+                    class: 'btn-primary'
+                form_options:
+                    attribute_fields:
+                        new_opportunity_name:
+                            options:
+                                required: true
+                                constraints:
+                                  - NotBlank: ~
+                        new_account: ~
+                        new_company_name: ~
+                        new_notes:
+                            form_type: textarea
+                    attribute_default_values:
+                        new_opportunity_name: $lead.name
+                        new_account: $lead.account
+                        new_company_name: $lead.companyName
+                        new_notes: $lead.notes
+                    init_actions:
+                        - @find_entity: # try to find account by company name
+                            conditions:
+                                @and: # if account is empty and company name is specified
+                                    - @empty: $new_account
+                                    - @not_empty: $new_company_name
+                            parameters:
+                                class: OroCRM\Bundle\AccountBundle\Entity\Account
+                                attribute: $new_account
+                                where:
+                                    name: $new_company_name
+                                case_insensitive: true
+                transition_definition: qualify_definition
+            develop:
+                label: 'Develop'
+                step_to: developed_opportunity
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-play'
+                    class: 'btn-primary'
+                transition_definition: develop_definition
+                form_options:
+                    attribute_fields:
+                        contact: ~
+                        account:
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        budget_amount: ~
+                        probability: ~
+                        customer_need: ~
+                        proposed_solution: ~
+            close_as_won:
+                label: 'Close as Won'
+                step_to: won_opportunity
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-ok-circle'
+                    class: 'btn-success'
+                transition_definition: close_as_won_definition
+                form_options:
+                    attribute_fields:
+                        close_revenue:
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        close_date:
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                    init_actions:
+                        - @create_date:
+                            conditions:
+                                @empty: $close_date
+                            parameters:
+                                attribute: $close_date
+            close_as_lost:
+                label: 'Close as Lost'
+                step_to: lost_opportunity
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-remove-circle'
+                    class: 'btn-danger'
+                transition_definition: close_as_lost_definition
+                form_options:
+                    attribute_fields:
+                        close_reason_name:
+                            form_type: choice
+                            options:
+                                required: true
+                                empty_value: false
+                                choices:
+                                    outsold: 'Outsold'
+                                    cancelled: 'Cancelled'
+                                constraints:
+                                    - NotBlank: ~
+                        close_date:
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                    init_actions:
+                        - @assign_value:
+                            conditions:
+                                @not_empty: $close_reason
+                            parameters: [$close_reason_name, $close_reason.name]
+                        - @create_date:
+                            conditions:
+                                @empty: $close_date
+                            parameters:
+                                attribute: $close_date
+            reopen:
+                label: 'Reopen'
+                message: |+
+                    This action will reset the opportunity data and will bring the Sales Activity workflow back to the New Opportunity step.
+
+                    Do you want to proceed?
+                step_to: new_opportunity
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-backward'
+                    class: 'btn-primary'
+                transition_definition: reopen_definition

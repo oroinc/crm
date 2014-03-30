@@ -11,6 +11,7 @@ datagrid:
                 select:
                     - o.id
                     - o.name
+                    - o.createdAt
                     - o.closeDate
                     - o.probability
                     - o.budgetAmount
@@ -29,6 +30,9 @@ datagrid:
         columns:
             name:
                 label: orocrm.sales.opportunity.name.label
+            createdAt:
+                label: orocrm.sales.opportunity.created_at.label
+                frontend_type: datetime
             contactName:
                 label: orocrm.sales.opportunity.contact.label
             closeDate:
@@ -62,6 +66,8 @@ datagrid:
             columns:
                 name:
                     data_name: o.name
+                createdAt:
+                    data_name: o.createdAt
                 contactName:
                     data_name: contactName
                 closeDate:
@@ -74,15 +80,19 @@ datagrid:
                     data_name: status.label
                 primaryEmail:
                     data_name: email.email
+            default:
+                createdAt: DESC
         filters:
             columns:
                 name:
                     type: string
                     data_name: o.name
+                createdAt:
+                    type: datetime
+                    data_name: o.createdAt
                 contactName:
                     type: string
                     data_name: contactName
-                    filter_by_having: true
                 closeDate:
                     type: date
                     data_name: o.closeDate
@@ -102,7 +112,6 @@ datagrid:
                 primaryEmail:
                     type: string
                     data_name: email.email
-                    filter_by_having: true
         actions:
             view:
                 type:          navigate
@@ -138,6 +147,7 @@ datagrid:
                     - l.name
                     - l.firstName
                     - l.lastName
+                    - l.createdAt
                     - l.email
                     - l.phoneNumber
                     - status.label as statusLabel
@@ -158,6 +168,8 @@ datagrid:
                         - { join: l.address, alias: address }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+            hints:
+                - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
         columns:
             name:
                 label: orocrm.sales.lead.name.label
@@ -167,6 +179,9 @@ datagrid:
                 label: orocrm.sales.lead.first_name.label
             lastName:
                 label: orocrm.sales.lead.last_name.label
+            createdAt:
+                label: orocrm.sales.lead.created_at.label
+                frontend_type: datetime
             email:
                 label: orocrm.sales.lead.email.label
             phoneNumber:
@@ -201,6 +216,8 @@ datagrid:
                     data_name: l.firstName
                 lastName:
                     data_name: l.lastName
+                createdAt:
+                    data_name: l.createdAt
                 email:
                     data_name: l.email
                 phoneNumber:
@@ -212,8 +229,7 @@ datagrid:
                 addressPostalCode:
                     data_name: addressPostalCode
             default:
-                firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
-                lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+                createdAt:  DESC
         actions:
             view:
                 type:          navigate
@@ -280,18 +296,18 @@ datagrid:
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
         options:
-            entityHint: sales activity
+            entityHint: sales process
         source:
             type: orm
             acl_resource: orocrm_sales_salesfunnel_view
             query:
                 select:
                     - salesFunnel.id
-                    - salesFunnel.name
                     - salesFunnel.startDate
                     - lead.name as leadName
                     - opportunity.name as opportunityName
                     - opportunity.budgetAmount as opportunityBudget
+                    - opportunity.closeRevenue as opportunityRevenue
                     - opportunity.probability as opportunityProbability
                     - step.label as stepLabel
                 from:
@@ -302,8 +318,8 @@ datagrid:
                         - { join: salesFunnel.lead, alias: lead }
                         - { join: salesFunnel.opportunity, alias: opportunity }
         columns:
-            name:
-                label: orocrm.sales.salesfunnel.name.label
+            id:
+                label: orocrm.sales.salesfunnel.id.label
             startDate:
                 label: orocrm.sales.salesfunnel.start_date.label
                 frontend_type: date
@@ -314,13 +330,15 @@ datagrid:
             opportunityBudget:
                 label: orocrm.sales.opportunity.budget_amount.label
                 frontend_type: currency
+            opportunityRevenue:
+                label: orocrm.sales.opportunity.close_revenue.label
+                frontend_type: currency
             opportunityProbability:
                 label: orocrm.sales.opportunity.probability.label
                 frontend_type: percent
             stepLabel:
                 label: orocrm.sales.salesfunnel.workflow_step.label
         properties:
-            id: ~
             view_link:
                 type:       url
                 route:      orocrm_sales_salesfunnel_view
@@ -335,8 +353,8 @@ datagrid:
                 params:     [ id ]
         sorters:
             columns:
-                name:
-                    data_name: salesFunnel.name
+                id:
+                    data_name: salesFunnel.id
                 startDate:
                     data_name: salesFunnel.startDate
                 leadName:
@@ -345,6 +363,8 @@ datagrid:
                     data_name: opportunity.name
                 opportunityBudget:
                     data_name: opportunity.budgetAmount
+                opportunityRevenue:
+                    data_name: opportunity.closeRevenue
                 opportunityProbability:
                     data_name: opportunity.probability
                 stepLabel:
@@ -373,9 +393,10 @@ datagrid:
                 link:          delete_link
         filters:
             columns:
-                name:
+                id:
                     type: string
-                    data_name: salesFunnel.name
+                    data_name: salesFunnel.id
+                    type: number
                 startDate:
                     type:      date
                     data_name: salesFunnel.startDate
@@ -388,6 +409,9 @@ datagrid:
                 opportunityBudget:
                     type: number
                     data_name: opportunity.budgetAmount
+                opportunityRevenue:
+                    type: number
+                    data_name: opportunity.closeRevenue
                 opportunityProbability:
                     type: percent
                     data_name: opportunity.probability
@@ -424,7 +448,6 @@ datagrid:
                               ELSE region.name
                             END, ''
                         ) as regionLabel
-                    - CONCAT(lead.name, CONCAT(lead.firstName, lead.lastName)) as searchIndex
                 from:
                     - { table: %orocrm_sales.lead.entity.class%, alias: lead }
                 join:
@@ -452,8 +475,6 @@ datagrid:
                 label: orocrm.sales.lead.datagrid.region
             addressPostalCode:
                 label: orocrm.sales.lead.datagrid.postal_code
-            searchIndex: # TODO: remove this field after complex form type implementation https://magecore.atlassian.net/browse/BAP-3146
-                label: 'Search Index'
         properties:
             id: ~
         sorters:
@@ -511,10 +532,6 @@ datagrid:
                      type: string
                      data_name: addressPostalCode
                      enabled: false
-                 searchIndex:
-                     type: string
-                     data_name: searchIndex
-                     enabled: true
 
     # opportunities with "In progress" status for Sales Funnel flow
     sales-funnel-opportunity-grid:
@@ -531,14 +548,6 @@ datagrid:
                     - opportunity.probability
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
                     - email.email as primaryEmail
-                    - >
-                        CONCAT(
-                            opportunity.name,
-                            CASE WHEN contact IS NOT NULL
-                                THEN CONCAT(contact.firstName, contact.lastName)
-                                ELSE ''
-                            END
-                        ) as searchIndex
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: opportunity }
                 join:
@@ -558,8 +567,6 @@ datagrid:
                 frontend_type: percent
             primaryEmail:
                 label: orocrm.contact.email.label
-            searchIndex: # TODO: remove this field after complex form type implementation https://magecore.atlassian.net/browse/BAP-3146
-                label: 'Search Index'
         properties:
             id: ~
         sorters:
@@ -580,14 +587,25 @@ datagrid:
                 contactName:
                     type: string
                     data_name: contactName
-                    filter_by_having: true
                 probability:
                     type: percent
                     data_name: opportunity.probability
                 primaryEmail:
                     type: string
                     data_name: email.email
-                    filter_by_having: true
-                searchIndex:
-                    type: string
-                    data_name: searchIndex
+
+    sales-account-lead-grid:
+        extends: sales-lead-grid
+        source:
+            query:
+                where:
+                      and:
+                        - l.account = :accountId
+
+    sales-account-opportunity-grid:
+        extends: sales-opportunity-grid
+        source:
+             query:
+                 where:
+                    and:
+                        - o.account = :accountId

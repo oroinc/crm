@@ -1,4 +1,5 @@
 parameters:
+    orocrm_contact_us.contactrequest.entity.class:           OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest
     orocrm_contact_us.embedded_form.class:                   OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType
     orocrm_contact_us.contact_request.form.handler.class:    OroCRM\Bundle\ContactUsBundle\Form\Handler\ContactRequestHandler
 

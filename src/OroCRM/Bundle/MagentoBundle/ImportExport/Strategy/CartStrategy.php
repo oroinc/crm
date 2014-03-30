@@ -6,7 +6,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
+use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class CartStrategy extends BaseStrategy
 {
@@ -28,6 +30,8 @@ class CartStrategy extends BaseStrategy
      */
     public function process($newEntity)
     {
+        /** @var Cart $newEntity */
+        /** @var Cart $existingEntity */
         $existingEntity = $this->getEntityByCriteria(
             ['originId' => $newEntity->getOriginId(), 'channel' => $newEntity->getChannel()],
             $newEntity
@@ -37,11 +41,30 @@ class CartStrategy extends BaseStrategy
             $this->strategyHelper->importEntity(
                 $existingEntity,
                 $newEntity,
-                ['id', 'store', 'status', 'cartItems', 'customer', 'shippingAddress', 'billingAddress']
+                [
+                    'id',
+                    'store',
+                    'status',
+                    'cartItems',
+                    'customer',
+                    'shippingAddress',
+                    'billingAddress',
+                    'workflowItem',
+                    'workflowStep'
+                ]
             );
         } else {
+            if (!$newEntity->getGrandTotal()) {
+                // newly created cart without items should be skipped
+                return false;
+            } elseif (!($newEntity->getBillingAddress() || $newEntity->getEmail())) {
+                // newly created cart without contact information should be skipped
+                return false;
+            }
             $existingEntity = $newEntity;
         }
+
+        $this->updateCartStatus($existingEntity, $newEntity->getStatus());
 
         if (!$existingEntity->getStore() || !$existingEntity->getStore()->getId()) {
             $existingEntity->setStore(
@@ -129,7 +152,7 @@ class CartStrategy extends BaseStrategy
             }
         );
         foreach ($deletedCartItems as $item) {
-            $cart->getCartItems()->remove($item);
+            $cart->getCartItems()->removeElement($item);
         }
 
         return $this;
@@ -146,8 +169,8 @@ class CartStrategy extends BaseStrategy
         $addresses = ['ShippingAddress', 'BillingAddress'];
 
         foreach ($addresses as $addressName) {
-            $addressGetter = 'get'.$addressName;
-            $setter = 'set'.$addressName;
+            $addressGetter = 'get' . $addressName;
+            $setter        = 'set' . $addressName;
             /** @var CartAddress $address */
             $address = $importedCart->$addressGetter();
 
@@ -156,12 +179,16 @@ class CartStrategy extends BaseStrategy
             }
 
             // at this point imported address region have code equal to region_id in magento db field
-            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
+            $mageRegionId    = $address->getRegion() ? $address->getRegion()->getCode() : null;
             $originAddressId = $address->getOriginId();
 
             $existingAddress = $newCart->$addressGetter();
             if ($existingAddress && $existingAddress->getOriginId() == $originAddressId) {
-                $this->strategyHelper->importEntity($existingAddress, $address, ['id', 'region', 'country']);
+                $this->strategyHelper->importEntity(
+                    $existingAddress,
+                    $address,
+                    ['id', 'region', 'country']
+                );
                 $address = $existingAddress;
             }
 
@@ -174,5 +201,26 @@ class CartStrategy extends BaseStrategy
         }
 
         return $this;
+    }
+
+    /**
+     * Update cart status
+     *
+     * @param Cart       $existingEntity
+     * @param CartStatus $status
+     */
+    protected function updateCartStatus(Cart $existingEntity, CartStatus $status)
+    {
+        // allow to modify status only for "open" carts
+        // because magento can only expire cart, so for different statuses this useless
+        if ($existingEntity->getStatus()->getName() !== 'open') {
+            $status = $existingEntity->getStatus();
+        }
+
+        $status = $this->strategyHelper->getEntityManager(MagentoConnectorInterface::CART_STATUS_TYPE)->getReference(
+            MagentoConnectorInterface::CART_STATUS_TYPE,
+            $status->getName()
+        );
+        $existingEntity->setStatus($status);
     }
 }
