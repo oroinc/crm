@@ -97,7 +97,7 @@ ROLE_SALES_REP:
         action|oro_tag_assign_unassign: []
         action|oro_tag_unassign_global: []
         action|oro_tag_view_tag_cloud: [EXECUTE]
-        action|oro_workflow: []
+        action|oro_workflow: [EXECUTE]
 ROLE_ONLINE_SALES_REP:
     label: Online Sales Rep
     permissions:
@@ -146,7 +146,7 @@ ROLE_ONLINE_SALES_REP:
         action|oro_tag_assign_unassign: []
         action|oro_tag_unassign_global: []
         action|oro_tag_view_tag_cloud: [EXECUTE]
-        action|oro_workflow: []
+        action|oro_workflow: [EXECUTE]
 ROLE_MARKETING_MANAGER:
     label: Marketing Manager
     permissions:
@@ -195,7 +195,7 @@ ROLE_MARKETING_MANAGER:
         action|oro_tag_assign_unassign: []
         action|oro_tag_unassign_global: []
         action|oro_tag_view_tag_cloud: [EXECUTE]
-        action|oro_workflow: []
+        action|oro_workflow: [EXECUTE]
 ROLE_LEADS_DEVELOPMENT_REP:
     label: Leads Development Rep
     permissions:
@@ -244,4 +244,4 @@ ROLE_LEADS_DEVELOPMENT_REP:
         action|oro_tag_assign_unassign: []
         action|oro_tag_unassign_global: []
         action|oro_tag_view_tag_cloud: [EXECUTE]
-        action|oro_workflow: []
+        action|oro_workflow: [EXECUTE]
