@@ -59,7 +59,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
     public function load(ObjectManager $manager)
     {
         /** @var \Oro\Bundle\UserBundle\Entity\Role $marketingRole */
-        $marketingRole = $this->roles->findOneBy(array('role' => LoadRolesData::ROLE_MANAGER));
+        $marketingRole = $this->roles->findOneBy(array('role' => 'ROLE_MARKETING_MANAGER'));
         /** @var \Oro\Bundle\UserBundle\Entity\Role $saleRole */
         $saleRole = $this->roles->findOneBy(array('role' => LoadRolesData::ROLE_MANAGER));
         /** @var \Oro\Bundle\UserBundle\Entity\Group $salesGroup */
