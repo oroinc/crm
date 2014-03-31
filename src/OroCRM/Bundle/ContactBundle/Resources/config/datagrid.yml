@@ -9,6 +9,7 @@ datagrid:
                     - CONCAT(c.firstName, CONCAT(' ', c.lastName)) as contactName
                     - email.email as primaryEmail
                     - phone.phone as primaryPhone
+                    - max(history.visitedAt) as visitDate
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
                 join:
@@ -25,7 +26,9 @@ datagrid:
                     and:
                       - locate('/contact/', history.url) <> 0
                       - history.user = @oro_security.security_facade->getLoggedUserId
-                groupBy:  c.id, contactName, primaryEmail, primaryPhone
+                groupBy:  c.id, contactName, email.email, phone.phone
+        sorters:
+            visitDate: { history.: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
         columns:
             contactName:
                 type: twig
