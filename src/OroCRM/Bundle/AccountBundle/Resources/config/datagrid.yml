@@ -9,7 +9,7 @@ datagrid:
                     - a.name
                     - defaultContactEmail.email as contactEmail
                     - defaultContactPhone.phone as contactPhone
-                    - history.visitedAt as visitDate
+                    - max(history.visitedAt) as visitDate
                 from:
                     - { table: %orocrm_account.account.entity.class%, alias: a }
                 join:
@@ -27,6 +27,7 @@ datagrid:
                     and:
                       - locate('/account/', history.url) <> 0
                       - history.user = @oro_security.security_facade->getLoggedUserId
+                groupBy:  a.id, a.name, contactEmail, contactPhone
         sorters:
             visitDate: { history.: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
         columns:
