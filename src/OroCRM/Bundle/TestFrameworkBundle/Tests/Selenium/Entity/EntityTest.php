@@ -29,6 +29,6 @@ class EntityTest extends Selenium2TestCase
             ->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
             ->openConfigEntity('Oro\Bundle\EntityConfigBundle', false)
-            ->checkEntityField(ucfirst($fieldName));
+            ->checkEntityField($fieldName);
     }
 }
