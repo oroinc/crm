@@ -1,4 +1,4 @@
-title: "Tasks list"
+title: "Task list"
 icon: "bundles/orocrmtask/sidebar_widgets/assigned_tasks/img/icon.ico"
 module: "orocrm/sidebar/widget/assigned_tasks"
 placement: "both"

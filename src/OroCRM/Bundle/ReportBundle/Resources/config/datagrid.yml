@@ -31,12 +31,12 @@ datagrid:
                 hide_if_one_page: true
                 columns:
                     name:
-                        label: 'Page totals'
+                        label: 'Page total'
 
             grand_total:
                 columns:
                     name:
-                        label: 'Grand Totals'
+                        label: 'Grand Total'
                     value:
                         expr: SUM( o.closeRevenue )
                         formatter: currency
@@ -96,11 +96,11 @@ datagrid:
                 hide_if_one_page: true
                 columns:
                     name:
-                        label: 'Page Totals'
+                        label: 'Page Total'
             grand_total:
                 columns:
                     name:
-                        label: 'Grand Totals'
+                        label: 'Grand Total'
                     wonCount:
                         expr: SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) )
                     lostCount:
@@ -174,11 +174,11 @@ datagrid:
                 hide_if_one_page: true
                 columns:
                     createdDate:
-                        label: 'Page Totals'
+                        label: 'Page Total'
             grand_total:
                 columns:
                     createdDate:
-                        label: 'Grand Totals'
+                        label: 'Grand Total'
                     leadsCount:
                         expr: COUNT(l.id)
         columns:
@@ -226,11 +226,11 @@ datagrid:
                 hide_if_one_page: true
                 columns:
                     statusLabel:
-                        label: 'Page Totals'
+                        label: 'Page Total'
             grand_total:
                 columns:
                     statusLabel:
-                        label: 'Grand Totals'
+                        label: 'Grand Total'
                     numberOfOpportunities:
                         expr: COUNT(opportunity.id)
                     closeRevenue:
@@ -323,11 +323,11 @@ datagrid:
                 hide_if_one_page: true
                 columns:
                     period:
-                        label: 'Page Totals'
+                        label: 'Page Total'
             grand_total:
                 columns:
                     period:
-                        label: 'Grand Totals'
+                        label: 'Grand Total'
                     cnt:
                         expr: COUNT( o.id )
                     value:
