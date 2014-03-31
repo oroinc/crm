@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Performance;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 
 use Symfony\Component\HttpKernel\Kernel;
