@@ -199,14 +199,18 @@ orocrm:
             entity_description:  Represent integration channel transport
 
             id.label:                     Id
-            wsdl_url.label:               Soap wsdl url
-            api_user.label:               Soap api user
-            api_key.label:                Soap api key
-            sync_start_date.label:        Sync start date
+            wsdl_url.label:               SOAP WSDL URL
+            api_user.label:               SOAP API User
+            api_key.label:                SOAP API Key
+            sync_start_date:
+                label:   Sync start date
+                tooltip: This is a starting date for data synchronization. Only records updated after this date will be synchronized
             sync_range.label:               Sync range
             wsi_mode.label:                 WS-I Compliance
             websites.label:                 Websites
-            website_id.label:               Website
+            website_id:
+                label:   Website
+                tooltip: This is a list of websites associated to the Magento instance specified above. Only one website can be selected per channel. To refresh the list, click on the Sync website list link next to the control.
             is_extension_installed.label:   Is extension installed
 
         order:
