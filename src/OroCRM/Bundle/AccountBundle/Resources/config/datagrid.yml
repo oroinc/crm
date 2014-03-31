@@ -27,8 +27,6 @@ datagrid:
                       - locate('/account/', history.url) <> 0
                       - history.user = @oro_security.security_facade->getLoggedUserId
                 groupBy:  a.id, a.name, contactEmail, contactPhone
-        sorters:
-            visitDate: { history.: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
         columns:
             name:
                 type: twig
