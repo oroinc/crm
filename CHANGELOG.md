@@ -1,3 +1,20 @@
+CHANGELOG for 1.0.0
+===================
+This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0 versions.
+
+* 1.0.0 (2014-04-01)
+ * Tasks
+ * Improved UI for launch of the Sales Process workflow
+
+CHANGELOG for 1.0.0-rc2
+===================
+This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-rc2 versions.
+
+* 1.0.0-rc2 (2014-02-25)
+ * Refactored Flexible Workflows
+ * Embedded forms
+ * Account merging
+
 CHANGELOG for 1.0.0-rc1
 ===================
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-rc1 versions.
@@ -7,7 +24,7 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * Improved Workflow
  * Improved Dashboard
  * Magento import performance improvements
- * Other improvements in channels, contacts
+ * Other improvements in channnels, contacts
 
 CHANGELOG for 1.0.0-beta6
 ===================

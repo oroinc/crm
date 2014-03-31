@@ -26,7 +26,7 @@ php composer.phar install
 Run unit tests
 --------------
 
-To run unit tests of any bundles :
+To run unit tests of any bundnles :
 
 ```bash
 phpunit
@@ -37,6 +37,6 @@ Use as dependency in composer
 
 ```yaml
     "require": {
-        "oro/crm": "dev-master",
+        "oro/crm": "1.0.*",
     }
 ```
