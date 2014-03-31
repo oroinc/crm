@@ -714,7 +714,7 @@ datagrid:
             itemsCount:
                 label: orocrm.magento.order.items_qty.label
                 frontend_type: integer
-            totalInvoicedAmount:
+            totalAmount:
                 label: orocrm.magento.order.total_amount.label
                 type:   localized_number
                 method: formatCurrency
@@ -732,12 +732,12 @@ datagrid:
                 label: orocrm.magento.order.b2c_flow_order_follow_up.step.label
         sorters:
             columns:
-                incrementId:            { data_name: o.incrementId }
-                itemsCount:             { data_name: itemsCount }
-                totalPaidAmount:        { data_name: o.totalPaidAmount }
-                totalInvoicedAmount:    { data_name: o.totalInvoicedAmount }
-                status:                 { data_name: o.status }
-                stepLabel:              { data_name: step.label }
+                incrementId:     { data_name: o.incrementId }
+                itemsCount:      { data_name: itemsCount }
+                totalPaidAmount: { data_name: o.totalPaidAmount }
+                totalAmount:     { data_name: o.totalAmount }
+                status:          { data_name: o.status }
+                stepLabel:       { data_name: step.label }
         properties:
             id: ~
 
