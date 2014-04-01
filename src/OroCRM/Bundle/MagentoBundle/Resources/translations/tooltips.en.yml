@@ -1,0 +1,5 @@
+orocrm:
+    magento:
+        magentosoaptransport:
+            sync_start_date.tooltip: This is a starting date for data synchronization. Only records updated after this date will be synchronized
+            website_id.tooltip: This is a list of websites associated to the Magento instance specified above. Only one website can be selected per channel. To refresh the list, click on the Sync website list link next to the control.
