@@ -14,6 +14,12 @@
             "OroCRM\\Bundle": "src/"
          }
     },
+    "repositories": [
+       {
+            "type": "composer",
+            "url": "http://packagist.orocrm.com"
+        }
+    ],
     "require": {
         "php": ">=5.4.4",
         "oro/platform": "1.0.0"
