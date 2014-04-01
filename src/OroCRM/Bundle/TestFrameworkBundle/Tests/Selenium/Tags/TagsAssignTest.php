@@ -106,7 +106,7 @@ class TagsAssignTest extends Selenium2TestCase
             ->setFirstName('First_'.$userName)
             ->setLastName('Last_'.$userName)
             ->setEmail($userName.'@mail.com')
-            ->setRoles(array('Manager', 'Marketing manager'), true)
+            ->setRoles(array('Manager', 'Marketing Manager'), true)
             ->uncheckInviteUser()
             ->verifyTag($tagName)
             ->setTag('New_' . $tagName)
