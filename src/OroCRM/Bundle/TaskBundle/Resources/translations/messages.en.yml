@@ -1,5 +1,7 @@
 orocrm:
     task:
+        menu:
+            task_list.description:  List of tasks
         #
         # OroCRM/Bundle/TaskBundle/Entity/Task
         #

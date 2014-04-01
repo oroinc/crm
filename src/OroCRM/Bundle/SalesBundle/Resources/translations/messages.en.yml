@@ -18,14 +18,27 @@ orocrm:
                     hint: Number of 'in progress' items
 
     sales:
+        menu:
+            sales_tab.label: Sales
+            lead_list.description: List of leads
+            opportunity_list.description: List of opportunities
+            sales_salesfunnel_list.description: List of sales funnels
+            shortcut_list_leads.label: Show leads list
+            shortcut_list_leads.description: List of leads
+            shortcut_list_opportunities.label: Show opportunities list
+            shortcut_list_opportunities.description: List of opportunities
+            shortcut_new_lead.label: Create new lead
+            shortcut_new_lead.description: Create new lead
+            shortcut_new_opportunity.label: Create new opportunity
+            shortcut_new_opportunity.description: Create new opportunity
         controller:
-            lead.saved.message: "Lead saved"
-            opportunity.saved.message: "Opportunity saved"
-            sales_funnel.saved.message: "Sales process saved"
+            lead.saved.message: Lead saved
+            opportunity.saved.message: Opportunity saved
+            sales_funnel.saved.message: Sales process saved
 
         form:
-            choose_opportunity: 'Choose an opportunity....'
-            choose_lead: 'Choose a lead....'
+            choose_opportunity: Choose an opportunity....
+            choose_lead: Choose a lead....
 
         #
         # OroCRM/Bundle/SalesBundle/Entity/LeadStatus.php

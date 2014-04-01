@@ -1,29 +1,29 @@
 oro_menu_config:
     items:
         activities_tab:
-            label: Activities
+            label: 'orocrm.call.menu.activities_tab.label'
             uri: '#'
             extras:
                 position: 30
         call_list:
-            label: orocrm.call.entity_plural_label
-            route: orocrm_call_index
+            label: 'orocrm.call.entity_plural_label'
+            route: 'orocrm_call_index'
             extras:
                 position: 20
                 routes: ['orocrm_call_*']
-                description: List of calls
+                description: 'orocrm.call.menu.call_list.description'
         shortcut_call_list:
-            label: Show calls list
-            route: orocrm_call_index
+            label: 'orocrm.call.menu.shortcut_call_list.label'
+            route: 'orocrm_call_index'
             extras:
-                description: List of calls
+                description: 'orocrm.call.menu.shortcut_call_list.description'
 
         account_calls_tab:
-            label: orocrm.call.entity_plural_label
+            label: 'orocrm.call.entity_plural_label'
             extras:
                 position: 10
-                widgetRoute: orocrm_call_widget_calls
-                widgetAcl: orocrm_call_view
+                widgetRoute: 'orocrm_call_widget_calls'
+                widgetAcl: 'orocrm_call_view'
                 widgetRouteParametersMap:
                     accountId: id
 
@@ -44,5 +44,5 @@ oro_menu_config:
 
 oro_titles:
     orocrm_call_index: ~
-    orocrm_call_update: %%subject%% - Edit
-    orocrm_call_create: Log Call
+    orocrm_call_update: '%%subject%% - Edit'
+    orocrm_call_create: 'Log Call'
