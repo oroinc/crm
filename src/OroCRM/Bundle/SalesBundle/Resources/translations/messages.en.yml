@@ -28,7 +28,7 @@ orocrm:
             shortcut_list_opportunities.label: Show opportunities list
             shortcut_list_opportunities.description: List of opportunities
             shortcut_new_lead.label: Create new lead
-            shortcut_new_lead.description: reate new lead
+            shortcut_new_lead.description: Create new lead
             shortcut_new_opportunity.label: Create new opportunity
             shortcut_new_opportunity.description: Create new opportunity
         controller:
