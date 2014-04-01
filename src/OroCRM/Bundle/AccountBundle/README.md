@@ -1,4 +1,4 @@
-AccountBundle
-=============
+OroCRMAccountBundle
+===================
 
-CRM Accounts
+Customer account entity management

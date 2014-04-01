@@ -3,10 +3,6 @@
 {% if form.vars.value.id %}
     {% oro_title_set({params : {"%group.label%": form.vars.value.label} }) %}
 {% endif %}
-{% set title = form.vars.value.id
-    ? form.vars.value.name|default('N/A')
-    : 'New'|trans ~ ' ' ~ 'orocrm.contact.group.entity_label'|trans
-%}
 {% set audit_entity_class = 'OroCRM_Bundle_ContactBundle_Entity_Group' %}
 {% set gridName = 'contact-group-contacts-grid' %}
 {% set formAction = form.vars.value.id ? path('orocrm_contact_group_update', { id: form.vars.value.id }) : path('orocrm_contact_group_create') %}
@@ -24,10 +20,11 @@
         {{ UI.buttonSeparator() }}
     {% endif %}
     {{ UI.cancelButton(path('orocrm_contact_group_index')) }}
+    {% set html = UI.saveAndCloseButton() %}
     {% if form.vars.value.id or resource_granted('orocrm_contact_group_update') %}
-        {{ UI.saveAndStayButton() }}
+        {% set html = html ~ UI.saveAndStayButton() %}
     {% endif %}
-    {{ UI.saveAndCloseButton() }}
+    {{ UI.dropdownSaveButton({'html': html}) }}
 {% endblock navButtons %}
 
 {% block pageHeader %}
@@ -41,7 +38,8 @@
         %}
         {{ parent() }}
     {% else %}
-        {% include 'OroUIBundle::page_title_block.html.twig' %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.contact.group.entity_label'|trans}) %}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
 

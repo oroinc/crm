@@ -1,0 +1,62 @@
+workflows:
+    b2b_flow_sales_funnel:
+        steps:
+            new_lead:
+                label: 'New Lead'
+                order: 10
+                entity_acl:
+                    lead:
+                        delete: false
+                allowed_transitions:
+                    - qualify
+                    - disqualify
+            disqualified_lead:
+                label: 'Disqualified Lead'
+                order: 20
+                entity_acl:
+                    lead:
+                        update: false
+                        delete: false
+                allowed_transitions:
+                    - follow_up
+                    - reactivate
+                is_final: true
+            new_opportunity:
+                label: 'New Opportunity'
+                order: 20
+                entity_acl:
+                    opportunity:
+                        delete: false
+                allowed_transitions:
+                    - develop
+                    - close_as_won
+                    - close_as_lost
+            developed_opportunity:
+                label: 'Developed Opportunity'
+                order: 30
+                entity_acl:
+                    opportunity:
+                        delete: false
+                allowed_transitions:
+                    - close_as_won
+                    - close_as_lost
+            won_opportunity:
+                label: 'Won Opportunity'
+                order: 40
+                entity_acl:
+                    opportunity:
+                        update: false
+                        delete: false
+                allowed_transitions:
+                    - reopen
+                is_final: true
+            lost_opportunity:
+                label: 'Lost Opportunity'
+                order: 40
+                entity_acl:
+                    opportunity:
+                        update: false
+                        delete: false
+                allowed_transitions:
+                    - reopen
+                is_final: true

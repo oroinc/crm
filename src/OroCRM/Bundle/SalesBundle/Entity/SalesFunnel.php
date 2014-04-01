@@ -11,8 +11,12 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 /**
- * @ORM\Table(name="orocrm_sales_funnel")
- * @ORM\Entity
+ * @ORM\Table(
+ *      name="orocrm_sales_funnel",
+ *      indexes={@ORM\Index(name="sales_start_idx",columns={"startDate"})}
+ *
+ * )
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
@@ -49,14 +53,6 @@ class SalesFunnel
     protected $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255)
-     * @Oro\Versioned
-     */
-    protected $name;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(type="date")
@@ -75,7 +71,7 @@ class SalesFunnel
     /**
      * @var Lead
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead", cascade={"persist"})
      * @ORM\JoinColumn(name="lead_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      */
@@ -84,7 +80,7 @@ class SalesFunnel
     /**
      * @var Opportunity
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity", cascade={"persist"})
      * @ORM\JoinColumn(name="opportunity_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      */
@@ -126,25 +122,6 @@ class SalesFunnel
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return SalesFunnel
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     /**

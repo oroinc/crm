@@ -1,0 +1,41 @@
+orocrm:
+    task:
+        #
+        # OroCRM/Bundle/TaskBundle/Entity/Task
+        #
+        entity_label:               Task
+        entity_plural_label:        Tasks
+        entity_description:         Represent task
+        subject.label:              Subject
+        description.label:          Description
+        due_date.label:             Due date
+        workflow_step.label:        Status
+        task_priority.label:        Priority
+        assigned_to.label:          Assigned To
+        related_account.label:      Account
+        related_contact.label:      Contact
+        reporter.label:             Reporter
+        created_at.label:           Created At
+        updated_at.label:           Updated At
+        id.label:                   Id
+        workflow_item.label:        Workflow item
+
+        datagrid:
+            view: View
+            update: Update
+            delete: Delete
+
+        block:
+            general: General Information
+            additional: Additional Information
+
+        add_entity: Add task
+        saved_message: Task saved
+
+        widgets:
+            account_tasks: Tasks
+        contact_tasks_section: Tasks
+        user_tasks_section: Tasks
+        assigned_tasks_widget:
+            no_task_exist: You have no tasks pending
+            update_widget: Reload tasks

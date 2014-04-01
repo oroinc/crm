@@ -1,0 +1,13 @@
+placeholders:
+    orocrm_account_channel_info_magento:
+        items:
+            orocrm_magento_account_channel_info: ~
+    orocrm_account_orders:
+        items:
+            orocrm_account_orders_grid: ~
+
+items:
+    orocrm_magento_account_channel_info:
+        template: OroCRMMagentoBundle:Account:channelInfo.html.twig
+    orocrm_account_orders_grid:
+        template: OroCRMMagentoBundle:Order:accountOrdersPlaceholder.html.twig

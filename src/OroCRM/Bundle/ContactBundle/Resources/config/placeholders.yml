@@ -1,0 +1,17 @@
+placeholders:
+    view_content_data_communications:
+        items:
+            orocrm_contact_emails: ~
+
+    orocrm_account_action_dropdown:
+        items:
+            orocrm_account_action_dropdown_add_contact: ~
+
+items:
+    orocrm_account_action_dropdown_add_contact:
+        template: OroCRMContactBundle:Account:action/addContactButton.html.twig
+        order: 10
+
+    orocrm_contact_emails:
+        template: OroCRMContactBundle:Contact:contactEmails.html.twig
+        attribute_instance_of: [entity, %orocrm_contact.entity.class%]

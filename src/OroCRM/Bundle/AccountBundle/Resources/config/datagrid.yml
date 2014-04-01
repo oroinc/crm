@@ -2,14 +2,14 @@ datagrid:
     dashboard-my-accounts-activity-grid:
         source:
             type: orm
-            acl_resource: orocrm_call_view
+            acl_resource: orocrm_account_view
             query:
                 select:
                     - a.id
                     - a.name
                     - defaultContactEmail.email as contactEmail
                     - defaultContactPhone.phone as contactPhone
-                    - history.visitedAt as visitDate
+                    - max(history.visitedAt) as visitDate
                 from:
                     - { table: %orocrm_account.account.entity.class%, alias: a }
                 join:
@@ -27,6 +27,7 @@ datagrid:
                     and:
                       - locate('/account/', history.url) <> 0
                       - history.user = @oro_security.security_facade->getLoggedUserId
+                groupBy:  a.id, a.name, contactEmail, contactPhone
         sorters:
             visitDate: { history.: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
         columns:
@@ -58,8 +59,7 @@ datagrid:
                     - a.name
                     - a.createdAt
                     - a.updatedAt
-                    - defaultContact.firstName as contactFirstName
-                    - defaultContact.lastName as contactLastName
+                    - CONCAT(defaultContact.firstName, CONCAT(' ', defaultContact.lastName)) as contactName
                     - defaultContactEmail.email as contactEmail
                     - defaultContactPhone.phone as contactPhone
                     - CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName)) as ownerName
@@ -88,14 +88,12 @@ datagrid:
         columns:
             name:
                 label:   orocrm.account.name.label
-            contactFirstName:
-                label:   orocrm.contact.first_name.label
-            contactLastName:
-                label:   orocrm.contact.last_name.label
+            contactName:
+                label:   orocrm.account.contact.name
             contactEmail:
-                label:   orocrm.contact.contactemail.email.label
+                label:   orocrm.account.contact.email
             contactPhone:
-                label:   orocrm.contact.contactphone.phone.label
+                label:   orocrm.account.contact.phone
             ownerName:
                 label:   orocrm.account.owner.label
             createdAt:
@@ -108,10 +106,8 @@ datagrid:
             columns:
                 name:
                     data_name: a.name
-                contactFirstName:
-                    data_name: contactFirstName
-                contactLastName:
-                    data_name: contactLastName
+                contactName:
+                    data_name: contactName
                 contactEmail:
                     data_name: contactEmail
                 contactPhone:
@@ -127,12 +123,9 @@ datagrid:
                 name:
                     type:      string
                     data_name: a.name
-                contactFirstName:
+                contactName:
                     type:      string
-                    data_name: contactFirstName
-                contactLastName:
-                    type:      string
-                    data_name: contactLastName
+                    data_name: contactName
                 contactEmail:
                     type:      string
                     data_name: contactEmail
@@ -224,55 +217,8 @@ datagrid:
         options:
             entityHint: contact
 
-    account-contacts-view-grid:
-        extend: base-account-contacts-grid
-        source:
-            query:
-                where:
-                    and:
-                        - :account MEMBER OF c.accounts
-        columns:
-            first_name:
-                label: orocrm.contact.first_name.label
-                data_name: firstName
-            last_name:
-                label: orocrm.contact.last_name.label
-                data_name: lastName
-            primaryEmail:
-                label: orocrm.contact.email.label
-            primaryPhone:
-                label: orocrm.contact.contactphone.phone.label
-            groupLabelsAsString:
-                label: orocrm.contact.groups.label
-            contactSourceLabel:
-                label: orocrm.contact.source.label
-            countryName:
-                label: orocrm.contact.contactaddress.country.label
-            regionLabel:
-                label: orocrm.contact.contactaddress.region.label
-            addressPostalCode:
-                label: orocrm.contact.contactaddress.postal_code.label
-            createdAt:
-                label: orocrm.contact.created_at.label
-                frontend_type: datetime
-            updatedAt:
-                label: orocrm.contact.updated_at.label
-                frontend_type: datetime
-        sorters:
-            columns:
-                groupLabelsAsString:
-                    data_name: contactGroup.label
-                contactSourceLabel:
-                    data_name: contactSource.label
-                createdAt:
-                    data_name: c.createdAt
-                updatedAt:
-                    data_name: c.updatedAt
-            default:
-                firstName: ASC
-
     account-contacts-update-grid:
-        extend: base-account-contacts-grid
+        extends: base-account-contacts-grid
         source:
             query:
                 select:
@@ -315,7 +261,6 @@ datagrid:
         filters:
             columns:
                 hasContact:
-                    filter_by_having: true
                     data_name: hasContact
                     type:      boolean
                 first_name:
@@ -350,7 +295,7 @@ datagrid:
         options:
             routerEnabled: false
             requireJSModules:
-              - oro/datagrid/column-form-listener
+              - orodatagrid/js/datagrid/listener/column-form-listener
             columnListener:
                 dataField: id
                 columnName: hasContact

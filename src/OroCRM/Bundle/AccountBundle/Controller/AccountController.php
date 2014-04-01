@@ -3,42 +3,46 @@
 namespace OroCRM\Bundle\AccountBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 class AccountController extends Controller
 {
     /**
      * @Route("/view/{id}", name="orocrm_account_view", requirements={"id"="\d+"})
-     * @Template
      * @Acl(
      *      id="orocrm_account_view",
      *      type="entity",
      *      permission="VIEW",
      *      class="OroCRMAccountBundle:Account"
      * )
+     * @Template()
      */
     public function viewAction(Account $account)
     {
-        return ['entity'  => $account];
+        $channels = $this->getDoctrine()->getRepository('OroIntegrationBundle:Channel')->findAll();
+
+        return array('entity' => $account, 'channels' => $channels);
     }
 
     /**
      * Create account form
      *
      * @Route("/create", name="orocrm_account_create")
-     * @Template("OroCRMAccountBundle:Account:update.html.twig")
      * @Acl(
      *      id="orocrm_account_create",
      *      type="entity",
      *      permission="CREATE",
      *      class="OroCRMAccountBundle:Account"
      * )
+     * @Template("OroCRMAccountBundle:Account:update.html.twig")
      */
     public function createAction()
     {
@@ -49,13 +53,13 @@ class AccountController extends Controller
      * Edit user form
      *
      * @Route("/update/{id}", name="orocrm_account_update", requirements={"id"="\d+"})
-     * @Template
      * @Acl(
      *      id="orocrm_account_update",
      *      type="entity",
      *      permission="EDIT",
      *      class="OroCRMAccountBundle:Account"
      * )
+     * @Template()
      */
     public function updateAction(Account $entity)
     {
@@ -109,46 +113,37 @@ class AccountController extends Controller
         }
 
         return array(
+            'entity'   => $entity,
             'form'     => $this->get('orocrm_account.form.account')->createView()
         );
     }
 
     /**
      * @Route(
-     *      "/contact/select/{id}",
-     *      name="orocrm_account_contact_select",
+     *      "/widget/contacts/{id}",
+     *      name="orocrm_account_widget_contacts_info",
      *      requirements={"id"="\d+"},
      *      defaults={"id"=0}
      * )
-     * @Template
      * @AclAncestor("orocrm_contact_view")
+     * @Template()
      */
-    public function contactDatagridAction(Account $entity = null)
+    public function contactsInfoAction(Account $account = null)
     {
         return [
-            'account' => $entity ? $entity->getId() : $entity
+            'account' => $account
         ];
     }
 
     /**
      * @Route("/widget/info/{id}", name="orocrm_account_widget_info", requirements={"id"="\d+"})
      * @AclAncestor("orocrm_account_view")
-     * @Template
+     * @Template()
      */
     public function infoAction(Account $account)
     {
         return [
-            'entity'  => $account
+            'account' => $account
         ];
-    }
-
-    /**
-     * @Route("/widget/contacts/{id}", name="orocrm_account_widget_contacts", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_contact_view")
-     * @Template
-     */
-    public function contactsAction(Account $account)
-    {
-        return ['entity' => $account];
     }
 }

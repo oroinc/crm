@@ -1,5 +1,5 @@
-CallBundle
-=============
+OroCRMCallBundle
+================
 
 CallBundle implements basic call logging for contacts and accounts.
 

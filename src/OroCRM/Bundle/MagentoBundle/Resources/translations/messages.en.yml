@@ -34,9 +34,9 @@ orocrm:
                 tax_amount:       Tax Amount
                 discount_amount:  Discount Amount
                 weight:           Weight
-                added_on:         Added On
+                added_on:         Placed On
                 updated_on:       Updated On
-                increment_id:     Increment ID
+                increment_id:     "Order #"
                 total_paid:       Total Paid
                 total_invoiced:   Total Invoiced
                 subtotal_amount:  Subtotal Amount
@@ -69,7 +69,7 @@ orocrm:
         customer:
             entity_label:        Customer
             entity_plural_label: Customers
-            entity_description:  Represent magento customer
+            entity_description:  Represent Magento customer
 
             id.label:            Id
             origin_id.label:     Origin Id
@@ -93,13 +93,15 @@ orocrm:
             addresses.label:     Adresses
             carts.label:         Carts
             channel.label:       Channel
+            name.label:          Name
+            orders.label:        Customer orders
 
         cart:
             entity_label:         Shopping Cart
             entity_plural_label:  Shopping Carts
-            entity_description:   Represent magento shopping cart
+            entity_description:   Represent Magento shopping cart
 
-            id.label:                  Id
+            id.label:                  Cart Id
             origin_id.label:           Origin Id
             items_qty.label:           Items qty
             items_count.label:         Items count
@@ -108,7 +110,10 @@ orocrm:
             quote_currency_code.label: Quote currency
             store_to_base_rate.label:  Store to base rate
             store_to_quote_rate.label: Store to quote rate
+            first_name.label:          First name
+            last_name.label:           Last name
             email.label:               Email
+            related_emails.label:      Emails
             gift_message.label:        Gift message
             is_guest.label:            Is guest
             payment_details.label:     Payment
@@ -130,6 +135,63 @@ orocrm:
             opportunity.label:         Opportunity
             notes.label:               Notes
             b2c_flow_abandoned_shopping_cart.step.label: Step
+            related_calls.label:       Calls
+            workflow_item.label:       Workflow item
+            workflow_step.label:       Workflow step
+
+        cartitem:
+            entity_label:              Shopping Cart Item
+            entity_plural_label:       Cart items
+            created_at.label:          Created at
+            updated_at.label:          Updated at
+            custom_price.label:        Custom price
+            description.label:         Description
+            discount_amount.label:     Discount amount
+            free_shipping.label:       Free shipping
+            gift_message.label:        Gift message
+            id.label:                  Cart item id
+            is_virtual.label:          Is virtual
+            name.label:                Name
+            origin_id.label:           Origin cart id
+            parent_item_id.label:      Parent cart item id
+            price.label:               Price
+            price_incl_tax.label:      Price incl. tax
+            product_id.label:          Product id
+            product_type.label:        Product type
+            qty.label:                 Qty
+            row_total.label:           Row total
+            sku.label:                 Sku
+            tax_amount.label:          Tax amount
+            tax_class_id.label:        Tax class id
+            tax_percent.label:         Tax percent
+            weight.label:              Weight
+            cart.label:                Cart
+
+        cartstatus:
+            entity_label:              Shopping Cart Status
+            entity_plural_label:       Shopping Cart Statuses
+            label.label:               Label
+            name.label:                Name
+
+        orderitem:
+            entity_label:              Order Item
+            entity_plural_label:       Order Items
+            discount_amount.label:     Discount amount
+            discount_percent.label:    Discount percent
+            id.label:                  Cart item id
+            is_virtual.label:          Is virtual
+            name.label:                Name
+            origin_id.label:           Origin order item id
+            original_price.label:      Original price
+            price.label:               Price
+            product_options.label:     Product options
+            product_type.label:        Product type
+            qty.label:                 Qty
+            row_total.label:           Row total
+            tax_amount.label:          Tax amount
+            tax_percent.label:         Tax percent
+            weight.label:              Weight
+            sku.label:                 Sku
 
         magentosoaptransport:
             entity_label:        Integration Channel Transport
@@ -137,14 +199,18 @@ orocrm:
             entity_description:  Represent integration channel transport
 
             id.label:                     Id
-            wsdl_url.label:               Soap wsdl url
-            api_user.label:               Soap api user
-            api_key.label:                Soap api key
-            sync_start_date.label:        Sync start date
+            wsdl_url.label:               SOAP WSDL URL
+            api_user.label:               SOAP API User
+            api_key.label:                SOAP API Key
+            sync_start_date:
+                label:   Sync start date
+                tooltip: This is a starting date for data synchronization. Only records updated after this date will be synchronized
             sync_range.label:               Sync range
             wsi_mode.label:                 WS-I Compliance
             websites.label:                 Websites
-            website_id.label:               Website
+            website_id:
+                label:   Website
+                tooltip: This is a list of websites associated to the Magento instance specified above. Only one website can be selected per channel. To refresh the list, click on the Sync website list link next to the control.
             is_extension_installed.label:   Is extension installed
 
         order:
@@ -153,7 +219,8 @@ orocrm:
             entity_description:  Respresent Magento Order
 
             id.label:           Id
-            increment_id.label: Increment Id
+            increment_id.label: "Order #"
+            items_qty.label:    Items qty
             gift_message.label: Gift message
             remote_ip.label:    Remote address
             store_name.label:   Website
@@ -161,6 +228,8 @@ orocrm:
             total_invoiced_amount.label: Total invoiced
             total_refunded_amount.label: Total refunded
             total_canceled_amount.label: Total canceled
+            first_name.label:       First name
+            last_name.label:        Last name
             currency.label:         Currency
             payment_method.label:   Payment method
             payment_details.label:  Payment details
@@ -172,7 +241,7 @@ orocrm:
             discount_percent.label: Discount percent
             total_amount.label:     Total amount
             status.label:           Status
-            created_at.label:       Added on
+            created_at.label:       Placed on
             updated_at.label:       Updated on
             customer.label:         Customer
             addresses.label:        Addresses
@@ -185,11 +254,15 @@ orocrm:
             notes.label:            Notes
             feedback.label:         Feedback
             b2c_flow_order_follow_up.step.label: Step
+            related_emails.label:   Emails
+            related_calls.label:    Calls
+            workflow_item.label:    Workflow item
+            workflow_step.label:    Workflow step
 
         product:
             entity_label:         Product
             entity_plural_label:  Products
-            entity_description:   Represent magento product
+            entity_description:   Represent Magento product
 
             id.label:             Id
             origin_id.label:      Origin Id
@@ -252,3 +325,8 @@ orocrm:
             origin_id.label:     Origin Id
             country.label:       Country
             region.label:        State
+
+        account:
+            no_customers_exist: No customers exist
+
+        menu.web_customers: Web Customers

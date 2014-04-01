@@ -25,12 +25,21 @@ datagrid:
         properties:
             id: ~
         totals:
-            columns:
-                name:
-                    label: 'Total'
-                value:
-                    query: SUM( o.closeRevenue )
-                    formatter: currency
+            total:
+                extends: grand_total
+                per_page: true
+                hide_if_one_page: true
+                columns:
+                    name:
+                        label: 'Page total'
+
+            grand_total:
+                columns:
+                    name:
+                        label: 'Grand Total'
+                    value:
+                        expr: SUM( o.closeRevenue )
+                        formatter: currency
         sorters:
             columns:
                 name:   { data_name: a.name }
@@ -81,17 +90,25 @@ datagrid:
         properties:
             id: ~
         totals:
-            columns:
-                name:
-                    label: 'Total'
-                wonCount:
-                    query: SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) )
-                lostCount:
-                    query: SUM( (CASE WHEN (s.name='lost') THEN 1 ELSE 0 END) )
-                inProgressCount:
-                    query: SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) )
-                totalOps:
-                    query: COUNT(o.id)
+            total:
+                extends: grand_total
+                per_page: true
+                hide_if_one_page: true
+                columns:
+                    name:
+                        label: 'Page Total'
+            grand_total:
+                columns:
+                    name:
+                        label: 'Grand Total'
+                    wonCount:
+                        expr: SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) )
+                    lostCount:
+                        expr: SUM( (CASE WHEN (s.name='lost') THEN 1 ELSE 0 END) )
+                    inProgressCount:
+                        expr: SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) )
+                    totalOps:
+                        expr: COUNT(o.id)
         columns:
             name:             { label: orocrm.report.datagrid.columns.account_name }
             wonCount:         { label: orocrm.report.datagrid.columns.wonCount,  frontend_type: integer }
@@ -151,11 +168,19 @@ datagrid:
                     - { table: OroCRMSalesBundle:Lead, alias: l }
                 groupBy: createdDate
         totals:
-            columns:
-                createdDate:
-                    label: 'Total'
-                leadsCount:
-                    query: COUNT(l.id)
+            total:
+                extends: grand_total
+                per_page: true
+                hide_if_one_page: true
+                columns:
+                    createdDate:
+                        label: 'Page Total'
+            grand_total:
+                columns:
+                    createdDate:
+                        label: 'Grand Total'
+                    leadsCount:
+                        expr: COUNT(l.id)
         columns:
             createdDate:    { label: orocrm.report.datagrid.columns.created_date, frontend_type: date }
             leadsCount:     { label: orocrm.report.datagrid.columns.leads_count,  frontend_type: integer }
@@ -165,14 +190,14 @@ datagrid:
                 leadsCount:    { data_name: leadsCount }
         filters:
             columns:
-                createdDate:   { type: date, data_name: createdDate }
+                createdDate:   { type: date, data_name: createdDate, filter_by_having: true }
                 leadsCount:    { type: number, data_name: leadsCount, filter_by_having: true }
         options:
             entityHint: report data
             export: true
 
-    orocrm_report-opportunities-by_step:
-        pageTitle: "Opportunities by step"
+    orocrm_report-opportunities-by_status:
+        pageTitle: "Opportunities by status"
         source:
             type: orm
             acl_resource: oro_report_view
@@ -181,47 +206,59 @@ datagrid:
                     - { table: OroCRMSalesBundle:Opportunity, alias: opportunity }
                 join:
                     inner:
-                        - { join: opportunity.workflowStep, alias: workflowStep }
+                        - { join: opportunity.status, alias: status }
                 select:
-                    - workflowStep.label as stepLabel
+                    - status.label as statusLabel
                     - COUNT(opportunity.id) as numberOfOpportunities
                     - >
                       SUM(
-                        CASE WHEN workflowStep.name='close' THEN opportunity.closeRevenue ELSE 0 END
+                        CASE WHEN status.name IN ('won', 'lost') THEN opportunity.closeRevenue ELSE 0 END
                       ) as closeRevenue
                     - >
                       SUM(
                         CASE WHEN opportunity.budgetAmount IS NOT NULL THEN opportunity.budgetAmount ELSE 0 END
                       ) as budgetAmount
-                groupBy: stepLabel
+                groupBy: statusLabel
         totals:
-            columns:
-                stepLabel:
-                    label: 'Total'
-                numberOfOpportunities:
-                    query: COUNT(opportunity.id)
-                closeRevenue:
-                    query: SUM(CASE WHEN workflowStep.name='close' THEN opportunity.closeRevenue ELSE 0 END)
-                    formatter: currency
-                budgetAmount:
-                    query: SUM(CASE WHEN opportunity.budgetAmount IS NOT NULL THEN opportunity.budgetAmount ELSE 0 END)
-                    formatter: currency
+            total:
+                extends: grand_total
+                per_page: true
+                hide_if_one_page: true
+                columns:
+                    statusLabel:
+                        label: 'Page Total'
+            grand_total:
+                columns:
+                    statusLabel:
+                        label: 'Grand Total'
+                    numberOfOpportunities:
+                        expr: COUNT(opportunity.id)
+                    closeRevenue:
+                        expr: SUM(CASE WHEN status.name IN ('won', 'lost') THEN opportunity.closeRevenue ELSE 0 END)
+                        formatter: currency
+                    budgetAmount:
+                        expr: SUM(CASE WHEN opportunity.budgetAmount IS NOT NULL THEN opportunity.budgetAmount ELSE 0 END)
+                        formatter: currency
         columns:
-            stepLabel:             { label: orocrm.report.datagrid.columns.step }
+            statusLabel:           { label: orocrm.report.datagrid.columns.status }
             numberOfOpportunities: { label: orocrm.report.datagrid.columns.number_of_opportunities, frontend_type: integer }
             closeRevenue:          { label: orocrm.report.datagrid.columns.close_revenue, frontend_type: currency }
             budgetAmount:          { label: orocrm.report.datagrid.columns.budget_amount, frontend_type: currency }
         sorters:
             columns:
-                stepLabel:             { data_name: stepLabel }
+                statusLabel:           { data_name: statusLabel }
                 numberOfOpportunities: { data_name: numberOfOpportunities }
                 closeRevenue:          { data_name: closeRevenue }
                 budgetAmount:          { data_name: budgetAmount }
         filters:
             columns:
-                stepLabel:
-                    type: string
-                    data_name: stepLabel
+                statusLabel:
+                    type: entity
+                    data_name: opportunity.status
+                    options:
+                        field_options:
+                            class: OroCRMSalesBundle:OpportunityStatus
+                            property: label
                 numberOfOpportunities:
                     type: number
                     data_name: numberOfOpportunities
@@ -238,14 +275,6 @@ datagrid:
                     filter_by_having: true
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                workflowName:
-                    type: entity
-                    label: orocrm.report.datagrid.columns.workflow
-                    data_name: wi.workflowName
-                    options:
-                        field_options:
-                            class: OroWorkflowBundle:WorkflowDefinition
-                            property: label
         options:
             entityHint: report data
             export: true
@@ -288,14 +317,22 @@ datagrid:
             quarterPeriod: ~
             yearPeriod: ~
         totals:
-            columns:
-                period:
-                    label: 'Total'
-                cnt:
-                    query: COUNT( o.id )
-                value:
-                    query: SUM( o.closeRevenue )
-                    formatter: currency
+            total:
+                extends: grand_total
+                per_page: true
+                hide_if_one_page: true
+                columns:
+                    period:
+                        label: 'Page Total'
+            grand_total:
+                columns:
+                    period:
+                        label: 'Grand Total'
+                    cnt:
+                        expr: COUNT( o.id )
+                    value:
+                        expr: SUM( o.closeRevenue )
+                        formatter: currency
 
         columns:
             period:    { label: orocrm.report.datagrid.columns.period }

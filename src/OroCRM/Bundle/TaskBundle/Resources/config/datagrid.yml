@@ -1,0 +1,161 @@
+datagrid:
+    tasks-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_task_view
+            query:
+                select:
+                    - task.id
+                    - task.subject
+                    - task.description
+                    - task.dueDate
+                    - taskPriority.label as priorityLabel
+                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
+                    - owner.id as ownerId
+                    - CONCAT(reporter.firstName, CONCAT(' ', reporter.lastName)) as reporterName
+                    - reporter.id as reporterId
+                    - task.createdAt
+                    - task.updatedAt
+                    - workflowStep.label as workflowStepLabel
+                from:
+                    - { table: %orocrm_task.entity.class%, alias: task }
+                join:
+                    left:
+                        - { join: task.taskPriority, alias: taskPriority }
+                        - { join: task.owner, alias: owner }
+                        - { join: task.reporter, alias: reporter }
+                        - { join: task.workflowStep, alias: workflowStep }
+        columns:
+            subject:
+                label: orocrm.task.subject.label
+            dueDate:
+                label: orocrm.task.due_date.label
+                frontend_type: datetime
+            workflowStepLabel:
+                label: orocrm.task.workflow_step.label
+            priorityLabel:
+                label: orocrm.task.task_priority.label
+            ownerName:
+                type: twig
+                label: orocrm.task.assigned_to.label
+                frontend_type: html
+                template: OroCRMTaskBundle:Task:Datagrid/Property/owner.html.twig
+            reporterName:
+                type: twig
+                label: orocrm.task.reporter.label
+                frontend_type: html
+                template: OroCRMTaskBundle:Task:Datagrid/Property/reporter.html.twig
+            createdAt:
+                label:   orocrm.task.created_at.label
+                frontend_type: datetime
+            updatedAt:
+                label:   orocrm.task.updated_at.label
+                frontend_type: datetime
+        sorters:
+            columns:
+                subject:
+                    data_name: task.subject
+                dueDate:
+                    data_name: task.dueDate
+                workflowStepLabel:
+                    data_name: workflowStep.stepOrder
+                priorityLabel:
+                    data_name: taskPriority.order
+                ownerName:
+                    data_name: ownerName
+                reporterName:
+                    data_name: reporterName
+                createdAt:
+                    data_name: task.createdAt
+                updatedAt:
+                    data_name: task.updatedAt
+            default:
+                dueDate: ASC
+        filters:
+            columns:
+                subject:
+                    type:      string
+                    data_name: task.subject
+                dueDate:
+                    type:      datetime
+                    data_name: task.dueDate
+                workflowStepLabel:
+                    type:      entity
+                    data_name: task.workflowStep
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %orocrm_task.entity.class%
+                priorityLabel:
+                    type:      string
+                    data_name: priorityLabel
+                ownerName:
+                    type:      string
+                    data_name: ownerName
+                reporterName:
+                    type:      string
+                    data_name: reporterName
+                createdAt:
+                    type:      datetime
+                    data_name: task.createdAt
+                updatedAt:
+                    type:      datetime
+                    data_name: task.updatedAt
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_task_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_task_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      orocrm_api_delete_task
+                params:     [ id ]
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_task_view
+                label:         View
+                icon:          user
+                link:          view_link
+                rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_task_update
+                label:         Update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_task_delete
+                label:         Delete
+                icon:          trash
+                link:          delete_link
+
+    task-account-tasks-grid:
+        extends: tasks-grid
+        source:
+            query:
+                where:
+                      and:
+                        - task.relatedAccount = :accountId
+
+    task-contact-tasks-grid:
+        extends: tasks-grid
+        source:
+            query:
+                where:
+                      and:
+                        - task.relatedContact = :contactId
+
+    task-user-tasks-grid:
+        extends: tasks-grid
+        source:
+            query:
+                where:
+                      and:
+                        - task.owner = :userId

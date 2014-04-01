@@ -7,7 +7,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_sales_opportunity_close_reason")
+ * @ORM\Table(name="orocrm_sales_opport_close_rsn")
  */
 class OpportunityCloseReason
 {

@@ -6,6 +6,8 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class StoresSoapIterator extends AbstractLoadeableSoapIterator
 {
+    const ADMIN_STORE_ID = 0;
+
     /**
      * {@inheritdoc}
      */
@@ -20,7 +22,7 @@ class StoresSoapIterator extends AbstractLoadeableSoapIterator
                 'website_id' => 0,
                 'code'       => 'admin',
                 'name'       => 'Admin',
-                'store_id'   => 0
+                'store_id'   => self::ADMIN_STORE_ID
             ];
             array_unshift($result, $adminStoreData);
 

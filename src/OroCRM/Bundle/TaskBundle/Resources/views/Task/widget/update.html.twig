@@ -1,0 +1,52 @@
+<div class="widget-content call-form">
+    {% if saved is defined and saved %}
+        <script type="text/javascript">
+            require(['underscore', 'orotranslation/js/translator', 'oroui/js/widget-manager',
+                'oroui/js/messenger', 'oroui/js/mediator'],
+            function(_, __, widgetManager, messenger, mediator) {
+                widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
+                    messenger.notificationFlashMessage('success', __('Task created successfully'));
+                    mediator.trigger('widget_success:' + widget.getAlias());
+                    mediator.trigger('widget_success:' + widget.getWid());
+                    widget.remove();
+                });
+            });
+        </script>
+    {% else %}
+        {% if not form.vars.valid and form.vars.errors|length %}
+            <div class="alert alert-error">
+                <div class="message">
+                    {{ form_errors(form) }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="form-container">
+            <form id="{{ form.vars.name }}" action="{{ path('orocrm_task_create', {'no_redirect': true }) }}" method="post">
+                <fieldset class="form form-horizontal">
+                    <div class="span6">
+                        {{ form_row(form.subject) }}
+                        {{ form_row(form.description) }}
+                    </div>
+                    <div class="span6">
+                        {{ form_row(form.dueDate) }}
+                        {{ form_row(form.taskPriority) }}
+                        {{ form_row(form.owner) }}
+                        {{ form_row(form.relatedAccount) }}
+                        {{ form_row(form.relatedContact) }}
+                        {{ form_row(form.reporter) }}
+                    </div>
+                    <div class="span6">
+                        {{ form_rest(form) }}
+                    </div>
+                    <div class="widget-actions form-actions">
+                        <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
+                        <button class="btn btn-primary" type="submit">
+                            {{ 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.task.entity_label'|trans}) }}
+                        </button>
+                    </div>
+                </fieldset>
+            </form>
+            {{ oro_form_js_validation(form) }}
+        </div>
+    {% endif %}
+</div>

@@ -3,10 +3,6 @@
 
 {% oro_title_set({params : {"%lead.name%": entity.name} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Lead' %}
-{% set title = form.vars.value.id
-    ? entity.name ~ ' - ' ~ 'Update'|trans ~ ' ' ~ 'orocrm.sales.lead.entity_label'|trans
-    : 'New'|trans ~ ' ' ~ 'orocrm.sales.lead.entity_label'|trans
-%}
 {% set formAction = form.vars.value.id ? path('orocrm_sales_lead_update', { 'id': form.vars.value.id }) : path('orocrm_sales_lead_create')  %}
 
 {% block head_script %}
@@ -30,10 +26,11 @@
         {{ UI.buttonSeparator() }}
     {% endif %}
     {{ UI.cancelButton(path('orocrm_sales_lead_index')) }}
+    {% set html = UI.saveAndCloseButton() %}
     {% if form.vars.value.id or resource_granted('orocrm_sales_lead_update') %}
-        {{ UI.saveAndStayButton() }}
+        {% set html = html ~ UI.saveAndStayButton() %}
     {% endif %}
-    {{ UI.saveAndCloseButton() }}
+    {{ UI.dropdownSaveButton({'html': html}) }}
 {% endblock %}
 
 {% block pageHeader %}
@@ -46,7 +43,8 @@
         } %}
         {{ parent() }}
     {% else %}
-        {% include 'OroUIBundle::page_title_block.html.twig' %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.sales.lead.entity_label'|trans}) %}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
 
@@ -98,7 +96,7 @@
             'class': 'active',
             'subblocks': [
                 {
-                    'title': 'Lead Information',
+                    'title': 'orocrm.sales.lead.information',
                     'data': formFields
                 },
                 {

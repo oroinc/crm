@@ -1,0 +1,15 @@
+OroCRM\Bundle\TaskBundle\Entity\Task:
+    properties:
+        subject:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        dueDate:
+            - NotBlank: ~
+            - DateTime: ~
+        taskPriority:
+            - NotBlank: ~
+        owner:
+            - NotBlank: ~
+        reporter:
+            - NotBlank: ~

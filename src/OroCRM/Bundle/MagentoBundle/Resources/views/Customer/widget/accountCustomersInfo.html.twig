@@ -1,0 +1,20 @@
+<div class="widget-content">
+    {% if customers|length > 0 %}
+        {% set tabs = [] %}
+        {% for customer in customers %}
+            {% set tabs = tabs|merge([
+                {
+                    'alias': 'orocrm_magento_customer_info_' ~ 'customer__' ~ customer.id ~ 'channel__' ~ channel.id,
+                    'widgetType': 'block',
+                    'label': customer|oro_format_name,
+                    'url': path('orocrm_magento_widget_customer_info', {'id': customer.id, 'channelId': channel.id})
+                }
+            ]) %}
+        {% endfor %}
+        {{ tabPanel(tabs) }}
+    {% else %}
+        <div class="no-data">
+            <span>{{ "orocrm.magento.account.no_customers_exist"|trans }}</span>
+        </div>
+    {% endif %}
+</div>

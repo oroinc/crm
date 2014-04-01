@@ -33,7 +33,7 @@ class ContactAddress extends AbstractTypedAddress
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType",cascade={"persist"})
      * @ORM\JoinTable(
-     *     name="orocrm_contact_address_to_address_type",
+     *     name="orocrm_contact_adr_to_adr_type",
      *     joinColumns={@ORM\JoinColumn(name="contact_address_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )

@@ -12,7 +12,15 @@ use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 class OrderStrategy extends BaseStrategy
 {
     /** @var array */
-    protected static $attributesToUpdateManual = ['id', 'store', 'items', 'customer', 'addresses'];
+    protected static $attributesToUpdateManual = [
+            'id',
+            'store',
+            'items',
+            'customer',
+            'addresses',
+            'workflowItem',
+            'workflowStep'
+        ];
 
     /** @var StoreStrategy */
     protected $storeStrategy;
@@ -96,10 +104,10 @@ class OrderStrategy extends BaseStrategy
         $cart = $this->getEntityByCriteria($criteria, MagentoConnectorInterface::CART_TYPE);
 
         if ($cart) {
-            $statusClass     = 'OroCRMMagentoBundle:CartStatus';
-            $convertedStatus = $this->strategyHelper->getEntityManager($statusClass)->find($statusClass, 'converted');
-            if ($convertedStatus) {
-                $cart->setStatus($convertedStatus);
+            $statusClass     = MagentoConnectorInterface::CART_STATUS_TYPE;
+            $purchasedStatus = $this->strategyHelper->getEntityManager($statusClass)->find($statusClass, 'purchased');
+            if ($purchasedStatus) {
+                $cart->setStatus($purchasedStatus);
             }
         }
 

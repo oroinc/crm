@@ -1,7 +1,8 @@
-/* global:define */
-define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/navigation', 'oro/messenger'],
-    function ($, _, routing, Backbone, __, Navigation, messenger) {
-        "use strict";
+/*global define*/
+define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/translator',
+        'oronavigation/js/navigation', 'oroui/js/messenger'
+    ], function ($, _, routing, Backbone, __, Navigation, messenger) {
+    "use strict";
 
     return Backbone.View.extend({
         events: {
@@ -24,7 +25,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
         connectorTemplate: _.template(
             '<div class="oro-clearfix">' +
                 '<input type="checkbox" id="oro_integration_channel_form_connectors_<%= i %>" ' +
-                    'name="oro_integration_channel_form[connectors][]" value="<%= name %>">' +
+                    'name="oro_integration_channel_form[connectors][]" value="<%= name %>" <%= checked %>>' +
                 '<label for="oro_integration_channel_form_connectors_<%= i %>"><%= label %></label>' +
             '</div>'
         ),
@@ -81,7 +82,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
                         navigation.loadingMask.hide();
                     }
                     if (status !== 'success') {
-                        this.renderResult('error', __('Error occurred during check request, please try later!'));
+                        this.renderResult('error', __('orocrm.magento.error'));
                     }
                 }, this));
         },
@@ -89,13 +90,15 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
         /**
          * Handler ajax response
          *
-         * @param res {}
+         * @param res {object}
          */
         responseHandler: function (res) {
             var success = res.success || false,
-                message = success ? __('Connection succeed, please choose website.') : __('Parameters are not valid!');
+                message = success ? __('orocrm.magento.success') : __('orocrm.magento.not_valid_parameters');
 
-            if (success && res.websites) {
+            // websitesModificationAllowed might be undefined, but it should not be false
+            // false is equal - denied
+            if (success && this.options.websitesModificationAllowed !== false && res.websites) {
                 var $listEl = $(this.options.websitesListEl),
                     $websiteSelectEl = $(this.options.websiteSelectEl),
                     $isExtensionInstalledEl = $(this.options.isExtensionInstalledEl);
@@ -110,13 +113,30 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'oro/translator', 'oro/na
             }
 
             if (success && res.connectors) {
-                var connectors = res.connectors;
-                var form = this.$el.parents('form');
-                form.find(this.options.connectorsEl).empty();
-                var i = 0;
+                var connectors = res.connectors,
+                    $form = this.$el.parents('form'),
+                    $connectorsEl = $form.find(this.options.connectorsEl),
+                    i = 0,
+                    checkedBoxes = $connectorsEl.find(':checked'),
+                    checked = {};
+
+                _.each(checkedBoxes, function(el) {
+                    checked[$(el).val()] = 'checked';
+                });
+
+                $connectorsEl.empty();
                 for (var key in connectors) {
-                    form.find(this.options.connectorsEl).append(this.connectorTemplate({name: key, label: connectors[key], i: i}));
-                    i++;
+                    if (connectors.hasOwnProperty(key)) {
+                        $connectorsEl.append(
+                            this.connectorTemplate({
+                                name:    key,
+                                label:   connectors[key],
+                                checked: checked[key] || '',
+                                i:       i
+                            })
+                        );
+                        i++;
+                    }
                 }
             }
 

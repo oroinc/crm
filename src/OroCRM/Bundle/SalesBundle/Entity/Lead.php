@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 
@@ -22,7 +23,10 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
- * @ORM\Table(name="orocrm_sales_lead")
+ * @ORM\Table(
+ *      name="orocrm_sales_lead",
+ *      indexes={@ORM\Index(name="lead_created_idx",columns={"createdAt"})}
+ * )
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\LeadRepository")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
@@ -42,8 +46,11 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  *          "type"="ACL",
  *          "group_name"=""
  *      },
- *      "workflow"={
- *          "active_workflow"="b2b_flow_lead"
+ *      "form"={
+ *          "form_type"="orocrm_sales_lead_select"
+ *      },
+ *      "dataaudit"={
+ *          "auditable"=true
  *      }
  *  }
  * )
@@ -71,6 +78,7 @@ class Lead extends ExtendLead implements FullNameInterface
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      **/
     protected $contact;
 
@@ -80,6 +88,7 @@ class Lead extends ExtendLead implements FullNameInterface
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      **/
     protected $account;
 
@@ -88,6 +97,7 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="name", type="string", length=255)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $name;
 
@@ -96,6 +106,7 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $namePrefix;
 
@@ -104,6 +115,7 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="first_name", type="string", length=255)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $firstName;
 
@@ -112,6 +124,7 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $middleName;
 
@@ -120,6 +133,7 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="last_name", type="string", length=255)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $lastName;
 
@@ -128,6 +142,7 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $nameSuffix;
 
@@ -136,6 +151,7 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="job_title", type="string", length=255, nullable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $jobTitle;
 
@@ -144,6 +160,7 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $phoneNumber;
 
@@ -152,6 +169,7 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $email;
 
@@ -160,6 +178,7 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="company_name", type="string", length=255, nullable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $companyName;
 
@@ -168,6 +187,7 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="website", type="string", length=255, nullable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $website;
 
@@ -176,6 +196,7 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="number_of_employees", type="integer", nullable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $numberOfEmployees;
 
@@ -184,6 +205,7 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="industry", type="string", length=255, nullable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $industry;
 
@@ -215,6 +237,7 @@ class Lead extends ExtendLead implements FullNameInterface
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $owner;
 
@@ -230,12 +253,12 @@ class Lead extends ExtendLead implements FullNameInterface
      * @var string
      *
      * @ORM\Column(name="notes", type="text", nullable=true)
+     * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $notes;
 
     /**
-     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
-     *
      * @var WorkflowItem
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
@@ -244,8 +267,6 @@ class Lead extends ExtendLead implements FullNameInterface
     protected $workflowItem;
 
     /**
-     * TODO: Move field to custom entity config https://magecore.atlassian.net/browse/BAP-2923
-     *
      * @var WorkflowStep
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")

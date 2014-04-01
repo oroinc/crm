@@ -18,6 +18,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -30,7 +31,10 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @ORM\Entity
- * @ORM\Table(name="orocrm_contact")
+ * @ORM\Table(
+ *      name="orocrm_contact",
+ *      indexes={@ORM\Index(name="contact_name_idx",columns={"first_name", "last_name"})}
+ * )
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
@@ -48,6 +52,12 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
+ *      },
+ *      "form"={
+ *          "form_type"="orocrm_contact_select"
+ *      },
+ *      "dataaudit"={
+ *          "auditable"=true
  *      }
  *  }
  * )
@@ -73,6 +83,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $namePrefix;
 
@@ -82,6 +93,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="first_name", type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $firstName;
 
@@ -91,6 +103,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $middleName;
 
@@ -100,6 +113,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="last_name", type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $lastName;
 
@@ -109,6 +123,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $nameSuffix;
 
@@ -118,15 +133,17 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="gender", type="string", length=8, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $gender;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="birthday", type="datetime", nullable=true)
+     * @ORM\Column(name="birthday", type="date", nullable=true)
      * @Soap\ComplexType("date", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $birthday;
 
@@ -135,6 +152,8 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $description;
 
@@ -143,6 +162,8 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Source")
      * @ORM\JoinColumn(name="source_name", referencedColumnName="name")
+     * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      **/
     protected $source;
 
@@ -151,6 +172,8 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Method")
      * @ORM\JoinColumn(name="method_name", referencedColumnName="name")
+     * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      **/
     protected $method;
 
@@ -160,6 +183,8 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $owner;
 
@@ -168,6 +193,8 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="assigned_to_user_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $assignedTo;
 
@@ -176,6 +203,8 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="reports_to_contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $reportsTo;
 
@@ -185,8 +214,18 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="job_title", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $jobTitle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     */
+    protected $email;
 
     /**
      * @var Collection
@@ -216,6 +255,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="fax", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $fax;
 
@@ -225,6 +265,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="skype", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $skype;
 
@@ -234,6 +275,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $twitter;
 
@@ -243,6 +285,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="facebook", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $facebook;
 
@@ -252,6 +295,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="google_plus", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $googlePlus;
 
@@ -261,6 +305,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="linkedin", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
+     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $linkedIn;
 
@@ -283,7 +328,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Group")
-     * @ORM\JoinTable(name="orocrm_contact_to_contact_group",
+     * @ORM\JoinTable(name="orocrm_contact_to_contact_grp",
      *      joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="contact_group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )

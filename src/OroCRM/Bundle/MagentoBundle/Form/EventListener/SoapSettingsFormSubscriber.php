@@ -7,7 +7,10 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Oro\Bundle\IntegrationBundle\Entity\Status;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 class SoapSettingsFormSubscriber implements EventSubscriberInterface
 {
@@ -47,11 +50,11 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
         $modifier = $this->getModifierWebsitesList($data->getWebsites());
         $modifier($form);
 
+        $this->muteFields($form);
+
         if ($data->getId()) {
             // change label for apiKey field
-            $options = $event->getForm()->get('apiKey')->getConfig()->getOptions();
-            $options = array_merge($options, ['label' => 'New SOAP API Key', 'required' => false]);
-            $form->add('apiKey', 'password', $options);
+            FormUtils::replaceField($form, 'apiKey', ['label' => 'New SOAP API Key', 'required' => false]);
         }
     }
 
@@ -65,8 +68,9 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
     public function preSubmit(FormEvent $event)
     {
         $data = (array)$event->getData();
+        $form = $event->getForm();
 
-        $oldPassword = $event->getForm()->get('apiKey')->getData();
+        $oldPassword = $form->get('apiKey')->getData();
         if (empty($data['apiKey']) && $oldPassword) {
             // populate old password
             $data['apiKey'] = $oldPassword;
@@ -74,6 +78,8 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
             $data['apiKey'] = $this->encryptor->encryptData($data['apiKey']);
         }
 
+        // first time all websites comes from frontend(when run sync action)
+        // otherwise loaded from entity
         if (!empty($data['websites'])) {
             $websites = $data['websites'];
             // reverseTransform, but not set back to event
@@ -81,8 +87,10 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
                 $websites = json_decode($websites, true);
             }
             $modifier = $this->getModifierWebsitesList($websites);
-            $modifier($event->getForm());
+            $modifier($form);
         }
+
+        $this->muteFields($form);
 
         $event->setData($data);
     }
@@ -99,24 +107,42 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
                 return;
             }
 
-            if ($form->has('websiteId')) {
-                $config = $form->get('websiteId')->getConfig()->getOptions();
-                unset($config['choice_list']);
-                unset($config['choices']);
-            } else {
-                $config = array();
-            }
-
-            if (array_key_exists('auto_initialize', $config)) {
-                $config['auto_initialize'] = false;
-            }
-
             $choices = [];
             foreach ($websites as $website) {
                 $choices[$website['id']] = $website['label'];
             }
 
-            $form->add('websiteId', 'choice', array_merge($config, ['choices' => $choices]));
+            FormUtils::replaceField($form, 'websiteId', ['choices' => $choices], ['choice_list']);
         };
+    }
+
+    /**
+     * Disable fields that are not allowed to be modified since channel has at least one sync completed
+     *
+     * @param FormInterface $form
+     */
+    protected function muteFields(FormInterface $form)
+    {
+        if ($form->getParent()) {
+            /** @var Channel $channel */
+            $channel = $form->getParent()->getData();
+
+            if (!($channel && $channel->getId())) {
+                // do nothing if channel is new
+                return;
+            }
+
+            $atLeastOneSync = $channel->getStatuses()->exists(
+                function ($key, Status $status) {
+                    return intval($status->getCode()) === Status::STATUS_COMPLETED;
+                }
+            );
+            if ($atLeastOneSync) {
+                // disable start sync date
+                FormUtils::replaceField($form, 'syncStartDate', ['disabled' => true]);
+                // disable websites selector
+                FormUtils::replaceField($form, 'websiteId', ['disabled' => true]);
+            }
+        }
     }
 }

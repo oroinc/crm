@@ -1,3 +1,11 @@
+CHANGELOG for 1.0.0
+===================
+This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0 versions.
+
+* 1.0.0 (2014-04-01)
+ * Tasks
+ * Improved UI for launch of the Sales Process workflow
+
 CHANGELOG for 1.0.0-rc2
 ===================
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-rc2 versions.

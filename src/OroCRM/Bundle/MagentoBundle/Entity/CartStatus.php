@@ -4,9 +4,12 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_magento_cart_status")
+ * @Config()
  */
 class CartStatus
 {

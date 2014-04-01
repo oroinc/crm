@@ -4,24 +4,24 @@
     <div class="responsive-block">
         {{ ui.renderProperty('Subject'|trans, entity.subject) }}
         {#{{ ui.renderProperty('Status'|trans, entity.callStatus ? entity.callStatus.label : null) }}#}
-        {{ ui.renderProperty('Notes'|trans, entity.notes|nl2br) }}
+        {{ ui.renderHtmlProperty('Notes'|trans, entity.notes|escape|nl2br) }}
         {{ ui.renderProperty('Call Date & Time'|trans, entity.callDateTime|oro_format_datetime) }}
     </div>
     <div class="responsive-block">
         {% set accountView = entity.relatedAccount ? entity.relatedAccount.__toString() : null %}
         {%- if accountView and resource_granted('orocrm_account_view') -%}
-            {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.relatedAccount.id}) ~ '">' ~ accountView ~ '</a>' %}
+            {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.relatedAccount.id}) ~ '">' ~ accountView|escape ~ '</a>' %}
         {%- endif -%}
-        {{ ui.renderProperty('Related To'|trans, accountView) }}
+        {{ ui.renderHtmlProperty('Related To'|trans, accountView) }}
 
         {% set contactView = entity.relatedContact ? entity.relatedContact|oro_format_name : null %}
         {%- if contactView and resource_granted('orocrm_contact_view') -%}
-            {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.relatedContact.id}) ~ '">' ~ contactView ~ '</a>' %}
+            {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.relatedContact.id}) ~ '">' ~ contactView|escape ~ '</a>' %}
         {%- endif -%}
-        {{ ui.renderProperty('Related Contact'|trans, contactView) }}
+        {{ ui.renderHtmlProperty('Related Contact'|trans, contactView) }}
 
         {% set phoneNumber = entity.contactPhoneNumber ? entity.contactPhoneNumber.phone : entity.phoneNumber %}
-        {{ ui.renderProperty('Phone Number'|trans, phoneNumber) }}
+        {{ ui.renderHtmlProperty('Phone Number'|trans, ui.renderPhone(phoneNumber)) }}
 
         {{ ui.renderProperty('Direction'|trans, entity.direction ? entity.direction.label : null) }}
 

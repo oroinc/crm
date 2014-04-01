@@ -1,0 +1,70 @@
+parameters:
+    #entity
+    orocrm_task.entity.class:         OroCRM\Bundle\TaskBundle\Entity\Task
+
+    #form
+    orocrm_task.form.type.task.class:        OroCRM\Bundle\TaskBundle\Form\Type\TaskType
+    orocrm_task.form.type.task_api.class:    OroCRM\Bundle\TaskBundle\Form\Type\TaskApiType
+    orocrm_task.form.handler.task_api.class: OroCRM\Bundle\TaskBundle\Form\Handler\TaskHandler
+    orocrm_task.manager.api.class:           Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
+services:
+    orocrm_task.form.type.task:
+        class: %orocrm_task.form.type.task.class%
+        tags:
+            - { name: form.type, alias: orocrm_task }
+
+    orocrm_task.form.type.task_api:
+        class: %orocrm_task.form.type.task_api.class%
+        tags:
+            - { name: form.type, alias: task }
+
+    #data grid events
+    orocrm_task.event_listener.account_tasks_grid_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'accountId'
+            - @oro_datagrid.datagrid.request_params
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.task-account-tasks-grid, method: onBuildAfter }
+
+    orocrm_task.event_listener.contact_tasks_grid_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'contactId'
+            - @oro_datagrid.datagrid.request_params
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.task-contact-tasks-grid, method: onBuildAfter }
+
+    orocrm_task.event_listener.user_tasks_grid_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'userId'
+            - @oro_datagrid.datagrid.request_params
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.task-user-tasks-grid, method: onBuildAfter }
+
+    orocrm_task.manager.api:
+        class: %orocrm_task.manager.api.class%
+        arguments:
+            - %orocrm_task.entity.class%
+            - @doctrine.orm.entity_manager
+
+    orocrm_task.form.handler.task_api:
+        class: %orocrm_task.form.handler.task_api.class%
+        scope: request
+        arguments:
+            - @orocrm_task.form.api
+            - @request
+            - @doctrine.orm.entity_manager
+
+    orocrm_task.form.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - 'task'
+            - 'task'

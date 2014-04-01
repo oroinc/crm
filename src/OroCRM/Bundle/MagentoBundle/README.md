@@ -1,5 +1,5 @@
-MagentoBundle
-=============
+OroCRMMagentoBundle
+===================
 
 Bundle provides integration with Magento e-commerce solution.
 

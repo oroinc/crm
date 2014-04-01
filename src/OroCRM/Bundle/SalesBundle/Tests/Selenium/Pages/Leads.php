@@ -4,6 +4,13 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
 
+/**
+ * Class Leads
+ *
+ * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
+ * @method Leads openLeads openLeads(string)
+ * {@inheritdoc}
+ */
 class Leads extends AbstractPageFilteredGrid
 {
     const URL = 'lead';
@@ -14,9 +21,12 @@ class Leads extends AbstractPageFilteredGrid
         parent::__construct($testCase, $redirect);
     }
 
+    /**
+     * @return Lead
+     */
     public function add()
     {
-        $this->test->byXPath("//a[@title='Create lead']")->click();
+        $this->test->byXPath("//a[@title='Create Lead']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $lead = new Lead($this->test);
@@ -27,7 +37,6 @@ class Leads extends AbstractPageFilteredGrid
     {
         $contact = $this->getEntity($entityData);
         $contact->click();
-        sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
 

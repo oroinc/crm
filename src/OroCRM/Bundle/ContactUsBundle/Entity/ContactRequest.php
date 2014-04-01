@@ -16,11 +16,15 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_contactus_request")
+ * @ORM\Table(
+ *      name="orocrm_contactus_request",
+ *      indexes={@ORM\Index(name="request_create_idx",columns={"created_at"})}
+ * )
  *
  * @Config(
  *  routeName="orocrm_contactus_request_index",
  *  defaultValues={
+ *      "entity"={"icon"="icon-envelope"},
  *      "security"={
  *          "type"="ACL",
  *          "permissions"="All",
@@ -95,7 +99,7 @@ class ContactRequest extends AbstractContactRequest
      * @var ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\EmailBundle\Entity\Email")
-     * @ORM\JoinTable(name="orocrm_contactus_request_emails",
+     * @ORM\JoinTable(name="orocrm_contactus_req_emails",
      *      joinColumns={@ORM\JoinColumn(name="request_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
@@ -103,8 +107,6 @@ class ContactRequest extends AbstractContactRequest
     protected $emails;
 
     /**
-     * TODO: Move field to custom entity config BAP-2923
-     *
      * @var WorkflowItem
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
@@ -113,8 +115,6 @@ class ContactRequest extends AbstractContactRequest
     protected $workflowItem;
 
     /**
-     * TODO: Move field to custom entity config BAP-2923
-     *
      * @var WorkflowStep
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")

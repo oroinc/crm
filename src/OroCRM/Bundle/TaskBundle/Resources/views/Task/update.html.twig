@@ -1,0 +1,78 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+
+{% oro_title_set({params : {"%entity.subject%": entity.subject, "%entityName%": 'orocrm.task.entity_label'|trans }}) %}
+{% set entityId = entity.id %}
+
+{% set formAction = entityId ? path('orocrm_task_update', { 'id': entityId}) : path('orocrm_task_create') %}
+
+{% block navButtons %}
+    {% set html = UI.saveAndCloseButton() %}
+    {% if resource_granted('orocrm_task_update') %}
+        {% set html = html ~ UI.saveAndStayButton() %}
+    {% endif %}
+    {{ UI.dropdownSaveButton({'html': html}) }}
+    {{ UI.cancelButton(path('orocrm_task_index')) }}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% if entityId %}
+        {% set breadcrumbs = {
+            'entity': entity,
+            'indexPath': path('orocrm_task_index'),
+            'indexLabel': 'orocrm.task.entity_plural_label'|trans,
+            'entityTitle': entity.subject
+        } %}
+        {{ parent() }}
+    {% else %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.task.entity_label'|trans}) %}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
+    {% endif %}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'task-form' %}
+
+    {% set dataBlocks = [{
+        'title': 'orocrm.task.block.general'|trans,
+        'class': 'active',
+        'subblocks': [
+            {
+                'title': '',
+                'data': [
+                    form_row(form.subject),
+                    form_row(form.description),
+                    form_row(form.dueDate),
+                    form_row(form.taskPriority),
+                    form_row(form.relatedAccount),
+                    form_row(form.relatedContact),
+                    form_row(form.owner),
+                    form_row(form.reporter),
+                    form_row(form.reminders)
+                ]
+            }
+        ]
+    }] %}
+
+    {# This is required to show extended fields #}
+    {% if form.additional is defined and form.additional.children|length > 0 %}
+        {% set additionalData = [] %}
+        {% for value in form.additional %}
+            {% set additionalData = additionalData|merge([form_row(value)]) %}
+        {% endfor %}
+
+        {% set dataBlocks = dataBlocks|merge([{
+            'title': 'orocrm.task.block.additional'|trans,
+            'subblocks': [{
+                'title': '',
+                'useSpan': false,
+                'data' : additionalData
+            }]
+        }] ) %}
+    {% endif %}
+
+    {% set data = {
+        'formErrors': form_errors(form)? form_errors(form) : null,
+        'dataBlocks': dataBlocks,
+    } %}
+    {{ parent() }}
+{% endblock content_data %}

@@ -1,3 +1,5 @@
-"Error occurred during check request, please try later!": "Error occurred during check request, please try later!"
-"Connection succeed, please choose website.": "Connection succeed, please choose website. "
-"Parameters are not valid!": "Parameters are not valid!"
+orocrm:
+    magento:
+        success: Connection successful, please select a website from the list below
+        not_valid_parameters: Parameters are not valid!
+        error: Error occurred during check request, please try later!

@@ -3,12 +3,22 @@
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseOrderItem;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table("orocrm_magento_order_items")
  * @ORM\Entity
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"icon"="icon-list-alt"},
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
+ *  }
+ * )
  */
 class OrderItem extends BaseOrderItem
 {
@@ -32,7 +42,7 @@ class OrderItem extends BaseOrderItem
     /**
      * @var string
      *
-     * @ORM\Column(name="product_options", type="string", length=255, nullable=true)
+     * @ORM\Column(name="product_options", type="text", nullable=true)
      */
     protected $productOptions;
 
@@ -44,16 +54,16 @@ class OrderItem extends BaseOrderItem
     protected $isVirtual;
 
     /**
-     * @var float
+     * @var double
      *
-     * @ORM\Column(name="original_price", type="float", nullable=true)
+     * @ORM\Column(name="original_price", type="money", nullable=true)
      */
     protected $originalPrice;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="discount_percent", type="float", nullable=true)
+     * @ORM\Column(name="discount_percent", type="percent", nullable=true)
      */
     protected $discountPercent;
 

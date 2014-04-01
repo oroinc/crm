@@ -1,0 +1,29 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% if resource_granted('orocrm_task_create') %}
+    {# Find a way to pass here parameter from container to not hard-code class name #}
+    {% set task_entity_config = oro_entity_config('OroCRM\\Bundle\\TaskBundle\\Entity\\Task') %}
+    {% set title = 'orocrm.task.add_entity'|trans %}
+    {{ UI.clientButton({
+        'dataUrl': path('orocrm_task_create', { 'assignedToId': entity.id }) ,
+        'aCss': 'no-hash',
+        'iCss': task_entity_config.icon|default(''),
+        'title' : title,
+        'label' : title,
+        'widget' : {
+            'type' : 'dialog',
+            'multiple' : false,
+            'reload-grid-name' : 'task-user-tasks-grid',
+            'options' : {
+                'dialogOptions' : {
+                    'title' : title,
+                    'allowMaximize': true,
+                    'allowMinimize': true,
+                    'dblclick': 'maximize',
+                    'maximizedHeightDecreaseBy': 'minimize-bar',
+                    'width': 1000
+                }
+            }
+        },
+    }) }}
+{% endif %}

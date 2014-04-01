@@ -2,7 +2,8 @@
 
 namespace OroCRM\Bundle\CallBundle\Controller;
 
-use OroCRM\Bundle\CallBundle\Entity\Call;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -11,8 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class CallController extends Controller
 {
@@ -30,8 +31,9 @@ class CallController extends Controller
     {
         $redirect = ($this->getRequest()->get('no_redirect')) ? false : true;
         $contactId = $this->getRequest()->get('contactId');
+        $accountId = $this->getRequest()->get('accountId');
 
-        $entity = $this->initEntity($contactId);
+        $entity = $this->initEntity($contactId, $accountId);
         return $this->update($entity, $redirect);
     }
 
@@ -92,10 +94,11 @@ class CallController extends Controller
 
     /**
      * @param int|null $contactId
+     * @param int|null $accountId
      * @return Call
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    protected function initEntity($contactId = null)
+    protected function initEntity($contactId = null, $accountId = null)
     {
         $entity = new Call();
 
@@ -117,6 +120,17 @@ class CallController extends Controller
                 $entity->setContactPhoneNumber($contact->getPrimaryPhone());
             } else {
                 throw new NotFoundHttpException(sprintf('Contact with ID %s is not found', $contactId));
+            }
+        }
+
+        if ($accountId) {
+            $repository = $this->getDoctrine()->getRepository('OroCRMAccountBundle:Account');
+            /** @var Account $account */
+            $account = $repository->find($accountId);
+            if ($account) {
+                $entity->setRelatedAccount($account);
+            } else {
+                throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
             }
         }
 
@@ -153,6 +167,7 @@ class CallController extends Controller
         }
 
         return array(
+            'entity' => $entity,
             'saved' => $saved,
             'form' => $this->get('orocrm_call.call.form')->createView()
         );

@@ -2,8 +2,14 @@
 
 namespace OroCRM\Bundle\TestsBundle\Tests\Selenium;
 
+use Oro\Bundle\DataAuditBundle\Tests\Selenium\Pages\DataAudit;
+use Oro\Bundle\NavigationBundle\Tests\Selenium\Pages\Navigation;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Groups;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\User;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
 
 /**
  * Class AclTest
@@ -41,6 +47,7 @@ class AclTest extends Selenium2TestCase
         $username = 'User_'.mt_rand();
 
         $login = $this->login();
+        /** @var Users $login */
         $login->openUsers('Oro\Bundle\UserBundle')
             ->add()
             ->assertTitle('Create User - Users - Users Management - System')
@@ -53,6 +60,7 @@ class AclTest extends Selenium2TestCase
             ->setLastName('Last_'.$username)
             ->setEmail($username.'@mail.com')
             ->setRoles(array($roleName))
+            ->uncheckInviteUser()
             ->save()
             ->assertMessage('User saved')
             ->toGrid()
@@ -73,10 +81,11 @@ class AclTest extends Selenium2TestCase
             ->setPassword('123123q')
             ->submit();
         $login->assertElementNotPresent(
-            "//div[@id='main-menu']/ul/li/a[normalize-space(.) = 'System']",
+            "//div[@id='main-menu']//span[normalize-space(.) = 'Configuration']",
             'Element present so ACL for Users do not work'
         );
         $login->assertElementNotPresent("//div[@id='search-div']", 'Element present so ACL for Search do not work');
+        /** @var Navigation $login */
         $login->openNavigation('Oro\Bundle\NavigationBundle')->openMyMenu();
     }
 
@@ -87,16 +96,21 @@ class AclTest extends Selenium2TestCase
     public function testUserAccessDirectUrl($username)
     {
         $login = new Login($this);
+
         $login->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openUsers('Oro\Bundle\UserBundle')
-            ->assertTitle('403 - Forbidden')
-            ->openRoles('Oro\Bundle\UserBundle')
-            ->assertTitle('403 - Forbidden')
-            ->openGroups('Oro\Bundle\UserBundle')
-            ->assertTitle('403 - Forbidden')
-            ->openDataAudit('Oro\Bundle\DataAuditBundle')
+            ->submit();
+        /** @var Users $login */
+        $login->openUsers('Oro\Bundle\UserBundle')
+            ->assertTitle('403 - Forbidden');
+        /** @var Roles $login */
+        $login->openRoles('Oro\Bundle\UserBundle')
+            ->assertTitle('403 - Forbidden');
+        /** @var Groups $login */
+        $login->openGroups('Oro\Bundle\UserBundle')
+            ->assertTitle('403 - Forbidden');
+        /** @var DataAudit $login */
+        $login->openDataAudit('Oro\Bundle\DataAuditBundle')
             ->assertTitle('403 - Forbidden');
     }
 
@@ -131,13 +145,13 @@ class AclTest extends Selenium2TestCase
             ->submit()
             ->openAccounts('OroCRM\Bundle\AccountBundle')
             ->assertTitle('Accounts - Customers')
-            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create account']")
+            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create Account']")
             ->openContacts('OroCRM\Bundle\ContactBundle')
             ->assertTitle('Contacts - Customers')
-            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create contact']")
+            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create Contact']")
             ->openContactGroups('OroCRM\Bundle\ContactBundle')
-            ->assertTitle('Contact Groups - Customers')
-            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create contact group']")
+            ->assertTitle('Contact Groups - System')
+            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create Contact Group']")
             ->openAclCheck('Oro\Bundle\SecurityBundle')
             ->assertAcl('account/create')
             ->assertAcl('contact/create')
@@ -153,10 +167,11 @@ class AclTest extends Selenium2TestCase
     public function testEditUserProfile($username)
     {
         $login = new Login($this);
-        $login->setUsername($username)
+        $login = $login->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openUser('Oro\Bundle\UserBundle')
+            ->submit();
+
+        $login->openUser('Oro\Bundle\UserBundle')
             ->viewInfo($username)
             ->checkRoleSelector();
     }
