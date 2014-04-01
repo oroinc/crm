@@ -127,10 +127,10 @@
                 {%- if entity.assignedTo -%}
                     {% if resource_granted('oro_user_user_view') %}
                         <a href="{{ path('oro_user_view', {'id': entity.assignedTo.id}) }}">
-                            {{ entity.assignedTo }}
+                            {{ entity.assignedTo.firstname~' '~entity.assignedTo.lastname }}
                         </a>
                     {% else %}
-                        {{ entity.assignedTo }}
+                        {{ entity.assignedTo.firstname~' '~entity.assignedTo.lastname }}
                     {% endif %}
                 {%- endif -%}
             {%- endset -%}
