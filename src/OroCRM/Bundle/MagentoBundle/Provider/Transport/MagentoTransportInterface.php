@@ -18,7 +18,6 @@ interface MagentoTransportInterface extends TransportInterface
      */
     public function isExtensionInstalled();
 
-
     /**
      * Return string if oro bridge extension installed on remote instance
      *
