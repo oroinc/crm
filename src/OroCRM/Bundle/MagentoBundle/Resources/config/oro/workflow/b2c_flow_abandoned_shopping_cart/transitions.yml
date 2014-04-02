@@ -160,18 +160,27 @@ workflows:
                             parameters: [$email_to, $cart.customer.contact.primaryEmail.email]
 
             convert:
-                label: 'Convert'
-                step_to: converted
+                label:    'Convert'
+                step_to:   converted
+                is_hidden: true
+                transition_definition: convert_definition
+
+            place_order_from_open:
+                label:   'Place an order'
+                step_to: open
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-shopping-cart'
-                transition_definition: convert_definition
-                form_options:
-                    attribute_fields:
-                        notes:
-                            form_type: textarea
-                            options:
-                                required: false
+                    icon: 'icon-money'
+                transition_definition: place_order_definition
+
+            place_order_from_contacted:
+                label:   'Place an order'
+                step_to: contacted
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-money'
+                transition_definition: place_order_definition
+
             convert_to_opportunity:
                 label: 'Convert to opportunity'
                 step_to: converted_to_opportunity
