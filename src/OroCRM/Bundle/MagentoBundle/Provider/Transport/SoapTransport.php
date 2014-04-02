@@ -9,6 +9,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 
 use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
+use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
@@ -56,9 +57,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /** @var bool */
     protected $isWsiMode = false;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $adminUrl;
 
     public function __construct(Mcrypt $encoder)
@@ -155,7 +154,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getAdminUrl()
     {
-        if(null === $this->adminUrl) {
+        if (null === $this->adminUrl) {
             $this->pingMagento();
         }
         return $this->adminUrl;
@@ -184,7 +183,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
             return new CartsBridgeIterator($this, $this->settings->all());
         }
 
-        throw new \LogicException('Could not retrieve carts via SOAP with out installed Oro Bridge module');
+        throw new ExtensionRequiredException();
     }
 
     /**

@@ -7,10 +7,10 @@ use Doctrine\ORM\EntityManager;
 use Psr\Log\LoggerAwareTrait;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 
 use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
+use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
@@ -18,8 +18,8 @@ class CartExpirationProcessor
 {
     const DEFAULT_PAGE_SIZE = 200;
 
-    /** @var TypesRegistry */
-    protected $registry;
+    /** @var ConnectorContextMediator */
+    protected $helper;
 
     /** @var EntityManager */
     protected $em;
@@ -36,15 +36,18 @@ class CartExpirationProcessor
     /**
      * Constructor
      *
-     * @param ServiceLink   $registryLink
-     * @param EntityManager $em
-     * @param int           $batchSize
+     * @param ConnectorContextMediator $helper
+     * @param EntityManager            $em
+     * @param int                      $batchSize
      */
-    public function __construct(ServiceLink $registryLink, EntityManager $em, $batchSize = self::DEFAULT_PAGE_SIZE)
-    {
-        $this->registryLink = $registryLink;
-        $this->em           = $em;
-        $this->batchSize    = $batchSize;
+    public function __construct(
+        ConnectorContextMediator $helper,
+        EntityManager $em,
+        $batchSize = self::DEFAULT_PAGE_SIZE
+    ) {
+        $this->helper    = $helper;
+        $this->em        = $em;
+        $this->batchSize = $batchSize;
     }
 
     /**
@@ -87,11 +90,11 @@ class CartExpirationProcessor
         $filterBag->addComplexFilter(
             'entity_id',
             [
-                'key'   => 'entity_id',
-                'value' => [
-                    'key'   => 'in',
-                    'value' => implode(',', array_keys($ids))
-                ]
+            'key'   => 'entity_id',
+            'value' => [
+                'key'   => 'in',
+                'value' => implode(',', array_keys($ids))
+            ]
             ]
         );
         $filters          = $filterBag->getAppliedFilters();
@@ -119,11 +122,12 @@ class CartExpirationProcessor
      */
     protected function configure(Channel $channel)
     {
-        $transport = $this->getTransport($channel);
+        $transport = $this->helper->getTransport($channel);
+        $transport->init($channel->getTransport());
         $settings  = $channel->getTransport()->getSettingsBag();
 
         if (!$transport->isExtensionInstalled()) {
-            throw new \LogicException('Could not retrieve carts via SOAP with out installed Oro Bridge module');
+            throw new ExtensionRequiredException();
         }
 
         $websiteId = $settings->get('website_id');
@@ -142,22 +146,5 @@ class CartExpirationProcessor
 
         $this->transport = $transport;
         $this->stores    = $stores;
-    }
-
-    /**
-     * Retrieve and initialize real transport object
-     *
-     * @param Channel $channel
-     *
-     * @return MagentoTransportInterface
-     */
-    protected function getTransport(Channel $channel)
-    {
-        /** @var MagentoTransportInterface $transport */
-        $transport = clone $this->registryLink->getService()
-            ->getTransportTypeBySettingEntity($channel->getTransport(), $channel->getType());
-        $transport->init($channel->getTransport());
-
-        return $transport;
     }
 }

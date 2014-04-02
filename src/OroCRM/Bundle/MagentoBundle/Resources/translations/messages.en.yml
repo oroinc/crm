@@ -329,3 +329,5 @@ orocrm:
             no_customers_exist: No customers exist
 
         menu.web_customers: Web Customers
+        controller.transport_not_configure: Unable to handle your request. Invalid channel configuration detected.
+        exception.extension_required: Unable to perform this operation, Oro Bridge extension not found.
