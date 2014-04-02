@@ -73,11 +73,16 @@ workflows:
             convert_definition:
                 pre_conditions:
                     @equal: [$cart.status.name, 'open']
+                post_actions: []
+
+            place_order_definition:
+                pre_conditions:
+                    @equal: [$cart.status.name, 'open']
                 post_actions:
-                    - @find_entity: # Set cart status to converted
-                        class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
-                        identifier: 'converted'
-                        attribute: $cart.status
+                    - @redirect:
+                        route: orocrm_magento_orderplace_cart
+                        route_parameters:
+                           id: $cart.id
 
             convert_to_opportunity_definition:
                 pre_conditions:
@@ -126,7 +131,6 @@ workflows:
             reopen_definition:
                 conditions:
                     @or:
-                        - @equal: [$cart.status.name, 'converted']
                         - @equal: [$cart.status.name, 'converted_to_opportunity']
                         - @equal: [$cart.status.name, 'lost']
                 post_actions:

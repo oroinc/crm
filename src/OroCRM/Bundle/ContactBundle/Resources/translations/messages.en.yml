@@ -6,9 +6,19 @@ orocrm:
             view_all: View all
 
     contact:
+        menu:
+            customers_tab.label: Customers
+            contact_list.description: List of contacts
+            contact_group_list.description: List of contact groups
+            shortcut_new_contact.label: Create new contact
+            shortcut_new_contact.description: Create new contact instance
+            shortcut_list_contacts.label: Show contacts list
+            shortcut_list_contacts.description: List of contacts
+            shortcut_new_contact_group.label: Create new contact group
+            shortcut_new_contact_group.description: Create new contact group instance
         controller:
-            contact.saved.message: "Contact saved"
-            contact_group.saved.message: "Contact Group saved"
+            contact.saved.message: Contact saved
+            contact_group.saved.message: Contact Group saved
 
         #
         # Form

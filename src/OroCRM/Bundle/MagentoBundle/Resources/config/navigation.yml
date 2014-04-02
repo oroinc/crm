@@ -1,11 +1,11 @@
 oro_menu_config:
     items:
         orocrm_magento_account_orders_tab:
-            label: orocrm.magento.order.entity_plural_label
+            label: 'orocrm.magento.order.entity_plural_label'
             extras:
                 position: 30
-                widgetAcl: orocrm_magento_order_view
-                widgetRoute: orocrm_magento_widget_account_orders
+                widgetAcl: 'orocrm_magento_order_view'
+                widgetRoute: 'orocrm_magento_widget_account_orders'
 
     tree:
         account_sales_tab_panel:
@@ -13,11 +13,11 @@ oro_menu_config:
                 orocrm_magento_account_orders_tab: ~
 
 oro_titles:
-    orocrm_magento_customer_index: Channels - Customers
-    orocrm_magento_customer_view:  %%customer.name%% - Channels - Customers
-    orocrm_magento_cart_index:     Shopping Carts - Sales
-    orocrm_magento_cart_view:      "Cart %%cart.id%% - Shopping Carts - Sales"
-    orocrm_magento_order_index:    Orders - Sales
-    orocrm_magento_order_view:     "Order %%order.incrementId%% - Orders - Sales"
-    orocrm_magento_product_index:  Products - Sales
-    orocrm_magento_product_view:   %%product.name%% - Products - Sales
+    orocrm_magento_customer_index: 'Channels - Customers'
+    orocrm_magento_customer_view:  '%%customer.name%% - Channels - Customers'
+    orocrm_magento_cart_index:     'Shopping Carts - Sales'
+    orocrm_magento_cart_view:      'Cart %%cart.id%% - Shopping Carts - Sales'
+    orocrm_magento_order_index:    'Orders - Sales'
+    orocrm_magento_order_view:     'Order %%order.incrementId%% - Orders - Sales'
+    orocrm_magento_product_index:  'Products - Sales'
+    orocrm_magento_product_view:   '%%product.name%% - Products - Sales'

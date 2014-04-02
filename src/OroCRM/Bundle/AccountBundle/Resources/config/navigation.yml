@@ -1,31 +1,31 @@
 oro_menu_config:
     items:
         customers_tab:
-            label: Customers
+            label: 'orocrm.account.menu.customers_tab.label'
             uri: '#'
             extras:
                 position: 10
 
         account_list:
-            label: orocrm.account.entity_plural_label
-            route: orocrm_account_index
+            label: 'orocrm.account.entity_plural_label'
+            route: 'orocrm_account_index'
             extras:
                 position: 5
                 routes: ['orocrm_account_*']
-                description: List of accounts
+                description: 'orocrm.account.menu.account_list.description'
 
         shortcut_new_account:
-            label: Create new account
-            route: orocrm_account_create
+            label: 'orocrm.account.menu.shortcut_new_account.label'
+            route: 'orocrm_account_create'
             extras:
-                description: Create new account instance
+                description: 'orocrm.account.menu.shortcut_new_account.description'
                 isCustomAction: true
 
         shortcut_list_accounts:
-            label: Show accounts list
-            route: orocrm_account_index
+            label: 'orocrm.account.menu.shortcut_list_accounts.label'
+            route: 'orocrm_account_index'
             extras:
-                description: List of accounts
+                description: 'orocrm.account.menu.shortcut_list_accounts.description'
 
     tree:
         application_menu:
@@ -41,6 +41,6 @@ oro_menu_config:
 
 oro_titles:
     orocrm_account_index: ~
-    orocrm_account_view: %%account.name%%
-    orocrm_account_create: Create Account
-    orocrm_account_update: %%account.name%% - Edit
+    orocrm_account_view: '%%account.name%%'
+    orocrm_account_create: 'Create Account'
+    orocrm_account_update: '%%account.name%% - Edit'
