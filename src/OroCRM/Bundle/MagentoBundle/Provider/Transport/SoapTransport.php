@@ -161,7 +161,6 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         return $this->adminUrl;
     }
 
-
     /**
      * {@inheritdoc}
      */

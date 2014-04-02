@@ -101,7 +101,6 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
             if (success && this.options.websitesModificationAllowed !== false && res.websites) {
                 var $listEl = $(this.options.websitesListEl),
                     $websiteSelectEl = $(this.options.websiteSelectEl);
-                    //$isExtensionInstalledEl = $(this.options.isExtensionInstalledEl);//вынести
 
                 $listEl.val(JSON.stringify(res.websites));
                 $websiteSelectEl.empty();
@@ -119,7 +118,6 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
                 $isExtensionInstalledEl.val(res.isExtensionInstalled || false ? 1 : 0);
                 $adminUrlEl.val((res.adminUrl) ? res.adminUrl : '');
             }
-
 
             if (success && res.connectors) {
                 var connectors = res.connectors,

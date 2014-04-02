@@ -95,7 +95,6 @@ class MagentoSoapTransport extends Transport
      */
     protected $adminUrl;
 
-
     public function __construct()
     {
         $this->setSyncStartDate(new \DateTime('2007-01-01', new \DateTimeZone('UTC')));
