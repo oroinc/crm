@@ -131,7 +131,6 @@ workflows:
             reopen_definition:
                 conditions:
                     @or:
-                        - @equal: [$cart.status.name, 'converted']
                         - @equal: [$cart.status.name, 'converted_to_opportunity']
                         - @equal: [$cart.status.name, 'lost']
                 post_actions:
