@@ -208,6 +208,7 @@ orocrm:
             websites.label:                 Websites
             website_id.label:               Website
             is_extension_installed.label:   Is extension installed
+            admin_url.label:                Admin url
 
         order:
             entity_label:        Order

@@ -42,11 +42,15 @@ class SoapController extends Controller
         $transportEntity      = $form->getData();
         $websites             = $allowedTypesChoices = [];
         $isExtensionInstalled = false;
+        $adminUrl             = false;
         try {
             $transport->init($transportEntity);
+
             $websites             = $this->formatWebsiteChoices($transport->getWebsites());
 
             $isExtensionInstalled = $transport->isExtensionInstalled();
+
+            $adminUrl             = $transport->getAdminUrl();
 
             $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')
                 ->getAvailableConnectorsTypesChoiceList(
@@ -55,11 +59,15 @@ class SoapController extends Controller
                         return $connector instanceof ExtensionAwareInterface ? $isExtensionInstalled : true;
                     }
                 );
+
             $translator          = $this->get('translator');
+
             foreach ($allowedTypesChoices as $name => $val) {
                 $allowedTypesChoices[$name] = $translator->trans($val);
             }
+
             $result = true;
+
         } catch (\Exception $e) {
             $result = false;
             $this->get('logger')->critical(sprintf('MageCheck error: %s: %s', $e->getCode(), $e->getMessage()));
@@ -71,6 +79,7 @@ class SoapController extends Controller
                 'websites'             => $websites,
                 'isExtensionInstalled' => $isExtensionInstalled,
                 'connectors'           => $allowedTypesChoices,
+                'adminUrl'            => $adminUrl,
             ]
         );
     }

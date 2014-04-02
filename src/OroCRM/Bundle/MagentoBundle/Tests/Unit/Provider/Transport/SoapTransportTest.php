@@ -274,6 +274,62 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider getAdminUrlProvider
+     *
+     * @param mixed  $expectedResult
+     * @param mixed  $soapResult
+     * @param bool   $throwsException
+     */
+    public function testGetAdminUrl($expectedResult, $soapResult, $throwsException = false)
+    {
+        $this->initSettings();
+
+        if ($throwsException) {
+            $this->soapClientMock->expects($this->at(1))
+                ->method('__soapCall')
+                ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
+                ->will($this->throwException(new \Exception()));
+        } else {
+            $this->soapClientMock->expects($this->at(1))
+                ->method('__soapCall')
+                ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
+                ->will($this->returnValue($soapResult));
+        }
+
+        $this->transport->init($this->transportEntity);
+
+        $result1 = $this->transport->getAdminUrl();
+
+        $result2 = $this->transport->getAdminUrl();
+
+        $this->assertSame($result1, $result2, 'All results should be same, and call remote service only once');
+
+        $this->assertSame($expectedResult, $result1);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdminUrlProvider()
+    {
+        return [
+            'exception result is perceived as not installed' => [
+                false,
+                null,
+                true
+            ],
+            'good result with admin_url'                     => [
+                'http://localhost/admin/',
+                (Object)['admin_url' => 'http://localhost/admin/']
+            ],
+            'good result with out admin_url'                 => [
+                false,
+                (object)[null]
+            ]
+        ];
+    }
+
+    /**
      * @return array
      */
     public function isExtensionInstalledProvider()
@@ -294,6 +350,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
+
 
     /**
      * @dataProvider wsiDataProvider
