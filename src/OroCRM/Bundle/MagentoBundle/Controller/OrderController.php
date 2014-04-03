@@ -94,4 +94,16 @@ class OrderController extends Controller
     {
         return array('account' => $account);
     }
+
+    /**
+     * @Route("/actualize/{id}", name="orocrm_magento_order_actualize", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_order_view")
+     */
+    public function actualizeAction(Order $order)
+    {
+        $processor = $this->get('oro_integration.sync.processor');
+        $processor->process($order->getChannel(), 'order', ['filters' => ['order_id' => $order->getIncrementId()]]);
+
+        return $this->redirect($this->generateUrl('orocrm_magento_order_view', ['id' => $order->getId()]));
+    }
 }
