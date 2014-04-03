@@ -185,4 +185,20 @@ class BatchFilterBag
 
         return $this;
     }
+
+    public function merge(BatchFilterBag $bag)
+    {
+        $appliedFilters = $bag->getAppliedFilters();
+        $appliedFilters = array_pop($appliedFilters);
+        if (!empty($appliedFilters[self::FILTER_TYPE_COMPLEX])) {
+            foreach ($appliedFilters[self::FILTER_TYPE_COMPLEX] as $filterName => $filterData) {
+                $this->addComplexFilter($filterName, $filterData);
+            }
+        }
+        if (!empty($appliedFilters[self::FILTER_TYPE_SIMPLE])) {
+            foreach ($appliedFilters[self::FILTER_TYPE_SIMPLE] as $filterName => $filterData) {
+                $this->addFilter($filterName, $filterData);
+            }
+        }
+    }
 }

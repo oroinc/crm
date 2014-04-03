@@ -3,8 +3,9 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
+use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 
-abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator
+abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator implements FiltersAwareInterface
 {
     const DEFAULT_PAGE_SIZE = 100;
 
@@ -13,6 +14,20 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator
 
     /** @var \stdClass[] Entities buffer got from pageable remote */
     protected $entityBuffer = null;
+
+    /** @var bool */
+    protected $lastPageAssumed = false;
+
+    /** @var BatchFilterBag */
+    protected $predefinedFilters;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPredefinedFiltersBag(BatchFilterBag $bag)
+    {
+        $this->predefinedFilters = $bag;
+    }
 
     /**
      * {@inheritdoc}
@@ -26,6 +41,10 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator
         }
 
         $this->filter->addDateFilter($dateField, 'from', $this->lastSyncDate);
+
+        if ($this->predefinedFilters) {
+            $this->filter->merge($this->predefinedFilters);
+        }
     }
 
     /**
@@ -33,11 +52,21 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator
      */
     protected function findEntitiesToProcess()
     {
+        if ($this->lastPageAssumed) {
+            return null;
+        }
+
         $this->logger->info('Looking for batch');
         $this->entitiesIdsBuffer = $this->getEntityIds();
         $this->currentPage++;
 
         $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
+
+        // if previous result batch items count less then requested page size
+        // then assume that it's last page
+        if (count($this->entityBuffer) < self::DEFAULT_PAGE_SIZE) {
+            $this->lastPageAssumed = true;
+        }
 
         return empty($this->entitiesIdsBuffer) ? null : true;
     }

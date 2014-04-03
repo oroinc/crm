@@ -101,6 +101,8 @@ orocrm:
             entity_plural_label:  Shopping Carts
             entity_description:   Represent Magento shopping cart
 
+            actualize_label:      Actualize Data
+
             id.label:                  Cart Id
             origin_id.label:           Origin Id
             items_qty.label:           Items qty

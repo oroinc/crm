@@ -80,4 +80,16 @@ class CartController extends Controller
     {
         return array('customer' => $customer, 'channel' => $channel);
     }
+
+    /**
+     * @Route("/actualize/{id}", name="orocrm_magento_cart_actualize", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_cart_view")
+     */
+    public function actualizeAction(Cart $cart)
+    {
+        $processor = $this->get('oro_integration.sync.processor');
+        $processor->process($cart->getChannel(), 'cart', ['filters' => ['entity_id' => $cart->getOriginId()]]);
+
+        return $this->redirect($this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]));
+    }
 }

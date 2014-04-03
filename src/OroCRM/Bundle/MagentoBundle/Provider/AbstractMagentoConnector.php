@@ -6,6 +6,7 @@ use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\FiltersAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
@@ -23,10 +24,30 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
 
         // set start date and mode depending on status
         $status = $this->channel->getStatusesForConnector($this->getType(), Status::STATUS_COMPLETED)->first();
-        if ($this->getSourceIterator() instanceof UpdatedLoaderInterface && false !== $status) {
+        $iterator = $this->getSourceIterator();
+        if ($iterator instanceof UpdatedLoaderInterface && false !== $status) {
             /** @var Status $status */
-            $this->getSourceIterator()->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
-            $this->getSourceIterator()->setStartDate($status->getDate());
+            $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
+            $iterator->setStartDate($status->getDate());
+        }
+
+        // pass filters from connector
+        if (null !== $context->getOption('filters')) {
+            if ($iterator instanceof FiltersAwareInterface) {
+                $predefinedFilters = new BatchFilterBag();
+                foreach ($context->getOption('filters') as $filterName => $filterValue) {
+                    $predefinedFilters->addFilter(
+                        $filterName,
+                        [
+                            'key'   => $filterName,
+                            'value' => $filterValue
+                        ]
+                    );
+                }
+                $iterator->setPredefinedFiltersBag($predefinedFilters);
+            } else {
+                throw new \LogicException('Iterator does not support predefined filters');
+            }
         }
     }
 

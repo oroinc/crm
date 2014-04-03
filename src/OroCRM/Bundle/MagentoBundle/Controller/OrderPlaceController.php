@@ -33,14 +33,9 @@ class OrderPlaceController extends Controller
     public function cartAction(Cart $cart)
     {
         $channel = $cart->getChannel();
-
-        $error = $sourceUrl = false;
+        $error   = $sourceUrl = false;
         try {
-            /** @var MagentoTransportInterface $transport */
-            $transport = $this->get('oro_integration.provider.connector_context_mediator')->getTransport($channel);
-            $transport->init($channel->getTransport());
-
-            $url = $transport->getAdminUrl();
+            $url = $channel->getTransport()->getAdminUrl();
             if (false === $url) {
                 throw new ExtensionRequiredException();
             }
