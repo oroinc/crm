@@ -110,7 +110,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
                 $websiteSelectEl.trigger('change');
             }
 
-            if (success && res.websites) {
+            if (success) {
 
                 var $isExtensionInstalledEl = $(this.options.isExtensionInstalledEl),
                     $adminUrlEl = $(this.options.adminUrlEl);

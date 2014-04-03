@@ -45,13 +45,9 @@ class SoapController extends Controller
         $adminUrl             = false;
         try {
             $transport->init($transportEntity);
-
             $websites             = $this->formatWebsiteChoices($transport->getWebsites());
-
             $isExtensionInstalled = $transport->isExtensionInstalled();
-
             $adminUrl             = $transport->getAdminUrl();
-
             $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')
                 ->getAvailableConnectorsTypesChoiceList(
                     'magento',
@@ -59,13 +55,10 @@ class SoapController extends Controller
                         return $connector instanceof ExtensionAwareInterface ? $isExtensionInstalled : true;
                     }
                 );
-
             $translator          = $this->get('translator');
-
             foreach ($allowedTypesChoices as $name => $val) {
                 $allowedTypesChoices[$name] = $translator->trans($val);
             }
-
             $result = true;
 
         } catch (\Exception $e) {

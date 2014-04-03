@@ -23,15 +23,19 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
         $syncRange = \DateInterval::createFromDateString('p1d');
         $websiteId = 123;
         $websites = [];
+        $isExtensionInstalled = true;
+        $adminUrl = 'http://localhost/admin';
 
         return [
-            'wsdl_url'      => ['wsdlUrl',       $wsdlUrl, $wsdlUrl],
-            'api_user'      => ['apiUser',       $apiUser, $apiUser],
-            'api_key'       => ['apiKey',        $apiKey, $apiKey],
-            'website_id'    => ['websiteId',     $websiteId, $websiteId],
-            'websites'      => ['websites',      $websites, $websites],
-            'syncStartDate' => ['syncStartDate', $syncStartDate, $syncStartDate],
-            'syncRange'     => ['syncRange',     $syncRange, $syncRange],
+            'wsdl_url'               => ['wsdlUrl',              $wsdlUrl, $wsdlUrl],
+            'api_user'               => ['apiUser',              $apiUser, $apiUser],
+            'api_key'                => ['apiKey',               $apiKey, $apiKey],
+            'website_id'             => ['websiteId',            $websiteId, $websiteId],
+            'websites'               => ['websites',             $websites, $websites],
+            'syncStartDate'          => ['syncStartDate',        $syncStartDate, $syncStartDate],
+            'syncRange'              => ['syncRange',            $syncRange, $syncRange],
+            'is_extension_installed' => ['isExtensionInstalled', $isExtensionInstalled, $isExtensionInstalled],
+            'admin_url'              => ['adminUrl',             $adminUrl, $adminUrl],
         ];
     }
 
