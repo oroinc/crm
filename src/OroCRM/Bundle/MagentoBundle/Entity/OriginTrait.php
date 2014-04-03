@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
-
 trait OriginTrait
 {
     /**
