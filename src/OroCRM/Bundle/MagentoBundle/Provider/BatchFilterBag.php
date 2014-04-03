@@ -220,12 +220,14 @@ class BatchFilterBag
         $appliedFilters = $bag->getAppliedFilters();
         $appliedFilters = array_pop($appliedFilters);
         if (!empty($appliedFilters[self::FILTER_TYPE_COMPLEX])) {
-            foreach ($appliedFilters[self::FILTER_TYPE_COMPLEX] as $filterName => $filterData) {
+            foreach ($appliedFilters[self::FILTER_TYPE_COMPLEX] as $filterData) {
+                $filterName = $filterData['key'];
                 $this->addComplexFilter($filterName, $filterData);
             }
         }
         if (!empty($appliedFilters[self::FILTER_TYPE_SIMPLE])) {
-            foreach ($appliedFilters[self::FILTER_TYPE_SIMPLE] as $filterName => $filterData) {
+            foreach ($appliedFilters[self::FILTER_TYPE_SIMPLE] as $filterData) {
+                $filterName = $filterData['key'];
                 $this->addFilter($filterName, $filterData);
             }
         }
