@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
+
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 
 abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator implements PredefinedFiltersAwareInterface

@@ -43,10 +43,6 @@ class BatchFilterBag
                 );
             }
         }
-
-        if (!empty($complexFilters)) {
-
-        }
     }
 
     /**
