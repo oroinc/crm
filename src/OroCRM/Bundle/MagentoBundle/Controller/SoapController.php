@@ -60,12 +60,10 @@ class SoapController extends Controller
                 $allowedTypesChoices[$name] = $translator->trans($val);
             }
             $result = true;
-
         } catch (\Exception $e) {
             $result = false;
             $this->get('logger')->critical(sprintf('MageCheck error: %s: %s', $e->getCode(), $e->getMessage()));
         }
-
         return new JsonResponse(
             [
                 'success'              => $result,
