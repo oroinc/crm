@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium;
 
 use Oro\Bundle\SearchBundle\Tests\Selenium\Pages\Search;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\User;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
 
 /**
  * Class TagsAssignTest
@@ -93,6 +95,7 @@ class TagsAssignTest extends Selenium2TestCase
         $userName = 'User_'.mt_rand();
 
         $login = $this->login();
+        /** @var Users $login */
         $login->openUsers('Oro\Bundle\UserBundle')
             ->add()
             ->setUsername($userName)
@@ -103,7 +106,7 @@ class TagsAssignTest extends Selenium2TestCase
             ->setFirstName('First_'.$userName)
             ->setLastName('Last_'.$userName)
             ->setEmail($userName.'@mail.com')
-            ->setRoles(array('Manager'))
+            ->setRoles(array('Manager', 'Marketing Manager'), true)
             ->uncheckInviteUser()
             ->verifyTag($tagName)
             ->setTag('New_' . $tagName)

@@ -82,7 +82,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
                         navigation.loadingMask.hide();
                     }
                     if (status !== 'success') {
-                        this.renderResult('error', __('Error occurred during check request, please try later!'));
+                        this.renderResult('error', __('orocrm.magento.error'));
                     }
                 }, this));
         },
@@ -94,7 +94,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
          */
         responseHandler: function (res) {
             var success = res.success || false,
-                message = success ? __('Connection succeeded, please choose website.') : __('Parameters are not valid!');
+                message = success ? __('orocrm.magento.success') : __('orocrm.magento.not_valid_parameters');
 
             // websitesModificationAllowed might be undefined, but it should not be false
             // false is equal - denied

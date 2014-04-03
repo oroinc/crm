@@ -94,7 +94,6 @@ class NavigationListener
                                 'route'           => self::$map[$key]['route'],
                                 'routeParameters' => ['id' => $entry['id']],
                                 'label'           => $entry['label'],
-                                'check_access'    => false,
                                 'extras'          => ['routes' => self::$map[$key]['extra_routes']]
                             ]
                         );

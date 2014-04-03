@@ -199,14 +199,16 @@ orocrm:
             entity_description:  Represent integration channel transport
 
             id.label:                     Id
-            wsdl_url.label:               Soap wsdl url
-            api_user.label:               Soap api user
-            api_key.label:                Soap api key
-            sync_start_date.label:        Sync start date
+            wsdl_url.label:               SOAP WSDL URL
+            api_user.label:               SOAP API User
+            api_key.label:                SOAP API Key
+            sync_start_date:
+                label:   Sync start date
             sync_range.label:               Sync range
             wsi_mode.label:                 WS-I Compliance
             websites.label:                 Websites
-            website_id.label:               Website
+            website_id:
+                label:   Website
             is_extension_installed.label:   Is extension installed
             admin_url.label:                Admin url
 

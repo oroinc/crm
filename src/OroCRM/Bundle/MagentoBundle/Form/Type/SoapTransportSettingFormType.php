@@ -69,7 +69,7 @@ class SoapTransportSettingFormType extends AbstractType
             [
                 'label'      => 'orocrm.magento.magentosoaptransport.sync_start_date.label',
                 'required'   => true,
-                'tooltip'    => 'Provide the start date you wish to import data from.',
+                'tooltip'    => 'orocrm.magento.magentosoaptransport.sync_start_date.tooltip',
                 'empty_data' => new \DateTime('2007-01-01', new \DateTimeZone('UTC'))
             ]
         );
@@ -80,7 +80,7 @@ class SoapTransportSettingFormType extends AbstractType
             [
                 'label'    => 'orocrm.magento.magentosoaptransport.website_id.label',
                 'required' => true,
-                'tooltip'  => 'List could be refreshed using connection settings filled above.',
+                'tooltip'  => 'orocrm.magento.magentosoaptransport.website_id.tooltip',
             ]
         );
         $builder->add(

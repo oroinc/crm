@@ -6,6 +6,7 @@ workflows:
                 step_to: called
                 is_start: true
                 is_unavailable_hidden: true
+                acl_resource: orocrm_call_create
                 frontend_options:
                     icon: 'icon-phone'
                 transition_definition: log_call_definition
@@ -121,6 +122,7 @@ workflows:
                 step_to: emailed
                 is_start: true
                 is_unavailable_hidden: true
+                acl_resource: oro_email_create
                 frontend_options:
                     icon: 'icon-envelope-alt'
                     dialog:
