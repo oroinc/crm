@@ -101,8 +101,26 @@ class OrderController extends Controller
      */
     public function actualizeAction(Order $order)
     {
-        $processor = $this->get('oro_integration.sync.processor');
-        $processor->process($order->getChannel(), 'order', ['filters' => ['increment_id' => $order->getIncrementId()]]);
+        try {
+            $processor = $this->get('oro_integration.sync.processor');
+            $processor->process(
+                $order->getChannel(),
+                'order',
+                ['filters' => ['increment_id' => $order->getIncrementId()]]
+            );
+
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.magento.controller.synchronization_success')
+            );
+        } catch (\LogicException $e) {
+            $this->get('logger')->addCritical($e->getMessage(), ['exception' => $e]);
+
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                $this->get('translator')->trans('orocrm.magento.controller.synchronization_error')
+            );
+        }
 
         return $this->redirect($this->generateUrl('orocrm_magento_order_view', ['id' => $order->getId()]));
     }
