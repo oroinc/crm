@@ -92,6 +92,12 @@ class SoapTransportSettingFormType extends AbstractType
                 ->create('isExtensionInstalled', 'hidden')
                 ->addEventSubscriber(new SoapConnectorsFormSubscriber($this->registry))
         );
+
+        $builder->add(
+            'adminUrl',
+            'text',
+            ['label' => 'orocrm.magento.magentosoaptransport.admin_url.label', 'required' => true]
+        );
     }
 
     /**

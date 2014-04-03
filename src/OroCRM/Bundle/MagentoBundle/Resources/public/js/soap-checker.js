@@ -16,7 +16,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
         route:           'orocrm_magento_soap_check',
         url:             null,
         id:              null,
-        requiredOptions: ['websiteSelectEl', 'websitesListEl', 'isExtensionInstalledEl', 'connectorsEl'],
+        requiredOptions: ['websiteSelectEl', 'websitesListEl', 'isExtensionInstalledEl', 'connectorsEl', 'adminUrlEl'],
 
         resultTemplate: _.template(
             '<div class="alert alert-<%= type %> connection-status"><%= message %></div>'
@@ -100,8 +100,7 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
             // false is equal - denied
             if (success && this.options.websitesModificationAllowed !== false && res.websites) {
                 var $listEl = $(this.options.websitesListEl),
-                    $websiteSelectEl = $(this.options.websiteSelectEl),
-                    $isExtensionInstalledEl = $(this.options.isExtensionInstalledEl);
+                    $websiteSelectEl = $(this.options.websiteSelectEl);
 
                 $listEl.val(JSON.stringify(res.websites));
                 $websiteSelectEl.empty();
@@ -109,7 +108,15 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
                     $websiteSelectEl.append($("<option />").val(website.id).text(website.label));
                 });
                 $websiteSelectEl.trigger('change');
+            }
+
+            if (success) {
+
+                var $isExtensionInstalledEl = $(this.options.isExtensionInstalledEl),
+                    $adminUrlEl = $(this.options.adminUrlEl);
+
                 $isExtensionInstalledEl.val(res.isExtensionInstalled || false ? 1 : 0);
+                $adminUrlEl.val((res.adminUrl) ? res.adminUrl : '');
             }
 
             if (success && res.connectors) {
