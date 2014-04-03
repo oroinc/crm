@@ -2,18 +2,19 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
-use Oro\Bundle\IntegrationBundle\Entity\Status;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
-use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
+use Oro\Bundle\ImportExportBundle\Context\Context;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-
+use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
+use Oro\Bundle\IntegrationBundle\Entity\Status;
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -125,7 +126,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getConnector($transport, $stepExecutionMock, $channel = null)
     {
-        $contextRegistry     = new ContextRegistry();
+        $contextRegistryMock = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextRegistry');
         $contextMediatorMock = $this
             ->getMockBuilder('Oro\\Bundle\\IntegrationBundle\\Provider\\ConnectorContextMediator')
             ->disableOriginalConstructor()->getMock();
@@ -134,21 +135,24 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $channel           = $channel ? : new Channel();
         $channel->setTransport($transportSettings);
 
+        $contextMock = new Context([]);
+
         $executionContext = new ExecutionContext();
         $stepExecutionMock->expects($this->any())
             ->method('getExecutionContext')->will($this->returnValue($executionContext));
 
-        $context = $contextRegistry->getByStepExecution($stepExecutionMock);
+        $contextRegistryMock->expects($this->any())->method('getByStepExecution')
+            ->will($this->returnValue($contextMock));
         $contextMediatorMock->expects($this->at(0))
-            ->method('getTransport')->with($this->equalTo($context))
+            ->method('getTransport')->with($this->equalTo($contextMock))
             ->will($this->returnValue($transport));
         $contextMediatorMock->expects($this->at(1))
-            ->method('getChannel')->with($this->equalTo($context))
+            ->method('getChannel')->with($this->equalTo($contextMock))
             ->will($this->returnValue($channel));
 
         $logger = new LoggerStrategy(new NullLogger());
 
-        return $this->getConnectorInstance($contextRegistry, $logger, $contextMediatorMock);
+        return $this->getConnectorInstance($contextRegistryMock, $logger, $contextMediatorMock);
     }
 
     /**

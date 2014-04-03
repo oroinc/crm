@@ -87,8 +87,14 @@ class CartController extends Controller
      */
     public function actualizeAction(Cart $cart)
     {
+        $connector = $this->get('orocrm_magento.mage.cart_connector');
+
         $processor = $this->get('oro_integration.sync.processor');
-        $processor->process($cart->getChannel(), 'cart', ['filters' => ['entity_id' => $cart->getOriginId()]]);
+        $processor->process(
+            $cart->getChannel(),
+            $connector->getType(),
+            ['filters' => ['entity_id' => $cart->getOriginId()]]
+        );
 
         return $this->redirect($this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]));
     }

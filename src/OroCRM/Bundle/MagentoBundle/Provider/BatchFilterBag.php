@@ -16,9 +16,37 @@ class BatchFilterBag
     /** @var array applied filters */
     protected $filters;
 
-    public function __construct()
+    public function __construct(array $filters = [], array $complexFilters = [])
     {
         $this->reset();
+
+        if (!empty($filters)) {
+            foreach ($filters as $filterName => $filterValue) {
+                $this->addFilter(
+                    $filterName,
+                    [
+                        'key'   => $filterName,
+                        'value' => $filterValue
+                    ]
+                );
+            }
+        }
+
+        if (!empty($complexFilters)) {
+            foreach ($complexFilters as $filterName => $filterValue) {
+                $this->addComplexFilter(
+                    $filterName,
+                    [
+                        'key'   => $filterName,
+                        'value' => $filterValue
+                    ]
+                );
+            }
+        }
+
+        if (!empty($complexFilters)) {
+
+        }
     }
 
     /**
@@ -186,6 +214,11 @@ class BatchFilterBag
         return $this;
     }
 
+    /**
+     * Merge one instance of filter bag into current
+     *
+     * @param BatchFilterBag $bag
+     */
     public function merge(BatchFilterBag $bag)
     {
         $appliedFilters = $bag->getAppliedFilters();

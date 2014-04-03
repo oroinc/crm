@@ -2,11 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
+use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\FiltersAwareInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
@@ -23,7 +23,7 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         parent::initializeFromContext($context);
 
         // set start date and mode depending on status
-        $status = $this->channel->getStatusesForConnector($this->getType(), Status::STATUS_COMPLETED)->first();
+        $status   = $this->channel->getStatusesForConnector($this->getType(), Status::STATUS_COMPLETED)->first();
         $iterator = $this->getSourceIterator();
         if ($iterator instanceof UpdatedLoaderInterface && false !== $status) {
             /** @var Status $status */
@@ -32,18 +32,12 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         }
 
         // pass filters from connector
-        if (null !== $context->getOption('filters')) {
-            if ($iterator instanceof FiltersAwareInterface) {
-                $predefinedFilters = new BatchFilterBag();
-                foreach ($context->getOption('filters') as $filterName => $filterValue) {
-                    $predefinedFilters->addFilter(
-                        $filterName,
-                        [
-                            'key'   => $filterName,
-                            'value' => $filterValue
-                        ]
-                    );
-                }
+        if ($context->hasOption('filters') || $context->hasOption('complex_filters')) {
+            if ($iterator instanceof PredefinedFiltersAwareInterface) {
+                $filters        = $context->getOption('filters') ? : [];
+                $complexFilters = $context->getOption('complex_filters') ? : [];
+
+                $predefinedFilters = new BatchFilterBag($filters, $complexFilters);
                 $iterator->setPredefinedFiltersBag($predefinedFilters);
             } else {
                 throw new \LogicException('Iterator does not support predefined filters');
