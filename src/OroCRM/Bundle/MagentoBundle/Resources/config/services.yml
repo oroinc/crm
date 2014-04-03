@@ -31,7 +31,7 @@ services:
     orocrm_magento.provider.cart_expiration_processor:
         class: %orocrm_magento.provider.cart_expiration_processor.class%
         arguments:
-            - @oro_integration.manager.types_registry.link
+            - @oro_integration.provider.connector_context_mediator
             - @doctrine.orm.entity_manager
 
     # forms
