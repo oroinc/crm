@@ -16,9 +16,33 @@ class BatchFilterBag
     /** @var array applied filters */
     protected $filters;
 
-    public function __construct()
+    public function __construct(array $filters = [], array $complexFilters = [])
     {
         $this->reset();
+
+        if (!empty($filters)) {
+            foreach ($filters as $filterName => $filterValue) {
+                $this->addFilter(
+                    $filterName,
+                    [
+                        'key'   => $filterName,
+                        'value' => $filterValue
+                    ]
+                );
+            }
+        }
+
+        if (!empty($complexFilters)) {
+            foreach ($complexFilters as $filterName => $filterValue) {
+                $this->addComplexFilter(
+                    $filterName,
+                    [
+                        'key'   => $filterName,
+                        'value' => $filterValue
+                    ]
+                );
+            }
+        }
     }
 
     /**
@@ -186,17 +210,24 @@ class BatchFilterBag
         return $this;
     }
 
+    /**
+     * Merge one instance of filter bag into current
+     *
+     * @param BatchFilterBag $bag
+     */
     public function merge(BatchFilterBag $bag)
     {
         $appliedFilters = $bag->getAppliedFilters();
         $appliedFilters = array_pop($appliedFilters);
         if (!empty($appliedFilters[self::FILTER_TYPE_COMPLEX])) {
-            foreach ($appliedFilters[self::FILTER_TYPE_COMPLEX] as $filterName => $filterData) {
+            foreach ($appliedFilters[self::FILTER_TYPE_COMPLEX] as $filterData) {
+                $filterName = $filterData['key'];
                 $this->addComplexFilter($filterName, $filterData);
             }
         }
         if (!empty($appliedFilters[self::FILTER_TYPE_SIMPLE])) {
-            foreach ($appliedFilters[self::FILTER_TYPE_SIMPLE] as $filterName => $filterData) {
+            foreach ($appliedFilters[self::FILTER_TYPE_SIMPLE] as $filterData) {
+                $filterName = $filterData['key'];
                 $this->addFilter($filterName, $filterData);
             }
         }

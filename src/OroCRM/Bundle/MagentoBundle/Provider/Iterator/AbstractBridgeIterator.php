@@ -3,9 +3,10 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
+
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 
-abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator implements FiltersAwareInterface
+abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator implements PredefinedFiltersAwareInterface
 {
     const DEFAULT_PAGE_SIZE = 100;
 
@@ -42,7 +43,7 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
 
         $this->filter->addDateFilter($dateField, 'from', $this->lastSyncDate);
 
-        if ($this->predefinedFilters) {
+        if (null !== $this->predefinedFilters) {
             $this->filter->merge($this->predefinedFilters);
         }
     }
