@@ -90,11 +90,11 @@ class CartExpirationProcessor
         $filterBag->addComplexFilter(
             'entity_id',
             [
-            'key'   => 'entity_id',
-            'value' => [
-                'key'   => 'in',
-                'value' => implode(',', array_keys($ids))
-            ]
+                'key'   => 'entity_id',
+                'value' => [
+                    'key'   => 'in',
+                    'value' => implode(',', array_keys($ids))
+                ]
             ]
         );
         $filters          = $filterBag->getAppliedFilters();
@@ -124,7 +124,7 @@ class CartExpirationProcessor
     {
         $transport = $this->helper->getTransport($channel);
         $transport->init($channel->getTransport());
-        $settings  = $channel->getTransport()->getSettingsBag();
+        $settings = $channel->getTransport()->getSettingsBag();
 
         if (!$transport->isExtensionInstalled()) {
             throw new ExtensionRequiredException();
