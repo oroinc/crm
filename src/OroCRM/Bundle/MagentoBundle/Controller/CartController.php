@@ -89,12 +89,26 @@ class CartController extends Controller
     {
         $connector = $this->get('orocrm_magento.mage.cart_connector');
 
-        $processor = $this->get('oro_integration.sync.processor');
-        $processor->process(
-            $cart->getChannel(),
-            $connector->getType(),
-            ['filters' => ['entity_id' => $cart->getOriginId()]]
-        );
+        try {
+            $processor = $this->get('oro_integration.sync.processor');
+            $processor->process(
+                $cart->getChannel(),
+                $connector->getType(),
+                ['filters' => ['entity_id' => $cart->getOriginId()]]
+            );
+
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.magento.controller.synchronization_success')
+            );
+        } catch (\LogicException $e) {
+            $this->get('logger')->addCritical($e->getMessage(), ['exception' => $e]);
+
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                $this->get('translator')->trans('orocrm.magento.controller.synchronization_error')
+            );
+        }
 
         return $this->redirect($this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]));
     }
