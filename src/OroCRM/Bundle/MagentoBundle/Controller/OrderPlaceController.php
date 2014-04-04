@@ -98,6 +98,7 @@ class OrderPlaceController extends Controller
      */
     public function customerAction(Customer $customer)
     {
+        var_dump($customer);
         // @TODO order creation from customer page
         return [];
     }
@@ -109,6 +110,7 @@ class OrderPlaceController extends Controller
      */
     public function cartSuccessAction()
     {
+
         return [];
     }
 
