@@ -15,10 +15,10 @@
 {% block navButtonContainer %}
     {% if backUrl is defined %}
         {{ UI.Button({
-        'path':   backUrl,
-        'aCss':   'btn back icons-holder-text',
-        'title' : 'Back',
-        'label' : 'Back'
+            'path':   backUrl,
+            'aCss':   'btn back icons-holder-text',
+            'title' : 'Back',
+            'label' : 'Back'
         }) }}
     {% endif %}
 {% endblock navButtonContainer%}
@@ -36,108 +36,99 @@
     {% if requireTransition is defined and requireTransition is sameas(true) %}
         {% set transitionURL %}
         {{
-        path('oro_workflow_api_rest_workflow_transit', {
-        transitionName: 'convert',
-        workflowItemId: entity.workflowItem.id
-        })
+            path('oro_workflow_api_rest_workflow_transit', {
+                transitionName: 'convert',
+                workflowItemId: entity.workflowItem.id
+            })
         }}
         {% endset %}
+        {% set syncURL = path('orocrm_magento_orderplace_sync', {id: entity.id}) %}
         <script type="text/javascript">
             var ORO_ORDER_EMBED_API = {};
-            require(['jquery', 'oroui/js/messenger', 'orotranslation/js/translator', 'oronavigation/js/navigation'],
-                    function ($, messenger, __, Navigation) {
 
-                        var transitionUrl = {{ transitionURL|trim|json_encode|raw }},
-                                navigation = Navigation.getInstance();
+            require(['jquery', 'oroui/js/messenger', 'orotranslation/js/translator', 'oronavigation/js/navigation', 'jquery.ajax.queue'],
+            function ($, messenger, __, Navigation) {
+                var transitionUrl = {{ transitionURL|trim|json_encode|raw }},
+                    syncUrl = {{ syncURL|trim|json_encode|raw }},
+                    navigation = Navigation.getInstance(),
+                    $frame = $('#orderPlaceFrame'),
+                    resizeIframe = function(contentContainer, containerFluid) {
+                        var deviation = 5,
+                            heightResult = (contentContainer.height() - deviation) - containerFluid.height();
+                        $frame.css( 'height', (heightResult)+'px');
+                        $frame.css( 'width', '100%');
+                    };
 
-                        var ResizeIframe = function(contentContainer, containerFluid) {
-                            var deviation = 5;
-                            var heightResult = (contentContainer.height() - deviation) - containerFluid.height();
-                            $('#orderPlaceFrame').css( 'height', (heightResult)+'px');
-                            $('#orderPlaceFrame').css( 'width', '100%');
-                        }
+                navigation.loadingMask.show();
 
-                        navigation.loadingMask.show();
+                var contentContainer = $('#container'),
+                    containerFluidClass = $('.container-fluid'),
+                    loaded = false;
 
-                        var contentContainer = $('#container');
-                        var containerFluidClass = $('.container-fluid');
-                        var loaded = false;
-
-                        $("#orderPlaceFrame").load(function () {
-                            console.log('loaded');
-                            ResizeIframe(contentContainer, containerFluidClass);
-                            navigation.loadingMask.hide();
-                            loaded = true;
-
-                            return function() {
-
+                $("#orderPlaceFrame").load(function () {
+                    resizeIframe(contentContainer, containerFluidClass);
+                    if (!loaded) {
+                        navigation.loadingMask.hide();
+                    }
+                    loaded = true;
+                }).ready(function() {
+                    var counter = 0;
+                    var FF = setInterval( function() {
+                        counter ++;
+                        if (counter >= 5) {
+                            clearInterval(FF);
+                            if (false === loaded) {
+                                ORO_ORDER_EMBED_API.error();
                             }
-                        })
-                                .ready(function() {
-                                    var counter = 0;
-                                    var FF = setInterval( function() {
-                                        counter ++;
-                                        if (true === loaded) {
+                        }
+                    }, 2000);
+                });
 
-                                        }
-                                        if (counter >= 5) {
-                                            clearInterval(FF);
-                                            if (false === loaded) {
-                                                ORO_ORDER_EMBED_API.error();
-                                            }
-                                        }
-                                    },2000);
-                                });
+                $(window).on("resize",function (){
+                    resizeIframe(contentContainer, containerFluidClass);
+                });
+                contentContainer.on("resize",function (){
+                    resizeIframe(contentContainer, containerFluidClass);
+                });
 
+                ORO_ORDER_EMBED_API.success = function () {
+                    navigation.loadingMask.show();
 
-                        $(window).on("resize",function (){
-                            ResizeIframe(contentContainer, containerFluidClass);
-                        });
+                    var transitAction = {url: transitionUrl, dataType: 'json'};
+                    transitAction.beforeSend = function ()  {
+                        messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_transition'));
+                    };
+                    transitAction.success = function () {
+                        messenger.notificationFlashMessage('success', __('orocrm.magento.transition_performed'));
+                    };
+                    transitAction.error = function () {
+                        messenger.notificationFlashMessage('error', __('orocrm.magento.transition_error'));
+                    };
 
-                        contentContainer.on("resize",function (){
-                            ResizeIframe(contentContainer, containerFluidClass);
-                        });
+                    var syncAction = {url: syncUrl};
+                    syncAction.beforeSend = function ()  {
+                        messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_synchronization'));
+                    };
+                    syncAction.success = function () {
+                        messenger.notificationFlashMessage('success', __('orocrm.magento.synchronization_success'));
+                    };
+                    syncAction.error = function () {
+                        messenger.notificationFlashMessage('error', __('orocrm.magento.synchronization_error'));
+                    };
 
-                        ORO_ORDER_EMBED_API.success = function () {
-                            navigation.loadingMask.show();
-
-                            var transitAction = {url: transitionUrl, dataType: 'json'};
-                            transitAction.beforeSend = function ()  {
-                                messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_transition'));
-                            };
-                            transitAction.success = function () {
-                                messenger.notificationFlashMessage('success', __('orocrm.magento.transition_performed'));
-                            };
-                            transitAction.failure = function () {
-                                messenger.notificationFlashMessage('error', __('orocrm.magento.transition_error'));
-                            };
-
-                            var syncAction = {url: syncUrl};
-                            syncAction.beforeSend = function ()  {
-                                messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_synchronization'));
-                            };
-                            syncAction.success = function () {
-                                messenger.notificationFlashMessage('success', __('orocrm.magento.synchronization_success'));
-                            };
-                            syncAction.failure = function () {
-                                messenger.notificationFlashMessage('error', __('orocrm.magento.synchronization_error'));
-                            };
-
-                            $.ajaxQueue(transitAction);
-                            $.ajaxQueue(syncAction).always(function () {
-                                navigation.setLocation({{ backUrl|json_encode|raw }});
-                            });
-                        };
-
-                        ORO_ORDER_EMBED_API.error = function () {
-                            $('#orderPlaceFrame').css('width', '1');
-                            $('#orderPlaceFrame').css('height', '1');
-                            navigation.loadingMask.hide();
-                            messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));
-                            navigation.setLocation({{ backUrl|json_encode|raw }});
-                        };
+                    $.ajaxQueue(transitAction);
+                    $.ajaxQueue(syncAction).always(function () {
+                        navigation.setLocation({{ backUrl|json_encode|raw }});
                     });
+                };
+
+                ORO_ORDER_EMBED_API.error = function () {
+                    $frame.css('width', '1');
+                    $frame.css('height', '1');
+                    messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));
+                    navigation.setLocation({{ backUrl|json_encode|raw }});
+                };
+            });
         </script>
     {% endif %}
 {% endblock %}
-

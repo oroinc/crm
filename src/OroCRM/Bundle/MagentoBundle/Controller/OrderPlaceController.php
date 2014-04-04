@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -14,7 +15,6 @@ use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 /**
  * @Route("/order/place")
@@ -33,14 +33,9 @@ class OrderPlaceController extends Controller
     public function cartAction(Cart $cart)
     {
         $channel = $cart->getChannel();
-
-        $error = $sourceUrl = false;
+        $error   = $sourceUrl = false;
         try {
-            /** @var MagentoTransportInterface $transport */
-            $transport = $this->get('oro_integration.provider.connector_context_mediator')->getTransport($channel);
-            $transport->init($channel->getTransport());
-
-            $url = $transport->getAdminUrl();
+            $url = $channel->getTransport()->getAdminUrl();
             if (false === $url) {
                 throw new ExtensionRequiredException();
             }
@@ -92,13 +87,36 @@ class OrderPlaceController extends Controller
     }
 
     /**
+     * @Route("/sync/{id}", name="orocrm_magento_orderplace_sync", requirements={"id"="\d+"}))
+     * @AclAncestor("oro_workflow")
+     */
+    public function syncAction(Cart $cart)
+    {
+        $cartConnector  = $this->get('orocrm_magento.mage.cart_connector');
+        $orderConnector = $this->get('orocrm_magento.mage.order_connector');
+
+        $processor = $this->get('oro_integration.sync.processor');
+        $processor->process(
+            $cart->getChannel(),
+            $cartConnector->getType(),
+            ['filters' => ['entity_id' => $cart->getOriginId()]]
+        );
+        $processor->process(
+            $cart->getChannel(),
+            $orderConnector->getType(),
+            ['filters' => ['quote_id' => $cart->getOriginId()]]
+        );
+
+        return new Response();
+    }
+
+    /**
      * @Route("/customer/{id}", name="orocrm_magento_orderplace_customer", requirements={"id"="\d+"}))
      * @AclAncestor("oro_workflow")
      * @Template("OroCRMMagentoBundle:OrderPlace:place.html.twig")
      */
     public function customerAction(Customer $customer)
     {
-        var_dump($customer);
         // @TODO order creation from customer page
         return [];
     }
@@ -110,7 +128,6 @@ class OrderPlaceController extends Controller
      */
     public function cartSuccessAction()
     {
-
         return [];
     }
 
