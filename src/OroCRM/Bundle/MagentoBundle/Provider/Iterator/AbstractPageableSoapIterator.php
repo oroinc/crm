@@ -74,7 +74,6 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
 
         $this->setLogger(new NullLogger());
         $this->filter = new BatchFilterBag();
-
     }
 
     /**

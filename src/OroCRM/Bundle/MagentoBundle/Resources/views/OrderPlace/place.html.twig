@@ -30,8 +30,8 @@
 
 {% block content_data %}
 
-    <iframe id="orderPlaceFrame" src="{{ sourceUrl|raw }}" width="1" height="1"  frameborder="0"></iframe>
-    {#<iframe id="orderPlaceFrame" src="http://sdbwergbw.csergwerg" width="1"  frameborder="0"></iframe>#}
+    {#<iframe id="orderPlaceFrame" src="{{ sourceUrl|raw }}" width="1" height="1"  frameborder="0"></iframe>#}
+    <iframe id="orderPlaceFrame" src="http://sdbwergbw.csergwerg" width="100%"  frameborder="0"></iframe>
 
     {% if requireTransition is defined and requireTransition is sameas(true) %}
         {% set transitionURL %}
@@ -45,84 +45,98 @@
         <script type="text/javascript">
             var ORO_ORDER_EMBED_API = {};
             require(['jquery', 'oroui/js/messenger', 'orotranslation/js/translator', 'oronavigation/js/navigation'],
-                function ($, messenger, __, Navigation) {
+                    function ($, messenger, __, Navigation) {
 
-                    var transitionUrl = {{ transitionURL|trim|json_encode|raw }},
-                        navigation = Navigation.getInstance(),
-                        contentContainer = $('#container'),
-                        containerFluidClass = $('.container-fluid'),
-                        loaded = false
-                    ;
+                        var transitionUrl = {{ transitionURL|trim|json_encode|raw }},
+                                navigation = Navigation.getInstance();
 
-                    var ResizeIframe = function(contentContainer, containerFluid) {
-                        var deviation = 5;
-                        var heightResult = (contentContainer.height() - deviation) - containerFluid.height();
-                        $('#orderPlaceFrame').css( 'height', (heightResult)+'px');
-                        $('#orderPlaceFrame').css( 'width', '100%');
-                    }
+                        var ResizeIframe = function(contentContainer, containerFluid) {
+                            var deviation = 5;
+                            var heightResult = (contentContainer.height() - deviation) - containerFluid.height();
+                            $('#orderPlaceFrame').css( 'height', (heightResult)+'px');
+                            $('#orderPlaceFrame').css( 'width', '100%');
+                        }
 
-                    navigation.loadingMask.show();
-
-                    $("#orderPlaceFrame").load(function () {
-                        console.log('loaded');
-                        ResizeIframe(contentContainer, containerFluidClass);
-                        navigation.loadingMask.hide();
-                        loaded = true;
-
-                    })
-                    .ready(function() {
-                        var counter = 0;
-                        var FF = setInterval( function() {
-                            counter ++;
-                            if (true === loaded) {
-                                clearInterval(FF);
-                            }
-                            if (counter >= 5) {
-                                clearInterval(FF);
-                                if (false === loaded) {
-                                    ORO_ORDER_EMBED_API.error();
-                                }
-                            }
-                         },2000);
-                    });
-
-                    $(window).on("resize",function (){
-                        ResizeIframe(contentContainer, containerFluidClass);
-                    });
-
-                    contentContainer.on("resize",function (){
-                        ResizeIframe(contentContainer, containerFluidClass);
-                    });
-
-                    // @TODO create iframe async here
-                    // @TODO handle iframe load error/success here
-                    ORO_ORDER_EMBED_API.success = function () {
                         navigation.loadingMask.show();
-                        messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_transition'));
-                        $.getJSON(transitionUrl)
-                                .done(function() {
-                                    navigation.loadingMask.hide();
-                                    messenger.notificationFlashMessage('success', __('orocrm.magento.transition_performed'));
-                                }).fail(function() {
-                                    messenger.notificationFlashMessage('error', __('orocrm.magento.transition_error'));
-                                }).always(function() {
-                                    navigation.loadingMask.hide();
-                                    // @TODO further sync here
-                                    navigation.setLocation({{ backUrl|json_encode|raw }});
+
+                        var contentContainer = $('#container');
+                        var containerFluidClass = $('.container-fluid');
+                        var loaded = false;
+
+                        $("#orderPlaceFrame").load(function () {
+                            console.log('loaded');
+                            ResizeIframe(contentContainer, containerFluidClass);
+                            navigation.loadingMask.hide();
+                            loaded = true;
+
+                            return function() {
+
+                            }
+                        })
+                                .ready(function() {
+                                    var counter = 0;
+                                    var FF = setInterval( function() {
+                                        counter ++;
+                                        if (true === loaded) {
+
+                                        }
+                                        if (counter >= 5) {
+                                            clearInterval(FF);
+                                            if (false === loaded) {
+                                                ORO_ORDER_EMBED_API.error();
+                                            }
+                                        }
+                                    },2000);
                                 });
-                        console.log('success');
-                    };
 
-                    ORO_ORDER_EMBED_API.error = function () {
-                        $('#orderPlaceFrame').css('width', '1');
-                        $('#orderPlaceFrame').css('height', '1');
-                        console.log('error');
-                        navigation.loadingMask.hide();
-                        messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));
-                        navigation.setLocation({{ backUrl|json_encode|raw }});
-                    };
 
-                });
+                        $(window).on("resize",function (){
+                            ResizeIframe(contentContainer, containerFluidClass);
+                        });
+
+                        contentContainer.on("resize",function (){
+                            ResizeIframe(contentContainer, containerFluidClass);
+                        });
+
+                        ORO_ORDER_EMBED_API.success = function () {
+                            navigation.loadingMask.show();
+
+                            var transitAction = {url: transitionUrl, dataType: 'json'};
+                            transitAction.beforeSend = function ()  {
+                                messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_transition'));
+                            };
+                            transitAction.success = function () {
+                                messenger.notificationFlashMessage('success', __('orocrm.magento.transition_performed'));
+                            };
+                            transitAction.failure = function () {
+                                messenger.notificationFlashMessage('error', __('orocrm.magento.transition_error'));
+                            };
+
+                            var syncAction = {url: syncUrl};
+                            syncAction.beforeSend = function ()  {
+                                messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_synchronization'));
+                            };
+                            syncAction.success = function () {
+                                messenger.notificationFlashMessage('success', __('orocrm.magento.synchronization_success'));
+                            };
+                            syncAction.failure = function () {
+                                messenger.notificationFlashMessage('error', __('orocrm.magento.synchronization_error'));
+                            };
+
+                            $.ajaxQueue(transitAction);
+                            $.ajaxQueue(syncAction).always(function () {
+                                navigation.setLocation({{ backUrl|json_encode|raw }});
+                            });
+                        };
+
+                        ORO_ORDER_EMBED_API.error = function () {
+                            $('#orderPlaceFrame').css('width', '1');
+                            $('#orderPlaceFrame').css('height', '1');
+                            navigation.loadingMask.hide();
+                            messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));
+                            navigation.setLocation({{ backUrl|json_encode|raw }});
+                        };
+                    });
         </script>
     {% endif %}
 {% endblock %}
