@@ -3,7 +3,10 @@ workflows:
         transition_definitions:
             log_call_definition:
                 pre_conditions:
-                    @equal: [$cart.status.name, 'open']
+                    @or:
+                        - @equal: [$cart.status.name, 'open']
+                        # allow to submit call to converted step on any status
+                        - @equal: [$cart.workflowStep.name, 'converted']
                 conditions:
                     @and:
                         - @not_empty:
@@ -43,7 +46,10 @@ workflows:
 
             send_email_definition:
                 pre_conditions:
-                    @equal: [$cart.status.name, 'open']
+                    @or:
+                        - @equal: [$cart.status.name, 'open']
+                        # allow to submit email to converted step on any status
+                        - @equal: [$cart.workflowStep.name, 'converted']
                 conditions:
                     @and:
                         - @not_empty:
