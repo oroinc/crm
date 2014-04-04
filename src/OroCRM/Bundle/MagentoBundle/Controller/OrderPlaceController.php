@@ -2,10 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller;
 
+use FOS\Rest\Util\Codes;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -84,6 +87,30 @@ class OrderPlaceController extends Controller
             'sourceUrl'         => $sourceUrl,
             'backUrl'           => $backUrl
         ];
+    }
+
+    /**
+     * @Route("/sync/{id}", name="orocrm_magento_orderplace_sync", requirements={"id"="\d+"}))
+     * @AclAncestor("oro_workflow")
+     */
+    public function syncAction(Cart $cart)
+    {
+        $cartConnector  = $this->get('orocrm_magento.mage.cart_connector');
+        $orderConnector = $this->get('orocrm_magento.mage.order_connector');
+
+        $processor = $this->get('oro_integration.sync.processor');
+        $processor->process(
+            $cart->getChannel(),
+            $cartConnector->getType(),
+            ['filters' => ['entity_id' => $cart->getOriginId()]]
+        );
+        $processor->process(
+            $cart->getChannel(),
+            $orderConnector->getType(),
+            ['filters' => ['quote_id' => $cart->getOriginId()]]
+        );
+
+        return new Response();
     }
 
     /**
