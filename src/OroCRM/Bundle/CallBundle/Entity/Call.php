@@ -66,7 +66,7 @@ class Call
      * @var Account
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     * @ConfigField(defaultValues={"merge"={"inverse_display"=true, "relation_cast_method"="getSubject"}})
+     * @ConfigField(defaultValues={"merge"={"inverse_display"=true, "inverse_cast_method"="getSubject"}})
      */
     protected $relatedAccount;
 
@@ -133,12 +133,6 @@ class Call
     {
         $this->callDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->duration = new \DateTime('00:00:00', new \DateTimeZone('UTC'));
-    }
-
-    public function __toString()
-    {
-        $contact = $this->getRelatedContact();
-        return (string) $contact->getFirstName() . $contact->getLastName() . ' - ' . $this->getSubject();
     }
 
     /**
