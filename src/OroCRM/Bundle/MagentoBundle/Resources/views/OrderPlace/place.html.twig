@@ -52,7 +52,10 @@
                     syncUrl = {{ syncURL|trim|json_encode|raw }},
                     navigation = Navigation.getInstance(),
                     $frame = $('#orderPlaceFrame'),
-                    resizeIframe = function(contentContainer, containerFluid) {
+                    contentContainer = $('#container'),
+                    containerFluid = $('.container-fluid'),
+                    loaded = false,
+                    resizeIframe = function() {
                         var deviation = 5,
                             heightResult = (contentContainer.height() - deviation) - containerFluid.height();
                         $frame.css( 'height', (heightResult)+'px');
@@ -61,12 +64,8 @@
 
                 navigation.loadingMask.show();
 
-                var contentContainer = $('#container'),
-                    containerFluidClass = $('.container-fluid'),
-                    loaded = false;
-
-                $("#orderPlaceFrame").load(function () {
-                    resizeIframe(contentContainer, containerFluidClass);
+                $frame.load(function () {
+                    resizeIframe();
                     if (!loaded) {
                         navigation.loadingMask.hide();
                     }
@@ -85,10 +84,10 @@
                 });
 
                 $(window).on("resize",function (){
-                    resizeIframe(contentContainer, containerFluidClass);
+                    resizeIframe();
                 });
                 contentContainer.on("resize",function (){
-                    resizeIframe(contentContainer, containerFluidClass);
+                    resizeIframe();
                 });
 
                 ORO_ORDER_EMBED_API.success = function () {
@@ -123,8 +122,7 @@
                 };
 
                 ORO_ORDER_EMBED_API.error = function () {
-                    $frame.css('width', '1');
-                    $frame.css('height', '1');
+                    $frame.css('width', '1px').css('height', '1px');
                     messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));
                     navigation.setLocation({{ backUrl|json_encode|raw }});
                 };
