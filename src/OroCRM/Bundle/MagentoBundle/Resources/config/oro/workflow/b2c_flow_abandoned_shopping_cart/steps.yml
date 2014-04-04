@@ -35,5 +35,7 @@ workflows:
             converted:
                 label: 'Converted'
                 order: 30
-                allowed_transitions: []
+                allowed_transitions:
+                    - log_call_from_converted
+                    - send_email_from_converted
                 is_final: true

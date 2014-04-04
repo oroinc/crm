@@ -4,10 +4,10 @@
 
 {% block pageHeader %}
     {% set breadcrumbs = {
-    'entity': entity,
-    'indexPath': path('orocrm_magento_cart_view', {id: entity.id}),
-    'indexLabel': 'orocrm.magento.cart.entity_label'|trans ~ ' ' ~ entity.originId,
-    'entityTitle': 'Place order'
+        'entity': entity,
+        'indexPath': path('orocrm_magento_cart_view', {id: entity.id}),
+        'indexLabel': 'orocrm.magento.cart.entity_label'|trans ~ ' ' ~ entity.originId,
+        'entityTitle': 'Place order'
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
@@ -29,9 +29,7 @@
 {% block navigation_content_tags %}{% endblock navigation_content_tags %}
 
 {% block content_data %}
-
     <iframe id="orderPlaceFrame" src="{{ sourceUrl|raw }}" width="1" height="1"  frameborder="0"></iframe>
-    {#<iframe id="orderPlaceFrame" src="http://sdbwergbw.csergwerg" width="100%"  frameborder="0"></iframe>#}
 
     {% if requireTransition is defined and requireTransition is sameas(true) %}
         {% set transitionURL %}
