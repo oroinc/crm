@@ -135,6 +135,12 @@ class Call
         $this->duration = new \DateTime('00:00:00', new \DateTimeZone('UTC'));
     }
 
+    public function __toString()
+    {
+        $contact = $this->getRelatedContact();
+        return (string) $contact->getFirstName() . $contact->getLastName() . ' - ' . $this->getSubject();
+    }
+
     /**
      * Get id
      *
