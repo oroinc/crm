@@ -1,12 +1,52 @@
-{% extends bap.layout %}
+{#% extends 'OroUIBundle:actions:index.html.twig' %#}
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+
 {% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroNavigationBundle:Include:contentTags.html.twig' as navigationMacro %}
+
 {#  @TODO:
-        - add title
-        - add back button and pass URL from controller
+        - +add title
+        - +add back button and pass URL from controller
         - add breadcrumbs
 #}
-{% block content %}
-    <iframe src="{{ sourceUrl|raw }}" width="1200" height="600" frameborder="0"></iframe>
+
+{% oro_title_set({params : {"%cart.id%":  entity.originId} }) %}
+
+{#% set pageTitle = 'Place order' %#}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+    'entity': entity,
+    'indexPath': path('orocrm_magento_cart_view', {id: entity.id}),
+    'indexLabel': 'orocrm.magento.cart.entity_label'|trans ~ ' ' ~ entity.originId,
+    'entityTitle': 'Place order'
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+
+{% block navButtonContainer %}
+    {% if backUrl is defined %}
+        {{ UI.Button({
+        'path':   backUrl,
+        'aCss':   'btn back icons-holder-text',
+        'title' : 'Back',
+        'label' : 'Back'
+        }) }}
+    {% endif %}
+{% endblock navButtonContainer%}
+
+{% block pageActions %}{% endblock pageActions %}
+{% block content_datagrid %}{% endblock content_datagrid %}
+{% block workflowStepListContainer %}{% endblock workflowStepListContainer %}
+{% block navigation_content_tags %}{% endblock navigation_content_tags %}
+
+
+{% block content_data %}
+{#{ parent() }#}
+
+    <iframe id="orderPlaceFrame" src="{{ sourceUrl|raw }}" width="100%"  frameborder="0"></iframe>
+    {#<iframe id="orderPlaceFrame" src="http://sdbwergbw.csergwerg" width="100%"  frameborder="0"></iframe>#}
 
     {% if requireTransition is defined and requireTransition is sameas(true) %}
         {% set transitionURL %}
@@ -19,19 +59,63 @@
         {% endset %}
         <script type="text/javascript">
             var ORO_ORDER_EMBED_API = {};
-
             require(['jquery', 'oroui/js/messenger', 'orotranslation/js/translator', 'oronavigation/js/navigation'],
             function ($, messenger, __, Navigation) {
+
                 var transitionUrl = {{ transitionURL|trim|json_encode|raw }},
                     navigation = Navigation.getInstance();
 
+                var ResizeIframe = function(contentContainer, containerFluid) {
+                    var deviation = 5;
+                    var heightResult = (contentContainer.height() - deviation) - containerFluid.height();
+                    $('#orderPlaceFrame').css( 'height', (heightResult)+'px');
+                }
+
+                navigation.loadingMask.show();
+
+                var contentContainer = $('#container');
+                var containerFluidClass = $('.container-fluid');
+
+
+                var iframeStatus = 'not';
+
+                $("#orderPlaceFrame").load(function () {
+
+                    console.log(456);
+                    ResizeIframe(contentContainer, containerFluidClass);
+
+                    navigation.loadingMask.hide();
+                    iframeStatus = 'loaded';
+                })
+                .ready(function(){
+
+                    console.log(iframeStatus);
+                    console.log(123);
+                    setTimeout(console.log(iframeStatus), 5000);
+                });
+
+
+                /*(function(iframeStatus){
+                    setTimeout(console.log(iframeStatus), 5000);
+                })(iframeStatus);*/
+
+
+
+
+
+                $(window).on("resize",function (){
+                    ResizeIframe(contentContainer, containerFluidClass);
+                });
+
+                contentContainer.on("resize",function (){
+                    ResizeIframe(contentContainer, containerFluidClass);
+                });
+
                 // @TODO create iframe async here
                 // @TODO handle iframe load error/success here
-
                 ORO_ORDER_EMBED_API.success = function () {
                     navigation.loadingMask.show();
                     messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_transition'));
-
                     $.getJSON(transitionUrl)
                         .done(function() {
                             messenger.notificationFlashMessage('success', __('orocrm.magento.transition_performed'));
@@ -45,10 +129,14 @@
                 };
 
                 ORO_ORDER_EMBED_API.error = function () {
+                    console.log(123);
+                    navigation.loadingMask.hide();
                     messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));
                     // @TODO error handling here
                 };
+
             });
         </script>
     {% endif %}
 {% endblock %}
+
