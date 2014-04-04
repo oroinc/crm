@@ -6,8 +6,7 @@ orocrm:
         performing_transition: Performing transition...
         transition_error: Could not perform transition
         transition_performed: Transition performed
-        external_error: External error occured
+        external_error:             External error occured
         performing_synchronization: Performing synchronization...
         synchronization_error:      Unable to synchronize from remote.
         synchronization_success:    Data successfuly synchronized.
-        external_error: External error occured
