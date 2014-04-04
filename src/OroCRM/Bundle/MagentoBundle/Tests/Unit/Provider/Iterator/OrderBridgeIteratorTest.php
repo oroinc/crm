@@ -38,10 +38,6 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
             ->with($this->equalTo('oroOrderList'))
             ->will($this->returnValue($orderArray));
 
-        $this->transport->expects($this->at(3))->method('call')
-            ->with($this->equalTo('oroOrderList'))
-            ->will($this->returnValue([]));
-
         $orders = [
             array_merge((array)$orderArray[0], $storeData, ['items' => []]),
             array_merge((array)$orderArray[1], $storeData, ['items' => []]),

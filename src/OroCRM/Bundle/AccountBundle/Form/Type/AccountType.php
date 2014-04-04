@@ -74,10 +74,11 @@ class AccountType extends AbstractType
             'contacts',
             'oro_multiple_entity',
             array(
-                'class' => 'OroCRMContactBundle:Contact',
-                'required' => false,
-                'default_element' => 'default_contact',
-                'selector_window_title' => 'orocrm.account.form.select_contacts'
+                'add_acl_resource'      => 'orocrm_contact_view',
+                'class'                 => 'OroCRMContactBundle:Contact',
+                'default_element'       => 'default_contact',
+                'required'              => false,
+                'selector_window_title' => 'orocrm.account.form.select_contacts',
             )
         );
 

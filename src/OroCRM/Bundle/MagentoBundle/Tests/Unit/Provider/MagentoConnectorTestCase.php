@@ -2,18 +2,20 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
-use Oro\Bundle\IntegrationBundle\Entity\Status;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
+use Oro\Bundle\ImportExportBundle\Context\Context;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -69,6 +71,50 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $connector->setStepExecution($this->stepExecutionMock);
     }
 
+
+    /**
+     * @dataProvider predefinedIteratorProvider
+     *
+     * @param mixed $iterator
+     * @param null  $exceptionExpected
+     */
+    public function testInitializationWithPredefinedFilters($iterator, $exceptionExpected = null)
+    {
+        if (null !== $exceptionExpected) {
+            $this->setExpectedException($exceptionExpected);
+        } else {
+            $iterator->expects($this->once())->method('setPredefinedFiltersBag');
+        }
+        $context = new Context(['filters' => []]);
+
+        $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock, null, $context);
+        $this->transportMock->expects($this->once())->method('init');
+
+        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+            ->will($this->returnValue($iterator));
+
+        $connector->setStepExecution($this->stepExecutionMock);
+    }
+
+    /**
+     * @return array
+     */
+    public function predefinedIteratorProvider()
+    {
+        $iterator1 = $this->getMock('\Iterator');
+        $iterator2 = $this->getMock('OroCRM\Bundle\MagentoBundle\Tests\Unit\Fixtures\PredefinedFiltersAwareFixture');
+
+        return [
+            'should throw exception' => [
+                $iterator1,
+                '\LogicException'
+            ],
+            'should process filters' => [
+                $iterator2
+            ]
+        ];
+    }
+
     /**
      * @expectedException \LogicException
      */
@@ -121,11 +167,13 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
      * @param mixed        $stepExecutionMock
      * @param null|Channel $channel
      *
+     * @param null         $context
+     *
      * @return AbstractMagentoConnector
      */
-    protected function getConnector($transport, $stepExecutionMock, $channel = null)
+    protected function getConnector($transport, $stepExecutionMock, $channel = null, $context = null)
     {
-        $contextRegistry     = new ContextRegistry();
+        $contextRegistryMock = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextRegistry');
         $contextMediatorMock = $this
             ->getMockBuilder('Oro\\Bundle\\IntegrationBundle\\Provider\\ConnectorContextMediator')
             ->disableOriginalConstructor()->getMock();
@@ -134,21 +182,24 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $channel           = $channel ? : new Channel();
         $channel->setTransport($transportSettings);
 
+        $contextMock = $context ? : new Context([]);
+
         $executionContext = new ExecutionContext();
         $stepExecutionMock->expects($this->any())
             ->method('getExecutionContext')->will($this->returnValue($executionContext));
 
-        $context = $contextRegistry->getByStepExecution($stepExecutionMock);
-        $contextMediatorMock->expects($this->at(0))
-            ->method('getTransport')->with($this->equalTo($context))
+        $contextRegistryMock->expects($this->any())->method('getByStepExecution')
+            ->will($this->returnValue($contextMock));
+        $contextMediatorMock->expects($this->once())
+            ->method('getTransport')->with($this->equalTo($contextMock))
             ->will($this->returnValue($transport));
-        $contextMediatorMock->expects($this->at(1))
-            ->method('getChannel')->with($this->equalTo($context))
+        $contextMediatorMock->expects($this->once())
+            ->method('getChannel')->with($this->equalTo($contextMock))
             ->will($this->returnValue($channel));
 
         $logger = new LoggerStrategy(new NullLogger());
 
-        return $this->getConnectorInstance($contextRegistry, $logger, $contextMediatorMock);
+        return $this->getConnectorInstance($contextRegistryMock, $logger, $contextMediatorMock);
     }
 
     /**

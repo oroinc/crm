@@ -13,6 +13,15 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
+{% block navButtons %}
+    {{ UI.button({
+        'path':  path('orocrm_magento_cart_actualize', {'id': entity.id}),
+        'label': 'orocrm.magento.cart.actualize_label'|trans,
+        'title': 'orocrm.magento.cart.actualize_label'|trans,
+        'iCss': 'icon-refresh'
+    }) }}
+{% endblock navButtons %}
+
 {% block content_data %}
     {% set generalSubblocks = [] %}
 
