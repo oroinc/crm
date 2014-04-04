@@ -15,6 +15,8 @@ class SalesFunnels extends AbstractPageFilteredGrid
 {
     const URL = 'salesfunnel';
 
+    protected $gridPath = "//div[@class = 'grid-container']";
+
     public function __construct($testCase, $redirect = true)
     {
         $this->redirectUrl = self::URL;
