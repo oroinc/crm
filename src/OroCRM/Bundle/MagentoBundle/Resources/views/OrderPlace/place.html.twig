@@ -1,18 +1,6 @@
-{#% extends 'OroUIBundle:actions:index.html.twig' %#}
 {% extends 'OroUIBundle:actions:view.html.twig' %}
-
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 {% import 'OroNavigationBundle:Include:contentTags.html.twig' as navigationMacro %}
-
-{#  @TODO:
-        - +add title
-        - +add back button and pass URL from controller
-        - add breadcrumbs
-#}
-
-{% oro_title_set({params : {"%cart.id%":  entity.originId} }) %}
-
-{#% set pageTitle = 'Place order' %#}
 
 {% block pageHeader %}
     {% set breadcrumbs = {
@@ -23,7 +11,6 @@
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
-
 
 {% block navButtonContainer %}
     {% if backUrl is defined %}
@@ -41,9 +28,7 @@
 {% block workflowStepListContainer %}{% endblock workflowStepListContainer %}
 {% block navigation_content_tags %}{% endblock navigation_content_tags %}
 
-
 {% block content_data %}
-{#{ parent() }#}
 
     <iframe id="orderPlaceFrame" src="{{ sourceUrl|raw }}" width="100%"  frameborder="0"></iframe>
     {#<iframe id="orderPlaceFrame" src="http://sdbwergbw.csergwerg" width="100%"  frameborder="0"></iframe>#}
