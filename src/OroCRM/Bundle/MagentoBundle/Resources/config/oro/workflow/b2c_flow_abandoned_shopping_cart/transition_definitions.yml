@@ -5,7 +5,8 @@ workflows:
                 pre_conditions:
                     @or:
                         - @equal: [$cart.status.name, 'open']
-                        - @equal: [$cart.status.name, 'purchased']
+                        # allow to submit call to converted step on any status
+                        - @equal: [$cart.workflowStep.name, 'converted']
                 conditions:
                     @and:
                         - @not_empty:
@@ -47,7 +48,8 @@ workflows:
                 pre_conditions:
                     @or:
                         - @equal: [$cart.status.name, 'open']
-                        - @equal: [$cart.status.name, 'purchased']
+                        # allow to submit email to converted step on any status
+                        - @equal: [$cart.workflowStep.name, 'converted']
                 conditions:
                     @and:
                         - @not_empty:
