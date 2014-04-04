@@ -2,13 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller;
 
-use FOS\Rest\Util\Codes;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -17,7 +15,6 @@ use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 /**
  * @Route("/order/place")
