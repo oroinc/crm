@@ -53,6 +53,9 @@ class CartStrategy extends BaseStrategy
                     'workflowStep'
                 ]
             );
+
+            $this->removeErrorMessage($existingEntity);
+
         } else {
             if (!$newEntity->getGrandTotal()) {
                 // newly created cart without items should be skipped
@@ -73,6 +76,7 @@ class CartStrategy extends BaseStrategy
         }
 
         $newEntity->getCustomer()->setChannel($newEntity->getChannel());
+
         $this->updateCustomer($existingEntity, $newEntity->getCustomer())
             ->updateAddresses($existingEntity, $newEntity)
             ->updateCartItems($existingEntity, $newEntity->getCartItems());
@@ -222,5 +226,16 @@ class CartStrategy extends BaseStrategy
             $status->getName()
         );
         $existingEntity->setStatus($status);
+    }
+
+    /**
+     * @param Cart $existingEntity
+     *
+     * @return $this
+     */
+    protected function removeErrorMessage(Cart $existingEntity)
+    {
+        $existingEntity->setStatusMessage(null);
+        return $this;
     }
 }

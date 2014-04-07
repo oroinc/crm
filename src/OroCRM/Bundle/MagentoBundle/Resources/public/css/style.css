@@ -39,3 +39,7 @@
 #magento-without-border-tabs .oro-tabs .nav-tabs > li:first-child > a:focus {
     border-left: none;
 }
+
+.mess-pos {
+    margin-left: 10px;
+}

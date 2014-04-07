@@ -19,5 +19,9 @@ class OroCrmMagentoBundle implements Migration
         $orderTable = $schema->getTable('orocrm_magento_order');
         $orderTable->dropIndex('UNIQ_4D09F3051AD5CDBF');
         $orderTable->addIndex(['cart_id'], 'IDX_4D09F3051AD5CDBF');
+
+        $chart = $schema->getTable('orocrm_magento_cart');
+        $chart->addColumn('status_message', 'string', ['notnull' => false, 'length' => 255]);
+
     }
 }
