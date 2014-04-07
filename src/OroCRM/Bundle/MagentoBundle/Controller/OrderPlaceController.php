@@ -73,7 +73,7 @@ class OrderPlaceController extends Controller
             try {
                 $httpStatus = StaticClient::get($sourceUrl)->getStatusCode();
                 if ($httpStatus >= 400 && false !== $httpStatus) {
-                    $error = 'orocrm.magento.ping_site_error';
+                    throw new \LogicException();
                 }
             } catch (\Exception $e) {
                 $error = 'orocrm.magento.ping_site_error';
