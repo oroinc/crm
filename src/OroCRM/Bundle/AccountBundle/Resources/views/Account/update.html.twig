@@ -98,19 +98,21 @@
         }] ) %}
     {% endif %}
 
-    {% set dataBlocks = dataBlocks|merge([{
-        'title' : 'orocrm.account.contacts.label'|trans,
-        'subblocks': [
-            {
+    {% if form.contacts is defined%}
+        {% set dataBlocks = dataBlocks|merge([{
+            'title' : 'orocrm.account.contacts.label'|trans,
+            'subblocks': [{
                 'title' : null,
                 'useSpan': false,
                 'data' : [
                     form_widget(form.default_contact),
-                    form_widget(form.contacts)
-                ]
-            }
-        ]
-    }] ) %}
+                    form_widget(form.contacts)]
+            }]
+        }] ) %}
+    {% else %}
+        empty
+    {% endif %}
+
 
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,

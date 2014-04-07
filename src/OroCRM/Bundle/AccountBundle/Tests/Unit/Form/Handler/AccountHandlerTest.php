@@ -112,10 +112,15 @@ class AccountHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('submit')
             ->with($this->request);
 
-        $this->form->expects($this->exactly(2))
+        $this->form->expects($this->exactly(1))
             ->method('get')
             ->with('contacts')
             ->will($this->returnValue($contactsForm));
+
+        $this->form->expects($this->once())
+            ->method('has')
+            ->with('contacts')
+            ->will($this->returnValue(true));
 
         $this->assertFalse($this->handler->process($this->entity));
     }
@@ -152,6 +157,11 @@ class AccountHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('isValid')
             ->will($this->returnValue(true));
 
+        $this->form->expects($this->once())
+            ->method('has')
+            ->with('contacts')
+            ->will($this->returnValue(true));
+
         $contactsForm = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
             ->getMock();
@@ -177,7 +187,7 @@ class AccountHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('removed')
             ->will($this->returnValue($removeForm));
 
-        $this->form->expects($this->exactly(2))
+        $this->form->expects($this->exactly(1))
             ->method('get')
             ->with('contacts')
             ->will($this->returnValue($contactsForm));
@@ -194,5 +204,36 @@ class AccountHandlerTest extends \PHPUnit_Framework_TestCase
         $actualContacts = $this->entity->getContacts()->toArray();
         $this->assertCount(1, $actualContacts);
         $this->assertEquals($appendedContact, current($actualContacts));
+    }
+
+    public function testProcessWithoutContactViewPermission()
+    {
+        $this->request->setMethod('POST');
+
+        $this->form->expects($this->once())
+            ->method('setData')
+            ->with($this->entity);
+
+        $this->form->expects($this->once())
+            ->method('submit')
+            ->with($this->request);
+
+        $this->form->expects($this->once())
+            ->method('isValid')
+            ->will($this->returnValue(true));
+
+        $this->form->expects($this->once())
+            ->method('has')
+            ->with('contacts')
+            ->will($this->returnValue(false));
+
+        $this->form->expects($this->never())
+            ->method('get');
+
+        $this->assertTrue($this->handler->process($this->entity));
+
+        $actualContacts = $this->entity->getContacts()->toArray();
+        $this->assertCount(0, $actualContacts);
+        $this->assertEquals(array(), $actualContacts);
     }
 }

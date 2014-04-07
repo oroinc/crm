@@ -75,10 +75,11 @@ class AccountHandler implements TagHandlerInterface
      */
     protected function handleContacts($entity)
     {
-        $appendContacts = $this->form->get('contacts')->get('added')->getData();
-        $removeContacts = $this->form->get('contacts')->get('removed')->getData();
-        $this->appendContacts($entity, $appendContacts);
-        $this->removeContacts($entity, $removeContacts);
+        if ($this->form->has('contacts')) {
+            $contacts = $this->form->get('contacts');
+            $this->appendContacts($entity, $contacts->get('added')->getData());
+            $this->removeContacts($entity, $contacts->get('removed')->getData());
+        }
     }
 
     /**

@@ -26,6 +26,11 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected $nameFormatter;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $securityFacade;
+
     protected function setUp()
     {
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
@@ -34,8 +39,11 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $this->nameFormatter = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\NameFormatter')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->type = new AccountType($this->router, $this->nameFormatter);
+        $this->type = new AccountType($this->router, $this->nameFormatter, $this->securityFacade);
     }
 
     public function testAddEntityFields()
@@ -43,6 +51,11 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->securityFacade->expects($this->once())
+            ->method('isGranted')
+            ->with('orocrm_contact_view')
+            ->will($this->returnValue(true));
 
         $builder->expects($this->at(0))
             ->method('add')
@@ -72,6 +85,37 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $this->type->buildForm($builder, []);
     }
 
+    public function testAddEntityFieldsWithoutContactPermission()
+    {
+        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->securityFacade->expects($this->once())
+            ->method('isGranted')
+            ->with('orocrm_contact_view')
+            ->will($this->returnValue(false));
+
+        $builder->expects($this->at(0))
+            ->method('add')
+            ->with('name', 'text')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(1))
+            ->method('add')
+            ->with('tags', 'oro_tag_select')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(2))
+            ->method('add')
+            ->with('shippingAddress', 'oro_address')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(3))
+            ->method('add')
+            ->with('billingAddress', 'oro_address')
+            ->will($this->returnSelf());
+
+        $this->type->buildForm($builder, []);
+    }
+
     public function testSetDefaultOptions()
     {
         /** @var OptionsResolverInterface $resolver */
@@ -89,6 +133,11 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testFinishView()
     {
+        $this->securityFacade->expects($this->exactly(2))
+            ->method('isGranted')
+            ->with('orocrm_contact_view')
+            ->will($this->returnValue(true));
+
         $this->router->expects($this->at(0))
             ->method('generate')
             ->with('orocrm_account_widget_contacts_info', array('id' => 100))
@@ -167,5 +216,22 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             )
         );
         $this->assertEquals($expectedInitialElements, $contactsFormView->vars['initial_elements']);
+    }
+
+    public function testFinishViewWithoutContactPermission()
+    {
+        $this->securityFacade->expects($this->exactly(1))
+            ->method('isGranted')
+            ->with('orocrm_contact_view')
+            ->will($this->returnValue(false));
+
+        $form = $this->getMockBuilder('Symfony\Component\Form\Form')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $formView = new FormView();
+        $this->type->finishView($formView, $form, array());
+
+        $this->assertTrue(empty($formView->children['contacts']));
     }
 }
