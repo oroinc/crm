@@ -70,14 +70,12 @@ class OrderPlaceController extends Controller
                 $successUrl,
                 $errorUrl
             );
-
+            $sourceUrl = 'http://asdrwergwertgh.werghqwergwe';
             try {
-                $httpStatus = StaticClient::get($sourceUrl)->getStatusCode();
+                if (StaticClient::get($sourceUrl)->getStatusCode() >= 400 && false !== $httpStatus) {
+                    $error = 'orocrm.magento.ping_site_error';
+                }
             } catch (\Exception $e) {
-                $error = 'orocrm.magento.ping_site_error';
-            }
-
-            if ($httpStatus >= 400 && false !== $httpStatus) {
                 $error = 'orocrm.magento.ping_site_error';
             }
         } catch (ExtensionRequiredException $e) {
