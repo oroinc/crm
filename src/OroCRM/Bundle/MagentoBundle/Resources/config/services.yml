@@ -7,6 +7,7 @@ parameters:
     orocrm_magento.provider.cart_expiration_processor.class:                OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor
 
     # forms
+    orocrm_magento.form.type.order_place.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\OrderPlaceType
     orocrm_magento.form.type.soap_transport_setting.class:                  OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
     orocrm_magento.form.subscriber.soap_transport_setting.class:            OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
 
@@ -48,6 +49,11 @@ services:
             - @oro_integration.manager.types_registry
         tags:
             - { name: form.type, alias: orocrm_magento_soap_transport_setting_form_type }
+
+    orocrm_magento.form.type.order_place:
+        class: %orocrm_magento.form.type.order_place.class%
+        tags:
+            - { name: form.type, alias: orocrm_magento_order_place_form_type }
 
     # event listeners
     orocrm_magento.event_listener.navigation:

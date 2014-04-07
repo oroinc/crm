@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller;
 
+use Guzzle\Http\StaticClient;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -57,7 +59,7 @@ class OrderPlaceController extends Controller
             );
 
             $sourceUrl = sprintf(
-                '%s/%s?quote=%d&route=%s&workflow=%s&success_url=%s&error_url=%s',
+                '%sdasd/%s?quote=%d&route=%s&workflow=%s&success_url=%s&error_url=%s',
                 rtrim($url, '/'),
                 self::GATEWAY_ROUTE,
                 $cart->getOriginId(),
@@ -66,23 +68,25 @@ class OrderPlaceController extends Controller
                 $successUrl,
                 $errorUrl
             );
+            try {
+                $httpStatus = StaticClient::get($sourceUrl)->getStatusCode();
+                if ($httpStatus >= 400 && false !== $httpStatus) {
+                    throw new \LogicException('Unable to load resource');
+                }
+            } catch (\Exception $e) {
+                $error = 'orocrm.magento.ping_site_error';
+            }
         } catch (ExtensionRequiredException $e) {
             $error = $e->getMessage();
         } catch (\LogicException $e) {
             $error = 'orocrm.magento.controller.transport_not_configure';
         }
 
-        $backUrl = $this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]);
-        if (false !== $error) {
-            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans($error));
-            return $this->redirect($backUrl);
-        }
-
         return [
-            'entity'            => $cart,
-            'requireTransition' => true,
-            'sourceUrl'         => $sourceUrl,
-            'backUrl'           => $backUrl
+            'entity'    => $cart,
+            'error'     => $error ? $this->get('translator')->trans($error) : $error,
+            'sourceUrl' => $sourceUrl,
+            'backUrl'   => $this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()])
         ];
     }
 
@@ -93,10 +97,12 @@ class OrderPlaceController extends Controller
     public function syncAction(Cart $cart)
     {
         $status = 200;
+
         try {
             $cartConnector  = $this->get('orocrm_magento.mage.cart_connector');
             $orderConnector = $this->get('orocrm_magento.mage.order_connector');
-            $processor = $this->get('oro_integration.sync.processor');
+            $processor      = $this->get('oro_integration.sync.processor');
+
             $processor->process(
                 $cart->getChannel(),
                 $cartConnector->getType(),
@@ -116,10 +122,8 @@ class OrderPlaceController extends Controller
             $em->flush();
             $status = 400;
         }
-        return new Response(
-            '',
-            $status
-        );
+
+        return new Response('', $status);
     }
 
     /**

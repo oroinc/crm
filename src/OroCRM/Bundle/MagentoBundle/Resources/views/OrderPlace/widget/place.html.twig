@@ -1,0 +1,86 @@
+{% block page_container %}
+<div class="container-fluid email-body-holder widget-content">
+    {% if error is sameas(false) %}
+            <iframe id="orderPlaceFrame" src="{{ sourceUrl|raw }}" width="1" height="1"  frameborder="0"></iframe>
+
+            {% set syncURL = path('orocrm_magento_orderplace_sync', {id: entity.id}) %}
+            <script type="text/javascript">
+                var ORO_ORDER_EMBED_API = {};
+
+                require(['jquery', 'oroui/js/widget-manager', 'oroui/js/messenger', 'orotranslation/js/translator'],
+                function ($, widgetManager, messenger, __) {
+                    var syncUrl = {{ syncURL|trim|json_encode|raw }},
+                        $frame = $('#orderPlaceFrame'),
+                        contentContainer = $('#container'),
+                        containerFluid = $('.container-fluid'),
+                        resizeIframe = function() {
+                            var deviation = 5,
+                                heightResult = (contentContainer.height() - deviation) - containerFluid.height();
+                            $frame.css( 'height', (heightResult)+'px');
+                            $frame.css( 'width', '100%');
+                        };
+
+                    $frame.load(function () {
+                        resizeIframe();
+                    }).ready(function() {
+                        var counter = 0;
+                        var FF = setInterval( function() {
+                            counter ++;
+                            if (counter >= 5) {
+                                clearInterval(FF);
+                                if (false === loaded) {
+                                    ORO_ORDER_EMBED_API.error();
+                                }
+                            }
+                        }, 2000);
+                    });
+
+                    $(window).on("resize",function (){
+                        resizeIframe();
+                    });
+                    contentContainer.on("resize",function (){
+                        resizeIframe();
+                    });
+
+                    ORO_ORDER_EMBED_API.success = function () {
+                        navigation.loadingMask.show();
+                        messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_synchronization'));
+
+                        $.get(syncUrl, function() {
+                            messenger.notificationFlashMessage('success', __('orocrm.magento.synchronization_success'));
+
+                            widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
+                                widget.trigger('formSave');
+                            });
+                        }).error(function() {
+                            messenger.notificationFlashMessage('error', __('orocrm.magento.synchronization_error'));
+
+                            widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
+                                widget.remove();
+                            });
+                        });
+                    };
+
+                    {#ORO_ORDER_EMBED_API.error = function () {#}
+                        {#$frame.css('width', '1px').css('height', '1px');#}
+                        {#messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));#}
+                        {#navigation.setLocation({{ backUrl|json_encode|raw }});#}
+                    {#};
+                    #}
+                });
+            </script>
+    {% else %}
+        <script type="text/javascript">
+            require(['oroui/js/widget-manager', 'oroui/js/messenger'],
+            function (widgetManager, messenger) {
+                messenger.notificationFlashMessage('error', {{ error|json_encode|raw }});
+
+                debugger;
+                widgetManager.getWidgetInstanceByAlias('transition-form', function(widget) {
+                    widget.remove();
+                });
+            });
+        </script>
+    {% endif %}
+</div>
+{% endblock %}

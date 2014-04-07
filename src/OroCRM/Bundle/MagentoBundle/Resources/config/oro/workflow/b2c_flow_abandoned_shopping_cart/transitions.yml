@@ -333,7 +333,16 @@ workflows:
                 is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-money'
+                    dialog:
+                        alias: transaction-dialog
                 transition_definition: place_order_definition
+                form_type: orocrm_magento_order_place_form_type
+                form_options:
+                    attribute_fields:
+                        cart_id:
+                            form_type: hidden
+                    init_actions:
+                        - @assign_value: [$cart_id, $cart.id]
 
             place_order_from_contacted:
                 label:   'Place an order'
@@ -342,6 +351,13 @@ workflows:
                 frontend_options:
                     icon: 'icon-money'
                 transition_definition: place_order_definition
+                form_type: orocrm_magento_order_place_form_type
+                form_options:
+                    attribute_fields:
+                        cart_id:
+                            form_type: hidden
+                    init_actions:
+                        - @assign_value: [$cart_id, $cart.id]
 
             convert_to_opportunity:
                 label: 'Convert to opportunity'
