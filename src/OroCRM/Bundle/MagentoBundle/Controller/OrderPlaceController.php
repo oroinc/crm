@@ -107,9 +107,9 @@ class OrderPlaceController extends Controller
                 $orderConnector->getType(),
                 ['filters' => ['quote_id' => $cart->getOriginId()]]
             );
-        } catch(Exception $e) {
+        } catch (\Exception $e) {
             $cart->setStatusMessage(
-                $this->get('translator')->trans('orocrm.magento.controller.order_palace_controller_error')
+                $this->get('translator')->trans('orocrm.magento.controller.synchronization_failed_status')
             );
             $em = $this->get('doctrine')->getManagerForClass('OroCRMMagentoBundle:Cart');
             $em->persist($cart);
