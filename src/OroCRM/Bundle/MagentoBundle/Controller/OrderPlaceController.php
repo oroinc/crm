@@ -93,11 +93,9 @@ class OrderPlaceController extends Controller
     public function syncAction(Cart $cart)
     {
         $status = 200;
-
         try {
             $cartConnector  = $this->get('orocrm_magento.mage.cart_connector');
             $orderConnector = $this->get('orocrm_magento.mage.order_connector');
-
             $processor = $this->get('oro_integration.sync.processor');
             $processor->process(
                 $cart->getChannel(),
@@ -117,7 +115,6 @@ class OrderPlaceController extends Controller
             $em->persist($cart);
             $em->flush();
             $status = 400;
-
         }
         return new Response(
             '',
