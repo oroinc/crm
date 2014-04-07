@@ -13,6 +13,15 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
+{% block breadcrumbMessage %}
+    {% if entity.statusMessage %}
+        <div class="bg-danger mess-pos pull-left">
+            <div class="badge badge-warning">{{ entity.statusMessage }}</div>
+        </div>
+    {% endif %}
+{% endblock breadcrumbMessage %}
+
+
 {% block navButtons %}
     {{ UI.button({
         'path':  path('orocrm_magento_cart_actualize', {'id': entity.id}),
