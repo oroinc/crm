@@ -107,22 +107,34 @@ class OrderPlaceController extends Controller
      */
     public function syncAction(Cart $cart)
     {
-        $cartConnector  = $this->get('orocrm_magento.mage.cart_connector');
-        $orderConnector = $this->get('orocrm_magento.mage.order_connector');
-
-        $processor = $this->get('oro_integration.sync.processor');
-        $processor->process(
-            $cart->getChannel(),
-            $cartConnector->getType(),
-            ['filters' => ['entity_id' => $cart->getOriginId()]]
+        $status = 200;
+        try {
+            $cartConnector  = $this->get('orocrm_magento.mage.cart_connector');
+            $orderConnector = $this->get('orocrm_magento.mage.order_connector');
+            $processor = $this->get('oro_integration.sync.processor');
+            $processor->process(
+                $cart->getChannel(),
+                $cartConnector->getType(),
+                ['filters' => ['entity_id' => $cart->getOriginId()]]
+            );
+            $processor->process(
+                $cart->getChannel(),
+                $orderConnector->getType(),
+                ['filters' => ['quote_id' => $cart->getOriginId()]]
+            );
+        } catch (\Exception $e) {
+            $cart->setStatusMessage(
+                $this->get('translator')->trans('orocrm.magento.controller.synchronization_failed_status')
+            );
+            $em = $this->get('doctrine')->getManagerForClass('OroCRMMagentoBundle:Cart');
+            $em->persist($cart);
+            $em->flush();
+            $status = 400;
+        }
+        return new Response(
+            '',
+            $status
         );
-        $processor->process(
-            $cart->getChannel(),
-            $orderConnector->getType(),
-            ['filters' => ['quote_id' => $cart->getOriginId()]]
-        );
-
-        return new Response();
     }
 
     /**
