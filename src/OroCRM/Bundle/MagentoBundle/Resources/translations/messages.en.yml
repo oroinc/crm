@@ -337,3 +337,4 @@ orocrm:
             synchronization_error:    Unable to synchronize from remote.
             synchronization_success:  Data successfuly updated.
         exception.extension_required: Unable to perform this operation, Oro Bridge extension not found.
+        ping_site_error: Unable to load form

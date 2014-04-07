@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\MagentoBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Guzzle\Http\StaticClient;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -33,9 +35,11 @@ class OrderPlaceController extends Controller
     public function cartAction(Cart $cart)
     {
         $channel = $cart->getChannel();
-        $error   = $sourceUrl = false;
+        $error   = $sourceUrl = $httpStatus = false;
+
         try {
             $url = $channel->getTransport()->getAdminUrl();
+
             if (false === $url) {
                 throw new ExtensionRequiredException();
             }
@@ -66,6 +70,16 @@ class OrderPlaceController extends Controller
                 $successUrl,
                 $errorUrl
             );
+
+            try {
+                $httpStatus = StaticClient::get($sourceUrl)->getStatusCode();
+            } catch (\Exception $e) {
+                $error = 'orocrm.magento.ping_site_error';
+            }
+
+            if ($httpStatus >= 400 && false !== $httpStatus) {
+                $error = 'orocrm.magento.ping_site_error';
+            }
         } catch (ExtensionRequiredException $e) {
             $error = $e->getMessage();
         } catch (\LogicException $e) {
@@ -73,6 +87,7 @@ class OrderPlaceController extends Controller
         }
 
         $backUrl = $this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]);
+
         if (false !== $error) {
             $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans($error));
             return $this->redirect($backUrl);
