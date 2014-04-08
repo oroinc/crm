@@ -16,11 +16,10 @@
 {% block breadcrumbMessage %}
     {% if entity.statusMessage %}
         <div class="bg-danger mess-pos pull-left">
-            <div class="badge badge-warning">{{ entity.statusMessage }}</div>
+            <div class="badge badge-warning">{{ entity.statusMessage|trans }}</div>
         </div>
     {% endif %}
 {% endblock breadcrumbMessage %}
-
 
 {% block navButtons %}
     {{ UI.button({
