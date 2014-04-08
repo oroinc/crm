@@ -17,7 +17,6 @@ datagrid:
                     - o.budgetAmount
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
                     - status.label as statusLabel
-                    - step.label as stepLabel
                     - email.email as primaryEmail
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: o }
@@ -25,7 +24,6 @@ datagrid:
                     left:
                         - { join: o.contact , alias: contact }
                         - { join: o.status, alias: status }
-                        - { join: o.workflowStep, alias: step }
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
         columns:
             name:
