@@ -7,7 +7,7 @@ workflows:
                 allowed_transitions:
                     - log_call
                     - send_email
-                    - place_order_from_open
+                    - place_order
                     - convert_to_opportunity
                     - convert
             contacted:
@@ -16,7 +16,7 @@ workflows:
                 allowed_transitions:
                     - log_call
                     - send_email
-                    - place_order_from_contacted
+                    - place_order
                     - convert_to_opportunity
                     - abandon
                     - convert

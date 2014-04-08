@@ -2,10 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Doctrine\ORM\EntityManager;
 
 use Guzzle\Http\StaticClient;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -34,31 +36,19 @@ class OrderPlaceController extends Controller
      */
     public function cartAction(Cart $cart)
     {
-        $channel = $cart->getChannel();
-        $error   = $sourceUrl = $httpStatus = false;
+        $channel      = $cart->getChannel();
+        $error        = $sourceUrl = $httpStatus = false;
+        $successRoute = 'orocrm_magento_orderplace_cart_success';
+        $errorRoute   = 'orocrm_magento_orderplace_external_error';
 
         try {
             $url = $channel->getTransport()->getAdminUrl();
-
             if (false === $url) {
                 throw new ExtensionRequiredException();
             }
 
-            $successUrl = urlencode(
-                $this->generateUrl(
-                    'orocrm_magento_orderplace_cart_success',
-                    [],
-                    UrlGeneratorInterface::ABSOLUTE_URL
-                )
-            );
-
-            $errorUrl = urlencode(
-                $this->generateUrl(
-                    'orocrm_magento_orderplace_external_error',
-                    [],
-                    UrlGeneratorInterface::ABSOLUTE_URL
-                )
-            );
+            $successUrl = urlencode($this->generateUrl($successRoute, [], UrlGeneratorInterface::ABSOLUTE_URL));
+            $errorUrl   = urlencode($this->generateUrl($errorRoute, [], UrlGeneratorInterface::ABSOLUTE_URL));
 
             $sourceUrl = sprintf(
                 '%s/%s?quote=%d&route=%s&workflow=%s&success_url=%s&error_url=%s',
@@ -70,13 +60,11 @@ class OrderPlaceController extends Controller
                 $successUrl,
                 $errorUrl
             );
-            try {
-                $httpStatus = StaticClient::get($sourceUrl)->getStatusCode();
-                if ($httpStatus >= 400 && false !== $httpStatus) {
-                    throw new \LogicException();
-                }
-            } catch (\Exception $e) {
-                $error = 'orocrm.magento.ping_site_error';
+
+            // ping url just to ensure that it's accessible
+            $httpStatus = StaticClient::get($sourceUrl)->getStatusCode();
+            if (false !== $httpStatus && $httpStatus >= 400) {
+                throw new \LogicException('Unable to load resource');
             }
         } catch (ExtensionRequiredException $e) {
             $error = $e->getMessage();
@@ -84,18 +72,9 @@ class OrderPlaceController extends Controller
             $error = 'orocrm.magento.controller.transport_not_configure';
         }
 
-        $backUrl = $this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]);
-
-        if (false !== $error) {
-            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans($error));
-            return $this->redirect($backUrl);
-        }
-
         return [
-            'entity'            => $cart,
-            'requireTransition' => true,
-            'sourceUrl'         => $sourceUrl,
-            'backUrl'           => $backUrl
+            'error'     => $error ? $this->get('translator')->trans($error) : $error,
+            'sourceUrl' => $sourceUrl
         ];
     }
 
@@ -105,11 +84,14 @@ class OrderPlaceController extends Controller
      */
     public function syncAction(Cart $cart)
     {
-        $status = 200;
+        /** @var EntityManager $em */
+        $em = $this->get('doctrine.orm.entity_manager');
+
         try {
             $cartConnector  = $this->get('orocrm_magento.mage.cart_connector');
             $orderConnector = $this->get('orocrm_magento.mage.order_connector');
-            $processor = $this->get('oro_integration.sync.processor');
+            $processor      = $this->get('oro_integration.sync.processor');
+
             $processor->process(
                 $cart->getChannel(),
                 $cartConnector->getType(),
@@ -120,19 +102,25 @@ class OrderPlaceController extends Controller
                 $orderConnector->getType(),
                 ['filters' => ['quote_id' => $cart->getOriginId()]]
             );
+
+            $order = $em->getRepository('OroCRMMagentoBundle:Order')->getLastPlacedOrderByCart($cart);
+            if (null === $order) {
+                throw new \LogicException('Unable to load order.');
+            }
+
+            $redirectUrl = $this->generateUrl('orocrm_magento_order_view', ['id' => $order->getId()]);
+            $this->addMessage('orocrm.magento.controller.synchronization_success');
         } catch (\Exception $e) {
-            $cart->setStatusMessage(
-                $this->get('translator')->trans('orocrm.magento.controller.synchronization_failed_status')
-            );
-            $em = $this->get('doctrine')->getManagerForClass('OroCRMMagentoBundle:Cart');
-            $em->persist($cart);
+            $cart->setStatusMessage('orocrm.magento.controller.synchronization_failed_status');
+
+            // in import process we have EntityManager#clear()
+            $cart = $em->merge($cart);
             $em->flush();
-            $status = 400;
+            $redirectUrl = $this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]);
+            $this->addMessage('orocrm.magento.controller.synchronization_error', 'error');
         }
-        return new Response(
-            '',
-            $status
-        );
+
+        return $this->redirect($redirectUrl);
     }
 
     /**
@@ -164,5 +152,16 @@ class OrderPlaceController extends Controller
     public function errorAction()
     {
         return [];
+    }
+
+    /**
+     * Adds message to flash bag
+     *
+     * @param string $message
+     * @param string $type
+     */
+    protected function addMessage($message, $type = 'success')
+    {
+        $this->get('session')->getFlashBag()->add($type, $this->get('translator')->trans($message));
     }
 }

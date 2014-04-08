@@ -1,0 +1,56 @@
+{% block page_container %}
+    <div class="order-form-widget widget-content">
+        {% if error is sameas(false) %}
+            <iframe id="orderPlaceFrame" src="{{ sourceUrl|raw }}" width="1" height="1" frameborder="0"></iframe>
+
+            <script type="text/javascript">
+                var ORO_ORDER_EMBED_API = {};
+
+                require(['jquery', 'oroui/js/widget-manager', 'oroui/js/messenger', 'orotranslation/js/translator'],
+                function ($, widgetManager, messenger, __) {
+                    var $frame = $('#orderPlaceFrame'),
+                        widgetAlias = 'transaction-dialog';
+
+                    widgetManager.getWidgetInstanceByAlias(widgetAlias, function (widget) {
+                        widget._showLoading();
+                    });
+
+                    $frame.load(function () {
+                        $frame.css({'height': '100%', 'width': '100%'});
+
+                        widgetManager.getWidgetInstanceByAlias(widgetAlias, function (widget) {
+                            widget._hideLoading();
+                        });
+                    });
+
+                    ORO_ORDER_EMBED_API.success = function () {
+                        messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_synchronization'));
+
+                        widgetManager.getWidgetInstanceByAlias(widgetAlias, function (widget) {
+                            widget.trigger('formSave');
+                        });
+                    };
+
+                    ORO_ORDER_EMBED_API.error = function () {
+                        messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));
+
+                        widgetManager.getWidgetInstanceByAlias(widgetAlias, function (widget) {
+                            widget.remove();
+                        });
+                    };
+                });
+            </script>
+        {% else %}
+            <script type="text/javascript">
+                require(['oroui/js/widget-manager', 'oroui/js/messenger'],
+                function (widgetManager, messenger) {
+                    messenger.notificationFlashMessage('error', {{ error|json_encode|raw }});
+
+                    widgetManager.getWidgetInstanceByAlias('transaction-dialog', function (widget) {
+                        widget.remove();
+                    });
+                });
+            </script>
+        {% endif %}
+    </div>
+{% endblock %}

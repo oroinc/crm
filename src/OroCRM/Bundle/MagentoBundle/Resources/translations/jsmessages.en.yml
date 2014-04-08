@@ -3,10 +3,5 @@ orocrm:
         success: Connection successful, please select a website from the list below
         not_valid_parameters: Parameters are not valid!
         error: Error occurred during check request, please try later!
-        performing_transition: Performing transition...
-        transition_error: Could not perform transition
-        transition_performed: Transition performed
         external_error:             External error occured
         performing_synchronization: Performing synchronization...
-        synchronization_error:      Unable to synchronize from remote.
-        synchronization_success:    Data successfuly synchronized.

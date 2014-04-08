@@ -54,6 +54,9 @@ workflows:
                 type: string
 
             # Other workflow attributes
+            cart_id:
+                type: integer
+                property_path: cart.id
             notes:
                 label: 'Notes'
                 type: string

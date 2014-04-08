@@ -58,3 +58,11 @@
     {% endspaceless %}
 {% endblock %}
 
+{% block orocrm_magento_order_place_form_type_row %}
+    {% set cartId = form.cart_id.vars.data %}
+    {{ oro_widget_render({
+        'widgetType': 'block',
+        'url': path('orocrm_magento_orderplace_cart', {id: cartId}),
+        'loadingMaskEnabled': false
+    }) }}
+{% endblock %}
