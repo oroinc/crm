@@ -35,9 +35,11 @@ class OrderPlaceController extends Controller
     public function cartAction(Cart $cart)
     {
         $channel = $cart->getChannel();
-        $error   = $sourceUrl = false;
+        $error   = $sourceUrl = $httpStatus = false;
+
         try {
             $url = $channel->getTransport()->getAdminUrl();
+
             if (false === $url) {
                 throw new ExtensionRequiredException();
             }
@@ -59,7 +61,7 @@ class OrderPlaceController extends Controller
             );
 
             $sourceUrl = sprintf(
-                '%sdasd/%s?quote=%d&route=%s&workflow=%s&success_url=%s&error_url=%s',
+                '%s/%s?quote=%d&route=%s&workflow=%s&success_url=%s&error_url=%s',
                 rtrim($url, '/'),
                 self::GATEWAY_ROUTE,
                 $cart->getOriginId(),
