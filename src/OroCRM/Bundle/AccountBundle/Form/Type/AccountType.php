@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
 use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
+use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -30,13 +31,26 @@ class AccountType extends AbstractType
     protected $nameFormatter;
 
     /**
+     * @var SecurityFacade
+     */
+    protected $securityFacade;
+
+    /**
+     * @var boolean
+     */
+    private $canViewContact;
+
+    /**
      * @param Router $router
      * @param NameFormatter $nameFormatter
+     * @param SecurityFacade $securityFacade
      */
-    public function __construct(Router $router, NameFormatter $nameFormatter)
+    public function __construct(Router $router, NameFormatter $nameFormatter, SecurityFacade $securityFacade)
     {
-        $this->router = $router;
-        $this->nameFormatter = $nameFormatter;
+        $this->nameFormatter  = $nameFormatter;
+        $this->router         = $router;
+        $this->securityFacade = $securityFacade;
+        $this->canViewContact = $this->securityFacade->isGranted('orocrm_contact_view');
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -60,27 +74,29 @@ class AccountType extends AbstractType
             )
         );
 
-        $builder->add(
-            'default_contact',
-            'oro_entity_identifier',
-            array(
-                'class'    => 'OroCRMContactBundle:Contact',
-                'multiple' => false
-            )
-        );
+        if ($this->canViewContact) {
+            $builder->add(
+                'default_contact',
+                'oro_entity_identifier',
+                array(
+                    'class'    => 'OroCRMContactBundle:Contact',
+                    'multiple' => false
+                )
+            );
 
-        // contacts
-        $builder->add(
-            'contacts',
-            'oro_multiple_entity',
-            array(
-                'add_acl_resource'      => 'orocrm_contact_view',
-                'class'                 => 'OroCRMContactBundle:Contact',
-                'default_element'       => 'default_contact',
-                'required'              => false,
-                'selector_window_title' => 'orocrm.account.form.select_contacts',
-            )
-        );
+            // contacts
+            $builder->add(
+                'contacts',
+                'oro_multiple_entity',
+                array(
+                    'add_acl_resource'      => 'orocrm_contact_view',
+                    'class'                 => 'OroCRMContactBundle:Contact',
+                    'default_element'       => 'default_contact',
+                    'required'              => false,
+                    'selector_window_title' => 'orocrm.account.form.select_contacts',
+                )
+            );
+        }
 
         // addresses
         $builder
@@ -107,13 +123,15 @@ class AccountType extends AbstractType
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        /** @var Account $account */
-        $account = $form->getData();
-        $view->children['contacts']->vars['grid_url']
-            = $this->router->generate('orocrm_account_widget_contacts_info', array('id' => $account->getId()));
-        $defaultContactId = $account->getDefaultContact() ? $account->getDefaultContact()->getId() : null;
-        $view->children['contacts']->vars['initial_elements']
-            = $this->getInitialElements($account->getContacts(), $defaultContactId);
+        if ($this->canViewContact) {
+            /** @var Account $account */
+            $account = $form->getData();
+            $view->children['contacts']->vars['grid_url']
+                = $this->router->generate('orocrm_account_widget_contacts_info', array('id' => $account->getId()));
+            $defaultContactId = $account->getDefaultContact() ? $account->getDefaultContact()->getId() : null;
+            $view->children['contacts']->vars['initial_elements']
+                = $this->getInitialElements($account->getContacts(), $defaultContactId);
+        }
     }
 
     /**
@@ -124,20 +142,22 @@ class AccountType extends AbstractType
     protected function getInitialElements(Collection $contacts, $default)
     {
         $result = array();
-        /** @var Contact $contact */
-        foreach ($contacts as $contact) {
-            $primaryPhone = $contact->getPrimaryPhone();
-            $primaryEmail = $contact->getPrimaryEmail();
-            $result[] = array(
-                'id' => $contact->getId(),
-                'label' => $this->nameFormatter->format($contact),
-                'link' => $this->router->generate('orocrm_contact_info', array('id' => $contact->getId())),
-                'extraData' => array(
-                    array('label' => 'Phone', 'value' => $primaryPhone ? $primaryPhone->getPhone() : null),
-                    array('label' => 'Email', 'value' => $primaryEmail ? $primaryEmail->getEmail() : null),
-                ),
-                'isDefault' => $default == $contact->getId()
-            );
+        if ($this->canViewContact) {
+            /** @var Contact $contact */
+            foreach ($contacts as $contact) {
+                $primaryPhone = $contact->getPrimaryPhone();
+                $primaryEmail = $contact->getPrimaryEmail();
+                $result[] = array(
+                    'id' => $contact->getId(),
+                    'label' => $this->nameFormatter->format($contact),
+                    'link' => $this->router->generate('orocrm_contact_info', array('id' => $contact->getId())),
+                    'extraData' => array(
+                        array('label' => 'Phone', 'value' => $primaryPhone ? $primaryPhone->getPhone() : null),
+                        array('label' => 'Email', 'value' => $primaryEmail ? $primaryEmail->getEmail() : null),
+                    ),
+                    'isDefault' => $default == $contact->getId()
+                );
+            }
         }
         return $result;
     }
