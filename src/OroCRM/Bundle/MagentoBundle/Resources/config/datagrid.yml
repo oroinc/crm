@@ -740,6 +740,18 @@ datagrid:
                 stepLabel:       { data_name: step.label }
         properties:
             id: ~
+            view_link:
+                type: url
+                route: orocrm_magento_order_view
+                params: [ id ]
+        actions:
+            view:
+                type:         navigate
+                label:        orocrm.magento.datagrid.actions.view.label
+                link:         view_link
+                icon:         book
+                acl_recource: orocrm_magento_order_view
+                rowAction:    true
 
     magento-customer-cart-grid:
         source:
@@ -796,6 +808,10 @@ datagrid:
                 label: orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
         properties:
             id: ~
+            view_link:
+                type: url
+                route: orocrm_magento_cart_view
+                params: [ id ]
         sorters:
             columns:
                 originId:             { data_name: c.originId }
@@ -808,6 +824,14 @@ datagrid:
                 stepLabel:            { data_name: step.label }
             default:
                 updatedAt:  DESC
+        actions:
+            view:
+                type:         navigate
+                label:        orocrm.magento.datagrid.actions.view.label
+                link:         view_link
+                icon:         book
+                acl_recource: orocrm_magento_cart_view
+                rowAction:    true
     magento-account-order-grid:
         source:
             type: orm
