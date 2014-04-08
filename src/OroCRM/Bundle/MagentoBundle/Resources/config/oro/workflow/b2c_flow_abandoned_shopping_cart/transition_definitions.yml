@@ -86,7 +86,7 @@ workflows:
                     @equal: [$cart.status.name, 'open']
                 post_actions:
                     - @redirect:
-                        route: orocrm_magento_orderplace_cart
+                        route: orocrm_magento_orderplace_sync
                         route_parameters:
                            id: $cart.id
 
