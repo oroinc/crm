@@ -101,7 +101,7 @@ orocrm:
             entity_plural_label:  Shopping Carts
             entity_description:   Represent Magento shopping cart
 
-            actualize_label:      Actualize Data
+            refresh_label:             Refresh Data
 
             id.label:                  Cart Id
             origin_id.label:           Origin Id
@@ -219,7 +219,7 @@ orocrm:
             entity_plural_label: Orders
             entity_description:  Respresent Magento Order
 
-            actualize_label:      Actualize Data
+            refresh_label:      Refresh Data
             id.label:           Id
             increment_id.label: "Order #"
             items_qty.label:    Items qty
@@ -336,4 +336,6 @@ orocrm:
             transport_not_configure: Unable to handle your request. Invalid channel configuration detected.
             synchronization_error:    Unable to synchronize from remote.
             synchronization_success:  Data successfuly updated.
+            synchronization_failed_status: Cart data is not up to date
         exception.extension_required: Unable to perform this operation, Oro Bridge extension not found.
+        ping_site_error: Unable to load form

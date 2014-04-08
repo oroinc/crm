@@ -36,7 +36,6 @@ class CartStrategy extends BaseStrategy
             ['originId' => $newEntity->getOriginId(), 'channel' => $newEntity->getChannel()],
             $newEntity
         );
-
         if ($existingEntity) {
             $this->strategyHelper->importEntity(
                 $existingEntity,
@@ -53,6 +52,7 @@ class CartStrategy extends BaseStrategy
                     'workflowStep'
                 ]
             );
+            $this->removeErrorMessage($existingEntity);
         } else {
             if (!$newEntity->getGrandTotal()) {
                 // newly created cart without items should be skipped
@@ -63,22 +63,17 @@ class CartStrategy extends BaseStrategy
             }
             $existingEntity = $newEntity;
         }
-
         $this->updateCartStatus($existingEntity, $newEntity->getStatus());
-
         if (!$existingEntity->getStore() || !$existingEntity->getStore()->getId()) {
             $existingEntity->setStore(
                 $this->storeStrategy->process($newEntity->getStore())
             );
         }
-
         $newEntity->getCustomer()->setChannel($newEntity->getChannel());
         $this->updateCustomer($existingEntity, $newEntity->getCustomer())
             ->updateAddresses($existingEntity, $newEntity)
             ->updateCartItems($existingEntity, $newEntity->getCartItems());
-
         $this->validateAndUpdateContext($existingEntity);
-
         return $existingEntity;
     }
 
@@ -222,5 +217,16 @@ class CartStrategy extends BaseStrategy
             $status->getName()
         );
         $existingEntity->setStatus($status);
+    }
+
+    /**
+     * @param Cart $existingEntity
+     *
+     * @return $this
+     */
+    protected function removeErrorMessage(Cart $existingEntity)
+    {
+        $existingEntity->setStatusMessage(null);
+        return $this;
     }
 }
