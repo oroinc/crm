@@ -113,6 +113,8 @@ class OrderPlaceController extends Controller
         } catch (\Exception $e) {
             $cart->setStatusMessage('orocrm.magento.controller.synchronization_failed_status');
 
+            // in import process we have EntityManager#clear()
+            $cart = $em->merge($cart);
             $em->flush();
             $redirectUrl = $this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]);
             $this->addMessage('orocrm.magento.controller.synchronization_error', 'error');
@@ -160,6 +162,6 @@ class OrderPlaceController extends Controller
      */
     protected function addMessage($message, $type = 'success')
     {
-        $this->get('session')->getFlashBag()->add($type, $message);
+        $this->get('session')->getFlashBag()->add($type, $this->get('translator')->trans($message));
     }
 }
