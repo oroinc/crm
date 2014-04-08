@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
+use BeSimple\SoapCommon\Type\KeyValue\Boolean;
 use OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -9,19 +10,14 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $securityFacade;
-
-    /**
      * @var AccountApiType
      */
     private $type;
 
     /**
-     * Set up test environment
+     * init environment
      */
-    public function setUp()
+    public function init($havePrivilege = true)
     {
         $nameFormatter = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\NameFormatter')
             ->disableOriginalConstructor()
@@ -31,15 +27,21 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
+        $securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->type = new AccountApiType($router, $nameFormatter, $this->securityFacade);
+        $securityFacade->expects($this->any())
+            ->method('isGranted')
+            ->with('orocrm_contact_view')
+            ->will($this->returnValue($havePrivilege));
+
+        $this->type = new AccountApiType($router, $nameFormatter, $securityFacade);
     }
 
     public function testSetDefaultOptions()
     {
+        $this->init();
         /** @var OptionsResolverInterface $resolver */
         $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
 
@@ -52,16 +54,13 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testName()
     {
+        $this->init();
         $this->assertEquals('account', $this->type->getName());
     }
 
     public function testAddEntityFields()
     {
-        $this->securityFacade->expects($this->any())
-            ->method('isGranted')
-            ->with('orocrm_contact_view')
-            ->will($this->returnValue(true));
-
+        $this->init();
         /** @var FormBuilderInterface $builder */
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
@@ -102,11 +101,7 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testAddEntityFieldsWithoutContactPermission()
     {
-        $this->securityFacade->expects($this->any())
-            ->method('isGranted')
-            ->with('orocrm_contact_view')
-            ->will($this->returnValue(false));
-
+        $this->init(false);
         /** @var FormBuilderInterface $builder */
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()

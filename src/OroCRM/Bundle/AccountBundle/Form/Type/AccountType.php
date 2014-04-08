@@ -36,6 +36,11 @@ class AccountType extends AbstractType
     protected $securityFacade;
 
     /**
+     * @var boolean
+     */
+    private $canViewContact;
+
+    /**
      * @param Router $router
      * @param NameFormatter $nameFormatter
      * @param SecurityFacade $securityFacade
@@ -45,6 +50,7 @@ class AccountType extends AbstractType
         $this->nameFormatter  = $nameFormatter;
         $this->router         = $router;
         $this->securityFacade = $securityFacade;
+        $this->canViewContact = $this->securityFacade->isGranted('orocrm_contact_view');
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -68,7 +74,7 @@ class AccountType extends AbstractType
             )
         );
 
-        if ($this->securityFacade->isGranted('orocrm_contact_view')) {
+        if ($this->canViewContact) {
             $builder->add(
                 'default_contact',
                 'oro_entity_identifier',
@@ -117,7 +123,7 @@ class AccountType extends AbstractType
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        if ($this->securityFacade->isGranted('orocrm_contact_view')) {
+        if ($this->canViewContact) {
             /** @var Account $account */
             $account = $form->getData();
             $view->children['contacts']->vars['grid_url']
@@ -136,7 +142,7 @@ class AccountType extends AbstractType
     protected function getInitialElements(Collection $contacts, $default)
     {
         $result = array();
-        if ($this->securityFacade->isGranted('orocrm_contact_view')) {
+        if ($this->canViewContact) {
             /** @var Contact $contact */
             foreach ($contacts as $contact) {
                 $primaryPhone = $contact->getPrimaryPhone();
