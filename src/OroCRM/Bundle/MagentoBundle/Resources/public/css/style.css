@@ -43,3 +43,35 @@
 .mess-pos {
     margin-left: 10px;
 }
+
+.place-order-transaction-dialog {
+    min-width: 600px;
+    min-height: 400px;
+    /* allow to be scalled by widget content */
+    height: auto!important;
+}
+
+/* fix FF block height */
+.place-order-transaction-dialog .form-dialog,
+.place-order-transaction-dialog .form-dialog > div,
+.place-order-transaction-dialog .form-dialog > div > div,
+.place-order-transaction-dialog .form-dialog > div > div > div {
+    height: 100%;
+}
+
+.place-order-transaction-dialog .ui-dialog-content {
+    /* prevent JS resizing */
+    width: 100%!important;
+    min-height: 400px!important;
+    overflow: hidden;
+    padding: 0;
+}
+
+.place-order-transaction-dialog .ui-dialog-content .widget-content {
+    height: 100%;
+}
+
+.place-order-transaction-dialog .ui-dialog-buttonpane {
+    /* hide empty button pane */
+    display: none;
+}

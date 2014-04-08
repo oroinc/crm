@@ -340,6 +340,7 @@ workflows:
                             resizable: true
                             width: 1000
                             height: 600
+                            dialogClass: place-order-transaction-dialog
                 transition_definition: place_order_definition
                 form_type: orocrm_magento_order_place_form_type
                 form_options:
