@@ -39,12 +39,13 @@ class MagentoUrlGenerator
     /**
      *
      */
-    public function __construct(Symfony\Component\Routing\Route $Route)
+    public function __construct($Route)
     {
         $this->channel   = false;
         $this->error     = false;
         $this->sourceUrl = false;
         $this->flowName  = false;
+        $this->route = $Route;
     }
 
     /**
