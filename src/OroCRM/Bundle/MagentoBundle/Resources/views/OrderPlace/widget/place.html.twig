@@ -11,14 +11,16 @@
                     var $frame = $('#orderPlaceFrame'),
                         widgetAlias = 'transaction-dialog';
 
-                    widgetManager.getWidgetInstanceByAlias(widgetAlias, function (widget) {
-                        widget._showLoading();
+                    widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
+                        widget.on('widget_initialize',function() {
+                            widget._showLoading();
+                        });
                     });
 
                     $frame.load(function () {
                         $frame.css({'height': '100%', 'width': '100%'});
 
-                        widgetManager.getWidgetInstanceByAlias(widgetAlias, function (widget) {
+                        widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
                             widget._hideLoading();
                         });
                     });
