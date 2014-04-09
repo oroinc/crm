@@ -83,7 +83,10 @@ workflows:
 
             place_order_definition:
                 pre_conditions:
-                    @equal: [$cart.status.name, 'open']
+                    @and:
+                        - @equal: [$cart.status.name, 'open']
+                        - @not_empty: [$cart.channel.transport.adminUrl]
+                        - @equal: [$cart.channel.transport.isExtensionInstalled, true]
                 post_actions:
                     - @redirect:
                         route: orocrm_magento_orderplace_sync
