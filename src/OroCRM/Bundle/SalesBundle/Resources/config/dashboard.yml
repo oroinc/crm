@@ -65,14 +65,14 @@ oro_dashboard_config:
         quick_launchpad:
             widgets:
                 leads_launchpad:
-                    position:   30
+                    layout_position: [2, 30]
                 opportunities_launchpad:
-                    position:   40
+                    layout_position: [2, 40]
         main:
             widgets:
                 opportunities_by_lead_source_chart:
-                    position:   80
+                    layout_position: [2, 80]
                 opportunities_by_state:
-                    position: 90
+                    layout_position: [1, 90]
                 my_sales_flow_b2b_chart:
-                    position: 120
+                    layout_position: [2, 120]

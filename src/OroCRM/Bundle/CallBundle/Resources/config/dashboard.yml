@@ -10,4 +10,4 @@ oro_dashboard_config:
         main:
             widgets:
                 recent_calls:
-                    position:   50
+                    layout_position:   [1, 50]
