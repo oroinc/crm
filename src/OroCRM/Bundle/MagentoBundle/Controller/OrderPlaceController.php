@@ -44,8 +44,8 @@ class OrderPlaceController extends Controller
 
         $UrlGenerator->setSourceUrl(
             $cart->getOriginId(),
-            $this->generateUrl('orocrm_magento_orderplace_cart_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            $this->generateUrl('orocrm_magento_orderplace_external_error', [], UrlGeneratorInterface::ABSOLUTE_URL)
+            'orocrm_magento_orderplace_cart_success',
+            'orocrm_magento_orderplace_external_error'
         );
 
         return [
@@ -116,8 +116,8 @@ class OrderPlaceController extends Controller
 
         $UrlGenerator->setSourceUrl(
             $customer->getOriginId(),
-            $this->generateUrl('orocrm_magento_orderplace_cart_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            $this->generateUrl('orocrm_magento_orderplace_external_error', [], UrlGeneratorInterface::ABSOLUTE_URL)
+            'orocrm_magento_orderplace_cart_success',
+            'orocrm_magento_orderplace_external_error'
         );
 
         return [

@@ -1,6 +1,9 @@
 <?php
 namespace OroCRM\Bundle\MagentoBundle\Service;
 
+use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
@@ -34,18 +37,21 @@ class MagentoUrlGenerator
      */
     private $flowName;
 
-    private $route;
+    /**
+     * @var Router
+     */
+    private $router;
 
     /**
      *
      */
-    public function __construct($Route)
+    public function __construct(Router $Router)
     {
         $this->channel   = false;
         $this->error     = false;
         $this->sourceUrl = false;
         $this->flowName  = false;
-        $this->route = $Route;
+        $this->setRouter($Router);
     }
 
     /**
@@ -103,16 +109,49 @@ class MagentoUrlGenerator
     }
 
     /**
+     * @param \Symfony\Component\Routing\Router $router
+     */
+    public function setRouter($router)
+    {
+        $this->router = $router;
+    }
+
+    /**
+     * @return \Symfony\Component\Routing\Router
+     */
+    public function getRouter()
+    {
+        return $this->router;
+    }
+
+    /**
+     * Generates a URL from the given parameters.
+     *
+     * @param string         $route         The name of the route
+     * @param mixed          $parameters    An array of parameters
+     * @param Boolean|string $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     *
+     * @return string The generated URL
+     *
+     * @see UrlGeneratorInterface
+     */
+    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        return $this->getRouter()->generate($route, $parameters, $referenceType);
+    }
+
+    /**
      * @return mixed
+     * @throws \OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException
      */
     public function getAdminUrl()
     {
-        return $this->getChannel()->getTransport()->getAdminUrl();
+        $url = (string)@$this->getChannel()->getTransport()->getAdminUrl();
 
-        if (false === $url) {
+        if (false === $url || '' === $url || empty($url)) {
             throw new ExtensionRequiredException();
         }
-
+        return $url;
     }
 
     /**
@@ -125,12 +164,12 @@ class MagentoUrlGenerator
 
     /**
      * @param int $id
-     * @param string $successUrl
-     * @param string $errorUrl
+     * @param string $successRoute
+     * @param string $errorRoute
      *
      * @return $this
      */
-    public function setSourceUrl($id, $successUrl, $errorUrl)
+    public function setSourceUrl($id, $successRoute, $errorRoute)
     {
         try {
             $this->sourceUrl = sprintf(
@@ -140,8 +179,8 @@ class MagentoUrlGenerator
                 $id,
                 self::NEW_ORDER_ROUTE,
                 $this->getFlowName(),
-                urlencode($successUrl),
-                urlencode($errorUrl)
+                urlencode($this->generateUrl($successRoute)),
+                urlencode($this->generateUrl($errorRoute))
             );
 
         } catch (ExtensionRequiredException $e) {
