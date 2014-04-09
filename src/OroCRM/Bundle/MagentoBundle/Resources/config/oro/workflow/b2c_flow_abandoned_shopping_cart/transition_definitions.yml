@@ -86,6 +86,7 @@ workflows:
                     @and:
                         - @equal: [$cart.status.name, 'open']
                         - @not_empty: [$cart.channel.transport.adminUrl]
+                        - @equal: [$cart.channel.transport.isExtensionInstalled, true]
                 post_actions:
                     - @redirect:
                         route: orocrm_magento_orderplace_sync
