@@ -148,7 +148,7 @@ class MagentoUrlGenerator
     {
         $url = (string)@$this->getChannel()->getTransport()->getAdminUrl();
 
-        if (false === $url || '' === $url || empty($url)) {
+        if (empty($url)) {
             throw new ExtensionRequiredException();
         }
         return $url;
