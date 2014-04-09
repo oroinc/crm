@@ -17,15 +17,19 @@
             'type' : 'dialog',
             'multiple' : true,
             'options' : {
-                'alias': 'create-order-dialog',
+                'alias': 'transaction-dialog',
+                'stateEnabled': false,
+                'incrementalPosition': false,
+                'loadingMaskEnabled': true,
                 'dialogOptions' : {
+                    'dialogClass': 'place-order-transaction-dialog',
                     'title' : 'Create order',
-                    'allowMaximize': true,
+                    'allowMaximize': false,
                     'allowMinimize': false,
-                    'dblclick': 'maximize',
-                    'maximizedHeightDecreaseBy': 'minimize-bar',
                     'width': 1000,
-                    'height': 600
+                    'height': 600,
+                    'modal': true,
+                    'autoResize': true
                 }
             }
         }

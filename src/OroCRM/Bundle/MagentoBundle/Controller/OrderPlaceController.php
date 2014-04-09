@@ -121,7 +121,9 @@ class OrderPlaceController extends Controller
         );
 
         return [
-            'error'     => $UrlGenerator->isError() ? $this->get('translator')->trans($UrlGenerator->getError()) : $UrlGenerator->getError(),
+            'error'     => $UrlGenerator->isError()
+                                ? $this->get('translator')->trans($UrlGenerator->getError())
+                                : $UrlGenerator->getError(),
             'sourceUrl' => $UrlGenerator->getSourceUrl()
         ];
     }
