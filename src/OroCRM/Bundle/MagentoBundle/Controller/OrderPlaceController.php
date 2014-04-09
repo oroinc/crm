@@ -36,45 +36,23 @@ class OrderPlaceController extends Controller
      */
     public function cartAction(Cart $cart)
     {
-        $channel      = $cart->getChannel();
-        $error        = $sourceUrl = $httpStatus = false;
-        $successRoute = 'orocrm_magento_orderplace_cart_success';
-        $errorRoute   = 'orocrm_magento_orderplace_external_error';
+        $UrlGenerator = $this
+            ->get('orocrm_magento.service.magento_url_generator')
+            ->setChannel($cart->getChannel())
+            ->setFlowName('oro_sales_new_order')
+        ;
 
-        try {
-            $url = $channel->getTransport()->getAdminUrl();
-            if (false === $url) {
-                throw new ExtensionRequiredException();
-            }
-
-            $successUrl = urlencode($this->generateUrl($successRoute, [], UrlGeneratorInterface::ABSOLUTE_URL));
-            $errorUrl   = urlencode($this->generateUrl($errorRoute, [], UrlGeneratorInterface::ABSOLUTE_URL));
-
-            $sourceUrl = sprintf(
-                '%s/%s?quote=%d&route=%s&workflow=%s&success_url=%s&error_url=%s',
-                rtrim($url, '/'),
-                self::GATEWAY_ROUTE,
-                $cart->getOriginId(),
-                self::NEW_ORDER_ROUTE,
-                self::FLOW_NAME,
-                $successUrl,
-                $errorUrl
-            );
-
-            // ping url just to ensure that it's accessible
-            $httpStatus = StaticClient::get($sourceUrl)->getStatusCode();
-            if (false !== $httpStatus && $httpStatus >= 400) {
-                throw new \LogicException('Unable to load resource');
-            }
-        } catch (ExtensionRequiredException $e) {
-            $error = $e->getMessage();
-        } catch (\LogicException $e) {
-            $error = 'orocrm.magento.controller.transport_not_configure';
-        }
+        $UrlGenerator->setSourceUrl(
+            $cart->getOriginId(),
+            $this->generateUrl('orocrm_magento_orderplace_cart_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            $this->generateUrl('orocrm_magento_orderplace_external_error', [], UrlGeneratorInterface::ABSOLUTE_URL)
+        );
 
         return [
-            'error'     => $error ? $this->get('translator')->trans($error) : $error,
-            'sourceUrl' => $sourceUrl
+            'error'     => $UrlGenerator->isError()
+                                ? $this->get('translator')->trans($UrlGenerator->getError())
+                                : $UrlGenerator->getError(),
+            'sourceUrl' => $UrlGenerator->getSourceUrl()
         ];
     }
 
@@ -130,8 +108,22 @@ class OrderPlaceController extends Controller
      */
     public function customerAction(Customer $customer)
     {
-        // @TODO order creation from customer page
-        return [];
+        $UrlGenerator = $this
+            ->get('orocrm_magento.service.magento_url_generator')
+            ->setChannel($customer->getChannel())
+            ->setFlowName('oro_sales_new_order')
+        ;
+
+        $UrlGenerator->setSourceUrl(
+            $customer->getOriginId(),
+            $this->generateUrl('orocrm_magento_orderplace_cart_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            $this->generateUrl('orocrm_magento_orderplace_external_error', [], UrlGeneratorInterface::ABSOLUTE_URL)
+        );
+
+        return [
+            'error'     => $UrlGenerator->isError() ? $this->get('translator')->trans($UrlGenerator->getError()) : $UrlGenerator->getError(),
+            'sourceUrl' => $UrlGenerator->getSourceUrl()
+        ];
     }
 
     /**

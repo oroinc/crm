@@ -102,3 +102,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-cartitem-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-orderitem-grid, method: onBuildAfter }
+
+    orocrm_magento.service.magento_url_generator:
+        class: OroCRM\Bundle\MagentoBundle\Service\MagentoUrlCreator
+        arguments: []

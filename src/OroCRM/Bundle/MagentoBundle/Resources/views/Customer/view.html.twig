@@ -4,6 +4,37 @@
 {% set fullname = entity|oro_format_name|default('N/A'|trans) %}
 {% oro_title_set({params : {"%customer.name%": fullname} }) %}
 
+{% block navButtons %}
+{{
+    UI.clientButton({
+        'dataUrl': path('orocrm_magento_orderplace_customer', {'id': entity.id ? entity.id : ''}),
+        'aCss': 'no-hash',
+        'iCss': 'icon-money',
+        'dataId': entity.id,
+        'title' : 'Create order',
+        'label' : 'Create order',
+        'widget' : {
+            'type' : 'dialog',
+            'multiple' : true,
+            'options' : {
+                'alias': 'create-order-dialog',
+                'dialogOptions' : {
+                    'title' : 'Create order',
+                    'allowMaximize': true,
+                    'allowMinimize': false,
+                    'dblclick': 'maximize',
+                    'maximizedHeightDecreaseBy': 'minimize-bar',
+                    'width': 1000,
+                    'height': 600
+                }
+            }
+        }
+    })
+}}
+{{ parent() }}
+{% endblock navButtons %}
+
+
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
