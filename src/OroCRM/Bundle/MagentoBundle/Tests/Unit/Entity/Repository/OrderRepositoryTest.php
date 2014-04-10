@@ -73,4 +73,51 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->repository->getLastPlacedOrderByCart($cart);
         $this->assertSame($order, $result);
     }
+
+    /**
+     * @dataProvider dataProvider()
+     */
+    public function testGetLastPlacedOrderBy($fields, $item)
+    {
+        $order = new Order();
+
+        $query = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
+            ->disableOriginalConstructor()->setMethods(['getOneOrNullResult'])
+            ->getMockForAbstractClass();
+
+        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->disableOriginalConstructor()
+            ->setMethods(['setMaxResults', 'orderBy', 'where', 'setParameter', 'getQuery', 'select', 'from'])
+            ->getMock();
+
+        $queryBuilder->expects($this->once())->method('select')->with('o')
+            ->will($this->returnSelf());
+        $queryBuilder->expects($this->once())->method('from')->with(self::ENTITY_NAME, 'o')
+            ->will($this->returnSelf());
+        $queryBuilder->expects($this->once())->method('where')->with('o.'.$fields.' = :item')
+            ->will($this->returnSelf());
+        $queryBuilder->expects($this->once())->method('setParameter')->with('item', $item)
+            ->will($this->returnSelf());
+        $queryBuilder->expects($this->once())->method('orderBy')->with('o.updatedAt', 'DESC')
+            ->will($this->returnSelf());
+        $queryBuilder->expects($this->once())->method('setMaxResults')->with(1)
+            ->will($this->returnSelf());
+        $queryBuilder->expects($this->once())->method('getQuery')
+            ->will($this->returnValue($query));
+
+        $this->em->expects($this->once())->method('createQueryBuilder')
+            ->will($this->returnValue($queryBuilder));
+
+        $query->expects($this->once())->method('getOneOrNullResult')->will($this->returnValue($order));
+
+        $result = $this->repository->getLastPlacedOrderBy($item, $fields);
+        $this->assertSame($order, $result);
+    }
+
+    public function dataProvider()
+    {
+        return [
+            ['cart', new Cart()],
+        ];
+    }
 }
