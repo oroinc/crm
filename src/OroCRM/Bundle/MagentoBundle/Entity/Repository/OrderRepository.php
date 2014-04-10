@@ -34,6 +34,6 @@ class OrderRepository extends EntityRepository
         $qb->orderBy('o.updatedAt', 'DESC');
         $qb->setMaxResults(1);
 
-        return $qb->getQuery()->getSingleResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

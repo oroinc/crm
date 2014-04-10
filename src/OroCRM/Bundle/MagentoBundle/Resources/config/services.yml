@@ -106,10 +106,3 @@ services:
     orocrm_magento.service.magento_url_generator:
         class: OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
         arguments: ['@router']
-
-    orocrm_magento.service.magento_items_synchronizer:
-        class: OroCRM\Bundle\MagentoBundle\Service\ItemsSynchronizer
-        arguments:
-            - @doctrine.orm.entity_manager
-            - @orocrm_magento.mage.order_connector
-            - @oro_integration.sync.processor
