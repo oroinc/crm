@@ -28,6 +28,16 @@
 
                         widgetManager.getWidgetInstanceByAlias(widgetAlias, function (widget) {
                             widget.trigger('formSave');
+                            $('#transition-b2c_flow_abandoned_shopping_cart-place_order').one('transitions_success', function() {
+                                {% set syncURL = path('orocrm_magento_orderplace_sync', {id: cartId}) %}
+                                $.ajax({
+                                    dataType: 'json',
+                                    url: {{ syncURL|json_encode|raw }},
+                                    success: function(data) {
+                                        messenger.notificationFlashMessage(data.statusType, data.message);
+                                    }
+                                });
+                            });
                         });
                     };
 
