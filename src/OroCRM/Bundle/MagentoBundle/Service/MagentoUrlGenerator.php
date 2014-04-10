@@ -43,6 +43,11 @@ class MagentoUrlGenerator
     private $router;
 
     /**
+     * @var string
+     */
+    private $origin;
+
+    /**
      *
      */
     public function __construct(Router $Router)
@@ -51,6 +56,7 @@ class MagentoUrlGenerator
         $this->error     = false;
         $this->sourceUrl = false;
         $this->flowName  = false;
+        $this->origin    = false;
         $this->setRouter($Router);
     }
 
@@ -140,6 +146,25 @@ class MagentoUrlGenerator
     }
 
     /**
+     * @param string $origin
+     *
+     * @return $this
+     */
+    public function setOrigin($origin)
+    {
+        $this->origin = $origin;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrigin()
+    {
+        return $this->origin;
+    }
+
+    /**
      * Generates a URL from the given parameters.
      *
      * @param string         $route         The name of the route
@@ -195,7 +220,9 @@ class MagentoUrlGenerator
     {
         try {
             $this->sourceUrl = sprintf(
-                '%s/%s?quote=%d&route=%s&workflow=%s&success_url=%s&error_url=%s',
+                '%s/%s?' .
+                $this->getOrigin() .
+                '=%d&route=%s&workflow=%s&success_url=%s&error_url=%s',
                 rtrim($this->getAdminUrl(), '/'),
                 self::GATEWAY_ROUTE,
                 $id,

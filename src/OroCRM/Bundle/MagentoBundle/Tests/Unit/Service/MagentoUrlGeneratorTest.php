@@ -81,11 +81,13 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $error = 'Some error text';
         $flowName = 'some flow name';
+        $origin = 'customer';
 
         return [
             'channel'  => ['channel', $this->channel, $this->channel],
             'error'    => ['error', $error, $error],
             'flowName' => ['flowName', $flowName, $flowName],
+            'origin'   => ['origin', $origin, $origin],
         ];
     }
 
@@ -165,11 +167,20 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
      * @param $successUrl
      * @param $errorUrl
      * @param $flowName
+     * @param $origin
      */
-    public function testSetSourceUrl($id, $successRoute, $errorRoute, $adminUrl, $successUrl, $errorUrl, $flowName)
-    {
+    public function testSetSourceUrl(
+        $id,
+        $successRoute,
+        $errorRoute,
+        $adminUrl,
+        $successUrl,
+        $errorUrl,
+        $flowName,
+        $origin
+    ) {
         $result = $adminUrl .
-                  '/oro_gateway/do?quote=' .
+                  '/oro_gateway/do?'.$origin.'=' .
                   $id .
                   '&route=oro_sales/newOrder' .
                   '&workflow=' . $flowName .
@@ -194,6 +205,7 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $urlGenerator = new MagentoUrlGenerator($this->router);
         $urlGenerator->setChannel($this->channel);
         $urlGenerator->setFlowName($flowName);
+        $urlGenerator->setorigin($origin);
         $urlGenerator->setSourceUrl($id, $successRoute, $errorRoute);
 
         $this->assertEquals(
@@ -210,13 +222,14 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $successUrl = 'http://localhost/magento/success';
         $errorUrl = 'http://localhost/magento/error';
         $flowName = 'flowName';
+        $origin = 'cusomer';
         $Exception = new ExtensionRequiredException;
 
         return [
-            [144, $successRoute, $errorRoute, $adminUrl, $successUrl, $errorUrl, $flowName],
-            [356, $successRoute, $errorRoute, $Exception, $successUrl, $errorUrl, $flowName],
-            [543, $Exception,    $errorRoute, $adminUrl,  $successUrl, $errorUrl, $flowName],
-            [632, $successRoute, $Exception,  $adminUrl,  $successUrl, $errorUrl, $flowName],
+            [144, $successRoute, $errorRoute, $adminUrl,  $successUrl, $errorUrl, $flowName, $origin],
+            [356, $successRoute, $errorRoute, $Exception, $successUrl, $errorUrl, $flowName, $origin],
+            [543, $Exception,    $errorRoute, $adminUrl,  $successUrl, $errorUrl, $flowName, $origin],
+            [632, $successRoute, $Exception,  $adminUrl,  $successUrl, $errorUrl, $flowName, $origin],
         ];
     }
 }

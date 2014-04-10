@@ -40,6 +40,7 @@ class OrderPlaceController extends Controller
             ->get('orocrm_magento.service.magento_url_generator')
             ->setChannel($cart->getChannel())
             ->setFlowName('oro_sales_new_order')
+            ->setOrigin('quote')
         ;
 
         $UrlGenerator->setSourceUrl(
@@ -112,6 +113,7 @@ class OrderPlaceController extends Controller
             ->get('orocrm_magento.service.magento_url_generator')
             ->setChannel($customer->getChannel())
             ->setFlowName('oro_sales_new_order')
+            ->setOrigin('customer')
         ;
 
         $UrlGenerator->setSourceUrl(
