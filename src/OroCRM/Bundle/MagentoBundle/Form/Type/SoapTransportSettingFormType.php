@@ -96,7 +96,7 @@ class SoapTransportSettingFormType extends AbstractType
         $builder->add(
             'adminUrl',
             'text',
-            ['label' => 'orocrm.magento.magentosoaptransport.admin_url.label', 'required' => true]
+            ['label' => 'orocrm.magento.magentosoaptransport.admin_url.label', 'required' => false]
         );
     }
 
