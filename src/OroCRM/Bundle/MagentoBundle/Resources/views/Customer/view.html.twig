@@ -5,14 +5,15 @@
 {% oro_title_set({params : {"%customer.name%": fullname} }) %}
 
 {% block navButtons %}
+    {% set sendEmailTitle = 'orocrm.magento.customer.create_order'|trans %}
     {{
         UI.clientButton({
             'dataUrl': path('orocrm_magento_widget_customer_orderplace', {'id': entity.id }),
             'aCss':    'no-hash',
             'iCss':    'icon-money',
             'dataId':  entity.id,
-            'title' : 'Place an order'|trans,
-            'label' : 'Place an order'|trans,
+            'title' : sendEmailTitle,
+            'label' : sendEmailTitle,
             'widget' : {
                 'type' : 'dialog',
                 'options' : {
@@ -22,7 +23,7 @@
                     'loadingMaskEnabled':  false,
                     'dialogOptions' : {
                         'dialogClass':   'place-order-transaction-dialog',
-                        'title' :        'Place an order'|trans,
+                        'title' :        sendEmailTitle,
                         'allowMaximize': true,
                         'allowMinimize': false,
                         'width':         1000,
