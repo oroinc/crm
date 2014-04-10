@@ -62,7 +62,18 @@
     {% set cartId = form.cart_id.vars.data %}
     {{ oro_widget_render({
         'widgetType': 'block',
+        'alias': 'order-place-widget',
         'url': path('orocrm_magento_orderplace_cart', {id: cartId}),
         'loadingMaskEnabled': true
     }) }}
+
+    <script type="text/javascript">
+        require(['underscore', 'oroui/js/widget-manager'], function(_, widgetManager) {
+            widgetManager.getWidgetInstanceByAlias('order-place-widget', function(widget) {
+                widget._showLoading();
+
+                widget.once('externalContentLoaded', _.bind(widget._hideLoading, widget));
+            });
+        });
+    </script>
 {% endblock %}
