@@ -5,40 +5,37 @@
 {% oro_title_set({params : {"%customer.name%": fullname} }) %}
 
 {% block navButtons %}
-    {% set createOrderTitle = 'orocrm.magento.customer.new_order'|trans %}
-{{
-    UI.clientButton({
-        'dataUrl': path('orocrm_magento_orderplace_customer', {'id': entity.id ? entity.id : ''}),
-        'aCss': 'no-hash',
-        'iCss': 'icon-money',
-        'dataId': entity.id,
-        'title' : createOrderTitle,
-        'label' : createOrderTitle,
-        'widget' : {
-            'type' : 'dialog',
-            'multiple' : true,
-            'options' : {
-                'alias': 'transaction-dialog',
-                'stateEnabled': false,
-                'incrementalPosition': true,
-                'loadingMaskEnabled': true,
-                'dialogOptions' : {
-                    'dialogClass': 'place-order-transaction-dialog',
-                    'title' : createOrderTitle,
-                    'allowMaximize': false,
-                    'allowMinimize': false,
-                    'width': 1000,
-                    'height': 600,
-                    'modal': true,
-                    'autoResize': true
+    {{
+        UI.clientButton({
+            'dataUrl': path('orocrm_magento_widget_customer_orderplace', {'id': entity.id }),
+            'aCss':    'no-hash',
+            'iCss':    'icon-money',
+            'dataId':  entity.id,
+            'title' : 'Place an order'|trans,
+            'label' : 'Place an order'|trans,
+            'widget' : {
+                'type' : 'dialog',
+                'options' : {
+                    'alias':               'transaction-dialog',
+                    'stateEnabled':        false,
+                    'incrementalPosition': true,
+                    'loadingMaskEnabled':  false,
+                    'dialogOptions' : {
+                        'dialogClass':   'place-order-transaction-dialog',
+                        'title' :        'Place an order'|trans,
+                        'allowMaximize': true,
+                        'allowMinimize': false,
+                        'width':         1000,
+                        'height':        600,
+                        'modal':         true,
+                        'autoResize':    true
+                    }
                 }
             }
-        }
-    })
-}}
-{{ parent() }}
+        })
+    }}
+    {{ parent() }}
 {% endblock navButtons %}
-
 
 {% block pageHeader %}
     {% set breadcrumbs = {
@@ -72,6 +69,3 @@
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}
 {% endblock content_data %}
-{% block script %}
-    {{ parent() }}
-{% endblock script %}
