@@ -9,24 +9,24 @@
                 require(['jquery', 'oroui/js/widget-manager', 'oroui/js/messenger', 'orotranslation/js/translator'],
                 function ($, widgetManager, messenger, __) {
                     var $frame = $('#orderPlaceFrame'),
-                        widgetAlias = 'transaction-dialog';
+                        modalWidgetAlias = 'transaction-dialog';
 
-                    widgetManager.getWidgetInstanceByAlias(widgetAlias, function (widget) {
-                        widget._showLoading();
+                    widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
+                        widget.getWidget().dialog('maximize');
                     });
 
                     $frame.load(function () {
                         $frame.css({'height': '100%', 'width': '100%'});
 
-                        widgetManager.getWidgetInstanceByAlias(widgetAlias, function (widget) {
-                            widget._hideLoading();
+                        widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
+                            widget.trigger('externalContentLoaded')
                         });
                     });
 
                     ORO_ORDER_EMBED_API.success = function () {
                         messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_synchronization'));
 
-                        widgetManager.getWidgetInstanceByAlias(widgetAlias, function (widget) {
+                        widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
                             widget.trigger('formSave');
                         });
                     };
@@ -34,7 +34,7 @@
                     ORO_ORDER_EMBED_API.error = function () {
                         messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));
 
-                        widgetManager.getWidgetInstanceByAlias(widgetAlias, function (widget) {
+                        widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
                             widget.remove();
                         });
                     };
