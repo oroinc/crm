@@ -228,8 +228,8 @@ class MagentoUrlGenerator
                 $id,
                 self::NEW_ORDER_ROUTE,
                 $this->getFlowName(),
-                urlencode($this->generateUrl($successRoute)),
-                urlencode($this->generateUrl($errorRoute))
+                urlencode($this->generateUrl($successRoute, [], UrlGeneratorInterface::ABSOLUTE_URL)),
+                urlencode($this->generateUrl($errorRoute, [], UrlGeneratorInterface::ABSOLUTE_URL))
             );
 
         } catch (ExtensionRequiredException $e) {

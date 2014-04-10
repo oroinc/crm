@@ -5,25 +5,26 @@
 {% oro_title_set({params : {"%customer.name%": fullname} }) %}
 
 {% block navButtons %}
+    {% set createOrderTitle = 'orocrm.magento.customer.new_order'|trans %}
 {{
     UI.clientButton({
         'dataUrl': path('orocrm_magento_orderplace_customer', {'id': entity.id ? entity.id : ''}),
         'aCss': 'no-hash',
         'iCss': 'icon-money',
         'dataId': entity.id,
-        'title' : 'Create order',
-        'label' : 'Create order',
+        'title' : createOrderTitle,
+        'label' : createOrderTitle,
         'widget' : {
             'type' : 'dialog',
             'multiple' : true,
             'options' : {
                 'alias': 'transaction-dialog',
                 'stateEnabled': false,
-                'incrementalPosition': false,
+                'incrementalPosition': true,
                 'loadingMaskEnabled': true,
                 'dialogOptions' : {
                     'dialogClass': 'place-order-transaction-dialog',
-                    'title' : 'Create order',
+                    'title' : createOrderTitle,
                     'allowMaximize': false,
                     'allowMinimize': false,
                     'width': 1000,
@@ -71,3 +72,6 @@
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}
 {% endblock content_data %}
+{% block script %}
+    {{ parent() }}
+{% endblock script %}

@@ -83,6 +83,7 @@ class OrderPlaceController extends Controller
             );
 
             $order = $em->getRepository('OroCRMMagentoBundle:Order')->getLastPlacedOrderByCart($cart);
+
             if (null === $order) {
                 throw new \LogicException('Unable to load order.');
             }
@@ -118,7 +119,7 @@ class OrderPlaceController extends Controller
 
         $UrlGenerator->setSourceUrl(
             $customer->getOriginId(),
-            'orocrm_magento_orderplace_cart_success',
+            'orocrm_magento_orderplace_customer_success',
             'orocrm_magento_orderplace_external_error'
         );
 
@@ -131,11 +132,81 @@ class OrderPlaceController extends Controller
     }
 
     /**
+     * @Route("/unisync/{id}", name="orocrm_magento_orderplace_customer_sync", requirements={"id"="\d+"}))
+     * @AclAncestor("oro_workflow")
+     */
+    public function customerSyncAction(Customer $customer)
+    {
+
+        $itemSync = $this->get('orocrm_magento.service.magento_items_synchronizer');
+
+        $itemSync->setItem($customer);
+
+        $itemSync->setConnector($this->get('orocrm_magento.mage.customer_connector'));
+
+        $itemSync->sync('customer', 'orocrm_magento_customer_view');
+
+        var_dump($itemSync);
+
+        /*
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        try {
+            $itemConnector  = $this->get('orocrm_magento.mage.customer_connector');
+            $orderConnector = $this->get('orocrm_magento.mage.order_connector');
+            $processor      = $this->get('oro_integration.sync.processor');
+
+            $processor->process(
+                $customer->getChannel(),
+                $itemConnector->getType(),
+                ['filters' => ['entity_id' => $customer->getOriginId()]]
+            );
+            $processor->process(
+                $customer->getChannel(),
+                $orderConnector->getType(),
+                ['filters' => ['quote_id' => $customer->getOriginId()]]
+            );
+
+            $order = $em->getRepository('OroCRMMagentoBundle:Order')->getLastPlacedOrderBy($customer, 'customer');
+
+            if (null === $order) {
+                throw new \LogicException('Unable to load order.');
+            }
+
+            $redirectUrl = $this->generateUrl('orocrm_magento_order_view', ['id' => $order->getId()]);
+            $this->addMessage('orocrm.magento.controller.synchronization_success');
+        } catch (\Exception $e) {
+            #$customer->setStatusMessage('orocrm.magento.controller.synchronization_failed_status');
+
+            // in import process we have EntityManager#clear()
+            $customer = $em->merge($customer);
+            $em->flush();
+            $redirectUrl = $this->generateUrl('orocrm_magento_customer_view', ['id' => $customer->getId()]);
+            $this->addMessage('orocrm.magento.controller.synchronization_error', 'error');
+        }*/
+        return [];
+        #return $this->redirect($redirectUrl);
+    }
+
+
+
+
+    /**
      * @Route("/cart/success", name="orocrm_magento_orderplace_cart_success"))
      * @AclAncestor("oro_workflow")
      * @Template
      */
     public function cartSuccessAction()
+    {
+        return [];
+    }
+
+    /**
+     * @Route("/customer/success", name="orocrm_magento_orderplace_customer_success"))
+     * @AclAncestor("oro_workflow")
+     * @Template
+     */
+    public function customerSuccessAction()
     {
         return [];
     }
