@@ -26,15 +26,13 @@ class OrderRepository extends EntityRepository
         return $qb->getQuery()->getSingleResult();
     }
 
-    public function getLastPlacedOrderBy($item, $param)
+    public function getLastPlacedOrderBy($item, $field)
     {
         $qb = $this->createQueryBuilder('o');
-        $qb->where('o.' . $param . ' = :item');
+        $qb->where('o.' . $field . ' = :item');
         $qb->setParameter('item', $item);
         $qb->orderBy('o.updatedAt', 'DESC');
         $qb->setMaxResults(1);
-
-        var_dump( $qb->getQuery() );
 
         return $qb->getQuery()->getSingleResult();
     }

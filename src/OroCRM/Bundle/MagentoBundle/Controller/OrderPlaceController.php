@@ -132,10 +132,10 @@ class OrderPlaceController extends Controller
     }
 
     /**
-     * @Route("/unisync/{id}", name="orocrm_magento_orderplace_customer_sync", requirements={"id"="\d+"}))
+     * @Route("/unisync/{itemName}/{id}", name="orocrm_magento_orderplace_uni_sync", requirements={"id"="\d+"}))
      * @AclAncestor("oro_workflow")
      */
-    public function customerSyncAction(Customer $customer)
+    public function customerSyncAction(Customer $customer, $itemName)
     {
 
         $itemSync = $this->get('orocrm_magento.service.magento_items_synchronizer');
@@ -144,9 +144,11 @@ class OrderPlaceController extends Controller
 
         $itemSync->setConnector($this->get('orocrm_magento.mage.customer_connector'));
 
-        $itemSync->sync('customer', 'orocrm_magento_customer_view');
+        $itemSync->sync($itemName, 'orocrm_magento_customer_view');
 
-        var_dump($itemSync);
+        var_dump(
+            $itemSync->getError()
+        );
 
         /*
         $em = $this->get('doctrine.orm.entity_manager');

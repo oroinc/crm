@@ -173,7 +173,8 @@ class ItemsSynchronizer
         try {
             $this->getProcessor()->process(
                 $this->getItem()->getChannel(),
-                $this->getConnector()->getType(),#todo: add exception
+                #todo: add exception
+                $this->getConnector()->getType(),
                 ['filters' => ['entity_id' => $this->getItem()->getOriginId()]]
             );
 
@@ -191,18 +192,21 @@ class ItemsSynchronizer
             if (null === $order) {
                 throw new \LogicException('Unable to load order.');
             }
-
-            $this->setRedirectUrl($this->generateUrl('orocrm_magento_order_view', ['id' => $order->getId()]));
+            #todo: add generateUrl
+            #$this->generateUrl('orocrm_magento_order_view', ['id' => $order->getId()]);
             $this->setError('orocrm.magento.controller.synchronization_success');
 
         } catch (\Exception $e) {
             #todo: add field
             #$this->getItem()->setStatusMessage('orocrm.magento.controller.synchronization_failed_status');
 
+            var_dump($e->getMessage());
+
             // in import process we have EntityManager#clear()
             $item = $this->getEm()->merge($this->getItem());
             $this->getEm()->flush();
-            $this->setRedirectUrl($this->generateUrl($errorRedirectRoute, ['id' =>  $item->getId()]));
+            #todo: add generateUrl
+            #$this->generateUrl($errorRedirectRoute, ['id' =>  $item->getId()]);
             $this->setError('orocrm.magento.controller.synchronization_error');
             unset($item);
         }
