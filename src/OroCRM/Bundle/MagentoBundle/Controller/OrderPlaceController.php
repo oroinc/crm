@@ -4,21 +4,16 @@ namespace OroCRM\Bundle\MagentoBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 
-use Guzzle\Http\StaticClient;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 
 /**
  * @Route("/order/place")
@@ -36,24 +31,23 @@ class OrderPlaceController extends Controller
      */
     public function cartAction(Cart $cart)
     {
-        $UrlGenerator = $this
+        $urlGenerator = $this
             ->get('orocrm_magento.service.magento_url_generator')
             ->setChannel($cart->getChannel())
             ->setFlowName('oro_sales_new_order')
-            ->setOrigin('quote')
-        ;
+            ->setOrigin('quote');
 
-        $UrlGenerator->setSourceUrl(
+        $urlGenerator->setSourceUrl(
             $cart->getOriginId(),
-            'orocrm_magento_orderplace_cart_success',
-            'orocrm_magento_orderplace_external_error'
+            'orocrm_magento_orderplace_success',
+            'orocrm_magento_orderplace_error'
         );
 
+        $translator = $this->get('translator');
+
         return [
-            'error'     => $UrlGenerator->isError()
-                                ? $this->get('translator')->trans($UrlGenerator->getError())
-                                : $UrlGenerator->getError(),
-            'sourceUrl' => $UrlGenerator->getSourceUrl()
+            'error'     => $urlGenerator->isError() ? $translator->trans($urlGenerator->getError()) : false,
+            'sourceUrl' => $urlGenerator->getSourceUrl()
         ];
     }
 
@@ -110,24 +104,23 @@ class OrderPlaceController extends Controller
      */
     public function customerAction(Customer $customer)
     {
-        $UrlGenerator = $this
+        $urlGenerator = $this
             ->get('orocrm_magento.service.magento_url_generator')
             ->setChannel($customer->getChannel())
             ->setFlowName('oro_sales_new_order')
-            ->setOrigin('customer')
-        ;
+            ->setOrigin('customer');
 
-        $UrlGenerator->setSourceUrl(
+        $urlGenerator->setSourceUrl(
             $customer->getOriginId(),
-            'orocrm_magento_orderplace_customer_success',
-            'orocrm_magento_orderplace_external_error'
+            'orocrm_magento_orderplace_success',
+            'orocrm_magento_orderplace_error'
         );
 
+        $translator = $this->get('translator');
+
         return [
-            'error'     => $UrlGenerator->isError()
-                                ? $this->get('translator')->trans($UrlGenerator->getError())
-                                : $UrlGenerator->getError(),
-            'sourceUrl' => $UrlGenerator->getSourceUrl()
+            'error'     => $urlGenerator->isError() ? $translator->trans($urlGenerator->getError()) : false,
+            'sourceUrl' => $urlGenerator->getSourceUrl()
         ];
     }
 
@@ -191,30 +184,18 @@ class OrderPlaceController extends Controller
     }
 
 
-
-
     /**
-     * @Route("/cart/success", name="orocrm_magento_orderplace_cart_success"))
+     * @Route("/success", name="orocrm_magento_orderplace_success")
      * @AclAncestor("oro_workflow")
      * @Template
      */
-    public function cartSuccessAction()
+    public function successAction()
     {
         return [];
     }
 
     /**
-     * @Route("/customer/success", name="orocrm_magento_orderplace_customer_success"))
-     * @AclAncestor("oro_workflow")
-     * @Template
-     */
-    public function customerSuccessAction()
-    {
-        return [];
-    }
-
-    /**
-     * @Route("/error", name="orocrm_magento_orderplace_external_error"))
+     * @Route("/error", name="orocrm_magento_orderplace_error"))
      * @AclAncestor("oro_workflow")
      * @Template
      */
