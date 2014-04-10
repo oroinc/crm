@@ -6,12 +6,24 @@ use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 
 class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Symfony\Component\Routing\Router
+     */
     private $router;
 
+    /**
+     * @var MagentoUrlGenerator
+     */
     private $urlGenerator;
 
+    /**
+     * @var \Oro\Bundle\IntegrationBundle\Entity\Channel
+     */
     private $channel;
 
+    /**
+     * @var \OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport
+     */
     private $transport;
 
     public function setUp()
@@ -45,13 +57,9 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         $this->assertFalse($this->urlGenerator->getChannel());
-
         $this->assertFalse($this->urlGenerator->getError());
-
         $this->assertFalse($this->urlGenerator->getFlowName());
-
         $this->assertFalse($this->urlGenerator->getSourceUrl());
-
         $this->assertSame($this->router, $this->urlGenerator->getRouter());
     }
 
@@ -94,30 +102,9 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testIsError()
     {
         $this->assertFalse($this->urlGenerator->isError());
-
         $error = 'some error text';
-
         $this->urlGenerator->setError($error);
-
         $this->assertTrue($this->urlGenerator->isError());
-    }
-
-
-    public function testGenerateUrl()
-    {
-        $url = 'http://localhost/some/url/id';
-
-        $this->router
-            ->expects($this->once())
-            ->method('generate')
-            ->will(
-                $this->returnValue($url)
-            );
-
-        $this->assertEquals(
-            $url,
-            $this->urlGenerator->generateUrl('some.router')
-        );
     }
 
     /**
@@ -160,16 +147,16 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getSourceProvider
      *
-     * @param $id
-     * @param $successRoute
-     * @param $errorRoute
-     * @param $adminUrl
-     * @param $successUrl
-     * @param $errorUrl
-     * @param $flowName
-     * @param $origin
+     * @param int $id
+     * @param string $successRoute
+     * @param string $errorRoute
+     * @param string $adminUrl
+     * @param string $successUrl
+     * @param string $errorUrl
+     * @param string $flowName
+     * @param string $origin
      */
-    public function testSetSourceUrl(
+    public function testGenerate(
         $id,
         $successRoute,
         $errorRoute,
@@ -206,7 +193,7 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $urlGenerator->setChannel($this->channel);
         $urlGenerator->setFlowName($flowName);
         $urlGenerator->setorigin($origin);
-        $urlGenerator->setSourceUrl($id, $successRoute, $errorRoute);
+        $urlGenerator->generate($id, $successRoute, $errorRoute);
 
         $this->assertEquals(
             $result,

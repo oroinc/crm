@@ -35,13 +35,12 @@ class OrderPlaceController extends Controller
             ->get('orocrm_magento.service.magento_url_generator')
             ->setChannel($cart->getChannel())
             ->setFlowName('oro_sales_new_order')
-            ->setOrigin('quote');
-
-        $urlGenerator->setSourceUrl(
-            $cart->getOriginId(),
-            'orocrm_magento_orderplace_success',
-            'orocrm_magento_orderplace_error'
-        );
+            ->setOrigin('quote')
+            ->generate(
+                $cart->getOriginId(),
+                'orocrm_magento_orderplace_success',
+                'orocrm_magento_orderplace_error'
+            );
 
         $translator = $this->get('translator');
 
@@ -108,13 +107,12 @@ class OrderPlaceController extends Controller
             ->get('orocrm_magento.service.magento_url_generator')
             ->setChannel($customer->getChannel())
             ->setFlowName('oro_sales_new_order')
-            ->setOrigin('customer');
-
-        $urlGenerator->setSourceUrl(
-            $customer->getOriginId(),
-            'orocrm_magento_orderplace_success',
-            'orocrm_magento_orderplace_error'
-        );
+            ->setOrigin('customer')
+            ->generate(
+                $customer->getOriginId(),
+                'orocrm_magento_orderplace_success',
+                'orocrm_magento_orderplace_error'
+            );
 
         $translator = $this->get('translator');
 

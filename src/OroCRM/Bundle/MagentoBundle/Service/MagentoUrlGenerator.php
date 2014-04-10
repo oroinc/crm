@@ -10,11 +10,8 @@ use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 
 class MagentoUrlGenerator
 {
-
     const GATEWAY_ROUTE   = 'oro_gateway/do';
-
     const NEW_ORDER_ROUTE = 'oro_sales/newOrder';
-
     const ERROR_MESSAGE = 'orocrm.magento.controller.transport_not_configure';
 
     /**
@@ -177,7 +174,7 @@ class MagentoUrlGenerator
      *
      * @see UrlGeneratorInterface
      */
-    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    private function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $url = (string)@$this->getRouter()->generate($route, $parameters, $referenceType);
 
@@ -216,7 +213,7 @@ class MagentoUrlGenerator
      *
      * @return $this
      */
-    public function setSourceUrl($id, $successRoute, $errorRoute)
+    public function generate($id, $successRoute, $errorRoute)
     {
         try {
             $this->sourceUrl = sprintf(
