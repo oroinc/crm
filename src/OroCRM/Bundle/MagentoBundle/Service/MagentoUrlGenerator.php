@@ -82,6 +82,17 @@ class MagentoUrlGenerator
     }
 
     /**
+     * @param mixed $error
+     *
+     * @return $this
+     */
+    public function setError($error)
+    {
+        $this->error = $error;
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isError()
@@ -110,13 +121,17 @@ class MagentoUrlGenerator
 
     /**
      * @param \Symfony\Component\Routing\Router $router
+     *
+     * @return $this
      */
     public function setRouter($router)
     {
         $this->router = $router;
+        return $this;
     }
 
     /**
+     *
      * @return \Symfony\Component\Routing\Router
      */
     public function getRouter()
@@ -133,16 +148,23 @@ class MagentoUrlGenerator
      *
      * @return string The generated URL
      *
+     * @throws ExtensionRequiredException
+     *
      * @see UrlGeneratorInterface
      */
     public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        return $this->getRouter()->generate($route, $parameters, $referenceType);
+        $url = (string)@$this->getRouter()->generate($route, $parameters, $referenceType);
+
+        if (empty($url)) {
+            throw new ExtensionRequiredException();
+        }
+        return $url;
     }
 
     /**
      * @return mixed
-     * @throws \OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException
+     * @throws ExtensionRequiredException
      */
     public function getAdminUrl()
     {
@@ -184,9 +206,9 @@ class MagentoUrlGenerator
             );
 
         } catch (ExtensionRequiredException $e) {
-            $this->error = $e->getMessage();
+            $this->setError($e->getMessage());
         } catch (\LogicException $e) {
-            $this->error = self::ERROR_MESSAGE;
+            $this->setError(self::ERROR_MESSAGE);
         }
 
         return $this;
