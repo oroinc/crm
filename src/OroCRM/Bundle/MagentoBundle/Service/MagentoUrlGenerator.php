@@ -77,6 +77,14 @@ class MagentoUrlGenerator
     }
 
     /**
+     * @return bool
+     */
+    public function isChannel()
+    {
+        return !empty($this->channel);
+    }
+
+    /**
      * @return mixed
      */
     public function getError()
@@ -127,7 +135,7 @@ class MagentoUrlGenerator
      *
      * @return $this
      */
-    public function setRouter($router)
+    private function setRouter(Router $router)
     {
         $this->router = $router;
         return $this;
@@ -176,7 +184,7 @@ class MagentoUrlGenerator
      */
     private function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        $url = (string)@$this->getRouter()->generate($route, $parameters, $referenceType);
+        $url = $this->getRouter()->generate($route, $parameters, $referenceType);
 
         if (empty($url)) {
             throw new ExtensionRequiredException();
@@ -190,8 +198,13 @@ class MagentoUrlGenerator
      */
     public function getAdminUrl()
     {
-        $url = (string)@$this->getChannel()->getTransport()->getAdminUrl();
-
+        $url = false;
+        if ($this->isChannel()) {
+            $transport = $this->getChannel()->getTransport();
+            if (!empty($transport)) {
+                $url = $transport->getAdminUrl();
+            }
+        }
         if (empty($url)) {
             throw new ExtensionRequiredException();
         }
