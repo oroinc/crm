@@ -173,7 +173,6 @@ class MagentoUrlGenerator
         }
         if (empty($url)) {
             throw new ExtensionRequiredException();
-
         }
         return $url;
     }
