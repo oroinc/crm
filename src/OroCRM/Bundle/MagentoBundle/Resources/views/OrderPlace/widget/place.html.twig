@@ -18,8 +18,7 @@
                             widget.getWidget().dialog('maximize');
                         }
                     );
-
-                    var showMessage = function(data) {
+                    var showMessage = function(navigation, data) {
                         var message = data.message;
                         if (data.statusType == 'success') {
                             message = messageTemplate(
@@ -30,13 +29,17 @@
                                 }
                             );
                         }
-                        messenger.notificationFlashMessage(
-                                data.statusType,
-                                message
-                        );
+                        messenger.notificationFlashMessage(data.statusType, message);
                         navigation.processClicks($('.order-link'));
                     };
-
+                    var chooseMessage = function (Navigation, data) {
+                        var navigation = Navigation.getInstance();
+                        if (navigation.loadingMask.$el.is(':visible')) {
+                            mediator.once('hash_navigation_request:complete', showMessage(navigation, data));
+                        } else {
+                            showMessage(navigation, data);
+                        }
+                    }
                     $frame.load(function () {
                         $frame.css({'height': '100%', 'width': '100%'});
                         widgetManager.getWidgetInstance(
@@ -46,12 +49,10 @@
                             }
                         );
                     });
-
                     ORO_ORDER_EMBED_API.success = function () {
                         messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_synchronization'));
                         widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
                             widget.trigger('formSave');
-
                             {% if cartId is defined %}
                             $('#transition-b2c_flow_abandoned_shopping_cart-place_order').one('transitions_success', function() {
                                 {% set syncURL = path('orocrm_magento_orderplace_sync', {id: cartId}) %}
@@ -59,12 +60,7 @@
                                     dataType: 'json',
                                     url: {{ syncURL|json_encode|raw}},
                                     success: function(data) {
-                                        var navigation = Navigation.getInstance();
-                                        if (navigation.loadingMask.$el.is(':visible')) {
-                                            mediator.once('hash_navigation_request:complete', showMessage(data));
-                                        } else {
-                                            showMessage(data);
-                                        }
+                                        chooseMessage(Navigation, data);
                                     }
                                 });
                             });
@@ -77,12 +73,7 @@
                                         widget.remove();
                                     },
                                     success: function(data) {
-                                        var navigation = Navigation.getInstance();
-                                        if (navigation.loadingMask.$el.is(':visible')) {
-                                            mediator.once('hash_navigation_request:complete', showMessage(data));
-                                        } else {
-                                            showMessage(data);
-                                        }
+                                        chooseMessage(Navigation, data);
                                     },
                                     error: function() {
                                         messenger.notificationFlashMessage(
@@ -96,7 +87,6 @@
                     };
                     ORO_ORDER_EMBED_API.error = function () {
                         messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));
-
                         widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
                             widget.remove();
                         });
@@ -108,7 +98,6 @@
                 require(['oroui/js/widget-manager', 'oroui/js/messenger'],
                 function (widgetManager, messenger) {
                     messenger.notificationFlashMessage('error', {{ error|json_encode|raw }});
-
                     widgetManager.getWidgetInstanceByAlias('transaction-dialog', function (widget) {
                         widget.remove();
                     });
