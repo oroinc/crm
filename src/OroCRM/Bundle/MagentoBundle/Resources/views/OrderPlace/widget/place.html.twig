@@ -18,7 +18,6 @@
 
                     $frame.load(function () {
                         $frame.css({'height': '100%', 'width': '100%'});
-
                         widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
                             widget.trigger('externalContentLoaded')
                         });
@@ -48,7 +47,6 @@
                                                 );
                                                 navigation.processClicks($('.order-link'));
                                             };
-
                                         if (navigation.loadingMask.$el.is(':visible')) {
                                             mediator.once('hash_navigation_request:complete', showMessage);
                                         } else {
@@ -73,14 +71,11 @@
                                                 'error',
                                                 __('orocrm.magento.external_error')
                                         );
-
                                     }
                                 });
                             {% endif %}
-
                         });
                     };
-
                     ORO_ORDER_EMBED_API.error = function () {
                         messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));
 

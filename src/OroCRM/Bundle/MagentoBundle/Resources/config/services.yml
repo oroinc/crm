@@ -15,8 +15,8 @@ parameters:
     orocrm_magento.event_listener.navigation.class:                         OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener
     orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
 
-    # service
-    orocrm_magento.servie.magento_url_generator.class:                      OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
+    # services
+    orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
 
 services:
     orocrm_magento.transport.soap_transport:
@@ -107,6 +107,6 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-orderitem-grid, method: onBuildAfter }
 
     orocrm_magento.service.magento_url_generator:
-        class: %orocrm_magento.servie.magento_url_generator.class%
+        class: %orocrm_magento.magento_url_generator.class%
         arguments: [@router]
         scope: prototype

@@ -3,6 +3,7 @@ namespace OroCRM\Bundle\MagentoBundle\Service;
 
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
@@ -131,7 +132,7 @@ class MagentoUrlGenerator
     }
 
     /**
-     * @param \Symfony\Component\Routing\Router $router
+     * @param Router $router
      *
      * @return $this
      */
@@ -142,8 +143,7 @@ class MagentoUrlGenerator
     }
 
     /**
-     *
-     * @return \Symfony\Component\Routing\Router
+     * @return Router
      */
     public function getRouter()
     {
@@ -178,7 +178,7 @@ class MagentoUrlGenerator
      *
      * @return string The generated URL
      *
-     * @throws ExtensionRequiredException
+     * @throws RouteNotFoundException
      *
      * @see UrlGeneratorInterface
      */
@@ -187,7 +187,7 @@ class MagentoUrlGenerator
         $url = $this->getRouter()->generate($route, $parameters, $referenceType);
 
         if (empty($url)) {
-            throw new ExtensionRequiredException();
+            throw new RouteNotFoundException('orocrm.magento.exception.extension_required');
         }
         return $url;
     }
@@ -207,6 +207,7 @@ class MagentoUrlGenerator
         }
         if (empty($url)) {
             throw new ExtensionRequiredException();
+
         }
         return $url;
     }
