@@ -21,12 +21,12 @@ class MagentoUrlGenerator
     private $channel;
 
     /**
-     * @var mixed
+     * @var string
      */
     private $error;
 
     /**
-     * @var mixed
+     * @var string
      */
     private $sourceUrl;
 
@@ -50,11 +50,11 @@ class MagentoUrlGenerator
      */
     public function __construct(Router $Router)
     {
-        $this->channel   = false;
-        $this->error     = false;
-        $this->sourceUrl = false;
-        $this->flowName  = false;
-        $this->origin    = false;
+        $this->channel   = null;
+        $this->error     = '';
+        $this->sourceUrl = '';
+        $this->flowName  = '';
+        $this->origin    = '';
         $this->setRouter($Router);
     }
 
@@ -70,7 +70,7 @@ class MagentoUrlGenerator
     }
 
     /**
-     * @return bool|Channel
+     * @return Channel
      */
     public function getChannel()
     {
@@ -86,7 +86,7 @@ class MagentoUrlGenerator
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getError()
     {
@@ -94,7 +94,7 @@ class MagentoUrlGenerator
     }
 
     /**
-     * @param mixed $error
+     * @param string $error
      *
      * @return $this
      */
@@ -159,7 +159,7 @@ class MagentoUrlGenerator
     }
 
     /**
-     * @return mixed
+     * @return string
      * @throws ExtensionRequiredException
      */
     public function getAdminUrl()
@@ -179,7 +179,7 @@ class MagentoUrlGenerator
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSourceUrl()
     {
@@ -222,7 +222,7 @@ class MagentoUrlGenerator
      * Generates a URL from the given parameters.
      *
      * @param string         $route         The name of the route
-     * @param mixed          $parameters    An array of parameters
+     * @param array          $parameters    An array of parameters
      * @param Boolean|string $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
      *
      * @return string The generated URL
