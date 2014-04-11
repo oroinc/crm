@@ -41,16 +41,14 @@
                                                     data.statusType,
                                                     messageTemplate({message: data.message, url: data.url, urlLabel: __('orocrm.magento.view_order')})
                                                 );
+                                                navigation.processClicks($('.order-link'));
                                             };
 
                                         if (navigation.loadingMask.$el.is(':visible')) {
                                             mediator.on('hash_navigation_request:complete', showMessage);
-                                            console.log(1);
                                         } else {
                                             showMessage();
                                         }
-
-                                        navigation.processClicks($('.order-link'));
                                     }
                                 });
                             });
