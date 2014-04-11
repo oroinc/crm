@@ -37,8 +37,8 @@ oro_dashboard_config:
         main:
             widgets:
                 my_contacts_activity:
-                    layout_position:   [1, 60]
+                    layout_position:   [0, 60]
         quick_launchpad:
             widgets:
                 contacts_launchpad:
-                    layout_position:   [1, 20]
+                    layout_position:   [0, 20]

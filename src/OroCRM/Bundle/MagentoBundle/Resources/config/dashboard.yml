@@ -8,4 +8,4 @@ oro_dashboard_config:
         main:
             widgets:
                 my_sales_flow_b2c_chart:
-                    layoutPosition: [2, 130]
+                    layoutPosition: [1, 130]

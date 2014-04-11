@@ -33,8 +33,8 @@ oro_dashboard_config:
         main:
             widgets:
                 my_accounts_activity:
-                    layout_position:   [1, 40]
+                    layout_position:   [0, 40]
         quick_launchpad:
             widgets:
                 accounts_launchpad:
-                    layout_position:   [1, 10]
+                    layout_position:   [0, 10]
