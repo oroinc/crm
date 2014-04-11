@@ -46,7 +46,7 @@ class MagentoUrlGenerator
     private $origin;
 
     /**
-     *
+     * @param Router $Router
      */
     public function __construct(Router $Router)
     {
@@ -132,17 +132,6 @@ class MagentoUrlGenerator
     }
 
     /**
-     * @param Router $router
-     *
-     * @return $this
-     */
-    private function setRouter(Router $router)
-    {
-        $this->router = $router;
-        return $this;
-    }
-
-    /**
      * @return Router
      */
     public function getRouter()
@@ -167,29 +156,6 @@ class MagentoUrlGenerator
     public function getOrigin()
     {
         return $this->origin;
-    }
-
-    /**
-     * Generates a URL from the given parameters.
-     *
-     * @param string         $route         The name of the route
-     * @param mixed          $parameters    An array of parameters
-     * @param Boolean|string $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
-     *
-     * @return string The generated URL
-     *
-     * @throws RouteNotFoundException
-     *
-     * @see UrlGeneratorInterface
-     */
-    private function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
-    {
-        $url = $this->getRouter()->generate($route, $parameters, $referenceType);
-
-        if (empty($url)) {
-            throw new RouteNotFoundException('orocrm.magento.exception.extension_required');
-        }
-        return $url;
     }
 
     /**
@@ -249,6 +215,40 @@ class MagentoUrlGenerator
             $this->setError(self::ERROR_MESSAGE);
         }
 
+        return $this;
+    }
+
+    /**
+     * Generates a URL from the given parameters.
+     *
+     * @param string         $route         The name of the route
+     * @param mixed          $parameters    An array of parameters
+     * @param Boolean|string $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     *
+     * @return string The generated URL
+     *
+     * @throws RouteNotFoundException
+     *
+     * @see UrlGeneratorInterface
+     */
+    private function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        $url = $this->getRouter()->generate($route, $parameters, $referenceType);
+
+        if (empty($url)) {
+            throw new RouteNotFoundException('orocrm.magento.exception.extension_required');
+        }
+        return $url;
+    }
+
+    /**
+     * @param Router $router
+     *
+     * @return $this
+     */
+    private function setRouter(Router $router)
+    {
+        $this->router = $router;
         return $this;
     }
 }
