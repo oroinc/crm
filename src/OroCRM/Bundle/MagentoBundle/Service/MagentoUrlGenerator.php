@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\MagentoBundle\Service;
 
 use Symfony\Component\Routing\Router;
@@ -46,16 +47,16 @@ class MagentoUrlGenerator
     private $origin;
 
     /**
-     * @param Router $Router
+     * @param Router $router
      */
-    public function __construct(Router $Router)
+    public function __construct(Router $router)
     {
         $this->channel   = null;
         $this->error     = '';
         $this->sourceUrl = '';
         $this->flowName  = '';
         $this->origin    = '';
-        $this->setRouter($Router);
+        $this->router    = $router;
     }
 
     /**
@@ -207,13 +208,11 @@ class MagentoUrlGenerator
                 urlencode($this->generateUrl($successRoute, [], UrlGeneratorInterface::ABSOLUTE_URL)),
                 urlencode($this->generateUrl($errorRoute, [], UrlGeneratorInterface::ABSOLUTE_URL))
             );
-
         } catch (ExtensionRequiredException $e) {
             $this->setError($e->getMessage());
         } catch (\LogicException $e) {
             $this->setError(self::ERROR_MESSAGE);
         }
-
         return $this;
     }
 
@@ -233,21 +232,9 @@ class MagentoUrlGenerator
     private function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $url = $this->getRouter()->generate($route, $parameters, $referenceType);
-
         if (empty($url)) {
             throw new RouteNotFoundException('orocrm.magento.exception.route_not_found');
         }
         return $url;
-    }
-
-    /**
-     * @param Router $router
-     *
-     * @return $this
-     */
-    private function setRouter(Router $router)
-    {
-        $this->router = $router;
-        return $this;
     }
 }
