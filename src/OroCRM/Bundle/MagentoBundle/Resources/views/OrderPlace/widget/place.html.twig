@@ -37,15 +37,19 @@
                                     success: function(data) {
                                         var navigation = Navigation.getInstance(),
                                             showMessage = function() {
+                                                var message = data.message;
+                                                if (data.statusType == 'success') {
+                                                    message = messageTemplate({message: data.message, url: data.url, urlLabel: __('orocrm.magento.view_order')});
+                                                }
                                                 messenger.notificationFlashMessage(
                                                     data.statusType,
-                                                    messageTemplate({message: data.message, url: data.url, urlLabel: __('orocrm.magento.view_order')})
+                                                    message
                                                 );
                                                 navigation.processClicks($('.order-link'));
                                             };
 
                                         if (navigation.loadingMask.$el.is(':visible')) {
-                                            mediator.on('hash_navigation_request:complete', showMessage);
+                                            mediator.once('hash_navigation_request:complete', showMessage);
                                         } else {
                                             showMessage();
                                         }
