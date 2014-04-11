@@ -237,5 +237,4 @@ class MagentoUrlGenerator
         }
         return $url;
     }
-
 }
