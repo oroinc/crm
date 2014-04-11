@@ -6,10 +6,20 @@
             <script type="text/javascript">
                 var ORO_ORDER_EMBED_API = {};
 
-                require(['jquery', 'oroui/js/widget-manager', 'oroui/js/messenger', 'orotranslation/js/translator'],
-                function ($, widgetManager, messenger, __) {
+                require(['jquery', 'oroui/js/widget-manager', 'oroui/js/messenger', 'orotranslation/js/translator', 'oronavigation/js/navigation'],
+                function ($, widgetManager, messenger, __, Navigation) {
                     var $frame = $('#orderPlaceFrame'),
-                        modalWidgetAlias = 'transaction-dialog';
+                        modalWidgetAlias = 'transaction-dialog',
+                        messageTemplate = "{0} <a href=\"{1}\" class=\"order-link\">{2}</a> ";
+
+                    String.prototype.format = function() {
+                        var formatted = this;
+                        for (var i = 0; i < arguments.length; i++) {
+                            var regexp = new RegExp('\\{'+i+'\\}', 'gi');
+                            formatted = formatted.replace(regexp, arguments[i]);
+                        }
+                        return formatted;
+                    };
 
                     widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
                         widget.getWidget().dialog('maximize');
@@ -34,7 +44,15 @@
                                     dataType: 'json',
                                     url: {{ syncURL|json_encode|raw }},
                                     success: function(data) {
-                                        messenger.notificationFlashMessage(data.statusType, data.message);
+                                        messenger.notificationFlashMessage(
+                                                data.statusType,
+                                                messageTemplate.format(data.message, data.url, __('orocrm.magento.view_order')),
+                                                {container: $("#oroplatform-header")}
+                                        );
+                                        var navigation = Navigation.getInstance();
+                                        if (navigation) {
+                                            navigation.processClicks($('.order-link'));
+                                        }
                                     }
                                 });
                             });
