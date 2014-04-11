@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Service\Provider;
 
 use OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator;
