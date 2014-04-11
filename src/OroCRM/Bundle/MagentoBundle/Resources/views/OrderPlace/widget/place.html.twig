@@ -65,7 +65,10 @@
                                         messenger.notificationFlashMessage(data.statusType, data.message);
                                     },
                                     error: function() {
-                                        messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));
+                                        messenger.notificationFlashMessage(
+                                                'error',
+                                                __('orocrm.magento.external_error')
+                                        );
 
                                     }
                                 });
