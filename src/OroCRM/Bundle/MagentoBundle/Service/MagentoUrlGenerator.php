@@ -236,7 +236,7 @@ class MagentoUrlGenerator
         $url = $this->getRouter()->generate($route, $parameters, $referenceType);
 
         if (empty($url)) {
-            throw new RouteNotFoundException('orocrm.magento.exception.extension_required');
+            throw new RouteNotFoundException('orocrm.magento.exception.route_not_found');
         }
         return $url;
     }
