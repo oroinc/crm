@@ -15,7 +15,7 @@ parameters:
     orocrm_magento.event_listener.navigation.class:                         OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener
     orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
 
-    # services
+    # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
 
 services:
