@@ -163,7 +163,6 @@ class OrderPlaceController extends Controller
             $message = $this->get('translator')->trans('orocrm.magento.controller.sync_error_with_magento');
             $status = self::SYNC_ERROR;
         }
-        #return $this->redirect($redirectUrl);
         return new JsonResponse(
             [
                 'statusType' => $status,

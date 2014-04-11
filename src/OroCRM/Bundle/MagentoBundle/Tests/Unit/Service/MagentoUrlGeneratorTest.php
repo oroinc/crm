@@ -8,7 +8,7 @@ use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Symfony\Component\Routing\Router
+     * @var Router
      */
     private $router;
 
