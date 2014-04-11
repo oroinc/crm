@@ -23,6 +23,18 @@
                         });
                     });
 
+                    var showMessage = function(data) {
+                        var message = data.message;
+                        if (data.statusType == 'success') {
+                            message = messageTemplate({message: data.message, url: data.url, urlLabel: __('orocrm.magento.view_order')});
+                        }
+                        messenger.notificationFlashMessage(
+                                data.statusType,
+                                message
+                        );
+                        navigation.processClicks($('.order-link'));
+                    };
+
                     ORO_ORDER_EMBED_API.success = function () {
                         messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_synchronization'));
                         widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
@@ -35,22 +47,12 @@
                                     dataType: 'json',
                                     url: {{ syncURL|json_encode|raw }},
                                     success: function(data) {
-                                        var navigation = Navigation.getInstance(),
-                                            showMessage = function() {
-                                                var message = data.message;
-                                                if (data.statusType == 'success') {
-                                                    message = messageTemplate({message: data.message, url: data.url, urlLabel: __('orocrm.magento.view_order')});
-                                                }
-                                                messenger.notificationFlashMessage(
-                                                    data.statusType,
-                                                    message
-                                                );
-                                                navigation.processClicks($('.order-link'));
-                                            };
+                                        var navigation = Navigation.getInstance();
+
                                         if (navigation.loadingMask.$el.is(':visible')) {
-                                            mediator.once('hash_navigation_request:complete', showMessage);
+                                            mediator.once('hash_navigation_request:complete', showMessage(data));
                                         } else {
-                                            showMessage();
+                                            showMessage(data);
                                         }
                                     }
                                 });
@@ -63,26 +65,13 @@
                                     beforeSend: function() {
                                         widget.remove();
                                     },
-                                    success: function(data ) {
-                                        //messenger.notificationFlashMessage(data.statusType, data.message);
-                                        var navigation = Navigation.getInstance(),
-                                                showMessage = function() {
-                                                    var message = data.message;
-                                                    if (data.statusType == 'success') {
-                                                        message = messageTemplate({message: data.message, url: data.url, urlLabel: __('orocrm.magento.view_order')});
-                                                    }
-                                                    messenger.notificationFlashMessage(
-                                                            data.statusType,
-                                                            message
-                                                    );
-                                                    navigation.processClicks($('.order-link'));
-                                                };
+                                    success: function(data) {
+                                        var navigation = Navigation.getInstance();
                                         if (navigation.loadingMask.$el.is(':visible')) {
-                                            mediator.once('hash_navigation_request:complete', showMessage);
+                                            mediator.once('hash_navigation_request:complete', showMessage(data));
                                         } else {
-                                            showMessage();
+                                            showMessage(data);
                                         }
-
                                     },
                                     error: function() {
                                         messenger.notificationFlashMessage(

@@ -80,7 +80,7 @@ class OrderPlaceController extends Controller
                 ['filters' => ['quote_id' => $cart->getOriginId()]]
             );
 
-            $order = $em->getRepository('OroCRMMagentoBundle:Order')->getLastPlacedOrderByCart($cart);
+            $order = $em->getRepository('OroCRMMagentoBundle:Order')->getLastPlacedOrderBy($cart, 'cart');
 
             if (null === $order) {
                 throw new \LogicException('Unable to load order.');
@@ -144,7 +144,6 @@ class OrderPlaceController extends Controller
     {
         $em = $this->get('doctrine.orm.entity_manager');
         try {
-            throw new \LogicException('Unable to load order.');
             $orderConnector = $this->get('orocrm_magento.mage.order_connector');
             $processor      = $this->get('oro_integration.sync.processor');
             $processor->process(
