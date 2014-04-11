@@ -64,7 +64,25 @@
                                         widget.remove();
                                     },
                                     success: function(data ) {
-                                        messenger.notificationFlashMessage(data.statusType, data.message);
+                                        //messenger.notificationFlashMessage(data.statusType, data.message);
+                                        var navigation = Navigation.getInstance(),
+                                                showMessage = function() {
+                                                    var message = data.message;
+                                                    if (data.statusType == 'success') {
+                                                        message = messageTemplate({message: data.message, url: data.url, urlLabel: __('orocrm.magento.view_order')});
+                                                    }
+                                                    messenger.notificationFlashMessage(
+                                                            data.statusType,
+                                                            message
+                                                    );
+                                                    navigation.processClicks($('.order-link'));
+                                                };
+                                        if (navigation.loadingMask.$el.is(':visible')) {
+                                            mediator.once('hash_navigation_request:complete', showMessage);
+                                        } else {
+                                            showMessage();
+                                        }
+
                                     },
                                     error: function() {
                                         messenger.notificationFlashMessage(
