@@ -60,19 +60,3 @@ oro_dashboard_config:
             label:      My Sales Flow B2B Streamline
             route:      orocrm_sales_dashboard_sales_flow_b2b_streamline_chart
             acl:        orocrm_sales_opportunity_view
-
-    dashboards:
-        quick_launchpad:
-            widgets:
-                leads_launchpad:
-                    layout_position: [1, 30]
-                opportunities_launchpad:
-                    layout_position: [1, 40]
-        main:
-            widgets:
-                opportunities_by_lead_source_chart:
-                    layout_position: [1, 80]
-                opportunities_by_state:
-                    layout_position: [0, 90]
-                my_sales_flow_b2b_chart:
-                    layout_position: [1, 120]

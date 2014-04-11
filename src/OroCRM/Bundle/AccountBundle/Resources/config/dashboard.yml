@@ -28,13 +28,3 @@ oro_dashboard_config:
                     label:      Create account
                     route:      orocrm_account_create
                     acl:        orocrm_account_create
-
-    dashboards:
-        main:
-            widgets:
-                my_accounts_activity:
-                    layout_position:   [0, 40]
-        quick_launchpad:
-            widgets:
-                accounts_launchpad:
-                    layout_position:   [0, 10]
