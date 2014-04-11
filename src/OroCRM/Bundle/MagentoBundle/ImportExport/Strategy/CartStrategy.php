@@ -54,7 +54,7 @@ class CartStrategy extends BaseStrategy
             );
             $this->removeErrorMessage($existingEntity);
         } else {
-            if (!$newEntity->getGrandTotal()) {
+            if (!$newEntity->getItemsCount()) {
                 // newly created cart without items should be skipped
                 return false;
             } elseif (!($newEntity->getBillingAddress() || $newEntity->getEmail())) {
@@ -63,6 +63,7 @@ class CartStrategy extends BaseStrategy
             }
             $existingEntity = $newEntity;
         }
+
         $this->updateCartStatus($existingEntity, $newEntity->getStatus());
         if (!$existingEntity->getStore() || !$existingEntity->getStore()->getId()) {
             $existingEntity->setStore(
@@ -73,7 +74,9 @@ class CartStrategy extends BaseStrategy
         $this->updateCustomer($existingEntity, $newEntity->getCustomer())
             ->updateAddresses($existingEntity, $newEntity)
             ->updateCartItems($existingEntity, $newEntity->getCartItems());
+
         $this->validateAndUpdateContext($existingEntity);
+
         return $existingEntity;
     }
 

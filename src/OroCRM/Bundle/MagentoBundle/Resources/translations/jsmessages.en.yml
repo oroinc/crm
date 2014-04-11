@@ -5,3 +5,4 @@ orocrm:
         error: Error occurred during check request, please try later!
         external_error:             External error occured
         performing_synchronization: Performing synchronization...
+        view_order: View order
