@@ -160,7 +160,7 @@ class OrderPlaceController extends Controller
             $status = self::SYNC_SUCCESS;
         } catch (\Exception $e) {
             $redirectUrl = $this->generateUrl('orocrm_magento_customer_view', ['id' => $customer->getId()]);
-            $message = $this->get('translator')->trans('orocrm.magento.controller.sync_error_with_magento');
+            $message = $this->get('translator')->trans('orocrm.magento.controller.synchronization_error');
             $status = self::SYNC_ERROR;
         }
         #return $this->redirect($redirectUrl);
