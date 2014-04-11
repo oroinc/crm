@@ -144,7 +144,6 @@ class OrderPlaceController extends Controller
     {
         $em = $this->get('doctrine.orm.entity_manager');
         try {
-            throw new \LogicException('Unable to load order.');
             $orderConnector = $this->get('orocrm_magento.mage.order_connector');
             $processor      = $this->get('oro_integration.sync.processor');
             $processor->process(
