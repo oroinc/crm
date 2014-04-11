@@ -56,7 +56,7 @@ class MagentoUrlGenerator
         $this->sourceUrl = '';
         $this->flowName  = '';
         $this->origin    = '';
-        $this->setRouter($router);
+        $this->router    = $router;
     }
 
     /**
@@ -238,14 +238,4 @@ class MagentoUrlGenerator
         return $url;
     }
 
-    /**
-     * @param Router $router
-     *
-     * @return $this
-     */
-    private function setRouter(Router $router)
-    {
-        $this->router = $router;
-        return $this;
-    }
 }
