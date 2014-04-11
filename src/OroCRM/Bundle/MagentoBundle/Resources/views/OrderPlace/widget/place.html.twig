@@ -6,20 +6,11 @@
             <script type="text/javascript">
                 var ORO_ORDER_EMBED_API = {};
 
-                require(['jquery', 'oroui/js/widget-manager', 'oroui/js/messenger', 'orotranslation/js/translator', 'oronavigation/js/navigation'],
-                function ($, widgetManager, messenger, __, Navigation) {
+                require(['jquery', 'oroui/js/widget-manager', 'oroui/js/messenger', 'orotranslation/js/translator', 'oronavigation/js/navigation', 'underscore'],
+                function ($, widgetManager, messenger, __, Navigation, _) {
                     var $frame = $('#orderPlaceFrame'),
                         modalWidgetAlias = 'transaction-dialog',
-                        messageTemplate = "{0} <a href=\"{1}\" class=\"order-link\">{2}</a> ";
-
-                    String.prototype.format = function() {
-                        var formatted = this;
-                        for (var i = 0; i < arguments.length; i++) {
-                            var regexp = new RegExp('\\{'+i+'\\}', 'gi');
-                            formatted = formatted.replace(regexp, arguments[i]);
-                        }
-                        return formatted;
-                    };
+                        messageTemplate = _.template("<%= message %> <a href=\"<%= url %>\" class=\"order-link\"><%= urlLabel %></a> ");
 
                     widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
                         widget.getWidget().dialog('maximize');
@@ -46,7 +37,7 @@
                                     success: function(data) {
                                         messenger.notificationFlashMessage(
                                                 data.statusType,
-                                                messageTemplate.format(data.message, data.url, __('orocrm.magento.view_order')),
+                                                messageTemplate({message: data.message, url: data.url, urlLabel: __('orocrm.magento.view_order')}),
                                                 {container: $("#oroplatform-header")}
                                         );
                                         var navigation = Navigation.getInstance();

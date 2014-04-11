@@ -339,4 +339,3 @@ orocrm:
             synchronization_failed_status: Cart data is not up to date
         exception.extension_required: Unable to perform this operation, Oro Bridge extension not found.
         ping_site_error: Unable to load form
-        view_order: View order
