@@ -9,6 +9,7 @@ use Guzzle\Http\StaticClient;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -74,7 +75,8 @@ class OrderPlaceController extends Controller
 
         return [
             'error'     => $error ? $this->get('translator')->trans($error) : $error,
-            'sourceUrl' => $sourceUrl
+            'sourceUrl' => $sourceUrl,
+            'cartId'    => $cart->getId(),
         ];
     }
 
@@ -109,7 +111,8 @@ class OrderPlaceController extends Controller
             }
 
             $redirectUrl = $this->generateUrl('orocrm_magento_order_view', ['id' => $order->getId()]);
-            $this->addMessage('orocrm.magento.controller.synchronization_success');
+            $message = $this->get('translator')->trans('orocrm.magento.controller.synchronization_success');
+            $status = 'success';
         } catch (\Exception $e) {
             $cart->setStatusMessage('orocrm.magento.controller.synchronization_failed_status');
 
@@ -117,10 +120,17 @@ class OrderPlaceController extends Controller
             $cart = $em->merge($cart);
             $em->flush();
             $redirectUrl = $this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]);
-            $this->addMessage('orocrm.magento.controller.synchronization_error', 'error');
+            $message = $this->get('translator')->trans('orocrm.magento.controller.synchronization_error');
+            $status = 'error';
         }
 
-        return $this->redirect($redirectUrl);
+        return new JsonResponse(
+            [
+                'statusType' => $status,
+                'message' => $message,
+                'url' => $redirectUrl
+            ]
+        );
     }
 
     /**
