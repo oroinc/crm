@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\MagentoBundle\Service;
 
 use Symfony\Component\Routing\Router;
