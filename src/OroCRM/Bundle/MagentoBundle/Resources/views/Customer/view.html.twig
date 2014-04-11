@@ -8,7 +8,7 @@
     {% set createOrder = 'orocrm.magento.customer.create_order'|trans %}
     {{
         UI.clientButton({
-            'dataUrl': path('orocrm_magento_widget_customer_orderplace', {'id': entity.id }),
+            'dataUrl': path('orocrm_magento_customer_orderplace', {'id': entity.id }),
             'aCss':    'no-hash',
             'iCss':    'icon-money',
             'dataId':  entity.id,

@@ -7,6 +7,8 @@ use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -23,6 +25,8 @@ class OrderPlaceController extends Controller
     const FLOW_NAME       = 'oro_sales_new_order';
     const GATEWAY_ROUTE   = 'oro_gateway/do';
     const NEW_ORDER_ROUTE = 'oro_sales/newOrder';
+    const SYNC_SUCCESS    = 'success';
+    const SYNC_ERROR      = 'error';
 
     /**
      * @Route("/cart/{id}", name="orocrm_magento_orderplace_cart", requirements={"id"="\d+"}))
@@ -46,7 +50,8 @@ class OrderPlaceController extends Controller
 
         return [
             'error'     => $urlGenerator->isError() ? $translator->trans($urlGenerator->getError()) : false,
-            'sourceUrl' => $urlGenerator->getSourceUrl()
+            'sourceUrl' => $urlGenerator->getSourceUrl(),
+            'cartId'    => $cart->getId(),
         ];
     }
 
@@ -82,7 +87,8 @@ class OrderPlaceController extends Controller
             }
 
             $redirectUrl = $this->generateUrl('orocrm_magento_order_view', ['id' => $order->getId()]);
-            $this->addMessage('orocrm.magento.controller.synchronization_success');
+            $message = $this->get('translator')->trans('orocrm.magento.controller.synchronization_success');
+            $status = self::SYNC_SUCCESS;
         } catch (\Exception $e) {
             $cart->setStatusMessage('orocrm.magento.controller.synchronization_failed_status');
 
@@ -90,14 +96,21 @@ class OrderPlaceController extends Controller
             $cart = $em->merge($cart);
             $em->flush();
             $redirectUrl = $this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]);
-            $this->addMessage('orocrm.magento.controller.synchronization_error', 'error');
+            $message = $this->get('translator')->trans('orocrm.magento.controller.synchronization_error');
+            $status = self::SYNC_ERROR;
         }
 
-        return $this->redirect($redirectUrl);
+        return new JsonResponse(
+            [
+                'statusType' => $status,
+                'message' => $message,
+                'url' => $redirectUrl
+            ]
+        );
     }
 
     /**
-     * @Route("/customer/{id}", name="orocrm_magento_orderplace_customer", requirements={"id"="\d+"}))
+     * @Route("/customer/{id}", name="orocrm_magento_widget_customer_orderplace", requirements={"id"="\d+"}))
      * @AclAncestor("oro_workflow")
      * @Template("OroCRMMagentoBundle:OrderPlace:place.html.twig")
      */
@@ -117,8 +130,9 @@ class OrderPlaceController extends Controller
         $translator = $this->get('translator');
 
         return [
-            'error'     => $urlGenerator->isError() ? $translator->trans($urlGenerator->getError()) : false,
-            'sourceUrl' => $urlGenerator->getSourceUrl()
+            'error'       => $urlGenerator->isError() ? $translator->trans($urlGenerator->getError()) : false,
+            'sourceUrl'   => $urlGenerator->getSourceUrl(),
+            'customerId'  => $customer->getid(),
         ];
     }
 
@@ -142,13 +156,21 @@ class OrderPlaceController extends Controller
                 throw new \LogicException('Unable to load order.');
             }
             $redirectUrl = $this->generateUrl('orocrm_magento_order_view', ['id' => $order->getId()]);
-            $this->addMessage('orocrm.magento.controller.synchronization_success');
+            $message = $this->get('translator')->trans('orocrm.magento.controller.synchronization_success');
+            $status = self::SYNC_SUCCESS;
         } catch (\Exception $e) {
-            $this->addMessage('orocrm.magento.controller.synchronization_failed_status', 'error');
             $redirectUrl = $this->generateUrl('orocrm_magento_customer_view', ['id' => $customer->getId()]);
-            $this->addMessage('orocrm.magento.controller.synchronization_error', 'error');
+            $message = $this->get('translator')->trans('orocrm.magento.controller.synchronization_error');
+            $status = self::SYNC_ERROR;
         }
-        return $this->redirect($redirectUrl);
+        #return $this->redirect($redirectUrl);
+        return new JsonResponse(
+            [
+                'statusType' => $status,
+                'message' => $message,
+                'url' => $redirectUrl
+            ]
+        );
     }
 
     /**

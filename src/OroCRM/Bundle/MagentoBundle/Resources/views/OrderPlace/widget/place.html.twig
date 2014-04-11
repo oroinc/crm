@@ -25,9 +25,38 @@
 
                     ORO_ORDER_EMBED_API.success = function () {
                         messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_synchronization'));
-
                         widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
                             widget.trigger('formSave');
+
+                            {% if cartId is defined %}
+                            $('#transition-b2c_flow_abandoned_shopping_cart-place_order').one('transitions_success', function() {
+                                {% set syncURL = path('orocrm_magento_orderplace_sync', {id: cartId}) %}
+                                $.ajax({
+                                    dataType: 'json',
+                                    url: {{ syncURL|json_encode|raw }},
+                                    success: function(data) {
+                                        messenger.notificationFlashMessage(data.statusType, data.message);
+                                    }
+                                });
+                            });
+                            {% elseif customerId is defined %}
+                                {% set syncURL = path('orocrm_magento_orderplace_customer_sync', {id: customerId}) %}
+                                $.ajax({
+                                    dataType: 'json',
+                                    url: {{ syncURL|json_encode|raw }},
+                                    beforeSend: function() {
+                                        widget.remove();
+                                    },
+                                    success: function(data ) {
+                                        messenger.notificationFlashMessage(data.statusType, data.message);
+                                    },
+                                    error: function() {
+                                        messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));
+
+                                    }
+                                });
+                            {% endif %}
+
                         });
                     };
 

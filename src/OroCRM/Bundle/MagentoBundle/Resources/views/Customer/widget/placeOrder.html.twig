@@ -3,7 +3,7 @@
         {{ oro_widget_render({
             'widgetType':         'block',
             'alias':              'order-place-widget',
-            'url':                path('orocrm_magento_orderplace_customer', {id: entity.id}),
+            'url':                path('orocrm_magento_widget_customer_orderplace', {id: entity.id}),
             'loadingMaskEnabled': true
         }) }}
 
@@ -11,7 +11,6 @@
             require(['underscore', 'oroui/js/widget-manager'], function(_, widgetManager) {
                 widgetManager.getWidgetInstanceByAlias('order-place-widget', function(widget) {
                     widget._showLoading();
-
                     widget.once('externalContentLoaded', _.bind(widget._hideLoading, widget));
                 });
             });

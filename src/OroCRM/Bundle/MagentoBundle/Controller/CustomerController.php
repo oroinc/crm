@@ -91,7 +91,7 @@ class CustomerController extends Controller
     }
 
     /**
-     * @Route("/order/{id}", name="orocrm_magento_widget_customer_orderplace", requirements={"id"="\d+"}))
+     * @Route("/order/{id}", name="orocrm_magento_customer_orderplace", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_customer_view")
      * @Template
      */
