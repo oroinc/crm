@@ -14,22 +14,3 @@ oro_dashboard_config:
             route_parameters: { bundle: OroCRMContactBundle, name: myContactsActivity }
             acl:         orocrm_contact_view
             description: orocrm.dashboard.my_contacts_activity.description
-        contacts_launchpad:
-            label:      Contacts
-            icon:       group
-            route:      oro_dashboard_itemized_widget
-            route_parameters: { bundle: OroDashboardBundle, name: launchpad }
-            acl:        orocrm_contact_view
-            items:
-                index:
-                    label:      List
-                    route:      orocrm_contact_index
-                    acl:        orocrm_contact_view
-                create:
-                    label:      Create contact
-                    route:      orocrm_contact_create
-                    acl:        orocrm_contact_create
-                group_index:
-                    label:      Manage groups
-                    route:      orocrm_contact_group_index
-                    acl:        orocrm_contact_group_view

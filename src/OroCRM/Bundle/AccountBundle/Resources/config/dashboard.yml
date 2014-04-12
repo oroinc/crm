@@ -14,19 +14,3 @@ oro_dashboard_config:
             route_parameters: { bundle: OroCRMAccountBundle, name: myAccountsActivity }
             acl:         orocrm_account_view
             description: orocrm.dashboard.my_accounts_activity.description
-
-        accounts_launchpad:
-            label:      Accounts
-            icon:       suitcase
-            route:      oro_dashboard_itemized_widget
-            route_parameters: { bundle: OroDashboardBundle, name: launchpad }
-            acl:        orocrm_account_view
-            items:
-                index:
-                    label:      List
-                    route:      orocrm_account_index
-                    acl:        orocrm_account_view
-                create:
-                    label:      Create account
-                    route:      orocrm_account_create
-                    acl:        orocrm_account_create
