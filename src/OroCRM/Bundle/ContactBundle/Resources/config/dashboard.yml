@@ -9,10 +9,11 @@ oro_dashboard_config:
                     acl:        orocrm_contact_view
                     position:   30
         my_contacts_activity:
-            label:      orocrm.dashboard.my_contacts_activity.title
-            route:      oro_dashboard_widget
+            label:       orocrm.dashboard.my_contacts_activity.title
+            route:       oro_dashboard_widget
             route_parameters: { bundle: OroCRMContactBundle, name: myContactsActivity }
-            acl:        orocrm_contact_view
+            acl:         orocrm_contact_view
+            description: orocrm.dashboard.my_contacts_activity.description
         contacts_launchpad:
             label:      Contacts
             icon:       group
