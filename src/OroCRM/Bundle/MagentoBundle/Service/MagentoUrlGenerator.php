@@ -79,14 +79,6 @@ class MagentoUrlGenerator
     }
 
     /**
-     * @return bool
-     */
-    public function isChannel()
-    {
-        return !empty($this->channel);
-    }
-
-    /**
      * @return string
      */
     public function getError()
@@ -166,7 +158,7 @@ class MagentoUrlGenerator
     public function getAdminUrl()
     {
         $url = false;
-        if ($this->isChannel()) {
+        if (!empty($this->channel)) {
             $transport = $this->getChannel()->getTransport();
             if (!empty($transport)) {
                 $url = $transport->getAdminUrl();
