@@ -1,0 +1,9 @@
+placeholders:
+    quick_launchpad_left_column:
+        items:
+            accounts_launchpad:
+                order: 10
+
+items:
+    accounts_launchpad:
+        template: OroCRMAccountBundle:Dashboard:accountsLaunchpad.html.twig
