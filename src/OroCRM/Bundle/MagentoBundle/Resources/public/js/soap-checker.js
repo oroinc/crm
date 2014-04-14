@@ -101,7 +101,6 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
             if (success && this.options.websitesModificationAllowed !== false && res.websites) {
                 var $listEl = $(this.options.websitesListEl),
                     $websiteSelectEl = $(this.options.websiteSelectEl);
-
                 $listEl.val(JSON.stringify(res.websites));
                 $websiteSelectEl.empty();
                 _.each(res.websites, function (website) {
@@ -109,16 +108,12 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
                 });
                 $websiteSelectEl.trigger('change');
             }
-
             if (success) {
-
                 var $isExtensionInstalledEl = $(this.options.isExtensionInstalledEl),
                     $adminUrlEl = $(this.options.adminUrlEl);
-
                 $isExtensionInstalledEl.val(res.isExtensionInstalled || false ? 1 : 0);
                 $adminUrlEl.val((res.adminUrl) ? res.adminUrl : '');
             }
-
             if (success && res.connectors) {
                 var connectors = res.connectors,
                     $form = this.$el.parents('form'),
@@ -126,11 +121,9 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
                     i = 0,
                     checkedBoxes = $connectorsEl.find(':checked'),
                     checked = {};
-
                 _.each(checkedBoxes, function(el) {
                     checked[$(el).val()] = 'checked';
                 });
-
                 $connectorsEl.empty();
                 for (var key in connectors) {
                     if (connectors.hasOwnProperty(key)) {
@@ -146,7 +139,6 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
                     }
                 }
             }
-
             this.renderResult(success ? 'success' : 'error', message);
         },
 

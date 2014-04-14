@@ -22,9 +22,6 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
  */
 class OrderPlaceController extends Controller
 {
-    const FLOW_NAME       = 'oro_sales_new_order';
-    const GATEWAY_ROUTE   = 'oro_gateway/do';
-    const NEW_ORDER_ROUTE = 'oro_sales/newOrder';
     const SYNC_SUCCESS    = 'success';
     const SYNC_ERROR      = 'error';
 
