@@ -40,7 +40,7 @@ class Tasks extends AbstractPageFilteredGrid
      */
     public function open($entityData = array())
     {
-        $task = $this->getEntity($entityData);
+        $task = $this->getEntity($entityData, 1);
         $task->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
