@@ -21,7 +21,7 @@ class OrderRepository extends EntityRepository
     public function getLastPlacedOrderBy($item, $field)
     {
         if (!($item instanceof Cart) && !($item instanceof Customer)) {
-            return new InvalidEntityException();
+            throw new InvalidEntityException();
         }
         $qb = $this->createQueryBuilder('o');
         $qb->where('o.' . $field . ' = :item');
