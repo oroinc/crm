@@ -80,7 +80,7 @@ class OrderPlaceController extends Controller
                 ['filters' => ['quote_id' => $cart->getOriginId()]]
             );
 
-            $order = $em->getRepository('OroCRMMagentoBundle:Order')->getLastPlacedOrderByCart($cart);
+            $order = $em->getRepository('OroCRMMagentoBundle:Order')->getLastPlacedOrderBy($cart, 'cart');
 
             if (null === $order) {
                 throw new \LogicException('Unable to load order.');
@@ -96,7 +96,7 @@ class OrderPlaceController extends Controller
             $cart = $em->merge($cart);
             $em->flush();
             $redirectUrl = $this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]);
-            $message = $this->get('translator')->trans('orocrm.magento.controller.synchronization_error');
+            $message = $this->get('translator')->trans('orocrm.magento.controller.sync_error_with_magento');
             $status = self::SYNC_ERROR;
         }
 
@@ -160,10 +160,9 @@ class OrderPlaceController extends Controller
             $status = self::SYNC_SUCCESS;
         } catch (\Exception $e) {
             $redirectUrl = $this->generateUrl('orocrm_magento_customer_view', ['id' => $customer->getId()]);
-            $message = $this->get('translator')->trans('orocrm.magento.controller.synchronization_error');
+            $message = $this->get('translator')->trans('orocrm.magento.controller.sync_error_with_magento');
             $status = self::SYNC_ERROR;
         }
-        #return $this->redirect($redirectUrl);
         return new JsonResponse(
             [
                 'statusType' => $status,

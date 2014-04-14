@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Service\Provider;
 
 use OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator;
@@ -7,7 +8,7 @@ use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Symfony\Component\Routing\Router
+     * @var Router
      */
     private $router;
 
@@ -56,10 +57,11 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testConstruct()
     {
-        $this->assertFalse($this->urlGenerator->getChannel());
-        $this->assertFalse($this->urlGenerator->getError());
-        $this->assertFalse($this->urlGenerator->getFlowName());
-        $this->assertFalse($this->urlGenerator->getSourceUrl());
+        $cleanStr = '';
+        $this->assertNull($this->urlGenerator->getChannel());
+        $this->assertEquals($cleanStr, $this->urlGenerator->getError());
+        $this->assertEquals($cleanStr, $this->urlGenerator->getFlowName());
+        $this->assertEquals($cleanStr, $this->urlGenerator->getSourceUrl());
         $this->assertSame($this->router, $this->urlGenerator->getRouter());
     }
 
@@ -192,7 +194,7 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $urlGenerator = new MagentoUrlGenerator($this->router);
         $urlGenerator->setChannel($this->channel);
         $urlGenerator->setFlowName($flowName);
-        $urlGenerator->setorigin($origin);
+        $urlGenerator->setOrigin($origin);
         $urlGenerator->generate($id, $successRoute, $errorRoute);
 
         $this->assertEquals(

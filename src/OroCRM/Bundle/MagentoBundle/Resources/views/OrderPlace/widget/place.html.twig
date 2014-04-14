@@ -12,46 +12,55 @@
                         modalWidgetAlias = 'transaction-dialog',
                         messageTemplate = _.template("<%= message %> <a href=\"<%= url %>\" class=\"order-link\"><%= urlLabel %></a> ");
 
-                    widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
-                        widget.getWidget().dialog('maximize');
-                    });
-
+                    widgetManager.getWidgetInstanceByAlias(
+                        modalWidgetAlias,
+                        function (widget) {
+                            widget.getWidget().dialog('maximize');
+                        }
+                    );
+                    var showMessage = function(navigation, data) {
+                        var message = data.message;
+                        if (data.statusType == 'success') {
+                            message = messageTemplate(
+                                {
+                                    message: data.message,
+                                    url: data.url,
+                                    urlLabel: __('orocrm.magento.view_order')
+                                }
+                            );
+                        }
+                        messenger.notificationFlashMessage(data.statusType, message);
+                        navigation.processClicks($('.order-link'));
+                    };
+                    var chooseMessage = function (Navigation, data) {
+                        var navigation = Navigation.getInstance();
+                        if (navigation.loadingMask.$el.is(':visible')) {
+                            mediator.once('hash_navigation_request:complete', showMessage(navigation, data));
+                        } else {
+                            showMessage(navigation, data);
+                        }
+                    }
                     $frame.load(function () {
                         $frame.css({'height': '100%', 'width': '100%'});
-                        widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
-                            widget.trigger('externalContentLoaded')
-                        });
+                        widgetManager.getWidgetInstance(
+                            {{ app.request.get('_wid')|json_encode|raw }},
+                            function(widget) {
+                                widget.trigger('externalContentLoaded')
+                            }
+                        );
                     });
-
                     ORO_ORDER_EMBED_API.success = function () {
                         messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_synchronization'));
                         widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
                             widget.trigger('formSave');
-
                             {% if cartId is defined %}
                             $('#transition-b2c_flow_abandoned_shopping_cart-place_order').one('transitions_success', function() {
                                 {% set syncURL = path('orocrm_magento_orderplace_sync', {id: cartId}) %}
                                 $.ajax({
                                     dataType: 'json',
-                                    url: {{ syncURL|json_encode|raw }},
+                                    url: {{ syncURL|json_encode|raw}},
                                     success: function(data) {
-                                        var navigation = Navigation.getInstance(),
-                                            showMessage = function() {
-                                                var message = data.message;
-                                                if (data.statusType == 'success') {
-                                                    message = messageTemplate({message: data.message, url: data.url, urlLabel: __('orocrm.magento.view_order')});
-                                                }
-                                                messenger.notificationFlashMessage(
-                                                    data.statusType,
-                                                    message
-                                                );
-                                                navigation.processClicks($('.order-link'));
-                                            };
-                                        if (navigation.loadingMask.$el.is(':visible')) {
-                                            mediator.once('hash_navigation_request:complete', showMessage);
-                                        } else {
-                                            showMessage();
-                                        }
+                                        chooseMessage(Navigation, data);
                                     }
                                 });
                             });
@@ -63,26 +72,8 @@
                                     beforeSend: function() {
                                         widget.remove();
                                     },
-                                    success: function(data ) {
-                                        //messenger.notificationFlashMessage(data.statusType, data.message);
-                                        var navigation = Navigation.getInstance(),
-                                                showMessage = function() {
-                                                    var message = data.message;
-                                                    if (data.statusType == 'success') {
-                                                        message = messageTemplate({message: data.message, url: data.url, urlLabel: __('orocrm.magento.view_order')});
-                                                    }
-                                                    messenger.notificationFlashMessage(
-                                                            data.statusType,
-                                                            message
-                                                    );
-                                                    navigation.processClicks($('.order-link'));
-                                                };
-                                        if (navigation.loadingMask.$el.is(':visible')) {
-                                            mediator.once('hash_navigation_request:complete', showMessage);
-                                        } else {
-                                            showMessage();
-                                        }
-
+                                    success: function(data) {
+                                        chooseMessage(Navigation, data);
                                     },
                                     error: function() {
                                         messenger.notificationFlashMessage(
@@ -96,7 +87,6 @@
                     };
                     ORO_ORDER_EMBED_API.error = function () {
                         messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));
-
                         widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
                             widget.remove();
                         });
@@ -108,7 +98,6 @@
                 require(['oroui/js/widget-manager', 'oroui/js/messenger'],
                 function (widgetManager, messenger) {
                     messenger.notificationFlashMessage('error', {{ error|json_encode|raw }});
-
                     widgetManager.getWidgetInstanceByAlias('transaction-dialog', function (widget) {
                         widget.remove();
                     });
