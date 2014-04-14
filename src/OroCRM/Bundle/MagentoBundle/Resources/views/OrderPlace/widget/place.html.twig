@@ -54,6 +54,7 @@
                         messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_synchronization'));
                         widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
                             widget.trigger('formSave');
+                            
                             {% if cartId is defined %}
                             $('#transition-b2c_flow_abandoned_shopping_cart-place_order').one('transitions_success', function() {
                                 {% set syncURL = path('orocrm_magento_orderplace_sync', {id: cartId}) %}
@@ -73,6 +74,7 @@
                                                 );
                                                 navigation.processClicks($('.order-link'));
                                             };
+
                                         if (navigation.loadingMask.$el.is(':visible')) {
                                             mediator.once('hash_navigation_request:complete', showMessage);
                                         } else {
