@@ -335,7 +335,7 @@ orocrm:
         menu.web_customers: Web Customers
         controller:
             transport_not_configure: Unable to handle your request. Invalid channel configuration detected.
-            synchronization_error:    Unable to synchronize from remote.
+            synchronization_error:    Synchronization with remote server failed, please try to re-sync. If the problem persists, please contact your Administrator.
             synchronization_success:  Data successfuly synchronized.
             synchronization_failed_status: Cart data is not up to date
         exception:
