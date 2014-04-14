@@ -1,5 +1,5 @@
 title:     "Task list"
-iCss:      "icon-list-alt"
+iconClass: "icon-list-alt"
 module:    "orocrm/sidebar/widget/assigned_tasks"
 placement: "both"
 cssClass:  "sidebar-widget-assigned-tasks"
