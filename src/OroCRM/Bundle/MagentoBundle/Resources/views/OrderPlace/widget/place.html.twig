@@ -18,28 +18,6 @@
                             widget.getWidget().dialog('maximize');
                         }
                     );
-                    var showMessage = function(navigation, data) {
-                        var message = data.message;
-                        if (data.statusType == 'success') {
-                            message = messageTemplate(
-                                {
-                                    message: data.message,
-                                    url: data.url,
-                                    urlLabel: __('orocrm.magento.view_order')
-                                }
-                            );
-                        }
-                        messenger.notificationFlashMessage(data.statusType, message);
-                        navigation.processClicks($('.order-link'));
-                    };
-                    var chooseMessage = function (Navigation, data) {
-                        var navigation = Navigation.getInstance();
-                        if (navigation.loadingMask.$el.is(':visible')) {
-                            mediator.once('hash_navigation_request:complete', showMessage(navigation, data));
-                        } else {
-                            showMessage(navigation, data);
-                        }
-                    }
                     $frame.load(function () {
                         $frame.css({'height': '100%', 'width': '100%'});
                         widgetManager.getWidgetInstance(
@@ -50,6 +28,28 @@
                         );
                     });
                     ORO_ORDER_EMBED_API.success = function () {
+                        var showMessage = function(navigation, data) {
+                            var message = data.message;
+                            if (data.statusType == 'success') {
+                                message = messageTemplate(
+                                        {
+                                            message: data.message,
+                                            url: data.url,
+                                            urlLabel: __('orocrm.magento.view_order')
+                                        }
+                                );
+                            }
+                            messenger.notificationFlashMessage(data.statusType, message);
+                            navigation.processClicks($('.order-link'));
+                        };
+                        var chooseMessage = function (Navigation, data, mediator) {
+                            var navigation = Navigation.getInstance();
+                            if (navigation.loadingMask.$el.is(':visible')) {
+                                mediator.once('hash_navigation_request:complete', showMessage(navigation, data));
+                            } else {
+                                showMessage(navigation, data);
+                            }
+                        };
                         messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_synchronization'));
                         widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
                             widget.trigger('formSave');
@@ -60,7 +60,23 @@
                                     dataType: 'json',
                                     url: {{ syncURL|json_encode|raw}},
                                     success: function(data) {
-                                        chooseMessage(Navigation, data);
+                                        var navigation = Navigation.getInstance(),
+                                            showMessage = function() {
+                                                var message = data.message;
+                                                if (data.statusType == 'success') {
+                                                    message = messageTemplate({message: data.message, url: data.url, urlLabel: __('orocrm.magento.view_order')});
+                                                }
+                                                messenger.notificationFlashMessage(
+                                                        data.statusType,
+                                                        message
+                                                );
+                                                navigation.processClicks($('.order-link'));
+                                            };
+                                        if (navigation.loadingMask.$el.is(':visible')) {
+                                            mediator.once('hash_navigation_request:complete', showMessage);
+                                        } else {
+                                            showMessage();
+                                        }
                                     }
                                 });
                             });
