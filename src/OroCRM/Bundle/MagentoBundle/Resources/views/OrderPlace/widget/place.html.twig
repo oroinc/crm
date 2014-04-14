@@ -44,6 +44,7 @@
                         };
                         var chooseMessage = function (Navigation, data, mediator) {
                             var navigation = Navigation.getInstance();
+
                             if (navigation.loadingMask.$el.is(':visible')) {
                                 mediator.once('hash_navigation_request:complete', showMessage(navigation, data));
                             } else {
