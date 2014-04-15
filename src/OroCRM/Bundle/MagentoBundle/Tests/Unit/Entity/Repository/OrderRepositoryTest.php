@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity\Repository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
+use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
@@ -39,8 +41,12 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider dataProvider()
+     *
+     * @param string $fields
+     * @param Cart|Customer $item
+     * @param bool $isException
      */
-    public function testGetLastPlacedOrderBy($fields, $item)
+    public function testGetLastPlacedOrderBy($fields, $item, $isException)
     {
         $order = new Order();
 
@@ -48,40 +54,47 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->setMethods(['getOneOrNullResult'])
             ->getMockForAbstractClass();
 
-        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->setMethods(['setMaxResults', 'orderBy', 'where', 'setParameter', 'getQuery', 'select', 'from'])
-            ->getMock();
+        if (!$isException) {
+            $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+                ->disableOriginalConstructor()
+                ->setMethods(['setMaxResults', 'orderBy', 'where', 'setParameter', 'getQuery', 'select', 'from'])
+                ->getMock();
 
-        $queryBuilder->expects($this->once())->method('select')->with('o')
-            ->will($this->returnSelf());
-        $queryBuilder->expects($this->once())->method('from')->with(self::ENTITY_NAME, 'o')
-            ->will($this->returnSelf());
-        $queryBuilder->expects($this->once())->method('where')->with('o.'.$fields.' = :item')
-            ->will($this->returnSelf());
-        $queryBuilder->expects($this->once())->method('setParameter')->with('item', $item)
-            ->will($this->returnSelf());
-        $queryBuilder->expects($this->once())->method('orderBy')->with('o.updatedAt', 'DESC')
-            ->will($this->returnSelf());
-        $queryBuilder->expects($this->once())->method('setMaxResults')->with(1)
-            ->will($this->returnSelf());
-        $queryBuilder->expects($this->once())->method('getQuery')
-            ->will($this->returnValue($query));
+            $queryBuilder->expects($this->once())->method('select')->with('o')
+                ->will($this->returnSelf());
+            $queryBuilder->expects($this->once())->method('from')->with(self::ENTITY_NAME, 'o')
+                ->will($this->returnSelf());
+            $queryBuilder->expects($this->once())->method('where')->with('o.'.$fields.' = :item')
+                ->will($this->returnSelf());
+            $queryBuilder->expects($this->once())->method('setParameter')->with('item', $item)
+                ->will($this->returnSelf());
+            $queryBuilder->expects($this->once())->method('orderBy')->with('o.updatedAt', 'DESC')
+                ->will($this->returnSelf());
+            $queryBuilder->expects($this->once())->method('setMaxResults')->with(1)
+                ->will($this->returnSelf());
+            $queryBuilder->expects($this->once())->method('getQuery')
+                ->will($this->returnValue($query));
 
-        $this->em->expects($this->once())->method('createQueryBuilder')
-            ->will($this->returnValue($queryBuilder));
+            $this->em->expects($this->once())->method('createQueryBuilder')
+                ->will($this->returnValue($queryBuilder));
 
-        $query->expects($this->once())->method('getOneOrNullResult')->will($this->returnValue($order));
-
+            $query->expects($this->once())->method('getOneOrNullResult')->will($this->returnValue($order));
+        } else {
+            $query
+                ->expects($this->any())
+                ->method('getOneOrNullResult')
+                ->will($this->throwException(new InvalidEntityException()));
+        }
         $result = $this->repository->getLastPlacedOrderBy($item, $fields);
+
         $this->assertSame($order, $result);
     }
 
     public function dataProvider()
     {
         return [
-            ['cart', new Cart()],
-            ['customer', new Customer()],
+            ['cart', new Cart(), false],
+            ['customer', new Customer(), false],
         ];
     }
 }

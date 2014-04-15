@@ -32,17 +32,13 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
                         ->disableOriginalConstructor()
                         ->getMock();
-
         $this->urlGenerator = new MagentoUrlGenerator($this->router);
-
         $this->channel = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->transport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
             ->disableOriginalConstructor()
             ->getMock();
-
     }
 
     public function tearDown()
@@ -77,7 +73,6 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         if ($value !== null) {
             call_user_func_array(array($this->urlGenerator, 'set' . ucfirst($property)), array($value));
         }
-
         $this->assertEquals(
             $expected,
             call_user_func_array(array($this->urlGenerator, 'get' . ucfirst($property)), array())
@@ -122,16 +117,13 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue($url)
             );
-
         $this->channel
             ->expects($this->once())
             ->method('getTransport')
             ->will(
                 $this->returnValue($this->transport)
             );
-
         $this->urlGenerator->setChannel($this->channel);
-
         $this->assertEquals(
             $url,
             $this->urlGenerator->getAdminUrl()
@@ -178,25 +170,21 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->transport->expects($this->once())->method('getAdminUrl')->will($this->returnValue($adminUrl));
         $this->channel->expects($this->once())->method('getTransport')->will($this->returnValue($this->transport));
-
         $this->router
             ->expects($this->at(0))
             ->method('generate')
             ->with($this->equalTo($successRoute))
             ->will($this->returnValue($successUrl));
-
         $this->router
             ->expects($this->at(1))
             ->method('generate')
             ->with($this->equalTo($errorRoute))
             ->will($this->returnValue($errorUrl));
-
         $urlGenerator = new MagentoUrlGenerator($this->router);
         $urlGenerator->setChannel($this->channel);
         $urlGenerator->setFlowName($flowName);
         $urlGenerator->setOrigin($origin);
         $urlGenerator->generate($id, $successRoute, $errorRoute);
-
         $this->assertEquals(
             $result,
             $urlGenerator->getSourceUrl()
