@@ -120,8 +120,8 @@ datagrid:
                     - c.updatedAt
                     - cstatus.label as statusLabel
                     - step.label as stepLabel
-                    - adress.regionText as regionName
                     - country.name as countryName
+                    - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                 from:
                     - { table: %orocrm_magento.cart.entity.class% , alias: c }
                 join:
@@ -130,8 +130,9 @@ datagrid:
                         - { join: c.channel, alias: ch }
                         - { join: c.status, alias: cstatus }
                         - { join: c.workflowStep, alias: step }
-                        - { join: c.billingAddress, alias: adress }
-                        - { join: adress.country, alias: country }
+                        - { join: c.billingAddress, alias: address }
+                        - { join: address.country, alias: country }
+                        - { join: address.region, alias: region }
                 where:
                     and:
                         - c.channel = :channelId
