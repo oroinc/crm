@@ -61,7 +61,8 @@ class CartTest extends AbstractEntityTestCase
             'billingAddress'    => array('billingAddress', $testBillingAddress, $testBillingAddress),
             'customer'          => array('customer', $testCustomer, $testCustomer),
             'cartItems'         => array('cartItems', $testItemsCollection, $testItemsCollection),
-            'store'             => array('store', $testStore, $testStore)
+            'store'             => array('store', $testStore, $testStore),
+            'statusMessage'     => array('statusMessage', 'some message', 'some message')
         );
     }
 }

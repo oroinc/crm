@@ -36,7 +36,6 @@ class CartStrategy extends BaseStrategy
             ['originId' => $newEntity->getOriginId(), 'channel' => $newEntity->getChannel()],
             $newEntity
         );
-
         if ($existingEntity) {
             $this->strategyHelper->importEntity(
                 $existingEntity,
@@ -53,8 +52,9 @@ class CartStrategy extends BaseStrategy
                     'workflowStep'
                 ]
             );
+            $this->removeErrorMessage($existingEntity);
         } else {
-            if (!$newEntity->getGrandTotal()) {
+            if (!$newEntity->getItemsCount()) {
                 // newly created cart without items should be skipped
                 return false;
             } elseif (!($newEntity->getBillingAddress() || $newEntity->getEmail())) {
@@ -65,13 +65,11 @@ class CartStrategy extends BaseStrategy
         }
 
         $this->updateCartStatus($existingEntity, $newEntity->getStatus());
-
         if (!$existingEntity->getStore() || !$existingEntity->getStore()->getId()) {
             $existingEntity->setStore(
                 $this->storeStrategy->process($newEntity->getStore())
             );
         }
-
         $newEntity->getCustomer()->setChannel($newEntity->getChannel());
         $this->updateCustomer($existingEntity, $newEntity->getCustomer())
             ->updateAddresses($existingEntity, $newEntity)
@@ -222,5 +220,16 @@ class CartStrategy extends BaseStrategy
             $status->getName()
         );
         $existingEntity->setStatus($status);
+    }
+
+    /**
+     * @param Cart $existingEntity
+     *
+     * @return $this
+     */
+    protected function removeErrorMessage(Cart $existingEntity)
+    {
+        $existingEntity->setStatusMessage(null);
+        return $this;
     }
 }

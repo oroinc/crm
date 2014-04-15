@@ -90,4 +90,14 @@ class CustomerController extends Controller
     {
         return array('customer' => $customer, 'channel' => $channel);
     }
+
+    /**
+     * @Route("/order/{id}", name="orocrm_magento_customer_orderplace", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_customer_view")
+     * @Template
+     */
+    public function placeOrderAction(Customer $customer)
+    {
+        return ['entity' => $customer];
+    }
 }

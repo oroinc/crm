@@ -22,7 +22,7 @@
 }
 #magento-without-border-tabs{
     min-width: 595px;
-    padding-left: 0px;
+    padding-left: 0;
 }
 
 #magento-without-border-tabs .oro-tabs .tab-content{
@@ -38,4 +38,42 @@
 #magento-without-border-tabs .oro-tabs .nav-tabs > li:first-child > a:hover,
 #magento-without-border-tabs .oro-tabs .nav-tabs > li:first-child > a:focus {
     border-left: none;
+}
+
+.mess-pos {
+    margin-left: 10px;
+}
+
+.place-order-transaction-dialog {
+    /* allow to be scalled by widget content */
+    height: auto!important;
+}
+
+.ui-dialog-minimized.place-order-transaction-dialog {
+    min-width: 0;
+    min-height: 0;
+}
+
+/* fix FF block height */
+.place-order-transaction-dialog .form-dialog,
+.place-order-transaction-dialog .form-dialog > div,
+.place-order-transaction-dialog .form-dialog > div > div,
+.place-order-transaction-dialog .form-dialog > div > div > div {
+    height: 100%;
+}
+
+.place-order-transaction-dialog .ui-dialog-content {
+    /* prevent JS resizing */
+    width: 100%!important;
+    overflow: hidden;
+    padding: 0;
+}
+
+.place-order-transaction-dialog .ui-dialog-content .widget-content {
+    height: 100%;
+}
+
+.place-order-transaction-dialog .ui-dialog-buttonpane {
+    /* hide empty button pane */
+    display: none;
 }
