@@ -9,6 +9,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 
 use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
+use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
@@ -55,6 +56,9 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
 
     /** @var bool */
     protected $isWsiMode = false;
+
+    /** @var string */
+    protected $adminUrl;
 
     public function __construct(Mcrypt $encoder)
     {
@@ -112,15 +116,45 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function isExtensionInstalled()
     {
         if (null === $this->isExtensionInstalled) {
-            try {
-                $isExtensionInstalled       = $this->call(self::ACTION_PING);
-                $this->isExtensionInstalled = !empty($isExtensionInstalled->version);
-            } catch (\Exception $e) {
-                $this->isExtensionInstalled = false;
-            }
+            $this->pingMagento();
         }
 
         return $this->isExtensionInstalled;
+    }
+
+    /**
+     * Pings magento and fill $isExtensionInstalled and $adminUrl
+     *
+     * @return $this
+     */
+    protected function pingMagento()
+    {
+        if (null === $this->isExtensionInstalled  && null === $this->adminUrl) {
+            try {
+                $magentoPing                = $this->call(self::ACTION_PING);
+                $this->isExtensionInstalled = !empty($magentoPing->version);
+                $this->adminUrl             = !empty($magentoPing->admin_url)
+                                                    ? $magentoPing->admin_url
+                                                    : false;
+
+            } catch (\Exception $e) {
+                $this->isExtensionInstalled = false;
+                $this->adminUrl = false;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAdminUrl()
+    {
+        if (null === $this->adminUrl) {
+            $this->pingMagento();
+        }
+        return $this->adminUrl;
     }
 
     /**
@@ -146,7 +180,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
             return new CartsBridgeIterator($this, $this->settings->all());
         }
 
-        throw new \LogicException('Could not retrieve carts via SOAP with out installed Oro Bridge module');
+        throw new ExtensionRequiredException();
     }
 
     /**

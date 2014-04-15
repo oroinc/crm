@@ -7,12 +7,16 @@ parameters:
     orocrm_magento.provider.cart_expiration_processor.class:                OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor
 
     # forms
+    orocrm_magento.form.type.order_place.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\OrderPlaceType
     orocrm_magento.form.type.soap_transport_setting.class:                  OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
     orocrm_magento.form.subscriber.soap_transport_setting.class:            OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
 
     # event listeners
     orocrm_magento.event_listener.navigation.class:                         OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener
     orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
+
+    # generator
+    orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
 
 services:
     orocrm_magento.transport.soap_transport:
@@ -31,7 +35,7 @@ services:
     orocrm_magento.provider.cart_expiration_processor:
         class: %orocrm_magento.provider.cart_expiration_processor.class%
         arguments:
-            - @oro_integration.manager.types_registry.link
+            - @oro_integration.provider.connector_context_mediator
             - @doctrine.orm.entity_manager
 
     # forms
@@ -48,6 +52,11 @@ services:
             - @oro_integration.manager.types_registry
         tags:
             - { name: form.type, alias: orocrm_magento_soap_transport_setting_form_type }
+
+    orocrm_magento.form.type.order_place:
+        class: %orocrm_magento.form.type.order_place.class%
+        tags:
+            - { name: form.type, alias: orocrm_magento_order_place_form_type }
 
     # event listeners
     orocrm_magento.event_listener.navigation:
@@ -95,3 +104,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-cartitem-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-orderitem-grid, method: onBuildAfter }
+
+    orocrm_magento.service.magento_url_generator:
+        class: %orocrm_magento.magento_url_generator.class%
+        arguments: [@router]
+        scope: prototype

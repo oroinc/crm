@@ -232,6 +232,13 @@ class Cart extends BaseCart
     protected $workflowStep;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="status_message", type="string", length=255, nullable=true)
+     */
+    protected $statusMessage;
+
+    /**
      * @param WorkflowItem $workflowItem
      *
      * @return Cart
@@ -764,5 +771,21 @@ class Cart extends BaseCart
     public function doPreUpdate()
     {
         $this->updateNames();
+    }
+
+    /**
+     * @param string $statusMessage
+     */
+    public function setStatusMessage($statusMessage)
+    {
+        $this->statusMessage = $statusMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusMessage()
+    {
+        return $this->statusMessage;
     }
 }
