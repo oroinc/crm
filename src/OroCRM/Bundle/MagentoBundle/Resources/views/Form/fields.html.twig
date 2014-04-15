@@ -14,7 +14,8 @@
                         websitesListEl:              '#{{ form.parent.websites.vars.id }}',
                         websitesModificationAllowed: {{ modificationAreAllowed|json_encode|raw }},
                         isExtensionInstalledEl:      '#{{ form.parent.isExtensionInstalled.vars.id }}',
-                        connectorsEl:                '#{{ form.parent.parent.connectors.vars.id }}'
+                        connectorsEl:                '#{{ form.parent.parent.connectors.vars.id }}',
+                        adminUrlEl:                  '#{{ form.parent.adminUrl.vars.id }}'
                     });
                 });
             </script>
@@ -44,7 +45,8 @@
                                 websiteSelectEl:           '#{{ form.vars.id }}',
                                 websitesListEl:            '#{{ form.parent.websites.vars.id }}',
                                 isExtensionInstalledEl:    '#{{ form.parent.isExtensionInstalled.vars.id }}',
-                                connectorsEl:              '#{{ form.parent.parent.connectors.vars.id }}'
+                                connectorsEl:              '#{{ form.parent.parent.connectors.vars.id }}',
+                                adminUrlEl:                '#{{ form.parent.adminUrl.vars.id }}'
                             });
                         });
                     </script>
@@ -56,3 +58,22 @@
     {% endspaceless %}
 {% endblock %}
 
+{% block orocrm_magento_order_place_form_type_row %}
+    {% set cartId = form.cart_id.vars.data %}
+    {{ oro_widget_render({
+        'widgetType': 'block',
+        'alias': 'order-place-widget',
+        'url': path('orocrm_magento_orderplace_cart', {id: cartId}),
+        'loadingMaskEnabled': true
+    }) }}
+
+    <script type="text/javascript">
+        require(['underscore', 'oroui/js/widget-manager'], function(_, widgetManager) {
+            widgetManager.getWidgetInstanceByAlias('order-place-widget', function(widget) {
+                widget._showLoading();
+
+                widget.once('externalContentLoaded', _.bind(widget._hideLoading, widget));
+            });
+        });
+    </script>
+{% endblock %}

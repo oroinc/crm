@@ -40,12 +40,16 @@ class WebsiteCollectionToStringTest extends \PHPUnit_Framework_TestCase
         return [
             'empty data'                => [new ResultRecord(['websites' => null]), ''],
             'websites collection given' => [
-                new ResultRecord([
-                    'websites' => new ArrayCollection([
+                new ResultRecord(
+                    [
+                        'websites' => new ArrayCollection(
+                            [
                             $websiteMock1,
                             $websiteMock2
-                        ])
-                ]),
+                            ]
+                        )
+                    ]
+                ),
                 'website 1, website 2'
             ],
         ];

@@ -38,7 +38,7 @@ class DashboardController extends Controller
 
         $result = array_merge(
             ['data' => $data],
-            $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
+            $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget)
         );
 
         return $result;
@@ -60,7 +60,7 @@ class DashboardController extends Controller
                         ->getRepository('OroCRMSalesBundle:Opportunity')
                         ->getOpportunitiesByStatus($this->get('oro_security.acl_helper'))
             ],
-            $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
+            $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget)
         );
     }
 
@@ -100,7 +100,7 @@ class DashboardController extends Controller
                 $customStepCalculations,
                 $this->get('oro_security.acl_helper')
             ),
-            $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
+            $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget)
         );
     }
 }
