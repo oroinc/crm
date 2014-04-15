@@ -63,7 +63,6 @@ services:
         class: %orocrm_magento.event_listener.navigation.class%
         arguments:
             - @doctrine.orm.entity_manager
-            - @router
         tags:
             - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
 
