@@ -42,12 +42,12 @@ class SoapController extends Controller
         $transportEntity      = $form->getData();
         $websites             = $allowedTypesChoices = [];
         $isExtensionInstalled = false;
+        $adminUrl             = false;
         try {
             $transport->init($transportEntity);
             $websites             = $this->formatWebsiteChoices($transport->getWebsites());
-
             $isExtensionInstalled = $transport->isExtensionInstalled();
-
+            $adminUrl             = $transport->getAdminUrl();
             $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')
                 ->getAvailableConnectorsTypesChoiceList(
                     'magento',
@@ -64,13 +64,13 @@ class SoapController extends Controller
             $result = false;
             $this->get('logger')->critical(sprintf('MageCheck error: %s: %s', $e->getCode(), $e->getMessage()));
         }
-
         return new JsonResponse(
             [
                 'success'              => $result,
                 'websites'             => $websites,
                 'isExtensionInstalled' => $isExtensionInstalled,
                 'connectors'           => $allowedTypesChoices,
+                'adminUrl'            => $adminUrl,
             ]
         );
     }
