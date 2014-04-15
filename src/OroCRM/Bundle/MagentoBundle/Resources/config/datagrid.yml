@@ -84,6 +84,7 @@ datagrid:
                         field_options:
                             class: OroIntegrationBundle:Channel
                             property: name
+                            query_builder: @orocrm_magento.datagrid_helper->getMagentoChannelsQueryBuilder
                 websiteName:
                     type: entity
                     data_name: cw.id
@@ -140,7 +141,7 @@ datagrid:
                         - { join: c.workflowStep, alias: step }
         columns:
             channelName:
-                label: orocrm.magento.customer.channel.label
+                label: orocrm.magento.cart.channel.label
             originId:
                 label: orocrm.magento.cart.id.label
             firstName:
@@ -479,7 +480,7 @@ datagrid:
                         - { join: o.channel, alias: ch }
         columns:
             channelName:
-                label: orocrm.magento.customer.channel.label
+                label: orocrm.magento.order.channel.label
             incrementId:
                 label: orocrm.magento.order.increment_id.label
             firstName:

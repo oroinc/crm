@@ -14,6 +14,9 @@ parameters:
     orocrm_magento.event_listener.navigation.class:                         OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener
     orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
 
+    # gatagrid helper
+    orocrm_magento.datagrid_helper.class:                                    OroCRM\Bundle\MagentoBundle\Datagrid\MagentoDatagridHelper
+
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -84,3 +87,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-cartitem-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-orderitem-grid, method: onBuildAfter }
+
+    orocrm_magento.datagrid_helper:
+        class: %orocrm_magento.datagrid_helper.class%
