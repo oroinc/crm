@@ -187,7 +187,7 @@ datagrid:
                 statusLabel:          { data_name: cstatus.label }
                 stepLabel:            { data_name: step.label }
                 countryName:          { data_name: country.name }
-                regionName:           { data_name: adress.regionText }
+                regionName:           { data_name: regionName }
             default:
                 updatedAt:  DESC
         filters:
@@ -231,8 +231,7 @@ datagrid:
                     enabled: false
                 countryName:
                     type: entity
-                    data_name: country.name
-                    enabled: false
+                    data_name: address.country
                     options:
                         field_options:
                           class: OroAddressBundle:Country
@@ -240,8 +239,7 @@ datagrid:
                           query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
                 regionName:
                     type: string
-                    data_name: adress.regionText
-                    enabled: false
+                    data_name: regionName
         actions:
             view:
                 type:         navigate
@@ -479,7 +477,8 @@ datagrid:
                     - o.lastName
                     - step.label as stepLabel
                     - customer.email as email
-                    - addressTypes.label as addressName
+                    - country.name as countryName
+                    - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                 from:
                     - { table: %orocrm_magento.order.entity.class%, alias: o }
                 join:
@@ -487,7 +486,9 @@ datagrid:
                         - { join: o.workflowStep, alias: step }
                         - { join: o.customer, alias: customer }
                         - { join: o.addresses, alias: address }
-                        - { join: address.types, alias: addressTypes }
+                        - { join: address.country, alias: country }
+                        - { join: address.types, alias: types }
+                        - { join: address.region, alias: region }
                 where:
                     and:
                         - o.channel = :channelId
@@ -516,10 +517,10 @@ datagrid:
                 label: orocrm.magento.order.status.label
             stepLabel:
                 label: orocrm.magento.order.b2c_flow_order_follow_up.step.label
-
-            addressName:
-                label: orocrm.magento.order.addresses.label
-
+            countryName:
+                label: orocrm.magento.cartaddress.country.label
+            regionName:
+                label: orocrm.magento.cartaddress.region.label
         properties:
             id: ~
             view_link:
@@ -537,6 +538,8 @@ datagrid:
                 stepLabel:              { data_name: step.label }
                 createdAt:              { data_name: o.createdAt }
                 updatedAt:              { data_name: o.updatedAt }
+                countryName:            { data_name: country.name }
+                regionName:             { data_name: regionName }
             default:
                 createdAt:  DESC
         filters:
@@ -576,6 +579,17 @@ datagrid:
                     type:             datetime
                     data_name:        o.updatedAt
                     enabled:          false
+                countryName:
+                    type: entity
+                    data_name: address.country
+                    options:
+                        field_options:
+                          class: OroAddressBundle:Country
+                          property: iso2Code
+                          query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
+                regionName:
+                    type: string
+                    data_name: regionName
         actions:
             view:
                 type:         navigate
