@@ -12,6 +12,15 @@ use Oro\Bundle\WorkflowBundle\Model\Workflow;
 class SalesFunnelRepository extends EntityRepository
 {
     /**
+     * @var array
+     */
+    protected $excludedSteps = [
+        'new_lead',
+        'disqualified_lead',
+        'lost_opportunity',
+    ];
+
+    /**
      * @param \DateTime $dateFrom
      * @param \DateTime $dateTo
      * @param Workflow $workflow
@@ -36,10 +45,12 @@ class SalesFunnelRepository extends EntityRepository
         $regularSteps = array();
         $finalSteps = array();
         foreach ($steps as $step) {
-            if ($step->isFinal()) {
-                $finalSteps[] = $step->getName();
-            } else {
-                $regularSteps[] = $step->getName();
+            if (!in_array($step->getName(), $this->excludedSteps)) {
+                if ($step->isFinal()) {
+                    $finalSteps[] = $step->getName();
+                } else {
+                    $regularSteps[] = $step->getName();
+                }
             }
         }
 
@@ -52,11 +63,13 @@ class SalesFunnelRepository extends EntityRepository
         $finalData = array();
         foreach ($steps as $step) {
             $stepName = $step->getName();
-            $stepLabel = $step->getLabel();
-            if ($step->isFinal()) {
-                $finalData[$stepLabel] = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
-            } else {
-                $regularData[$stepLabel] = isset($regularStepsData[$stepName]) ? $regularStepsData[$stepName] : 0;
+            if (!in_array($stepName, $this->excludedSteps)) {
+                $stepLabel = $step->getLabel();
+                if ($step->isFinal()) {
+                    $finalData[$stepLabel] = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
+                } else {
+                    $regularData[$stepLabel] = isset($regularStepsData[$stepName]) ? $regularStepsData[$stepName] : 0;
+                }
             }
         }
 
