@@ -130,6 +130,8 @@ datagrid:
                     - c.updatedAt
                     - cstatus.label as statusLabel
                     - step.label as stepLabel
+                    - country.name as countryName
+                    - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - ch.name as channelName
                 from:
                     - { table: %orocrm_magento.cart.entity.class% , alias: c }
@@ -139,6 +141,9 @@ datagrid:
                         - { join: c.channel, alias: ch }
                         - { join: c.status, alias: cstatus }
                         - { join: c.workflowStep, alias: step }
+                        - { join: c.billingAddress, alias: address }
+                        - { join: address.country, alias: country }
+                        - { join: address.region, alias: region }
         columns:
             channelName:
                 label: orocrm.magento.cart.channel.label
@@ -169,6 +174,10 @@ datagrid:
                 label: orocrm.magento.datagrid.columns.status
             stepLabel:
                 label: orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
+            countryName:
+                label: orocrm.magento.cartaddress.country.label
+            regionName:
+                label: orocrm.magento.cartaddress.region.label
         properties:
             id: ~
             view_link:
@@ -188,6 +197,8 @@ datagrid:
                 updatedAt:            { data_name: c.updatedAt }
                 statusLabel:          { data_name: cstatus.label }
                 stepLabel:            { data_name: step.label }
+                countryName:          { data_name: country.name }
+                regionName:           { data_name: regionName }
             default:
                 updatedAt:  DESC
         filters:
@@ -236,6 +247,17 @@ datagrid:
                     type:      datetime
                     data_name: c.updatedAt
                     enabled: false
+                countryName:
+                    type: entity
+                    data_name: address.country
+                    options:
+                        field_options:
+                          class: OroAddressBundle:Country
+                          property: name
+                          query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                regionName:
+                    type: string
+                    data_name: regionName
         actions:
             view:
                 type:         navigate
