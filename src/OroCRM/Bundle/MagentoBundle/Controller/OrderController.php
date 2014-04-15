@@ -22,13 +22,14 @@ use OroCRM\Bundle\MagentoBundle\Entity\Order;
 class OrderController extends Controller
 {
     /**
-     * @Route("/{id}", name="orocrm_magento_order_index", requirements={"id"="\d+"}))
+     * @Route("", name="orocrm_magento_order_index"))
      * @AclAncestor("orocrm_magento_order_view")
      * @Template
      */
-    public function indexAction(Channel $channel)
+    public function indexAction()
     {
-        return ['channelId' => $channel->getId()];
+        //todo: refactor for all the channels
+        return [];
     }
 
     /**

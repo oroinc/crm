@@ -21,13 +21,14 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 class CartController extends Controller
 {
     /**
-     * @Route("/{id}", name="orocrm_magento_cart_index", requirements={"id"="\d+"}))
+     * @Route("/", name="orocrm_magento_cart_index"))
      * @AclAncestor("orocrm_magento_cart_view")
      * @Template
      */
-    public function indexAction(Channel $channel)
+    public function indexAction()
     {
-        return ['channelId' => $channel->getId()];
+        //todo:refactor for all the channels
+        return [];
     }
 
     /**

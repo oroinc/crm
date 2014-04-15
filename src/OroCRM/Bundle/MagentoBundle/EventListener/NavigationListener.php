@@ -6,8 +6,6 @@ use Doctrine\ORM\EntityManager;
 
 use Knp\Menu\ItemInterface;
 
-use Symfony\Component\Routing\RouterInterface;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
@@ -47,13 +45,12 @@ class NavigationListener
     /** @var EntityManager */
     protected $em;
 
-    /** @var RouterInterface */
-    protected $router;
-
-    public function __construct(EntityManager $em, RouterInterface $router)
+    /**
+     * @param EntityManager $em
+     */
+    public function __construct(EntityManager $em)
     {
-        $this->em     = $em;
-        $this->router = $router;
+        $this->em = $em;
     }
 
     /**
@@ -85,19 +82,13 @@ class NavigationListener
                 if (isset(self::$map[$key])) {
                     /** @var ItemInterface $reportsMenuItem */
                     $salesMenuItem = $event->getMenu()->getChild(self::$map[$key]['parent']);
-                    $child         = $salesMenuItem
-                        ->addChild(self::$map[$key]['prefix'], ['label' => self::$map[$key]['label'], 'uri' => '#']);
-                    foreach ($items as $entry) {
-                        $child->addChild(
-                            implode([self::$map[$key]['prefix'], $entry['id']]),
-                            [
-                                'route'           => self::$map[$key]['route'],
-                                'routeParameters' => ['id' => $entry['id']],
-                                'label'           => $entry['label'],
-                                'extras'          => ['routes' => self::$map[$key]['extra_routes']]
-                            ]
-                        );
-                    }
+                    $salesMenuItem->addChild(
+                        self::$map[$key]['prefix'],
+                        [
+                            'label' => self::$map[$key]['label'],
+                            'route' => self::$map[$key]['route']
+                        ]
+                    );
                 }
             }
         }
