@@ -2,8 +2,9 @@ oro.importexport.import.orocrm_contact.add_or_replace: Add and Replace
 orocrm:
     dashboard:
         my_contacts_activity:
-            title: Recently accessed contacts
-            view_all: View all
+            title:       Recently accessed contacts
+            view_all:    View all
+            description: This widget displays the list of recently accessed contacts
 
     contact:
         menu:

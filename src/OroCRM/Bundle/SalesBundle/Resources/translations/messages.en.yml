@@ -18,6 +18,16 @@ orocrm:
                     hint: Number of 'in progress' items
 
     sales:
+        dashboard:
+            opportunities_by_state:
+                title:       Opportunities by Status
+                description: This widget displays a breakdown of opportunities by status in form of a bar chart.
+            my_sales_flow_b2b_chart:
+                title:       My Sales Flow B2B
+                description: This widget gives you a quick overview of a B2B workflow in form of a funnel chart.
+            opportunities_by_lead_source_chart:
+                title:       Opportunities By Lead Source
+                description: This widget displays a breakdown of opportunities by Lead source in form of a pie chart.
         menu:
             sales_tab.label: Sales
             lead_list.description: List of leads
