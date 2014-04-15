@@ -14,6 +14,8 @@ datagrid:
                     - cg.name as groupName
                     - cw.name as websiteName
                     - ch.name as channelName
+                    - country.name as countryName
+                    - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                 from:
                     - { table: OroCRMMagentoBundle:Customer , alias: c }
                 join:
@@ -21,6 +23,9 @@ datagrid:
                         - { join: c.group, alias: cg }
                         - { join: c.website, alias: cw }
                         - { join: c.channel, alias: ch }
+                        - { join: c.addresses, alias: address }
+                        - { join: address.country, alias: country }
+                        - { join: address.region, alias: region }
         columns:
             firstName:
                 label: orocrm.magento.customer.first_name.label
@@ -34,6 +39,10 @@ datagrid:
                 label: orocrm.magento.customer.channel.label
             websiteName:
                 label: orocrm.magento.customer.website.label
+            countryName:
+                label: orocrm.magento.cartaddress.country.label
+            regionName:
+                label: orocrm.magento.cartaddress.region.label
             createdAt:
                 label: orocrm.magento.customer.created_at.label
                 frontend_type: datetime
@@ -56,6 +65,8 @@ datagrid:
                 channelName: { data_name: ch.name }
                 createdAt:   { data_name: c.createdAt }
                 updatedAt:   { data_name: c.updatedAt }
+                countryName: { data_name: country.name }
+                regionName:  { data_name: address.regionName }
             default:
                 lastName:  ASC
                 firstName: ASC
@@ -92,6 +103,17 @@ datagrid:
                         field_options:
                             class: OroCRMMagentoBundle:Website
                             property: name
+                countryName:
+                    type: entity
+                    data_name: address.country
+                    options:
+                        field_options:
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                regionName:
+                     type: string
+                     data_name: regionName
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt
