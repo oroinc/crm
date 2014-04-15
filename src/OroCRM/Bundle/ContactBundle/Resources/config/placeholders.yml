@@ -7,6 +7,11 @@ placeholders:
         items:
             orocrm_account_action_dropdown_add_contact: ~
 
+    quick_launchpad_right_column:
+        items:
+            leads_launchpad:
+                order: 10
+
 items:
     orocrm_account_action_dropdown_add_contact:
         template: OroCRMContactBundle:Account:action/addContactButton.html.twig
@@ -15,3 +20,6 @@ items:
     orocrm_contact_emails:
         template: OroCRMContactBundle:Contact:contactEmails.html.twig
         attribute_instance_of: [entity, %orocrm_contact.entity.class%]
+
+    contacts_launchpad:
+        template: OroCRMContactBundle:Dashboard:contactsLaunchpad.html.twig
