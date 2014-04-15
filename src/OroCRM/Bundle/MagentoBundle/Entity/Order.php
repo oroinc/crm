@@ -144,7 +144,7 @@ class Order extends BaseOrder
     protected $totalCanceledAmount = 0;
 
     /**
-     * @ORM\OneToOne(targetEntity="Cart", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Cart", cascade={"persist"})
      */
     protected $cart;
 
