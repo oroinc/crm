@@ -70,15 +70,14 @@ class NavigationListener
                 if ($channel->getConnectors()) {
                     foreach ($channel->getConnectors() as $connector) {
                         if (!isset($entries[$connector])) {
-                            $entries[$connector] = [];
+                            $entries[$connector] = true;
                         }
-                        $entries[$connector][] = ['id' => $channel->getId(), 'label' => $channel->getName()];
                     }
                 }
             }
 
             // walk trough prepared array
-            foreach ($entries as $key => $items) {
+            foreach (array_keys($entries) as $key) {
                 if (isset(self::$map[$key])) {
                     /** @var ItemInterface $reportsMenuItem */
                     $salesMenuItem = $event->getMenu()->getChild(self::$map[$key]['parent']);

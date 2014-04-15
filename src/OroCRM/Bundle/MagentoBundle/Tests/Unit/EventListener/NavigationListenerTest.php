@@ -4,8 +4,10 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
 use Knp\Menu\MenuFactory;
 use Knp\Menu\MenuItem;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
+
 use OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener;
 
 class NavigationListenerTest extends \PHPUnit_Framework_TestCase
@@ -15,6 +17,9 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected $listener;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $em;
 
     public function setUp()
@@ -55,7 +60,6 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
         if (!$menuChild) {
             $resultTab = $menu->getChild($menuChild);
             $this->assertTrue($resultTab->hasChildren($menuItem));
-
         }
     }
 
