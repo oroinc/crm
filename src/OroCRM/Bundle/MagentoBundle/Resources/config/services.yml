@@ -19,7 +19,8 @@ parameters:
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
 
     # gatagrid helper
-    orocrm_magento.datagrid_helper.class:                                    OroCRM\Bundle\MagentoBundle\Datagrid\MagentoDatagridHelper
+    orocrm_magento.datagrid_helper.class:                                   OroCRM\Bundle\MagentoBundle\Datagrid\MagentoDatagridHelper
+    orocrm_magento.country.datagrid_helper.class:                           Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
 
 services:
     orocrm_magento.transport.soap_transport:
@@ -104,3 +105,6 @@ services:
 
     orocrm_magento.datagrid_helper:
         class: %orocrm_magento.datagrid_helper.class%
+
+    orocrm_magento.country.datagrid_helper:
+        class: %orocrm_magento.country.datagrid_helper.class%
