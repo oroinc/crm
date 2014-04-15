@@ -75,6 +75,7 @@ orocrm:
             entity_label:        Customer
             entity_plural_label: Customers
             entity_description:  Represent Magento customer
+            create_order:        Create Order
 
             id.label:            Id
             origin_id.label:     Origin Id
@@ -105,6 +106,8 @@ orocrm:
             entity_label:         Shopping Cart
             entity_plural_label:  Shopping Carts
             entity_description:   Represent Magento shopping cart
+
+            refresh_label:             Refresh Data
 
             id.label:                  Cart Id
             origin_id.label:           Origin Id
@@ -215,12 +218,14 @@ orocrm:
             website_id:
                 label:   Website
             is_extension_installed.label:   Is extension installed
+            admin_url.label:                Admin url
 
         order:
             entity_label:        Order
             entity_plural_label: Orders
             entity_description:  Respresent Magento Order
 
+            refresh_label:      Refresh Data
             id.label:           Id
             increment_id.label: "Order #"
             items_qty.label:    Items qty
@@ -333,3 +338,13 @@ orocrm:
             no_customers_exist: No customers exist
 
         menu.web_customers: Web Customers
+        controller:
+            transport_not_configure:       Unable to handle your request. Invalid channel configuration detected.
+            synchronization_error:         Unable to synchronize from remote.
+            sync_error_with_magento:       Synchronization with remote server failed and orders should be re-synced. If the problem persists, please contact your Administrator.
+            synchronization_success:       Data successfuly synchronized.
+            synchronization_failed_status: Cart data is not up to date
+        exception:
+          extension_required: Unable to perform this operation, Oro Bridge extension not found.
+          route_not_found: Route cannot be generated, route not found.
+        ping_site_error: Unable to load form
