@@ -129,6 +129,7 @@ datagrid:
                     - c.updatedAt
                     - cstatus.label as statusLabel
                     - step.label as stepLabel
+                    - ch.name as channelName
                 from:
                     - { table: %orocrm_magento.cart.entity.class% , alias: c }
                 join:
@@ -137,10 +138,9 @@ datagrid:
                         - { join: c.channel, alias: ch }
                         - { join: c.status, alias: cstatus }
                         - { join: c.workflowStep, alias: step }
-                where:
-                    and:
-                        - c.channel = :channelId
         columns:
+            channelName:
+                label: orocrm.magento.customer.channel.label
             originId:
                 label: orocrm.magento.cart.id.label
             firstName:
@@ -181,6 +181,7 @@ datagrid:
                 lastName:             { data_name: c.lastName }
                 email:                { data_name: c.email }
                 itemsQty:             { data_name: c.itemsQty }
+                channelName:          { data_name: ch.name }
                 grandTotal:           { data_name: c.grandTotal }
                 createdAt:            { data_name: c.createdAt }
                 updatedAt:            { data_name: c.updatedAt }
@@ -190,6 +191,13 @@ datagrid:
                 updatedAt:  DESC
         filters:
             columns:
+                channelName:
+                    type: entity
+                    data_name: ch.id
+                    options:
+                        field_options:
+                            class: OroIntegrationBundle:Channel
+                            property: name
                 originId:
                     type: number
                     data_name: c.originId
@@ -461,16 +469,17 @@ datagrid:
                     - o.lastName
                     - step.label as stepLabel
                     - customer.email as email
+                    - ch.name as channelName
                 from:
                     - { table: %orocrm_magento.order.entity.class%, alias: o }
                 join:
                     left:
                         - { join: o.workflowStep, alias: step }
                         - { join: o.customer, alias: customer }
-                where:
-                    and:
-                        - o.channel = :channelId
+                        - { join: o.channel, alias: ch }
         columns:
+            channelName:
+                label: orocrm.magento.customer.channel.label
             incrementId:
                 label: orocrm.magento.order.increment_id.label
             firstName:
@@ -509,6 +518,7 @@ datagrid:
                 email:                  { data_name: customer.email }
                 totalPaidAmount:        { data_name: o.totalPaidAmount }
                 status:                 { data_name: o.status }
+                channelName:            { data_name: ch.name }
                 stepLabel:              { data_name: step.label }
                 createdAt:              { data_name: o.createdAt }
                 updatedAt:              { data_name: o.updatedAt }
@@ -516,6 +526,13 @@ datagrid:
                 createdAt:  DESC
         filters:
             columns:
+                channelName:
+                    type: entity
+                    data_name: ch.id
+                    options:
+                        field_options:
+                            class: OroIntegrationBundle:Channel
+                            property: name
                 incrementId:
                     type:             string
                     data_name:        o.incrementId
