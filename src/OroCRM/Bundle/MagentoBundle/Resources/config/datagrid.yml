@@ -160,14 +160,14 @@ datagrid:
             updatedAt:
                 label: orocrm.magento.cart.updated_at.label
                 frontend_type: datetime
-            statusLabel:
-                label: orocrm.magento.datagrid.columns.status
-            stepLabel:
-                label: orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
             countryName:
                 label: orocrm.magento.cartaddress.country.label
             regionName:
                 label: orocrm.magento.cartaddress.region.label
+            statusLabel:
+                label: orocrm.magento.datagrid.columns.status
+            stepLabel:
+                label: orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
         properties:
             id: ~
             view_link:
@@ -184,10 +184,10 @@ datagrid:
                 grandTotal:           { data_name: c.grandTotal }
                 createdAt:            { data_name: c.createdAt }
                 updatedAt:            { data_name: c.updatedAt }
-                statusLabel:          { data_name: cstatus.label }
-                stepLabel:            { data_name: step.label }
                 countryName:          { data_name: country.name }
                 regionName:           { data_name: regionName }
+                statusLabel:          { data_name: cstatus.label }
+                stepLabel:            { data_name: step.label }
             default:
                 updatedAt:  DESC
         filters:
@@ -207,6 +207,17 @@ datagrid:
                 grandTotal:
                     type: number
                     data_name: c.grandTotal
+                countryName:
+                    type: entity
+                    data_name: address.country
+                    options:
+                        field_options:
+                          class: OroAddressBundle:Country
+                          property: name
+                          query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                regionName:
+                    type: string
+                    data_name: regionName
                 statusLabel:
                     type: entity
                     data_name: c.status
@@ -229,17 +240,6 @@ datagrid:
                     type:      datetime
                     data_name: c.updatedAt
                     enabled: false
-                countryName:
-                    type: entity
-                    data_name: address.country
-                    options:
-                        field_options:
-                          class: OroAddressBundle:Country
-                          property: iso2Code
-                          query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
-                regionName:
-                    type: string
-                    data_name: regionName
         actions:
             view:
                 type:         navigate
@@ -513,14 +513,14 @@ datagrid:
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align: right
-            status:
-                label: orocrm.magento.order.status.label
-            stepLabel:
-                label: orocrm.magento.order.b2c_flow_order_follow_up.step.label
             countryName:
                 label: orocrm.magento.cartaddress.country.label
             regionName:
                 label: orocrm.magento.cartaddress.region.label
+            status:
+                label: orocrm.magento.order.status.label
+            stepLabel:
+                label: orocrm.magento.order.b2c_flow_order_follow_up.step.label
         properties:
             id: ~
             view_link:
@@ -534,12 +534,12 @@ datagrid:
                 lastName:               { data_name: o.lastName }
                 email:                  { data_name: customer.email }
                 totalPaidAmount:        { data_name: o.totalPaidAmount }
+                countryName:            { data_name: country.name }
+                regionName:             { data_name: regionName }
                 status:                 { data_name: o.status }
                 stepLabel:              { data_name: step.label }
                 createdAt:              { data_name: o.createdAt }
                 updatedAt:              { data_name: o.updatedAt }
-                countryName:            { data_name: country.name }
-                regionName:             { data_name: regionName }
             default:
                 createdAt:  DESC
         filters:
@@ -561,6 +561,17 @@ datagrid:
                     data_name:        o.totalPaidAmount
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                countryName:
+                    type: entity
+                    data_name: address.country
+                    options:
+                        field_options:
+                          class: OroAddressBundle:Country
+                          property: name
+                          query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                regionName:
+                    type: string
+                    data_name: regionName
                 status:
                     type:             string
                     data_name:        o.status
@@ -579,17 +590,6 @@ datagrid:
                     type:             datetime
                     data_name:        o.updatedAt
                     enabled:          false
-                countryName:
-                    type: entity
-                    data_name: address.country
-                    options:
-                        field_options:
-                          class: OroAddressBundle:Country
-                          property: iso2Code
-                          query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
-                regionName:
-                    type: string
-                    data_name: regionName
         actions:
             view:
                 type:         navigate
