@@ -22,13 +22,12 @@ use OroCRM\Bundle\MagentoBundle\Entity\Order;
 class OrderController extends Controller
 {
     /**
-     * @Route("", name="orocrm_magento_order_index"))
+     * @Route("/", name="orocrm_magento_order_index"))
      * @AclAncestor("orocrm_magento_order_view")
      * @Template
      */
     public function indexAction()
     {
-        //todo: refactor for all the channels
         return [];
     }
 

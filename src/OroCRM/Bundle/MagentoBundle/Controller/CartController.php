@@ -27,7 +27,6 @@ class CartController extends Controller
      */
     public function indexAction()
     {
-        //todo:refactor for all the channels
         return [];
     }
 
