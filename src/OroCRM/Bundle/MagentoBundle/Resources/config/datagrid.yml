@@ -120,6 +120,8 @@ datagrid:
                     - c.updatedAt
                     - cstatus.label as statusLabel
                     - step.label as stepLabel
+                    - adress.regionText as regionName
+                    - country.name as countryName
                 from:
                     - { table: %orocrm_magento.cart.entity.class% , alias: c }
                 join:
@@ -128,6 +130,8 @@ datagrid:
                         - { join: c.channel, alias: ch }
                         - { join: c.status, alias: cstatus }
                         - { join: c.workflowStep, alias: step }
+                        - { join: c.billingAddress, alias: adress }
+                        - { join: adress.country, alias: country }
                 where:
                     and:
                         - c.channel = :channelId
@@ -159,6 +163,10 @@ datagrid:
                 label: orocrm.magento.datagrid.columns.status
             stepLabel:
                 label: orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
+            countryName:
+                label: orocrm.magento.cartaddress.country.label
+            regionName:
+                label: orocrm.magento.cartaddress.region.label
         properties:
             id: ~
             view_link:
@@ -177,6 +185,8 @@ datagrid:
                 updatedAt:            { data_name: c.updatedAt }
                 statusLabel:          { data_name: cstatus.label }
                 stepLabel:            { data_name: step.label }
+                countryName:          { data_name: country.name }
+                regionName:           { data_name: adress.regionText }
             default:
                 updatedAt:  DESC
         filters:
@@ -218,6 +228,12 @@ datagrid:
                     type:      datetime
                     data_name: c.updatedAt
                     enabled: false
+                countryName:
+                    type: string
+                    data_name: country.name
+                regionName:
+                    type: string
+                    data_name: adress.regionText
         actions:
             view:
                 type:         navigate
