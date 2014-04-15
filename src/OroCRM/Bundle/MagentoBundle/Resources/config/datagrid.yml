@@ -27,6 +27,8 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
         columns:
+            channelName:
+                label: orocrm.magento.customer.channel.label
             firstName:
                 label: orocrm.magento.customer.first_name.label
             lastName:
@@ -35,8 +37,6 @@ datagrid:
                 label: orocrm.magento.customer.email.label
             groupName:
                 label: orocrm.magento.customer.group.label
-            channelName:
-                label: orocrm.magento.customer.channel.label
             websiteName:
                 label: orocrm.magento.customer.website.label
             countryName:
@@ -72,6 +72,14 @@ datagrid:
                 firstName: ASC
         filters:
             columns:
+                channelName:
+                    type: entity
+                    data_name: ch.id
+                    options:
+                        field_options:
+                            class: OroIntegrationBundle:Channel
+                            property: name
+                            query_builder: @orocrm_magento.datagrid_helper->getMagentoChannelsQueryBuilder
                 firstName:
                     type: string
                     data_name: c.firstName
@@ -88,14 +96,6 @@ datagrid:
                         field_options:
                             class: OroCRMMagentoBundle:CustomerGroup
                             property: name
-                channelName:
-                    type: entity
-                    data_name: ch.id
-                    options:
-                        field_options:
-                            class: OroIntegrationBundle:Channel
-                            property: name
-                            query_builder: @orocrm_magento.datagrid_helper->getMagentoChannelsQueryBuilder
                 websiteName:
                     type: entity
                     data_name: cw.id
@@ -152,9 +152,9 @@ datagrid:
                     - c.updatedAt
                     - cstatus.label as statusLabel
                     - step.label as stepLabel
+                    - ch.name as channelName
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
-                    - ch.name as channelName
                 from:
                     - { table: %orocrm_magento.cart.entity.class% , alias: c }
                 join:
@@ -192,14 +192,14 @@ datagrid:
             updatedAt:
                 label: orocrm.magento.cart.updated_at.label
                 frontend_type: datetime
-            statusLabel:
-                label: orocrm.magento.datagrid.columns.status
-            stepLabel:
-                label: orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
             countryName:
                 label: orocrm.magento.cartaddress.country.label
             regionName:
                 label: orocrm.magento.cartaddress.region.label
+            statusLabel:
+                label: orocrm.magento.datagrid.columns.status
+            stepLabel:
+                label: orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
         properties:
             id: ~
             view_link:
@@ -217,10 +217,10 @@ datagrid:
                 grandTotal:           { data_name: c.grandTotal }
                 createdAt:            { data_name: c.createdAt }
                 updatedAt:            { data_name: c.updatedAt }
-                statusLabel:          { data_name: cstatus.label }
-                stepLabel:            { data_name: step.label }
                 countryName:          { data_name: country.name }
                 regionName:           { data_name: regionName }
+                statusLabel:          { data_name: cstatus.label }
+                stepLabel:            { data_name: step.label }
             default:
                 updatedAt:  DESC
         filters:
@@ -247,6 +247,17 @@ datagrid:
                 grandTotal:
                     type: number
                     data_name: c.grandTotal
+                countryName:
+                    type: entity
+                    data_name: address.country
+                    options:
+                        field_options:
+                          class: OroAddressBundle:Country
+                          property: name
+                          query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                regionName:
+                    type: string
+                    data_name: regionName
                 statusLabel:
                     type: entity
                     data_name: c.status
@@ -269,17 +280,6 @@ datagrid:
                     type:      datetime
                     data_name: c.updatedAt
                     enabled: false
-                countryName:
-                    type: entity
-                    data_name: address.country
-                    options:
-                        field_options:
-                          class: OroAddressBundle:Country
-                          property: name
-                          query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
-                regionName:
-                    type: string
-                    data_name: regionName
         actions:
             view:
                 type:         navigate
