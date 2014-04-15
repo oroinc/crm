@@ -37,10 +37,6 @@ class CustomerBridgeIteratorTest extends BaseIteratorTestCase
             ->with($this->equalTo('oroCustomerList'))
             ->will($this->returnValue($customerArray));
 
-        $this->transport->expects($this->at(4))->method('call')
-            ->with($this->equalTo('oroCustomerList'))
-            ->will($this->returnValue([]));
-
         $orders = [
             array_merge((array)$customerArray[0], $storeData),
             array_merge((array)$customerArray[1], $storeData),

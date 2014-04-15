@@ -22,7 +22,7 @@ class NavigationListener
             'prefix'         => self::CART_MENU_ITEM,
             'label'          => 'Shopping Carts',
             'route'          => 'orocrm_magento_cart_index',
-            'extra_routes'   => '/^orocrm_magento_cart_(index|view)$/',
+            'extra_routes'   => '/^orocrm_magento_cart_(index|view)|orocrm_magento_orderplace_cart$/',
             'extra_position' => 40
         ],
         'order'    => [
@@ -70,15 +70,14 @@ class NavigationListener
                 if ($channel->getConnectors()) {
                     foreach ($channel->getConnectors() as $connector) {
                         if (!isset($entries[$connector])) {
-                            $entries[$connector] = [];
+                            $entries[$connector] = true;
                         }
-                        $entries[$connector][] = ['id' => $channel->getId(), 'label' => $channel->getName()];
                     }
                 }
             }
 
             // walk trough prepared array
-            foreach ($entries as $key => $items) {
+            foreach (array_keys($entries) as $key) {
                 if (isset(self::$map[$key])) {
                     /** @var ItemInterface $reportsMenuItem */
                     $salesMenuItem = $event->getMenu()->getChild(self::$map[$key]['parent']);
