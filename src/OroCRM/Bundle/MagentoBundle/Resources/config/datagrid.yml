@@ -229,11 +229,18 @@ datagrid:
                     data_name: c.updatedAt
                     enabled: false
                 countryName:
-                    type: string
+                    type: entity
                     data_name: country.name
+                    enabled: false
+                    options:
+                        field_options:
+                          class: OroAddressBundle:Country
+                          property: name
+                          query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
                 regionName:
                     type: string
                     data_name: adress.regionText
+                    enabled: false
         actions:
             view:
                 type:         navigate
