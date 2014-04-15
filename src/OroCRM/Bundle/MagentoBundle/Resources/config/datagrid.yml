@@ -236,7 +236,7 @@ datagrid:
                     options:
                         field_options:
                           class: OroAddressBundle:Country
-                          property: name
+                          property: iso2Code
                           query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
                 regionName:
                     type: string
@@ -479,12 +479,15 @@ datagrid:
                     - o.lastName
                     - step.label as stepLabel
                     - customer.email as email
+                    - addressTypes.label as addressName
                 from:
                     - { table: %orocrm_magento.order.entity.class%, alias: o }
                 join:
                     left:
                         - { join: o.workflowStep, alias: step }
                         - { join: o.customer, alias: customer }
+                        - { join: o.addresses, alias: address }
+                        - { join: address.types, alias: addressTypes }
                 where:
                     and:
                         - o.channel = :channelId
@@ -513,6 +516,10 @@ datagrid:
                 label: orocrm.magento.order.status.label
             stepLabel:
                 label: orocrm.magento.order.b2c_flow_order_follow_up.step.label
+
+            addressName:
+                label: orocrm.magento.order.addresses.label
+
         properties:
             id: ~
             view_link:
