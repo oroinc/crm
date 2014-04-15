@@ -57,17 +57,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
 
-    orocrm_magento.event_listener.grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'channelId'
-            - @oro_datagrid.datagrid.request_params
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customers-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-cart-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-order-grid, method: onBuildAfter }
-
     orocrm_magento.event_listener.account_orders_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
