@@ -8,8 +8,6 @@ use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 
 class MagentoDatagridHelper
 {
-    const MAGENTO_TYPE = 'magento';
-
     /**
      * Returns query builder callback for magento channels
      *
