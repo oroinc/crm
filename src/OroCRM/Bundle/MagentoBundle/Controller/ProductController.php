@@ -19,7 +19,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 class ProductController extends Controller
 {
     /**
-     * @Route("/", name="orocrm_magento_product_index"))
+     * @Route("/", name="orocrm_magento_product_index")
      * @AclAncestor("orocrm_magento_product_view")
      * @Template
      */

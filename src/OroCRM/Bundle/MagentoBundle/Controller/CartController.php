@@ -21,7 +21,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 class CartController extends Controller
 {
     /**
-     * @Route("/", name="orocrm_magento_cart_index"))
+     * @Route("/", name="orocrm_magento_cart_index")
      * @AclAncestor("orocrm_magento_cart_view")
      * @Template
      */
