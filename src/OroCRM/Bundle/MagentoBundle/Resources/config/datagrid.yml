@@ -495,6 +495,8 @@ datagrid:
                     - o.lastName
                     - step.label as stepLabel
                     - customer.email as email
+                    - country.name as countryName
+                    - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - ch.name as channelName
                 from:
                     - { table: %orocrm_magento.order.entity.class%, alias: o }
@@ -502,6 +504,10 @@ datagrid:
                     left:
                         - { join: o.workflowStep, alias: step }
                         - { join: o.customer, alias: customer }
+                        - { join: o.addresses, alias: address }
+                        - { join: address.country, alias: country }
+                        - { join: address.types, alias: types }
+                        - { join: address.region, alias: region }
                         - { join: o.channel, alias: ch }
         columns:
             channelName:
@@ -526,6 +532,10 @@ datagrid:
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align: right
+            countryName:
+                label: orocrm.magento.cartaddress.country.label
+            regionName:
+                label: orocrm.magento.cartaddress.region.label
             status:
                 label: orocrm.magento.order.status.label
             stepLabel:
@@ -543,6 +553,8 @@ datagrid:
                 lastName:               { data_name: o.lastName }
                 email:                  { data_name: customer.email }
                 totalPaidAmount:        { data_name: o.totalPaidAmount }
+                countryName:            { data_name: country.name }
+                regionName:             { data_name: regionName }
                 status:                 { data_name: o.status }
                 channelName:            { data_name: ch.name }
                 stepLabel:              { data_name: step.label }
@@ -576,6 +588,17 @@ datagrid:
                     data_name:        o.totalPaidAmount
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                countryName:
+                    type: entity
+                    data_name: address.country
+                    options:
+                        field_options:
+                          class: OroAddressBundle:Country
+                          property: name
+                          query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                regionName:
+                    type: string
+                    data_name: regionName
                 status:
                     type:             string
                     data_name:        o.status
