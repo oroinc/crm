@@ -22,6 +22,8 @@ datagrid:
                         - { join: c.website, alias: cw }
                         - { join: c.channel, alias: ch }
         columns:
+            channelName:
+                label: orocrm.magento.customer.channel.label
             firstName:
                 label: orocrm.magento.customer.first_name.label
             lastName:
@@ -30,8 +32,6 @@ datagrid:
                 label: orocrm.magento.customer.email.label
             groupName:
                 label: orocrm.magento.customer.group.label
-            channelName:
-                label: orocrm.magento.customer.channel.label
             websiteName:
                 label: orocrm.magento.customer.website.label
             createdAt:
@@ -61,6 +61,14 @@ datagrid:
                 firstName: ASC
         filters:
             columns:
+                channelName:
+                    type: entity
+                    data_name: ch.id
+                    options:
+                        field_options:
+                            class: OroIntegrationBundle:Channel
+                            property: name
+                            query_builder: @orocrm_magento.datagrid_helper->getMagentoChannelsQueryBuilder
                 firstName:
                     type: string
                     data_name: c.firstName
@@ -77,14 +85,6 @@ datagrid:
                         field_options:
                             class: OroCRMMagentoBundle:CustomerGroup
                             property: name
-                channelName:
-                    type: entity
-                    data_name: ch.id
-                    options:
-                        field_options:
-                            class: OroIntegrationBundle:Channel
-                            property: name
-                            query_builder: @orocrm_magento.datagrid_helper->getMagentoChannelsQueryBuilder
                 websiteName:
                     type: entity
                     data_name: cw.id
