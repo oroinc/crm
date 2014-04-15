@@ -193,6 +193,9 @@ datagrid:
                 email:
                     type: string
                     data_name: c.email
+                grandTotal:
+                    type: number
+                    data_name: c.grandTotal
                 statusLabel:
                     type: entity
                     data_name: c.status
