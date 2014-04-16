@@ -530,9 +530,13 @@ datagrid:
                         - { join: o.customer, alias: customer }
                         - { join: o.addresses, alias: address }
                         - { join: address.country, alias: country }
-                        - { join: address.types, alias: types }
+                        - { join: address.types, alias: types, conditionType: WITH, condition: "types.name = 'billing'" }
                         - { join: address.region, alias: region }
                         - { join: o.channel, alias: ch }
+                where:
+                    and:
+                        - types.name = 'billing'
+
         columns:
             channelName:
                 label: orocrm.magento.order.channel.label
