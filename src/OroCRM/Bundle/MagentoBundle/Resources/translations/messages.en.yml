@@ -54,6 +54,8 @@ orocrm:
                 taxPercent:       Tax percent
                 taxAmount:        Tax amount
                 rowTotal:         Row total
+                billing_country:  Billing country
+                billing_region:   Billing region
         channel_type:
             label:  Magento
         transport:
@@ -87,8 +89,8 @@ orocrm:
             gender.label:        Gender
             birthday.label:      Birthday
             email.label:         Email
-            created_at.label:    Created at
-            updated_at.label:    Updated at
+            created_at.label:    Created on
+            updated_at.label:    Updated on
             is_active.label:     Is active
             vat.label:           Tax/Vat
             website.label:       Website
@@ -132,8 +134,8 @@ orocrm:
             sub_total.label:           Sub total
             grand_total.label:         Grand total
             tax_amount.label:          Tax
-            created_at.label:          Created at
-            updated_at.label:          Updated at
+            created_at.label:          Created on
+            updated_at.label:          Updated on
             cart_items.label:          Cart Items
             customer.label:            Customer
             store.label:               Store
