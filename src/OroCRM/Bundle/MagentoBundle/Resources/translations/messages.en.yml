@@ -102,6 +102,7 @@ orocrm:
             name.label:          Name
             orders.label:        Customer orders
             lifetime.label:      Lifetime
+            currency.label:      Currency
 
         cart:
             entity_label:         Shopping Cart
