@@ -22,23 +22,29 @@ class NavigationListener
             'prefix'         => self::CART_MENU_ITEM,
             'label'          => 'Shopping Carts',
             'route'          => 'orocrm_magento_cart_index',
-            'extra_routes'   => '/^orocrm_magento_cart_(index|view)|orocrm_magento_orderplace_cart$/',
-            'extra_position' => 40
+            'extras'         => [
+                'routes'     => '/^orocrm_magento_cart_(index|view)|orocrm_magento_orderplace_cart$/',
+                'position'   => 40
+            ]
         ],
         'order'    => [
             'parent'         => 'sales_tab',
             'prefix'         => self::ORDER_MENU_ITEM,
             'label'          => 'Orders',
             'route'          => 'orocrm_magento_order_index',
-            'extra_routes'   => '/^orocrm_magento_order_(index|view)$/',
-            'extra_position' => 50
+            'extras'         => [
+                'routes'     => '/^orocrm_magento_order_(index|view)$/',
+                'position'   => 50
+            ]
         ],
         'customer' => [
             'parent'       => 'customers_tab',
             'prefix'       => self::CUSTOMER_MENU_ITEM,
             'label'        => 'orocrm.magento.menu.web_customers',
             'route'        => 'orocrm_magento_customer_index',
-            'extra_routes' => '/^orocrm_magento_customer_(index|view)$/'
+            'extras'         => [
+                'routes'     => '/^orocrm_magento_customer_*$/',
+            ]
         ]
     ];
 
@@ -85,7 +91,8 @@ class NavigationListener
                         self::$map[$key]['prefix'],
                         [
                             'label' => self::$map[$key]['label'],
-                            'route' => self::$map[$key]['route']
+                            'route' => self::$map[$key]['route'],
+                            'extras' => self::$map[$key]['extras'],
                         ]
                     );
                 }
