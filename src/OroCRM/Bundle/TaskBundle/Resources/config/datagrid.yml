@@ -37,7 +37,7 @@ datagrid:
                 label: orocrm.task.task_priority.label
             ownerName:
                 type: twig
-                label: orocrm.task.assigned_to.label
+                label: orocrm.task.owner.label
                 frontend_type: html
                 template: OroCRMTaskBundle:Task:Datagrid/Property/owner.html.twig
             reporterName:
