@@ -13,8 +13,6 @@ datagrid:
                     - c.currency
                     - c.createdAt
                     - c.updatedAt
-                    - cg.name as groupName
-                    - cw.name as websiteName
                     - ch.name as channelName
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
@@ -22,35 +20,29 @@ datagrid:
                     - { table: OroCRMMagentoBundle:Customer , alias: c }
                 join:
                     left:
-                        - { join: c.group, alias: cg }
-                        - { join: c.website, alias: cw }
                         - { join: c.channel, alias: ch }
                         - { join: c.addresses, alias: address }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
         columns:
-            channelName:
-                label: orocrm.magento.customer.channel.label
             firstName:
                 label: orocrm.magento.customer.first_name.label
             lastName:
                 label: orocrm.magento.customer.last_name.label
             email:
                 label: orocrm.magento.customer.email.label
-            groupName:
-                label: orocrm.magento.customer.group.label
-            websiteName:
-                label: orocrm.magento.customer.website.label
-            countryName:
-                label: orocrm.magento.cartaddress.country.label
-            regionName:
-                label: orocrm.magento.cartaddress.region.label
+            channelName:
+                label: orocrm.magento.customer.channel.label
             lifetime:
                 label: orocrm.magento.customer.lifetime.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align: right
+            countryName:
+                label: orocrm.magento.datagrid.columns.billing_country
+            regionName:
+                label: orocrm.magento.datagrid.columns.billing_region
             createdAt:
                 label: orocrm.magento.customer.created_at.label
                 frontend_type: datetime
@@ -68,8 +60,6 @@ datagrid:
                 firstName:   { data_name: c.firstName }
                 lastName:    { data_name: c.lastName }
                 email:       { data_name: c.email }
-                groupName:   { data_name: cg.name }
-                websiteName: { data_name: cw.name }
                 channelName: { data_name: ch.name }
                 createdAt:   { data_name: c.createdAt }
                 updatedAt:   { data_name: c.updatedAt }
@@ -81,14 +71,6 @@ datagrid:
                 firstName: ASC
         filters:
             columns:
-                channelName:
-                    type: entity
-                    data_name: ch.id
-                    options:
-                        field_options:
-                            class: OroIntegrationBundle:Channel
-                            property: name
-                            query_builder: @orocrm_magento.datagrid_helper->getMagentoChannelsQueryBuilder
                 firstName:
                     type: string
                     data_name: c.firstName
@@ -98,20 +80,15 @@ datagrid:
                 email:
                     type: string
                     data_name: c.email
-                groupName:
+                channelName:
                     type: entity
-                    data_name: cg.id
+                    data_name: ch.id
                     options:
                         field_options:
-                            class: OroCRMMagentoBundle:CustomerGroup
+                            multiple: true
+                            class: OroIntegrationBundle:Channel
                             property: name
-                websiteName:
-                    type: entity
-                    data_name: cw.id
-                    options:
-                        field_options:
-                            class: OroCRMMagentoBundle:Website
-                            property: name
+                            query_builder: @orocrm_magento.datagrid_helper->getMagentoChannelsQueryBuilder
                 countryName:
                     type: entity
                     data_name: address.country
@@ -205,9 +182,9 @@ datagrid:
                 label: orocrm.magento.cart.updated_at.label
                 frontend_type: datetime
             countryName:
-                label: orocrm.magento.cartaddress.country.label
+                label: orocrm.magento.datagrid.columns.billing_country
             regionName:
-                label: orocrm.magento.cartaddress.region.label
+                label: orocrm.magento.datagrid.columns.billing_region
             statusLabel:
                 label: orocrm.magento.datagrid.columns.status
             stepLabel:
@@ -242,6 +219,7 @@ datagrid:
                     data_name: ch.id
                     options:
                         field_options:
+                            multiple: true
                             class: OroIntegrationBundle:Channel
                             property: name
                 originId:
@@ -400,22 +378,6 @@ datagrid:
                 updatedAt:      { data_name: c.updatedAt }
             default:
                 createdAt:  DESC
-        filters:
-            columns:
-                sku:
-                    type: string
-                    data_name: c.sku
-                price:
-                    type: number
-                    data_name: c.price
-                createdAt:
-                    type:      datetime
-                    data_name: c.createdAt
-                    enabled: false
-                updatedAt:
-                    type:      datetime
-                    data_name: c.updatedAt
-                    enabled: false
         options:
             entityHint: cart item
 
@@ -527,6 +489,8 @@ datagrid:
                     - o
                     - o.firstName
                     - o.lastName
+                    - o.subtotalAmount as subTotal
+                    - o.totalAmount as grandTotal
                     - step.label as stepLabel
                     - customer.email as email
                     - country.name as countryName
@@ -538,11 +502,13 @@ datagrid:
                     left:
                         - { join: o.workflowStep, alias: step }
                         - { join: o.customer, alias: customer }
-                        - { join: o.addresses, alias: address }
                         - { join: address.country, alias: country }
-                        - { join: address.types, alias: types }
                         - { join: address.region, alias: region }
                         - { join: o.channel, alias: ch }
+                    inner:
+                        - { join: o.addresses, alias: address }
+                        - { join: address.types, alias: types, conditionType: WITH, condition: "types.name = 'billing'" }
+
         columns:
             channelName:
                 label: orocrm.magento.order.channel.label
@@ -566,10 +532,22 @@ datagrid:
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align: right
+            grandTotal:
+                label:  orocrm.magento.cart.grand_total.label
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+            subTotal:
+                label: orocrm.magento.cart.sub_total.label
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             countryName:
-                label: orocrm.magento.cartaddress.country.label
+                label: orocrm.magento.datagrid.columns.billing_country
             regionName:
-                label: orocrm.magento.cartaddress.region.label
+                label: orocrm.magento.datagrid.columns.billing_region
             status:
                 label: orocrm.magento.order.status.label
             stepLabel:
@@ -587,6 +565,8 @@ datagrid:
                 lastName:               { data_name: o.lastName }
                 email:                  { data_name: customer.email }
                 totalPaidAmount:        { data_name: o.totalPaidAmount }
+                grandTotal:             { data_name: grandTotal }
+                subTotal:               { data_name: subTotal }
                 countryName:            { data_name: country.name }
                 regionName:             { data_name: regionName }
                 status:                 { data_name: o.status }
@@ -603,6 +583,7 @@ datagrid:
                     data_name: ch.id
                     options:
                         field_options:
+                            multiple: true
                             class: OroIntegrationBundle:Channel
                             property: name
                 incrementId:
@@ -620,6 +601,16 @@ datagrid:
                 totalPaidAmount:
                     type:             number
                     data_name:        o.totalPaidAmount
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                grandTotal:
+                    type:             number
+                    data_name:        grandTotal
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                subTotal:
+                    type:             number
+                    data_name:        subTotal
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 countryName:
@@ -742,59 +733,6 @@ datagrid:
                 taxPercent:          { data_name: oi.taxPercent }
                 taxAmount:           { data_name: oi.taxAmount }
                 rowTotal:            { data_name: oi.rowTotal }
-        filters:
-            columns:
-                sku:
-                    type:             string
-                    data_name:        oi.sku
-                name:
-                    type:             string
-                    data_name:        oi.name
-                qty:
-                    type:             number
-                    data_name:        oi.qty
-                productType:
-                    type:             string
-                    enabled:          false
-                    data_name:        oi.productType
-                weight:
-                    type:             number
-                    data_name:        oi.weight
-                    enabled:          false
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                price:
-                    type:             number
-                    data_name:        oi.price
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                originalPrice:
-                    type:             number
-                    enabled:          false
-                    data_name:        oi.originalPrice
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                discountPercent:
-                    type:             percent
-                    data_name:        oi.discountPercent
-                discountAmount:
-                    type:             number
-                    data_name:        oi.discountAmount
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                taxPercent:
-                    type:             percent
-                    data_name:        oi.taxPercent
-                taxAmount:
-                    type:             number
-                    data_name:        oi.taxAmount
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                rowTotal:
-                    type:             number
-                    data_name:        oi.rowTotal
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
         options:
             entityHint: order item
 
@@ -941,6 +879,7 @@ datagrid:
                 icon:         book
                 acl_recource: orocrm_magento_cart_view
                 rowAction:    true
+
     magento-account-order-grid:
         source:
             type: orm
