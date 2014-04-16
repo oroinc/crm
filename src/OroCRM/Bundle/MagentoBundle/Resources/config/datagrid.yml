@@ -515,6 +515,8 @@ datagrid:
                     - o
                     - o.firstName
                     - o.lastName
+                    - o.subtotalAmount as subTotal
+                    - o.totalAmount as grandTotal
                     - step.label as stepLabel
                     - customer.email as email
                     - country.name as countryName
@@ -554,6 +556,18 @@ datagrid:
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align: right
+            grandTotal:
+                label:  orocrm.magento.cart.grand_total.label
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+            subTotal:
+                label: orocrm.magento.cart.sub_total.label
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             countryName:
                 label: orocrm.magento.cartaddress.country.label
             regionName:
@@ -575,6 +589,8 @@ datagrid:
                 lastName:               { data_name: o.lastName }
                 email:                  { data_name: customer.email }
                 totalPaidAmount:        { data_name: o.totalPaidAmount }
+                grandTotal:             { data_name: grandTotal }
+                subTotal:               { data_name: subTotal }
                 countryName:            { data_name: country.name }
                 regionName:             { data_name: regionName }
                 status:                 { data_name: o.status }
@@ -605,6 +621,16 @@ datagrid:
                 email:
                     type:             string
                     data_name:        customer.email
+                grandTotal:
+                    type:             number
+                    data_name:        grandTotal
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                subTotal:
+                    type:             number
+                    data_name:        subTotal
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 totalPaidAmount:
                     type:             number
                     data_name:        o.totalPaidAmount
