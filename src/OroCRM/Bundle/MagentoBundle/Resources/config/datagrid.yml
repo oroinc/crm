@@ -388,22 +388,6 @@ datagrid:
                 updatedAt:      { data_name: c.updatedAt }
             default:
                 createdAt:  DESC
-        filters:
-            columns:
-                sku:
-                    type: string
-                    data_name: c.sku
-                price:
-                    type: number
-                    data_name: c.price
-                createdAt:
-                    type:      datetime
-                    data_name: c.createdAt
-                    enabled: false
-                updatedAt:
-                    type:      datetime
-                    data_name: c.updatedAt
-                    enabled: false
         options:
             entityHint: cart item
 
@@ -756,59 +740,6 @@ datagrid:
                 taxPercent:          { data_name: oi.taxPercent }
                 taxAmount:           { data_name: oi.taxAmount }
                 rowTotal:            { data_name: oi.rowTotal }
-        filters:
-            columns:
-                sku:
-                    type:             string
-                    data_name:        oi.sku
-                name:
-                    type:             string
-                    data_name:        oi.name
-                qty:
-                    type:             number
-                    data_name:        oi.qty
-                productType:
-                    type:             string
-                    enabled:          false
-                    data_name:        oi.productType
-                weight:
-                    type:             number
-                    data_name:        oi.weight
-                    enabled:          false
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                price:
-                    type:             number
-                    data_name:        oi.price
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                originalPrice:
-                    type:             number
-                    enabled:          false
-                    data_name:        oi.originalPrice
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                discountPercent:
-                    type:             percent
-                    data_name:        oi.discountPercent
-                discountAmount:
-                    type:             number
-                    data_name:        oi.discountAmount
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                taxPercent:
-                    type:             percent
-                    data_name:        oi.taxPercent
-                taxAmount:
-                    type:             number
-                    data_name:        oi.taxAmount
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                rowTotal:
-                    type:             number
-                    data_name:        oi.rowTotal
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
         options:
             entityHint: order item
 
@@ -955,6 +886,7 @@ datagrid:
                 icon:         book
                 acl_recource: orocrm_magento_cart_view
                 rowAction:    true
+
     magento-account-order-grid:
         source:
             type: orm
