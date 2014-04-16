@@ -14,7 +14,7 @@ class OroCrmMagentoBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_magento_customer');
-        $table->addColumn('lifetime', 'money');
-        $table->addColumn('currency', 'string', ['length' => 10]);
+        $table->addColumn('lifetime', 'money', ['notnull' => false]);
+        $table->addColumn('currency', 'string', ['notnull' => false, 'length' => 10]);
     }
 }

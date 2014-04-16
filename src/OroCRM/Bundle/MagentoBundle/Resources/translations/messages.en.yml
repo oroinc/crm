@@ -103,7 +103,7 @@ orocrm:
             channel.label:       Channel
             name.label:          Name
             orders.label:        Customer orders
-            lifetime.label:      Lifetime
+            lifetime.label:      Lifetime value
             currency.label:      Currency
 
         cart:

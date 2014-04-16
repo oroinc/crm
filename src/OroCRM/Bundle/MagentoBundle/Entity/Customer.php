@@ -212,14 +212,14 @@ class Customer extends BasePerson
      *
      * @ORM\Column(name="lifetime", type="money", nullable=true)
      */
-    protected $lifetime;
+    protected $lifetime = 0;
 
     /**
      * @var string
      *
      * @ORM\Column(name="currency", type="string", length=10, nullable=true)
      */
-    protected $currency;
+    protected $currency = 'USD';
 
     /**
      * {@inheritdoc}

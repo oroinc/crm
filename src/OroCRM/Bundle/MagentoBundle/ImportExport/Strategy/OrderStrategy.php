@@ -85,20 +85,22 @@ class OrderStrategy extends BaseStrategy
         /** @var Customer|null $customer */
         $customer = $this->getEntityByCriteria($criteria, MagentoConnectorInterface::CUSTOMER_TYPE);
 
-        $customer->setLifetime(
-            $this->getEntityRepository(ClassUtils::getClass($entity))
-                ->getCustomerOrdersSubtotalAmount(
-                    $customer,
-                    $entity
+        if ($customer instanceof Customer) {
+            $customer->setLifetime(
+                $this->getEntityRepository(ClassUtils::getClass($entity))
+                    ->getCustomerOrdersSubtotalAmount(
+                        $customer,
+                        $entity
+                    )
+                + ($entity->getSubtotalAmount()
+                    - $entity->getTotalCanceledAmount()
+                    - $entity->getTotalRefundedAmount()
                 )
-            + ($entity->getSubtotalAmount()
-                - $entity->getTotalCanceledAmount()
-                - $entity->getTotalRefundedAmount()
-            )
-        );
-        // now customer orders subtotal calculation support only one currency.
-        // customer currency needs on customer's grid to format lifetime value.
-        $customer->setCurrency($entity->getCurrency());
+            );
+            // now customer orders subtotal calculation support only one currency.
+            // customer currency needs on customer's grid to format lifetime value.
+            $customer->setCurrency($entity->getCurrency());
+        }
         $entity->setCustomer($customer);
     }
 
