@@ -11,8 +11,6 @@ datagrid:
                     - c.email
                     - c.createdAt
                     - c.updatedAt
-                    - cg.name as groupName
-                    - cw.name as websiteName
                     - ch.name as channelName
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
@@ -20,25 +18,19 @@ datagrid:
                     - { table: OroCRMMagentoBundle:Customer , alias: c }
                 join:
                     left:
-                        - { join: c.group, alias: cg }
-                        - { join: c.website, alias: cw }
                         - { join: c.channel, alias: ch }
                         - { join: c.addresses, alias: address }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
         columns:
-            channelName:
-                label: orocrm.magento.customer.channel.label
             firstName:
                 label: orocrm.magento.customer.first_name.label
             lastName:
                 label: orocrm.magento.customer.last_name.label
             email:
                 label: orocrm.magento.customer.email.label
-            groupName:
-                label: orocrm.magento.customer.group.label
-            websiteName:
-                label: orocrm.magento.customer.website.label
+            channelName:
+                label: orocrm.magento.customer.channel.label
             countryName:
                 label: orocrm.magento.cartaddress.country.label
             regionName:
@@ -60,8 +52,6 @@ datagrid:
                 firstName:   { data_name: c.firstName }
                 lastName:    { data_name: c.lastName }
                 email:       { data_name: c.email }
-                groupName:   { data_name: cg.name }
-                websiteName: { data_name: cw.name }
                 channelName: { data_name: ch.name }
                 createdAt:   { data_name: c.createdAt }
                 updatedAt:   { data_name: c.updatedAt }
@@ -72,14 +62,6 @@ datagrid:
                 firstName: ASC
         filters:
             columns:
-                channelName:
-                    type: entity
-                    data_name: ch.id
-                    options:
-                        field_options:
-                            class: OroIntegrationBundle:Channel
-                            property: name
-                            query_builder: @orocrm_magento.datagrid_helper->getMagentoChannelsQueryBuilder
                 firstName:
                     type: string
                     data_name: c.firstName
@@ -89,20 +71,15 @@ datagrid:
                 email:
                     type: string
                     data_name: c.email
-                groupName:
+                channelName:
                     type: entity
-                    data_name: cg.id
+                    data_name: ch.id
                     options:
                         field_options:
-                            class: OroCRMMagentoBundle:CustomerGroup
+                            multiple: true
+                            class: OroIntegrationBundle:Channel
                             property: name
-                websiteName:
-                    type: entity
-                    data_name: cw.id
-                    options:
-                        field_options:
-                            class: OroCRMMagentoBundle:Website
-                            property: name
+                            query_builder: @orocrm_magento.datagrid_helper->getMagentoChannelsQueryBuilder
                 countryName:
                     type: entity
                     data_name: address.country
@@ -230,6 +207,7 @@ datagrid:
                     data_name: ch.id
                     options:
                         field_options:
+                            multiple: true
                             class: OroIntegrationBundle:Channel
                             property: name
                 originId:
@@ -593,6 +571,7 @@ datagrid:
                     data_name: ch.id
                     options:
                         field_options:
+                            multiple: true
                             class: OroIntegrationBundle:Channel
                             property: name
                 incrementId:

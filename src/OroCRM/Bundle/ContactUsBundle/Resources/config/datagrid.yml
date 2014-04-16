@@ -52,8 +52,10 @@ datagrid:
                 channelName:
                     type:      entity
                     data_name: channel.id
+                    multiple:  true
                     options:
                         field_options:
+                            multiple: true
                             class:    OroIntegrationBundle:Channel
                             property: name
                 firstName:
