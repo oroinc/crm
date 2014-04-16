@@ -621,6 +621,11 @@ datagrid:
                 email:
                     type:             string
                     data_name:        customer.email
+                totalPaidAmount:
+                    type:             number
+                    data_name:        o.totalPaidAmount
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 grandTotal:
                     type:             number
                     data_name:        grandTotal
@@ -629,11 +634,6 @@ datagrid:
                 subTotal:
                     type:             number
                     data_name:        subTotal
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                totalPaidAmount:
-                    type:             number
-                    data_name:        o.totalPaidAmount
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 countryName:
