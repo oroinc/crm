@@ -45,7 +45,7 @@ class DashboardController extends Controller
                 $workflow,
                 $this->get('oro_security.acl_helper')
             ),
-            $this->get('oro_dashboard.manager')->getWidgetAttributesForTwig($widget)
+            $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget)
         );
     }
 }

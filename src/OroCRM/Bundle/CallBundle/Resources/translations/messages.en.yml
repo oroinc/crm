@@ -12,6 +12,7 @@ orocrm:
         recent_calls:
             title: Recent calls
             view_all: View All
+            description: This widget displays the list of recently logged calls
 
     call:
         menu:

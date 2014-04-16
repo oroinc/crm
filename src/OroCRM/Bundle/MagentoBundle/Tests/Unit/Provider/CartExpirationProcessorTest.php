@@ -4,50 +4,45 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\ORM\EntityManager;
 
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 use OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 
 class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
 {
     const BATCH_SIZE = 2;
 
-    /** @var CartExpirationProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CartExpirationProcessor */
     protected $processor;
 
     /** @var EntityManager|\PHPUnit_Framework_MockObject_MockObject */
     protected $em;
 
+    /** @var ConnectorContextMediator|\PHPUnit_Framework_MockObject_MockObject */
+    protected $helper;
+
     public function setUp()
     {
-        $proxiedServiceID = 'registry';
-
-        $container = new Container();
-        $container->set($proxiedServiceID, new TypesRegistry());
-
         $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
 
-        $this->processor = $this->getMock(
-            'OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor',
-            ['getTransport'],
-            [new ServiceLink($container, $proxiedServiceID), $this->em, self::BATCH_SIZE]
-        );
+        $this->helper = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator')
+            ->disableOriginalConstructor()->getMock();
+
+        $this->processor = new CartExpirationProcessor($this->helper, $this->em, self::BATCH_SIZE);
     }
 
     public function tearDown()
     {
-        unset($this->em, $this->processor);
+        unset($this->em, $this->helper, $this->processor);
     }
 
     /**
-     * @expectedException \LogicException
+     * @expectedException \OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException
      */
     public function testProcessConfigurationExceptionScenario()
     {
@@ -61,7 +56,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
         $realTransport = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $realTransport->expects($this->once())->method('isExtensionInstalled')->will($this->returnValue(false));
 
-        $this->processor->expects($this->once())->method('getTransport')
+        $this->helper->expects($this->once())->method('getTransport')
             ->will($this->returnValue($realTransport));
 
         $channel = new Channel();
@@ -90,7 +85,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
         $realTransport->expects($this->once())->method('getStores')
             ->will($this->returnValue($testStoresArray));
 
-        $this->processor->expects($this->once())->method('getTransport')
+        $this->helper->expects($this->once())->method('getTransport')
             ->will($this->returnValue($realTransport));
 
         $channel = new Channel();
@@ -131,13 +126,13 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
         $realTransport->expects($this->once())->method('getStores')
             ->will($this->returnValue($testStoresArray));
 
-        $this->processor->expects($this->once())->method('getTransport')
+        $this->helper->expects($this->once())->method('getTransport')
             ->will($this->returnValue($realTransport));
 
         $channel = new Channel();
         $channel->setTransport($transport);
 
-        $realTransport->expects($this->at(2))->method('call')
+        $realTransport->expects($this->at(3))->method('call')
             ->with(
                 SoapTransport::ACTION_ORO_CART_LIST,
                 [
@@ -150,7 +145,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
                     'pager'   => ['page' => 1, 'pageSize' => self::BATCH_SIZE]
                 ]
             )->will($this->returnValue($testExistedCarts));
-        $realTransport->expects($this->at(3))->method('call')
+        $realTransport->expects($this->at(4))->method('call')
             ->with(
                 SoapTransport::ACTION_ORO_CART_LIST,
                 [

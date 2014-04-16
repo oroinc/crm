@@ -3,7 +3,10 @@ workflows:
         transition_definitions:
             log_call_definition:
                 pre_conditions:
-                    @equal: [$cart.status.name, 'open']
+                    @or:
+                        - @equal: [$cart.status.name, 'open']
+                        # allow to submit call to converted step on any status
+                        - @equal: [$cart.workflowStep.name, 'converted']
                 conditions:
                     @and:
                         - @not_empty:
@@ -43,7 +46,10 @@ workflows:
 
             send_email_definition:
                 pre_conditions:
-                    @equal: [$cart.status.name, 'open']
+                    @or:
+                        - @equal: [$cart.status.name, 'open']
+                        # allow to submit email to converted step on any status
+                        - @equal: [$cart.workflowStep.name, 'converted']
                 conditions:
                     @and:
                         - @not_empty:
@@ -73,11 +79,14 @@ workflows:
             convert_definition:
                 pre_conditions:
                     @equal: [$cart.status.name, 'open']
-                post_actions:
-                    - @find_entity: # Set cart status to converted
-                        class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
-                        identifier: 'converted'
-                        attribute: $cart.status
+                post_actions: []
+
+            place_order_definition:
+                pre_conditions:
+                    @and:
+                        - @equal: [$cart.status.name, 'open']
+                        - @not_empty: [$cart.channel.transport.adminUrl]
+                        - @equal: [$cart.channel.transport.isExtensionInstalled, true]
 
             convert_to_opportunity_definition:
                 pre_conditions:
@@ -126,7 +135,6 @@ workflows:
             reopen_definition:
                 conditions:
                     @or:
-                        - @equal: [$cart.status.name, 'converted']
                         - @equal: [$cart.status.name, 'converted_to_opportunity']
                         - @equal: [$cart.status.name, 'lost']
                 post_actions:

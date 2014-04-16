@@ -21,7 +21,6 @@ class LoadShoppingCartStatusData extends AbstractFixture implements
     protected $dataV0 = array(
         'open'                     => 'Open',
         'lost'                     => 'Lost',
-        'converted'                => 'Converted',
         'converted_to_opportunity' => 'Converted to opportunity',
     );
 
@@ -46,6 +45,12 @@ class LoadShoppingCartStatusData extends AbstractFixture implements
             $data = array_merge($this->dataV0, $this->dataV1);
         } elseif ($this->version === '0.0') {
             $data = $this->dataV1;
+        } elseif ($this->version === '1.0') {
+            // remove not needed status from version 1.0
+            $converted = $manager->find('OroCRM\Bundle\MagentoBundle\Entity\CartStatus', 'converted');
+            if ($converted) {
+                $manager->remove($converted);
+            }
         }
 
         foreach ($data as $name => $label) {
@@ -70,6 +75,6 @@ class LoadShoppingCartStatusData extends AbstractFixture implements
      */
     public function getVersion()
     {
-        return '1.0';
+        return '1.1';
     }
 }
