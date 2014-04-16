@@ -96,6 +96,8 @@ class OrderStrategy extends BaseStrategy
                 - $entity->getTotalRefundedAmount()
             )
         );
+        // now customer orders subtotal calculation support only one currency.
+        // customer currency needs on customer's grid to format lifetime value.
         $customer->setCurrency($entity->getCurrency());
         $entity->setCustomer($customer);
     }

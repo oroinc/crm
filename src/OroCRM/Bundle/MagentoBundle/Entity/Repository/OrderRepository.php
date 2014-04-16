@@ -10,7 +10,6 @@ use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
-
 class OrderRepository extends EntityRepository
 {
     /**
@@ -34,6 +33,14 @@ class OrderRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * Get customer orders subtotal amount
+     *
+     * @param Customer $customer
+     * @param Order    $order
+     *
+     * @return float
+     */
     public function getCustomerOrdersSubtotalAmount(Customer $customer, Order $order)
     {
         $qb = $this->createQueryBuilder('o')
