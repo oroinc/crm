@@ -32,9 +32,9 @@ datagrid:
             channelName:
                 label: orocrm.magento.customer.channel.label
             countryName:
-                label: orocrm.magento.cartaddress.country.label
+                label: orocrm.magento.datagrid.columns.billing_country
             regionName:
-                label: orocrm.magento.cartaddress.region.label
+                label: orocrm.magento.datagrid.columns.billing_region
             createdAt:
                 label: orocrm.magento.customer.created_at.label
                 frontend_type: datetime
@@ -170,9 +170,9 @@ datagrid:
                 label: orocrm.magento.cart.updated_at.label
                 frontend_type: datetime
             countryName:
-                label: orocrm.magento.cartaddress.country.label
+                label: orocrm.magento.datagrid.columns.billing_country
             regionName:
-                label: orocrm.magento.cartaddress.region.label
+                label: orocrm.magento.datagrid.columns.billing_region
             statusLabel:
                 label: orocrm.magento.datagrid.columns.status
             stepLabel:
@@ -533,9 +533,9 @@ datagrid:
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align: right
             countryName:
-                label: orocrm.magento.cartaddress.country.label
+                label: orocrm.magento.datagrid.columns.billing_country
             regionName:
-                label: orocrm.magento.cartaddress.region.label
+                label: orocrm.magento.datagrid.columns.billing_region
             status:
                 label: orocrm.magento.order.status.label
             stepLabel:
