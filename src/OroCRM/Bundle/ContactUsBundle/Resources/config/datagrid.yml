@@ -52,7 +52,6 @@ datagrid:
                 channelName:
                     type:      entity
                     data_name: channel.id
-                    multiple:  true
                     options:
                         field_options:
                             multiple: true
