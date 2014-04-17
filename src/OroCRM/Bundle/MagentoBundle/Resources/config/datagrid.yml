@@ -9,6 +9,8 @@ datagrid:
                     - c.firstName
                     - c.lastName
                     - c.email
+                    - CASE WHEN c.lifetime IS NOT NULL THEN c.lifetime ELSE 0 END as lifetime
+                    - c.currency
                     - c.createdAt
                     - c.updatedAt
                     - ch.name as channelName
@@ -31,6 +33,12 @@ datagrid:
                 label: orocrm.magento.customer.email.label
             channelName:
                 label: orocrm.magento.customer.channel.label
+            lifetime:
+                label: orocrm.magento.customer.lifetime.label
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
             countryName:
                 label: orocrm.magento.datagrid.columns.billing_country
             regionName:
@@ -56,6 +64,7 @@ datagrid:
                 createdAt:   { data_name: c.createdAt }
                 updatedAt:   { data_name: c.updatedAt }
                 countryName: { data_name: country.name }
+                lifetime:    { data_name: c.lifetime }
                 regionName:  { data_name: address.regionName }
             default:
                 lastName:  ASC
@@ -89,8 +98,11 @@ datagrid:
                             property: name
                             query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
                 regionName:
-                     type: string
-                     data_name: regionName
+                    type: string
+                    data_name: regionName
+                lifetime:
+                    type: number
+                    data_name: c.lifetime
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt

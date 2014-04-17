@@ -43,7 +43,7 @@ class NavigationListener
             'label'        => 'orocrm.magento.menu.web_customers',
             'route'        => 'orocrm_magento_customer_index',
             'extras'         => [
-                'routes'     => '/^orocrm_magento_customer_*$/',
+                'routes'     => '/^orocrm_magento_customer_(index|view)$/',
             ]
         ]
     ];
