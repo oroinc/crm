@@ -25,7 +25,7 @@ class LoadDashboardData extends AbstractDashboardFixture implements DependentFix
         $mainDashboard = $this->findAdminDashboard($manager, 'main');
 
         if ($mainDashboard) {
-            $this->addNewDashboardWidget($manager, $mainDashboard, 'recent_calls')
+            $this->addNewWidget($manager, $mainDashboard, 'recent_calls')
                 ->setLayoutPosition([0, 50]);
 
             $manager->flush();

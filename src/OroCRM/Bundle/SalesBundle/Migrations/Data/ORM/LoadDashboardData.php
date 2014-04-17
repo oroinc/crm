@@ -25,11 +25,11 @@ class LoadDashboardData extends AbstractDashboardFixture implements DependentFix
         $mainDashboard = $this->findAdminDashboard($manager, 'main');
 
         if ($mainDashboard) {
-            $this->addNewDashboardWidget($manager, $mainDashboard, 'opportunities_by_lead_source_chart')
+            $this->addNewWidget($manager, $mainDashboard, 'opportunities_by_lead_source_chart')
                 ->setLayoutPosition([1, 80]);
-            $this->addNewDashboardWidget($manager, $mainDashboard, 'opportunities_by_state')
+            $this->addNewWidget($manager, $mainDashboard, 'opportunities_by_state')
                 ->setLayoutPosition([0, 90]);
-            $this->addNewDashboardWidget($manager, $mainDashboard, 'my_sales_flow_b2b_chart')
+            $this->addNewWidget($manager, $mainDashboard, 'my_sales_flow_b2b_chart')
                 ->setLayoutPosition([1, 120]);
 
             $manager->flush();
