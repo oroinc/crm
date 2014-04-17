@@ -92,12 +92,10 @@ class OrderStrategy extends BaseStrategy
                         $customer,
                         $entity
                     )
-                + ($entity->getSubtotalAmount()
-                    - $entity->getTotalCanceledAmount()
-                    - $entity->getTotalRefundedAmount()
-                )
+                + ($entity->getStatus() !== 'canceled' ? $entity->getSubtotalAmount() : 0)
             );
             // now customer orders subtotal calculation support only one currency.
+            // also we do not take into account order refunds due to magento does not bring subtotal data
             // customer currency needs on customer's grid to format lifetime value.
             $customer->setCurrency($entity->getCurrency());
         }

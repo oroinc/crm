@@ -44,9 +44,11 @@ class OrderRepository extends EntityRepository
     public function getCustomerOrdersSubtotalAmount(Customer $customer, Order $order)
     {
         $qb = $this->createQueryBuilder('o')
-            ->select('sum(o.subtotalAmount - o.totalCanceledAmount - o.totalRefundedAmount) as subtotal')
+            ->select('sum(o.subtotalAmount) as subtotal')
             ->where('o.customer = :customer')
-            ->setParameter('customer', $customer);
+            ->setParameter('customer', $customer)
+            ->andWhere('o.status != :status')
+            ->setParameter('status', 'canceled');
 
         if ($order->getId()) {
             $qb->andWhere('o.id != :orderId')
