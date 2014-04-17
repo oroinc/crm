@@ -73,7 +73,7 @@ class TaskType extends AbstractType
                 'oro_user_select',
                 [
                     'required' => true,
-                    'label' => 'orocrm.task.assigned_to.label'
+                    'label' => 'orocrm.task.owner.label'
                 ]
             )
             ->add(
