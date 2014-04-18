@@ -79,7 +79,7 @@
                     {% endif %}
                 {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.task.assigned_to.label'|trans, ownerData) }}
+                {{ UI.renderHtmlProperty('orocrm.task.owner.label'|trans, ownerData) }}
 
                 {%- set reporterData -%}
                     {%- if entity.reporter -%}
