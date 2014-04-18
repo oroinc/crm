@@ -119,6 +119,7 @@ workflows:
                 label: 'Qualify'
                 step_to: new_opportunity
                 is_unavailable_hidden: true
+                acl_resource: orocrm_sales_opportunity_create
                 frontend_options:
                     icon: 'icon-ok'
                     class: 'btn-primary'

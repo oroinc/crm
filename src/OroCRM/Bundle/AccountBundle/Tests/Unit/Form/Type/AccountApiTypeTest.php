@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
+use BeSimple\SoapCommon\Type\KeyValue\Boolean;
 use OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -14,22 +15,33 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
     private $type;
 
     /**
-     * Set up test environment
+     * init environment
      */
-    public function setUp()
+    public function init($havePrivilege = true)
     {
-        $router = $this->getMockBuilder('Symfony\Component\Routing\Router')
-            ->disableOriginalConstructor()
-            ->getMock();
         $nameFormatter = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\NameFormatter')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->type = new AccountApiType($router, $nameFormatter);
+        $router = $this->getMockBuilder('Symfony\Component\Routing\Router')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $securityFacade->expects($this->any())
+            ->method('isGranted')
+            ->with('orocrm_contact_view')
+            ->will($this->returnValue($havePrivilege));
+
+        $this->type = new AccountApiType($router, $nameFormatter, $securityFacade);
     }
 
     public function testSetDefaultOptions()
     {
+        $this->init();
         /** @var OptionsResolverInterface $resolver */
         $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
 
@@ -42,11 +54,13 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testName()
     {
+        $this->init();
         $this->assertEquals('account', $this->type->getName());
     }
 
     public function testAddEntityFields()
     {
+        $this->init();
         /** @var FormBuilderInterface $builder */
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
@@ -74,6 +88,39 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
             ->with('shippingAddress', 'oro_address')
             ->will($this->returnSelf());
         $builder->expects($this->at(5))
+            ->method('add')
+            ->with('billingAddress', 'oro_address')
+            ->will($this->returnSelf());
+
+        $builder->expects($this->once())
+            ->method('addEventSubscriber')
+            ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
+
+        $this->type->buildForm($builder, []);
+    }
+
+    public function testAddEntityFieldsWithoutContactPermission()
+    {
+        $this->init(false);
+        /** @var FormBuilderInterface $builder */
+        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $builder->expects($this->at(0))
+            ->method('add')
+            ->with('name', 'text')
+            ->will($this->returnSelf());
+
+        $builder->expects($this->at(1))
+            ->method('add')
+            ->with('tags', 'oro_tag_select')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(2))
+            ->method('add')
+            ->with('shippingAddress', 'oro_address')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(3))
             ->method('add')
             ->with('billingAddress', 'oro_address')
             ->will($this->returnSelf());
