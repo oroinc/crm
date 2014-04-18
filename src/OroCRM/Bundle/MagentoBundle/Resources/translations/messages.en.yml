@@ -55,7 +55,7 @@ orocrm:
                 taxAmount:        Tax amount
                 rowTotal:         Row total
                 billing_country:  Billing country
-                billing_region:   Billing region
+                billing_region:   Billing state
         channel_type:
             label:  Magento
         transport:
@@ -111,7 +111,7 @@ orocrm:
             entity_plural_label:  Shopping Carts
             entity_description:   Represent Magento shopping cart
 
-            refresh_label:             Refresh Data
+            refresh_label:             Sync Data
 
             id.label:                  Cart Id
             origin_id.label:           Origin Id
