@@ -26,14 +26,14 @@ datagrid:
                         - { join: address.region, alias: region }
                 groupBy: c.id
         columns:
+            channelName:
+                label: orocrm.magento.customer.channel.label
             firstName:
                 label: orocrm.magento.customer.first_name.label
             lastName:
                 label: orocrm.magento.customer.last_name.label
             email:
                 label: orocrm.magento.customer.email.label
-            channelName:
-                label: orocrm.magento.customer.channel.label
             lifetime:
                 label: orocrm.magento.customer.lifetime.label
                 type:   localized_number
@@ -72,15 +72,6 @@ datagrid:
                 firstName: ASC
         filters:
             columns:
-                firstName:
-                    type: string
-                    data_name: c.firstName
-                lastName:
-                    type: string
-                    data_name: c.lastName
-                email:
-                    type: string
-                    data_name: c.email
                 channelName:
                     type: entity
                     data_name: ch.id
@@ -90,6 +81,15 @@ datagrid:
                             class: OroIntegrationBundle:Channel
                             property: name
                             query_builder: @orocrm_magento.datagrid_helper->getMagentoChannelsQueryBuilder
+                firstName:
+                    type: string
+                    data_name: c.firstName
+                lastName:
+                    type: string
+                    data_name: c.lastName
+                email:
+                    type: string
+                    data_name: c.email
                 countryName:
                     type: entity
                     data_name: address.country
@@ -241,14 +241,16 @@ datagrid:
                 countryName:
                     type: entity
                     data_name: address.country
+                    enabled:          false
                     options:
                         field_options:
                           class: OroAddressBundle:Country
                           property: name
                           query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
                 regionName:
-                    type: string
+                    type:      string
                     data_name: regionName
+                    enabled:   false
                 statusLabel:
                     type: entity
                     data_name: c.status
@@ -381,6 +383,8 @@ datagrid:
                 createdAt:  DESC
         options:
             entityHint: cart item
+            toolbarOptions:
+                hide: true
 
     magento-products-grid:
         source:
@@ -615,22 +619,25 @@ datagrid:
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 countryName:
-                    type: entity
+                    type:      entity
                     data_name: address.country
+                    enabled:   false
                     options:
                         field_options:
                           class: OroAddressBundle:Country
                           property: name
                           query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
                 regionName:
-                    type: string
+                    type:      string
                     data_name: regionName
+                    enabled:   false
                 status:
                     type:             string
                     data_name:        o.status
                 stepLabel:
-                    type: entity
+                    type:      entity
                     data_name: o.workflowStep
+                    enabled:   false
                     options:
                         field_type: oro_workflow_step_select
                         field_options:
