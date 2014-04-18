@@ -21,9 +21,10 @@ datagrid:
                 join:
                     left:
                         - { join: c.channel, alias: ch }
-                        - { join: c.addresses, alias: address }
+                        - { join: c.addresses, alias: address,  conditionType: WITH, condition: "address.primary = true"}
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+                groupBy: c.id
         columns:
             firstName:
                 label: orocrm.magento.customer.first_name.label
