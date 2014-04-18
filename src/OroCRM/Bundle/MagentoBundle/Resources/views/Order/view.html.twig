@@ -80,7 +80,7 @@
         {% set orderEmailsWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
-                'url': path('oro_email_widget_emails', {'emailIds': emailIds, 'datagrid-no-filters': true}),
+                'url': path('oro_email_widget_emails', {'emailIds': emailIds, 'datagrid-no-filters': true, 'turn-off-toolbar-records-number': 5}),
                 'title': 'oro.email.entity_plural_label'|trans,
                 'alias': 'cart_emails'
             }) }}
@@ -101,7 +101,7 @@
         {% set orderCallsWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
-                'url': path('orocrm_call_widget_calls', {'callIds': callIds, 'datagrid-no-filters': true}),
+                'url': path('orocrm_call_widget_calls', {'callIds': callIds, 'datagrid-no-filters': true, 'turn-off-toolbar-records-number': 10}),
                 'title': 'orocrm.call.entity_plural_label'|trans,
                 'alias': 'cart_calls'
             }) }}
