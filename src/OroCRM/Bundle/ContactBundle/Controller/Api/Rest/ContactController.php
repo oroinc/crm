@@ -172,6 +172,22 @@ class ContactController extends RestController implements ClassResourceInterface
             $result['method'] = null;
         }
 
+        $result['emails'] = array();
+        foreach ($entity->getEmails() as $email) {
+            $result['emails'][] = array(
+                'email' => $email->getEmail(),
+                'primary' => $email->isPrimary()
+            );
+        }
+
+        $result['phones'] = array();
+        foreach ($entity->getPhones() as $phone) {
+            $result['phones'][] = array(
+                'phone' => $phone->getPhone(),
+                'primary' => $phone->isPrimary()
+            );
+        }
+
         // set contact group data
         $groupsData = array();
         foreach ($entity->getGroups() as $group) {
