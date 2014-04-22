@@ -2,21 +2,17 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Oro\Bundle\EmailBundle\Builder\EmailEntityBuilder;
-use Oro\Bundle\EmailBundle\Entity\EmailFolder;
-use Oro\Bundle\EmailBundle\Entity\InternalEmailOrigin;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-use Oro\Bundle\EmailBundle\Entity\Email;
-use Oro\Bundle\EmailBundle\Entity\EmailRecipient;
-use Oro\Bundle\EmailBundle\Entity\Util\EmailUtil;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\CallBundle\Entity\Call;
+use Oro\Bundle\EmailBundle\Builder\EmailEntityBuilder;
+use Oro\Bundle\EmailBundle\Entity\EmailFolder;
+use Oro\Bundle\EmailBundle\Entity\InternalEmailOrigin;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class LoadEmailData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
@@ -80,7 +76,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             $contact = $contacts[$contactRandom];
             $origin = $om
                 ->getRepository('OroEmailBundle:InternalEmailOrigin')
-                ->findOneBy(array('name' => InternalEmailOrigin::BAP));
+                ->findOneBy(array('internalName' => InternalEmailOrigin::BAP));
 
             $randTemplate = array_rand($this->templates);
             $email = $emailsBuilder->email(
