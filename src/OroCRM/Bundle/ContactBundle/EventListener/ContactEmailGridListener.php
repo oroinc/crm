@@ -71,32 +71,24 @@ class ContactEmailGridListener
             ->innerJoin('r.emailAddress', 'ra')
             ->where('ra.email IN (:email_addresses)');
 
-        $queryBuilder->setParameter('email_addresses', !empty($emailAddresses) ? $emailAddresses : null);
-
-
-        $subQb = $this->em->createQueryBuilder();
-
-        $subQb->select('email')
+        $dupsQueryBuilder = $this->em->createQueryBuilder()
+            ->select('email')
             ->from('OroEmailBundle:Email', 'email')
             ->groupBy('email.messageId')
             ->having('MAX(email.id) = e.id');
 
+        $queryBuilder->setParameter('email_addresses', !empty($emailAddresses) ? $emailAddresses : null);
 
         $queryBuilder->where(
-            $queryBuilder->expr()->exists(
-                $subQb->getDQL()
+            $queryBuilder->expr()->andX(
+                $queryBuilder->expr()->exists(
+                    $dupsQueryBuilder->getDQL()
+                ),
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->in('a.email', ':email_addresses'),
+                    $queryBuilder->expr()->in('e.id', $qbRecipients->getDQL())
+                )
             )
         );
-
-        $queryBuilder->andWhere(
-            $queryBuilder->expr()->orX(
-                $queryBuilder->expr()->in('a.email', ':email_addresses'),
-                $queryBuilder->expr()->in('e.id', $qbRecipients->getDQL())
-            )
-        );
-
-
-
-
     }
 }
