@@ -71,18 +71,16 @@ class ContactEmailGridListener
             ->innerJoin('r.emailAddress', 'ra')
             ->where('ra.email IN (:email_addresses)');
 
-        $dupsQueryBuilder = $this->em->createQueryBuilder()
+        $dupesQueryBuilder = $this->em->createQueryBuilder()
             ->select('email')
             ->from('OroEmailBundle:Email', 'email')
             ->groupBy('email.messageId')
             ->having('MAX(email.id) = e.id');
 
-        $queryBuilder->setParameter('email_addresses', !empty($emailAddresses) ? $emailAddresses : null);
-
         $queryBuilder->where(
             $queryBuilder->expr()->andX(
                 $queryBuilder->expr()->exists(
-                    $dupsQueryBuilder->getDQL()
+                    $dupesQueryBuilder->getDQL()
                 ),
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->in('a.email', ':email_addresses'),
@@ -90,5 +88,7 @@ class ContactEmailGridListener
                 )
             )
         );
+        
+        $queryBuilder->setParameter('email_addresses', !empty($emailAddresses) ? $emailAddresses : null);
     }
 }
