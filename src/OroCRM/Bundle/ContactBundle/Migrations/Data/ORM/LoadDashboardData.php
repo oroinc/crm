@@ -22,11 +22,10 @@ class LoadDashboardData extends AbstractDashboardFixture implements DependentFix
      */
     public function load(ObjectManager $manager)
     {
-        $mainDashboard = $this->findAdminDashboard($manager, 'main');
+        $mainDashboard = $this->findAdminDashboardModel($manager, 'main');
 
         if ($mainDashboard) {
-            $this->addNewWidget($manager, $mainDashboard, 'my_contacts_activity')
-                ->setLayoutPosition([0, 60]);
+            $mainDashboard->addWidget($this->createWidgetModel('my_contacts_activity', [0 ,60]));
 
             $manager->flush();
         }
