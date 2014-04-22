@@ -71,7 +71,7 @@ class ContactEmailGridListener
             ->innerJoin('r.emailAddress', 'ra')
             ->where('ra.email IN (:email_addresses)');
 
-        $dupesQueryBuilder = $this->em->createQueryBuilder()
+        $qbDuplicates = $this->em->createQueryBuilder()
             ->select('email')
             ->from('OroEmailBundle:Email', 'email')
             ->groupBy('email.messageId')
@@ -80,7 +80,7 @@ class ContactEmailGridListener
         $queryBuilder->where(
             $queryBuilder->expr()->andX(
                 $queryBuilder->expr()->exists(
-                    $dupesQueryBuilder->getDQL()
+                    $qbDuplicates->getDQL()
                 ),
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->in('a.email', ':email_addresses'),
