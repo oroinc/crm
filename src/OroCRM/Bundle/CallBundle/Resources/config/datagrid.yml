@@ -90,7 +90,7 @@ datagrid:
             entityHint: calls
             export: true
 
-    widget-calls-grid:
+    widget-base-calls-grid:
         source:
             type: orm
             acl_resource: orocrm_call_view
@@ -132,25 +132,6 @@ datagrid:
                 frontend_type: html
             phone:
                 label: orocrm.call.phone_number.label
-        filters:
-            columns:
-                contactName:
-                    type: string
-                    enabled: false
-                    data_name: contactName
-                accountName:
-                    type: string
-                    enabled: false
-                    data_name: account.name
-                subject:
-                    type: string
-                    data_name: call.subject
-                phone:
-                    type: string
-                    data_name: phone
-                dateTime:
-                    type: datetime
-                    data_name: call.callDateTime
         sorters:
             columns:
                 contactName:
@@ -171,6 +152,35 @@ datagrid:
             accountId: ~
         options:
             entityHint: calls
+            toolbarOptions:
+                turnOffToolbarRecordsNumber: 10
+                addResetAction: false
+
+    widget-calls-grid:
+        extends: widget-base-calls-grid
+        filters:
+            columns:
+                contactName:
+                    type: string
+                    enabled: false
+                    data_name: contactName
+                accountName:
+                    type: string
+                    enabled: false
+                    data_name: account.name
+                subject:
+                    type: string
+                    data_name: call.subject
+                phone:
+                    type: string
+                    data_name: phone
+                dateTime:
+                    type: datetime
+                    data_name: call.callDateTime
+        options:
+            toolbarOptions:
+                turnOffToolbarRecordsNumber: 0
+                addResetAction: true
 
     dashboard-recent-calls-grid:
         options:

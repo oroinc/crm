@@ -7,7 +7,7 @@
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
-        'indexPath': path('orocrm_magento_order_index', {id: entity.channel.id}),
+        'indexPath': path('orocrm_magento_order_index'),
         'indexLabel': 'orocrm.magento.order.entity_plural_label'|trans,
         'entityTitle': 'orocrm.magento.order.entity_label'|trans ~ ' ' ~ entity.incrementId
     } %}
@@ -80,7 +80,7 @@
         {% set orderEmailsWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
-                'url': path('oro_email_widget_emails', {'emailIds': emailIds, 'datagrid-no-filters': true, 'turn-off-toolbar-records-number': 5}),
+                'url': path('oro_email_widget_base_emails', {'emailIds': emailIds}),
                 'title': 'oro.email.entity_plural_label'|trans,
                 'alias': 'cart_emails'
             }) }}
@@ -101,7 +101,7 @@
         {% set orderCallsWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
-                'url': path('orocrm_call_widget_calls', {'callIds': callIds, 'datagrid-no-filters': true, 'turn-off-toolbar-records-number': 10}),
+                'url': path('orocrm_call_base_widget_calls', {'callIds': callIds}),
                 'title': 'orocrm.call.entity_plural_label'|trans,
                 'alias': 'cart_calls'
             }) }}

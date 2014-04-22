@@ -108,15 +108,3 @@ services:
 
     orocrm_magento.country.datagrid_helper:
         class: %orocrm_magento.country.datagrid_helper.class%
-
-    orocrm_magento.filters.event_listener:
-        class: %oro_filter.event_listener.disabled_filters.class%
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.widget-calls-grid, method: onBuildBefore }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.email-grid, method: onBuildBefore }
-
-    orocrm_magento.toolbar.event_listener:
-        class: %oro_datagrid.event_listener.hide_toolbar_by_records.class%
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.widget-calls-grid, method: onBuildBefore }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.email-grid, method: onBuildBefore }
