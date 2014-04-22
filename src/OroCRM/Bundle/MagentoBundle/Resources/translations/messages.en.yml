@@ -229,7 +229,7 @@ orocrm:
             entity_plural_label: Orders
             entity_description:  Respresent Magento Order
 
-            refresh_label:      Refresh Data
+            refresh_label:      Sync Data
             id.label:           Id
             increment_id.label: "Order #"
             items_qty.label:    Items qty
