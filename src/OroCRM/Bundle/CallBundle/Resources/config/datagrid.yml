@@ -152,6 +152,10 @@ datagrid:
             accountId: ~
         options:
             entityHint: calls
+
+    widget-simplyfied-calls-grid:
+        extends: widget-base-calls-grid
+        options:
             toolbarOptions:
                 turnOffToolbarRecordsNumber: 10
                 addResetAction: false
@@ -177,10 +181,6 @@ datagrid:
                 dateTime:
                     type: datetime
                     data_name: call.callDateTime
-        options:
-            toolbarOptions:
-                turnOffToolbarRecordsNumber: 0
-                addResetAction: true
 
     dashboard-recent-calls-grid:
         options:
