@@ -261,6 +261,7 @@ datagrid:
                 stepLabel:
                     type: entity
                     data_name: c.workflowStep
+                    enabled:   false
                     options:
                         field_type: oro_workflow_step_select
                         field_options:
@@ -743,6 +744,8 @@ datagrid:
                 rowTotal:            { data_name: oi.rowTotal }
         options:
             entityHint: order item
+            toolbarOptions:
+                hide: true
 
     magento-customer-order-grid:
         source:
