@@ -6,3 +6,4 @@ oro_dashboard_config:
             route_parameters: { bundle: OroCRMCallBundle, name: recentCalls }
             acl:         orocrm_call_view
             description: orocrm.dashboard.recent_calls.description
+            icon:   bundles/orocrmcall/img/recent_calls.png
