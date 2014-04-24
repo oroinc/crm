@@ -90,14 +90,13 @@ class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
             ;
         }
 
-        $uniqueCartAddressIds = array_unique($cartAddressId);
-
-        if (is_array($uniqueCartAddressIds)) {
+        if (!empty($cartAddressId)) {
+            $uniqueCartAddressIds = array_unique($cartAddressId);
             $this
                 ->getEntityManager()
                 ->createQuery(
                     'DELETE FROM OroCRMMagentoBundle:CartAddress ca '.
-                    'WHERE ca.id IN ' . $this->inExpr($uniqueCartAddressIds)
+                    'WHERE ca.id IN ' . $this->exprIn($uniqueCartAddressIds)
                 )
                 ->execute();
         }
@@ -143,7 +142,7 @@ class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
      *
      * @return string
      */
-    private function inExpr(array $array)
+    private function exprIn(array $array)
     {
         return '(' . implode(',', $array) . ')';
     }
