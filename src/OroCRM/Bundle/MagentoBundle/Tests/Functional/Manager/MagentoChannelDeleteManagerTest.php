@@ -52,7 +52,6 @@ class MagentoChannelDeleteManagerTest extends WebTestCase
         return $this->em->getRepository($repository)->findByChannel($channel->getId());
     }
 
-
     public function testDeleteCart()
     {
         $channel = $this->getChannel();
