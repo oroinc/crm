@@ -20,7 +20,7 @@ class DashboardController extends Controller
      *      name="orocrm_sales_dashboard_opportunities_by_lead_source_chart",
      *      requirements={"widget"="[\w-]+"}
      * )
-     * @Template("OroDashboardBundle:Dashboard:pieChart.html.twig")
+     * @Template("OroCRMSalesBundle:Dashboard:opportunitiesByLeadSource.html.twig")
      */
     public function opportunitiesByLeadSourceAction($widget)
     {
@@ -31,14 +31,19 @@ class DashboardController extends Controller
             ->getRepository('OroCRMSalesBundle:Lead')
             ->getOpportunitiesByLeadSource($this->get('oro_security.acl_helper'));
 
-        foreach ($data as $key => $sourceData) {
+        foreach ($data as &$sourceData) {
             if (!empty($sourceData['label'])) {
-                $data[$key]['label'] = $translator->trans($sourceData['label']);
+                $sourceData['label'] = $translator->trans($sourceData['label']);
             }
         }
 
+        $view = $this->getChartViewBuilder();
+        $view->setArrayData($data);
+        $view->setDataMapping(array('label' => 'label', 'value' => 'fraction'));
+        $view->setOptions(array('name' => 'pie_chart'));
+
         $result = array_merge(
-            ['data' => $data],
+            ['chartView' => $view->getView()],
             $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget)
         );
 
