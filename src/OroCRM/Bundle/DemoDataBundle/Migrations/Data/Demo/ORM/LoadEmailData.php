@@ -89,13 +89,15 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             );
 
             $email->setFolder($origin->getFolder(EmailFolder::SENT));
+
             $emailBody = $emailsBuilder->body(
                 "Hi,\n" . $this->templates[$randTemplate]['Text'],
                 false,
                 true
             );
-
             $email->setEmailBody($emailBody);
+            $email->setMessageId(sprintf('id.%s@%s', uniqid(), '@bap.migration.generated'));
+
             $emailsBuilder->getBatch()->persist($om);
         }
     }
