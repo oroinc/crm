@@ -41,20 +41,25 @@ class MagentoChannelDeleteManager implements ChannelDeleteProviderInterface
     {
         $this->channel = $channel;
 
-        $this
-            ->removeFromEntityByChannelId('OroEmbeddedFormBundle:EmbeddedForm')
-            ->removeFromEntityByChannelId('OroCRMMagentoBundle:Order')
-            ->removeCarts()
-            ->removeFromEntityByChannelId('OroCRMMagentoBundle:Customer')
-            ->removeFromEntityByChannelId('OroCRMMagentoBundle:Store')
-            ->removeFromEntityByChannelId('OroCRMMagentoBundle:Website')
-            ->removeFromEntityByChannelId('OroCRMMagentoBundle:CustomerGroup')
-        ;
+        try {
+            $this
+                ->removeFromEntityByChannelId('OroEmbeddedFormBundle:EmbeddedForm')
+                ->removeFromEntityByChannelId('OroCRMMagentoBundle:Order')
+                ->removeCarts()
+                ->removeFromEntityByChannelId('OroCRMMagentoBundle:Customer')
+                ->removeFromEntityByChannelId('OroCRMMagentoBundle:Store')
+                ->removeFromEntityByChannelId('OroCRMMagentoBundle:Website')
+                ->removeFromEntityByChannelId('OroCRMMagentoBundle:CustomerGroup')
+            ;
 
-        $this->getEntityManager()->remove($channel);
-        $this->getEntityManager()->flush();
+            $this->getEntityManager()->remove($channel);
+            $this->getEntityManager()->flush();
 
-        return $this;
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
