@@ -2,11 +2,14 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Manager;
 
+use Doctrine\ORM\EntityManager;
+
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Util\Debug;
 
 /**
  * @outputBuffering enabled
@@ -34,13 +37,59 @@ class MagentoChannelDeleteManagerTest extends WebTestCase
         $this->em = $this->client->getKernel()->getContainer()->get('doctrine.orm.entity_manager');
     }
 
-    public function testDelete()
+    public function tearDown()
     {
-        $entity   = $this->getRepository('OroIntegrationBundle:Channel')->findOne();
-
-        var_dump($entity);
-
-        #$this->get('oro_integration.channel_delete_manager')->deleteChannel($entity);
+        unset($this->client, $this->em);
     }
+
+    public function getChannel()
+    {
+        return $this->em->getRepository('OroIntegrationBundle:Channel')->findOneByType('magento');
+    }
+
+    public function getEntity(Channel $channel, $repository)
+    {
+        return $this->em->getRepository($repository)->findByChannel($channel->getId());
+    }
+
+
+    public function testDeleteCart()
+    {
+        $channel = $this->getChannel();
+        $entityName = 'OroCRMMagentoBundle:Cart';
+        $entity  = $this->getEntity($channel, $entityName);
+
+        $this->assertGreaterThan(0, count($entity));
+
+        $this->client->getKernel()->getContainer()->get('oro_integration.channel_delete_manager')->deleteChannel($channel);
+
+        $entity1 = $this->getEntity($channel, $entityName);
+
+        $this->assertEquals(0, count($entity1));
+
+        $this->assertGreaterThan(count($entity1), count($entity));
+
+        unset($entity, $entity1);
+    }
+
+    public function testDeleteWebSite()
+    {
+        $channel = $this->getChannel();
+        $entityName = 'OroCRMMagentoBundle:Website';
+
+        $entity  = $this->getEntity($channel, $entityName);
+
+        $this->assertGreaterThan(0, count($entity));
+
+        $this->client->getKernel()->getContainer()->get('oro_integration.channel_delete_manager')->deleteChannel($channel);
+
+        $entity1 = $this->getEntity($channel, $entityName);
+
+        $this->assertEquals(0, count($entity1));
+        $this->assertGreaterThan(count($entity1), count($entity));
+
+        unset($entity, $entity1);
+    }
+
 
 }
