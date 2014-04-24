@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace OroCRM\Bundle\MagentoBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 
@@ -10,7 +10,7 @@ use Oro\Bundle\IntegrationBundle\Manager\ChannelDeleteProviderInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 
-class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
+class MagentoChannelDeleteManager implements ChannelDeleteProviderInterface
 {
     /** @var EntityManager */
     protected $em;

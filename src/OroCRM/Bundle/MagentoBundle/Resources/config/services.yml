@@ -5,7 +5,6 @@ parameters:
     # providers
     orocrm_magento.provider.channel_type.class:                             OroCRM\Bundle\MagentoBundle\Provider\ChannelType
     orocrm_magento.provider.cart_expiration_processor.class:                OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor
-    orocrm_magento.provider.magento_channel_delete_provider.class:          OroCRM\Bundle\MagentoBundle\Provider\MagentoChannelDeleteProvider
 
     # forms
     orocrm_magento.form.type.order_place.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\OrderPlaceType
@@ -22,6 +21,9 @@ parameters:
     # datagrid helpers
     orocrm_magento.country.datagrid_helper.class:                           Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
     orocrm_magento.datagrid_helper.class:                                   OroCRM\Bundle\MagentoBundle\Datagrid\MagentoDatagridHelper
+
+    # manager
+    orocrm_magento.manager.magento_channel_delete_manager.class:            OroCRM\Bundle\MagentoBundle\Manager\MagentoChannelDeleteManager
 
 services:
     orocrm_magento.transport.soap_transport:
@@ -110,8 +112,8 @@ services:
     orocrm_magento.country.datagrid_helper:
         class: %orocrm_magento.country.datagrid_helper.class%
 
-    orocrm_magento.provider.magento_channel_delete_provider:
-        class: %orocrm_magento.provider.magento_channel_delete_provider.class%
+    orocrm_magento.manager.magento_channel_delete_manager:
+        class: %orocrm_magento.manager.magento_channel_delete_manager.class%
         arguments: [ @doctrine.orm.entity_manager ]
         tags:
             - { name: oro_integration.channel_delete_provider }
