@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller\Dashboard;
 
+use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -54,12 +55,17 @@ class DashboardController extends Controller
      */
     public function opportunityByStatusAction($widget)
     {
+        $items = $this->getDoctrine()
+            ->getRepository('OroCRMSalesBundle:Opportunity')
+            ->getOpportunitiesByStatus($this->get('oro_security.acl_helper'));
+
+        $view = $this->getChartViewBuilder();
+        $view->setArrayData($items);
+        $view->setDataMapping(array('label' => 'label', 'value' => 'budget'));
+        $view->setOptions(array('name' => 'line_chart'));
+
         return array_merge(
-            [
-                'items' => $this->getDoctrine()
-                        ->getRepository('OroCRMSalesBundle:Opportunity')
-                        ->getOpportunitiesByStatus($this->get('oro_security.acl_helper'))
-            ],
+            array('chartView' => $view->getView()),
             $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget)
         );
     }
@@ -102,5 +108,13 @@ class DashboardController extends Controller
             ),
             $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget)
         );
+    }
+
+    /**
+     * @return ChartViewBuilder
+     */
+    protected function getChartViewBuilder()
+    {
+        return $this->container->get('oro_chart.view_builder');
     }
 }
