@@ -2,6 +2,8 @@
 
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
+{% oro_title_set({params : {'%reportName%': pageTitle|title } }) %}
+
 {% block content %}
     {% set buttons = [] %}
     {{ parent() }}
