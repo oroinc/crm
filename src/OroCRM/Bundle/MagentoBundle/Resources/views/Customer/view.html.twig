@@ -56,15 +56,6 @@
         }) }}
     {% endset %}
 
-    {% set addressBookWidget %}
-        {{ oro_widget_render({
-            'widgetType': 'block',
-            'contentClasses': [],
-            'url': path('orocrm_contact_address_book', {id: entity.id}),
-            'title': 'Address Book'|trans
-        }) }}
-    {% endset %}
-
     {% set SalesTabsWidget %}
         <div class="responsive-cell" id="magento-without-border-tabs">
             {% set tabs = [
@@ -97,7 +88,6 @@
             'class': 'active',
             'subblocks': [
                 {'data' : [customerInformationWidget] },
-                {'data' : [addressBookWidget] },
             ]
         },
         {
