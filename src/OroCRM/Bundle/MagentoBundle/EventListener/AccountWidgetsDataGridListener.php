@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
-use Oro\Bundle\DataGridBundle\Datagrid\RequestParameters;
 
 class AccountWidgetsDataGridListener
 {
@@ -12,34 +11,30 @@ class AccountWidgetsDataGridListener
      * @var array
      */
     protected $parameters;
-    /**
-     * @var RequestParameters
-     */
-    protected $requestParams;
 
     /**
-     * @param RequestParameters $requestParams
      * @param array $parameters
      */
-    public function __construct(RequestParameters $requestParams, $parameters = array())
+    public function __construct($parameters = array())
     {
         $this->parameters = $parameters;
-        $this->requestParams = $requestParams;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function onBuildAfter(BuildAfter $event)
     {
+        $datagrid = $event->getDatagrid();
         $dataSource = $event->getDatagrid()->getDatasource();
-        if ($dataSource instanceof OrmDatasource) {
 
+        if ($dataSource instanceof OrmDatasource) {
+            $parameters = $datagrid->getParameters();
             $queryBuilder = $dataSource->getQueryBuilder();
             $params = array();
 
             foreach ($this->parameters as $fieldName) {
-                $param = $this->requestParams->get($fieldName, null);
+                $param = $parameters->get($fieldName, null);
                 $params[$fieldName] = $param;
             }
 
