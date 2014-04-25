@@ -95,7 +95,7 @@ class NavigationListener
                                 'routeParameters' => ['id' => $entry['id']],
                                 'label'           => $entry['label'],
                                 'extras'          => [
-                                    'routes'         => self::$map[$key]['extra_routes'],
+                                    'routes'          => self::$map[$key]['extra_routes'],
                                     'skipBreadcrumbs' => true
                                 ]
                             ]
