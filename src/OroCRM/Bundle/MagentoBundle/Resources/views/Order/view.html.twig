@@ -2,7 +2,7 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 {% import 'OroAddressBundle::macros.html.twig' as address %}
 
-{% oro_title_set({params : {"%order.incrementId%":  entity.incrementId} }) %}
+{% oro_title_set({params : {"%order.incrementId%":  entity.incrementId, '%channelName%': entity.channel.name} }) %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {

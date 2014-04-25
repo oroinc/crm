@@ -14,3 +14,4 @@ oro_dashboard_config:
             route_parameters: { bundle: OroCRMContactBundle, name: myContactsActivity }
             acl:         orocrm_contact_view
             description: orocrm.dashboard.my_contacts_activity.description
+            icon:       bundles/orocrmcontact/img/recently_accessed_contacts.png

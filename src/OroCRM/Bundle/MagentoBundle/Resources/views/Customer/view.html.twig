@@ -2,7 +2,7 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
 {% set fullname = entity|oro_format_name|default('N/A'|trans) %}
-{% oro_title_set({params : {"%customer.name%": fullname} }) %}
+{% oro_title_set({params : {"%customer.name%": fullname, '%channelName%': entity.channel.name} }) %}
 
 {% block navButtons %}
     {% set createOrder = 'orocrm.magento.customer.create_order'|trans %}
