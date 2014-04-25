@@ -27,7 +27,7 @@ class CartController extends Controller
      */
     public function indexAction(Channel $channel)
     {
-        return ['channelId' => $channel->getId()];
+        return ['channel' => $channel];
     }
 
     /**
