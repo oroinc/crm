@@ -1006,7 +1006,7 @@ datagrid:
             columns:
                 incrementId:
                     type:        string
-                    data_name:   o.id
+                    data_name:   o.incrementId
                 itemsCount:
                     type:        number
                     data_name:   itemsCount
@@ -1131,8 +1131,8 @@ datagrid:
         filters:
             columns:
                 originId:
-                    type:            string
-                    data_name:       c.id
+                    type:            number
+                    data_name:       c.originId
                 itemsCount:
                     type:             number
                     data_name:        itemsCount
