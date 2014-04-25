@@ -73,7 +73,7 @@ class SalesFunnelRepository extends EntityRepository
             }
         }
 
-        return array('data' => $data);
+        return $data;
     }
 
     /**
