@@ -62,8 +62,11 @@
             'contentClasses': [],
             'url': path('orocrm_contact_address_book', {id: entity.id}),
             'title': 'Address Book'|trans
-            })
-        }}
+        }) }}
+    {% endset %}
+
+    {% set SalesTabsWidget %}
+        {{ menuTabPanel('customer_sales_tab_panel', {'id': entity.id}) }}
     {% endset %}
 
     {% set dataBlocks = [
@@ -73,6 +76,12 @@
             'subblocks': [
                 {'data' : [customerInformationWidget] },
                 {'data' : [addressBookWidget] },
+            ]
+        },
+        {
+            'title': 'orocrm.magento.customer.sales.label'|trans,
+            'subblocks': [
+                {'data' : [SalesTabsWidget] }
             ]
         }
     ] %}
