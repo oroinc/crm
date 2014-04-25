@@ -130,6 +130,7 @@ orocrm:
                 active:                Active
                 converted:             Converted
             sub_total.label:           Sub total
+            sub_total_amount.label:    Subtotal Amount
             grand_total.label:         Grand total
             tax_amount.label:          Tax
             created_at.label:          Created at
