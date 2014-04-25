@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller\Dashboard;
 
+use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -37,15 +38,29 @@ class DashboardController extends Controller
         /** @var CartRepository $shoppingCartRepository */
         $shoppingCartRepository = $this->getDoctrine()->getRepository('OroCRMMagentoBundle:Cart');
 
-        return array_merge(
-            array('quarterDate' => $dateFrom),
-            $shoppingCartRepository->getFunnelChartData(
-                $dateFrom,
-                $dateTo,
-                $workflow,
-                $this->get('oro_security.acl_helper')
-            ),
-            $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget)
+
+        $data = $shoppingCartRepository->getFunnelChartData(
+            $dateFrom,
+            $dateTo,
+            $workflow,
+            $this->get('oro_security.acl_helper')
         );
+        $view = $this->getChartViewBuilder();
+        $view->setArrayData($data);
+        $view->setDataMapping(array('label' => 'label', 'value' => 'value', 'isNozzle' => 'isNozzle'));
+        $view->setOptions(array('name' => 'flow_chart', 'settings' => array('quarterDate' => $dateFrom)));
+
+        $widgetAttr = $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget);
+        $widgetAttr['chartView'] = $view->getView();
+
+        return $widgetAttr;
+    }
+
+    /**
+     * @return ChartViewBuilder
+     */
+    protected function getChartViewBuilder()
+    {
+        return $this->container->get('oro_chart.view_builder');
     }
 }

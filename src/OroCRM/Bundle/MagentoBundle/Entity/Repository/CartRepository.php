@@ -59,21 +59,20 @@ class CartRepository extends EntityRepository
         $finalStepsData   = $this->getStepData($finalSteps, $dateFrom, $dateTo, $aclHelper);
 
         // final calculation
-        $regularData = array();
-        $finalData   = array();
+        $data = array();
         foreach ($steps as $step) {
             $stepName  = $step->getName();
             if (!in_array($stepName, $this->excludedSteps)) {
-                $stepLabel = $step->getLabel();
                 if ($step->isFinal()) {
-                    $finalData[$stepLabel] = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
+                    $stepValue = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
+                    $data[] = array('label' => $step->getLabel(), 'value' => $stepValue, 'isNozzle' => true);
                 } else {
-                    $regularData[$stepLabel] = isset($regularStepsData[$stepName]) ? $regularStepsData[$stepName] : 0;
+                    $stepValue = isset($regularStepsData[$stepName]) ? $regularStepsData[$stepName] : 0;
+                    $data[] = array('label' => $step->getLabel(), 'value' => $stepValue, 'isNozzle' => false);
                 }
             }
         }
-
-        return array('items' => array_merge($regularData, $finalData), 'nozzleSteps' => array_keys($finalData));
+        return $data;
     }
 
     /**

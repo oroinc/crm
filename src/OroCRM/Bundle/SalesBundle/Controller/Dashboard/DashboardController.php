@@ -102,17 +102,23 @@ class DashboardController extends Controller
         /** @var SalesFunnelRepository $salesFunnerRepository */
         $salesFunnerRepository = $this->getDoctrine()->getRepository('OroCRMSalesBundle:SalesFunnel');
 
-        return array_merge(
-            array('quarterDate' => $dateFrom),
-            $salesFunnerRepository->getFunnelChartData(
-                $dateFrom,
-                $dateTo,
-                $workflow,
-                $customStepCalculations,
-                $this->get('oro_security.acl_helper')
-            ),
-            $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget)
+        $data = $salesFunnerRepository->getFunnelChartData(
+            $dateFrom,
+            $dateTo,
+            $workflow,
+            $customStepCalculations,
+            $this->get('oro_security.acl_helper')
         );
+        $view = $this->getChartViewBuilder();
+        $view->setArrayData($data);
+        $view->setDataMapping(array('label' => 'label', 'value' => 'value', 'isNozzle' => 'isNozzle'));
+        $view->setOptions(array('name' => 'flow_chart', 'settings' => array('quarterDate' => $dateFrom)));
+
+
+        $widgetAttr = $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget);
+        $widgetAttr['chartView'] = $view->getView();
+
+        return $widgetAttr;
     }
 
     /**
