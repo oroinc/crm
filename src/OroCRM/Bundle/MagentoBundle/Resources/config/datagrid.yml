@@ -1005,34 +1005,35 @@ datagrid:
         filters:
             columns:
                 incrementId:
-                    type:        number
+                    type:        string
                     data_name:   o.id
                 itemsCount:
                     type:        number
                     data_name:   itemsCount
+                    filter_by_having: true
                 createdAt:
-                    type:             datetime
-                    data_name:        o.createdAt
+                    type:         datetime
+                    data_name:    o.createdAt
                 updatedAt:
-                    type:             datetime
-                    data_name:        o.updatedAt
+                    type:         datetime
+                    data_name:    o.updatedAt
                 subTotalAmount:
-                    type:             number
-                    data_name:        o.subtotalAmount
+                    type:         number
+                    data_name:    o.subtotalAmount
                     options:
-                       data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                       data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 totalAmount:
-                    type:        number
-                    data_name:   o.totalAmount
+                    type:         number
+                    data_name:    o.totalAmount
                 totalPaidAmount:
-                    type:        number
-                    data_name:   o.totalPaidAmount
+                    type:         number
+                    data_name:    o.totalPaidAmount
                 status:
-                    type:             string
-                    data_name:        o.status
+                    type:         string
+                    data_name:    o.status
                 stepLabel:
-                    type: entity
-                    data_name: o.workflowStep
+                    type:         entity
+                    data_name:    o.workflowStep
                     options:
                         field_type: oro_workflow_step_select
                         field_options:
@@ -1130,23 +1131,24 @@ datagrid:
         filters:
             columns:
                 originId:
-                    type:        number
-                    data_name:   c.id
+                    type:            string
+                    data_name:       c.id
                 itemsCount:
-                    type:        number
-                    data_name:   itemsCount
+                    type:             number
+                    data_name:        itemsCount
+                    filter_by_having: true
                 createdAt:
-                    type:        datetime
-                    data_name:   c.createdAt
+                    type:             datetime
+                    data_name:        c.createdAt
                 updatedAt:
-                    type:        datetime
-                    data_name:   c.updatedAt
+                    type:             datetime
+                    data_name:        c.updatedAt
                 grandTotal:
-                    type:        number
-                    data_name:   c.grandTotal
+                    type:             number
+                    data_name:        c.grandTotal
                 statusLabel:
-                    type:        entity
-                    data_name:   c.status
+                    type:             entity
+                    data_name:        c.status
                     options:
                         field_options:
                             class: OroCRMMagentoBundle:CartStatus
