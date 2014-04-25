@@ -981,7 +981,7 @@ datagrid:
                 label: orocrm.magento.order.updated_at.label
                 frontend_type: datetime
             subTotalAmount:
-                label: orocrm.magento.cart.sub_total.label
+                label: orocrm.magento.cart.sub_total_amount.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
