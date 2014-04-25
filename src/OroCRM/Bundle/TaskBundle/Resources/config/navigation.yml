@@ -29,5 +29,5 @@ oro_menu_config:
 oro_titles:
     orocrm_task_index: ~
     orocrm_task_view: '%%entity.subject%%'
-    orocrm_task_create: 'Create %%entityName%%'
+    orocrm_task_create: oro.ui.create_entity
     orocrm_task_update: '%%entity.subject%% - Edit'
