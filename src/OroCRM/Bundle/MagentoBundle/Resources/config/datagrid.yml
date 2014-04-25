@@ -1062,3 +1062,108 @@ datagrid:
                 icon:         book
                 acl_recource: orocrm_magento_order_view
                 rowAction:    true
+
+    magento-customer-cart-widget-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_magento_cart_view
+            query:
+                select:
+                    - c.id
+                    - c.originId
+                    - c.grandTotal
+                    - c.createdAt
+                    - c.updatedAt
+                    - c.quoteCurrencyCode as currency
+                    - cstatus.label as statusLabel
+                    - step.label as stepLabel
+                    - c.itemsCount
+                from:
+                    - { table: %orocrm_magento.cart.entity.class% , alias: c }
+                join:
+                    left:
+                        - { join: c.status, alias: cstatus }
+                        - { join: c.workflowStep, alias: step }
+                where:
+                    and:
+                        - c.customer = :customerId AND c.channel = :channelId
+                groupBy: c.id
+        columns:
+            originId:
+                label: orocrm.magento.cart.id.label
+            itemsCount:
+                label: orocrm.magento.cart.items_qty.label
+                frontend_type: integer
+            createdAt:
+                label: orocrm.magento.cart.created_on.label
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.magento.cart.updated_on.label
+                frontend_type: datetime
+            grandTotal:
+                label:  orocrm.magento.cart.grand_total.label
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+            statusLabel:
+                label: orocrm.magento.datagrid.columns.status
+            stepLabel:
+                label: orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: orocrm_magento_cart_view
+                params: [ id ]
+        sorters:
+            columns:
+                originId:             { data_name: c.originId }
+                itemsCount:           { data_name: c.itemsCount }
+                createdAt:            { data_name: c.createdAt }
+                updatedAt:            { data_name: c.updatedAt }
+                grandTotal:           { data_name: c.grandTotal }
+                statusLabel:          { data_name: cstatus.label }
+                stepLabel:            { data_name: step.label }
+            default:
+                updatedAt:  DESC
+
+        filters:
+            columns:
+                originId:
+                    type:        number
+                    data_name:   c.id
+                itemsCount:
+                    type:        number
+                    data_name:   itemsCount
+                createdAt:
+                    type:        datetime
+                    data_name:   c.createdAt
+                updatedAt:
+                    type:        datetime
+                    data_name:   c.updatedAt
+                grandTotal:
+                    type:        number
+                    data_name:   c.grandTotal
+                statusLabel:
+                    type:        entity
+                    data_name:   c.status
+                    options:
+                        field_options:
+                            class: OroCRMMagentoBundle:CartStatus
+                            property: label
+                stepLabel:
+                    type:        entity
+                    data_name:   c.workflowStep
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %orocrm_magento.cart.entity.class%
+        actions:
+            view:
+                type:         navigate
+                label:        orocrm.magento.datagrid.actions.view.label
+                link:         view_link
+                icon:         book
+                acl_recource: orocrm_magento_cart_view
+                rowAction:    true

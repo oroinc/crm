@@ -135,6 +135,8 @@ orocrm:
             tax_amount.label:          Tax
             created_at.label:          Created at
             updated_at.label:          Updated at
+            created_on.label:          Created On
+            updated_on.label:          Updated On
             cart_items.label:          Cart Items
             customer.label:            Customer
             store.label:               Store
