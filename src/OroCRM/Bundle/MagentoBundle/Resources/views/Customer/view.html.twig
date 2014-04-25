@@ -56,16 +56,9 @@
         }) }}
     {% endset %}
 
-    {% set addressBookWidget %}
-        {{ oro_widget_render({
-            'widgetType': 'block',
-            'contentClasses': [],
-            'url': path('orocrm_contact_address_book', {id: entity.id}),
-            'title': 'Address Book'|trans
-        }) }}
-    {% endset %}
+    {% set generalSubBlocks = [{'data' : [customerInformationWidget]}] %}
 
-    {% set SalesTabsWidget %}
+    {% set salesTabsWidget %}
         <div class="responsive-cell" id="magento-without-border-tabs">
             {% set tabs = [
                 {
@@ -91,19 +84,30 @@
         </div>
     {% endset %}
 
+    {% if entity.addresses.count is not sameas(0) %}
+        {% set customerAddressBookWidget %}
+            <div class="responsive-cell">
+                {{ oro_widget_render({
+                    'widgetType': 'block',
+                    'contentClasses': [],
+                    'url': path('orocrm_magento_customer_address_book', {id: entity.id}),
+                    'title': 'Address Book'|trans
+                }) }}
+            </div>
+        {% endset %}
+        {% set generalSubBlocks = generalSubBlocks|merge([{'data': [customerAddressBookWidget]}]) %}
+    {% endif %}
+
     {% set dataBlocks = [
         {
             'title': 'General Information'|trans,
             'class': 'active',
-            'subblocks': [
-                {'data' : [customerInformationWidget] },
-                {'data' : [addressBookWidget] },
-            ]
+            'subblocks': generalSubBlocks
         },
         {
             'title': 'orocrm.magento.customer.sales.label'|trans,
             'subblocks': [
-                {'data' : [SalesTabsWidget] }
+                {'data' : [salesTabsWidget] }
             ]
         }
     ] %}
