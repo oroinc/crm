@@ -1078,7 +1078,7 @@ datagrid:
                     - c.quoteCurrencyCode as currency
                     - cstatus.label as statusLabel
                     - step.label as stepLabel
-                    - c.itemsCount
+                    - c.itemsCount as itemsCount
                 from:
                     - { table: %orocrm_magento.cart.entity.class% , alias: c }
                 join:
