@@ -88,7 +88,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
                 new \DateTime('now')
             );
 
-            $email->setFolder($origin->getFolder(EmailFolder::SENT));
+            $email->addFolder($origin->getFolder(EmailFolder::SENT));
 
             $emailBody = $emailsBuilder->body(
                 "Hi,\n" . $this->templates[$randTemplate]['Text'],
