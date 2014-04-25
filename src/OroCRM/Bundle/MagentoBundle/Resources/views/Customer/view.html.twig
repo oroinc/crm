@@ -61,7 +61,7 @@
     {% if entity.addresses.count is not sameas(0) %}
         {% set customerAddressBookWidget %}
             <div class="responsive-cell">
-                    {{ oro_widget_render({
+                {{ oro_widget_render({
                     'widgetType': 'block',
                     'contentClasses': [],
                     'url': path('orocrm_magento_customer_address_book', {id: entity.id}),
