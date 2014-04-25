@@ -12,7 +12,6 @@
             {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.website.name) }}
             {{ ui.renderHtmlProperty('orocrm.magento.customer.store.label'|trans, entity.store.name|escape|nl2br) }}
         </div>
-
         <div class="responsive-block">
             {%- set accountData -%}
                 {% if entity.account %}
@@ -47,7 +46,6 @@
             {{ ui.renderProperty('orocrm.magento.customer.birthday.label'|trans, entity.birthday ? birthdayData : null) }}
             {{ ui.renderProperty('orocrm.magento.customer.gender.label'|trans, oro_gender(entity.gender)) }}
             {{ ui.renderProperty('orocrm.magento.customer.vat.label'|trans, entity.vat) }}
-
         </div>
     </div>
 </div>

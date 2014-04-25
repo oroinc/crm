@@ -56,13 +56,27 @@
         }) }}
     {% endset %}
 
+    {% set generalSubBlocks = [{'data' : [customerInformationWidget]}] %}
+
+    {% if entity.addresses.count is not sameas(0) %}
+        {% set customerAddressBookWidget %}
+            <div class="responsive-cell">
+                {{ oro_widget_render({
+                    'widgetType': 'block',
+                    'contentClasses': [],
+                    'url': path('orocrm_magento_customer_address_book', {id: entity.id}),
+                    'title': 'Address Book'|trans
+                }) }}
+            </div>
+        {% endset %}
+        {% set generalSubBlocks = generalSubBlocks|merge([{'data': [customerAddressBookWidget]}]) %}
+    {% endif %}
+
     {% set dataBlocks = [
         {
             'title': 'General Information'|trans,
             'class': 'active',
-            'subblocks': [
-                {'data' : [customerInformationWidget] },
-            ]
+            'subblocks': generalSubBlocks
         }
     ] %}
 
