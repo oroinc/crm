@@ -18,6 +18,8 @@ parameters:
     # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
 
+    orocrm_magento.customer.manager.api.class:                              Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -112,3 +114,10 @@ services:
         class: %orocrm_magento.magento_url_generator.class%
         arguments: [@router]
         scope: prototype
+
+    # Customer API
+    orocrm_magento.customer.manager.api:
+        class: %orocrm_magento.customer.manager.api.class%
+        arguments:
+            - OroCRM\Bundle\MagentoBundle\Entity\Customer
+            - @doctrine.orm.entity_manager
