@@ -27,8 +27,6 @@ class ReportController extends Controller
         $gridName  = implode('-', ['orocrm_report', $reportGroupName, $reportName]);
         $pageTitle = $this->get('oro_datagrid.datagrid.manager')->getConfigurationForGrid($gridName)['pageTitle'];
 
-        $this->get('oro_navigation.title_service')->setParams(array('%reportName%' => $pageTitle));
-
         return [
             'pageTitle' => $pageTitle,
             'gridName'  => $gridName,
