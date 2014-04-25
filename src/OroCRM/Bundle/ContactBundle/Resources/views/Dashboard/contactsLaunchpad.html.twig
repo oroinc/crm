@@ -12,8 +12,13 @@
         acl: 'orocrm_contact_view'
     },
     create: {
-        label: 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.call.entity_label'|trans}),
+        label: 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.contact.entity_label'|trans}),
         route: 'orocrm_contact_create',
         acl: 'orocrm_contact_create'
+    },
+    group: {
+        label: 'orocrm.contact.group.manage'|trans,
+        route: 'orocrm_contact_group_index',
+        acl: 'orocrm_contact_group_view'
     }
 } %}

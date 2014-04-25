@@ -54,7 +54,6 @@ class TaskControllersTest extends WebTestCase
             )
         );
 
-        file_put_contents('/tmp/response.html', $result->getContent());
         ToolsAPI::assertJsonResponse($result, 200);
 
         $result = ToolsAPI::jsonToArray($result->getContent());
