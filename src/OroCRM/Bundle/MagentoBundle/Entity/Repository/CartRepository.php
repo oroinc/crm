@@ -22,6 +22,13 @@ class CartRepository extends EntityRepository
     ];
 
     /**
+     * @var array
+     */
+    protected $excludedStatuses = [
+        'purchased'
+    ];
+
+    /**
      * @param \DateTime $dateFrom
      * @param \DateTime $dateTo
      * @param Workflow  $workflow
@@ -97,6 +104,7 @@ class CartRepository extends EntityRepository
 
         $queryBuilder = $this->createQueryBuilder('cart')
             ->select('workflowStep.name as workflowStepName', 'SUM(cart.grandTotal) as total')
+            ->leftJoin('cart.status', 'status')
             ->join('cart.workflowStep', 'workflowStep')
             ->groupBy('workflowStep.name');
 
@@ -106,6 +114,10 @@ class CartRepository extends EntityRepository
             $queryBuilder->andWhere($queryBuilder->expr()->between('cart.createdAt', ':dateFrom', ':dateTo'))
                 ->setParameter('dateFrom', $dateFrom)
                 ->setParameter('dateTo', $dateTo);
+        }
+
+        if ($this->excludedStatuses) {
+            $queryBuilder->andWhere($queryBuilder->expr()->notIn('status.name', $this->excludedStatuses));
         }
 
         if ($aclHelper) {

@@ -5,3 +5,4 @@ oro_dashboard_config:
             route:       orocrm_magento_dashboard_sales_flow_b2c_chart
             acl:         orocrm_magento_cart_view
             description: orocrm.magento.dashboard.my_sales_flow_b2c_chart.description
+            icon:        bundles/orocrmmagento/img/my_sales_flow_b2c.png
