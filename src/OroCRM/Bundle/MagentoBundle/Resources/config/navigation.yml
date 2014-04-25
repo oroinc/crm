@@ -7,29 +7,10 @@ oro_menu_config:
                 widgetAcl: 'orocrm_magento_order_view'
                 widgetRoute: 'orocrm_magento_widget_account_orders'
 
-        orocrm_magento_customer_orders_tab:
-            label: 'orocrm.magento.order.entity_plural_label'
-            extras:
-                position: 30
-                widgetAcl: 'orocrm_magento_order_view'
-                widgetRoute: 'orocrm_magento_order_widget_items'
-
-        orocrm_magento_customer_carts_tab:
-            label: 'orocrm.magento.cart.entity_plural_label'
-            extras:
-                position: 30
-                widgetAcl: 'orocrm_magento_cart_view'
-                widgetRoute: 'orocrm_magento_cart_widget_items'
-
     tree:
         account_sales_tab_panel:
             children:
                 orocrm_magento_account_orders_tab: ~
-
-        customer_sales_tab_panel:
-            children:
-                orocrm_magento_customer_carts_tab: ~
-                orocrm_magento_customer_orders_tab: ~
 
 oro_titles:
     orocrm_magento_customer_index: 'Channels - Customers'

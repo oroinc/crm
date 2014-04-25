@@ -66,7 +66,29 @@
     {% endset %}
 
     {% set SalesTabsWidget %}
-        {{ menuTabPanel('customer_sales_tab_panel', {'id': entity.id}) }}
+        <div class="responsive-cell" id="magento-without-border-tabs">
+            {% set tabs = [
+                {
+                    'alias': 'orocrm_magento_customer_orders',
+                    'widgetType': 'block',
+                    'label': "orocrm.magento.order.entity_plural_label"|trans,
+                    'url': path(
+                            'orocrm_magento_customer_orders_widget',
+                            {'customerId': entity.id, 'channelId': entity.channel.id}
+                    )
+                },
+                {
+                    'alias': 'orocrm_magento_customer_carts',
+                    'widgetType': 'block',
+                    'label': "orocrm.magento.cart.entity_plural_label"|trans,
+                    'url': path(
+                        'orocrm_magento_widget_customer_carts',
+                        {'customerId': entity.id, 'channelId': entity.channel.id}
+                    )
+                }
+            ] %}
+            {{ tabPanel(tabs) }}
+        </div>
     {% endset %}
 
     {% set dataBlocks = [

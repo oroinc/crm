@@ -948,3 +948,117 @@ datagrid:
            entityHint: order
            export: true
 
+    magento-customer-orders-widget-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_magento_order_view
+            query:
+                select:
+                    - o
+                    - o.subtotalAmount
+                    - step.label as stepLabel
+                    - COUNT(items.id) as itemsCount
+                from:
+                    - { table: %orocrm_magento.order.entity.class%, alias: o }
+                join:
+                    left:
+                        - { join: o.workflowStep, alias: step }
+                        - { join: o.items, alias: items }
+                where:
+                    and:
+                        - o.customer = :customerId AND o.channel = :channelId
+                groupBy: o.id
+        columns:
+            incrementId:
+                label: orocrm.magento.order.id.label
+            itemsCount:
+                label: orocrm.magento.order.items_qty.label
+                frontend_type: integer
+            createdAt:
+                label: orocrm.magento.order.created_at.label
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.magento.order.updated_at.label
+                frontend_type: datetime
+            subTotalAmount:
+                label: orocrm.magento.cart.sub_total.label
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+            totalAmount:
+                label: orocrm.magento.order.total_amount.label
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+            totalPaidAmount:
+                label:  orocrm.magento.order.total_paid_amount.label
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+            status:
+                label: orocrm.magento.order.status.label
+            stepLabel:
+                label: orocrm.magento.order.b2c_flow_order_follow_up.step.label
+        filters:
+            columns:
+                incrementId:
+                    type:        number
+                    data_name:   o.id
+                itemsCount:
+                    type:        number
+                    data_name:   itemsCount
+                createdAt:
+                    type:             datetime
+                    data_name:        o.createdAt
+                updatedAt:
+                    type:             datetime
+                    data_name:        o.updatedAt
+                subTotalAmount:
+                    type:             number
+                    data_name:        o.subtotalAmount
+                    options:
+                       data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                totalAmount:
+                    type:        number
+                    data_name:   o.totalAmount
+                totalPaidAmount:
+                    type:        number
+                    data_name:   o.totalPaidAmount
+                status:
+                    type:             string
+                    data_name:        o.status
+                stepLabel:
+                    type: entity
+                    data_name: o.workflowStep
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %orocrm_magento.order.entity.class%
+        sorters:
+            columns:
+                incrementId:     { data_name: o.incrementId }
+                itemsCount:      { data_name: itemsCount }
+                createdAt:       { data_name: o.createdAt }
+                updatedAt:       { data_name: o.updatedAt }
+                subTotalAmount:  { data_name: o.subTotalAmount }
+                totalPaidAmount: { data_name: o.totalPaidAmount }
+                totalAmount:     { data_name: o.totalAmount }
+                status:          { data_name: o.status }
+                stepLabel:       { data_name: step.label }
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: orocrm_magento_order_view
+                params: [ id ]
+        actions:
+            view:
+                type:         navigate
+                label:        orocrm.magento.datagrid.actions.view.label
+                link:         view_link
+                icon:         book
+                acl_recource: orocrm_magento_order_view
+                rowAction:    true
