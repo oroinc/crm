@@ -2,7 +2,8 @@
 
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
-{% oro_title_set({params : {'%reportName%': pageTitle|title } }) %}
+{% set reportGroupName = 'orocrm.report.menu.' ~ params.reportGroupName ~ '_report_tab.label' %}
+{% oro_title_set({params : {'%reportName%': pageTitle|title, '%reportGroup%': reportGroupName|trans } }) %}
 
 {% block content %}
     {% set buttons = [] %}
