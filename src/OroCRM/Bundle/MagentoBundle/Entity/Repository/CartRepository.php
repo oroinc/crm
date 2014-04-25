@@ -14,6 +14,14 @@ use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 class CartRepository extends EntityRepository
 {
     /**
+     * @var array
+     */
+    protected $excludedSteps = [
+        'converted_to_opportunity',
+        'abandoned',
+    ];
+
+    /**
      * @param \DateTime $dateFrom
      * @param \DateTime $dateTo
      * @param Workflow  $workflow
@@ -37,10 +45,12 @@ class CartRepository extends EntityRepository
         $regularSteps = array();
         $finalSteps   = array();
         foreach ($steps as $step) {
-            if ($step->isFinal()) {
-                $finalSteps[] = $step->getName();
-            } else {
-                $regularSteps[] = $step->getName();
+            if (!in_array($step->getName(), $this->excludedSteps)) {
+                if ($step->isFinal()) {
+                    $finalSteps[] = $step->getName();
+                } else {
+                    $regularSteps[] = $step->getName();
+                }
             }
         }
 
@@ -53,11 +63,13 @@ class CartRepository extends EntityRepository
         $finalData   = array();
         foreach ($steps as $step) {
             $stepName  = $step->getName();
-            $stepLabel = $step->getLabel();
-            if ($step->isFinal()) {
-                $finalData[$stepLabel] = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
-            } else {
-                $regularData[$stepLabel] = isset($regularStepsData[$stepName]) ? $regularStepsData[$stepName] : 0;
+            if (!in_array($stepName, $this->excludedSteps)) {
+                $stepLabel = $step->getLabel();
+                if ($step->isFinal()) {
+                    $finalData[$stepLabel] = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
+                } else {
+                    $regularData[$stepLabel] = isset($regularStepsData[$stepName]) ? $regularStepsData[$stepName] : 0;
+                }
             }
         }
 
@@ -78,6 +90,12 @@ class CartRepository extends EntityRepository
         \DateTime $dateTo = null,
         AclHelper $aclHelper = null
     ) {
+        $stepData = array();
+
+        if (!$steps) {
+            return $stepData;
+        }
+
         $queryBuilder = $this->createQueryBuilder('cart')
             ->select('workflowStep.name as workflowStepName', 'SUM(cart.grandTotal) as total')
             ->join('cart.workflowStep', 'workflowStep')
@@ -97,7 +115,6 @@ class CartRepository extends EntityRepository
             $query = $queryBuilder->getQuery();
         }
 
-        $stepData = array();
         foreach ($query->getArrayResult() as $record) {
             $stepData[$record['workflowStepName']] = $record['total'] ? (float)$record['total'] : 0;
         }

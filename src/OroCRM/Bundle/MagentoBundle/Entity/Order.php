@@ -20,7 +20,7 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
  * Class Order
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository")
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="orocrm_magento_order",
  *     indexes={
@@ -144,7 +144,7 @@ class Order extends BaseOrder
     protected $totalCanceledAmount = 0;
 
     /**
-     * @ORM\OneToOne(targetEntity="Cart", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Cart", cascade={"persist"})
      */
     protected $cart;
 

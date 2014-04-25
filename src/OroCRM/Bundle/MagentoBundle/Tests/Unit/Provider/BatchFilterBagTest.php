@@ -85,6 +85,72 @@ class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(isset($filters['filter']['test']));
     }
 
+    public function testConstructAddition()
+    {
+        $testFilters        = ['testField1' => 'testValue1'];
+        $testComplexFilters = ['testFieldComplex' => ['key' => 'in', 'value' => 'some, list, of, values']];
+
+        $bag = new BatchFilterBag($testFilters, $testComplexFilters);
+
+        $result = $bag->getAppliedFilters();
+
+        $expected = [
+            'filters' => [
+                'filter'         => [['key' => 'testField1', 'value' => 'testValue1']],
+                'complex_filter' => [
+                    [
+                        'key'   => 'testFieldComplex',
+                        'value' => [
+                            'key'   => 'in',
+                            'value' => 'some, list, of, values',
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $this->assertSame($expected, $result);
+    }
+
+    public function testMerge()
+    {
+        $testFilters        = ['testField1' => 'testValue1'];
+        $testComplexFilters = ['testFieldComplex' => ['key' => 'in', 'value' => 'some, list, of, values']];
+        $bag                = new BatchFilterBag($testFilters, $testComplexFilters);
+
+        $testFilters2        = ['testField1' => 'Overriden', 'testField2' => 'testValue2'];
+        $testComplexFilters2 = ['testField2Complex' => ['key' => 'gt', 'value' => 3]];
+        $bag2                = new BatchFilterBag($testFilters2, $testComplexFilters2);
+
+        $bag->merge($bag2);
+        $result = $bag->getAppliedFilters();
+
+        $expected = [
+            'filters' => [
+                'filter'         => [
+                    ['key' => 'testField1', 'value' => 'Overriden'],
+                    ['key' => 'testField2', 'value' => 'testValue2']
+                ],
+                'complex_filter' => [
+                    [
+                        'key'   => 'testFieldComplex',
+                        'value' => [
+                            'key'   => 'in',
+                            'value' => 'some, list, of, values',
+                        ],
+                    ],
+                    [
+                        'key'   => 'testField2Complex',
+                        'value' => [
+                            'key'   => 'gt',
+                            'value' => 3,
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $this->assertSame($expected, $result);
+    }
+
     /**
      * @param BatchFilterBag $bag
      *

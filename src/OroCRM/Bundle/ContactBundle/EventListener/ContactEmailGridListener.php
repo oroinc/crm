@@ -64,17 +64,31 @@ class ContactEmailGridListener
      */
     protected function addRecipientsQuery(QueryBuilder $queryBuilder, $emailAddresses)
     {
-        $qbRecipients = $queryBuilder->getEntityManager()->createQueryBuilder()
+        $qbRecipients = $this->em->createQueryBuilder()
             ->select('re.id')
             ->from('OroEmailBundle:Email', 're')
             ->innerJoin('re.recipients', 'r')
             ->innerJoin('r.emailAddress', 'ra')
             ->where('ra.email IN (:email_addresses)');
 
-        $queryBuilder->setParameter('email_addresses', !empty($emailAddresses) ? $emailAddresses : null);
+        $qbDuplicates = $this->em->createQueryBuilder()
+            ->select('email')
+            ->from('OroEmailBundle:Email', 'email')
+            ->groupBy('email.messageId')
+            ->having('MAX(email.id) = e.id');
 
-        $queryBuilder->orWhere(
-            $queryBuilder->expr()->in('e.id', $qbRecipients->getDQL())
+        $queryBuilder->where(
+            $queryBuilder->expr()->andX(
+                $queryBuilder->expr()->exists(
+                    $qbDuplicates->getDQL()
+                ),
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->in('a.email', ':email_addresses'),
+                    $queryBuilder->expr()->in('e.id', $qbRecipients->getDQL())
+                )
+            )
         );
+        
+        $queryBuilder->setParameter('email_addresses', !empty($emailAddresses) ? $emailAddresses : null);
     }
 }
