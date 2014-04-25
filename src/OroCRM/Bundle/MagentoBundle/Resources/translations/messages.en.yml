@@ -101,6 +101,7 @@ orocrm:
             channel.label:       Channel
             name.label:          Name
             orders.label:        Customer orders
+            sales.label:         Sales
 
         cart:
             entity_label:         Shopping Cart

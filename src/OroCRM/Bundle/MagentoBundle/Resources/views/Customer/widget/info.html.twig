@@ -2,19 +2,15 @@
 {% import 'OroEmailBundle::macros.html.twig' as email %}
 
 <div class="widget-content">
-    <div class="row-fluid form-horizontal">
+    <div class="row-fluid form-horizontal horizontal-line">
         <div class="responsive-block">
-            {{ ui.renderHtmlProperty('orocrm.magento.customer.channel.label'|trans, entity.channel.name) }}
             {{ ui.renderHtmlProperty('orocrm.magento.customer.email.label'|trans, email.email_address_simple(entity.email)) }}
             {% if entity.group %}
                 {{ ui.renderProperty('orocrm.magento.customer.group.label'|trans, entity.group.name) }}
             {% endif %}
-
+            {{ ui.renderHtmlProperty('orocrm.magento.customer.channel.label'|trans, entity.channel.name) }}
             {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.website.name) }}
             {{ ui.renderHtmlProperty('orocrm.magento.customer.store.label'|trans, entity.store.name|escape|nl2br) }}
-        </div>
-
-        <div class="responsive-block">
             {%- set accountData -%}
                 {% if entity.account %}
                     {% set accountViewGranted = resource_granted('orocrm_account_view') %}
@@ -48,7 +44,6 @@
             {{ ui.renderProperty('orocrm.magento.customer.birthday.label'|trans, entity.birthday ? birthdayData : null) }}
             {{ ui.renderProperty('orocrm.magento.customer.gender.label'|trans, oro_gender(entity.gender)) }}
             {{ ui.renderProperty('orocrm.magento.customer.vat.label'|trans, entity.vat) }}
-
         </div>
     </div>
 </div>
