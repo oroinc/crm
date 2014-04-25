@@ -7,6 +7,8 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\ChannelDeleteProviderInterface;
 
+use Oro\Bundle\WorkflowBundle\Model\EntityConnector;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 
@@ -18,12 +20,17 @@ class MagentoChannelDeleteManager implements ChannelDeleteProviderInterface
     /** @var Channel */
     protected $channel;
 
+    /** @var EntityConnector */
+    protected $entityConnector;
+
     /**
-     * @param EntityManager $em
+     * @param EntityManager   $em
+     * @param EntityConnector $entityConnector
      */
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, EntityConnector $entityConnector)
     {
         $this->em = $em;
+        $this->entityConnector = $entityConnector;
     }
 
     /**
@@ -40,21 +47,18 @@ class MagentoChannelDeleteManager implements ChannelDeleteProviderInterface
     public function processDelete(Channel $channel)
     {
         $this->channel = $channel;
-
         try {
-            $this
-                ->removeFromEntityByChannelId('OroEmbeddedFormBundle:EmbeddedForm')
+            $this->removeFromEntityByChannelId('OroEmbeddedFormBundle:EmbeddedForm')
+                ->removeWorkflowDefinitions('OroCRMMagentoBundle:Order')
                 ->removeFromEntityByChannelId('OroCRMMagentoBundle:Order')
+                ->removeWorkflowDefinitions('OroCRMMagentoBundle:Cart')
                 ->removeCarts()
                 ->removeFromEntityByChannelId('OroCRMMagentoBundle:Customer')
                 ->removeFromEntityByChannelId('OroCRMMagentoBundle:Store')
                 ->removeFromEntityByChannelId('OroCRMMagentoBundle:Website')
-                ->removeFromEntityByChannelId('OroCRMMagentoBundle:CustomerGroup')
-            ;
-
-            $this->getEntityManager()->remove($channel);
-            $this->getEntityManager()->flush();
-
+                ->removeFromEntityByChannelId('OroCRMMagentoBundle:CustomerGroup');
+            $this->em->remove($channel);
+            $this->em->flush();
         } catch (\Exception $e) {
             return false;
         }
@@ -63,15 +67,9 @@ class MagentoChannelDeleteManager implements ChannelDeleteProviderInterface
     }
 
     /**
-     * @return EntityManager
-     */
-    protected function getEntityManager()
-    {
-        return $this->em;
-    }
-
-    /**
-     * @return mixed
+     * Get channel id for current channel
+     *
+     * @return int
      */
     protected function getChannelId()
     {
@@ -79,50 +77,84 @@ class MagentoChannelDeleteManager implements ChannelDeleteProviderInterface
     }
 
     /**
+     * Remove cart records
+     *
      * @return $this
      */
     protected function removeCarts()
     {
         $cartAddressId = [];
-        $carts = $this
-            ->getEntityManager()
+        $carts = $this->em
             ->getRepository('OroCRMMagentoBundle:Cart')->findByChannel($this->getChannelId());
-
         foreach ($carts as $cart) {
-            $this
-                ->pushInto($cart->getShippingAddress(), $cartAddressId)
-                ->pushInto($cart->getBillingAddress(), $cartAddressId)
-            ;
+            $this->pushInto($cart->getShippingAddress(), $cartAddressId)
+                ->pushInto($cart->getBillingAddress(), $cartAddressId);
         }
-
         if (!empty($cartAddressId)) {
             $uniqueCartAddressIds = array_unique($cartAddressId);
-            $this
-                ->getEntityManager()
+            $this->em
                 ->createQuery(
                     'DELETE FROM OroCRMMagentoBundle:CartAddress ca '.
                     'WHERE ca.id IN ' . $this->exprIn($uniqueCartAddressIds)
                 )
                 ->execute();
         }
-
         unset($uniqueCartAddressIds, $cartAddressId, $carts, $cart);
-
         $this->removeFromEntityByChannelId('OroCRMMagentoBundle:Cart');
 
         return $this;
     }
 
     /**
-     * @param string $entity
+     * Get Related entities
      *
+     * @param string $entityClassName
+     * @return array
+     */
+    protected function getRelatedEntities($entityClassName)
+    {
+        return $this->em
+            ->createQueryBuilder()
+            ->select('e')
+            ->from($entityClassName, 'e')
+            ->where('e.channel = :channel')
+            ->setParameter('channel', $this->channel)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Remove workflow records
+     *
+     * @param string $entityClassName
      * @return $this
      */
-    private function removeFromEntityByChannelId($entity)
+    protected function removeWorkflowDefinitions($entityClassName)
     {
-        $this
-            ->getEntityManager()
-            ->createQuery('DELETE FROM ' . $entity . ' e WHERE e.channel = ' . $this->getChannelId())
+        $entities = $this->getRelatedEntities($entityClassName);
+        if (!empty($entities)) {
+            foreach ($entities as $entity) {
+                if ($this->entityConnector->isWorkflowAware($entity)) {
+                    $workflowItem = $this->entityConnector->getWorkflowItem($entity);
+                    if ($workflowItem) {
+                        $this->em->remove($workflowItem);
+                    }
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove records from given entity type related to channel
+     *
+     * @param string $entityClassName
+     * @return $this
+     */
+    private function removeFromEntityByChannelId($entityClassName)
+    {
+        $this->em->createQuery('DELETE FROM ' . $entityClassName . ' e WHERE e.channel = ' . $this->getChannelId())
             ->execute();
 
         return $this;
@@ -130,8 +162,7 @@ class MagentoChannelDeleteManager implements ChannelDeleteProviderInterface
 
     /**
      * @param CartAddress|NULL $element
-     * @param array $array
-     *
+     * @param array            $array
      * @return $this
      */
     private function pushInto($element, &$array)
