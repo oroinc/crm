@@ -12,7 +12,7 @@ use Oro\Bundle\WorkflowBundle\Model\EntityConnector;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 
-class MagentoChannelDeleteManager implements ChannelDeleteProviderInterface
+class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
 {
     /** @var EntityManager */
     protected $em;
@@ -36,34 +36,26 @@ class MagentoChannelDeleteManager implements ChannelDeleteProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getSupportedChannelType()
+    public function isSupport($channelType)
     {
-        return 'magento';
+        return 'magento' == $channelType;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function processDelete(Channel $channel)
+    public function deleteRelatedData(Channel $channel)
     {
         $this->channel = $channel;
-        try {
-            $this->removeFromEntityByChannelId('OroEmbeddedFormBundle:EmbeddedForm')
-                ->removeWorkflowDefinitions('OroCRMMagentoBundle:Order')
-                ->removeFromEntityByChannelId('OroCRMMagentoBundle:Order')
-                ->removeWorkflowDefinitions('OroCRMMagentoBundle:Cart')
-                ->removeCarts()
-                ->removeFromEntityByChannelId('OroCRMMagentoBundle:Customer')
-                ->removeFromEntityByChannelId('OroCRMMagentoBundle:Store')
-                ->removeFromEntityByChannelId('OroCRMMagentoBundle:Website')
-                ->removeFromEntityByChannelId('OroCRMMagentoBundle:CustomerGroup');
-            $this->em->remove($channel);
-            $this->em->flush();
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        return true;
+        $this->removeFromEntityByChannelId('OroEmbeddedFormBundle:EmbeddedForm')
+            ->removeWorkflowDefinitions('OroCRMMagentoBundle:Order')
+            ->removeFromEntityByChannelId('OroCRMMagentoBundle:Order')
+            ->removeWorkflowDefinitions('OroCRMMagentoBundle:Cart')
+            ->removeCarts()
+            ->removeFromEntityByChannelId('OroCRMMagentoBundle:Customer')
+            ->removeFromEntityByChannelId('OroCRMMagentoBundle:Store')
+            ->removeFromEntityByChannelId('OroCRMMagentoBundle:Website')
+            ->removeFromEntityByChannelId('OroCRMMagentoBundle:CustomerGroup');
     }
 
     /**

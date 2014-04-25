@@ -115,7 +115,7 @@ class LoadMagentoChannel extends AbstractFixture
         $cart->setStoreToBaseRate('code');
         $cart->setIsGuest(1);
 
-        $this->persistAndFlush($cart);
+        $this->em->persist($cart);
 
         return $cart;
     }
