@@ -980,7 +980,7 @@ datagrid:
             updatedAt:
                 label: orocrm.magento.order.updated_at.label
                 frontend_type: datetime
-            subTotalAmount:
+            subtotalAmount:
                 label: orocrm.magento.cart.sub_total_amount.label
                 type:   localized_number
                 method: formatCurrency
@@ -1017,7 +1017,7 @@ datagrid:
                 updatedAt:
                     type:         datetime
                     data_name:    o.updatedAt
-                subTotalAmount:
+                subtotalAmount:
                     type:         number
                     data_name:    o.subtotalAmount
                     options:
@@ -1044,7 +1044,7 @@ datagrid:
                 itemsCount:      { data_name: itemsCount }
                 createdAt:       { data_name: o.createdAt }
                 updatedAt:       { data_name: o.updatedAt }
-                subTotalAmount:  { data_name: o.subTotalAmount }
+                subtotalAmount:  { data_name: o.subtotalAmount }
                 totalPaidAmount: { data_name: o.totalPaidAmount }
                 totalAmount:     { data_name: o.totalAmount }
                 status:          { data_name: o.status }
