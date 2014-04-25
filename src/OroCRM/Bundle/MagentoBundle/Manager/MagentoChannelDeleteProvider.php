@@ -47,8 +47,7 @@ class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
     public function deleteRelatedData(Channel $channel)
     {
         $this->channel = $channel;
-        $this->removeFromEntityByChannelId('OroEmbeddedFormBundle:EmbeddedForm')
-            ->removeWorkflowDefinitions('OroCRMMagentoBundle:Order')
+        $this->removeWorkflowDefinitions('OroCRMMagentoBundle:Order')
             ->removeFromEntityByChannelId('OroCRMMagentoBundle:Order')
             ->removeWorkflowDefinitions('OroCRMMagentoBundle:Cart')
             ->removeCarts()
