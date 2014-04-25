@@ -90,6 +90,12 @@ class CartRepository extends EntityRepository
         \DateTime $dateTo = null,
         AclHelper $aclHelper = null
     ) {
+        $stepData = array();
+
+        if (!$steps) {
+            return $stepData;
+        }
+
         $queryBuilder = $this->createQueryBuilder('cart')
             ->select('workflowStep.name as workflowStepName', 'SUM(cart.grandTotal) as total')
             ->join('cart.workflowStep', 'workflowStep')
@@ -109,7 +115,6 @@ class CartRepository extends EntityRepository
             $query = $queryBuilder->getQuery();
         }
 
-        $stepData = array();
         foreach ($query->getArrayResult() as $record) {
             $stepData[$record['workflowStepName']] = $record['total'] ? (float)$record['total'] : 0;
         }
