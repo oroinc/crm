@@ -2,6 +2,8 @@
 
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
+{% oro_title_set({params : {"%channelName%": channel.name } }) %}
+
 {% set pageTitle = 'orocrm.magento.customer.entity_plural_label'|trans %}
 {% set gridName = 'magento-customers-grid' %}
-{% set params = {'channelId': channelId} %}
+{% set params = {'channelId': channel.id} %}

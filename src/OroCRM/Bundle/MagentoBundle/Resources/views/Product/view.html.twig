@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
-{% oro_title_set({params : {"%product.name%": entity.name} }) %}
+{% oro_title_set({params : {"%product.name%": entity.name, '%channelName%': entity.channel.name} }) %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {
