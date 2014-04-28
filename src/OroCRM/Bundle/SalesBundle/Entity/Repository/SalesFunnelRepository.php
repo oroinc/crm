@@ -93,6 +93,10 @@ class SalesFunnelRepository extends EntityRepository
     ) {
         $stepData = array();
 
+        if (!$steps) {
+            return $stepData;
+        }
+
         $budgetAmountQueryBuilder = $this->getTemplateQueryBuilder($dateFrom, $dateTo)
             ->addSelect('SUM(opportunity.budgetAmount) as budgetAmount');
         $budgetAmountQueryBuilder

@@ -1,0 +1,3 @@
+oro_crm_magento_bundle_customer_address_api:
+    resource:     "@OroCRMMagentoBundle/Controller/Api/Rest/CustomerAddressController.php"
+    type:         rest

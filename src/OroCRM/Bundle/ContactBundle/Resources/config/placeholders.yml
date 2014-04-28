@@ -9,7 +9,7 @@ placeholders:
 
     quick_launchpad_right_column:
         items:
-            leads_launchpad:
+            contacts_launchpad:
                 order: 10
 
 items:

@@ -99,4 +99,14 @@ class CustomerController extends Controller
     {
         return ['entity' => $customer];
     }
+
+    /**
+     * @Route("/addressBook/{id}", name="orocrm_magento_customer_address_book", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_customer_view")
+     * @Template
+     */
+    public function addressBookAction(Customer $customer)
+    {
+        return ['entity' => $customer];
+    }
 }
