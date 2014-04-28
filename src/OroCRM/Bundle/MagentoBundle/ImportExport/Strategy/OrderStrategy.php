@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Doctrine\Common\Util\ClassUtils;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
@@ -82,6 +84,21 @@ class OrderStrategy extends BaseStrategy
 
         /** @var Customer|null $customer */
         $customer = $this->getEntityByCriteria($criteria, MagentoConnectorInterface::CUSTOMER_TYPE);
+
+        if ($customer instanceof Customer) {
+            $customer->setLifetime(
+                $this->getEntityRepository(ClassUtils::getClass($entity))
+                    ->getCustomerOrdersSubtotalAmount(
+                        $customer,
+                        $entity
+                    )
+                + ($entity->getStatus() !== 'canceled' ? $entity->getSubtotalAmount() : 0)
+            );
+            // now customer orders subtotal calculation support only one currency.
+            // also we do not take into account order refunds due to magento does not bring subtotal data
+            // customer currency needs on customer's grid to format lifetime value.
+            $customer->setCurrency($entity->getCurrency());
+        }
         $entity->setCustomer($customer);
     }
 

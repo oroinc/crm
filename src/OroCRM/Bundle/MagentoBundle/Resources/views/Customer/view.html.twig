@@ -2,7 +2,7 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
 {% set fullname = entity|oro_format_name|default('N/A'|trans) %}
-{% oro_title_set({params : {"%customer.name%": fullname, '%channelName%': entity.channel.name} }) %}
+{% oro_title_set({params : {"%customer.name%": fullname} }) %}
 
 {% block navButtons %}
     {% set createOrder = 'orocrm.magento.customer.create_order'|trans %}
@@ -41,7 +41,7 @@
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
-        'indexPath': path('orocrm_magento_customer_index', {id: entity.channel.id}),
+        'indexPath': path('orocrm_magento_customer_index'),
         'indexLabel': 'orocrm.magento.customer.entity_plural_label'|trans,
         'entityTitle': fullname
     } %}

@@ -9,25 +9,20 @@ use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Datagrid\RequestParameters;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 
-use Oro\Bundle\EmailBundle\Datagrid\EmailQueryFactory;
 use Oro\Bundle\EmailBundle\Entity\Util\EmailUtil;
 
 class ContactEmailGridListener
 {
-    /** @var EmailQueryFactory */
-    protected $queryFactory;
-
     /** @var RequestParameters */
     protected $requestParams;
 
     /** @var  EntityManager */
     protected $em;
 
-    public function __construct(RequestParameters $requestParams, EntityManager $em, EmailQueryFactory $factory)
+    public function __construct(RequestParameters $requestParams, EntityManager $em)
     {
         $this->requestParams = $requestParams;
         $this->em            = $em;
-        $this->queryFactory  = $factory;
     }
 
     /**
@@ -39,8 +34,6 @@ class ContactEmailGridListener
         if ($datasource instanceof OrmDatasource) {
             /** @var QueryBuilder $query */
             $queryBuilder = $datasource->getQueryBuilder();
-
-            $this->queryFactory->prepareQuery($queryBuilder);
 
             if ($id = $this->requestParams->get('contactId')) {
                 $contact = $this->em

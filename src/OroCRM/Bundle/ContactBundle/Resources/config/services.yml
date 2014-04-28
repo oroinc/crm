@@ -190,7 +190,6 @@ services:
         arguments:
           - @oro_datagrid.datagrid.request_params
           - @doctrine.orm.entity_manager
-          - @oro_email.datagrid_query_factory
         tags:
           - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.contacts-email-grid, method: onBuildAfter }
 
