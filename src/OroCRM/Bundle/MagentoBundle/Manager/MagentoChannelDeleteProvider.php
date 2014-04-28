@@ -4,12 +4,13 @@ namespace OroCRM\Bundle\MagentoBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\ChannelDeleteProviderInterface;
 
 use Oro\Bundle\WorkflowBundle\Model\EntityConnector;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 
 class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
@@ -75,8 +76,14 @@ class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
     protected function removeCarts()
     {
         $cartAddressId = [];
-        $carts = $this->em
-            ->getRepository('OroCRMMagentoBundle:Cart')->findByChannel($this->getChannelId());
+        $carts = new BufferedQueryResultIterator(
+            $this->em->createQueryBuilder()
+                ->select('c')
+                ->from('OroCRMMagentoBundle:Cart', 'c')
+                ->where('c.channel = :channel')
+                ->setParameter('channel', $this->channel)
+                ->getQuery()
+        );
         foreach ($carts as $cart) {
             $this->pushInto($cart->getShippingAddress(), $cartAddressId)
                 ->pushInto($cart->getBillingAddress(), $cartAddressId);
