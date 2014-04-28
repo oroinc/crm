@@ -6,8 +6,6 @@ use Doctrine\ORM\EntityManager;
 
 use Knp\Menu\ItemInterface;
 
-use Symfony\Component\Routing\RouterInterface;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
@@ -20,40 +18,45 @@ class NavigationListener
 
     protected static $map = [
         'cart'     => [
-            'parent'         => 'sales_tab',
-            'prefix'         => self::CART_MENU_ITEM,
-            'label'          => 'Shopping Carts',
-            'route'          => 'orocrm_magento_cart_index',
-            'extra_routes'   => '/^orocrm_magento_cart_(index|view)|orocrm_magento_orderplace_cart$/',
-            'extra_position' => 40
+            'parent' => 'sales_tab',
+            'prefix' => self::CART_MENU_ITEM,
+            'label'  => 'Shopping Carts',
+            'route'  => 'orocrm_magento_cart_index',
+            'extras' => [
+                'routes'   => '/^orocrm_magento_cart_(index|view)|orocrm_magento_orderplace_cart$/',
+                'position' => 40
+            ]
         ],
         'order'    => [
-            'parent'         => 'sales_tab',
-            'prefix'         => self::ORDER_MENU_ITEM,
-            'label'          => 'Orders',
-            'route'          => 'orocrm_magento_order_index',
-            'extra_routes'   => '/^orocrm_magento_order_(index|view)$/',
-            'extra_position' => 50
+            'parent' => 'sales_tab',
+            'prefix' => self::ORDER_MENU_ITEM,
+            'label'  => 'Orders',
+            'route'  => 'orocrm_magento_order_index',
+            'extras' => [
+                'routes'   => '/^orocrm_magento_order_(index|view)$/',
+                'position' => 50
+            ]
         ],
         'customer' => [
-            'parent'       => 'customers_tab',
-            'prefix'       => self::CUSTOMER_MENU_ITEM,
-            'label'        => 'orocrm.magento.menu.web_customers',
-            'route'        => 'orocrm_magento_customer_index',
-            'extra_routes' => '/^orocrm_magento_customer_(index|view)$/'
+            'parent' => 'customers_tab',
+            'prefix' => self::CUSTOMER_MENU_ITEM,
+            'label'  => 'orocrm.magento.menu.web_customers',
+            'route'  => 'orocrm_magento_customer_index',
+            'extras' => [
+                'routes' => '/^orocrm_magento_customer_(index|view)$/',
+            ]
         ]
     ];
 
     /** @var EntityManager */
     protected $em;
 
-    /** @var RouterInterface */
-    protected $router;
-
-    public function __construct(EntityManager $em, RouterInterface $router)
+    /**
+     * @param EntityManager $em
+     */
+    public function __construct(EntityManager $em)
     {
-        $this->em     = $em;
-        $this->router = $router;
+        $this->em = $em;
     }
 
     /**
@@ -73,31 +76,25 @@ class NavigationListener
                 if ($channel->getConnectors()) {
                     foreach ($channel->getConnectors() as $connector) {
                         if (!isset($entries[$connector])) {
-                            $entries[$connector] = [];
+                            $entries[$connector] = true;
                         }
-                        $entries[$connector][] = ['id' => $channel->getId(), 'label' => $channel->getName()];
                     }
                 }
             }
 
             // walk trough prepared array
-            foreach ($entries as $key => $items) {
+            foreach (array_keys($entries) as $key) {
                 if (isset(self::$map[$key])) {
                     /** @var ItemInterface $reportsMenuItem */
                     $salesMenuItem = $event->getMenu()->getChild(self::$map[$key]['parent']);
-                    $child         = $salesMenuItem
-                        ->addChild(self::$map[$key]['prefix'], ['label' => self::$map[$key]['label'], 'uri' => '#']);
-                    foreach ($items as $entry) {
-                        $child->addChild(
-                            implode([self::$map[$key]['prefix'], $entry['id']]),
-                            [
-                                'route'           => self::$map[$key]['route'],
-                                'routeParameters' => ['id' => $entry['id']],
-                                'label'           => $entry['label'],
-                                'extras'          => ['routes' => self::$map[$key]['extra_routes']]
-                            ]
-                        );
-                    }
+                    $salesMenuItem->addChild(
+                        self::$map[$key]['prefix'],
+                        [
+                            'label'  => self::$map[$key]['label'],
+                            'route'  => self::$map[$key]['route'],
+                            'extras' => array_merge(self::$map[$key]['extras'], ['skipBreadcrumbs' => true])
+                        ]
+                    );
                 }
             }
         }
