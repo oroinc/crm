@@ -82,6 +82,23 @@ class CartController extends Controller
     }
 
     /**
+     * @Route(
+     *        "/widget/customer_cart/{customerId}/{channelId}",
+     *         name="orocrm_magento_customer_carts_widget",
+     *         requirements={"customerId"="\d+", "channelId"="\d+"}
+     * )
+     * @AclAncestor("orocrm_magento_cart_view")
+     * @ParamConverter("customer", class="OroCRMMagentoBundle:Customer", options={"id" = "customerId"})
+     * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id" = "channelId"})
+     * @Template
+     */
+    public function customerCartsWidgetAction(Customer $customer, Channel $channel)
+    {
+        return array('customer' => $customer, 'channel' => $channel);
+    }
+
+
+    /**
      * @Route("/actualize/{id}", name="orocrm_magento_cart_actualize", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_cart_view")
      */
