@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller\Dashboard;
 
-use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

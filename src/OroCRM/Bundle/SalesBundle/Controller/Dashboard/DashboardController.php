@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller\Dashboard;
 
-use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Translation\TranslatorInterface;
 
