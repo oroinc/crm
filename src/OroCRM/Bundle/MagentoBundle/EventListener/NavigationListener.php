@@ -18,32 +18,32 @@ class NavigationListener
 
     protected static $map = [
         'cart'     => [
-            'parent'         => 'sales_tab',
-            'prefix'         => self::CART_MENU_ITEM,
-            'label'          => 'Shopping Carts',
-            'route'          => 'orocrm_magento_cart_index',
-            'extras'         => [
-                'routes'     => '/^orocrm_magento_cart_(index|view)|orocrm_magento_orderplace_cart$/',
-                'position'   => 40
+            'parent' => 'sales_tab',
+            'prefix' => self::CART_MENU_ITEM,
+            'label'  => 'Shopping Carts',
+            'route'  => 'orocrm_magento_cart_index',
+            'extras' => [
+                'routes'   => '/^orocrm_magento_cart_(index|view)|orocrm_magento_orderplace_cart$/',
+                'position' => 40
             ]
         ],
         'order'    => [
-            'parent'         => 'sales_tab',
-            'prefix'         => self::ORDER_MENU_ITEM,
-            'label'          => 'Orders',
-            'route'          => 'orocrm_magento_order_index',
-            'extras'         => [
-                'routes'     => '/^orocrm_magento_order_(index|view)$/',
-                'position'   => 50
+            'parent' => 'sales_tab',
+            'prefix' => self::ORDER_MENU_ITEM,
+            'label'  => 'Orders',
+            'route'  => 'orocrm_magento_order_index',
+            'extras' => [
+                'routes'   => '/^orocrm_magento_order_(index|view)$/',
+                'position' => 50
             ]
         ],
         'customer' => [
-            'parent'       => 'customers_tab',
-            'prefix'       => self::CUSTOMER_MENU_ITEM,
-            'label'        => 'orocrm.magento.menu.web_customers',
-            'route'        => 'orocrm_magento_customer_index',
-            'extras'         => [
-                'routes'     => '/^orocrm_magento_customer_(index|view)$/',
+            'parent' => 'customers_tab',
+            'prefix' => self::CUSTOMER_MENU_ITEM,
+            'label'  => 'orocrm.magento.menu.web_customers',
+            'route'  => 'orocrm_magento_customer_index',
+            'extras' => [
+                'routes' => '/^orocrm_magento_customer_(index|view)$/',
             ]
         ]
     ];
@@ -90,9 +90,9 @@ class NavigationListener
                     $salesMenuItem->addChild(
                         self::$map[$key]['prefix'],
                         [
-                            'label' => self::$map[$key]['label'],
-                            'route' => self::$map[$key]['route'],
-                            'extras' => self::$map[$key]['extras'],
+                            'label'  => self::$map[$key]['label'],
+                            'route'  => self::$map[$key]['route'],
+                            'extras' => array_merge(self::$map[$key]['extras'], ['skipBreadcrumbs' => true])
                         ]
                     );
                 }
