@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "96d7d10070f0a993a996153e0730cf5c",
+    "hash": "fc2d187f4727d8c3892e511d1e0dad43",
     "packages": [
         {
             "name": "a2lix/translation-form-bundle",
@@ -3284,11 +3284,11 @@
         },
         {
             "name": "oro/platform",
-            "version": "dev-master",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:orocrm/platform.git",
-                "reference": "f9b3884bf79f3ff964529e80bbd83b77d6cfc510"
+                "reference": "c6e8afba17be23367211c29e34e6b11a720bf68b"
             },
             "require": {
                 "a2lix/translation-form-bundle": "1.2",
@@ -4890,9 +4890,9 @@
 
     ],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "oro/platform": 20
-    },
+    "stability-flags": [
+
+    ],
     "platform": {
         "php": ">=5.4.4"
     },
