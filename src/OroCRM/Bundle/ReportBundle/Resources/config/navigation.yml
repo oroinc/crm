@@ -11,18 +11,21 @@ oro_menu_config:
             uri: '#'
             extras:
                 position: 10
+                skipBreadcrumbs: true
 
         leads_report_tab:
             label: 'orocrm.report.menu.leads_report_tab.label'
             uri: '#'
             extras:
                 position: 20
+                skipBreadcrumbs: true
 
         opportunities_report_tab:
             label: 'orocrm.report.menu.opportunities_report_tab.label'
             uri: '#'
             extras:
                 position: 30
+                skipBreadcrumbs: true
 
         accounts_life_time_value:
             label: 'orocrm.report.menu.accounts_life_time_value.label'
@@ -32,6 +35,7 @@ oro_menu_config:
                 reportName:      'life_time_value'
             extras:
                 description: 'orocrm.report.menu.accounts_life_time_value.description'
+                skipBreadcrumbs: true
 
         accounts_by_opportunities:
             label: 'orocrm.report.menu.accounts_by_opportunities.label'
@@ -41,6 +45,7 @@ oro_menu_config:
                 reportName:      'by_opportunities'
             extras:
                 description: 'orocrm.report.menu.accounts_by_opportunities.description'
+                skipBreadcrumbs: true
 
         leads_by_date:
             label: 'orocrm.report.menu.leads_by_date.label'
@@ -50,6 +55,7 @@ oro_menu_config:
                 reportName:      'by_date'
             extras:
                 description: 'orocrm.report.menu.leads_by_date.description'
+                skipBreadcrumbs: true
 
         opportunities_by_status:
             label: 'orocrm.report.menu.opportunities_by_status.label'
@@ -59,6 +65,7 @@ oro_menu_config:
                 reportName:      'by_status'
             extras:
                 description: 'orocrm.report.menu.opportunities_by_status.description'
+                skipBreadcrumbs: true
 
         won_by_period:
             label: 'orocrm.report.menu.won_by_period.label'
@@ -68,6 +75,7 @@ oro_menu_config:
                 reportName:      'won_by_period'
             extras:
                 description: 'orocrm.report.menu.won_by_period.description'
+                skipBreadcrumbs: true
 
     tree:
         application_menu:
@@ -91,4 +99,4 @@ oro_menu_config:
                                         won_by_period: ~
 
 oro_titles:
-    orocrm_report_index: ~
+    orocrm_report_index: '%%reportName%% - %%reportGroup%%'

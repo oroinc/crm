@@ -409,7 +409,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * Get entity class name.
-     *
+     * TODO: Remove this temporary solution for get 'view' route in twig after EntityConfigBundle is finished
      * @return string
      */
     public function getClass()
@@ -418,13 +418,12 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     }
 
     /**
-     * Get name of field contains the primary email address
+     * Get names of fields contain email addresses
      *
-     * @return string
+     * @return string[]|null
      */
-    public function getPrimaryEmailField()
+    public function getEmailFields()
     {
-        // TODO: Return correct field name after refactoring of contact class
         return null;
     }
 
