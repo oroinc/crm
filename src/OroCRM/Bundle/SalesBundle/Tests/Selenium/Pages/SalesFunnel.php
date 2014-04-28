@@ -68,13 +68,12 @@ class SalesFunnel extends AbstractPageEntity
     public function selectEntity($type, $entity)
     {
         $this->opportunity = $this->test->byXpath(
-            "//div[@class='responsive-section create-select-entity create clearfix']" .
-            "//button[normalize-space(.) = 'Select Existing']"
+            "//a[@class = 'entity-select-btn' and normalize-space(.) = 'Choose Existing']"
         );
         $this->opportunity->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
-        $this->test->byXpath("//div[@class='filter-container']//button[contains(., '{$type} name')]")->click();
+        $this->test->byXpath("//div[@class='filter-container']//a[contains(., '{$type} name')]")->click();
         $filter = $this->test->byXpath(
             "//div[contains(@class, 'filter-item oro-drop open-filter' )]//input[@name='value']"
         );

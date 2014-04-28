@@ -28,7 +28,7 @@ class OrderController extends Controller
      */
     public function indexAction(Channel $channel)
     {
-        return ['channelId' => $channel->getId()];
+        return ['channel' => $channel];
     }
 
     /**
@@ -93,5 +93,35 @@ class OrderController extends Controller
     public function accountOrdersAction(Account $account)
     {
         return array('account' => $account);
+    }
+
+    /**
+     * @Route("/actualize/{id}", name="orocrm_magento_order_actualize", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_order_view")
+     */
+    public function actualizeAction(Order $order)
+    {
+        try {
+            $processor = $this->get('oro_integration.sync.processor');
+            $processor->process(
+                $order->getChannel(),
+                'order',
+                ['filters' => ['increment_id' => $order->getIncrementId()]]
+            );
+
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.magento.controller.synchronization_success')
+            );
+        } catch (\LogicException $e) {
+            $this->get('logger')->addCritical($e->getMessage(), ['exception' => $e]);
+
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                $this->get('translator')->trans('orocrm.magento.controller.synchronization_error')
+            );
+        }
+
+        return $this->redirect($this->generateUrl('orocrm_magento_order_view', ['id' => $order->getId()]));
     }
 }

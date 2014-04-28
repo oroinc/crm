@@ -24,7 +24,7 @@ class NavigationListener
             'prefix'         => self::CART_MENU_ITEM,
             'label'          => 'Shopping Carts',
             'route'          => 'orocrm_magento_cart_index',
-            'extra_routes'   => '/^orocrm_magento_cart_(index|view)$/',
+            'extra_routes'   => '/^orocrm_magento_cart_(index|view)|orocrm_magento_orderplace_cart$/',
             'extra_position' => 40
         ],
         'order'    => [
@@ -94,7 +94,10 @@ class NavigationListener
                                 'route'           => self::$map[$key]['route'],
                                 'routeParameters' => ['id' => $entry['id']],
                                 'label'           => $entry['label'],
-                                'extras'          => ['routes' => self::$map[$key]['extra_routes']]
+                                'extras'          => [
+                                    'routes'          => self::$map[$key]['extra_routes'],
+                                    'skipBreadcrumbs' => true
+                                ]
                             ]
                         );
                     }

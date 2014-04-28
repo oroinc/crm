@@ -2,7 +2,41 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
 {% set fullname = entity|oro_format_name|default('N/A'|trans) %}
-{% oro_title_set({params : {"%customer.name%": fullname} }) %}
+{% oro_title_set({params : {"%customer.name%": fullname, '%channelName%': entity.channel.name} }) %}
+
+{% block navButtons %}
+    {% set createOrder = 'orocrm.magento.customer.create_order'|trans %}
+    {{
+        UI.clientButton({
+            'dataUrl': path('orocrm_magento_customer_orderplace', {'id': entity.id }),
+            'aCss':    'no-hash',
+            'iCss':    'icon-money',
+            'dataId':  entity.id,
+            'title' : createOrder,
+            'label' : createOrder,
+            'widget' : {
+                'type' : 'dialog',
+                'options' : {
+                    'alias':               'transaction-dialog',
+                    'stateEnabled':        false,
+                    'incrementalPosition': true,
+                    'loadingMaskEnabled':  false,
+                    'dialogOptions' : {
+                        'dialogClass':   'place-order-transaction-dialog',
+                        'title' :        createOrder,
+                        'allowMaximize': true,
+                        'allowMinimize': false,
+                        'width':         1000,
+                        'height':        600,
+                        'modal':         true,
+                        'autoResize':    true
+                    }
+                }
+            }
+        })
+    }}
+    {{ parent() }}
+{% endblock navButtons %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {

@@ -12,19 +12,25 @@ orocrm:
         recent_calls:
             title: Recent calls
             view_all: View All
+            description: This widget displays the list of recently logged calls
 
     call:
-        phone.required.message: 'Phone number is required field'
-        form.call.other: 'Other...'
+        menu:
+            activities_tab.label: Activities
+            call_list.description: List of calls
+            shortcut_call_list.label: Show calls list
+            shortcut_call_list.description: List of calls
+        phone.required.message: Phone number is required field
+        form.call.other: Other...
 
         controller:
-            call.saved.message: 'Call logged successfully'
-            call.deleted.message: 'Call deleted successfully'
+            call.saved.message: Call logged successfully
+            call.deleted.message: Call deleted successfully
 
         datagrid:
-            contact_name: 'Contact name'
-            account_name: 'Account name'
-            date_time:    'Call date'
+            contact_name: Contact name
+            account_name: Account name
+            date_time:    Call date
 
         #
         # OroCRM/Bundle/CallBundle/Entity/Call

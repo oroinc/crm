@@ -3,8 +3,16 @@ orocrm:
         my_accounts_activity:
             title:                  Recently accessed accounts
             view_all:               View all
+            description:            This widget displays the list of recently accessed accounts
 
     account:
+        menu:
+            customers_tab.label: Customers
+            account_list.description: List of accounts
+            shortcut_new_account.label: Create new account
+            shortcut_new_account.description: Create new account instance
+            shortcut_list_accounts.label: Show accounts list
+            shortcut_list_accounts.description: List of accounts
         widgets:
             magento_channel:        Magento Channel
             account_information:    Account Information

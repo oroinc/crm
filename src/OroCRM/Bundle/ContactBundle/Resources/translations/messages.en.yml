@@ -2,13 +2,24 @@ oro.importexport.import.orocrm_contact.add_or_replace: Add and Replace
 orocrm:
     dashboard:
         my_contacts_activity:
-            title: Recently accessed contacts
-            view_all: View all
+            title:       Recently accessed contacts
+            view_all:    View all
+            description: This widget displays the list of recently accessed contacts
 
     contact:
+        menu:
+            customers_tab.label: Customers
+            contact_list.description: List of contacts
+            contact_group_list.description: List of contact groups
+            shortcut_new_contact.label: Create new contact
+            shortcut_new_contact.description: Create new contact instance
+            shortcut_list_contacts.label: Show contacts list
+            shortcut_list_contacts.description: List of contacts
+            shortcut_new_contact_group.label: Create new contact group
+            shortcut_new_contact_group.description: Create new contact group instance
         controller:
-            contact.saved.message: "Contact saved"
-            contact_group.saved.message: "Contact Group saved"
+            contact.saved.message: Contact saved
+            contact_group.saved.message: Contact Group saved
 
         #
         # Form
@@ -128,6 +139,7 @@ orocrm:
             entity_label:        Contact Group
             entity_plural_label: Contact Groups
             entity_description:  Represent contact's group
+            manage:              Manage groups
             id.label:    Id
             owner.label: Owner
             label.label: Label

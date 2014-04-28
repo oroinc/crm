@@ -87,6 +87,14 @@ class MagentoSoapTransport extends Transport
      */
     protected $isWsiMode = false;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="admin_url", type="string", length=255, nullable=true)
+     * @Oro\Versioned()
+     */
+    protected $adminUrl;
+
     public function __construct()
     {
         $this->setSyncStartDate(new \DateTime('2007-01-01', new \DateTimeZone('UTC')));
@@ -288,5 +296,25 @@ class MagentoSoapTransport extends Transport
                 'start_sync_date' => $this->getSyncStartDate(),
             ]
         );
+    }
+
+    /**
+     * @param string $adminUrl
+     *
+     * @return $this
+     */
+    public function setAdminUrl($adminUrl)
+    {
+        $this->adminUrl = $adminUrl;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdminUrl()
+    {
+        return $this->adminUrl;
     }
 }

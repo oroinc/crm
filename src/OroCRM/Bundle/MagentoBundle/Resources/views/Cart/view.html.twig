@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
-{% oro_title_set({params : {"%cart.id%":  entity.originId} }) %}
+{% oro_title_set({params : {"%cart.id%":  entity.originId, '%channelName%': entity.channel.name} }) %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {
@@ -12,6 +12,23 @@
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
+
+{% block breadcrumbMessage %}
+    {% if entity.statusMessage %}
+        <div class="bg-danger mess-pos pull-left">
+            <div class="badge badge-warning">{{ entity.statusMessage|trans }}</div>
+        </div>
+    {% endif %}
+{% endblock breadcrumbMessage %}
+
+{% block navButtons %}
+    {{ UI.button({
+        'path':  path('orocrm_magento_cart_actualize', {'id': entity.id}),
+        'label': 'orocrm.magento.cart.refresh_label'|trans,
+        'title': 'orocrm.magento.cart.refresh_label'|trans,
+        'iCss': 'icon-refresh'
+    }) }}
+{% endblock navButtons %}
 
 {% block content_data %}
     {% set generalSubblocks = [] %}

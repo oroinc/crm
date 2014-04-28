@@ -27,7 +27,7 @@ class CustomerController extends Controller
      */
     public function indexAction(Channel $channel)
     {
-        return ['channelId' => $channel->getId()];
+        return ['channel' => $channel];
     }
 
     /**
@@ -88,5 +88,15 @@ class CustomerController extends Controller
     public function customerInfoAction(Customer $customer, Channel $channel)
     {
         return array('customer' => $customer, 'channel' => $channel);
+    }
+
+    /**
+     * @Route("/order/{id}", name="orocrm_magento_customer_orderplace", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_customer_view")
+     * @Template
+     */
+    public function placeOrderAction(Customer $customer)
+    {
+        return ['entity' => $customer];
     }
 }

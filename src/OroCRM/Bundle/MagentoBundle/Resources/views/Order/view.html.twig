@@ -2,7 +2,7 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 {% import 'OroAddressBundle::macros.html.twig' as address %}
 
-{% oro_title_set({params : {"%order.incrementId%":  entity.incrementId} }) %}
+{% oro_title_set({params : {"%order.incrementId%":  entity.incrementId, '%channelName%': entity.channel.name} }) %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {
@@ -13,6 +13,15 @@
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
+
+{% block navButtons %}
+    {{ UI.button({
+    'path':  path('orocrm_magento_order_actualize', {'id': entity.id}),
+    'label': 'orocrm.magento.order.refresh_label'|trans,
+    'title': 'orocrm.magento.order.refresh_label'|trans,
+    'iCss': 'icon-refresh'
+    }) }}
+{% endblock navButtons %}
 
 {% block content_data %}
     {% set generalSubblocks = [] %}
