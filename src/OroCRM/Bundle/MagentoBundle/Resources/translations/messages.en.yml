@@ -78,7 +78,7 @@ orocrm:
             entity_plural_label: Customers
             entity_description:  Represent Magento customer
             create_order:        Create Order
-
+            sales.label:         Sales
             id.label:            Id
             origin_id.label:     Origin Id
             name_prefix.label:   Name prefix
@@ -134,6 +134,7 @@ orocrm:
                 active:                Active
                 converted:             Converted
             sub_total.label:           Sub total
+            sub_total_amount.label:    Subtotal Amount
             grand_total.label:         Grand total
             tax_amount.label:          Tax
             created_at.label:          Created on

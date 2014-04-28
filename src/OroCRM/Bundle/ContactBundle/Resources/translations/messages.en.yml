@@ -139,6 +139,7 @@ orocrm:
             entity_label:        Contact Group
             entity_plural_label: Contact Groups
             entity_description:  Represent contact's group
+            manage:              Manage groups
             id.label:    Id
             owner.label: Owner
             label.label: Label
