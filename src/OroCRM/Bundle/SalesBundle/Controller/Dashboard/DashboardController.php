@@ -44,7 +44,7 @@ class DashboardController extends Controller
                     'name' => 'pie_chart',
                     'data_schema' => array(
                         'label' => array('field_name' => 'label'),
-                        'value' => array('field_name' => 'fraction')
+                        'value' => array('field_name' => 'itemCount')
                     )
                 )
             )
