@@ -1,0 +1,12 @@
+<script type="text/html" id="template-addressbook-item">
+    <div class="title-item"><%= _.escape(label) %></div>
+    <ul class="inline">
+        <% if (primary) { %> <li><span class="label label-info"><%= _.__('Primary') %></span></li> <% } %>
+        <% _.each(types, function(type) { %>
+        <li><span class="label"><%= _.escape(type.label) %></span></li>
+        <% }) %>
+    </ul>
+    <address>
+        <%= _.escape(formatted_address).replace(/\n/g, "<br/>") %>
+    </address>
+</script>

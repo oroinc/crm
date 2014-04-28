@@ -14,3 +14,4 @@ oro_dashboard_config:
             route_parameters: { bundle: OroCRMAccountBundle, name: myAccountsActivity }
             acl:         orocrm_account_view
             description: orocrm.dashboard.my_accounts_activity.description
+            icon:        bundles/orocrmaccount/img/recent_accessed_accounts.png

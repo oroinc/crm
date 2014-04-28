@@ -19,13 +19,13 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 class ProductController extends Controller
 {
     /**
-     * @Route("/{id}", name="orocrm_magento_product_index", requirements={"id"="\d+"}))
+     * @Route("/", name="orocrm_magento_product_index")
      * @AclAncestor("orocrm_magento_product_view")
      * @Template
      */
-    public function indexAction(Channel $channel)
+    public function indexAction()
     {
-        return ['channelId' => $channel->getId()];
+        return [];
     }
 
     /**

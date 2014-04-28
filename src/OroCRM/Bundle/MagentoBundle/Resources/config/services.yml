@@ -18,6 +18,11 @@ parameters:
     # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
 
+    orocrm_magento.customer.manager.api.class:                              Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    # datagrid helpers
+    orocrm_magento.country.datagrid_helper.class:                           Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
+    orocrm_magento.datagrid_helper.class:                                   OroCRM\Bundle\MagentoBundle\Datagrid\MagentoDatagridHelper
+
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -63,20 +68,8 @@ services:
         class: %orocrm_magento.event_listener.navigation.class%
         arguments:
             - @doctrine.orm.entity_manager
-            - @router
         tags:
             - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
-
-    orocrm_magento.event_listener.grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'channelId'
-            - @oro_datagrid.datagrid.request_params
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customers-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-cart-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-order-grid, method: onBuildAfter }
 
     orocrm_magento.event_listener.account_orders_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
@@ -95,6 +88,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-order-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-cart-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-orders-widget-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-cart-widget-grid, method: onBuildAfter }
 
     orocrm_magento.event_listener.cart_items_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
@@ -110,3 +105,16 @@ services:
         class: %orocrm_magento.magento_url_generator.class%
         arguments: [@router]
         scope: prototype
+
+    # Customer API
+    orocrm_magento.customer.manager.api:
+        class: %orocrm_magento.customer.manager.api.class%
+        arguments:
+            - OroCRM\Bundle\MagentoBundle\Entity\Customer
+            - @doctrine.orm.entity_manager
+
+    orocrm_magento.datagrid_helper:
+        class: %orocrm_magento.datagrid_helper.class%
+
+    orocrm_magento.country.datagrid_helper:
+        class: %orocrm_magento.country.datagrid_helper.class%
