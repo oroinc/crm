@@ -25,7 +25,8 @@ class CartRepository extends EntityRepository
      * @var array
      */
     protected $excludedStatuses = [
-        'purchased'
+        'purchased',
+        'expired'
     ];
 
     /**
