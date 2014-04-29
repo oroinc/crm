@@ -72,7 +72,7 @@ class DashboardController extends Controller
             ->setArrayData($items)
             ->setOptions(
                 array(
-                    'name' => 'line_chart',
+                    'name' => 'bar_chart',
                     'data_schema' => array(
                         'label' => array('field_name' => 'label'),
                         'value' => array('field_name' => 'budget')
