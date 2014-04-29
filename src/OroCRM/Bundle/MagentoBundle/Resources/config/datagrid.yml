@@ -1013,7 +1013,6 @@ datagrid:
             query:
                 select:
                     - o
-                    - o.updatedAt
                     - o.subtotalAmount
                     - step.label as stepLabel
                     - COUNT(items.id) as itemsCount
@@ -1061,8 +1060,6 @@ datagrid:
                 label: orocrm.magento.order.status.label
             stepLabel:
                 label: orocrm.magento.order.b2c_flow_order_follow_up.step.label
-            default:
-                updatedAt:  DESC
         filters:
             columns:
                 incrementId:
@@ -1110,6 +1107,8 @@ datagrid:
                 totalAmount:     { data_name: o.totalAmount }
                 status:          { data_name: o.status }
                 stepLabel:       { data_name: step.label }
+            default:
+                incrementId:  DESC
         properties:
             id: ~
             view_link:
