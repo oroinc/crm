@@ -33,7 +33,7 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *  routeView="orocrm_task_view",
  *  defaultValues={
  *      "entity"={
- *          "icon"="icon-tasks"
+ *          "icon"="icon-list-alt"
  *      },
  *      "ownership"={
  *          "owner_type"="USER",
