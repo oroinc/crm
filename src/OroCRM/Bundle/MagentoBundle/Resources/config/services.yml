@@ -23,6 +23,9 @@ parameters:
     orocrm_magento.country.datagrid_helper.class:                           Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
     orocrm_magento.datagrid_helper.class:                                   OroCRM\Bundle\MagentoBundle\Datagrid\MagentoDatagridHelper
 
+    # magento related records delete provider
+    orocrm_magento.manager.magento_channel_delete_provider.class:           OroCRM\Bundle\MagentoBundle\Manager\MagentoChannelDeleteProvider
+
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -118,3 +121,11 @@ services:
 
     orocrm_magento.country.datagrid_helper:
         class: %orocrm_magento.country.datagrid_helper.class%
+
+    orocrm_magento.manager.magento_channel_delete_provider:
+        class: %orocrm_magento.manager.magento_channel_delete_provider.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @oro_workflow.entity_connector
+        tags:
+            - { name: oro_integration.channel_delete_provider }
