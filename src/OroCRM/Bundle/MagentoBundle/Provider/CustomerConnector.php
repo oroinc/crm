@@ -2,7 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-class CustomerConnector extends AbstractMagentoConnector
+use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
+
+class CustomerConnector extends AbstractMagentoConnector implements TwoWaySyncConnectorInterface
 {
     /**
      * {@inheritdoc}
@@ -26,6 +28,11 @@ class CustomerConnector extends AbstractMagentoConnector
     public function getImportJobName()
     {
         return 'mage_customer_import';
+    }
+
+    public function getTwoWayJobName()
+    {
+        return '';
     }
 
     /**
