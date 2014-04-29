@@ -208,6 +208,20 @@ class Customer extends BasePerson
     protected $vat;
 
     /**
+     * @var double
+     *
+     * @ORM\Column(name="lifetime", type="money", nullable=true)
+     */
+    protected $lifetime = 0;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="currency", type="string", length=10, nullable=true)
+     */
+    protected $currency = 'USD';
+
+    /**
      * {@inheritdoc}
      */
     public function __construct()
@@ -393,5 +407,45 @@ class Customer extends BasePerson
                 return $item->getOriginId() == $originId;
             }
         )->first();
+    }
+
+    /**
+     * @param double $lifetime
+     *
+     * @return $this
+     */
+    public function setLifetime($lifetime)
+    {
+        $this->lifetime = $lifetime;
+
+        return $this;
+    }
+
+    /**
+     * @return double
+     */
+    public function getLifetime()
+    {
+        return $this->lifetime;
+    }
+
+    /**
+     * @param string $currency
+     *
+     * @return $this
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
     }
 }

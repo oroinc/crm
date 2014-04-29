@@ -8,21 +8,16 @@ use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 
-use Oro\Bundle\EmailBundle\Datagrid\EmailQueryFactory;
 use Oro\Bundle\EmailBundle\Entity\Util\EmailUtil;
 
 class ContactEmailGridListener
 {
-    /** @var EmailQueryFactory */
-    protected $queryFactory;
-
     /** @var  EntityManager */
     protected $em;
 
-    public function __construct(EntityManager $em, EmailQueryFactory $factory)
+    public function __construct(EntityManager $em)
     {
-        $this->em            = $em;
-        $this->queryFactory  = $factory;
+        $this->em = $em;
     }
 
     /**
@@ -35,8 +30,6 @@ class ContactEmailGridListener
         if ($datasource instanceof OrmDatasource) {
             $parameters = $datagrid->getParameters();
             $queryBuilder = $datasource->getQueryBuilder();
-
-            $this->queryFactory->prepareQuery($queryBuilder);
 
             if ($id = $parameters->get('contactId')) {
                 $contact = $this->em

@@ -2,7 +2,7 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
 {% set fullname = entity|oro_format_name|default('N/A'|trans) %}
-{% oro_title_set({params : {"%customer.name%": fullname, '%channelName%': entity.channel.name} }) %}
+{% oro_title_set({params : {"%customer.name%": fullname} }) %}
 
 {% block navButtons %}
     {% set createOrder = 'orocrm.magento.customer.create_order'|trans %}
@@ -41,7 +41,7 @@
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
-        'indexPath': path('orocrm_magento_customer_index', {id: entity.channel.id}),
+        'indexPath': path('orocrm_magento_customer_index'),
         'indexLabel': 'orocrm.magento.customer.entity_plural_label'|trans,
         'entityTitle': fullname
     } %}
@@ -56,12 +56,56 @@
         }) }}
     {% endset %}
 
+    {% set generalSubBlocks = [{'data' : [customerInformationWidget]}] %}
+
+    {% set salesTabsWidget %}
+        <div class="responsive-cell" id="magento-without-border-tabs">
+            {% set tabs = [
+                {
+                    'alias': 'orocrm_magento_customer_orders',
+                    'widgetType': 'block',
+                    'label': "orocrm.magento.order.entity_plural_label"|trans,
+                    'url': path(
+                            'orocrm_magento_customer_orders_widget',
+                            {'customerId': entity.id, 'channelId': entity.channel.id}
+                    )
+                },
+                {
+                    'alias': 'orocrm_magento_customer_carts',
+                    'widgetType': 'block',
+                    'label': "orocrm.magento.cart.entity_plural_label"|trans,
+                    'url': path(
+                        'orocrm_magento_customer_carts_widget',
+                        {'customerId': entity.id, 'channelId': entity.channel.id}
+                    )
+                }
+            ] %}
+            {{ tabPanel(tabs) }}
+        </div>
+    {% endset %}
+
+    {% set customerAddressBookWidget %}
+        <div class="responsive-cell">
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'contentClasses': [],
+                'url': path('orocrm_magento_customer_address_book', {id: entity.id}),
+                'title': 'Address Book'|trans
+            }) }}
+        </div>
+    {% endset %}
+    {% set generalSubBlocks = generalSubBlocks|merge([{'data': [customerAddressBookWidget]}]) %}
+
     {% set dataBlocks = [
         {
             'title': 'General Information'|trans,
             'class': 'active',
+            'subblocks': generalSubBlocks
+        },
+        {
+            'title': 'orocrm.magento.customer.sales.label'|trans,
             'subblocks': [
-                {'data' : [customerInformationWidget] },
+                {'data' : [salesTabsWidget] }
             ]
         }
     ] %}
