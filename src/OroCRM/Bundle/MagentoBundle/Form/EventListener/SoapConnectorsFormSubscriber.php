@@ -84,7 +84,19 @@ class SoapConnectorsFormSubscriber implements EventSubscriberInterface
             );
 
             $form->getParent()->add('connectors', 'choice', array_merge($config, ['choices' => $allowedTypesChoices]));
-            $form->getParent()->add('syncPriority', 'choice', ['choices' =>['Remote wins', 'Local wins']]);
+
+            $form
+                ->getParent()
+                    ->add(
+                        'syncPriority',
+                        'choice',
+                        [
+                            'choices' => [
+                                'remote' => 'Remote wins',
+                                'local' => 'Local wins'
+                            ]
+                        ]
+                    );
         }
     }
 
