@@ -508,12 +508,11 @@ datagrid:
                     left:
                         - { join: o.workflowStep, alias: step }
                         - { join: o.customer, alias: customer }
+                        - { join: o.addresses, alias: address }
+                        - { join: address.types, alias: types, conditionType: WITH, condition: "types.name = 'billing'" }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: o.channel, alias: ch }
-                    inner:
-                        - { join: o.addresses, alias: address }
-                        - { join: address.types, alias: types, conditionType: WITH, condition: "types.name = 'billing'" }
 
         columns:
             channelName:
