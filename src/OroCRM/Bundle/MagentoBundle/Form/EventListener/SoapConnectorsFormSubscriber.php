@@ -87,8 +87,7 @@ class SoapConnectorsFormSubscriber implements EventSubscriberInterface
                 ->getParent()
                     ->add('connectors', 'choice', array_merge($config, ['choices' => $allowedTypesChoices]));
 
-            if ($form->getParent()->has('syncPriority') &&  $form->getParent()->has('isTwoWaySyncEnable')) {
-
+            if ($form->getParent()->has('syncPriority') && $form->getParent()->has('isTwoWaySyncEnable')) {
                 $form
                     ->getParent()
                     ->remove('syncPriority')
