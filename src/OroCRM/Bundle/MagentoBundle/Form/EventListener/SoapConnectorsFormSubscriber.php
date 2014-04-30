@@ -83,9 +83,8 @@ class SoapConnectorsFormSubscriber implements EventSubscriberInterface
                 }
             );
 
-            $form
-                ->getParent()
-                    ->add('connectors', 'choice', array_merge($config, ['choices' => $allowedTypesChoices]));
+            $form->getParent()
+                ->add('connectors', 'choice', array_merge($config, ['choices' => $allowedTypesChoices]));
         }
     }
 
