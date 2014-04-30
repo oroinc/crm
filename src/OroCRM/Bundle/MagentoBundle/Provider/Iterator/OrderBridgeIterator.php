@@ -11,8 +11,10 @@ class OrderBridgeIterator extends AbstractBridgeIterator
      */
     protected function applyFilter()
     {
-        $this->filter->addStoreFilter($this->getStoresByWebsiteId($this->websiteId));
-        parent::applyFilter();
+        if ($this->websiteId !== -1) {
+            $this->filter->addStoreFilter($this->getStoresByWebsiteId($this->websiteId));
+            parent::applyFilter();
+        }
     }
 
     /**

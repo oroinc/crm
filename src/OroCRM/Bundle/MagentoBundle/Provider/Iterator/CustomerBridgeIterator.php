@@ -11,8 +11,10 @@ class CustomerBridgeIterator extends AbstractBridgeIterator
      */
     protected function applyFilter()
     {
-        $this->filter->addWebsiteFilter([$this->websiteId]);
-        parent::applyFilter();
+        if ($this->websiteId !== -1) {
+            $this->filter->addWebsiteFilter([$this->websiteId]);
+            parent::applyFilter();
+        }
     }
 
     /**

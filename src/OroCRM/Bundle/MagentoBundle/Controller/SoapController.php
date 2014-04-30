@@ -45,8 +45,8 @@ class SoapController extends Controller
         $adminUrl             = false;
         try {
             $transport->init($transportEntity);
-            $websites             = $this->formatWebsiteChoices($transport->getWebsites());
             $isExtensionInstalled = $transport->isExtensionInstalled();
+            $websites             = $this->formatWebsiteChoices($transport->getWebsites(), $isExtensionInstalled);
             $adminUrl             = $transport->getAdminUrl();
             $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')
                 ->getAvailableConnectorsTypesChoiceList(
@@ -82,10 +82,11 @@ class SoapController extends Controller
      * ]
      *
      * @param \Iterator $websitesSource
+     * @param bool      $isExtensionInstalled
      *
      * @return array
      */
-    protected function formatWebsiteChoices(\Iterator $websitesSource)
+    protected function formatWebsiteChoices(\Iterator $websitesSource, $isExtensionInstalled)
     {
         $translator = $this->get('translator');
         $websites   = iterator_to_array($websitesSource);
@@ -104,6 +105,13 @@ class SoapController extends Controller
             },
             $websites
         );
+
+        if ($isExtensionInstalled) {
+            array_unshift(
+                $websites,
+                ['id' => -1, 'label' => $translator->trans('orocrm.magento.magentosoaptransport.all_sites')]
+            );
+        }
 
         return $websites;
     }
