@@ -45,7 +45,7 @@ class WebsiteSoapIteratorTest extends BaseIteratorTestCase
     {
         return [
             'bad data retrieved, should be empty array'               => [[], []],
-            'data retrieved correctly, admin store should be skipped' => [
+            'data retrieved correctly, admin store should not be skipped' => [
                 [
                     0 => [
                         'website_id' => 0,
@@ -61,6 +61,11 @@ class WebsiteSoapIteratorTest extends BaseIteratorTestCase
                     ]
                 ],
                 [
+                    0 => [
+                        'name' => 'Admin',
+                        'code' => 'admin',
+                        'id' => StoresSoapIterator::ADMIN_STORE_ID
+                    ],
                     1 => [
                         'name' => 'B2C French',
                         'code' => 'fr_b2c',
