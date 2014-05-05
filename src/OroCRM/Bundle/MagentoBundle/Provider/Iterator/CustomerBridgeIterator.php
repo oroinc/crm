@@ -11,7 +11,7 @@ class CustomerBridgeIterator extends AbstractBridgeIterator
      */
     protected function applyFilter()
     {
-        if ($this->websiteId !== -1) {
+        if ($this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
             $this->filter->addWebsiteFilter([$this->websiteId]);
             parent::applyFilter();
         }

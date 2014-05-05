@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller;
 
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -46,7 +47,7 @@ class SoapController extends Controller
         try {
             $transport->init($transportEntity);
             $isExtensionInstalled = $transport->isExtensionInstalled();
-            $websites             = $this->formatWebsiteChoices($transport->getWebsites(), $isExtensionInstalled);
+            $websites             = $this->formatWebsiteChoices($transport->getWebsites());
             $adminUrl             = $transport->getAdminUrl();
             $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')
                 ->getAvailableConnectorsTypesChoiceList(
@@ -82,11 +83,10 @@ class SoapController extends Controller
      * ]
      *
      * @param \Iterator $websitesSource
-     * @param bool      $isExtensionInstalled
      *
      * @return array
      */
-    protected function formatWebsiteChoices(\Iterator $websitesSource, $isExtensionInstalled)
+    protected function formatWebsiteChoices(\Iterator $websitesSource)
     {
         $translator = $this->get('translator');
         $websites   = iterator_to_array($websitesSource);
@@ -106,12 +106,21 @@ class SoapController extends Controller
             $websites
         );
 
-        if ($isExtensionInstalled) {
-            array_unshift(
-                $websites,
-                ['id' => -1, 'label' => $translator->trans('orocrm.magento.magentosoaptransport.all_sites')]
-            );
+        // Delete Admin website
+        foreach ($websites as $key => $website) {
+            if ($website['id'] == StoresSoapIterator::ADMIN_WEBSITE_ID) {
+                unset($websites[$key]);
+            }
         }
+
+        // Add all web sites choice
+        array_unshift(
+            $websites,
+            [
+                'id' => StoresSoapIterator::ALL_WEBSITES,
+                'label' => $translator->trans('orocrm.magento.magentosoaptransport.all_sites')
+            ]
+        );
 
         return $websites;
     }
