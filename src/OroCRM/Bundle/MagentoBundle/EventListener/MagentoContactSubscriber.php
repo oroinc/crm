@@ -43,6 +43,9 @@ class MagentoContactSubscriber implements EventSubscriber
         ],
         'OroCRM\Bundle\ContactBundle\Entity\ContactEmail'   => [
             'findContactMethod' => 'getOwner'
+        ],
+        'OroCRM\Bundle\ContactBundle\Entity\ContactPhone'   => [
+            'findContactMethod' => 'getOwner'
         ]
     ];
 
@@ -100,14 +103,18 @@ class MagentoContactSubscriber implements EventSubscriber
     }
 
     /**
-     * Process updated entities
+     * Process updated and inserted entities
      *
      * @param EntityManager $em
      */
     protected function processUpdates(EntityManager $em)
     {
         $uow      = $em->getUnitOfWork();
-        $entities = $uow->getScheduledEntityUpdates();
+        $entities = array_merge(
+            $uow->getScheduledEntityInsertions(),
+            $uow->getScheduledEntityUpdates()
+        );
+
         foreach ($entities as $entity) {
             foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
                 if ($entity instanceof $classNames) {
