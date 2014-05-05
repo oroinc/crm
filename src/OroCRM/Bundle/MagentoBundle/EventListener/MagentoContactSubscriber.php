@@ -83,61 +83,53 @@ class MagentoContactSubscriber implements EventSubscriber
     {
         $uow      = $em->getUnitOfWork();
         $entities = $uow->getScheduledEntityDeletions();
-
-        if (!empty($entities)) {
-            foreach ($entities as $entity) {
-                foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
-                    if ($entity instanceof $classNames) {
-                        if (isset ($classMapConfig['findContactMethod'])) {
-                            $method        = $classMapConfig['findContactMethod'];
-                            $contactEntity = $entity->$method();
-                        } else {
-                            $contactEntity = $entity;
-                        }
-
-                        $this->scheduleSync($contactEntity, $em);
+        foreach ($entities as $entity) {
+            foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
+                if ($entity instanceof $classNames) {
+                    if (isset ($classMapConfig['findContactMethod'])) {
+                        $method        = $classMapConfig['findContactMethod'];
+                        $contactEntity = $entity->$method();
+                    } else {
+                        $contactEntity = $entity;
                     }
+
+                    $this->scheduleSync($contactEntity, $em);
                 }
             }
         }
     }
 
     /**
-     * Process inserted and updated entities
+     * Process updated entities
      *
      * @param EntityManager $em
      */
     protected function processUpdates(EntityManager $em)
     {
         $uow      = $em->getUnitOfWork();
-        $entities = array_merge(
-            $uow->getScheduledEntityInsertions(),
-            $uow->getScheduledEntityUpdates()
-        );
-        if (!empty($entities)) {
-            foreach ($entities as $entity) {
-                foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
-                    if ($entity instanceof $classNames) {
-                        if (isset ($classMapConfig['findContactMethod'])) {
-                            $method        = $classMapConfig['findContactMethod'];
-                            $contactEntity = $entity->$method();
-                            $changed       = true;
-                        } else {
-                            $changed       = false;
-                            $contactEntity = $entity;
+        $entities = $uow->getScheduledEntityUpdates();
+        foreach ($entities as $entity) {
+            foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
+                if ($entity instanceof $classNames) {
+                    if (isset ($classMapConfig['findContactMethod'])) {
+                        $method        = $classMapConfig['findContactMethod'];
+                        $contactEntity = $entity->$method();
+                        $changed       = true;
+                    } else {
+                        $changed       = false;
+                        $contactEntity = $entity;
 
-                            $chaneSet = $uow->getEntityChangeSet($contactEntity);
-                            foreach (array_keys($chaneSet) as $fieldName) {
-                                if (in_array($fieldName, $classMapConfig['fields'])) {
-                                    $changed = true;
-                                    break;
-                                }
+                        $chaneSet = $uow->getEntityChangeSet($contactEntity);
+                        foreach (array_keys($chaneSet) as $fieldName) {
+                            if (in_array($fieldName, $classMapConfig['fields'])) {
+                                $changed = true;
+                                break;
                             }
                         }
+                    }
 
-                        if ($changed) {
-                            $this->scheduleSync($contactEntity, $em);
-                        }
+                    if ($changed) {
+                        $this->scheduleSync($contactEntity, $em);
                     }
                 }
             }
@@ -153,6 +145,7 @@ class MagentoContactSubscriber implements EventSubscriber
     {
         $magentoCustomer = $em->getRepository('OroCRMMagentoBundle:Customer')
             ->getCustomerRelatedToContact($contactEntity);
+        // check for logged user is for confidence that data changes comes from UI, not from sync process.
         if ($magentoCustomer && $this->securityFacade->hasLoggedUser()) {
             $this->schedulerServiceLink->getService()->schedule(
                 $magentoCustomer->getChannel(),
