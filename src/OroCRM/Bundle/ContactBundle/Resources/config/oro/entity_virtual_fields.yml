@@ -1,0 +1,10 @@
+oro_entity_virtual_fields:
+    OroCRM\Bundle\ContactBundle\Entity\Contact:
+        primaryEmail:
+            query:
+                select:
+                    expr:         emails.email
+                    return_type:  string
+                join:
+                    left:
+                        - { join: entity.emails, alias: emails, conditionType: 'WITH', condition: 'emails.primary = true' }
