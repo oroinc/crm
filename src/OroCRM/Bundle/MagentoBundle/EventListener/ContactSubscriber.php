@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\EventListener;
 use Doctrine\Common\EventSubscriber;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
@@ -13,7 +14,7 @@ use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
-class MagentoContactSubscriber implements EventSubscriber
+class ContactSubscriber implements EventSubscriber
 {
     /**
      * @var ServiceLink
@@ -49,6 +50,13 @@ class MagentoContactSubscriber implements EventSubscriber
         ]
     ];
 
+    /**
+     * Array with processed records
+     *
+     * @var array
+     */
+    protected $processedIds = [];
+
     public function __construct(SecurityFacade $securityFacade, ServiceLink $schedulerServiceLink)
     {
         $this->schedulerServiceLink = $schedulerServiceLink;
@@ -62,7 +70,7 @@ class MagentoContactSubscriber implements EventSubscriber
     {
         return [
             // @codingStandardsIgnoreStart
-            Events::onFlush
+            Events::postFlush
             // @codingStandardsIgnoreEnd
         ];
     }
@@ -70,7 +78,7 @@ class MagentoContactSubscriber implements EventSubscriber
     /**
      * {@inheritdoc}
      */
-    public function onFlush(OnFlushEventArgs $event)
+    public function postFlush(PostFlushEventArgs $event)
     {
         $em = $event->getEntityManager();
         $this->processUpdates($em);
@@ -143,22 +151,26 @@ class MagentoContactSubscriber implements EventSubscriber
         }
     }
 
-
     /**
      * @param Contact       $contactEntity
      * @param EntityManager $em
      */
     protected function scheduleSync(Contact $contactEntity, EntityManager $em)
     {
-        $magentoCustomer = $em->getRepository('OroCRMMagentoBundle:Customer')
-            ->getCustomerRelatedToContact($contactEntity);
-        // check for logged user is for confidence that data changes comes from UI, not from sync process.
-        if ($magentoCustomer && $this->securityFacade->hasLoggedUser()) {
-            $this->schedulerServiceLink->getService()->schedule(
-                $magentoCustomer->getChannel(),
-                'magento',
-                ['id' => $magentoCustomer->getId()]
-            );
+        if (!in_array($contactEntity->getId(), $this->processedIds)) {
+            $magentoCustomer = $em->getRepository('OroCRMMagentoBundle:Customer')
+                ->getCustomerRelatedToContact($contactEntity);
+            // check for logged user is for confidence that data changes comes from UI, not from sync process.
+            if ($magentoCustomer && $this->securityFacade->hasLoggedUser()) {
+                $this->schedulerServiceLink->getService()->schedule(
+                    $magentoCustomer->getChannel(),
+                    'customer',
+                    ['id' => $magentoCustomer->getId()]
+                );
+            }
+
+            $this->processedIds[] = $contactEntity->getId();
         }
+
     }
 }
