@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -15,6 +14,7 @@ use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 
 use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 
 class SoapController extends Controller
 {
