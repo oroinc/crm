@@ -11,10 +11,26 @@ connector:
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
                         reader:    orocrm_magento.mage.customer_connector
-                        processor: oro_importexport.processor.import_delegate
+                        processor: oro_integration.processor.reverse
                         writer:    oro_integration.writer.persistent_batch_writer
                     parameters:
                         batch_size: 100
+
+        # Customer export job
+        mage_customer_export:
+            title: "Entity export to Magento SOAP API"
+            type:  export
+            steps:
+                export:
+                    title: export
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    oro_integration.reader.entity.with_filters
+                        processor: oro_integration.processor.reverse
+                        writer:    oro_integration.writer.reverse
+                    parameters:
+                        batch_size: 100
+
         # Region import job
         mage_region_import:
             title: "Import Magento regions via SOAP API"

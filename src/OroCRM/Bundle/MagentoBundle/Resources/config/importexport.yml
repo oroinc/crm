@@ -233,3 +233,10 @@ services:
              - [setStrategy, [@orocrm_magento.import.strategy.order.add_or_update]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.order.entity.class%, alias: orocrm_magento.add_or_update_order }
+
+    # Export processor
+    orocrm_magento.importexport.processor.export_customer:
+        parent: oro_importexport.processor.export_abstract
+        tags:
+            - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_magento }
+

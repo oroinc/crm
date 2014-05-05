@@ -32,7 +32,7 @@ class CustomerConnector extends AbstractMagentoConnector implements TwoWaySyncCo
 
     public function getTwoWayJobName()
     {
-        return '';
+        return 'mage_customer_export';
     }
 
     /**
