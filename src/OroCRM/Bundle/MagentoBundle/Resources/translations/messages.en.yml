@@ -151,6 +151,7 @@ orocrm:
             related_calls.label:       Calls
             workflow_item.label:       Workflow item
             workflow_step.label:       Workflow step
+            website.label:             Website
 
         cartitem:
             entity_label:              Shopping Cart Item
@@ -272,6 +273,7 @@ orocrm:
             related_calls.label:    Calls
             workflow_item.label:    Workflow item
             workflow_step.label:    Workflow step
+            website.label:          Website
 
         product:
             entity_label:         Product

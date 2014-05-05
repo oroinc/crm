@@ -16,6 +16,7 @@ datagrid:
                     - ch.name as channelName
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
+                    - cw.name as websiteName
                 from:
                     - { table: OroCRMMagentoBundle:Customer , alias: c }
                 join:
@@ -24,10 +25,13 @@ datagrid:
                         - { join: c.addresses, alias: address,  conditionType: WITH, condition: "address.primary = true"}
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+                        - { join: c.website, alias: cw }
                 groupBy: c.id
         columns:
             channelName:
                 label: orocrm.magento.customer.channel.label
+            websiteName:
+                label: orocrm.magento.customer.website.label
             firstName:
                 label: orocrm.magento.customer.first_name.label
             lastName:
@@ -62,6 +66,7 @@ datagrid:
                 lastName:    { data_name: c.lastName }
                 email:       { data_name: c.email }
                 channelName: { data_name: ch.name }
+                websiteName: { data_name: cw.name }
                 createdAt:   { data_name: c.createdAt }
                 updatedAt:   { data_name: c.updatedAt }
                 countryName: { data_name: country.name }
@@ -81,6 +86,14 @@ datagrid:
                             class: OroIntegrationBundle:Channel
                             property: name
                             query_builder: @orocrm_magento.datagrid_helper->getMagentoChannelsQueryBuilder
+                websiteName:
+                    type: entity
+                    data_name: cw.id
+                    options:
+                        field_options:
+                            class: OroCRMMagentoBundle:Website
+                            property: name
+                    enabled: false
                 firstName:
                     type: string
                     data_name: c.firstName
@@ -145,6 +158,7 @@ datagrid:
                     - ch.name as channelName
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
+                    - cw.name as websiteName
                 from:
                     - { table: %orocrm_magento.cart.entity.class% , alias: c }
                 join:
@@ -156,9 +170,12 @@ datagrid:
                         - { join: c.billingAddress, alias: address }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+                        - { join: cs.website, alias: cw }
         columns:
             channelName:
                 label: orocrm.magento.cart.channel.label
+            websiteName:
+                label: orocrm.magento.cart.website.label
             originId:
                 label: orocrm.magento.cart.id.label
             firstName:
@@ -204,6 +221,7 @@ datagrid:
                 email:                { data_name: c.email }
                 itemsQty:             { data_name: c.itemsQty }
                 channelName:          { data_name: ch.name }
+                websiteName: { data_name: cw.name }
                 grandTotal:           { data_name: c.grandTotal }
                 createdAt:            { data_name: c.createdAt }
                 updatedAt:            { data_name: c.updatedAt }
@@ -223,6 +241,14 @@ datagrid:
                             multiple: true
                             class: OroIntegrationBundle:Channel
                             property: name
+                websiteName:
+                    type: entity
+                    data_name: cw.id
+                    options:
+                        field_options:
+                            class: OroCRMMagentoBundle:Website
+                            property: name
+                    enabled:   false
                 originId:
                     type: number
                     data_name: c.originId
@@ -502,6 +528,7 @@ datagrid:
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - ch.name as channelName
+                    - cw.name as websiteName
                 from:
                     - { table: %orocrm_magento.order.entity.class%, alias: o }
                 join:
@@ -513,10 +540,14 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: o.channel, alias: ch }
+                        - { join: o.store, alias: cs }
+                        - { join: cs.website, alias: cw }
 
         columns:
             channelName:
                 label: orocrm.magento.order.channel.label
+            websiteName:
+                label: orocrm.magento.order.website.label
             incrementId:
                 label: orocrm.magento.order.increment_id.label
             firstName:
@@ -576,6 +607,7 @@ datagrid:
                 regionName:             { data_name: regionName }
                 status:                 { data_name: o.status }
                 channelName:            { data_name: ch.name }
+                websiteName: { data_name: cw.name }
                 stepLabel:              { data_name: step.label }
                 createdAt:              { data_name: o.createdAt }
                 updatedAt:              { data_name: o.updatedAt }
@@ -591,6 +623,14 @@ datagrid:
                             multiple: true
                             class: OroIntegrationBundle:Channel
                             property: name
+                websiteName:
+                    type: entity
+                    data_name: cw.id
+                    options:
+                        field_options:
+                            class: OroCRMMagentoBundle:Website
+                            property: name
+                    enabled:   false
                 incrementId:
                     type:             string
                     data_name:        o.incrementId
