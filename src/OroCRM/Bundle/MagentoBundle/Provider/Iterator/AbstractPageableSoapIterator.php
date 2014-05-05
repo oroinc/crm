@@ -178,12 +178,14 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         array $storeIds = [],
         $format = 'Y-m-d H:i:s'
     ) {
-        if (!empty($websiteIds)) {
-            $this->filter->addWebsiteFilter($websiteIds);
-        }
+        if ($this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+            if (!empty($websiteIds)) {
+                $this->filter->addWebsiteFilter($websiteIds);
+            }
 
-        if (!empty($storeIds)) {
-            $this->filter->addStoreFilter($storeIds);
+            if (!empty($storeIds)) {
+                $this->filter->addStoreFilter($storeIds);
+            }
         }
 
         $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
