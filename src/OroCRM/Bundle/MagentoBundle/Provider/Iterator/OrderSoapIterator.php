@@ -13,7 +13,11 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
      */
     public function getEntityIds()
     {
-        $filters = $this->getBatchFilter($this->lastSyncDate, [], $this->getStoresByWebsiteId($this->websiteId));
+        $stores = [];
+        if ($this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+            $stores = $this->getStoresByWebsiteId($this->websiteId);
+        }
+        $filters = $this->getBatchFilter($this->lastSyncDate, [], $stores);
 
         $result = $this->transport->call(SoapTransport::ACTION_ORDER_LIST, $filters);
         $result = $this->processCollectionResponse($result);
