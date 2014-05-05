@@ -55,7 +55,7 @@ class ContactSubscriber implements EventSubscriber
      *
      * @var array
      */
-    protected $processedIds = [];
+    protected $processIds = [];
 
     public function __construct(SecurityFacade $securityFacade, ServiceLink $schedulerServiceLink)
     {
@@ -70,7 +70,8 @@ class ContactSubscriber implements EventSubscriber
     {
         return [
             // @codingStandardsIgnoreStart
-            Events::postFlush
+            Events::postFlush,
+            Events::onFlush
             // @codingStandardsIgnoreEnd
         ];
     }
@@ -78,11 +79,25 @@ class ContactSubscriber implements EventSubscriber
     /**
      * {@inheritdoc}
      */
-    public function postFlush(PostFlushEventArgs $event)
+    public function onFlush(OnFlushEventArgs $event)
     {
         $em = $event->getEntityManager();
         $this->processUpdates($em);
         $this->processDeletes($em);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function postFlush(PostFlushEventArgs $event)
+    {
+        foreach ($this->processIds as $magentoCustomer) {
+            $this->schedulerServiceLink->getService()->schedule(
+                $magentoCustomer->getChannel(),
+                'customer',
+                ['id' => $magentoCustomer->getId()]
+            );
+        }
     }
 
     /**
@@ -157,19 +172,13 @@ class ContactSubscriber implements EventSubscriber
      */
     protected function scheduleSync(Contact $contactEntity, EntityManager $em)
     {
-        if (!in_array($contactEntity->getId(), $this->processedIds)) {
+        if (!isset($this->processIds[$contactEntity->getId()])) {
             $magentoCustomer = $em->getRepository('OroCRMMagentoBundle:Customer')
                 ->getCustomerRelatedToContact($contactEntity);
             // check for logged user is for confidence that data changes comes from UI, not from sync process.
             if ($magentoCustomer && $this->securityFacade->hasLoggedUser()) {
-                $this->schedulerServiceLink->getService()->schedule(
-                    $magentoCustomer->getChannel(),
-                    'customer',
-                    ['id' => $magentoCustomer->getId()]
-                );
+                $this->processIds[$contactEntity->getId()] = $magentoCustomer;
             }
-
-            $this->processedIds[] = $contactEntity->getId();
         }
 
     }
