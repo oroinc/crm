@@ -49,7 +49,7 @@ orocrm:
         add_entity:        Add contact
         id.label:          Id
         phones.label:      Phones
-        primaryEmail.label: Primary Email
+        primary_email.label:  Primary Email
         email.label:       Email
         emails.label:      Emails
         skype.label:       Skype
