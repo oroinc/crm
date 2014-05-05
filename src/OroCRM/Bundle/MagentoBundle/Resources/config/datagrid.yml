@@ -221,7 +221,7 @@ datagrid:
                 email:                { data_name: c.email }
                 itemsQty:             { data_name: c.itemsQty }
                 channelName:          { data_name: ch.name }
-                websiteName: { data_name: cw.name }
+                websiteName:          { data_name: cw.name }
                 grandTotal:           { data_name: c.grandTotal }
                 createdAt:            { data_name: c.createdAt }
                 updatedAt:            { data_name: c.updatedAt }
@@ -607,7 +607,7 @@ datagrid:
                 regionName:             { data_name: regionName }
                 status:                 { data_name: o.status }
                 channelName:            { data_name: ch.name }
-                websiteName: { data_name: cw.name }
+                websiteName:            { data_name: cw.name }
                 stepLabel:              { data_name: step.label }
                 createdAt:              { data_name: o.createdAt }
                 updatedAt:              { data_name: o.updatedAt }
