@@ -151,6 +151,8 @@ orocrm:
             related_calls.label:       Calls
             workflow_item.label:       Workflow item
             workflow_step.label:       Workflow step
+            website.label:             Website
+            status_message.label:      Status message
 
         cartitem:
             entity_label:              Shopping Cart Item
@@ -224,6 +226,7 @@ orocrm:
                 label:   Website
             is_extension_installed.label:   Is extension installed
             admin_url.label:                Admin url
+            all_sites:                      All web sites
 
         order:
             entity_label:        Order
@@ -271,6 +274,7 @@ orocrm:
             related_calls.label:    Calls
             workflow_item.label:    Workflow item
             workflow_step.label:    Workflow step
+            website.label:          Website
 
         product:
             entity_label:         Product
