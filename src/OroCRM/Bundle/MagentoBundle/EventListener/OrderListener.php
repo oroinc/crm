@@ -24,6 +24,8 @@ class OrderListener
     {
         /** @var Order $entity */
         $entity = $event->getEntity();
+
+        // if new order has valuable subtotal
         if ($this->isOrderValid($entity) && $entity->getSubtotalAmount() != 0) {
             $this->recalculateCustomerLifetime($event->getEntityManager(), $entity->getCustomer());
         }
@@ -35,7 +37,11 @@ class OrderListener
     public function preUpdate(PreUpdateEventArgs $event)
     {
         $entity = $event->getEntity();
-        if ($this->isOrderValid($entity) && array_key_exists('subtotalAmount', $event->getEntityChangeSet())) {
+
+        // if subtotal or status has been changed
+        if ($this->isOrderValid($entity) &&
+            array_intersect(array('subtotalAmount', 'status'), array_keys($event->getEntityChangeSet()))
+        ) {
             $this->ordersForUpdate[$entity->getId()] = true;
         }
     }
@@ -47,6 +53,8 @@ class OrderListener
     {
         /** @var Order $entity */
         $entity = $event->getEntity();
+
+        // if order was scheduled for update
         if ($this->isOrderValid($entity) && !empty($this->ordersForUpdate[$entity->getId()])) {
             $this->recalculateCustomerLifetime($event->getEntityManager(), $entity->getCustomer());
             unset($this->ordersForUpdate[$entity->getId()]);

@@ -52,9 +52,9 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdate($order, $newLifetime = null, array $changeSet = array())
     {
-        $isSubtotalChanged = array_key_exists('subtotalAmount', $changeSet);
+        $isUpdateRequired = array_intersect(array('subtotalAmount', 'status'), array_keys($changeSet));
 
-        if ($isSubtotalChanged && $newLifetime) {
+        if ($isUpdateRequired && $newLifetime) {
             $entityManager = $this->createEntityManagerMock($order->getCustomer(), $newLifetime);
         } else {
             $entityManager = $this->createEntityManagerMock();
@@ -63,7 +63,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         $listener = new OrderListener();
         $listener->preUpdate(new PreUpdateEventArgs($order, $entityManager, $changeSet));
 
-        if ($isSubtotalChanged) {
+        if ($isUpdateRequired) {
             $this->assertAttributeEquals(array($order->getId() => true), 'ordersForUpdate', $listener);
         } else {
             $this->assertAttributeEmpty('ordersForUpdate', $listener);
@@ -87,7 +87,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
             'equal lifetime'       => array(
                 $this->createOrder($this->createCustomer(20)),
                 20,
-                array('subtotalAmount' => array(0, 0)),
+                array('status' => array('pending', 'canceled')),
             ),
             'updated lifetime'     => array(
                 $this->createOrder($this->createCustomer(20)),
