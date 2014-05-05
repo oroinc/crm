@@ -50,6 +50,7 @@ orocrm:
         id.label:          Id
         phones.label:      Phones
         primary_email.label:  Primary Email
+        primary_phone.label:  Primary Phone
         email.label:       Email
         emails.label:      Emails
         skype.label:       Skype
