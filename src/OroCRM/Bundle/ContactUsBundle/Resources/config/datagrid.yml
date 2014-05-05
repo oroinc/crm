@@ -91,7 +91,7 @@ datagrid:
                 acl_resource: orocrm_contactus_request_view
                 type:         navigate
                 label:        orocrm.contactus.contactrequest.datagrid.view
-                icon:         user
+                icon:         eye-open
                 link:         view_link
                 rowAction:    true
             update:

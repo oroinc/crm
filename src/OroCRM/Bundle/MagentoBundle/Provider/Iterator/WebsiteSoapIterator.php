@@ -14,12 +14,6 @@ class WebsiteSoapIterator extends AbstractLoadeableSoapIterator
         $websites = [];
         $stores   = $this->transport->getStores();
         foreach ($stores as $store) {
-            if ($store['store_id'] === StoresSoapIterator::ADMIN_STORE_ID) {
-                // skip admin store based website
-                // it's not filtered in StoresSoapIterator because admin store might be part of some entity
-                continue;
-            }
-
             $websites[$store['website_id']]['name'][] = $store['name'];
             $websites[$store['website_id']]['code'][] = $store['code'];
         }
