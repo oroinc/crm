@@ -344,6 +344,11 @@ datagrid:
     # contact email datagrid
     contacts-email-grid:
         extends: email-grid
+        source:
+            query:
+                where:
+                    and:
+                        - a.email IN (:email_addresses)
 
     # assigned accounts grid
     contact-accounts-grid:
