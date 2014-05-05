@@ -212,7 +212,7 @@ class CallListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $expectedUnsets
-     * @param array $parameters
+     * @param array $parametersData
      * @return BuildBefore
      */
     protected function createBuildBeforeEvent(array $expectedUnsets, array $parameters)
@@ -221,6 +221,7 @@ class CallListenerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('offsetUnsetByPath'))
             ->disableOriginalConstructor()
             ->getMock();
+
         if ($expectedUnsets) {
             foreach ($expectedUnsets as $iteration => $value) {
                 $config->expects($this->at($iteration))->method('offsetUnsetByPath')->with($value);
@@ -229,10 +230,13 @@ class CallListenerTest extends \PHPUnit_Framework_TestCase
             $config->expects($this->never())->method('offsetUnsetByPath');
         }
 
-        $dataGrid = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface')
-            ->getMockForAbstractClass();
+        $dataGrid = $this->getMock('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface');
 
-        return new BuildBefore($dataGrid, $config, $parameters);
+        $dataGrid->expects($this->any())
+            ->method('getParameters')
+            ->will($this->returnValue($this->createParameterBag($parameters)));
+
+        return new BuildBefore($dataGrid, $config);
     }
 
     /**
@@ -240,7 +244,7 @@ class CallListenerTest extends \PHPUnit_Framework_TestCase
      * @param array $parameters
      * @return BuildAfter
      */
-    protected function createBuildAfterEvent($queryBuilder, $parameters)
+    protected function createBuildAfterEvent($queryBuilder, array $parameters)
     {
         $ormDataSource = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource')
             ->disableOriginalConstructor()
@@ -250,12 +254,47 @@ class CallListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getQueryBuilder')
             ->will($this->returnValue($queryBuilder));
 
-        $dataGrid = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface')
-            ->getMockForAbstractClass();
+        $dataGrid = $this->getMock('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface');
+
         $dataGrid->expects($this->any())
             ->method('getDatasource')
             ->will($this->returnValue($ormDataSource));
 
+        $dataGrid->expects($this->any())
+            ->method('getParameters')
+            ->will($this->returnValue($this->createParameterBag($parameters)));
+
         return new BuildAfter($dataGrid, $parameters);
+    }
+
+    /**
+     * @param array $data
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createParameterBag(array $data)
+    {
+        $parameters = $this->getMock('Oro\Bundle\DataGridBundle\Datagrid\ParameterBag');
+
+        $parameters->expects($this->any())
+            ->method('has')
+            ->will(
+                $this->returnCallback(
+                    function ($key) use ($data) {
+                        return isset($data[$key]);
+                    }
+                )
+            );
+
+        $parameters->expects($this->any())
+            ->method('get')
+            ->will(
+                $this->returnCallback(
+                    function ($key) use ($data) {
+                        return $data[$key];
+                    }
+                )
+            );
+
+        return $parameters;
     }
 }

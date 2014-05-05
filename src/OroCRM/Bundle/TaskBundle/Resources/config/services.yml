@@ -24,7 +24,6 @@ services:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
             - 'accountId'
-            - @oro_datagrid.datagrid.request_params
             - false
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.task-account-tasks-grid, method: onBuildAfter }
@@ -33,7 +32,6 @@ services:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
             - 'contactId'
-            - @oro_datagrid.datagrid.request_params
             - false
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.task-contact-tasks-grid, method: onBuildAfter }
@@ -42,7 +40,6 @@ services:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
             - 'userId'
-            - @oro_datagrid.datagrid.request_params
             - false
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.task-user-tasks-grid, method: onBuildAfter }
