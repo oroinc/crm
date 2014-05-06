@@ -234,7 +234,7 @@ services:
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.order.entity.class%, alias: orocrm_magento.add_or_update_order }
 
-    # Export processor
+    # Reverse processor
     orocrm_magento.importexport.processor.export_customer:
         parent: oro_importexport.processor.export_abstract
         tags:
