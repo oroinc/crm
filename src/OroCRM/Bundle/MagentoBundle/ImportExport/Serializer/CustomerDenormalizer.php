@@ -17,9 +17,7 @@ use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormal
 
 class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $importFieldsMap = array(
         'customer_id' => 'origin_id',
         'firstname'   => 'first_name',
@@ -31,29 +29,25 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
         'taxvat'      => 'vat',
     );
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $addressBapToMageMapping = array(
-        'namePrefix' => 'prefix',
-        'firstName' => 'firstname',
-        'middleName' => 'middlename',
-        'lastName' => 'lastname',
-        'nameSuffix' => 'suffix',
+        'namePrefix'   => 'prefix',
+        'firstName'    => 'firstname',
+        'middleName'   => 'middlename',
+        'lastName'     => 'lastname',
+        'nameSuffix'   => 'suffix',
         'organization' => 'company',
-        'street' => 'street',
-        'city' => 'city',
-        'postalCode' => 'postcode',
-        'country' => 'country_id',
-        'regionText' => 'region',
-        'region' => 'region_id',
-        'created' => 'created_at',
-        'updated' => 'updated_at'
+        'street'       => 'street',
+        'city'         => 'city',
+        'postalCode'   => 'postcode',
+        'country'      => 'country_id',
+        'regionText'   => 'region',
+        'region'       => 'region_id',
+        'created'      => 'created_at',
+        'updated'      => 'updated_at'
     );
 
-    /**
-     * @var array
-     */
+    /** @var array */
     static protected $objectFields = array(
         'store',
         'website',
