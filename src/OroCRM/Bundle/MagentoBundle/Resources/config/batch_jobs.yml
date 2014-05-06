@@ -25,7 +25,7 @@ connector:
                     title: export
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    oro_integration.reader.entity.with_filters
+                        reader:    oro_integration.reader.entity.by_id
                         processor: oro_integration.processor.reverse
                         writer:    oro_integration.writer.reverse
                     parameters:
