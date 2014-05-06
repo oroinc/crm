@@ -35,7 +35,7 @@
     {% endset %}
     {% set generalSubblocks = generalSubblocks|merge([{'data' : [orderInformationWidget] }]) %}
 
-    {% if entity.customer %}
+    {% if entity.customer and resource_granted('orocrm_magento_customer_view') %}
         {% set customerInformationWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
@@ -46,26 +46,31 @@
         {% set generalSubblocks = generalSubblocks|merge([{'data' : [customerInformationWidget] }]) %}
     {% endif %}
 
-    {% set orderItemsWidget %}
-        {{ oro_widget_render({
-            'widgetType': 'block',
-            'url': path('orocrm_magento_order_widget_items', {id: entity.id})
-        }) }}
-    {% endset %}
-
     {% set dataBlocks = [
         {
             'title': 'General Information'|trans,
             'class': 'active',
-                'subblocks': generalSubblocks
-            },
-        {
-            'title': 'orocrm.magento.order.items.label'|trans,
-            'subblocks': [
-                {'data' : [orderItemsWidget] }
-            ]
-        },
+            'subblocks': generalSubblocks
+        }
     ] %}
+
+    {% if resource_granted('orocrm_magento_cart_view') %}
+        {% set orderItemsWidget %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('orocrm_magento_order_widget_items', {id: entity.id})
+            }) }}
+        {% endset %}
+
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title': 'orocrm.magento.order.items.label'|trans,
+                'subblocks': [
+                    {'data' : [orderItemsWidget] }
+                ]
+            }
+        ]) %}
+    {% endif %}
 
     {% set relatedInformation = [] %}
 
