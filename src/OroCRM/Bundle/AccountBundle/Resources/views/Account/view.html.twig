@@ -105,8 +105,10 @@
     {# Render account channels #}
     {% for channel in channels %}
         {%- set accountChannelInfoSection -%}
-            {% set placeHolderName = 'orocrm_account_channel_info_' ~ channel.type %}
-            {{ placeholder(placeHolderName, {'account': entity, 'channel': channel}) }}
+            {% spaceless %}
+                {% set placeHolderName = 'orocrm_account_channel_info_' ~ channel.type %}
+                {{ placeholder(placeHolderName, {'account': entity, 'channel': channel}) }}
+            {% endspaceless %}
         {%- endset -%}
         {% if accountChannelInfoSection %}
             {% set dataBlocks = dataBlocks|merge([
