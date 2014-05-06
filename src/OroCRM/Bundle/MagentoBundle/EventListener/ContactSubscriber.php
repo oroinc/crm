@@ -26,6 +26,11 @@ class ContactSubscriber implements EventSubscriber
      */
     protected $securityFacade;
 
+    /**
+     * Entities we must process
+     *
+     * @var array
+     */
     protected $checkEntityClasses = [
         'OroCRM\Bundle\ContactBundle\Entity\Contact'        => [
             'fields' => [
@@ -57,6 +62,10 @@ class ContactSubscriber implements EventSubscriber
      */
     protected $processIds = [];
 
+    /**
+     * @param SecurityFacade $securityFacade
+     * @param ServiceLink    $schedulerServiceLink
+     */
     public function __construct(SecurityFacade $securityFacade, ServiceLink $schedulerServiceLink)
     {
         $this->schedulerServiceLink = $schedulerServiceLink;
@@ -172,14 +181,16 @@ class ContactSubscriber implements EventSubscriber
      */
     protected function scheduleSync(Contact $contactEntity, EntityManager $em)
     {
-        if (!isset($this->processIds[$contactEntity->getId()])) {
+        // check for logged user is for confidence that data changes comes from UI, not from sync process.
+        if ($contactEntity->getId()
+            && !isset($this->processIds[$contactEntity->getId()])
+            && $this->securityFacade->hasLoggedUser()
+        ) {
             $magentoCustomer = $em->getRepository('OroCRMMagentoBundle:Customer')
                 ->getCustomerRelatedToContact($contactEntity);
-            // check for logged user is for confidence that data changes comes from UI, not from sync process.
-            if ($magentoCustomer && $this->securityFacade->hasLoggedUser()) {
+            if ($magentoCustomer) {
                 $this->processIds[$contactEntity->getId()] = $magentoCustomer;
             }
         }
-
     }
 }
