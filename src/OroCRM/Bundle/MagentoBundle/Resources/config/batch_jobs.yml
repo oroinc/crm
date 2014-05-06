@@ -18,7 +18,7 @@ connector:
 
         # Customer export job
         mage_customer_reverse_sync:
-            title: "Entity export to Magento SOAP API"
+            title: "Entity reverse to Magento SOAP API"
             type:  export
             steps:
                 export:
