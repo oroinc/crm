@@ -19,7 +19,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * Class Customer
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository")
+ * @ORM\Entity
  * @ORM\Table(
  *      name="orocrm_magento_customer",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})},

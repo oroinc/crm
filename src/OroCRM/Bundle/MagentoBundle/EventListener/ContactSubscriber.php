@@ -116,8 +116,8 @@ class ContactSubscriber implements EventSubscriber
      */
     protected function processDeletes(EntityManager $em)
     {
-        $uow      = $em->getUnitOfWork();
-        $entities = $uow->getScheduledEntityDeletions();
+        $unitOfWork      = $em->getUnitOfWork();
+        $entities = $unitOfWork->getScheduledEntityDeletions();
         foreach ($entities as $entity) {
             foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
                 if ($entity instanceof $classNames) {
@@ -141,10 +141,10 @@ class ContactSubscriber implements EventSubscriber
      */
     protected function processUpdates(EntityManager $em)
     {
-        $uow      = $em->getUnitOfWork();
+        $unitOfWork      = $em->getUnitOfWork();
         $entities = array_merge(
-            $uow->getScheduledEntityInsertions(),
-            $uow->getScheduledEntityUpdates()
+            $unitOfWork->getScheduledEntityInsertions(),
+            $unitOfWork->getScheduledEntityUpdates()
         );
 
         foreach ($entities as $entity) {
@@ -158,7 +158,7 @@ class ContactSubscriber implements EventSubscriber
                         $changed       = false;
                         $contactEntity = $entity;
 
-                        $chaneSet = $uow->getEntityChangeSet($contactEntity);
+                        $chaneSet = $unitOfWork->getEntityChangeSet($contactEntity);
                         foreach (array_keys($chaneSet) as $fieldName) {
                             if (in_array($fieldName, $classMapConfig['fields'])) {
                                 $changed = true;
@@ -187,7 +187,7 @@ class ContactSubscriber implements EventSubscriber
             && $this->securityFacade->hasLoggedUser()
         ) {
             $magentoCustomer = $em->getRepository('OroCRMMagentoBundle:Customer')
-                ->getCustomerRelatedToContact($contactEntity);
+                ->findOneBy(['contact' => $contactEntity]);
             if ($magentoCustomer) {
                 $this->processIds[$contactEntity->getId()] = $magentoCustomer;
             }

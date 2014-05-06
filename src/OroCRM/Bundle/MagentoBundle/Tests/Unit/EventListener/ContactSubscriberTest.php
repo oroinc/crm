@@ -110,14 +110,14 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
         $entityChangeSetRun = true,
         $scheduleRun = true
     ) {
-        $repo = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository')
+        $repo = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
             ->disableOriginalConstructor()
             ->getMock();
         $this->em->expects($this->any())
             ->method('getRepository')
             ->will($this->returnValue($repo));
         $repo->expects($this->any())
-            ->method('getCustomerRelatedToContact')
+            ->method('findOneBy')
             ->will($this->returnValue($testMagentoCustomer));
 
         if ($setContactId) {
