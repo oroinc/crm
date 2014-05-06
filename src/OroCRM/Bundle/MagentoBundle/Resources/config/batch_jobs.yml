@@ -11,21 +11,21 @@ connector:
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
                         reader:    orocrm_magento.mage.customer_connector
-                        processor: oro_integration.processor.reverse
+                        processor: oro_importexport.processor.import_delegate
                         writer:    oro_integration.writer.persistent_batch_writer
                     parameters:
                         batch_size: 100
 
         # Customer export job
-        mage_customer_export:
-            title: "Entity export to Magento SOAP API"
+        mage_customer_reverse_sync:
+            title: "Entity reverse to Magento SOAP API"
             type:  export
             steps:
                 export:
                     title: export
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    oro_integration.reader.entity.with_filters
+                        reader:    oro_integration.reader.entity.by_id
                         processor: oro_integration.processor.reverse
                         writer:    oro_integration.writer.reverse
                     parameters:
