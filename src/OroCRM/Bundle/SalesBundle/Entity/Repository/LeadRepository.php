@@ -29,7 +29,7 @@ class LeadRepository extends EntityRepository implements EntityConfigAwareReposi
      *
      * @param AclHelper $aclHelper
      * @param int       $limit
-     * @return array [fraction, label]
+     * @return array [itemCount, label]
      */
     public function getOpportunitiesByLeadSource(AclHelper $aclHelper, $limit = 10)
     {
@@ -50,7 +50,7 @@ class LeadRepository extends EntityRepository implements EntityConfigAwareReposi
 
         // calculate total number of opportunities, update Unclassified source and collect other sources
         $sources               = [];
-        $totalItemCount = 0;
+
         $hasUnclassifiedSource = false;
         foreach ($result as &$row) {
             if ($row['label'] === null) {
@@ -59,7 +59,6 @@ class LeadRepository extends EntityRepository implements EntityConfigAwareReposi
             } else {
                 $sources[] = $row['source_id'];
             }
-            $totalItemCount += $row['itemCount'];
         }
 
         // get Others if needed
@@ -78,23 +77,14 @@ class LeadRepository extends EntityRepository implements EntityConfigAwareReposi
             if (!empty($others)) {
                 $others = reset($others);
                 $result[] = array_merge(['label' => 'orocrm.sales.lead.extend_source.others'], $others);
-                $totalItemCount += $others['itemCount'];
             }
         }
 
         // if no data found
         if (empty($result)) {
             $result[] = array(
-                'itemCount' => 0,
                 'label' => 'orocrm.sales.lead.extend_source.none'
             );
-        }
-
-        // calculate fraction for each source
-        foreach ($result as &$row) {
-            $row['fraction'] = $totalItemCount > 0
-                ? round($row['itemCount'] / $totalItemCount, 4)
-                : 1;
         }
 
         // sort alphabetically by label

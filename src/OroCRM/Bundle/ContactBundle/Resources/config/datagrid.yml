@@ -314,7 +314,7 @@ datagrid:
                 type: navigate
                 acl_resource: orocrm_contact_view
                 label: orocrm.contact.datagrid.view
-                icon: user
+                icon: eye-open
                 link: view_link
                 rowAction: true
             update:

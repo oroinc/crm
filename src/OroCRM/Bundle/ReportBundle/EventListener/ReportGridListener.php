@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\ReportBundle\EventListener;
 
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
-use Oro\Bundle\DataGridBundle\Datagrid\RequestParameters;
 use Oro\Bundle\DataGridBundle\Extension\Formatter\Property\PropertyInterface;
 use Oro\Bundle\FilterBundle\Filter\FilterUtility;
 use Oro\Bundle\FilterBundle\Grid\Extension\OrmFilterExtension;
@@ -16,14 +15,6 @@ class ReportGridListener
     const PERIOD_COLUMN_NAME          = 'period';
     const PERIOD_FILTER_DEFAULT_VALUE = 'monthPeriod';
 
-    /** @var \Oro\Bundle\DataGridBundle\Datagrid\RequestParameters */
-    protected $params;
-
-    public function __construct(RequestParameters $params)
-    {
-        $this->params = $params;
-    }
-
     /**
      * Need to change data name depends to filter value
      *
@@ -35,7 +26,7 @@ class ReportGridListener
     {
         $config = $event->getConfig();
 
-        $filters = $this->params->get(OrmFilterExtension::FILTER_ROOT_PARAM);
+        $filters = $event->getDatagrid()->getParameters()->get(OrmFilterExtension::FILTER_ROOT_PARAM, []);
         $period = isset($filters[self::PERIOD_COLUMN_NAME]['value'])
             ? $filters[self::PERIOD_COLUMN_NAME]['value']
             : self::PERIOD_FILTER_DEFAULT_VALUE;
