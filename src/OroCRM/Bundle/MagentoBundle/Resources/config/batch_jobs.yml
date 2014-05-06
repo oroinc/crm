@@ -17,7 +17,7 @@ connector:
                         batch_size: 100
 
         # Customer export job
-        mage_customer_export:
+        mage_customer_reverse_sync:
             title: "Entity export to Magento SOAP API"
             type:  export
             steps:
