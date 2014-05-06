@@ -85,6 +85,5 @@ services:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
            - 'account'
-           - @oro_datagrid.datagrid.request_params
         tags:
            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.account-contacts-update-grid, method: onBuildAfter }

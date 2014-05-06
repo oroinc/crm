@@ -19,10 +19,6 @@ class OpportunityRepository extends EntityRepository
      *
      * @param $aclHelper AclHelper
      * @return array
-     *  [
-     *      'data' => [id, value]
-     *      'labels' => [id, label]
-     *  ]
      */
     public function getOpportunitiesByStatus(AclHelper $aclHelper)
     {
@@ -31,17 +27,7 @@ class OpportunityRepository extends EntityRepository
             $dateEnd->format('Y') . '-01-' . ((ceil($dateEnd->format('n') / 3) - 1) * 3 + 1),
             new \DateTimeZone('UTC')
         );
-        $data = $this->getOpportunitiesDataByStatus($aclHelper, $dateStart, $dateEnd);
-
-        $resultData = [];
-        $labels = [];
-
-        foreach ($data as $index => $dataValue) {
-            $resultData[$index] = [$index, (double)$dataValue['budget']];
-            $labels[$index] = $dataValue['label'];
-        }
-
-        return ['data' => $resultData, 'labels' => $labels];
+        return $this->getOpportunitiesDataByStatus($aclHelper, $dateStart, $dateEnd);
     }
 
     /**
