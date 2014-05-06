@@ -120,7 +120,7 @@ datagrid:
                 type:          navigate
                 acl_resource:  orocrm_task_view
                 label:         View
-                icon:          user
+                icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:

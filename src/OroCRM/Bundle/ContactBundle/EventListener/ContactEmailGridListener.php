@@ -6,23 +6,18 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
-use Oro\Bundle\DataGridBundle\Datagrid\RequestParameters;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 
 use Oro\Bundle\EmailBundle\Entity\Util\EmailUtil;
 
 class ContactEmailGridListener
 {
-    /** @var RequestParameters */
-    protected $requestParams;
-
     /** @var  EntityManager */
     protected $em;
 
-    public function __construct(RequestParameters $requestParams, EntityManager $em)
+    public function __construct(EntityManager $em)
     {
-        $this->requestParams = $requestParams;
-        $this->em            = $em;
+        $this->em = $em;
     }
 
     /**
@@ -30,12 +25,13 @@ class ContactEmailGridListener
      */
     public function onBuildAfter(BuildAfter $event)
     {
-        $datasource = $event->getDatagrid()->getDatasource();
+        $datagrid = $event->getDatagrid();
+        $datasource = $datagrid->getDatasource();
         if ($datasource instanceof OrmDatasource) {
-            /** @var QueryBuilder $query */
+            $parameters = $datagrid->getParameters();
             $queryBuilder = $datasource->getQueryBuilder();
 
-            if ($id = $this->requestParams->get('contactId')) {
+            if ($id = $parameters->get('contactId')) {
                 $contact = $this->em
                     ->getRepository('OroCRMContactBundle:Contact')
                     ->find($id);
@@ -67,7 +63,7 @@ class ContactEmailGridListener
         $queryBuilder->orWhere(
             $queryBuilder->expr()->in('e.id', $qbRecipients->getDQL())
         );
-        
+
         $queryBuilder->setParameter('email_addresses', !empty($emailAddresses) ? $emailAddresses : null);
     }
 }

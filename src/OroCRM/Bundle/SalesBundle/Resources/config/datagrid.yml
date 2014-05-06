@@ -115,7 +115,7 @@ datagrid:
                 type:          navigate
                 acl_resource:  orocrm_sales_opportunity_view
                 label:         orocrm.sales.opportunity.datagrid.view
-                icon:          user
+                icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
@@ -233,7 +233,7 @@ datagrid:
                 type:          navigate
                 acl_resource:  orocrm_sales_lead_view
                 label:         orocrm.sales.lead.datagrid.view
-                icon:          user
+                icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
@@ -374,7 +374,7 @@ datagrid:
                 type:          navigate
                 acl_resource:  orocrm_sales_salesfunnel_view
                 label:         orocrm.sales.salesfunnel.datagrid.view
-                icon:          user
+                icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:

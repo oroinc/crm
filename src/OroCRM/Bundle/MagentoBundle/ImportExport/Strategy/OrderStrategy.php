@@ -15,14 +15,14 @@ class OrderStrategy extends BaseStrategy
 {
     /** @var array */
     protected static $attributesToUpdateManual = [
-            'id',
-            'store',
-            'items',
-            'customer',
-            'addresses',
-            'workflowItem',
-            'workflowStep'
-        ];
+        'id',
+        'store',
+        'items',
+        'customer',
+        'addresses',
+        'workflowItem',
+        'workflowStep'
+    ];
 
     /** @var StoreStrategy */
     protected $storeStrategy;
@@ -86,14 +86,6 @@ class OrderStrategy extends BaseStrategy
         $customer = $this->getEntityByCriteria($criteria, MagentoConnectorInterface::CUSTOMER_TYPE);
 
         if ($customer instanceof Customer) {
-            $customer->setLifetime(
-                $this->getEntityRepository(ClassUtils::getClass($entity))
-                    ->getCustomerOrdersSubtotalAmount(
-                        $customer,
-                        $entity
-                    )
-                + ($entity->getStatus() !== 'canceled' ? $entity->getSubtotalAmount() : 0)
-            );
             // now customer orders subtotal calculation support only one currency.
             // also we do not take into account order refunds due to magento does not bring subtotal data
             // customer currency needs on customer's grid to format lifetime value.

@@ -19,7 +19,7 @@ class DashboardController extends Controller
      *      name="orocrm_sales_dashboard_opportunities_by_lead_source_chart",
      *      requirements={"widget"="[\w-]+"}
      * )
-     * @Template("OroDashboardBundle:Dashboard:pieChart.html.twig")
+     * @Template("OroCRMSalesBundle:Dashboard:opportunitiesByLeadSource.html.twig")
      */
     public function opportunitiesByLeadSourceAction($widget)
     {
@@ -30,18 +30,27 @@ class DashboardController extends Controller
             ->getRepository('OroCRMSalesBundle:Lead')
             ->getOpportunitiesByLeadSource($this->get('oro_security.acl_helper'));
 
-        foreach ($data as $key => $sourceData) {
+        foreach ($data as &$sourceData) {
             if (!empty($sourceData['label'])) {
-                $data[$key]['label'] = $translator->trans($sourceData['label']);
+                $sourceData['label'] = $translator->trans($sourceData['label']);
             }
         }
 
-        $result = array_merge(
-            ['data' => $data],
-            $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget)
-        );
+        $widgetAttr = $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget);
+        $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
+            ->setArrayData($data)
+            ->setOptions(
+                array(
+                    'name' => 'pie_chart',
+                    'data_schema' => array(
+                        'label' => array('field_name' => 'label'),
+                        'value' => array('field_name' => 'itemCount')
+                    )
+                )
+            )
+            ->getView();
 
-        return $result;
+        return $widgetAttr;
     }
 
     /**
@@ -54,14 +63,25 @@ class DashboardController extends Controller
      */
     public function opportunityByStatusAction($widget)
     {
-        return array_merge(
-            [
-                'items' => $this->getDoctrine()
-                        ->getRepository('OroCRMSalesBundle:Opportunity')
-                        ->getOpportunitiesByStatus($this->get('oro_security.acl_helper'))
-            ],
-            $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget)
-        );
+        $items = $this->getDoctrine()
+            ->getRepository('OroCRMSalesBundle:Opportunity')
+            ->getOpportunitiesByStatus($this->get('oro_security.acl_helper'));
+
+        $widgetAttr = $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget);
+        $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
+            ->setArrayData($items)
+            ->setOptions(
+                array(
+                    'name' => 'bar_chart',
+                    'data_schema' => array(
+                        'label' => array('field_name' => 'label'),
+                        'value' => array('field_name' => 'budget')
+                    )
+                )
+            )
+            ->getView();
+
+        return $widgetAttr;
     }
 
     /**
@@ -91,16 +111,30 @@ class DashboardController extends Controller
         /** @var SalesFunnelRepository $salesFunnerRepository */
         $salesFunnerRepository = $this->getDoctrine()->getRepository('OroCRMSalesBundle:SalesFunnel');
 
-        return array_merge(
-            array('quarterDate' => $dateFrom),
-            $salesFunnerRepository->getFunnelChartData(
-                $dateFrom,
-                $dateTo,
-                $workflow,
-                $customStepCalculations,
-                $this->get('oro_security.acl_helper')
-            ),
-            $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget)
+        $data = $salesFunnerRepository->getFunnelChartData(
+            $dateFrom,
+            $dateTo,
+            $workflow,
+            $customStepCalculations,
+            $this->get('oro_security.acl_helper')
         );
+
+        $widgetAttr = $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget);
+        $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
+            ->setArrayData($data)
+            ->setOptions(
+                array(
+                    'name' => 'flow_chart',
+                    'settings' => array('quarterDate' => $dateFrom),
+                    'data_schema' => array(
+                        'label' => array('field_name' => 'label'),
+                        'value' => array('field_name' => 'value'),
+                        'isNozzle' => array('field_name' => 'isNozzle'),
+                    )
+                )
+            )
+            ->getView();
+
+        return $widgetAttr;
     }
 }
