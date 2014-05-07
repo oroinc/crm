@@ -329,19 +329,6 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         return $cartItems;
     }
 
-    protected function getAddress(ObjectManager $om)
-    {
-        $address = new Address;
-        $address->setCity('City');
-        $address->setStreet('First street');
-        $address->setPostalCode(123456);
-        $address->setFirstName('John');
-        $address->setLastName('Doe');
-        $om->persist($address);
-
-        return $address;
-    }
-
     protected function getOrderAddress(ObjectManager $om)
     {
         $address = new OrderAddress;
@@ -372,10 +359,6 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
     ) {
         $accounts = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
         $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
-
-        foreach ($accounts as $account) {
-            $account->setBillingAddress($this->getAddress($om));
-        }
 
         $buffer = range(0, 48);
         shuffle($buffer);
