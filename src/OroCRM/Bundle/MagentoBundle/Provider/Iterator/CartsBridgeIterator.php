@@ -94,6 +94,7 @@ class CartsBridgeIterator extends AbstractBridgeIterator
             foreach ($this->dependencies['groups'] as $group) {
                 if (self::NOT_LOGGED_IN === $group['customer_group_code']) {
                     $groupId = $group['id'];
+                    break;
                 }
             }
             unset($group);
