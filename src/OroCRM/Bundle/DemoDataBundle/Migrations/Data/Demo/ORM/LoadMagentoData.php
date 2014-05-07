@@ -183,7 +183,9 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $order->setPaymentMethod($paymentMethod);
         $order->setPaymentDetails($paymentMethodDetails);
         $order->setShippingMethod('flatrate_flatrate');
-        $order->addAddress($this->getOrderAddress($om));
+        $address = $this->getOrderAddress($om);
+        $order->addAddress($address);
+        $address->setOwner($order);
         $om->persist($order);
         return $order;
     }
