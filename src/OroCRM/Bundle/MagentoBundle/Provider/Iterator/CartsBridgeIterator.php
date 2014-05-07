@@ -52,7 +52,7 @@ class CartsBridgeIterator extends AbstractBridgeIterator
     {
         parent::addDependencyData($result);
 
-        $customer_group              = $this->dependencies[self::ALIAS_GROUPS][$result->customer_group_id];
+        $customer_group              = $this->dependencies[self::ALIAS_GROUPS][$this->getGroupId($result)];
         $result->customer_group_code = $customer_group['customer_group_code'];
         $result->customer_group_name = $customer_group['name'];
     }
@@ -75,5 +75,37 @@ class CartsBridgeIterator extends AbstractBridgeIterator
     protected function getIdFieldName()
     {
         return 'entity_id';
+    }
+
+    /**
+     * @param $result
+     *
+     * @return int
+     */
+    protected function getGroupId($result)
+    {
+        if (empty($result->customer_group_id)) {
+            $groupId = false;
+
+            foreach ($this->dependencies['groups'] as $group) {
+                if ('NOT LOGGED IN' === $group['customer_group_code']) {
+                    $groupId = $group['id'];
+                }
+            }
+            unset($group);
+
+            if (false === $groupId) {
+                reset($this->dependencies['groups']);
+                $currentElement = current($this->dependencies['groups']);
+
+                if (!empty($currentElement)) {
+                    $groupId = $currentElement['id'];
+                }
+            }
+        } else {
+            $groupId = $result->customer_group_id;
+        }
+
+        return $groupId;
     }
 }
