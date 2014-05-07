@@ -79,6 +79,9 @@ class CartsBridgeIterator extends AbstractBridgeIterator
     }
 
     /**
+     * HotFix for BAP-4161, because $result->customer_group_id not present in some cases and we need to set
+     * NOT_LOGGED_IN into $customer_group if value does not exists
+     *
      * @param $result
      *
      * @return int
