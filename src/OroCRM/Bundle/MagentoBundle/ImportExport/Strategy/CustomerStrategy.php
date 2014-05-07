@@ -14,8 +14,8 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\MergeHelper\ContactMergeHelper;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\ContactImportHelper;
 
 class CustomerStrategy extends BaseStrategy
 {
@@ -51,17 +51,17 @@ class CustomerStrategy extends BaseStrategy
             $remoteEntity->getWebsite(),
             $remoteEntity->getGroup()
         );
-
-        $this->updateAddresses($localEntity, $remoteEntity->getAddresses());
         $this->updateContact($remoteEntity, $localEntity, $remoteEntity->getContact());
         $this->updateAccount($localEntity, $remoteEntity->getAccount());
         $localEntity->getAccount()->setDefaultContact($localEntity->getContact());
 
+        // modify local entity after all relations done
         $this->strategyHelper->importEntity(
             $localEntity,
             $remoteEntity,
             ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses']
         );
+        $this->updateAddresses($localEntity, $remoteEntity->getAddresses());
 
         // validate and update context - increment counter or add validation error
         return $this->validateAndUpdateContext($localEntity);
@@ -141,25 +141,19 @@ class CustomerStrategy extends BaseStrategy
      */
     protected function updateContact(Customer $remoteData, Customer $localData, Contact $contact)
     {
-        // update not allowed
+        $helper = new ContactImportHelper($localData->getChannel(), $this->addressHelper);
+
         if ($localData->getContact() && $localData->getContact()->getId()) {
-            $helper = new ContactMergeHelper($localData->getChannel());
             $helper->merge($remoteData, $localData, $localData->getContact());
         } else {
             // loop by imported addresses, add new only
             foreach ($contact->getAddresses() as $key => $address) {
-                // at this point imported address region have code equal to region_id in magento db field
-                $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
-                $address->setId(null);
+                $helper->prepareAddress($address);
 
-                $this->updateAddressCountryRegion($address, $mageRegionId);
                 if (!$address->getCountry()) {
                     $contact->removeAddress($address);
                     continue;
                 }
-
-                $this->updateAddressTypes($address);
-
                 // @TODO find possible solution
                 // guess parent address by key
                 $localData->getAddresses()->get($key)->setContactAddress($address);
@@ -190,8 +184,12 @@ class CustomerStrategy extends BaseStrategy
                     $this->strategyHelper->importEntity(
                         $existingAddress,
                         $address,
-                        ['id', 'region', 'country', 'created', 'updated']
+                        ['id', 'region', 'country', 'contactAddress', 'created', 'updated']
                     );
+                    // set remote data for further processing
+                    $existingAddress->setRegion($address->getRegion());
+                    $existingAddress->setCountry($address->getCountry());
+
                     $address = $existingAddress;
                 }
             }
