@@ -6,6 +6,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class CartsBridgeIterator extends AbstractBridgeIterator
 {
+    const NOT_LOGGED_IN = 'NOT LOGGED IN';
     /**
      * {@inheritdoc}
      */
@@ -88,7 +89,7 @@ class CartsBridgeIterator extends AbstractBridgeIterator
             $groupId = false;
 
             foreach ($this->dependencies['groups'] as $group) {
-                if ('NOT LOGGED IN' === $group['customer_group_code']) {
+                if (self::NOT_LOGGED_IN === $group['customer_group_code']) {
                     $groupId = $group['id'];
                 }
             }
