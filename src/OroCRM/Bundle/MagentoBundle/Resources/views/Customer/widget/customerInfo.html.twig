@@ -44,7 +44,7 @@
         {{ UI.renderProperty("orocrm.magento.customer.vat.label"|trans, customer.vat) }}
     </div>
     <div class="responsive-cell" id="magento-without-border-tabs">
-        {% set uniqueSuffix = '_customer__' ~ customer.id ~ '_channel__' ~ channel.id %}
+        {% set uniqueSuffix = '_customer_' ~ customer.id ~ '_channel_' ~ channel.id %}
         {% set tabs =
             [{
                 'alias': 'orocrm_magento_customer_orders' ~ uniqueSuffix,
@@ -53,7 +53,7 @@
                 'url': path('orocrm_magento_widget_customer_orders', {'customerId': customer.id, 'channelId': channel.id})
             },
             {
-                'alias': 'orocrm_magento_customer_carts_' ~ uniqueSuffix,
+                'alias': 'orocrm_magento_customer_carts' ~ uniqueSuffix,
                 'widgetType': 'block',
                 'label': "orocrm.magento.cart.entity_plural_label"|trans,
                 'url': path('orocrm_magento_widget_customer_carts', {'customerId': customer.id, 'channelId': channel.id})
