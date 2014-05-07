@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\MergeHelper;
 
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
@@ -59,8 +61,17 @@ class ContactMergeHelper
         }
 
         // process addresses
+        /*
         $addresses = $contact->getAddresses();
-
+        foreach ($addresses as $address) {
+            // find in update local data if
+            if (!$this->getCustomerAddressByContactAddress($localData, $address) && $this->isRemotePrioritized()) {
+                // remove if added and
+                $contact->removeAddress($address);
+            } else {
+                // do update
+            }
+        }*/
     }
 
     /**
@@ -107,5 +118,25 @@ class ContactMergeHelper
         $newValue = $this->accessor->getValue($inheritedObject, $field);
 
         return $oldValue !== $newValue;
+    }
+
+    /**
+     * Find customer address by given contact address
+     *
+     * @param Customer       $customer
+     * @param ContactAddress $contactAddress
+     *
+     * @return Address|null
+     */
+    protected function getCustomerAddressByContactAddress(Customer $customer, ContactAddress $contactAddress)
+    {
+        $filtered = $customer->getAddresses()->filter(
+            function (Address $address) use ($contactAddress) {
+                return $address->getContactAddress()
+                    && $address->getContactAddress()->getId() === $contactAddress->getId();
+            }
+        );
+
+        return $filtered->first();
     }
 }

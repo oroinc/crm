@@ -31,20 +31,21 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
 
     /** @var array */
     protected $addressBapToMageMapping = array(
-        'namePrefix'   => 'prefix',
-        'firstName'    => 'firstname',
-        'middleName'   => 'middlename',
-        'lastName'     => 'lastname',
-        'nameSuffix'   => 'suffix',
-        'organization' => 'company',
-        'street'       => 'street',
-        'city'         => 'city',
-        'postalCode'   => 'postcode',
-        'country'      => 'country_id',
-        'regionText'   => 'region',
-        'region'       => 'region_id',
-        'created'      => 'created_at',
-        'updated'      => 'updated_at'
+        'namePrefix'        => 'prefix',
+        'firstName'         => 'firstname',
+        'middleName'        => 'middlename',
+        'lastName'          => 'lastname',
+        'nameSuffix'        => 'suffix',
+        'organization'      => 'company',
+        'street'            => 'street',
+        'city'              => 'city',
+        'postalCode'        => 'postcode',
+        'country'           => 'country_id',
+        'regionText'        => 'region',
+        'region'            => 'region_id',
+        'created'           => 'created_at',
+        'updated'           => 'updated_at',
+        'customerAddressId' => 'customer_address_id'
     );
 
     /** @var array */
@@ -224,18 +225,18 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
      */
     protected function formatContactData($data)
     {
-        $contact = $this->convertToCamelCase($data);
+        $contact           = $this->convertToCamelCase($data);
         $contactFieldNames = array(
-            'firstName'  => null,
-            'lastName'   => null,
-            'middleName' => null,
-            'namePrefix' => null,
-            'nameSuffix' => null,
-            'gender'     => null,
-            'addresses'  => [],
-            'birthday'   => null,
-            'phones'     => [],
-            'emails'     => [],
+            'firstName'         => null,
+            'lastName'          => null,
+            'middleName'        => null,
+            'namePrefix'        => null,
+            'nameSuffix'        => null,
+            'gender'            => null,
+            'addresses'         => [],
+            'birthday'          => null,
+            'phones'            => [],
+            'emails'            => []
         );
         // fill default values
         $contact = array_merge($contactFieldNames, $contact);

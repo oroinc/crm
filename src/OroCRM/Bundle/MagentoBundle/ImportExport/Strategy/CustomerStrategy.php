@@ -146,10 +146,8 @@ class CustomerStrategy extends BaseStrategy
             $helper = new ContactMergeHelper($localData->getChannel());
             $helper->merge($remoteData, $localData, $localData->getContact());
         } else {
-            // @TODO remove this if
-
             // loop by imported addresses, add new only
-            foreach ($contact->getAddresses() as $address) {
+            foreach ($contact->getAddresses() as $key => $address) {
                 // at this point imported address region have code equal to region_id in magento db field
                 $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
                 $address->setId(null);
@@ -161,6 +159,10 @@ class CustomerStrategy extends BaseStrategy
                 }
 
                 $this->updateAddressTypes($address);
+
+                // @TODO find possible solution
+                // guess parent address by key
+                $localData->getAddresses()->get($key)->setContactAddress($address);
             }
 
             $localData->setContact($contact);
@@ -185,7 +187,11 @@ class CustomerStrategy extends BaseStrategy
             if ($originAddressId) {
                 $existingAddress = $entity->getAddressByOriginId($originAddressId);
                 if ($existingAddress) {
-                    $this->strategyHelper->importEntity($existingAddress, $address, ['id', 'region', 'country']);
+                    $this->strategyHelper->importEntity(
+                        $existingAddress,
+                        $address,
+                        ['id', 'region', 'country', 'created', 'updated']
+                    );
                     $address = $existingAddress;
                 }
             }
