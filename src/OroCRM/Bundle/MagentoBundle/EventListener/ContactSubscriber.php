@@ -9,7 +9,6 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -22,9 +21,9 @@ class ContactSubscriber implements EventSubscriber
     protected $schedulerServiceLink;
 
     /**
-     * @var SecurityFacade
+     * @var ServiceLink
      */
-    protected $securityFacade;
+    protected $securityFacadeLink;
 
     /**
      * Entities we must process
@@ -63,13 +62,13 @@ class ContactSubscriber implements EventSubscriber
     protected $processIds = [];
 
     /**
-     * @param SecurityFacade $securityFacade
-     * @param ServiceLink    $schedulerServiceLink
+     * @param ServiceLink $securityFacadeLink
+     * @param ServiceLink $schedulerServiceLink
      */
-    public function __construct(SecurityFacade $securityFacade, ServiceLink $schedulerServiceLink)
+    public function __construct(ServiceLink $securityFacadeLink, ServiceLink $schedulerServiceLink)
     {
         $this->schedulerServiceLink = $schedulerServiceLink;
-        $this->securityFacade       = $securityFacade;
+        $this->securityFacadeLink       = $securityFacadeLink;
     }
 
     /**
@@ -184,7 +183,7 @@ class ContactSubscriber implements EventSubscriber
         // check for logged user is for confidence that data changes comes from UI, not from sync process.
         if ($contactEntity->getId()
             && !isset($this->processIds[$contactEntity->getId()])
-            && $this->securityFacade->hasLoggedUser()
+            && $this->securityFacadeLink->getService()->hasLoggedUser()
         ) {
             $magentoCustomer = $em->getRepository('OroCRMMagentoBundle:Customer')
                 ->findOneBy(['contact' => $contactEntity]);
