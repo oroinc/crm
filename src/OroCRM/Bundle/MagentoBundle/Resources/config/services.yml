@@ -27,6 +27,8 @@ parameters:
     # magento related records delete provider
     orocrm_magento.manager.magento_channel_delete_provider.class:           OroCRM\Bundle\MagentoBundle\Manager\MagentoChannelDeleteProvider
 
+    orocrm_magento.subscriber.customer_subscriber.class:                    OroCRM\Bundle\MagentoBundle\EventListener\ContactSubscriber
+
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -134,3 +136,12 @@ services:
             - @oro_workflow.entity_connector
         tags:
             - { name: oro_integration.channel_delete_provider }
+
+    orocrm_magento.subscriber.customer_subscriber:
+        public: false
+        class: %orocrm_magento.subscriber.customer_subscriber.class%
+        arguments:
+            - @oro_security.security_facade
+            - @oro_integration.sync_scheduler.link
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
