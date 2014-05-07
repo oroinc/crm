@@ -7,6 +7,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\AddressBundle\Entity\Address;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
@@ -18,6 +20,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 
 class LoadMagentoData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -180,6 +183,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $order->setPaymentMethod($paymentMethod);
         $order->setPaymentDetails($paymentMethodDetails);
         $order->setShippingMethod('flatrate_flatrate');
+        $order->addAddress($this->getOrderAddress($om));
         $om->persist($order);
         return $order;
     }
@@ -323,6 +327,33 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         return $cartItems;
     }
 
+    protected function getAddress(ObjectManager $om)
+    {
+        $address = new Address;
+        $address->setCity('City');
+        $address->setStreet('First street');
+        $address->setPostalCode(123456);
+        $address->setFirstName('John');
+        $address->setLastName('Doe');
+        $om->persist($address);
+
+        return $address;
+    }
+
+    protected function getOrderAddress(ObjectManager $om)
+    {
+        $address = new OrderAddress;
+        $address->setCity('City');
+        $address->setStreet('First street');
+        $address->setPostalCode(123456);
+        $address->setFirstName('John');
+        $address->setLastName('Doe');
+
+        $om->persist($address);
+
+        return $address;
+    }
+
     /**
      * @param ObjectManager                                     $om
      * @param Website                                           $website
@@ -339,6 +370,10 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
     ) {
         $accounts = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
         $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
+
+        foreach ($accounts as $account) {
+            $account->setBillingAddress($this->getAddress($om));
+        }
 
         $buffer = range(0, 48);
         shuffle($buffer);
