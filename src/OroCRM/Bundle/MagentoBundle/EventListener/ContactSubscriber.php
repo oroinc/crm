@@ -100,7 +100,7 @@ class ContactSubscriber implements EventSubscriber
      */
     public function postFlush(PostFlushEventArgs $event)
     {
-        foreach ($this->processIds as $magentoCustomer) {
+        while (null !== $magentoCustomer = array_pop($this->processIds)) {
             $this->schedulerServiceLink->getService()->schedule(
                 $magentoCustomer->getChannel(),
                 'customer',
