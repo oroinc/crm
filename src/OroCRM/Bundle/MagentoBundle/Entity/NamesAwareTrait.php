@@ -42,8 +42,8 @@ trait NamesAwareTrait
             $firstName = $this->getCustomer()->getFirstName();
             $lastName  = $this->getCustomer()->getLastName();
         } elseif (!empty($billingAddress)) {
-            $firstName = $this->getBillingAddress()->getFirstName();
-            $lastName  = $this->getBillingAddress()->getLastName();
+            $firstName = $billingAddress->getFirstName();
+            $lastName  = $billingAddress->getLastName();
         }
 
         $this->firstName = $firstName;
