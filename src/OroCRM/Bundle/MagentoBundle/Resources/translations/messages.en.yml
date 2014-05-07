@@ -106,6 +106,14 @@ orocrm:
             lifetime.label:      Lifetime value
             currency.label:      Currency
 
+        customergroup:
+            entity_label:        Customer Group
+            entity_plural_label: Customer Groups
+            name.label:          Name
+            id.label:            Id
+            origin_id.label:     Origin Id
+            channel.label:       Channel
+
         cart:
             entity_label:         Shopping Cart
             entity_plural_label:  Shopping Carts

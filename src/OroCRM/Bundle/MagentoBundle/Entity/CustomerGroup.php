@@ -8,13 +8,20 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePersonGroup;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
 /**
  * Class CustomerGroup
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
- * @Oro\Loggable
  * @ORM\Table(name="orocrm_magento_customer_group")
+ * @Config(
+ *   defaultValues={
+ *      "entity"={"icon"="icon-group"}
+ *  }
+ * )
+ * @Oro\Loggable
  */
 class CustomerGroup extends BasePersonGroup
 {
