@@ -43,9 +43,16 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $securityFacadeLink   = $this
+            ->getMockBuilder('Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->securityFacade   = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
             ->disableOriginalConstructor()
             ->getMock();
+        $securityFacadeLink->expects($this->any())
+            ->method('getService')
+            ->will($this->returnValue($this->securityFacade));
         $schedulerServiceLink   = $this
             ->getMockBuilder('Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink')
             ->disableOriginalConstructor()
@@ -57,7 +64,7 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
             ->method('getService')
             ->will($this->returnValue($this->schedulerService));
 
-        $this->subscriber = new ContactSubscriber($this->securityFacade, $schedulerServiceLink);
+        $this->subscriber = new ContactSubscriber($securityFacadeLink, $schedulerServiceLink);
 
         $this->em  = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
