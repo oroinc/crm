@@ -2,16 +2,16 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\MergeHelper;
 
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
+use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 
 class ContactMergeHelper
 {
@@ -100,7 +100,7 @@ class ContactMergeHelper
      */
     protected function isRemotePrioritized()
     {
-        return $this->priority === ChannelType::REMOTE_WINS;
+        return $this->priority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS;
     }
 
     /**
