@@ -216,19 +216,6 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
                 true,
                 false
             ],
-            'Update contact from import'              => [
-                $testContact,
-                $testMagentoCustomer,
-                $channel,
-                [],
-                [$testContact],
-                [],
-                false,
-                false,
-                false,
-                true,
-                false
-            ],
             'Deleted contact'                         => [
                 $testContact,
                 $testMagentoCustomer,
@@ -282,5 +269,21 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
                 true
             ],
         ];
+    }
+
+    public function testUpdateContactFromImport()
+    {
+        $this->uow->expects($this->never())
+            ->method('getScheduledEntityInsertions');
+        $this->uow->expects($this->never())
+            ->method('getScheduledEntityUpdates');
+        $this->uow->expects($this->never())
+            ->method('getScheduledEntityDeletions');
+
+        $this->securityFacade->expects($this->any())
+            ->method('hasLoggedUser')
+            ->will($this->returnValue(false));
+
+        $this->subscriber->onFlush($this->onFlushEventArgs);
     }
 }
