@@ -7,6 +7,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\AddressBundle\Entity\Address;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
@@ -18,6 +20,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 
 class LoadMagentoData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -180,6 +183,9 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $order->setPaymentMethod($paymentMethod);
         $order->setPaymentDetails($paymentMethodDetails);
         $order->setShippingMethod('flatrate_flatrate');
+        $address = $this->getOrderAddress($om);
+        $order->addAddress($address);
+        $address->setOwner($order);
         $om->persist($order);
         return $order;
     }
@@ -321,6 +327,20 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $cart->setTaxAmount($totalTaxAmount);
         $om->persist($cart);
         return $cartItems;
+    }
+
+    protected function getOrderAddress(ObjectManager $om)
+    {
+        $address = new OrderAddress;
+        $address->setCity('City');
+        $address->setStreet('First street');
+        $address->setPostalCode(123456);
+        $address->setFirstName('John');
+        $address->setLastName('Doe');
+
+        $om->persist($address);
+
+        return $address;
     }
 
     /**
