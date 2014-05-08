@@ -4,14 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\ChannelDeleteProviderInterface;
-
-use Oro\Bundle\WorkflowBundle\Model\EntityConnector;
-
-use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 
 class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
 {
@@ -21,17 +15,12 @@ class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
     /** @var Channel */
     protected $channel;
 
-    /** @var EntityConnector */
-    protected $entityConnector;
-
     /**
-     * @param EntityManager   $em
-     * @param EntityConnector $entityConnector
+     * @param EntityManager $em
      */
-    public function __construct(EntityManager $em, EntityConnector $entityConnector)
+    public function __construct(EntityManager $em)
     {
         $this->em = $em;
-        $this->entityConnector = $entityConnector;
     }
 
     /**
@@ -39,7 +28,7 @@ class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
      */
     public function isSupport($channelType)
     {
-        return 'magento' == $channelType;
+        return 'magento' === $channelType;
     }
 
     /**
@@ -75,71 +64,51 @@ class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
      */
     protected function removeCarts()
     {
-        $cartAddressId = [];
-        $carts = new BufferedQueryResultIterator(
-            $this->em->createQueryBuilder()
-                ->select('c')
-                ->from('OroCRMMagentoBundle:Cart', 'c')
-                ->where('c.channel = :channel')
-                ->setParameter('channel', $this->channel)
-                ->getQuery()
+        $cartTable = $this->em->getClassMetadata('OroCRMMagentoBundle:Cart')->getTableName();
+        $shippingAddresses = sprintf(
+            'SELECT sa.shipping_address_id FROM %s sa WHERE sa.channel_id = %s',
+            $cartTable,
+            $this->channel->getId()
         );
-        foreach ($carts as $cart) {
-            $this->pushInto($cart->getShippingAddress(), $cartAddressId)
-                ->pushInto($cart->getBillingAddress(), $cartAddressId);
-        }
-        if (!empty($cartAddressId)) {
-            $uniqueCartAddressIds = array_unique($cartAddressId);
-            $this->em
-                ->createQuery(
-                    'DELETE FROM OroCRMMagentoBundle:CartAddress ca '.
-                    'WHERE ca.id IN ' . $this->exprIn($uniqueCartAddressIds)
-                )
-                ->execute();
-        }
-        unset($uniqueCartAddressIds, $cartAddressId, $carts, $cart);
+        $billingAddresses  = sprintf(
+            'SELECT ba.billing_address_id FROM %s ba WHERE ba.channel_id = %s',
+            $cartTable,
+            $this->channel->getId()
+        );
+        $this->em->getConnection()->executeQuery(
+            sprintf(
+                'Delete FROM %s WHERE id IN (%s) OR id IN (%s)',
+                $this->em->getClassMetadata('OroCRMMagentoBundle:CartAddress')->getTableName(),
+                $shippingAddresses,
+                $billingAddresses
+            )
+        );
+
         $this->removeFromEntityByChannelId('OroCRMMagentoBundle:Cart');
 
         return $this;
     }
 
     /**
-     * Get Related entities
-     *
-     * @param string $entityClassName
-     * @return array
-     */
-    protected function getRelatedEntities($entityClassName)
-    {
-        return $this->em
-            ->createQueryBuilder()
-            ->select('e')
-            ->from($entityClassName, 'e')
-            ->where('e.channel = :channel')
-            ->setParameter('channel', $this->channel)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
      * Remove workflow records
      *
      * @param string $entityClassName
+     *
      * @return $this
      */
     protected function removeWorkflowDefinitions($entityClassName)
     {
-        $entities = $this->getRelatedEntities($entityClassName);
-        if (!empty($entities)) {
-            foreach ($entities as $entity) {
-                if ($this->entityConnector->isWorkflowAware($entity)) {
-                    $workflowItem = $this->entityConnector->getWorkflowItem($entity);
-                    if ($workflowItem) {
-                        $this->em->remove($workflowItem);
-                    }
-                }
-            }
-        }
+        $workflowMetadata = $this->em->getClassMetadata('OroWorkflowBundle:WorkflowItem');
+        $entityMetadata   = $this->em->getClassMetadata($entityClassName);
+
+        $this->em->getConnection()->executeQuery(
+            sprintf(
+                'Delete FROM %s WHERE id IN (SELECT o.workflow_item_id FROM %s o WHERE o.channel_id=%s)',
+                $workflowMetadata->getTableName(),
+                $entityMetadata->getTableName(),
+                $this->channel->getId()
+            )
+        );
 
         return $this;
     }
@@ -148,36 +117,19 @@ class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
      * Remove records from given entity type related to channel
      *
      * @param string $entityClassName
-     * @return $this
-     */
-    private function removeFromEntityByChannelId($entityClassName)
-    {
-        $this->em->createQuery('DELETE FROM ' . $entityClassName . ' e WHERE e.channel = ' . $this->getChannelId())
-            ->execute();
-
-        return $this;
-    }
-
-    /**
-     * @param CartAddress|NULL $element
-     * @param array            $array
-     * @return $this
-     */
-    private function pushInto($element, &$array)
-    {
-        if (!empty($element)) {
-            array_push($array, $element->getid());
-        }
-        return $this;
-    }
-
-    /**
-     * @param array $array
      *
-     * @return string
+     * @return $this
      */
-    private function exprIn(array $array)
+    protected function removeFromEntityByChannelId($entityClassName)
     {
-        return '(' . implode(',', $array) . ')';
+        $this->em->getConnection()->executeQuery(
+            sprintf(
+                'DELETE FROM %s WHERE channel_id=%s',
+                $this->em->getClassMetadata($entityClassName)->getTableName(),
+                $this->getChannelId()
+            )
+        );
+
+        return $this;
     }
 }
