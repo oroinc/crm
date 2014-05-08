@@ -137,7 +137,6 @@ class AddressImportHelper
         return $this->countriesCache[$countryCode];
     }
 
-
     /**
      * @param string $combinedCode
      * @param string $countryCode

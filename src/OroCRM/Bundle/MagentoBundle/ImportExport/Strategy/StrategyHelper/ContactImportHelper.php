@@ -71,6 +71,13 @@ class ContactImportHelper
         $this->mergeObjects($remoteData, $localData, $contact);
     }
 
+    /**
+     * Do merge of non-scalar fields such as emails or addresses
+     *
+     * @param Customer $remoteData
+     * @param Customer $localData
+     * @param Contact  $contact
+     */
     public function mergeObjects(Customer $remoteData, Customer $localData, Contact $contact)
     {
         // process emails
