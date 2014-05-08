@@ -1,6 +1,6 @@
 {% block page_container %}
     <div class="order-form-widget widget-content">
-        {% if error is sameas(false) %}
+        {% if not error %}
             <iframe id="orderPlaceFrame" src="{{ sourceUrl|raw }}" width="1" height="1" frameborder="0"></iframe>
 
             <script type="text/javascript">
