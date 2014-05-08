@@ -21,10 +21,10 @@ class UpdateCustomerLifetime extends AbstractFixture
         $repository = $manager->getRepository('OroCRMMagentoBundle:Customer');
         $queryBuilder = $repository->createQueryBuilder('customer')
             ->select('customer.id, SUM(customerOrder.subtotalAmount) as lifetime')
-            ->leftJoin('customer.orders', 'customerOrder')
-            ->where('customerOrder.status != :status')->setParameter('status', 'canceled')
+            ->leftJoin('customer.orders', 'customerOrder', 'WITH', 'customerOrder.status != :status')
             ->groupBy('customer.id')
             ->orderBy('customer.id');
+        $queryBuilder->setParameter('status', 'canceled');
 
         $updateQuery =
             'UPDATE OroCRMMagentoBundle:Customer customer SET customer.lifetime = :lifetime WHERE customer.id = :id';
