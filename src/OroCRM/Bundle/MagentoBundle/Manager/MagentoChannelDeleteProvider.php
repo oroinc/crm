@@ -4,14 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\ChannelDeleteProviderInterface;
-
-use Oro\Bundle\WorkflowBundle\Model\EntityConnector;
-
-use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 
 class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
 {
@@ -21,17 +15,12 @@ class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
     /** @var Channel */
     protected $channel;
 
-    /** @var EntityConnector */
-    protected $entityConnector;
-
     /**
-     * @param EntityManager   $em
-     * @param EntityConnector $entityConnector
+     * @param EntityManager $em
      */
-    public function __construct(EntityManager $em, EntityConnector $entityConnector)
+    public function __construct(EntityManager $em)
     {
-        $this->em              = $em;
-        $this->entityConnector = $entityConnector;
+        $this->em = $em;
     }
 
     /**
@@ -39,7 +28,7 @@ class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
      */
     public function isSupport($channelType)
     {
-        return 'magento' == $channelType;
+        return 'magento' === $channelType;
     }
 
     /**
@@ -109,7 +98,6 @@ class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
      */
     protected function removeWorkflowDefinitions($entityClassName)
     {
-
         $workflowMetadata = $this->em->getClassMetadata('OroWorkflowBundle:WorkflowItem');
         $entityMetadata   = $this->em->getClassMetadata($entityClassName);
 
