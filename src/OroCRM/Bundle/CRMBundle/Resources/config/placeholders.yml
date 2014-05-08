@@ -1,9 +1,0 @@
-placeholders:
-    footer_inner:
-        items:
-            application_version:
-                order: 100
-
-items:
-    application_version:
-        template: OroCRMBundle::application_version.html.twig
