@@ -89,6 +89,7 @@ class ContactSubscriber implements EventSubscriber
      */
     public function onFlush(OnFlushEventArgs $event)
     {
+        // check for logged user is for confidence that data changes comes from UI, not from sync process.
         if ($this->securityFacadeLink->getService()->hasLoggedUser()) {
             $em = $event->getEntityManager();
             $this->processUpdates($em);
@@ -187,10 +188,7 @@ class ContactSubscriber implements EventSubscriber
      */
     protected function scheduleSync(Contact $contactEntity, EntityManager $em)
     {
-        // check for logged user is for confidence that data changes comes from UI, not from sync process.
-        if ($contactEntity->getId()
-            && !isset($this->processIds[$contactEntity->getId()])
-        ) {
+        if ($contactEntity->getId() && !isset($this->processIds[$contactEntity->getId()])) {
             $magentoCustomer = $em->getRepository('OroCRMMagentoBundle:Customer')
                 ->findOneBy(['contact' => $contactEntity]);
             if ($magentoCustomer) {
