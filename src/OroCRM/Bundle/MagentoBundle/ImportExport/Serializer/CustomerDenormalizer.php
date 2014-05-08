@@ -90,7 +90,7 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
             $mappedData['birthday'] = substr($mappedData['birthday'], 0, 10);
         }
 
-        if (!empty($mappedData['gender'])) {
+        if (isset($mappedData['gender']) && !empty($mappedData['gender'])) {
             $gender = strtolower($mappedData['gender']);
             if (in_array($gender, [Gender::FEMALE, Gender::MALE])) {
                 $mappedData['gender'] = $gender;
