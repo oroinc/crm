@@ -58,6 +58,13 @@ class ContactImportHelper
         $this->accessor            = new PropertyAccessor();
     }
 
+    /**
+     * Merge contact information with remote customer data
+     *
+     * @param Customer $remoteData
+     * @param Customer $localData
+     * @param Contact  $contact
+     */
     public function merge(Customer $remoteData, Customer $localData, Contact $contact)
     {
         $this->mergeScalars($this->scalarFields, $remoteData, $localData, $contact);
@@ -81,7 +88,6 @@ class ContactImportHelper
         }
 
         // @TODO process statuses
-
         // process addresses
         $addresses = $contact->getAddresses();
         foreach ($addresses as $address) {
@@ -89,7 +95,8 @@ class ContactImportHelper
             $localAddress = $this->getCustomerAddressByContactAddress($localData, $address);
             if (!$localAddress && $this->isRemotePrioritized()) {
                 // remove if added and remote data has higher priority
-                $contact->removeAddress($address);
+                // commented until two way sync will finished
+                // $contact->removeAddress($address);
             } else {
                 $remoteAddress = $this->getCorrespondentRemoteAddress($remoteData, $localAddress);
                 if ($remoteAddress) {
@@ -119,7 +126,8 @@ class ContactImportHelper
                         $contact->removeAddress($address);
                     }
                 } elseif ($this->isRemotePrioritized()) {
-                    $contact->removeAddress($address);
+                    // commented until two way sync will finished
+                    // $contact->removeAddress($address);
                 }
             }
         }
