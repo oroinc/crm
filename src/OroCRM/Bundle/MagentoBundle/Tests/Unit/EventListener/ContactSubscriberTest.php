@@ -43,9 +43,16 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $securityFacadeLink   = $this
+            ->getMockBuilder('Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->securityFacade   = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
             ->disableOriginalConstructor()
             ->getMock();
+        $securityFacadeLink->expects($this->any())
+            ->method('getService')
+            ->will($this->returnValue($this->securityFacade));
         $schedulerServiceLink   = $this
             ->getMockBuilder('Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink')
             ->disableOriginalConstructor()
@@ -57,7 +64,7 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
             ->method('getService')
             ->will($this->returnValue($this->schedulerService));
 
-        $this->subscriber = new ContactSubscriber($this->securityFacade, $schedulerServiceLink);
+        $this->subscriber = new ContactSubscriber($securityFacadeLink, $schedulerServiceLink);
 
         $this->em  = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
@@ -209,19 +216,6 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
                 true,
                 false
             ],
-            'Update contact from import'              => [
-                $testContact,
-                $testMagentoCustomer,
-                $channel,
-                [],
-                [$testContact],
-                [],
-                false,
-                false,
-                false,
-                true,
-                false
-            ],
             'Deleted contact'                         => [
                 $testContact,
                 $testMagentoCustomer,
@@ -275,5 +269,21 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
                 true
             ],
         ];
+    }
+
+    public function testUpdateContactFromImport()
+    {
+        $this->uow->expects($this->never())
+            ->method('getScheduledEntityInsertions');
+        $this->uow->expects($this->never())
+            ->method('getScheduledEntityUpdates');
+        $this->uow->expects($this->never())
+            ->method('getScheduledEntityDeletions');
+
+        $this->securityFacade->expects($this->any())
+            ->method('hasLoggedUser')
+            ->will($this->returnValue(false));
+
+        $this->subscriber->onFlush($this->onFlushEventArgs);
     }
 }
