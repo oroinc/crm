@@ -2,10 +2,10 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use Oro\Bundle\UserBundle\Model\Gender;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\UserBundle\Model\Gender;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
