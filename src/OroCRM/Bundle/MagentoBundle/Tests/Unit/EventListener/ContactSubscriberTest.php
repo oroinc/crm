@@ -223,7 +223,7 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
                 [],
                 [$testContact],
                 [],
-                false,
+                true,
                 false,
                 false,
                 true,
