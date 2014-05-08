@@ -89,9 +89,12 @@ class ContactSubscriber implements EventSubscriber
      */
     public function onFlush(OnFlushEventArgs $event)
     {
-        $em = $event->getEntityManager();
-        $this->processUpdates($em);
-        $this->processDeletes($em);
+        // check for logged user is for confidence that data changes comes from UI, not from sync process.
+        if ($this->securityFacadeLink->getService()->hasLoggedUser()) {
+            $em = $event->getEntityManager();
+            $this->processUpdates($em);
+            $this->processDeletes($em);
+        }
     }
 
     /**
@@ -140,19 +143,24 @@ class ContactSubscriber implements EventSubscriber
      */
     protected function processUpdates(EntityManager $em)
     {
-        $unitOfWork      = $em->getUnitOfWork();
-        $entities = array_merge(
+        $unitOfWork = $em->getUnitOfWork();
+        $entities   = array_merge(
             $unitOfWork->getScheduledEntityInsertions(),
             $unitOfWork->getScheduledEntityUpdates()
         );
 
         foreach ($entities as $entity) {
             foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
+                $changed = false;
+
                 if ($entity instanceof $classNames) {
                     if (isset ($classMapConfig['findContactMethod'])) {
                         $method        = $classMapConfig['findContactMethod'];
                         $contactEntity = $entity->$method();
-                        $changed       = true;
+
+                        if (!empty($contactEntity)) {
+                            $changed = true;
+                        }
                     } else {
                         $changed       = false;
                         $contactEntity = $entity;
@@ -180,11 +188,7 @@ class ContactSubscriber implements EventSubscriber
      */
     protected function scheduleSync(Contact $contactEntity, EntityManager $em)
     {
-        // check for logged user is for confidence that data changes comes from UI, not from sync process.
-        if ($contactEntity->getId()
-            && !isset($this->processIds[$contactEntity->getId()])
-            && $this->securityFacadeLink->getService()->hasLoggedUser()
-        ) {
+        if ($contactEntity->getId() && !isset($this->processIds[$contactEntity->getId()])) {
             $magentoCustomer = $em->getRepository('OroCRMMagentoBundle:Customer')
                 ->findOneBy(['contact' => $contactEntity]);
             if ($magentoCustomer) {
