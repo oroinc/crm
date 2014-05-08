@@ -6,5 +6,4 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class OroCRMBundle extends Bundle
 {
-    const VERSION = '1.1.0';
 }

@@ -30,18 +30,20 @@ trait NamesAwareTrait
     protected $lastName;
 
     /**
-     * Update denormalized names baased on current cart state
+     * Update denormalized names based on current cart state
      * See docblock for firstName property
      */
     protected function updateNames()
     {
         $firstName = $lastName = null;
+        $billingAddress = $this->getBillingAddress();
+
         if (null !== $this->getCustomer()) {
             $firstName = $this->getCustomer()->getFirstName();
             $lastName  = $this->getCustomer()->getLastName();
-        } elseif (null !== $this->getBillingAddress()) {
-            $firstName = $this->getBillingAddress()->getFirstName();
-            $lastName  = $this->getBillingAddress()->getLastName();
+        } elseif (!empty($billingAddress)) {
+            $firstName = $billingAddress->getFirstName();
+            $lastName  = $billingAddress->getLastName();
         }
 
         $this->firstName = $firstName;
