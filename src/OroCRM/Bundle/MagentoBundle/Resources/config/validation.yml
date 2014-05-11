@@ -8,3 +8,158 @@ OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
           - NotBlank: ~
         websiteId:
           - NotBlank: ~
+
+OroCRM\Bundle\MagentoBundle\Entity\Website:
+    properties:
+        code:
+            - NotBlank: ~
+            - Length: { max: 32 }
+        name:
+            - NotBlank: ~
+            - Length: { max: 255 }
+
+OroCRM\Bundle\MagentoBundle\Entity\Store:
+    properties:
+        code:
+            - NotBlank: ~
+            - Length: { max: 32 }
+        name:
+            - NotBlank: ~
+            - Length: { max: 255 }
+        website:
+            - Valid: ~
+
+OroCRM\Bundle\MagentoBundle\Entity\Region:
+    properties:
+        combinedCode:
+            - NotBlank: ~
+            - Length: { max: 60 }
+        code:
+            - NotBlank: ~
+            - Length: { max: 32 }
+        countryCode:
+            - NotBlank: ~
+            - Length: { max: 255 }
+        regionId:
+            - NotBlank: ~
+        name:
+            - Length: { max: 255 }
+
+OroCRM\Bundle\MagentoBundle\Entity\Customer:
+    properties:
+        namePrefix:
+            - Length: { max: 255 }
+        firstName:
+            - Length: { max: 255 }
+        lastName:
+            - Length: { max: 255 }
+        middleName:
+            - Length: { max: 255 }
+        nameSuffix:
+            - Length: { max: 255 }
+        vat:
+            - Length: { max: 255 }
+        email:
+            - Length: { max: 255 }
+        gender:
+            - Length: { max: 8 }
+        birthday:
+            - Date: ~
+        createdAt:
+            - DateTime: ~
+        updatedAt:
+            - DateTime: ~
+        isActive:
+            - NotNull: ~
+        website:
+            - Valid: ~
+        store:
+            - Valid: ~
+        group:
+            - Valid: ~
+        contact:
+            - Valid: ~
+        account:
+            - Valid: ~
+        addresses:
+            - Valid: ~
+
+OroCRM\Bundle\MagentoBundle\Entity\Address:
+    properties:
+        label:
+            - Length: { max: 255 }
+        street:
+            - Length: { max: 255 }
+        street2:
+            - Length: { max: 255 }
+        city:
+            - Length: { max: 255 }
+        postalCode:
+            - Length: { max: 20 }
+        regionText:
+            - Length: { max: 255 }
+        namePrefix:
+            - Length: { max: 255 }
+        firstName:
+            - Length: { max: 255 }
+        lastName:
+            - Length: { max: 255 }
+        middleName:
+            - Length: { max: 255 }
+        nameSuffix:
+            - Length: { max: 255 }
+        types:
+            - Valid: ~
+
+OroCRM\Bundle\MagentoBundle\Entity\Cart:
+    properties:
+        cartItems:
+            - Valid: ~
+        store:
+            - Valid: ~
+        itemsQty:
+            - GreaterThanOrEqual: { value: 0 }
+        itemsCount:
+            - GreaterThanOrEqual: { value: 0 }
+        baseCurrencyCode:
+            - NotBlank: ~
+            - Length: { max: 32 }
+        storeCurrencyCode:
+            - NotBlank: ~
+            - Length: { max: 32 }
+        quoteCurrencyCode:
+            - NotBlank: ~
+            - Length: { max: 32 }
+        storeToBaseRate:
+            - NotBlank: ~
+        storeToQuoteRate:
+            - NotBlank: ~
+        email:
+            - Length: { max: 255 }
+        giftMessage:
+            - Length: { max: 255 }
+        isGuest:
+            - NotNull: ~
+        shippingAddress:
+            - Valid: ~
+        billingAddress:
+            - Valid: ~
+        paymentDetails:
+            - Length: { max: 255 }
+
+OroCRM\Bundle\MagentoBundle\Entity\CartAddress:
+    properties:
+        street:
+            - Length: { max: 500 }
+        street2:
+            - Length: { max: 500 }
+        city:
+            - Length: { max: 255 }
+        postalCode:
+            - Length: { max: 20 }
+        country:
+            - Valid: ~
+        firstName:
+            - Length: { max: 255 }
+        lastName:
+            - Length: { max: 255 }

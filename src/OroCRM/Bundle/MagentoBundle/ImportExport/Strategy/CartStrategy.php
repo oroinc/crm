@@ -75,9 +75,7 @@ class CartStrategy extends BaseStrategy
             ->updateAddresses($existingEntity, $newEntity)
             ->updateCartItems($existingEntity, $newEntity->getCartItems());
 
-        $this->validateAndUpdateContext($existingEntity);
-
-        return $existingEntity;
+        return $this->validateAndUpdateContext($existingEntity);
     }
 
     /**
