@@ -20,8 +20,7 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
     /**
      * @var array
      */
-    protected $importFieldsMap
-        = array(
+    protected $importFieldsMap = array(
             'customer_id' => 'origin_id',
             'firstname'   => 'first_name',
             'lastname'    => 'last_name',
@@ -35,8 +34,7 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
     /**
      * @var array
      */
-    protected $addressBapToMageMapping
-        = array(
+    protected $addressBapToMageMapping = array(
             'namePrefix'        => 'prefix',
             'firstName'         => 'firstname',
             'middleName'        => 'middlename',
