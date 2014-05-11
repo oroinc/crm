@@ -20,36 +20,39 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
     /**
      * @var array
      */
-    protected $importFieldsMap = array(
-        'customer_id' => 'origin_id',
-        'firstname'   => 'first_name',
-        'lastname'    => 'last_name',
-        'middlename'  => 'middle_name',
-        'prefix'      => 'name_prefix',
-        'suffix'      => 'name_suffix',
-        'dob'         => 'birthday',
-        'taxvat'      => 'vat',
-    );
+    protected $importFieldsMap
+        = array(
+            'customer_id' => 'origin_id',
+            'firstname'   => 'first_name',
+            'lastname'    => 'last_name',
+            'middlename'  => 'middle_name',
+            'prefix'      => 'name_prefix',
+            'suffix'      => 'name_suffix',
+            'dob'         => 'birthday',
+            'taxvat'      => 'vat',
+        );
 
     /**
      * @var array
      */
-    protected $addressBapToMageMapping = array(
-        'namePrefix' => 'prefix',
-        'firstName' => 'firstname',
-        'middleName' => 'middlename',
-        'lastName' => 'lastname',
-        'nameSuffix' => 'suffix',
-        'organization' => 'company',
-        'street' => 'street',
-        'city' => 'city',
-        'postalCode' => 'postcode',
-        'country' => 'country_id',
-        'regionText' => 'region',
-        'region' => 'region_id',
-        'created' => 'created_at',
-        'updated' => 'updated_at'
-    );
+    protected $addressBapToMageMapping
+        = array(
+            'namePrefix'        => 'prefix',
+            'firstName'         => 'firstname',
+            'middleName'        => 'middlename',
+            'lastName'          => 'lastname',
+            'nameSuffix'        => 'suffix',
+            'organization'      => 'company',
+            'street'            => 'street',
+            'city'              => 'city',
+            'postalCode'        => 'postcode',
+            'country'           => 'country_id',
+            'regionText'        => 'region',
+            'region'            => 'region_id',
+            'created'           => 'created_at',
+            'updated'           => 'updated_at',
+            'customerAddressId' => 'customer_address_id'
+        );
 
     /**
      * @var array

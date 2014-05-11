@@ -50,7 +50,7 @@ class CustomerStrategy extends BaseStrategy
             $remoteEntity->getWebsite(),
             $remoteEntity->getGroup()
         );
-        $this->updateContact($remoteEntity, $localEntity, $remoteEntity->getContact());
+        $this->updateContact($localEntity, $remoteEntity->getContact());
         $this->updateAccount($localEntity, $remoteEntity->getAccount());
         $localEntity->getAccount()->setDefaultContact($localEntity->getContact());
 
