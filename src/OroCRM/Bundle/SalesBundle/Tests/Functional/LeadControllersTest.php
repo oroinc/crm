@@ -10,7 +10,7 @@ use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
+ * @dbIsolation
  */
 class LeadControllersTest extends WebTestCase
 {

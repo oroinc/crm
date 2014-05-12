@@ -11,8 +11,8 @@ use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
- * @db_reindex
+ * @dbIsolation
+ * @dbReindex
  */
 class ImportExportTest extends WebTestCase
 {

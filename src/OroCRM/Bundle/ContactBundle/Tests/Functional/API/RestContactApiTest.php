@@ -14,7 +14,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
+ * @dbIsolation
  */
 class RestContactApiTest extends WebTestCase
 {

@@ -2,15 +2,15 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 
+use Symfony\Component\DomCrawler\Form;
+
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
-use Symfony\Component\DomCrawler\Form;
-use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
+ * @dbIsolation
  */
 class ControllersGroupTest extends WebTestCase
 {
@@ -46,7 +46,7 @@ class ControllersGroupTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, '');
+        ToolsAPI::assertJsonResponse($result, 200, false);
         $this->assertContains("Group saved", $crawler->html());
     }
 
@@ -80,7 +80,7 @@ class ControllersGroupTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, '');
+        ToolsAPI::assertJsonResponse($result, 200, false);
         $this->assertContains("Group saved", $crawler->html());
 
         return $id;

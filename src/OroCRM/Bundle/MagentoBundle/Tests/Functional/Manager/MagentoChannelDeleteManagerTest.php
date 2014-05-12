@@ -12,7 +12,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
+ * @dbIsolation
  */
 class MagentoChannelDeleteManagerTest extends WebTestCase
 {

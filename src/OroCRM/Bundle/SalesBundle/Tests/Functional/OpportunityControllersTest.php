@@ -13,7 +13,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
+ * @dbIsolation
  */
 class OpportunityControllersTest extends WebTestCase
 {

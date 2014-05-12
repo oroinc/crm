@@ -13,8 +13,8 @@ use OroCRM\Bundle\ReportBundle\Command\ReportUpdateCommand;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
- * @db_reindex
+ * @dbIsolation
+ * @dbReindex
  */
 class CommandsTest extends WebTestCase
 {
