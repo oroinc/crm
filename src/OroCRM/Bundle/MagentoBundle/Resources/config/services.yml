@@ -29,6 +29,9 @@ parameters:
 
     orocrm_magento.subscriber.customer_subscriber.class:                    OroCRM\Bundle\MagentoBundle\EventListener\ContactSubscriber
 
+    # processors
+    orocrm_magento.importexport.customer.reverse.processor.class:           OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor
+
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -145,3 +148,6 @@ services:
             - @oro_integration.sync_scheduler.link
         tags:
             - { name: doctrine.event_subscriber, connection: default }
+
+    orocrm_magento.importexport.customer.reverse.processor:
+        class: %orocrm_magento.importexport.customer.reverse.processor.class%
