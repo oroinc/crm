@@ -17,9 +17,7 @@ use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormal
 
 class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $importFieldsMap = array(
         'customer_id' => 'origin_id',
         'firstname'   => 'first_name',
@@ -31,29 +29,26 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
         'taxvat'      => 'vat',
     );
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $addressBapToMageMapping = array(
-        'namePrefix' => 'prefix',
-        'firstName' => 'firstname',
-        'middleName' => 'middlename',
-        'lastName' => 'lastname',
-        'nameSuffix' => 'suffix',
-        'organization' => 'company',
-        'street' => 'street',
-        'city' => 'city',
-        'postalCode' => 'postcode',
-        'country' => 'country_id',
-        'regionText' => 'region',
-        'region' => 'region_id',
-        'created' => 'created_at',
-        'updated' => 'updated_at'
+        'namePrefix'        => 'prefix',
+        'firstName'         => 'firstname',
+        'middleName'        => 'middlename',
+        'lastName'          => 'lastname',
+        'nameSuffix'        => 'suffix',
+        'organization'      => 'company',
+        'street'            => 'street',
+        'city'              => 'city',
+        'postalCode'        => 'postcode',
+        'country'           => 'country_id',
+        'regionText'        => 'region',
+        'region'            => 'region_id',
+        'created'           => 'created_at',
+        'updated'           => 'updated_at',
+        'customerAddressId' => 'customer_address_id'
     );
 
-    /**
-     * @var array
-     */
+    /** @var array */
     static protected $objectFields = array(
         'store',
         'website',
@@ -230,18 +225,18 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
      */
     protected function formatContactData($data)
     {
-        $contact = $this->convertToCamelCase($data);
+        $contact           = $this->convertToCamelCase($data);
         $contactFieldNames = array(
-            'firstName'  => null,
-            'lastName'   => null,
-            'middleName' => null,
-            'namePrefix' => null,
-            'nameSuffix' => null,
-            'gender'     => null,
-            'addresses'  => [],
-            'birthday'   => null,
-            'phones'     => [],
-            'emails'     => [],
+            'firstName'         => null,
+            'lastName'          => null,
+            'middleName'        => null,
+            'namePrefix'        => null,
+            'nameSuffix'        => null,
+            'gender'            => null,
+            'addresses'         => [],
+            'birthday'          => null,
+            'phones'            => [],
+            'emails'            => []
         );
         // fill default values
         $contact = array_merge($contactFieldNames, $contact);

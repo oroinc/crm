@@ -71,7 +71,7 @@ class SoapController extends Controller
                 'websites'             => $websites,
                 'isExtensionInstalled' => $isExtensionInstalled,
                 'connectors'           => $allowedTypesChoices,
-                'adminUrl'            => $adminUrl,
+                'adminUrl'             => $adminUrl,
             ]
         );
     }
