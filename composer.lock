@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "4ce5cd70d6802d3a2654e92ac2cef351",
+    "hash": "68a3007512d80c209b9f2a32d2fc7051",
     "packages": [
         {
             "name": "a2lix/translation-form-bundle",
@@ -3284,11 +3284,11 @@
         },
         {
             "name": "oro/platform",
-            "version": "dev-master",
+            "version": "1.2.0-rc1",
             "source": {
                 "type": "git",
                 "url": "git@github.com:orocrm/platform.git",
-                "reference": "2a805618160e8e9d4b520e8219e01aa1252a381a"
+                "reference": "5eb5fda9a97efed794081794e6e947c7dedad3e1"
             },
             "require": {
                 "a2lix/translation-form-bundle": "1.2",
@@ -3365,7 +3365,7 @@
             ],
             "description": "Business Application Platform (BAP)",
             "homepage": "https://github.com/orocrm/platform.git",
-            "time": "2014-05-12 18:28:53"
+            "time": "2014-05-12 18:29:23"
         },
         {
             "name": "phpcollection/phpcollection",
@@ -4893,9 +4893,9 @@
 
     ],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "oro/platform": 20
-    },
+    "stability-flags": [
+
+    ],
     "platform": {
         "php": ">=5.4.4"
     },
