@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Processor;
 
+use \Doctrine\Common\Collections\Collection;
+
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorInterface;
@@ -37,15 +39,39 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
                 );
 
                 if (!empty($classMapConfig['relation'])) {
+
                     foreach ($classMapConfig['relation'] as $relationName => $relationClassMapConfig) {
-                        $this->fieldPlaceholder(
-                            $entity->$relationClassMapConfig['method'](),
-                            $classNames,
-                            $result,
-                            $classMapConfig['fields'],
-                            $classMapConfig['checking'],
-                            'object'
-                        );
+
+                        $relations = $entity->$relationClassMapConfig['method']();
+
+                        if ($relations instanceof Collection) {
+                            $relations = $relations->getValues();
+                        }
+
+                        if (is_array($relations)) {
+
+                            foreach ($relations as $relation) {
+                                $this->fieldPlaceholder(
+                                    $relation,
+                                    $relationClassMapConfig['class'],
+                                    $result['object'],
+                                    $relationClassMapConfig['fields'],
+                                    $relationClassMapConfig['checking'],
+                                    $relationName
+                                );
+                            }
+                            $result;
+                        } else {
+                            $this->fieldPlaceholder(
+                                $relations,
+                                $relationClassMapConfig['class'],
+                                $result['object'],
+                                $relationClassMapConfig['fields'],
+                                $relationClassMapConfig['checking'],
+                                $relationName
+                            );
+                            $result;
+                        }
                     }
 
                 }
@@ -144,6 +170,8 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
     }
 
     /**
+     * @todo: FIIIIIIIIIIIIIX to !==
+     *
      * @param object $entity
      * @param string $checkingMethod
      * @param string $methods
@@ -155,13 +183,13 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
         if (!empty($methods[1])) {
             return (
                 $this->getObjectMethodValue($entity, $methods)
-                !== $this->getCheckingMethodValue($entity, $checkingMethod, $methods)
+                === $this->getCheckingMethodValue($entity, $checkingMethod, $methods)
             );
         }
 
         return (
             $this->getObjectMethodValue($entity, $methods)
-            !== $this->getCheckingMethodValue($entity, $checkingMethod, $methods)
+            === $this->getCheckingMethodValue($entity, $checkingMethod, $methods)
         );
     }
 }
