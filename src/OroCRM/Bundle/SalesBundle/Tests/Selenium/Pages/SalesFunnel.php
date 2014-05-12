@@ -35,7 +35,8 @@ class SalesFunnel extends AbstractPageEntity
 
     public function setOwner($owner)
     {
-        $this->owner = $this->test->byXpath("//div[@id='s2id_oro_workflow_transition_sales_funnel_owner']/a");
+        $this->owner = $this->test
+            ->byXpath("//div[starts-with(@id,'s2id_oro_workflow_transition_sales_funnel_owner')]/a");
         $this->owner->click();
         $this->waitForAjax();
         $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($owner);
