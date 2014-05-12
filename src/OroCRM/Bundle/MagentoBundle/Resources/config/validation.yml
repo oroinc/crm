@@ -9,157 +9,680 @@ OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
         websiteId:
           - NotBlank: ~
 
-OroCRM\Bundle\MagentoBundle\Entity\Website:
-    properties:
-        code:
-            - NotBlank: ~
-            - Length: { max: 32 }
-        name:
-            - NotBlank: ~
-            - Length: { max: 255 }
-
-OroCRM\Bundle\MagentoBundle\Entity\Store:
-    properties:
-        code:
-            - NotBlank: ~
-            - Length: { max: 32 }
-        name:
-            - NotBlank: ~
-            - Length: { max: 255 }
-        website:
-            - Valid: ~
-
-OroCRM\Bundle\MagentoBundle\Entity\Region:
-    properties:
-        combinedCode:
-            - NotBlank: ~
-            - Length: { max: 60 }
-        code:
-            - NotBlank: ~
-            - Length: { max: 32 }
-        countryCode:
-            - NotBlank: ~
-            - Length: { max: 255 }
-        regionId:
-            - NotBlank: ~
-        name:
-            - Length: { max: 255 }
-
-OroCRM\Bundle\MagentoBundle\Entity\Customer:
-    properties:
-        namePrefix:
-            - Length: { max: 255 }
-        firstName:
-            - Length: { max: 255 }
-        lastName:
-            - Length: { max: 255 }
-        middleName:
-            - Length: { max: 255 }
-        nameSuffix:
-            - Length: { max: 255 }
-        vat:
-            - Length: { max: 255 }
-        email:
-            - Length: { max: 255 }
-        gender:
-            - Length: { max: 8 }
-        birthday:
-            - Date: ~
-        createdAt:
-            - DateTime: ~
-        updatedAt:
-            - DateTime: ~
-        isActive:
-            - NotNull: ~
-        website:
-            - Valid: ~
-        store:
-            - Valid: ~
-        group:
-            - Valid: ~
-        contact:
-            - Valid: ~
-        account:
-            - Valid: ~
-        addresses:
-            - Valid: ~
-
 OroCRM\Bundle\MagentoBundle\Entity\Address:
-    properties:
-        label:
-            - Length: { max: 255 }
-        street:
-            - Length: { max: 255 }
-        street2:
-            - Length: { max: 255 }
-        city:
-            - Length: { max: 255 }
-        postalCode:
-            - Length: { max: 20 }
-        regionText:
-            - Length: { max: 255 }
-        namePrefix:
-            - Length: { max: 255 }
-        firstName:
-            - Length: { max: 255 }
-        lastName:
-            - Length: { max: 255 }
-        middleName:
-            - Length: { max: 255 }
-        nameSuffix:
-            - Length: { max: 255 }
-        types:
-            - Valid: ~
+  properties:
+    city:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    firstName:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    label:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    lastName:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    middleName:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    namePrefix:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    nameSuffix:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    postalCode:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 20
+    regionText:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    street:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    street2:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    types:
+      - Valid: ~
 
 OroCRM\Bundle\MagentoBundle\Entity\Cart:
-    properties:
-        cartItems:
-            - Valid: ~
-        store:
-            - Valid: ~
-        itemsQty:
-            - GreaterThanOrEqual: { value: 0 }
-        itemsCount:
-            - GreaterThanOrEqual: { value: 0 }
-        baseCurrencyCode:
-            - NotBlank: ~
-            - Length: { max: 32 }
-        storeCurrencyCode:
-            - NotBlank: ~
-            - Length: { max: 32 }
-        quoteCurrencyCode:
-            - NotBlank: ~
-            - Length: { max: 32 }
-        storeToBaseRate:
-            - NotBlank: ~
-        storeToQuoteRate:
-            - NotBlank: ~
-        email:
-            - Length: { max: 255 }
-        giftMessage:
-            - Length: { max: 255 }
-        isGuest:
-            - NotNull: ~
-        shippingAddress:
-            - Valid: ~
-        billingAddress:
-            - Valid: ~
-        paymentDetails:
-            - Length: { max: 255 }
+  properties:
+    baseCurrencyCode:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 32
+    billingAddress:
+      - Valid: ~
+    cartItems:
+      - Valid: ~
+    email:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    giftMessage:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    isGuest:
+      - NotNull:
+          groups:
+            - Default
+            - Import
+    itemsCount:
+      - GreaterThanOrEqual:
+          groups:
+            - Default
+            - Import
+          value: 0
+    itemsQty:
+      - GreaterThanOrEqual:
+          groups:
+            - Default
+            - Import
+          value: 0
+    paymentDetails:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    quoteCurrencyCode:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 32
+    shippingAddress:
+      - Valid: ~
+    status:
+      - Valid: ~
+    store:
+      - Valid: ~
+    storeCurrencyCode:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 32
+    storeToBaseRate:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+    storeToQuoteRate:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
 
 OroCRM\Bundle\MagentoBundle\Entity\CartAddress:
-    properties:
-        street:
-            - Length: { max: 500 }
-        street2:
-            - Length: { max: 500 }
-        city:
-            - Length: { max: 255 }
-        postalCode:
-            - Length: { max: 20 }
-        country:
-            - Valid: ~
-        firstName:
-            - Length: { max: 255 }
-        lastName:
-            - Length: { max: 255 }
+  properties:
+    city:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    country:
+      - Valid: ~
+    firstName:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    lastName:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    postalCode:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 20
+    region:
+      - Valid: ~
+    regionText:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    street:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 500
+    street2:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 500
+
+OroCRM\Bundle\MagentoBundle\Entity\CartItem:
+  properties:
+    createdAt:
+      - DateTime:
+          groups:
+            - Default
+            - Import
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+    discountAmount:
+      - NotNull:
+          groups:
+            - Default
+            - Import
+    freeShipping:
+      - NotNull:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    giftMessage:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    isVirtual:
+      - NotNull:
+          groups:
+            - Default
+            - Import
+    name:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    price:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+    productId:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+    productType:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    qty:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+    rowTotal:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+    sku:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    taxAmount:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+    taxClassId:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    taxPercent:
+      - NotNull:
+          groups:
+            - Default
+            - Import
+    updatedAt:
+      - DateTime:
+          groups:
+            - Default
+            - Import
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+
+OroCRM\Bundle\MagentoBundle\Entity\CartStatus:
+  properties:
+    label:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    name:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 32
+
+OroCRM\Bundle\MagentoBundle\Entity\Customer:
+  properties:
+    account:
+      - Valid: ~
+    addresses:
+      - Valid: ~
+    birthday:
+      - Date:
+          groups:
+            - Default
+            - Import
+    contact:
+      - Valid: ~
+    createdAt:
+      - DateTime:
+          groups:
+            - Default
+            - Import
+    email:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    firstName:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    gender:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 8
+    group:
+      - Valid: ~
+    isActive:
+      - NotNull:
+          groups:
+            - Default
+            - Import
+    lastName:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    middleName:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    namePrefix:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    nameSuffix:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    store:
+      - Valid: ~
+    updatedAt:
+      - DateTime:
+          groups:
+            - Default
+            - Import
+    vat:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    website:
+      - Valid: ~
+
+OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup:
+  properties:
+    name:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+
+OroCRM\Bundle\MagentoBundle\Entity\Order:
+  properties:
+    addresses:
+      - Valid: ~
+    cart:
+      - Valid: ~
+    createdAt:
+      - DateTime:
+          groups:
+            - Default
+            - Import
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+    giftMessage:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    incrementId:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 500
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+    items:
+      - Valid: ~
+    paymentDetails:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    paymentMethod:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    remoteIp:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    shippingMethod:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    status:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    store:
+      - Valid: ~
+    storeName:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    updatedAt:
+      - DateTime:
+          groups:
+            - Default
+            - Import
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+
+OroCRM\Bundle\MagentoBundle\Entity\OrderAddress:
+  properties:
+    city:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    country:
+      - Valid: ~
+    postalCode:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 20
+    region:
+      - Valid: ~
+    regionText:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    street:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 500
+
+OroCRM\Bundle\MagentoBundle\Entity\OrderItem:
+  properties:
+    name:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    productType:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    qty:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+    sku:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+
+OroCRM\Bundle\MagentoBundle\Entity\Region:
+  properties:
+    code:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 32
+    combinedCode:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 60
+    countryCode:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    name:
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    regionId:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+
+OroCRM\Bundle\MagentoBundle\Entity\Store:
+  properties:
+    code:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 32
+    name:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255
+    website:
+      - Valid: ~
+
+OroCRM\Bundle\MagentoBundle\Entity\Website:
+  properties:
+    code:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 32
+    name:
+      - NotBlank:
+          groups:
+            - Default
+            - Import
+      - Length:
+          groups:
+            - Default
+            - Import
+          max: 255

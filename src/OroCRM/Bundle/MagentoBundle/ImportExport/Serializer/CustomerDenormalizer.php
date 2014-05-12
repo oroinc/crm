@@ -214,9 +214,8 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
      */
     protected function formatAccountData($data)
     {
-        $account = array(
-            'name' => sprintf("%s %s", $data['first_name'], $data['last_name'])
-        );
+        $nameParts = array_intersect_key($data, array_flip(['first_name', 'last_name']));
+        $account   = ['name' => implode(' ', $nameParts)];
 
         foreach ($data['addresses'] as $address) {
             $addressTypes = array();

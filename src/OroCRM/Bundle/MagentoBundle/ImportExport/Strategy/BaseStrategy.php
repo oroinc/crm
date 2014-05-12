@@ -18,6 +18,7 @@ use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
 {
@@ -107,10 +108,18 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
     protected function validateAndUpdateContext($entity)
     {
         // validate entity
-        $validationErrors = $this->strategyHelper->validateEntity($entity);
+        $validationErrors = $this->strategyHelper->validateEntity($entity, ['Import']);
         if ($validationErrors) {
             $this->context->incrementErrorEntriesCount();
-            $this->strategyHelper->addValidationErrors($validationErrors, $this->context);
+            $errorPrefix = null;
+            $identifier  = method_exists($entity, 'getOriginId') ? $entity->getOriginId() : null;
+            if (!empty($identifier)) {
+                $errorPrefix = 'Validation error: Mangeto entity ID ' . $identifier;
+            }
+
+            echo PHP_EOL . str_repeat('_', 20) . PHP_EOL . implode(', ', $validationErrors) . PHP_EOL;
+
+            $this->strategyHelper->addValidationErrors($validationErrors, $this->context, $errorPrefix);
 
             return null;
         }
