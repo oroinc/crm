@@ -35,20 +35,21 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
      * @var array
      */
     protected $addressBapToMageMapping = array(
-        'namePrefix' => 'prefix',
-        'firstName' => 'firstname',
-        'middleName' => 'middlename',
-        'lastName' => 'lastname',
-        'nameSuffix' => 'suffix',
-        'organization' => 'company',
-        'street' => 'street',
-        'city' => 'city',
-        'postalCode' => 'postcode',
-        'country' => 'country_id',
-        'regionText' => 'region',
-        'region' => 'region_id',
-        'created' => 'created_at',
-        'updated' => 'updated_at'
+        'namePrefix'        => 'prefix',
+        'firstName'         => 'firstname',
+        'middleName'        => 'middlename',
+        'lastName'          => 'lastname',
+        'nameSuffix'        => 'suffix',
+        'organization'      => 'company',
+        'street'            => 'street',
+        'city'              => 'city',
+        'postalCode'        => 'postcode',
+        'country'           => 'country_id',
+        'regionText'        => 'region',
+        'region'            => 'region_id',
+        'created'           => 'created_at',
+        'updated'           => 'updated_at',
+        'customerAddressId' => 'customer_address_id'
     );
 
     /**
