@@ -108,13 +108,13 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
     protected function validateAndUpdateContext($entity)
     {
         // validate entity
-        $validationErrors = $this->strategyHelper->validateEntity($entity, ['Import']);
+        $validationErrors = $this->strategyHelper->validateEntity($entity);
         if ($validationErrors) {
             $this->context->incrementErrorEntriesCount();
             $errorPrefix = null;
             $identifier  = method_exists($entity, 'getOriginId') ? $entity->getOriginId() : null;
             if (!empty($identifier)) {
-                $errorPrefix = 'Validation error: Mangeto entity ID ' . $identifier;
+                $errorPrefix = 'Validation error: Magento entity ID ' . $identifier;
             }
 
             echo PHP_EOL . str_repeat('_', 20) . PHP_EOL . implode(', ', $validationErrors) . PHP_EOL;
