@@ -133,12 +133,12 @@ class ControllersTest extends WebTestCase
      */
     public function testMassAction()
     {
-        for ($i = 1; $i <=5; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             $crawler = $this->client->request('GET', $this->client->generate('orocrm_contact_create'));
             /** @var Form $form */
             $form = $crawler->selectButton('Save and Close')->form();
-            $form['orocrm_contact_form[firstName]'] = 'Contact_fname' . ToolsAPI::randomGen(5);
-            $form['orocrm_contact_form[lastName]'] = 'Contact_lname' . ToolsAPI::randomGen(5);
+            $form['orocrm_contact_form[firstName]'] = 'Contact_fname' . ToolsAPI::generateRandomString(5);
+            $form['orocrm_contact_form[lastName]'] = 'Contact_lname' . ToolsAPI::generateRandomString(5);
             $form['orocrm_contact_form[owner]'] = '1';
 
             $this->client->followRedirects(true);
