@@ -37,15 +37,30 @@ class DashboardController extends Controller
         /** @var CartRepository $shoppingCartRepository */
         $shoppingCartRepository = $this->getDoctrine()->getRepository('OroCRMMagentoBundle:Cart');
 
-        return array_merge(
-            array('quarterDate' => $dateFrom),
-            $shoppingCartRepository->getFunnelChartData(
-                $dateFrom,
-                $dateTo,
-                $workflow,
-                $this->get('oro_security.acl_helper')
-            ),
-            $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget)
+
+        $data = $shoppingCartRepository->getFunnelChartData(
+            $dateFrom,
+            $dateTo,
+            $workflow,
+            $this->get('oro_security.acl_helper')
         );
+
+        $widgetAttr = $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget);
+        $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
+            ->setArrayData($data)
+            ->setOptions(
+                array(
+                    'name' => 'flow_chart',
+                    'settings' => array('quarterDate' => $dateFrom),
+                    'data_schema' => array(
+                        'label' => array('field_name' => 'label'),
+                        'value' => array('field_name' => 'value'),
+                        'isNozzle' => array('field_name' => 'isNozzle'),
+                    )
+                )
+            )
+            ->getView();
+
+        return $widgetAttr;
     }
 }

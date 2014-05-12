@@ -249,6 +249,7 @@ class Order extends BaseOrder
 
     public function __construct()
     {
+        parent::__construct();
         $this->relatedCalls  = new ArrayCollection();
         $this->relatedEmails = new ArrayCollection();
     }

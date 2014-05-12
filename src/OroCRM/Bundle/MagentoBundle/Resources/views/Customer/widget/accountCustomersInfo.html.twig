@@ -4,7 +4,7 @@
         {% for customer in customers %}
             {% set tabs = tabs|merge([
                 {
-                    'alias': 'orocrm_magento_customer_info_' ~ 'customer__' ~ customer.id ~ 'channel__' ~ channel.id,
+                    'alias': 'orocrm_magento_customer_info_customer_' ~ customer.id ~ '_channel_' ~ channel.id,
                     'widgetType': 'block',
                     'label': customer|oro_format_name,
                     'url': path('orocrm_magento_widget_customer_info', {'id': customer.id, 'channelId': channel.id})

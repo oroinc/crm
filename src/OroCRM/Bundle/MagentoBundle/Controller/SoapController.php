@@ -14,6 +14,7 @@ use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 
 use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 
 class SoapController extends Controller
 {
@@ -45,8 +46,8 @@ class SoapController extends Controller
         $adminUrl             = false;
         try {
             $transport->init($transportEntity);
-            $websites             = $this->formatWebsiteChoices($transport->getWebsites());
             $isExtensionInstalled = $transport->isExtensionInstalled();
+            $websites             = $this->formatWebsiteChoices($transport->getWebsites());
             $adminUrl             = $transport->getAdminUrl();
             $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')
                 ->getAvailableConnectorsTypesChoiceList(
@@ -103,6 +104,22 @@ class SoapController extends Controller
                 ];
             },
             $websites
+        );
+
+        // Delete Admin website
+        foreach ($websites as $key => $website) {
+            if ($website['id'] == StoresSoapIterator::ADMIN_WEBSITE_ID) {
+                unset($websites[$key]);
+            }
+        }
+
+        // Add all web sites choice
+        array_unshift(
+            $websites,
+            [
+                'id' => StoresSoapIterator::ALL_WEBSITES,
+                'label' => $translator->trans('orocrm.magento.magentosoaptransport.all_sites')
+            ]
         );
 
         return $websites;
