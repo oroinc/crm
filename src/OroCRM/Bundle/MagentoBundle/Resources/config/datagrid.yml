@@ -518,7 +518,13 @@ datagrid:
             acl_resource: orocrm_magento_order_view
             query:
                 select:
-                    - o
+                    - o.id
+                    - o.currency
+                    - o.incrementId
+                    - o.createdAt
+                    - o.updatedAt
+                    - o.totalPaidAmount
+                    - o.status
                     - o.firstName
                     - o.lastName
                     - o.subtotalAmount as subTotal
@@ -536,13 +542,15 @@ datagrid:
                         - { join: o.workflowStep, alias: step }
                         - { join: o.customer, alias: customer }
                         - { join: o.addresses, alias: address }
-                        - { join: address.types, alias: types, conditionType: WITH, condition: "types.name = 'billing'" }
+                        - { join: address.types, alias: type }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: o.channel, alias: ch }
                         - { join: o.store, alias: cs }
                         - { join: cs.website, alias: cw }
-
+                where:
+                    and:
+                        - type.name IN ('billing') OR type.name IS NULL
         columns:
             channelName:
                 label: orocrm.magento.order.channel.label
