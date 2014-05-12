@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\UserBundle\Model\Gender;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
@@ -29,26 +30,28 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
         'suffix'      => 'name_suffix',
         'dob'         => 'birthday',
         'taxvat'      => 'vat',
+        'gender'      => 'gender'
     );
 
     /**
      * @var array
      */
     protected $addressBapToMageMapping = array(
-        'namePrefix' => 'prefix',
-        'firstName' => 'firstname',
-        'middleName' => 'middlename',
-        'lastName' => 'lastname',
-        'nameSuffix' => 'suffix',
-        'organization' => 'company',
-        'street' => 'street',
-        'city' => 'city',
-        'postalCode' => 'postcode',
-        'country' => 'country_id',
-        'regionText' => 'region',
-        'region' => 'region_id',
-        'created' => 'created_at',
-        'updated' => 'updated_at'
+        'namePrefix'        => 'prefix',
+        'firstName'         => 'firstname',
+        'middleName'        => 'middlename',
+        'lastName'          => 'lastname',
+        'nameSuffix'        => 'suffix',
+        'organization'      => 'company',
+        'street'            => 'street',
+        'city'              => 'city',
+        'postalCode'        => 'postcode',
+        'country'           => 'country_id',
+        'regionText'        => 'region',
+        'region'            => 'region_id',
+        'created'           => 'created_at',
+        'updated'           => 'updated_at',
+        'customerAddressId' => 'customer_address_id'
     );
 
     /**
@@ -86,6 +89,15 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
 
         if (!empty($mappedData['birthday'])) {
             $mappedData['birthday'] = substr($mappedData['birthday'], 0, 10);
+        }
+
+        if (isset($mappedData['gender']) && !empty($mappedData['gender'])) {
+            $gender = strtolower($mappedData['gender']);
+            if (in_array($gender, [Gender::FEMALE, Gender::MALE])) {
+                $mappedData['gender'] = $gender;
+            } else {
+                $mappedData['gender'] = null;
+            }
         }
 
         $resultObject->setChannel($this->getChannelFromContext($context));

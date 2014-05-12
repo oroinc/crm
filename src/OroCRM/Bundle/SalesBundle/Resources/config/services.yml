@@ -54,7 +54,6 @@ services:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
             - 'accountId'
-            - @oro_datagrid.datagrid.request_params
             - false
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-account-lead-grid, method: onBuildAfter }
@@ -63,7 +62,6 @@ services:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
             - 'accountId'
-            - @oro_datagrid.datagrid.request_params
             - false
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-account-opportunity-grid, method: onBuildAfter }

@@ -31,4 +31,20 @@ class OrderRepository extends EntityRepository
 
         return $qb->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * Get customer orders subtotal amount
+     *
+     * @param Customer $customer
+     * @return string
+     */
+    public function getCustomerOrdersSubtotalAmount(Customer $customer)
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->select('sum(o.subtotalAmount) as subtotal')
+            ->where('o.customer = :customer')->setParameter('customer', $customer)
+            ->andWhere('o.status != :status')->setParameter('status', 'canceled');
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }

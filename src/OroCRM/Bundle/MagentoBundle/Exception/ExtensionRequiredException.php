@@ -2,13 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Exception;
 
-class ExtensionRequiredException extends \LogicException
+class ExtensionRequiredException extends \LogicException implements Exception
 {
     /**
      * {@inheritdoc}
      */
-    public function __construct()
+    public function __construct($message = 'Oro Bridge extension is not installed.')
     {
-        parent::__construct('orocrm.magento.exception.extension_required');
+        parent::__construct($message);
     }
 }

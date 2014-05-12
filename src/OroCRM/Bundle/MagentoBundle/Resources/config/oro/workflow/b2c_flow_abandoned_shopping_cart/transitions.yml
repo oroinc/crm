@@ -8,7 +8,7 @@ workflows:
                 is_unavailable_hidden: true
                 acl_resource: orocrm_call_create
                 frontend_options:
-                    icon: 'icon-phone'
+                    icon: 'icon-phone-sign'
                 transition_definition: log_call_definition
                 form_options:
                     attribute_fields:
@@ -95,7 +95,7 @@ workflows:
                 is_unavailable_hidden: true
                 acl_resource: orocrm_call_create
                 frontend_options:
-                    icon: 'icon-phone'
+                    icon: 'icon-phone-sign'
                 transition_definition: log_call_definition
                 form_options:
                     attribute_fields:

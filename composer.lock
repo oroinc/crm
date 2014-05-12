@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "96d7d10070f0a993a996153e0730cf5c",
+    "hash": "4ce5cd70d6802d3a2654e92ac2cef351",
     "packages": [
         {
             "name": "a2lix/translation-form-bundle",
@@ -477,7 +477,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -2552,12 +2552,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenu.git",
-                "reference": "7d9bcdc29b49c3fc671a9c22885176f0ffe034c5"
+                "reference": "de645e813ddca4a1243db48bce5eaee8adb346a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/7d9bcdc29b49c3fc671a9c22885176f0ffe034c5",
-                "reference": "7d9bcdc29b49c3fc671a9c22885176f0ffe034c5",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/de645e813ddca4a1243db48bce5eaee8adb346a2",
+                "reference": "de645e813ddca4a1243db48bce5eaee8adb346a2",
                 "shasum": ""
             },
             "require": {
@@ -2608,7 +2608,7 @@
                 "menu",
                 "tree"
             ],
-            "time": "2014-04-08 20:25:33"
+            "time": "2014-05-01 19:50:28"
         },
         {
             "name": "knplabs/knp-menu-bundle",
@@ -2842,12 +2842,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikMaintenanceBundle.git",
-                "reference": "abf8c8d4d0c13b74997480b1250cc190eeb4ace3"
+                "reference": "287f8e00140930d60efc9b2be3c9a1e94dfacd81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikMaintenanceBundle/zipball/abf8c8d4d0c13b74997480b1250cc190eeb4ace3",
-                "reference": "abf8c8d4d0c13b74997480b1250cc190eeb4ace3",
+                "url": "https://api.github.com/repos/lexik/LexikMaintenanceBundle/zipball/287f8e00140930d60efc9b2be3c9a1e94dfacd81",
+                "reference": "287f8e00140930d60efc9b2be3c9a1e94dfacd81",
                 "shasum": ""
             },
             "require": {
@@ -2886,7 +2886,7 @@
                 "bundle",
                 "maintenance"
             ],
-            "time": "2014-04-10 09:12:03"
+            "time": "2014-04-30 07:50:35"
         },
         {
             "name": "liip/imagine-bundle",
@@ -3288,7 +3288,7 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:orocrm/platform.git",
-                "reference": "f9b3884bf79f3ff964529e80bbd83b77d6cfc510"
+                "reference": "2a805618160e8e9d4b520e8219e01aa1252a381a"
             },
             "require": {
                 "a2lix/translation-form-bundle": "1.2",
@@ -3365,7 +3365,7 @@
             ],
             "description": "Business Application Platform (BAP)",
             "homepage": "https://github.com/orocrm/platform.git",
-            "time": "2014-04-28 09:42:03"
+            "time": "2014-05-12 18:28:53"
         },
         {
             "name": "phpcollection/phpcollection",
@@ -3892,25 +3892,28 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.1.0",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "748c01c1144713ac0118396935d10b6ceec91b68"
+                "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/748c01c1144713ac0118396935d10b6ceec91b68",
-                "reference": "748c01c1144713ac0118396935d10b6ceec91b68",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/043e336b871f17a117f76ef8e190eddfc04c8d48",
+                "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
+            "require-dev": {
+                "mockery/mockery": "~0.9.1"
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.1-dev"
+                    "dev-master": "5.2-dev"
                 }
             },
             "autoload": {
@@ -3939,7 +3942,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2014-03-18 09:03:27"
+            "time": "2014-05-08 08:11:19"
         },
         {
             "name": "sylius/flow-bundle",

@@ -58,22 +58,22 @@ class SalesFunnelRepository extends EntityRepository
         $regularStepsData = $this->getStepData($regularSteps, null, null, $customStepCalculations, $aclHelper);
         $finalStepsData = $this->getStepData($finalSteps, $dateFrom, $dateTo, $customStepCalculations, $aclHelper);
 
-        // final calculation
-        $regularData = array();
-        $finalData = array();
+        $data = array();
         foreach ($steps as $step) {
             $stepName = $step->getName();
             if (!in_array($stepName, $this->excludedSteps)) {
                 $stepLabel = $step->getLabel();
                 if ($step->isFinal()) {
-                    $finalData[$stepLabel] = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
+                    $dataValue = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
+                    $data[] = array('value' => $dataValue, 'label' => $stepLabel, 'isNozzle' => true);
                 } else {
-                    $regularData[$stepLabel] = isset($regularStepsData[$stepName]) ? $regularStepsData[$stepName] : 0;
+                    $dataValue = isset($regularStepsData[$stepName]) ? $regularStepsData[$stepName] : 0;
+                    $data[] = array('value' => $dataValue, 'label' => $stepLabel, 'isNozzle' => false);
                 }
             }
         }
 
-        return array('items' => array_merge($regularData, $finalData), 'nozzleSteps' => array_keys($finalData));
+        return $data;
     }
 
     /**
