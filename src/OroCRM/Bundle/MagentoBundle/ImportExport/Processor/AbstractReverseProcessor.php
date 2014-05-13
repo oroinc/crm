@@ -24,7 +24,9 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
      */
     public function process($entity)
     {
-        $result = [];
+        $result = [
+            'object' => []
+        ];
 
         if ($entity->getChannel()) {
 
@@ -60,7 +62,6 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
                                     $relationName
                                 );
                             }
-                            $result;
                         } else {
                             $this->fieldPlaceholder(
                                 $relations,
@@ -70,7 +71,6 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
                                 $relationClassMapConfig['checking'],
                                 $relationName
                             );
-                            $result;
                         }
                     }
 
@@ -115,7 +115,7 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
         if ($entity instanceof $classNames) {
             foreach ($fields as $name => $methods) {
                 if ($this->isChanged($entity, $methods, $checking)) {
-                    $result[$arrayName][$name] = $this->getObjectMethodValue($entity, $methods);
+                    $result[$arrayName][$name] = $this->getCheckingMethodValue($entity, $checking['method'], $methods);
                 }
             }
         }
@@ -170,7 +170,6 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
     }
 
     /**
-     * @todo: FIIIIIIIIIIIIIX to !==
      *
      * @param object $entity
      * @param string $checkingMethod
@@ -183,13 +182,13 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
         if (!empty($methods[1])) {
             return (
                 $this->getObjectMethodValue($entity, $methods)
-                === $this->getCheckingMethodValue($entity, $checkingMethod, $methods)
+                !== $this->getCheckingMethodValue($entity, $checkingMethod, $methods)
             );
         }
 
         return (
             $this->getObjectMethodValue($entity, $methods)
-            === $this->getCheckingMethodValue($entity, $checkingMethod, $methods)
+            !== $this->getCheckingMethodValue($entity, $checkingMethod, $methods)
         );
     }
 }
