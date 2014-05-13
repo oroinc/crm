@@ -46,6 +46,8 @@ class CartStrategy extends BaseStrategy
                     'status',
                     'cartItems',
                     'customer',
+                    'relatedCalls',
+                    'relatedEmails',
                     'shippingAddress',
                     'billingAddress',
                     'workflowItem',
