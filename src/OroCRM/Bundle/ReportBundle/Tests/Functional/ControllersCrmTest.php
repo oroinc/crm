@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\ReportBundle\Tests\Functional;
 
 use Oro\Bundle\ReportBundle\Tests\Functional\ControllersTest as BaseControllersTest;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 
 /**
  * @outputBuffering enabled
@@ -16,9 +15,9 @@ class ControllersCrmTest extends BaseControllersTest
 
     public function setUp()
     {
-        $this->client = static::createClient(
+        $this->client = self::createClient(
             array(),
-            array_merge(ToolsAPI::generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
 
         if (!self::$fixturesLoaded) {
@@ -31,19 +30,20 @@ class ControllersCrmTest extends BaseControllersTest
      * @param array $report
      * @param array $reportResult
      *
-     * @dataProvider requestsApi()
+     * @dataProvider exportDataProvider
      */
-    public function testExport($report, $reportResult)
+    public function testExport(array $report, array $reportResult)
     {
         $this->markTestSkipped("Skipped by BAP-2946");
     }
-        /**
+
+    /**
      * Data provider for SOAP API tests
      *
      * @return array
      */
-    public function requestsApi()
+    public function exportDataProvider()
     {
-        return ToolsAPI::requestsApi(__DIR__ . DIRECTORY_SEPARATOR . 'reports');
+        return $this->getApiRequestsData(__DIR__ . DIRECTORY_SEPARATOR . 'reports');
     }
 }

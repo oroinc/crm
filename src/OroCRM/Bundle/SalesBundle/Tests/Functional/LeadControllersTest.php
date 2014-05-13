@@ -2,11 +2,11 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Functional;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
+
+use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
@@ -21,9 +21,9 @@ class LeadControllersTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(
+        $this->client = self::createClient(
             array(),
-            array_merge(ToolsAPI::generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
     }
 
@@ -31,7 +31,7 @@ class LeadControllersTest extends WebTestCase
     {
         $this->client->request('GET', $this->client->generate('orocrm_sales_lead_index'));
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate()
@@ -39,7 +39,7 @@ class LeadControllersTest extends WebTestCase
         $crawler = $this->client->request('GET', $this->client->generate('orocrm_sales_lead_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $name = 'name' . ToolsAPI::generateRandomString();
+        $name = 'name' . $this->generateRandomString();
         $form['orocrm_sales_lead_form[name]']                = $name;
         $form['orocrm_sales_lead_form[firstName]']           = 'firstName';
         $form['orocrm_sales_lead_form[lastName]']            = 'lastName';
@@ -77,7 +77,7 @@ class LeadControllersTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Lead saved", $crawler->html());
 
         return $name;
@@ -91,17 +91,13 @@ class LeadControllersTest extends WebTestCase
      */
     public function testUpdate($name)
     {
-        $result = ToolsAPI::getEntityGrid(
+        $response = $this->getGridResponse(
             $this->client,
             'sales-lead-grid',
-            array(
-                'sales-lead-grid[_filter][name][value]' => $name,
-            )
+            array('sales-lead-grid[_filter][name][value]' => $name)
         );
 
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($response, 200);
         $result = reset($result['data']);
         $returnValue = $result;
         $crawler = $this->client->request(
@@ -111,14 +107,14 @@ class LeadControllersTest extends WebTestCase
 
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $name = 'name' . ToolsAPI::generateRandomString();
+        $name = 'name' . $this->generateRandomString();
         $form['orocrm_sales_lead_form[name]'] = $name;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Lead saved", $crawler->html());
 
         $returnValue['name'] = $name;
@@ -139,7 +135,7 @@ class LeadControllersTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("{$returnValue['name']} - Leads - Sales", $crawler->html());
     }
 
@@ -160,7 +156,7 @@ class LeadControllersTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains($returnValue['firstName'], $crawler->html());
         $this->assertContains($returnValue['lastName'], $crawler->html());
     }
@@ -177,7 +173,7 @@ class LeadControllersTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 204);
+        $this->assertJsonResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
@@ -185,6 +181,6 @@ class LeadControllersTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 404, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 404);
     }
 }

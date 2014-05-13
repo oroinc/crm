@@ -2,14 +2,13 @@
 
 namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Performance;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\DependencyInjection\Container;
 
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class LoadTest extends WebTestCase
 {
@@ -24,7 +23,7 @@ class LoadTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(array("debug"=>false), ToolsAPI::generateBasicHeader());
+        $this->client = self::createClient(array("debug"=>false), $this->generateBasicHeader());
     }
 
     protected function tearDown()

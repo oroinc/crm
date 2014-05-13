@@ -3,11 +3,12 @@
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 
 use Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository as BatchJobRepository;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
+
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Crawler;
+
+use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
@@ -23,7 +24,7 @@ class ImportExportTest extends WebTestCase
 
     protected function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateBasicHeader());
+        $this->client = self::createClient(array(), $this->generateBasicHeader());
     }
 
     protected function tearDown()
@@ -61,7 +62,7 @@ class ImportExportTest extends WebTestCase
             )
         );
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
         return $crawler;
     }
@@ -94,7 +95,7 @@ class ImportExportTest extends WebTestCase
 
         $result = $this->client->getResponse();
 
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
         $crawler = $this->client->getCrawler();
         $this->assertEquals(0, $crawler->filter('.import-errors')->count());
@@ -116,9 +117,9 @@ class ImportExportTest extends WebTestCase
                 )
             )
         );
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-        $data = ToolsAPI::jsonToArray($result->getContent());
+
+        $data = $this->getJsonResponseContent($this->client->getResponse(), 200);
+
         $this->assertEquals(
             array(
                 'success' => true,
@@ -145,9 +146,9 @@ class ImportExportTest extends WebTestCase
                 )
             )
         );
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-        $data = ToolsAPI::jsonToArray($result->getContent());
+
+        $data = $this->getJsonResponseContent($this->client->getResponse(), 200);
+
         $this->assertTrue($data['success']);
         $this->assertEquals(2, $data['readsCount']);
         $this->assertEquals(0, $data['errorsCount']);
@@ -168,7 +169,8 @@ class ImportExportTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/csv');
+        $this->assertResponseStatusCodeEquals($result, 200);
+        $this->assertResponseContentTypeEquals($result, 'text/csv');
 
         // Enable the output buffer
         ob_start();

@@ -2,11 +2,11 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
+
+use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
@@ -21,9 +21,9 @@ class ContactAddressControllersTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(
+        $this->client = self::createClient(
             array(),
-            array_merge(ToolsAPI::generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
     }
 
@@ -31,7 +31,7 @@ class ContactAddressControllersTest extends WebTestCase
     {
         $this->client->request('GET', $this->client->generate('orocrm_contact_index'));
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate()
@@ -47,7 +47,7 @@ class ContactAddressControllersTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Contact saved", $crawler->html());
     }
 
@@ -56,17 +56,13 @@ class ContactAddressControllersTest extends WebTestCase
      */
     public function testCreateAddress()
     {
-        $result = ToolsAPI::getEntityGrid(
+        $response = $this->getGridResponse(
             $this->client,
             'contacts-grid',
-            array(
-                'contacts-grid[_filter][firstName][value]' => 'Contact_fname',
-            )
+            array('contacts-grid[_filter][firstName][value]' => 'Contact_fname')
         );
 
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($response, 200);
         $result = reset($result['data']);
         $id = $result['id'];
         $crawler = $this->client->request(
@@ -114,15 +110,15 @@ class ContactAddressControllersTest extends WebTestCase
         $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
         $this->client->request(
             'GET',
             $this->client->generate('oro_api_get_contact_address_primary', array('contactId' => $id))
         );
 
-        $result = $this->client->getResponse();
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
+
         $this->assertEquals('Badakhshān', $result['region']);
 
         return $id;
@@ -138,8 +134,7 @@ class ContactAddressControllersTest extends WebTestCase
             $this->client->generate('oro_api_get_contact_address_primary', array('contactId' => $id))
         );
 
-        $address = $this->client->getResponse();
-        $address = ToolsAPI::jsonToArray($address->getContent());
+        $address = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $crawler = $this->client->request(
             'GET',
@@ -182,15 +177,15 @@ class ContactAddressControllersTest extends WebTestCase
         $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
         $this->client->request(
             'GET',
             $this->client->generate('oro_api_get_contact_address_primary', array('contactId' => $id))
         );
 
-        $result = $this->client->getResponse();
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
+
         $this->assertEquals('Manicaland', $result['region']);
     }
 }

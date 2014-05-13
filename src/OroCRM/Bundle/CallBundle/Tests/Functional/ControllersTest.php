@@ -2,9 +2,10 @@
 
 namespace OroCRM\Bundle\CallBundle\Tests\Controller;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
+use Symfony\Component\Form\Form;
+
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
@@ -19,9 +20,9 @@ class ControllersTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(
+        $this->client = self::createClient(
             array(),
-            array_merge(ToolsAPI::generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
     }
 
@@ -29,7 +30,7 @@ class ControllersTest extends WebTestCase
     {
         $this->client->request('GET', $this->client->generate('orocrm_call_index'));
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate()
@@ -46,7 +47,7 @@ class ControllersTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Call logged successfully", $crawler->html());
     }
 
@@ -55,18 +56,15 @@ class ControllersTest extends WebTestCase
      */
     public function testUpdate()
     {
-        $result = ToolsAPI::getEntityGrid(
+        $response = $this->getGridResponse(
             $this->client,
             'calls-grid',
-            array(
-                'calls-grid[_filter][subject][value]' => 'Test Call',
-            )
+            array('calls-grid[_filter][subject][value]' => 'Test Call')
         );
 
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($response, 200);
         $result = reset($result['data']);
+
         $id = $result['id'];
         $crawler = $this->client->request(
             'GET',
@@ -80,7 +78,7 @@ class ControllersTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Call logged successfully", $crawler->html());
 
         return $id;
@@ -97,7 +95,7 @@ class ControllersTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 204);
+        $this->assertJsonResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
@@ -105,6 +103,6 @@ class ControllersTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 404, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 404);
     }
 }

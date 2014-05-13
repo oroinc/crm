@@ -2,9 +2,8 @@
 
 namespace OroCRM\Bundle\TaskBundle\Tests\Functional\Controller;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
@@ -20,7 +19,7 @@ class TaskControllersTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateBasicHeader());
+        $this->client = self::createClient(array(), $this->generateBasicHeader());
     }
 
     public function testCreate()
@@ -37,7 +36,7 @@ class TaskControllersTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Task saved", $crawler->html());
     }
 
@@ -46,17 +45,13 @@ class TaskControllersTest extends WebTestCase
      */
     public function testUpdate()
     {
-        $result = ToolsAPI::getEntityGrid(
+        $response = $this->getGridResponse(
             $this->client,
             'tasks-grid',
-            array(
-                'tasks-grid[_filter][reporterName][value]' => 'John Doe'
-            )
+            array('tasks-grid[_filter][reporterName][value]' => 'John Doe')
         );
 
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($response, 200);
         $result = reset($result['data']);
 
         $crawler = $this->client->request(
@@ -72,7 +67,7 @@ class TaskControllersTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Task saved", $crawler->html());
     }
 
@@ -81,17 +76,13 @@ class TaskControllersTest extends WebTestCase
      */
     public function testView()
     {
-        $result = ToolsAPI::getEntityGrid(
+        $response = $this->getGridResponse(
             $this->client,
             'tasks-grid',
-            array(
-                'tasks-grid[_filter][reporterName][value]' => 'John Doe'
-            )
+            array('tasks-grid[_filter][reporterName][value]' => 'John Doe')
         );
 
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($response, 200);
         $result = reset($result['data']);
 
         $this->client->request(
@@ -100,7 +91,7 @@ class TaskControllersTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains('Task updated - Tasks - Activities', $result->getContent());
     }
 
@@ -111,7 +102,7 @@ class TaskControllersTest extends WebTestCase
     {
         $this->client->request('GET', $this->client->generate('orocrm_task_index'));
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains('Task updated', $result->getContent());
     }
 }

@@ -2,9 +2,8 @@
 
 namespace OroCRM\Bundle\AccountBundle\Tests\Functional\API;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
@@ -17,7 +16,7 @@ class SoapAccountTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        $this->client = self::createClient(array(), $this->generateWsseHeader());
         $this->client->soap(
             "http://localhost/api/soap",
             array(
@@ -53,7 +52,7 @@ class SoapAccountTest extends WebTestCase
     public function testGet($request)
     {
         $accounts = $this->client->getSoap()->getAccounts(1, 1000);
-        $accounts = ToolsAPI::classToArray($accounts);
+        $accounts = $this->valueToArray($accounts);
         $accountName = $request['name'];
         $account = $accounts['item'];
         if (isset($account[0])) {
@@ -84,7 +83,7 @@ class SoapAccountTest extends WebTestCase
         $this->assertTrue($result);
 
         $account = $this->client->getSoap()->getAccount($request['id']);
-        $account = ToolsAPI::classToArray($account);
+        $account = $this->valueToArray($account);
 
         $this->assertEquals($accountUpdate['name'], $account['name']);
 

@@ -2,10 +2,10 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Symfony\Component\DomCrawler\Form;
+
+use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
@@ -20,9 +20,9 @@ class ControllersTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(
+        $this->client = self::createClient(
             array(),
-            array_merge(ToolsAPI::generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
     }
 
@@ -30,7 +30,7 @@ class ControllersTest extends WebTestCase
     {
         $this->client->request('GET', $this->client->generate('orocrm_contact_index'));
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate()
@@ -46,7 +46,7 @@ class ControllersTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Contact saved", $crawler->html());
     }
 
@@ -57,7 +57,7 @@ class ControllersTest extends WebTestCase
      */
     public function testUpdate()
     {
-        $result = ToolsAPI::getEntityGrid(
+        $response = $this->getGridResponse(
             $this->client,
             'contacts-grid',
             array(
@@ -65,10 +65,9 @@ class ControllersTest extends WebTestCase
             )
         );
 
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($response, 200);
         $result = reset($result['data']);
+
         $id = $result['id'];
         $crawler = $this->client->request(
             'GET',
@@ -83,7 +82,7 @@ class ControllersTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Contact saved", $crawler->html());
 
         return $id;
@@ -101,7 +100,7 @@ class ControllersTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertRegExp("/Contact_fname_updated\s+Contact_lname_updated - Contacts - Customers/", $crawler->html());
     }
 
@@ -117,7 +116,7 @@ class ControllersTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 204);
+        $this->assertJsonResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
@@ -125,7 +124,7 @@ class ControllersTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 404, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 404);
     }
 
     /**
@@ -137,26 +136,26 @@ class ControllersTest extends WebTestCase
             $crawler = $this->client->request('GET', $this->client->generate('orocrm_contact_create'));
             /** @var Form $form */
             $form = $crawler->selectButton('Save and Close')->form();
-            $form['orocrm_contact_form[firstName]'] = 'Contact_fname' . ToolsAPI::generateRandomString(5);
-            $form['orocrm_contact_form[lastName]'] = 'Contact_lname' . ToolsAPI::generateRandomString(5);
+            $form['orocrm_contact_form[firstName]'] = 'Contact_fname' . $this->generateRandomString(5);
+            $form['orocrm_contact_form[lastName]'] = 'Contact_lname' . $this->generateRandomString(5);
             $form['orocrm_contact_form[owner]'] = '1';
 
             $this->client->followRedirects(true);
             $crawler = $this->client->submit($form);
 
             $result = $this->client->getResponse();
-            ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+            $this->assertHtmlResponseStatusCodeEquals($result, 200);
             $this->assertContains("Contact saved", $crawler->html());
         }
 
-        $result = ToolsAPI::getEntityGrid(
+        $response = $this->getGridResponse(
             $this->client,
             'contacts-grid',
             array()
         );
 
-        ToolsAPI::assertJsonResponse($result, 200);
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($response, 200);
+
         $id = array();
         foreach ($result['data'] as $value) {
             $id[] = $value['id'];
@@ -170,22 +169,19 @@ class ControllersTest extends WebTestCase
             )
         );
 
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertTrue($result['successful']);
         $this->assertEquals("5 entities were removed", $result['message']);
         $this->assertEquals(5, $result['count']);
 
-        $result = ToolsAPI::getEntityGrid(
+        $response = $this->getGridResponse(
             $this->client,
             'contacts-grid',
             array()
         );
 
-        ToolsAPI::assertJsonResponse($result, 200);
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($response, 200);
         $this->assertEmpty($result['data']);
     }
 }

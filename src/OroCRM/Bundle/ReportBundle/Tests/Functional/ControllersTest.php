@@ -2,10 +2,8 @@
 
 namespace OroCRM\Bundle\ReportBundle\Tests\Functional;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
-use Symfony\Component\DomCrawler\Form;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
@@ -21,7 +19,7 @@ class ControllersTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateBasicHeader());
+        $this->client = self::createClient(array(), $this->generateBasicHeader());
     }
 
     /**
@@ -48,7 +46,7 @@ class ControllersTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, "text/html; charset=UTF-8");
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains($reportName, $result->getContent());
     }
 
@@ -63,7 +61,7 @@ class ControllersTest extends WebTestCase
     public function testGrid($gridName, $report, $group)
     {
         $reportName = $gridName . '-' . $report;
-        $result     = ToolsAPI::getEntityGrid(
+        $response = $this->getGridResponse(
             $this->client,
             $reportName,
             array(
@@ -72,7 +70,7 @@ class ControllersTest extends WebTestCase
             )
         );
 
-        ToolsAPI::assertJsonResponse($result, 200);
+        $this->assertJsonResponseStatusCodeEquals($response, 200);
     }
 
     public function reportsProvider()

@@ -2,9 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional\API;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
@@ -17,7 +16,7 @@ class RestContactGroupsApiTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        $this->client = self::createClient(array(), $this->generateWsseHeader());
     }
 
     /**
@@ -33,7 +32,7 @@ class RestContactGroupsApiTest extends WebTestCase
         );
         $this->client->request('POST', $this->client->generate('oro_api_post_contactgroup'), $request);
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 201);
+        $this->assertJsonResponseStatusCodeEquals($result, 201);
 
         return $request;
     }
@@ -66,7 +65,7 @@ class RestContactGroupsApiTest extends WebTestCase
             $this->client->generate('oro_api_get_contactgroup', array('id' => $group['id']))
         );
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
+        $this->assertJsonResponseStatusCodeEquals($result, 200);
 
         return $group;
     }
@@ -87,14 +86,14 @@ class RestContactGroupsApiTest extends WebTestCase
             $request
         );
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 204);
+        $this->assertJsonResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
             $this->client->generate('oro_api_get_contactgroup', array('id' => $group['id']))
         );
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
+        $this->assertJsonResponseStatusCodeEquals($result, 200);
         $result = json_decode($result->getContent(), true);
         $this->assertEquals($request['contact_group']['label'], $result['label'], 'ContactGroup does not updated');
     }
@@ -111,13 +110,13 @@ class RestContactGroupsApiTest extends WebTestCase
             $this->client->generate('oro_api_delete_contactgroup', array('id' => $group['id']))
         );
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 204);
+        $this->assertJsonResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
             $this->client->generate('oro_api_get_contactgroup', array('id' => $group['id']))
         );
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 404);
+        $this->assertJsonResponseStatusCodeEquals($result, 404);
     }
 }

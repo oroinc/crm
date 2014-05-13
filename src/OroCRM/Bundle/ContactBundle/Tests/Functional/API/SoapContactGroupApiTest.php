@@ -2,9 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional\API;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
@@ -17,7 +16,7 @@ class SoapContactGroupApiTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        $this->client = self::createClient(array(), $this->generateWsseHeader());
         $this->client->soap(
             "http://localhost/api/soap",
             array(
@@ -52,7 +51,7 @@ class SoapContactGroupApiTest extends WebTestCase
     public function testGetContactGroups($request)
     {
         $groups = $this->client->getSoap()->getContactGroups(1, 1000);
-        $groups = ToolsAPI::classToArray($groups);
+        $groups = $this->valueToArray($groups);
         $groupLabel = $request['label'];
         $group = array_filter(
             $groups['item'],
@@ -78,7 +77,7 @@ class SoapContactGroupApiTest extends WebTestCase
         $this->assertTrue($result);
 
         $group = $this->client->getSoap()->getContactGroup($group['id']);
-        $group = ToolsAPI::classToArray($group);
+        $group = $this->valueToArray($group);
         $this->assertEquals($request['label'], $group['label']);
     }
 

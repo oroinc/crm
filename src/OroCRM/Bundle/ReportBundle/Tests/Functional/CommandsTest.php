@@ -27,7 +27,7 @@ class CommandsTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient();
+        $this->client = self::createClient();
         if (!self::$fixturesLoaded) {
             $this->client->appendFixtures(__DIR__ . DIRECTORY_SEPARATOR . 'DataFixtures', array('LoadLead'));
             self::$fixturesLoaded = true;

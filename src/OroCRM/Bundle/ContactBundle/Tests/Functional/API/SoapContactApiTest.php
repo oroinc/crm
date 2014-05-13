@@ -2,9 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional\API;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
@@ -24,7 +23,7 @@ class SoapContactApiTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        $this->client = self::createClient(array(), $this->generateWsseHeader());
         $this->client->soap(
             "http://localhost/api/soap",
             array(
@@ -41,10 +40,10 @@ class SoapContactApiTest extends WebTestCase
     }
 
     /**
-     * @param string $request
-     * @dataProvider requestsApi
+     * @param array $request
+     * @dataProvider contactsDataProvider
      */
-    public function testCreateContact($request)
+    public function testCreateContact(array $request)
     {
         $result = $this->client->getSoap()->createContact($request);
         $this->assertInternalType('int', $result);
@@ -65,16 +64,16 @@ class SoapContactApiTest extends WebTestCase
 
     /**
      * @param array $request
-     * @dataProvider requestsApi
+     * @dataProvider contactsDataProvider
      * @depends testCreateContact
      */
-    public function testGetContact($request)
+    public function testGetContact(array $request)
     {
         $contactId = $this->getContactIdByFirstName($request['firstName']);
 
         // test getContact
         $contact = $this->client->getSoap()->getContact($contactId);
-        $contact = ToolsAPI::classToArray($contact);
+        $contact = $this->valueToArray($contact);
 
         $this->assertNotEmpty($contact);
         $this->assertArrayHasKey('firstName', $contact);
@@ -82,7 +81,7 @@ class SoapContactApiTest extends WebTestCase
 
         // get getContacts
         $contacts = $this->client->getSoap()->getContacts(1, 1000);
-        $contacts = ToolsAPI::classToArray($contacts);
+        $contacts = $this->valueToArray($contacts);
         $contactFound = array_filter(
             $contacts,
             function ($a) use ($contactId) {
@@ -94,10 +93,10 @@ class SoapContactApiTest extends WebTestCase
 
     /**
      * @param array $request
-     * @dataProvider requestsApi
+     * @dataProvider contactsDataProvider
      * @depends testCreateContact
      */
-    public function testUpdateContact($request)
+    public function testUpdateContact(array $request)
     {
         $contactId = $this->getContactIdByFirstName($request['firstName']);
 
@@ -106,17 +105,17 @@ class SoapContactApiTest extends WebTestCase
         $this->assertTrue($result);
 
         $contact = $this->client->getSoap()->getContact($contactId);
-        $contact = ToolsAPI::classToArray($contact);
+        $contact = $this->valueToArray($contact);
         $this->assertArrayHasKey('description', $contact);
         $this->assertEquals($request['description'], $contact['description']);
     }
 
     /**
-     * @param $request
-     * @dataProvider requestsApi
+     * @param array $request
+     * @dataProvider contactsDataProvider
      * @depends testCreateContact
      */
-    public function testDeleteContact($request)
+    public function testDeleteContact(array $request)
     {
         $contactId = $this->getContactIdByFirstName($request['firstName']);
 
@@ -129,11 +128,10 @@ class SoapContactApiTest extends WebTestCase
     }
 
     /**
-     * Data provider for API tests
      * @return array
      */
-    public function requestsApi()
+    public function contactsDataProvider()
     {
-        return ToolsAPI::requestsApi(__DIR__ . DIRECTORY_SEPARATOR . 'ContactRequest');
+        return $this->getApiRequestsData(__DIR__ . DIRECTORY_SEPARATOR . 'ContactRequest');
     }
 }

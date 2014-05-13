@@ -2,9 +2,8 @@
 
 namespace OroCRM\Bundle\TaskBundle\Tests\Functional\Controller\Api\Soap;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
@@ -32,7 +31,7 @@ class TaskControllerTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        $this->client = self::createClient(array(), $this->generateWsseHeader());
         $this->client->soap(
             "http://localhost/api/soap",
             array(
@@ -59,7 +58,7 @@ class TaskControllerTest extends WebTestCase
     public function testCget()
     {
         $tasks = $this->client->getSoap()->getTasks();
-        $tasks = ToolsAPI::classToArray($tasks);
+        $tasks = $this->valueToArray($tasks);
         $this->assertCount(1, $tasks);
     }
 
@@ -70,7 +69,7 @@ class TaskControllerTest extends WebTestCase
     public function testGet($id)
     {
         $task = $this->client->getSoap()->getTask($id);
-        $task = ToolsAPI::classToArray($task);
+        $task = $this->valueToArray($task);
         $this->assertEquals($this->task['subject'], $task['subject']);
     }
 
@@ -86,7 +85,7 @@ class TaskControllerTest extends WebTestCase
         $this->assertTrue($result);
 
         $updatedTask = $this->client->getSoap()->getTask($id);
-        $updatedTask = ToolsAPI::classToArray($updatedTask);
+        $updatedTask = $this->valueToArray($updatedTask);
 
         $this->assertEquals($task['subject'], $updatedTask['subject']);
     }

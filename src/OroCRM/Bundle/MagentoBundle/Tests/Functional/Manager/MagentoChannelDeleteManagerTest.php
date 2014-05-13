@@ -5,10 +5,9 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Manager;
 use Doctrine\ORM\EntityManager;
 
 use OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
@@ -16,7 +15,6 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
  */
 class MagentoChannelDeleteManagerTest extends WebTestCase
 {
-
     /**
      * @var Client
      */
@@ -29,9 +27,9 @@ class MagentoChannelDeleteManagerTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(
+        $this->client = self::createClient(
             array(),
-            array_merge(ToolsAPI::generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
         $this->em = $this->client->getKernel()->getContainer()->get('doctrine.orm.entity_manager');
     }
