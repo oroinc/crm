@@ -97,11 +97,14 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         $regionTextAddress = 'text';
         $streetAddress = '';
         $nameSuffixAddress = '';
+        $id = 1;
+        $originId = 11;
 
         return [
             [
                 'partial entry' =>
                 [
+                    'id' => $id, 'originId' => $originId,
                     'email' => 'e1@e.com', 'emailContact' => $email,
                     'firstName' => $firstName, 'firstNameContact'=> $firstName,
                     'lastName' => 'Smith', 'lastNameContact' => $lastName,
@@ -134,12 +137,15 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                             'city' => $cityAddress,
                             'company' => $organizationAddress,
                         ]
-                    ]
+                    ],
+                    'id' => $id,
+                    'originId' => $originId,
                 ]
             ],
             [
                 'full entry' =>
                     [
+                        'id' => $id, 'originId' => $originId,
                         'email' => 'e1@e.com', 'emailContact' => $email,
                         'firstName' => 'jane', 'firstNameContact'=> $firstName,
                         'lastName' => 'Smith', 'lastNameContact' => $lastName,
@@ -186,12 +192,15 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                             'street' => $streetAddress,
                             'suffix' => $nameSuffixAddress,
                         ]
-                    ]
+                    ],
+                    'id' => $id,
+                    'originId' => $originId,
                 ]
             ],
             [
                 'nothing to change' =>
                     [
+                        'id' => $id, 'originId' => $originId,
                         'email' => $email, 'emailContact' => $email,
                         'firstName' => $firstName, 'firstNameContact'=> $firstName,
                         'lastName' => $lastName, 'lastNameContact' => $lastName,
@@ -215,7 +224,36 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                         'nameSuffixAddress' => $nameSuffixAddress,
                         'nameSuffixContactAddress' => $nameSuffixAddress,
                     ],
-                (object)['object' => []]
+                (object)['object' => [],'id' => $id, 'originId' => $originId]
+            ],
+            [
+                'no originId' =>
+                    [
+                        'id' => $id,
+                        'email' => $email, 'emailContact' => $email,
+                        'firstName' => $firstName, 'firstNameContact'=> $firstName,
+                        'lastName' => $lastName, 'lastNameContact' => $lastName,
+                        'prefix' => $prefix, 'prefixContact' => $prefix,
+                        'suffix' => $suffix, 'suffixContact' => $suffix,
+                        'dob' => $dob, 'dobContact' => $dob,
+                        'gender' => $gender, 'genderContact' => $gender,
+                        'middleName' => $middleName, 'middleNameContact' => $middleName,
+                        'cityAddress' => $cityAddress, 'cityContactAddress' => $cityAddress,
+                        'organizationAddress' => $organizationAddress,
+                        'organizationContactAddress' => $organizationAddress,
+                        'countryAddress' => $countryAddress, 'countryContactAddress' => $countryAddress,
+                        'firstNameAddress' => $firstNameAddress, 'firstNameContactAddress' => $firstNameAddress,
+                        'lastNameAddress' => $lastNameAddress, 'lastNameContactAddress' => $lastNameAddress,
+                        'middleNameAddress' => $middleNameAddress, 'middleNameContactAddress' => $middleNameAddress,
+                        'postalCodeAddress' => $postalCodeAddress, 'postalCodeContactAddress' => $postalCodeAddress,
+                        'prefixAddress' => $prefixAddress, 'prefixContactAddress' => $prefixAddress,
+                        'regionAddress' => $regionAddress, 'regionContactAddress' => $regionAddress,
+                        'regionTextAddress' => $regionTextAddress, 'regionTextContactAddress' => $regionTextAddress,
+                        'streetAddress' => $streetAddress, 'streetContactAddress' => $streetAddress,
+                        'nameSuffixAddress' => $nameSuffixAddress,
+                        'nameSuffixContactAddress' => $nameSuffixAddress,
+                    ],
+                (object)['object' => [],'id' => $id]
             ],
         ];
 
@@ -235,6 +273,13 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
             $finO->channel = $this->channel;
         }
 
+        $this->customer->expects($this->any())->method('getId')
+            ->will($this->returnValue($fields['id']));
+
+        if (!empty($fields['originId'])) {
+            $this->customer->expects($this->any())->method('getOriginId')
+                ->will($this->returnValue($fields['originId']));
+        }
 
         $this->customer->expects($this->any())->method('getEmail')
             ->will($this->returnValue($fields['email']));
@@ -336,12 +381,9 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         $this->contactAddress->expects($this->any())->method('getNameSuffix')
             ->will($this->returnValue($fields['nameSuffixContactAddress']));
 
-
-        $result = $customerReverseProcessor->process($this->customer);
-
         $this->assertEquals(
             $finO,
-            $result
+            $customerReverseProcessor->process($this->customer)
         );
     }
 }

@@ -25,10 +25,12 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
     public function process($entity)
     {
         $result = [
-            'object' => []
+            'object' => [],
+            'id' => $entity->getId(),
         ];
 
-        if ($entity->getChannel()) {
+        if ($entity->getChannel() && $entity->getOriginId()) {
+            $result['originId'] = $entity->getOriginId();
 
             foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
                 $this->fieldPlaceholder(
@@ -43,7 +45,6 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
                 if (!empty($classMapConfig['relation'])) {
 
                     foreach ($classMapConfig['relation'] as $relationName => $relationClassMapConfig) {
-
                         $relations = $entity->$relationClassMapConfig['method']();
 
                         if ($relations instanceof Collection) {
@@ -51,7 +52,6 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
                         }
 
                         if (is_array($relations)) {
-
                             foreach ($relations as $relation) {
                                 $this->fieldPlaceholder(
                                     $relation,
@@ -73,10 +73,7 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
                             );
                         }
                     }
-
                 }
-
-
             }
 
             if (!empty($result['object'])) {
