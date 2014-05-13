@@ -74,7 +74,6 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     public function getDataProvider()
     {
         $email = 'e@e.com';
@@ -97,14 +96,11 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         $regionTextAddress = 'text';
         $streetAddress = '';
         $nameSuffixAddress = '';
-        $id = 1;
-        $originId = 11;
 
         return [
             [
                 'partial entry' =>
                 [
-                    'id' => $id, 'originId' => $originId,
                     'email' => 'e1@e.com', 'emailContact' => $email,
                     'firstName' => $firstName, 'firstNameContact'=> $firstName,
                     'lastName' => 'Smith', 'lastNameContact' => $lastName,
@@ -137,15 +133,12 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                             'city' => $cityAddress,
                             'company' => $organizationAddress,
                         ]
-                    ],
-                    'id' => $id,
-                    'originId' => $originId,
+                    ]
                 ]
             ],
             [
                 'full entry' =>
                     [
-                        'id' => $id, 'originId' => $originId,
                         'email' => 'e1@e.com', 'emailContact' => $email,
                         'firstName' => 'jane', 'firstNameContact'=> $firstName,
                         'lastName' => 'Smith', 'lastNameContact' => $lastName,
@@ -192,15 +185,12 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                             'street' => $streetAddress,
                             'suffix' => $nameSuffixAddress,
                         ]
-                    ],
-                    'id' => $id,
-                    'originId' => $originId,
+                    ]
                 ]
             ],
             [
                 'nothing to change' =>
                     [
-                        'id' => $id, 'originId' => $originId,
                         'email' => $email, 'emailContact' => $email,
                         'firstName' => $firstName, 'firstNameContact'=> $firstName,
                         'lastName' => $lastName, 'lastNameContact' => $lastName,
@@ -224,12 +214,11 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                         'nameSuffixAddress' => $nameSuffixAddress,
                         'nameSuffixContactAddress' => $nameSuffixAddress,
                     ],
-                (object)['object' => [],'id' => $id, 'originId' => $originId]
+                (object)['object' => []]
             ],
             [
                 'no originId' =>
                     [
-                        'id' => $id,
                         'email' => $email, 'emailContact' => $email,
                         'firstName' => $firstName, 'firstNameContact'=> $firstName,
                         'lastName' => $lastName, 'lastNameContact' => $lastName,
@@ -253,7 +242,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                         'nameSuffixAddress' => $nameSuffixAddress,
                         'nameSuffixContactAddress' => $nameSuffixAddress,
                     ],
-                (object)['object' => [],'id' => $id]
+                (object)['object' => []]
             ],
         ];
 
@@ -271,15 +260,11 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
 
         if (!empty($finO->object)) {
             $finO->channel = $this->channel;
+            $finO->entity = $this->customer;
         }
 
-        $this->customer->expects($this->any())->method('getId')
-            ->will($this->returnValue($fields['id']));
-
-        if (!empty($fields['originId'])) {
-            $this->customer->expects($this->any())->method('getOriginId')
-                ->will($this->returnValue($fields['originId']));
-        }
+        $this->customer->expects($this->any())->method('getOriginId')
+            ->will($this->returnValue(true));
 
         $this->customer->expects($this->any())->method('getEmail')
             ->will($this->returnValue($fields['email']));
@@ -381,9 +366,11 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         $this->contactAddress->expects($this->any())->method('getNameSuffix')
             ->will($this->returnValue($fields['nameSuffixContactAddress']));
 
+        $result = $customerReverseProcessor->process($this->customer);
+
         $this->assertEquals(
             $finO,
-            $customerReverseProcessor->process($this->customer)
+            $result
         );
     }
 }

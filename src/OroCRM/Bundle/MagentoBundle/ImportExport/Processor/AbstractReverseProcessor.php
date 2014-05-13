@@ -26,11 +26,9 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
     {
         $result = [
             'object' => [],
-            'id' => $entity->getId(),
         ];
 
         if ($entity->getChannel() && $entity->getOriginId()) {
-            $result['originId'] = $entity->getOriginId();
 
             foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
                 $this->fieldPlaceholder(
@@ -78,6 +76,7 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
 
             if (!empty($result['object'])) {
                 $result['channel'] = $entity->getChannel();
+                $result['entity'] = $entity;
             }
         }
 
