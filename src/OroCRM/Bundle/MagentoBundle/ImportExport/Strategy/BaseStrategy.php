@@ -18,6 +18,7 @@ use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
+use OroCRM\Bundle\MagentoBundle\Utils\ValidationUtils;
 
 abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
 {
@@ -110,12 +111,7 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
         $validationErrors = $this->strategyHelper->validateEntity($entity);
         if ($validationErrors) {
             $this->context->incrementErrorEntriesCount();
-            $errorPrefix = null;
-            // TODO add error message helper
-            $identifier  = method_exists($entity, 'getOriginId') ? $entity->getOriginId() : null;
-            if (!empty($identifier)) {
-                $errorPrefix = 'Validation error: Magento entity ID ' . $identifier;
-            }
+            $errorPrefix = ValidationUtils::guessValidationMessagePrefix($entity);
 
             $this->strategyHelper->addValidationErrors($validationErrors, $this->context, $errorPrefix);
 
