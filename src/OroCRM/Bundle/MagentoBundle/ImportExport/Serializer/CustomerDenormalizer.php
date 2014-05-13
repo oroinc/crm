@@ -280,8 +280,10 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
             $contact['addresses'][$key] = $bapAddress;
         }
 
-        $contact['emails'][] = $contact['email'];
-        unset($contact['email']);
+        if (!empty($contact['email'])) {
+            $contact['emails'][] = $contact['email'];
+            unset($contact['email']);
+        }
 
         return $contact;
     }
