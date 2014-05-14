@@ -18,14 +18,14 @@ class CustomerReverseProcessor extends AbstractReverseProcessor
     protected $checkEntityClasses = [
         'OroCRM\Bundle\MagentoBundle\Entity\Customer'=> [
             'fields' => [
-                'email'      => ['email',       'contact.primary_email'],
-                'firstname'  => ['first_name',  'contact.first_name'],
-                'lastname'   => ['last_name',   'contact.last_name'],
-                'prefix'     => ['name_prefix', 'contact.name_prefix'],
-                'suffix'     => ['name_suffix', 'contact.name_suffix'],
-                'dob'        => ['birthday',    'contact.birthday'],
-                'gender'     => ['gender',      'contact.gender'],
-                'middlename' => ['middle_name', 'contact.middle_name'],
+                ['email',       'contact.primary_email'],
+                ['first_name',  'contact.first_name'],
+                ['last_name',   'contact.last_name'],
+                ['name_prefix', 'contact.name_prefix'],
+                ['name_suffix', 'contact.name_suffix'],
+                ['birthday',    'contact.birthday'],
+                ['gender',      'contact.gender'],
+                ['middle_name', 'contact.middle_name'],
             ],
             'checking' => 'contact.addresses',
             'relation' => [
@@ -34,18 +34,18 @@ class CustomerReverseProcessor extends AbstractReverseProcessor
                     'class'    => 'OroCRM\Bundle\MagentoBundle\Entity\Address',
                     'checking'   => 'contact_address.id',
                     'fields' => [
-                        'city' => ['city', 'contact_address.city'],
-                        /*'company' => ['addresses.organization'],
-                        'country_id' => ['addresses.country'],
-                        'firstname' => ['getFirstName'],
-                        'lastname' => ['getLastName'],
-                        'middlename' => ['getMiddleName'],
-                        'postcode' => ['getPostalCode'],
-                        'prefix' => ['getNamePrefix'],
-                        'region_id' => ['getRegion'],
-                        'region' => ['getRegionText'],
-                        'street' => ['getStreet'],
-                        'suffix' => ['getNameSuffix'],*/
+                        ['city', 'contact_address.city'],
+                        ['organization', 'contact_address.organization'],
+                        ['country', 'contact_address.country'],
+                        ['first_name', 'contact_address.first_name'],
+                        ['last_name', 'contact_address.last_name'],
+                        ['middle_name', 'contact_address.middle_name'],
+                        ['postal_code', 'contact_address.postal_code'],
+                        ['name_prefix', 'contact_address.name_prefix'],
+                        ['region', 'contact_address.region'],
+                        ['region_text', 'contact_address.region_text'],
+                        ['street', 'contact_address.street'],
+                        ['name_suffix', 'contact_address.name_suffix'],
                     ]
                 ],
             ]

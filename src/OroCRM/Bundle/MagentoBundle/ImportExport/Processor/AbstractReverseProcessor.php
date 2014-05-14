@@ -44,7 +44,6 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
             'entity' => $entity,
         ];
 
-
         if ($entity->getChannel() && $entity->getOriginId()) {
 
             foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
@@ -64,10 +63,9 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
 
                     foreach ($classMapConfig['relation'] as $relationName => $relationClassMapConfig) {
 
-                        $relations = $this->accessor->getValue($entity, $relationClassMapConfig['method']);
+                        $relations = $this->getValue($entity, $relationClassMapConfig['method']);
 
-                        $allRelationsCheckingEntity = $this->accessor
-                            ->getValue($entity, $classMapConfig['checking']);
+                        $allRelationsCheckingEntity = $this->getValue($entity, $classMapConfig['checking']);
 
                         if ($relations instanceof Collection) {
                             $relations = $relations->getValues();
@@ -91,20 +89,24 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
                                     $relationClassMapConfig['fields']
                                 );
 
-                                $relationArray['status'] = self::UPDATE_ENTITY;
+                                if (!empty($relationArray)) {
+                                    $relationArray['status'] = self::UPDATE_ENTITY;
+                                }
 
                                 array_push(
                                     $checkedIdsRelations,
-                                    $this->accessor->getValue($relation, $relationClassMapConfig['checking'])
+                                    $this->getValue($relation, $relationClassMapConfig['checking'])
                                 );
-
                             } catch (\Exception $e) {
                                 $relationArray['status'] = self::DELETE_ENTITY;
                             }
-                            array_push(
-                                $result['object'][$relationName],
-                                array_merge($relationArray, ['entity' => $relation])
-                            );
+
+                            if (!empty($relationArray)) {
+                                array_push(
+                                    $result['object'][$relationName],
+                                    array_merge($relationArray, ['entity' => $relation])
+                                );
+                            }
                             unset($relationArray);
                         }
                         unset($relation);
@@ -119,7 +121,6 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
                 }
             }
         }
-
         return (object)$result;
     }
 
@@ -138,15 +139,21 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
         if ($entity instanceof $classNames) {
             foreach ($fields as $name => $methods) {
                 if ($this->isChanged($entity, $methods)) {
-                    $result[$methods[self::SOURCE]] = $this->accessor->getValue($entity, $methods[self::CHECKING]);
+                    $result[$methods[self::SOURCE]] = $this->getValue($entity, $methods[self::CHECKING]);
                 }
             }
         }
     }
 
+    /**
+     * @param object $entity
+     * @param array $paths
+     *
+     * @return bool
+     */
     protected function isChanged($entity, array $paths)
     {
-        $checking = $this->accessor->getValue($entity, $paths[self::CHECKING]);
+        $checking = $this->getValue($entity, $paths[self::CHECKING]);
 
         if (is_object($checking)) {
             try {
@@ -157,12 +164,17 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
         }
 
         return (
-            $this->accessor->getValue($entity, $paths[self::SOURCE])
+            $this->getValue($entity, $paths[self::SOURCE])
             !== $checking
         );
     }
 
-    protected function addNew($entities, $checkedIds, &$result)
+    /**
+     * @param object $entities
+     * @param array $checkedIds
+     * @param array $result
+     */
+    protected function addNew($entities, array $checkedIds, array &$result)
     {
         foreach ($entities as $entity) {
             if (!in_array($entity->getId(), $checkedIds)) {
@@ -174,40 +186,14 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
         }
     }
 
-
-    /*protected function getCheckingMethodValue($entity, $checkingMethod, $methods)
+    /**
+     * @param object $entity
+     * @param string $path
+     *
+     * @return mixed
+     */
+    protected function getValue($entity, $path)
     {
-        if (!empty($methods[1])) {
-            return $entity->$checkingMethod()->$methods[1]();
-        }
-
-        return $entity->$checkingMethod()->$methods[0]();
-    }*/
-
-
-    /*protected function getObjectMethodValue($entity, $methods)
-    {
-        return $entity->$methods[0]();
-    }*/
-
-    protected function hasDistinction($entity, $paths)
-    {
-        return (
-            $this->accessor->getValue($entity, $paths[self::SOURCE])
-            !== $this->accessor->getValue($entity, $paths[self::CHECKING])
-        );
-
-        /*
-        if (!empty($methods[1])) {
-            return (
-                $this->getObjectMethodValue($entity, $methods)
-                !== $this->getCheckingMethodValue($entity, $checkingMethod, $methods)
-            );
-        }
-
-        return (
-            $this->getObjectMethodValue($entity, $methods)
-            !== $this->getCheckingMethodValue($entity, $checkingMethod, $methods)
-        );*/
+        return $this->accessor->getValue($entity, $path);
     }
 }
