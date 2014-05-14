@@ -137,7 +137,7 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
         array $fields
     ) {
         if ($entity instanceof $classNames) {
-            foreach ($fields as $name => $methods) {
+            foreach ($fields as $methods) {
                 if ($this->isChanged($entity, $methods)) {
                     $result[$methods[self::SOURCE]] = $this->getValue($entity, $methods[self::CHECKING]);
                 }
