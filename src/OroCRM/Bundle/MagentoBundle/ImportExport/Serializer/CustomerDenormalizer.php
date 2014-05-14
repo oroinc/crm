@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 
@@ -15,7 +16,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 
-class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInterface
+class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInterface, NormalizerInterface
 {
     /** @var array */
     protected $importFieldsMap = array(
@@ -58,6 +59,64 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
         'createdAt',
         'birthday'
     );
+
+    public function getCurrentCustomerValues($customer, $magentoFields, $accessor)
+    {
+        $result = [];
+        foreach ($magentoFields as $field) {
+            $result[$field] = $accessor->getValue($customer, $this->importFieldsMap[$field]);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Normalizes an object into a set of arrays/scalars
+     *
+     * @param object $object object to normalize
+     * @param string $format format the normalization result will be encoded as
+     * @param array $context Context options for the normalizer
+     *
+     * @return array|scalar
+     */
+    public function normalize($object, $format = null, array $context = array())
+    {
+        $result = [];
+        foreach ($this->importFieldsMap as $magentoName => $oroName) {
+            if (array_key_exists($oroName, $object->object)) {
+                $result[$magentoName] = $object->object[$oroName];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Checks whether the given class is supported for normalization by this normalizer
+     *
+     * @param mixed  $data   Data to normalize.
+     * @param string $format The format being (de-)serialized from or into.
+     *
+     * @return Boolean
+     */
+    public function supportsNormalization($data, $format = null)
+    {
+        return true;
+    }
+
+    /**
+     * Used in import
+     *
+     * @param mixed  $data
+     * @param string $type
+     * @param null   $format
+     *
+     * @return bool
+     */
+    public function supportsDenormalization($data, $type, $format = null)
+    {
+        return is_array($data) && $type == MagentoConnectorInterface::CUSTOMER_TYPE;
+    }
 
     /**
      * For importing customers
@@ -318,19 +377,5 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
         }
 
         return $result;
-    }
-
-    /**
-     * Used in import
-     *
-     * @param mixed  $data
-     * @param string $type
-     * @param null   $format
-     *
-     * @return bool
-     */
-    public function supportsDenormalization($data, $type, $format = null)
-    {
-        return is_array($data) && $type == MagentoConnectorInterface::CUSTOMER_TYPE;
     }
 }

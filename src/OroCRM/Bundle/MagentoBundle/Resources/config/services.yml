@@ -31,6 +31,7 @@ parameters:
 
     # processors
     orocrm_magento.importexport.customer.reverse.processor.class:           OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor
+    orocrm_magento.importexport.customer.reverse.writer.class:              OroCRM\Bundle\MagentoBundle\Writer\ReverseWriter
 
 services:
     orocrm_magento.transport.soap_transport:
@@ -146,9 +147,16 @@ services:
         arguments:
             - @oro_security.security_facade.link
             - @oro_integration.sync_scheduler.link
-        # commented until two way sync will finished
-        #tags:
-        #    - { name: doctrine.event_subscriber, connection: default }
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
 
     orocrm_magento.importexport.customer.reverse.processor:
         class: %orocrm_magento.importexport.customer.reverse.processor.class%
+
+    orocrm_magento.importexport.customer.reverse.writer:
+        class: %orocrm_magento.importexport.customer.reverse.writer.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @orocrm_magento.importexport.denormalizer.customer
+            - @oro_integration.provider.connector_context_mediator
+            - @orocrm_magento.transport.soap_transport
