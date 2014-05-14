@@ -41,22 +41,24 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
 
         $result = [
             'object' => [],
+            'entity' => $entity,
         ];
+
 
         if ($entity->getChannel() && $entity->getOriginId()) {
 
             foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
-
-                /**
-                 * @todo: если удалили контакт?
-                 * @todo: добавить try и добавить статус
-                 * */
-                $this->fieldPlaceholder(
-                    $entity,
-                    $classNames,
-                    $result['object'],
-                    $classMapConfig['fields']
-                );
+                try {
+                    $this->fieldPlaceholder(
+                        $entity,
+                        $classNames,
+                        $result['object'],
+                        $classMapConfig['fields']
+                    );
+                } catch (\Exception $e) {
+                    $result['status'] = self::DELETE_ENTITY;
+                    return $result;
+                }
 
                 if (!empty($classMapConfig['relation'])) {
 
@@ -116,10 +118,6 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
                     unset($relationClassMapConfig, $relationName);
                 }
             }
-
-            if (!empty($result['object'])) {
-                $result['entity'] = $entity;
-            }
         }
 
         return (object)$result;
@@ -160,7 +158,7 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
 
         return (
             $this->accessor->getValue($entity, $paths[self::SOURCE])
-            === $checking
+            !== $checking
         );
     }
 
