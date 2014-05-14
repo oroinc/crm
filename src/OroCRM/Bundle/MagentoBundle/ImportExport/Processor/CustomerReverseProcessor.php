@@ -5,16 +5,8 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Processor;
 class CustomerReverseProcessor extends AbstractReverseProcessor
 {
     /**
-     * {@inheritdoc}
-     *
-     * @todo:
-     * - взять все адреса в кастомере и пройтись по ним ( customer->addressses )
-     *   - если нет связи в кастомер адресе с contact_address то этот адрес идёт на удаление
-     *   - записать все contact_address id
-     * - взять контакт адреса у данного кастомера (customer->contact->addresses)
-     *   - убрать те кторые есть в списке
-     *   - оставшиеся записать как новые для данного кастомера
-     */
+     * @var array
+    */
     protected $checkEntityClasses = [
         'OroCRM\Bundle\MagentoBundle\Entity\Customer'=> [
             'fields' => [
