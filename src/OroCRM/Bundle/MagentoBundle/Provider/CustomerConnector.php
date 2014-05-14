@@ -43,4 +43,12 @@ class CustomerConnector extends AbstractMagentoConnector
     {
         return $this->transport->getCustomers();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function supportsForceSync()
+    {
+        return true;
+    }
 }
