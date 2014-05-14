@@ -31,7 +31,7 @@ class TaskControllerTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = self::createClient([], $this->generateWsseHeader());
+        $this->client = self::createClient([], $this->generateWsseAuthHeader());
     }
 
     public function testCreate()
@@ -61,7 +61,7 @@ class TaskControllerTest extends WebTestCase
             $this->client->generate('orocrm_api_get_tasks'),
             [],
             [],
-            $this->generateWsseHeader()
+            $this->generateWsseAuthHeader()
         );
 
         $tasks = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -80,7 +80,7 @@ class TaskControllerTest extends WebTestCase
             $this->client->generate('orocrm_api_get_task', ['id' => $id]),
             [],
             [],
-            $this->generateWsseHeader()
+            $this->generateWsseAuthHeader()
         );
 
         $task = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -100,7 +100,7 @@ class TaskControllerTest extends WebTestCase
             $this->client->generate('orocrm_api_put_task', ['id' => $id]),
             ['task' =>$updatedTask],
             [],
-            $this->generateWsseHeader()
+            $this->generateWsseAuthHeader()
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 204);
@@ -131,7 +131,7 @@ class TaskControllerTest extends WebTestCase
             $this->client->generate('orocrm_api_delete_task', ['id' => $id]),
             [],
             [],
-            $this->generateWsseHeader()
+            $this->generateWsseAuthHeader()
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 204);
@@ -140,7 +140,7 @@ class TaskControllerTest extends WebTestCase
             $this->client->generate('orocrm_api_get_task', ['id' => $id]),
             [],
             [],
-            $this->generateWsseHeader()
+            $this->generateWsseAuthHeader()
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 404);

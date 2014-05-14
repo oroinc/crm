@@ -31,8 +31,8 @@ class TaskControllerTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = self::createClient(array(), $this->generateWsseHeader());
-        $this->client->soap(
+        $this->client = self::createClient(array(), $this->generateWsseAuthHeader());
+        $this->client->createSoapClient(
             "http://localhost/api/soap",
             array(
                 'location' => 'http://localhost/api/soap',
@@ -46,8 +46,8 @@ class TaskControllerTest extends WebTestCase
      */
     public function testCreate()
     {
-        $result = $this->client->getSoap()->createTask($this->task);
-        $this->assertTrue((bool) $result, $this->client->getSoap()->__getLastResponse());
+        $result = $this->client->getSoapClient()->createTask($this->task);
+        $this->assertTrue((bool) $result, $this->client->getSoapClient()->__getLastResponse());
 
         return $result;
     }
@@ -57,7 +57,7 @@ class TaskControllerTest extends WebTestCase
      */
     public function testCget()
     {
-        $tasks = $this->client->getSoap()->getTasks();
+        $tasks = $this->client->getSoapClient()->getTasks();
         $tasks = $this->valueToArray($tasks);
         $this->assertCount(1, $tasks);
     }
@@ -68,7 +68,7 @@ class TaskControllerTest extends WebTestCase
      */
     public function testGet($id)
     {
-        $task = $this->client->getSoap()->getTask($id);
+        $task = $this->client->getSoapClient()->getTask($id);
         $task = $this->valueToArray($task);
         $this->assertEquals($this->task['subject'], $task['subject']);
     }
@@ -81,10 +81,10 @@ class TaskControllerTest extends WebTestCase
     {
         $task =  array_merge($this->task, ['subject' => 'Updated subject']);
 
-        $result = $this->client->getSoap()->updateTask($id, $task);
+        $result = $this->client->getSoapClient()->updateTask($id, $task);
         $this->assertTrue($result);
 
-        $updatedTask = $this->client->getSoap()->getTask($id);
+        $updatedTask = $this->client->getSoapClient()->getTask($id);
         $updatedTask = $this->valueToArray($updatedTask);
 
         $this->assertEquals($task['subject'], $updatedTask['subject']);
@@ -96,10 +96,10 @@ class TaskControllerTest extends WebTestCase
      */
     public function testDelete($id)
     {
-        $result = $this->client->getSoap()->deleteTask($id);
+        $result = $this->client->getSoapClient()->deleteTask($id);
         $this->assertTrue($result);
 
         $this->setExpectedException('\SoapFault', 'Record with ID "' . $id . '" can not be found');
-        $this->client->getSoap()->getTask($id);
+        $this->client->getSoapClient()->getTask($id);
     }
 }

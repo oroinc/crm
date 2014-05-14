@@ -20,7 +20,7 @@ class RestLeadTest extends WebTestCase
     {
         $this->client = self::createClient(
             array(),
-            $this->generateWsseHeader()
+            $this->generateWsseAuthHeader()
         );
     }
 

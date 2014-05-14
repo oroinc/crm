@@ -23,8 +23,8 @@ class SoapContactApiTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = self::createClient(array(), $this->generateWsseHeader());
-        $this->client->soap(
+        $this->client = self::createClient(array(), $this->generateWsseAuthHeader());
+        $this->client->createSoapClient(
             "http://localhost/api/soap",
             array(
                 'location' => 'http://localhost/api/soap',
@@ -45,9 +45,9 @@ class SoapContactApiTest extends WebTestCase
      */
     public function testCreateContact(array $request)
     {
-        $result = $this->client->getSoap()->createContact($request);
+        $result = $this->client->getSoapClient()->createContact($request);
         $this->assertInternalType('int', $result);
-        $this->assertGreaterThan(0, $result, $this->client->getSoap()->__getLastResponse());
+        $this->assertGreaterThan(0, $result, $this->client->getSoapClient()->__getLastResponse());
 
         self::$contactIds[$request['firstName']] = $result;
     }
@@ -72,7 +72,7 @@ class SoapContactApiTest extends WebTestCase
         $contactId = $this->getContactIdByFirstName($request['firstName']);
 
         // test getContact
-        $contact = $this->client->getSoap()->getContact($contactId);
+        $contact = $this->client->getSoapClient()->getContact($contactId);
         $contact = $this->valueToArray($contact);
 
         $this->assertNotEmpty($contact);
@@ -80,7 +80,7 @@ class SoapContactApiTest extends WebTestCase
         $this->assertEquals($request['firstName'], $contact['firstName']);
 
         // get getContacts
-        $contacts = $this->client->getSoap()->getContacts(1, 1000);
+        $contacts = $this->client->getSoapClient()->getContacts(1, 1000);
         $contacts = $this->valueToArray($contacts);
         $contactFound = array_filter(
             $contacts,
@@ -101,10 +101,10 @@ class SoapContactApiTest extends WebTestCase
         $contactId = $this->getContactIdByFirstName($request['firstName']);
 
         $request['description'] .= '_Updated';
-        $result = $this->client->getSoap()->updateContact($contactId, $request);
+        $result = $this->client->getSoapClient()->updateContact($contactId, $request);
         $this->assertTrue($result);
 
-        $contact = $this->client->getSoap()->getContact($contactId);
+        $contact = $this->client->getSoapClient()->getContact($contactId);
         $contact = $this->valueToArray($contact);
         $this->assertArrayHasKey('description', $contact);
         $this->assertEquals($request['description'], $contact['description']);
@@ -119,12 +119,12 @@ class SoapContactApiTest extends WebTestCase
     {
         $contactId = $this->getContactIdByFirstName($request['firstName']);
 
-        $result = $this->client->getSoap()->deleteContact($contactId);
+        $result = $this->client->getSoapClient()->deleteContact($contactId);
         $this->assertTrue($result);
 
         $this->setExpectedException('\SoapFault', 'Record with ID "' . $contactId . '" can not be found');
 
-        $this->client->getSoap()->getContact($contactId);
+        $this->client->getSoapClient()->getContact($contactId);
     }
 
     /**

@@ -19,7 +19,7 @@ class TaskControllersTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = self::createClient(array(), $this->generateBasicHeader());
+        $this->client = self::createClient(array(), $this->generateBasicAuthHeader());
     }
 
     public function testCreate()

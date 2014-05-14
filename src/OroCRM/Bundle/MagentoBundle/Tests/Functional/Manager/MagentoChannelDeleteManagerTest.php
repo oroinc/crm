@@ -29,7 +29,7 @@ class MagentoChannelDeleteManagerTest extends WebTestCase
     {
         $this->client = self::createClient(
             array(),
-            array_merge($this->generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
         $this->em = $this->client->getKernel()->getContainer()->get('doctrine.orm.entity_manager');
     }

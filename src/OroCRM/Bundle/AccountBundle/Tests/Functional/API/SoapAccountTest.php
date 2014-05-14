@@ -16,8 +16,8 @@ class SoapAccountTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = self::createClient(array(), $this->generateWsseHeader());
-        $this->client->soap(
+        $this->client = self::createClient(array(), $this->generateWsseAuthHeader());
+        $this->client->createSoapClient(
             "http://localhost/api/soap",
             array(
                 'location' => 'http://localhost/api/soap',
@@ -37,8 +37,8 @@ class SoapAccountTest extends WebTestCase
             "owner" => '1',
         );
 
-        $result = $this->client->getSoap()->createAccount($request);
-        $this->assertTrue((bool) $result, $this->client->getSoap()->__getLastResponse());
+        $result = $this->client->getSoapClient()->createAccount($request);
+        $this->assertTrue((bool) $result, $this->client->getSoapClient()->__getLastResponse());
 
         $request['id'] = $result;
         return $request;
@@ -51,7 +51,7 @@ class SoapAccountTest extends WebTestCase
      */
     public function testGet($request)
     {
-        $accounts = $this->client->getSoap()->getAccounts(1, 1000);
+        $accounts = $this->client->getSoapClient()->getAccounts(1, 1000);
         $accounts = $this->valueToArray($accounts);
         $accountName = $request['name'];
         $account = $accounts['item'];
@@ -79,10 +79,10 @@ class SoapAccountTest extends WebTestCase
         unset($accountUpdate['id']);
         $accountUpdate['name'] .= '_Updated';
 
-        $result = $this->client->getSoap()->updateAccount($request['id'], $accountUpdate);
+        $result = $this->client->getSoapClient()->updateAccount($request['id'], $accountUpdate);
         $this->assertTrue($result);
 
-        $account = $this->client->getSoap()->getAccount($request['id']);
+        $account = $this->client->getSoapClient()->getAccount($request['id']);
         $account = $this->valueToArray($account);
 
         $this->assertEquals($accountUpdate['name'], $account['name']);
@@ -96,10 +96,10 @@ class SoapAccountTest extends WebTestCase
      */
     public function testDelete($request)
     {
-        $result = $this->client->getSoap()->deleteAccount($request['id']);
+        $result = $this->client->getSoapClient()->deleteAccount($request['id']);
         $this->assertTrue($result);
 
         $this->setExpectedException('\SoapFault', 'Record with ID "' . $request['id'] . '" can not be found');
-        $this->client->getSoap()->getAccount($request['id']);
+        $this->client->getSoapClient()->getAccount($request['id']);
     }
 }

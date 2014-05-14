@@ -24,7 +24,7 @@ class ImportExportTest extends WebTestCase
 
     protected function setUp()
     {
-        $this->client = self::createClient(array(), $this->generateBasicHeader());
+        $this->client = self::createClient(array(), $this->generateBasicAuthHeader());
     }
 
     protected function tearDown()

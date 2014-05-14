@@ -17,7 +17,7 @@ class ControllersCrmTest extends BaseControllersTest
     {
         $this->client = self::createClient(
             array(),
-            array_merge($this->generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
 
         if (!self::$fixturesLoaded) {

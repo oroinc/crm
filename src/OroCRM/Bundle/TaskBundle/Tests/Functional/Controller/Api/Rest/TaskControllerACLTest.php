@@ -28,7 +28,7 @@ class TaskControllerACLTest extends WebTestCase
     {
         $this->client = self::createClient(
             [],
-            $this->generateWsseHeader(self::USER_NAME, self::USER_PASSWORD)
+            $this->generateWsseAuthHeader(self::USER_NAME, self::USER_PASSWORD)
         );
 
         if (!self::$hasLoaded) {
@@ -61,7 +61,7 @@ class TaskControllerACLTest extends WebTestCase
             $this->client->generate('orocrm_api_post_task'),
             $request,
             [],
-            $this->generateWsseHeader(self::USER_NAME, self::USER_PASSWORD)
+            $this->generateWsseAuthHeader(self::USER_NAME, self::USER_PASSWORD)
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 403);
@@ -77,7 +77,7 @@ class TaskControllerACLTest extends WebTestCase
             $this->client->generate('orocrm_api_get_tasks'),
             [],
             [],
-            $this->generateWsseHeader(self::USER_NAME, self::USER_PASSWORD)
+            $this->generateWsseAuthHeader(self::USER_NAME, self::USER_PASSWORD)
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 403);
@@ -93,7 +93,7 @@ class TaskControllerACLTest extends WebTestCase
             $this->client->generate('orocrm_api_get_task', ['id' => self::$taskId]),
             [],
             [],
-            $this->generateWsseHeader(self::USER_NAME, self::USER_PASSWORD)
+            $this->generateWsseAuthHeader(self::USER_NAME, self::USER_PASSWORD)
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 403);
@@ -110,7 +110,7 @@ class TaskControllerACLTest extends WebTestCase
             $this->client->generate('orocrm_api_put_task', ['id' => self::$taskId]),
             ['task' => $updatedTask],
             [],
-            $this->generateWsseHeader(self::USER_NAME, self::USER_PASSWORD)
+            $this->generateWsseAuthHeader(self::USER_NAME, self::USER_PASSWORD)
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 403);
@@ -126,7 +126,7 @@ class TaskControllerACLTest extends WebTestCase
             $this->client->generate('orocrm_api_delete_task', ['id' => self::$taskId]),
             [],
             [],
-            $this->generateWsseHeader(self::USER_NAME, self::USER_PASSWORD)
+            $this->generateWsseAuthHeader(self::USER_NAME, self::USER_PASSWORD)
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 403);

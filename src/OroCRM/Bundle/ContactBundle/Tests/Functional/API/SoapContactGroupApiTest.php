@@ -16,8 +16,8 @@ class SoapContactGroupApiTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = self::createClient(array(), $this->generateWsseHeader());
-        $this->client->soap(
+        $this->client = self::createClient(array(), $this->generateWsseAuthHeader());
+        $this->client->createSoapClient(
             "http://localhost/api/soap",
             array(
                 'location' => 'http://localhost/api/soap',
@@ -37,7 +37,7 @@ class SoapContactGroupApiTest extends WebTestCase
             "label" => 'Group name_' . mt_rand(),
             "owner" => '1'
         );
-        $result = $this->client->getSoap()->createContactGroup($request);
+        $result = $this->client->getSoapClient()->createContactGroup($request);
         $this->assertTrue($result);
 
         return $request;
@@ -50,7 +50,7 @@ class SoapContactGroupApiTest extends WebTestCase
      */
     public function testGetContactGroups($request)
     {
-        $groups = $this->client->getSoap()->getContactGroups(1, 1000);
+        $groups = $this->client->getSoapClient()->getContactGroups(1, 1000);
         $groups = $this->valueToArray($groups);
         $groupLabel = $request['label'];
         $group = array_filter(
@@ -73,10 +73,10 @@ class SoapContactGroupApiTest extends WebTestCase
     public function testUpdateContact($request, $group)
     {
         $request['label'] .= '_Updated';
-        $result = $this->client->getSoap()->updateContactGroup($group['id'], $request);
+        $result = $this->client->getSoapClient()->updateContactGroup($group['id'], $request);
         $this->assertTrue($result);
 
-        $group = $this->client->getSoap()->getContactGroup($group['id']);
+        $group = $this->client->getSoapClient()->getContactGroup($group['id']);
         $group = $this->valueToArray($group);
         $this->assertEquals($request['label'], $group['label']);
     }
@@ -88,11 +88,11 @@ class SoapContactGroupApiTest extends WebTestCase
      */
     public function testDeleteContactGroup($group)
     {
-        $result = $this->client->getSoap()->deleteContactGroup($group['id']);
+        $result = $this->client->getSoapClient()->deleteContactGroup($group['id']);
         $this->assertTrue($result);
 
         $this->setExpectedException('\SoapFault', 'Record with ID "' . $group['id'] . '" can not be found');
 
-        $this->client->getSoap()->getContactGroup($group['id']);
+        $this->client->getSoapClient()->getContactGroup($group['id']);
     }
 }

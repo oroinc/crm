@@ -23,7 +23,7 @@ class LoadTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = self::createClient(array("debug"=>false), $this->generateBasicHeader());
+        $this->client = self::createClient(array("debug"=>false), $this->generateBasicAuthHeader());
     }
 
     protected function tearDown()
