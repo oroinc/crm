@@ -25,10 +25,10 @@ class ControllersTest extends WebTestCase
     /**
      * Simple controllers test
      *
-     * @param $gridName
-     * @param $report
-     * @param $group
-     * @param $reportName
+     * @param string $gridName
+     * @param string $report
+     * @param string $group
+     * @param string $reportName
      * @dataProvider reportsProvider
      */
     public function testIndex($gridName, $report, $group, $reportName)
@@ -53,9 +53,9 @@ class ControllersTest extends WebTestCase
     /**
      * Simple controllers test
      *
-     * @param $gridName
-     * @param $report
-     * @param $group
+     * @param string $gridName
+     * @param string $report
+     * @param string $group
      * @dataProvider reportsProvider
      */
     public function testGrid($gridName, $report, $group)

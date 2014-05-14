@@ -11,19 +11,13 @@ use Oro\Bundle\ReportBundle\Tests\Functional\ControllersTest as BaseControllersT
  */
 class ControllersCrmTest extends BaseControllersTest
 {
-    static protected $fixturesLoaded = false;
-
     public function setUp()
     {
         $this->client = self::createClient(
             array(),
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
-
-        if (!self::$fixturesLoaded) {
-            $this->client->appendFixtures(__DIR__ . DIRECTORY_SEPARATOR . 'DataFixtures', array('LoadLead'));
-            self::$fixturesLoaded = true;
-        }
+        $this->client->appendFixturesOnce(__DIR__ . DIRECTORY_SEPARATOR . 'DataFixtures', array('LoadLead'));
     }
 
     /**

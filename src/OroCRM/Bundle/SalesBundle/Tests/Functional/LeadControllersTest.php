@@ -84,7 +84,7 @@ class LeadControllersTest extends WebTestCase
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @depends testCreate
      *
      * @return string
@@ -122,7 +122,7 @@ class LeadControllersTest extends WebTestCase
     }
 
     /**
-     * @param $returnValue
+     * @param array $returnValue
      * @depends testUpdate
      *
      * @return string
@@ -140,7 +140,7 @@ class LeadControllersTest extends WebTestCase
     }
 
     /**
-     * @param $returnValue
+     * @param array $returnValue
      * @depends testUpdate
      *
      * @return string
@@ -162,7 +162,7 @@ class LeadControllersTest extends WebTestCase
     }
 
     /**
-     * @param $returnValue
+     * @param array $returnValue
      * @depends testUpdate
      */
     public function testDelete($returnValue)

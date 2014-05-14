@@ -2,13 +2,12 @@
 
 namespace OroCRM\Bundle\ReportBundle\Tests\Functional;
 
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Console\Application;
+
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
-
-use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\HttpKernel\Kernel;
-
-use Symfony\Component\Console\Application;
 use OroCRM\Bundle\ReportBundle\Command\ReportUpdateCommand;
 
 /**
@@ -18,8 +17,6 @@ use OroCRM\Bundle\ReportBundle\Command\ReportUpdateCommand;
  */
 class CommandsTest extends WebTestCase
 {
-    static protected $fixturesLoaded = false;
-
     /**
      * @var Client
      */
@@ -28,10 +25,7 @@ class CommandsTest extends WebTestCase
     public function setUp()
     {
         $this->client = self::createClient();
-        if (!self::$fixturesLoaded) {
-            $this->client->appendFixtures(__DIR__ . DIRECTORY_SEPARATOR . 'DataFixtures', array('LoadLead'));
-            self::$fixturesLoaded = true;
-        }
+        $this->client->appendFixturesOnce(__DIR__ . DIRECTORY_SEPARATOR . 'DataFixtures', array('LoadLead'));
     }
 
     public function testReportUpdate()

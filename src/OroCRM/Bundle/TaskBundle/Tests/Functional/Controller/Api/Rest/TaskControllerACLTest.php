@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\TaskBundle\Tests\Functional\Controller\Api\Rest;
 
-use OroCRM\Bundle\TaskBundle\Entity\Task;
-
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -16,13 +14,15 @@ class TaskControllerACLTest extends WebTestCase
     const USER_NAME = 'user_wo_permissions';
     const USER_PASSWORD = 'user_api_key';
 
-    /** @var Client */
+    /**
+     * @var Client
+     */
     protected $client;
 
-    /** @var Task */
+    /**
+     * @var int
+     */
     protected static $taskId;
-
-    protected static $hasLoaded = false;
 
     public function setUp()
     {
@@ -31,8 +31,9 @@ class TaskControllerACLTest extends WebTestCase
             $this->generateWsseAuthHeader(self::USER_NAME, self::USER_PASSWORD)
         );
 
-        if (!self::$hasLoaded) {
-            $this->client->appendFixtures(__DIR__ . DIRECTORY_SEPARATOR . 'DataFixtures');
+        $this->client->appendFixturesOnce(__DIR__ . DIRECTORY_SEPARATOR . 'DataFixtures');
+
+        if (!self::$taskId) {
             self::$taskId = $this->client->getContainer()
                 ->get('doctrine')
                 ->getManager()
@@ -40,7 +41,6 @@ class TaskControllerACLTest extends WebTestCase
                 ->findOneBySubject('Acl task')
                 ->getId();
         }
-        self::$hasLoaded = true;
     }
 
     public function testCreate()

@@ -90,7 +90,7 @@ class ControllersTest extends WebTestCase
 
     /**
      * @depends testUpdate
-     * @param $id
+     * @param int $id
      */
     public function testView($id)
     {
@@ -106,7 +106,7 @@ class ControllersTest extends WebTestCase
 
     /**
      * @depends testUpdate
-     * @param $id
+     * @param int $id
      */
     public function testDelete($id)
     {

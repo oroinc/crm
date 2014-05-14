@@ -72,7 +72,7 @@ class ImportExportTest extends WebTestCase
      *
      * @depends testImportFormAction
      */
-    public function testImportValidateAction($crawler)
+    public function testImportValidateAction(Crawler $crawler)
     {
         $path = $this->client
             ->getKernel()

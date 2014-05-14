@@ -47,10 +47,10 @@ class RestCallsTest extends WebTestCase
     }
 
     /**
-     * @param $request
+     * @param array $request
      * @depends testCreate
      */
-    public function testGet($request)
+    public function testGet(array $request)
     {
         $this->client->request(
             'GET',
@@ -81,11 +81,11 @@ class RestCallsTest extends WebTestCase
     }
 
     /**
-     * @param $request
+     * @param array $request
      * @depends testCreate
      * @depends testGet
      */
-    public function testUpdate($request)
+    public function testUpdate(array $request)
     {
         $request['call']['subject'] .= "_Updated";
         $this->client->request(
@@ -111,10 +111,10 @@ class RestCallsTest extends WebTestCase
     }
 
     /**
-     * @param $request
+     * @param array $request
      * @depends testCreate
      */
-    public function testDelete($request)
+    public function testDelete(array $request)
     {
         $this->client->request(
             'DELETE',

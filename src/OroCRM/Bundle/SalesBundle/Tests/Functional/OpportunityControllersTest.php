@@ -2,12 +2,11 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Functional;
 
-use Symfony\Component\DomCrawler\Form;
-
 use Doctrine\Common\Persistence\ManagerRegistry;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use Symfony\Component\DomCrawler\Form;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -81,7 +80,7 @@ class OpportunityControllersTest extends WebTestCase
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @depends testCreate
      *
      * @return string
@@ -122,12 +121,12 @@ class OpportunityControllersTest extends WebTestCase
     }
 
     /**
-     * @param $returnValue
+     * @param array $returnValue
      * @depends testUpdate
      *
      * @return string
      */
-    public function testView($returnValue)
+    public function testView(array $returnValue)
     {
         $crawler = $this->client->request(
             'GET',
@@ -140,12 +139,12 @@ class OpportunityControllersTest extends WebTestCase
     }
 
     /**
-     * @param $returnValue
+     * @param array $returnValue
      * @depends testUpdate
      *
      * @return string
      */
-    public function testInfo($returnValue)
+    public function testInfo(array $returnValue)
     {
         $crawler = $this->client->request(
             'GET',
@@ -160,10 +159,10 @@ class OpportunityControllersTest extends WebTestCase
     }
 
     /**
-     * @param $returnValue
+     * @param array $returnValue
      * @depends testUpdate
      */
-    public function testDelete($returnValue)
+    public function testDelete(array $returnValue)
     {
         $this->client->request(
             'DELETE',

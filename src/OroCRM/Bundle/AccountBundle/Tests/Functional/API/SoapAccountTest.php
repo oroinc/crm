@@ -11,7 +11,9 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class SoapAccountTest extends WebTestCase
 {
-    /** @var Client */
+    /**
+     * @var Client
+     */
     protected $client;
 
     public function setUp()
@@ -45,11 +47,11 @@ class SoapAccountTest extends WebTestCase
     }
 
     /**
-     * @param $request
+     * @param array $request
      * @depends testCreate
      * @return array
      */
-    public function testGet($request)
+    public function testGet(array $request)
     {
         $accounts = $this->client->getSoapClient()->getAccounts(1, 1000);
         $accounts = $this->valueToArray($accounts);
@@ -70,10 +72,10 @@ class SoapAccountTest extends WebTestCase
     }
 
     /**
-     * @param $request
+     * @param array $request
      * @depends testCreate
      */
-    public function testUpdate($request)
+    public function testUpdate(array $request)
     {
         $accountUpdate = $request;
         unset($accountUpdate['id']);
@@ -91,10 +93,10 @@ class SoapAccountTest extends WebTestCase
     }
 
     /**
-     * @param $request
+     * @param array $request
      * @depends testUpdate
      */
-    public function testDelete($request)
+    public function testDelete(array $request)
     {
         $result = $this->client->getSoapClient()->deleteAccount($request['id']);
         $this->assertTrue($result);
