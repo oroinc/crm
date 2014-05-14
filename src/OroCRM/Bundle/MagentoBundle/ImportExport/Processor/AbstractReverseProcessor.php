@@ -103,21 +103,15 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
                                 $result['object'][$relationName],
                                 array_merge($relationArray, ['entity' => $relation])
                             );
-
-                            $newEntity = $this->findNew($allRelationsCheckingEntity, $checkedIdsRelations);
-
-                            if (!empty($newEntity)) {
-                               /* array_push(
-                                    $result['object'][$relationName],
-                                    $newEntity
-                                );*/
-                            }
-
                             unset($relationArray);
                         }
                         unset($relation);
 
-
+                        $this->addNew(
+                            $allRelationsCheckingEntity,
+                            $checkedIdsRelations,
+                            $result['object'][$relationName]
+                        );
                     }
                     unset($relationClassMapConfig, $relationName);
                 }
@@ -170,16 +164,16 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
         );
     }
 
-    protected function findNew($entities, $checkedIds)
+    protected function addNew($entities, $checkedIds, &$result)
     {
-        $result = [];
-
         foreach ($entities as $entity) {
             if (!in_array($entity->getId(), $checkedIds)) {
-                array_push($result, $entity);
+                array_push(
+                    $result,
+                    ['status' => self::NEW_ENTITY, 'entity'=>$entity]
+                );
             }
         }
-        return $result;
     }
 
 
