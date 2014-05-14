@@ -63,7 +63,6 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($collection));
     }
 
-
     public function tearDown()
     {
         unset(
@@ -245,22 +244,21 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                 (object)['object' => []]
             ],
         ];
-
     }
 
     /**
      * @dataProvider  getDataProvider
      *
      * @param array $fields
-     * @param \stdClass $finO
+     * @param \stdClass $checkingObject
      */
-    public function testProcess(array $fields, $finO)
+    public function testProcess(array $fields, $checkingObject)
     {
         $customerReverseProcessor = new CustomerReverseProcessor();
 
-        if (!empty($finO->object)) {
-            $finO->channel = $this->channel;
-            $finO->entity = $this->customer;
+        if (!empty($checkingObject->object)) {
+            $checkingObject->channel = $this->channel;
+            $checkingObject->entity = $this->customer;
         }
 
         $this->customer->expects($this->any())->method('getOriginId')
@@ -369,7 +367,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         $result = $customerReverseProcessor->process($this->customer);
 
         $this->assertEquals(
-            $finO,
+            $checkingObject,
             $result
         );
     }

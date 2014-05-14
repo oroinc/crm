@@ -4,18 +4,31 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Processor;
 
 use \Doctrine\Common\Collections\Collection;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
+
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorInterface;
 use Oro\Bundle\ImportExportBundle\Exception\InvalidConfigurationException;
 
-abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAwareInterface
+abstract class AbstractReverseProcessor implements ProcessorInterface
 {
-    /** @var ContextInterface */
-    protected $context;
+    const SOURCE = 0;
+    const CHECKING = 1;
+    const UPDATE_ENTITY = 'update';
+    const DELETE_ENTITY = 'delete';
+    const NEW_ENTITY    = 'new';
 
     /** @var array */
     protected $checkEntityClasses = [];
+
+    /** @var PropertyAccess */
+    protected $accessor;
+
+    public function initPropertyAccess()
+    {
+        $this->accessor = PropertyAccess::createPropertyAccessor();
+    }
 
     /**
      * @param object $entity
@@ -24,6 +37,8 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
      */
     public function process($entity)
     {
+        $this->initPropertyAccess();
+
         $result = [
             'object' => [],
         ];
@@ -31,51 +46,84 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
         if ($entity->getChannel() && $entity->getOriginId()) {
 
             foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
+
+                /**
+                 * @todo: если удалили контакт?
+                 * @todo: добавить try и добавить статус
+                 * */
                 $this->fieldPlaceholder(
                     $entity,
                     $classNames,
-                    $result,
-                    $classMapConfig['fields'],
-                    $classMapConfig['checking'],
-                    'object'
+                    $result['object'],
+                    $classMapConfig['fields']
                 );
 
                 if (!empty($classMapConfig['relation'])) {
 
                     foreach ($classMapConfig['relation'] as $relationName => $relationClassMapConfig) {
-                        $relations = $entity->$relationClassMapConfig['method']();
+
+                        $relations = $this->accessor->getValue($entity, $relationClassMapConfig['method']);
+
+                        $allRelationsCheckingEntity = $this->accessor
+                            ->getValue($entity, $classMapConfig['checking']);
 
                         if ($relations instanceof Collection) {
                             $relations = $relations->getValues();
                         }
 
-                        if (is_array($relations)) {
-                            foreach ($relations as $relation) {
+                        if (!is_array($relations)) {
+                            $relations = [$relations];
+                        }
+
+                        $checkedIdsRelations = [];
+                        $result['object'][$relationName] = [];
+
+                        foreach ($relations as $relation) {
+                            $relationArray = [];
+
+                            try {
                                 $this->fieldPlaceholder(
                                     $relation,
                                     $relationClassMapConfig['class'],
-                                    $result['object'],
-                                    $relationClassMapConfig['fields'],
-                                    $relationClassMapConfig['checking'],
-                                    $relationName
+                                    $relationArray,
+                                    $relationClassMapConfig['fields']
                                 );
+
+                                $relationArray['status'] = self::UPDATE_ENTITY;
+
+                                array_push(
+                                    $checkedIdsRelations,
+                                    $this->accessor->getValue($relation, $relationClassMapConfig['checking'])
+                                );
+
+                            } catch (\Exception $e) {
+                                $relationArray['status'] = self::DELETE_ENTITY;
                             }
-                        } else {
-                            $this->fieldPlaceholder(
-                                $relations,
-                                $relationClassMapConfig['class'],
-                                $result['object'],
-                                $relationClassMapConfig['fields'],
-                                $relationClassMapConfig['checking'],
-                                $relationName
+                            array_push(
+                                $result['object'][$relationName],
+                                array_merge($relationArray, ['entity' => $relation])
                             );
+
+                            $newEntity = $this->findNew($allRelationsCheckingEntity, $checkedIdsRelations);
+
+                            if (!empty($newEntity)) {
+                               /* array_push(
+                                    $result['object'][$relationName],
+                                    $newEntity
+                                );*/
+                            }
+
+                            unset($relationArray);
                         }
+                        unset($relation);
+
+
                     }
+                    unset($relationClassMapConfig, $relationName);
                 }
             }
 
             if (!empty($result['object'])) {
-                $result['channel'] = $entity->getChannel();
                 $result['entity'] = $entity;
             }
         }
@@ -84,97 +132,80 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
     }
 
     /**
-     * @param ContextInterface $context
-     * @throws InvalidConfigurationException
-     */
-    public function setImportExportContext(ContextInterface $context)
-    {
-        $this->context = $context;
-    }
-
-    /**
      * @param object $entity
      * @param string $classNames
      * @param array  $result
      * @param array  $fields
-     * @param array  $checking
-     * @param string $arrayName
      */
     protected function fieldPlaceholder(
         $entity,
         $classNames,
         array &$result,
-        array $fields,
-        array $checking,
-        $arrayName
+        array $fields
     ) {
         if ($entity instanceof $classNames) {
             foreach ($fields as $name => $methods) {
-                if ($this->isChanged($entity, $methods, $checking)) {
-                    $result[$arrayName][$name] = $this->getCheckingMethodValue($entity, $checking['method'], $methods);
+                if ($this->isChanged($entity, $methods)) {
+                    $result[$methods[self::SOURCE]] = $this->accessor->getValue($entity, $methods[self::CHECKING]);
                 }
             }
         }
     }
 
-    /**
-     * @param object $entity
-     * @param array $methods
-     * @param array $checking
-     *
-     * @return bool
-     */
-    protected function isChanged($entity, array $methods, array $checking)
+    protected function isChanged($entity, array $paths)
     {
-        if (is_array($checking)) {
-            $checkingMethod = $checking['method'];
-            $checkingClass = $checking['class'];
+        $checking = $this->accessor->getValue($entity, $paths[self::CHECKING]);
 
-            if ($entity->$checkingMethod() instanceof $checkingClass) {
-                return $this->hasDistinction($entity, $checkingMethod, $methods);
+        if (is_object($checking)) {
+            try {
+                $checking = (string)$checking;
+            } catch (\Exception $e) {
+                return false;
             }
         }
 
-        return false;
+        return (
+            $this->accessor->getValue($entity, $paths[self::SOURCE])
+            === $checking
+        );
     }
 
-    /**
-     * @param object $entity
-     * @param string $checkingMethod
-     * @param string $methods
-     *
-     * @return mixed
-     */
-    protected function getCheckingMethodValue($entity, $checkingMethod, $methods)
+    protected function findNew($entities, $checkedIds)
+    {
+        $result = [];
+
+        foreach ($entities as $entity) {
+            if (!in_array($entity->getId(), $checkedIds)) {
+                array_push($result, $entity);
+            }
+        }
+        return $result;
+    }
+
+
+    /*protected function getCheckingMethodValue($entity, $checkingMethod, $methods)
     {
         if (!empty($methods[1])) {
             return $entity->$checkingMethod()->$methods[1]();
         }
 
         return $entity->$checkingMethod()->$methods[0]();
-    }
+    }*/
 
-    /**
-     * @param object $entity
-     * @param string $methods
-     *
-     * @return mixed
-     */
-    protected function getObjectMethodValue($entity, $methods)
+
+    /*protected function getObjectMethodValue($entity, $methods)
     {
         return $entity->$methods[0]();
-    }
+    }*/
 
-    /**
-     *
-     * @param object $entity
-     * @param string $checkingMethod
-     * @param string $methods
-     *
-     * @return bool
-     */
-    protected function hasDistinction($entity, $checkingMethod, $methods)
+    protected function hasDistinction($entity, $paths)
     {
+        return (
+            $this->accessor->getValue($entity, $paths[self::SOURCE])
+            !== $this->accessor->getValue($entity, $paths[self::CHECKING])
+        );
+
+        /*
         if (!empty($methods[1])) {
             return (
                 $this->getObjectMethodValue($entity, $methods)
@@ -185,6 +216,6 @@ abstract class AbstractReverseProcessor implements ProcessorInterface, ContextAw
         return (
             $this->getObjectMethodValue($entity, $methods)
             !== $this->getCheckingMethodValue($entity, $checkingMethod, $methods)
-        );
+        );*/
     }
 }

@@ -4,35 +4,39 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Processor;
 
 class CustomerReverseProcessor extends AbstractReverseProcessor
 {
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     *
+     * @todo:
+     * - взять все адреса в кастомере и пройтись по ним ( customer->addressses )
+     *   - если нет связи в кастомер адресе с contact_address то этот адрес идёт на удаление
+     *   - записать все contact_address id
+     * - взять контакт адреса у данного кастомера (customer->contact->addresses)
+     *   - убрать те кторые есть в списке
+     *   - оставшиеся записать как новые для данного кастомера
+     */
     protected $checkEntityClasses = [
         'OroCRM\Bundle\MagentoBundle\Entity\Customer'=> [
             'fields' => [
-                'email'      => ['getEmail', 'getPrimaryEmail'],
-                'firstname'  => ['getFirstName'],
-                'lastname'   => ['getLastName'],
-                'prefix'     => ['getNamePrefix'],
-                'suffix'     => ['getNameSuffix'],
-                'dob'        => ['getBirthday'],
-                'gender'     => ['getGender'],
-                'middlename' => ['getMiddleName'],
+                'email'      => ['email',       'contact.primary_email'],
+                'firstname'  => ['first_name',  'contact.first_name'],
+                'lastname'   => ['last_name',   'contact.last_name'],
+                'prefix'     => ['name_prefix', 'contact.name_prefix'],
+                'suffix'     => ['name_suffix', 'contact.name_suffix'],
+                'dob'        => ['birthday',    'contact.birthday'],
+                'gender'     => ['gender',      'contact.gender'],
+                'middlename' => ['middle_name', 'contact.middle_name'],
             ],
-            'checking' => [
-                'method' => 'getContact',
-                'class'  => 'OroCRM\Bundle\ContactBundle\Entity\Contact',
-            ],
+            'checking' => 'contact.addresses',
             'relation' => [
                 'addresses' => [
-                    'method'   => 'getAddresses',
+                    'method'   => 'addresses',
                     'class'    => 'OroCRM\Bundle\MagentoBundle\Entity\Address',
-                    'checking' => [
-                        'method' => 'getContactAddress',
-                        'class'  => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress',
-                    ],
+                    'checking'   => 'contact_address.id',
                     'fields' => [
-                        'city' => ['getCity'],
-                        'company' => ['getOrganization'],
-                        'country_id' => ['getCountry'],
+                        'city' => ['city', 'contact_address.city'],
+                        /*'company' => ['addresses.organization'],
+                        'country_id' => ['addresses.country'],
                         'firstname' => ['getFirstName'],
                         'lastname' => ['getLastName'],
                         'middlename' => ['getMiddleName'],
@@ -41,7 +45,7 @@ class CustomerReverseProcessor extends AbstractReverseProcessor
                         'region_id' => ['getRegion'],
                         'region' => ['getRegionText'],
                         'street' => ['getStreet'],
-                        'suffix' => ['getNameSuffix'],
+                        'suffix' => ['getNameSuffix'],*/
                     ]
                 ],
             ]
