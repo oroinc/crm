@@ -139,7 +139,7 @@ class OpportunityControllersTest extends WebTestCase
      */
     public function testInfo(array $returnValue)
     {
-        $crawler = $this->client->request(
+        $this->client->request(
             'GET',
             $this->getUrl(
                 'orocrm_sales_opportunity_info',
