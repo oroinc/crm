@@ -47,6 +47,6 @@ class OrderItemCompositeDenormalizer extends AbstractNormalizer implements Denor
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && $type == MagentoConnectorInterface::ORDER_ITEM_TYPE;
+        return $type == MagentoConnectorInterface::ORDER_ITEM_TYPE;
     }
 }

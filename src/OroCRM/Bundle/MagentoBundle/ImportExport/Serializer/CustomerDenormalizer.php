@@ -68,18 +68,15 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
     );
 
     /**
-     * For importing customers
-     *
-     * @param mixed  $data
-     * @param string $class
-     * @param null   $format
-     * @param array  $context
-     *
-     * @return object|Customer
+     * {@inheritdoc}
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
         $resultObject = new Customer();
+
+        if (!is_array($data)) {
+            return $resultObject;
+        }
 
         $mappedData = [];
         foreach ($data as $key => $value) {
@@ -339,16 +336,10 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
     }
 
     /**
-     * Used in import
-     *
-     * @param mixed  $data
-     * @param string $type
-     * @param null   $format
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && $type == MagentoConnectorInterface::CUSTOMER_TYPE;
+        return $type == MagentoConnectorInterface::CUSTOMER_TYPE;
     }
 }
