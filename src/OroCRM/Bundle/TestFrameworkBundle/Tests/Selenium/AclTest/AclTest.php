@@ -50,7 +50,7 @@ class AclTest extends Selenium2TestCase
         /** @var Users $login */
         $login->openUsers('Oro\Bundle\UserBundle')
             ->add()
-            ->assertTitle('Create User - Users - Users Management - System')
+            ->assertTitle('Create User - Users - User Management - System')
             ->setUsername($username)
             ->setOwner('Main')
             ->enable()
@@ -65,7 +65,7 @@ class AclTest extends Selenium2TestCase
             ->assertMessage('User saved')
             ->toGrid()
             ->close()
-            ->assertTitle('Users - Users Management - System');
+            ->assertTitle('Users - User Management - System');
 
         return $username;
     }
