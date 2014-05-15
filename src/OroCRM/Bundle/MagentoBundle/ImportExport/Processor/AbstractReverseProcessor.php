@@ -15,6 +15,7 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
 {
     const SOURCE = 0;
     const CHECKING = 1;
+    const MODIFIER = 2;
     const UPDATE_ENTITY = 'update';
     const DELETE_ENTITY = 'delete';
     const NEW_ENTITY    = 'new';
@@ -79,13 +80,13 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
                         $result['object'][$relationName] = [];
 
                         foreach ($relations as $relation) {
-                            $relationArray = [];
+                            $relationArray = ['object'=>[]];
 
                             try {
                                 $this->fieldPlaceholder(
                                     $relation,
                                     $relationClassMapConfig['class'],
-                                    $relationArray,
+                                    $relationArray['object'],
                                     $relationClassMapConfig['fields']
                                 );
 
@@ -139,7 +140,13 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
         if ($entity instanceof $classNames) {
             foreach ($fields as $methods) {
                 if ($this->isChanged($entity, $methods)) {
-                    $result[$methods[self::SOURCE]] = $this->getValue($entity, $methods[self::CHECKING]);
+
+                    if (!empty($methods[self::MODIFIER])) {
+                        $result[$methods[self::SOURCE]] = $this
+                            ->getValue($entity, $methods[self::CHECKING] . '.' . $methods[self::MODIFIER]);
+                    } else {
+                        $result[$methods[self::SOURCE]] = $this->getValue($entity, $methods[self::CHECKING]);
+                    }
                 }
             }
         }
@@ -153,7 +160,13 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
      */
     protected function isChanged($entity, array $paths)
     {
-        $checking = $this->getValue($entity, $paths[self::CHECKING]);
+        if ($paths[self::MODIFIER]) {
+            $checking = $this->getValue($entity, $paths[self::CHECKING] . '.' . $paths[self::MODIFIER]);
+            $source   = $this->getValue($entity, $paths[self::SOURCE] . '.' . $paths[self::MODIFIER]);
+        } else {
+            $checking = $this->getValue($entity, $paths[self::CHECKING]);
+            $source   = $this->getValue($entity, $paths[self::SOURCE]);
+        }
 
         if (is_object($checking)) {
             try {
@@ -163,10 +176,7 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
             }
         }
 
-        return (
-            $this->getValue($entity, $paths[self::SOURCE])
-            !== $checking
-        );
+        return $source !== $checking;
     }
 
     /**
