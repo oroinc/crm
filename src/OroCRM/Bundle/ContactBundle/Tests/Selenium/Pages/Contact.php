@@ -41,10 +41,10 @@ class Contact extends AbstractPageEntity
         $this->lastName = $this->test->byId('orocrm_contact_form_lastName');
         $this->nameSuffix = $this->test->byId('orocrm_contact_form_nameSuffix');
         $this->email = $this->test->byId('orocrm_contact_form_emails_0_email');
-        $this->assignedTo = $this->test->byXpath("//div[@id='s2id_orocrm_contact_form_assignedTo']/a");
-        $this->reportsTo = $this->test->byXpath("//div[@id='s2id_orocrm_contact_form_reportsTo']/a");
+        $this->assignedTo = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_assignedTo')]/a");
+        $this->reportsTo = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_reportsTo')]/a");
         $this->addressCollection = $this->test->byId('orocrm_contact_form_addresses_collection');
-        $this->owner = $this->test->byXpath("//div[@id='s2id_orocrm_contact_form_owner']/a");
+        $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_owner')]/a");
 
         return $this;
     }
@@ -262,9 +262,9 @@ class Contact extends AbstractPageEntity
 
     public function setAddressCountry($value, $addressId = 0)
     {
-        $country = "//div[@id='s2id_orocrm_contact_form_addresses_{$addressId}_country']/a";
+        $country = "//div[starts-with(@id,'s2id_orocrm_contact_form_addresses_{$addressId}_country')]/a";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $country = "//div[@id='s2id_orocrm_contact_address_form_country']/a";
+            $country = "//div[starts-with(@id,'s2id_orocrm_contact_address_form_country')]/a";
         }
         $country = $this->test->byXpath($country);
         $this->test->moveto($country);
@@ -285,9 +285,9 @@ class Contact extends AbstractPageEntity
 
     public function typeAddressCountry($value, $addressId = 0)
     {
-        $country = "//div[@id='s2id_orocrm_contact_form_addresses_{$addressId}_country']/a";
+        $country = "//div[starts-with(@id,'s2id_orocrm_contact_form_addresses_{$addressId}_country')]/a";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $country = "//div[@id='s2id_orocrm_contact_address_form_country']/a";
+            $country = "//div[starts-with(@id,'s2id_orocrm_contact_address_form_country')]/a";
         }
         $country = $this->test->byXpath($country);
         $this->test->moveto($country);
@@ -315,9 +315,9 @@ class Contact extends AbstractPageEntity
 
     public function setAddressRegion($region, $addressId = 0)
     {
-        $xpath = "//div[@id='s2id_orocrm_contact_form_addresses_{$addressId}_region']/a";
+        $xpath = "//div[starts-with(@id,'s2id_orocrm_contact_form_addresses_{$addressId}_region')]/a";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $xpath = "//div[@id='s2id_orocrm_contact_address_form_region']/a";
+            $xpath = "//div[starts-with(@id,'s2id_orocrm_contact_address_form_region')]/a";
         }
         $xpath = $this->test->byXpath($xpath);
         $this->test->moveto($xpath);
@@ -337,9 +337,9 @@ class Contact extends AbstractPageEntity
 
     public function typeAddressRegion($region, $addressId = 0)
     {
-        $xpath = "//div[@id='s2id_orocrm_contact_form_addresses_{$addressId}_region']/a";
+        $xpath = "//div[starts-with(@id,'s2id_orocrm_contact_form_addresses_{$addressId}_region')]/a";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $xpath = "//div[@id='s2id_orocrm_contact_address_form_region']/a";
+            $xpath = "//div[starts-with(@id,'s2id_orocrm_contact_address_form_region')]/a";
         }
         $xpath = $this->test->byXpath($xpath);
         $this->test->moveto($xpath);

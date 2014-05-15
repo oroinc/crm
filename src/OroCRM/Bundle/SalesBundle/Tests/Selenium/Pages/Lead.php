@@ -47,7 +47,7 @@ class Lead extends AbstractPageEntity
         $this->name = $this->test->byId('orocrm_sales_lead_form_name');
         $this->firstName = $this->test->byId('orocrm_sales_lead_form_firstName');
         $this->lastName = $this->test->byId('orocrm_sales_lead_form_lastName');
-        $this->contact = $this->test->byXpath("//div[@id='s2id_orocrm_sales_lead_form_contact']/a");
+        $this->contact = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_lead_form_contact')]/a");
         $this->jobTitle = $this->test->byId('orocrm_sales_lead_form_jobTitle');
         $this->phone = $this->test->byId('orocrm_sales_lead_form_phoneNumber');
         $this->email = $this->test->byId('orocrm_sales_lead_form_email');
@@ -55,7 +55,7 @@ class Lead extends AbstractPageEntity
         $this->website = $this->test->byId('orocrm_sales_lead_form_website');
         $this->employees = $this->test->byId('orocrm_sales_lead_form_numberOfEmployees');
         $this->industry = $this->test->byId('orocrm_sales_lead_form_industry');
-        $this->owner = $this->test->byXpath("//div[@id='s2id_orocrm_sales_lead_form_owner']/a");
+        $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_lead_form_owner')]/a");
 
         return $this;
     }
@@ -111,7 +111,7 @@ class Lead extends AbstractPageEntity
 
     public function getContact()
     {
-        return $this->test->byXpath("//div[@id='s2id_orocrm_sales_lead_form_contact']/a/span")->text();
+        return $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_lead_form_contact')]/a/span")->text();
     }
 
     public function setJobTitle($jobTitle)
@@ -263,7 +263,7 @@ class Lead extends AbstractPageEntity
 
     public function setAddressCountry($value)
     {
-        $country = $this->test->byXpath("//div[@id='s2id_orocrm_sales_lead_form_address_country']/a");
+        $country = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_lead_form_address_country')]/a");
         $country->click();
         $this->waitForAjax();
         $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($value);
@@ -290,7 +290,7 @@ class Lead extends AbstractPageEntity
             $state->clear();
             $state->value($value);
         } else {
-            $state = $this->test->byXpath("//div[@id='s2id_orocrm_sales_lead_form_address_region']/a");
+            $state = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_lead_form_address_region')]/a");
             $state->click();
             $this->waitForAjax();
             $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($value);

@@ -31,7 +31,7 @@ class Workflow extends AbstractPageEntity
 
     public function setContact($contact)
     {
-        $this->test->byXpath("//div[@id='s2id_oro_workflow_step_contact']/a")->click();
+        $this->test->byXpath("//div[starts-with(@id,'s2id_oro_workflow_step_contact')]/a")->click();
         $this->waitForAjax();
         $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($contact);
         $this->waitForAjax();
@@ -46,7 +46,7 @@ class Workflow extends AbstractPageEntity
 
     public function setAccount($account)
     {
-        $this->test->byXpath("//div[@id='s2id_oro_workflow_transition_new_account']/a")->click();
+        $this->test->byXpath("//div[starts-with(@id,'s2id_oro_workflow_transition_new_account')]/a")->click();
         $this->waitForAjax();
         $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($account);
         $this->waitForAjax();
