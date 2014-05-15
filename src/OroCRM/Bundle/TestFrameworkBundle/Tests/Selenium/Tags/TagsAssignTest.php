@@ -133,9 +133,9 @@ class TagsAssignTest extends Selenium2TestCase
         $result = $tagSearch->search('New_' . $tagName)
             ->submit()
             ->select('New_' . $tagName)
-            ->assertEntity('User', 1)
-            ->assertEntity('Contact', 1)
-            ->assertEntity('Account', 1);
+            ->assertEntity('Users', 1)
+            ->assertEntity('Contacts', 1)
+            ->assertEntity('Accounts', 1);
         $this->assertNotEmpty($result);
     }
 }
