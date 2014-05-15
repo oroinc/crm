@@ -160,7 +160,7 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
      */
     protected function isChanged($entity, array $paths)
     {
-        if ($paths[self::MODIFIER]) {
+        if (!empty($paths[self::MODIFIER])) {
             $checking = $this->getValue($entity, $paths[self::CHECKING] . '.' . $paths[self::MODIFIER]);
             $source   = $this->getValue($entity, $paths[self::SOURCE] . '.' . $paths[self::MODIFIER]);
         } else {

@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\Region;
 
 use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -27,6 +29,12 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var Channel */
     protected $channel;
 
+    /** @var Country */
+    protected $country;
+
+    /** @var Region */
+    protected $region;
+
     public function setUp()
     {
         $this->channel  =  $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')->getMock();
@@ -34,12 +42,32 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         $this->contact  = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')->getMock();
         $this->address = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Address')->getMock();
         $this->contactAddress = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\ContactAddress')->getMock();
+        $this->country = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Country')
+            ->disableOriginalConstructor()->getMock();
+        $this->region = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Region')
+            ->disableOriginalConstructor()->getMock();
 
         $collection = $this->getMock('Doctrine\Common\Collections\Collection');
 
         $collection->expects($this->any())
             ->method('getValues')
             ->will($this->returnValue([$this->address]));
+
+        $this->country->expects($this->any())
+            ->method('getIso2Code')
+            ->will($this->returnValue('US'));
+
+        $this->region->expects($this->any())
+            ->method('getCombinedCode')
+            ->will($this->returnValue('US-US'));
+
+        $this->contactAddress->expects($this->any())
+            ->method('getCountry')
+            ->will($this->returnValue($this->country));
+
+        $this->contactAddress->expects($this->any())
+            ->method('getRegion')
+            ->will($this->returnValue($this->region));
 
         $this->customer->expects($this->any())
             ->method('getContact')
@@ -54,6 +82,16 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getContactAddress')
             ->will($this->returnValue($this->contactAddress));
+
+        $this->address
+            ->expects($this->any())
+            ->method('getCountry')
+            ->will($this->returnValue($this->country));
+
+        $this->address
+            ->expects($this->any())
+            ->method('getRegion')
+            ->will($this->returnValue($this->region));
 
         $this->customer
             ->expects($this->any())
@@ -89,7 +127,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         $middleNameAddress = '';
         $postalCodeAddress = '12345';
         $prefixAddress = '';
-        $regionAddress = '';
+        $regionAddress = 'US-US';
         $regionTextAddress = 'text';
         $streetAddress = '';
         $nameSuffixAddress = '';
@@ -128,8 +166,10 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                         'gender' => $gender,
                         'addresses' => [
                             [
-                                'city' => $cityAddress,
-                                'organization' => $organizationAddress,
+                                'object' => [
+                                    'city' => $cityAddress,
+                                    'organization' => $organizationAddress,
+                                ],
                                 'status' => 'update',
                                 'entity'=>''
                             ]
@@ -174,18 +214,20 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                         'middle_name' => $middleName,
                         'addresses' => [
                             [
-                                'city' => $cityAddress,
-                                'organization' => $organizationAddress,
-                                'country' => $countryAddress,
-                                'first_name' => $firstNameAddress,
-                                'last_name' => $lastNameAddress,
-                                'middle_name' => $middleNameAddress,
-                                'postal_code' => $postalCodeAddress,
-                                'name_prefix' => $prefixAddress,
-                                'region' => $regionAddress,
-                                'region_text' => $regionTextAddress,
-                                'street' => $streetAddress,
-                                'name_suffix' => $nameSuffixAddress,
+                                'object' => [
+                                    'city' => $cityAddress,
+                                    'organization' => $organizationAddress,
+                                    #'country' => $countryAddress,
+                                    'first_name' => $firstNameAddress,
+                                    'last_name' => $lastNameAddress,
+                                    'middle_name' => $middleNameAddress,
+                                    'postal_code' => $postalCodeAddress,
+                                    'name_prefix' => $prefixAddress,
+                                    #'region' => $regionAddress,
+                                    'region_text' => $regionTextAddress,
+                                    'street' => $streetAddress,
+                                    'name_suffix' => $nameSuffixAddress,
+                                ],
                                 'status' => 'update',
                                 'entity'=>'',
                              ]
@@ -221,7 +263,13 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                     ],
                     (object)[
                         'object' => [
-                            'addresses' => []
+                            'addresses' => [
+                                [
+                                    'object' => [],
+                                    'status' => 'update',
+                                    'entity'=>'',
+                                ]
+                            ]
                         ]
                     ]
             ],
@@ -253,7 +301,13 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                     ],
                     (object)[
                         'object' => [
-                            'addresses' => []
+                            'addresses' => [
+                                [
+                                    'object' => [],
+                                    'status' => 'update',
+                                    'entity'=>'',
+                                ]
+                            ]
                         ]
                     ]
             ],
