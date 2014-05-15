@@ -9,7 +9,7 @@ class BaseIteratorTestCase extends \PHPUnit_Framework_TestCase
     /** @var AbstractBridgeIterator */
     protected $iterator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|SoapTransport */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $transport;
 
     /** @var array */
