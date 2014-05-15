@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor;
 
-use Doctrine\Common\Collections\Collection;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor;
@@ -125,12 +123,16 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                 (object)[
                     'object' =>[
                         'email' => $email,
-                        'lastname' => $lastName,
-                        'suffix' => $suffix,
+                        'last_name' => $lastName,
+                        'name_suffix' => $suffix,
                         'gender' => $gender,
                         'addresses' => [
-                            'city' => $cityAddress,
-                            'company' => $organizationAddress,
+                            [
+                                'city' => $cityAddress,
+                                'organization' => $organizationAddress,
+                                'status' => 'update',
+                                'entity'=>''
+                            ]
                         ]
                     ]
                 ]
@@ -163,26 +165,30 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                 (object)[
                     'object' =>[
                         'email' => $email,
-                        'firstname' => $firstName,
-                        'lastname' => $lastName,
-                        'prefix' => $prefix,
-                        'suffix' => $suffix,
-                        'dob' => $dob,
+                        'first_name' => $firstName,
+                        'last_name' => $lastName,
+                        'name_prefix' => $prefix,
+                        'name_suffix' => $suffix,
+                        'birthday' => $dob,
                         'gender' => $gender,
-                        'middlename' => $middleName,
+                        'middle_name' => $middleName,
                         'addresses' => [
-                            'city' => $cityAddress,
-                            'company' => $organizationAddress,
-                            'country_id' => $countryAddress,
-                            'firstname' => $firstNameAddress,
-                            'lastname' => $lastNameAddress,
-                            'middlename' => $middleNameAddress,
-                            'postcode' => $postalCodeAddress,
-                            'prefix' => $prefixAddress,
-                            'region_id' => $regionAddress,
-                            'region' => $regionTextAddress,
-                            'street' => $streetAddress,
-                            'suffix' => $nameSuffixAddress,
+                            [
+                                'city' => $cityAddress,
+                                'organization' => $organizationAddress,
+                                'country' => $countryAddress,
+                                'first_name' => $firstNameAddress,
+                                'last_name' => $lastNameAddress,
+                                'middle_name' => $middleNameAddress,
+                                'postal_code' => $postalCodeAddress,
+                                'name_prefix' => $prefixAddress,
+                                'region' => $regionAddress,
+                                'region_text' => $regionTextAddress,
+                                'street' => $streetAddress,
+                                'name_suffix' => $nameSuffixAddress,
+                                'status' => 'update',
+                                'entity'=>'',
+                             ]
                         ]
                     ]
                 ]
@@ -213,7 +219,11 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                         'nameSuffixAddress' => $nameSuffixAddress,
                         'nameSuffixContactAddress' => $nameSuffixAddress,
                     ],
-                (object)['object' => []]
+                    (object)[
+                        'object' => [
+                            'addresses' => []
+                        ]
+                    ]
             ],
             [
                 'no originId' =>
@@ -241,7 +251,11 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                         'nameSuffixAddress' => $nameSuffixAddress,
                         'nameSuffixContactAddress' => $nameSuffixAddress,
                     ],
-                (object)['object' => []]
+                    (object)[
+                        'object' => [
+                            'addresses' => []
+                        ]
+                    ]
             ],
         ];
     }
@@ -254,13 +268,9 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess(array $fields, $checkingObject)
     {
-        /*
         $customerReverseProcessor = new CustomerReverseProcessor();
 
-        if (!empty($checkingObject->object)) {
-            $checkingObject->channel = $this->channel;
-            $checkingObject->entity = $this->customer;
-        }
+        $checkingObject->entity = $this->customer;
 
         $this->customer->expects($this->any())->method('getOriginId')
             ->will($this->returnValue(true));
@@ -365,11 +375,22 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         $this->contactAddress->expects($this->any())->method('getNameSuffix')
             ->will($this->returnValue($fields['nameSuffixContactAddress']));
 
+        $this->contact
+            ->expects($this->any())->method('getAddresses')
+            ->will($this->returnValue([$this->contactAddress]));
+
+        if (!empty($checkingObject->object['addresses'])) {
+            foreach ($checkingObject->object['addresses'] as &$address) {
+                $address['entity'] = $this->address;
+            }
+            unset($address);
+        }
+
         $result = $customerReverseProcessor->process($this->customer);
 
         $this->assertEquals(
             $checkingObject,
             $result
-        );*/
+        );
     }
 }
