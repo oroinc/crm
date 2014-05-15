@@ -10,7 +10,6 @@ use OroCRM\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\UserBundle\Entity\User;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -19,11 +18,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class RestContactApiTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
     /**
      * @var EntityManager
      */
@@ -44,7 +38,7 @@ class RestContactApiTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = self::createClient(array(), $this->generateWsseAuthHeader());
+        $this->initClient(array(), $this->generateWsseAuthHeader());
     }
 
     /**
@@ -135,7 +129,7 @@ class RestContactApiTest extends WebTestCase
         );
         $this->client->request(
             'POST',
-            $this->client->generate('oro_api_post_contact'),
+            $this->getUrl('oro_api_post_contact'),
             $request
         );
 
@@ -156,7 +150,7 @@ class RestContactApiTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_contacts')
+            $this->getUrl('oro_api_get_contacts')
         );
 
         $entities = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -176,7 +170,7 @@ class RestContactApiTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_contact', array('id' => $requiredContact['id']))
+            $this->getUrl('oro_api_get_contact', array('id' => $requiredContact['id']))
         );
 
         $selectedContact = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -224,7 +218,7 @@ class RestContactApiTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            $this->client->generate('oro_api_put_contact', array('id' => $contact['id'])),
+            $this->getUrl('oro_api_put_contact', array('id' => $contact['id'])),
             $request
         );
         $result = $this->client->getResponse();
@@ -232,7 +226,7 @@ class RestContactApiTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_contact', array('id' => $contact['id']))
+            $this->getUrl('oro_api_get_contact', array('id' => $contact['id']))
         );
 
         $contact = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -256,14 +250,14 @@ class RestContactApiTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_contact', array('id' => $contact['id']))
+            $this->getUrl('oro_api_delete_contact', array('id' => $contact['id']))
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_contact', array('id' => $contact['id']))
+            $this->getUrl('oro_api_get_contact', array('id' => $contact['id']))
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 404);

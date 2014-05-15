@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\TaskBundle\Tests\Functional\Controller;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -12,19 +11,14 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class TaskControllersTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
     public function setUp()
     {
-        $this->client = self::createClient(array(), $this->generateBasicAuthHeader());
+        $this->initClient(array(), $this->generateBasicAuthHeader());
     }
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', $this->client->generate('orocrm_task_create'));
+        $crawler = $this->client->request('GET', $this->getUrl('orocrm_task_create'));
         $form = $crawler->selectButton('Save and Close')->form();
         $form['orocrm_task[subject]'] = 'New task';
         $form['orocrm_task[description]'] = 'New description';
@@ -45,8 +39,7 @@ class TaskControllersTest extends WebTestCase
      */
     public function testUpdate()
     {
-        $response = $this->getGridResponse(
-            $this->client,
+        $response = $this->client->requestGrid(
             'tasks-grid',
             array('tasks-grid[_filter][reporterName][value]' => 'John Doe')
         );
@@ -56,7 +49,7 @@ class TaskControllersTest extends WebTestCase
 
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_task_update', array('id' => $result['id']))
+            $this->getUrl('orocrm_task_update', array('id' => $result['id']))
         );
 
         $form = $crawler->selectButton('Save and Close')->form();
@@ -76,8 +69,7 @@ class TaskControllersTest extends WebTestCase
      */
     public function testView()
     {
-        $response = $this->getGridResponse(
-            $this->client,
+        $response = $this->client->requestGrid(
             'tasks-grid',
             array('tasks-grid[_filter][reporterName][value]' => 'John Doe')
         );
@@ -87,7 +79,7 @@ class TaskControllersTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_task_view', array('id' => $result['id']))
+            $this->getUrl('orocrm_task_view', array('id' => $result['id']))
         );
 
         $result = $this->client->getResponse();
@@ -100,7 +92,7 @@ class TaskControllersTest extends WebTestCase
      */
     public function testIndex()
     {
-        $this->client->request('GET', $this->client->generate('orocrm_task_index'));
+        $this->client->request('GET', $this->getUrl('orocrm_task_index'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains('Task updated', $result->getContent());

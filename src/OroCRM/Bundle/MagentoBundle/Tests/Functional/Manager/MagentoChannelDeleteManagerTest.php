@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManager;
 
 use OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -16,18 +15,13 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 class MagentoChannelDeleteManagerTest extends WebTestCase
 {
     /**
-     * @var Client
-     */
-    protected $client;
-
-    /**
      * @var EntityManager
      */
     protected $em;
 
     public function setUp()
     {
-        $this->client = self::createClient(
+        $this->initClient(
             array(),
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );

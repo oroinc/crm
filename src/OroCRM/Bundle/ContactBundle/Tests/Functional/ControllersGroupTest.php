@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 
 use Symfony\Component\DomCrawler\Form;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -13,14 +12,9 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class ControllersGroupTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
     public function setUp()
     {
-        $this->client = self::createClient(
+        $this->initClient(
             array(),
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
@@ -28,14 +22,14 @@ class ControllersGroupTest extends WebTestCase
 
     public function testIndex()
     {
-        $this->client->request('GET', $this->client->generate('orocrm_contact_group_index'));
+        $this->client->request('GET', $this->getUrl('orocrm_contact_group_index'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', $this->client->generate('orocrm_contact_group_create'));
+        $crawler = $this->client->request('GET', $this->getUrl('orocrm_contact_group_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $form['orocrm_contact_group_form[label]'] = 'Contact Group Label';
@@ -54,8 +48,7 @@ class ControllersGroupTest extends WebTestCase
      */
     public function testUpdate()
     {
-        $response = $this->getGridResponse(
-            $this->client,
+        $response = $this->client->requestGrid(
             'contact-groups-grid',
             array('contact-groups-grid[_filter][label][value]' => 'Contact Group Label')
         );
@@ -66,7 +59,7 @@ class ControllersGroupTest extends WebTestCase
         $id = $result['id'];
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_group_update', array('id' => $result['id']))
+            $this->getUrl('orocrm_contact_group_update', array('id' => $result['id']))
         );
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
@@ -89,7 +82,7 @@ class ControllersGroupTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_contactgroup', array('id' => $id))
+            $this->getUrl('oro_api_delete_contactgroup', array('id' => $id))
         );
 
         $result = $this->client->getResponse();

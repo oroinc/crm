@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Functional\API;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -11,14 +10,9 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class RestLeadTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
     public function setUp()
     {
-        $this->client = self::createClient(
+        $this->initClient(
             array(),
             $this->generateWsseAuthHeader()
         );
@@ -40,7 +34,7 @@ class RestLeadTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            $this->client->generate('oro_api_post_lead'),
+            $this->getUrl('oro_api_post_lead'),
             $request
         );
 
@@ -59,7 +53,7 @@ class RestLeadTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_lead', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_lead', array('id' => $request['id']))
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -87,7 +81,7 @@ class RestLeadTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            $this->client->generate('oro_api_put_lead', array('id' => $request['id'])),
+            $this->getUrl('oro_api_put_lead', array('id' => $request['id'])),
             $request
         );
 
@@ -96,7 +90,7 @@ class RestLeadTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_lead', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_lead', array('id' => $request['id']))
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -117,7 +111,7 @@ class RestLeadTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_leads')
+            $this->getUrl('oro_api_get_leads')
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -139,14 +133,14 @@ class RestLeadTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_lead', array('id' => $request['id']))
+            $this->getUrl('oro_api_delete_lead', array('id' => $request['id']))
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_lead', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_lead', array('id' => $request['id']))
         );
 
         $result = $this->client->getResponse();

@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\ReportBundle\Tests\Functional;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -12,14 +11,9 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class ControllersTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
     public function setUp()
     {
-        $this->client = self::createClient(array(), $this->generateBasicAuthHeader());
+        $this->initClient(array(), $this->generateBasicAuthHeader());
     }
 
     /**
@@ -35,7 +29,7 @@ class ControllersTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate(
+            $this->getUrl(
                 'orocrm_report_index',
                 array(
                     'reportGroupName' => $group,
@@ -61,8 +55,7 @@ class ControllersTest extends WebTestCase
     public function testGrid($gridName, $report, $group)
     {
         $reportName = $gridName . '-' . $report;
-        $response = $this->getGridResponse(
-            $this->client,
+        $response = $this->client->requestGrid(
             $reportName,
             array(
                 "{$reportName}[reportGroupName]" => $group,

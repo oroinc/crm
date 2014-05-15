@@ -7,7 +7,6 @@ use Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository as BatchJobRepository;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Crawler;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -17,14 +16,9 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class ImportExportTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
     protected function setUp()
     {
-        $this->client = self::createClient(array(), $this->generateBasicAuthHeader());
+        $this->initClient(array(), $this->generateBasicAuthHeader());
     }
 
     protected function tearDown()
@@ -53,7 +47,7 @@ class ImportExportTest extends WebTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate(
+            $this->getUrl(
                 'oro_importexport_import_form',
                 array(
                     'entity' => 'OroCRM\Bundle\ContactBundle\Entity\Contact',
@@ -109,7 +103,7 @@ class ImportExportTest extends WebTestCase
         $this->client->followRedirects(false);
         $this->client->request(
             'GET',
-            $this->client->generate(
+            $this->getUrl(
                 'oro_importexport_import_process',
                 array(
                     'processorAlias' => 'orocrm_contact.add_or_replace',
@@ -138,7 +132,7 @@ class ImportExportTest extends WebTestCase
         $this->client->followRedirects(false);
         $this->client->request(
             'GET',
-            $this->client->generate(
+            $this->getUrl(
                 'oro_importexport_export_instant',
                 array(
                     'processorAlias' => 'orocrm_contact',

@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Functional;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -14,14 +13,9 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class LeadControllersTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
     public function setUp()
     {
-        $this->client = self::createClient(
+        $this->initClient(
             array(),
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
@@ -29,14 +23,14 @@ class LeadControllersTest extends WebTestCase
 
     public function testIndex()
     {
-        $this->client->request('GET', $this->client->generate('orocrm_sales_lead_index'));
+        $this->client->request('GET', $this->getUrl('orocrm_sales_lead_index'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', $this->client->generate('orocrm_sales_lead_create'));
+        $crawler = $this->client->request('GET', $this->getUrl('orocrm_sales_lead_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
@@ -91,8 +85,7 @@ class LeadControllersTest extends WebTestCase
      */
     public function testUpdate($name)
     {
-        $response = $this->getGridResponse(
-            $this->client,
+        $response = $this->client->requestGrid(
             'sales-lead-grid',
             array('sales-lead-grid[_filter][name][value]' => $name)
         );
@@ -102,7 +95,7 @@ class LeadControllersTest extends WebTestCase
         $returnValue = $result;
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_sales_lead_update', array('id' => $result['id']))
+            $this->getUrl('orocrm_sales_lead_update', array('id' => $result['id']))
         );
 
         /** @var Form $form */
@@ -131,7 +124,7 @@ class LeadControllersTest extends WebTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_sales_lead_view', array('id' => $returnValue['id']))
+            $this->getUrl('orocrm_sales_lead_view', array('id' => $returnValue['id']))
         );
 
         $result = $this->client->getResponse();
@@ -149,7 +142,7 @@ class LeadControllersTest extends WebTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate(
+            $this->getUrl(
                 'orocrm_sales_lead_info',
                 array('id' => $returnValue['id'], '_widgetContainer' => 'block')
             )
@@ -169,7 +162,7 @@ class LeadControllersTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_lead', array('id' => $returnValue['id']))
+            $this->getUrl('oro_api_delete_lead', array('id' => $returnValue['id']))
         );
 
         $result = $this->client->getResponse();
@@ -177,7 +170,7 @@ class LeadControllersTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_sales_lead_view', array('id' => $returnValue['id']))
+            $this->getUrl('orocrm_sales_lead_view', array('id' => $returnValue['id']))
         );
 
         $result = $this->client->getResponse();

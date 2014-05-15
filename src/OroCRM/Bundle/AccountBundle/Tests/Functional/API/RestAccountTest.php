@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\AccountBundle\Tests\Functional\API;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -11,12 +10,9 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class RestAccountTest extends WebTestCase
 {
-    /** @var Client */
-    protected $client;
-
     public function setUp()
     {
-        $this->client = self::createClient(array(), $this->generateWsseAuthHeader());
+        $this->initClient(array(), $this->generateWsseAuthHeader());
     }
 
     public function testCreate()
@@ -30,7 +26,7 @@ class RestAccountTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            $this->client->generate('oro_api_post_account'),
+            $this->getUrl('oro_api_post_account'),
             $request
         );
 
@@ -50,7 +46,7 @@ class RestAccountTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_accounts')
+            $this->getUrl('oro_api_get_accounts')
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -68,7 +64,7 @@ class RestAccountTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_account', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_account', array('id' => $request['id']))
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -86,7 +82,7 @@ class RestAccountTest extends WebTestCase
         $request['account']['name'] .= "_Updated";
         $this->client->request(
             'PUT',
-            $this->client->generate('oro_api_put_account', array('id' => $request['id'])),
+            $this->getUrl('oro_api_put_account', array('id' => $request['id'])),
             $request
         );
         $result = $this->client->getResponse();
@@ -95,7 +91,7 @@ class RestAccountTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_account', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_account', array('id' => $request['id']))
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -114,11 +110,11 @@ class RestAccountTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_account', array('id' => $request['id']))
+            $this->getUrl('oro_api_delete_account', array('id' => $request['id']))
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 204);
-        $this->client->request('GET', $this->client->generate('oro_api_get_account', array('id' => $request['id'])));
+        $this->client->request('GET', $this->getUrl('oro_api_get_account', array('id' => $request['id'])));
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 404);
     }

@@ -13,11 +13,16 @@ class ControllersCrmTest extends BaseControllersTest
 {
     public function setUp()
     {
-        $this->client = self::createClient(
+        $this->initClient(
             array(),
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
-        $this->client->appendFixturesOnce(__DIR__ . DIRECTORY_SEPARATOR . 'DataFixtures', array('LoadLead'));
+        $this->loadFixtures(
+            array(
+                'OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures\LoadLeadSourceData',
+                'OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures\LoadLeadsData',
+            )
+        );
     }
 
     /**

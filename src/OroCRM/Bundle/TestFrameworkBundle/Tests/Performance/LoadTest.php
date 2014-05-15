@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\DependencyInjection\Container;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class LoadTest extends WebTestCase
@@ -15,15 +14,12 @@ class LoadTest extends WebTestCase
     const MAX_PAGES = 1000;
     const MAX_PAGE_TESTS = 100;
 
-    protected $result_data;
-    protected $result_limit;
-
-    /** @var  Client */
-    protected $client;
+    protected $resultData;
+    protected $resultLimit;
 
     public function setUp()
     {
-        $this->client = self::createClient(array("debug"=>false), $this->generateBasicAuthHeader());
+        $this->initClient(array("debug"=>false), $this->generateBasicAuthHeader());
     }
 
     protected function tearDown()
@@ -54,23 +50,23 @@ class LoadTest extends WebTestCase
 
         echo "\n Average Time: " . $container->averageTime;
         //export result
-        $this->result_limit = PHPUNIT_LOAD_LIMIT ;
-        $this->result_data = $container->averageTime;
+        $this->resultLimit = PHPUNIT_LOAD_LIMIT ;
+        $this->resultData = $container->averageTime;
     }
 
     protected function assertPostConditions()
     {
-        $data = $this->getName() . ',' . date('d/m/y') .  ',' . $this->result_limit. ',' . $this->result_data . "\n";
+        $data = $this->getName() . ',' . date('d/m/y') .  ',' . $this->resultLimit. ',' . $this->resultData . "\n";
         file_put_contents(
             getcwd() . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . 'statistics.txt',
             $data,
             FILE_APPEND
         );
-        $this->assertLessThan(floatval($this->result_limit), floatval($this->result_data), $this->getName());
+        $this->assertLessThan(floatval($this->resultLimit), floatval($this->resultData), $this->getName());
     }
 
     public function testPager()
-    {   $url = $this->client->generate('oro_datagrid_index', array('gridName' => 'contacts-grid'));
+    {   $url = $this->getUrl('oro_datagrid_index', array('gridName' => 'contacts-grid'));
         $averageTime = 0.0;
         for ($i  = 1; $i <= self::MAX_PAGE_TESTS; $i++) {
             $page = rand(1, self::MAX_PAGES);
@@ -89,7 +85,7 @@ class LoadTest extends WebTestCase
         echo "\n>> Average Time: " . $averageTime/self::MAX_PAGE_TESTS;
 
         //export result
-        $this->result_limit = PHPUNIT_PAGE_LIMIT;
-        $this->result_data = $averageTime/self::MAX_PAGE_TESTS;
+        $this->resultLimit = PHPUNIT_PAGE_LIMIT;
+        $this->resultData = $averageTime/self::MAX_PAGE_TESTS;
     }
 }

@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 
 use Symfony\Component\DomCrawler\Form;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -13,14 +12,9 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class ControllersTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
     public function setUp()
     {
-        $this->client = self::createClient(
+        $this->initClient(
             array(),
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
@@ -28,14 +22,14 @@ class ControllersTest extends WebTestCase
 
     public function testIndex()
     {
-        $this->client->request('GET', $this->client->generate('orocrm_contact_index'));
+        $this->client->request('GET', $this->getUrl('orocrm_contact_index'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', $this->client->generate('orocrm_contact_create'));
+        $crawler = $this->client->request('GET', $this->getUrl('orocrm_contact_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $form['orocrm_contact_form[firstName]'] = 'Contact_fname';
@@ -57,8 +51,7 @@ class ControllersTest extends WebTestCase
      */
     public function testUpdate()
     {
-        $response = $this->getGridResponse(
-            $this->client,
+        $response = $this->client->requestGrid(
             'contacts-grid',
             array(
                 'contacts-grid[_filter][firstName][value]' => 'Contact_fname',
@@ -71,7 +64,7 @@ class ControllersTest extends WebTestCase
         $id = $result['id'];
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_update', array('id' => $id))
+            $this->getUrl('orocrm_contact_update', array('id' => $id))
         );
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
@@ -96,7 +89,7 @@ class ControllersTest extends WebTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_view', array('id' => $id))
+            $this->getUrl('orocrm_contact_view', array('id' => $id))
         );
 
         $result = $this->client->getResponse();
@@ -112,7 +105,7 @@ class ControllersTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_contact', array('id' => $id))
+            $this->getUrl('oro_api_delete_contact', array('id' => $id))
         );
 
         $result = $this->client->getResponse();
@@ -120,7 +113,7 @@ class ControllersTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_view', array('id' => $id))
+            $this->getUrl('orocrm_contact_view', array('id' => $id))
         );
 
         $result = $this->client->getResponse();
@@ -133,7 +126,7 @@ class ControllersTest extends WebTestCase
     public function testMassAction()
     {
         for ($i = 1; $i <= 5; $i++) {
-            $crawler = $this->client->request('GET', $this->client->generate('orocrm_contact_create'));
+            $crawler = $this->client->request('GET', $this->getUrl('orocrm_contact_create'));
             /** @var Form $form */
             $form = $crawler->selectButton('Save and Close')->form();
             $form['orocrm_contact_form[firstName]'] = 'Contact_fname' . $this->generateRandomString(5);
@@ -148,8 +141,7 @@ class ControllersTest extends WebTestCase
             $this->assertContains("Contact saved", $crawler->html());
         }
 
-        $response = $this->getGridResponse(
-            $this->client,
+        $response = $this->client->requestGrid(
             'contacts-grid',
             array()
         );
@@ -163,7 +155,7 @@ class ControllersTest extends WebTestCase
         $id = implode(',', $id);
         $this->client->request(
             'GET',
-            $this->client->generate(
+            $this->getUrl(
                 'oro_datagrid_mass_action',
                 array('gridName' => 'contacts-grid', 'actionName' => 'delete', 'values' => $id, 'inset' => 1)
             )
@@ -175,8 +167,7 @@ class ControllersTest extends WebTestCase
         $this->assertEquals("5 entities were removed", $result['message']);
         $this->assertEquals(5, $result['count']);
 
-        $response = $this->getGridResponse(
-            $this->client,
+        $response = $this->client->requestGrid(
             'contacts-grid',
             array()
         );

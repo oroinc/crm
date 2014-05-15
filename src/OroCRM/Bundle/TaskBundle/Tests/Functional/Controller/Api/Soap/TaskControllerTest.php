@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\TaskBundle\Tests\Functional\Controller\Api\Soap;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -11,11 +10,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class TaskControllerTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
     /**
      * @var array
      */
@@ -31,14 +25,8 @@ class TaskControllerTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = self::createClient(array(), $this->generateWsseAuthHeader());
-        $this->client->createSoapClient(
-            "http://localhost/api/soap",
-            array(
-                'location' => 'http://localhost/api/soap',
-                'soap_version' => SOAP_1_2
-            )
-        );
+        $this->initClient(array(), $this->generateWsseAuthHeader());
+        $this->initSoapClient();
     }
 
     /**
@@ -46,8 +34,8 @@ class TaskControllerTest extends WebTestCase
      */
     public function testCreate()
     {
-        $result = $this->client->getSoapClient()->createTask($this->task);
-        $this->assertTrue((bool) $result, $this->client->getSoapClient()->__getLastResponse());
+        $result = $this->soapClient->createTask($this->task);
+        $this->assertTrue((bool) $result, $this->soapClient->__getLastResponse());
 
         return $result;
     }
@@ -57,7 +45,7 @@ class TaskControllerTest extends WebTestCase
      */
     public function testCget()
     {
-        $tasks = $this->client->getSoapClient()->getTasks();
+        $tasks = $this->soapClient->getTasks();
         $tasks = $this->valueToArray($tasks);
         $this->assertCount(1, $tasks);
     }
@@ -68,7 +56,7 @@ class TaskControllerTest extends WebTestCase
      */
     public function testGet($id)
     {
-        $task = $this->client->getSoapClient()->getTask($id);
+        $task = $this->soapClient->getTask($id);
         $task = $this->valueToArray($task);
         $this->assertEquals($this->task['subject'], $task['subject']);
     }
@@ -81,10 +69,10 @@ class TaskControllerTest extends WebTestCase
     {
         $task =  array_merge($this->task, ['subject' => 'Updated subject']);
 
-        $result = $this->client->getSoapClient()->updateTask($id, $task);
+        $result = $this->soapClient->updateTask($id, $task);
         $this->assertTrue($result);
 
-        $updatedTask = $this->client->getSoapClient()->getTask($id);
+        $updatedTask = $this->soapClient->getTask($id);
         $updatedTask = $this->valueToArray($updatedTask);
 
         $this->assertEquals($task['subject'], $updatedTask['subject']);
@@ -96,10 +84,10 @@ class TaskControllerTest extends WebTestCase
      */
     public function testDelete($id)
     {
-        $result = $this->client->getSoapClient()->deleteTask($id);
+        $result = $this->soapClient->deleteTask($id);
         $this->assertTrue($result);
 
         $this->setExpectedException('\SoapFault', 'Record with ID "' . $id . '" can not be found');
-        $this->client->getSoapClient()->getTask($id);
+        $this->soapClient->getTask($id);
     }
 }

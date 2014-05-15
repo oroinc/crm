@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\TaskBundle\Tests\Functional\Controller\Api\Rest;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -12,11 +11,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class TaskControllerTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
     /**
      * @var array
      */
@@ -31,7 +25,7 @@ class TaskControllerTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = self::createClient([], $this->generateWsseAuthHeader());
+        $this->initClient([], $this->generateWsseAuthHeader());
     }
 
     public function testCreate()
@@ -42,7 +36,7 @@ class TaskControllerTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            $this->client->generate('orocrm_api_post_task'),
+            $this->getUrl('orocrm_api_post_task'),
             $request
         );
 
@@ -58,7 +52,7 @@ class TaskControllerTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_api_get_tasks'),
+            $this->getUrl('orocrm_api_get_tasks'),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -77,7 +71,7 @@ class TaskControllerTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_api_get_task', ['id' => $id]),
+            $this->getUrl('orocrm_api_get_task', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -97,7 +91,7 @@ class TaskControllerTest extends WebTestCase
         $updatedTask =  array_merge($this->task, ['subject' => 'Updated subject']);
         $this->client->request(
             'PUT',
-            $this->client->generate('orocrm_api_put_task', ['id' => $id]),
+            $this->getUrl('orocrm_api_put_task', ['id' => $id]),
             ['task' =>$updatedTask],
             [],
             $this->generateWsseAuthHeader()
@@ -107,7 +101,7 @@ class TaskControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_api_get_task', ['id' => $id])
+            $this->getUrl('orocrm_api_get_task', ['id' => $id])
         );
 
         $task = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -128,7 +122,7 @@ class TaskControllerTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('orocrm_api_delete_task', ['id' => $id]),
+            $this->getUrl('orocrm_api_delete_task', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -137,7 +131,7 @@ class TaskControllerTest extends WebTestCase
         $this->assertJsonResponseStatusCodeEquals($result, 204);
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_api_get_task', ['id' => $id]),
+            $this->getUrl('orocrm_api_get_task', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()
