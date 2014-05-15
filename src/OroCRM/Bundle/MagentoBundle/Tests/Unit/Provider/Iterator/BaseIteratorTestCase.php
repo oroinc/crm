@@ -15,7 +15,7 @@ class BaseIteratorTestCase extends \PHPUnit_Framework_TestCase
     /** @var array */
     protected $settings;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->transport = $this->getMockBuilder('OroCRM\\Bundle\\MagentoBundle\\Provider\\Transport\\SoapTransport')
             ->disableOriginalConstructor()

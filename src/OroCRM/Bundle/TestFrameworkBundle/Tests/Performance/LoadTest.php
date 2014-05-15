@@ -19,7 +19,7 @@ class LoadTest extends WebTestCase
 
     protected function setUp()
     {
-        $this->initClient(array("debug"=>false), $this->generateBasicAuthHeader());
+        $this->initClient(array("debug" => false), $this->generateBasicAuthHeader());
     }
 
     protected function tearDown()

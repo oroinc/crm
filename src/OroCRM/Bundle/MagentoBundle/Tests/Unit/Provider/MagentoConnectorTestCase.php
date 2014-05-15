@@ -25,7 +25,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $stepExecutionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->transportMock     = $this
             ->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Transport\\MagentoTransportInterface');
