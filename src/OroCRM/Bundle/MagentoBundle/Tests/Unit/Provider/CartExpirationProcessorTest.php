@@ -25,7 +25,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var ConnectorContextMediator|\PHPUnit_Framework_MockObject_MockObject */
     protected $helper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
@@ -36,7 +36,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
         $this->processor = new CartExpirationProcessor($this->helper, $this->em, self::BATCH_SIZE);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->em, $this->helper, $this->processor);
     }

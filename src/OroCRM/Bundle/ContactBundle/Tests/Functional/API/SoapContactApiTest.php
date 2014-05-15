@@ -15,7 +15,7 @@ class SoapContactApiTest extends WebTestCase
      */
     protected static $contactIds = array();
 
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(array(), $this->generateWsseAuthHeader());
         $this->initSoapClient();

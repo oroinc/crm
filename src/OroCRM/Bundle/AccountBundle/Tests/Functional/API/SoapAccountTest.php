@@ -10,7 +10,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class SoapAccountTest extends WebTestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(array(), $this->generateWsseAuthHeader());
         $this->initSoapClient();

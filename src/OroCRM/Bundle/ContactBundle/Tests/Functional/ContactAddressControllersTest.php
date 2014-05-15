@@ -13,7 +13,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class ContactAddressControllersTest extends WebTestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(
             array(),

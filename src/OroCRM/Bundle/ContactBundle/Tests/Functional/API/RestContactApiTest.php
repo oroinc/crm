@@ -36,7 +36,7 @@ class RestContactApiTest extends WebTestCase
         'types' => array(AddressType::TYPE_BILLING, AddressType::TYPE_SHIPPING),
     );
 
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(array(), $this->generateWsseAuthHeader());
     }

@@ -10,7 +10,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class RestContactGroupsApiTest extends WebTestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(array(), $this->generateWsseAuthHeader());
     }

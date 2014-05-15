@@ -11,7 +11,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class TaskControllersTest extends WebTestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(array(), $this->generateBasicAuthHeader());
     }

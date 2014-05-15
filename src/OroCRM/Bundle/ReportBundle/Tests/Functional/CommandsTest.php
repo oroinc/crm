@@ -11,7 +11,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class CommandsTest extends WebTestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient();
         $this->loadFixtures(

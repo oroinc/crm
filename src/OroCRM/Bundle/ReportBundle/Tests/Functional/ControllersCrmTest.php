@@ -11,7 +11,7 @@ use Oro\Bundle\ReportBundle\Tests\Functional\ControllersTest as BaseControllersT
  */
 class ControllersCrmTest extends BaseControllersTest
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(
             array(),

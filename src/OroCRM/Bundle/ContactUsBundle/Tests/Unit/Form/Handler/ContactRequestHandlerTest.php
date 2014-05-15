@@ -39,7 +39,7 @@ class ContactRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->handler = new ContactRequestHandler($this->form, $this->request, $this->em);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->form, $this->request, $this->em, $this->handler, $this->entity);
     }

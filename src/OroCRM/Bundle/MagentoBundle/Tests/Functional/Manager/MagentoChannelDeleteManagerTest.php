@@ -19,7 +19,7 @@ class MagentoChannelDeleteManagerTest extends WebTestCase
      */
     protected $em;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(
             array(),
@@ -43,7 +43,7 @@ class MagentoChannelDeleteManagerTest extends WebTestCase
         $this->assertEquals(0, $this->getRecordsCount('OroCRMMagentoBundle:Website', $channelId));
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->client, $this->em);
     }

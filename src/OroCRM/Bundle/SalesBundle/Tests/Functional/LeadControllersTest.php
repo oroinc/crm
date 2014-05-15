@@ -13,7 +13,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class LeadControllersTest extends WebTestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(
             array(),

@@ -12,7 +12,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class ControllersGroupTest extends WebTestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(
             array(),

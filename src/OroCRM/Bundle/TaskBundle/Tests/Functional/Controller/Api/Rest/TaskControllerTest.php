@@ -23,7 +23,7 @@ class TaskControllerTest extends WebTestCase
         'reporter' => 1
     ];
 
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient([], $this->generateWsseAuthHeader());
     }

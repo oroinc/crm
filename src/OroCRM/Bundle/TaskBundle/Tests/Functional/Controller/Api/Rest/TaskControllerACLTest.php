@@ -18,7 +18,7 @@ class TaskControllerACLTest extends WebTestCase
      */
     protected static $taskId;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(
             [],
