@@ -109,6 +109,9 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD)
+     */
     public function getDataProvider()
     {
         $email = 'e@e.com';
@@ -315,6 +318,8 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @SuppressWarnings(PHPMD)
+     * 
      * @dataProvider  getDataProvider
      *
      * @param array $fields

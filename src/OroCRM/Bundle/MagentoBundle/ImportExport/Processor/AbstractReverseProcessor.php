@@ -6,10 +6,7 @@ use \Doctrine\Common\Collections\Collection;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
-use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorInterface;
-use Oro\Bundle\ImportExportBundle\Exception\InvalidConfigurationException;
 
 abstract class AbstractReverseProcessor implements ProcessorInterface
 {
@@ -26,11 +23,6 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
     /** @var PropertyAccess */
     protected $accessor;
 
-    public function initPropertyAccess()
-    {
-        $this->accessor = PropertyAccess::createPropertyAccessor();
-    }
-
     /**
      * @param object $entity
      *
@@ -38,7 +30,7 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
      */
     public function process($entity)
     {
-        $this->initPropertyAccess();
+        $this->accessor = PropertyAccess::createPropertyAccessor();
 
         $result = [
             'object' => [],
@@ -46,79 +38,80 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
         ];
 
         if ($entity->getChannel() && $entity->getOriginId()) {
-
             foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
-                try {
-                    $this->fieldPlaceholder(
-                        $entity,
-                        $classNames,
-                        $result['object'],
-                        $classMapConfig['fields']
-                    );
-                } catch (\Exception $e) {
-                    $result['status'] = self::DELETE_ENTITY;
-                    return $result;
-                }
+                if ($entity instanceof $classNames) {
+                    try {
+                        $this->fieldPlaceholder(
+                            $entity,
+                            $classNames,
+                            $result['object'],
+                            $classMapConfig['fields']
+                        );
+                    } catch (\Exception $e) {
+                        $result['status'] = self::DELETE_ENTITY;
+                        return $result;
+                    }
 
-                if (!empty($classMapConfig['relation'])) {
+                    if (!empty($classMapConfig['relation'])) {
 
-                    foreach ($classMapConfig['relation'] as $relationName => $relationClassMapConfig) {
+                        foreach ($classMapConfig['relation'] as $relationName => $relationClassMapConfig) {
 
-                        $relations = $this->getValue($entity, $relationClassMapConfig['method']);
+                            $relations = $this->getValue($entity, $relationClassMapConfig['method']);
 
-                        $allRelationsCheckingEntity = $this->getValue($entity, $classMapConfig['checking']);
+                            $allRelationsCheckingEntity = $this->getValue($entity, $classMapConfig['checking']);
 
-                        if ($relations instanceof Collection) {
-                            $relations = $relations->getValues();
-                        }
+                            if ($relations instanceof Collection) {
+                                $relations = $relations->getValues();
+                            }
 
-                        if (!is_array($relations)) {
-                            $relations = [$relations];
-                        }
+                            if (!is_array($relations)) {
+                                $relations = [$relations];
+                            }
 
-                        $checkedIdsRelations = [];
-                        $result['object'][$relationName] = [];
+                            $checkedIdsRelations = [];
+                            $result['object'][$relationName] = [];
 
-                        foreach ($relations as $relation) {
-                            $relationArray = ['object'=>[]];
+                            foreach ($relations as $relation) {
+                                $relationArray = ['object'=>[]];
 
-                            try {
-                                $this->fieldPlaceholder(
-                                    $relation,
-                                    $relationClassMapConfig['class'],
-                                    $relationArray['object'],
-                                    $relationClassMapConfig['fields']
-                                );
+                                try {
+                                    $this->fieldPlaceholder(
+                                        $relation,
+                                        $relationClassMapConfig['class'],
+                                        $relationArray['object'],
+                                        $relationClassMapConfig['fields']
+                                    );
 
-                                if (!empty($relationArray)) {
-                                    $relationArray['status'] = self::UPDATE_ENTITY;
+                                    if (!empty($relationArray['object'])) {
+                                        $relationArray['status'] = self::UPDATE_ENTITY;
+                                    }
+
+                                    array_push(
+                                        $checkedIdsRelations,
+                                        $this->getValue($relation, $relationClassMapConfig['checking'])
+                                    );
+                                } catch (\Exception $e) {
+                                    $relationArray['status'] = self::DELETE_ENTITY;
                                 }
 
-                                array_push(
-                                    $checkedIdsRelations,
-                                    $this->getValue($relation, $relationClassMapConfig['checking'])
-                                );
-                            } catch (\Exception $e) {
-                                $relationArray['status'] = self::DELETE_ENTITY;
+                                if (!empty($relationArray)) {
+                                    array_push(
+                                        $result['object'][$relationName],
+                                        array_merge($relationArray, ['entity' => $relation])
+                                    );
+                                }
+                                unset($relationArray);
                             }
+                            unset($relation);
 
-                            if (!empty($relationArray)) {
-                                array_push(
-                                    $result['object'][$relationName],
-                                    array_merge($relationArray, ['entity' => $relation])
-                                );
-                            }
-                            unset($relationArray);
+                            $this->addNew(
+                                $allRelationsCheckingEntity,
+                                $checkedIdsRelations,
+                                $result['object'][$relationName]
+                            );
                         }
-                        unset($relation);
-
-                        $this->addNew(
-                            $allRelationsCheckingEntity,
-                            $checkedIdsRelations,
-                            $result['object'][$relationName]
-                        );
+                        unset($relationClassMapConfig, $relationName);
                     }
-                    unset($relationClassMapConfig, $relationName);
                 }
             }
         }

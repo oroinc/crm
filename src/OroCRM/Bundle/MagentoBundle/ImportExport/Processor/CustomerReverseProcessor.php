@@ -5,6 +5,15 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Processor;
 class CustomerReverseProcessor extends AbstractReverseProcessor
 {
     /**
+     * This structure for check income Customer entity
+     * 'OroCRM\Bundle\MagentoBundle\Entity\Customer' - class for compare,
+     * 'fields' - fields for compare( in PropertyAccess style)
+     * 'checking' - gets all addresses for comparing
+     * 'relation' - describe relation in Customer which needed to be compared
+     * 'addresses' - relation field
+     * 'method' - field which describes how we can get all relations
+     * 'class' - for checking instanceof
+     *
      * @var array
     */
     protected $checkEntityClasses = [
