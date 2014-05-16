@@ -9,7 +9,8 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
+
+use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
 
 /**
  * @ORM\Table("orocrm_magento_customer_addr")
@@ -18,7 +19,7 @@ use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
  * @ORM\Entity
  * @Oro\Loggable
  */
-class Address extends AbstractTypedAddress
+class Address extends ExtendAddress
 {
     use OriginTrait;
 
