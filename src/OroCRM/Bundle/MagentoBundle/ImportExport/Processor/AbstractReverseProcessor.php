@@ -37,7 +37,7 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
             'entity' => $entity,
         ];
 
-        if ($entity->getChannel() && $entity->getOriginId()) {
+        if ($entity->getChannel() && $entity->getOriginId() && null === $entity) {
             foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
                 if ($entity instanceof $classNames) {
                     try {
