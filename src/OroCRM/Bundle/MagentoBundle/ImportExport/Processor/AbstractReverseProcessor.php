@@ -37,84 +37,83 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
             'entity' => $entity,
         ];
 
-        if ($entity->getChannel() && $entity->getOriginId() && null === $entity) {
-            foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
-                if ($entity instanceof $classNames) {
-                    try {
-                        $this->fieldPlaceholder(
-                            $entity,
-                            $classNames,
-                            $result['object'],
-                            $classMapConfig['fields']
-                        );
-                    } catch (\Exception $e) {
-                        $result['status'] = self::DELETE_ENTITY;
-                        return $result;
-                    }
+        foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
+            if ($entity instanceof $classNames && $entity->getChannel()) {
+                try {
+                    $this->fieldPlaceholder(
+                        $entity,
+                        $classNames,
+                        $result['object'],
+                        $classMapConfig['fields']
+                    );
+                } catch (\Exception $e) {
+                    $result['status'] = self::DELETE_ENTITY;
+                    return $result;
+                }
 
-                    if (!empty($classMapConfig['relation'])) {
+                if (!empty($classMapConfig['relation'])) {
 
-                        foreach ($classMapConfig['relation'] as $relationName => $relationClassMapConfig) {
+                    foreach ($classMapConfig['relation'] as $relationName => $relationClassMapConfig) {
 
-                            $relations = $this->getValue($entity, $relationClassMapConfig['method']);
+                        $relations = $this->getValue($entity, $relationClassMapConfig['method']);
 
-                            $allRelationsCheckingEntity = $this->getValue($entity, $classMapConfig['checking']);
+                        $allRelationsCheckingEntity = $this->getValue($entity, $classMapConfig['checking']);
 
-                            if ($relations instanceof Collection) {
-                                $relations = $relations->getValues();
-                            }
-
-                            if (!is_array($relations)) {
-                                $relations = [$relations];
-                            }
-
-                            $checkedIdsRelations = [];
-                            $result['object'][$relationName] = [];
-
-                            foreach ($relations as $relation) {
-                                $relationArray = ['object'=>[]];
-
-                                try {
-                                    $this->fieldPlaceholder(
-                                        $relation,
-                                        $relationClassMapConfig['class'],
-                                        $relationArray['object'],
-                                        $relationClassMapConfig['fields']
-                                    );
-
-                                    if (!empty($relationArray['object'])) {
-                                        $relationArray['status'] = self::UPDATE_ENTITY;
-                                    }
-
-                                    array_push(
-                                        $checkedIdsRelations,
-                                        $this->getValue($relation, $relationClassMapConfig['checking'])
-                                    );
-                                } catch (\Exception $e) {
-                                    $relationArray['status'] = self::DELETE_ENTITY;
-                                }
-
-                                if (!empty($relationArray)) {
-                                    array_push(
-                                        $result['object'][$relationName],
-                                        array_merge($relationArray, ['entity' => $relation])
-                                    );
-                                }
-                                unset($relationArray);
-                            }
-                            unset($relation);
-
-                            $this->addNew(
-                                $allRelationsCheckingEntity,
-                                $checkedIdsRelations,
-                                $result['object'][$relationName]
-                            );
+                        if ($relations instanceof Collection) {
+                            $relations = $relations->getValues();
                         }
-                        unset($relationClassMapConfig, $relationName);
+
+                        if (!is_array($relations)) {
+                            $relations = [$relations];
+                        }
+
+                        $checkedIdsRelations = [];
+                        $result['object'][$relationName] = [];
+
+                        foreach ($relations as $relation) {
+                            $relationArray = ['object'=>[]];
+
+                            try {
+                                $this->fieldPlaceholder(
+                                    $relation,
+                                    $relationClassMapConfig['class'],
+                                    $relationArray['object'],
+                                    $relationClassMapConfig['fields']
+                                );
+
+                                if (!empty($relationArray['object'])) {
+                                    $relationArray['status'] = self::UPDATE_ENTITY;
+                                }
+
+                                array_push(
+                                    $checkedIdsRelations,
+                                    $this->getValue($relation, $relationClassMapConfig['checking'])
+                                );
+                            } catch (\Exception $e) {
+                                $relationArray['status'] = self::DELETE_ENTITY;
+                            }
+
+                            if (!empty($relationArray)) {
+                                array_push(
+                                    $result['object'][$relationName],
+                                    array_merge($relationArray, ['entity' => $relation])
+                                );
+                            }
+                            unset($relationArray);
+                        }
+                        unset($relation);
+
+                        $this->addNew(
+                            $allRelationsCheckingEntity,
+                            $checkedIdsRelations,
+                            $result['object'][$relationName]
+                        );
                     }
+                    unset($relationClassMapConfig, $relationName);
                 }
             }
         }
+
         return (object)$result;
     }
 
@@ -180,11 +179,11 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
         }
 
         if ($checking instanceof \DateTime) {
-            $checking =  $checking->format('Y-m-d H:i:s') ;
+            $checking = $checking->format('Y-m-d H:i:s') ;
         }
 
         if ($source instanceof \DateTime) {
-            $source =  $source->format('Y-m-d H:i:s') ;
+            $source = $source->format('Y-m-d H:i:s') ;
         }
 
         return $source !== $checking;
