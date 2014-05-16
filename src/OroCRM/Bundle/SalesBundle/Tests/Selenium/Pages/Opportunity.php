@@ -41,8 +41,8 @@ class Opportunity extends AbstractPageEntity
     public function init()
     {
         $this->name = $this->test->byId('orocrm_sales_opportunity_form_name');
-        $this->contact = $this->test->byXpath("//div[@id='s2id_orocrm_sales_opportunity_form_contact']/a");
-        $this->account = $this->test->byXpath("//div[@id='s2id_orocrm_sales_opportunity_form_account']/a");
+        $this->contact = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_contact')]/a");
+        $this->account = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_account')]/a");
         $this->probability = $this->test->byId('orocrm_sales_opportunity_form_probability');
         $this->budget = $this->test->byId('orocrm_sales_opportunity_form_budgetAmount');
         $this->customerNeed = $this->test->byId('orocrm_sales_opportunity_form_customerNeed');
@@ -50,7 +50,7 @@ class Opportunity extends AbstractPageEntity
         $this->closeReason = $this->test->select($this->test->byId('orocrm_sales_opportunity_form_closeReason'));
         $this->closeRevenue = $this->test->byId('orocrm_sales_opportunity_form_closeRevenue');
         $this->closeDate = $this->test->byId('date_selector_orocrm_sales_opportunity_form_closeDate');
-        $this->owner = $this->test->byXpath("//div[@id='s2id_orocrm_sales_opportunity_form_owner']/a");
+        $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_owner')]/a");
 
         return $this;
     }
@@ -85,7 +85,7 @@ class Opportunity extends AbstractPageEntity
     public function getContact()
     {
         return $this->test->byXpath(
-            "//div[@id='s2id_orocrm_sales_opportunity_form_contact']/a/span"
+            "//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_contact')]/a/span"
         )->text();
     }
 
@@ -106,7 +106,8 @@ class Opportunity extends AbstractPageEntity
 
     public function getAccount()
     {
-        return $this->test->byXpath("//div[@id='s2id_orocrm_sales_opportunity_form_account']/a/span")->text();
+        return $this->test
+            ->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_account')]/a/span")->text();
     }
 
     public function setProbability($probability)

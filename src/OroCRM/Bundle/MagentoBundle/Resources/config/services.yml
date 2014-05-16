@@ -136,7 +136,6 @@ services:
         class: %orocrm_magento.manager.magento_channel_delete_provider.class%
         arguments:
             - @doctrine.orm.entity_manager
-            - @oro_workflow.entity_connector
         tags:
             - { name: oro_integration.channel_delete_provider }
 

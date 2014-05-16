@@ -46,6 +46,8 @@ class CartStrategy extends BaseStrategy
                     'status',
                     'cartItems',
                     'customer',
+                    'relatedCalls',
+                    'relatedEmails',
                     'shippingAddress',
                     'billingAddress',
                     'workflowItem',
@@ -75,9 +77,7 @@ class CartStrategy extends BaseStrategy
             ->updateAddresses($existingEntity, $newEntity)
             ->updateCartItems($existingEntity, $newEntity->getCartItems());
 
-        $this->validateAndUpdateContext($existingEntity);
-
-        return $existingEntity;
+        return $this->validateAndUpdateContext($existingEntity);
     }
 
     /**

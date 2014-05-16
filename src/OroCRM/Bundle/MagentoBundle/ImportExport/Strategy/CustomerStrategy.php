@@ -171,6 +171,11 @@ class CustomerStrategy extends BaseStrategy
      */
     protected function updateAddresses(Customer $entity, Collection $addresses)
     {
+        // force option enforce re-import of all addresses
+        if ($this->context->getOption('force') && $entity->getId()) {
+            $entity->getAddresses()->clear();
+        }
+
         /** $address - imported address */
         foreach ($addresses as $address) {
             // at this point imported address region have code equal to region_id in magento db field
@@ -178,7 +183,7 @@ class CustomerStrategy extends BaseStrategy
 
             $originAddressId = $address->getId();
             $address->setOriginId($originAddressId);
-            if ($originAddressId) {
+            if ($originAddressId && !$this->context->getOption('force')) {
                 $existingAddress = $entity->getAddressByOriginId($originAddressId);
                 if ($existingAddress) {
                     $this->strategyHelper->importEntity(
