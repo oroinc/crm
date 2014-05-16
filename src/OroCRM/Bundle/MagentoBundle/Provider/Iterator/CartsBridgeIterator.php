@@ -7,6 +7,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 class CartsBridgeIterator extends AbstractBridgeIterator
 {
     const NOT_LOGGED_IN = 'NOT LOGGED IN';
+
     /**
      * {@inheritdoc}
      */

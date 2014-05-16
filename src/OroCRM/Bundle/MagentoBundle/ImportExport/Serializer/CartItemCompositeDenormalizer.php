@@ -26,7 +26,7 @@ class CartItemCompositeDenormalizer extends AbstractNormalizer implements Denorm
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && $type == MagentoConnectorInterface::CART_ITEM_TYPE;
+        return $type == MagentoConnectorInterface::CART_ITEM_TYPE;
     }
 
     /**
@@ -34,11 +34,14 @@ class CartItemCompositeDenormalizer extends AbstractNormalizer implements Denorm
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $data = $this->itemConverter->convertToImportFormat($data);
-
-        $data = $this->denormalizeCreatedUpdated($data, $format, $context);
-
         $cartItem = new CartItem();
+
+        if (!is_array($data)) {
+            return $cartItem;
+        }
+
+        $data = $this->itemConverter->convertToImportFormat($data);
+        $data = $this->denormalizeCreatedUpdated($data, $format, $context);
         $this->fillResultObject($cartItem, $data);
 
         return $cartItem;
