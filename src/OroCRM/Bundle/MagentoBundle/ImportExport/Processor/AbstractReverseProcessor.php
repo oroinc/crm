@@ -161,12 +161,20 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
             $source   = $this->getValue($entity, $paths[self::SOURCE]);
         }
 
-        if (is_object($checking)) {
+        if (is_object($checking) && !($checking instanceof \DateTime)) {
             try {
                 $checking = (string)$checking;
             } catch (\Exception $e) {
                 return false;
             }
+        }
+
+        if ($checking instanceof \DateTime) {
+            $checking =  $checking->format('Y-m-d H:i:s') ;
+        }
+
+        if ($source instanceof \DateTime) {
+            $source =  $source->format('Y-m-d H:i:s') ;
         }
 
         return $source !== $checking;
