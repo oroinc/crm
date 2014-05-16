@@ -36,7 +36,7 @@ class AccountWidgetsDataGridListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected $queryBuilder;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->parameters = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\ParameterBag')
             ->disableOriginalConstructor()
