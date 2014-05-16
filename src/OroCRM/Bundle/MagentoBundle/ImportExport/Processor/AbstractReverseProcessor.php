@@ -131,14 +131,24 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
         array $fields
     ) {
         if ($entity instanceof $classNames) {
-            foreach ($fields as $methods) {
+            foreach ($fields as $name => $methods) {
                 if ($this->isChanged($entity, $methods)) {
+                    /**
+                     * @todo: will be fix, due to CRM-789
+                     * reason: We need this because getBapAddressData this method work with
+                     * arrays in CustomerDenormalizer
+                     */
+                    if (is_int($name)) {
+                        $resultFieldName = $methods[self::SOURCE];
+                    } else {
+                        $resultFieldName = $name;
+                    }
 
                     if (!empty($methods[self::MODIFIER])) {
-                        $result[$methods[self::SOURCE]] = $this
-                            ->getValue($entity, $methods[self::CHECKING] . '.' . $methods[self::MODIFIER]);
+                        $modifier = $methods[self::CHECKING] . '.' . $methods[self::MODIFIER];
+                        $result[$resultFieldName] = $this->getValue($entity, $modifier);
                     } else {
-                        $result[$methods[self::SOURCE]] = $this->getValue($entity, $methods[self::CHECKING]);
+                        $result[$resultFieldName] = $this->getValue($entity, $methods[self::CHECKING]);
                     }
                 }
             }
