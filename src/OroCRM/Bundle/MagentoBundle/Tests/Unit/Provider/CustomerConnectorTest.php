@@ -42,4 +42,9 @@ class CustomerConnectorTest extends MagentoConnectorTestCase
         $this->assertEquals('OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer', $connector->getImportEntityFQCN());
         $this->assertEquals('orocrm.magento.connector.customer.label', $connector->getLabel());
     }
+
+    protected function supportsForceMode()
+    {
+        return true;
+    }
 }

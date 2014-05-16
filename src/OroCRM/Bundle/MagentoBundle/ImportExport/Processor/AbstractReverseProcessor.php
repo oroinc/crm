@@ -2,14 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Processor;
 
-use \Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Collection;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
-use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorInterface;
-use Oro\Bundle\ImportExportBundle\Exception\InvalidConfigurationException;
 
 abstract class AbstractReverseProcessor implements ProcessorInterface
 {
@@ -26,11 +23,6 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
     /** @var PropertyAccess */
     protected $accessor;
 
-    public function initPropertyAccess()
-    {
-        $this->accessor = PropertyAccess::createPropertyAccessor();
-    }
-
     /**
      * @param object $entity
      *
@@ -38,16 +30,15 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
      */
     public function process($entity)
     {
-        $this->initPropertyAccess();
+        $this->accessor = PropertyAccess::createPropertyAccessor();
 
         $result = [
             'object' => [],
             'entity' => $entity,
         ];
 
-        if ($entity->getChannel() && $entity->getOriginId()) {
-
-            foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
+        foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
+            if ($entity instanceof $classNames && $entity->getChannel()) {
                 try {
                     $this->fieldPlaceholder(
                         $entity,
@@ -90,7 +81,7 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
                                     $relationClassMapConfig['fields']
                                 );
 
-                                if (!empty($relationArray)) {
+                                if (!empty($relationArray['object'])) {
                                     $relationArray['status'] = self::UPDATE_ENTITY;
                                 }
 
@@ -108,9 +99,7 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
                                     array_merge($relationArray, ['entity' => $relation])
                                 );
                             }
-                            unset($relationArray);
                         }
-                        unset($relation);
 
                         $this->addNew(
                             $allRelationsCheckingEntity,
@@ -118,10 +107,10 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
                             $result['object'][$relationName]
                         );
                     }
-                    unset($relationClassMapConfig, $relationName);
                 }
             }
         }
+
         return (object)$result;
     }
 
@@ -138,14 +127,24 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
         array $fields
     ) {
         if ($entity instanceof $classNames) {
-            foreach ($fields as $methods) {
+            foreach ($fields as $name => $methods) {
                 if ($this->isChanged($entity, $methods)) {
+                    /**
+                     * @todo: will be fix, due to CRM-789
+                     * reason: We need this because getBapAddressData this method work with
+                     * arrays in CustomerDenormalizer
+                     */
+                    if (is_int($name)) {
+                        $resultFieldName = $methods[self::SOURCE];
+                    } else {
+                        $resultFieldName = $name;
+                    }
 
                     if (!empty($methods[self::MODIFIER])) {
-                        $result[$methods[self::SOURCE]] = $this
-                            ->getValue($entity, $methods[self::CHECKING] . '.' . $methods[self::MODIFIER]);
+                        $modifier = $methods[self::CHECKING] . '.' . $methods[self::MODIFIER];
+                        $result[$resultFieldName] = $this->getValue($entity, $modifier);
                     } else {
-                        $result[$methods[self::SOURCE]] = $this->getValue($entity, $methods[self::CHECKING]);
+                        $result[$resultFieldName] = $this->getValue($entity, $methods[self::CHECKING]);
                     }
                 }
             }
@@ -168,12 +167,20 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
             $source   = $this->getValue($entity, $paths[self::SOURCE]);
         }
 
-        if (is_object($checking)) {
+        if (is_object($checking) && !($checking instanceof \DateTime)) {
             try {
                 $checking = (string)$checking;
             } catch (\Exception $e) {
                 return false;
             }
+        }
+
+        if ($checking instanceof \DateTime) {
+            $checking = $checking->format('Y-m-d H:i:s') ;
+        }
+
+        if ($source instanceof \DateTime) {
+            $source = $source->format('Y-m-d H:i:s') ;
         }
 
         return $source !== $checking;

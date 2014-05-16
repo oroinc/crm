@@ -5,6 +5,15 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Processor;
 class CustomerReverseProcessor extends AbstractReverseProcessor
 {
     /**
+     * This structure for check income Customer entity
+     * 'OroCRM\Bundle\MagentoBundle\Entity\Customer' - class for compare,
+     * 'fields' - fields for compare( in PropertyAccess style)
+     * 'checking' - gets all addresses for comparing
+     * 'relation' - describe relation in Customer which needed to be compared
+     * 'addresses' - relation field
+     * 'method' - field which describes how we can get all relations
+     * 'class' - for checking instanceof
+     *
      * @var array
     */
     protected $checkEntityClasses = [
@@ -26,18 +35,19 @@ class CustomerReverseProcessor extends AbstractReverseProcessor
                     'class'    => 'OroCRM\Bundle\MagentoBundle\Entity\Address',
                     'checking'   => 'contact_address.id',
                     'fields' => [
-                        ['city',         'contact_address.city'],
-                        ['organization', 'contact_address.organization'],
-                        ['country',      'contact_address.country', 'iso2_code'],
-                        ['first_name',   'contact_address.first_name'],
-                        ['last_name',    'contact_address.last_name'],
-                        ['middle_name',  'contact_address.middle_name'],
-                        ['postal_code',  'contact_address.postal_code'],
-                        ['name_prefix',  'contact_address.name_prefix'],
-                        ['region',       'contact_address.region', 'combined_code'],
-                        ['region_text',  'contact_address.region_text'],
-                        ['street',       'contact_address.street'],
-                        ['name_suffix',  'contact_address.name_suffix'],
+                        'city'         => ['city',         'contact_address.city'],
+                        'organization' => ['organization', 'contact_address.organization'],
+                        'country'      => ['country',      'contact_address.country', 'iso2_code'],
+                        'firstName'    => ['first_name',   'contact_address.first_name'],
+                        'lastName'     => ['last_name',    'contact_address.last_name'],
+                        'middleName'   => ['middle_name',  'contact_address.middle_name'],
+                        'postalCode'   => ['postal_code',  'contact_address.postal_code'],
+                        'namePrefix'   => ['name_prefix',  'contact_address.name_prefix'],
+                        'region'       => ['region',       'contact_address.region', 'combined_code'],
+                        'regionText'   => ['region_text',  'contact_address.region_text'],
+                        'street'       => ['street',       'contact_address.street'],
+                        'street2'      => ['street2',      'contact_address.street2'],
+                        'nameSuffix'   => ['name_suffix',  'contact_address.name_suffix'],
                     ]
                 ],
             ]

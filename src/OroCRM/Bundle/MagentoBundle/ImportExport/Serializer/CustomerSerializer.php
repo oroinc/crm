@@ -8,6 +8,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\UserBundle\Model\Gender;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
@@ -31,6 +32,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'suffix'      => 'name_suffix',
         'dob'         => 'birthday',
         'taxvat'      => 'vat',
+        'gender'      => 'gender'
     );
 
     /** @var array */
@@ -125,32 +127,24 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     }
 
     /**
-     * Used in import
-     *
-     * @param mixed  $data
-     * @param string $type
-     * @param null   $format
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && $type == MagentoConnectorInterface::CUSTOMER_TYPE;
+        return $type == MagentoConnectorInterface::CUSTOMER_TYPE;
     }
 
+
     /**
-     * For importing customers
-     *
-     * @param mixed  $data
-     * @param string $class
-     * @param null   $format
-     * @param array  $context
-     *
-     * @return object|Customer
+     * {@inheritdoc}
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
         $resultObject = new Customer();
+
+        if (!is_array($data)) {
+            return $resultObject;
+        }
 
         $mappedData = [];
         foreach ($data as $key => $value) {
@@ -160,6 +154,15 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
         if (!empty($mappedData['birthday'])) {
             $mappedData['birthday'] = substr($mappedData['birthday'], 0, 10);
+        }
+
+        if (isset($mappedData['gender']) && !empty($mappedData['gender'])) {
+            $gender = strtolower($mappedData['gender']);
+            if (in_array($gender, [Gender::FEMALE, Gender::MALE])) {
+                $mappedData['gender'] = $gender;
+            } else {
+                $mappedData['gender'] = null;
+            }
         }
 
         $resultObject->setChannel($this->getChannelFromContext($context));
@@ -276,9 +279,8 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
      */
     protected function formatAccountData($data)
     {
-        $account = array(
-            'name' => sprintf("%s %s", $data['first_name'], $data['last_name'])
-        );
+        $nameParts = array_intersect_key($data, array_flip(['first_name', 'last_name']));
+        $account   = ['name' => implode(' ', $nameParts)];
 
         foreach ($data['addresses'] as $address) {
             $addressTypes = array();
@@ -343,8 +345,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             $contact['addresses'][$key] = $bapAddress;
         }
 
-        $contact['emails'][] = $contact['email'];
-        unset($contact['email']);
+        if (!empty($contact['email'])) {
+            $contact['emails'][] = $contact['email'];
+            unset($contact['email']);
+        }
 
         return $contact;
     }

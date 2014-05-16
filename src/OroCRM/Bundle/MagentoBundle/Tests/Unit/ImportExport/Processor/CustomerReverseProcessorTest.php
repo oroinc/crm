@@ -109,6 +109,9 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD)
+     */
     public function getDataProvider()
     {
         $email = 'e@e.com';
@@ -217,16 +220,14 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                                 'object' => [
                                     'city' => $cityAddress,
                                     'organization' => $organizationAddress,
-                                    #'country' => $countryAddress,
-                                    'first_name' => $firstNameAddress,
-                                    'last_name' => $lastNameAddress,
-                                    'middle_name' => $middleNameAddress,
-                                    'postal_code' => $postalCodeAddress,
-                                    'name_prefix' => $prefixAddress,
-                                    #'region' => $regionAddress,
-                                    'region_text' => $regionTextAddress,
+                                    'firstName' => $firstNameAddress,
+                                    'lastName' => $lastNameAddress,
+                                    'middleName' => $middleNameAddress,
+                                    'postalCode' => $postalCodeAddress,
+                                    'namePrefix' => $prefixAddress,
+                                    'regionText' => $regionTextAddress,
                                     'street' => $streetAddress,
-                                    'name_suffix' => $nameSuffixAddress,
+                                    'nameSuffix' => $nameSuffixAddress,
                                 ],
                                 'status' => 'update',
                                 'entity'=>'',
@@ -266,7 +267,6 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                             'addresses' => [
                                 [
                                     'object' => [],
-                                    'status' => 'update',
                                     'entity'=>'',
                                 ]
                             ]
@@ -304,7 +304,6 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                             'addresses' => [
                                 [
                                     'object' => [],
-                                    'status' => 'update',
                                     'entity'=>'',
                                 ]
                             ]
@@ -315,6 +314,8 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @SuppressWarnings(PHPMD)
+     *
      * @dataProvider  getDataProvider
      *
      * @param array $fields

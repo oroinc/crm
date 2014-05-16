@@ -2,18 +2,18 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
+use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
-use Oro\Bundle\AddressBundle\Entity\Region;
+
+use OroCRM\Bundle\MagentoBundle\Utils\ValidationUtils;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\DoctrineHelper;
 
@@ -80,7 +80,9 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
         $validationErrors = $this->strategyHelper->validateEntity($entity);
         if ($validationErrors) {
             $this->context->incrementErrorEntriesCount();
-            $this->strategyHelper->addValidationErrors($validationErrors, $this->context);
+            $errorPrefix = ValidationUtils::guessValidationMessagePrefix($entity);
+
+            $this->strategyHelper->addValidationErrors($validationErrors, $this->context, $errorPrefix);
 
             return null;
         }

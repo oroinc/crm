@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 
 use Doctrine\ORM\EntityManager;
 
+use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -117,6 +118,11 @@ class ReverseWriter implements ItemWriterInterface
                         $this->em->persist($customer);
                     }
 
+                    // process addresses
+                    /*if (isset($item->object['addresses'])) {
+                        $this->processAddresses($item->object['addresses'], $channel->getSyncPriority());
+                    }*/
+
                 } catch (\Exception $e) {
                     //process another entity even in case if exception thrown
                     continue;
@@ -124,6 +130,26 @@ class ReverseWriter implements ItemWriterInterface
             }
         }
         $this->em->flush();
+    }
+
+    protected function processAddresses($addresses, $syncPriority)
+    {
+        foreach ($addresses as $address) {
+            if ($address->status === AbstractReverseProcessor::UPDATE_ENTITY) {
+                if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
+
+                } else {
+                    $addressData = $this->customerSerializer->normalizeAddress($address);
+                    $requestData = array_merge(
+                        ['addressId' => $address->entity->getOriginId()],
+                        ['addressData' => $addressData]
+                    );
+                    $this->transport->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_UPDATE, $requestData);
+                    $this->setChangedData($address->entity, $address->object);
+                    $this->em->persist($address->entity);
+                }
+            }
+        }
     }
 
     /**
@@ -182,7 +208,7 @@ class ReverseWriter implements ItemWriterInterface
      * @param Customer $entity
      * @param array    $changedData
      */
-    protected function setChangedData(Customer $entity, array $changedData)
+    protected function setChangedData($entity, array $changedData)
     {
         foreach ($changedData as $fieldName => $value) {
             if (!is_object($value) && !is_array($value)) {
