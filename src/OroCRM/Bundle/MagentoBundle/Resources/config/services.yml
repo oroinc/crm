@@ -146,8 +146,8 @@ services:
             - @oro_security.security_facade.link
             - @oro_integration.sync_scheduler.link
         # commented until two way sync will finished
-        #tags:
-        #    - { name: doctrine.event_subscriber, connection: default }
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
 
     orocrm_magento.importexport.customer.reverse.processor:
         class: %orocrm_magento.importexport.customer.reverse.processor.class%

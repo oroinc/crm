@@ -46,7 +46,7 @@ class CustomerReverseProcessor extends AbstractReverseProcessor
                         'region'       => ['region',       'contact_address.region', 'combined_code'],
                         'regionText'   => ['region_text',  'contact_address.region_text'],
                         'street'       => ['street',       'contact_address.street'],
-                        'street2'      => ['street2',       'contact_address.street2'],
+                        'street2'      => ['street2',      'contact_address.street2'],
                         'nameSuffix'   => ['name_suffix',  'contact_address.name_suffix'],
                     ]
                 ],

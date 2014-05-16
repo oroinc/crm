@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Processor;
 
-use \Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Collection;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -99,9 +99,7 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
                                     array_merge($relationArray, ['entity' => $relation])
                                 );
                             }
-                            unset($relationArray);
                         }
-                        unset($relation);
 
                         $this->addNew(
                             $allRelationsCheckingEntity,
@@ -109,7 +107,6 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
                             $result['object'][$relationName]
                         );
                     }
-                    unset($relationClassMapConfig, $relationName);
                 }
             }
         }
