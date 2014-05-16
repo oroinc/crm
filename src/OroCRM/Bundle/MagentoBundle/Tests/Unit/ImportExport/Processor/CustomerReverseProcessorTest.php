@@ -269,7 +269,6 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                             'addresses' => [
                                 [
                                     'object' => [],
-                                    'status' => 'update',
                                     'entity'=>'',
                                 ]
                             ]
@@ -307,7 +306,6 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                             'addresses' => [
                                 [
                                     'object' => [],
-                                    'status' => 'update',
                                     'entity'=>'',
                                 ]
                             ]
@@ -319,7 +317,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @SuppressWarnings(PHPMD)
-     * 
+     *
      * @dataProvider  getDataProvider
      *
      * @param array $fields
