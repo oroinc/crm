@@ -18,6 +18,8 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class ReverseWriter implements ItemWriterInterface
 {
+    const MAGENTO_DATETIME_FORMAT = 'Y-m-d H:i:s';
+
     /**
      * If at remote side where id no OroBridge installed, will be processed only this fields
      *
@@ -119,9 +121,9 @@ class ReverseWriter implements ItemWriterInterface
                     }
 
                     // process addresses
-                    /*if (isset($item->object['addresses'])) {
+                    if (isset($item->object['addresses'])) {
                         $this->processAddresses($item->object['addresses'], $channel->getSyncPriority());
-                    }*/
+                    }
 
                 } catch (\Exception $e) {
                     //process another entity even in case if exception thrown
@@ -160,6 +162,12 @@ class ReverseWriter implements ItemWriterInterface
      */
     protected function updateRemoteData($customerId, $customerData)
     {
+        foreach ($customerData as $fieldName => $value) {
+            if ($value instanceof \DateTime) {
+                /** @var $value \DateTime */
+                $customerData[$fieldName] = $value->format(self::MAGENTO_DATETIME_FORMAT);
+            }
+        }
         $requestData = array_merge(
             ['customerId' => $customerId],
             ['customerData' => $customerData]
@@ -211,7 +219,7 @@ class ReverseWriter implements ItemWriterInterface
     protected function setChangedData($entity, array $changedData)
     {
         foreach ($changedData as $fieldName => $value) {
-            if (!is_object($value) && !is_array($value)) {
+            if ($fieldName !== 'addresses') {
                 $this->accessor->setValue($entity, $fieldName, $value);
             }
         }
