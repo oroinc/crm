@@ -50,4 +50,12 @@ class CustomerConnector extends AbstractMagentoConnector implements TwoWaySyncCo
     {
         return $this->transport->getCustomers();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function supportsForceSync()
+    {
+        return true;
+    }
 }

@@ -26,14 +26,16 @@ class Account extends AbstractPageEntity
         $this->accountName = $this->test->byId('orocrm_account_form_name');
         $this->street = $this->test->byId('orocrm_account_form_billingAddress_street');
         $this->city = $this->test->byId('orocrm_account_form_billingAddress_city');
-        $this->country = $this->test->byXpath("//div[@id='s2id_orocrm_account_form_billingAddress_country']/a");
+        $this->country = $this->test
+            ->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_billingAddress_country')]/a");
         $this->zipcode = $this->test->byId('orocrm_account_form_billingAddress_postalCode');
-        $this->owner = $this->test->byXpath("//div[@id='s2id_orocrm_account_form_owner']/a");
+        $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_owner')]/a");
 
         if ($this->test->byId('orocrm_account_form_billingAddress_region_text')->displayed()) {
             $this->state = $this->test->byId('orocrm_account_form_billingAddress_region_text');
         } else {
-            $this->state = $this->test->byXpath("//div[@id='s2id_orocrm_account_form_billingAddress_region']/a");
+            $this->state = $this->test
+                ->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_billingAddress_region')]/a");
         }
 
         return $this;
@@ -69,8 +71,8 @@ class Account extends AbstractPageEntity
 
     public function verifyTag($tag)
     {
-        if ($this->isElementPresent("//div[@id='s2id_orocrm_account_form_tags_autocomplete']")) {
-            $tags = $this->test->byXpath("//div[@id='s2id_orocrm_account_form_tags_autocomplete']//input");
+        if ($this->isElementPresent("//div[starts-with(@id,'s2id_orocrm_account_form_tags_autocomplete')]")) {
+            $tags = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_tags_autocomplete')]//input");
             $tags->click();
             $tags->value(substr($tag, 0, (strlen($tag)-1)));
             $this->waitForAjax();
@@ -99,8 +101,8 @@ class Account extends AbstractPageEntity
      */
     public function setTag($tag)
     {
-        if ($this->isElementPresent("//div[@id='s2id_orocrm_account_form_tags_autocomplete']")) {
-            $tags = $this->test->byXpath("//div[@id='s2id_orocrm_account_form_tags_autocomplete']//input");
+        if ($this->isElementPresent("//div[starts-with(@id,'s2id_orocrm_account_form_tags_autocomplete')]")) {
+            $tags = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_tags_autocomplete')]//input");
             $tags->click();
             $tags->value($tag);
             $this->waitForAjax();
@@ -166,7 +168,8 @@ class Account extends AbstractPageEntity
         if ($this->test->byId('orocrm_account_form_billingAddress_region_text')->displayed()) {
             $this->state = $this->test->byId('orocrm_account_form_billingAddress_region_text');
         } else {
-            $this->state = $this->test->byXpath("//div[@id='s2id_orocrm_account_form_billingAddress_region']/a");
+            $this->state = $this->test
+                ->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_billingAddress_region')]/a");
         }
 
         $this->state->click();

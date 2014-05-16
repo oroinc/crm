@@ -155,10 +155,8 @@ class AbstractNormalizer implements SerializerAwareInterface
      */
     protected function denormalizeObject(array $data, $name, $type, $format = null, $context = array())
     {
-        $result = null;
-        if (!empty($data[$name])) {
-            $result = $this->serializer->denormalize($data[$name], $type, $format, $context);
-        }
+        $toDenormalize = empty($data[$name]) ? null : $data[$name];
+        $result        = $this->serializer->denormalize($toDenormalize, $type, $format, $context);
 
         return $result;
     }

@@ -357,11 +357,9 @@ orocrm:
         menu.web_customers: Web Customers
         controller:
             transport_not_configure:       Unable to handle your request. Invalid channel configuration detected.
+            extension_required:            Unable to perform this operation, Oro Bridge extension not found.
             synchronization_error:         Unable to synchronize from remote.
             sync_error_with_magento:       Synchronization with remote server failed and orders should be re-synced. If the problem persists, please contact your Administrator.
             synchronization_success:       Data successfuly synchronized.
             synchronization_failed_status: Cart data is not up to date
-        exception:
-          extension_required: Unable to perform this operation, Oro Bridge extension not found.
-          route_not_found: Route cannot be generated, route not found.
         ping_site_error: Unable to load form
