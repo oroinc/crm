@@ -18,7 +18,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 
-class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInterface, NormalizerInterface
+class CustomerSerializer extends AbstractNormalizer implements DenormalizerInterface, NormalizerInterface
 {
     /** @var array */
     protected $importFieldsMap = array(
@@ -64,38 +64,22 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
     );
 
     /**
-     * Customer-Contact relation, key - Customer field, value - Contact field
+     * Get customer values for given magento fields
      *
-     * @var array
+     * @param Customer $customer
+     * @param array    $magentoFields
+     *
+     * @return array
      */
-    protected $customerContactRelation = [
-        'name_prefix' => 'name_prefix',
-        'first_name'  => 'first_name',
-        'middle_name' => 'middle_name',
-        'last_name'   => 'last_name',
-        'name_suffix' => 'name_suffix',
-        'gender'      => 'gender',
-        'birthday'    => 'birthday',
-        'email'       => 'primary_email.email',
-    ];
-
-    public function getCurrentCustomerValues($customer, $magentoFields, $accessor)
+    public function getCurrentCustomerValues(Customer $customer, $magentoFields)
     {
+        $accessor = PropertyAccess::createPropertyAccessor();
         $result = [];
-        foreach ($magentoFields as $field) {
-            $result[$this->importFieldsMap[$field]] = $accessor->getValue($customer, $this->importFieldsMap[$field]);
-        }
-
-        return $result;
-    }
-
-    public function convertToOroStyle($magentoFields)
-    {
-        $involves = json_decode(json_encode($magentoFields), true);
-        $result = [];
-
-        foreach ($involves as $field => $value) {
-            $result[$this->importFieldsMap[$field]] = $value;
+        foreach ($magentoFields as $fieldName) {
+            $result[$fieldName] = $accessor->getValue(
+                $customer,
+                $this->importFieldsMap[$fieldName]
+            );
         }
 
         return $result;
@@ -104,9 +88,9 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
     /**
      * Normalizes an object into a set of arrays/scalars
      *
-     * @param object $object object to normalize
+     * @param object         $object  object to normalize
      * @param PropertyAccess $format
-     * @param array $context Context options for the normalizer
+     * @param array          $context Context options for the normalizer
      *
      * @return array|scalar
      */
@@ -115,7 +99,6 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
         $result = [];
 
         foreach ($this->importFieldsMap as $magentoName => $oroName) {
-
             if (empty($context)) {
                 $result[$magentoName] = $format->getValue($object, $oroName);
             } else {
@@ -124,6 +107,7 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
                 }
             }
         }
+
         return $result;
     }
 
@@ -183,17 +167,6 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
         $this->setObjectFieldsValues($resultObject, $mappedData);
 
         return $resultObject;
-    }
-
-
-    public function convertToDataForContact($customer, $accessor)
-    {
-        $result = [];
-
-        foreach ($this->customerContactRelation as $customerField => $contactField) {
-            $result[$contactField] = $accessor->getValue($customer, $customerField);
-        }
-        return $result;
     }
 
     /**
