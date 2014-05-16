@@ -69,9 +69,12 @@ class AddressImportHelper
                 $this->regionsCache[$combinedCode] = $this->loadRegionByCode($combinedCode, $countryCode, $regionCode);
             }
 
-            // no region found in system db for corresponding magento region, use region text
+            /**
+             * no region found in system db for corresponding magento region, use region text
+            */
             if (empty($this->regionsCache[$combinedCode])) {
                 $address->setRegion(null);
+                $address->setRegionText($mageRegion->getName());
             } else {
                 $this->regionsCache[$combinedCode] = $this->doctrineHelper->merge($this->regionsCache[$combinedCode]);
                 $address->setRegion($this->regionsCache[$combinedCode]);

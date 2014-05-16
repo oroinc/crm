@@ -100,12 +100,14 @@ class ContactImportHelper
         foreach ($addresses as $address) {
             // find in update local data if
             $localAddress = $this->getCustomerAddressByContactAddress($localData, $address);
+
             if (!$localAddress && $this->isRemotePrioritized()) {
                 // remove if added and remote data has higher priority
                 // commented until two way sync will finished
                 // $contact->removeAddress($address);
-            } else {
-                $remoteAddress = $this->getCorrespondentRemoteAddress($remoteData, $localAddress);
+            } elseif ($localAddress) {
+                 $remoteAddress = $this->getCorrespondentRemoteAddress($remoteData, $localAddress);
+
                 if ($remoteAddress) {
                     // do update
                     $this->mergeScalars($this->addressScalarFields, $remoteAddress, $localAddress, $address);
@@ -116,13 +118,7 @@ class ContactImportHelper
                         $address->setCountry($remoteAddress->getCountry());
                     }
 
-                    if ($remoteAddress->getRegion() == $address->getRegion()
-                        ||
-                        ($remoteAddress->getRegion() ? $remoteAddress->getRegion()->getCombinedCode() : null)
-                        ===
-                        ($address->getRegion() ? $address->getRegion()->getCombinedCode() : null)
-                        || $this->isRemotePrioritized()
-                    ) {
+                    if ($this->isRegion($remoteAddress, $address) || $this->isRemotePrioritized()) {
                         $address->setRegion($remoteAddress->getRegion());
                         if ($address->getRegion()) {
                             $address->setRegionText(null);
@@ -168,6 +164,24 @@ class ContactImportHelper
 
         $this->addressImportHelper->updateAddressCountryRegion($contactAddress, $mageRegionId);
         $this->addressImportHelper->updateAddressTypes($contactAddress);
+    }
+
+    /**
+     * @param Address        $remoteAddress
+     * @param ContactAddress $address
+     *
+     * @return bool
+     */
+    protected function isRegion($remoteAddress, $address)
+    {
+        return (
+            ($remoteAddress->getRegion() == $address->getRegion())
+            ||
+            (
+                ($remoteAddress->getRegion() ? $remoteAddress->getRegion()->getCombinedCode() : null)
+                === ($address->getRegion() ? $address->getRegion()->getCombinedCode() : null)
+            )
+        );
     }
 
     /**
