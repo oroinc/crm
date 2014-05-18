@@ -24,6 +24,18 @@ datagrid:
             value:  { label: orocrm.report.datagrid.columns.total_value,  frontend_type: currency }
         properties:
             id: ~
+            view_link:
+                type:       url
+                route:      orocrm_account_view
+                params:     [ id ]
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_account_view
+                label:         View
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
         totals:
             total:
                 extends: grand_total
@@ -89,6 +101,18 @@ datagrid:
                 groupBy:  a.id
         properties:
             id: ~
+            view_link:
+                type:       url
+                route:      orocrm_account_view
+                params:     [ id ]
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_account_view
+                label:         View
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
         totals:
             total:
                 extends: grand_total
