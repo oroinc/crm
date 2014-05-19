@@ -46,7 +46,8 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
  */
 class Order extends BaseOrder
 {
-    use IntegrationEntityTrait, NamesAwareTrait;
+    use IntegrationEntityTrait;
+    use OriginTrait;
 
     /**
      * @var string

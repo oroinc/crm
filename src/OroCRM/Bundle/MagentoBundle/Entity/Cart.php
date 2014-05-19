@@ -47,7 +47,9 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  */
 class Cart extends BaseCart
 {
-    use IntegrationEntityTrait, OriginTrait, NamesAwareTrait;
+    use IntegrationEntityTrait;
+    use OriginTrait;
+    use NamesAwareTrait;
 
     /**
      * @var CartItem[]|Collection

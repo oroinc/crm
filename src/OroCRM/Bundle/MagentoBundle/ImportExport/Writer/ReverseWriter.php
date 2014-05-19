@@ -13,10 +13,9 @@ use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscri
 use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
-use Zend\Mail\Address;
 
 class ReverseWriter implements ItemWriterInterface
 {
@@ -28,10 +27,10 @@ class ReverseWriter implements ItemWriterInterface
      * @var array
      */
     protected $clearMagentoFields = [
-        'email',
-        'firstname',
-        'lastname'
-    ];
+            'email',
+            'firstname',
+            'lastname'
+        ];
 
     /**
      * Customer-Contact relation, key - Customer field, value - Contact field
@@ -39,35 +38,26 @@ class ReverseWriter implements ItemWriterInterface
      * @var array
      */
     protected $customerContactRelation = [
-        'name_prefix' => 'name_prefix',
-        'first_name'  => 'first_name',
-        'middle_name' => 'middle_name',
-        'last_name'   => 'last_name',
-        'name_suffix' => 'name_suffix',
-        'gender'      => 'gender',
-        'birthday'    => 'birthday',
-        'email'       => 'primary_email.email',
-    ];
+            'name_prefix' => 'name_prefix',
+            'first_name'  => 'first_name',
+            'middle_name' => 'middle_name',
+            'last_name'   => 'last_name',
+            'name_suffix' => 'name_suffix',
+            'gender'      => 'gender',
+            'birthday'    => 'birthday',
+            'email'       => 'primary_email.email',
+        ];
 
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     protected $em;
 
-    /**
-     * @var CustomerSerializer
-     */
+    /** @var CustomerSerializer */
     protected $customerSerializer;
 
-    /**
-     * @var AddressNormalizer
-     *
-     */
+    /** @var AddressNormalizer */
     protected $addressNormalizer;
 
-    /**
-     * @var SoapTransport
-     */
+    /** @var SoapTransport */
     protected $transport;
 
     /**
@@ -78,6 +68,7 @@ class ReverseWriter implements ItemWriterInterface
     /**
      * @param EntityManager      $em
      * @param CustomerSerializer $customerSerializer
+     * @param AddressNormalizer  $addressNormalizer
      * @param SoapTransport      $transport
      */
     public function __construct(
@@ -119,7 +110,7 @@ class ReverseWriter implements ItemWriterInterface
                         $this->setChangedData($customer, $item->object);
                         $this->setChangedData($customer, $remoteChanges);
                         $this->em->persist($customer);
-                        $customerForMagento = $this->customerSerializer->normalize($customer, $this->accessor);
+                        $customerForMagento = $this->customerSerializer->normalize($customer);
                         $this->updateRemoteData($customer->getOriginId(), $customerForMagento);
                         $this->updateContact($item);
 
@@ -144,6 +135,12 @@ class ReverseWriter implements ItemWriterInterface
         $this->em->flush();
     }
 
+    /**
+     * Process address write  to remote instance and to DB
+     *
+     * @param array  $addresses
+     * @param string $syncPriority
+     */
     protected function processAddresses($addresses, $syncPriority)
     {
         foreach ($addresses as $address) {
@@ -156,7 +153,7 @@ class ReverseWriter implements ItemWriterInterface
                         (array)$this->transport->call(
                             SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO,
                             [
-                                'addressId' => $addressEntity->getOriginId()
+                            'addressId' => $addressEntity->getOriginId()
                             ]
                         ),
                         $addressEntity,
@@ -181,7 +178,7 @@ class ReverseWriter implements ItemWriterInterface
                     $result = $this->transport->call(
                         SoapTransport::ACTION_CUSTOMER_ADDRESS_DELETE,
                         [
-                            'addressId' => $address['entity']->getOriginId()
+                        'addressId' => $address['entity']->getOriginId()
                         ]
                     );
                 } catch (\Exception $e) {
@@ -215,13 +212,18 @@ class ReverseWriter implements ItemWriterInterface
                         );
                     }
                 } catch (\Exception $e) {
-                    $e;
                 }
                 unset($result, $requestData);
             }
         }
     }
 
+    /**
+     * Push data to remote instance
+     *
+     * @param int   $addressId
+     * @param array $addressData
+     */
     protected function updateRemoteAddressData($addressId, $addressData)
     {
         foreach ($addressData as $fieldName => $value) {
@@ -240,7 +242,7 @@ class ReverseWriter implements ItemWriterInterface
     }
 
     /**
-     * Update customer data at remote side
+     * Push data to remote instance
      *
      * @param int   $customerId
      * @param array $customerData
@@ -273,8 +275,8 @@ class ReverseWriter implements ItemWriterInterface
         $remoteData = $this->transport->call(
             SoapTransport::ACTION_CUSTOMER_INFO,
             [
-                'customerId' => $item->entity->getOriginId(),
-                'attributes' => $fieldsList
+            'customerId' => $item->entity->getOriginId(),
+            'attributes' => $fieldsList
             ]
         );
 
@@ -296,21 +298,6 @@ class ReverseWriter implements ItemWriterInterface
     }
 
     /**
-     * Set changed data
-     *
-     * @param Customer $entity
-     * @param array    $changedData
-     */
-    protected function setChangedDataByObject($entity, $changedEntity, $fieldList)
-    {
-        foreach ($fieldList as $fieldName) {
-            if ($fieldName !== 'addresses') {
-                $this->accessor->setValue($entity, $fieldName, $this->accessor->getValue($changedEntity, $fieldName));
-            }
-        }
-    }
-
-    /**
      * Set changed data to customer
      *
      * @param Customer $entity
@@ -326,9 +313,11 @@ class ReverseWriter implements ItemWriterInterface
     }
 
     /**
-     * @param object|string $email
+     * Convert email to sting
      *
-     * @return string
+     * @param mixed $email
+     *
+     * @return string|null
      */
     protected function emailParser($email)
     {
@@ -336,7 +325,7 @@ class ReverseWriter implements ItemWriterInterface
             try {
                 return (string)$email;
             } catch (\Exception $e) {
-
+                $email = null;
             }
         }
 
