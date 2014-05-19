@@ -3,21 +3,16 @@
 namespace OroCRM\Bundle\AccountBundle\Tests\Functional\API;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
+ * @dbIsolation
  */
 class RestAccountTest extends WebTestCase
 {
-    /** @var Client */
-    protected $client;
-
-    public function setUp()
+    protected function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        $this->initClient(array(), $this->generateWsseAuthHeader());
     }
 
     public function testCreate()
@@ -28,14 +23,14 @@ class RestAccountTest extends WebTestCase
                 "owner" => '1',
             )
         );
+
         $this->client->request(
             'POST',
-            $this->client->generate('oro_api_post_account'),
+            $this->getUrl('oro_api_post_account'),
             $request
         );
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 201);
-        $result = ToolsAPI::jsonToArray($result->getContent());
+
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 201);
         $this->assertArrayHasKey('id', $result);
 
         $request['id'] = $result['id'];
@@ -43,18 +38,19 @@ class RestAccountTest extends WebTestCase
     }
 
     /**
-     * @param $request
+     * @param array $request
      * @depends testCreate
      * @return array
      */
-    public function testGet($request)
+    public function testGet(array $request)
     {
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_accounts')
+            $this->getUrl('oro_api_get_accounts')
         );
-        $result = $this->client->getResponse();
-        $result = ToolsAPI::jsonToArray($result->getContent());
+
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
+
         $id = $request['id'];
         $result = array_filter(
             $result,
@@ -68,40 +64,38 @@ class RestAccountTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_account', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_account', array('id' => $request['id']))
         );
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
 
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
+
         $this->assertEquals($request['account']['name'], $result['name']);
     }
 
     /**
-     * @param $request
+     * @param array $request
      * @depends testCreate
      * @depends testGet
      */
-    public function testUpdate($request)
+    public function testUpdate(array $request)
     {
         $request['account']['name'] .= "_Updated";
         $this->client->request(
             'PUT',
-            $this->client->generate('oro_api_put_account', array('id' => $request['id'])),
+            $this->getUrl('oro_api_put_account', array('id' => $request['id'])),
             $request
         );
         $result = $this->client->getResponse();
 
-        ToolsAPI::assertJsonResponse($result, 204);
+        $this->assertJsonResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_account', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_account', array('id' => $request['id']))
         );
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
 
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
+
         $this->assertEquals(
             $request['account']['name'],
             $result['name']
@@ -109,19 +103,19 @@ class RestAccountTest extends WebTestCase
     }
 
     /**
-     * @param $request
+     * @param array $request
      * @depends testCreate
      */
-    public function testDelete($request)
+    public function testDelete(array $request)
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_account', array('id' => $request['id']))
+            $this->getUrl('oro_api_delete_account', array('id' => $request['id']))
         );
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 204);
-        $this->client->request('GET', $this->client->generate('oro_api_get_account', array('id' => $request['id'])));
+        $this->assertJsonResponseStatusCodeEquals($result, 204);
+        $this->client->request('GET', $this->getUrl('oro_api_get_account', array('id' => $request['id'])));
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 404);
+        $this->assertJsonResponseStatusCodeEquals($result, 404);
     }
 }
