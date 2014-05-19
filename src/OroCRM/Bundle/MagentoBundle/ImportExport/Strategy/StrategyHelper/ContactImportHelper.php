@@ -102,9 +102,7 @@ class ContactImportHelper
             $localAddress = $this->getCustomerAddressByContactAddress($localData, $address);
 
             if (!$localAddress && $this->isRemotePrioritized()) {
-                // remove if added and remote data has higher priority
-                // commented until two way sync will finished
-                // $contact->removeAddress($address);
+                 $contact->removeAddress($address);
             } elseif ($localAddress) {
                  $remoteAddress = $this->getCorrespondentRemoteAddress($remoteData, $localAddress);
 
@@ -129,8 +127,7 @@ class ContactImportHelper
                         $contact->removeAddress($address);
                     }
                 } elseif ($this->isRemotePrioritized()) {
-                    // commented until two way sync will finished
-                    // $contact->removeAddress($address);
+                     $contact->removeAddress($address);
                 }
             }
         }
