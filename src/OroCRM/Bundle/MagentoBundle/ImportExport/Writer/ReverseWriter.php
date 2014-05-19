@@ -169,6 +169,13 @@ class ReverseWriter implements ItemWriterInterface
 
                 $this->updateRemoteAddressData($addressEntity->getOriginId(), $this->addressNormalizer->normalize($addressEntity));
                 $this->em->persist($addressEntity);
+            } elseif (isset($address['status']) && $address['status'] === AbstractReverseProcessor::DELETE_ENTITY) {
+                $this->transport->call(
+                    SoapTransport::ACTION_CUSTOMER_ADDRESS_DELETE,
+                    [
+                        'addressId' => $address['entity']->getOriginId()
+                    ]
+                );
             }
         }
     }
