@@ -2,41 +2,34 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Symfony\Component\DomCrawler\Form;
-use Symfony\Component\DomCrawler\Field\ChoiceFormField;
+
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
+ * @dbIsolation
  */
 class ControllersGroupTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
-    public function setUp()
+    protected function setUp()
     {
-        $this->client = static::createClient(
+        $this->initClient(
             array(),
-            array_merge(ToolsAPI::generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
     }
 
     public function testIndex()
     {
-        $this->client->request('GET', $this->client->generate('orocrm_contact_group_index'));
+        $this->client->request('GET', $this->getUrl('orocrm_contact_group_index'));
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', $this->client->generate('orocrm_contact_group_create'));
+        $crawler = $this->client->request('GET', $this->getUrl('orocrm_contact_group_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $form['orocrm_contact_group_form[label]'] = 'Contact Group Label';
@@ -46,7 +39,7 @@ class ControllersGroupTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, '');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Group saved", $crawler->html());
     }
 
@@ -55,22 +48,18 @@ class ControllersGroupTest extends WebTestCase
      */
     public function testUpdate()
     {
-        $result = ToolsAPI::getEntityGrid(
-            $this->client,
+        $response = $this->client->requestGrid(
             'contact-groups-grid',
-            array(
-                'contact-groups-grid[_filter][label][value]' => 'Contact Group Label',
-            )
+            array('contact-groups-grid[_filter][label][value]' => 'Contact Group Label')
         );
 
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($response, 200);
         $result = reset($result['data']);
+
         $id = $result['id'];
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_group_update', array('id' => $result['id']))
+            $this->getUrl('orocrm_contact_group_update', array('id' => $result['id']))
         );
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
@@ -80,7 +69,7 @@ class ControllersGroupTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, '');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Group saved", $crawler->html());
 
         return $id;
@@ -93,10 +82,10 @@ class ControllersGroupTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_contactgroup', array('id' => $id))
+            $this->getUrl('oro_api_delete_contactgroup', array('id' => $id))
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 204);
+        $this->assertJsonResponseStatusCodeEquals($result, 204);
     }
 }

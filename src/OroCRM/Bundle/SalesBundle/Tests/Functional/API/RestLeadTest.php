@@ -3,25 +3,18 @@
 namespace OroCRM\Bundle\SalesBundle\Tests\Functional\API;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
+ * @dbIsolation
  */
 class RestLeadTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
-    public function setUp()
+    protected function setUp()
     {
-        $this->client = static::createClient(
+        $this->initClient(
             array(),
-            ToolsAPI::generateWsseHeader()
+            $this->generateWsseAuthHeader()
         );
     }
 
@@ -41,12 +34,11 @@ class RestLeadTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            $this->client->generate('oro_api_post_lead'),
+            $this->getUrl('oro_api_post_lead'),
             $request
         );
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 201);
-        $result = ToolsAPI::jsonToArray($result->getContent());
+
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 201);
 
         $request['id'] = $result['id'];
         return $request;
@@ -61,12 +53,10 @@ class RestLeadTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_lead', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_lead', array('id' => $request['id']))
         );
 
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['lead']['firstName'], $result['firstName']);
@@ -85,28 +75,25 @@ class RestLeadTest extends WebTestCase
      */
     public function testPutLead($request)
     {
-
         $request['lead']['firstName'] .= '_updated';
         $request['lead']['lastName'] .= '_updated';
         $request['lead']['name'] .= '_updated';
 
         $this->client->request(
             'PUT',
-            $this->client->generate('oro_api_put_lead', array('id' => $request['id'])),
+            $this->getUrl('oro_api_put_lead', array('id' => $request['id'])),
             $request
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 204);
+        $this->assertJsonResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_lead', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_lead', array('id' => $request['id']))
         );
 
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['lead']['firstName'], $result['firstName']);
@@ -124,11 +111,10 @@ class RestLeadTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_leads')
+            $this->getUrl('oro_api_get_leads')
         );
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-        $result = ToolsApi::jsonToArray($result->getContent());
+
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertNotEmpty($result);
 
@@ -147,17 +133,17 @@ class RestLeadTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_lead', array('id' => $request['id']))
+            $this->getUrl('oro_api_delete_lead', array('id' => $request['id']))
         );
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 204);
+        $this->assertJsonResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_lead', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_lead', array('id' => $request['id']))
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 404);
+        $this->assertJsonResponseStatusCodeEquals($result, 404);
     }
 }

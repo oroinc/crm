@@ -22,7 +22,7 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager */
     protected $em;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->setMethods(['createQueryBuilder', 'beginTransaction', 'commit'])
@@ -34,7 +34,7 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->em, $this->repository);
     }

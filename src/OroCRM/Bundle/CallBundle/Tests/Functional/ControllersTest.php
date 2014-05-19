@@ -2,39 +2,34 @@
 
 namespace OroCRM\Bundle\CallBundle\Tests\Controller;
 
+use Symfony\Component\Form\Form;
+
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
+ * @dbIsolation
  */
 class ControllersTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
-    public function setUp()
+    protected function setUp()
     {
-        $this->client = static::createClient(
+        $this->initClient(
             array(),
-            array_merge(ToolsAPI::generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
     }
 
     public function testIndex()
     {
-        $this->client->request('GET', $this->client->generate('orocrm_call_index'));
+        $this->client->request('GET', $this->getUrl('orocrm_call_index'));
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', $this->client->generate('orocrm_call_create'));
+        $crawler = $this->client->request('GET', $this->getUrl('orocrm_call_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $form['orocrm_call_form[subject]'] = 'Test Call';
@@ -46,7 +41,7 @@ class ControllersTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Call logged successfully", $crawler->html());
     }
 
@@ -55,22 +50,18 @@ class ControllersTest extends WebTestCase
      */
     public function testUpdate()
     {
-        $result = ToolsAPI::getEntityGrid(
-            $this->client,
+        $response = $this->client->requestGrid(
             'calls-grid',
-            array(
-                'calls-grid[_filter][subject][value]' => 'Test Call',
-            )
+            array('calls-grid[_filter][subject][value]' => 'Test Call')
         );
 
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($response, 200);
         $result = reset($result['data']);
+
         $id = $result['id'];
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_call_update', array('id' => $result['id']))
+            $this->getUrl('orocrm_call_update', array('id' => $result['id']))
         );
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
@@ -80,7 +71,7 @@ class ControllersTest extends WebTestCase
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Call logged successfully", $crawler->html());
 
         return $id;
@@ -93,18 +84,18 @@ class ControllersTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_call', array('id' => $id))
+            $this->getUrl('oro_api_delete_call', array('id' => $id))
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 204);
+        $this->assertJsonResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_call_update', array('id' => $id))
+            $this->getUrl('orocrm_call_update', array('id' => $id))
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 404, 'text/html; charset=UTF-8');
+        $this->assertHtmlResponseStatusCodeEquals($result, 404);
     }
 }

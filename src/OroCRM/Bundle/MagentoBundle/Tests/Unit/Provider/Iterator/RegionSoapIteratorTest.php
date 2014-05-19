@@ -6,7 +6,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
 
 class RegionSoapIteratorTest extends BaseIteratorTestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->iterator = new RegionSoapIterator($this->transport, $this->settings);

@@ -31,7 +31,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
     /** @var string */
     protected $decryptedApiKey = 'api_key';
 
-    public function setUp()
+    protected function setUp()
     {
         $encoder = $this->getMock('Oro\Bundle\SecurityBundle\Encoder\Mcrypt');
         $encoder->expects($this->any())
@@ -56,7 +56,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->settings));
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->transport, $this->transportEntity, $this->settings, $this->encoder, $this->soapClientMock);
     }
