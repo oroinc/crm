@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 
 use Doctrine\ORM\EntityManager;
 
-use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -16,6 +15,7 @@ use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalize
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
 use Zend\Mail\Address;
 
 class ReverseWriter implements ItemWriterInterface
@@ -76,9 +76,9 @@ class ReverseWriter implements ItemWriterInterface
     protected $accessor;
 
     /**
-     * @param EntityManager            $em
-     * @param CustomerSerializer       $customerSerializer
-     * @param SoapTransport            $transport
+     * @param EntityManager      $em
+     * @param CustomerSerializer $customerSerializer
+     * @param SoapTransport      $transport
      */
     public function __construct(
         EntityManager $em,
@@ -149,7 +149,7 @@ class ReverseWriter implements ItemWriterInterface
         foreach ($addresses as $address) {
             if (isset($address['status']) && $address['status'] === AbstractReverseProcessor::UPDATE_ENTITY) {
                 $addressEntity = $address['entity'];
-                $localChanges = $address['object'];
+                $localChanges  = $address['object'];
 
                 if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
                     $remoteData = $this->customerSerializer->compareAddresses(
@@ -351,14 +351,13 @@ class ReverseWriter implements ItemWriterInterface
      */
     protected function fixDataIfExtensionNotInstalled(\stdClass $remoteData)
     {
-        // todo: Uncomment this check after oro bridge was fixed to support all fields
-        #if (!$this->transport->isExtensionInstalled()) {
-        foreach ($remoteData as $key => $value) {
-            if (!in_array($key, $this->clearMagentoFields)) {
-                unset($remoteData->$key);
+        if (!$this->transport->isExtensionInstalled()) {
+            foreach ($remoteData as $key => $value) {
+                if (!in_array($key, $this->clearMagentoFields)) {
+                    unset($remoteData->$key);
+                }
             }
         }
-        #}
     }
 
     /**
@@ -373,8 +372,7 @@ class ReverseWriter implements ItemWriterInterface
             $contactData[$contactField] = $this->accessor->getValue($item->entity, $customerField);
         }
 
-        $contact     = $this->accessor->getValue($item->entity, 'contact');
-
+        $contact = $this->accessor->getValue($item->entity, 'contact');
         foreach ($contactData as $fieldName => $value) {
             try {
                 $this->accessor->setValue($contact, $fieldName, $value);
