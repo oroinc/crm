@@ -351,6 +351,48 @@ orocrm:
             country.label:       Country
             region.label:        State
 
+        orderaddress:
+            entity_label:        Magento Order Address
+            entity_plural_label: Magento Order Addresses
+            entity_description:  Represent Magento Order Address
+            id.label:            Id
+            city.label:          City
+            country.label:       Country
+            region.label:        State
+            region_text.label:   State
+            first_name.label:    First name
+            middle_name.label:   Middle name
+            last_name.label:     Last name
+            name_suffix.label:   Name suffix
+            postal_code.label:   Zip/Postal code
+            organization.label:  Organization
+            fax.label:           Fax
+            phone.label:         Phone
+            owner.label:         Owner
+            types.label:         Types
+            street.label:        Street
+
+        store:
+            entity_label:        Store
+            entity_plural_label: Magento Store
+            entity_description:  Represent Magento Store
+            id.label:            Id
+            origin_id.label:     Origin Id
+            code.label:          Code
+            name.label:          Name
+            channel.label:       Channel
+            website.label:       Website
+
+        website:
+            entity_label:        Website
+            entity_plural_label: Magento Website
+            entity_description:  Represent Magento Website
+            id.label:            Id
+            origin_id.label:     Origin Id
+            code.label:          Code
+            name.label:          Name
+            channel.label:       Channel
+
         account:
             no_customers_exist: No customers exist
 
