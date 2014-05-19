@@ -39,8 +39,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  */
 class Customer extends BasePerson
 {
-    use IntegrationEntityTrait;
-    use OriginTrait;
+    use IntegrationEntityTrait, OriginTrait;
 
     /*
      * FIELDS are duplicated to enable dataaudit only for customer fields

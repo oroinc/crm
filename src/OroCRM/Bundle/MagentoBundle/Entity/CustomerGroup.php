@@ -25,8 +25,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  */
 class CustomerGroup extends BasePersonGroup
 {
-    use IntegrationEntityTrait;
-    use OriginTrait;
+    use IntegrationEntityTrait, OriginTrait;
 
     /**
      * @var string

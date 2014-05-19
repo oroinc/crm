@@ -20,8 +20,7 @@ use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
  */
 class Website
 {
-    use IntegrationEntityTrait;
-    use OriginTrait;
+    use IntegrationEntityTrait, OriginTrait;
 
     /**
      * @var integer
