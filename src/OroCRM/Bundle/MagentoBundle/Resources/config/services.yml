@@ -157,4 +157,5 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
             - @orocrm_magento.importexport.denormalizer.customer
+            - @oro_address.importexport.address_normalizer
             - @orocrm_magento.transport.soap_transport

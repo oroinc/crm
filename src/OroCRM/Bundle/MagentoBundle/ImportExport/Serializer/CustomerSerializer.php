@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\Region;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -64,6 +66,49 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'createdAt',
         'birthday'
     );
+
+    public function compareAddresses($remoteData, $localData, $oroFieldList)
+    {
+        $remoteAddress = $this->serializer->denormalize($this->getBapAddressData($remoteData), MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE);
+
+        $accessor = PropertyAccess::createPropertyAccessor();
+        $result = [];
+        foreach ($oroFieldList as $fieldName) {
+            $localValue = $accessor->getValue($localData, $fieldName);
+            $remoteValue = $accessor->getValue($remoteAddress, $fieldName);
+
+            if (($fieldName !== 'country' && $remoteValue !== $localValue)
+                || ($fieldName == 'country' && $remoteValue->getIso2Code() !== $localValue->getIso2Code())
+            ) {
+                $result[$fieldName] = $remoteValue;
+            }
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * @param array $addressFields
+     * @return array
+     */
+    public function convertToMagentoAddress($addressFields)
+    {
+        $result = [];
+        foreach ($addressFields as $fieldName => $value) {
+            if (isset($this->addressBapToMageMapping[$fieldName])) {
+                $result[$this->addressBapToMageMapping[$fieldName]] = $value;
+            }
+        }
+
+        $result['street'] = [];
+        $result['street'][] = $addressFields['street'];
+        if (isset($addressFields['street2'])) {
+            $result['street'][] = $addressFields['street2'];
+        }
+
+        return $result;
+    }
 
     /**
      * Get customer values for given magento fields

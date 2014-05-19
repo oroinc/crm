@@ -33,6 +33,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_CUSTOMER_INFO = 'customerCustomerInfo';
     const ACTION_CUSTOMER_UPDATE = 'customerCustomerUpdate';
     const ACTION_CUSTOMER_DELETE = 'customerCustomerDelete';
+    const ACTION_CUSTOMER_ADDRESS_INFO   = 'customerAddressInfo';
     const ACTION_CUSTOMER_ADDRESS_UPDATE = 'customerAddressUpdate';
     const ACTION_CUSTOMER_ADDRESS_DELETE = 'customerAddressDelete';
     const ACTION_ADDRESS_LIST  = 'customerAddressList';

@@ -11,10 +11,12 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
+use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Zend\Mail\Address;
 
 class ReverseWriter implements ItemWriterInterface
 {
@@ -58,6 +60,12 @@ class ReverseWriter implements ItemWriterInterface
     protected $customerSerializer;
 
     /**
+     * @var AddressNormalizer
+     *
+     */
+    protected $addressNormalizer;
+
+    /**
      * @var SoapTransport
      */
     protected $transport;
@@ -75,10 +83,12 @@ class ReverseWriter implements ItemWriterInterface
     public function __construct(
         EntityManager $em,
         CustomerSerializer $customerSerializer,
+        AddressNormalizer $addressNormalizer,
         SoapTransport $transport
     ) {
         $this->em                 = $em;
         $this->customerSerializer = $customerSerializer;
+        $this->addressNormalizer  = $addressNormalizer;
         $this->transport          = $transport;
         $this->accessor           = PropertyAccess::createPropertyAccessor();
     }
@@ -137,21 +147,47 @@ class ReverseWriter implements ItemWriterInterface
     protected function processAddresses($addresses, $syncPriority)
     {
         foreach ($addresses as $address) {
-            if ($address->status === AbstractReverseProcessor::UPDATE_ENTITY) {
-                if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
+            if (isset($address['status']) && $address['status'] === AbstractReverseProcessor::UPDATE_ENTITY) {
+                $addressEntity = $address['entity'];
+                $localChanges = $address['object'];
 
-                } else {
-                    $addressData = $this->customerSerializer->normalizeAddress($address);
-                    $requestData = array_merge(
-                        ['addressId' => $address->entity->getOriginId()],
-                        ['addressData' => $addressData]
+                if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
+                    $remoteData = $this->customerSerializer->compareAddresses(
+                        (array)$this->transport->call(
+                            SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO,
+                            [
+                                'addressId' => $addressEntity->getOriginId()
+                            ]
+                        ),
+                        $addressEntity, array_keys($localChanges)
                     );
-                    $this->transport->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_UPDATE, $requestData);
-                    $this->setChangedData($address->entity, $address->object);
-                    $this->em->persist($address->entity);
+                    $this->setChangedData($addressEntity, $localChanges);
+                    $this->setChangedData($addressEntity, $remoteData);
+                } else {
+                    $this->setChangedData($addressEntity, $localChanges);
                 }
+
+                $this->updateRemoteAddressData($addressEntity->getOriginId(), $this->addressNormalizer->normalize($addressEntity));
+                $this->em->persist($addressEntity);
             }
         }
+    }
+
+    protected function updateRemoteAddressData($addressId, $addressData)
+    {
+        foreach ($addressData as $fieldName => $value) {
+            if ($value instanceof \DateTime) {
+                /** @var $value \DateTime */
+                $addressData[$fieldName] = $value->format(self::MAGENTO_DATETIME_FORMAT);
+            }
+        }
+        $addressData = $this->customerSerializer->convertToMagentoAddress($addressData);
+
+        $requestData = array_merge(
+            ['addressId' => $addressId],
+            ['addressData' => $addressData]
+        );
+        $this->transport->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_UPDATE, $requestData);
     }
 
     /**
@@ -208,6 +244,21 @@ class ReverseWriter implements ItemWriterInterface
         }
 
         return (array)$remoteData;
+    }
+
+    /**
+     * Set changed data
+     *
+     * @param Customer $entity
+     * @param array    $changedData
+     */
+    protected function setChangedDataByObject($entity, $changedEntity, $fieldList)
+    {
+        foreach ($fieldList as $fieldName) {
+            if ($fieldName !== 'addresses') {
+                $this->accessor->setValue($entity, $fieldName, $this->accessor->getValue($changedEntity, $fieldName));
+            }
+        }
     }
 
     /**
