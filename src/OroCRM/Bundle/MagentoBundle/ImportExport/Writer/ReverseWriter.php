@@ -27,10 +27,10 @@ class ReverseWriter implements ItemWriterInterface
      * @var array
      */
     protected $clearMagentoFields = [
-            'email',
-            'firstname',
-            'lastname'
-        ];
+        'email',
+        'firstname',
+        'lastname'
+    ];
 
     /**
      * Customer-Contact relation, key - Customer field, value - Contact field
@@ -38,15 +38,15 @@ class ReverseWriter implements ItemWriterInterface
      * @var array
      */
     protected $customerContactRelation = [
-            'name_prefix' => 'name_prefix',
-            'first_name'  => 'first_name',
-            'middle_name' => 'middle_name',
-            'last_name'   => 'last_name',
-            'name_suffix' => 'name_suffix',
-            'gender'      => 'gender',
-            'birthday'    => 'birthday',
-            'email'       => 'primary_email.email',
-        ];
+        'name_prefix' => 'name_prefix',
+        'first_name'  => 'first_name',
+        'middle_name' => 'middle_name',
+        'last_name'   => 'last_name',
+        'name_suffix' => 'name_suffix',
+        'gender'      => 'gender',
+        'birthday'    => 'birthday',
+        'email'       => 'primary_email.email',
+    ];
 
     /** @var EntityManager */
     protected $em;
@@ -60,9 +60,7 @@ class ReverseWriter implements ItemWriterInterface
     /** @var SoapTransport */
     protected $transport;
 
-    /**
-     * @var PropertyAccessor
-     */
+    /** @var PropertyAccessor */
     protected $accessor;
 
     /**
