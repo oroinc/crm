@@ -3,28 +3,17 @@
 namespace OroCRM\Bundle\AccountBundle\Tests\Functional\API;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
+ * @dbIsolation
  */
 class SoapAccountTest extends WebTestCase
 {
-    /** @var Client */
-    protected $client;
-
-    public function setUp()
+    protected function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
-        $this->client->soap(
-            "http://localhost/api/soap",
-            array(
-                'location' => 'http://localhost/api/soap',
-                'soap_version' => SOAP_1_2
-            )
-        );
+        $this->initClient(array(), $this->generateWsseAuthHeader());
+        $this->initSoapClient();
     }
 
     /**
@@ -38,22 +27,22 @@ class SoapAccountTest extends WebTestCase
             "owner" => '1',
         );
 
-        $result = $this->client->getSoap()->createAccount($request);
-        $this->assertTrue((bool) $result, $this->client->getSoap()->__getLastResponse());
+        $result = $this->soapClient->createAccount($request);
+        $this->assertTrue((bool) $result, $this->soapClient->__getLastResponse());
 
         $request['id'] = $result;
         return $request;
     }
 
     /**
-     * @param $request
+     * @param array $request
      * @depends testCreate
      * @return array
      */
-    public function testGet($request)
+    public function testGet(array $request)
     {
-        $accounts = $this->client->getSoap()->getAccounts(1, 1000);
-        $accounts = ToolsAPI::classToArray($accounts);
+        $accounts = $this->soapClient->getAccounts(1, 1000);
+        $accounts = $this->valueToArray($accounts);
         $accountName = $request['name'];
         $account = $accounts['item'];
         if (isset($account[0])) {
@@ -71,20 +60,20 @@ class SoapAccountTest extends WebTestCase
     }
 
     /**
-     * @param $request
+     * @param array $request
      * @depends testCreate
      */
-    public function testUpdate($request)
+    public function testUpdate(array $request)
     {
         $accountUpdate = $request;
         unset($accountUpdate['id']);
         $accountUpdate['name'] .= '_Updated';
 
-        $result = $this->client->getSoap()->updateAccount($request['id'], $accountUpdate);
+        $result = $this->soapClient->updateAccount($request['id'], $accountUpdate);
         $this->assertTrue($result);
 
-        $account = $this->client->getSoap()->getAccount($request['id']);
-        $account = ToolsAPI::classToArray($account);
+        $account = $this->soapClient->getAccount($request['id']);
+        $account = $this->valueToArray($account);
 
         $this->assertEquals($accountUpdate['name'], $account['name']);
 
@@ -92,15 +81,15 @@ class SoapAccountTest extends WebTestCase
     }
 
     /**
-     * @param $request
+     * @param array $request
      * @depends testUpdate
      */
-    public function testDelete($request)
+    public function testDelete(array $request)
     {
-        $result = $this->client->getSoap()->deleteAccount($request['id']);
+        $result = $this->soapClient->deleteAccount($request['id']);
         $this->assertTrue($result);
 
         $this->setExpectedException('\SoapFault', 'Record with ID "' . $request['id'] . '" can not be found');
-        $this->client->getSoap()->getAccount($request['id']);
+        $this->soapClient->getAccount($request['id']);
     }
 }

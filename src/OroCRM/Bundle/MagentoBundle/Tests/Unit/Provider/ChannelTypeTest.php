@@ -9,12 +9,12 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
     /** @var ChannelType */
     protected $channel;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->channel = new ChannelType();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->channel);
     }

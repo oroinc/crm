@@ -25,7 +25,9 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         // set start date and mode depending on status
         $status   = $this->channel->getStatusesForConnector($this->getType(), Status::STATUS_COMPLETED)->first();
         $iterator = $this->getSourceIterator();
-        if ($iterator instanceof UpdatedLoaderInterface && false !== $status) {
+
+        $isForceSync = $context->getOption('force') && $this->supportsForceSync();
+        if ($iterator instanceof UpdatedLoaderInterface && false !== $status && !$isForceSync) {
             /** @var Status $status */
             $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
             $iterator->setStartDate($status->getDate());

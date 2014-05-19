@@ -4,21 +4,15 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
+use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
-use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 
 class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
     /**
-     * For importing regions
-     *
-     * @param mixed  $data
-     * @param string $class
-     * @param null   $format
-     * @param array  $context
-     *
-     * @return bool|Region
+     * {@inheritdoc}
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
@@ -58,16 +52,10 @@ class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInter
     }
 
     /**
-     * Used in import
-     *
-     * @param mixed  $data
-     * @param string $type
-     * @param null   $format
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && $type == MagentoConnectorInterface::REGION_TYPE;
+        return $type == MagentoConnectorInterface::REGION_TYPE;
     }
 }
