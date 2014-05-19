@@ -21,6 +21,8 @@ use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+
 class CustomerSerializer extends AbstractNormalizer implements DenormalizerInterface, NormalizerInterface
 {
     /** @var array */
@@ -54,6 +56,23 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'created'           => 'created_at',
         'updated'           => 'updated_at',
         'customerAddressId' => 'customer_address_id'
+    );
+
+    protected $contactAddressEntityToMageMapping = array(
+        'name_prefix'          => 'prefix',
+        'first_name'           => 'firstname',
+        'middle_name'          => 'middlename',
+        'last_name'            => 'lastname',
+        'name_suffix'          => 'suffix',
+        'organization'         => 'company',
+        'street'               => 'street',
+        'city'                 => 'city',
+        'postal_code'          => 'postcode',
+        'country.iso2_code'    => 'country_id',
+        'region_Text'          => 'region',
+        'region.combined_code' => 'region_id',
+        'created'              => 'created_at',
+        'updated'              => 'updated_at',
     );
 
     /** @var array */
@@ -90,21 +109,38 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
     /**
      * @param array $addressFields
+     * @param  $accessor
+     *
      * @return array
      */
-    public function convertToMagentoAddress($addressFields)
+    public function convertToMagentoAddress($addressFields, $accessor = null)
     {
         $result = [];
-        foreach ($addressFields as $fieldName => $value) {
-            if (isset($this->addressBapToMageMapping[$fieldName])) {
-                $result[$this->addressBapToMageMapping[$fieldName]] = $value;
-            }
-        }
 
-        $result['street'] = [];
-        $result['street'][] = $addressFields['street'];
-        if (isset($addressFields['street2'])) {
-            $result['street'][] = $addressFields['street2'];
+        if ($addressFields instanceof ContactAddress && $accessor) {
+
+            foreach ($this->contactAddressEntityToMageMapping as $oroCrm => $magento) {
+                $oroValue = $accessor->getValue($addressFields, $oroCrm);
+
+                if ($oroValue instanceof \DateTime) {
+                    $result[$magento] = $oroValue->format('Y-m-d H:i:s');
+                } else {
+                    $result[$magento] = $accessor->getValue($addressFields, $oroCrm);
+                }
+            }
+
+        } else {
+            foreach ($addressFields as $fieldName => $value) {
+                if (isset($this->addressBapToMageMapping[$fieldName])) {
+                    $result[$this->addressBapToMageMapping[$fieldName]] = $value;
+                }
+            }
+
+            $result['street'] = [];
+            $result['street'][] = $addressFields['street'];
+            if (isset($addressFields['street2'])) {
+                $result['street'][] = $addressFields['street2'];
+            }
         }
 
         return $result;

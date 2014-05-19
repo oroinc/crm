@@ -159,7 +159,8 @@ class ReverseWriter implements ItemWriterInterface
                                 'addressId' => $addressEntity->getOriginId()
                             ]
                         ),
-                        $addressEntity, array_keys($localChanges)
+                        $addressEntity,
+                        array_keys($localChanges)
                     );
                     $this->setChangedData($addressEntity, $localChanges);
                     $this->setChangedData($addressEntity, $remoteData);
@@ -167,15 +168,56 @@ class ReverseWriter implements ItemWriterInterface
                     $this->setChangedData($addressEntity, $localChanges);
                 }
 
-                $this->updateRemoteAddressData($addressEntity->getOriginId(), $this->addressNormalizer->normalize($addressEntity));
-                $this->em->persist($addressEntity);
-            } elseif (isset($address['status']) && $address['status'] === AbstractReverseProcessor::DELETE_ENTITY) {
-                $this->transport->call(
-                    SoapTransport::ACTION_CUSTOMER_ADDRESS_DELETE,
-                    [
-                        'addressId' => $address['entity']->getOriginId()
-                    ]
+                $this->updateRemoteAddressData(
+                    $addressEntity->getOriginId(),
+                    $this->addressNormalizer->normalize($addressEntity)
                 );
+                $this->em->persist($addressEntity);
+                unset($addressEntity, $localChanges, $remoteData);
+            }
+            if (isset($address['status']) && $address['status'] === AbstractReverseProcessor::DELETE_ENTITY) {
+                $result = null;
+                try {
+                    $result = $this->transport->call(
+                        SoapTransport::ACTION_CUSTOMER_ADDRESS_DELETE,
+                        [
+                            'addressId' => $address['entity']->getOriginId()
+                        ]
+                    );
+                } catch (\Exception $e) {
+
+                }
+
+                if ($result) {
+                    $this->em->remove($address['entity']);
+                }
+
+                $this->em->remove($address['entity']);
+
+                unset($result);
+            }
+            if (isset($address['status']) && $address['status'] === AbstractReverseProcessor::NEW_ENTITY) {
+                try {
+                    if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
+
+                        $dataForSend = $this->customerSerializer->convertToMagentoAddress(
+                            $address['entity'],
+                            $this->accessor
+                        );
+                        $requestData = array_merge(
+                            ['customerId' => $address['magentoId']],
+                            ['addressData' => $dataForSend]
+                        );
+
+                        $result = $this->transport->call(
+                            SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
+                            [$requestData]
+                        );
+                    }
+                } catch (\Exception $e) {
+                    $e;
+                }
+                unset($result, $requestData);
             }
         }
     }
