@@ -112,7 +112,7 @@ class ContactImportHelper
                     // do update
                     $this->mergeScalars($this->addressScalarFields, $remoteAddress, $localAddress, $address);
 
-                    if ($remoteAddress->getCountry()->getIso2Code() === $address->getCountry()->getIso2Code()
+                    if ($localAddress->getCountry()->getIso2Code() === $address->getCountry()->getIso2Code()
                         || $this->isRemotePrioritized()
                     ) {
                         $address->setCountry($remoteAddress->getCountry());
