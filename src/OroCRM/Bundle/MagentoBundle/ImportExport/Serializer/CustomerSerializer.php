@@ -122,6 +122,13 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
                 if ($oroValue instanceof \DateTime) {
                     $result[$magento] = $oroValue->format('Y-m-d H:i:s');
+                } elseif ($oroCrm === 'street') {
+                    try {
+                        $street2 = $accessor->getValue($addressFields, 'street2');
+                    } catch (\Exception $e) {
+                        $street2 = '';
+                    }
+                    $result[$magento] = [$oroValue, $street2];
                 } else {
                     $result[$magento] = $accessor->getValue($addressFields, $oroCrm);
                 }

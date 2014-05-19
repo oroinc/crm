@@ -185,14 +185,14 @@ class ReverseWriter implements ItemWriterInterface
                         ]
                     );
                 } catch (\Exception $e) {
-
+                    $this->em->remove($address['entity']);
                 }
 
                 if ($result) {
                     $this->em->remove($address['entity']);
                 }
 
-                $this->em->remove($address['entity']);
+                $this->em->flush();
 
                 unset($result);
             }
@@ -206,12 +206,17 @@ class ReverseWriter implements ItemWriterInterface
                         );
                         $requestData = array_merge(
                             ['customerId' => $address['magentoId']],
-                            ['addressData' => $dataForSend]
+                            [
+                                'addressData' => array_merge(
+                                    $dataForSend,
+                                    ['telephone' => 'no phone']
+                                )
+                            ]
                         );
 
                         $result = $this->transport->call(
                             SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
-                            [$requestData]
+                            $requestData
                         );
                     }
                 } catch (\Exception $e) {
