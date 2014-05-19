@@ -23,7 +23,7 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
  *  routeName="orocrm_call_index",
  *  defaultValues={
  *      "entity"={
- *          "icon"="icon-phone"
+ *          "icon"="icon-phone-sign"
  *      },
  *      "ownership"={
  *          "owner_type"="USER",

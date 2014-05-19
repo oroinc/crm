@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium;
+namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium\Tags;
 
 use Oro\Bundle\SearchBundle\Tests\Selenium\Pages\Search;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
@@ -133,9 +133,9 @@ class TagsAssignTest extends Selenium2TestCase
         $result = $tagSearch->search('New_' . $tagName)
             ->submit()
             ->select('New_' . $tagName)
-            ->assertEntity('User', 1)
-            ->assertEntity('Contact', 1)
-            ->assertEntity('Account', 1);
+            ->assertEntity('Users', 1)
+            ->assertEntity('Contacts', 1)
+            ->assertEntity('Accounts', 1);
         $this->assertNotEmpty($result);
     }
 }

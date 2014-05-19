@@ -21,7 +21,9 @@ class OrderStrategy extends BaseStrategy
         'customer',
         'addresses',
         'workflowItem',
-        'workflowStep'
+        'workflowStep',
+        'relatedCalls',
+        'relatedEmails',
     ];
 
     /** @var StoreStrategy */

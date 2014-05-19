@@ -26,7 +26,7 @@ connector:
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
                         reader:    oro_integration.reader.entity.by_id
-                        processor: oro_integration.processor.reverse
+                        processor: orocrm_magento.importexport.customer.reverse.processor
                         writer:    oro_integration.writer.reverse
                     parameters:
                         batch_size: 100

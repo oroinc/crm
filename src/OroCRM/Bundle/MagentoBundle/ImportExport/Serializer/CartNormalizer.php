@@ -6,7 +6,6 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class CartNormalizer extends AbstractNormalizer implements DenormalizerInterface
@@ -16,7 +15,7 @@ class CartNormalizer extends AbstractNormalizer implements DenormalizerInterface
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && $type == MagentoConnectorInterface::CART_TYPE;
+        return $type == MagentoConnectorInterface::CART_TYPE;
     }
 
     /**
@@ -24,12 +23,17 @@ class CartNormalizer extends AbstractNormalizer implements DenormalizerInterface
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
+        $cartClass = MagentoConnectorInterface::CART_TYPE;
+        /** @var Cart $cart */
+        $cart = new $cartClass();
+        if (!is_array($data)) {
+            return $cart;
+        }
         $channel    = $this->getChannelFromContext($context);
         $serializer = $this->serializer;
 
-        $data['cartItems'] = $serializer->denormalize($data['cartItems'], MagentoConnectorInterface::CART_ITEMS_TYPE);
-
-        $data['customer'] = $this->denormalizeCustomer($data, $context);
+        $data['cartItems'] = $this->denormalizeObject($data, 'cartItems', MagentoConnectorInterface::CART_ITEMS_TYPE);
+        $data['customer']  = $this->denormalizeCustomer($data, $context);
 
         $website = $serializer->denormalize($data['store']['website'], MagentoConnectorInterface::WEBSITE_TYPE);
         $website->setChannel($channel);
@@ -51,14 +55,10 @@ class CartNormalizer extends AbstractNormalizer implements DenormalizerInterface
 
         $data['paymentDetails'] = $this->denormalizePaymentDetails($data['paymentDetails']);
 
-        $isActive = isset($data['is_active']) ? (bool)$data['is_active'] : true;
+        $isActive       = isset($data['is_active']) ? (bool)$data['is_active'] : true;
         $data['status'] = $this->denormalizeStatus($isActive);
 
-        $cartClass = MagentoConnectorInterface::CART_TYPE;
-        /** @var Cart $cart */
-        $cart = new $cartClass();
         $this->fillResultObject($cart, $data);
-
         $cart->setChannel($channel);
 
         return $cart;
@@ -97,8 +97,8 @@ class CartNormalizer extends AbstractNormalizer implements DenormalizerInterface
      */
     protected function denormalizeStatus($isActive)
     {
-        $statusClass =  MagentoConnectorInterface::CART_STATUS_TYPE;
-        $status = new $statusClass($isActive ? 'open' : 'expired');
+        $statusClass = MagentoConnectorInterface::CART_STATUS_TYPE;
+        $status      = new $statusClass($isActive ? 'open' : 'expired');
 
         return $status;
     }

@@ -30,7 +30,10 @@ class CustomerConnector extends AbstractMagentoConnector implements TwoWaySyncCo
         return 'mage_customer_import';
     }
 
-    public function getTwoWayJobName()
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportJobName()
     {
         return 'mage_customer_reverse_sync';
     }
@@ -49,5 +52,13 @@ class CustomerConnector extends AbstractMagentoConnector implements TwoWaySyncCo
     protected function getConnectorSource()
     {
         return $this->transport->getCustomers();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function supportsForceSync()
+    {
+        return true;
     }
 }
