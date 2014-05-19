@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper;
 use Akeneo\Bundle\BatchBundle\Item\InvalidItemException;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
@@ -24,6 +25,9 @@ class AddressImportHelper
 
     /** @var array */
     protected $mageRegionsCache = [];
+
+    /** @var AddressType[] */
+    protected $addressTypesCache = [];
 
     /**
      * @param DoctrineHelper $doctrineHelper
@@ -94,19 +98,29 @@ class AddressImportHelper
      */
     public function updateAddressTypes(AbstractTypedAddress $address)
     {
-        // update address type
-        $types = $address->getTypeNames();
-        if (empty($types)) {
-            return;
+        $addressTypes = $address->getTypes();
+        foreach ($addressTypes as $index => $type) {
+            $addressTypes->set($index, $this->updateAddressType($type->getName()));
+        }
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return AddressType
+     */
+    protected function updateAddressType($name)
+    {
+        $typeClass = 'OroAddressBundle:AddressType';
+
+        if (empty($this->addressTypesCache[$name])
+            || !$this->doctrineHelper->getEntityManager($typeClass)
+                ->getUnitOfWork()->isInIdentityMap($this->addressTypesCache[$name])
+        ) {
+            $this->addressTypesCache[$name] = $this->doctrineHelper->getEntityRepository($typeClass)->find($name);
         }
 
-        $address->getTypes()->clear();
-        $loadedTypes = $this->doctrineHelper->getEntityRepository('OroAddressBundle:AddressType')
-            ->findBy(['name' => $types]);
-
-        foreach ($loadedTypes as $type) {
-            $address->addType($type);
-        }
+        return $this->addressTypesCache[$name];
     }
 
     /**
@@ -114,7 +128,7 @@ class AddressImportHelper
      * @param string          $countryCode
      *
      * @throws InvalidItemException
-     * @return object|null
+     * @return Country|null
      */
     public function getAddressCountryByCode(AbstractAddress $address, $countryCode)
     {
@@ -155,7 +169,7 @@ class AddressImportHelper
         // Simply search region by combinedCode
         $region = $this->doctrineHelper->getEntityByCriteria(
             array(
-                'combinedCode' => $combinedCode
+                 'combinedCode' => $combinedCode
             ),
             $regionClass
         );
@@ -165,8 +179,8 @@ class AddressImportHelper
             $country = $em->getReference($countryClass, $countryCode);
             $region  = $this->doctrineHelper->getEntityByCriteria(
                 array(
-                    'country' => $country,
-                    'name'    => $combinedCode
+                     'country' => $country,
+                     'name'    => $combinedCode
                 ),
                 $regionClass
             );
@@ -176,11 +190,11 @@ class AddressImportHelper
             // As example FR-1 in magento and FR-01 in ISO
             $region = $this->doctrineHelper->getEntityByCriteria(
                 array(
-                    'combinedCode' =>
-                        BAPRegion::getRegionCombinedCode(
-                            $countryCode,
-                            str_pad($code, 2, '0', STR_PAD_LEFT)
-                        )
+                     'combinedCode' =>
+                         BAPRegion::getRegionCombinedCode(
+                             $countryCode,
+                             str_pad($code, 2, '0', STR_PAD_LEFT)
+                         )
                 ),
                 $regionClass
             );
