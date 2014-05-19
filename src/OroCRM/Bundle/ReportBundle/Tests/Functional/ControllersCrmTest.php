@@ -3,47 +3,46 @@
 namespace OroCRM\Bundle\ReportBundle\Tests\Functional;
 
 use Oro\Bundle\ReportBundle\Tests\Functional\ControllersTest as BaseControllersTest;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
- * @db_reindex
+ * @dbIsolation
+ * @dbReindex
  */
 class ControllersCrmTest extends BaseControllersTest
 {
-    static protected $fixturesLoaded = false;
-
-    public function setUp()
+    protected function setUp()
     {
-        $this->client = static::createClient(
+        $this->initClient(
             array(),
-            array_merge(ToolsAPI::generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
-
-        if (!self::$fixturesLoaded) {
-            $this->client->appendFixtures(__DIR__ . DIRECTORY_SEPARATOR . 'DataFixtures', array('LoadLead'));
-            self::$fixturesLoaded = true;
-        }
+        $this->loadFixtures(
+            array(
+                'OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures\LoadLeadSourceData',
+                'OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures\LoadLeadsData',
+            )
+        );
     }
 
     /**
      * @param array $report
      * @param array $reportResult
      *
-     * @dataProvider requestsApi()
+     * @dataProvider exportDataProvider
      */
-    public function testExport($report, $reportResult)
+    public function testExport(array $report, array $reportResult)
     {
         $this->markTestSkipped("Skipped by BAP-2946");
     }
-        /**
+
+    /**
      * Data provider for SOAP API tests
      *
      * @return array
      */
-    public function requestsApi()
+    public function exportDataProvider()
     {
-        return ToolsAPI::requestsApi(__DIR__ . DIRECTORY_SEPARATOR . 'reports');
+        return $this->getApiRequestsData(__DIR__ . DIRECTORY_SEPARATOR . 'reports');
     }
 }

@@ -8,7 +8,7 @@ abstract class AbstractEntityTestCase extends \PHPUnit_Framework_TestCase
 
     protected $entity;
 
-    public function setUp()
+    protected function setUp()
     {
         $name         = $this->getEntityFQCN();
         $this->entity = new $name();

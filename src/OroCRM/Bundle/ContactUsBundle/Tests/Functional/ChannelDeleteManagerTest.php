@@ -9,11 +9,11 @@ use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
+ * @dbIsolation
  */
 class ChannelDeleteManagerTest extends AbstractChannelDataDeleteTest
 {
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->entityClassName = 'OroCRMContactUsBundle:ContactRequest';
