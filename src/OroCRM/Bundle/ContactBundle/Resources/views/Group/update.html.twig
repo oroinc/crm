@@ -46,11 +46,11 @@
 {% block content_data %}
     {% set id = 'contact-group-profile' %}
     {% set dataBlocks = [{
-        'title': 'General',
+        'title': 'General'|trans,
         'class': 'active',
         'subblocks': [
             {
-                'title': 'Basic Information',
+                'title': 'Basic Information'|trans,
                 'data': [
                     form_row(form.label)
                 ]
