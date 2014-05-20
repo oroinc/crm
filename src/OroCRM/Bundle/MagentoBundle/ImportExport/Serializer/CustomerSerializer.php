@@ -68,7 +68,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'city'                 => 'city',
         'postal_code'          => 'postcode',
         'country.iso2_code'    => 'country_id',
-        'region_Text'          => 'region',
+        'region_text'          => 'region',
         'region.combined_code' => 'region_id',
         'created'              => 'created_at',
         'updated'              => 'updated_at'
@@ -128,11 +128,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     /**
      * @param array   $remoteData
      * @param Address $localData
-     * @param array   $oroFieldList
      *
      * @return array
      */
-    public function compareAddresses($remoteData, $localData, $oroFieldList)
+    public function compareAddresses($remoteData, $localData)
     {
         $result = [];
 
@@ -140,15 +139,25 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $remoteAddress = $this->serializer->denormalize($addressData, MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE);
 
         $accessor = PropertyAccess::createPropertyAccessor();
-        foreach ($oroFieldList as $fieldName) {
-            $localValue  = $accessor->getValue($localData, $fieldName);
-            $remoteValue = $accessor->getValue($remoteAddress, $fieldName);
 
-            if (($fieldName !== 'country' && $remoteValue !== $localValue)
-                || ($fieldName == 'country' && $remoteValue->getIso2Code() !== $localValue->getIso2Code())
-            ) {
-                $result[$fieldName] = $remoteValue;
+        foreach ($this->contactAddressEntityToMageMapping as $oroFieldName => $mageFieldName) {
+            try {
+                $localValue  = $accessor->getValue($localData, $oroFieldName);
+                $remoteValue = $accessor->getValue($remoteAddress, $oroFieldName);
+
+                if ($mageFieldName !== 'country_id' && $mageFieldName !== 'region_id' && $remoteValue !== $localValue) {
+                    $result[$oroFieldName] = $remoteValue;
+                } elseif ($mageFieldName === 'country_id') {
+                    $result['country'] = $accessor->getValue($remoteAddress, 'country');
+                } elseif ($mageFieldName === 'region_id') {
+                    $result['region'] = $accessor->getValue($remoteAddress, 'region');
+                }
+            } catch (\Exception $e) {
             }
+        }
+
+        if (!empty($result['region'])) {
+            unset($result['region_text']);
         }
 
         return $result;
