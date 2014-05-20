@@ -55,8 +55,6 @@ class RegionConverter
             }
         }
 
-        var_dump($data);
-
         return $data;
     }
 

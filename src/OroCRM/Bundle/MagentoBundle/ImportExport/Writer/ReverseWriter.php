@@ -190,7 +190,6 @@ class ReverseWriter implements ItemWriterInterface
                     $this->setChangedData($addressEntity, $localChanges);
                 }
 
-                var_dump($addressEntity->getRegion() ? $addressEntity->getRegion()->getCombinedCode() : null);
                 $dataForSend = array_merge(
                     [],
                     $this->customerSerializer->convertToMagentoAddress($addressEntity),
