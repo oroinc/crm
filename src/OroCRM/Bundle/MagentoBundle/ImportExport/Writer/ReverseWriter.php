@@ -66,7 +66,6 @@ class ReverseWriter implements ItemWriterInterface
     /** @var PropertyAccessor */
     protected $accessor;
 
-
     /** @var AddressImportHelper */
     protected $addressImportHelper;
 
@@ -131,7 +130,11 @@ class ReverseWriter implements ItemWriterInterface
 
                     // process addresses
                     if (isset($item->object['addresses'])) {
-                        $this->processAddresses($item->object['addresses'], $channel->getSyncPriority());
+                        $this->processAddresses(
+                            $item->object['addresses'],
+                            $channel->getSyncPriority(),
+                            $customer
+                        );
                     }
 
                 } catch (\Exception $e) {
@@ -146,10 +149,11 @@ class ReverseWriter implements ItemWriterInterface
     /**
      * Process address write  to remote instance and to DB
      *
-     * @param array  $addresses
-     * @param string $syncPriority
+     * @param array    $addresses
+     * @param string   $syncPriority
+     * @param Customer $customer
      */
-    protected function processAddresses($addresses, $syncPriority)
+    protected function processAddresses($addresses, $syncPriority, Customer $customer)
     {
         foreach ($addresses as $address) {
             if (isset($address['status']) && $address['status'] === AbstractReverseProcessor::UPDATE_ENTITY) {
@@ -196,17 +200,14 @@ class ReverseWriter implements ItemWriterInterface
                 if ($result) {
                     $this->em->remove($address['entity']);
                 }
-
+                $this->em->flush();
                 unset($result);
             }
             if (isset($address['status']) && $address['status'] === AbstractReverseProcessor::NEW_ENTITY) {
                 try {
                     if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
 
-                        $dataForSend = $this->customerSerializer->convertToMagentoAddress(
-                            $address['entity'],
-                            $this->accessor
-                        );
+                        $dataForSend = $this->customerSerializer->convertToMagentoAddress($address['entity']);
                         $requestData = array_merge(
                             ['customerId' => $address['magentoId']],
                             [
@@ -221,6 +222,15 @@ class ReverseWriter implements ItemWriterInterface
                             SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
                             $requestData
                         );
+
+                        if ($result) {
+                            $newAddress = $this->customerSerializer
+                                ->convertMageAddressToAddress($dataForSend, $address['entity'], $result);
+                            $newAddress->setOwner($customer);
+                            $customer->addAddress($newAddress);
+                            $this->em->persist($customer);
+                            $this->em->flush();
+                        }
                     }
                 } catch (\Exception $e) {
                 }
@@ -276,7 +286,7 @@ class ReverseWriter implements ItemWriterInterface
     /**
      * Get changes from magento side
      *
-     * @param       $item
+     * @param \stdClass $item
      * @param array $fieldsList
      *
      * @return array
@@ -323,6 +333,10 @@ class ReverseWriter implements ItemWriterInterface
         }
     }
 
+    /**
+     * @param \OroCRM\Bundle\MagentoBundle\Entity\Address $entity
+     * @param array $changedData
+     */
     protected function setRemoteDataChanges($entity, array $changedData)
     {
         foreach ($changedData as $fieldName => $value) {

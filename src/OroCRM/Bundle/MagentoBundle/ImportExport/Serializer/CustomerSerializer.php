@@ -13,6 +13,7 @@ use Oro\Bundle\UserBundle\Model\Gender;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
@@ -84,6 +85,53 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'birthday'
     );
 
+    /**
+     * @param array $remoteData
+     * @param ContactAddress $contactAddr
+     * @param int $originId
+     *
+     * @return Address
+     */
+    public function convertMageAddressToAddress($remoteData, ContactAddress $contactAddr, $originId)
+    {
+        $accessor = PropertyAccess::createPropertyAccessor();
+        $address = new Address();
+
+        foreach ($this->contactAddressEntityToMageMapping as $bapField => $mageField) {
+            if ($mageField === 'country_id') {
+                $accessor->setValue(
+                    $address,
+                    'country',
+                    $accessor->getValue($contactAddr, 'country')
+                );
+            } elseif ($mageField === 'region_id') {
+                $accessor->setValue(
+                    $address,
+                    'region',
+                    $accessor->getValue($contactAddr, 'region')
+                );
+            } elseif ($mageField === 'street' && is_array($remoteData[$mageField])) {
+                $accessor->setValue($address, $bapField, $remoteData[$mageField][0]);
+                $accessor->setValue($address, 'street2', $remoteData[$mageField][1]);
+
+            } else {
+                $accessor->setValue($address, $bapField, $remoteData[$mageField]);
+            }
+        }
+
+        $accessor->setValue($address, 'contact_address', $contactAddr);
+        $accessor->setValue($address, 'origin_id', $originId);
+
+        return $address;
+    }
+
+    /**
+     * @param array $remoteData
+     * @param Address $localData
+     * @param array $oroFieldList
+     *
+     * @return array
+     */
     public function compareAddresses($remoteData, $localData, $oroFieldList)
     {
         $result = [];
@@ -107,16 +155,17 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     }
 
     /**
-     * @param array $addressFields
-     * @param  $accessor
+     * @param array|ContactAddress $addressFields
      *
      * @return array
      */
-    public function convertToMagentoAddress($addressFields, $accessor = null)
+    public function convertToMagentoAddress($addressFields)
     {
+        $accessor = PropertyAccess::createPropertyAccessor();
+
         $result = [];
 
-        if ($addressFields instanceof ContactAddress && $accessor) {
+        if ($addressFields instanceof ContactAddress) {
 
             foreach ($this->contactAddressEntityToMageMapping as $oroCrm => $magento) {
                 $oroValue = $accessor->getValue($addressFields, $oroCrm);
@@ -210,7 +259,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     {
         return $type == MagentoConnectorInterface::CUSTOMER_TYPE;
     }
-
 
     /**
      * {@inheritdoc}
