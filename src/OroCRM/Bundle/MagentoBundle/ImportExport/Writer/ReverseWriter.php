@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 
 use Doctrine\ORM\EntityManager;
 
-use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -12,14 +11,16 @@ use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
 use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
+use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
+use Oro\Bundle\AddressBundle\Entity\Country as BAPCountry;
 
+use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
-
+use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
-
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class ReverseWriter implements ItemWriterInterface
 {
@@ -184,7 +185,8 @@ class ReverseWriter implements ItemWriterInterface
                         $addressEntity,
                         array_keys($localChanges)
                     );
-                    $this->setChangedData($addressEntity, $localChanges);
+
+                    $this->setLocalDataChanges($addressEntity, $localChanges);
                     $this->setRemoteDataChanges($addressEntity, $remoteData);
                 } else {
                     $this->setChangedData($addressEntity, $localChanges);
@@ -195,11 +197,19 @@ class ReverseWriter implements ItemWriterInterface
                     $this->customerSerializer->convertToMagentoAddress($addressEntity),
                     $this->regionConverter->toMagentoData($addressEntity)
                 );
+
                 $requestData = ['addressId' => $addressEntity->getOriginId(), 'addressData' => $dataForSend];
 
                 $this->transport->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_UPDATE, $requestData);
 
                 $this->em->persist($addressEntity);
+
+                try {
+                    $this->em->flush();
+                } catch (\Exception $e) {
+                    $e;
+                }
+
                 unset($addressEntity, $localChanges, $remoteData);
             } elseif ($address['status'] === AbstractReverseProcessor::DELETE_ENTITY) {
                 try {
@@ -314,6 +324,22 @@ class ReverseWriter implements ItemWriterInterface
     }
 
     /**
+     * Set changed data to customer
+     *
+     * @param Customer $entity
+     * @param array    $changedData
+     */
+    protected function setLocalDataChanges($entity, array $changedData)
+    {
+        foreach ($changedData as $fieldName => $value) {
+            if ($fieldName !== 'addresses' && $fieldName !== 'region') {
+                $this->accessor->setValue($entity, $fieldName, $value);
+            }
+        }
+    }
+
+
+    /**
      * @param \OroCRM\Bundle\MagentoBundle\Entity\Address $entity
      * @param array                                       $changedData
      */
@@ -324,15 +350,98 @@ class ReverseWriter implements ItemWriterInterface
                 if ($fieldName === 'region') {
                     try {
                         $mageRegionId = $this->accessor->getValue($value, 'code');
-                        $this->addressImportHelper->updateAddressCountryRegion($entity, $mageRegionId);
+
+                        $magentoRegion = $this->addressImportHelper->findRegionByRegionId($mageRegionId);
+
+                        if ($magentoRegion instanceof Region) {
+                            $this->accessor->setValue(
+                                $entity,
+                                $fieldName,
+                                $this->getChangedRegion($entity, $magentoRegion)
+                            );
+                        }
                     } catch (\Exception $e) {
+                        $e;
+                        $this->accessor->setValue($entity, $fieldName, null);
+                        $this->accessor->setValue($entity, 'contact_address.region', null);
                     }
 
+                } elseif ($fieldName === 'country') {
+                    if ($value instanceof BAPCountry) {
+
+                        try {
+                        if (!$value->getIso3Code()) {
+                            $country = $this->em->getRepository('OroAddressBundle:Country')
+                                ->findOneBy(['iso2Code'=>$value->getIso2Code()]);
+                        } else {
+                            $country = $value;
+                        }
+
+                        $this->accessor->setValue(
+                            $entity,
+                            $fieldName,
+                            $this->getChangedCountry($entity, $country)
+                        );
+                        } catch (\Exception $e) {
+                            $e;
+                        }
+
+                    }
                 } else {
                     $this->accessor->setValue($entity, $fieldName, $value);
                 }
             }
         }
+    }
+
+    protected function getChangedCountry($entity, $magentoCountry)
+    {
+        $magentoCountryCode = $this->accessor->getValue($magentoCountry, 'iso2_code');
+        $customerCountryCode = $this->accessor->getValue($entity, 'country.iso2_code');
+        $contactCountryCode = $this->accessor->getValue($entity, 'contact_address.country.iso2_code');
+
+        if ($magentoCountryCode !== $customerCountryCode) {
+            $this->accessor->setValue($entity, 'contact_address.country', $magentoCountry);
+            return $magentoCountry;
+        }
+
+        if ($contactCountryCode !== $customerCountryCode) {
+            $this->accessor->setValue(
+                $entity,
+                'country',
+                $this->accessor->getValue($entity, 'contact_address.country')
+            );
+        }
+
+        return $this->accessor->getValue($entity, 'contact_address.country');
+    }
+
+    /**
+     * @param $entity
+     * @param $magentoRegion
+     *
+     * @return mixed|BAPRegion
+     */
+    protected function getChangedRegion($entity, $magentoRegion)
+    {
+        $magentoRegionCode = $this->accessor->getValue($magentoRegion, 'combined_code');
+        $customerRegionCode = $this->accessor->getValue($entity, 'region.combined_code');
+        $contactRegionCode = $this->accessor->getValue($entity, 'contact_address.region.combined_code');
+
+        if ($magentoRegionCode !== $customerRegionCode) {
+            $bapRegion = $this->em->getRepository('OroAddressBundle:Region')
+                ->findOneBy(['combinedCode'=>$magentoRegionCode]);
+
+            $this->accessor->setValue($entity, 'contact_address.region', $bapRegion);
+
+            return $bapRegion;
+        }
+
+        if ($contactRegionCode !== $customerRegionCode) {
+            $this->accessor->setValue($entity, 'region', $this->accessor->getValue($entity, 'contact_address.region'));
+        }
+
+        return $this->accessor->getValue($entity, 'contact_address.region');
     }
 
     /**

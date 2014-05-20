@@ -165,7 +165,11 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $accessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($this->contactAddressEntityToMageMapping as $oroCrm => $magento) {
-            $oroValue = $accessor->getValue($addressFields, $oroCrm);
+            try {
+                $oroValue = $accessor->getValue($addressFields, $oroCrm);
+            } catch (\Exception $e) {
+                $oroValue = null;
+            }
 
             if ($oroValue instanceof \DateTime) {
                 $result[$magento] = $oroValue->format(ReverseWriter::MAGENTO_DATETIME_FORMAT);
@@ -177,7 +181,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
                 }
                 $result[$magento] = [$oroValue, $street2];
             } else {
-                $result[$magento] = $accessor->getValue($addressFields, $oroCrm);
+                $result[$magento] = $oroValue;
             }
         }
 
