@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 
-use Zend\Mail\Address;
-
 use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -223,7 +221,6 @@ class ReverseWriter implements ItemWriterInterface
                             SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
                             $requestData
                         );
-                        $result;
                     }
                 } catch (\Exception $e) {
                 }
@@ -312,25 +309,6 @@ class ReverseWriter implements ItemWriterInterface
     }
 
     /**
-<<<<<<< HEAD
-     * Set changed data
-     *
-     * @param Customer $entity
-     * @param array $changedEntity
-     * @param $fieldList
-     */
-    protected function setChangedDataByObject($entity, $changedEntity, $fieldList)
-    {
-        foreach ($fieldList as $fieldName) {
-            if ($fieldName !== 'addresses') {
-                $this->accessor->setValue($entity, $fieldName, $this->accessor->getValue($changedEntity, $fieldName));
-            }
-        }
-    }
-
-    /**
-=======
->>>>>>> 8b91e3e629c608afa7c24c31483d3fbcdc89d52b
      * Set changed data to customer
      *
      * @param Customer $entity
@@ -386,7 +364,7 @@ class ReverseWriter implements ItemWriterInterface
 
     /**
      * Check if magento extension not installed and fix data set
-     * In the magento version 1.8.0.0 we can send only these fields: email, firstname, lastname.
+     * In the magento version up to 1.8.0.0 we can send only: email, firstname, lastname.
      *
      * @param \stdClass $remoteData
      */
