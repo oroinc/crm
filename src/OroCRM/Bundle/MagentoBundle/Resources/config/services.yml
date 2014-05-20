@@ -33,6 +33,10 @@ parameters:
     orocrm_magento.importexport.customer.reverse.processor.class:           OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor
     orocrm_magento.importexport.customer.reverse.writer.class:              OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter
 
+    # helpers
+    orocrm_magento.importexport.address_import_helper.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper
+    orocrm_magento.importexport.doctrine_helper.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\DoctrineHelper
+
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -159,3 +163,14 @@ services:
             - @orocrm_magento.importexport.denormalizer.customer
             - @oro_address.importexport.address_normalizer
             - @orocrm_magento.transport.soap_transport
+            - @orocrm_magento.importexport.address_import_helper
+
+    orocrm_magento.importexport.address_import_helper:
+        class: %orocrm_magento.importexport.address_import_helper.class%
+        arguments:
+            - @orocrm_magento.importexport.doctrine_helper
+
+    orocrm_magento.importexport.doctrine_helper:
+        class: %orocrm_magento.importexport.doctrine_helper.class%
+        arguments:
+            - @oro_importexport.strategy.import.helper

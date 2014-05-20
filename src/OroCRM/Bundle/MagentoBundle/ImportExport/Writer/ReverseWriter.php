@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 
+use Zend\Mail\Address;
+
 use Doctrine\ORM\EntityManager;
 
 use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
@@ -16,7 +18,8 @@ use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalize
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
-use Zend\Mail\Address;
+
+use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 
 class ReverseWriter implements ItemWriterInterface
 {
@@ -75,22 +78,23 @@ class ReverseWriter implements ItemWriterInterface
      */
     protected $accessor;
 
-    /**
-     * @param EntityManager            $em
-     * @param CustomerSerializer       $customerSerializer
-     * @param SoapTransport            $transport
-     */
+    /** @var AddressImportHelper */
+    protected $addressImportHelper;
+
+
     public function __construct(
         EntityManager $em,
         CustomerSerializer $customerSerializer,
         AddressNormalizer $addressNormalizer,
-        SoapTransport $transport
+        SoapTransport $transport,
+        AddressImportHelper $addressImportHelper
     ) {
-        $this->em                 = $em;
-        $this->customerSerializer = $customerSerializer;
-        $this->addressNormalizer  = $addressNormalizer;
-        $this->transport          = $transport;
-        $this->accessor           = PropertyAccess::createPropertyAccessor();
+        $this->em                  = $em;
+        $this->customerSerializer  = $customerSerializer;
+        $this->addressNormalizer   = $addressNormalizer;
+        $this->transport           = $transport;
+        $this->accessor            = PropertyAccess::createPropertyAccessor();
+        $this->addressImportHelper = $addressImportHelper;
     }
 
     /**
@@ -163,7 +167,7 @@ class ReverseWriter implements ItemWriterInterface
                         array_keys($localChanges)
                     );
                     $this->setChangedData($addressEntity, $localChanges);
-                    $this->setChangedData($addressEntity, $remoteData);
+                    $this->setRemoteDataChanges($addressEntity, $remoteData);
                 } else {
                     $this->setChangedData($addressEntity, $localChanges);
                 }
@@ -192,8 +196,6 @@ class ReverseWriter implements ItemWriterInterface
                     $this->em->remove($address['entity']);
                 }
 
-                $this->em->flush();
-
                 unset($result);
             }
             if (isset($address['status']) && $address['status'] === AbstractReverseProcessor::NEW_ENTITY) {
@@ -218,6 +220,7 @@ class ReverseWriter implements ItemWriterInterface
                             SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
                             $requestData
                         );
+                        $result;
                     }
                 } catch (\Exception $e) {
                     $e;
@@ -304,7 +307,8 @@ class ReverseWriter implements ItemWriterInterface
      * Set changed data
      *
      * @param Customer $entity
-     * @param array    $changedData
+     * @param array $changedEntity
+     * @param $fieldList
      */
     protected function setChangedDataByObject($entity, $changedEntity, $fieldList)
     {
@@ -326,6 +330,25 @@ class ReverseWriter implements ItemWriterInterface
         foreach ($changedData as $fieldName => $value) {
             if ($fieldName !== 'addresses') {
                 $this->accessor->setValue($entity, $fieldName, $value);
+            }
+        }
+    }
+
+    protected function setRemoteDataChanges($entity, array $changedData)
+    {
+        foreach ($changedData as $fieldName => $value) {
+            if ($fieldName !== 'addresses') {
+                if ($fieldName === 'region') {
+                    try {
+                        $code = $this->accessor->getValue($value, 'code');
+                        $this->addressImportHelper->updateAddressCountryRegion($entity, $code);
+                    } catch (\Exception $e) {
+                    }
+
+                } else {
+                    $this->accessor->setValue($entity, $fieldName, $value);
+                }
+
             }
         }
     }

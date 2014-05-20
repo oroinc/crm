@@ -86,7 +86,8 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
     public function compareAddresses($remoteData, $localData, $oroFieldList)
     {
-        $remoteAddress = $this->serializer->denormalize($this->getBapAddressData($remoteData), MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE);
+        $remoteAddress = $this->serializer
+            ->denormalize($this->getBapAddressData($remoteData), MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE);
 
         $accessor = PropertyAccess::createPropertyAccessor();
         $result = [];
