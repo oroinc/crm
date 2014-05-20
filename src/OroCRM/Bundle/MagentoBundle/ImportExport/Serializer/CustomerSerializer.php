@@ -2,13 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
-use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\UserBundle\Model\Gender;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
@@ -16,16 +15,15 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-
 class CustomerSerializer extends AbstractNormalizer implements DenormalizerInterface, NormalizerInterface
 {
     /** @var array */
-    protected $importFieldsMap = array(
+    protected $importFieldsMap = [
         'customer_id' => 'origin_id',
         'firstname'   => 'first_name',
         'lastname'    => 'last_name',
@@ -36,10 +34,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'dob'         => 'birthday',
         'taxvat'      => 'vat',
         'gender'      => 'gender'
-    );
+    ];
 
     /** @var array */
-    protected $addressBapToMageMapping = array(
+    protected $addressBapToMageMapping = [
         'namePrefix'        => 'prefix',
         'firstName'         => 'firstname',
         'middleName'        => 'middlename',
@@ -55,9 +53,9 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'created'           => 'created_at',
         'updated'           => 'updated_at',
         'customerAddressId' => 'customer_address_id'
-    );
+    ];
 
-    protected $contactAddressEntityToMageMapping = array(
+    protected $contactAddressEntityToMageMapping = [
         'name_prefix'          => 'prefix',
         'first_name'           => 'firstname',
         'middle_name'          => 'middlename',
@@ -71,11 +69,11 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'region_Text'          => 'region',
         'region.combined_code' => 'region_id',
         'created'              => 'created_at',
-        'updated'              => 'updated_at',
-    );
+        'updated'              => 'updated_at'
+    ];
 
     /** @var array */
-    static protected $objectFields = array(
+    static protected $objectFields = [
         'store',
         'website',
         'group',
@@ -83,19 +81,19 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'updatedAt',
         'createdAt',
         'birthday'
-    );
+    ];
 
     /**
-     * @param array $remoteData
+     * @param array          $remoteData
      * @param ContactAddress $contactAddr
-     * @param int $originId
+     * @param int            $originId
      *
      * @return Address
      */
     public function convertMageAddressToAddress($remoteData, ContactAddress $contactAddr, $originId)
     {
         $accessor = PropertyAccess::createPropertyAccessor();
-        $address = new Address();
+        $address  = new Address();
 
         foreach ($this->contactAddressEntityToMageMapping as $bapField => $mageField) {
             if ($mageField === 'country_id') {
@@ -126,9 +124,9 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     }
 
     /**
-     * @param array $remoteData
+     * @param array   $remoteData
      * @param Address $localData
-     * @param array $oroFieldList
+     * @param array   $oroFieldList
      *
      * @return array
      */
@@ -166,7 +164,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $result = [];
 
         if ($addressFields instanceof ContactAddress) {
-
             foreach ($this->contactAddressEntityToMageMapping as $oroCrm => $magento) {
                 $oroValue = $accessor->getValue($addressFields, $oroCrm);
 
@@ -183,7 +180,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
                     $result[$magento] = $accessor->getValue($addressFields, $oroCrm);
                 }
             }
-
         } else {
             foreach ($addressFields as $fieldName => $value) {
                 if (isset($this->addressBapToMageMapping[$fieldName])) {
@@ -191,7 +187,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
                 }
             }
 
-            $result['street'] = [];
+            $result['street']   = [];
             $result['street'][] = $addressFields['street'];
             if (isset($addressFields['street2'])) {
                 $result['street'][] = $addressFields['street2'];
@@ -212,7 +208,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     public function getCurrentCustomerValues(Customer $customer, $magentoFields)
     {
         $accessor = PropertyAccess::createPropertyAccessor();
-        $result = [];
+        $result   = [];
         foreach ($magentoFields as $fieldName) {
             $result[$fieldName] = $accessor->getValue(
                 $customer,
@@ -399,7 +395,9 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
     /**
      * @todo Move to converter CRM-789
+     *
      * @param $data
+     *
      * @return array
      */
     protected function formatAccountData($data)
@@ -426,23 +424,25 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
     /**
      * @todo Move to converter CRM-789
+     *
      * @param $data
+     *
      * @return array
      */
     protected function formatContactData($data)
     {
         $contact           = $this->convertToCamelCase($data);
         $contactFieldNames = array(
-            'firstName'         => null,
-            'lastName'          => null,
-            'middleName'        => null,
-            'namePrefix'        => null,
-            'nameSuffix'        => null,
-            'gender'            => null,
-            'addresses'         => [],
-            'birthday'          => null,
-            'phones'            => [],
-            'emails'            => []
+            'firstName'  => null,
+            'lastName'   => null,
+            'middleName' => null,
+            'namePrefix' => null,
+            'nameSuffix' => null,
+            'gender'     => null,
+            'addresses'  => [],
+            'birthday'   => null,
+            'phones'     => [],
+            'emails'     => []
         );
         // fill default values
         $contact = array_merge($contactFieldNames, $contact);
@@ -451,8 +451,8 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             $bapAddress = $this->getBapAddressData(
                 $address,
                 array(
-                    'firstName' => $contact['firstName'],
-                    'lastName' => $contact['lastName']
+                     'firstName' => $contact['firstName'],
+                     'lastName'  => $contact['lastName']
                 )
             );
 
@@ -483,6 +483,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
      *
      * @param array $address
      * @param array $defaultValues
+     *
      * @return array
      */
     protected function getBapAddressData(array $address, array $defaultValues = array())
@@ -522,7 +523,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $result = null;
         if (!empty($data[$name])) {
             $result = $this->serializer->denormalize($data[$name], $type, $format, $context);
-
         }
 
         return $result;

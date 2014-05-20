@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 
 use Doctrine\ORM\EntityManager;
 
+use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -29,27 +30,29 @@ class ReverseWriter implements ItemWriterInterface
      *
      * @var array
      */
-    protected $clearMagentoFields = [
-        'email',
-        'firstname',
-        'lastname'
-    ];
+    protected $clearMagentoFields
+        = [
+            'email',
+            'firstname',
+            'lastname'
+        ];
 
     /**
      * Customer-Contact relation, key - Customer field, value - Contact field
      *
      * @var array
      */
-    protected $customerContactRelation = [
-        'name_prefix' => 'name_prefix',
-        'first_name'  => 'first_name',
-        'middle_name' => 'middle_name',
-        'last_name'   => 'last_name',
-        'name_suffix' => 'name_suffix',
-        'gender'      => 'gender',
-        'birthday'    => 'birthday',
-        'email'       => 'primary_email.email',
-    ];
+    protected $customerContactRelation
+        = [
+            'name_prefix' => 'name_prefix',
+            'first_name'  => 'first_name',
+            'middle_name' => 'middle_name',
+            'last_name'   => 'last_name',
+            'name_suffix' => 'name_suffix',
+            'gender'      => 'gender',
+            'birthday'    => 'birthday',
+            'email'       => 'primary_email.email',
+        ];
 
     /** @var EntityManager */
     protected $em;
@@ -69,19 +72,24 @@ class ReverseWriter implements ItemWriterInterface
     /** @var AddressImportHelper */
     protected $addressImportHelper;
 
+    /** @var RegionConverter */
+    protected $regionConverter;
+
     /**
-     * @param EntityManager      $em
-     * @param CustomerSerializer $customerSerializer
-     * @param AddressNormalizer  $addressNormalizer
-     * @param SoapTransport      $transport
+     * @param EntityManager       $em
+     * @param CustomerSerializer  $customerSerializer
+     * @param AddressNormalizer   $addressNormalizer
+     * @param SoapTransport       $transport
      * @param AddressImportHelper $addressImportHelper
+     * @param RegionConverter     $regionConverter
      */
     public function __construct(
         EntityManager $em,
         CustomerSerializer $customerSerializer,
         AddressNormalizer $addressNormalizer,
         SoapTransport $transport,
-        AddressImportHelper $addressImportHelper
+        AddressImportHelper $addressImportHelper,
+        RegionConverter $regionConverter
     ) {
         $this->em                  = $em;
         $this->customerSerializer  = $customerSerializer;
@@ -89,6 +97,7 @@ class ReverseWriter implements ItemWriterInterface
         $this->transport           = $transport;
         $this->accessor            = PropertyAccess::createPropertyAccessor();
         $this->addressImportHelper = $addressImportHelper;
+        $this->regionConverter     = $regionConverter;
     }
 
     /**
@@ -206,13 +215,14 @@ class ReverseWriter implements ItemWriterInterface
             if (isset($address['status']) && $address['status'] === AbstractReverseProcessor::NEW_ENTITY) {
                 try {
                     $dataForSend = $this->customerSerializer->convertToMagentoAddress($address['entity']);
+                    $dataForSend = array_merge($dataForSend, $this->regionConverter->toMagentoData($address['entity']));
                     $requestData = array_merge(
                         ['customerId' => $address['magentoId']],
                         [
-                            'addressData' => array_merge(
-                                $dataForSend,
-                                ['telephone' => 'no phone']
-                            )
+                        'addressData' => array_merge(
+                            $dataForSend,
+                            ['telephone' => 'no phone']
+                        )
                         ]
                     );
 
@@ -283,7 +293,7 @@ class ReverseWriter implements ItemWriterInterface
      * Get changes from magento side
      *
      * @param \stdClass $item
-     * @param array $fieldsList
+     * @param array     $fieldsList
      *
      * @return array
      */
@@ -331,7 +341,7 @@ class ReverseWriter implements ItemWriterInterface
 
     /**
      * @param \OroCRM\Bundle\MagentoBundle\Entity\Address $entity
-     * @param array $changedData
+     * @param array                                       $changedData
      */
     protected function setRemoteDataChanges($entity, array $changedData)
     {
