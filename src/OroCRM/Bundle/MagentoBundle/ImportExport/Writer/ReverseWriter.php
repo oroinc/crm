@@ -183,11 +183,7 @@ class ReverseWriter implements ItemWriterInterface
                         ]
                     );
 
-                    $remoteData = $this->customerSerializer->compareAddresses(
-                        $answer,
-                        $addressEntity,
-                        array_keys($localChanges)
-                    );
+                    $remoteData = $this->customerSerializer->compareAddresses($answer, $addressEntity);
 
                     $this->setLocalDataChanges($addressEntity, $localChanges);
                     $this->setRemoteDataChanges($addressEntity, $remoteData);
@@ -383,7 +379,11 @@ class ReverseWriter implements ItemWriterInterface
                         );
                     }
                 } else {
-                    $this->accessor->setValue($entity, $fieldName, $value);
+                    try {
+                        $this->accessor->setValue($entity, $fieldName, $value);
+                    } catch (\Exception $e) {
+                        $e;
+                    }
                 }
             }
         }
