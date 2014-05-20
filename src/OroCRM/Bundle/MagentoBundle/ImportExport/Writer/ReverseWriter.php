@@ -229,7 +229,6 @@ class ReverseWriter implements ItemWriterInterface
                             $newAddress->setOwner($customer);
                             $customer->addAddress($newAddress);
                             $this->em->persist($customer);
-                            $this->em->flush();
                         }
                     }
                 } catch (\Exception $e) {
