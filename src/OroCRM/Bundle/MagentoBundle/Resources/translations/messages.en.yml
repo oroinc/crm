@@ -328,6 +328,12 @@ orocrm:
             country.label:       Country
             region.label:        State
 
+            country_name.label:      Country
+            country_iso2_code.label: Country ISO2 Code
+            country_iso3_code.label: Country ISO3 Code
+            region_name.label:       Region
+            region_code.label:       Region ISO code
+
         cartaddress:
             entity_label:        Magento Cart Address
             entity_plural_label: Magento Cart Addresses
@@ -350,6 +356,12 @@ orocrm:
             origin_id.label:     Origin Id
             country.label:       Country
             region.label:        State
+
+            country_name.label:      Country
+            country_iso2_code.label: Country ISO2 Code
+            country_iso3_code.label: Country ISO3 Code
+            region_name.label:       Region
+            region_code.label:       Region ISO code
 
         account:
             no_customers_exist: No customers exist
