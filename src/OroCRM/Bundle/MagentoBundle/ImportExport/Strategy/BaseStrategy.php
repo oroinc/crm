@@ -8,10 +8,12 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\UnitOfWork;
 
+use Akeneo\Bundle\BatchBundle\Item\InvalidItemException;
+
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\Country;
-use Akeneo\Bundle\BatchBundle\Item\InvalidItemException;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
@@ -40,6 +42,9 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
     /** @var array */
     protected $mageRegionsCache = [];
 
+    /** @var AddressType[] */
+    protected $addressTypesCache = [];
+
     /**
      * @param ImportStrategyHelper $strategyHelper
      * @param ManagerRegistry      $managerRegistry
@@ -63,7 +68,7 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
     /**
      * @param mixed        $entity             New entity
      * @param string       $entityName         Class name
-     * @param string|array $criteria           Fieldname to find existing entity
+     * @param string|array $criteria           Field name to find existing entity
      * @param array        $excludedProperties Excluded properties
      *
      * @return mixed
@@ -315,25 +320,33 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
 
     /**
      * @param AbstractTypedAddress $address
-     *
      * @return $this
      */
     protected function updateAddressTypes(AbstractTypedAddress $address)
     {
-        // update address type
-        $types = $address->getTypeNames();
-        if (empty($types)) {
-            return $this;
-        }
-
-        $address->getTypes()->clear();
-        $loadedTypes = $this->getEntityRepository('OroAddressBundle:AddressType')->findBy(['name' => $types]);
-
-        foreach ($loadedTypes as $type) {
-            $address->addType($type);
+        $addressTypes = $address->getTypes();
+        foreach ($addressTypes as $index => $type) {
+            $addressTypes->set($index, $this->updateAddressType($type->getName()));
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return AddressType
+     */
+    protected function updateAddressType($name)
+    {
+        $typeClass = 'OroAddressBundle:AddressType';
+
+        if (empty($this->addressTypesCache[$name])
+            || !$this->getEntityManager($typeClass)->getUnitOfWork()->isInIdentityMap($this->addressTypesCache[$name])
+        ) {
+            $this->addressTypesCache[$name] = $this->getEntityRepository($typeClass)->find($name);
+        }
+
+        return $this->addressTypesCache[$name];
     }
 
     /**
@@ -341,7 +354,7 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
      * @param string          $countryCode
      *
      * @throws InvalidItemException
-     * @return object|null
+     * @return Country|null
      */
     protected function getAddressCountryByCode(AbstractAddress $address, $countryCode)
     {
