@@ -336,7 +336,6 @@ class ReverseWriter implements ItemWriterInterface
         }
     }
 
-
     /**
      * @param \OroCRM\Bundle\MagentoBundle\Entity\Address $entity
      * @param array                                       $changedData
@@ -348,7 +347,6 @@ class ReverseWriter implements ItemWriterInterface
                 if ($fieldName === 'region') {
                     try {
                         $mageRegionId = $this->accessor->getValue($value, 'code');
-
                         $magentoRegion = $this->addressImportHelper->findRegionByRegionId($mageRegionId);
 
                         if ($magentoRegion instanceof Region) {
@@ -362,7 +360,6 @@ class ReverseWriter implements ItemWriterInterface
                         $this->accessor->setValue($entity, $fieldName, null);
                         $this->accessor->setValue($entity, 'contact_address.region', null);
                     }
-
                 } elseif ($fieldName === 'country') {
                     if ($value instanceof BAPCountry) {
                         if (!$value->getIso3Code()) {
@@ -389,6 +386,12 @@ class ReverseWriter implements ItemWriterInterface
         }
     }
 
+    /**
+     * @param $entity
+     * @param $magentoCountry
+     *
+     * @return mixed
+     */
     protected function getChangedCountry($entity, $magentoCountry)
     {
         $magentoCountryCode = $this->accessor->getValue($magentoCountry, 'iso2_code');
@@ -426,7 +429,6 @@ class ReverseWriter implements ItemWriterInterface
         if ($magentoRegionCode !== $customerRegionCode) {
             $bapRegion = $this->em->getRepository('OroAddressBundle:Region')
                 ->findOneBy(['combinedCode'=>$magentoRegionCode]);
-
             $this->accessor->setValue($entity, 'contact_address.region', $bapRegion);
 
             return $bapRegion;

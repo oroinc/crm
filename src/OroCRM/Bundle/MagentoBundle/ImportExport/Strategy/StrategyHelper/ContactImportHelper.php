@@ -51,6 +51,10 @@ class ContactImportHelper
     /** @var string */
     protected $priority;
 
+    /**
+     * @param Channel             $channel
+     * @param AddressImportHelper $addressImportHelper
+     */
     public function __construct(Channel $channel, AddressImportHelper $addressImportHelper)
     {
         $this->priority            = $channel->getSyncPriority();
@@ -116,7 +120,7 @@ class ContactImportHelper
                         $address->setCountry($remoteAddress->getCountry());
                     }
 
-                    if ($this->isRegion($remoteAddress, $address) || $this->isRemotePrioritized()) {
+                    if ($this->isRegionChanged($remoteAddress, $address) || $this->isRemotePrioritized()) {
                         $address->setRegion($remoteAddress->getRegion());
                         if ($address->getRegion()) {
                             $address->setRegionText(null);
@@ -169,7 +173,7 @@ class ContactImportHelper
      *
      * @return bool
      */
-    protected function isRegion($remoteAddress, $address)
+    protected function isRegionChanged($remoteAddress, $address)
     {
         return (
             ($remoteAddress->getRegion() == $address->getRegion())
