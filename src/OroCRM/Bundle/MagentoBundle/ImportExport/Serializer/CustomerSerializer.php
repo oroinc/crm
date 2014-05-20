@@ -153,7 +153,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
                     $result['region'] = $accessor->getValue($remoteAddress, 'region');
                 }
             } catch (\Exception $e) {
-                $e;
             }
         }
 
