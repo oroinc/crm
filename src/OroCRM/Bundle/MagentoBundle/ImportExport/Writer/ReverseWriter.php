@@ -366,22 +366,18 @@ class ReverseWriter implements ItemWriterInterface
 
                 } elseif ($fieldName === 'country') {
                     if ($value instanceof BAPCountry) {
-                        try {
-                            if (!$value->getIso3Code()) {
-                                $country = $this->em->getRepository('OroAddressBundle:Country')
-                                    ->findOneBy(['iso2Code'=>$value->getIso2Code()]);
-                            } else {
-                                $country = $value;
-                            }
-
-                            $this->accessor->setValue(
-                                $entity,
-                                $fieldName,
-                                $this->getChangedCountry($entity, $country)
-                            );
-                        } catch (\Exception $e) {
+                        if (!$value->getIso3Code()) {
+                            $country = $this->em->getRepository('OroAddressBundle:Country')
+                                ->findOneBy(['iso2Code'=>$value->getIso2Code()]);
+                        } else {
+                            $country = $value;
                         }
 
+                        $this->accessor->setValue(
+                            $entity,
+                            $fieldName,
+                            $this->getChangedCountry($entity, $country)
+                        );
                     }
                 } else {
                     $this->accessor->setValue($entity, $fieldName, $value);
