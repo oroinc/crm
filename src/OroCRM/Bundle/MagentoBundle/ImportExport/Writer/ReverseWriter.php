@@ -207,7 +207,6 @@ class ReverseWriter implements ItemWriterInterface
                 try {
                     $this->em->flush();
                 } catch (\Exception $e) {
-                    $e;
                 }
 
                 unset($addressEntity, $localChanges, $remoteData);
@@ -361,29 +360,26 @@ class ReverseWriter implements ItemWriterInterface
                             );
                         }
                     } catch (\Exception $e) {
-                        $e;
                         $this->accessor->setValue($entity, $fieldName, null);
                         $this->accessor->setValue($entity, 'contact_address.region', null);
                     }
 
                 } elseif ($fieldName === 'country') {
                     if ($value instanceof BAPCountry) {
-
                         try {
-                        if (!$value->getIso3Code()) {
-                            $country = $this->em->getRepository('OroAddressBundle:Country')
-                                ->findOneBy(['iso2Code'=>$value->getIso2Code()]);
-                        } else {
-                            $country = $value;
-                        }
+                            if (!$value->getIso3Code()) {
+                                $country = $this->em->getRepository('OroAddressBundle:Country')
+                                    ->findOneBy(['iso2Code'=>$value->getIso2Code()]);
+                            } else {
+                                $country = $value;
+                            }
 
-                        $this->accessor->setValue(
-                            $entity,
-                            $fieldName,
-                            $this->getChangedCountry($entity, $country)
-                        );
+                            $this->accessor->setValue(
+                                $entity,
+                                $fieldName,
+                                $this->getChangedCountry($entity, $country)
+                            );
                         } catch (\Exception $e) {
-                            $e;
                         }
 
                     }
