@@ -175,13 +175,16 @@ class ReverseWriter implements ItemWriterInterface
                 $localChanges  = $address['object'];
 
                 if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
-                    $remoteData = $this->customerSerializer->compareAddresses(
-                        (array)$this->transport->call(
-                            SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO,
-                            [
+
+                    $answer = (array)$this->transport->call(
+                        SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO,
+                        [
                             'addressId' => $addressEntity->getOriginId()
-                            ]
-                        ),
+                        ]
+                    );
+
+                    $remoteData = $this->customerSerializer->compareAddresses(
+                        $answer,
                         $addressEntity,
                         array_keys($localChanges)
                     );
@@ -223,7 +226,7 @@ class ReverseWriter implements ItemWriterInterface
                     $this->em->remove($address['entity']);
                 }
 
-                if ($result) {
+                if (true === $result || null === $result) {
                     $this->em->remove($address['entity']);
                 }
                 $this->em->flush();
