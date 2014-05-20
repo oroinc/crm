@@ -179,11 +179,11 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
         }
 
         if ($checking instanceof \DateTime) {
-            $checking = $checking->format('Y-m-d H:i:s') ;
+            $checking = $checking->format('Y-m-d H:i:s');
         }
 
         if ($source instanceof \DateTime) {
-            $source = $source->format('Y-m-d H:i:s') ;
+            $source = $source->format('Y-m-d H:i:s');
         }
 
         return $source !== $checking;

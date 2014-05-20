@@ -5,9 +5,11 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
+use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
+
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
@@ -59,7 +61,7 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
     /**
      * @param mixed        $entity             New entity
      * @param string       $entityName         Class name
-     * @param string|array $criteria           Fieldname to find existing entity
+     * @param string|array $criteria           Field name to find existing entity
      * @param array        $excludedProperties Excluded properties
      *
      * @return mixed
@@ -177,21 +179,18 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
 
     /**
      * @param AbstractTypedAddress $address
-     *
      * @return $this
      */
     protected function updateAddressTypes(AbstractTypedAddress $address)
     {
         $this->addressHelper->updateAddressTypes($address);
-
-        return $this;
     }
 
     /**
      * @param AbstractAddress $address
      * @param string          $countryCode
      *
-     * @return object|null
+     * @return Country|null
      */
     protected function getAddressCountryByCode(AbstractAddress $address, $countryCode)
     {

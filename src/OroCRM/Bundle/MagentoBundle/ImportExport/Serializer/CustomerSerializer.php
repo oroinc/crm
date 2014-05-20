@@ -86,13 +86,14 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
     public function compareAddresses($remoteData, $localData, $oroFieldList)
     {
-        $remoteAddress = $this->serializer
-            ->denormalize($this->getBapAddressData($remoteData), MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE);
+        $result = [];
+
+        $addressData   = $this->getBapAddressData($remoteData);
+        $remoteAddress = $this->serializer->denormalize($addressData, MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE);
 
         $accessor = PropertyAccess::createPropertyAccessor();
-        $result = [];
         foreach ($oroFieldList as $fieldName) {
-            $localValue = $accessor->getValue($localData, $fieldName);
+            $localValue  = $accessor->getValue($localData, $fieldName);
             $remoteValue = $accessor->getValue($remoteAddress, $fieldName);
 
             if (($fieldName !== 'country' && $remoteValue !== $localValue)
@@ -104,7 +105,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
         return $result;
     }
-
 
     /**
      * @param array $addressFields
@@ -175,21 +175,16 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     }
 
     /**
-     * Normalizes an object into a set of arrays/scalars
-     *
-     * @param object         $object  object to normalize
-     * @param PropertyAccess $format
-     * @param array          $context Context options for the normalizer
-     *
-     * @return array|scalar
+     * {@inheritdoc}
      */
     public function normalize($object, $format = null, array $context = array())
     {
-        $result = [];
+        $accessor = PropertyAccess::createPropertyAccessor();
+        $result   = [];
 
         foreach ($this->importFieldsMap as $magentoName => $oroName) {
             if (empty($context)) {
-                $result[$magentoName] = $format->getValue($object, $oroName);
+                $result[$magentoName] = $accessor->getValue($object, $oroName);
             } else {
                 if (array_key_exists($oroName, $context)) {
                     $result[$magentoName] = $context[$oroName];
@@ -201,16 +196,11 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     }
 
     /**
-     * Checks whether the given class is supported for normalization by this normalizer
-     *
-     * @param mixed  $data   Data to normalize.
-     * @param string $format The format being (de-)serialized from or into.
-     *
-     * @return Boolean
+     * {@inheritdoc}
      */
     public function supportsNormalization($data, $format = null)
     {
-        return true;
+        return $data instanceof Customer;
     }
 
     /**
