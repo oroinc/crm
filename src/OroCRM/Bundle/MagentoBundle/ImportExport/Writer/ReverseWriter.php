@@ -127,8 +127,6 @@ class ReverseWriter implements ItemWriterInterface
                         $this->em->persist($customer);
                         $customerForMagento = $this->customerSerializer->normalize($customer);
                         $this->updateRemoteData($customer->getOriginId(), $customerForMagento);
-                        $this->updateContact($item);
-
                     } elseif ($channel->getSyncPriority() === ChannelFormTwoWaySyncSubscriber::LOCAL_WINS) {
                         // local wins
                         $this->updateRemoteData($customer->getOriginId(), $localUpdatedData);
@@ -379,7 +377,6 @@ class ReverseWriter implements ItemWriterInterface
                     try {
                         $this->accessor->setValue($entity, $fieldName, $value);
                     } catch (\Exception $e) {
-                        $e;
                     }
                 }
             }
@@ -476,30 +473,5 @@ class ReverseWriter implements ItemWriterInterface
                 }
             }
         }
-    }
-
-    /**
-     * Update contact data
-     *
-     * @param $item
-     */
-    protected function updateContact($item)
-    {
-        $contactData = [];
-        foreach ($this->customerContactRelation as $customerField => $contactField) {
-            $contactData[$contactField] = $this->accessor->getValue($item->entity, $customerField);
-        }
-
-        $contact = $this->accessor->getValue($item->entity, 'contact');
-        foreach ($contactData as $fieldName => $value) {
-            try {
-                $this->accessor->setValue($contact, $fieldName, $value);
-            } catch (\Exception $e) {
-                /**
-                 * @todo: if email is null? need to set primary email (create)
-                 */
-            }
-        }
-        $this->em->persist($contact);
     }
 }
