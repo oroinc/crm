@@ -2,12 +2,14 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 use Oro\Bundle\UserBundle\Model\Gender;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
@@ -153,44 +155,29 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     }
 
     /**
-     * @param array|ContactAddress $addressFields
+     * @param AbstractAddress $addressFields
      *
      * @return array
      */
-    public function convertToMagentoAddress($addressFields)
+    public function convertToMagentoAddress(AbstractAddress $addressFields)
     {
+        $result   = [];
         $accessor = PropertyAccess::createPropertyAccessor();
 
-        $result = [];
+        foreach ($this->contactAddressEntityToMageMapping as $oroCrm => $magento) {
+            $oroValue = $accessor->getValue($addressFields, $oroCrm);
 
-        if ($addressFields instanceof ContactAddress) {
-            foreach ($this->contactAddressEntityToMageMapping as $oroCrm => $magento) {
-                $oroValue = $accessor->getValue($addressFields, $oroCrm);
-
-                if ($oroValue instanceof \DateTime) {
-                    $result[$magento] = $oroValue->format('Y-m-d H:i:s');
-                } elseif ($oroCrm === 'street') {
-                    try {
-                        $street2 = $accessor->getValue($addressFields, 'street2');
-                    } catch (\Exception $e) {
-                        $street2 = '';
-                    }
-                    $result[$magento] = [$oroValue, $street2];
-                } else {
-                    $result[$magento] = $accessor->getValue($addressFields, $oroCrm);
+            if ($oroValue instanceof \DateTime) {
+                $result[$magento] = $oroValue->format(ReverseWriter::MAGENTO_DATETIME_FORMAT);
+            } elseif ($oroCrm === 'street') {
+                try {
+                    $street2 = $accessor->getValue($addressFields, 'street2');
+                } catch (\Exception $e) {
+                    $street2 = '';
                 }
-            }
-        } else {
-            foreach ($addressFields as $fieldName => $value) {
-                if (isset($this->addressBapToMageMapping[$fieldName])) {
-                    $result[$this->addressBapToMageMapping[$fieldName]] = $value;
-                }
-            }
-
-            $result['street']   = [];
-            $result['street'][] = $addressFields['street'];
-            if (isset($addressFields['street2'])) {
-                $result['street'][] = $addressFields['street2'];
+                $result[$magento] = [$oroValue, $street2];
+            } else {
+                $result[$magento] = $accessor->getValue($addressFields, $oroCrm);
             }
         }
 
