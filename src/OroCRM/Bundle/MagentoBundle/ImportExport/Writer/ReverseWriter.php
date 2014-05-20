@@ -205,31 +205,28 @@ class ReverseWriter implements ItemWriterInterface
             }
             if (isset($address['status']) && $address['status'] === AbstractReverseProcessor::NEW_ENTITY) {
                 try {
-                    if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
+                    $dataForSend = $this->customerSerializer->convertToMagentoAddress($address['entity']);
+                    $requestData = array_merge(
+                        ['customerId' => $address['magentoId']],
+                        [
+                            'addressData' => array_merge(
+                                $dataForSend,
+                                ['telephone' => 'no phone']
+                            )
+                        ]
+                    );
 
-                        $dataForSend = $this->customerSerializer->convertToMagentoAddress($address['entity']);
-                        $requestData = array_merge(
-                            ['customerId' => $address['magentoId']],
-                            [
-                                'addressData' => array_merge(
-                                    $dataForSend,
-                                    ['telephone' => 'no phone']
-                                )
-                            ]
-                        );
+                    $result = $this->transport->call(
+                        SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
+                        $requestData
+                    );
 
-                        $result = $this->transport->call(
-                            SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
-                            $requestData
-                        );
-
-                        if ($result) {
-                            $newAddress = $this->customerSerializer
-                                ->convertMageAddressToAddress($dataForSend, $address['entity'], $result);
-                            $newAddress->setOwner($customer);
-                            $customer->addAddress($newAddress);
-                            $this->em->persist($customer);
-                        }
+                    if ($result) {
+                        $newAddress = $this->customerSerializer
+                            ->convertMageAddressToAddress($dataForSend, $address['entity'], $result);
+                        $newAddress->setOwner($customer);
+                        $customer->addAddress($newAddress);
+                        $this->em->persist($customer);
                     }
                 } catch (\Exception $e) {
                 }
