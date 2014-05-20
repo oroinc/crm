@@ -11,11 +11,16 @@ use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
 use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
+use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
+use Oro\Bundle\AddressBundle\Entity\Country as BAPCountry;
 
+use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use OroCRM\Bundle\MagentoBundle\Entity\Region;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class ReverseWriter implements ItemWriterInterface
 {
@@ -27,10 +32,10 @@ class ReverseWriter implements ItemWriterInterface
      * @var array
      */
     protected $clearMagentoFields = [
-        'email',
-        'firstname',
-        'lastname'
-    ];
+            'email',
+            'firstname',
+            'lastname'
+        ];
 
     /**
      * Customer-Contact relation, key - Customer field, value - Contact field
@@ -38,15 +43,15 @@ class ReverseWriter implements ItemWriterInterface
      * @var array
      */
     protected $customerContactRelation = [
-        'name_prefix' => 'name_prefix',
-        'first_name'  => 'first_name',
-        'middle_name' => 'middle_name',
-        'last_name'   => 'last_name',
-        'name_suffix' => 'name_suffix',
-        'gender'      => 'gender',
-        'birthday'    => 'birthday',
-        'email'       => 'primary_email.email',
-    ];
+            'name_prefix' => 'name_prefix',
+            'first_name'  => 'first_name',
+            'middle_name' => 'middle_name',
+            'last_name'   => 'last_name',
+            'name_suffix' => 'name_suffix',
+            'gender'      => 'gender',
+            'birthday'    => 'birthday',
+            'email'       => 'primary_email.email',
+        ];
 
     /** @var EntityManager */
     protected $em;
@@ -63,23 +68,35 @@ class ReverseWriter implements ItemWriterInterface
     /** @var PropertyAccessor */
     protected $accessor;
 
+    /** @var AddressImportHelper */
+    protected $addressImportHelper;
+
+    /** @var RegionConverter */
+    protected $regionConverter;
+
     /**
-     * @param EntityManager      $em
-     * @param CustomerSerializer $customerSerializer
-     * @param AddressNormalizer  $addressNormalizer
-     * @param SoapTransport      $transport
+     * @param EntityManager       $em
+     * @param CustomerSerializer  $customerSerializer
+     * @param AddressNormalizer   $addressNormalizer
+     * @param SoapTransport       $transport
+     * @param AddressImportHelper $addressImportHelper
+     * @param RegionConverter     $regionConverter
      */
     public function __construct(
         EntityManager $em,
         CustomerSerializer $customerSerializer,
         AddressNormalizer $addressNormalizer,
-        SoapTransport $transport
+        SoapTransport $transport,
+        AddressImportHelper $addressImportHelper,
+        RegionConverter $regionConverter
     ) {
-        $this->em                 = $em;
-        $this->customerSerializer = $customerSerializer;
-        $this->addressNormalizer  = $addressNormalizer;
-        $this->transport          = $transport;
-        $this->accessor           = PropertyAccess::createPropertyAccessor();
+        $this->em                  = $em;
+        $this->customerSerializer  = $customerSerializer;
+        $this->addressNormalizer   = $addressNormalizer;
+        $this->transport           = $transport;
+        $this->accessor            = PropertyAccess::createPropertyAccessor();
+        $this->addressImportHelper = $addressImportHelper;
+        $this->regionConverter     = $regionConverter;
     }
 
     /**
@@ -110,8 +127,6 @@ class ReverseWriter implements ItemWriterInterface
                         $this->em->persist($customer);
                         $customerForMagento = $this->customerSerializer->normalize($customer);
                         $this->updateRemoteData($customer->getOriginId(), $customerForMagento);
-                        $this->updateContact($item);
-
                     } elseif ($channel->getSyncPriority() === ChannelFormTwoWaySyncSubscriber::LOCAL_WINS) {
                         // local wins
                         $this->updateRemoteData($customer->getOriginId(), $localUpdatedData);
@@ -121,7 +136,11 @@ class ReverseWriter implements ItemWriterInterface
 
                     // process addresses
                     if (isset($item->object['addresses'])) {
-                        $this->processAddresses($item->object['addresses'], $channel->getSyncPriority());
+                        $this->processAddresses(
+                            $item->object['addresses'],
+                            $channel->getSyncPriority(),
+                            $customer
+                        );
                     }
 
                 } catch (\Exception $e) {
@@ -136,42 +155,59 @@ class ReverseWriter implements ItemWriterInterface
     /**
      * Process address write  to remote instance and to DB
      *
-     * @param array  $addresses
-     * @param string $syncPriority
+     * @param array    $addresses
+     * @param string   $syncPriority
+     * @param Customer $customer
+     *
+     * @throws \LogicException
      */
-    protected function processAddresses($addresses, $syncPriority)
+    protected function processAddresses($addresses, $syncPriority, Customer $customer)
     {
         foreach ($addresses as $address) {
-            if (isset($address['status']) && $address['status'] === AbstractReverseProcessor::UPDATE_ENTITY) {
+            if (!isset($address['status'])) {
+                throw new \LogicException();
+            }
+
+            if ($address['status'] === AbstractReverseProcessor::UPDATE_ENTITY) {
                 $addressEntity = $address['entity'];
                 $localChanges  = $address['object'];
 
                 if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
-                    $remoteData = $this->customerSerializer->compareAddresses(
-                        (array)$this->transport->call(
-                            SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO,
-                            [
+
+                    $answer = (array)$this->transport->call(
+                        SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO,
+                        [
                             'addressId' => $addressEntity->getOriginId()
-                            ]
-                        ),
-                        $addressEntity,
-                        array_keys($localChanges)
+                        ]
                     );
-                    $this->setChangedData($addressEntity, $localChanges);
-                    $this->setChangedData($addressEntity, $remoteData);
+
+                    $remoteData = $this->customerSerializer->compareAddresses($answer, $addressEntity);
+
+                    $this->setLocalDataChanges($addressEntity, $localChanges);
+                    $this->setRemoteDataChanges($addressEntity, $remoteData);
                 } else {
                     $this->setChangedData($addressEntity, $localChanges);
                 }
 
-                $this->updateRemoteAddressData(
-                    $addressEntity->getOriginId(),
-                    $this->addressNormalizer->normalize($addressEntity)
+                $dataForSend = array_merge(
+                    [],
+                    $this->customerSerializer->convertToMagentoAddress($addressEntity),
+                    $this->regionConverter->toMagentoData($addressEntity)
                 );
+
+                $requestData = ['addressId' => $addressEntity->getOriginId(), 'addressData' => $dataForSend];
+
+                $this->transport->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_UPDATE, $requestData);
+
                 $this->em->persist($addressEntity);
+
+                try {
+                    $this->em->flush();
+                } catch (\Exception $e) {
+                }
+
                 unset($addressEntity, $localChanges, $remoteData);
-            }
-            if (isset($address['status']) && $address['status'] === AbstractReverseProcessor::DELETE_ENTITY) {
-                $result = null;
+            } elseif ($address['status'] === AbstractReverseProcessor::DELETE_ENTITY) {
                 try {
                     $result = $this->transport->call(
                         SoapTransport::ACTION_CUSTOMER_ADDRESS_DELETE,
@@ -180,63 +216,39 @@ class ReverseWriter implements ItemWriterInterface
                         ]
                     );
                 } catch (\Exception $e) {
-
-                }
-
-                if ($result) {
+                    $result = null;
                     $this->em->remove($address['entity']);
                 }
 
-                $this->em->remove($address['entity']);
-
-                unset($result);
-            }
-            if (isset($address['status']) && $address['status'] === AbstractReverseProcessor::NEW_ENTITY) {
+                if (true === $result || null === $result) {
+                    $this->em->remove($address['entity']);
+                }
+                $this->em->flush();
+            } elseif ($address['status'] === AbstractReverseProcessor::NEW_ENTITY) {
                 try {
-                    if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
+                    $dataForSend = array_merge(
+                        ['telephone' => 'no phone'],
+                        $this->customerSerializer->convertToMagentoAddress($address['entity']),
+                        $this->regionConverter->toMagentoData($address['entity'])
+                    );
+                    $requestData = ['customerId' => $address['magentoId'], 'addressData' => $dataForSend];
 
-                        $dataForSend = $this->customerSerializer->convertToMagentoAddress(
-                            $address['entity'],
-                            $this->accessor
-                        );
-                        $requestData = array_merge(
-                            ['customerId' => $address['magentoId']],
-                            ['addressData' => $dataForSend]
-                        );
+                    $result = $this->transport->call(
+                        SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
+                        $requestData
+                    );
 
-                        $result = $this->transport->call(
-                            SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
-                            [$requestData]
-                        );
+                    if ($result) {
+                        $newAddress = $this->customerSerializer
+                            ->convertMageAddressToAddress($dataForSend, $address['entity'], $result);
+                        $newAddress->setOwner($customer);
+                        $customer->addAddress($newAddress);
+                        $this->em->persist($customer);
                     }
                 } catch (\Exception $e) {
                 }
-                unset($result, $requestData);
             }
         }
-    }
-
-    /**
-     * Push data to remote instance
-     *
-     * @param int   $addressId
-     * @param array $addressData
-     */
-    protected function updateRemoteAddressData($addressId, $addressData)
-    {
-        foreach ($addressData as $fieldName => $value) {
-            if ($value instanceof \DateTime) {
-                /** @var $value \DateTime */
-                $addressData[$fieldName] = $value->format(self::MAGENTO_DATETIME_FORMAT);
-            }
-        }
-        $addressData = $this->customerSerializer->convertToMagentoAddress($addressData);
-
-        $requestData = array_merge(
-            ['addressId' => $addressId],
-            ['addressData' => $addressData]
-        );
-        $this->transport->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_UPDATE, $requestData);
     }
 
     /**
@@ -253,18 +265,15 @@ class ReverseWriter implements ItemWriterInterface
                 $customerData[$fieldName] = $value->format(self::MAGENTO_DATETIME_FORMAT);
             }
         }
-        $requestData = array_merge(
-            ['customerId' => $customerId],
-            ['customerData' => $customerData]
-        );
+        $requestData = ['customerId' => $customerId, 'customerData' => $customerData];
         $this->transport->call(SoapTransport::ACTION_CUSTOMER_UPDATE, $requestData);
     }
 
     /**
      * Get changes from magento side
      *
-     * @param       $item
-     * @param array $fieldsList
+     * @param \stdClass $item
+     * @param array     $fieldsList
      *
      * @return array
      */
@@ -311,6 +320,125 @@ class ReverseWriter implements ItemWriterInterface
     }
 
     /**
+     * Set changed data to customer
+     *
+     * @param Customer $entity
+     * @param array    $changedData
+     */
+    protected function setLocalDataChanges($entity, array $changedData)
+    {
+        foreach ($changedData as $fieldName => $value) {
+            if ($fieldName !== 'addresses' && $fieldName !== 'region') {
+                $this->accessor->setValue($entity, $fieldName, $value);
+            }
+        }
+    }
+
+    /**
+     * @param \OroCRM\Bundle\MagentoBundle\Entity\Address $entity
+     * @param array                                       $changedData
+     */
+    protected function setRemoteDataChanges($entity, array $changedData)
+    {
+        foreach ($changedData as $fieldName => $value) {
+            if ($fieldName !== 'addresses') {
+                if ($fieldName === 'region') {
+                    try {
+                        $mageRegionId = $this->accessor->getValue($value, 'code');
+                        $magentoRegion = $this->addressImportHelper->findRegionByRegionId($mageRegionId);
+
+                        if ($magentoRegion instanceof Region) {
+                            $this->accessor->setValue(
+                                $entity,
+                                $fieldName,
+                                $this->getChangedRegion($entity, $magentoRegion)
+                            );
+                        }
+                    } catch (\Exception $e) {
+                        $this->accessor->setValue($entity, $fieldName, null);
+                        $this->accessor->setValue($entity, 'contact_address.region', null);
+                    }
+                } elseif ($fieldName === 'country') {
+                    if ($value instanceof BAPCountry) {
+                        if (!$value->getIso3Code()) {
+                            $country = $this->em->getRepository('OroAddressBundle:Country')
+                                ->findOneBy(['iso2Code'=>$value->getIso2Code()]);
+                        } else {
+                            $country = $value;
+                        }
+
+                        $this->accessor->setValue(
+                            $entity,
+                            $fieldName,
+                            $this->getChangedCountry($entity, $country)
+                        );
+                    }
+                } else {
+                    try {
+                        $this->accessor->setValue($entity, $fieldName, $value);
+                    } catch (\Exception $e) {
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param $entity
+     * @param $magentoCountry
+     *
+     * @return mixed
+     */
+    protected function getChangedCountry($entity, $magentoCountry)
+    {
+        $magentoCountryCode = $this->accessor->getValue($magentoCountry, 'iso2_code');
+        $customerCountryCode = $this->accessor->getValue($entity, 'country.iso2_code');
+        $contactCountryCode = $this->accessor->getValue($entity, 'contact_address.country.iso2_code');
+
+        if ($magentoCountryCode !== $customerCountryCode) {
+            $this->accessor->setValue($entity, 'contact_address.country', $magentoCountry);
+            return $magentoCountry;
+        }
+
+        if ($contactCountryCode !== $customerCountryCode) {
+            $this->accessor->setValue(
+                $entity,
+                'country',
+                $this->accessor->getValue($entity, 'contact_address.country')
+            );
+        }
+
+        return $this->accessor->getValue($entity, 'contact_address.country');
+    }
+
+    /**
+     * @param $entity
+     * @param $magentoRegion
+     *
+     * @return mixed|BAPRegion
+     */
+    protected function getChangedRegion($entity, $magentoRegion)
+    {
+        $magentoRegionCode = $this->accessor->getValue($magentoRegion, 'combined_code');
+        $customerRegionCode = $this->accessor->getValue($entity, 'region.combined_code');
+        $contactRegionCode = $this->accessor->getValue($entity, 'contact_address.region.combined_code');
+
+        if ($magentoRegionCode !== $customerRegionCode) {
+            $bapRegion = $this->em->getRepository('OroAddressBundle:Region')
+                ->findOneBy(['combinedCode'=>$magentoRegionCode]);
+            $this->accessor->setValue($entity, 'contact_address.region', $bapRegion);
+
+            return $bapRegion;
+        }
+
+        if ($contactRegionCode !== $customerRegionCode) {
+            $this->accessor->setValue($entity, 'region', $this->accessor->getValue($entity, 'contact_address.region'));
+        }
+
+        return $this->accessor->getValue($entity, 'contact_address.region');
+    }
+
+    /**
      * Convert email to sting
      *
      * @param mixed $email
@@ -332,7 +460,7 @@ class ReverseWriter implements ItemWriterInterface
 
     /**
      * Check if magento extension not installed and fix data set
-     * In the magento version 1.8.0.0 we can send only these fields: email, firstname, lastname.
+     * In the magento version up to 1.8.0.0 we can send only: email, firstname, lastname.
      *
      * @param \stdClass $remoteData
      */
@@ -345,30 +473,5 @@ class ReverseWriter implements ItemWriterInterface
                 }
             }
         }
-    }
-
-    /**
-     * Update contact data
-     *
-     * @param $item
-     */
-    protected function updateContact($item)
-    {
-        $contactData = [];
-        foreach ($this->customerContactRelation as $customerField => $contactField) {
-            $contactData[$contactField] = $this->accessor->getValue($item->entity, $customerField);
-        }
-
-        $contact = $this->accessor->getValue($item->entity, 'contact');
-        foreach ($contactData as $fieldName => $value) {
-            try {
-                $this->accessor->setValue($contact, $fieldName, $value);
-            } catch (\Exception $e) {
-                /**
-                 * @todo: if email is null? need to set primary email (create)
-                 */
-            }
-        }
-        $this->em->persist($contact);
     }
 }

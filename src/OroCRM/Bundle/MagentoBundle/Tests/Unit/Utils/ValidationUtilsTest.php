@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Utils;
 
 use OroCRM\Bundle\MagentoBundle\Utils\ValidationUtils;
 
-class WSIUtilsTest extends \PHPUnit_Framework_TestCase
+class ValidationUtilsTest extends \PHPUnit_Framework_TestCase
 {
     const TEST_INCREMENT_ID    = '1000001232';
     const TEST_ORIGIN_ID       = 12;
