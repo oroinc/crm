@@ -30,8 +30,7 @@ class ReverseWriter implements ItemWriterInterface
      *
      * @var array
      */
-    protected $clearMagentoFields
-        = [
+    protected $clearMagentoFields = [
             'email',
             'firstname',
             'lastname'
@@ -42,8 +41,7 @@ class ReverseWriter implements ItemWriterInterface
      *
      * @var array
      */
-    protected $customerContactRelation
-        = [
+    protected $customerContactRelation = [
             'name_prefix' => 'name_prefix',
             'first_name'  => 'first_name',
             'middle_name' => 'middle_name',
@@ -192,6 +190,7 @@ class ReverseWriter implements ItemWriterInterface
                     $this->setChangedData($addressEntity, $localChanges);
                 }
 
+                var_dump($addressEntity->getRegion() ? $addressEntity->getRegion()->getCombinedCode() : null);
                 $dataForSend = array_merge(
                     [],
                     $this->customerSerializer->convertToMagentoAddress($addressEntity),
@@ -325,15 +324,14 @@ class ReverseWriter implements ItemWriterInterface
             if ($fieldName !== 'addresses') {
                 if ($fieldName === 'region') {
                     try {
-                        $code = $this->accessor->getValue($value, 'code');
-                        $this->addressImportHelper->updateAddressCountryRegion($entity, $code);
+                        $mageRegionId = $this->accessor->getValue($value, 'code');
+                        $this->addressImportHelper->updateAddressCountryRegion($entity, $mageRegionId);
                     } catch (\Exception $e) {
                     }
 
                 } else {
                     $this->accessor->setValue($entity, $fieldName, $value);
                 }
-
             }
         }
     }
