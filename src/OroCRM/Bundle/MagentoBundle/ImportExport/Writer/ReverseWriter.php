@@ -17,6 +17,7 @@ use Oro\Bundle\AddressBundle\Entity\Country as BAPCountry;
 use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
@@ -173,16 +174,11 @@ class ReverseWriter implements ItemWriterInterface
                 $localChanges  = $address['object'];
 
                 if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
-
                     $answer = (array)$this->transport->call(
                         SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO,
-                        [
-                            'addressId' => $addressEntity->getOriginId()
-                        ]
+                        ['addressId' => $addressEntity->getOriginId()]
                     );
-
                     $remoteData = $this->customerSerializer->compareAddresses($answer, $addressEntity);
-
                     $this->setLocalDataChanges($addressEntity, $localChanges);
                     $this->setRemoteDataChanges($addressEntity, $remoteData);
                 } else {
@@ -196,9 +192,7 @@ class ReverseWriter implements ItemWriterInterface
                 );
 
                 $requestData = ['addressId' => $addressEntity->getOriginId(), 'addressData' => $dataForSend];
-
                 $this->transport->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_UPDATE, $requestData);
-
                 $this->em->persist($addressEntity);
 
                 try {
@@ -206,14 +200,11 @@ class ReverseWriter implements ItemWriterInterface
                 } catch (\Exception $e) {
                 }
 
-                unset($addressEntity, $localChanges, $remoteData);
             } elseif ($address['status'] === AbstractReverseProcessor::DELETE_ENTITY) {
                 try {
                     $result = $this->transport->call(
                         SoapTransport::ACTION_CUSTOMER_ADDRESS_DELETE,
-                        [
-                        'addressId' => $address['entity']->getOriginId()
-                        ]
+                        ['addressId' => $address['entity']->getOriginId()]
                     );
                 } catch (\Exception $e) {
                     $result = null;
@@ -232,8 +223,7 @@ class ReverseWriter implements ItemWriterInterface
                         $this->regionConverter->toMagentoData($address['entity'])
                     );
                     $requestData = ['customerId' => $address['magentoId'], 'addressData' => $dataForSend];
-
-                    $result = $this->transport->call(
+                    $result      = $this->transport->call(
                         SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
                         $requestData
                     );
@@ -335,8 +325,8 @@ class ReverseWriter implements ItemWriterInterface
     }
 
     /**
-     * @param \OroCRM\Bundle\MagentoBundle\Entity\Address $entity
-     * @param array                                       $changedData
+     * @param Address $entity
+     * @param array   $changedData
      */
     protected function setRemoteDataChanges($entity, array $changedData)
     {
@@ -384,16 +374,16 @@ class ReverseWriter implements ItemWriterInterface
     }
 
     /**
-     * @param $entity
-     * @param $magentoCountry
+     * @param Address $entity
+     * @param BAPCountry $magentoCountry
      *
      * @return mixed
      */
     protected function getChangedCountry($entity, $magentoCountry)
     {
-        $magentoCountryCode = $this->accessor->getValue($magentoCountry, 'iso2_code');
+        $magentoCountryCode  = $this->accessor->getValue($magentoCountry, 'iso2_code');
         $customerCountryCode = $this->accessor->getValue($entity, 'country.iso2_code');
-        $contactCountryCode = $this->accessor->getValue($entity, 'contact_address.country.iso2_code');
+        $contactCountryCode  = $this->accessor->getValue($entity, 'contact_address.country.iso2_code');
 
         if ($magentoCountryCode !== $customerCountryCode) {
             $this->accessor->setValue($entity, 'contact_address.country', $magentoCountry);
@@ -412,20 +402,20 @@ class ReverseWriter implements ItemWriterInterface
     }
 
     /**
-     * @param $entity
-     * @param $magentoRegion
+     * @param Address $entity
+     * @param Region $magentoRegion
      *
      * @return mixed|BAPRegion
      */
     protected function getChangedRegion($entity, $magentoRegion)
     {
-        $magentoRegionCode = $this->accessor->getValue($magentoRegion, 'combined_code');
+        $magentoRegionCode  = $this->accessor->getValue($magentoRegion, 'combined_code');
         $customerRegionCode = $this->accessor->getValue($entity, 'region.combined_code');
-        $contactRegionCode = $this->accessor->getValue($entity, 'contact_address.region.combined_code');
+        $contactRegionCode  = $this->accessor->getValue($entity, 'contact_address.region.combined_code');
 
         if ($magentoRegionCode !== $customerRegionCode) {
             $bapRegion = $this->em->getRepository('OroAddressBundle:Region')
-                ->findOneBy(['combinedCode'=>$magentoRegionCode]);
+                ->findOneBy(['combinedCode' => $magentoRegionCode]);
             $this->accessor->setValue($entity, 'contact_address.region', $bapRegion);
 
             return $bapRegion;
