@@ -62,9 +62,7 @@ class SoapConnectorsFormSubscriber implements EventSubscriberInterface
      */
     protected function modify($data, FormInterface $form)
     {
-        if ($form->getParent()
-            && $form->getParent()->getConfig()->getType()->getInnerType() instanceof ChannelType
-        ) {
+        if ($this->hasChannelParent($form)) {
             $connectors = $form->getParent()->get('connectors');
             if ($connectors) {
                 $config = $connectors->getConfig()->getOptions();
@@ -88,5 +86,20 @@ class SoapConnectorsFormSubscriber implements EventSubscriberInterface
             $form->getParent()
                 ->add('connectors', 'choice', array_merge($config, ['choices' => $allowedTypesChoices]));
         }
+    }
+
+    /**
+     * Check is parent exists and this parent instance of ChannelType
+     *
+     * @param FormInterface $form
+     *
+     * @return bool
+     */
+    private function hasChannelParent(FormInterface $form)
+    {
+        return (
+            $form->getParent()
+            && $form->getParent()->getConfig()->getType()->getInnerType() instanceof ChannelType
+        );
     }
 }
