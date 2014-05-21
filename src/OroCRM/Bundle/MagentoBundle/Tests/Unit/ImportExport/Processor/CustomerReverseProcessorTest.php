@@ -324,6 +324,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                             [
                                 'object' => [],
                                 'entity' => '',
+                                'status' => 'update',
                             ]
                         ]
                     ]
@@ -379,6 +380,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                             [
                                 'object' => [],
                                 'entity' => '',
+                                'status' => 'update',
                             ]
                         ]
                     ]
@@ -511,6 +513,12 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         if (!empty($checkingObject->object['addresses'])) {
             foreach ($checkingObject->object['addresses'] as &$address) {
                 $address['entity'] = $this->address;
+                if (!empty($address['status'])) {
+                    if ('update' === $address['status']) {
+                        $address['object']['country'] = $this->country;
+                        $address['object']['region'] = $this->region;
+                    }
+                }
             }
             unset($address);
         }
