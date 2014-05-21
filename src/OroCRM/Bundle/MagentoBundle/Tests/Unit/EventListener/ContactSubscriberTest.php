@@ -78,7 +78,6 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $this->onFlushEventArgs   = new OnFlushEventArgs($this->em);
         $this->postFlushEventArgs = new PostFlushEventArgs($this->em);
-
     }
 
     public function testGetSubscribedEvents()

@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -18,6 +17,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
@@ -113,7 +113,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             } elseif ($mageField === 'street' && is_array($remoteData[$mageField])) {
                 $accessor->setValue($address, $bapField, $remoteData[$mageField][0]);
                 $accessor->setValue($address, 'street2', $remoteData[$mageField][1]);
-
             } else {
                 $accessor->setValue($address, $bapField, $remoteData[$mageField]);
             }
