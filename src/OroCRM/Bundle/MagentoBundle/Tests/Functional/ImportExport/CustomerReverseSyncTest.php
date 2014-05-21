@@ -54,12 +54,10 @@ class CustomerReverseSyncTest extends WebTestCase
      */
     public function testJobScheduling($twoWaySyncEnabled, $expectedJobsCount)
     {
-        $em = $this->getEM();
-        $em->clear();
+        $em      = $this->getEM();
         $channel = $em->find('OroIntegrationBundle:Channel', self::$channelId);
 
         $channel->setIsTwoWaySyncEnabled($twoWaySyncEnabled);
-        $em->flush();
 
         $this->assertEmpty($this->getRecordsCount('JMSJobQueueBundle:Job'), 'Empty jobs table on start of the test');
 
@@ -78,6 +76,7 @@ class CustomerReverseSyncTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
+        $em->flush();
 
         $this->assertEquals(
             $expectedJobsCount,

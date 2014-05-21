@@ -114,7 +114,7 @@ class ReverseWriter implements ItemWriterInterface
                     if (!empty($item->object['email'])) {
                         $item->object['email'] = $this->emailParser($item->object['email']);
                     }
-                    $this->transport->init($channel->getTransport($customer));
+                    $this->transport->init($channel->getTransport());
                     $localUpdatedData = $this->customerSerializer->normalize($item->entity, null, $item->object);
 
                     // REMOTE WINS
@@ -128,7 +128,7 @@ class ReverseWriter implements ItemWriterInterface
                         $this->em->persist($customer);
                         $customerForMagento = $this->customerSerializer->normalize($customer);
                         $this->updateRemoteData($customer->getOriginId(), $customerForMagento);
-                    } elseif ($channel->getSyncPriority() === ChannelFormTwoWaySyncSubscriber::LOCAL_WINS) {
+                    } else {
                         // local wins
                         $this->updateRemoteData($customer->getOriginId(), $localUpdatedData);
                         $this->setChangedData($customer, $item->object);
