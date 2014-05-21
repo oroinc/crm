@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
 
-
 /**
  * @outputBuffering enabled
  * @dbIsolation
