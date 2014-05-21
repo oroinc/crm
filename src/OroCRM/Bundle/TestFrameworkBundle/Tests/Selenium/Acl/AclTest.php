@@ -28,6 +28,7 @@ class AclTest extends Selenium2TestCase
             ->add()
             ->setLabel($this->newRole['LABEL'] . $randomPrefix)
             ->setOwner('Main')
+            ->setEntity('Role', array('View'), 'System')
             ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
             ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
             ->setEntity('Account', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
@@ -102,9 +103,6 @@ class AclTest extends Selenium2TestCase
             ->submit();
         /** @var Users $login */
         $login->openUsers('Oro\Bundle\UserBundle')
-            ->assertTitle('403 - Forbidden');
-        /** @var Roles $login */
-        $login->openRoles('Oro\Bundle\UserBundle')
             ->assertTitle('403 - Forbidden');
         /** @var Groups $login */
         $login->openGroups('Oro\Bundle\UserBundle')
