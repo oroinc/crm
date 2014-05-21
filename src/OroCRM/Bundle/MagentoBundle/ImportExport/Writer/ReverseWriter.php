@@ -143,7 +143,6 @@ class ReverseWriter implements ItemWriterInterface
                             $customer
                         );
                     }
-
                 } catch (\Exception $e) {
                     //process another entity even in case if exception thrown
                     continue;
