@@ -13,14 +13,8 @@ class OroCrmMagentoBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $integrationTransport = $schema->getTable('oro_integration_transport');
-        $integrationTransport->addColumn('admin_url', 'string', ['notnull' => false, 'length' => 255]);
-
         $orderTable = $schema->getTable('orocrm_magento_order');
         $orderTable->dropIndex('UNIQ_4D09F3051AD5CDBF');
         $orderTable->addIndex(['cart_id'], 'IDX_4D09F3051AD5CDBF');
-
-        $chart = $schema->getTable('orocrm_magento_cart');
-        $chart->addColumn('status_message', 'string', ['notnull' => false, 'length' => 255]);
     }
 }

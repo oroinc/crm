@@ -17,7 +17,7 @@ class OroCRMTaskExtensionTest extends \PHPUnit_Framework_TestCase
      */
     private $container;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->container = new ContainerBuilder();
         $this->extension = new OroCRMTaskExtension();

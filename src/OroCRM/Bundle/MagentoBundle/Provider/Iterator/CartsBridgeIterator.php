@@ -6,12 +6,16 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class CartsBridgeIterator extends AbstractBridgeIterator
 {
+    const NOT_LOGGED_IN = 'NOT LOGGED IN';
+
     /**
      * {@inheritdoc}
      */
     protected function applyFilter()
     {
-        $this->filter->addStoreFilter($this->getStoresByWebsiteId($this->websiteId));
+        if ($this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+            $this->filter->addStoreFilter($this->getStoresByWebsiteId($this->websiteId));
+        }
         parent::applyFilter();
     }
 
@@ -50,7 +54,7 @@ class CartsBridgeIterator extends AbstractBridgeIterator
     {
         parent::addDependencyData($result);
 
-        $customer_group              = $this->dependencies[self::ALIAS_GROUPS][$result->customer_group_id];
+        $customer_group              = $this->dependencies[self::ALIAS_GROUPS][$this->getGroupId($result)];
         $result->customer_group_code = $customer_group['customer_group_code'];
         $result->customer_group_name = $customer_group['name'];
     }
@@ -73,5 +77,41 @@ class CartsBridgeIterator extends AbstractBridgeIterator
     protected function getIdFieldName()
     {
         return 'entity_id';
+    }
+
+    /**
+     * HotFix for BAP-4161, because $result->customer_group_id not present in some cases and we need to set
+     * NOT_LOGGED_IN into $customer_group if value does not exists
+     *
+     * @param $result
+     *
+     * @return int
+     */
+    protected function getGroupId($result)
+    {
+        if (empty($result->customer_group_id)) {
+            $groupId = false;
+
+            foreach ($this->dependencies['groups'] as $group) {
+                if (self::NOT_LOGGED_IN === $group['customer_group_code']) {
+                    $groupId = $group['id'];
+                    break;
+                }
+            }
+            unset($group);
+
+            if (false === $groupId) {
+                reset($this->dependencies['groups']);
+                $currentElement = current($this->dependencies['groups']);
+
+                if (!empty($currentElement)) {
+                    $groupId = $currentElement['id'];
+                }
+            }
+        } else {
+            $groupId = $result->customer_group_id;
+        }
+
+        return $groupId;
     }
 }

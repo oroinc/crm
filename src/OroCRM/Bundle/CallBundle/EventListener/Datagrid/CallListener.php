@@ -32,13 +32,13 @@ class CallListener
     public function onBuildBefore(BuildBefore $event)
     {
         $config = $event->getConfig();
-        $parameters = $event->getParameters();
+        $parameters = $event->getDatagrid()->getParameters();
 
-        if (!empty($parameters['contactId'])) {
+        if ($parameters->has('contactId')) {
             $this->removeColumn($config, 'contactName');
         }
 
-        if (!empty($parameters['accountId'])) {
+        if ($parameters->has('accountId')) {
             $this->removeColumn($config, 'accountName');
         }
     }
@@ -61,34 +61,35 @@ class CallListener
      */
     public function onBuildAfter(BuildAfter $event)
     {
+        $datagrid = $event->getDatagrid();
         /** @var OrmDatasource $ormDataSource */
-        $ormDataSource = $event->getDatagrid()->getDatasource();
+        $ormDataSource = $datagrid->getDatasource();
         $queryBuilder = $ormDataSource->getQueryBuilder();
-        $parameters = $event->getParameters();
+        $parameters = $datagrid->getParameters();
 
-        if (!empty($parameters['userId'])) {
-            $user = $this->entityManager->find('OroUserBundle:User', $parameters['userId']);
+        if ($parameters->has('userId')) {
+            $user = $this->entityManager->find('OroUserBundle:User', $parameters->get('userId'));
             $queryBuilder
                 ->andWhere('call.owner = :user')
                 ->setParameter('user', $user);
         }
 
-        if (!empty($parameters['contactId'])) {
-            $contact = $this->entityManager->find('OroCRMContactBundle:Contact', $parameters['contactId']);
+        if ($parameters->has('contactId')) {
+            $contact = $this->entityManager->find('OroCRMContactBundle:Contact', $parameters->get('contactId'));
             $queryBuilder
                 ->andWhere('call.relatedContact = :contact')
                 ->setParameter('contact', $contact);
         }
 
-        if (!empty($parameters['accountId'])) {
-            $account = $this->entityManager->find('OroCRMAccountBundle:Account', $parameters['accountId']);
+        if ($parameters->has('accountId')) {
+            $account = $this->entityManager->find('OroCRMAccountBundle:Account', $parameters->get('accountId'));
             $queryBuilder
                 ->andWhere('(call.relatedAccount = :account OR :account MEMBER OF contact.accounts)')
                 ->setParameter('account', $account);
         }
 
-        if (array_key_exists('callIds', $parameters)) {
-            $callIds = $parameters['callIds'];
+        if ($parameters->has('callIds')) {
+            $callIds = $parameters->get('callIds');
             if (!is_array($callIds)) {
                 $callIds = explode(',', $callIds);
             }

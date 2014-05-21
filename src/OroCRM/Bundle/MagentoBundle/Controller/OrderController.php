@@ -22,13 +22,13 @@ use OroCRM\Bundle\MagentoBundle\Entity\Order;
 class OrderController extends Controller
 {
     /**
-     * @Route("/{id}", name="orocrm_magento_order_index", requirements={"id"="\d+"}))
+     * @Route("/", name="orocrm_magento_order_index")
      * @AclAncestor("orocrm_magento_order_view")
      * @Template
      */
-    public function indexAction(Channel $channel)
+    public function indexAction()
     {
-        return ['channelId' => $channel->getId()];
+        return [];
     }
 
     /**
@@ -72,11 +72,27 @@ class OrderController extends Controller
      *        name="orocrm_magento_widget_customer_orders",
      *        requirements={"customerId"="\d+", "channelId"="\d+"}
      * )
+     * @AclAncestor("orocrm_magento_order_view")
      * @ParamConverter("customer", class="OroCRMMagentoBundle:Customer", options={"id"="customerId"})
      * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id"="channelId"})
      * @Template
      */
     public function customerOrdersAction(Customer $customer, Channel $channel)
+    {
+        return array('customer' => $customer, 'channel' => $channel);
+    }
+
+    /**
+     * @Route(
+     *        "/customer-widget/customer-orders/{customerId}/{channelId}",
+     *        name="orocrm_magento_customer_orders_widget",
+     *        requirements={"customerId"="\d+", "channelId"="\d+"}
+     * )
+     * @ParamConverter("customer", class="OroCRMMagentoBundle:Customer", options={"id"="customerId"})
+     * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id"="channelId"})
+     * @Template
+     */
+    public function customerOrdersWidgetAction(Customer $customer, Channel $channel)
     {
         return array('customer' => $customer, 'channel' => $channel);
     }

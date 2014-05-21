@@ -142,6 +142,10 @@ workflows:
                                         name: $new_company_name
                                         extendWebsite: $lead.website
                                         extendEmployees: $lead.numberOfEmployees
+                    - @call_method: # connect Account with Contact
+                        object: $new_account
+                        method: addContact
+                        method_parameters: [$lead.contact]
                     - @create_entity: # create an opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $opportunity

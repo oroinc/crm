@@ -2,8 +2,9 @@ oro.importexport.import.orocrm_contact.add_or_replace: Add and Replace
 orocrm:
     dashboard:
         my_contacts_activity:
-            title: Recently accessed contacts
-            view_all: View all
+            title:       Recently accessed contacts
+            view_all:    View all
+            description: This widget displays the list of recently accessed contacts
 
     contact:
         menu:
@@ -48,6 +49,8 @@ orocrm:
         add_entity:        Add contact
         id.label:          Id
         phones.label:      Phones
+        primary_email.label:  Primary Email
+        primary_phone.label:  Primary Phone
         email.label:       Email
         emails.label:      Emails
         skype.label:       Skype
@@ -138,6 +141,7 @@ orocrm:
             entity_label:        Contact Group
             entity_plural_label: Contact Groups
             entity_description:  Represent contact's group
+            manage:              Manage groups
             id.label:    Id
             owner.label: Owner
             label.label: Label

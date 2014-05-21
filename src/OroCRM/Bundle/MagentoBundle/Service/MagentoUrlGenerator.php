@@ -8,13 +8,17 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Exception\AdminUrlRequiredException;
 use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
+use OroCRM\Bundle\MagentoBundle\Exception\Exception as MagentoBundleException;
 
 class MagentoUrlGenerator
 {
     const GATEWAY_ROUTE   = 'oro_gateway/do';
     const NEW_ORDER_ROUTE = 'oro_sales/newOrder';
-    const ERROR_MESSAGE = 'orocrm.magento.controller.transport_not_configure';
+    const EXTENSION_REQUIRED_ERROR_MESSAGE = 'orocrm.magento.controller.extension_required';
+    const DEFAULT_ERROR_MESSAGE = 'orocrm.magento.controller.transport_not_configure';
 
     /**
      * @var Channel
@@ -153,20 +157,23 @@ class MagentoUrlGenerator
 
     /**
      * @return string
-     * @throws ExtensionRequiredException
+     * @throws AdminUrlRequiredException
      */
     public function getAdminUrl()
     {
         $url = false;
-        if (!empty($this->channel)) {
+
+        if ($this->getChannel() && $this->getChannel()->getTransport()) {
             $transport = $this->getChannel()->getTransport();
-            if (!empty($transport)) {
+            if ($transport instanceof MagentoSoapTransport) {
                 $url = $transport->getAdminUrl();
             }
         }
-        if (empty($url)) {
-            throw new ExtensionRequiredException();
+
+        if (!$url) {
+            throw new AdminUrlRequiredException();
         }
+
         return $url;
     }
 
@@ -201,9 +208,9 @@ class MagentoUrlGenerator
                 urlencode($this->generateUrl($errorRoute, [], UrlGeneratorInterface::ABSOLUTE_URL))
             );
         } catch (ExtensionRequiredException $e) {
-            $this->setError($e->getMessage());
-        } catch (\LogicException $e) {
-            $this->setError(self::ERROR_MESSAGE);
+            $this->setError(self::EXTENSION_REQUIRED_ERROR_MESSAGE);
+        } catch (MagentoBundleException $e) {
+            $this->setError(self::DEFAULT_ERROR_MESSAGE);
         }
         return $this;
     }
@@ -225,7 +232,7 @@ class MagentoUrlGenerator
     {
         $url = $this->getRouter()->generate($route, $parameters, $referenceType);
         if (empty($url)) {
-            throw new RouteNotFoundException('orocrm.magento.exception.route_not_found');
+            throw new RouteNotFoundException('Route cannot be generated, route not found.');
         }
         return $url;
     }

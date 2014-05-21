@@ -21,13 +21,13 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 class CustomerController extends Controller
 {
     /**
-     * @Route("/{id}", name="orocrm_magento_customer_index", requirements={"id"="\d+"}))
+     * @Route("/", name="orocrm_magento_customer_index")
      * @AclAncestor("orocrm_magento_customer_view")
      * @Template
      */
-    public function indexAction(Channel $channel)
+    public function indexAction()
     {
-        return ['channelId' => $channel->getId()];
+        return [];
     }
 
     /**
@@ -96,6 +96,16 @@ class CustomerController extends Controller
      * @Template
      */
     public function placeOrderAction(Customer $customer)
+    {
+        return ['entity' => $customer];
+    }
+
+    /**
+     * @Route("/addressBook/{id}", name="orocrm_magento_customer_address_book", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_customer_view")
+     * @Template
+     */
+    public function addressBookAction(Customer $customer)
     {
         return ['entity' => $customer];
     }

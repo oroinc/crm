@@ -1,0 +1,136 @@
+<?php
+
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Writer;
+
+use Doctrine\ORM\EntityManager;
+
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
+
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
+use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
+
+class ReverseWriterTest extends \PHPUnit_Framework_TestCase
+{
+    const TEST_FIRSTNAME = 'fname';
+    const TEST_LASTNAME  = 'lname';
+
+    const TEST_CUSTOMER_ID        = 123;
+    const TEST_CUSTOMER_FIRSTNAME = 'customer fname';
+    const TEST_CUSTOMER_LASTNAME  = 'customer lname';
+
+    /** @var EntityManager|\PHPUnit_Framework_MockObject_MockObject */
+    protected $em;
+
+    /** @var CustomerSerializer */
+    protected $customerSerializer;
+
+    /** @var AddressNormalizer */
+    protected $addressNormalizer;
+
+    /** @var SoapTransport|\PHPUnit_Framework_MockObject_MockObject */
+    protected $transport;
+
+    /** @var AddressImportHelper|\PHPUnit_Framework_MockObject_MockObject */
+    protected $addressImportHelper;
+
+    /** @var RegionConverter|\PHPUnit_Framework_MockObject_MockObject */
+    protected $regionConverter;
+
+    /** @var ReverseWriter */
+    protected $writer;
+
+    public function setUp()
+    {
+        $this->em        = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()->getMock();
+        $this->transport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport')
+            ->disableOriginalConstructor()->getMock();
+        $this->addressImportHelper = $this
+            ->getMockBuilder('OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper')
+            ->disableOriginalConstructor()->getMock();
+        $this->regionConverter = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Converter\RegionConverter')
+            ->disableOriginalConstructor()->getMock();
+
+        $this->customerSerializer = new CustomerSerializer($this->em);
+        $this->addressNormalizer  = new AddressNormalizer();
+
+        $this->writer = new ReverseWriter(
+            $this->em,
+            $this->customerSerializer,
+            $this->addressNormalizer,
+            $this->transport,
+            $this->addressImportHelper,
+            $this->regionConverter
+        );
+    }
+
+    public function tearDown()
+    {
+        unset(
+            $this->em,
+            $this->customerSerializer,
+            $this->addressImportHelper,
+            $this->addressNormalizer,
+            $this->regionConverter,
+            $this->transport,
+            $this->writer
+        );
+    }
+
+    public function testWriteMinimalChanges()
+    {
+        $transportSetting = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Transport');
+        $channel          = new Channel();
+        $channel->setSyncPriority(ChannelFormTwoWaySyncSubscriber::LOCAL_WINS);
+        $channel->setTransport($transportSetting);
+        $customer = new Customer();
+        $customer->setChannel($channel);
+        $customer->setFirstName(self::TEST_CUSTOMER_FIRSTNAME);
+        $customer->setLastName(self::TEST_CUSTOMER_LASTNAME);
+        $customer->setOriginId(self::TEST_CUSTOMER_ID);
+
+        $self = $this;
+        $this->transport->expects($this->once())->method('init');
+        $this->em->expects($this->once())->method('flush');
+        $this->em->expects($this->once())->method('persist')
+            ->will(
+                $this->returnCallback(
+                    function (Customer $customer) use ($self) {
+                        $self->assertEquals($customer->getFirstName(), self::TEST_FIRSTNAME);
+                        $self->assertEquals($customer->getLastName(), self::TEST_LASTNAME);
+                    }
+                )
+            );
+
+        $this->transport->expects($this->once())->method('call')
+            ->with(
+                $this->equalTo(SoapTransport::ACTION_CUSTOMER_UPDATE),
+                $this->equalTo(
+                    [
+                        'customerId' => self::TEST_CUSTOMER_ID,
+                        'customerData' => ['firstname' => self::TEST_FIRSTNAME, 'lastname' => self::TEST_LASTNAME]
+                    ]
+                )
+            );
+
+        $data = [];
+        array_push(
+            $data,
+            (object)[
+                'entity' => $customer,
+                'object' => [
+                    'first_name' => self::TEST_FIRSTNAME,
+                    'last_name'  => self::TEST_LASTNAME
+                ]
+            ]
+        );
+
+        $this->writer->write($data);
+    }
+}

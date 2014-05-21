@@ -9,12 +9,12 @@ class OrderPlaceTypeTest extends \PHPUnit_Framework_TestCase
     /** @var OrderPlaceType */
     protected $type;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->type = new OrderPlaceType();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->type);
     }

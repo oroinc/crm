@@ -2,6 +2,11 @@
 
 orocrm:
     magento:
+        dashboard:
+            my_sales_flow_b2c_chart:
+                title: My Sales Flow B2C
+                description: This widget gives you a quick overview of a B2C workflow in form of a funnel chart
+
         datagrid:
             actions:
                 view:
@@ -49,6 +54,8 @@ orocrm:
                 taxPercent:       Tax percent
                 taxAmount:        Tax amount
                 rowTotal:         Row total
+                billing_country:  Billing country
+                billing_region:   Billing state
         channel_type:
             label:  Magento
         transport:
@@ -71,7 +78,7 @@ orocrm:
             entity_plural_label: Customers
             entity_description:  Represent Magento customer
             create_order:        Create Order
-
+            sales.label:         Sales
             id.label:            Id
             origin_id.label:     Origin Id
             name_prefix.label:   Name prefix
@@ -82,8 +89,8 @@ orocrm:
             gender.label:        Gender
             birthday.label:      Birthday
             email.label:         Email
-            created_at.label:    Created at
-            updated_at.label:    Updated at
+            created_at.label:    Created on
+            updated_at.label:    Updated on
             is_active.label:     Is active
             vat.label:           Tax/Vat
             website.label:       Website
@@ -96,13 +103,23 @@ orocrm:
             channel.label:       Channel
             name.label:          Name
             orders.label:        Customer orders
+            lifetime.label:      Lifetime value
+            currency.label:      Currency
+
+        customergroup:
+            entity_label:        Customer Group
+            entity_plural_label: Customer Groups
+            name.label:          Name
+            id.label:            Id
+            origin_id.label:     Origin Id
+            channel.label:       Channel
 
         cart:
             entity_label:         Shopping Cart
             entity_plural_label:  Shopping Carts
             entity_description:   Represent Magento shopping cart
 
-            refresh_label:             Refresh Data
+            refresh_label:             Sync Data
 
             id.label:                  Cart Id
             origin_id.label:           Origin Id
@@ -125,10 +142,11 @@ orocrm:
                 active:                Active
                 converted:             Converted
             sub_total.label:           Sub total
+            sub_total_amount.label:    Subtotal Amount
             grand_total.label:         Grand total
             tax_amount.label:          Tax
-            created_at.label:          Created at
-            updated_at.label:          Updated at
+            created_at.label:          Created on
+            updated_at.label:          Updated on
             cart_items.label:          Cart Items
             customer.label:            Customer
             store.label:               Store
@@ -141,6 +159,8 @@ orocrm:
             related_calls.label:       Calls
             workflow_item.label:       Workflow item
             workflow_step.label:       Workflow step
+            website.label:             Website
+            status_message.label:      Status message
 
         cartitem:
             entity_label:              Shopping Cart Item
@@ -171,56 +191,55 @@ orocrm:
             cart.label:                Cart
 
         cartstatus:
-            entity_label:              Shopping Cart Status
-            entity_plural_label:       Shopping Cart Statuses
-            label.label:               Label
-            name.label:                Name
+            entity_label:        Shopping Cart Status
+            entity_plural_label: Shopping Cart Statuses
+            label.label:         Label
+            name.label:          Name
 
         orderitem:
-            entity_label:              Order Item
-            entity_plural_label:       Order Items
-            discount_amount.label:     Discount amount
-            discount_percent.label:    Discount percent
-            id.label:                  Cart item id
-            is_virtual.label:          Is virtual
-            name.label:                Name
-            origin_id.label:           Origin order item id
-            original_price.label:      Original price
-            price.label:               Price
-            product_options.label:     Product options
-            product_type.label:        Product type
-            qty.label:                 Qty
-            row_total.label:           Row total
-            tax_amount.label:          Tax amount
-            tax_percent.label:         Tax percent
-            weight.label:              Weight
-            sku.label:                 Sku
+            entity_label:           Order Item
+            entity_plural_label:    Order Items
+            discount_amount.label:  Discount amount
+            discount_percent.label: Discount percent
+            id.label:               Cart item id
+            is_virtual.label:       Is virtual
+            name.label:             Name
+            order.label:            Order
+            origin_id.label:        Origin order item id
+            original_price.label:   Original price
+            price.label:            Price
+            product_options.label:  Product options
+            product_type.label:     Product type
+            qty.label:              Qty
+            row_total.label:        Row total
+            sku.label:              Sku
+            tax_amount.label:       Tax amount
+            tax_percent.label:      Tax percent
+            weight.label:           Weight
 
         magentosoaptransport:
-            entity_label:        Integration Channel Transport
-            entity_plural_label: Integration Channel Transports
-            entity_description:  Represent integration channel transport
-
-            id.label:                     Id
-            wsdl_url.label:               SOAP WSDL URL
+            admin_url.label:              Admin url
+            all_sites:                    All web sites
             api_user.label:               SOAP API User
             api_key.label:                SOAP API Key
-            sync_start_date:
-                label:   Sync start date
-            sync_range.label:               Sync range
-            wsi_mode.label:                 WS-I Compliance
-            websites.label:                 Websites
-            website_id:
-                label:   Website
-            is_extension_installed.label:   Is extension installed
-            admin_url.label:                Admin url
+            entity_description:           Represent integration channel transport
+            entity_label:                 Integration Channel Transport
+            entity_plural_label:          Integration Channel Transports
+            id.label:                     Id
+            is_extension_installed.label: Is extension installed
+            is_wsi_mode.label:            WS-I Compliance
+            sync_start_date.label:        Sync start date
+            sync_range.label:             Sync range
+            website_id.label:             Website
+            websites.label:               Websites
+            wsdl_url.label:               SOAP WSDL URL
 
         order:
             entity_label:        Order
             entity_plural_label: Orders
             entity_description:  Respresent Magento Order
 
-            refresh_label:      Refresh Data
+            refresh_label:      Sync Data
             id.label:           Id
             increment_id.label: "Order #"
             items_qty.label:    Items qty
@@ -261,6 +280,7 @@ orocrm:
             related_calls.label:    Calls
             workflow_item.label:    Workflow item
             workflow_step.label:    Workflow step
+            website.label:          Website
 
         product:
             entity_label:         Product
@@ -335,11 +355,9 @@ orocrm:
         menu.web_customers: Web Customers
         controller:
             transport_not_configure:       Unable to handle your request. Invalid channel configuration detected.
+            extension_required:            Unable to perform this operation, Oro Bridge extension not found.
             synchronization_error:         Unable to synchronize from remote.
             sync_error_with_magento:       Synchronization with remote server failed and orders should be re-synced. If the problem persists, please contact your Administrator.
             synchronization_success:       Data successfuly synchronized.
             synchronization_failed_status: Cart data is not up to date
-        exception:
-          extension_required: Unable to perform this operation, Oro Bridge extension not found.
-          route_not_found: Route cannot be generated, route not found.
         ping_site_error: Unable to load form

@@ -14,7 +14,7 @@ class AccountWidgetsDataGridListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $requestParams;
+    protected $parameters;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -36,42 +36,50 @@ class AccountWidgetsDataGridListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected $queryBuilder;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->requestParams = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\RequestParameters')
+        $this->parameters = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\ParameterBag')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->event = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Event\BuildAfter')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dataGrid = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+
         $this->queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->dataGrid = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->dataGrid->expects($this->any())
+            ->method('getParameters')
+            ->will($this->returnValue($this->parameters));
+
+        $this->event = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Event\BuildAfter')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->event->expects($this->any())
+            ->method('getDatagrid')
+            ->will($this->returnValue($this->dataGrid));
+
+        $this->dataSource = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
-    public function init($params = array(), $dataSourceInstants = null)
+    public function testOnBuildAfterWithOrmDataSource()
     {
-        $this->dataSource = $dataSourceInstants ? $dataSourceInstants :
-            $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource')
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->dataGrid->expects($this->once())
+            ->method('getDatasource')
+            ->will($this->returnValue($this->dataSource));
 
-        $this->dataGrid->expects($this->any())->method('getDatasource')->will($this->returnValue($this->dataSource));
-        $this->event->expects($this->any())->method('getDatagrid')->will($this->returnValue($this->dataGrid));
-        $this->dataSource->expects($this->any())
+        $this->dataSource->expects($this->once())
             ->method('getQueryBuilder')
             ->will($this->returnValue($this->queryBuilder));
-        $this->target = new AccountWidgetsDataGridListener($this->requestParams, $params);
-    }
 
-    public function testOnBuildAfterSetParams()
-    {
         $id = rand();
         $name = 'name_'.rand();
-        $this->requestParams->expects($this->any())
+        $this->parameters->expects($this->any())
             ->method('get')
             ->will(
                 $this->returnValueMap(
@@ -81,11 +89,15 @@ class AccountWidgetsDataGridListenerTest extends \PHPUnit_Framework_TestCase
                     )
                 )
             );
-        $keys = array('id', 'name');
-        $expected = array('id' => $id, 'name' => $name);
-        $this->init($keys);
-        $this->queryBuilder->expects($this->once())->method('setParameters')->with($this->equalTo($expected));
-        $this->target->onBuildAfter($this->event);
+
+        $parameters = array('id', 'name');
+        $expectedParams = array('id' => $id, 'name' => $name);
+
+        $this->queryBuilder->expects($this->once())
+            ->method('setParameters')
+            ->with($this->equalTo($expectedParams));
+
+        $this->createListener($parameters)->onBuildAfter($this->event);
     }
 
     public function testOnBuildAfterChecksDataSourceType()
@@ -93,8 +105,21 @@ class AccountWidgetsDataGridListenerTest extends \PHPUnit_Framework_TestCase
         $dataSource = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->init(array(), $dataSource);
+
+        $this->dataGrid->expects($this->once())
+            ->method('getDatasource')
+            ->will($this->returnValue($dataSource));
+
         $this->queryBuilder->expects($this->never())->method('setParameters');
-        $this->target->onBuildAfter($this->event);
+        $this->createListener(array())->onBuildAfter($this->event);
+    }
+
+    /**
+     * @param array $params
+     * @return AccountWidgetsDataGridListener
+     */
+    protected function createListener(array $params)
+    {
+        return new AccountWidgetsDataGridListener($params);
     }
 }

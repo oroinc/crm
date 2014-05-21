@@ -8,7 +8,7 @@ use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Router
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $router;
 
@@ -18,34 +18,30 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
     private $urlGenerator;
 
     /**
-     * @var \Oro\Bundle\IntegrationBundle\Entity\Channel
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $channel;
 
     /**
-     * @var \OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $transport;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
                         ->disableOriginalConstructor()
                         ->getMock();
-
         $this->urlGenerator = new MagentoUrlGenerator($this->router);
-
         $this->channel = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->transport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
             ->disableOriginalConstructor()
             ->getMock();
-
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset(
             $this->urlGenerator,
@@ -77,7 +73,6 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         if ($value !== null) {
             call_user_func_array(array($this->urlGenerator, 'set' . ucfirst($property)), array($value));
         }
-
         $this->assertEquals(
             $expected,
             call_user_func_array(array($this->urlGenerator, 'get' . ucfirst($property)), array())
@@ -117,21 +112,18 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGetAdminUrl($url)
     {
         $this->transport
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('getAdminUrl')
             ->will(
                 $this->returnValue($url)
             );
-
         $this->channel
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('getTransport')
             ->will(
                 $this->returnValue($this->transport)
             );
-
         $this->urlGenerator->setChannel($this->channel);
-
         $this->assertEquals(
             $url,
             $this->urlGenerator->getAdminUrl()
@@ -176,27 +168,27 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
                   '&success_url=' . urlencode($successUrl) .
                   '&error_url=' . urlencode($errorUrl);
 
-        $this->transport->expects($this->once())->method('getAdminUrl')->will($this->returnValue($adminUrl));
-        $this->channel->expects($this->once())->method('getTransport')->will($this->returnValue($this->transport));
+        $this->transport->expects($this->atLeastOnce())->method('getAdminUrl')->will($this->returnValue($adminUrl));
+
+        $this->channel->expects($this->atLeastOnce())
+            ->method('getTransport')
+            ->will($this->returnValue($this->transport));
 
         $this->router
             ->expects($this->at(0))
             ->method('generate')
             ->with($this->equalTo($successRoute))
             ->will($this->returnValue($successUrl));
-
         $this->router
             ->expects($this->at(1))
             ->method('generate')
             ->with($this->equalTo($errorRoute))
             ->will($this->returnValue($errorUrl));
-
         $urlGenerator = new MagentoUrlGenerator($this->router);
         $urlGenerator->setChannel($this->channel);
         $urlGenerator->setFlowName($flowName);
         $urlGenerator->setOrigin($origin);
         $urlGenerator->generate($id, $successRoute, $errorRoute);
-
         $this->assertEquals(
             $result,
             $urlGenerator->getSourceUrl()
@@ -212,13 +204,13 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $errorUrl = 'http://localhost/magento/error';
         $flowName = 'flowName';
         $origin = 'cusomer';
-        $Exception = new ExtensionRequiredException;
+        $exception = new ExtensionRequiredException;
 
         return [
             [144, $successRoute, $errorRoute, $adminUrl,  $successUrl, $errorUrl, $flowName, $origin],
-            [356, $successRoute, $errorRoute, $Exception, $successUrl, $errorUrl, $flowName, $origin],
-            [543, $Exception,    $errorRoute, $adminUrl,  $successUrl, $errorUrl, $flowName, $origin],
-            [632, $successRoute, $Exception,  $adminUrl,  $successUrl, $errorUrl, $flowName, $origin],
+            [356, $successRoute, $errorRoute, $exception, $successUrl, $errorUrl, $flowName, $origin],
+            [543, $exception,    $errorRoute, $adminUrl,  $successUrl, $errorUrl, $flowName, $origin],
+            [632, $successRoute, $exception,  $adminUrl,  $successUrl, $errorUrl, $flowName, $origin],
         ];
     }
 }

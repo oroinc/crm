@@ -2,7 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-class CustomerConnector extends AbstractMagentoConnector
+use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
+
+class CustomerConnector extends AbstractMagentoConnector implements TwoWaySyncConnectorInterface
 {
     /**
      * {@inheritdoc}
@@ -31,6 +33,14 @@ class CustomerConnector extends AbstractMagentoConnector
     /**
      * {@inheritdoc}
      */
+    public function getExportJobName()
+    {
+        return 'mage_customer_reverse_sync';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getType()
     {
         return 'customer';
@@ -42,5 +52,13 @@ class CustomerConnector extends AbstractMagentoConnector
     protected function getConnectorSource()
     {
         return $this->transport->getCustomers();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function supportsForceSync()
+    {
+        return true;
     }
 }

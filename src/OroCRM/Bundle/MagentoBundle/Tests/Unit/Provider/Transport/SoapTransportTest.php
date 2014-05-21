@@ -31,7 +31,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
     /** @var string */
     protected $decryptedApiKey = 'api_key';
 
-    public function setUp()
+    protected function setUp()
     {
         $encoder = $this->getMock('Oro\Bundle\SecurityBundle\Encoder\Mcrypt');
         $encoder->expects($this->any())
@@ -56,7 +56,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->settings));
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->transport, $this->transportEntity, $this->settings, $this->encoder, $this->soapClientMock);
     }
@@ -251,7 +251,6 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
     public function testIsExtensionInstalled($expectedResult, $soapResult, $throwsException = false)
     {
         $this->initSettings();
-
         if ($throwsException) {
             $this->soapClientMock->expects($this->at(1))
                 ->method('__soapCall')
@@ -265,10 +264,8 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->transport->init($this->transportEntity);
-
         $result1 = $this->transport->isExtensionInstalled();
         $result2 = $this->transport->isExtensionInstalled();
-
         $this->assertSame($result1, $result2, 'All results should be same, and call remote service only once');
         $this->assertSame($expectedResult, $result1);
     }
@@ -283,7 +280,6 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
     public function testGetAdminUrl($expectedResult, $soapResult, $throwsException = false)
     {
         $this->initSettings();
-
         if ($throwsException) {
             $this->soapClientMock->expects($this->at(1))
                 ->method('__soapCall')
@@ -295,15 +291,10 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
                 ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
                 ->will($this->returnValue($soapResult));
         }
-
         $this->transport->init($this->transportEntity);
-
         $result1 = $this->transport->getAdminUrl();
-
         $result2 = $this->transport->getAdminUrl();
-
         $this->assertSame($result1, $result2, 'All results should be same, and call remote service only once');
-
         $this->assertSame($expectedResult, $result1);
     }
 

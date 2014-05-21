@@ -1,0 +1,12 @@
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+<div class="widget-content">
+    {{
+        dataGrid.renderGrid(
+            'magento-customer-orders-widget-grid', {
+                'customerId': customer.id,
+                'channelId': channel.id
+            }
+        )
+    }}
+</div>

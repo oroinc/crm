@@ -83,6 +83,21 @@ class CallController extends Controller
     }
 
     /**
+     * @Route("/base-widget", name="orocrm_call_base_widget_calls")
+     * @Template
+     * @AclAncestor("orocrm_call_view")
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function baseCallsAction(Request $request)
+    {
+        return array(
+            'datagridParameters' => $request->query->all()
+        );
+    }
+
+    /**
      * @Route("/widget/info/{id}", name="orocrm_call_widget_info", requirements={"id"="\d+"})
      * @Template
      * @AclAncestor("orocrm_call_view")

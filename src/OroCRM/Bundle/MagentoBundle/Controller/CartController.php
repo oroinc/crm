@@ -21,13 +21,13 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 class CartController extends Controller
 {
     /**
-     * @Route("/{id}", name="orocrm_magento_cart_index", requirements={"id"="\d+"}))
+     * @Route("/", name="orocrm_magento_cart_index")
      * @AclAncestor("orocrm_magento_cart_view")
      * @Template
      */
-    public function indexAction(Channel $channel)
+    public function indexAction()
     {
-        return ['channelId' => $channel->getId()];
+        return [];
     }
 
     /**
@@ -80,6 +80,23 @@ class CartController extends Controller
     {
         return array('customer' => $customer, 'channel' => $channel);
     }
+
+    /**
+     * @Route(
+     *        "/widget/customer_cart/{customerId}/{channelId}",
+     *         name="orocrm_magento_customer_carts_widget",
+     *         requirements={"customerId"="\d+", "channelId"="\d+"}
+     * )
+     * @AclAncestor("orocrm_magento_cart_view")
+     * @ParamConverter("customer", class="OroCRMMagentoBundle:Customer", options={"id" = "customerId"})
+     * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id" = "channelId"})
+     * @Template
+     */
+    public function customerCartsWidgetAction(Customer $customer, Channel $channel)
+    {
+        return array('customer' => $customer, 'channel' => $channel);
+    }
+
 
     /**
      * @Route("/actualize/{id}", name="orocrm_magento_cart_actualize", requirements={"id"="\d+"}))

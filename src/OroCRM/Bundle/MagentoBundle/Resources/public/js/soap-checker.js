@@ -111,10 +111,8 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
             }
 
             if (success) {
-
                 var $isExtensionInstalledEl = $(this.options.isExtensionInstalledEl),
                     $adminUrlEl = $(this.options.adminUrlEl);
-
                 $isExtensionInstalledEl.val(res.isExtensionInstalled || false ? 1 : 0);
                 $adminUrlEl.val((res.adminUrl) ? res.adminUrl : '');
             }
@@ -146,7 +144,6 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
                     }
                 }
             }
-
             this.renderResult(success ? 'success' : 'error', message);
         },
 

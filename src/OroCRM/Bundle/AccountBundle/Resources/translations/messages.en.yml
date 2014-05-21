@@ -1,8 +1,11 @@
+Addresses: Addresses
+Basic Information: Basic Information
 orocrm:
     dashboard:
         my_accounts_activity:
             title:                  Recently accessed accounts
             view_all:               View all
+            description:            This widget displays the list of recently accessed accounts
 
     account:
         menu:
