@@ -43,6 +43,8 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
  *      }
  *  }
  * )
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Order extends BaseOrder
 {
@@ -206,6 +208,13 @@ class Order extends BaseOrder
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowStep;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="customer_email", type="string", length=255, nullable=true)
+     */
+    protected $customerEmail;
 
     /**
      * @param WorkflowItem $workflowItem
@@ -658,5 +667,25 @@ class Order extends BaseOrder
         );
 
         return $addresses->first();
+    }
+
+    /**
+     * @param string $customerEmail
+     *
+     * @return $this
+     */
+    public function setCustomerEmail($customerEmail)
+    {
+        $this->customerEmail = $customerEmail;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerEmail()
+    {
+        return $this->customerEmail;
     }
 }

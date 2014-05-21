@@ -29,17 +29,23 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
  */
 class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterface
 {
-    const ACTION_CUSTOMER_LIST = 'customerCustomerList';
-    const ACTION_CUSTOMER_INFO = 'customerCustomerInfo';
-    const ACTION_ADDRESS_LIST  = 'customerAddressList';
-    const ACTION_GROUP_LIST    = 'customerGroupList';
-    const ACTION_STORE_LIST    = 'storeList';
-    const ACTION_ORDER_LIST    = 'salesOrderList';
-    const ACTION_ORDER_INFO    = 'salesOrderInfo';
-    const ACTION_CART_INFO     = 'shoppingCartInfo';
-    const ACTION_COUNTRY_LIST  = 'directoryCountryList';
-    const ACTION_REGION_LIST   = 'directoryRegionList';
-    const ACTION_PING          = 'oroPing';
+    const ACTION_CUSTOMER_LIST           = 'customerCustomerList';
+    const ACTION_CUSTOMER_INFO           = 'customerCustomerInfo';
+    const ACTION_CUSTOMER_UPDATE         = 'customerCustomerUpdate';
+    const ACTION_CUSTOMER_DELETE         = 'customerCustomerDelete';
+    const ACTION_CUSTOMER_ADDRESS_INFO   = 'customerAddressInfo';
+    const ACTION_CUSTOMER_ADDRESS_UPDATE = 'customerAddressUpdate';
+    const ACTION_CUSTOMER_ADDRESS_DELETE = 'customerAddressDelete';
+    const ACTION_CUSTOMER_ADDRESS_CREATE = 'customerAddressCreate';
+    const ACTION_ADDRESS_LIST            = 'customerAddressList';
+    const ACTION_GROUP_LIST              = 'customerGroupList';
+    const ACTION_STORE_LIST              = 'storeList';
+    const ACTION_ORDER_LIST              = 'salesOrderList';
+    const ACTION_ORDER_INFO              = 'salesOrderInfo';
+    const ACTION_CART_INFO               = 'shoppingCartInfo';
+    const ACTION_COUNTRY_LIST            = 'directoryCountryList';
+    const ACTION_REGION_LIST             = 'directoryRegionList';
+    const ACTION_PING                    = 'oroPing';
 
     const ACTION_ORO_CART_LIST     = 'oroQuoteList';
     const ACTION_ORO_ORDER_LIST    = 'oroOrderList';

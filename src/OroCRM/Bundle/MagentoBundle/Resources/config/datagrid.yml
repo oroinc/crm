@@ -530,7 +530,7 @@ datagrid:
                     - o.subtotalAmount as subTotal
                     - o.totalAmount as grandTotal
                     - step.label as stepLabel
-                    - customer.email as email
+                    - o.customerEmail as email
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - ch.name as channelName
@@ -607,7 +607,7 @@ datagrid:
                 incrementId:            { data_name: o.incrementId }
                 firstName:              { data_name: o.firstName }
                 lastName:               { data_name: o.lastName }
-                email:                  { data_name: customer.email }
+                email:                  { data_name: email }
                 totalPaidAmount:        { data_name: o.totalPaidAmount }
                 grandTotal:             { data_name: grandTotal }
                 subTotal:               { data_name: subTotal }
@@ -650,7 +650,7 @@ datagrid:
                     data_name:        o.lastName
                 email:
                     type:             string
-                    data_name:        customer.email
+                    data_name:        email
                 totalPaidAmount:
                     type:             number
                     data_name:        o.totalPaidAmount
