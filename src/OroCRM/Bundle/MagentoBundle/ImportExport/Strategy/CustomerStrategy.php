@@ -15,6 +15,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\ContactImportHelper;
 
 class CustomerStrategy extends BaseStrategy
 {
@@ -50,7 +51,7 @@ class CustomerStrategy extends BaseStrategy
             $remoteEntity->getWebsite(),
             $remoteEntity->getGroup()
         );
-        $this->updateContact($localEntity, $remoteEntity->getContact());
+        $this->updateContact($remoteEntity, $localEntity, $remoteEntity->getContact());
         $this->updateAccount($localEntity, $remoteEntity->getAccount());
         $localEntity->getAccount()->setDefaultContact($localEntity->getContact());
 
@@ -129,45 +130,37 @@ class CustomerStrategy extends BaseStrategy
             ->setGroup($this->groupEntityCache[$group->getName()]);
 
         $entity->getStore()->setWebsite($entity->getWebsite());
-
-        return $this;
     }
 
     /**
      * Update $entity with new contact data
-     * updating contact data is not allowed
      *
-     * @param Customer $entity
+     * @param Customer $remoteData
+     * @param Customer $localData
      * @param Contact  $contact
-     *
-     * @return $this
      */
-    protected function updateContact(Customer $entity, Contact $contact)
+    protected function updateContact(Customer $remoteData, Customer $localData, Contact $contact)
     {
-        // update not allowed
-        if ($entity->getContact() && $entity->getContact()->getId()) {
-            return $this;
-        }
+        $helper = new ContactImportHelper($localData->getChannel(), $this->addressHelper);
 
-        // loop by imported addresses, add new only
-        foreach ($contact->getAddresses() as $address) {
-            // at this point imported address region have code equal to region_id in magento db field
-            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
-            //$originAddressId = $address->getId();
-            $address->setId(null);
+        if ($localData->getContact() && $localData->getContact()->getId()) {
+            $helper->merge($remoteData, $localData, $localData->getContact());
+        } else {
+            // loop by imported addresses, add new only
+            foreach ($contact->getAddresses() as $key => $address) {
+                $helper->prepareAddress($address);
 
-            $this->updateAddressCountryRegion($address, $mageRegionId);
-            if (!$address->getCountry()) {
-                $contact->removeAddress($address);
-                continue;
+                if (!$address->getCountry()) {
+                    $contact->removeAddress($address);
+                    continue;
+                }
+                // @TODO find possible solution
+                // guess parent address by key
+                $localData->getAddresses()->get($key)->setContactAddress($address);
             }
 
-            $this->updateAddressTypes($address);
+            $localData->setContact($contact);
         }
-
-        $entity->setContact($contact);
-
-        return $this;
     }
 
     /**
@@ -196,7 +189,7 @@ class CustomerStrategy extends BaseStrategy
                     $this->strategyHelper->importEntity(
                         $existingAddress,
                         $address,
-                        ['id', 'region', 'country', 'created', 'updated']
+                        ['id', 'region', 'country', 'contactAddress', 'created', 'updated']
                     );
                     // set remote data for further processing
                     $existingAddress->setRegion($address->getRegion());
@@ -257,7 +250,5 @@ class CustomerStrategy extends BaseStrategy
             }
         }
         $entity->setAccount($account);
-
-        return $this;
     }
 }
