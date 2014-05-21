@@ -43,6 +43,8 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
  *      }
  *  }
  * )
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Order extends BaseOrder
 {
