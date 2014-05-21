@@ -669,10 +669,14 @@ class Order extends BaseOrder
 
     /**
      * @param string $customerEmail
+     *
+     * @return $this
      */
     public function setCustomerEmail($customerEmail)
     {
         $this->customerEmail = $customerEmail;
+
+        return $this;
     }
 
     /**
