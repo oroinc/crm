@@ -208,6 +208,13 @@ class Order extends BaseOrder
     protected $workflowStep;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="customer_email", type="string", length=255, nullable=true)
+     */
+    protected $customerEmail;
+
+    /**
      * @param WorkflowItem $workflowItem
      *
      * @return Order
@@ -658,5 +665,21 @@ class Order extends BaseOrder
         );
 
         return $addresses->first();
+    }
+
+    /**
+     * @param string $customerEmail
+     */
+    public function setCustomerEmail($customerEmail)
+    {
+        $this->customerEmail = $customerEmail;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerEmail()
+    {
+        return $this->customerEmail;
     }
 }
