@@ -81,6 +81,9 @@ class ContactImportHelper
      * @param Customer $remoteData
      * @param Customer $localData
      * @param Contact  $contact
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * TODO Should be fixed during CRM-1185
      */
     public function mergeObjects(Customer $remoteData, Customer $localData, Contact $contact)
     {

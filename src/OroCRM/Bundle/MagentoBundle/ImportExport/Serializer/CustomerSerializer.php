@@ -22,6 +22,10 @@ use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * TODO Should be fixed during CRM-1185
+ */
 class CustomerSerializer extends AbstractNormalizer implements DenormalizerInterface, NormalizerInterface
 {
     /** @var array */
