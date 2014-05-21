@@ -58,6 +58,7 @@ class CustomerReverseSyncTest extends WebTestCase
         $channel = $em->find('OroIntegrationBundle:Channel', self::$channelId);
 
         $channel->setIsTwoWaySyncEnabled($twoWaySyncEnabled);
+        $em->flush();
 
         $this->assertEmpty($this->getRecordsCount('JMSJobQueueBundle:Job'), 'Empty jobs table on start of the test');
 
@@ -68,15 +69,14 @@ class CustomerReverseSyncTest extends WebTestCase
         );
 
         $form                                   = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_contact_form[firstName]'] = 'Contact_fname_updated';
-        $form['orocrm_contact_form[lastName]']  = 'Contact_lname_updated';
+        $form['orocrm_contact_form[firstName]'] = uniqid('Contact_fname_updated');
+        $form['orocrm_contact_form[lastName]']  = uniqid('Contact_lname_updated');
 
         $this->client->followRedirects(true);
         $this->client->submit($form);
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $em->flush();
 
         $this->assertEquals(
             $expectedJobsCount,
