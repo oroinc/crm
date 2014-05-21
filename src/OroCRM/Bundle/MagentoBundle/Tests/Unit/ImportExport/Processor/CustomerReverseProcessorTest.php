@@ -42,7 +42,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         $this->contact        = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
         $this->address        = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Address');
         $this->contactAddress = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\ContactAddress');
-        $this->country        = $this->getMock('Oro\Bundle\AddressBundle\Entity\Country')
+        $this->country        = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Country')
             ->disableOriginalConstructor()->getMock();
         $this->region         = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Region')
             ->disableOriginalConstructor()->getMock();
@@ -97,8 +97,6 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getAddresses')
             ->will($this->returnValue($collection));
-
-        $this->markTestSkipped();
     }
 
     public function tearDown()
