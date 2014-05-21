@@ -4,8 +4,13 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
+use Doctrine\Common\Util\Debug;
+
 abstract class AbstractController extends WebTestCase
 {
+    /** @var \Oro\Bundle\IntegrationBundle\Entity\Channel */
+    protected $channel;
+
     public function setUp()
     {
         $this->initClient(array('debug' => false), $this->generateBasicAuthHeader());
@@ -15,6 +20,14 @@ abstract class AbstractController extends WebTestCase
                 'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel',
             )
         );
+    }
+
+    protected function postFixtureLoad()
+    {
+        $this->channel = $this->getContainer()
+            ->get('doctrine')
+            ->getRepository('OroIntegrationBundle:Channel')
+            ->findOneByName('Demo Web store');
     }
 
     /**

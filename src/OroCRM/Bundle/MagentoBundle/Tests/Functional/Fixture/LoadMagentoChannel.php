@@ -117,7 +117,7 @@ class LoadMagentoChannel extends AbstractFixture
         $cart->setStoreCurrencyCode('code');
         $cart->setQuoteCurrencyCode('usd');
         $cart->setStoreToBaseRate(12);
-        $cart->setIsGuest(1);
+        $cart->setIsGuest(0);
 
         $this->em->persist($cart);
 
