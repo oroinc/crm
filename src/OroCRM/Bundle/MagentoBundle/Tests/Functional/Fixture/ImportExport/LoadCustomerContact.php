@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\ImportExport;
 
 use Doctrine\Common\Persistence\ObjectManager;

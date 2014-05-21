@@ -9,19 +9,19 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 
-use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
-use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use Oro\Bundle\AddressBundle\Entity\Country as BAPCountry;
+use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
+use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
 
-use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 
 class ReverseWriter implements ItemWriterInterface
 {
@@ -33,10 +33,10 @@ class ReverseWriter implements ItemWriterInterface
      * @var array
      */
     protected $clearMagentoFields = [
-            'email',
-            'firstname',
-            'lastname'
-        ];
+        'email',
+        'firstname',
+        'lastname'
+    ];
 
     /**
      * Customer-Contact relation, key - Customer field, value - Contact field
@@ -44,15 +44,15 @@ class ReverseWriter implements ItemWriterInterface
      * @var array
      */
     protected $customerContactRelation = [
-            'name_prefix' => 'name_prefix',
-            'first_name'  => 'first_name',
-            'middle_name' => 'middle_name',
-            'last_name'   => 'last_name',
-            'name_suffix' => 'name_suffix',
-            'gender'      => 'gender',
-            'birthday'    => 'birthday',
-            'email'       => 'primary_email.email',
-        ];
+        'name_prefix' => 'name_prefix',
+        'first_name'  => 'first_name',
+        'middle_name' => 'middle_name',
+        'last_name'   => 'last_name',
+        'name_suffix' => 'name_suffix',
+        'gender'      => 'gender',
+        'birthday'    => 'birthday',
+        'email'       => 'primary_email.email',
+    ];
 
     /** @var EntityManager */
     protected $em;
