@@ -19,7 +19,6 @@ class CartControllerTest extends AbstractController
             ->get('doctrine')
             ->getRepository('OroCRMMagentoBundle:Cart')
             ->findOneByChannel($this->channel);
-
     }
 
     public function testView()
@@ -36,6 +35,7 @@ class CartControllerTest extends AbstractController
         $this->assertContains('Sync Data', $result->getContent());
         $this->assertContains('Open', $result->getContent());
         $this->assertContains('web site', $result->getContent());
+        $this->assertContains('demo store', $result->getContent());
 
         $filteredHtml = str_replace(['<br/>', '<br />'], ' ', $result->getContent());
         $this->assertContains(

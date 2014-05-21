@@ -276,7 +276,7 @@ class LoadMagentoChannel extends AbstractFixture
     protected function createStore()
     {
         $store = new Store;
-        $store->setName('store');
+        $store->setName('demo store');
         $store->setChannel($this->channel);
         $store->setCode(1);
         $store->setWebsite($this->website);
