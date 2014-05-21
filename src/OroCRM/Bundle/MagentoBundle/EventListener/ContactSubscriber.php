@@ -4,9 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 
+use Doctrine\ORM\Events;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
@@ -191,7 +191,7 @@ class ContactSubscriber implements EventSubscriber
         if ($contactEntity->getId() && !isset($this->processIds[$contactEntity->getId()])) {
             $magentoCustomer = $em->getRepository('OroCRMMagentoBundle:Customer')
                 ->findOneBy(['contact' => $contactEntity]);
-            if ($magentoCustomer) {
+            if ($magentoCustomer && $magentoCustomer->getChannel()->getIsTwoWaySyncEnabled()) {
                 $this->processIds[$contactEntity->getId()] = $magentoCustomer;
             }
         }

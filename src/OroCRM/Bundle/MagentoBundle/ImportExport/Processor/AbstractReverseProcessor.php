@@ -37,6 +37,8 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
             'entity' => $entity,
         ];
 
+        $magentoId =  $entity->getOriginId();
+
         foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
             if ($entity instanceof $classNames && $entity->getChannel()) {
                 try {
@@ -104,7 +106,8 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
                         $this->addNew(
                             $allRelationsCheckingEntity,
                             $checkedIdsRelations,
-                            $result['object'][$relationName]
+                            $result['object'][$relationName],
+                            $magentoId
                         );
                     }
                 }
@@ -176,11 +179,11 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
         }
 
         if ($checking instanceof \DateTime) {
-            $checking = $checking->format('Y-m-d H:i:s') ;
+            $checking = $checking->format('Y-m-d H:i:s');
         }
 
         if ($source instanceof \DateTime) {
-            $source = $source->format('Y-m-d H:i:s') ;
+            $source = $source->format('Y-m-d H:i:s');
         }
 
         return $source !== $checking;
@@ -190,14 +193,15 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
      * @param object $entities
      * @param array $checkedIds
      * @param array $result
+     * @param int $magentoId
      */
-    protected function addNew($entities, array $checkedIds, array &$result)
+    protected function addNew($entities, array $checkedIds, array &$result, $magentoId)
     {
         foreach ($entities as $entity) {
             if (!in_array($entity->getId(), $checkedIds)) {
                 array_push(
                     $result,
-                    ['status' => self::NEW_ENTITY, 'entity'=>$entity]
+                    ['status' => self::NEW_ENTITY, 'entity'=>$entity, 'magentoId'=>$magentoId]
                 );
             }
         }

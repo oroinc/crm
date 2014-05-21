@@ -27,7 +27,7 @@ connector:
                     services:
                         reader:    oro_integration.reader.entity.by_id
                         processor: orocrm_magento.importexport.customer.reverse.processor
-                        writer:    oro_integration.writer.reverse
+                        writer:    orocrm_magento.importexport.customer.reverse.writer
                     parameters:
                         batch_size: 100
 

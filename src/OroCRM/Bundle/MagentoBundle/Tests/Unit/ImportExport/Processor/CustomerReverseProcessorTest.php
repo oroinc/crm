@@ -6,11 +6,11 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 
-use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor;
 
 class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,14 +37,14 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->channel  =  $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')->getMock();
-        $this->customer = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Customer')->getMock();
-        $this->contact  = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')->getMock();
-        $this->address = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Address')->getMock();
-        $this->contactAddress = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\ContactAddress')->getMock();
-        $this->country = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Country')
+        $this->channel        = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
+        $this->customer       = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Customer');
+        $this->contact        = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
+        $this->address        = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Address');
+        $this->contactAddress = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\ContactAddress');
+        $this->country        = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Country')
             ->disableOriginalConstructor()->getMock();
-        $this->region = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Region')
+        $this->region         = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Region')
             ->disableOriginalConstructor()->getMock();
 
         $collection = $this->getMock('Doctrine\Common\Collections\Collection');
@@ -102,10 +102,10 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         unset(
-            $this->customer,
-            $this->contact,
-            $this->address,
-            $this->contactAddress
+        $this->customer,
+        $this->contact,
+        $this->address,
+        $this->contactAddress
         );
     }
 
@@ -114,67 +114,86 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function getDataProvider()
     {
-        $email = 'e@e.com';
-        $firstName = 'john';
-        $lastName  = 'Doe';
-        $prefix = '';
-        $suffix = 'suffix';
-        $dob = '01.01.1975';
-        $gender = 'male';
-        $middleName = '';
-        $cityAddress = 'city';
+        $email               = 'e@e.com';
+        $firstName           = 'john';
+        $lastName            = 'Doe';
+        $prefix              = '';
+        $suffix              = 'suffix';
+        $dob                 = '01.01.1975';
+        $gender              = 'male';
+        $middleName          = '';
+        $cityAddress         = 'city';
         $organizationAddress = 'oro';
-        $countryAddress = 'US';
-        $firstNameAddress = 'John';
-        $lastNameAddress = 'Doe';
-        $middleNameAddress = '';
-        $postalCodeAddress = '12345';
-        $prefixAddress = '';
-        $regionAddress = 'US-US';
-        $regionTextAddress = 'text';
-        $streetAddress = '';
-        $nameSuffixAddress = '';
+        $countryAddress      = 'US';
+        $firstNameAddress    = 'John';
+        $lastNameAddress     = 'Doe';
+        $middleNameAddress   = '';
+        $postalCodeAddress   = '12345';
+        $prefixAddress       = '';
+        $regionAddress       = 'US-US';
+        $regionTextAddress   = 'text';
+        $streetAddress       = '';
+        $nameSuffixAddress   = '';
 
         return [
             [
                 'partial entry' =>
-                [
-                    'email' => 'e1@e.com', 'emailContact' => $email,
-                    'firstName' => $firstName, 'firstNameContact'=> $firstName,
-                    'lastName' => 'Smith', 'lastNameContact' => $lastName,
-                    'prefix' => $prefix, 'prefixContact' => $prefix,
-                    'suffix' => '', 'suffixContact' => $suffix,
-                    'dob' => $dob, 'dobContact' => $dob,
-                    'gender' => 'S', 'genderContact' => $gender,
-                    'middleName' => $middleName, 'middleNameContact' => $middleName,
-                    'cityAddress' => '', 'cityContactAddress' => $cityAddress,
-                    'organizationAddress' => '', 'organizationContactAddress' => $organizationAddress,
-                    'countryAddress' => $countryAddress, 'countryContactAddress' => $countryAddress,
-                    'firstNameAddress' => $firstNameAddress, 'firstNameContactAddress' => $firstNameAddress,
-                    'lastNameAddress' => $lastNameAddress, 'lastNameContactAddress' => $lastNameAddress,
-                    'middleNameAddress' => $middleNameAddress, 'middleNameContactAddress' => $middleNameAddress,
-                    'postalCodeAddress' => $postalCodeAddress, 'postalCodeContactAddress' => $postalCodeAddress,
-                    'prefixAddress' => $prefixAddress, 'prefixContactAddress' => $prefixAddress,
-                    'regionAddress' => $regionAddress, 'regionContactAddress' => $regionAddress,
-                    'regionTextAddress' => $regionTextAddress, 'regionTextContactAddress' => $regionTextAddress,
-                    'streetAddress' => $streetAddress, 'streetContactAddress' => $streetAddress,
-                    'nameSuffixAddress' => $nameSuffixAddress,
-                    'nameSuffixContactAddress' => $nameSuffixAddress,
-                ],
+                    [
+                        'email'                      => 'e1@e.com',
+                        'emailContact'               => $email,
+                        'firstName'                  => $firstName,
+                        'firstNameContact'           => $firstName,
+                        'lastName'                   => 'Smith',
+                        'lastNameContact'            => $lastName,
+                        'prefix'                     => $prefix,
+                        'prefixContact'              => $prefix,
+                        'suffix'                     => '',
+                        'suffixContact'              => $suffix,
+                        'dob'                        => $dob,
+                        'dobContact'                 => $dob,
+                        'gender'                     => 'S',
+                        'genderContact'              => $gender,
+                        'middleName'                 => $middleName,
+                        'middleNameContact'          => $middleName,
+                        'cityAddress'                => '',
+                        'cityContactAddress'         => $cityAddress,
+                        'organizationAddress'        => '',
+                        'organizationContactAddress' => $organizationAddress,
+                        'countryAddress'             => $countryAddress,
+                        'countryContactAddress'      => $countryAddress,
+                        'firstNameAddress'           => $firstNameAddress,
+                        'firstNameContactAddress'    => $firstNameAddress,
+                        'lastNameAddress'            => $lastNameAddress,
+                        'lastNameContactAddress'     => $lastNameAddress,
+                        'middleNameAddress'          => $middleNameAddress,
+                        'middleNameContactAddress'   => $middleNameAddress,
+                        'postalCodeAddress'          => $postalCodeAddress,
+                        'postalCodeContactAddress'   => $postalCodeAddress,
+                        'prefixAddress'              => $prefixAddress,
+                        'prefixContactAddress'       => $prefixAddress,
+                        'regionAddress'              => $regionAddress,
+                        'regionContactAddress'       => $regionAddress,
+                        'regionTextAddress'          => $regionTextAddress,
+                        'regionTextContactAddress'   => $regionTextAddress,
+                        'streetAddress'              => $streetAddress,
+                        'streetContactAddress'       => $streetAddress,
+                        'nameSuffixAddress'          => $nameSuffixAddress,
+                        'nameSuffixContactAddress'   => $nameSuffixAddress,
+                    ],
                 (object)[
-                    'object' =>[
-                        'email' => $email,
-                        'last_name' => $lastName,
+                    'object' => [
+                        'email'       => $email,
+                        'last_name'   => $lastName,
                         'name_suffix' => $suffix,
-                        'gender' => $gender,
-                        'addresses' => [
+                        'gender'      => $gender,
+                        'addresses'   => [
                             [
                                 'object' => [
-                                    'city' => $cityAddress,
+                                    'city'         => $cityAddress,
                                     'organization' => $organizationAddress,
                                 ],
                                 'status' => 'update',
-                                'entity'=>''
+                                'entity' => ''
                             ]
                         ]
                     ]
@@ -183,55 +202,74 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
             [
                 'full entry' =>
                     [
-                        'email' => 'e1@e.com', 'emailContact' => $email,
-                        'firstName' => 'jane', 'firstNameContact'=> $firstName,
-                        'lastName' => 'Smith', 'lastNameContact' => $lastName,
-                        'prefix' => 'prefix', 'prefixContact' => $prefix,
-                        'suffix' => '', 'suffixContact' => $suffix,
-                        'dob' => '01.02.1975', 'dobContact' => $dob,
-                        'gender' => 'S', 'genderContact' => $gender,
-                        'middleName' => 'middle', 'middleNameContact' => $middleName,
-                        'cityAddress' => '', 'cityContactAddress' => $cityAddress,
-                        'organizationAddress' => '', 'organizationContactAddress' => $organizationAddress,
-                        'countryAddress' => '', 'countryContactAddress' => $countryAddress,
-                        'firstNameAddress' => '', 'firstNameContactAddress' => $firstNameAddress,
-                        'lastNameAddress' => '', 'lastNameContactAddress' => $lastNameAddress,
-                        'middleNameAddress' => 'middle', 'middleNameContactAddress' => $middleNameAddress,
-                        'postalCodeAddress' => '12458', 'postalCodeContactAddress' => $postalCodeAddress,
-                        'prefixAddress' => 'pref1', 'prefixContactAddress' => $prefixAddress,
-                        'regionAddress' => 'reg', 'regionContactAddress' => $regionAddress,
-                        'regionTextAddress' => 'retext', 'regionTextContactAddress' => $regionTextAddress,
-                        'streetAddress' => 'str', 'streetContactAddress' => $streetAddress,
-                        'nameSuffixAddress' => 'suf',
-                        'nameSuffixContactAddress' => $nameSuffixAddress,
+                        'email'                      => 'e1@e.com',
+                        'emailContact'               => $email,
+                        'firstName'                  => 'jane',
+                        'firstNameContact'           => $firstName,
+                        'lastName'                   => 'Smith',
+                        'lastNameContact'            => $lastName,
+                        'prefix'                     => 'prefix',
+                        'prefixContact'              => $prefix,
+                        'suffix'                     => '',
+                        'suffixContact'              => $suffix,
+                        'dob'                        => '01.02.1975',
+                        'dobContact'                 => $dob,
+                        'gender'                     => 'S',
+                        'genderContact'              => $gender,
+                        'middleName'                 => 'middle',
+                        'middleNameContact'          => $middleName,
+                        'cityAddress'                => '',
+                        'cityContactAddress'         => $cityAddress,
+                        'organizationAddress'        => '',
+                        'organizationContactAddress' => $organizationAddress,
+                        'countryAddress'             => '',
+                        'countryContactAddress'      => $countryAddress,
+                        'firstNameAddress'           => '',
+                        'firstNameContactAddress'    => $firstNameAddress,
+                        'lastNameAddress'            => '',
+                        'lastNameContactAddress'     => $lastNameAddress,
+                        'middleNameAddress'          => 'middle',
+                        'middleNameContactAddress'   => $middleNameAddress,
+                        'postalCodeAddress'          => '12458',
+                        'postalCodeContactAddress'   => $postalCodeAddress,
+                        'prefixAddress'              => 'pref1',
+                        'prefixContactAddress'       => $prefixAddress,
+                        'regionAddress'              => 'reg',
+                        'regionContactAddress'       => $regionAddress,
+                        'regionTextAddress'          => 'retext',
+                        'regionTextContactAddress'   => $regionTextAddress,
+                        'streetAddress'              => 'str',
+                        'streetContactAddress'       => $streetAddress,
+                        'nameSuffixAddress'          => 'suf',
+                        'nameSuffixContactAddress'   => $nameSuffixAddress,
                     ],
                 (object)[
-                    'object' =>[
-                        'email' => $email,
-                        'first_name' => $firstName,
-                        'last_name' => $lastName,
+                    'object' => [
+                        'email'       => $email,
+                        'first_name'  => $firstName,
+                        'last_name'   => $lastName,
                         'name_prefix' => $prefix,
                         'name_suffix' => $suffix,
-                        'birthday' => $dob,
-                        'gender' => $gender,
+                        'birthday'    => $dob,
+                        'gender'      => $gender,
                         'middle_name' => $middleName,
-                        'addresses' => [
+                        'addresses'   => [
                             [
                                 'object' => [
-                                    'city' => $cityAddress,
+                                    'city'         => $cityAddress,
                                     'organization' => $organizationAddress,
-                                    'firstName' => $firstNameAddress,
-                                    'lastName' => $lastNameAddress,
-                                    'middleName' => $middleNameAddress,
-                                    'postalCode' => $postalCodeAddress,
-                                    'namePrefix' => $prefixAddress,
-                                    'regionText' => $regionTextAddress,
-                                    'street' => $streetAddress,
-                                    'nameSuffix' => $nameSuffixAddress,
+                                    'firstName'    => $firstNameAddress,
+                                    'lastName'     => $lastNameAddress,
+                                    'middleName'   => $middleNameAddress,
+                                    'postalCode'   => $postalCodeAddress,
+                                    'namePrefix'   => $prefixAddress,
+                                    'regionText'   => $regionTextAddress,
+                                    'street'       => $streetAddress,
+                                    'nameSuffix'   => $nameSuffixAddress,
                                 ],
                                 'status' => 'update',
-                                'entity'=>'',
-                             ]
+                                'entity' => '',
+                            ]
                         ]
                     ]
                 ]
@@ -239,76 +277,114 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
             [
                 'nothing to change' =>
                     [
-                        'email' => $email, 'emailContact' => $email,
-                        'firstName' => $firstName, 'firstNameContact'=> $firstName,
-                        'lastName' => $lastName, 'lastNameContact' => $lastName,
-                        'prefix' => $prefix, 'prefixContact' => $prefix,
-                        'suffix' => $suffix, 'suffixContact' => $suffix,
-                        'dob' => $dob, 'dobContact' => $dob,
-                        'gender' => $gender, 'genderContact' => $gender,
-                        'middleName' => $middleName, 'middleNameContact' => $middleName,
-                        'cityAddress' => $cityAddress, 'cityContactAddress' => $cityAddress,
-                        'organizationAddress' => $organizationAddress,
+                        'email'                      => $email,
+                        'emailContact'               => $email,
+                        'firstName'                  => $firstName,
+                        'firstNameContact'           => $firstName,
+                        'lastName'                   => $lastName,
+                        'lastNameContact'            => $lastName,
+                        'prefix'                     => $prefix,
+                        'prefixContact'              => $prefix,
+                        'suffix'                     => $suffix,
+                        'suffixContact'              => $suffix,
+                        'dob'                        => $dob,
+                        'dobContact'                 => $dob,
+                        'gender'                     => $gender,
+                        'genderContact'              => $gender,
+                        'middleName'                 => $middleName,
+                        'middleNameContact'          => $middleName,
+                        'cityAddress'                => $cityAddress,
+                        'cityContactAddress'         => $cityAddress,
+                        'organizationAddress'        => $organizationAddress,
                         'organizationContactAddress' => $organizationAddress,
-                        'countryAddress' => $countryAddress, 'countryContactAddress' => $countryAddress,
-                        'firstNameAddress' => $firstNameAddress, 'firstNameContactAddress' => $firstNameAddress,
-                        'lastNameAddress' => $lastNameAddress, 'lastNameContactAddress' => $lastNameAddress,
-                        'middleNameAddress' => $middleNameAddress, 'middleNameContactAddress' => $middleNameAddress,
-                        'postalCodeAddress' => $postalCodeAddress, 'postalCodeContactAddress' => $postalCodeAddress,
-                        'prefixAddress' => $prefixAddress, 'prefixContactAddress' => $prefixAddress,
-                        'regionAddress' => $regionAddress, 'regionContactAddress' => $regionAddress,
-                        'regionTextAddress' => $regionTextAddress, 'regionTextContactAddress' => $regionTextAddress,
-                        'streetAddress' => $streetAddress, 'streetContactAddress' => $streetAddress,
-                        'nameSuffixAddress' => $nameSuffixAddress,
-                        'nameSuffixContactAddress' => $nameSuffixAddress,
+                        'countryAddress'             => $countryAddress,
+                        'countryContactAddress'      => $countryAddress,
+                        'firstNameAddress'           => $firstNameAddress,
+                        'firstNameContactAddress'    => $firstNameAddress,
+                        'lastNameAddress'            => $lastNameAddress,
+                        'lastNameContactAddress'     => $lastNameAddress,
+                        'middleNameAddress'          => $middleNameAddress,
+                        'middleNameContactAddress'   => $middleNameAddress,
+                        'postalCodeAddress'          => $postalCodeAddress,
+                        'postalCodeContactAddress'   => $postalCodeAddress,
+                        'prefixAddress'              => $prefixAddress,
+                        'prefixContactAddress'       => $prefixAddress,
+                        'regionAddress'              => $regionAddress,
+                        'regionContactAddress'       => $regionAddress,
+                        'regionTextAddress'          => $regionTextAddress,
+                        'regionTextContactAddress'   => $regionTextAddress,
+                        'streetAddress'              => $streetAddress,
+                        'streetContactAddress'       => $streetAddress,
+                        'nameSuffixAddress'          => $nameSuffixAddress,
+                        'nameSuffixContactAddress'   => $nameSuffixAddress,
                     ],
-                    (object)[
-                        'object' => [
-                            'addresses' => [
-                                [
-                                    'object' => [],
-                                    'entity'=>'',
-                                ]
+                (object)[
+                    'object' => [
+                        'addresses' => [
+                            [
+                                'object' => [],
+                                'entity' => '',
+                                'status' => 'update',
                             ]
                         ]
                     ]
+                ]
             ],
             [
                 'no originId' =>
                     [
-                        'email' => $email, 'emailContact' => $email,
-                        'firstName' => $firstName, 'firstNameContact'=> $firstName,
-                        'lastName' => $lastName, 'lastNameContact' => $lastName,
-                        'prefix' => $prefix, 'prefixContact' => $prefix,
-                        'suffix' => $suffix, 'suffixContact' => $suffix,
-                        'dob' => $dob, 'dobContact' => $dob,
-                        'gender' => $gender, 'genderContact' => $gender,
-                        'middleName' => $middleName, 'middleNameContact' => $middleName,
-                        'cityAddress' => $cityAddress, 'cityContactAddress' => $cityAddress,
-                        'organizationAddress' => $organizationAddress,
+                        'email'                      => $email,
+                        'emailContact'               => $email,
+                        'firstName'                  => $firstName,
+                        'firstNameContact'           => $firstName,
+                        'lastName'                   => $lastName,
+                        'lastNameContact'            => $lastName,
+                        'prefix'                     => $prefix,
+                        'prefixContact'              => $prefix,
+                        'suffix'                     => $suffix,
+                        'suffixContact'              => $suffix,
+                        'dob'                        => $dob,
+                        'dobContact'                 => $dob,
+                        'gender'                     => $gender,
+                        'genderContact'              => $gender,
+                        'middleName'                 => $middleName,
+                        'middleNameContact'          => $middleName,
+                        'cityAddress'                => $cityAddress,
+                        'cityContactAddress'         => $cityAddress,
+                        'organizationAddress'        => $organizationAddress,
                         'organizationContactAddress' => $organizationAddress,
-                        'countryAddress' => $countryAddress, 'countryContactAddress' => $countryAddress,
-                        'firstNameAddress' => $firstNameAddress, 'firstNameContactAddress' => $firstNameAddress,
-                        'lastNameAddress' => $lastNameAddress, 'lastNameContactAddress' => $lastNameAddress,
-                        'middleNameAddress' => $middleNameAddress, 'middleNameContactAddress' => $middleNameAddress,
-                        'postalCodeAddress' => $postalCodeAddress, 'postalCodeContactAddress' => $postalCodeAddress,
-                        'prefixAddress' => $prefixAddress, 'prefixContactAddress' => $prefixAddress,
-                        'regionAddress' => $regionAddress, 'regionContactAddress' => $regionAddress,
-                        'regionTextAddress' => $regionTextAddress, 'regionTextContactAddress' => $regionTextAddress,
-                        'streetAddress' => $streetAddress, 'streetContactAddress' => $streetAddress,
-                        'nameSuffixAddress' => $nameSuffixAddress,
-                        'nameSuffixContactAddress' => $nameSuffixAddress,
+                        'countryAddress'             => $countryAddress,
+                        'countryContactAddress'      => $countryAddress,
+                        'firstNameAddress'           => $firstNameAddress,
+                        'firstNameContactAddress'    => $firstNameAddress,
+                        'lastNameAddress'            => $lastNameAddress,
+                        'lastNameContactAddress'     => $lastNameAddress,
+                        'middleNameAddress'          => $middleNameAddress,
+                        'middleNameContactAddress'   => $middleNameAddress,
+                        'postalCodeAddress'          => $postalCodeAddress,
+                        'postalCodeContactAddress'   => $postalCodeAddress,
+                        'prefixAddress'              => $prefixAddress,
+                        'prefixContactAddress'       => $prefixAddress,
+                        'regionAddress'              => $regionAddress,
+                        'regionContactAddress'       => $regionAddress,
+                        'regionTextAddress'          => $regionTextAddress,
+                        'regionTextContactAddress'   => $regionTextAddress,
+                        'streetAddress'              => $streetAddress,
+                        'streetContactAddress'       => $streetAddress,
+                        'nameSuffixAddress'          => $nameSuffixAddress,
+                        'nameSuffixContactAddress'   => $nameSuffixAddress,
                     ],
-                    (object)[
-                        'object' => [
-                            'addresses' => [
-                                [
-                                    'object' => [],
-                                    'entity'=>'',
-                                ]
+                (object)[
+                    'object' => [
+                        'addresses' => [
+                            [
+                                'object' => [],
+                                'entity' => '',
+                                'status' => 'update',
                             ]
                         ]
                     ]
+                ]
             ],
         ];
     }
@@ -318,7 +394,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider  getDataProvider
      *
-     * @param array $fields
+     * @param array     $fields
      * @param \stdClass $checkingObject
      */
     public function testProcess(array $fields, $checkingObject)
@@ -437,6 +513,12 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         if (!empty($checkingObject->object['addresses'])) {
             foreach ($checkingObject->object['addresses'] as &$address) {
                 $address['entity'] = $this->address;
+                if (!empty($address['status'])) {
+                    if ('update' === $address['status']) {
+                        $address['object']['country'] = $this->country;
+                        $address['object']['region'] = $this->region;
+                    }
+                }
             }
             unset($address);
         }

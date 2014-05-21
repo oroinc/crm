@@ -186,6 +186,7 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $testMagentoCustomer = new ExtendCustomer();
         $channel             = new Channel();
+        $channel->setIsTwoWaySyncEnabled(true);
         $channel->setName('test');
         $testMagentoCustomer->setChannel($channel);
 

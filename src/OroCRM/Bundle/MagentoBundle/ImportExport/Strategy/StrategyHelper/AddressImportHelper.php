@@ -57,10 +57,7 @@ class AddressImportHelper
         }
 
         if (!empty($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId])) {
-            $this->mageRegionsCache[$mageRegionId] = $this->doctrineHelper->getEntityByCriteria(
-                ['regionId' => $mageRegionId],
-                'OroCRM\Bundle\MagentoBundle\Entity\Region'
-            );
+            $this->mageRegionsCache[$mageRegionId] = $this->findRegionByRegionId($mageRegionId);
         }
 
         if (!empty($this->mageRegionsCache[$mageRegionId])) {
@@ -102,6 +99,19 @@ class AddressImportHelper
         foreach ($addressTypes as $index => $type) {
             $addressTypes->set($index, $this->updateAddressType($type->getName()));
         }
+    }
+
+    /**
+     * @param $mageRegionId
+     *
+     * @return object
+     */
+    public function findRegionByRegionId($mageRegionId)
+    {
+        return $this->doctrineHelper->getEntityByCriteria(
+            ['regionId' => $mageRegionId],
+            'OroCRM\Bundle\MagentoBundle\Entity\Region'
+        );
     }
 
     /**
