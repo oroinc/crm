@@ -402,6 +402,7 @@ class LoadMagentoChannel extends AbstractFixture
         $order->setCart($cart);
         $order->setStore($this->store);
         $order->setCustomer($customer);
+        $order->setCustomerEmail('customer@email.com');
 
         $this->em->persist($order);
 
