@@ -227,13 +227,12 @@ orocrm:
             entity_plural_label:          Integration Channel Transports
             id.label:                     Id
             is_extension_installed.label: Is extension installed
-            is_wsi_mode.label:            Is Wsi Mode
+            is_wsi_mode.label:            WS-I Compliance
             sync_start_date.label:        Sync start date
             sync_range.label:             Sync range
             website_id.label:             Website
             websites.label:               Websites
             wsdl_url.label:               SOAP WSDL URL
-            wsi_mode.label:               WS-I Compliance
 
         order:
             entity_label:        Order
