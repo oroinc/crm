@@ -23,6 +23,10 @@ use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * TODO Should be fixed during CRM-1185
+ */
 class ReverseWriter implements ItemWriterInterface
 {
     const MAGENTO_DATETIME_FORMAT = 'Y-m-d H:i:s';
