@@ -12,7 +12,6 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Oro\Bundle\EmailBundle\Mailer\Processor;
 use Oro\Bundle\EmailBundle\Builder\EmailEntityBuilder;
 use Oro\Bundle\EmailBundle\Entity\EmailFolder;
-use Oro\Bundle\EmailBundle\Entity\InternalEmailOrigin;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
