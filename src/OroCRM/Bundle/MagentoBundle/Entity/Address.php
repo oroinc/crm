@@ -11,6 +11,8 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+
 /**
  * @ORM\Table("orocrm_magento_customer_addr")
  * @ORM\HasLifecycleCallbacks()
@@ -143,6 +145,13 @@ class Address extends AbstractTypedAddress
     protected $types;
 
     /**
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress",cascade={"persist"})
+     * @ORM\JoinColumn(name="related_contact_address_id", referencedColumnName="id", onDelete="SET NULL")
+     * @var ContactAddress
+     */
+    protected $contactAddress;
+
+    /**
      * Set contact as owner.
      *
      * @param Customer $owner
@@ -160,5 +169,61 @@ class Address extends AbstractTypedAddress
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    /**
+     * @param ContactAddress $contactAddress
+     */
+    public function setContactAddress(ContactAddress $contactAddress = null)
+    {
+        $this->contactAddress = $contactAddress;
+    }
+
+    /**
+     * @return ContactAddress
+     */
+    public function getContactAddress()
+    {
+        return $this->contactAddress;
+    }
+
+    /**
+     * Set address created date/time
+     *
+     * @param \DateTime $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * Get address created date/time
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set address updated date/time
+     *
+     * @param \DateTime $updated
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+    }
+
+    /**
+     * Get address last update date/time
+     *
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
     }
 }
