@@ -60,4 +60,24 @@ class ContactAddress extends AbstractTypedAddress
     {
         return $this->owner;
     }
+
+    /**
+     * Get address created date/time
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Get address last update date/time
+     *
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
 }

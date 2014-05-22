@@ -191,50 +191,48 @@ orocrm:
             cart.label:                Cart
 
         cartstatus:
-            entity_label:              Shopping Cart Status
-            entity_plural_label:       Shopping Cart Statuses
-            label.label:               Label
-            name.label:                Name
+            entity_label:        Shopping Cart Status
+            entity_plural_label: Shopping Cart Statuses
+            label.label:         Label
+            name.label:          Name
 
         orderitem:
-            entity_label:              Order Item
-            entity_plural_label:       Order Items
-            discount_amount.label:     Discount amount
-            discount_percent.label:    Discount percent
-            id.label:                  Cart item id
-            is_virtual.label:          Is virtual
-            name.label:                Name
-            origin_id.label:           Origin order item id
-            original_price.label:      Original price
-            price.label:               Price
-            product_options.label:     Product options
-            product_type.label:        Product type
-            qty.label:                 Qty
-            row_total.label:           Row total
-            tax_amount.label:          Tax amount
-            tax_percent.label:         Tax percent
-            weight.label:              Weight
-            sku.label:                 Sku
+            entity_label:           Order Item
+            entity_plural_label:    Order Items
+            discount_amount.label:  Discount amount
+            discount_percent.label: Discount percent
+            id.label:               Cart item id
+            is_virtual.label:       Is virtual
+            name.label:             Name
+            order.label:            Order
+            origin_id.label:        Origin order item id
+            original_price.label:   Original price
+            price.label:            Price
+            product_options.label:  Product options
+            product_type.label:     Product type
+            qty.label:              Qty
+            row_total.label:        Row total
+            sku.label:              Sku
+            tax_amount.label:       Tax amount
+            tax_percent.label:      Tax percent
+            weight.label:           Weight
 
         magentosoaptransport:
-            entity_label:        Integration Channel Transport
-            entity_plural_label: Integration Channel Transports
-            entity_description:  Represent integration channel transport
-
-            id.label:                     Id
-            wsdl_url.label:               SOAP WSDL URL
+            admin_url.label:              Admin url
+            all_sites:                    All web sites
             api_user.label:               SOAP API User
             api_key.label:                SOAP API Key
-            sync_start_date:
-                label:   Sync start date
-            sync_range.label:               Sync range
-            wsi_mode.label:                 WS-I Compliance
-            websites.label:                 Websites
-            website_id:
-                label:   Website
-            is_extension_installed.label:   Is extension installed
-            admin_url.label:                Admin url
-            all_sites:                      All web sites
+            entity_description:           Represent integration channel transport
+            entity_label:                 Integration Channel Transport
+            entity_plural_label:          Integration Channel Transports
+            id.label:                     Id
+            is_extension_installed.label: Is extension installed
+            is_wsi_mode.label:            WS-I Compliance
+            sync_start_date.label:        Sync start date
+            sync_range.label:             Sync range
+            website_id.label:             Website
+            websites.label:               Websites
+            wsdl_url.label:               SOAP WSDL URL
 
         order:
             entity_label:        Order
@@ -279,6 +277,7 @@ orocrm:
             feedback.label:         Feedback
             b2c_flow_order_follow_up.step.label: Step
             related_emails.label:   Emails
+            customer_email.label:   Email
             related_calls.label:    Calls
             workflow_item.label:    Workflow item
             workflow_step.label:    Workflow step
