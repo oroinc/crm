@@ -68,7 +68,7 @@ abstract class AbstractController extends WebTestCase
             }
         }
 
-        if ($filters['oneOrMore']) {
+        if ($filters['isResult']) {
             $this->assertGreaterThanOrEqual(1, $count);
         } else {
             $this->assertEquals($count, 0);

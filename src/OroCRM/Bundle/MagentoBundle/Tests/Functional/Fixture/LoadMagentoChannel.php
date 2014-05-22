@@ -410,6 +410,16 @@ class LoadMagentoChannel extends AbstractFixture
         $order->setStore($this->store);
         $order->setCustomer($customer);
         $order->setCustomerEmail('customer@email.com');
+        $order->setDiscountAmount(34.40);
+        $order->setTaxAmount(12.47);
+        $order->setShippingAmount(5);
+        $order->setTotalPaidAmount(17.85);
+        $order->setTotalInvoicedAmount(11);
+        $order->setTotalRefundedAmount(4);
+        $order->setTotalCanceledAmount(0);
+        $order->setShippingMethod('some unique shipping method');
+        $order->setRemoteIp('unique ip');
+        $order->setGiftMessage('some very unique gift message');
 
         $this->em->persist($order);
 

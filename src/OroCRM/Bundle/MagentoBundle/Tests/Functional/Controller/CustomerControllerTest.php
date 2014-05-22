@@ -50,8 +50,8 @@ class CustomerControllerTest extends AbstractController
     public function gridProvider()
     {
         return [
-            'Customers grid' => [
-                 [
+            'Customers grid'                             => [
+                [
                     'gridParameters' => [
                         'gridName' => 'magento-customers-grid'
                     ],
@@ -65,10 +65,10 @@ class CustomerControllerTest extends AbstractController
                         'countryName' => null,
                         'regionName'  => null,
                     ],
-                    'oneOrMore'      => true
+                    'isResult'       => true
                 ],
             ],
-            'Customers grid with filters' => [
+            'Customers grid with filters'                => [
                 [
                     'gridParameters' => [
                         'gridName' => 'magento-customers-grid'
@@ -87,7 +87,7 @@ class CustomerControllerTest extends AbstractController
                         'countryName' => null,
                         'regionName'  => null,
                     ],
-                    'oneOrMore'      => true
+                    'isResult'       => true
                 ],
             ],
             'Customers grid with filters without result' => [
@@ -109,10 +109,10 @@ class CustomerControllerTest extends AbstractController
                         'countryName' => null,
                         'regionName'  => null,
                     ],
-                    'oneOrMore'      => false
+                    'isResult'       => false
                 ],
             ],
-            'Customer Cart grid'  => [
+            'Customer Cart grid'                         => [
                 [
                     'gridParameters' => [
                         'gridName' => 'magento-customer-cart-widget-grid',
@@ -126,10 +126,10 @@ class CustomerControllerTest extends AbstractController
                         'statusLabel' => 'Open',
                         'stepLabel'   => 'Open',
                     ],
-                    'oneOrMore'      => true
+                    'isResult'       => true
                 ],
             ],
-            'Customer order grid' => [
+            'Customer order grid'                        => [
                 [
                     'gridParameters' => [
                         'gridName' => 'magento-customer-order-grid',
@@ -144,7 +144,7 @@ class CustomerControllerTest extends AbstractController
                         'status'          => 'open',
                         'stepLabel'       => 'Not contacted',
                     ],
-                    'oneOrMore'      => true
+                    'isResult'       => true
                 ],
             ],
         ];

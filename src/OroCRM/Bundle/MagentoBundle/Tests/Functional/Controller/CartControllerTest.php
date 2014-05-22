@@ -55,7 +55,7 @@ class CartControllerTest extends AbstractController
     public function gridProvider()
     {
         return [
-            'full grid'                         => [
+            'Magento cart grid'                             => [
                 [
                     'gridParameters' => [
                         'gridName' => 'magento-cart-grid'
@@ -68,10 +68,10 @@ class CartControllerTest extends AbstractController
                         'email'      => 'email@email.com',
                         'regionName' => 'Arizona'
                     ],
-                    'oneOrMore'      => true
+                    'isResult'       => true
                 ],
             ],
-            'grid with filters'                 => [
+            'Magento cart grid with filters'                => [
                 [
                     'gridParameters' => [
                         'gridName' => 'magento-cart-grid'
@@ -87,10 +87,10 @@ class CartControllerTest extends AbstractController
                         'email'      => 'email@email.com',
                         'regionName' => 'Arizona'
                     ],
-                    'oneOrMore'      => true
+                    'isResult'       => true
                 ],
             ],
-            'grid with filters, without result' => [
+            'Magento cart grid with filters without result' => [
                 [
                     'gridParameters' => [
                         'gridName' => 'magento-cart-grid'
@@ -106,10 +106,10 @@ class CartControllerTest extends AbstractController
                         'email'      => 'email@email.com',
                         'regionName' => 'Arizona'
                     ],
-                    'oneOrMore'      => false
+                    'isResult'       => false
                 ]
             ],
-            'CartItem grid'                     => [
+            'Cart item grid'                                => [
                 [
                     'gridParameters' => [
                         'gridName' => 'magento-cartitem-grid',
@@ -124,7 +124,7 @@ class CartControllerTest extends AbstractController
                         'taxAmount'      => '$10.00',
                         'discountAmount' => '$0.00'
                     ],
-                    'oneOrMore'      => true
+                    'isResult'       => true
                 ],
             ],
         ];
