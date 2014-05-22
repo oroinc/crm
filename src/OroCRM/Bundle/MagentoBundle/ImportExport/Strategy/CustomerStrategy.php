@@ -59,7 +59,7 @@ class CustomerStrategy extends BaseStrategy
         $this->strategyHelper->importEntity(
             $localEntity,
             $remoteEntity,
-            ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses']
+            ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses', 'lifetime']
         );
         $this->updateAddresses($localEntity, $remoteEntity->getAddresses());
 
