@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator implements PredefinedFiltersAwareInterface
 {
@@ -21,6 +22,19 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
 
     /** @var BatchFilterBag */
     protected $predefinedFilters;
+
+    /** @var int */
+    protected $pageSize;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(SoapTransport $transport, array $settings)
+    {
+        parent::__construct($transport, $settings);
+
+        $this->pageSize = !empty($settings['page_size']) ? (int)$settings['page_size'] : self::DEFAULT_PAGE_SIZE;
+    }
 
     /**
      * {@inheritdoc}
@@ -65,7 +79,7 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
 
         // if previous result batch items count less then requested page size
         // then assume that it's last page
-        if (count($this->entityBuffer) < self::DEFAULT_PAGE_SIZE) {
+        if (count($this->entityBuffer) < $this->pageSize) {
             $this->lastPageAssumed = true;
         }
 
