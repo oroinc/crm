@@ -113,7 +113,7 @@ class CartControllerTest extends AbstractController
                 [
                     'gridParameters' => [
                         'gridName' => 'magento-cartitem-grid',
-                        'id'       => '',
+                        'id'       => 'id',
                     ],
                     'gridFilters'    => [],
                     'channelName'    => 'Demo Web store',

@@ -25,10 +25,13 @@ class CustomerControllerTest extends AbstractController
     {
         return self::$customer->getid();
     }
-/*
+
     public function testView()
     {
-        $this->client->request('GET', $this->getUrl('orocrm_magento_customer_view', ['id' => $this->getMainEntityId()]));
+        $this->client->request(
+            'GET',
+            $this->getUrl('orocrm_magento_customer_view', ['id' => $this->getMainEntityId()])
+        );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains('Customers', $result->getContent());
@@ -43,12 +46,12 @@ class CustomerControllerTest extends AbstractController
         $this->assertContains('Demo Web store', $result->getContent());
         $this->assertContains('web site', $result->getContent());
     }
-*/
+
     public function gridProvider()
     {
         return [
-            /*[
-                [
+            'Customers grid' => [
+                 [
                     'gridParameters' => [
                         'gridName' => 'magento-customers-grid'
                     ],
@@ -65,7 +68,7 @@ class CustomerControllerTest extends AbstractController
                     'oneOrMore'      => true
                 ],
             ],
-            [
+            'Customers grid with filters' => [
                 [
                     'gridParameters' => [
                         'gridName' => 'magento-customers-grid'
@@ -87,7 +90,7 @@ class CustomerControllerTest extends AbstractController
                     'oneOrMore'      => true
                 ],
             ],
-            [
+            'Customers grid with filters without result' => [
                 [
                     'gridParameters' => [
                         'gridName' => 'magento-customers-grid'
@@ -108,18 +111,38 @@ class CustomerControllerTest extends AbstractController
                     ],
                     'oneOrMore'      => false
                 ],
-            ],*/
-            'Customer Cart grid'                     => [
+            ],
+            'Customer Cart grid'  => [
                 [
                     'gridParameters' => [
-                        'gridName' => 'magento-customer-cart-grid',
-                        'id'       => '',
+                        'gridName' => 'magento-customer-cart-widget-grid',
+                        'id'       => 'customerId',
+                        'channel'  => 'channelId'
                     ],
                     'gridFilters'    => [],
                     'channelName'    => 'Demo Web store',
                     'verifying'      => [
-                        'QuoteCurrencyCode'  => 'usd',
-                        'QuoteCurrencyCode'  => 'usd',
+                        'grandTotal'  => '$0.00',
+                        'statusLabel' => 'Open',
+                        'stepLabel'   => 'Open',
+                    ],
+                    'oneOrMore'      => true
+                ],
+            ],
+            'Customer order grid' => [
+                [
+                    'gridParameters' => [
+                        'gridName' => 'magento-customer-order-grid',
+                        'id'       => 'customerId',
+                        'channel'  => 'channelId'
+                    ],
+                    'gridFilters'    => [],
+                    'channelName'    => 'Demo Web store',
+                    'verifying'      => [
+                        'totalAmount'     => '$0.00',
+                        'totalPaidAmount' => '$0.00',
+                        'status'          => 'open',
+                        'stepLabel'       => 'Not contacted',
                     ],
                     'oneOrMore'      => true
                 ],
