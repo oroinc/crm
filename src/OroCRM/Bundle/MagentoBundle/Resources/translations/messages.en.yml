@@ -328,11 +328,11 @@ orocrm:
             country.label:       Country
             region.label:        State
 
-            country_name.label:      Country
-            country_iso2_code.label: Country ISO2 Code
-            country_iso3_code.label: Country ISO3 Code
-            region_name.label:       Region
-            region_code.label:       Region ISO code
+            country_name.label:      Country name
+            country_iso2_code.label: Country ISO2 code
+            country_iso3_code.label: Country ISO3 code
+            region_name.label:       State name
+            region_code.label:       State ISO code
 
         cartaddress:
             entity_label:        Magento Cart Address
