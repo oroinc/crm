@@ -9,21 +9,26 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
 class CartControllerTest extends AbstractController
 {
     /** @var \OroCRM\Bundle\MagentoBundle\Entity\Cart */
-    protected $cart;
+    public static $cart;
 
     protected function postFixtureLoad()
     {
         parent::postFixtureLoad();
 
-        $this->cart = $this->getContainer()
+        self::$cart = $this->getContainer()
             ->get('doctrine')
             ->getRepository('OroCRMMagentoBundle:Cart')
             ->findOneByChannel($this->channel);
     }
 
+    protected function getMainEntityId()
+    {
+        return self::$cart->getid();
+    }
+
     public function testView()
     {
-        $this->client->request('GET', $this->getUrl('orocrm_magento_cart_view', ['id' => $this->cart->getid()]));
+        $this->client->request('GET', $this->getUrl('orocrm_magento_cart_view', ['id' => $this->getMainEntityId()]));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains('Cart Information', $result->getContent());
@@ -36,13 +41,15 @@ class CartControllerTest extends AbstractController
         $this->assertContains('Open', $result->getContent());
         $this->assertContains('web site', $result->getContent());
         $this->assertContains('demo store', $result->getContent());
+        $this->assertContains('Log call', $result->getContent());
+        $this->assertContains('Send email', $result->getContent());
+        $this->assertContains('Convert to opportunity', $result->getContent());
 
         $filteredHtml = str_replace(['<br/>', '<br />'], ' ', $result->getContent());
         $this->assertContains(
             'John Doe street CITY AZ US 123456',
             preg_replace('#\s+#', ' ', $filteredHtml)
         );
-
     }
 
     public function gridProvider()
@@ -101,7 +108,25 @@ class CartControllerTest extends AbstractController
                     ],
                     'oneOrMore'      => false
                 ]
-            ]
+            ],
+            'CartItem grid'                     => [
+                [
+                    'gridParameters' => [
+                        'gridName' => 'magento-cartitem-grid',
+                        'id'       => '',
+                    ],
+                    'gridFilters'    => [],
+                    'channelName'    => 'Demo Web store',
+                    'verifying'      => [
+                        'sku'            => 'sku',
+                        'qty'            => 0,
+                        'rowTotal'       => '$100.00',
+                        'taxAmount'      => '$10.00',
+                        'discountAmount' => '$0.00'
+                    ],
+                    'oneOrMore'      => true
+                ],
+            ],
         ];
     }
 }

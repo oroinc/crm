@@ -8,6 +8,24 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
  */
 class OrderControllerTest extends AbstractController
 {
+    /** @var \OroCRM\Bundle\MagentoBundle\Entity\Order */
+    public static $order;
+
+    protected function postFixtureLoad()
+    {
+        parent::postFixtureLoad();
+
+        self::$order = $this->getContainer()
+            ->get('doctrine')
+            ->getRepository('OroCRMMagentoBundle:Order')
+            ->findOneByChannel($this->channel);
+    }
+
+    protected function getMainEntityId()
+    {
+        return self::$order->getid();
+    }
+
     public function gridProvider()
     {
         return [

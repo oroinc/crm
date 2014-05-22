@@ -4,8 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-use Doctrine\Common\Util\Debug;
-
 abstract class AbstractController extends WebTestCase
 {
     /** @var \Oro\Bundle\IntegrationBundle\Entity\Channel */
@@ -22,6 +20,8 @@ abstract class AbstractController extends WebTestCase
         );
     }
 
+    abstract protected function getMainEntityId();
+
     protected function postFixtureLoad()
     {
         $this->channel = $this->getContainer()
@@ -37,17 +37,26 @@ abstract class AbstractController extends WebTestCase
      */
     public function testGrid($filters)
     {
+        if (isset($filters['gridParameters']['id'])) {
+            $gridId                             = $filters['gridParameters']['gridName'] . '[id]';
+            $filters['gridParameters'][$gridId] = $this->getMainEntityId();
+        }
+
         $this->client->requestGrid($filters['gridParameters'], $filters['gridFilters']);
         $result = $this->client->getResponse();
         $this->assertTrue($result->isSuccessful());
         $this->assertTrue($result->isOk());
-        $data = json_decode($result->getContent(), 1);
+        $data  = json_decode($result->getContent(), 1);
         $count = 0;
 
         foreach ($data['data'] as $grid) {
-            if ($filters['channelName'] === $grid['channelName']) {
-                ++$count;
+            if (
+                (isset($filters['gridParameters']['id']))
+                ||
+                ($filters['channelName'] === $grid['channelName'])
+            ) {
                 foreach ($filters['verifying'] as $fieldName => $value) {
+                    ++$count;
                     $this->assertEquals($value, $grid[$fieldName]);
                 }
                 break;
@@ -55,7 +64,7 @@ abstract class AbstractController extends WebTestCase
         }
 
         if ($filters['oneOrMore']) {
-            $this->assertGreaterThanOrEqual($count, 1);
+            $this->assertGreaterThanOrEqual(1, $count);
         } else {
             $this->assertEquals($count, 0);
         }

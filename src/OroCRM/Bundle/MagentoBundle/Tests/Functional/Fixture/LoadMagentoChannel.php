@@ -9,6 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseOrderItem;
 
 use Oro\Bundle\UserBundle\Model\Gender;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
@@ -84,7 +85,12 @@ class LoadMagentoChannel extends AbstractFixture
         $this->setReference('customer', $customer);
         $this->setReference('channel', $this->channel);
 
-        $this->createOrder($cart1, $customer);
+        $order = $this->createOrder($cart1, $customer);
+
+        #$baseOrderItem = $this->createBaseOrderItem($order);
+        #$order->setItems([$baseOrderItem]);
+        #$this->em->persist($order);
+
         $this->em->flush();
 
         return $this->channel;
@@ -117,6 +123,7 @@ class LoadMagentoChannel extends AbstractFixture
         $cart->setStoreCurrencyCode('code');
         $cart->setQuoteCurrencyCode('usd');
         $cart->setStoreToBaseRate(12);
+        $cart->setGrandTotal(2.54);
         $cart->setIsGuest(0);
 
         $this->em->persist($cart);
@@ -407,5 +414,33 @@ class LoadMagentoChannel extends AbstractFixture
         $this->em->persist($order);
 
         return $order;
+    }
+
+    protected function createBaseOrderItem(Order $order)
+    {
+        $baseOrderItem = new BaseOrderItem();
+        #$baseOrderItem->setId(mt_rand(0,9999));
+        $baseOrderItem->setName('some order item');
+        $baseOrderItem->setSku('some sku');
+        $baseOrderItem->setOrder($order);
+        $baseOrderItem->setQty(1234);
+        $baseOrderItem->setCost(51.00);
+        $baseOrderItem->setPrice(75.00);
+        $baseOrderItem->setWeight(6.12);
+        $baseOrderItem->setTaxPercent(2);
+        $baseOrderItem->setTaxAmount(1.5);
+        $baseOrderItem->setDiscountPercent(4);
+        $baseOrderItem->setDiscountAmount(0);
+        $baseOrderItem->setRowTotal(234);
+
+        /**
+         * Doctrine\ORM\ORMInvalidArgumentException : The given entity of type
+         * 'Oro\Bundle\BusinessEntitiesBundle\Entity\BaseOrderItem'
+         * (Oro\Bundle\BusinessEntitiesBundle\Entity\BaseOrderItem@0000000036e617f8000000007dcf06ec) has no identity/no
+         * id values set. It cannot be added to the identity map.
+         */
+        #$this->em->persist($baseOrderItem);
+
+        return $baseOrderItem;
     }
 }
