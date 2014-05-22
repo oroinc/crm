@@ -6,5 +6,4 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterfac
 
 interface PredefinedFiltersAwareFixture extends PredefinedFiltersAwareInterface, \Iterator
 {
-
 }

@@ -196,6 +196,7 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
         $address->setFirstName($data['GivenName']);
         $address->setLastName($data['Surname']);
         $address->setPrimary(true);
+        $address->setOwner($contact);
 
         $isoCode = $data['Country'];
         $country = array_filter(

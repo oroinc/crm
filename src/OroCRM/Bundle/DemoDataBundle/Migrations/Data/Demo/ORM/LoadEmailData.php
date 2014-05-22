@@ -9,18 +9,28 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Oro\Bundle\EmailBundle\Mailer\Processor;
 use Oro\Bundle\EmailBundle\Builder\EmailEntityBuilder;
 use Oro\Bundle\EmailBundle\Entity\EmailFolder;
-use Oro\Bundle\EmailBundle\Entity\InternalEmailOrigin;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class LoadEmailData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
-    /** @var ContainerInterface */
-    private $container;
-
+    /**
+     * @var string
+     */
     protected $templates;
+
+    /**
+     * @var EmailEntityBuilder
+     */
+    protected $emailEntityBuilder;
+
+    /**
+     * @var Processor
+     */
+    protected $mailerProcessor;
 
     /**
      * {@inheritdoc}
@@ -30,9 +40,17 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
         return ['OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setContainer(ContainerInterface $container = null)
     {
-        $this->container = $container;
+        if (!$container) {
+            return;
+        }
+
+        $this->emailEntityBuilder = $container->get('oro_email.email.entity.builder');
+        $this->mailerProcessor = $container->get('oro_email.mailer.processor');
     }
 
     /**
@@ -63,25 +81,24 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
     /**
      * @param ObjectManager $om
      */
-    protected function loadEmailsDemo(
-        ObjectManager $om
-    ) {
+    protected function loadEmailsDemo(ObjectManager $om)
+    {
         $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
         $contactCount = count($contacts);
-        /** @var EmailEntityBuilder $emailsBuilder */
-        $emailsBuilder = $this->container->get('oro_email.email.entity.builder');
+
         for ($i = 0; $i < 100; ++$i) {
             $contactRandom = rand(0, $contactCount - 1);
+
             /** @var Contact $contact */
             $contact = $contacts[$contactRandom];
-            $origin = $om
-                ->getRepository('OroEmailBundle:InternalEmailOrigin')
-                ->findOneBy(array('internalName' => InternalEmailOrigin::BAP));
+            $owner = $contact->getOwner();
+            $origin = $this->mailerProcessor->getEmailOrigin($owner->getEmail());
 
-            $randTemplate = array_rand($this->templates);
-            $email = $emailsBuilder->email(
-                $this->templates[$randTemplate]['Subject'],
-                $contact->getOwner()->getEmail(),
+            $randomTemplate = array_rand($this->templates);
+
+            $email = $this->emailEntityBuilder->email(
+                $this->templates[$randomTemplate]['Subject'],
+                $owner->getEmail(),
                 $contact->getPrimaryEmail()->getEmail(),
                 new \DateTime('now'),
                 new \DateTime('now'),
@@ -90,15 +107,15 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
 
             $email->addFolder($origin->getFolder(EmailFolder::SENT));
 
-            $emailBody = $emailsBuilder->body(
-                "Hi,\n" . $this->templates[$randTemplate]['Text'],
+            $emailBody = $this->emailEntityBuilder->body(
+                "Hi,\n" . $this->templates[$randomTemplate]['Text'],
                 false,
                 true
             );
             $email->setEmailBody($emailBody);
             $email->setMessageId(sprintf('id.%s@%s', uniqid(), '@bap.migration.generated'));
 
-            $emailsBuilder->getBatch()->persist($om);
+            $this->emailEntityBuilder->getBatch()->persist($om);
         }
     }
 }
