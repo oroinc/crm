@@ -1,5 +1,4 @@
 oro_entity:
-    exclude: ~
     virtual_fields:
         OroCRM\Bundle\ContactBundle\Entity\Contact:
             primaryEmail:
