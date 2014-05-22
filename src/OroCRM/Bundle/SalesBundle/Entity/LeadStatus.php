@@ -8,6 +8,11 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_sales_lead_status")
+ * @Config(
+ *      defaultValues={
+ *          "grouping"={"groups"={"dictionary"}}
+ *      }
+ * )
  */
 class LeadStatus
 {
