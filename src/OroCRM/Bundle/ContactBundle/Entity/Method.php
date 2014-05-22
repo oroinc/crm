@@ -12,8 +12,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @ORM\Table(name="orocrm_contact_method")
  * @Config(
  *      defaultValues={
- *          "grouping"={"groups"={"dictionary"}},
- *          "dictionary"={"default_field_name"="label"}
+ *          "grouping"={"groups"={"dictionary"}}
  *      }
  * )
  */

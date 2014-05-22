@@ -10,8 +10,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @ORM\Table(name="orocrm_sales_opport_close_rsn")
  * @Config(
  *      defaultValues={
- *          "grouping"={"groups"={"dictionary"}},
- *          "dictionary"={"default_field_name"="label"}
+ *          "grouping"={"groups"={"dictionary"}}
  *      }
  * )
  */
