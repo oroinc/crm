@@ -18,6 +18,7 @@ use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
+use OroCRM\Bundle\MagentoBundle\Utils\ValidationUtils;
 
 abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
 {
@@ -110,7 +111,9 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
         $validationErrors = $this->strategyHelper->validateEntity($entity);
         if ($validationErrors) {
             $this->context->incrementErrorEntriesCount();
-            $this->strategyHelper->addValidationErrors($validationErrors, $this->context);
+            $errorPrefix = ValidationUtils::guessValidationMessagePrefix($entity);
+
+            $this->strategyHelper->addValidationErrors($validationErrors, $this->context, $errorPrefix);
 
             return null;
         }
@@ -188,9 +191,17 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
      */
     protected function merge($entity)
     {
-        $em = $this->getEntityManager(ClassUtils::getClass($entity));
+        /*
+         * Reload entity instead merge due to strange behavior with spl_object_hash
+         * EntityManager#find has own cache, so query will be performed only once per batch (until EntityManager#clear)
+         */
+        $cn = ClassUtils::getClass($entity);
+        $em = $this->getEntityManager($cn);
         if ($em->getUnitOfWork()->getEntityState($entity) !== UnitOfWork::STATE_MANAGED) {
-            $entity = $em->merge($entity);
+            $id = $em->getClassMetadata($cn)->getIdentifierValues($entity);
+            if ($id) {
+                $entity = $em->find($cn, $id);
+            }
         }
 
         return $entity;

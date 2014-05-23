@@ -13,14 +13,16 @@ class OrderStrategy extends BaseStrategy
 {
     /** @var array */
     protected static $attributesToUpdateManual = [
-            'id',
-            'store',
-            'items',
-            'customer',
-            'addresses',
-            'workflowItem',
-            'workflowStep'
-        ];
+        'id',
+        'store',
+        'items',
+        'customer',
+        'addresses',
+        'workflowItem',
+        'workflowStep',
+        'relatedCalls',
+        'relatedEmails',
+    ];
 
     /** @var StoreStrategy */
     protected $storeStrategy;
