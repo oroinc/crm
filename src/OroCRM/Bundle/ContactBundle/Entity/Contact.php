@@ -9,10 +9,9 @@ use Doctrine\Common\Collections\Collection;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
-use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
+use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
@@ -230,9 +229,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactEmail",
-     *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
-     * )
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactEmail", mappedBy="owner")
      * @ORM\OrderBy({"primary" = "DESC"})
      * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactEmail[]", nillable=true)
      */
@@ -241,9 +238,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone",
-     *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
-     * )
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone", mappedBy="owner")
      * @ORM\OrderBy({"primary" = "DESC"})
      * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactPhone[]", nillable=true)
      */
@@ -318,7 +313,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress",
-     *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     *     mappedBy="owner"
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
      */
@@ -866,10 +861,10 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     /**
      * Add address
      *
-     * @param AbstractAddress $address
+     * @param ContactAddress $address
      * @return BasePerson
      */
-    public function addAddress(AbstractAddress $address)
+    public function addAddress(ContactAddress $address)
     {
         if (!$this->addresses->contains($address)) {
             $this->addresses->add($address);
@@ -888,6 +883,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     {
         $result = null;
 
+        /** @var ContactAddress $address */
         foreach ($this->getAddresses() as $address) {
             if ($address->isPrimary()) {
                 $result = $address;
@@ -908,6 +904,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     {
         if ($this->hasAddress($address)) {
             $address->setPrimary(true);
+            /** @var ContactAddress $otherAddress */
             foreach ($this->getAddresses() as $otherAddress) {
                 if (!$address->isEqual($otherAddress)) {
                     $otherAddress->setPrimary(false);
@@ -929,6 +926,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     {
         if ($this->hasAddress($address)) {
             $address->addType($addressType);
+            /** @var ContactAddress $otherAddress */
             foreach ($this->getAddresses() as $otherAddress) {
                 if (!$address->isEqual($otherAddress)) {
                     $otherAddress->removeType($addressType);
@@ -960,6 +958,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     {
         $result = null;
 
+        /** @var ContactAddress $address */
         foreach ($this->getAddresses() as $address) {
             if ($address->hasTypeWithName($typeName)) {
                 $result = $address;
