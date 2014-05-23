@@ -122,7 +122,7 @@ class CustomerControllerTest extends AbstractController
                     'gridFilters'    => [],
                     'channelName'    => 'Demo Web store',
                     'verifying'      => [
-                        'grandTotal'  => '$0.00',
+                        'grandTotal'  => '$2.54',
                         'statusLabel' => 'Open',
                         'stepLabel'   => 'Open',
                     ],
@@ -140,7 +140,7 @@ class CustomerControllerTest extends AbstractController
                     'channelName'    => 'Demo Web store',
                     'verifying'      => [
                         'totalAmount'     => '$0.00',
-                        'totalPaidAmount' => '$0.00',
+                        'totalPaidAmount' => '$17.85',
                         'status'          => 'open',
                         'stepLabel'       => 'Not contacted',
                     ],
