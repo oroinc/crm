@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
 use Oro\Bundle\TagBundle\Entity\Taggable;
@@ -861,11 +862,12 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     /**
      * Add address
      *
-     * @param ContactAddress $address
+     * @param AbstractAddress $address
      * @return BasePerson
      */
-    public function addAddress(ContactAddress $address)
+    public function addAddress(AbstractAddress $address)
     {
+        /** @var ContactAddress $address */
         if (!$this->addresses->contains($address)) {
             $this->addresses->add($address);
             $address->setOwner($this);
