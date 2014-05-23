@@ -23,6 +23,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
+use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 
 class LoadMagentoChannel extends AbstractFixture
 {
@@ -87,9 +88,9 @@ class LoadMagentoChannel extends AbstractFixture
 
         $order = $this->createOrder($cart1, $customer);
 
-        #$baseOrderItem = $this->createBaseOrderItem($order);
-        #$order->setItems([$baseOrderItem]);
-        #$this->em->persist($order);
+        $baseOrderItem = $this->createBaseOrderItem($order);
+        $order->setItems([$baseOrderItem]);
+        $this->em->persist($order);
 
         $this->em->flush();
 
@@ -428,12 +429,12 @@ class LoadMagentoChannel extends AbstractFixture
 
     protected function createBaseOrderItem(Order $order)
     {
-        $baseOrderItem = new BaseOrderItem();
-        #$baseOrderItem->setId(mt_rand(0,9999));
+        $baseOrderItem = new OrderItem();
+        $baseOrderItem->setId(mt_rand(0,9999));
         $baseOrderItem->setName('some order item');
         $baseOrderItem->setSku('some sku');
+        $baseOrderItem->setQty(1);
         $baseOrderItem->setOrder($order);
-        $baseOrderItem->setQty(1234);
         $baseOrderItem->setCost(51.00);
         $baseOrderItem->setPrice(75.00);
         $baseOrderItem->setWeight(6.12);
@@ -443,13 +444,7 @@ class LoadMagentoChannel extends AbstractFixture
         $baseOrderItem->setDiscountAmount(0);
         $baseOrderItem->setRowTotal(234);
 
-        /**
-         * Doctrine\ORM\ORMInvalidArgumentException : The given entity of type
-         * 'Oro\Bundle\BusinessEntitiesBundle\Entity\BaseOrderItem'
-         * (Oro\Bundle\BusinessEntitiesBundle\Entity\BaseOrderItem@0000000036e617f8000000007dcf06ec) has no identity/no
-         * id values set. It cannot be added to the identity map.
-         */
-        #$this->em->persist($baseOrderItem);
+        $this->em->persist($baseOrderItem);
 
         return $baseOrderItem;
     }

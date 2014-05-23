@@ -124,13 +124,13 @@ class OrderControllerTest extends AbstractController
                     'gridFilters'    => [],
                     'channelName'    => 'Demo Web store',
                     'verifying'      => [
-                        'sku'            => 'sku',
-                        'qty'            => 0,
-                        'rowTotal'       => '$100.00',
-                        'taxAmount'      => '$10.00',
+                        'sku'            => 'some sku',
+                        'qty'            => 1,
+                        'rowTotal'       => '$234.00',
+                        'taxAmount'      => '$1.50',
                         'discountAmount' => '$0.00'
                     ],
-                    'isResult'       => false
+                    'isResult'       => true
                 ],
             ],
         ];
