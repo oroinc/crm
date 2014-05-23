@@ -326,6 +326,7 @@ orocrm:
             types.label:         Types
             country.label:       Country
             region.label:        State
+            contact_address.label: Contact address
 
         cartaddress:
             entity_label:        Magento Cart Address
