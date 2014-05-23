@@ -230,7 +230,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactEmail", mappedBy="owner")
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactEmail",
+     *    mappedBy="owner", cascade={"persist"}
+     * )
      * @ORM\OrderBy({"primary" = "DESC"})
      * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactEmail[]", nillable=true)
      */
@@ -239,7 +241,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone", mappedBy="owner")
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone", mappedBy="owner",
+     *    mappedBy="owner", cascade={"persist"}
+     * ))
      * @ORM\OrderBy({"primary" = "DESC"})
      * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactPhone[]", nillable=true)
      */
@@ -314,7 +318,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress",
-     *     mappedBy="owner"
+     *    mappedBy="owner", cascade={"persist"}
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
      */
@@ -335,7 +339,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", mappedBy="contacts")
-     * @ORM\JoinTable(name="orocrm_contact_to_account")
+     * @ORM\JoinTable(name="orocrm_account_to_contact")
      */
     protected $accounts;
 
