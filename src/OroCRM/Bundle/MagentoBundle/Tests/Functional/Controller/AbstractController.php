@@ -4,6 +4,10 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
+/**
+ * @outputBuffering enabled
+ * @dbIsolation
+ */
 abstract class AbstractController extends WebTestCase
 {
     /** @var \Oro\Bundle\IntegrationBundle\Entity\Channel */
