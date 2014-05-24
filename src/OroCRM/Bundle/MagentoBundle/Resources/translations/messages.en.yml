@@ -302,30 +302,31 @@ orocrm:
             updated_at.label:     Updated at
 
         address:
-            entity_label:        Magento Customer Address
-            entity_plural_label: Magento Customer Addresses
-            entity_description:  Represent Magento Customer Address
-            label.label:         Label
-            street.label:        Street
-            street2.label:       Street 2
-            city.label:          City
-            postal_code.label:   Zip/Postal code
-            region_text.label:   State
-            name_prefix.label:   Name prefix
-            first_name.label:    First name
-            middle_name.label:   Middle name
-            last_name.label:     Last name
-            name_suffix.label:   Name suffix
-            primary.label:       Primary
-            id.label:            Id
-            organization.label:  Organization
-            created.label:       Created at
-            updated.label:       Updated at
-            origin_id.label:     Origin id
-            owner.label:         Owner
-            types.label:         Types
-            country.label:       Country
-            region.label:        State
+            entity_label:          Magento Customer Address
+            entity_plural_label:   Magento Customer Addresses
+            entity_description:    Represent Magento Customer Address
+            label.label:           Label
+            street.label:          Street
+            street2.label:         Street 2
+            city.label:            City
+            postal_code.label:     Zip/Postal code
+            region_text.label:     State
+            name_prefix.label:     Name prefix
+            first_name.label:      First name
+            middle_name.label:     Middle name
+            last_name.label:       Last name
+            name_suffix.label:     Name suffix
+            primary.label:         Primary
+            id.label:              Id
+            organization.label:    Organization
+            created.label:         Created at
+            updated.label:         Updated at
+            origin_id.label:       Origin id
+            owner.label:           Owner
+            types.label:           Types
+            country.label:         Country
+            region.label:          State
+            contact_address.label: Contact address
 
         cartaddress:
             entity_label:        Magento Cart Address
