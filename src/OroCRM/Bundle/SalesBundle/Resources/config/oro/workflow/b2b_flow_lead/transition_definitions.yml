@@ -130,6 +130,8 @@ workflows:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
                         attribute: $.result.opportunity.status
+                    - @unset_value:
+                        [$account]
                     - @redirect: # redirect to workflow item edit page
                         route: 'orocrm_sales_opportunity_view'
                         route_parameters:

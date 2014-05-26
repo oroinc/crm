@@ -43,6 +43,8 @@ workflows:
                         method: 'addRelatedCall'
                         object: $cart
                         method_parameters: [$call]
+                    - @unset_value:
+                        [$call]
 
             send_email_definition:
                 pre_conditions:
