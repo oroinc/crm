@@ -26,7 +26,7 @@ class OroCrmMagentoBundle implements Migration
             $schema->getTable('orocrm_magento_cart'),
             ['cart_id'],
             ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+            ['onDelete' => 'CASCADE']
         );
         $orderCall = $schema->getTable('orocrm_magento_order_calls');
         $orderCall->removeForeignKey('FK_A885A3450A89B2C');
@@ -41,7 +41,7 @@ class OroCrmMagentoBundle implements Migration
             $schema->getTable('orocrm_magento_order'),
             ['order_id'],
             ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+            ['onDelete' => 'CASCADE']
         );
         $cartEmail = $schema->getTable('orocrm_magento_cart_emails');
         $cartEmail->removeForeignKey('FK_11B0F84B1AD5CDBF');
@@ -49,14 +49,14 @@ class OroCrmMagentoBundle implements Migration
             $schema->getTable('orocrm_magento_cart'),
             ['cart_id'],
             ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+            ['onDelete' => 'CASCADE']
         );
         $cartEmail->removeForeignKey('FK_11B0F84BA832C1C9');
         $cartEmail->addForeignKeyConstraint(
             $schema->getTable('oro_email'),
             ['email_id'],
             ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+            ['onDelete' => 'CASCADE']
         );
         $orderEmail = $schema->getTable('orocrm_magento_order_emails');
         $orderEmail->removeForeignKey('FK_10E2A9508D9F6D38');
@@ -64,14 +64,14 @@ class OroCrmMagentoBundle implements Migration
             $schema->getTable('orocrm_magento_order'),
             ['order_id'],
             ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+            ['onDelete' => 'CASCADE']
         );
         $orderEmail->removeForeignKey('FK_10E2A950A832C1C9');
         $orderEmail->addForeignKeyConstraint(
             $schema->getTable('oro_email'),
             ['email_id'],
             ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+            ['onDelete' => 'CASCADE']
         );
     }
 }

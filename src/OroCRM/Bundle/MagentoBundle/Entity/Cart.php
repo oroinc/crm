@@ -189,7 +189,7 @@ class Cart extends BaseCart
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\CallBundle\Entity\Call", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\CallBundle\Entity\Call")
      * @ORM\JoinTable(name="orocrm_magento_cart_calls",
      *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id", onDelete="CASCADE")}

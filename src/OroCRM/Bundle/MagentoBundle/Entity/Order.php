@@ -160,7 +160,7 @@ class Order extends BaseOrder
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\CallBundle\Entity\Call", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\CallBundle\Entity\Call")
      * @ORM\JoinTable(name="orocrm_magento_order_calls",
      *      joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id", onDelete="CASCADE")}
