@@ -27,7 +27,7 @@ class CartsBridgeIterator extends AbstractBridgeIterator
         $this->applyFilter();
 
         $filters          = $this->filter->getAppliedFilters();
-        $filters['pager'] = ['page' => $this->getCurrentPage(), 'pageSize' => self::DEFAULT_PAGE_SIZE];
+        $filters['pager'] = ['page' => $this->getCurrentPage(), 'pageSize' => $this->pageSize];
 
         $result = $this->transport->call(SoapTransport::ACTION_ORO_CART_LIST, $filters);
         $result = $this->processCollectionResponse($result);
