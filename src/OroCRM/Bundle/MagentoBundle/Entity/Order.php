@@ -5,16 +5,16 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseOrder;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
+use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
 
 /**
  * Class Order
@@ -46,7 +46,7 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Order extends BaseOrder
+class Order extends ExtendOrder
 {
     use IntegrationEntityTrait, NamesAwareTrait;
 

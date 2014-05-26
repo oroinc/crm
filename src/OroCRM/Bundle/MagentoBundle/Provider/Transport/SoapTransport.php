@@ -51,6 +51,8 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_ORO_ORDER_LIST    = 'oroOrderList';
     const ACTION_ORO_CUSTOMER_LIST = 'oroCustomerList';
 
+    const SOAP_FAULT_ADDRESS_DOES_NOT_EXIST = 102;
+
     /** @var string */
     protected $sessionId;
 
@@ -233,6 +235,19 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function getRegions()
     {
         return new RegionSoapIterator($this, $this->settings->all());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getErrorCode(\Exception $e)
+    {
+        if ($e instanceof \SoapFault) {
+            switch($e->faultcode) {
+                case self::SOAP_FAULT_ADDRESS_DOES_NOT_EXIST:
+                    return self::TRANSPORT_ERROR_ADDRESS_DOES_NOT_EXIST;
+            }
+        }
     }
 
     /**

@@ -2,17 +2,18 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCart;
 use Oro\Bundle\EmailBundle\Entity\Email;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
 use OroCRM\Bundle\CallBundle\Entity\Call;
+use OroCRM\Bundle\MagentoBundle\Model\ExtendCart;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
@@ -45,7 +46,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *  }
  * )
  */
-class Cart extends BaseCart
+class Cart extends ExtendCart
 {
     use IntegrationEntityTrait, OriginTrait, NamesAwareTrait;
 

@@ -1,5 +1,6 @@
 datagrid:
     magento-customers-grid:
+        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Customer
         source:
             type: orm
             acl_resource: orocrm_magento_customer_view
@@ -18,7 +19,7 @@ datagrid:
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
                 from:
-                    - { table: OroCRMMagentoBundle:Customer , alias: c }
+                    - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
                     left:
                         - { join: c.channel, alias: ch }
@@ -138,6 +139,7 @@ datagrid:
             export: true
 
     magento-cart-grid:
+        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Cart
         source:
             type: orm
             acl_resource: orocrm_magento_cart_view
@@ -160,7 +162,7 @@ datagrid:
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
                 from:
-                    - { table: %orocrm_magento.cart.entity.class% , alias: c }
+                    - { table: OroCRM\Bundle\MagentoBundle\Entity\Cart , alias: c }
                 join:
                     left:
                         - { join: c.store, alias: cs }
@@ -313,6 +315,7 @@ datagrid:
             export: true
 
     magento-cartitem-grid:
+        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\CartItem
         source:
             type: orm
             acl_resource: orocrm_magento_cart_view
@@ -334,7 +337,7 @@ datagrid:
                     - c.updatedAt
                     - co.quoteCurrencyCode as currency
                 from:
-                    - { table: OroCRMMagentoBundle:CartItem , alias: c }
+                    - { table: OroCRM\Bundle\MagentoBundle\Entity\CartItem , alias: c }
                 join:
                     left:
                         - { join: c.cart, alias: co }
@@ -414,6 +417,7 @@ datagrid:
                 hide: true
 
     magento-products-grid:
+        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Product
         source:
             type: orm
             acl_resource: orocrm_magento_product_view
@@ -421,7 +425,7 @@ datagrid:
                 select:
                     - p
                 from:
-                    - { table: OroCRMMagentoBundle:Product , alias: p }
+                    - { table: OroCRM\Bundle\MagentoBundle\Entity\Product , alias: p }
                 join:
                     left:
                         - { join: p.channel, alias: pch }
@@ -513,6 +517,7 @@ datagrid:
             entityHint: product
 
     magento-order-grid:
+        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Order
         source:
             type: orm
             acl_resource: orocrm_magento_order_view
@@ -536,7 +541,7 @@ datagrid:
                     - ch.name as channelName
                     - cw.name as websiteName
                 from:
-                    - { table: %orocrm_magento.order.entity.class%, alias: o }
+                    - { table: OroCRM\Bundle\MagentoBundle\Entity\Order, alias: o }
                 join:
                     left:
                         - { join: o.workflowStep, alias: step }
@@ -711,6 +716,7 @@ datagrid:
             export: true
 
     magento-orderitem-grid:
+        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\OrderItem
         source:
             type: orm
             acl_resource: orocrm_magento_order_view
@@ -719,7 +725,7 @@ datagrid:
                     - oi
                     - o.currency
                 from:
-                    - { table: OroCRMMagentoBundle:OrderItem , alias: oi }
+                    - { table: OroCRM\Bundle\MagentoBundle\Entity\OrderItem , alias: oi }
                 join:
                     left:
                         - { join: oi.order, alias: o }
