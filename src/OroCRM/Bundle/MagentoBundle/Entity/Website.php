@@ -6,6 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
+use OroCRM\Bundle\MagentoBundle\Model\ExtendWebsite;
 
 /**
  * Class Website
@@ -17,8 +20,9 @@ use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
  *  name="orocrm_magento_website",
  *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_site_idx", columns={"website_code", "origin_id", "channel_id"})}
  * )
+ * @Config()
  */
-class Website
+class Website extends ExtendWebsite
 {
     use IntegrationEntityTrait, OriginTrait;
 

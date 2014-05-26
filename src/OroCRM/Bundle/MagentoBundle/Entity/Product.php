@@ -2,13 +2,14 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseProduct;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
+use OroCRM\Bundle\MagentoBundle\Model\ExtendProduct;
 
 /**
  * Class Product
@@ -28,7 +29,7 @@ use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
  * )
  * @Oro\Loggable
  */
-class Product extends BaseProduct
+class Product extends ExtendProduct
 {
     use IntegrationEntityTrait;
 

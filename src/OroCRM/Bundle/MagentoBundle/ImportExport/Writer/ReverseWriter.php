@@ -15,12 +15,14 @@ use Oro\Bundle\AddressBundle\Entity\Country as BAPCountry;
 use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
 
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 
@@ -169,9 +171,17 @@ class ReverseWriter implements ItemWriterInterface
     protected function processAddresses($addresses, $syncPriority, Customer $customer)
     {
         foreach ($addresses as $address) {
-            if (!isset($address['status'])) {
-                throw new \LogicException();
+            if (empty($address['status']) || empty($address['entity'])) {
+                throw new \LogicException('Unable to process entity modification');
             }
+
+            /** @var ContactAddress|Address $addressEntity */
+            $addressEntity = $address['entity'];
+            $status        = $address['status'];
+            $defaultData   = [
+                'firstname' => $customer->getFirstName(),
+                'lastname'  => $customer->getLastName()
+            ];
 
             if ($address['status'] === AbstractReverseProcessor::UPDATE_ENTITY) {
                 $addressEntity = $address['entity'];
@@ -190,43 +200,23 @@ class ReverseWriter implements ItemWriterInterface
                 }
 
                 $dataForSend = array_merge(
-                    [],
-                    $this->customerSerializer->convertToMagentoAddress($addressEntity),
+                    $this->customerSerializer->convertToMagentoAddress($addressEntity, $defaultData),
                     $this->regionConverter->toMagentoData($addressEntity)
                 );
-
                 $requestData = ['addressId' => $addressEntity->getOriginId(), 'addressData' => $dataForSend];
-                $this->transport->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_UPDATE, $requestData);
-                $this->em->persist($addressEntity);
-
                 try {
-                    $this->em->flush();
+                    $this->transport->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_UPDATE, $requestData);
+                    $this->em->persist($addressEntity);
                 } catch (\Exception $e) {
                 }
-
-            } elseif ($address['status'] === AbstractReverseProcessor::DELETE_ENTITY) {
+            } elseif ($status === AbstractReverseProcessor::NEW_ENTITY) {
                 try {
-                    $result = $this->transport->call(
-                        SoapTransport::ACTION_CUSTOMER_ADDRESS_DELETE,
-                        ['addressId' => $address['entity']->getOriginId()]
-                    );
-                } catch (\Exception $e) {
-                    $result = null;
-                    $this->em->remove($address['entity']);
-                }
-
-                if (true === $result || null === $result) {
-                    $this->em->remove($address['entity']);
-                }
-                $this->em->flush();
-            } elseif ($address['status'] === AbstractReverseProcessor::NEW_ENTITY) {
-                try {
-                    $dataForSend = array_merge(
+                    $addressData = array_merge(
                         ['telephone' => 'no phone'],
-                        $this->customerSerializer->convertToMagentoAddress($address['entity']),
-                        $this->regionConverter->toMagentoData($address['entity'])
+                        $this->customerSerializer->convertToMagentoAddress($addressEntity, $defaultData),
+                        $this->regionConverter->toMagentoData($addressEntity)
                     );
-                    $requestData = ['customerId' => $address['magentoId'], 'addressData' => $dataForSend];
+                    $requestData = ['customerId' => $address['magentoId'], 'addressData' => $addressData];
                     $result      = $this->transport->call(
                         SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
                         $requestData
@@ -234,12 +224,27 @@ class ReverseWriter implements ItemWriterInterface
 
                     if ($result) {
                         $newAddress = $this->customerSerializer
-                            ->convertMageAddressToAddress($dataForSend, $address['entity'], $result);
+                            ->convertMageAddressToAddress($addressData, $addressEntity, $result);
                         $newAddress->setOwner($customer);
                         $customer->addAddress($newAddress);
                         $this->em->persist($customer);
                     }
                 } catch (\Exception $e) {
+                }
+            } elseif ($status === AbstractReverseProcessor::DELETE_ENTITY) {
+                try {
+                    $shouldBeRemoved = $this->transport->call(
+                        SoapTransport::ACTION_CUSTOMER_ADDRESS_DELETE,
+                        ['addressId' => $addressEntity->getOriginId()]
+                    );
+                } catch (\Exception $e) {
+                    // remove from local customer if it's already removed on remote side
+                    $errorCode       = $this->transport->getErrorCode($e);
+                    $shouldBeRemoved = $errorCode === MagentoTransportInterface::TRANSPORT_ERROR_ADDRESS_DOES_NOT_EXIST;
+                }
+
+                if ($shouldBeRemoved) {
+                    $this->em->remove($address['entity']);
                 }
             }
         }
@@ -301,8 +306,8 @@ class ReverseWriter implements ItemWriterInterface
     /**
      * Set changed data to customer
      *
-     * @param Customer $entity
-     * @param array    $changedData
+     * @param object $entity
+     * @param array  $changedData
      */
     protected function setChangedData($entity, array $changedData)
     {
@@ -316,8 +321,8 @@ class ReverseWriter implements ItemWriterInterface
     /**
      * Set changed data to customer
      *
-     * @param Customer $entity
-     * @param array    $changedData
+     * @param object $entity
+     * @param array  $changedData
      */
     protected function setLocalDataChanges($entity, array $changedData)
     {
@@ -380,9 +385,9 @@ class ReverseWriter implements ItemWriterInterface
                     foreach ($value as $typeName) {
                         $type = $this->em->getRepository('OroAddressBundle:AddressType')->find($typeName);
                         /** @var Collection $currentTypes */
-                        $currentTypes = $this->accessor->getValue($entity, $fieldName);
+                        $currentTypes = $this->accessor->getValue($entity, 'types');
                         if ($currentTypes->contains($type)) {
-                            $currentTypes->remove($type);
+                            $currentTypes->removeElement($type);
                         }
                     }
                 } else {
