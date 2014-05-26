@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
@@ -134,15 +136,21 @@ class ContactImportHelper
                     if (!$address->getCountry()) {
                         $contact->removeAddress($address);
                     }
-                } elseif ($this->isRemotePrioritized()) {
+                } else {
                      $contact->removeAddress($address);
                 }
             }
         }
 
+        /** @var ArrayCollection|Address[] $newAddresses */
         $newAddresses = $this->getOrphanRemoteAddresses($remoteData, $localData);
-        if ($this->isRemotePrioritized() && $newAddresses->count()) {
-            foreach ($newAddresses as $address) {
+        foreach ($newAddresses as $address) {
+            /*
+             * Will create new address if remote data has higher priority and means
+             * that address removed from contact and remove should be cancelled.
+             * Another case if it's newly created address, then process it anyway
+             */
+            if ($this->isRemotePrioritized() || !$address->getId()) {
                 $contactAddress = new ContactAddress();
 
                 $this->mergeScalars($this->addressScalarFields, $address, $contactAddress, $contactAddress);
@@ -267,7 +275,7 @@ class ContactImportHelper
     {
         $filtered = $customer->getAddresses()->filter(
             function (Address $address) use ($localAddress) {
-                return $address->getId() === $localAddress->getOriginId();
+                return $address->getOriginId() === $localAddress->getOriginId();
             }
         );
 
@@ -286,7 +294,7 @@ class ContactImportHelper
     {
         $filtered = $customer->getAddresses()->filter(
             function (Address $address) use ($remoteAddress) {
-                return $remoteAddress->getId() === $address->getOriginId();
+                return $remoteAddress->getOriginId() === $address->getOriginId();
             }
         );
 
