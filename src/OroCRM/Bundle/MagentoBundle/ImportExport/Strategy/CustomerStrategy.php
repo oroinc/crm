@@ -28,47 +28,42 @@ class CustomerStrategy extends BaseStrategy
     protected $groupEntityCache = [];
 
     /**
-     * Process item strategy
+     * Update/Create customer and related entities based on remote data
      *
-     * @param mixed $importedEntity
+     * @param Customer $remoteEntity Denormalized remote data
      *
-     * @return mixed|null
+     * @return Customer|null
      */
-    public function process($importedEntity)
+    public function process($remoteEntity)
     {
-        $newEntity = $this->getEntityByCriteria(
-            ['originId' => $importedEntity->getOriginId(), 'channel' => $importedEntity->getChannel()],
-            $importedEntity
+        /** @var Customer $localEntity */
+        $localEntity = $this->getEntityByCriteria(
+            ['originId' => $remoteEntity->getOriginId(), 'channel' => $remoteEntity->getChannel()],
+            $remoteEntity
         );
-
-        if ($newEntity) {
-            $this->strategyHelper->importEntity(
-                $newEntity,
-                $importedEntity,
-                ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses']
-            );
-        } else {
-            $newEntity = $importedEntity;
-        }
+        $localEntity = $localEntity ? : $remoteEntity;
 
         // update all related entities
         $this->updateStoresAndGroup(
-            $newEntity,
-            $importedEntity->getStore(),
-            $importedEntity->getWebsite(),
-            $importedEntity->getGroup()
+            $localEntity,
+            $remoteEntity->getStore(),
+            $remoteEntity->getWebsite(),
+            $remoteEntity->getGroup()
         );
+        $this->updateContact($localEntity, $remoteEntity->getContact());
+        $this->updateAccount($localEntity, $remoteEntity->getAccount());
+        $localEntity->getAccount()->setDefaultContact($localEntity->getContact());
 
-        $this->updateAddresses($newEntity, $importedEntity->getAddresses())
-            ->updateContact($newEntity, $importedEntity->getContact(), true)
-            ->updateAccount($newEntity, $importedEntity->getAccount());
-
-        // set relations
-        $newEntity->getContact()->addAccount($newEntity->getAccount());
-        $newEntity->getAccount()->setDefaultContact($newEntity->getContact());
+        // modify local entity after all relations done
+        $this->strategyHelper->importEntity(
+            $localEntity,
+            $remoteEntity,
+            ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses']
+        );
+        $this->updateAddresses($localEntity, $remoteEntity->getAddresses());
 
         // validate and update context - increment counter or add validation error
-        return $this->validateAndUpdateContext($newEntity);
+        return $this->validateAndUpdateContext($localEntity);
     }
 
     /**
@@ -183,6 +178,11 @@ class CustomerStrategy extends BaseStrategy
      */
     protected function updateAddresses(Customer $entity, Collection $addresses)
     {
+        // force option enforce re-import of all addresses
+        if ($this->context->getOption('force') && $entity->getId()) {
+            $entity->getAddresses()->clear();
+        }
+
         /** $address - imported address */
         foreach ($addresses as $address) {
             // at this point imported address region have code equal to region_id in magento db field
@@ -190,10 +190,18 @@ class CustomerStrategy extends BaseStrategy
 
             $originAddressId = $address->getId();
             $address->setOriginId($originAddressId);
-            if ($originAddressId) {
+            if ($originAddressId && !$this->context->getOption('force')) {
                 $existingAddress = $entity->getAddressByOriginId($originAddressId);
                 if ($existingAddress) {
-                    $this->strategyHelper->importEntity($existingAddress, $address, ['id', 'region', 'country']);
+                    $this->strategyHelper->importEntity(
+                        $existingAddress,
+                        $address,
+                        ['id', 'region', 'country', 'created', 'updated']
+                    );
+                    // set remote data for further processing
+                    $existingAddress->setRegion($address->getRegion());
+                    $existingAddress->setCountry($address->getCountry());
+
                     $address = $existingAddress;
                 }
             }
@@ -209,8 +217,6 @@ class CustomerStrategy extends BaseStrategy
             $address->setOwner($entity);
             $entity->addAddress($address);
         }
-
-        return $this;
     }
 
     /**

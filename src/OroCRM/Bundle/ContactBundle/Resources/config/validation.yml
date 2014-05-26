@@ -30,3 +30,16 @@ OroCRM\Bundle\ContactBundle\Entity\Group:
             - Length:
                 min: 3
                 max: 255
+
+# Prevent required values for all child of AbstractAddress
+OroCRM\Bundle\ContactBundle\Entity\ContactAddress:
+    properties:
+        street:
+            - NotBlank: ~
+        city:
+            - NotBlank: ~
+        postalCode:
+            - NotBlank: ~
+    constraints:
+        - Callback:
+            methods: [isRegionValid]

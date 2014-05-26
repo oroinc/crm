@@ -35,20 +35,21 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
      * @var array
      */
     protected $addressBapToMageMapping = array(
-        'namePrefix' => 'prefix',
-        'firstName' => 'firstname',
-        'middleName' => 'middlename',
-        'lastName' => 'lastname',
-        'nameSuffix' => 'suffix',
-        'organization' => 'company',
-        'street' => 'street',
-        'city' => 'city',
-        'postalCode' => 'postcode',
-        'country' => 'country_id',
-        'regionText' => 'region',
-        'region' => 'region_id',
-        'created' => 'created_at',
-        'updated' => 'updated_at'
+        'namePrefix'        => 'prefix',
+        'firstName'         => 'firstname',
+        'middleName'        => 'middlename',
+        'lastName'          => 'lastname',
+        'nameSuffix'        => 'suffix',
+        'organization'      => 'company',
+        'street'            => 'street',
+        'city'              => 'city',
+        'postalCode'        => 'postcode',
+        'country'           => 'country_id',
+        'regionText'        => 'region',
+        'region'            => 'region_id',
+        'created'           => 'created_at',
+        'updated'           => 'updated_at',
+        'customerAddressId' => 'customer_address_id'
     );
 
     /**
@@ -65,18 +66,15 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
     );
 
     /**
-     * For importing customers
-     *
-     * @param mixed  $data
-     * @param string $class
-     * @param null   $format
-     * @param array  $context
-     *
-     * @return object|Customer
+     * {@inheritdoc}
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
         $resultObject = new Customer();
+
+        if (!is_array($data)) {
+            return $resultObject;
+        }
 
         $mappedData = [];
         foreach ($data as $key => $value) {
@@ -202,9 +200,8 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
      */
     protected function formatAccountData($data)
     {
-        $account = array(
-            'name' => sprintf("%s %s", $data['first_name'], $data['last_name'])
-        );
+        $nameParts = array_intersect_key($data, array_flip(['first_name', 'last_name']));
+        $account   = ['name' => implode(' ', $nameParts)];
 
         foreach ($data['addresses'] as $address) {
             $addressTypes = array();
@@ -269,8 +266,10 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
             $contact['addresses'][$key] = $bapAddress;
         }
 
-        $contact['emails'][] = $contact['email'];
-        unset($contact['email']);
+        if (!empty($contact['email'])) {
+            $contact['emails'][] = $contact['email'];
+            unset($contact['email']);
+        }
 
         return $contact;
     }
@@ -326,16 +325,10 @@ class CustomerDenormalizer extends AbstractNormalizer implements DenormalizerInt
     }
 
     /**
-     * Used in import
-     *
-     * @param mixed  $data
-     * @param string $type
-     * @param null   $format
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && $type == MagentoConnectorInterface::CUSTOMER_TYPE;
+        return $type == MagentoConnectorInterface::CUSTOMER_TYPE;
     }
 }
