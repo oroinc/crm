@@ -1,5 +1,6 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroEmailBundle::macros.html.twig' as email %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
@@ -11,6 +12,7 @@
             {{ ui.renderProperty('orocrm.magento.customer.channel.label'|trans, entity.channel.name) }}
             {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.website.name) }}
             {{ ui.renderHtmlProperty('orocrm.magento.customer.store.label'|trans, entity.store.name|escape|nl2br) }}
+            {{ entityConfig.renderDynamicFields(entity) }}
         </div>
         <div class="responsive-block">
             {%- set accountData -%}
