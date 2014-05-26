@@ -192,8 +192,8 @@ class Cart extends ExtendCart
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\CallBundle\Entity\Call")
      * @ORM\JoinTable(name="orocrm_magento_cart_calls",
-     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     protected $relatedCalls;
@@ -203,8 +203,8 @@ class Cart extends ExtendCart
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\EmailBundle\Entity\Email")
      * @ORM\JoinTable(name="orocrm_magento_cart_emails",
-     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     protected $relatedEmails;

@@ -162,8 +162,8 @@ class Order extends ExtendOrder
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\CallBundle\Entity\Call")
      * @ORM\JoinTable(name="orocrm_magento_order_calls",
-     *      joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     protected $relatedCalls;
@@ -173,8 +173,8 @@ class Order extends ExtendOrder
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\EmailBundle\Entity\Email")
      * @ORM\JoinTable(name="orocrm_magento_order_emails",
-     *      joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     protected $relatedEmails;
