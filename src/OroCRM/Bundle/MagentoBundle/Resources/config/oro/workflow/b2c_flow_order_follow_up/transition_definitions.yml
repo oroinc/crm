@@ -67,5 +67,7 @@ workflows:
                         method: 'addRelatedEmail'
                         object: $order
                         method_parameters: [$email]
+                    - @unset_value:
+                         [$email]
             no_reply_definition: [] # do nothing
             record_feedback_definition: [] # do nothing

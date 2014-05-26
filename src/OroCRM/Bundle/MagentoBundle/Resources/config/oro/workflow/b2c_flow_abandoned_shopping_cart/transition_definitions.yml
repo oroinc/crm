@@ -77,6 +77,8 @@ workflows:
                          method: 'addRelatedEmail'
                          object: $cart
                          method_parameters: [$email]
+                     - @unset_value:
+                         [$email]
 
             convert_definition:
                 pre_conditions:
