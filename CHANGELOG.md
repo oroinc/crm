@@ -1,3 +1,12 @@
+CHANGELOG for 1.1.1
+===================
+This changelog references the relevant changes (new features, changes and bugs) done in 1.1.1 versions.
+
+* 1.1.1 (2014-05-26)
+ * Fixed Magento Channel validation over https
+ * Improved Magento import entities validation
+ * Added possibility to force run Magento Synchronization 
+
 CHANGELOG for 1.1.0
 ===================
 This changelog references the relevant changes (new features, changes and bugs) done in 1.1.0 versions.
