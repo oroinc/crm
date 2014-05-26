@@ -19,7 +19,7 @@ class OroCrmMagentoBundle implements Migration
             $schema->getTable('orocrm_call'),
             ['call_id'],
             ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => 'RESTRICT']
+            ['onDelete' => 'CASCADE']
         );
         $cartCall->removeForeignKey('FK_83A847751AD5CDBF');
         $cartCall->addForeignKeyConstraint(
@@ -28,14 +28,13 @@ class OroCrmMagentoBundle implements Migration
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
-
         $orderCall = $schema->getTable('orocrm_magento_order_calls');
         $orderCall->removeForeignKey('FK_A885A3450A89B2C');
         $orderCall->addForeignKeyConstraint(
             $schema->getTable('orocrm_call'),
             ['call_id'],
             ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => 'RESTRICT']
+            ['onDelete' => 'CASCADE']
         );
         $orderCall->removeForeignKey('FK_A885A348D9F6D38');
         $orderCall->addForeignKeyConstraint(
@@ -44,7 +43,6 @@ class OroCrmMagentoBundle implements Migration
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
-
         $cartEmail = $schema->getTable('orocrm_magento_cart_emails');
         $cartEmail->removeForeignKey('FK_11B0F84B1AD5CDBF');
         $cartEmail->addForeignKeyConstraint(
@@ -60,7 +58,6 @@ class OroCrmMagentoBundle implements Migration
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
-
         $orderEmail = $schema->getTable('orocrm_magento_order_emails');
         $orderEmail->removeForeignKey('FK_10E2A9508D9F6D38');
         $orderEmail->addForeignKeyConstraint(
