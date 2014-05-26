@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Collections\Collection;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -174,7 +175,7 @@ class ReverseWriter implements ItemWriterInterface
 
             if ($address['status'] === AbstractReverseProcessor::UPDATE_ENTITY) {
                 $addressEntity = $address['entity'];
-                $localChanges  = $address['object'];
+                $localChanges  = array_merge($address['object'], ['types' => $addressEntity->getContactAddress()->getTypes()]);
 
                 if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
                     $answer = (array)$this->transport->call(
@@ -365,6 +366,24 @@ class ReverseWriter implements ItemWriterInterface
                             $fieldName,
                             $this->getChangedCountry($entity, $country)
                         );
+                    }
+                } elseif ($fieldName === 'types') {
+                    foreach ($value as $typeName) {
+                        $type = $this->em->getRepository('OroAddressBundle:AddressType')->find($typeName);
+                        /** @var Collection $currentTypes */
+                        $currentTypes = $this->accessor->getValue($entity, $fieldName);
+                        if (!$currentTypes->contains($type)) {
+                            $currentTypes->add($type);
+                        }
+                    }
+                } elseif ($fieldName === 'remove_types') {
+                    foreach ($value as $typeName) {
+                        $type = $this->em->getRepository('OroAddressBundle:AddressType')->find($typeName);
+                        /** @var Collection $currentTypes */
+                        $currentTypes = $this->accessor->getValue($entity, $fieldName);
+                        if ($currentTypes->contains($type)) {
+                            $currentTypes->remove($type);
+                        }
                     }
                 } else {
                     try {

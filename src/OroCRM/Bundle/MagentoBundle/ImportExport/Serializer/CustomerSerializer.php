@@ -163,6 +163,21 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             unset($result['region_text']);
         }
 
+        $result['types'] = [];
+        if (isset($remoteData['is_default_billing']) && $remoteData['is_default_billing'] === true && !in_array('billing', $localData->getTypeNames())) {
+            $result['types'][] = 'billing';
+        }
+        if (isset($remoteData['is_default_shipping']) && $remoteData['is_default_shipping'] === true && !in_array('shipping', $localData->getTypeNames())) {
+            $result['types'][] = 'shipping';
+        }
+        $result['remove_types'] = [];
+        if (!isset($remoteData['is_default_billing']) && in_array('billing', $localData->getTypeNames())) {
+            $result['remove_types'][] = 'billing';
+        }
+        if (!isset($remoteData['is_default_shipping']) && in_array('shipping', $localData->getTypeNames())) {
+            $result['remove_types'][] = 'shipping';
+        }
+
         return $result;
     }
 
@@ -195,6 +210,21 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             } else {
                 $result[$magento] = $oroValue;
             }
+        }
+
+        $addressTypes = $accessor->getValue($addressFields, 'types');
+
+        $addressTypesValues = [];
+        foreach ($addressTypes as $addressType) {
+            $addressTypesValues[] = $addressType->getName();
+        }
+        $result['is_default_billing'] = false;
+        $result['is_default_shipping'] = false;
+        if (in_array('billing', $addressTypesValues)) {
+            $result['is_default_billing'] = true;
+        }
+        if (in_array('shipping', $addressTypesValues)) {
+            $result['is_default_shipping'] = true;
         }
 
         return $result;
