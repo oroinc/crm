@@ -1,4 +1,5 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
@@ -18,6 +19,7 @@
                 {% set websites = websites|merge([website.name]) %}
             {% endfor %}
             {{ ui.renderProperty('orocrm.magento.product.websites.label'|trans, websites|join(', ')) }}
+            {{ entityConfig.renderDynamicFields(entity) }}
         </div>
     </div>
 </div>

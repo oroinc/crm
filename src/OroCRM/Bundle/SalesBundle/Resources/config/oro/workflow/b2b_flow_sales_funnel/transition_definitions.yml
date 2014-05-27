@@ -159,6 +159,8 @@ workflows:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
                         attribute: $opportunity.status
+                    - @unset_value:
+                        [$new_account]
             develop_definition:
                 pre_conditions: # if opportunity.status = "in_progress"
                     @equal:
