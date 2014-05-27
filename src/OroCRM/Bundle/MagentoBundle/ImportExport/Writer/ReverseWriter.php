@@ -285,10 +285,6 @@ class ReverseWriter implements ItemWriterInterface
                         $this->customerSerializer->convertToMagentoAddress($addressEntity, $defaultData),
                         $this->regionConverter->toMagentoData($addressEntity)
                     );
-                    $addressData = array_merge(
-                        $addressData,
-                        ['types' => $addressEntity->getTypes()]
-                    );
                     $requestData = ['customerId' => $address['magentoId'], 'addressData' => $addressData];
                     $result      = $this->transport->call(
                         SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,

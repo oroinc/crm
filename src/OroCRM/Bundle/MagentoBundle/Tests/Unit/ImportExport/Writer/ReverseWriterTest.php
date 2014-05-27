@@ -166,7 +166,7 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
 
         $remoteResult = is_bool($remoteResult)
             ? $this->returnValue($remoteResult) : $this->throwException($remoteResult);
-        $this->transport->expects($this->at(2))->method('call')
+        $this->transport->expects($this->at(3))->method('call')
             ->with(
                 $this->equalTo(SoapTransport::ACTION_CUSTOMER_ADDRESS_DELETE),
                 $this->equalTo(['addressId' => self::TEST_ADDRESS_ID])
@@ -234,34 +234,35 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($address))
             ->will($this->returnValue(['region' => self::TEST_ADDRESS_REGION_RESOLVED, 'region_id' => null]));
 
-        $this->transport->expects($this->at(2))->method('call')
+        $this->transport->expects($this->at(3))->method('call')
             ->with(
                 $this->equalTo(SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE),
                 $this->equalTo(
                     [
                         'customerId'  => self::TEST_CUSTOMER_ID,
-                        'addressData' =>
-                            [
-                                'telephone'  => 'no phone',
-                                'prefix'     => null,
-                                'firstname'  => self::TEST_FIRSTNAME,
-                                'middlename' => null,
-                                'lastname'   => self::TEST_CUSTOMER_LASTNAME,
-                                'suffix'     => null,
-                                'company'    => null,
-                                'street'     =>
-                                    [
-                                        0 => self::TEST_ADDRESS_STREET,
-                                        1 => null,
-                                    ],
-                                'city'       => null,
-                                'postcode'   => null,
-                                'country_id' => self::TEST_ADDRESS_COUNTRY,
-                                'region'     => self::TEST_ADDRESS_REGION_RESOLVED,
-                                'region_id'  => null,
-                                'created_at' => null,
-                                'updated_at' => null,
-                            ],
+                        'addressData' => [
+                            'telephone'           => 'no phone',
+                            'prefix'              => null,
+                            'firstname'           => self::TEST_FIRSTNAME,
+                            'middlename'          => null,
+                            'lastname'            => self::TEST_CUSTOMER_LASTNAME,
+                            'suffix'              => null,
+                            'company'             => null,
+                            'street'              =>
+                                [
+                                    0 => self::TEST_ADDRESS_STREET,
+                                    1 => null,
+                                ],
+                            'city'                => null,
+                            'postcode'            => null,
+                            'country_id'          => self::TEST_ADDRESS_COUNTRY,
+                            'region'              => self::TEST_ADDRESS_REGION_RESOLVED,
+                            'region_id'           => null,
+                            'created_at'          => null,
+                            'updated_at'          => null,
+                            'is_default_billing'  => false,
+                            'is_default_shipping' => false,
+                        ],
                     ]
                 )
             )
