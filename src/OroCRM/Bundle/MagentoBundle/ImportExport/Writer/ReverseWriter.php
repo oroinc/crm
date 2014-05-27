@@ -173,11 +173,12 @@ class ReverseWriter implements ItemWriterInterface
         foreach($addresses as $localAddress) {
             $localData = $localAddress['entity'];
             $remoteAddress = $this->getRemoteAddressByOriginId($remoteAddresses, $localData->getOriginId());
+            $localDataTypes = $localData->getTypeNames();
             if ($remoteAddress &&
-                 (($remoteAddress->is_default_billing === true && !in_array('billing', $localData->getTypeNames()))
-                    || ($remoteAddress->is_default_shipping === true && !in_array('shipping', $localData->getTypeNames()))
-                    || ($remoteAddress->is_default_billing === false && in_array('billing', $localData->getTypeNames()))
-                    || ($remoteAddress->is_default_shipping === false && in_array('shipping', $localData->getTypeNames()))
+                 (($remoteAddress->is_default_billing === true && !in_array('billing', $localDataTypes))
+                    || ($remoteAddress->is_default_shipping === true && !in_array('shipping', $localDataTypes))
+                    || ($remoteAddress->is_default_billing === false && in_array('billing', $localDataTypes))
+                    || ($remoteAddress->is_default_shipping === false && in_array('shipping', $localDataTypes))
                 )
             ) {
                 return true;
