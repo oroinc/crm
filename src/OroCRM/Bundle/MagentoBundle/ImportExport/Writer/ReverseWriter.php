@@ -10,6 +10,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use Oro\Bundle\AddressBundle\Entity\Country as BAPCountry;
 use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
@@ -159,6 +160,41 @@ class ReverseWriter implements ItemWriterInterface
         $this->em->flush();
     }
 
+    protected function isRemoteAddressesTypesChanged($addresses, $remoteAddresses)
+    {
+        foreach($addresses as $localAddress) {
+            $localData = $localAddress['entity'];
+            $remoteAddress = $this->getRemoteAddressByOriginId($remoteAddresses, $localData->getOriginId());
+            if ($remoteAddress &&
+                 (($remoteAddress->is_default_billing === true && !in_array('billing', $localData->getTypeNames()))
+                    || ($remoteAddress->is_default_shipping === true && !in_array('shipping', $localData->getTypeNames()))
+                    || ($remoteAddress->is_default_billing === false && in_array('billing', $localData->getTypeNames()))
+                    || ($remoteAddress->is_default_shipping === false && in_array('shipping', $localData->getTypeNames()))
+                )
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $remoteAddresses
+     * @param int $originId
+     * @return \stdClass|bool
+     */
+    protected function getRemoteAddressByOriginId($remoteAddresses, $originId)
+    {
+        foreach ($remoteAddresses as $remoteAddress) {
+            if ($remoteAddress->customer_address_id === $originId) {
+                return $remoteAddress;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Process address write  to remote instance and to DB
      *
@@ -170,6 +206,11 @@ class ReverseWriter implements ItemWriterInterface
      */
     protected function processAddresses($addresses, $syncPriority, Customer $customer)
     {
+        $remoteAddresses = (array)$this->transport->call(
+            SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST,
+            ['customerId' => $customer->getOriginId()]
+        );
+        $remoteTypesWin = $this->isRemoteAddressesTypesChanged($addresses, $remoteAddresses);
         foreach ($addresses as $address) {
             if (empty($address['status']) || empty($address['entity'])) {
                 throw new \LogicException('Unable to process entity modification');
@@ -183,20 +224,32 @@ class ReverseWriter implements ItemWriterInterface
                 'lastname'  => $customer->getLastName()
             ];
 
-            if ($address['status'] === AbstractReverseProcessor::UPDATE_ENTITY) {
-                $addressEntity = $address['entity'];
+            if ($status === AbstractReverseProcessor::UPDATE_ENTITY) {
                 $localChanges  = $address['object'];
-
                 if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
-                    $answer = (array)$this->transport->call(
-                        SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO,
-                        ['addressId' => $addressEntity->getOriginId()]
+                    $remoteAddress = (array)$this->getRemoteAddressByOriginId(
+                        $remoteAddresses,
+                        $addressEntity->getOriginId()
                     );
-                    $remoteData = $this->customerSerializer->compareAddresses($answer, $addressEntity);
+                    $remoteData = $this->customerSerializer->compareAddresses(
+                        $remoteAddress,
+                        $addressEntity,
+                        $remoteTypesWin
+                    );
+                    // if on remote side was not changed address types - save local types
+                    if (!$remoteTypesWin) {
+                        $localChanges = array_merge(
+                            $localChanges,
+                            ['types' => $addressEntity->getContactAddress()->getTypes()]
+                        );
+                    }
                     $this->setLocalDataChanges($addressEntity, $localChanges);
                     $this->setRemoteDataChanges($addressEntity, $remoteData);
                 } else {
-                    $localChanges = array_merge($localChanges, ['types' => $addressEntity->getContactAddress()->getTypes()]);
+                    $localChanges = array_merge(
+                        $localChanges,
+                        ['types' => $addressEntity->getContactAddress()->getTypes()]
+                    );
                     $this->setChangedData($addressEntity, $localChanges);
                 }
 
@@ -373,20 +426,20 @@ class ReverseWriter implements ItemWriterInterface
                             $this->getChangedCountry($entity, $country)
                         );
                     }
-                } elseif ($fieldName === 'types') {
-                    foreach ($value as $typeName) {
-                        $type = $this->em->getRepository('OroAddressBundle:AddressType')->find($typeName);
-                        /** @var Collection $currentTypes */
-                        $currentTypes = $this->accessor->getValue($entity, $fieldName);
+                } elseif ($fieldName === 'types' && !empty($value)) {
+                    /** @var Collection $currentTypes */
+                    $currentTypes = $this->accessor->getValue($entity, $fieldName);
+                    $types = $this->getTypesByNameList($value);
+                    foreach ($types as $type) {
                         if (!$currentTypes->contains($type)) {
                             $currentTypes->add($type);
                         }
                     }
-                } elseif ($fieldName === 'remove_types') {
-                    foreach ($value as $typeName) {
-                        $type = $this->em->getRepository('OroAddressBundle:AddressType')->find($typeName);
-                        /** @var Collection $currentTypes */
-                        $currentTypes = $this->accessor->getValue($entity, 'types');
+                } elseif ($fieldName === 'remove_types' && !empty($value)) {
+                    /** @var Collection $currentTypes */
+                    $currentTypes = $this->accessor->getValue($entity, 'types');
+                    $types = $this->getTypesByNameList($value);
+                    foreach ($types as $type) {
                         if ($currentTypes->contains($type)) {
                             $currentTypes->removeElement($type);
                         }
@@ -399,6 +452,22 @@ class ReverseWriter implements ItemWriterInterface
                 }
             }
         }
+    }
+
+    /**
+     * Get array of address types by name list
+     *
+     * @param array $names
+     * @return AddressType[]
+     */
+    protected function getTypesByNameList($names)
+    {
+        $qb = $this->em->getRepository('OroAddressBundle:AddressType')->createQueryBuilder('at');
+
+        return $qb->select('at')
+            ->where($qb->expr()->in('at.name', $names))
+            ->getQuery()
+            ->getResult();
     }
 
     /**

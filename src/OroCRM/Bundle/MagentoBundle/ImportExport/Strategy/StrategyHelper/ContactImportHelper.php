@@ -132,6 +132,7 @@ class ContactImportHelper
                             $address->setRegionText(null);
                         }
                     }
+                    $address->setTypes($remoteAddress->getTypes());
                     $this->prepareAddress($address);
                     if (!$address->getCountry()) {
                         $contact->removeAddress($address);
@@ -156,6 +157,7 @@ class ContactImportHelper
                 $this->mergeScalars($this->addressScalarFields, $address, $contactAddress, $contactAddress);
                 $contactAddress->setCountry($address->getCountry());
                 $contactAddress->setRegion($address->getRegion());
+                $contactAddress->setTypes($address->getTypes());
 
                 $this->prepareAddress($contactAddress);
                 if ($contactAddress->getCountry()) {

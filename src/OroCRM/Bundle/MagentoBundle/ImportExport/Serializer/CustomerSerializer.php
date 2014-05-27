@@ -134,7 +134,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
      *
      * @return array
      */
-    public function compareAddresses($remoteData, $localData)
+    public function compareAddresses($remoteData, $localData, $processTypes = true)
     {
         $result = [];
 
@@ -163,17 +163,35 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             unset($result['region_text']);
         }
 
-        $result['types'] = [];
-        $result['remove_types'] = [];
-        if ($remoteData['is_default_billing'] === true) {
+        /*$result['types'] = [];
+        if ($remoteData['is_default_billing'] === true && !in_array('billing', $localData->getTypeNames())) {
             $result['types'][] = 'billing';
-        } else {
+        }
+        if ($remoteData['is_default_shipping'] === true && !in_array('shipping', $localData->getTypeNames())) {
+            $result['types'][] = 'shipping';
+        }
+        $result['remove_types'] = [];
+        if ($remoteData['is_default_billing'] === false && in_array('billing', $localData->getTypeNames())) {
             $result['remove_types'][] = 'billing';
         }
-        if ($remoteData['is_default_shipping'] === true) {
-            $result['types'][] = 'shipping';
-        } else {
+        if ($remoteData['is_default_shipping'] === false && in_array('shipping', $localData->getTypeNames())) {
             $result['remove_types'][] = 'shipping';
+        }*/
+
+        $result['types'] = [];
+        $result['remove_types'] = [];
+
+        if ($processTypes) {
+            if ($remoteData['is_default_billing'] === true) {
+                $result['types'][] = 'billing';
+            } else {
+                $result['remove_types'][] = 'billing';
+            }
+            if ($remoteData['is_default_shipping'] === true) {
+                $result['types'][] = 'shipping';
+            } else {
+                $result['remove_types'][] = 'shipping';
+            }
         }
 
         return $result;
