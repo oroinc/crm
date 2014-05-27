@@ -173,16 +173,19 @@ class ReverseWriter implements ItemWriterInterface
     {
         foreach ($addresses as $localAddress) {
             $localData = $localAddress['entity'];
-            $remoteAddress = $this->getRemoteAddressByOriginId($remoteAddresses, $localData->getOriginId());
-            $localDataTypes = $localData->getTypeNames();
-            if ($remoteAddress &&
-                 (($remoteAddress->is_default_billing === true && !in_array('billing', $localDataTypes))
-                    || ($remoteAddress->is_default_shipping === true && !in_array('shipping', $localDataTypes))
-                    || ($remoteAddress->is_default_billing === false && in_array('billing', $localDataTypes))
-                    || ($remoteAddress->is_default_shipping === false && in_array('shipping', $localDataTypes))
-                )
-            ) {
-                return true;
+            // check only if entity is Magento Address (update)
+            if ($localData instanceof Address) {
+                $remoteAddress = $this->getRemoteAddressByOriginId($remoteAddresses, $localData->getOriginId());
+                $localDataTypes = $localData->getTypeNames();
+                if ($remoteAddress &&
+                    (($remoteAddress->is_default_billing === true && !in_array('billing', $localDataTypes))
+                        || ($remoteAddress->is_default_shipping === true && !in_array('shipping', $localDataTypes))
+                        || ($remoteAddress->is_default_billing === false && in_array('billing', $localDataTypes))
+                        || ($remoteAddress->is_default_shipping === false && in_array('shipping', $localDataTypes))
+                    )
+                ) {
+                    return true;
+                }
             }
         }
 
@@ -281,6 +284,10 @@ class ReverseWriter implements ItemWriterInterface
                         ['telephone' => 'no phone'],
                         $this->customerSerializer->convertToMagentoAddress($addressEntity, $defaultData),
                         $this->regionConverter->toMagentoData($addressEntity)
+                    );
+                    $addressData = array_merge(
+                        $addressData,
+                        ['types' => $addressEntity->getTypes()]
                     );
                     $requestData = ['customerId' => $address['magentoId'], 'addressData' => $addressData];
                     $result      = $this->transport->call(

@@ -124,6 +124,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
         $accessor->setValue($address, 'contact_address', $contactAddr);
         $accessor->setValue($address, 'origin_id', $originId);
+        $accessor->setValue($address, 'types', $accessor->getValue($contactAddr, 'types'));
 
         return $address;
     }
