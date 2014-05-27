@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
@@ -104,13 +105,9 @@ class ContactImportHelper
             $contact->addEmail($email);
         }
 
-        // @TODO process statuses
         // process addresses
-        $addresses = $contact->getAddresses();
-        $isRemoteTypesWin = $this->isRemoteAddressesTypesChanged(
-            $localData->getAddresses(),
-            $remoteData
-        );
+        $addresses           = $contact->getAddresses();
+        $isLocalTypesChanged = $this->isLocalAddressesTypesChanged($addresses, $localData);
         foreach ($addresses as $address) {
             // find in update local data if
             $localAddress = $this->getCustomerAddressByContactAddress($localData, $address);
@@ -137,10 +134,8 @@ class ContactImportHelper
                         }
                     }
 
-                    if ($this->isRemotePrioritized() && $isRemoteTypesWin) {
+                    if ($this->isRemotePrioritized() || !$isLocalTypesChanged) {
                         $address->setTypes($remoteAddress->getTypes());
-                    } else {
-                        $address->setTypes($localAddress->getTypes());
                     }
 
                     $this->prepareAddress($address);
@@ -325,7 +320,7 @@ class ContactImportHelper
      * @param Customer $remoteCustomer
      * @param Customer $localCustomer
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     protected function getOrphanRemoteAddresses(Customer $remoteCustomer, Customer $localCustomer)
     {
@@ -341,22 +336,21 @@ class ContactImportHelper
     }
 
     /**
-     * @param $localAddresses
-     * @param Customer $remoteCustomer
+     * @param AbstractAddress[] $contactAddresses
+     * @param Customer          $localCustomer
+     *
      * @return bool
      */
-    protected function isRemoteAddressesTypesChanged($localAddresses, Customer $remoteCustomer)
+    protected function isLocalAddressesTypesChanged($contactAddresses, Customer $localCustomer)
     {
-        foreach($localAddresses as $localData) {
-            $remoteAddress = $this->getCorrespondentRemoteAddress($remoteCustomer, $localData);
-            if ($remoteAddress) {
-                $remoteTypes = $remoteAddress->getTypeNames();
-                $localTypes = $localData->getTypeNames();
-                if ((in_array('billing', $remoteTypes) && !in_array('billing', $localTypes))
-                    || (in_array('shipping', $remoteTypes) && !in_array('shipping', $localTypes))
-                    || (!in_array('billing', $remoteTypes) && in_array('billing', $localTypes))
-                    || (!in_array('shipping', $remoteTypes) && in_array('shipping', $localTypes))
-                ) {
+        foreach ($contactAddresses as $contactAddress) {
+            $localAddress = $this->getCustomerAddressByContactAddress($localCustomer, $contactAddress);
+            if ($localAddress) {
+                $contactAddressTypes = $contactAddress->getTypeNames();
+                $localTypes          = $localAddress->getTypeNames();
+
+                $typesDiff = array_diff($contactAddressTypes, $localTypes);
+                if (!empty($typesDiff)) {
                     return true;
                 }
             }
