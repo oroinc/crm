@@ -4,8 +4,10 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Writer;
 
 use Doctrine\ORM\EntityManager;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
@@ -23,6 +25,8 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
     const TEST_CUSTOMER_ID        = 123;
     const TEST_CUSTOMER_FIRSTNAME = 'customer fname';
     const TEST_CUSTOMER_LASTNAME  = 'customer lname';
+
+    const TEST_ADDRESS_ID = 123;
 
     /** @var EntityManager|\PHPUnit_Framework_MockObject_MockObject */
     protected $em;
@@ -50,6 +54,7 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
         $this->em        = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
         $this->transport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport')
+            ->setMethods(['init', 'call'])
             ->disableOriginalConstructor()->getMock();
         $this->addressImportHelper = $this
             ->getMockBuilder('OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper')
@@ -132,5 +137,73 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->writer->write($data);
+    }
+
+    /**
+     * @dataProvider removeAddressDataProvider
+     *
+     * @param bool $remoteResult
+     * @param bool $expectedRemove
+     */
+    public function testRemoveAddress($remoteResult, $expectedRemove)
+    {
+        $transportSetting = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Transport');
+        $channel          = new Channel();
+        $channel->setTransport($transportSetting);
+        $customer = new Customer();
+        $customer->setChannel($channel);
+        $address = new Address();
+        $address->setOriginId(self::TEST_ADDRESS_ID);
+        $customer->addAddress($address);
+
+        $this->transport->expects($this->once())->method('init');
+
+        $remoteResult = is_bool($remoteResult)
+            ? $this->returnValue($remoteResult) : $this->throwException($remoteResult);
+        $this->transport->expects($this->at(2))->method('call')
+            ->with(
+                $this->equalTo(SoapTransport::ACTION_CUSTOMER_ADDRESS_DELETE),
+                $this->equalTo(['addressId' => self::TEST_ADDRESS_ID])
+            )
+            ->will($remoteResult);
+        $this->em->expects($this->exactly((int)$expectedRemove))->method('remove');
+        $this->em->expects($this->once())->method('flush');
+
+        $data = [];
+        array_push(
+            $data,
+            (object)[
+                'entity' => $customer,
+                'object' => [
+                    'addresses' => [
+                        [
+                            'entity' => $address,
+                            'status' => AbstractReverseProcessor::DELETE_ENTITY
+                        ]
+                    ],
+                ]
+            ]
+        );
+
+        $this->writer->write($data);
+    }
+
+    /**
+     * @return array
+     */
+    public function removeAddressDataProvider()
+    {
+        $exception         = new \Exception();
+        $notFoundException = new \SoapFault(
+            (string)SoapTransport::SOAP_FAULT_ADDRESS_DOES_NOT_EXIST,
+            'Address not found'
+        );
+
+        return [
+            'removed on remote side correctly'      => [true, true],
+            'not removed on remote side'            => [false, false],
+            'address does not exist on remote side' => [$notFoundException, true],
+            'remote fault unknown error'            => [$exception, false],
+        ];
     }
 }
