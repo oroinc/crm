@@ -164,6 +164,12 @@ class ContactImportHelper
                 }
             }
         }
+
+        /** @var ContactAddress $toBePrimary */
+        $toBePrimary = $contact->getAddresses()->first();
+        if (!$contact->getPrimaryAddress() && $toBePrimary) {
+            $toBePrimary->setPrimary(true);
+        }
     }
 
     /**
