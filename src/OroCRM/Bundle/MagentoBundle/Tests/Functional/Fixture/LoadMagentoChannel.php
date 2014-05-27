@@ -9,6 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseOrderItem;
 
 use Oro\Bundle\UserBundle\Model\Gender;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
@@ -22,6 +23,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
+use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 
 class LoadMagentoChannel extends AbstractFixture
 {
@@ -84,7 +86,12 @@ class LoadMagentoChannel extends AbstractFixture
         $this->setReference('customer', $customer);
         $this->setReference('channel', $this->channel);
 
-        $this->createOrder($cart1, $customer);
+        $order = $this->createOrder($cart1, $customer);
+
+        $baseOrderItem = $this->createBaseOrderItem($order);
+        $order->setItems([$baseOrderItem]);
+        $this->em->persist($order);
+
         $this->em->flush();
 
         return $this->channel;
@@ -117,7 +124,8 @@ class LoadMagentoChannel extends AbstractFixture
         $cart->setStoreCurrencyCode('code');
         $cart->setQuoteCurrencyCode('usd');
         $cart->setStoreToBaseRate(12);
-        $cart->setIsGuest(1);
+        $cart->setGrandTotal(2.54);
+        $cart->setIsGuest(0);
 
         $this->em->persist($cart);
 
@@ -276,7 +284,7 @@ class LoadMagentoChannel extends AbstractFixture
     protected function createStore()
     {
         $store = new Store;
-        $store->setName('store');
+        $store->setName('demo store');
         $store->setChannel($this->channel);
         $store->setCode(1);
         $store->setWebsite($this->website);
@@ -402,9 +410,42 @@ class LoadMagentoChannel extends AbstractFixture
         $order->setCart($cart);
         $order->setStore($this->store);
         $order->setCustomer($customer);
+        $order->setCustomerEmail('customer@email.com');
+        $order->setDiscountAmount(34.40);
+        $order->setTaxAmount(12.47);
+        $order->setShippingAmount(5);
+        $order->setTotalPaidAmount(17.85);
+        $order->setTotalInvoicedAmount(11);
+        $order->setTotalRefundedAmount(4);
+        $order->setTotalCanceledAmount(0);
+        $order->setShippingMethod('some unique shipping method');
+        $order->setRemoteIp('unique ip');
+        $order->setGiftMessage('some very unique gift message');
 
         $this->em->persist($order);
 
         return $order;
+    }
+
+    protected function createBaseOrderItem(Order $order)
+    {
+        $baseOrderItem = new OrderItem();
+        $baseOrderItem->setId(mt_rand(0,9999));
+        $baseOrderItem->setName('some order item');
+        $baseOrderItem->setSku('some sku');
+        $baseOrderItem->setQty(1);
+        $baseOrderItem->setOrder($order);
+        $baseOrderItem->setCost(51.00);
+        $baseOrderItem->setPrice(75.00);
+        $baseOrderItem->setWeight(6.12);
+        $baseOrderItem->setTaxPercent(2);
+        $baseOrderItem->setTaxAmount(1.5);
+        $baseOrderItem->setDiscountPercent(4);
+        $baseOrderItem->setDiscountAmount(0);
+        $baseOrderItem->setRowTotal(234);
+
+        $this->em->persist($baseOrderItem);
+
+        return $baseOrderItem;
     }
 }
