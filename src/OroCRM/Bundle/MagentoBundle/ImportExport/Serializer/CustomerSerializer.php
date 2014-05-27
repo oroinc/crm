@@ -164,17 +164,15 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         }
 
         $result['types'] = [];
-        if ($remoteData['is_default_billing'] === true && !in_array('billing', $localData->getTypeNames())) {
-            $result['types'][] = 'billing';
-        }
-        if ($remoteData['is_default_shipping'] === true && !in_array('shipping', $localData->getTypeNames())) {
-            $result['types'][] = 'shipping';
-        }
         $result['remove_types'] = [];
-        if ($remoteData['is_default_billing'] === false && in_array('billing', $localData->getTypeNames())) {
+        if ($remoteData['is_default_billing'] === true) {
+            $result['types'][] = 'billing';
+        } else {
             $result['remove_types'][] = 'billing';
         }
-        if ($remoteData['is_default_shipping'] === false && in_array('shipping', $localData->getTypeNames())) {
+        if ($remoteData['is_default_shipping'] === true) {
+            $result['types'][] = 'shipping';
+        } else {
             $result['remove_types'][] = 'shipping';
         }
 

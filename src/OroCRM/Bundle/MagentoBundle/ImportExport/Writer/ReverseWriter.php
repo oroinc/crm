@@ -185,7 +185,7 @@ class ReverseWriter implements ItemWriterInterface
 
             if ($address['status'] === AbstractReverseProcessor::UPDATE_ENTITY) {
                 $addressEntity = $address['entity'];
-                $localChanges  = array_merge($address['object'], ['types' => $addressEntity->getContactAddress()->getTypes()]);
+                $localChanges  = $address['object'];
 
                 if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
                     $answer = (array)$this->transport->call(
@@ -196,6 +196,7 @@ class ReverseWriter implements ItemWriterInterface
                     $this->setLocalDataChanges($addressEntity, $localChanges);
                     $this->setRemoteDataChanges($addressEntity, $remoteData);
                 } else {
+                    $localChanges = array_merge($localChanges, ['types' => $addressEntity->getContactAddress()->getTypes()]);
                     $this->setChangedData($addressEntity, $localChanges);
                 }
 
