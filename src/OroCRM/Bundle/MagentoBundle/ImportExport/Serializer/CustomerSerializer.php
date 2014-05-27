@@ -131,6 +131,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     /**
      * @param array   $remoteData
      * @param Address $localData
+     * @param bool    $processTypes
      *
      * @return array
      */
@@ -162,21 +163,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         if (!empty($result['region'])) {
             unset($result['region_text']);
         }
-
-        /*$result['types'] = [];
-        if ($remoteData['is_default_billing'] === true && !in_array('billing', $localData->getTypeNames())) {
-            $result['types'][] = 'billing';
-        }
-        if ($remoteData['is_default_shipping'] === true && !in_array('shipping', $localData->getTypeNames())) {
-            $result['types'][] = 'shipping';
-        }
-        $result['remove_types'] = [];
-        if ($remoteData['is_default_billing'] === false && in_array('billing', $localData->getTypeNames())) {
-            $result['remove_types'][] = 'billing';
-        }
-        if ($remoteData['is_default_shipping'] === false && in_array('shipping', $localData->getTypeNames())) {
-            $result['remove_types'][] = 'shipping';
-        }*/
 
         $result['types'] = [];
         $result['remove_types'] = [];

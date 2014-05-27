@@ -160,6 +160,14 @@ class ReverseWriter implements ItemWriterInterface
         $this->em->flush();
     }
 
+    /**
+     * Returns true if was changed address types at remote side
+     *
+     * @param $addresses
+     * @param $remoteAddresses
+     *
+     * @return bool
+     */
     protected function isRemoteAddressesTypesChanged($addresses, $remoteAddresses)
     {
         foreach($addresses as $localAddress) {

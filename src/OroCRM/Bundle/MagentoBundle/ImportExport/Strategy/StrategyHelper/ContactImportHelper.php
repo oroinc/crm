@@ -107,6 +107,10 @@ class ContactImportHelper
         // @TODO process statuses
         // process addresses
         $addresses = $contact->getAddresses();
+        $isRemoteTypesWin = $this->isRemoteAddressesTypesChanged(
+            $localData->getAddresses(),
+            $remoteData
+        );
         foreach ($addresses as $address) {
             // find in update local data if
             $localAddress = $this->getCustomerAddressByContactAddress($localData, $address);
@@ -132,7 +136,13 @@ class ContactImportHelper
                             $address->setRegionText(null);
                         }
                     }
-                    $address->setTypes($remoteAddress->getTypes());
+
+                    if ($this->isRemotePrioritized() && $isRemoteTypesWin) {
+                        $address->setTypes($remoteAddress->getTypes());
+                    } else {
+                        $address->setTypes($localAddress->getTypes());
+                    }
+
                     $this->prepareAddress($address);
                     if (!$address->getCountry()) {
                         $contact->removeAddress($address);
@@ -328,5 +338,30 @@ class ContactImportHelper
         );
 
         return $filtered;
+    }
+
+    /**
+     * @param $localAddresses
+     * @param Customer $remoteCustomer
+     * @return bool
+     */
+    protected function isRemoteAddressesTypesChanged($localAddresses, Customer $remoteCustomer)
+    {
+        foreach($localAddresses as $localData) {
+            $remoteAddress = $this->getCorrespondentRemoteAddress($remoteCustomer, $localData);
+            if ($remoteAddress) {
+                $remoteTypes = $remoteAddress->getTypeNames();
+                $localTypes = $localData->getTypeNames();
+                if ((in_array('billing', $remoteTypes) && !in_array('billing', $localTypes))
+                    || (in_array('shipping', $remoteTypes) && !in_array('shipping', $localTypes))
+                    || (!in_array('billing', $remoteTypes) && in_array('billing', $localTypes))
+                    || (!in_array('shipping', $remoteTypes) && in_array('shipping', $localTypes))
+                ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
