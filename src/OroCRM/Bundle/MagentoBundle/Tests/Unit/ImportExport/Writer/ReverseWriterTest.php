@@ -28,10 +28,11 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
     const TEST_CUSTOMER_FIRSTNAME = 'customer fname';
     const TEST_CUSTOMER_LASTNAME  = 'customer lname';
 
-    const TEST_ADDRESS_ID      = 123;
-    const TEST_ADDRESS_COUNTRY = 'US';
-    const TEST_ADDRESS_REGION  = 'CA';
-    const TEST_ADDRESS_STREET  = 'test street';
+    const TEST_ADDRESS_ID              = 123;
+    const TEST_ADDRESS_COUNTRY         = 'US';
+    const TEST_ADDRESS_REGION          = 'CA';
+    const TEST_ADDRESS_REGION_RESOLVED = 'California';
+    const TEST_ADDRESS_STREET          = 'test street';
 
     /** @var EntityManager|\PHPUnit_Framework_MockObject_MockObject */
     protected $em;
@@ -231,7 +232,7 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
         $this->transport->expects($this->once())->method('init');
         $this->regionConverter->expects($this->once())->method('toMagentoData')
             ->with($this->identicalTo($address))
-            ->will($this->returnValue(['region' => 'California', 'region_id' => null]));
+            ->will($this->returnValue(['region' => self::TEST_ADDRESS_REGION_RESOLVED, 'region_id' => null]));
 
         $this->transport->expects($this->at(2))->method('call')
             ->with(
@@ -250,13 +251,13 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
                                 'company'    => null,
                                 'street'     =>
                                     [
-                                        0 => 'test street',
+                                        0 => self::TEST_ADDRESS_STREET,
                                         1 => null,
                                     ],
                                 'city'       => null,
                                 'postcode'   => null,
-                                'country_id' => 'US',
-                                'region'     => 'California',
+                                'country_id' => self::TEST_ADDRESS_COUNTRY,
+                                'region'     => self::TEST_ADDRESS_REGION_RESOLVED,
                                 'region_id'  => null,
                                 'created_at' => null,
                                 'updated_at' => null,
