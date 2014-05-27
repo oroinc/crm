@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Collections\Collection;
 
+use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -196,7 +197,7 @@ class ReverseWriter implements ItemWriterInterface
     protected function getRemoteAddressByOriginId($remoteAddresses, $originId)
     {
         foreach ($remoteAddresses as $remoteAddress) {
-            if ($remoteAddress->customer_address_id === $originId) {
+            if (!empty($remoteAddress) && $remoteAddress->customer_address_id === $originId) {
                 return $remoteAddress;
             }
         }
@@ -215,11 +216,13 @@ class ReverseWriter implements ItemWriterInterface
      */
     protected function processAddresses($addresses, $syncPriority, Customer $customer)
     {
-        $remoteAddresses = (array)$this->transport->call(
-            SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST,
-            ['customerId' => $customer->getOriginId()]
+        $remoteAddresses = WSIUtils::processCollectionResponse(
+            $this->transport->call(
+                SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST,
+                ['customerId' => $customer->getOriginId()]
+            )
         );
-        $remoteTypesWin = $this->isRemoteAddressesTypesChanged($addresses, $remoteAddresses);
+        $remoteTypesWin  = $this->isRemoteAddressesTypesChanged($addresses, $remoteAddresses);
         foreach ($addresses as $address) {
             if (empty($address['status']) || empty($address['entity'])) {
                 throw new \LogicException('Unable to process entity modification');
