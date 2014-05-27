@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Writer;
 
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\AddressBundle\Entity\Country;
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
@@ -26,7 +28,10 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
     const TEST_CUSTOMER_FIRSTNAME = 'customer fname';
     const TEST_CUSTOMER_LASTNAME  = 'customer lname';
 
-    const TEST_ADDRESS_ID = 123;
+    const TEST_ADDRESS_ID      = 123;
+    const TEST_ADDRESS_COUNTRY = 'US';
+    const TEST_ADDRESS_REGION  = 'CA';
+    const TEST_ADDRESS_STREET  = 'test street';
 
     /** @var EntityManager|\PHPUnit_Framework_MockObject_MockObject */
     protected $em;
@@ -205,5 +210,81 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
             'address does not exist on remote side' => [$notFoundException, true],
             'remote fault unknown error'            => [$exception, false],
         ];
+    }
+
+    public function testAddressCreateDefaultData()
+    {
+        $transportSetting = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Transport');
+        $channel          = new Channel();
+        $channel->setTransport($transportSetting);
+        $customer = new Customer();
+        $customer->setOriginId(self::TEST_CUSTOMER_ID);
+        $customer->setChannel($channel);
+        $customer->setFirstName(self::TEST_CUSTOMER_FIRSTNAME);
+        $customer->setLastName(self::TEST_CUSTOMER_LASTNAME);
+        $address = new ContactAddress();
+        $address->setFirstName(self::TEST_FIRSTNAME);
+        $address->setCountry(new Country(self::TEST_ADDRESS_COUNTRY));
+        $address->setRegionText(self::TEST_ADDRESS_REGION);
+        $address->setStreet(self::TEST_ADDRESS_STREET);
+
+        $this->transport->expects($this->once())->method('init');
+        $this->regionConverter->expects($this->once())->method('toMagentoData')
+            ->with($this->identicalTo($address))
+            ->will($this->returnValue(['region' => 'California', 'region_id' => null]));
+
+        $this->transport->expects($this->at(2))->method('call')
+            ->with(
+                $this->equalTo(SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE),
+                $this->equalTo(
+                    [
+                        'customerId'  => self::TEST_CUSTOMER_ID,
+                        'addressData' =>
+                            [
+                                'telephone'  => 'no phone',
+                                'prefix'     => null,
+                                'firstname'  => self::TEST_FIRSTNAME,
+                                'middlename' => null,
+                                'lastname'   => self::TEST_CUSTOMER_LASTNAME,
+                                'suffix'     => null,
+                                'company'    => null,
+                                'street'     =>
+                                    [
+                                        0 => 'test street',
+                                        1 => null,
+                                    ],
+                                'city'       => null,
+                                'postcode'   => null,
+                                'country_id' => 'US',
+                                'region'     => 'California',
+                                'region_id'  => null,
+                                'created_at' => null,
+                                'updated_at' => null,
+                            ],
+                    ]
+                )
+            )
+            ->will($this->returnValue(true));
+        $this->em->expects($this->atLeastOnce())->method('persist');
+        $this->em->expects($this->once())->method('flush');
+
+        $data = [];
+        array_push(
+            $data,
+            (object)[
+                'entity' => $customer,
+                'object' => [
+                    'addresses' => [
+                        [
+                            'entity'    => $address,
+                            'status'    => AbstractReverseProcessor::NEW_ENTITY,
+                            'magentoId' => self::TEST_CUSTOMER_ID
+                        ]
+                    ],
+                ]
+            ]
+        );
+
+        $this->writer->write($data);
     }
 }
