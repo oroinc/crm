@@ -222,18 +222,14 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             }
         }
 
-        $addressTypes = $accessor->getValue($addressFields, 'types');
+        $addressTypesNames = $addressFields->getTypeNames();
 
-        $addressTypesValues = [];
-        foreach ($addressTypes as $addressType) {
-            $addressTypesValues[] = $addressType->getName();
-        }
         $result['is_default_billing'] = false;
         $result['is_default_shipping'] = false;
-        if (in_array('billing', $addressTypesValues)) {
+        if (in_array('billing', $addressTypesNames)) {
             $result['is_default_billing'] = true;
         }
-        if (in_array('shipping', $addressTypesValues)) {
+        if (in_array('shipping', $addressTypesNames)) {
             $result['is_default_shipping'] = true;
         }
 
