@@ -147,7 +147,6 @@ services:
             - { name: oro_integration.channel_delete_provider }
 
     orocrm_magento.subscriber.customer_subscriber:
-        public: false
         class: %orocrm_magento.subscriber.customer_subscriber.class%
         arguments:
             - @oro_security.security_facade.link
