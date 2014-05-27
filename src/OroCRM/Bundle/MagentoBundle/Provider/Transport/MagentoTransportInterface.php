@@ -11,6 +11,8 @@ interface MagentoTransportInterface extends TransportInterface
     const WEBSITE_CODE_SEPARATOR = ' / ';
     const WEBSITE_NAME_SEPARATOR = ', ';
 
+    const TRANSPORT_ERROR_ADDRESS_DOES_NOT_EXIST = 102;
+
     /**
      * Return true if oro bridge extension installed on remote instance
      *
@@ -73,4 +75,13 @@ interface MagentoTransportInterface extends TransportInterface
      * @return \Iterator
      */
     public function getRegions();
+
+    /**
+     * Parse exception from remote side and returns generic code
+     *
+     * @param \Exception $e
+     *
+     * @return int
+     */
+    public function getErrorCode(\Exception $e);
 }

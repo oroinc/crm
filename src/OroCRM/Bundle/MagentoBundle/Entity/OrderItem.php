@@ -2,10 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseOrderItem;
+use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
-use Doctrine\ORM\Mapping as ORM;
+use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderItem;
 
 /**
  * @ORM\Table("orocrm_magento_order_items")
@@ -20,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  */
-class OrderItem extends BaseOrderItem
+class OrderItem extends ExtendOrderItem
 {
     use OriginTrait;
 

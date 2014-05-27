@@ -2,17 +2,18 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCart;
 use Oro\Bundle\EmailBundle\Entity\Email;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
 use OroCRM\Bundle\CallBundle\Entity\Call;
+use OroCRM\Bundle\MagentoBundle\Model\ExtendCart;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
@@ -45,7 +46,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *  }
  * )
  */
-class Cart extends BaseCart
+class Cart extends ExtendCart
 {
     use IntegrationEntityTrait, OriginTrait, NamesAwareTrait;
 
@@ -191,8 +192,8 @@ class Cart extends BaseCart
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\CallBundle\Entity\Call")
      * @ORM\JoinTable(name="orocrm_magento_cart_calls",
-     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     protected $relatedCalls;
@@ -202,8 +203,8 @@ class Cart extends BaseCart
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\EmailBundle\Entity\Email")
      * @ORM\JoinTable(name="orocrm_magento_cart_emails",
-     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     protected $relatedEmails;

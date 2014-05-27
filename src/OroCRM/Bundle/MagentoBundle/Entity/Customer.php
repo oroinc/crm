@@ -10,10 +10,10 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
 
 /**
  * Class Customer
@@ -37,7 +37,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * )
  * @Oro\Loggable
  */
-class Customer extends BasePerson
+class Customer extends ExtendCustomer
 {
     use IntegrationEntityTrait, OriginTrait;
 
