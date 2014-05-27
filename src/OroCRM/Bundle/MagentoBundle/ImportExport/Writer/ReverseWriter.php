@@ -170,7 +170,7 @@ class ReverseWriter implements ItemWriterInterface
      */
     protected function isRemoteAddressesTypesChanged($addresses, $remoteAddresses)
     {
-        foreach($addresses as $localAddress) {
+        foreach ($addresses as $localAddress) {
             $localData = $localAddress['entity'];
             $remoteAddress = $this->getRemoteAddressByOriginId($remoteAddresses, $localData->getOriginId());
             $localDataTypes = $localData->getTypeNames();
@@ -435,22 +435,26 @@ class ReverseWriter implements ItemWriterInterface
                             $this->getChangedCountry($entity, $country)
                         );
                     }
-                } elseif ($fieldName === 'types' && !empty($value)) {
-                    /** @var Collection $currentTypes */
-                    $currentTypes = $this->accessor->getValue($entity, $fieldName);
-                    $types = $this->getTypesByNameList($value);
-                    foreach ($types as $type) {
-                        if (!$currentTypes->contains($type)) {
-                            $currentTypes->add($type);
+                } elseif ($fieldName === 'types') {
+                    if (!empty($value)) {
+                        /** @var Collection $currentTypes */
+                        $currentTypes = $this->accessor->getValue($entity, $fieldName);
+                        $types = $this->getTypesByNameList($value);
+                        foreach ($types as $type) {
+                            if (!$currentTypes->contains($type)) {
+                                $currentTypes->add($type);
+                            }
                         }
                     }
-                } elseif ($fieldName === 'remove_types' && !empty($value)) {
-                    /** @var Collection $currentTypes */
-                    $currentTypes = $this->accessor->getValue($entity, 'types');
-                    $types = $this->getTypesByNameList($value);
-                    foreach ($types as $type) {
-                        if ($currentTypes->contains($type)) {
-                            $currentTypes->removeElement($type);
+                } elseif ($fieldName === 'remove_types') {
+                    if (!empty($value)) {
+                        /** @var Collection $currentTypes */
+                        $currentTypes = $this->accessor->getValue($entity, 'types');
+                        $types = $this->getTypesByNameList($value);
+                        foreach ($types as $type) {
+                            if ($currentTypes->contains($type)) {
+                                $currentTypes->removeElement($type);
+                            }
                         }
                     }
                 } else {
