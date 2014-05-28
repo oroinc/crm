@@ -168,7 +168,7 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
         if ($scheduleRun) {
             $this->schedulerService->expects($this->once())
                 ->method('schedule')
-                ->with($channel, 'customer', ['id' => 125]);
+                ->with($channel, 'customer', ['id' => 125], false);
         } else {
             $this->schedulerService->expects($this->never())
                 ->method('schedule');

@@ -98,7 +98,8 @@ class ContactSubscriber implements EventSubscriber
                 $this->schedulerServiceLink->getService()->schedule(
                     $magentoCustomer->getChannel(),
                     'customer',
-                    ['id' => $magentoCustomer->getId()]
+                    ['id' => $magentoCustomer->getId()],
+                    false
                 );
             }
         }
