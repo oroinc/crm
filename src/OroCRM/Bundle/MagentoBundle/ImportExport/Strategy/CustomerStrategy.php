@@ -164,6 +164,8 @@ class CustomerStrategy extends BaseStrategy
     }
 
     /**
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
      * @param Customer             $entity
      * @param Collection|Address[] $addresses
      *
@@ -176,13 +178,14 @@ class CustomerStrategy extends BaseStrategy
             $entity->getAddresses()->clear();
         }
 
+        $processedRemote = [];
+
         /** $address - imported address */
         foreach ($addresses as $address) {
             // at this point imported address region have code equal to region_id in magento db field
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
 
-            $originAddressId = $address->getId();
-            $address->setOriginId($originAddressId);
+            $originAddressId = $address->getOriginId();
             if ($originAddressId && !$this->context->getOption('force')) {
                 $existingAddress = $entity->getAddressByOriginId($originAddressId);
                 if ($existingAddress) {
@@ -200,15 +203,23 @@ class CustomerStrategy extends BaseStrategy
             }
 
             $this->updateAddressCountryRegion($address, $mageRegionId);
-            if (!$address->getCountry()) {
-                $entity->removeAddress($address);
-                continue;
+            if ($address->getCountry()) {
+                $this->updateAddressTypes($address);
+
+                $address->setOwner($entity);
+                $entity->addAddress($address);
+                $processedRemote[] = $address;
             }
+        }
 
-            $this->updateAddressTypes($address);
-
-            $address->setOwner($entity);
-            $entity->addAddress($address);
+        // remove not processed addresses
+        $toRemove = $entity->getAddresses()->filter(
+            function (Address $address) use ($processedRemote) {
+                return !in_array($address, $processedRemote, true);
+            }
+        );
+        foreach ($toRemove as $address) {
+            $entity->removeAddress($address);
         }
     }
 

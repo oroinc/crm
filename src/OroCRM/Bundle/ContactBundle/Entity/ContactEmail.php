@@ -24,7 +24,7 @@ class ContactEmail extends AbstractEmail implements EmailInterface
 {
     /**
      * @ORM\ManyToOne(targetEntity="Contact", inversedBy="emails")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $owner;
 
