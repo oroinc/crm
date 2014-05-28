@@ -60,7 +60,7 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
         $this->em        = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
         $this->transport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport')
-            ->setMethods(['init', 'call'])
+            ->setMethods(['init', 'call', 'getCustomerAddresses'])
             ->disableOriginalConstructor()->getMock();
         $this->addressImportHelper = $this
             ->getMockBuilder('OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper')
@@ -166,13 +166,8 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
 
         $remoteResult = is_bool($remoteResult)
             ? $this->returnValue($remoteResult) : $this->throwException($remoteResult);
-        $this->transport->expects($this->at(2))->method('call')
-            ->will(
-                $this->returnValue(
-                    [
-                    ]
-                )
-            );
+        $this->transport->expects($this->at(2))->method('getCustomerAddresses')
+            ->will($this->returnValue([]));
         $this->transport->expects($this->at(3))->method('call')
             ->with(
                 $this->equalTo(SoapTransport::ACTION_CUSTOMER_ADDRESS_DELETE),
@@ -319,11 +314,8 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
         $this->transport->expects($this->once())->method('init');
         $this->regionConverter->expects($this->once())->method('toMagentoData')->with($this->identicalTo($address))
             ->will($this->returnValue(['region' => self::TEST_ADDRESS_REGION_RESOLVED, 'region_id' => null]));
-        $this->transport->expects($this->at(2))->method('call')
-            ->with(
-                $this->equalTo(SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST),
-                $this->equalTo(['customerId' => self::TEST_CUSTOMER_ID])
-            )
+        $this->transport->expects($this->at(2))->method('getCustomerAddresses')
+            ->with($this->identicalTo($customer))
             ->will(
                 $this->returnValue(
                     [
