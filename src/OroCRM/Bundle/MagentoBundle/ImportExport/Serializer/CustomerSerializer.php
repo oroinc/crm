@@ -124,6 +124,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
         $accessor->setValue($address, 'contact_address', $contactAddr);
         $accessor->setValue($address, 'origin_id', $originId);
+        $accessor->setValue($address, 'types', $accessor->getValue($contactAddr, 'types'));
 
         return $address;
     }
@@ -131,10 +132,11 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     /**
      * @param array   $remoteData
      * @param Address $localData
+     * @param bool    $processTypes
      *
      * @return array
      */
-    public function compareAddresses($remoteData, $localData)
+    public function compareAddresses($remoteData, $localData, $processTypes = true)
     {
         $result = [];
 
@@ -161,6 +163,22 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
         if (!empty($result['region'])) {
             unset($result['region_text']);
+        }
+
+        $result['types'] = [];
+        $result['remove_types'] = [];
+
+        if ($processTypes) {
+            if ($remoteData['is_default_billing'] === true) {
+                $result['types'][] = 'billing';
+            } else {
+                $result['remove_types'][] = 'billing';
+            }
+            if ($remoteData['is_default_shipping'] === true) {
+                $result['types'][] = 'shipping';
+            } else {
+                $result['remove_types'][] = 'shipping';
+            }
         }
 
         return $result;
@@ -204,6 +222,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
                 $result[$field] = $value;
             }
         }
+
+        $types = $addressFields->getTypeNames();
+        $result['is_default_billing'] = in_array('billing', $types);
+        $result['is_default_shipping'] = in_array('shipping', $types);
 
         return $result;
     }

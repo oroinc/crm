@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
@@ -15,6 +16,10 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * TODO Should be fixed during CRM-1185
+ */
 class ContactImportHelper
 {
     /** @var array */
@@ -104,9 +109,9 @@ class ContactImportHelper
             $contact->addEmail($email);
         }
 
-        // @TODO process statuses
         // process addresses
-        $addresses = $contact->getAddresses();
+        $addresses           = $contact->getAddresses();
+        $isLocalTypesChanged = $this->isLocalAddressesTypesChanged($addresses, $localData);
         foreach ($addresses as $address) {
             // find in update local data if
             $localAddress = $this->getCustomerAddressByContactAddress($localData, $address);
@@ -132,6 +137,11 @@ class ContactImportHelper
                             $address->setRegionText(null);
                         }
                     }
+
+                    if ($this->isRemotePrioritized() || !$isLocalTypesChanged) {
+                        $address->setTypes($remoteAddress->getTypes());
+                    }
+
                     $this->prepareAddress($address);
                     if (!$address->getCountry()) {
                         $contact->removeAddress($address);
@@ -156,6 +166,7 @@ class ContactImportHelper
                 $this->mergeScalars($this->addressScalarFields, $address, $contactAddress, $contactAddress);
                 $contactAddress->setCountry($address->getCountry());
                 $contactAddress->setRegion($address->getRegion());
+                $contactAddress->setTypes($address->getTypes());
 
                 $this->prepareAddress($contactAddress);
                 if ($contactAddress->getCountry()) {
@@ -163,6 +174,12 @@ class ContactImportHelper
                     $address->setContactAddress($contactAddress);
                 }
             }
+        }
+
+        /** @var ContactAddress $toBePrimary */
+        $toBePrimary = $contact->getAddresses()->first();
+        if (!$contact->getPrimaryAddress() && $toBePrimary) {
+            $toBePrimary->setPrimary(true);
         }
     }
 
@@ -307,7 +324,7 @@ class ContactImportHelper
      * @param Customer $remoteCustomer
      * @param Customer $localCustomer
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     protected function getOrphanRemoteAddresses(Customer $remoteCustomer, Customer $localCustomer)
     {
@@ -320,5 +337,31 @@ class ContactImportHelper
         );
 
         return $filtered;
+    }
+
+    /**
+     * Checks whenever if any of contact address types was modified since last sync from magento
+     *
+     * @param AbstractAddress[] $contactAddresses
+     * @param Customer          $localCustomer
+     *
+     * @return bool
+     */
+    protected function isLocalAddressesTypesChanged($contactAddresses, Customer $localCustomer)
+    {
+        foreach ($contactAddresses as $contactAddress) {
+            $localAddress = $this->getCustomerAddressByContactAddress($localCustomer, $contactAddress);
+            if ($localAddress) {
+                $contactAddressTypes = $contactAddress->getTypeNames();
+                $localTypes          = $localAddress->getTypeNames();
+
+                $typesDiff = array_diff($contactAddressTypes, $localTypes);
+                if (!empty($typesDiff)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
