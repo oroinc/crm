@@ -223,16 +223,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             }
         }
 
-        $addressTypesNames = $addressFields->getTypeNames();
-
-        $result['is_default_billing'] = false;
-        $result['is_default_shipping'] = false;
-        if (in_array('billing', $addressTypesNames)) {
-            $result['is_default_billing'] = true;
-        }
-        if (in_array('shipping', $addressTypesNames)) {
-            $result['is_default_shipping'] = true;
-        }
+        $result = $this->checkAddressTypes($result, $addressFields->getTypeNames());
 
         return $result;
     }
@@ -563,6 +554,27 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $result = null;
         if (!empty($data[$name])) {
             $result = $this->serializer->denormalize($data[$name], $type, $format, $context);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Check AddressTypes
+     *
+     * @param array $result
+     * @param array $addressTypesNames
+     * @return array mixed
+     */
+    protected function checkAddressTypes($result, $addressTypesNames)
+    {
+        $result['is_default_billing'] = false;
+        $result['is_default_shipping'] = false;
+        if (in_array('billing', $addressTypesNames)) {
+            $result['is_default_billing'] = true;
+        }
+        if (in_array('shipping', $addressTypesNames)) {
+            $result['is_default_shipping'] = true;
         }
 
         return $result;
