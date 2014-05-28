@@ -164,6 +164,8 @@ class CustomerStrategy extends BaseStrategy
     }
 
     /**
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
      * @param Customer             $entity
      * @param Collection|Address[] $addresses
      *
