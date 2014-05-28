@@ -328,6 +328,12 @@ orocrm:
             region.label:          State
             contact_address.label: Contact address
 
+            country_name.label:      Country name
+            country_iso2_code.label: Country ISO2 code
+            country_iso3_code.label: Country ISO3 code
+            region_name.label:       State name
+            region_code.label:       State ISO code
+
         cartaddress:
             entity_label:        Magento Cart Address
             entity_plural_label: Magento Cart Addresses
@@ -351,6 +357,12 @@ orocrm:
             country.label:       Country
             region.label:        State
 
+            country_name.label:      Country
+            country_iso2_code.label: Country ISO2 Code
+            country_iso3_code.label: Country ISO3 Code
+            region_name.label:       Region
+            region_code.label:       Region ISO code
+
         orderaddress:
             entity_label:        Magento Order Address
             entity_plural_label: Magento Order Addresses
@@ -371,6 +383,12 @@ orocrm:
             owner.label:         Owner
             types.label:         Types
             street.label:        Street
+
+            country_name.label:      Country
+            country_iso2_code.label: Country ISO2 Code
+            country_iso3_code.label: Country ISO3 Code
+            region_name.label:       Region
+            region_code.label:       Region ISO code
 
         store:
             entity_label:        Store
