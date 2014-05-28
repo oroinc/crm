@@ -4,10 +4,10 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
@@ -340,6 +340,8 @@ class ContactImportHelper
     }
 
     /**
+     * Checks whenever if any of contact address types was modified since last sync from magento
+     *
      * @param AbstractAddress[] $contactAddresses
      * @param Customer          $localCustomer
      *
