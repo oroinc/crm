@@ -111,6 +111,12 @@ orocrm:
             types.label:         Types
             updated.label:       Updated
 
+            country_name.label:      Country name
+            country_iso2_code.label: Country ISO2 code
+            country_iso3_code.label: Country ISO3 code
+            region_name.label:       State name
+            region_code.label:       State ISO code
+
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\ContactEmail
         #
