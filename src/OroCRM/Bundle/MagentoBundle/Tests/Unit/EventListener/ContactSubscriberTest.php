@@ -83,7 +83,7 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testGetSubscribedEvents()
     {
         $this->assertEquals(
-            ['postFlush', 'onFlush'],
+            ['onFlush'],
             $this->subscriber->getSubscribedEvents()
         );
     }
@@ -145,6 +145,12 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->uow->expects($this->once())
             ->method('getScheduledEntityDeletions')
             ->will($this->returnValue($entityDeletions));
+        $this->uow->expects($this->once())
+            ->method('getScheduledCollectionUpdates')
+            ->will($this->returnValue([]));
+        $this->uow->expects($this->once())
+            ->method('getScheduledCollectionDeletions')
+            ->will($this->returnValue([]));
 
         $this->securityFacade->expects($this->any())
             ->method('hasLoggedUser')
@@ -169,7 +175,6 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->subscriber->onFlush($this->onFlushEventArgs);
-        $this->subscriber->postFlush($this->postFlushEventArgs);
     }
 
     public function dataTest()
