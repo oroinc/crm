@@ -316,12 +316,9 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
         $address->setStreet(self::TEST_ADDRESS_STREET);
         $address->setContactAddress($contactAddress);
         $address->setOriginId(1);
-
         $this->transport->expects($this->once())->method('init');
-        $this->regionConverter->expects($this->once())->method('toMagentoData')
-            ->with($this->identicalTo($address))
+        $this->regionConverter->expects($this->once())->method('toMagentoData')->with($this->identicalTo($address))
             ->will($this->returnValue(['region' => self::TEST_ADDRESS_REGION_RESOLVED, 'region_id' => null]));
-
         $this->transport->expects($this->at(2))->method('call')
             ->with(
                 $this->equalTo(SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST),
@@ -378,7 +375,6 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->em->expects($this->atLeastOnce())->method('persist');
         $this->em->expects($this->once())->method('flush');
-
         $data = [];
         array_push(
             $data,
@@ -398,7 +394,6 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
-
         $this->writer->write($data);
     }
 }
