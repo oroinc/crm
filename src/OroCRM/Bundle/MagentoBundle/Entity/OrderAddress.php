@@ -5,14 +5,21 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
+use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderAddress;
 
 /**
  * @ORM\Table("orocrm_magento_order_address")
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity
+ * @Config(
+ *       defaultValues={
+ *          "entity"={"icon"="icon-map-marker"},
+ *      }
+ * )
  */
-class OrderAddress extends AbstractTypedAddress
+class OrderAddress extends ExtendOrderAddress
 {
     /**
      * @var ArrayCollection

@@ -124,6 +124,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
         $accessor->setValue($address, 'contact_address', $contactAddr);
         $accessor->setValue($address, 'origin_id', $originId);
+        $accessor->setValue($address, 'types', $accessor->getValue($contactAddr, 'types'));
 
         return $address;
     }
@@ -131,10 +132,11 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     /**
      * @param array   $remoteData
      * @param Address $localData
+     * @param bool    $processTypes
      *
      * @return array
      */
-    public function compareAddresses($remoteData, $localData)
+    public function compareAddresses($remoteData, $localData, $processTypes = true)
     {
         $result = [];
 
@@ -148,12 +150,12 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
                 $localValue  = $accessor->getValue($localData, $oroFieldName);
                 $remoteValue = $accessor->getValue($remoteAddress, $oroFieldName);
 
-                if ($mageFieldName !== 'country_id' && $mageFieldName !== 'region_id' && $remoteValue !== $localValue) {
-                    $result[$oroFieldName] = $remoteValue;
-                } elseif ($mageFieldName === 'country_id') {
+                if ($mageFieldName === 'country_id') {
                     $result['country'] = $accessor->getValue($remoteAddress, 'country');
                 } elseif ($mageFieldName === 'region_id') {
                     $result['region'] = $accessor->getValue($remoteAddress, 'region');
+                } elseif ($remoteValue !== $localValue) {
+                    $result[$oroFieldName] = $remoteValue;
                 }
             } catch (\Exception $e) {
             }
@@ -163,39 +165,67 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             unset($result['region_text']);
         }
 
+        $result['types'] = [];
+        $result['remove_types'] = [];
+
+        if ($processTypes) {
+            if ($remoteData['is_default_billing'] === true) {
+                $result['types'][] = 'billing';
+            } else {
+                $result['remove_types'][] = 'billing';
+            }
+            if ($remoteData['is_default_shipping'] === true) {
+                $result['types'][] = 'shipping';
+            } else {
+                $result['remove_types'][] = 'shipping';
+            }
+        }
+
         return $result;
     }
 
     /**
      * @param AbstractAddress $addressFields
      *
+     * @param array $defaultData
+     *
      * @return array
      */
-    public function convertToMagentoAddress(AbstractAddress $addressFields)
+    public function convertToMagentoAddress(AbstractAddress $addressFields, array $defaultData = [])
     {
         $result   = [];
         $accessor = PropertyAccess::createPropertyAccessor();
 
-        foreach ($this->contactAddressEntityToMageMapping as $oroCrm => $magento) {
+        foreach ($this->contactAddressEntityToMageMapping as $oroPropertyPath => $magentoFieldName) {
             try {
-                $oroValue = $accessor->getValue($addressFields, $oroCrm);
+                $oroValue = $accessor->getValue($addressFields, $oroPropertyPath);
             } catch (\Exception $e) {
                 $oroValue = null;
             }
 
             if ($oroValue instanceof \DateTime) {
-                $result[$magento] = $oroValue->format(ReverseWriter::MAGENTO_DATETIME_FORMAT);
-            } elseif ($oroCrm === 'street') {
+                $result[$magentoFieldName] = $oroValue->format(ReverseWriter::MAGENTO_DATETIME_FORMAT);
+            } elseif ($oroPropertyPath === 'street') {
                 try {
                     $street2 = $accessor->getValue($addressFields, 'street2');
                 } catch (\Exception $e) {
                     $street2 = '';
                 }
-                $result[$magento] = [$oroValue, $street2];
+                $result[$magentoFieldName] = [$oroValue, $street2];
             } else {
-                $result[$magento] = $oroValue;
+                $result[$magentoFieldName] = $oroValue;
             }
         }
+
+        foreach ($defaultData as $field => $value) {
+            if (empty($result[$field])) {
+                $result[$field] = $value;
+            }
+        }
+
+        $types = $addressFields->getTypeNames();
+        $result['is_default_billing'] = in_array('billing', $types);
+        $result['is_default_shipping'] = in_array('shipping', $types);
 
         return $result;
     }

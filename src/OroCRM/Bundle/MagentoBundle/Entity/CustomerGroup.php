@@ -5,10 +5,10 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePersonGroup;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
-
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
+use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomerGroup;
 
 /**
  * Class CustomerGroup
@@ -23,7 +23,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * )
  * @Oro\Loggable
  */
-class CustomerGroup extends BasePersonGroup
+class CustomerGroup extends ExtendCustomerGroup
 {
     use IntegrationEntityTrait, OriginTrait;
 
