@@ -230,7 +230,6 @@ class ReverseWriter implements ItemWriterInterface
             if (empty($address['status']) || empty($address['entity'])) {
                 throw new \LogicException('Unable to process entity modification');
             }
-
             /** @var ContactAddress|Address $addressEntity */
             $addressEntity = $address['entity'];
             $status        = $address['status'];
@@ -238,7 +237,6 @@ class ReverseWriter implements ItemWriterInterface
                 'firstname' => $customer->getFirstName(),
                 'lastname'  => $customer->getLastName()
             ];
-
             if ($status === AbstractReverseProcessor::UPDATE_ENTITY) {
                 $localChanges  = $address['object'];
                 if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
@@ -267,7 +265,6 @@ class ReverseWriter implements ItemWriterInterface
                     );
                     $this->setChangedData($addressEntity, $localChanges);
                 }
-
                 $dataForSend = array_merge(
                     $this->customerSerializer->convertToMagentoAddress($addressEntity, $defaultData),
                     $this->regionConverter->toMagentoData($addressEntity)
@@ -285,16 +282,11 @@ class ReverseWriter implements ItemWriterInterface
                         $this->customerSerializer->convertToMagentoAddress($addressEntity, $defaultData),
                         $this->regionConverter->toMagentoData($addressEntity)
                     );
-                    $addressData = array_merge(
-                        $addressData,
-                        ['types' => $addressEntity->getTypes()]
-                    );
                     $requestData = ['customerId' => $address['magentoId'], 'addressData' => $addressData];
                     $result      = $this->transport->call(
                         SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
                         $requestData
                     );
-
                     if ($result) {
                         $newAddress = $this->customerSerializer
                             ->convertMageAddressToAddress($addressData, $addressEntity, $result);
@@ -315,7 +307,6 @@ class ReverseWriter implements ItemWriterInterface
                     $errorCode       = $this->transport->getErrorCode($e);
                     $shouldBeRemoved = $errorCode === MagentoTransportInterface::TRANSPORT_ERROR_ADDRESS_DOES_NOT_EXIST;
                 }
-
                 if ($shouldBeRemoved) {
                     $this->em->remove($address['entity']);
                 }
@@ -446,32 +437,55 @@ class ReverseWriter implements ItemWriterInterface
                         );
                     }
                 } elseif ($fieldName === 'types') {
-                    if (!empty($value)) {
-                        /** @var Collection $currentTypes */
-                        $currentTypes = $this->accessor->getValue($entity, $fieldName);
-                        $types = $this->getTypesByNameList($value);
-                        foreach ($types as $type) {
-                            if (!$currentTypes->contains($type)) {
-                                $currentTypes->add($type);
-                            }
-                        }
-                    }
+                    $this->addTypes($fieldName, $value, $entity);
                 } elseif ($fieldName === 'remove_types') {
-                    if (!empty($value)) {
-                        /** @var Collection $currentTypes */
-                        $currentTypes = $this->accessor->getValue($entity, 'types');
-                        $types = $this->getTypesByNameList($value);
-                        foreach ($types as $type) {
-                            if ($currentTypes->contains($type)) {
-                                $currentTypes->removeElement($type);
-                            }
-                        }
-                    }
+                    $this->removeTypes($value, $entity);
                 } else {
                     try {
                         $this->accessor->setValue($entity, $fieldName, $value);
                     } catch (\Exception $e) {
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     * Remove types from entity
+     *
+     * @param array $names
+     * @param Address $entity
+     */
+    protected function removeTypes($names, $entity)
+    {
+        if (!empty($names)) {
+            /** @var Collection $currentTypes */
+            $currentTypes = $this->accessor->getValue($entity, 'types');
+            $types = $this->getTypesByNameList($names);
+            foreach ($types as $type) {
+                if ($currentTypes->contains($type)) {
+                    $currentTypes->removeElement($type);
+                }
+            }
+        }
+    }
+
+    /**
+     * Add types into entity
+     *
+     * @param string $fieldName
+     * @param array $names
+     * @param Address $entity
+     */
+    protected function addTypes($fieldName, $names, $entity)
+    {
+        if (!empty($names)) {
+            /** @var Collection $currentTypes */
+            $currentTypes = $this->accessor->getValue($entity, $fieldName);
+            $types = $this->getTypesByNameList($names);
+            foreach ($types as $type) {
+                if (!$currentTypes->contains($type)) {
+                    $currentTypes->add($type);
                 }
             }
         }
