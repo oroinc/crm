@@ -195,7 +195,7 @@ class ReverseWriter implements ItemWriterInterface
     /**
      * @param array $remoteAddresses
      * @param int $originId
-     * @return \stdClass|bool
+     * @return array|bool
      */
     protected function getRemoteAddressByOriginId($remoteAddresses, $originId)
     {
@@ -215,16 +215,12 @@ class ReverseWriter implements ItemWriterInterface
      * @param string   $syncPriority
      * @param Customer $customer
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @throws \LogicException
      */
     protected function processAddresses($addresses, $syncPriority, Customer $customer)
     {
-        $remoteAddresses = WSIUtils::processCollectionResponse(
-            $this->transport->call(
-                SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST,
-                ['customerId' => $customer->getOriginId()]
-            )
-        );
+        $remoteAddresses = $this->transport->getCustomerAddresses($customer);
         $remoteTypesWin  = $this->isRemoteAddressesTypesChanged($addresses, $remoteAddresses);
         foreach ($addresses as $address) {
             if (empty($address['status']) || empty($address['entity'])) {
@@ -233,19 +229,23 @@ class ReverseWriter implements ItemWriterInterface
             /** @var ContactAddress|Address $addressEntity */
             $addressEntity = $address['entity'];
             $status        = $address['status'];
-            $defaultData   = [
-                'firstname' => $customer->getFirstName(),
-                'lastname'  => $customer->getLastName()
-            ];
             if ($status === AbstractReverseProcessor::UPDATE_ENTITY) {
-                $localChanges  = $address['object'];
+                $localChanges = $address['object'];
+                $this->setDefaultData(
+                    $localChanges,
+                    [
+                        'firstName' => $customer->getFirstName(),
+                        'lastName'  => $customer->getLastName()
+                    ]
+                );
+
                 if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
-                    $remoteAddress = (array)$this->getRemoteAddressByOriginId(
-                        $remoteAddresses,
-                        $addressEntity->getOriginId()
-                    );
+                    $remoteAddress = $this->getRemoteAddressByOriginId($remoteAddresses, $addressEntity->getOriginId());
+                    if (!$remoteAddress) {
+                        continue;
+                    }
                     $remoteData = $this->customerSerializer->compareAddresses(
-                        $remoteAddress,
+                        (array) $remoteAddress,
                         $addressEntity,
                         $remoteTypesWin
                     );
@@ -266,7 +266,7 @@ class ReverseWriter implements ItemWriterInterface
                     $this->setChangedData($addressEntity, $localChanges);
                 }
                 $dataForSend = array_merge(
-                    $this->customerSerializer->convertToMagentoAddress($addressEntity, $defaultData),
+                    $this->customerSerializer->convertToMagentoAddress($addressEntity),
                     $this->regionConverter->toMagentoData($addressEntity)
                 );
                 $requestData = ['addressId' => $addressEntity->getOriginId(), 'addressData' => $dataForSend];
@@ -279,14 +279,17 @@ class ReverseWriter implements ItemWriterInterface
                 try {
                     $addressData = array_merge(
                         ['telephone' => 'no phone'],
-                        $this->customerSerializer->convertToMagentoAddress($addressEntity, $defaultData),
+                        $this->customerSerializer->convertToMagentoAddress(
+                            $addressEntity,
+                            [
+                                'firstname' => $customer->getFirstName(),
+                                'lastname'  => $customer->getLastName()
+                            ]
+                        ),
                         $this->regionConverter->toMagentoData($addressEntity)
                     );
                     $requestData = ['customerId' => $address['magentoId'], 'addressData' => $addressData];
-                    $result      = $this->transport->call(
-                        SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
-                        $requestData
-                    );
+                    $result      = $this->transport->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE, $requestData);
                     if ($result) {
                         $newAddress = $this->customerSerializer
                             ->convertMageAddressToAddress($addressData, $addressEntity, $result);
@@ -595,6 +598,23 @@ class ReverseWriter implements ItemWriterInterface
                 if (!in_array($key, $this->clearMagentoFields)) {
                     unset($remoteData->$key);
                 }
+            }
+        }
+    }
+
+    /**
+     * Set default data to changeset
+     *
+     * @param array $localChanges
+     * @param array $defaultData
+     */
+    protected function setDefaultData(array &$localChanges, array $defaultData)
+    {
+        $changesIntersected = array_intersect_key($localChanges, $defaultData);
+
+        foreach (array_keys($changesIntersected) as $field) {
+            if (empty($localChanges[$field])) {
+                $localChanges[$field] = $defaultData[$field];
             }
         }
     }
