@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Collections\Collection;
 
-use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -17,6 +16,7 @@ use Oro\Bundle\AddressBundle\Entity\Country as BAPCountry;
 use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
 
+use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
