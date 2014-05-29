@@ -60,7 +60,7 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
         $this->em        = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
         $this->transport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport')
-            ->setMethods(['init', 'call'])
+            ->setMethods(['init', 'call', 'getCustomerAddresses'])
             ->disableOriginalConstructor()->getMock();
         $this->addressImportHelper = $this
             ->getMockBuilder('OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper')
@@ -166,7 +166,9 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
 
         $remoteResult = is_bool($remoteResult)
             ? $this->returnValue($remoteResult) : $this->throwException($remoteResult);
-        $this->transport->expects($this->at(2))->method('call')
+        $this->transport->expects($this->at(2))->method('getCustomerAddresses')
+            ->will($this->returnValue([]));
+        $this->transport->expects($this->at(3))->method('call')
             ->with(
                 $this->equalTo(SoapTransport::ACTION_CUSTOMER_ADDRESS_DELETE),
                 $this->equalTo(['addressId' => self::TEST_ADDRESS_ID])
@@ -234,34 +236,35 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($address))
             ->will($this->returnValue(['region' => self::TEST_ADDRESS_REGION_RESOLVED, 'region_id' => null]));
 
-        $this->transport->expects($this->at(2))->method('call')
+        $this->transport->expects($this->at(3))->method('call')
             ->with(
                 $this->equalTo(SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE),
                 $this->equalTo(
                     [
                         'customerId'  => self::TEST_CUSTOMER_ID,
-                        'addressData' =>
-                            [
-                                'telephone'  => 'no phone',
-                                'prefix'     => null,
-                                'firstname'  => self::TEST_FIRSTNAME,
-                                'middlename' => null,
-                                'lastname'   => self::TEST_CUSTOMER_LASTNAME,
-                                'suffix'     => null,
-                                'company'    => null,
-                                'street'     =>
-                                    [
-                                        0 => self::TEST_ADDRESS_STREET,
-                                        1 => null,
-                                    ],
-                                'city'       => null,
-                                'postcode'   => null,
-                                'country_id' => self::TEST_ADDRESS_COUNTRY,
-                                'region'     => self::TEST_ADDRESS_REGION_RESOLVED,
-                                'region_id'  => null,
-                                'created_at' => null,
-                                'updated_at' => null,
-                            ],
+                        'addressData' => [
+                            'telephone'           => 'no phone',
+                            'prefix'              => null,
+                            'firstname'           => self::TEST_FIRSTNAME,
+                            'middlename'          => null,
+                            'lastname'            => self::TEST_CUSTOMER_LASTNAME,
+                            'suffix'              => null,
+                            'company'             => null,
+                            'street'              =>
+                                [
+                                    0 => self::TEST_ADDRESS_STREET,
+                                    1 => null,
+                                ],
+                            'city'                => null,
+                            'postcode'            => null,
+                            'country_id'          => self::TEST_ADDRESS_COUNTRY,
+                            'region'              => self::TEST_ADDRESS_REGION_RESOLVED,
+                            'region_id'           => null,
+                            'created_at'          => null,
+                            'updated_at'          => null,
+                            'is_default_billing'  => false,
+                            'is_default_shipping' => false,
+                        ],
                     ]
                 )
             )
@@ -286,6 +289,103 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
+        $this->writer->write($data);
+    }
+
+    public function testUpdateAddress()
+    {
+        $transportSetting = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Transport');
+        $channel          = new Channel();
+        $channel->setTransport($transportSetting);
+        $channel->setSyncPriority(ChannelFormTwoWaySyncSubscriber::LOCAL_WINS);
+        $customer = new Customer();
+        $customer->setOriginId(self::TEST_CUSTOMER_ID);
+        $customer->setChannel($channel);
+        $customer->setFirstName(self::TEST_CUSTOMER_FIRSTNAME);
+        $customer->setLastName(self::TEST_CUSTOMER_LASTNAME);
+        $contactAddress = new ContactAddress();
+        $address = new Address();
+        $address->setFirstName(self::TEST_FIRSTNAME);
+        $address->setCountry(new Country(self::TEST_ADDRESS_COUNTRY));
+        $address->setRegionText(self::TEST_ADDRESS_REGION);
+        $address->setStreet(self::TEST_ADDRESS_STREET);
+        $address->setContactAddress($contactAddress);
+        $address->setOriginId(1);
+        $this->transport->expects($this->once())->method('init');
+        $this->regionConverter->expects($this->once())->method('toMagentoData')->with($this->identicalTo($address))
+            ->will($this->returnValue(['region' => self::TEST_ADDRESS_REGION_RESOLVED, 'region_id' => null]));
+        $this->transport->expects($this->at(2))->method('getCustomerAddresses')
+            ->with($this->identicalTo($customer))
+            ->will(
+                $this->returnValue(
+                    [
+                        (object)[
+                            'customer_address_id' => 1,
+                            'telephone'           => '911',
+                            'middlename'          => 'testMiddleName',
+                            'suffix'              => 'testSuffix',
+                            'company'             => 'testCompany',
+                            'city'                => 'testCity',
+                            'is_default_shipping' => false,
+                            'is_default_billing'  => false
+                        ]
+                    ]
+                )
+            );
+        $this->transport->expects($this->at(3))->method('call')
+            ->with(
+                $this->equalTo(SoapTransport::ACTION_CUSTOMER_ADDRESS_UPDATE),
+                $this->equalTo(
+                    [
+                        'addressId'   => 1,
+                        'addressData' =>
+                            [
+                                'prefix'     => null,
+                                'firstname'  => 'newName',
+                                'middlename' => null,
+                                'lastname'   => 'newLastName',
+                                'suffix'     => null,
+                                'company'    => null,
+                                'street'     =>
+                                    [
+                                        0 => self::TEST_ADDRESS_STREET,
+                                        1 => null,
+                                    ],
+                                'city'       => null,
+                                'postcode'   => null,
+                                'country_id' => self::TEST_ADDRESS_COUNTRY,
+                                'region'     => self::TEST_ADDRESS_REGION_RESOLVED,
+                                'region_id'  => null,
+                                'created_at' => null,
+                                'updated_at' => null,
+                                'is_default_billing' => false,
+                                'is_default_shipping' => false
+                            ]
+                    ]
+                )
+            )
+            ->will($this->returnValue(true));
+        $this->em->expects($this->atLeastOnce())->method('persist');
+        $this->em->expects($this->once())->method('flush');
+        $data = [];
+        array_push(
+            $data,
+            (object)[
+                'entity' => $customer,
+                'object' => [
+                    'addresses' => [
+                        [
+                            'entity' => $address,
+                            'status' => AbstractReverseProcessor::UPDATE_ENTITY,
+                            'object' => [
+                                'firstname'  => 'newName',
+                                'lastname'   => 'newLastName',
+                            ]
+                        ]
+                    ],
+                ]
+            ]
+        );
         $this->writer->write($data);
     }
 }
