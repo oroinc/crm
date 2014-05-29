@@ -8,8 +8,8 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 /**
- * @ outputBuffering enabled
- * @ dbIsolation
+ * @outputBuffering enabled
+ * @dbIsolation
  */
 class CustomerAddressControllerTest extends WebTestCase
 {
