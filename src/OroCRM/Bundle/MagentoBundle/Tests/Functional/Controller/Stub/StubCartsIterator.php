@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: de-key
- * Date: 5/29/14
- * Time: 2:46 PM
- */
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Stub;
-
 
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterface;
