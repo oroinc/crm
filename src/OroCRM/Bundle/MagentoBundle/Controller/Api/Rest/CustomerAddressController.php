@@ -16,6 +16,9 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
+/**
+ * @NamePrefix("oro_api_")
+ */
 class CustomerAddressController extends RestController implements ClassResourceInterface
 {
     /**
