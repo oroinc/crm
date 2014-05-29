@@ -1,0 +1,8 @@
+orocrm_case_bundle_api:
+    resource:     "@OroCRMCaseBundle/Controller/Api/Rest/CaseController.php"
+    type:         rest
+    prefix:       api/rest/{version}
+    requirements:
+        version:  latest|v1
+    defaults:
+        version:  latest
