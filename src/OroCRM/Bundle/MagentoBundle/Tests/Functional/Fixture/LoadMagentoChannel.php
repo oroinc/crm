@@ -229,6 +229,10 @@ class LoadMagentoChannel extends AbstractFixture
         $address->setPostalCode(123456);
         $address->setFirstName('John');
         $address->setLastName('Doe');
+        $address->setLabel('label');
+        $address->setPrimary(true);
+        $address->setOrganization('oro');
+        $address->setOriginId(1);
 
         $this->em->persist($address);
 
