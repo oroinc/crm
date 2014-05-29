@@ -2,8 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
 
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+
 class MagentoSoapTransportTest extends AbstractEntityTestCase
 {
+    /** @var MagentoSoapTransport */
+    protected $entity;
+
     /**
      * {@inheritDoc}
      */
@@ -41,6 +46,29 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
 
     public function testSettingsBag()
     {
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\ParameterBag', $this->entity->getSettingsBag());
+        $data = array(
+            'api_user'        => 'test_user',
+            'api_key'         => 'test_key',
+            'wsdl_url'        => 'http://test.url/',
+            'sync_range'      => new \DateInterval('P1D'),
+            'wsi_mode'        => true,
+            'website_id'      => 1,
+            'start_sync_date' => new \DateTime('now'),
+        );
+
+        $this->entity
+            ->setApiUser($data['api_user'])
+            ->setApiKey($data['api_key'])
+            ->setWsdlUrl($data['wsdl_url'])
+            ->setSyncRange($data['sync_range'])
+            ->setIsWsiMode($data['wsi_mode'])
+            ->setWebsiteId($data['website_id'])
+            ->setSyncStartDate($data['start_sync_date']);
+
+        $settingsBag = $this->entity->getSettingsBag();
+
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\ParameterBag', $settingsBag);
+        $this->assertSame($settingsBag, $this->entity->getSettingsBag());
+        $this->assertEquals($data, $settingsBag->all());
     }
 }

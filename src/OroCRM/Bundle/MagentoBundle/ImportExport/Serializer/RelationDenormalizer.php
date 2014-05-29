@@ -12,17 +12,15 @@ use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 class RelationDenormalizer implements DenormalizerInterface
 {
     /**
-     * @param mixed  $data
-     * @param string $class
-     * @param mixed  $format
-     * @param array  $context
-     *
-     * @return Store|Website
+     * {@inheritdoc}
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
         /** @var Store|Website|CustomerGroup $result */
         $result = new $class();
+        if (!is_array($data)) {
+            return $result;
+        }
 
         foreach (['id', 'code', 'name', 'originId'] as $name) {
             $method = 'set' . ucfirst($name);
@@ -39,12 +37,13 @@ class RelationDenormalizer implements DenormalizerInterface
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        $supportedEntities = [
-            MagentoConnectorInterface::STORE_TYPE,
-            MagentoConnectorInterface::WEBSITE_TYPE,
-            MagentoConnectorInterface::CUSTOMER_GROUPS_TYPE
-        ];
-
-        return is_array($data) && class_exists($type) && in_array($type, $supportedEntities);
+        return in_array(
+            $type,
+            [
+                MagentoConnectorInterface::STORE_TYPE,
+                MagentoConnectorInterface::WEBSITE_TYPE,
+                MagentoConnectorInterface::CUSTOMER_GROUPS_TYPE
+            ]
+        );
     }
 }

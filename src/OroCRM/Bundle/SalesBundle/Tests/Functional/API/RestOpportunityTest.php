@@ -3,25 +3,18 @@
 namespace OroCRM\Bundle\SalesBundle\Tests\Functional\API;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
+ * @dbIsolation
  */
 class RestOpportunityTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
-    public function setUp()
+    protected function setUp()
     {
-        $this->client = static::createClient(
+        $this->initClient(
             array(),
-            ToolsAPI::generateWsseHeader()
+            $this->generateWsseAuthHeader()
         );
     }
 
@@ -35,12 +28,12 @@ class RestOpportunityTest extends WebTestCase
         );
         $this->client->request(
             'POST',
-            $this->client->generate('oro_api_post_account'),
+            $this->getUrl('oro_api_post_account'),
             $request
         );
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 201);
-        $result = ToolsAPI::jsonToArray($result->getContent());
+
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 201);
+
         return $result['id'];
     }
     /**
@@ -58,14 +51,14 @@ class RestOpportunityTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            $this->client->generate('oro_api_post_opportunity'),
+            $this->getUrl('oro_api_post_opportunity'),
             $request
         );
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 201);
-        $result = ToolsAPI::jsonToArray($result->getContent());
+
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 201);
 
         $request['id'] = $result['id'];
+
         return $request;
     }
 
@@ -78,12 +71,10 @@ class RestOpportunityTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_opportunity', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_opportunity', array('id' => $request['id']))
         );
 
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['opportunity']['name'], $result['name']);
@@ -106,21 +97,19 @@ class RestOpportunityTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            $this->client->generate('oro_api_put_opportunity', array('id' => $request['id'])),
+            $this->getUrl('oro_api_put_opportunity', array('id' => $request['id'])),
             $request
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 204);
+        $this->assertJsonResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_opportunity', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_opportunity', array('id' => $request['id']))
         );
 
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-        $result = ToolsAPI::jsonToArray($result->getContent());
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['opportunity']['name'], $result['name']);
@@ -136,11 +125,10 @@ class RestOpportunityTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_opportunities')
+            $this->getUrl('oro_api_get_opportunities')
         );
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-        $result = ToolsApi::jsonToArray($result->getContent());
+
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertNotEmpty($result);
 
@@ -157,17 +145,17 @@ class RestOpportunityTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_opportunity', array('id' => $request['id']))
+            $this->getUrl('oro_api_delete_opportunity', array('id' => $request['id']))
         );
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 204);
+        $this->assertJsonResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
-            $this->client->generate('oro_api_get_opportunity', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_opportunity', array('id' => $request['id']))
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 404);
+        $this->assertJsonResponseStatusCodeEquals($result, 404);
     }
 }

@@ -58,9 +58,6 @@ class CartAddressCompositeDenormalizer extends OrderAddressCompositeDenormalizer
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return
-            is_array($data)
-            && class_exists($type)
-            && MagentoConnectorInterface::CART_ADDRESS_TYPE == $type;
+        return MagentoConnectorInterface::CART_ADDRESS_TYPE == $type;
     }
 }

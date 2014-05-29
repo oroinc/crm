@@ -14,7 +14,23 @@ connector:
                         processor: oro_importexport.processor.import_delegate
                         writer:    oro_integration.writer.persistent_batch_writer
                     parameters:
+                        batch_size: 25
+
+        # Customer export job
+        mage_customer_reverse_sync:
+            title: "Entity reverse to Magento SOAP API"
+            type:  export
+            steps:
+                export:
+                    title: export
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    oro_integration.reader.entity.by_id
+                        processor: orocrm_magento.importexport.customer.reverse.processor
+                        writer:    orocrm_magento.importexport.customer.reverse.writer
+                    parameters:
                         batch_size: 100
+
         # Region import job
         mage_region_import:
             title: "Import Magento regions via SOAP API"
@@ -42,7 +58,7 @@ connector:
                         processor: oro_importexport.processor.import_delegate
                         writer:    oro_integration.writer.persistent_batch_writer
                     parameters:
-                        batch_size: 100
+                        batch_size: 25
         # Cart import job
         mage_cart_import:
             title: "Import Magento carts (quote) from Magento"
@@ -56,4 +72,4 @@ connector:
                         processor: oro_importexport.processor.import_delegate
                         writer:    oro_integration.writer.persistent_batch_writer
                     parameters:
-                        batch_size: 100
+                        batch_size: 25

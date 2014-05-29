@@ -14,7 +14,7 @@ class OrderDenormalizer extends AbstractNormalizer implements DenormalizerInterf
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && $type == MagentoConnectorInterface::ORDER_TYPE;
+        return $type == MagentoConnectorInterface::ORDER_TYPE;
     }
 
     /**

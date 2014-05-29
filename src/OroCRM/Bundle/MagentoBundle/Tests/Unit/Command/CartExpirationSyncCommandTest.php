@@ -18,7 +18,7 @@ class CartExpirationSyncCommandTest extends \PHPUnit_Framework_TestCase
     /** @var ContainerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $container;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->command = new CartExpirationSyncCommand();
 
@@ -26,7 +26,7 @@ class CartExpirationSyncCommandTest extends \PHPUnit_Framework_TestCase
         $this->command->setContainer($this->container);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->container, $this->command);
     }

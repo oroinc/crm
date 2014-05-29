@@ -6,10 +6,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
+use Oro\Bundle\UserBundle\Model\Gender;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
@@ -80,6 +81,9 @@ class LoadMagentoChannel extends AbstractFixture
         $cart1 = $this->createCart($cartAddress1, $cartAddress2, $customer, $items, $status);
         $this->updateCartItem($cartItem, $cart1);
 
+        $this->setReference('customer', $customer);
+        $this->setReference('channel', $this->channel);
+
         $this->createOrder($cart1, $customer);
         $this->em->flush();
 
@@ -112,7 +116,7 @@ class LoadMagentoChannel extends AbstractFixture
         $cart->setBaseCurrencyCode('code');
         $cart->setStoreCurrencyCode('code');
         $cart->setQuoteCurrencyCode('usd');
-        $cart->setStoreToBaseRate('code');
+        $cart->setStoreToBaseRate(12);
         $cart->setIsGuest(1);
 
         $this->em->persist($cart);
@@ -233,11 +237,13 @@ class LoadMagentoChannel extends AbstractFixture
         $customer->setChannel($this->channel);
         $customer->setFirstName('John');
         $customer->setLastName('Doe');
+        $customer->setEmail('test@example.com');
         $customer->setOriginId($oid);
         $customer->setIsActive(true);
         $customer->setWebsite($this->website);
         $customer->setStore($this->store);
         $customer->setAccount($account);
+        $customer->setGender(Gender::MALE);
         $customer->setGroup($this->customerGroup);
         $customer->setCreatedAt(new \DateTime('now'));
         $customer->setUpdatedAt(new \DateTime('now'));

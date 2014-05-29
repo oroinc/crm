@@ -25,7 +25,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $stepExecutionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->transportMock     = $this
             ->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Transport\\MagentoTransportInterface');
@@ -71,6 +71,27 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $connector->setStepExecution($this->stepExecutionMock);
     }
 
+    public function testInitializationInForceMode()
+    {
+        $channel   = new Channel();
+        $context   = new Context(['force' => true]);
+        $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock, $channel, $context);
+
+        $status = new Status();
+        $status->setCode($status::STATUS_COMPLETED);
+        $status->setConnector($connector->getType());
+        $channel->addStatus($status);
+
+        $this->transportMock->expects($this->once())->method('init');
+
+        $iterator = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
+        $iterator->expects($this->exactly((int)!$this->supportsForceMode()))->method('setMode');
+        $iterator->expects($this->exactly((int)!$this->supportsForceMode()))->method('setStartDate');
+        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+            ->will($this->returnValue($iterator));
+
+        $connector->setStepExecution($this->stepExecutionMock);
+    }
 
     /**
      * @dataProvider predefinedIteratorProvider
@@ -200,6 +221,14 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $logger = new LoggerStrategy(new NullLogger());
 
         return $this->getConnectorInstance($contextRegistryMock, $logger, $contextMediatorMock);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function supportsForceMode()
+    {
+        return false;
     }
 
     /**
