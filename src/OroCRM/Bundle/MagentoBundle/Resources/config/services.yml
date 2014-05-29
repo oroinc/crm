@@ -152,7 +152,6 @@ services:
             - @oro_security.security_facade.link
             - @oro_integration.sync_scheduler.link
         tags:
-            - { name: doctrine.event_listener, event: postFlush, connection: default }
             - { name: doctrine.event_listener, event: onFlush, connection: default }
 
     orocrm_magento.importexport.customer.reverse.processor:

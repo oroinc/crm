@@ -80,14 +80,6 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
         $this->postFlushEventArgs = new PostFlushEventArgs($this->em);
     }
 
-    public function testGetSubscribedEvents()
-    {
-        $this->assertEquals(
-            ['onFlush'],
-            $this->subscriber->getSubscribedEvents()
-        );
-    }
-
     /**
      * @dataProvider dataTest
      *
