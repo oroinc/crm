@@ -9,7 +9,6 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 class CustomerAddressControllerTest extends WebTestCase
 {
-
     /** @var Channel */
     protected $channel;
 
@@ -53,6 +52,7 @@ class CustomerAddressControllerTest extends WebTestCase
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 200);
+        $data  = json_decode($result->getContent(), 1);
+        var_dump($data);
     }
-
 }
