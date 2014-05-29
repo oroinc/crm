@@ -9,9 +9,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseOrderItem;
-
 use Oro\Bundle\UserBundle\Model\Gender;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
@@ -430,23 +429,23 @@ class LoadMagentoChannel extends AbstractFixture
 
     protected function createBaseOrderItem(Order $order)
     {
-        $baseOrderItem = new OrderItem();
-        $baseOrderItem->setId(mt_rand(0,9999));
-        $baseOrderItem->setName('some order item');
-        $baseOrderItem->setSku('some sku');
-        $baseOrderItem->setQty(1);
-        $baseOrderItem->setOrder($order);
-        $baseOrderItem->setCost(51.00);
-        $baseOrderItem->setPrice(75.00);
-        $baseOrderItem->setWeight(6.12);
-        $baseOrderItem->setTaxPercent(2);
-        $baseOrderItem->setTaxAmount(1.5);
-        $baseOrderItem->setDiscountPercent(4);
-        $baseOrderItem->setDiscountAmount(0);
-        $baseOrderItem->setRowTotal(234);
+        $orderItem = new OrderItem();
+        $orderItem->setId(mt_rand(0, 9999));
+        $orderItem->setName('some order item');
+        $orderItem->setSku('some sku');
+        $orderItem->setQty(1);
+        $orderItem->setOrder($order);
+        $orderItem->setCost(51.00);
+        $orderItem->setPrice(75.00);
+        $orderItem->setWeight(6.12);
+        $orderItem->setTaxPercent(2);
+        $orderItem->setTaxAmount(1.5);
+        $orderItem->setDiscountPercent(4);
+        $orderItem->setDiscountAmount(0);
+        $orderItem->setRowTotal(234);
 
-        $this->em->persist($baseOrderItem);
+        $this->em->persist($orderItem);
 
-        return $baseOrderItem;
+        return $orderItem;
     }
 }
