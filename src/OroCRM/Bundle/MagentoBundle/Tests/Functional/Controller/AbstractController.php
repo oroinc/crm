@@ -59,11 +59,7 @@ abstract class AbstractController extends WebTestCase
         $count = 0;
 
         foreach ($data['data'] as $grid) {
-            if (
-                (isset($filters['gridParameters']['id']))
-                ||
-                ($filters['channelName'] === $grid['channelName'])
-            ) {
+            if ((isset($filters['gridParameters']['id'])) || ($filters['channelName'] === $grid['channelName'])) {
                 foreach ($filters['verifying'] as $fieldName => $value) {
                     ++$count;
                     $this->assertEquals($value, $grid[$fieldName]);

@@ -7,7 +7,6 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterfac
 
 class StubCartsIterator extends \ArrayIterator implements PredefinedFiltersAwareInterface
 {
-
     /**
      * Set filter bag that will be used for batch processing
      *
