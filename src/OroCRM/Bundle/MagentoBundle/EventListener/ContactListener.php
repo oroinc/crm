@@ -77,33 +77,39 @@ class ContactListener
         if ($this->securityFacadeLink->getService()->hasLoggedUser()) {
             $em = $event->getEntityManager();
             $this->processUpdates($em);
-            $this->processDeletes($em);
+            $this->processDeletesAndCollections($em);
+
+            while (null !== $magentoCustomer = array_pop($this->processIds)) {
+                $this->schedulerServiceLink->getService()->schedule(
+                    $magentoCustomer->getChannel(),
+                    'customer',
+                    ['id' => $magentoCustomer->getId()],
+                    false
+                );
+            }
         }
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function postFlush(PostFlushEventArgs $event)
-    {
-        while (null !== $magentoCustomer = array_pop($this->processIds)) {
-            $this->schedulerServiceLink->getService()->schedule(
-                $magentoCustomer->getChannel(),
-                'customer',
-                ['id' => $magentoCustomer->getId()]
-            );
-        }
-    }
-
-    /**
-     * Process Delete entities
+     * Process Delete entities and entities Collections
      *
      * @param EntityManager $em
      */
-    protected function processDeletes(EntityManager $em)
+    protected function processDeletesAndCollections(EntityManager $em)
     {
-        $unitOfWork      = $em->getUnitOfWork();
-        $entities = $unitOfWork->getScheduledEntityDeletions();
+        $unitOfWork  = $em->getUnitOfWork();
+        $entities    = $unitOfWork->getScheduledEntityDeletions();
+        $collections = array_merge(
+            $unitOfWork->getScheduledCollectionUpdates(),
+            $unitOfWork->getScheduledCollectionDeletions()
+        );
+
+        foreach ($collections as $collection) {
+            $owner = $collection->getOwner();
+            if (!in_array($owner, $entities, true)) {
+                $entities[] = $owner;
+            }
+        }
         foreach ($entities as $entity) {
             foreach ($this->checkEntityClasses as $classNames => $classMapConfig) {
                 if ($entity instanceof $classNames) {

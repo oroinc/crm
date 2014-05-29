@@ -80,6 +80,14 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
         $this->postFlushEventArgs = new PostFlushEventArgs($this->em);
     }
 
+    public function testGetSubscribedEvents()
+    {
+        $this->assertEquals(
+            ['onFlush'],
+            $this->subscriber->getSubscribedEvents()
+        );
+    }
+
     /**
      * @dataProvider dataTest
      *
@@ -137,6 +145,12 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
         $this->uow->expects($this->once())
             ->method('getScheduledEntityDeletions')
             ->will($this->returnValue($entityDeletions));
+        $this->uow->expects($this->once())
+            ->method('getScheduledCollectionUpdates')
+            ->will($this->returnValue([]));
+        $this->uow->expects($this->once())
+            ->method('getScheduledCollectionDeletions')
+            ->will($this->returnValue([]));
 
         $this->securityFacade->expects($this->any())
             ->method('hasLoggedUser')
@@ -154,14 +168,13 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
         if ($scheduleRun) {
             $this->schedulerService->expects($this->once())
                 ->method('schedule')
-                ->with($channel, 'customer', ['id' => 125]);
+                ->with($channel, 'customer', ['id' => 125], false);
         } else {
             $this->schedulerService->expects($this->never())
                 ->method('schedule');
         }
 
         $this->listener->onFlush($this->onFlushEventArgs);
-        $this->listener->postFlush($this->postFlushEventArgs);
     }
 
     public function dataTest()
