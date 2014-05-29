@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -256,6 +257,16 @@ class Opportunity extends ExtendOpportunity
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowStep;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\CaseBundle\Entity\CaseEntity",
+     *    mappedBy="relatedOpportunity", cascade={"all"}, orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"primary" = "DESC"})
+     */
+    protected $cases;
 
     /**
      * @param WorkflowItem $workflowItem
@@ -609,6 +620,22 @@ class Opportunity extends ExtendOpportunity
     {
         $this->notes = $notes;
         return $this;
+    }
+
+    /**
+     * @param Collection $cases
+     */
+    public function setCases($cases)
+    {
+        $this->cases = $cases;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCases()
+    {
+        return $this->cases;
     }
 
     /**

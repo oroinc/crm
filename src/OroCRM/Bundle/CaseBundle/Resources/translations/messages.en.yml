@@ -12,7 +12,7 @@ orocrm:
         owner.label:                 Owner
         reporter_contact.label:      Reporter contact
         reporter_customer.label:     Reporter customer
-        related_shopping_cart.label: Related shopping cart
+        related_cart.label:          elated shopping cart
         related_lead.label:          Related lead
         related_order.label:         Related order
         related_opportunity.label:   Related opportunity

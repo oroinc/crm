@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\CaseBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use Oro\Bundle\UserBundle\Entity\User;
@@ -110,9 +112,9 @@ class CaseEntity
      * @var Cart
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Cart")
-     * @ORM\JoinColumn(name="related_shopping_cart_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="related_cart_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $relatedShoppingCart;
+    protected $relatedCart;
 
     /**
      * @var Lead

@@ -375,6 +375,16 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      */
     protected $updatedAt;
 
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\CaseBundle\Entity\CaseEntity",
+     *    mappedBy="reporterContact", cascade={"all"}, orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"primary" = "DESC"})
+     */
+    protected $cases;
+
     public function __construct()
     {
         parent::__construct();
@@ -878,6 +888,22 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @param Collection $cases
+     */
+    public function setCases($cases)
+    {
+        $this->cases = $cases;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCases()
+    {
+        return $this->cases;
     }
 
     /**

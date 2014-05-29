@@ -222,6 +222,16 @@ class Customer extends ExtendCustomer
     protected $currency = 'USD';
 
     /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\CaseBundle\Entity\CaseEntity",
+     *    mappedBy="reporterCustomer", cascade={"all"}, orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"primary" = "DESC"})
+     */
+    protected $cases;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct()
@@ -447,5 +457,21 @@ class Customer extends ExtendCustomer
     public function getCurrency()
     {
         return $this->currency;
+    }
+
+    /**
+     * @param Collection $cases
+     */
+    public function setCases($cases)
+    {
+        $this->cases = $cases;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCases()
+    {
+        return $this->cases;
     }
 }
