@@ -48,15 +48,36 @@ class CustomerAddressControllerTest extends WebTestCase
         return $this->customer->getid();
     }
 
-    public function testCget()
+
+    /**
+     * @dataProvider cgetProvider
+     */
+    public function testCget($hasId, $status)
     {
+        $id = 122334522;
+
+        if ($hasId) {
+            $id = $this->getCustomerId();
+        }
+
         $this->client->request(
             'GET',
-            $this->getUrl('get_customer_addresses', ['customerId' => $this->getCustomerId()])
+            $this->getUrl('get_customer_addresses', ['customerId' => $id])
         );
-        $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 200);
-        $data  = json_decode($result->getContent(), 1);
-        $this->assertGreaterThanOrEqual(count($data), 1);
+        $this->assertCount(1, self::getJsonResponseContent($this->client->getResponse(), $status));
+    }
+
+    public function cgetProvider()
+    {
+        return [
+            'response with status 200' => [
+                true,
+                200,
+            ],
+            'response with status 404' => [
+                false,
+                404,
+            ]
+        ];
     }
 }

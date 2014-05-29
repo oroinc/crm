@@ -149,7 +149,7 @@ class OrderPlaceController extends WebTestCase
         $this->assertJsonResponseStatusCodeEquals($result, 200);
         $arrayJson = json_decode($result->getContent(), 1);
         $this->assertEquals($arrayJson['statusType'], 'success');
-        $this->assertEquals($arrayJson['message'], 'Data successfuly synchronized.');
+        $this->assertEquals($arrayJson['message'], 'Data successfully synchronized.');
         $this->assertEquals(
             $arrayJson['url'],
             $this->getUrl('orocrm_magento_order_view', ['id' => $this->order->getId()])

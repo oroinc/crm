@@ -34,14 +34,20 @@ class CustomerAddressController extends RestController implements ClassResourceI
     {
         /** @var Customer $customer */
         $customer = $this->getManager()->find($customerId);
-        $items    = $customer->getAddresses();
         $result   = [];
-        foreach ($items as $item) {
-            $result[] = $this->getPreparedItem($item);
-        }
-        unset($items);
 
-        return JsonResponse::create($result);
+        if (!empty($customer)) {
+            $items = $customer->getAddresses();
+
+            foreach ($items as $item) {
+                $result[] = $this->getPreparedItem($item);
+            }
+        }
+
+        return new JsonResponse(
+            $result,
+            empty($customer) ? Codes::HTTP_NOT_FOUND : Codes::HTTP_OK
+        );
     }
 
     /**
