@@ -1,7 +1,8 @@
 placeholders:
-    view_content_data_communications:
+    view_content_data:
         items:
-            orocrm_contact_emails: ~
+            orocrm_contact_emails:
+                block: communications
 
     orocrm_account_action_dropdown:
         items:
