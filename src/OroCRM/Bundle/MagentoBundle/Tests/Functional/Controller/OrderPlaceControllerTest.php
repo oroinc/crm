@@ -2,9 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
 
-use OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Stub\StubCartsIterator;
-use Symfony\Component\HttpFoundation\ParameterBag;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -12,36 +9,37 @@ use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
+use OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Stub\StubCartsIterator;
+
 /**
  * @outputBuffering enabled
  * @dbIsolation
  */
 class OrderPlaceController extends WebTestCase
 {
+    const TEST_NEW_EMAIL     = 'new@email.com';
+    const TEST_NEW_ITEMS_QTY = 444;
+    const TEST_NEW_SUBTOTAL  = '133.33';
+
     /** @var Channel */
-    protected static $channel;
+    protected $channel;
 
     /** @var Cart */
-    protected static $cart;
+    protected $cart;
 
     /** @var Order */
-    protected static $order;
+    protected $order;
 
     /** @var Customer */
-    protected static $customer;
+    protected $customer;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     protected $soapTransport;
 
     public function setUp()
     {
-        $this->initClient(array('debug' => false), $this->generateBasicAuthHeader(), true);
-        $this->loadFixtures(
-            array(
-                'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel',
-            ),
-            true
-        );
+        $this->initClient(['debug' => false], $this->generateBasicAuthHeader(), true);
+        $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'], true);
 
         $this->soapTransport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport')
             ->setMethods(['init', 'call', 'getCarts', 'getCustomers', 'getOrders'])
@@ -50,20 +48,12 @@ class OrderPlaceController extends WebTestCase
         $this->getContainer()->set('orocrm_magento.transport.soap_transport', $this->soapTransport);
     }
 
-    public function tearDown()
-    {
-        self::$channel  = null;
-        self::$cart     = null;
-        self::$order    = null;
-        self::$customer = null;
-    }
-
     protected function postFixtureLoad()
     {
-        self::$channel  = $this->getChannel();
-        self::$cart     = $this->getCartByChannel(self::$channel);
-        self::$order    = $this->getOrderByChannel(self::$channel);
-        self::$customer = $this->getCustomerByChannel(self::$channel);
+        $this->channel  = $this->getChannel();
+        $this->cart     = $this->getCartByChannel($this->channel);
+        $this->order    = $this->getOrderByChannel($this->channel);
+        $this->customer = $this->getCustomerByChannel($this->channel);
     }
 
     /**
@@ -116,8 +106,7 @@ class OrderPlaceController extends WebTestCase
             ->findOneByChannel($channel);
     }
 
-
-    /*public function testCartAction()
+    public function testCartAction()
     {
         $widgetId = '2w45254tst4562';
         $this->client->request(
@@ -125,7 +114,7 @@ class OrderPlaceController extends WebTestCase
             $this->getUrl(
                 'orocrm_magento_orderplace_cart',
                 [
-                    'id' => self::$cart->getId(),
+                    'id' => $this->cart->getId(),
                     '_widgetContainer' => 'block',
                     '_wid' => $widgetId
                 ]
@@ -136,12 +125,11 @@ class OrderPlaceController extends WebTestCase
         $this->assertContains('iframe', $result->getContent());
         $this->assertContains('orderPlaceFrame', $result->getContent());
         $this->assertContains($widgetId, $result->getContent());
-    }*/
-
+    }
 
     public function testSyncAction()
     {
-        $newCart = $this->getModifiedCart(self::$cart, self::$customer);
+        $newCart = $this->getModifiedCartData($this->cart, $this->customer);
 
         $cartIterator  = new StubCartsIterator([$newCart]);
         $orderIterator = new \ArrayIterator([]);
@@ -152,7 +140,10 @@ class OrderPlaceController extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_magento_orderplace_sync', ['id' => self::$cart->getId()])
+            $this->getUrl('orocrm_magento_orderplace_sync', ['id' => $this->cart->getId()]),
+            [],
+            [],
+            ['HTTP_X-Requested-With' => 'XMLHttpRequest']
         );
 
         $result = $this->client->getResponse();
@@ -162,99 +153,40 @@ class OrderPlaceController extends WebTestCase
         $this->assertEquals($arrayJson['message'], 'Data successfuly synchronized.');
         $this->assertEquals(
             $arrayJson['url'],
-            $this->getUrl('orocrm_magento_order_view', ['id' => self::$order->getId()])
+            $this->getUrl('orocrm_magento_order_view', ['id' => $this->order->getId()])
         );
-    }
 
-    public function gridProvider()
-    {
-        return [ /*
-            'Magento cart grid' => [
-                [
-                    'gridParameters' => [
-                        'gridName' => 'magento-cart-grid'
-                    ],
-                    'gridFilters'    => [],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
-                        'firstName'  => 'John',
-                        'lastName'   => 'Doe',
-                        'email'      => 'email@email.com',
-                        'regionName' => 'Arizona'
-                    ],
-                    'isResult'       => true
-                ],
-            ],*/
-            'Cart item grid' => [
-                [
-                    'gridParameters' => [
-                        'gridName' => 'magento-cartitem-grid',
-                        'id'       => 'id',
-                    ],
-                    'gridFilters'    => [],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
-                        'sku'            => 'sku',
-                        'qty'            => 0,
-                        'rowTotal'       => '$100.00',
-                        'taxAmount'      => '$10.00',
-                        'discountAmount' => '$0.00'
-                    ],
-                    'isResult'       => true
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @depends testSyncAction
-     */
-    public function testSyncedCartView()
-    {
-        $this->client->request('GET', $this->getUrl('orocrm_magento_cart_view', ['id' => self::$cart->getId()]));
+        $this->client->request('GET', $this->getUrl('orocrm_magento_cart_view', ['id' => $this->cart->getId()]));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
         $this->assertContains('Cart Information', $result->getContent());
-        $this->assertContains('email@email.com', $result->getContent());
+        $this->assertContains(self::TEST_NEW_EMAIL, $result->getContent());
+        $this->assertContains((string)self::TEST_NEW_ITEMS_QTY, $result->getContent());
+        $this->assertContains((string)'Expired', $result->getContent());
 
         $this->assertContains('Customer Information', $result->getContent());
         $this->assertContains('test@example.com', $result->getContent());
-
     }
 
-    /*
-        public function testCustomerSyncAction()
-        {
-            $this->client->request(
-                'GET',
-                $this->getUrl('orocrm_magento_orderplace_customer_sync', ['id' => self::$customer->getId()])
-            );
-
-            $result = $this->client->getResponse();
-            $this->assertJsonResponseStatusCodeEquals($result, 200);
-            $arrayJson = json_decode($result->getContent(), 1);
-            $this->assertEquals($arrayJson['statusType'], 'success');
-            $this->assertEquals($arrayJson['message'], 'Data successfuly synchronized.');
-            $this->assertEquals(
-                $arrayJson['url'],
-                $this->getUrl('orocrm_magento_order_view', ['id' => self::$order->getId()])
-            );
-        }
-    */
-
-    protected function getModifiedCart(Cart $cart, Customer $customer)
+    /**
+     * @param Cart     $cart
+     * @param Customer $customer
+     *
+     * @return array
+     */
+    protected function getModifiedCartData(Cart $cart, Customer $customer)
     {
-        return array(
+        return [
             'entity_id'                   => $cart->getOriginId(),
             'store_id'                    => $cart->getStore()->getOriginId(),
             'created_at'                  => '2014-04-22 10:41:43',
             'updated_at'                  => '2014-05-29 08:52:33',
-            'is_active'                   => true,
+            'is_active'                   => false,
             'is_virtual'                  => false,
             'is_multi_shipping'           => false,
             'items_count'                 => '2',
-            'items_qty'                   => '6.0000',
+            'items_qty'                   => self::TEST_NEW_ITEMS_QTY,
             'orig_order_id'               => '0',
             'store_to_base_rate'          => '1.0000',
             'store_to_quote_rate'         => '1.0000',
@@ -266,9 +198,9 @@ class OrderPlaceController extends WebTestCase
             'customer_id'                 => $customer->getOriginId(),
             'customer_tax_class_id'       => '3',
             'customer_group_id'           => '1',
-            'customer_email'              => 'TEST@PRODUCT.com',
-            'customer_firstname'          => 'TEST@PRODUCT.com',
-            'customer_lastname'           => '12312312',
+            'customer_email'              => self::TEST_NEW_EMAIL,
+            'customer_firstname'          => 'firstname',
+            'customer_lastname'           => 'lastname',
             'customer_note_notify'        => '1',
             'customer_is_guest'           => '0',
             'remote_ip'                   => '82.117.235.210',
@@ -293,6 +225,6 @@ class OrderPlaceController extends WebTestCase
             'store_website_name'          => $cart->getStore()->getWebsite()->getName(),
             'customer_group_code'         => 'General',
             'customer_group_name'         => 'General',
-        );
+        ];
     }
 }
