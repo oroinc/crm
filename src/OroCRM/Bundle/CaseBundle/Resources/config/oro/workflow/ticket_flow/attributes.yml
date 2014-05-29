@@ -1,0 +1,3 @@
+workflows:
+    ticket_flow:
+        attributes: ~
