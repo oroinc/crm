@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCartItem;
+use OroCRM\Bundle\MagentoBundle\Model\ExtendCartItem;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
@@ -26,7 +26,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *  }
  * )
  */
-class CartItem extends BaseCartItem
+class CartItem extends ExtendCartItem
 {
     use OriginTrait;
 
