@@ -302,30 +302,37 @@ orocrm:
             updated_at.label:     Updated at
 
         address:
-            entity_label:        Magento Customer Address
-            entity_plural_label: Magento Customer Addresses
-            entity_description:  Represent Magento Customer Address
-            label.label:         Label
-            street.label:        Street
-            street2.label:       Street 2
-            city.label:          City
-            postal_code.label:   Zip/Postal code
-            region_text.label:   State
-            name_prefix.label:   Name prefix
-            first_name.label:    First name
-            middle_name.label:   Middle name
-            last_name.label:     Last name
-            name_suffix.label:   Name suffix
-            primary.label:       Primary
-            id.label:            Id
-            organization.label:  Organization
-            created.label:       Created at
-            updated.label:       Updated at
-            origin_id.label:     Origin id
-            owner.label:         Owner
-            types.label:         Types
-            country.label:       Country
-            region.label:        State
+            entity_label:          Magento Customer Address
+            entity_plural_label:   Magento Customer Addresses
+            entity_description:    Represent Magento Customer Address
+            label.label:           Label
+            street.label:          Street
+            street2.label:         Street 2
+            city.label:            City
+            postal_code.label:     Zip/Postal code
+            region_text.label:     State
+            name_prefix.label:     Name prefix
+            first_name.label:      First name
+            middle_name.label:     Middle name
+            last_name.label:       Last name
+            name_suffix.label:     Name suffix
+            primary.label:         Primary
+            id.label:              Id
+            organization.label:    Organization
+            created.label:         Created at
+            updated.label:         Updated at
+            origin_id.label:       Origin id
+            owner.label:           Owner
+            types.label:           Types
+            country.label:         Country
+            region.label:          State
+            contact_address.label: Contact address
+
+            country_name.label:      Country name
+            country_iso2_code.label: Country ISO2 code
+            country_iso3_code.label: Country ISO3 code
+            region_name.label:       State name
+            region_code.label:       State ISO code
 
         cartaddress:
             entity_label:        Magento Cart Address
@@ -350,6 +357,60 @@ orocrm:
             country.label:       Country
             region.label:        State
 
+            country_name.label:      Country
+            country_iso2_code.label: Country ISO2 Code
+            country_iso3_code.label: Country ISO3 Code
+            region_name.label:       Region
+            region_code.label:       Region ISO code
+
+        orderaddress:
+            entity_label:        Magento Order Address
+            entity_plural_label: Magento Order Addresses
+            entity_description:  Represent Magento Order Address
+            id.label:            Id
+            city.label:          City
+            country.label:       Country
+            region.label:        State
+            region_text.label:   State
+            first_name.label:    First name
+            middle_name.label:   Middle name
+            last_name.label:     Last name
+            name_suffix.label:   Name suffix
+            postal_code.label:   Zip/Postal code
+            organization.label:  Organization
+            fax.label:           Fax
+            phone.label:         Phone
+            owner.label:         Owner
+            types.label:         Types
+            street.label:        Street
+
+            country_name.label:      Country
+            country_iso2_code.label: Country ISO2 Code
+            country_iso3_code.label: Country ISO3 Code
+            region_name.label:       Region
+            region_code.label:       Region ISO code
+
+        store:
+            entity_label:        Store
+            entity_plural_label: Magento Store
+            entity_description:  Represent Magento Store
+            id.label:            Id
+            origin_id.label:     Origin Id
+            code.label:          Code
+            name.label:          Name
+            channel.label:       Channel
+            website.label:       Website
+
+        website:
+            entity_label:        Website
+            entity_plural_label: Magento Website
+            entity_description:  Represent Magento Website
+            id.label:            Id
+            origin_id.label:     Origin Id
+            code.label:          Code
+            name.label:          Name
+            channel.label:       Channel
+
         account:
             no_customers_exist: No customers exist
 
@@ -359,6 +420,6 @@ orocrm:
             extension_required:            Unable to perform this operation, Oro Bridge extension not found.
             synchronization_error:         Unable to synchronize from remote.
             sync_error_with_magento:       Synchronization with remote server failed and orders should be re-synced. If the problem persists, please contact your Administrator.
-            synchronization_success:       Data successfuly synchronized.
+            synchronization_success:       Data successfully synchronized.
             synchronization_failed_status: Cart data is not up to date
         ping_site_error: Unable to load form

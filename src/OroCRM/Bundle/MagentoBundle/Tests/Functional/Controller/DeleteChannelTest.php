@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
@@ -18,7 +19,7 @@ class DeleteChannelTest extends WebTestCase
 
     public function setUp()
     {
-        $this->initClient(array('debug' => true), $this->generateWsseAuthHeader());
+        $this->initClient(array('debug' => false), $this->generateWsseAuthHeader());
 
         $this->loadFixtures(
             array(

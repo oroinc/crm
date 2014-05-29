@@ -95,6 +95,11 @@ class MagentoSoapTransport extends Transport
      */
     protected $adminUrl;
 
+    /**
+     * @var ParameterBag
+     */
+    protected $settings;
+
     public function __construct()
     {
         $this->setSyncStartDate(new \DateTime('2007-01-01', new \DateTimeZone('UTC')));
@@ -285,17 +290,21 @@ class MagentoSoapTransport extends Transport
      */
     public function getSettingsBag()
     {
-        return new ParameterBag(
-            [
-                'api_user'        => $this->getApiUser(),
-                'api_key'         => $this->getApiKey(),
-                'wsdl_url'        => $this->getWsdlUrl(),
-                'sync_range'      => $this->getSyncRange(),
-                'wsi_mode'        => $this->getIsWsiMode(),
-                'website_id'      => $this->getWebsiteId(),
-                'start_sync_date' => $this->getSyncStartDate(),
-            ]
-        );
+        if (null === $this->settings) {
+            $this->settings = new ParameterBag(
+                [
+                    'api_user' => $this->getApiUser(),
+                    'api_key' => $this->getApiKey(),
+                    'wsdl_url' => $this->getWsdlUrl(),
+                    'sync_range' => $this->getSyncRange(),
+                    'wsi_mode' => $this->getIsWsiMode(),
+                    'website_id' => $this->getWebsiteId(),
+                    'start_sync_date' => $this->getSyncStartDate(),
+                ]
+            );
+        }
+
+        return $this->settings;
     }
 
     /**

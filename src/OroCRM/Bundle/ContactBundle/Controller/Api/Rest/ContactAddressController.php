@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -60,20 +61,27 @@ class ContactAddressController extends RestController implements ClassResourceIn
      * )
      * @AclAncestor("orocrm_contact_view")
      * @param int $contactId
-     * @return Response
+     *
+     * @return JsonResponse
      */
     public function cgetAction($contactId)
     {
         /** @var Contact $contact */
         $contact = $this->getContactManager()->find($contactId);
-        $items = $contact->getAddresses();
-        $result = array();
-        foreach ($items as $item) {
-            $result[] = $this->getPreparedItem($item);
-        }
-        unset($items);
+        $result  = [];
 
-        return new Response(json_encode($result), Codes::HTTP_OK);
+        if (!empty($contact)) {
+            $items = $contact->getAddresses();
+
+            foreach ($items as $item) {
+                $result[] = $this->getPreparedItem($item);
+            }
+        }
+
+        return new JsonResponse(
+            $result,
+            empty($customer) ? Codes::HTTP_NOT_FOUND : Codes::HTTP_OK
+        );
     }
 
     /**
@@ -84,8 +92,9 @@ class ContactAddressController extends RestController implements ClassResourceIn
      *      resource=true
      * )
      * @AclAncestor("orocrm_contact_delete")
-     * @param $contactId
+     * @param     $contactId
      * @param int $addressId
+     *
      * @return Response
      */
     public function deleteAction($contactId, $addressId)
@@ -201,11 +210,11 @@ class ContactAddressController extends RestController implements ClassResourceIn
             $addressTypesData[] = parent::getPreparedItem($addressType);
         }
 
-        $result = parent::getPreparedItem($entity);
-        $result['types'] = $addressTypesData;
+        $result                = parent::getPreparedItem($entity);
+        $result['types']       = $addressTypesData;
         $result['countryIso2'] = $entity->getCountry()->getIso2Code();
         $result['countryIso3'] = $entity->getCountry()->getIso3Code();
-        $result['regionCode'] = $entity->getRegionCode();
+        $result['regionCode']  = $entity->getRegionCode();
 
         unset($result['owner']);
 

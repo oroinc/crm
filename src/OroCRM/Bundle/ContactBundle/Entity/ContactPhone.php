@@ -24,7 +24,7 @@ class ContactPhone extends AbstractPhone
 {
     /**
      * @ORM\ManyToOne(targetEntity="Contact", inversedBy="phones")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $owner;
 

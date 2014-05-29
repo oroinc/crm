@@ -6,14 +6,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
 
 /**
  * Class Customer
@@ -37,7 +38,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * )
  * @Oro\Loggable
  */
-class Customer extends BasePerson
+class Customer extends ExtendCustomer
 {
     use IntegrationEntityTrait, OriginTrait;
 
@@ -447,5 +448,22 @@ class Customer extends BasePerson
     public function getCurrency()
     {
         return $this->currency;
+    }
+
+    /**
+     * Add address
+     *
+     * @param AbstractAddress $address
+     * @return $this
+     */
+    public function addAddress(AbstractAddress $address)
+    {
+        /** @var Address $address */
+        if (!$this->addresses->contains($address)) {
+            $this->addresses->add($address);
+            $address->setOwner($this);
+        }
+
+        return $this;
     }
 }

@@ -137,4 +137,15 @@ class CustomerBridgeIteratorTest extends BaseIteratorTestCase
             ],
         ];
     }
+
+    public function testConstructBatchSize()
+    {
+        $iterator = new CustomerBridgeIterator($this->transport, $this->settings);
+        $this->assertAttributeEquals(CustomerBridgeIterator::DEFAULT_PAGE_SIZE, 'pageSize', $iterator);
+
+        $batchSize = 2000;
+        $settings = array_merge($this->settings, array('page_size' => $batchSize));
+        $iterator = new CustomerBridgeIterator($this->transport, $settings);
+        $this->assertAttributeEquals($batchSize, 'pageSize', $iterator);
+    }
 }

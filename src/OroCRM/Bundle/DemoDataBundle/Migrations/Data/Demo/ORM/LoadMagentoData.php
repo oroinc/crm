@@ -6,6 +6,8 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\AddressBundle\Entity\Address;
 
@@ -337,7 +339,12 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $address->setPostalCode(123456);
         $address->setFirstName('John');
         $address->setLastName('Doe');
-
+        /** @var Country $country */
+        $country = $om->getRepository('OroAddressBundle:Country')->findOneBy(array('iso2Code' => 'US'));
+        $address->setCountry($country);
+        /** @var Region $region */
+        $region = $om->getRepository('OroAddressBundle:Region')->findOneBy(array('combinedCode' => 'US-AK'));
+        $address->setRegion($region);
         $om->persist($address);
 
         return $address;
