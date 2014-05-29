@@ -1,2 +1,2 @@
 imports:
-    - { resource: 'oro/workflow/ticket_flow.yml' } # Workflow for Ticket entity
+    - { resource: 'oro/workflow/case_flow.yml' } # Workflow for Ticket entity

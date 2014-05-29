@@ -1,0 +1,12 @@
+imports:
+    - { resource: 'case_flow/steps.yml' }
+    - { resource: 'case_flow/attributes.yml' }
+    - { resource: 'case_flow/transitions.yml' }
+    - { resource: 'case_flow/transition_definitions.yml' }
+
+workflows:
+    case_flow:
+        label: 'Case Flow'
+        entity: OroCRM\Bundle\CaseBundle\Entity\CaseEntity
+        entity_attribute: case
+        start_step: open

@@ -1,5 +1,5 @@
 workflows:
-    ticket_flow:
+    case_flow:
         transitions:
             start_progress:
                 label: 'Start progress'

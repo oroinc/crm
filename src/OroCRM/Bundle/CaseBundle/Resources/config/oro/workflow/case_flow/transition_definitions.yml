@@ -1,5 +1,5 @@
 workflows:
-    ticket_flow:
+    case_flow:
         transition_definitions:
             start_progress_definition: ~
             stop_progress_definition: ~

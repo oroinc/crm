@@ -30,12 +30,12 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
  *          "type"="ACL"
  *      },
  *      "workflow"={
- *          "active_workflow"="ticket_flow"
+ *          "active_workflow"="case_flow"
  *      },
  *  }
  * )
  */
-class Ticket
+class CaseEntity
 {
     /**
      * @var integer
