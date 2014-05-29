@@ -77,7 +77,21 @@ class CaseEntity
     protected $assignedTo;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="reporter_class", type="string", length=255, nullable=false)
+     */
+    protected $reporterClass;
+
+    /**
      * @var integer
+     *
+     * @ORM\Column(name="reporter_id", type="integer", nullable=false)
+     */
+    protected $reporterId;
+
+    /**
+     * @var string
      *
      * @ORM\Column(name="related_class", type="string", length=255, nullable=false)
      */
@@ -294,5 +308,37 @@ class CaseEntity
     public function getWorkflowStep()
     {
         return $this->workflowStep;
+    }
+
+    /**
+     * @param string $reporterClass
+     */
+    public function setReporterClass($reporterClass)
+    {
+        $this->reporterClass = $reporterClass;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReporterClass()
+    {
+        return $this->reporterClass;
+    }
+
+    /**
+     * @param integer $reporterId
+     */
+    public function setReporterId($reporterId)
+    {
+        $this->reporterId = $reporterId;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getReporterId()
+    {
+        return $this->reporterId;
     }
 }
