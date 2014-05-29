@@ -8,10 +8,12 @@ placeholders:
             create_task_contact_button: ~
             create_task_user_button: ~
 
-    view_content_data_additional_information:
+    view_content_data:
         items:
-            orocrm_task_contact_tasks: ~
-            orocrm_task_user_tasks: ~
+            orocrm_task_contact_tasks:
+                block: additional_information
+            orocrm_task_user_tasks:
+                block: additional_information
 
     orocrm_account_action_dropdown:
         items:

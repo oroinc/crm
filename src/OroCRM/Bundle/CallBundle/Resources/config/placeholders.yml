@@ -1,8 +1,10 @@
 placeholders:
-    view_content_data_communications:
+    view_content_data:
         items:
-            orocrm_call_user_calls: ~
-            orocrm_call_contact_calls: ~
+            orocrm_call_user_calls:
+                block: communications
+            orocrm_call_contact_calls:
+                block: communications
 
     orocrm_account_action_dropdown:
         items:
