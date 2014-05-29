@@ -231,7 +231,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactEmail",
-     *    mappedBy="owner", cascade={"persist"}, orphanRemoval=true
+     *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
      * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactEmail[]", nillable=true)
@@ -242,7 +242,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone", mappedBy="owner",
-     *    mappedBy="owner", cascade={"persist"}, orphanRemoval=true
+     *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * ))
      * @ORM\OrderBy({"primary" = "DESC"})
      * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactPhone[]", nillable=true)
@@ -318,7 +318,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress",
-     *    mappedBy="owner", cascade={"persist"}, orphanRemoval=true
+     *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
      */
