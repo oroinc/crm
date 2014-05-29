@@ -3,19 +3,21 @@ orocrm:
         #
         # OroCRM/Bundle/TaskBundle/Entity/Task
         #
-        entity_label:         Case
-        entity_plural_label:  Cases
-        entity_description:   Represent case
-        subject.label:        Subject
-        description.label:    Description
-        workflow_step.label:  Status
-        owner.label:          Owner
-        reporter_class.label: Reporter entity name
-        reporter_id.label:    Reporter entity id
-        related_class.label:  Related entity name
-        related_id.label:     Related entity id
-        created_at.label:     Created At
-        updated_at.label:     Updated At
-        id.label:             Id
-        workflow_item.label:  Workflow item
-        assigned_to:          Assigned to
+        entity_label:                Case
+        entity_plural_label:         Cases
+        entity_description:          Represent case
+        subject.label:               Subject
+        description.label:           Description
+        workflow_step.label:         Status
+        owner.label:                 Owner
+        reporter_contact.label:      Reporter contact
+        reporter_customer.label:     Reporter customer
+        related_shopping_cart.label: Related shopping cart
+        related_lead.label:          Related lead
+        related_order.label:         Related order
+        related_opportunity.label:   Related opportunity
+        created_at.label:            Created At
+        updated_at.label:            Updated At
+        id.label:                    Id
+        workflow_item.label:         Workflow item
+        assigned_to:                 Assigned to

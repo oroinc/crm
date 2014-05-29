@@ -7,6 +7,12 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
  * @ORM\Entity
@@ -77,32 +83,52 @@ class CaseEntity
     protected $assignedTo;
 
     /**
-     * @var string
+     * @var Contact
      *
-     * @ORM\Column(name="reporter_class", type="string", length=255, nullable=false)
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\JoinColumn(name="reporter_contact_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $reporterClass;
+    protected $reporterContact;
 
     /**
-     * @var integer
+     * @var Customer
      *
-     * @ORM\Column(name="reporter_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer")
+     * @ORM\JoinColumn(name="reporter_customer_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $reporterId;
+    protected $reporterCustomer;
 
     /**
-     * @var string
+     * @var Order
      *
-     * @ORM\Column(name="related_class", type="string", length=255, nullable=false)
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Order")
+     * @ORM\JoinColumn(name="related_order_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $relatedClass;
+    protected $relatedOrder;
 
     /**
-     * @var integer
+     * @var Cart
      *
-     * @ORM\Column(name="related_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Cart")
+     * @ORM\JoinColumn(name="related_shopping_cart_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $relatedId;
+    protected $relatedShoppingCart;
+
+    /**
+     * @var Lead
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead")
+     * @ORM\JoinColumn(name="related_lead_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $relatedLead;
+
+    /**
+     * @var Opportunity
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity")
+     * @ORM\JoinColumn(name="related_opportunity_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $relatedOpportunity;
 
     /**
      * @var WorkflowStep
@@ -231,38 +257,6 @@ class CaseEntity
     }
 
     /**
-     * @param string $relatedClass
-     */
-    public function setRelatedClass($relatedClass)
-    {
-        $this->relatedClass = $relatedClass;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRelatedClass()
-    {
-        return $this->relatedClass;
-    }
-
-    /**
-     * @param int $relatedId
-     */
-    public function setRelatedId($relatedId)
-    {
-        $this->relatedId = $relatedId;
-    }
-
-    /**
-     * @return integer
-     */
-    public function getRelatedId()
-    {
-        return $this->relatedId;
-    }
-
-    /**
      * @param \DateTime $updatedAt
      */
     public function setUpdatedAt($updatedAt)
@@ -311,34 +305,98 @@ class CaseEntity
     }
 
     /**
-     * @param string $reporterClass
+     * @param Lead $relatedLead
      */
-    public function setReporterClass($reporterClass)
+    public function setRelatedLead($relatedLead)
     {
-        $this->reporterClass = $reporterClass;
+        $this->relatedLead = $relatedLead;
     }
 
     /**
-     * @return string
+     * @return Lead
      */
-    public function getReporterClass()
+    public function getRelatedLead()
     {
-        return $this->reporterClass;
+        return $this->relatedLead;
     }
 
     /**
-     * @param integer $reporterId
+     * @param Opportunity $relatedOpportunity
      */
-    public function setReporterId($reporterId)
+    public function setRelatedOpportunity($relatedOpportunity)
     {
-        $this->reporterId = $reporterId;
+        $this->relatedOpportunity = $relatedOpportunity;
     }
 
     /**
-     * @return integer
+     * @return Opportunity
      */
-    public function getReporterId()
+    public function getRelatedOpportunity()
     {
-        return $this->reporterId;
+        return $this->relatedOpportunity;
+    }
+
+    /**
+     * @param Order $relatedOrder
+     */
+    public function setRelatedOrder($relatedOrder)
+    {
+        $this->relatedOrder = $relatedOrder;
+    }
+
+    /**
+     * @return Order
+     */
+    public function getRelatedOrder()
+    {
+        return $this->relatedOrder;
+    }
+
+    /**
+     * @param Cart $relatedShoppingCart
+     */
+    public function setRelatedShoppingCart($relatedShoppingCart)
+    {
+        $this->relatedShoppingCart = $relatedShoppingCart;
+    }
+
+    /**
+     * @return Cart
+     */
+    public function getRelatedShoppingCart()
+    {
+        return $this->relatedShoppingCart;
+    }
+
+    /**
+     * @param Contact $reporterContact
+     */
+    public function setReporterContact($reporterContact)
+    {
+        $this->reporterContact = $reporterContact;
+    }
+
+    /**
+     * @return Contact
+     */
+    public function getReporterContact()
+    {
+        return $this->reporterContact;
+    }
+
+    /**
+     * @param Customer $reporterCustomer
+     */
+    public function setReporterCustomer($reporterCustomer)
+    {
+        $this->reporterCustomer = $reporterCustomer;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getReporterCustomer()
+    {
+        return $this->reporterCustomer;
     }
 }
