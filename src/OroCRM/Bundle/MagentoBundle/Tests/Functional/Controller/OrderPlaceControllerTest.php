@@ -18,6 +18,7 @@ use OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Stub\StubCartsIterat
 class OrderPlaceController extends WebTestCase
 {
     const TEST_NEW_EMAIL     = 'new@email.com';
+    const TEST_NEW_ITEMS_QTY = 444;
 
     /** @var Channel */
     protected $channel;
