@@ -7,6 +7,10 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
+/**
+ * @ outputBuffering enabled
+ * @ dbIsolation
+ */
 class CustomerAddressControllerTest extends WebTestCase
 {
     /** @var Channel */
@@ -48,11 +52,11 @@ class CustomerAddressControllerTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_customer_addresses', ['customerId' => $this->getCustomerId()])
+            $this->getUrl('get_customer_addresses', ['customerId' => $this->getCustomerId()])
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 200);
         $data  = json_decode($result->getContent(), 1);
-        var_dump($data);
+        $this->assertGreaterThanOrEqual(count($data), 1);
     }
 }
