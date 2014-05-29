@@ -23,6 +23,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
+use OroCRM\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
 
 class LoadMagentoChannel extends AbstractFixture
 {
@@ -67,16 +68,17 @@ class LoadMagentoChannel extends AbstractFixture
             ->createCustomerGroup()
             ->createStore();
 
-        $user         = $this->getUser();
-        $address1     = $this->createAddress($this->regions['US-AZ'], $this->countries['US']);
-        $address2     = $this->createAddress($this->regions['US-AZ'], $this->countries['US']);
-        $account      = $this->createAccount($address1, $address2, $user);
-        $customer     = $this->createCustomer(1, $account);
-        $cartAddress1 = $this->createCartAddress($this->regions['US-AZ'], $this->countries['US'], 1);
-        $cartAddress2 = $this->createCartAddress($this->regions['US-AZ'], $this->countries['US'], 2);
-        $cartItem     = $this->createCartItem();
-        $status       = $this->getStatus();
-        $items        = new ArrayCollection();
+        $user           = $this->getUser();
+        $address1       = $this->createAddress($this->regions['US-AZ'], $this->countries['US']);
+        $address2       = $this->createAddress($this->regions['US-AZ'], $this->countries['US']);
+        $magentoAddress = $this->createMagentoAddress($this->regions['US-AZ'], $this->countries['US']);
+        $account        = $this->createAccount($address1, $address2, $user);
+        $customer       = $this->createCustomer(1, $account, $magentoAddress);
+        $cartAddress1   = $this->createCartAddress($this->regions['US-AZ'], $this->countries['US'], 1);
+        $cartAddress2   = $this->createCartAddress($this->regions['US-AZ'], $this->countries['US'], 2);
+        $cartItem       = $this->createCartItem();
+        $status         = $this->getStatus();
+        $items          = new ArrayCollection();
         $items->add($cartItem);
 
         $cart1 = $this->createCart($cartAddress1, $cartAddress2, $customer, $items, $status);
@@ -215,6 +217,28 @@ class LoadMagentoChannel extends AbstractFixture
      * @param $region
      * @param $country
      *
+     * @return MagentoAddress
+     */
+    protected function createMagentoAddress($region, $country)
+    {
+        $address = new MagentoAddress;
+        $address->setRegion($region);
+        $address->setCountry($country);
+        $address->setCity('City');
+        $address->setStreet('street');
+        $address->setPostalCode(123456);
+        $address->setFirstName('John');
+        $address->setLastName('Doe');
+
+        $this->em->persist($address);
+
+        return $address;
+    }
+
+    /**
+     * @param $region
+     * @param $country
+     *
      * @return Address
      */
     protected function createAddress($region, $country)
@@ -234,12 +258,13 @@ class LoadMagentoChannel extends AbstractFixture
     }
 
     /**
-     * @param         $oid
-     * @param Account $account
+     * @param                $oid
+     * @param Account        $account
+     * @param MagentoAddress $address
      *
      * @return Customer
      */
-    protected function createCustomer($oid, Account $account)
+    protected function createCustomer($oid, Account $account, MagentoAddress $address)
     {
         $customer = new Customer();
         $customer->setChannel($this->channel);
@@ -255,6 +280,7 @@ class LoadMagentoChannel extends AbstractFixture
         $customer->setGroup($this->customerGroup);
         $customer->setCreatedAt(new \DateTime('now'));
         $customer->setUpdatedAt(new \DateTime('now'));
+        $customer->addAddress($address);
 
         $this->em->persist($customer);
 
