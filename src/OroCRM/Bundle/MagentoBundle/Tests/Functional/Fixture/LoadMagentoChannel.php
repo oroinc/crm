@@ -126,6 +126,7 @@ class LoadMagentoChannel extends AbstractFixture
         $cart->setStoreToBaseRate(12);
         $cart->setGrandTotal(2.54);
         $cart->setIsGuest(0);
+        $cart->setStore($this->store);
 
         $this->em->persist($cart);
 
