@@ -1,0 +1,4 @@
+OroCRMCampaignBundle
+===================
+
+Campaigns management
