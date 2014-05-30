@@ -62,8 +62,8 @@ class CustomerControllerTest extends AbstractController
                         'lastName'    => 'Doe',
                         'email'       => 'test@example.com',
                         'lifetime'    => '$0.00',
-                        'countryName' => null,
-                        'regionName'  => null,
+                        'countryName' => 'United States',
+                        'regionName'  => 'Arizona',
                     ],
                     'isResult'       => true
                 ],
@@ -84,8 +84,8 @@ class CustomerControllerTest extends AbstractController
                         'lastName'    => 'Doe',
                         'email'       => 'test@example.com',
                         'lifetime'    => '$0.00',
-                        'countryName' => null,
-                        'regionName'  => null,
+                        'countryName' => 'United States',
+                        'regionName'  => 'Arizona',
                     ],
                     'isResult'       => true
                 ],

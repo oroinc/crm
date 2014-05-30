@@ -341,6 +341,4 @@ class OrderPlaceControllerTest extends WebTestCase
             'store_website_name'   => $customer->getStore()->getWebsite()->getName(),
         ];
     }
-
-
 }
