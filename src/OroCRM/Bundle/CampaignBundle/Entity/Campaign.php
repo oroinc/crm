@@ -88,7 +88,6 @@ class Campaign
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\BusinessUnit")
      * @ORM\JoinColumn(name="business_unit_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
      */
     protected $owner;
@@ -198,15 +197,15 @@ class Campaign
     }
 
     /**
-     * @param User $owner
+     * @param BusinessUnit $owner
      */
-    public function setOwner(User $owner)
+    public function setOwner(BusinessUnit $owner)
     {
         $this->owner = $owner;
     }
 
     /**
-     * @return User
+     * @return BusinessUnit
      */
     public function getOwner()
     {
