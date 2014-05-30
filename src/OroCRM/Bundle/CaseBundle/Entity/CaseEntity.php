@@ -381,7 +381,7 @@ class CaseEntity
     /**
      * @param CaseOrigin $origin
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function addOrigin(CaseOrigin $origin)
     {
@@ -397,7 +397,7 @@ class CaseEntity
     /**
      * @param CaseOrigin $origin
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function removeOrigin(CaseOrigin $origin)
     {
@@ -409,7 +409,7 @@ class CaseEntity
     }
 
     /**
-     * @return Collection
+     * @return ArrayCollection
      */
     public function getOrigins()
     {

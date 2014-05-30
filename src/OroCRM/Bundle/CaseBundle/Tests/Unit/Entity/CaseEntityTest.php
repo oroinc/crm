@@ -21,13 +21,11 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
 
         $method = 'set' . $property;
         if (method_exists($entity, $method)) {
-            var_dump($method);
             $result = $entity->$method($value);
         }
 
         $method = 'add' . rtrim($property, 's');
         if (method_exists($entity, $method)) {
-            var_dump($method);
             $result = $entity->$method($value);
         }
 

@@ -59,4 +59,15 @@ class CaseItemTypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('orocrm_case_item', $this->formType->getName());
     }
+
+    public function testSetDefaultOptions()
+    {
+        $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+
+        $resolver
+            ->expects($this->once())
+            ->method('setDefaults');
+
+        $this->formType->setDefaultOptions($resolver);
+    }
 }
