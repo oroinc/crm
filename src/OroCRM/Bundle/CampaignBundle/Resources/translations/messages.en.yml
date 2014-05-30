@@ -1,12 +1,18 @@
 orocrm:
     campaign:
-        label: Campaings
-        menu:
-            marketing_tab.label: Marketing
-
-        #
-        # Entity oroCRM\Bundle\ContactBundle\Entity\Contact
-        #
         entity_description:  Represent contact
         entity_label:        Campaign
         entity_plural_label: Campaigns
+        entity_description:  Represent contact
+        entity_label:        Campaign
+        entity_plural_label: Campaigns
+        id.label:            Id
+        name.label:          Name
+        code.label:          Code
+        start_date.label:    Start date
+        end_date.label:      End date
+        description.label:   Description
+        budget.label:        Budget
+        owner.label:         Owner
+        menu:
+            marketing_tab.label: Marketing

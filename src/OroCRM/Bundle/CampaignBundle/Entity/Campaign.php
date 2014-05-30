@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
+use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
+
 /**
  * @package OroCRM\Bundle\OroCRMCampaignBundle\Entity
  * @ORM\Entity()
@@ -30,7 +32,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *  }
  * )
  */
-class Campaign
+class Campaign extends ExtendCampaign
 {
     /**
      * @var int
@@ -58,14 +60,14 @@ class Campaign
     /**
      * @var \DateTime $createdAt
      *
-     * @ORM\Column(name="start_date", type="datetime")
+     * @ORM\Column(name="start_date", type="datetime", nullable=true)
      */
     protected $startDate;
 
     /**
      * @var \DateTime $createdAt
      *
-     * @ORM\Column(name="end_date", type="datetime")
+     * @ORM\Column(name="end_date", type="datetime", nullable=true)
      */
     protected $endDate;
 
