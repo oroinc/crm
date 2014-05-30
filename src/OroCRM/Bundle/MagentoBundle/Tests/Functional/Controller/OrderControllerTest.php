@@ -106,12 +106,7 @@ class OrderControllerTest extends AbstractController
                         'magento-order-grid[_filter][status][value]'    => 'close',
                     ],
                     'channelName'         => 'Demo Web store',
-                    'assert'              => [
-                        'firstName' => 'John',
-                        'lastName'  => 'Doe',
-                        'status'    => 'open',
-                        'subTotal'  => '$0.00',
-                    ],
+                    'assert'              => [],
                     'expectedResultCount' => 0
                 ],
             ],

@@ -62,7 +62,7 @@ class CartControllerTest extends AbstractController
                     ],
                     'gridFilters'         => [],
                     'channelName'         => 'Demo Web store',
-                    'verifying'           => [
+                    'assert'              => [
                         'firstName'  => 'John',
                         'lastName'   => 'Doe',
                         'email'      => 'email@email.com',
@@ -81,7 +81,7 @@ class CartControllerTest extends AbstractController
                         'magento-cart-grid[_filter][firstName][value]' => 'John',
                     ],
                     'channelName'         => 'Demo Web store',
-                    'verifying'           => [
+                    'assert'              => [
                         'firstName'  => 'John',
                         'lastName'   => 'Doe',
                         'email'      => 'email@email.com',
@@ -100,12 +100,7 @@ class CartControllerTest extends AbstractController
                         'magento-cart-grid[_filter][firstName][value]' => 'Doe',
                     ],
                     'channelName'         => 'Demo Web store',
-                    'verifying'           => [
-                        'firstName'  => 'John',
-                        'lastName'   => 'Doe',
-                        'email'      => 'email@email.com',
-                        'regionName' => 'Arizona'
-                    ],
+                    'assert'              => [],
                     'expectedResultCount' => 0
                 ]
             ],
@@ -117,7 +112,7 @@ class CartControllerTest extends AbstractController
                     ],
                     'gridFilters'         => [],
                     'channelName'         => 'Demo Web store',
-                    'verifying'           => [
+                    'assert'              => [
                         'sku'            => 'sku',
                         'qty'            => 0,
                         'rowTotal'       => '$100.00',

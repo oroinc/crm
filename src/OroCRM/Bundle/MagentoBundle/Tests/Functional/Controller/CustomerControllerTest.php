@@ -95,14 +95,7 @@ class CustomerControllerTest extends AbstractController
                         'magento-customers-grid[_filter][email][value]'     => 'test@example.com',
                     ],
                     'channelName'         => 'Demo Web store',
-                    'assert'              => [
-                        'firstName'   => 'John',
-                        'lastName'    => 'Doe',
-                        'email'       => 'test@example.com',
-                        'lifetime'    => '$0.00',
-                        'countryName' => null,
-                        'regionName'  => null,
-                    ],
+                    'assert'              => [],
                     'expectedResultCount' => 0
                 ],
             ],
