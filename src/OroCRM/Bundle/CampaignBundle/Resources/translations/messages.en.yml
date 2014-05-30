@@ -3,10 +3,11 @@ orocrm:
         entity_description:  Represent contact
         entity_label:        Campaign
         entity_plural_label: Campaigns
+        id.label:            Id
         name.label:          Name
         code.label:          Code
-        startDate.label:     Start date
-        endDate.label:       End date
+        start_date.label:    Start date
+        end_date.label:      End date
         description.label:   Description
         budget.label:        Budget
         owner.label:         Owner
