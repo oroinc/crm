@@ -163,6 +163,7 @@ class CustomerStrategy extends BaseStrategy
                 $localData->getAddresses()->get($key)->setContactAddress($address);
             }
 
+            // populate default owner only for new contacts
             $this->defaultOwnerHelper->populateChannelOwner($contact, $localData->getChannel());
             $localData->setContact($contact);
         }
@@ -266,6 +267,7 @@ class CustomerStrategy extends BaseStrategy
             }
         }
 
+        // populate default owner only for new accounts
         $this->defaultOwnerHelper->populateChannelOwner($account, $entity->getChannel());
         $entity->setAccount($account);
     }
