@@ -4,8 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -27,6 +28,9 @@ class CustomerStrategy extends BaseStrategy
 
     /** @var array */
     protected $groupEntityCache = [];
+
+    /** @var DefaultOwnerHelper */
+    protected $defaultOwnerHelper;
 
     /**
      * Update/Create customer and related entities based on remote data
@@ -159,6 +163,8 @@ class CustomerStrategy extends BaseStrategy
                 $localData->getAddresses()->get($key)->setContactAddress($address);
             }
 
+            // populate default owner only for new contacts
+            $this->defaultOwnerHelper->populateChannelOwner($contact, $localData->getChannel());
             $localData->setContact($contact);
         }
     }
@@ -260,6 +266,17 @@ class CustomerStrategy extends BaseStrategy
                 $account->{'set' . ucfirst($key) . 'Address'}(null);
             }
         }
+
+        // populate default owner only for new accounts
+        $this->defaultOwnerHelper->populateChannelOwner($account, $entity->getChannel());
         $entity->setAccount($account);
+    }
+
+    /**
+     * @param DefaultOwnerHelper $helper
+     */
+    public function setOwnerHelper(DefaultOwnerHelper $helper)
+    {
+        $this->defaultOwnerHelper = $helper;
     }
 }
