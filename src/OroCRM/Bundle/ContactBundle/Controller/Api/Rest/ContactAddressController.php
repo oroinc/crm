@@ -80,7 +80,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
 
         return new JsonResponse(
             $result,
-            empty($customer) ? Codes::HTTP_NOT_FOUND : Codes::HTTP_OK
+            empty($contact) ? Codes::HTTP_NOT_FOUND : Codes::HTTP_OK
         );
     }
 
