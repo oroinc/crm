@@ -18,7 +18,7 @@ class ContactDataConverter extends AbstractTableDataConverter implements QueryBu
     /**
      * @var array
      */
-    protected $headerConversionRules = array(
+    protected $contactConversionRules = array(
         // plain fields
         'ID'          => 'id',
         'Name Prefix' => 'namePrefix',
@@ -211,7 +211,7 @@ class ContactDataConverter extends AbstractTableDataConverter implements QueryBu
             ),
         );
 
-        return array_merge($this->headerConversionRules, $complexConversionRules);
+        return array_merge($this->contactConversionRules, $complexConversionRules);
     }
 
     /**

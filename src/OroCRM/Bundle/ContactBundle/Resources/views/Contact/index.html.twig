@@ -17,9 +17,8 @@
 
     {% include 'OroImportExportBundle:ImportExport:buttons.html.twig' with {
         entityClass: 'OroCRM\\Bundle\\ContactBundle\\Entity\\Contact',
-        importProcessor: 'orocrm_contact.import_validation',
         exportProcessor: 'orocrm_contact',
-        imortTitle: 'orocrm.contact.import'|trans,
+        importTitle: 'orocrm.contact.import'|trans,
         dataGridName: gridName
     } %}
 
