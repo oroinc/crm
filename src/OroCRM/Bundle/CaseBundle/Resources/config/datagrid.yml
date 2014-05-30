@@ -1,0 +1,88 @@
+datagrid:
+    cases-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_case_view
+            query:
+                select:
+                    - case_entity.id as caseNumber
+                    - case_entity.subject
+                    - |
+                        (CASE
+                              when reporter_user IS NOT NULL
+                              THEN CONCAT(reporter_user.firstName, CONCAT(' ', reporter_user.lastName))
+                              when reporter_contact IS NOT NULL
+                              THEN CONCAT(reporter_contact.firstName, CONCAT(' ', reporter_contact.lastName))
+                              when reporter_customer IS NOT NULL
+                              THEN CONCAT(reporter_customer.firstName, CONCAT(' ', reporter_customer.lastName))
+                              else ''
+                              END) as reporter
+                    - case_entity.reportedOn
+                    - case_entity.closedOn
+                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as assignedTo
+                    - workflowStep.label as status
+                from:
+                    - { table: %orocrm_case.entity.class%, alias: case_entity }
+                join:
+                    left:
+                        - { join: case_entity.reporter, alias: case_reporter }
+                        - { join: case_reporter.user, alias: reporter_user }
+                        - { join: case_reporter.contact, alias: reporter_contact }
+                        - { join: case_reporter.customer, alias: reporter_customer }
+                        - { join: case_entity.owner, alias: owner }
+                        - { join: case_entity.workflowStep, alias: workflowStep }
+        columns:
+            caseNumber:
+                label: orocrm.case.datagrid.case_number.label
+            subject:
+                label: orocrm.case.datagrid.subject.label
+            reporter:
+                label: orocrm.case.datagrid.reporter.label
+            assignedTo:
+                label: orocrm.case.datagrid.assigned_to.label
+            reportedOn:
+                label: orocrm.case.datagrid.reported_on.label
+                frontend_type: datetime
+            closedOn:
+                label: orocrm.case.datagrid.closed_on.label
+                frontend_type: datetime
+            status:
+                label: orocrm.case.datagrid.workflow_status.label
+        filters:
+            columns:
+                subject:
+                    type: string
+                    data_name: subject
+                assignedTo:
+                    type: string
+                    data_name: assignedTo
+                reportedOn:
+                    type: datetime
+                    data_name: case_entity.reportedOn
+                closedOn:
+                    type: datetime
+                    data_name: case_entity.closedOn
+                status:
+                    type:      entity
+                    data_name: case_entity.status
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %orocrm_case.entity.class%
+
+        sorters:
+            columns:
+                subject:
+                    data_name: subject
+                caseNumber:
+                    data_name: case_entity.id
+                reportedOn:
+                    data_name: case_entity.reportedOn
+                closedOn:
+                    data_name: case_entity.closedOn
+                status:
+                    data_name: case_entity.status
+            default:
+                reportedOn: DESC
+        properties:
+            id: ~

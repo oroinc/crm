@@ -1,3 +1,8 @@
+orocrm_case_bundle:
+    resource: "@OroCRMCaseBundle/Controller"
+    type:     annotation
+    prefix:   /case
+
 orocrm_case_bundle_api:
     resource:     "@OroCRMCaseBundle/Controller/Api/Rest/CaseController.php"
     type:         rest
