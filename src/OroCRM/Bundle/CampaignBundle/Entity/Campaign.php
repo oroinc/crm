@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
+use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
+
 /**
  * @package OroCRM\Bundle\OroCRMCampaignBundle\Entity
  * @ORM\Entity()
@@ -30,7 +32,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *  }
  * )
  */
-class Campaign
+class Campaign extends ExtendCampaign
 {
     /**
      * @var int
