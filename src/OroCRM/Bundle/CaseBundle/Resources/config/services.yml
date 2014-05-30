@@ -1,2 +1,39 @@
 parameters:
+    orocrm_case.entity.class:             OroCRM\Bundle\CaseBundle\Entity\CaseEntity
+    orocrm_case.manager.api.class:        Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_case.form.type.case.class:     OroCRM\Bundle\CaseBundle\Form\Type\CaseType
+    orocrm_case.form.type.case_api.class: OroCRM\Bundle\CaseBundle\Form\Type\CaseApiType
+    orocrm_caserm.handler.case_api.class: OroCRM\Bundle\CaseBundle\Form\Handler\CaseHandler
+
 services:
+    orocrm_case.manager.api:
+        class: %orocrm_case.manager.api.class%
+        arguments:
+            - %orocrm_case.entity.class%
+            - @doctrine.orm.entity_manager
+
+    orocrm_case.form.type.case:
+        class: %orocrm_case.form.type.case.class%
+        tags:
+            - { name: form.type, alias: orocrm_case }
+
+    orocrm_case.form.type.case_api:
+        class: %orocrm_case.form.type.case_api.class%
+        tags:
+            - { name: form.type, alias: case }
+
+    orocrm_case.form.handler.case_api:
+        class: %orocrm_caserm.handler.case_api.class%
+        scope: request
+        arguments:
+            - @orocrm_case.form.api
+            - @request
+            - @doctrine.orm.entity_manager
+
+    orocrm_case.form.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - 'case'
+            - 'case'

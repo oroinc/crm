@@ -139,7 +139,7 @@ class CaseController extends RestController implements ClassResourceInterface
      */
     public function getForm()
     {
-        return $this->get('orocrm_case.form.api');
+        return $this->get('orocrm_case.form.type.case_api');
     }
 
     /**

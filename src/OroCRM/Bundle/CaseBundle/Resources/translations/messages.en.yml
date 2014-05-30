@@ -1,7 +1,7 @@
 orocrm:
     case_entity:
         #
-        # OroCRM/Bundle/TaskBundle/Entity/Task
+        # OroCRM/Bundle/CaseBundle/Entity/CaseEntity
         #
         entity_label:                Case
         entity_plural_label:         Cases

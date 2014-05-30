@@ -549,4 +549,21 @@ class CaseEntity
     {
         return $this->web;
     }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->createdAt  = new \DateTime();
+        $this->reportedOn = new \DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime();
+    }
 }
