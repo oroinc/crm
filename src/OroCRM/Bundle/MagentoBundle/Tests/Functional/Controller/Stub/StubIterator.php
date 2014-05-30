@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Stub;
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterface;
 
-class StubCartsIterator extends \ArrayIterator implements PredefinedFiltersAwareInterface
+class StubIterator extends \ArrayIterator implements PredefinedFiltersAwareInterface
 {
     /**
      * Set filter bag that will be used for batch processing

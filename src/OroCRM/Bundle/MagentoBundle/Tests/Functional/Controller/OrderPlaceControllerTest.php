@@ -9,13 +9,13 @@ use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
-use OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Stub\StubCartsIterator;
+use OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Stub\StubIterator;
 
 /**
  * @outputBuffering enabled
  * @dbIsolation
  */
-class OrderPlaceController extends WebTestCase
+class OrderPlaceControllerTest extends WebTestCase
 {
     const TEST_NEW_EMAIL     = 'new@email.com';
     const TEST_NEW_ITEMS_QTY = 444;
@@ -113,9 +113,9 @@ class OrderPlaceController extends WebTestCase
             $this->getUrl(
                 'orocrm_magento_orderplace_cart',
                 [
-                    'id' => $this->cart->getId(),
+                    'id'               => $this->cart->getId(),
                     '_widgetContainer' => 'block',
-                    '_wid' => $widgetId
+                    '_wid'             => $widgetId
                 ]
             )
         );
@@ -130,7 +130,7 @@ class OrderPlaceController extends WebTestCase
     {
         $newCart = $this->getModifiedCartData($this->cart, $this->customer);
 
-        $cartIterator  = new StubCartsIterator([$newCart]);
+        $cartIterator  = new StubIterator([$newCart]);
         $orderIterator = new \ArrayIterator([]);
 
         $this->soapTransport->expects($this->any())->method('call');
@@ -139,7 +139,7 @@ class OrderPlaceController extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_magento_orderplace_sync', ['id' => $this->cart->getId()]),
+            $this->getUrl('orocrm_magento_orderplace_new_cart_order_sync', ['id' => $this->cart->getId()]),
             [],
             [],
             ['HTTP_X-Requested-With' => 'XMLHttpRequest']
@@ -226,4 +226,121 @@ class OrderPlaceController extends WebTestCase
             'customer_group_name'         => 'General',
         ];
     }
+
+    public function testCustomerSyncAction()
+    {
+        $newCustomerOrder = $this->getModifiedCustomerOrder($this->customer);
+
+        $orderIterator = new StubIterator([$newCustomerOrder]);
+
+        $this->soapTransport->expects($this->any())->method('call');
+        /*$this->soapTransport->expects($this->once())->method('getCustomer')->will(
+            $this->returnValue($customerIterator)
+        );*/
+        $this->soapTransport->expects($this->once())->method('getOrders')->will($this->returnValue($orderIterator));
+
+        $this->client->request(
+            'GET',
+            $this->getUrl('orocrm_magento_orderplace_new_customer_order_sync', ['id' => $this->customer->getId()]),
+            [],
+            [],
+            ['HTTP_X-Requested-With' => 'XMLHttpRequest']
+        );
+
+        $result = $this->client->getResponse();
+        $this->assertJsonResponseStatusCodeEquals($result, 200);
+        $arrayJson = json_decode($result->getContent(), 1);
+        $this->assertEquals($arrayJson['statusType'], 'success');
+        $this->assertEquals($arrayJson['message'], 'Data successfully synchronized.');
+
+        $this->assertEquals(
+            $arrayJson['url'],
+            $this->getUrl('orocrm_magento_order_view', ['id' => $this->order->getId()])
+        );
+
+        $this->client->request(
+            'GET',
+            $this->getUrl('orocrm_magento_customer_view', ['id' => $this->customer->getId()])
+        );
+        $result = $this->client->getResponse();
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
+
+        $this->assertContains('General Information', $result->getContent());
+        $this->assertContains('100000307', $result->getContent());
+        $this->assertContains('$750', $result->getContent());
+        $this->assertContains('pending', $result->getContent());
+        $this->assertContains('$755', $result->getContent());
+        $this->assertContains('$755', $result->getContent());
+    }
+
+    /**
+     * @param Customer $customer
+     *
+     * @return array
+     */
+    protected function getModifiedCustomerOrder(Customer $customer)
+    {
+        return [
+            'increment_id'         => '100000307',
+            'store_id'             => $customer->getStore()->getOriginId(),
+            'created_at'           => '2014-05-29 16:41:43',
+            'updated_at'           => '2014-05-29 16:41:43',
+            'customer_id'          => $customer->getOriginId(),
+            'tax_amount'           => '0.0000',
+            'shipping_amount'      => '5.0000',
+            'discount_amount'      => '0.0000',
+            'subtotal'             => '750.0000',
+            'grand_total'          => '755.0000',
+            'total_qty_ordered'    => '1.0000',
+            'base_tax_amount'      => '0.0000',
+            'base_shipping_amount' => '5.0000',
+            'base_discount_amount' => '0.0000',
+            'base_subtotal'        => '750.0000',
+            'base_grand_total'     => '755.0000',
+            'billing_address_id'   => '603',
+            'billing_firstname'    => 'asdf',
+            'billing_lastname'     => 'asdf',
+            'shipping_address_id'  => '604',
+            'shipping_firstname'   => 'asdf',
+            'shipping_lastname'    => 'asdf',
+            'billing_name'         => 'asdf asdf',
+            'shipping_name'        => 'asdf asdf',
+            'store_to_base_rate'   => '1.0000',
+            'store_to_order_rate'  => '1.0000',
+            'base_to_global_rate'  => '1.0000',
+            'base_to_order_rate'   => '1.0000',
+            'weight'               => '0.3000',
+            'store_name'           => $customer->getStore()->getName(),
+            'status'               => 'pending',
+            'state'                => 'new',
+            'global_currency_code' => 'USD',
+            'base_currency_code'   => 'USD',
+            'store_currency_code'  => 'USD',
+            'order_currency_code'  => 'USD',
+            'shipping_method'      => 'flatrate_flatrate',
+            'shipping_description' => 'Flat Rate - Fixed',
+            'customer_email'       => 'valibaba@pochta.com',
+            'customer_firstname'   => 'asdf',
+            'customer_lastname'    => 'asdf',
+            'quote_id'             => '368',
+            'is_virtual'           => '0',
+            'customer_group_id'    => '1',
+            'customer_note_notify' => '0',
+            'customer_is_guest'    => '0',
+            'email_sent'           => '1',
+            'order_id'             => '302',
+            'shipping_address'     => [],
+            'billing_address'      => [],
+            'items'                => [],
+            'payment'              => [],
+            'status_history'       => [],
+            'store_code'           => $customer->getStore()->getCode(),
+            'store_storename'      => $customer->getStore()->getName(),
+            'store_website_id'     => $customer->getStore()->getWebsite()->getOriginId(),
+            'store_website_code'   => $customer->getStore()->getWebsite()->getCode(),
+            'store_website_name'   => $customer->getStore()->getWebsite()->getName(),
+        ];
+    }
+
+
 }
