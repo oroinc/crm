@@ -19,7 +19,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 /**
  * @ORM\Entity
  * @ORM\Table(
- *      name="oro_ticket"
+ *      name="orocrm_case"
  * )
  * @ORM\HasLifecycleCallbacks()
  * @Config(
@@ -194,14 +194,14 @@ class CaseEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=100, nullable=true)
+     * @ORM\Column(name="web", type="string", length=100, nullable=true)
      */
     protected $web;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=100, nullable=true)
+     * @ORM\Column(name="other_contact", type="string", length=100, nullable=true)
      */
     protected $otherContact;
 
