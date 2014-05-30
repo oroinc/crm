@@ -28,20 +28,20 @@ class CaseController extends RestController implements ClassResourceInterface
      * REST GET list
      *
      * @QueryParam(
-     *      name="page",
-     *      requirements="\d+",
-     *      nullable=true,
-     *      description="Page number, starting from 1. Defaults to 1."
+     *     name="page",
+     *     requirements="\d+",
+     *     nullable=true,
+     *     description="Page number, starting from 1. Defaults to 1."
      * )
      * @QueryParam(
-     *      name="limit",
-     *      requirements="\d+",
-     *      nullable=true,
-     *      description="Number of items per page. defaults to 10."
+     *     name="limit",
+     *     requirements="\d+",
+     *     nullable=true,
+     *     description="Number of items per page. defaults to 10."
      * )
      * @ApiDoc(
-     *      description="Get all CaseEntity items",
-     *      resource=true
+     *     description="Get all CaseEntity items",
+     *     resource=true
      * )
      * @AclAncestor("orocrm_case_view")
      * @return Response
@@ -60,8 +60,8 @@ class CaseController extends RestController implements ClassResourceInterface
      * @param string $id
      *
      * @ApiDoc(
-     *      description="Get CaseEntity item",
-     *      resource=true
+     *     description="Get CaseEntity item",
+     *     resource=true
      * )
      * @AclAncestor("orocrm_case_view")
      * @return Response
@@ -77,8 +77,8 @@ class CaseController extends RestController implements ClassResourceInterface
      * @param int $id CaseEntity item id
      *
      * @ApiDoc(
-     *      description="Update CaseEntity",
-     *      resource=true
+     *     description="Update CaseEntity",
+     *     resource=true
      * )
      * @AclAncestor("orocrm_case_update")
      * @return Response
@@ -92,8 +92,8 @@ class CaseController extends RestController implements ClassResourceInterface
      * Create new case
      *
      * @ApiDoc(
-     *      description="Create new CaseEntity",
-     *      resource=true
+     *     description="Create new CaseEntity",
+     *     resource=true
      * )
      * @AclAncestor("orocrm_case_create")
      */
@@ -108,14 +108,14 @@ class CaseController extends RestController implements ClassResourceInterface
      * @param int $id
      *
      * @ApiDoc(
-     *      description="Delete CaseEntity",
-     *      resource=true
+     *     description="Delete CaseEntity",
+     *     resource=true
      * )
      * @Acl(
-     *      id="orocrm_case_delete",
-     *      type="entity",
-     *      permission="DELETE",
-     *      class="OroCRMCaseBundle:CaseEntity"
+     *     id="orocrm_case_delete",
+     *     type="entity",
+     *     permission="DELETE",
+     *     class="OroCRMCaseBundle:CaseEntity"
      * )
      * @return Response
      */

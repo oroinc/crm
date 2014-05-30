@@ -15,9 +15,52 @@ class CaseType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // @todo: add properties
         $builder
-            ->add('subject');
+            ->add(
+                'subject',
+                'text',
+                [
+                    'label' => 'orocrm.case.subject.label'
+                ]
+            )
+            ->add(
+                'description',
+                'textarea',
+                [
+                    'label' => 'orocrm.case.description.label'
+                ]
+            )
+            ->add(
+                'owner',
+                'oro_user_select',
+                [
+                    'label' => 'orocrm.case.owner.label'
+                ]
+            )
+            ->add(
+                'reporter',
+                'orocrm_case_reporter',
+                [
+                    'label' => 'orocrm.case.reporter.label'
+                ]
+            )
+            ->add(
+                'item',
+                'orocrm_case_item',
+                [
+                    'label' => 'orocrm.case.item.label'
+                ]
+            )
+            ->add(
+                'origins',
+                'collection',
+                [
+                    'type'         => 'orocrm_case_origin',
+                    'allow_add'    => true,
+                    'allow_delete' => true,
+                    'label'        => 'orocrm.case.origins.label'
+                ]
+            );
     }
 
     /**

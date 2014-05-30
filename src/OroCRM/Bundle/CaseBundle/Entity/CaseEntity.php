@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\CaseBundle\Entity;
 
-use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -74,7 +74,7 @@ class CaseEntity
     /**
      * @var CaseReporter
      *
-     * @ORM\OneToOne(targetEntity="CaseReporter")
+     * @ORM\OneToOne(targetEntity="CaseReporter", cascade={"persist"})
      * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $reporter;
@@ -82,13 +82,13 @@ class CaseEntity
     /**
      * @var CaseItem
      *
-     * @ORM\OneToOne(targetEntity="CaseItem")
+     * @ORM\OneToOne(targetEntity="CaseItem", cascade={"persist"})
      * @ORM\JoinColumn(name="item_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $item;
 
     /**
-     * @var CaseOrigin
+     * @var CaseOrigin[]|ArrayCollection
      *
      * @ORM\OneToMany(
      *      targetEntity="CaseOrigin",
@@ -143,6 +143,11 @@ class CaseEntity
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $closedOn;
+
+    public function __construct()
+    {
+        $this->origins = new ArrayCollection();
+    }
 
     /**
      * @param \DateTime $closedOn
@@ -374,13 +379,31 @@ class CaseEntity
     }
 
     /**
-     * @param Collection $origins
+     * @param CaseOrigin $origin
      *
      * @return $this
      */
-    public function setOrigins(Collection $origins)
+    public function addOrigin(CaseOrigin $origin)
     {
-        $this->origins = $origins;
+        if (!$this->origins->contains($origin)) {
+            $this->origins->add($origin);
+
+            $origin->setCaseEntity($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CaseOrigin $origin
+     *
+     * @return $this
+     */
+    public function removeOrigin(CaseOrigin $origin)
+    {
+        if ($this->origins->contains($origin)) {
+            $this->origins->remove($origin);
+        }
 
         return $this;
     }
