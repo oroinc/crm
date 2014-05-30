@@ -48,7 +48,6 @@ class CustomerAddressControllerTest extends WebTestCase
         return $this->customer->getid();
     }
 
-
     /**
      * @dataProvider cgetProvider
      */

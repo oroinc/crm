@@ -83,7 +83,6 @@ class DeleteChannelTest extends WebTestCase
             ->findOneByChannel($channel);
     }
 
-
     public function testDeleteChannel()
     {
         $oldChannel = clone($this->channel);
