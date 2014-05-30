@@ -4,12 +4,10 @@ namespace OroCRM\Bundle\CampaignBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
- * @SuppressWarnings(PHPMD.ExcessivePublicCount)
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- *
  * @package OroCRM\Bundle\OroCRMCampaignBundle\Entity
  * @ORM\Entity()
  * @ORM\Table(name="orocrm_campaign")
@@ -86,13 +84,12 @@ class Campaign
     protected $budget;
 
     /**
-     * @var User
+     * @var BusinessUnit
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\BusinessUnit")
+     * @ORM\JoinColumn(name="business_unit_owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
      */
     protected $owner;
 
