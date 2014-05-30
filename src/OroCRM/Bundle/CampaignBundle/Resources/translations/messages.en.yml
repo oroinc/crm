@@ -3,9 +3,6 @@ orocrm:
         entity_description:  Represent contact
         entity_label:        Campaign
         entity_plural_label: Campaigns
-        entity_description:  Represent contact
-        entity_label:        Campaign
-        entity_plural_label: Campaigns
         id.label:            Id
         name.label:          Name
         code.label:          Code
