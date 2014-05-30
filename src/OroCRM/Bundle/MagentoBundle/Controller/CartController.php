@@ -97,7 +97,6 @@ class CartController extends Controller
         return array('customer' => $customer, 'channel' => $channel);
     }
 
-
     /**
      * @Route("/actualize/{id}", name="orocrm_magento_cart_actualize", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_cart_view")
