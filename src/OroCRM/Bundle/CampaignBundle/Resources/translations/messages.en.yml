@@ -1,6 +1,8 @@
 orocrm:
     campaign:
         label: Campaings
+        menu:
+            marketing_tab.label: Marketing
 
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\Contact
