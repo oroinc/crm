@@ -1,0 +1,4 @@
+oro_crm_campaign_bundle:
+    resource:     "@OroCRMCampaignBundle/Controller"
+    type:         annotation
+    prefix:       /
