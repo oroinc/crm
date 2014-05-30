@@ -217,16 +217,6 @@ class Order extends ExtendOrder
     protected $customerEmail;
 
     /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\CaseBundle\Entity\CaseEntity",
-     *    mappedBy="relatedOrder", cascade={"all"}, orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"primary" = "DESC"})
-     */
-    protected $cases;
-
-    /**
      * @param WorkflowItem $workflowItem
      *
      * @return Order
@@ -697,21 +687,5 @@ class Order extends ExtendOrder
     public function getCustomerEmail()
     {
         return $this->customerEmail;
-    }
-
-    /**
-     * @param ArrayCollection $cases
-     */
-    public function setCases($cases)
-    {
-        $this->cases = $cases;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getCases()
-    {
-        return $this->cases;
     }
 }

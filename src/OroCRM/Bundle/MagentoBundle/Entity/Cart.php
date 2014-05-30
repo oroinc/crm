@@ -240,16 +240,6 @@ class Cart extends ExtendCart
     protected $statusMessage;
 
     /**
-     * @var Collection
-     *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\CaseBundle\Entity\CaseEntity",
-     *    mappedBy="relatedCart", cascade={"all"}, orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"primary" = "DESC"})
-     */
-    protected $cases;
-
-    /**
      * @param WorkflowItem $workflowItem
      *
      * @return Cart
@@ -798,21 +788,5 @@ class Cart extends ExtendCart
     public function getStatusMessage()
     {
         return $this->statusMessage;
-    }
-
-    /**
-     * @param Collection $cases
-     */
-    public function setCases($cases)
-    {
-        $this->cases = $cases;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getCases()
-    {
-        return $this->cases;
     }
 }

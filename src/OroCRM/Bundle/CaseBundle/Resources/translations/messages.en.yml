@@ -9,7 +9,7 @@ orocrm:
         subject.label:               Subject
         description.label:           Description
         workflow_step.label:         Status
-        owner.label:                 Owner
+        owner.label:                 Assigned To
         reporter_contact.label:      Reporter contact
         reporter_customer.label:     Reporter customer
         related_cart.label:          elated shopping cart

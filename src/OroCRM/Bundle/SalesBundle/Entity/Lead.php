@@ -275,16 +275,6 @@ class Lead extends ExtendLead implements FullNameInterface
     protected $workflowStep;
 
     /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\CaseBundle\Entity\CaseEntity",
-     *    mappedBy="relatedLead", cascade={"all"}, orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"primary" = "DESC"})
-     */
-    protected $cases;
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -837,22 +827,6 @@ class Lead extends ExtendLead implements FullNameInterface
         return $this->workflowStep;
     }
 
-
-    /**
-     * @param ArrayCollection $cases
-     */
-    public function setCases($cases)
-    {
-        $this->cases = $cases;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getCases()
-    {
-        return $this->cases;
-    }
     /**
      * @ORM\PrePersist
      */

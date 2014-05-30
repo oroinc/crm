@@ -80,9 +80,9 @@ class CaseEntity
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="assigned_to_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $assignedTo;
+    protected $reporter;
 
     /**
      * @var Contact
@@ -141,6 +141,15 @@ class CaseEntity
     protected $workflowStep;
 
     /**
+     * @var WorkflowItem
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
+     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $workflowItem;
+
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -155,33 +164,100 @@ class CaseEntity
     protected $updatedAt;
 
     /**
-     * @var WorkflowItem
+     * @var \DateTime
      *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
-     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\Column(type="datetime")
      */
-    protected $workflowItem;
+    protected $reportedOn;
 
     /**
-     * @param User $assignedTo
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    public function setAssignedTo($assignedTo)
+    protected $closedOn;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email_address", type="string", length=100, nullable=true)
+     */
+    protected $emailAddress;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=100, nullable=true)
+     */
+    protected $phone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=100, nullable=true)
+     */
+    protected $web;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=100, nullable=true)
+     */
+    protected $otherContact;
+
+    /**
+     * @param \DateTime $closedOn
+     */
+    public function setClosedOn(\DateTime $closedOn)
     {
-        $this->assignedTo = $assignedTo;
+        $this->closedOn = $closedOn;
     }
 
     /**
-     * @return User
+     * @return \DateTime
      */
-    public function getAssignedTo()
+    public function getClosedOn()
     {
-        return $this->assignedTo;
+        return $this->closedOn;
     }
+
+    /**
+     * @param Cart $relatedCart
+     */
+    public function setRelatedCart(Cart $relatedCart)
+    {
+        $this->relatedCart = $relatedCart;
+    }
+
+    /**
+     * @return Cart
+     */
+    public function getRelatedCart()
+    {
+        return $this->relatedCart;
+    }
+
+    /**
+     * @param \DateTime $reportedOn
+     */
+    public function setReportedOn(\DateTime $reportedOn)
+    {
+        $this->reportedOn = $reportedOn;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getReportedOn()
+    {
+        return $this->reportedOn;
+    }
+
 
     /**
      * @param \DateTime $createdAt
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }
@@ -229,7 +305,7 @@ class CaseEntity
     /**
      * @param User $owner
      */
-    public function setOwner($owner)
+    public function setOwner(User $owner)
     {
         $this->owner = $owner;
     }
@@ -261,7 +337,7 @@ class CaseEntity
     /**
      * @param \DateTime $updatedAt
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
     }
@@ -307,9 +383,17 @@ class CaseEntity
     }
 
     /**
+     * @return string
+     */
+    public function getWorkflowStepName()
+    {
+        return $this->getWorkflowStep() ? $this->getWorkflowStep()->getName() : null;
+    }
+
+    /**
      * @param Lead $relatedLead
      */
-    public function setRelatedLead($relatedLead)
+    public function setRelatedLead(Lead $relatedLead)
     {
         $this->relatedLead = $relatedLead;
     }
@@ -325,7 +409,7 @@ class CaseEntity
     /**
      * @param Opportunity $relatedOpportunity
      */
-    public function setRelatedOpportunity($relatedOpportunity)
+    public function setRelatedOpportunity(Opportunity $relatedOpportunity)
     {
         $this->relatedOpportunity = $relatedOpportunity;
     }
@@ -341,7 +425,7 @@ class CaseEntity
     /**
      * @param Order $relatedOrder
      */
-    public function setRelatedOrder($relatedOrder)
+    public function setRelatedOrder(Order $relatedOrder)
     {
         $this->relatedOrder = $relatedOrder;
     }
@@ -355,25 +439,9 @@ class CaseEntity
     }
 
     /**
-     * @param Cart $relatedShoppingCart
-     */
-    public function setRelatedShoppingCart($relatedShoppingCart)
-    {
-        $this->relatedShoppingCart = $relatedShoppingCart;
-    }
-
-    /**
-     * @return Cart
-     */
-    public function getRelatedShoppingCart()
-    {
-        return $this->relatedShoppingCart;
-    }
-
-    /**
      * @param Contact $reporterContact
      */
-    public function setReporterContact($reporterContact)
+    public function setReporterContact(Contact $reporterContact)
     {
         $this->reporterContact = $reporterContact;
     }
@@ -389,7 +457,7 @@ class CaseEntity
     /**
      * @param Customer $reporterCustomer
      */
-    public function setReporterCustomer($reporterCustomer)
+    public function setReporterCustomer(Customer $reporterCustomer)
     {
         $this->reporterCustomer = $reporterCustomer;
     }
@@ -400,5 +468,85 @@ class CaseEntity
     public function getReporterCustomer()
     {
         return $this->reporterCustomer;
+    }
+
+    /**
+     * @param string $emailAddress
+     */
+    public function setEmailAddress($emailAddress)
+    {
+        $this->emailAddress = $emailAddress;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmailAddress()
+    {
+        return $this->emailAddress;
+    }
+
+    /**
+     * @param string $otherContact
+     */
+    public function setOtherContact($otherContact)
+    {
+        $this->otherContact = $otherContact;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOtherContact()
+    {
+        return $this->otherContact;
+    }
+
+    /**
+     * @param string $phone
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param User $reporter
+     */
+    public function setReporter(User $reporter)
+    {
+        $this->reporter = $reporter;
+    }
+
+    /**
+     * @return User
+     */
+    public function getReporter()
+    {
+        return $this->reporter;
+    }
+
+    /**
+     * @param string $web
+     */
+    public function setWeb($web)
+    {
+        $this->web = $web;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWeb()
+    {
+        return $this->web;
     }
 }
