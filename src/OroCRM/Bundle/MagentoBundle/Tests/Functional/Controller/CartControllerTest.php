@@ -57,74 +57,74 @@ class CartControllerTest extends AbstractController
         return [
             'Magento cart grid'                             => [
                 [
-                    'gridParameters' => [
+                    'gridParameters'      => [
                         'gridName' => 'magento-cart-grid'
                     ],
-                    'gridFilters'    => [],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
+                    'gridFilters'         => [],
+                    'channelName'         => 'Demo Web store',
+                    'verifying'           => [
                         'firstName'  => 'John',
                         'lastName'   => 'Doe',
                         'email'      => 'email@email.com',
                         'regionName' => 'Arizona'
                     ],
-                    'isResult'       => true
+                    'expectedResultCount' => 1
                 ],
             ],
             'Magento cart grid with filters'                => [
                 [
-                    'gridParameters' => [
+                    'gridParameters'      => [
                         'gridName' => 'magento-cart-grid'
                     ],
-                    'gridFilters'    => [
+                    'gridFilters'         => [
                         'magento-cart-grid[_filter][lastName][value]'  => 'Doe',
                         'magento-cart-grid[_filter][firstName][value]' => 'John',
                     ],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
+                    'channelName'         => 'Demo Web store',
+                    'verifying'           => [
                         'firstName'  => 'John',
                         'lastName'   => 'Doe',
                         'email'      => 'email@email.com',
                         'regionName' => 'Arizona'
                     ],
-                    'isResult'       => true
+                    'expectedResultCount' => 1
                 ],
             ],
             'Magento cart grid with filters without result' => [
                 [
-                    'gridParameters' => [
+                    'gridParameters'      => [
                         'gridName' => 'magento-cart-grid'
                     ],
-                    'gridFilters'    => [
+                    'gridFilters'         => [
                         'magento-cart-grid[_filter][lastName][value]'  => 'Doe',
                         'magento-cart-grid[_filter][firstName][value]' => 'Doe',
                     ],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
+                    'channelName'         => 'Demo Web store',
+                    'verifying'           => [
                         'firstName'  => 'John',
                         'lastName'   => 'Doe',
                         'email'      => 'email@email.com',
                         'regionName' => 'Arizona'
                     ],
-                    'isResult'       => false
+                    'expectedResultCount' => 0
                 ]
             ],
             'Cart item grid'                                => [
                 [
-                    'gridParameters' => [
+                    'gridParameters'      => [
                         'gridName' => 'magento-cartitem-grid',
                         'id'       => 'id',
                     ],
-                    'gridFilters'    => [],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
+                    'gridFilters'         => [],
+                    'channelName'         => 'Demo Web store',
+                    'verifying'           => [
                         'sku'            => 'sku',
                         'qty'            => 0,
                         'rowTotal'       => '$100.00',
                         'taxAmount'      => '$10.00',
                         'discountAmount' => '$0.00'
                     ],
-                    'isResult'       => true
+                    'expectedResultCount' => 1
                 ],
             ],
         ];

@@ -13,6 +13,8 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
  */
 class CustomerAddressControllerTest extends WebTestCase
 {
+    const SOME_CUSTOMER_ID = 24234;
+
     /** @var Channel */
     protected $channel;
 
@@ -48,23 +50,23 @@ class CustomerAddressControllerTest extends WebTestCase
         return $this->customer->getid();
     }
 
-
     /**
      * @dataProvider cgetProvider
      */
-    public function testCget($hasId, $status)
+    public function testCget($hasCustomer, $expectedStatus)
     {
-        $id = 122334522;
+        $id = self::SOME_CUSTOMER_ID;
 
-        if ($hasId) {
+        if ($hasCustomer) {
             $id = $this->getCustomerId();
         }
 
         $this->client->request(
             'GET',
-            $this->getUrl('get_customer_addresses', ['customerId' => $id])
+            $this->getUrl('oro_api_get_customer_addresses', ['customerId' => $id])
         );
-        $this->assertCount(1, self::getJsonResponseContent($this->client->getResponse(), $status));
+        $response = self::getJsonResponseContent($this->client->getResponse(), $expectedStatus);
+        $this->assertCount((int)$hasCustomer, $response);
     }
 
     public function cgetProvider()

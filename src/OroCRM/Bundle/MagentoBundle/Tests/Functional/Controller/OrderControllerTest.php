@@ -61,76 +61,76 @@ class OrderControllerTest extends AbstractController
         return [
             'Magento order grid'                             => [
                 [
-                    'gridParameters' => [
+                    'gridParameters'      => [
                         'gridName' => 'magento-order-grid'
                     ],
-                    'gridFilters'    => [],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
+                    'gridFilters'         => [],
+                    'channelName'         => 'Demo Web store',
+                    'assert'              => [
                         'firstName' => 'John',
                         'lastName'  => 'Doe',
                         'status'    => 'open',
                         'subTotal'  => '$0.00',
                     ],
-                    'isResult'       => true
+                    'expectedResultCount' => 1
                 ],
             ],
             'Magento order grid with filters'                => [
                 [
-                    'gridParameters' => [
+                    'gridParameters'      => [
                         'gridName' => 'magento-order-grid'
                     ],
-                    'gridFilters'    => [
+                    'gridFilters'         => [
                         'magento-order-grid[_filter][lastName][value]'  => 'Doe',
                         'magento-order-grid[_filter][firstName][value]' => 'John',
                         'magento-order-grid[_filter][status][value]'    => 'open',
                     ],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
+                    'channelName'         => 'Demo Web store',
+                    'assert'              => [
                         'firstName' => 'John',
                         'lastName'  => 'Doe',
                         'status'    => 'open',
                         'subTotal'  => '$0.00',
                     ],
-                    'isResult'       => true
+                    'expectedResultCount' => 1
                 ],
             ],
             'Magento order grid with filters without result' => [
                 [
-                    'gridParameters' => [
+                    'gridParameters'      => [
                         'gridName' => 'magento-order-grid'
                     ],
-                    'gridFilters'    => [
+                    'gridFilters'         => [
                         'magento-order-grid[_filter][lastName][value]'  => 'Doe',
                         'magento-order-grid[_filter][firstName][value]' => 'John',
                         'magento-order-grid[_filter][status][value]'    => 'close',
                     ],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
+                    'channelName'         => 'Demo Web store',
+                    'assert'              => [
                         'firstName' => 'John',
                         'lastName'  => 'Doe',
                         'status'    => 'open',
                         'subTotal'  => '$0.00',
                     ],
-                    'isResult'       => false
+                    'expectedResultCount' => 0
                 ],
             ],
             'Magento order item grid'                        => [
                 [
-                    'gridParameters' => [
+                    'gridParameters'      => [
                         'gridName' => 'magento-orderitem-grid',
                         'id'       => 'id',
                     ],
-                    'gridFilters'    => [],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
+                    'gridFilters'         => [],
+                    'channelName'         => 'Demo Web store',
+                    'assert'              => [
                         'sku'            => 'some sku',
                         'qty'            => 1,
                         'rowTotal'       => '$234.00',
                         'taxAmount'      => '$1.50',
                         'discountAmount' => '$0.00'
                     ],
-                    'isResult'       => true
+                    'expectedResultCount' => 1
                 ],
             ],
         ];

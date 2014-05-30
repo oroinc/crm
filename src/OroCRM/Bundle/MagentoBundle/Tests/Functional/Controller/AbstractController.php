@@ -52,26 +52,18 @@ abstract class AbstractController extends WebTestCase
         }
 
         $this->client->requestGrid($filters['gridParameters'], $filters['gridFilters']);
-        $result = $this->client->getResponse();
-        $this->assertTrue($result->isSuccessful());
-        $this->assertTrue($result->isOk());
-        $data  = json_decode($result->getContent(), 1);
-        $count = 0;
+        $response = $this->client->getResponse();
+        $result = $this->getJsonResponseContent($response, 200);
 
-        foreach ($data['data'] as $grid) {
-            if ((isset($filters['gridParameters']['id'])) || ($filters['channelName'] === $grid['channelName'])) {
-                foreach ($filters['verifying'] as $fieldName => $value) {
-                    ++$count;
-                    $this->assertEquals($value, $grid[$fieldName]);
+        foreach ($result['data'] as $row) {
+            if ((isset($filters['gridParameters']['id'])) || ($filters['channelName'] === $row['channelName'])) {
+                foreach ($filters['assert'] as $fieldName => $value) {
+                    $this->assertEquals($value, $row[$fieldName]);
                 }
                 break;
             }
         }
 
-        if ($filters['isResult']) {
-            $this->assertGreaterThanOrEqual(1, $count);
-        } else {
-            $this->assertEquals($count, 0);
-        }
+        $this->assertCount((int)$filters['expectedResultCount'], $result['data']);
     }
 }

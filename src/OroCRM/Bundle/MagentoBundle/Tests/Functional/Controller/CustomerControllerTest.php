@@ -52,12 +52,10 @@ class CustomerControllerTest extends AbstractController
         return [
             'Customers grid'                             => [
                 [
-                    'gridParameters' => [
-                        'gridName' => 'magento-customers-grid'
-                    ],
-                    'gridFilters'    => [],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
+                    'gridParameters'      => ['gridName' => 'magento-customers-grid'],
+                    'gridFilters'         => [],
+                    'channelName'         => 'Demo Web store',
+                    'assert'              => [
                         'firstName'   => 'John',
                         'lastName'    => 'Doe',
                         'email'       => 'test@example.com',
@@ -65,21 +63,19 @@ class CustomerControllerTest extends AbstractController
                         'countryName' => 'United States',
                         'regionName'  => 'Arizona',
                     ],
-                    'isResult'       => true
+                    'expectedResultCount' => 1
                 ],
             ],
             'Customers grid with filters'                => [
                 [
-                    'gridParameters' => [
-                        'gridName' => 'magento-customers-grid'
-                    ],
-                    'gridFilters'    => [
+                    'gridParameters'      => ['gridName' => 'magento-customers-grid'],
+                    'gridFilters'         => [
                         'magento-customers-grid[_filter][lastName][value]'  => 'Doe',
                         'magento-customers-grid[_filter][firstName][value]' => 'John',
                         'magento-customers-grid[_filter][email][value]'     => 'test@example.com',
                     ],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
+                    'channelName'         => 'Demo Web store',
+                    'assert'              => [
                         'firstName'   => 'John',
                         'lastName'    => 'Doe',
                         'email'       => 'test@example.com',
@@ -87,21 +83,19 @@ class CustomerControllerTest extends AbstractController
                         'countryName' => 'United States',
                         'regionName'  => 'Arizona',
                     ],
-                    'isResult'       => true
+                    'expectedResultCount' => 1
                 ],
             ],
             'Customers grid with filters without result' => [
                 [
-                    'gridParameters' => [
-                        'gridName' => 'magento-customers-grid'
-                    ],
-                    'gridFilters'    => [
+                    'gridParameters'      => ['gridName' => 'magento-customers-grid'],
+                    'gridFilters'         => [
                         'magento-customers-grid[_filter][lastName][value]'  => 'Doe1',
                         'magento-customers-grid[_filter][firstName][value]' => 'John1',
                         'magento-customers-grid[_filter][email][value]'     => 'test@example.com',
                     ],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
+                    'channelName'         => 'Demo Web store',
+                    'assert'              => [
                         'firstName'   => 'John',
                         'lastName'    => 'Doe',
                         'email'       => 'test@example.com',
@@ -109,42 +103,42 @@ class CustomerControllerTest extends AbstractController
                         'countryName' => null,
                         'regionName'  => null,
                     ],
-                    'isResult'       => false
+                    'expectedResultCount' => 0
                 ],
             ],
             'Customer Cart grid'                         => [
                 [
-                    'gridParameters' => [
+                    'gridParameters'      => [
                         'gridName' => 'magento-customer-cart-widget-grid',
                         'id'       => 'customerId',
                         'channel'  => 'channelId'
                     ],
-                    'gridFilters'    => [],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
+                    'gridFilters'         => [],
+                    'channelName'         => 'Demo Web store',
+                    'assert'              => [
                         'grandTotal'  => '$2.54',
                         'statusLabel' => 'Open',
                         'stepLabel'   => 'Open',
                     ],
-                    'isResult'       => true
+                    'expectedResultCount' => 1
                 ],
             ],
             'Customer order grid'                        => [
                 [
-                    'gridParameters' => [
+                    'gridParameters'      => [
                         'gridName' => 'magento-customer-order-grid',
                         'id'       => 'customerId',
                         'channel'  => 'channelId'
                     ],
-                    'gridFilters'    => [],
-                    'channelName'    => 'Demo Web store',
-                    'verifying'      => [
+                    'gridFilters'         => [],
+                    'channelName'         => 'Demo Web store',
+                    'assert'              => [
                         'totalAmount'     => '$0.00',
                         'totalPaidAmount' => '$17.85',
                         'status'          => 'open',
                         'stepLabel'       => 'Not contacted',
                     ],
-                    'isResult'       => true
+                    'expectedResultCount' => 1
                 ],
             ],
         ];
