@@ -60,14 +60,14 @@ class Campaign extends ExtendCampaign
     /**
      * @var \DateTime $createdAt
      *
-     * @ORM\Column(name="start_date", type="datetime")
+     * @ORM\Column(name="start_date", type="datetime", nullable=true)
      */
     protected $startDate;
 
     /**
      * @var \DateTime $createdAt
      *
-     * @ORM\Column(name="end_date", type="datetime")
+     * @ORM\Column(name="end_date", type="datetime", nullable=true)
      */
     protected $endDate;
 
