@@ -53,7 +53,7 @@ abstract class AbstractController extends WebTestCase
 
         $this->client->requestGrid($filters['gridParameters'], $filters['gridFilters']);
         $response = $this->client->getResponse();
-        $result = $this->getJsonResponseContent($response, 200);
+        $result   = $this->getJsonResponseContent($response, 200);
 
         foreach ($result['data'] as $row) {
             if ((isset($filters['gridParameters']['id'])) || ($filters['channelName'] === $row['channelName'])) {
