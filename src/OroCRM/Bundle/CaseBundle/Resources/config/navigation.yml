@@ -1,0 +1,17 @@
+oro_menu_config:
+    items:
+        orocrm_cases_index:
+            label: 'orocrm.cases.menu.index.label'
+            uri: '#'
+            extras:
+                position: 30
+
+    tree:
+        application_menu:
+            children:
+                activities_tab:
+                    children:
+                        cases_list: ~
+
+oro_titles:
+    orocrm_cases_index: ~

@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CaseBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -9,12 +10,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
  * @ORM\Entity
@@ -77,60 +72,32 @@ class CaseEntity
     protected $owner;
 
     /**
-     * @var User
+     * @var CaseReporter
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\OneToOne(targetEntity="CaseReporter")
      * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $reporter;
 
     /**
-     * @var Contact
+     * @var CaseItem
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
-     * @ORM\JoinColumn(name="reporter_contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\OneToOne(targetEntity="CaseItem")
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $reporterContact;
+    protected $item;
 
     /**
-     * @var Customer
+     * @var CaseOrigin
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer")
-     * @ORM\JoinColumn(name="reporter_customer_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\OneToMany(
+     *      targetEntity="CaseOrigin",
+     *      mappedBy="caseEntity",
+     *      cascade={"all"},
+     *      orphanRemoval=true
+     * )
      */
-    protected $reporterCustomer;
-
-    /**
-     * @var Order
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Order")
-     * @ORM\JoinColumn(name="related_order_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedOrder;
-
-    /**
-     * @var Cart
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Cart")
-     * @ORM\JoinColumn(name="related_cart_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedCart;
-
-    /**
-     * @var Lead
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead")
-     * @ORM\JoinColumn(name="related_lead_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedLead;
-
-    /**
-     * @var Opportunity
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity")
-     * @ORM\JoinColumn(name="related_opportunity_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedOpportunity;
+    protected $origins;
 
     /**
      * @var WorkflowStep
@@ -178,39 +145,15 @@ class CaseEntity
     protected $closedOn;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="email_address", type="string", length=100, nullable=true)
-     */
-    protected $emailAddress;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="phone", type="string", length=100, nullable=true)
-     */
-    protected $phone;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="web", type="string", length=100, nullable=true)
-     */
-    protected $web;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="other_contact", type="string", length=100, nullable=true)
-     */
-    protected $otherContact;
-
-    /**
      * @param \DateTime $closedOn
+     *
+     * @return $this
      */
     public function setClosedOn(\DateTime $closedOn)
     {
         $this->closedOn = $closedOn;
+
+        return $this;
     }
 
     /**
@@ -222,27 +165,15 @@ class CaseEntity
     }
 
     /**
-     * @param Cart $relatedCart
-     */
-    public function setRelatedCart(Cart $relatedCart)
-    {
-        $this->relatedCart = $relatedCart;
-    }
-
-    /**
-     * @return Cart
-     */
-    public function getRelatedCart()
-    {
-        return $this->relatedCart;
-    }
-
-    /**
      * @param \DateTime $reportedOn
+     *
+     * @return $this
      */
     public function setReportedOn(\DateTime $reportedOn)
     {
         $this->reportedOn = $reportedOn;
+
+        return $this;
     }
 
     /**
@@ -256,10 +187,14 @@ class CaseEntity
 
     /**
      * @param \DateTime $createdAt
+     *
+     * @return $this
      */
     public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     /**
@@ -272,10 +207,14 @@ class CaseEntity
 
     /**
      * @param string $description
+     *
+     * @return $this
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
+        return $this;
     }
 
     /**
@@ -288,10 +227,14 @@ class CaseEntity
 
     /**
      * @param integer $id
+     *
+     * @return $this
      */
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -304,10 +247,14 @@ class CaseEntity
 
     /**
      * @param User $owner
+     *
+     * @return $this
      */
     public function setOwner(User $owner)
     {
         $this->owner = $owner;
+
+        return $this;
     }
 
     /**
@@ -320,10 +267,14 @@ class CaseEntity
 
     /**
      * @param string $subject
+     *
+     * @return $this
      */
     public function setSubject($subject)
     {
         $this->subject = $subject;
+
+        return $this;
     }
 
     /**
@@ -336,10 +287,14 @@ class CaseEntity
 
     /**
      * @param \DateTime $updatedAt
+     *
+     * @return $this
      */
     public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
     /**
@@ -352,10 +307,14 @@ class CaseEntity
 
     /**
      * @param WorkflowItem $workflowItem
+     *
+     * @return $this
      */
     public function setWorkflowItem($workflowItem)
     {
         $this->workflowItem = $workflowItem;
+
+        return $this;
     }
 
     /**
@@ -368,10 +327,14 @@ class CaseEntity
 
     /**
      * @param WorkflowStep $workflowStep
+     *
+     * @return $this
      */
     public function setWorkflowStep($workflowStep)
     {
         $this->workflowStep = $workflowStep;
+
+        return $this;
     }
 
     /**
@@ -391,163 +354,63 @@ class CaseEntity
     }
 
     /**
-     * @param Lead $relatedLead
+     * @param CaseItem $item
+     *
+     * @return $this
      */
-    public function setRelatedLead(Lead $relatedLead)
+    public function setItem($item)
     {
-        $this->relatedLead = $relatedLead;
+        $this->item = $item;
+
+        return $this;
     }
 
     /**
-     * @return Lead
+     * @return CaseItem
      */
-    public function getRelatedLead()
+    public function getItem()
     {
-        return $this->relatedLead;
+        return $this->item;
     }
 
     /**
-     * @param Opportunity $relatedOpportunity
+     * @param Collection $origins
+     *
+     * @return $this
      */
-    public function setRelatedOpportunity(Opportunity $relatedOpportunity)
+    public function setOrigins(Collection $origins)
     {
-        $this->relatedOpportunity = $relatedOpportunity;
+        $this->origins = $origins;
+
+        return $this;
     }
 
     /**
-     * @return Opportunity
+     * @return Collection
      */
-    public function getRelatedOpportunity()
+    public function getOrigins()
     {
-        return $this->relatedOpportunity;
+        return $this->origins;
     }
 
     /**
-     * @param Order $relatedOrder
+     * @param CaseReporter $reporter
+     *
+     * @return $this
      */
-    public function setRelatedOrder(Order $relatedOrder)
-    {
-        $this->relatedOrder = $relatedOrder;
-    }
-
-    /**
-     * @return Order
-     */
-    public function getRelatedOrder()
-    {
-        return $this->relatedOrder;
-    }
-
-    /**
-     * @param Contact $reporterContact
-     */
-    public function setReporterContact(Contact $reporterContact)
-    {
-        $this->reporterContact = $reporterContact;
-    }
-
-    /**
-     * @return Contact
-     */
-    public function getReporterContact()
-    {
-        return $this->reporterContact;
-    }
-
-    /**
-     * @param Customer $reporterCustomer
-     */
-    public function setReporterCustomer(Customer $reporterCustomer)
-    {
-        $this->reporterCustomer = $reporterCustomer;
-    }
-
-    /**
-     * @return Customer
-     */
-    public function getReporterCustomer()
-    {
-        return $this->reporterCustomer;
-    }
-
-    /**
-     * @param string $emailAddress
-     */
-    public function setEmailAddress($emailAddress)
-    {
-        $this->emailAddress = $emailAddress;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmailAddress()
-    {
-        return $this->emailAddress;
-    }
-
-    /**
-     * @param string $otherContact
-     */
-    public function setOtherContact($otherContact)
-    {
-        $this->otherContact = $otherContact;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOtherContact()
-    {
-        return $this->otherContact;
-    }
-
-    /**
-     * @param string $phone
-     */
-    public function setPhone($phone)
-    {
-        $this->phone = $phone;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPhone()
-    {
-        return $this->phone;
-    }
-
-    /**
-     * @param User $reporter
-     */
-    public function setReporter(User $reporter)
+    public function setReporter($reporter)
     {
         $this->reporter = $reporter;
+
+        return $this;
     }
 
     /**
-     * @return User
+     * @return CaseReporter
      */
     public function getReporter()
     {
         return $this->reporter;
-    }
-
-    /**
-     * @param string $web
-     */
-    public function setWeb($web)
-    {
-        $this->web = $web;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWeb()
-    {
-        return $this->web;
     }
 
     /**

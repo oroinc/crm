@@ -1,4 +1,7 @@
 orocrm:
+    case:
+        menu:
+            index: Cases List
     case_entity:
         #
         # OroCRM/Bundle/CaseBundle/Entity/CaseEntity

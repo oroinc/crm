@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CaseBundle\Tests\Unit\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
 class CaseEntityTest extends \PHPUnit_Framework_TestCase
@@ -18,30 +19,26 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
     {
         $obj = new CaseEntity();
 
-        call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
+        $result = call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
+        $this->assertInstanceOf(get_class($obj), $result);
         $this->assertEquals($value, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
     }
 
     public function settersAndGettersDataProvider()
     {
+        $origin = $this->getMock('OroCRM\Bundle\CaseBundle\Entity\CaseOrigin');
+        $origins = new ArrayCollection(array($origin));
+
         return array(
             array('id', 42),
             array('subject', 'Test subject'),
             array('description', 'Test Description'),
-            array('emailAddress', 'alex@gmail.com'),
-            array('otherContact', 'fax: 100092304'),
-            array('phone', '100092304'),
-            array('web', 'alex.com'),
             array('owner', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
             array('workflowStep', $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep')),
             array('workflowItem', $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowItem')),
-            array('reporter', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
-            array('reporterContact', $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact')),
-            array('reporterCustomer', $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Customer')),
-            array('relatedLead', $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Lead')),
-            array('relatedOpportunity', $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Opportunity')),
-            array('relatedCart', $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Cart')),
-            array('relatedOrder', $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Order')),
+            array('reporter', $this->getMock('OroCRM\Bundle\CaseBundle\Entity\CaseReporter')),
+            array('item', $this->getMock('OroCRM\Bundle\CaseBundle\Entity\CaseItem')),
+            array('origins', $origins),
             array('createdAt', new \DateTime()),
             array('updatedAt', new \DateTime()),
             array('reportedOn', new \DateTime()),
