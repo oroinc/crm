@@ -51,7 +51,7 @@ class Campaign
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="code", type="string", length=255)
      */
     protected $code;
 
@@ -88,7 +88,6 @@ class Campaign
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\BusinessUnit")
      * @ORM\JoinColumn(name="business_unit_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      */
     protected $owner;
 
