@@ -8,6 +8,7 @@ use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
@@ -33,6 +34,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_CUSTOMER_INFO           = 'customerCustomerInfo';
     const ACTION_CUSTOMER_UPDATE         = 'customerCustomerUpdate';
     const ACTION_CUSTOMER_DELETE         = 'customerCustomerDelete';
+    const ACTION_CUSTOMER_ADDRESS_LIST   = 'customerAddressList';
     const ACTION_CUSTOMER_ADDRESS_INFO   = 'customerAddressInfo';
     const ACTION_CUSTOMER_ADDRESS_UPDATE = 'customerAddressUpdate';
     const ACTION_CUSTOMER_ADDRESS_DELETE = 'customerAddressDelete';
@@ -235,6 +237,18 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function getRegions()
     {
         return new RegionSoapIterator($this, $this->settings->all());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomerAddresses(Customer $customer)
+    {
+        $customerId = $customer->getOriginId();
+        $addresses  = $this->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST, ['customerId' => $customerId]);
+        $addresses  = WSIUtils::processCollectionResponse($addresses);
+
+        return $addresses;
     }
 
     /**

@@ -3,17 +3,20 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Collections\Collection;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use Oro\Bundle\AddressBundle\Entity\Country as BAPCountry;
 use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
 
+use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
@@ -159,46 +162,111 @@ class ReverseWriter implements ItemWriterInterface
     }
 
     /**
+     * Returns true if was changed address types at remote side
+     *
+     * @param $addresses
+     * @param $remoteAddresses
+     *
+     * @return bool
+     */
+    protected function isRemoteAddressesTypesChanged($addresses, $remoteAddresses)
+    {
+        foreach ($addresses as $localAddress) {
+            $localData = $localAddress['entity'];
+            // check only if entity is Magento Address (update)
+            if ($localData instanceof Address) {
+                $remoteAddress = $this->getRemoteAddressByOriginId($remoteAddresses, $localData->getOriginId());
+                $localDataTypes = $localData->getTypeNames();
+                if ($remoteAddress &&
+                    (($remoteAddress->is_default_billing === true && !in_array('billing', $localDataTypes))
+                        || ($remoteAddress->is_default_shipping === true && !in_array('shipping', $localDataTypes))
+                        || ($remoteAddress->is_default_billing === false && in_array('billing', $localDataTypes))
+                        || ($remoteAddress->is_default_shipping === false && in_array('shipping', $localDataTypes))
+                    )
+                ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $remoteAddresses
+     * @param int $originId
+     * @return array|bool
+     */
+    protected function getRemoteAddressByOriginId($remoteAddresses, $originId)
+    {
+        foreach ($remoteAddresses as $remoteAddress) {
+            if (!empty($remoteAddress) && $remoteAddress->customer_address_id === $originId) {
+                return $remoteAddress;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Process address write  to remote instance and to DB
      *
      * @param array    $addresses
      * @param string   $syncPriority
      * @param Customer $customer
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @throws \LogicException
      */
     protected function processAddresses($addresses, $syncPriority, Customer $customer)
     {
+        $remoteAddresses = $this->transport->getCustomerAddresses($customer);
+        $remoteTypesWin  = $this->isRemoteAddressesTypesChanged($addresses, $remoteAddresses);
         foreach ($addresses as $address) {
             if (empty($address['status']) || empty($address['entity'])) {
                 throw new \LogicException('Unable to process entity modification');
             }
-
             /** @var ContactAddress|Address $addressEntity */
             $addressEntity = $address['entity'];
             $status        = $address['status'];
-            $defaultData   = [
-                'firstname' => $customer->getFirstName(),
-                'lastname'  => $customer->getLastName()
-            ];
-
             if ($status === AbstractReverseProcessor::UPDATE_ENTITY) {
                 $localChanges = $address['object'];
+                $this->setDefaultData(
+                    $localChanges,
+                    [
+                        'firstName' => $customer->getFirstName(),
+                        'lastName'  => $customer->getLastName()
+                    ]
+                );
 
                 if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
-                    $answer = (array)$this->transport->call(
-                        SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO,
-                        ['addressId' => $addressEntity->getOriginId()]
+                    $remoteAddress = $this->getRemoteAddressByOriginId($remoteAddresses, $addressEntity->getOriginId());
+                    if (!$remoteAddress) {
+                        continue;
+                    }
+                    $remoteData = $this->customerSerializer->compareAddresses(
+                        (array) $remoteAddress,
+                        $addressEntity,
+                        $remoteTypesWin
                     );
-                    $remoteData = $this->customerSerializer->compareAddresses($answer, $addressEntity);
+                    // if on remote side was not changed address types - save local types
+                    if (!$remoteTypesWin) {
+                        $localChanges = array_merge(
+                            $localChanges,
+                            ['types' => $addressEntity->getContactAddress()->getTypes()]
+                        );
+                    }
                     $this->setLocalDataChanges($addressEntity, $localChanges);
                     $this->setRemoteDataChanges($addressEntity, $remoteData);
                 } else {
+                    $localChanges = array_merge(
+                        $localChanges,
+                        ['types' => $addressEntity->getContactAddress()->getTypes()]
+                    );
                     $this->setChangedData($addressEntity, $localChanges);
                 }
-
                 $dataForSend = array_merge(
-                    $this->customerSerializer->convertToMagentoAddress($addressEntity, $defaultData),
+                    $this->customerSerializer->convertToMagentoAddress($addressEntity),
                     $this->regionConverter->toMagentoData($addressEntity)
                 );
                 $requestData = ['addressId' => $addressEntity->getOriginId(), 'addressData' => $dataForSend];
@@ -211,15 +279,17 @@ class ReverseWriter implements ItemWriterInterface
                 try {
                     $addressData = array_merge(
                         ['telephone' => 'no phone'],
-                        $this->customerSerializer->convertToMagentoAddress($addressEntity, $defaultData),
+                        $this->customerSerializer->convertToMagentoAddress(
+                            $addressEntity,
+                            [
+                                'firstname' => $customer->getFirstName(),
+                                'lastname'  => $customer->getLastName()
+                            ]
+                        ),
                         $this->regionConverter->toMagentoData($addressEntity)
                     );
                     $requestData = ['customerId' => $address['magentoId'], 'addressData' => $addressData];
-                    $result      = $this->transport->call(
-                        SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
-                        $requestData
-                    );
-
+                    $result      = $this->transport->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE, $requestData);
                     if ($result) {
                         $newAddress = $this->customerSerializer
                             ->convertMageAddressToAddress($addressData, $addressEntity, $result);
@@ -240,7 +310,6 @@ class ReverseWriter implements ItemWriterInterface
                     $errorCode       = $this->transport->getErrorCode($e);
                     $shouldBeRemoved = $errorCode === MagentoTransportInterface::TRANSPORT_ERROR_ADDRESS_DOES_NOT_EXIST;
                 }
-
                 if ($shouldBeRemoved) {
                     $this->em->remove($address['entity']);
                 }
@@ -370,6 +439,10 @@ class ReverseWriter implements ItemWriterInterface
                             $this->getChangedCountry($entity, $country)
                         );
                     }
+                } elseif ($fieldName === 'types') {
+                    $this->addTypes($fieldName, $value, $entity);
+                } elseif ($fieldName === 'remove_types') {
+                    $this->removeTypes($value, $entity);
                 } else {
                     try {
                         $this->accessor->setValue($entity, $fieldName, $value);
@@ -378,6 +451,63 @@ class ReverseWriter implements ItemWriterInterface
                 }
             }
         }
+    }
+
+    /**
+     * Remove types from entity
+     *
+     * @param array $names
+     * @param Address $entity
+     */
+    protected function removeTypes($names, $entity)
+    {
+        if (!empty($names)) {
+            /** @var Collection $currentTypes */
+            $currentTypes = $this->accessor->getValue($entity, 'types');
+            $types = $this->getTypesByNameList($names);
+            foreach ($types as $type) {
+                if ($currentTypes->contains($type)) {
+                    $currentTypes->removeElement($type);
+                }
+            }
+        }
+    }
+
+    /**
+     * Add types into entity
+     *
+     * @param string $fieldName
+     * @param array $names
+     * @param Address $entity
+     */
+    protected function addTypes($fieldName, $names, $entity)
+    {
+        if (!empty($names)) {
+            /** @var Collection $currentTypes */
+            $currentTypes = $this->accessor->getValue($entity, $fieldName);
+            $types = $this->getTypesByNameList($names);
+            foreach ($types as $type) {
+                if (!$currentTypes->contains($type)) {
+                    $currentTypes->add($type);
+                }
+            }
+        }
+    }
+
+    /**
+     * Get array of address types by name list
+     *
+     * @param array $names
+     * @return AddressType[]
+     */
+    protected function getTypesByNameList($names)
+    {
+        $qb = $this->em->getRepository('OroAddressBundle:AddressType')->createQueryBuilder('at');
+
+        return $qb->select('at')
+            ->where($qb->expr()->in('at.name', $names))
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -468,6 +598,23 @@ class ReverseWriter implements ItemWriterInterface
                 if (!in_array($key, $this->clearMagentoFields)) {
                     unset($remoteData->$key);
                 }
+            }
+        }
+    }
+
+    /**
+     * Set default data to changeset
+     *
+     * @param array $localChanges
+     * @param array $defaultData
+     */
+    protected function setDefaultData(array &$localChanges, array $defaultData)
+    {
+        $changesIntersected = array_intersect_key($localChanges, $defaultData);
+
+        foreach (array_keys($changesIntersected) as $field) {
+            if (empty($localChanges[$field])) {
+                $localChanges[$field] = $defaultData[$field];
             }
         }
     }
