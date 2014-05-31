@@ -337,6 +337,7 @@ class LoadMagentoChannel extends AbstractFixture
         $account->setName('acc');
         $account->setBillingAddress($billing);
         $account->setShippingAddress($shipping);
+        $account->setOwner($this->getUser());
 
         $this->em->persist($account);
 
@@ -464,5 +465,16 @@ class LoadMagentoChannel extends AbstractFixture
         $this->em->persist($orderItem);
 
         return $orderItem;
+    }
+
+
+    /**
+     * @return User
+     */
+    protected function getUser()
+    {
+        $user = $this->em->getRepository('OroUserBundle:User')->findOneBy(['username' => 'admin']);
+
+        return $user;
     }
 }
