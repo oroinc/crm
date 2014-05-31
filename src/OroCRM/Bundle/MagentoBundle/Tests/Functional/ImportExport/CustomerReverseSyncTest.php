@@ -21,22 +21,20 @@ class CustomerReverseSyncTest extends WebTestCase
     {
         $this->initClient(
             array(),
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
         );
 
         $fixtures = [
             self::FIXTURE_NS . 'LoadMagentoChannel',
-            self::FIXTURE_NS . 'ImportExport\\' . 'LoadCustomerContact'
+            self::FIXTURE_NS . 'LoadCustomerContact'
         ];
         $this->loadFixtures($fixtures);
     }
 
     protected function postFixtureLoad()
     {
-        $channel = $this->getEM()->getRepository('OroIntegrationBundle:Channel')->findAll();
-        $channel = reset($channel);
-        $contact = $this->getEM()->getRepository('OroCRMContactBundle:Contact')->findAll();
-        $contact = reset($contact);
+        $channel = $this->getReference('channel');
+        $contact = $this->getReference('contact');
 
         if (!($channel && $contact)) {
             $this->markTestIncomplete('Invalid fixtures, unable to perform test case');

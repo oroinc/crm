@@ -68,11 +68,10 @@ class LoadMagentoChannel extends AbstractFixture
             ->createCustomerGroup()
             ->createStore();
 
-        $user           = $this->getUser();
         $address1       = $this->createAddress($this->regions['US-AZ'], $this->countries['US']);
         $address2       = $this->createAddress($this->regions['US-AZ'], $this->countries['US']);
         $magentoAddress = $this->createMagentoAddress($this->regions['US-AZ'], $this->countries['US']);
-        $account        = $this->createAccount($address1, $address2, $user);
+        $account        = $this->createAccount($address1, $address2);
         $customer       = $this->createCustomer(1, $account, $magentoAddress);
         $cartAddress1   = $this->createCartAddress($this->regions['US-AZ'], $this->countries['US'], 1);
         $cartAddress2   = $this->createCartAddress($this->regions['US-AZ'], $this->countries['US'], 2);
@@ -329,31 +328,19 @@ class LoadMagentoChannel extends AbstractFixture
     /**
      * @param      $billing
      * @param      $shipping
-     * @param User $user
      *
      * @return Account
      */
-    protected function createAccount($billing, $shipping, User $user)
+    protected function createAccount($billing, $shipping)
     {
         $account = new Account;
         $account->setName('acc');
         $account->setBillingAddress($billing);
         $account->setShippingAddress($shipping);
-        $account->setOwner($user);
 
         $this->em->persist($account);
 
         return $account;
-    }
-
-    /**
-     * @return User
-     */
-    protected function getUser()
-    {
-        $user = $this->em->getRepository('OroUserBundle:User')->findOneBy(['username' => 'admin']);
-
-        return $user;
     }
 
     /**

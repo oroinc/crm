@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\ImportExport;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -29,13 +29,7 @@ class LoadCustomerContact extends AbstractFixture implements DependentFixtureInt
 
         $customer->setContact($contact);
 
-        $adminUser = $manager->getRepository('OroUserBundle:User')->findOneBy(['username'=>'admin']);
-        if ($adminUser) {
-            $contact->setOwner($adminUser);
-        }
-
         $this->setReference('contact', $contact);
-
         $manager->persist($contact);
 
         $manager->flush();
