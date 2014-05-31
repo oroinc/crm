@@ -467,7 +467,6 @@ class LoadMagentoChannel extends AbstractFixture
         return $orderItem;
     }
 
-
     /**
      * @return User
      */
