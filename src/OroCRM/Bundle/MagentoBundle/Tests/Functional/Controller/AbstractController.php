@@ -15,7 +15,7 @@ abstract class AbstractController extends WebTestCase
 
     public function setUp()
     {
-        $this->initClient(array('debug' => false), $this->generateBasicAuthHeader());
+        $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
 
         $this->loadFixtures(
             array(
@@ -42,12 +42,16 @@ abstract class AbstractController extends WebTestCase
     public function testGrid($filters)
     {
         if (isset($filters['gridParameters']['id'])) {
-            $gridId = $filters['gridParameters']['gridName'] . '[' . $filters['gridParameters']['id'] . ']';
+            $gridId
+                                                =
+                $filters['gridParameters']['gridName'] . '[' . $filters['gridParameters']['id'] . ']';
             $filters['gridParameters'][$gridId] = $this->getMainEntityId();
         }
 
         if (isset($filters['gridParameters']['channel'])) {
-            $gridChannel = $filters['gridParameters']['gridName'] . '[' . $filters['gridParameters']['channel'] . ']';
+            $gridChannel
+                                                     =
+                $filters['gridParameters']['gridName'] . '[' . $filters['gridParameters']['channel'] . ']';
             $filters['gridParameters'][$gridChannel] = $this->getMainEntityId();
         }
 

@@ -19,11 +19,7 @@ class CustomerReverseSyncTest extends WebTestCase
 
     public function setUp()
     {
-        $this->initClient(
-            array(),
-            array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
-        );
-
+        $this->initClient([], array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1]));
         $fixtures = [
             self::FIXTURE_NS . 'LoadMagentoChannel',
             self::FIXTURE_NS . 'LoadCustomerContact'

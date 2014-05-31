@@ -3,7 +3,9 @@
 namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
+
 use Oro\Bundle\IntegrationBundle\Event\DefaultOwnerSetEvent;
+
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 
 /**
@@ -45,8 +47,10 @@ class ChannelOwnerSetListener
             ->where($qb->expr()->isNull('c.owner'))
             ->andWhere(
                 $qb->expr()->exists(
-                    $this->em->getRepository('OroCRMMagentoBundle:Customer')->createQueryBuilder('mc')
+                    $this->em->getRepository('OroCRMMagentoBundle:Customer')
+                        ->createQueryBuilder('mc')
                         ->innerJoin('mc.contact', 'mcc')
+                        ->select('mcc')
                 )
             );
 

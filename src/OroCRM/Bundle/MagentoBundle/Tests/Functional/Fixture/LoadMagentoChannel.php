@@ -180,7 +180,7 @@ class LoadMagentoChannel extends AbstractFixture
         $transport->setIsWsiMode(false);
         $transport->setWebsiteId('1');
         $transport->setWsdlUrl('http://localhost/magento/api/v2_soap?wsdl=1');
-        $transport->setWebsites(['id' => 1, 'label' => 'Website ID: 1, Stores: English, French, German']);
+        $transport->setWebsites([['id' => 1, 'label' => 'Website ID: 1, Stores: English, French, German']]);
 
         $this->em->persist($transport);
         $this->transport = $transport;
