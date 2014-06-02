@@ -18,7 +18,7 @@ class CartControllerTest extends AbstractController
         self::$cart = $this->getContainer()
             ->get('doctrine')
             ->getRepository('OroCRMMagentoBundle:Cart')
-            ->findOneByChannel($this->channel);
+            ->findOneByChannel(self::$channel);
     }
 
     protected function getMainEntityId()
