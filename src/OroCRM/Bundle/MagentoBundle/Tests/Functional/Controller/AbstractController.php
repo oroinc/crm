@@ -11,24 +11,20 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 abstract class AbstractController extends WebTestCase
 {
     /** @var \Oro\Bundle\IntegrationBundle\Entity\Channel */
-    protected $channel;
+    protected static $channel;
 
     public function setUp()
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
 
-        $this->loadFixtures(
-            array(
-                'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel',
-            )
-        );
+        $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel']);
     }
 
     abstract protected function getMainEntityId();
 
     protected function postFixtureLoad()
     {
-        $this->channel = $this->getContainer()
+        self::$channel = $this->getContainer()
             ->get('doctrine')
             ->getRepository('OroIntegrationBundle:Channel')
             ->findOneByName('Demo Web store');
@@ -48,7 +44,7 @@ abstract class AbstractController extends WebTestCase
 
         if (isset($filters['gridParameters']['channel'])) {
             $gridChannel = $filters['gridParameters']['gridName'] . '[' . $filters['gridParameters']['channel'] . ']';
-            $filters['gridParameters'][$gridChannel] = $this->getMainEntityId();
+            $filters['gridParameters'][$gridChannel] = self::$channel->getId();
         }
 
         $this->client->requestGrid($filters['gridParameters'], $filters['gridFilters']);
