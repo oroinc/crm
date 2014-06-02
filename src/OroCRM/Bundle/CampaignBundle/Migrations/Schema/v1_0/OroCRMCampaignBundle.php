@@ -15,7 +15,6 @@ class OroCRMCampaignBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         self::createCampaignTable($schema);
-        self::setCampaignTableIndexes($schema);
     }
 
     public static function createCampaignTable(Schema $schema)
@@ -29,15 +28,11 @@ class OroCRMCampaignBundle implements Migration
         $table->addColumn('description', 'text', ['notnull' => false]);
         $table->addColumn('budget', 'money', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
+
         $table->setPrimaryKey(['id']);
         $table->addIndex(['owner_id'], 'IDX_55153CAD7E3C61F9', []);
-    }
-
-    public static function setCampaignTableIndexes(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_campaign');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_business_unit'),
+            $schema->getTable('oro_user'),
             ['owner_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],

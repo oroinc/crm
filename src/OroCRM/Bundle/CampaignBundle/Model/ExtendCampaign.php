@@ -4,5 +4,4 @@ namespace OroCRM\Bundle\CampaignBundle\Model;
 
 class ExtendCampaign
 {
-
 }

@@ -5,33 +5,27 @@ namespace OroCRM\Bundle\CampaignBundle\Form\Handler;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 
 use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 
 class CampaignHandler
 {
-    /**
-     * @var FormInterface
-     */
+    /** @var FormInterface */
     protected $form;
 
-    /**
-     * @var Request
-     */
+    /** @var Request */
     protected $request;
 
-    /**
-     * @var ObjectManager
-     */
+    /** @var EntityManager */
     protected $manager;
 
     /**
      * @param FormInterface $form
      * @param Request       $request
-     * @param ObjectManager $manager
+     * @param EntityManager $manager
      */
-    public function __construct(FormInterface $form, Request $request, ObjectManager $manager)
+    public function __construct(FormInterface $form, Request $request, EntityManager $manager)
     {
         $this->form    = $form;
         $this->request = $request;
@@ -42,17 +36,19 @@ class CampaignHandler
      * Process form
      *
      * @param  Campaign $entity
+     *
      * @return bool  True on successful processing, false otherwise
      */
     public function process(Campaign $entity)
     {
         $this->form->setData($entity);
 
-        if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
+        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);
+
                 return true;
             }
         }
