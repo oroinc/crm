@@ -60,6 +60,21 @@ class CampaignController extends Controller
     }
 
     /**
+     * @Route("/view/{id}", name="orocrm_campaign_view")
+     * @Acl(
+     *      id="orocrm_campaign_view",
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMCampaignBundle:Campaign"
+     * )
+     * @Template
+     */
+    public function viewAction()
+    {
+        return [];
+    }
+
+    /**
      * @param Campaign $entity
      * @return array
      */
@@ -73,7 +88,7 @@ class CampaignController extends Controller
 
             return $this->get('oro_ui.router')->redirectAfterSave(
                 ['route' => 'orocrm_campaign_update', 'parameters' => ['id' => $entity->getId()]],
-                ['route' => 'orocrm_campaign_index', 'parameters' => ['id' => $entity->getId()]],
+                ['route' => 'orocrm_campaign_view', 'parameters' => ['id' => $entity->getId()]],
                 $entity
             );
         }
@@ -82,20 +97,5 @@ class CampaignController extends Controller
             'entity' => $entity,
             'form' => $this->get('orocrm_campaign.campaign.form')->createView()
         ];
-    }
-
-    /**
-     * @Route("/view/{id}", name="orocrm_campaign_view")
-     * @Acl(
-     *      id="orocrm_campaign_view",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="OroCRMCampaignBundle:Campaign"
-     * )
-     * @Template
-     */
-    public function viewAction()
-    {
-        return [];
     }
 }
