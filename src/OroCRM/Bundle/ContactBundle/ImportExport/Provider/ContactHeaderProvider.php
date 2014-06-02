@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Provider;
 
 use Symfony\Component\Serializer\SerializerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\ImportExportBundle\Converter\DataConverterInterface;
