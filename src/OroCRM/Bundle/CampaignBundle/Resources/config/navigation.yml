@@ -7,7 +7,7 @@ oro_menu_config:
                 position: 30
         campaigns_list:
             label: 'orocrm.campaign.entity_plural_label'
-            uri: '#'
+            route: 'orocrm_campaign_index'
             extras:
                 position: 10
     tree:
