@@ -1,8 +1,7 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
-{% oro_title_set({params : {"%business_unit.name%": entity.name|default('N/A') }}) %}
-{% set audit_entity_class = 'Oro_Bundle_OrganizationBundle_Entity_BusinessUnit' %}
+{% oro_title_set({params : {"%entity.name%": entity.name|default('N/A') }}) %}
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
@@ -13,12 +12,11 @@
     {% endif %}
     {% if resource_granted('DELETE', entity) %}
         {{ UI.deleteButton({
-        'dataUrl': path('oro_api_delete_campaign', {'id': entity.id}),
-        'dataRedirect': path('orocrm_campaign_index'),
-        'aCss': 'no-hash remove-button',
-        'dataId': entity.id,
-        'id': 'btn-remove-account',
-        'entity_label': 'orocrm.campaign.entity_label'|trans
+            'dataUrl': path('oro_api_delete_campaign', {'id': entity.id}),
+            'dataRedirect': path('orocrm_campaign_index'),
+            'aCss': 'no-hash remove-button',
+            'dataId': entity.id,
+            'entity_label': 'orocrm.campaign.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock navButtons %}

@@ -229,7 +229,7 @@ class Campaign extends ExtendCampaign
     }
 
     /**
-     * Get user created date/time
+     * Get campaign created date/time
      *
      * @return \DateTime
      */
@@ -239,7 +239,7 @@ class Campaign extends ExtendCampaign
     }
 
     /**
-     * Get user last update date/time
+     * Get campaign last update date/time
      *
      * @return \DateTime
      */
@@ -256,7 +256,7 @@ class Campaign extends ExtendCampaign
     public function prePersist()
     {
         $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->updatedAt = $this->createdAt;
+        $this->updatedAt = clone $this->createdAt;
     }
 
     /**

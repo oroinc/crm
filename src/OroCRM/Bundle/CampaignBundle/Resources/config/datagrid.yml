@@ -1,5 +1,5 @@
 datagrid:
-    campaing-grid:
+    orocrm-campaing-grid:
         extended_entity_name: OroCRM\Bundle\CampaignBundle\Entity\Campaign
         source:
             type: orm
