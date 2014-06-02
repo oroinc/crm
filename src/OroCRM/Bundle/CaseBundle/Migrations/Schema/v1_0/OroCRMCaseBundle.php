@@ -29,11 +29,12 @@ class OroCRMCaseBundle implements Migration
     {
         $table = $schema->createTable('orocrm_case');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('origin_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
-        $table->addColumn('item_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
-        $table->addColumn('reporter_id', 'integer', ['notnull' => false]);
+        $table->addColumn('item_id', 'integer', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
+        $table->addColumn('reporter_id', 'integer', ['notnull' => false]);
         $table->addColumn('subject', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('description', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('createdAt', 'datetime', []);
@@ -44,6 +45,7 @@ class OroCRMCaseBundle implements Migration
         $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_DB30FF11023C4EE');
         $table->addUniqueIndex(['reporter_id'], 'UNIQ_AB3BAC1EE1CFE6F5');
         $table->addUniqueIndex(['item_id'], 'UNIQ_AB3BAC1E126F525E');
+        $table->addUniqueIndex(['origin_id'], 'UNIQ_AB3BAC1E56A273CC');
         $table->addIndex(['owner_id'], 'IDX_DB30FF17E3C61F9', []);
         $table->addIndex(['workflow_step_id'], 'IDX_DB30FF171FE882C', []);
     }
@@ -110,22 +112,9 @@ class OroCRMCaseBundle implements Migration
     {
         $table = $schema->createTable('orocrm_case_origin');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('case_entity_id', 'integer', ['notnull' => false]);
-        $table->addColumn('type', 'integer', []);
-        $table->addColumn('value', 'string', ['notnull' => false, 'length' => 100]);
+        $table->addColumn('type', 'string', ['length' => 100]);
+        $table->addColumn('label', 'string', ['notnull' => false, 'length' => 100]);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['case_entity_id'], 'IDX_32669008AF060DA6', []);
-
-        $table = $schema->getTable('orocrm_case_origin');
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_case'),
-            ['case_entity_id'],
-            ['id'],
-            [
-                'onDelete' => null,
-                'onUpdate' => null,
-            ]
-        );
     }
 
     /**
@@ -176,10 +165,27 @@ class OroCRMCaseBundle implements Migration
     protected function createCaseForeignKeys(Schema $schema)
     {
         $table = $schema->getTable('orocrm_case');
-
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_case_origin'),
+            ['origin_id'],
+            ['id'],
+            [
+                'onDelete' => 'SET NULL',
+                'onUpdate' => null
+            ]
+        );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_workflow_item'),
             ['workflow_item_id'],
+            ['id'],
+            [
+                'onDelete' => 'SET NULL',
+                'onUpdate' => null
+            ]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_workflow_step'),
+            ['workflow_step_id'],
             ['id'],
             [
                 'onDelete' => 'SET NULL',
@@ -193,13 +199,10 @@ class OroCRMCaseBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_workflow_step'),
-            ['workflow_step_id'],
+            $schema->getTable('oro_user'),
+            ['owner_id'],
             ['id'],
-            [
-                'onDelete' => 'SET NULL',
-                'onUpdate' => null,
-            ]
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_case_reporter'),
@@ -207,14 +210,8 @@ class OroCRMCaseBundle implements Migration
             ['id'],
             [
                 'onDelete' => 'SET NULL',
-                'onUpdate' => null,
+                'onUpdate' => null
             ]
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_user'),
-            ['owner_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
     }
 }
