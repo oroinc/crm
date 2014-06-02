@@ -19,7 +19,7 @@ class CampaignController extends Controller
 {
     /**
      * @Route("/", name="orocrm_campaign_index")
-     * @AclAncestor("orocrm_campaign_index_view")
+     * @AclAncestor("orocrm_campaign_view")
      * @Template
      */
     public function indexAction()
@@ -78,9 +78,24 @@ class CampaignController extends Controller
             );
         }
 
-        return array(
+        return [
             'entity' => $entity,
             'form' => $this->get('orocrm_campaign.campaign.form')->createView()
-        );
+        ];
+    }
+
+    /**
+     * @Route("/view/{id}", name="orocrm_campaign_view")
+     * @Acl(
+     *      id="orocrm_campaign_view",
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMCampaignBundle:Campaign"
+     * )
+     * @Template
+     */
+    public function viewAction()
+    {
+        return [];
     }
 }

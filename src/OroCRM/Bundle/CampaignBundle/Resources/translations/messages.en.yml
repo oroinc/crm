@@ -13,3 +13,7 @@ orocrm:
         owner.label:         Owner
         menu:
             marketing_tab.label: Marketing
+        datagrid:
+            actions:
+                view.label: Data rid
+
