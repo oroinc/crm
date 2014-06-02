@@ -1,5 +1,25 @@
 parameters:
-    #some parametrs
+    orocrm_campaign.campaign.form.handler.class: OroCRM\Bundle\CampaignBundle\Form\Handler\CampaignHandler
+    orocrm_campaign.campaign.form.type.class:    OroCRM\Bundle\CampaignBundle\Form\Type\CampaignType
 
 services:
-    #some services
+    orocrm_campaign.campaign.form.handler:
+            class: %orocrm_campaign.campaign.form.handler.class%
+            scope: request
+            arguments:
+                - @orocrm_campaign.campaign.form
+                - @request
+                - @doctrine.orm.entity_manager
+
+    orocrm_campaign.campaign.form.type:
+        class: %orocrm_campaign.campaign.form.type.class%
+        tags:
+            - { name: form.type, alias: orocrm_campaign_form }
+
+    orocrm_campaign.campaign.form:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - "orocrm_campaign_form"
+            - "orocrm_campaign_form"

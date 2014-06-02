@@ -1,0 +1,60 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+{% form_theme form with ['OroFormBundle:Form:fields.html.twig'] %}
+
+{% set entityId = form.vars.value.id %}
+{% oro_title_set({params : { "%campaign.name%": form.vars.value.name } }) %}
+{% set formAction = entityId ? path('orocrm_campaign_update', { 'id': entityId}) : path('orocrm_campaign_create') %}
+
+{% block navButtons %}
+    {{ UI.cancelButton(path('orocrm_campaign_index')) }}
+    {% set html = UI.saveAndCloseButton() %}
+    {% if form.vars.value.id or resource_granted('orocrm_campaign_update') %}
+        {% set html = html ~ UI.saveAndStayButton() %}
+    {% endif %}
+    {{ UI.dropdownSaveButton({'html': html}) }}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% if entityId %}
+        {% set breadcrumbs = {
+            'entity':      form.vars.value,
+            'indexPath':   path('orocrm_campaign_index'),
+            'indexLabel': 'orocrm.campaign.entity_plural_label'|trans,
+            'entityTitle': form.vars.value.name
+        } %}
+        {{ parent() }}
+    {% else %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.campaign.entity_label'|trans}) %}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
+    {% endif %}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'orocrm_campaign_form-profile' %}
+    {% set dataBlocks = [{
+            'title': 'General',
+            'class': 'active',
+            'subblocks': [
+                {
+                    'title': '',
+                    'data': [
+                        form_row(form.name),
+                        form_row(form.code),
+                        form_row(form.startDate),
+                        form_row(form.endDate),
+                        form_row(form.description),
+                        form_row(form.budget),
+                    ]
+                }
+            ]
+        }]
+    %}
+
+    {% set data =
+        {
+            'formErrors': form_errors(form)? form_errors(form) : null,
+            'dataBlocks': dataBlocks
+        }
+    %}
+    {{ parent() }}
+{% endblock content_data %}

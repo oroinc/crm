@@ -11,6 +11,8 @@ orocrm:
         description.label:   Description
         budget.label:        Budget
         owner.label:         Owner
+        menu:
+            marketing_tab.label: Marketing
         datagrid:
             actions:
                 view.label: View
