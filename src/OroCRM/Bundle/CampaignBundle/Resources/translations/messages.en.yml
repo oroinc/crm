@@ -11,3 +11,6 @@ orocrm:
         description.label:   Description
         budget.label:        Budget
         owner.label:         Owner
+        datagrid:
+            actions:
+                view.label: View
