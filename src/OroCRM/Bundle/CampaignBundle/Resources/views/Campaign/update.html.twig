@@ -2,7 +2,7 @@
 {% form_theme form with ['OroFormBundle:Form:fields.html.twig'] %}
 
 {% set entityId = form.vars.value.id %}
-{% oro_title_set({params : { "%entity.name%": form.vars.value.name } }) %}
+{% oro_title_set({params : {"%entity.name%": entity.name, "%entityName%": 'orocrm.campaign.entity_label'|trans }}) %}
 {% set formAction = entityId ? path('orocrm_campaign_update', { 'id': entityId}) : path('orocrm_campaign_create') %}
 
 {% block navButtons %}
