@@ -15,5 +15,4 @@ orocrm:
             marketing_tab.label: Marketing
         datagrid:
             actions:
-                view.label: Data rid
-
+                view.label: View
