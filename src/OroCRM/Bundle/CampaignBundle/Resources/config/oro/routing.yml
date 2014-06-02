@@ -1,4 +1,14 @@
-oro_crm_campaign_bundle:
+orocrm_campaign_bundle:
     resource:     "@OroCRMCampaignBundle/Controller"
     type:         annotation
     prefix:       /
+
+orocrm_campaign_bundle_api:
+    resource:     "@OroCRMCampaignBundle/Controller/Api/Rest/CampaignController.php"
+    type:         rest
+    prefix:       api/rest/{version}
+    requirements:
+        version:  latest|v1
+    defaults:
+        version:  latest
+

@@ -16,3 +16,5 @@ orocrm:
         datagrid:
             actions:
                 view.label: View
+                update.label: Update
+                delete.label: Delete

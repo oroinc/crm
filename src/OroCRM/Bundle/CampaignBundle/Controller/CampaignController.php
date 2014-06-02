@@ -48,7 +48,7 @@ class CampaignController extends Controller
      * @Route("/update/{id}", name="orocrm_campaign_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="orocrm_campaign_create",
+     *      id="orocrm_campaign_update",
      *      type="entity",
      *      permission="EDIT",
      *      class="OroCRMCampaignBundle:Campaign"
@@ -69,9 +69,9 @@ class CampaignController extends Controller
      * )
      * @Template
      */
-    public function viewAction()
+    public function viewAction(Campaign $entity)
     {
-        return [];
+        return ['entity' => $entity];
     }
 
     /**

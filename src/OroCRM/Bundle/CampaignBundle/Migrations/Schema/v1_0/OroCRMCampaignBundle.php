@@ -28,6 +28,8 @@ class OroCRMCampaignBundle implements Migration
         $table->addColumn('description', 'text', ['notnull' => false]);
         $table->addColumn('budget', 'float', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
+        $table->addColumn('created_at', 'datetime', []);
+        $table->addColumn('updated_at', 'datetime', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['owner_id'], 'IDX_55153CAD7E3C61F9', []);
     }

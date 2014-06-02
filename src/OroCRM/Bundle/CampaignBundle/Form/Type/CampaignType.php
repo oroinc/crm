@@ -34,7 +34,7 @@ class CampaignType extends AbstractType
             )
             ->add(
                 'startDate',
-                'oro_datetime',
+                'oro_date',
                 array(
                     'label'    => 'orocrm.campaign.start_date.label',
                     'required' => false,
@@ -42,14 +42,14 @@ class CampaignType extends AbstractType
             )
             ->add(
                 'endDate',
-                'oro_datetime',
+                'oro_date',
                 array(
                     'label'    => 'orocrm.campaign.end_date.label',
                     'required' => false,
                 )
             )->add(
                 'description',
-                'text',
+                'textarea',
                 array(
                     'label'    => 'orocrm.campaign.description.label',
                     'required' => false,
