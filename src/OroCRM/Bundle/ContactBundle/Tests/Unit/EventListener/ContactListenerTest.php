@@ -6,18 +6,16 @@ use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
-use OroCRM\Bundle\ContactBundle\EventListener\ContactSubscriber;
+use OroCRM\Bundle\ContactBundle\EventListener\ContactListener;
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
-class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
+class ContactListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ContactSubscriber
+     * @var ContactListener
      */
-    protected $contactSubscriber;
+    protected $contactListener;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -31,13 +29,13 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->contactSubscriber = new ContactSubscriber($this->container);
+        $this->contactListener = new ContactListener($this->container);
     }
 
     protected function tearDown()
     {
         unset($this->container);
-        unset($this->contactSubscriber);
+        unset($this->contactListener);
     }
 
     /**
@@ -64,7 +62,7 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $args = new LifecycleEventArgs($entity, $em);
 
-        $this->contactSubscriber->prePersist($args);
+        $this->contactListener->prePersist($args);
 
         if (!$entity instanceof Contact) {
             $this->assertEquals($initialEntity, $entity);
@@ -147,7 +145,7 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
         $changeSet = array();
         $args = new PreUpdateEventArgs($entity, $entityManager, $changeSet);
 
-        $this->contactSubscriber->preUpdate($args);
+        $this->contactListener->preUpdate($args);
 
         if (!$entity instanceof Contact) {
             $this->assertEquals($initialEntity, $entity);
@@ -257,10 +255,5 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('security.context')
             ->will($this->returnValue($securityContext));
-    }
-
-    public function testGetSubscribedEvents()
-    {
-        $this->assertEquals(array('prePersist', 'preUpdate'), $this->contactSubscriber->getSubscribedEvents());
     }
 }

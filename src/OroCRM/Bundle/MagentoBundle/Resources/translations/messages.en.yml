@@ -420,6 +420,6 @@ orocrm:
             extension_required:            Unable to perform this operation, Oro Bridge extension not found.
             synchronization_error:         Unable to synchronize from remote.
             sync_error_with_magento:       Synchronization with remote server failed and orders should be re-synced. If the problem persists, please contact your Administrator.
-            synchronization_success:       Data successfuly synchronized.
+            synchronization_success:       Data successfully synchronized.
             synchronization_failed_status: Cart data is not up to date
         ping_site_error: Unable to load form
