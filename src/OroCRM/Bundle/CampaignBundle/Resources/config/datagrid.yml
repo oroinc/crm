@@ -76,8 +76,8 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.campaing.datagrid.actions.view.label
+                label:        orocrm.campaign.datagrid.actions.view.label
                 link:         view_link
-                icon:         icon-volume-up
+                icon:         eye-open
                 acl_recource: orocrm_campaign_view
                 rowAction:    true

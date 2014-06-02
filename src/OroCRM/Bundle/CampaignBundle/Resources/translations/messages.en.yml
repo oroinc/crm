@@ -13,4 +13,4 @@ orocrm:
         owner.label:         Owner
         datagrid:
             actions:
-                view.label: Data rid
+                view.label: Data grid view
