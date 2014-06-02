@@ -239,4 +239,3 @@ services:
         parent: oro_importexport.processor.export_abstract
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_magento }
-
