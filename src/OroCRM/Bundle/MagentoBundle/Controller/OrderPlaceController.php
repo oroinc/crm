@@ -53,7 +53,7 @@ class OrderPlaceController extends Controller
     }
 
     /**
-     * @Route("/sync/{id}", name="orocrm_magento_orderplace_sync", requirements={"id"="\d+"}))
+     * @Route("/sync/{id}", name="orocrm_magento_orderplace_new_cart_order_sync", requirements={"id"="\d+"}))
      * @AclAncestor("oro_workflow")
      */
     public function syncAction(Cart $cart)
@@ -134,7 +134,10 @@ class OrderPlaceController extends Controller
     }
 
     /**
-     * @Route("/customer_sync/{id}", name="orocrm_magento_orderplace_customer_sync", requirements={"id"="\d+"}))
+     * @Route(
+     *   "/customer_sync/{id}",
+     *   name="orocrm_magento_orderplace_new_customer_order_sync", requirements={"id"="\d+"})
+     * )
      * @AclAncestor("oro_workflow")
      */
     public function customerSyncAction(Customer $customer)
