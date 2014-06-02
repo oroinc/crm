@@ -17,15 +17,15 @@ class CaseOriginType extends AbstractType
     {
         $builder
             ->add(
-                'type',
+                'code',
                 'choice',
                 [
                     'label'   => 'orocrm.case.origin.type.label',
                     'choices' => [
-                        CaseOrigin::TYPE_EMAIL => 'orocrm.case.origin.type.email',
-                        CaseOrigin::TYPE_PHONE => 'orocrm.case.origin.type.phone',
-                        CaseOrigin::TYPE_WEB   => 'orocrm.case.origin.type.web',
-                        CaseOrigin::TYPE_OTHER => 'orocrm.case.origin.type.other',
+                        CaseOrigin::CODE_EMAIL => 'orocrm.case.origin.type.email',
+                        CaseOrigin::CODE_PHONE => 'orocrm.case.origin.type.phone',
+                        CaseOrigin::CODE_WEB   => 'orocrm.case.origin.type.web',
+                        CaseOrigin::CODE_OTHER => 'orocrm.case.origin.type.other',
                     ]
                 ]
             )

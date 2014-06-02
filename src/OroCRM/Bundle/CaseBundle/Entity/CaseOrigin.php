@@ -12,26 +12,18 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CaseOrigin
 {
-    const TYPE_EMAIL = 'email';
-    const TYPE_PHONE = 'phone';
-    const TYPE_WEB = 'web';
-    const TYPE_OTHER = 'other';
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    const CODE_EMAIL = 'email';
+    const CODE_PHONE = 'phone';
+    const CODE_WEB = 'web';
+    const CODE_OTHER = 'other';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=100)
+     * @ORM\Id
+     * @ORM\Column(name="code", type="string", length=30)
      */
-    protected $type;
+    protected $code;
 
     /**
      * @var string
@@ -41,33 +33,13 @@ class CaseOrigin
     protected $label;
 
     /**
-     * @param int $id
+     * @param string $code
      *
      * @return $this
      */
-    public function setId($id)
+    public function setCode($code)
     {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return $this
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
+        $this->code = $code;
 
         return $this;
     }
@@ -75,9 +47,9 @@ class CaseOrigin
     /**
      * @return string
      */
-    public function getType()
+    public function getCode()
     {
-        return $this->type;
+        return $this->code;
     }
 
     /**

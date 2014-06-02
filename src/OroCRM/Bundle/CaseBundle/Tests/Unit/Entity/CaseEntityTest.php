@@ -50,8 +50,8 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
             ['origin', $origin],
             ['createdAt', new \DateTime()],
             ['updatedAt', new \DateTime()],
-            ['reportedOn', new \DateTime()],
-            ['closedOn', new \DateTime()],
+            ['reportedAt', new \DateTime()],
+            ['closedAt', new \DateTime()],
         ];
     }
 }

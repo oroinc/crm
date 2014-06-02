@@ -17,14 +17,14 @@ class LoadOriginData extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         $origins = array(
-            CaseOrigin::TYPE_PHONE => 'Phone',
-            CaseOrigin::TYPE_EMAIL => 'Email',
-            CaseOrigin::TYPE_WEB   => 'Web',
-            CaseOrigin::TYPE_OTHER => 'Other'
+            CaseOrigin::CODE_PHONE => 'Phone',
+            CaseOrigin::CODE_EMAIL => 'Email',
+            CaseOrigin::CODE_WEB   => 'Web',
+            CaseOrigin::CODE_OTHER => 'Other'
         );
-        foreach ($origins as $type => $label) {
+        foreach ($origins as $code => $label) {
             $origin = new CaseOrigin();
-            $origin->setType($type);
+            $origin->setCode($code);
             $origin->setLabel($label);
             $manager->persist($origin);
         }

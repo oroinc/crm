@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\CaseBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -74,7 +73,7 @@ class CaseEntity
     /**
      * @var CaseReporter
      *
-     * @ORM\OneToOne(targetEntity="CaseReporter", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="CaseReporter", cascade={"persist"})
      * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $reporter;
@@ -82,7 +81,7 @@ class CaseEntity
     /**
      * @var CaseItem
      *
-     * @ORM\OneToOne(targetEntity="CaseItem", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="CaseItem", cascade={"persist"})
      * @ORM\JoinColumn(name="item_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $item;
@@ -90,8 +89,8 @@ class CaseEntity
     /**
      * @var CaseOrigin
      *
-     * @ORM\OneToOne(targetEntity="CaseOrigin")
-     * @ORM\JoinColumn(name="origin_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity="CaseOrigin")
+     * @ORM\JoinColumn(name="origin_code", referencedColumnName="code", onDelete="SET NULL")
      */
     protected $origin;
 
@@ -110,7 +109,6 @@ class CaseEntity
      * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowItem;
-
 
     /**
      * @var \DateTime
@@ -131,23 +129,23 @@ class CaseEntity
      *
      * @ORM\Column(type="datetime")
      */
-    protected $reportedOn;
+    protected $reportedAt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    protected $closedOn;
+    protected $closedAt;
 
     /**
-     * @param \DateTime $closedOn
+     * @param \DateTime $closedAt
      *
      * @return $this
      */
-    public function setClosedOn(\DateTime $closedOn)
+    public function setClosedAt(\DateTime $closedAt)
     {
-        $this->closedOn = $closedOn;
+        $this->closedAt = $closedAt;
 
         return $this;
     }
@@ -155,19 +153,19 @@ class CaseEntity
     /**
      * @return \DateTime
      */
-    public function getClosedOn()
+    public function getClosedAt()
     {
-        return $this->closedOn;
+        return $this->closedAt;
     }
 
     /**
-     * @param \DateTime $reportedOn
+     * @param \DateTime $reportedAt
      *
      * @return $this
      */
-    public function setReportedOn(\DateTime $reportedOn)
+    public function setReportedAt(\DateTime $reportedAt)
     {
-        $this->reportedOn = $reportedOn;
+        $this->reportedAt = $reportedAt;
 
         return $this;
     }
@@ -175,9 +173,9 @@ class CaseEntity
     /**
      * @return \DateTime
      */
-    public function getReportedOn()
+    public function getReportedAt()
     {
-        return $this->reportedOn;
+        return $this->reportedAt;
     }
 
 
@@ -414,8 +412,8 @@ class CaseEntity
      */
     public function prePersist()
     {
-        $this->createdAt  = new \DateTime();
-        $this->reportedOn = new \DateTime();
+        $this->createdAt  = $this->createdAt ? $this->createdAt : new \DateTime();
+        $this->reportedAt = $this->reportedAt? $this->reportedAt : new \DateTime();
     }
 
     /**

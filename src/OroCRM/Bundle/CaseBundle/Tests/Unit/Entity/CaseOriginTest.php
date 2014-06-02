@@ -25,9 +25,8 @@ class CaseOriginTest extends \PHPUnit_Framework_TestCase
     public function settersAndGettersDataProvider()
     {
         return array(
-            array('id', 42),
             array('label', 'email'),
-            array('type', CaseOrigin::TYPE_EMAIL)
+            array('code', CaseOrigin::CODE_EMAIL)
         );
     }
 }

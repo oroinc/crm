@@ -39,8 +39,8 @@ datagrid:
                               THEN CONCAT(reporter_customer.firstName, CONCAT(' ', reporter_customer.lastName))
                               else ''
                         END) as reporter
-                    - case_entity.reportedOn
-                    - case_entity.closedOn
+                    - case_entity.reportedAt
+                    - case_entity.closedAt
                     - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as assignedTo
                     - owner.id as ownerId
                     - item.id as itemNumber
@@ -72,10 +72,10 @@ datagrid:
                 label: orocrm.case.datagrid.assigned_to.label
                 frontend_type: html
                 template: OroCRMCaseBundle:Case:Datagrid/Property/owner.html.twig
-            reportedOn:
+            reportedAt:
                 label: orocrm.case.datagrid.reported_on.label
                 frontend_type: datetime
-            closedOn:
+            closedAt:
                 label: orocrm.case.datagrid.closed_on.label
                 frontend_type: datetime
             workflowStepLabel:
@@ -88,12 +88,12 @@ datagrid:
                 assignedTo:
                     type: string
                     data_name: assignedTo
-                reportedOn:
+                reportedAt:
                     type: datetime
-                    data_name: case_entity.reportedOn
-                closedOn:
+                    data_name: case_entity.reportedAt
+                closedAt:
                     type: datetime
-                    data_name: case_entity.closedOn
+                    data_name: case_entity.closedAt
                 reporter:
                     label: orocrm.case.datagrid.reporter.label
                     type: string
@@ -131,14 +131,14 @@ datagrid:
                     data_name: subject
                 caseNumber:
                     data_name: case_entity.id
-                reportedOn:
-                    data_name: case_entity.reportedOn
-                closedOn:
-                    data_name: case_entity.closedOn
+                reportedAt:
+                    data_name: case_entity.reportedAt
+                closedAt:
+                    data_name: case_entity.closedAt
                 workflowStepLabel:
                     data_name: workflowStep.stepOrder
             default:
-                reportedOn: DESC
+                reportedAt: DESC
         properties:
             id: ~
             view_link:
