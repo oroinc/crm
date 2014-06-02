@@ -1,6 +1,7 @@
 parameters:
     orocrm_campaign.campaign.form.handler.class: OroCRM\Bundle\CampaignBundle\Form\Handler\CampaignHandler
     orocrm_campaign.campaign.form.type.class:    OroCRM\Bundle\CampaignBundle\Form\Type\CampaignType
+    orocrm_campaign.type.code_type.class:        OroCRM\Bundle\CampaignBundle\Form\Type\CodeType
 
 services:
     orocrm_campaign.campaign.form.handler:
@@ -23,3 +24,9 @@ services:
         arguments:
             - "orocrm_campaign_form"
             - "orocrm_campaign_form"
+
+    orocrm_campaign.type.code_type:
+        class:     %orocrm_campaign.type.code_type.class%
+        arguments: ["@translator"]
+        tags:
+            - { name: form.type, alias: orocrm_campaign_code_type }
