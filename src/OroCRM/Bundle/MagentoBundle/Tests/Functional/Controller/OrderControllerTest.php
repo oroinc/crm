@@ -18,7 +18,7 @@ class OrderControllerTest extends AbstractController
         self::$order = $this->getContainer()
             ->get('doctrine')
             ->getRepository('OroCRMMagentoBundle:Order')
-            ->findOneByChannel($this->channel);
+            ->findOneByChannel(self::$channel);
     }
 
     protected function getMainEntityId()
