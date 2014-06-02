@@ -18,7 +18,7 @@ class CustomerControllerTest extends AbstractController
         self::$customer = $this->getContainer()
             ->get('doctrine')
             ->getRepository('OroCRMMagentoBundle:Customer')
-            ->findOneByChannel($this->channel);
+            ->findOneByChannel(self::$channel);
     }
 
     protected function getMainEntityId()
