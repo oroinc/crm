@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
@@ -447,5 +448,22 @@ class Customer extends ExtendCustomer
     public function getCurrency()
     {
         return $this->currency;
+    }
+
+    /**
+     * Add address
+     *
+     * @param AbstractAddress $address
+     * @return $this
+     */
+    public function addAddress(AbstractAddress $address)
+    {
+        /** @var Address $address */
+        if (!$this->addresses->contains($address)) {
+            $this->addresses->add($address);
+            $address->setOwner($this);
+        }
+
+        return $this;
     }
 }

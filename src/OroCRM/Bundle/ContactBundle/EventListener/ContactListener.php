@@ -7,14 +7,13 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\UserBundle\Entity\User;
 
-class ContactSubscriber implements EventSubscriber
+class ContactListener
 {
     /**
      * @var ContainerInterface
@@ -33,14 +32,6 @@ class ContactSubscriber implements EventSubscriber
     {
         // can't inject security context directly because of circular dependency for Doctrine entity manager
         $this->container = $container;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getSubscribedEvents()
-    {
-        return array('prePersist', 'preUpdate');
     }
 
     /**
