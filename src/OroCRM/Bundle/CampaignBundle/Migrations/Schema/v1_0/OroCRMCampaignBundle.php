@@ -2,7 +2,9 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Migrations\Schema\v1_0;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Schema\Schema;
+
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
@@ -35,11 +37,13 @@ class OroCRMCampaignBundle implements Migration
     public static function setCampaignTableIndexes(Schema $schema)
     {
         $table = $schema->getTable('orocrm_campaign');
+        $table->getColumn('budget')->setType(Type::getType('money'));
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_business_unit'),
             ['owner_id'],
             ['id'],
-            ['onDelete' => null, 'onUpdate' => null]
+            ['onDelete' => 'SET NULL', 'onUpdate' => null],
+            'FK_E9A064037E3C61F9'
         );
     }
 }
