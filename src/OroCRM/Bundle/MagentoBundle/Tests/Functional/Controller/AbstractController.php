@@ -15,7 +15,7 @@ abstract class AbstractController extends WebTestCase
 
     public function setUp()
     {
-        $this->initClient(array('debug' => false), $this->generateBasicAuthHeader());
+        $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
 
         $this->loadFixtures(
             array(
