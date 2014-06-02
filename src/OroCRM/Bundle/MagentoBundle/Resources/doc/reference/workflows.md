@@ -77,7 +77,6 @@ until reopen;
     * set shopping cart status to "open";
     * reset all attributes related to call, email and opportunity.
 
-
 Order Follow Up Flow
 --------------------
 

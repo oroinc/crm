@@ -88,7 +88,6 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($result));
     }
 
-
     /**
      * Test init method
      */

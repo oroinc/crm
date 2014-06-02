@@ -10,8 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class CampaignType extends AbstractType
 {
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -19,66 +18,62 @@ class CampaignType extends AbstractType
             ->add(
                 'name',
                 'text',
-                array(
+                [
                     'label'    => 'orocrm.campaign.name.label',
                     'required' => true,
-                )
+                ]
             )
             ->add(
                 'code',
-                'text',
-                array(
+                'orocrm_campaign_code_type',
+                [
                     'label'    => 'orocrm.campaign.code.label',
                     'required' => true,
-                )
+                ]
             )
             ->add(
                 'startDate',
                 'oro_date',
-                array(
+                [
                     'label'    => 'orocrm.campaign.start_date.label',
                     'required' => false,
-                )
+                ]
             )
             ->add(
                 'endDate',
                 'oro_date',
-                array(
+                [
                     'label'    => 'orocrm.campaign.end_date.label',
                     'required' => false,
-                )
+                ]
             )->add(
                 'description',
                 'textarea',
-                array(
+                [
                     'label'    => 'orocrm.campaign.description.label',
                     'required' => false,
-                )
+                ]
             )
             ->add(
                 'budget',
                 'oro_money',
-                array(
+                [
                     'label'    => 'orocrm.campaign.budget.label',
                     'required' => false,
-                )
+                ]
             );
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'data_class' => 'OroCRM\Bundle\CampaignBundle\Entity\Campaign',
-            )
-        );
+        $resolver->setDefaults(['data_class' => 'OroCRM\Bundle\CampaignBundle\Entity\Campaign']);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {

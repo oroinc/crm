@@ -15,7 +15,7 @@ parameters:
     orocrm_contact.form.type.group.api.class:       OroCRM\Bundle\ContactBundle\Form\Type\GroupApiType
 
     orocrm_contact.contact_address.entity.class:        OroCRM\Bundle\ContactBundle\Entity\ContactAddress
-    orocrm_contact.subscriber.contact_subscriber.class: OroCRM\Bundle\ContactBundle\EventListener\ContactSubscriber
+    orocrm_contact.subscriber.contact_listener.class: OroCRM\Bundle\ContactBundle\EventListener\ContactListener
 
     orocrm_contact.email.owner.provider.class: OroCRM\Bundle\ContactBundle\Entity\Provider\EmailOwnerProvider
 
@@ -173,12 +173,13 @@ services:
         tags:
             - { name: oro_email.owner.provider, order: 2 }
 
-    orocrm_contact.subscriber.contact_subscriber:
-        class: %orocrm_contact.subscriber.contact_subscriber.class%
+    orocrm_contact.subscriber.contact_listener:
+        class: %orocrm_contact.subscriber.contact_listener.class%
         arguments:
             - @service_container
         tags:
-            - { name: doctrine.event_subscriber }
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
 
     orocrm_contact.social_url_formatter:
         class: %orocrm_contact.social_url_formatter.class%
