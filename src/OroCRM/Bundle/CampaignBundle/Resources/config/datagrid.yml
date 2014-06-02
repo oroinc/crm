@@ -3,7 +3,7 @@ datagrid:
         extended_entity_name: OroCRM\Bundle\CampaignBundle\Entity\Campaign
         source:
             type: orm
-            #acl_resource: orocrm_campaign_view
+            acl_resource: orocrm_campaign_view
             query:
                 select:
                     - c.id
@@ -12,12 +12,8 @@ datagrid:
                     - c.startDate
                     - c.endDate
                     - c.budget
-                    - bu.name as ownerName
                 from:
                     - { table: OroCRM\Bundle\CampaignBundle\Entity\Campaign, alias: c }
-                join:
-                    left:
-                        - { join: c.owner, alias: bu }
         columns:
             name:
                 label: orocrm.campaign.name.label
@@ -31,8 +27,6 @@ datagrid:
                 frontend_type: date
             budget:
                 label: orocrm.campaign.budget.label
-            ownerName:
-                label: orocrm.campaign.owner.label
         filters:
             columns:
                 name:
@@ -50,13 +44,6 @@ datagrid:
                 budget:
                     type:        number
                     data_name:   o.budget
-                ownerName:
-                    type: entity
-                    data_name: bu.id
-                    options:
-                        field_options:
-                            class: OroOrganizationBundle:BusinessUnit
-                            property: name
         sorters:
             columns:
                 name:        { data_name: c.name }
@@ -64,7 +51,6 @@ datagrid:
                 startDate:   { data_name: c.startDate }
                 endDate:     { data_name: c.endDate }
                 budget:      { data_name: c.budget }
-                ownerName:   { data_name: ownerName }
             default:
                 startDate:  DESC
         properties:
