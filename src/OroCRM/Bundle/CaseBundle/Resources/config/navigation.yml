@@ -5,6 +5,7 @@ oro_menu_config:
             route: 'orocrm_case_index'
             extras:
                 position: 30
+                routes: ['orocrm_case_update', 'orocrm_case_create', 'orocrm_case_view']
 
     tree:
         application_menu:
@@ -15,3 +16,6 @@ oro_menu_config:
 
 oro_titles:
     orocrm_case_index: ~
+    orocrm_case_view: 'View Case'
+    orocrm_case_create: 'Create Case'
+    orocrm_case_update: 'Edit case'

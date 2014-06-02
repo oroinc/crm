@@ -5,8 +5,29 @@ datagrid:
             acl_resource: orocrm_case_view
             query:
                 select:
+                    - case_entity.id
                     - case_entity.id as caseNumber
                     - case_entity.subject
+                    - |
+                        (CASE
+                              when reporter_user IS NOT NULL
+                              THEN reporter_user.id
+                              when reporter_contact IS NOT NULL
+                              THEN reporter_contact.id
+                              when reporter_customer IS NOT NULL
+                              THEN reporter_customer.id
+                              else '0'
+                        END) as reporter_id
+                    - |
+                        (CASE
+                              when reporter_user IS NOT NULL
+                              THEN '%oro_user.entity.class%'
+                              when reporter_contact IS NOT NULL
+                              THEN '%orocrm_contact.entity.class%'
+                              when reporter_customer IS NOT NULL
+                              THEN '%orocrm_magento.customer.entity.class%'
+                              else ''
+                         END) as reporter_class
                     - |
                         (CASE
                               when reporter_user IS NOT NULL
@@ -16,7 +37,7 @@ datagrid:
                               when reporter_customer IS NOT NULL
                               THEN CONCAT(reporter_customer.firstName, CONCAT(' ', reporter_customer.lastName))
                               else ''
-                              END) as reporter
+                        END) as reporter
                     - case_entity.reportedOn
                     - case_entity.closedOn
                     - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as assignedTo
@@ -37,7 +58,10 @@ datagrid:
             subject:
                 label: orocrm.case.datagrid.subject.label
             reporter:
+                type: twig
                 label: orocrm.case.datagrid.reporter.label
+                frontend_type: html
+                template: OroCRMCaseBundle:Case:Datagrid/Property/reporter.html.twig
             assignedTo:
                 label: orocrm.case.datagrid.assigned_to.label
             reportedOn:
@@ -86,3 +110,35 @@ datagrid:
                 reportedOn: DESC
         properties:
             id: ~
+            view_link:
+                type:       url
+                route:      orocrm_case_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_case_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      orocrm_api_delete_case
+                params:     [ id ]
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_case_view
+                label:         View
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_case_update
+                label:         Update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_case_delete
+                label:         Delete
+                icon:          trash
+                link:          delete_link
