@@ -1,0 +1,90 @@
+datagrid:
+    campaing-grid:
+        extended_entity_name: OroCRM\Bundle\CampaignBundle\Entity\Campaign
+        source:
+            type: orm
+            #acl_resource: orocrm_campaign_view
+            query:
+                select:
+                    - c.id
+                    - c.name
+                    - c.code
+                    - c.startDate
+                    - c.endDate
+                    - c.description
+                    - c.budget
+                    - bu.name as ownerName
+                from:
+                    - { table: OroCRM\Bundle\CampaignBundle\Entity\Campaign, alias: c }
+                join:
+                    left:
+                        - { join: c.owner, alias: bu }
+        columns:
+            name:
+                label: orocrm.campaign.name.label
+            code:
+                label: orocrm.campaign.code.label
+            startDate:
+                label: orocrm.campaign.start_date.label
+                frontend_type: date
+            endDate:
+                label: orocrm.campaign.end_date.label
+                frontend_type: date
+            description:
+                label: orocrm.campaign.description.label
+            budget:
+                label: orocrm.campaign.budget.label
+            ownerName:
+                label: orocrm.campaign.owner.label
+        filters:
+            columns:
+                name:
+                    type:        string
+                    data_name:   o.name
+                code:
+                    type:        string
+                    data_name:   o.code
+                startDate:
+                    type:        date
+                    data_name:   o.startDate
+                endDate:
+                    type:        date
+                    data_name:   o.endDate
+                description:
+                    type:        string
+                    data_name:   o.description
+                budget:
+                    type:        number
+                    data_name:   o.budget
+                ownerName:
+                    type: entity
+                    data_name: bu.id
+                    options:
+                        field_options:
+                            class: OroOrganizationBundle:BusinessUnit
+                            property: name
+        sorters:
+            columns:
+                name:        { data_name: c.name }
+                code:        { data_name: c.code }
+                startDate:   { data_name: c.startDate }
+                endDate:     { data_name: c.endDate }
+                description: { data_name: c.description }
+                budget:      { data_name: c.budget }
+                ownerName:   { data_name: ownerName }
+            default:
+                startDate:  DESC
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: orocrm_campaign_view
+                params: [ id ]
+        actions:
+            view:
+                type:         navigate
+                label:        orocrm.campaing.datagrid.actions.view.label
+                link:         view_link
+                icon:         icon-volume-up
+                acl_recource: orocrm_campaign_view
+                rowAction:    true

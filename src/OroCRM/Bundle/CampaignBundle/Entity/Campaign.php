@@ -60,14 +60,14 @@ class Campaign extends ExtendCampaign
     /**
      * @var \DateTime $createdAt
      *
-     * @ORM\Column(name="start_date", type="datetime", nullable=true)
+     * @ORM\Column(name="start_date", type="date", nullable=true)
      */
     protected $startDate;
 
     /**
      * @var \DateTime $createdAt
      *
-     * @ORM\Column(name="end_date", type="datetime", nullable=true)
+     * @ORM\Column(name="end_date", type="date", nullable=true)
      */
     protected $endDate;
 
@@ -89,7 +89,7 @@ class Campaign extends ExtendCampaign
      * @var BusinessUnit
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\BusinessUnit")
-     * @ORM\JoinColumn(name="business_unit_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $owner;
 
