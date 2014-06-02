@@ -1,6 +1,21 @@
 OroCRM\Bundle\CampaignBundle\Entity\Campaign:
     properties:
+        name:
+            - NotBlank:
+                message: This value should not be blank
+            - Length:
+                max: 255
         code:
+            - NotBlank: ~
             - Regex:
                 pattern: "/^[a-zA-Z0-9_\-]*$/"
                 message: This value should contains only alphabetic symbols, underscore and numbers
+        startDate:
+            - Date: ~
+        endDate:
+            - Date: ~
+        budget:
+            - Range:
+                min: 0
+        owner:
+            - NotBlank: ~
