@@ -1,0 +1,6 @@
+OroCRM\Bundle\CampaignBundle\Entity\Campaign:
+    properties:
+        code:
+            - Regex:
+                pattern: "/^[a-zA-Z0-9_\-]*$/"
+                message: This value should contains only alphabetic symbols, underscore and numbers
