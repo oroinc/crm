@@ -11,7 +11,6 @@ datagrid:
                     - c.code
                     - c.startDate
                     - c.endDate
-                    - c.description
                     - c.budget
                     - bu.name as ownerName
                 from:
@@ -30,8 +29,6 @@ datagrid:
             endDate:
                 label: orocrm.campaign.end_date.label
                 frontend_type: date
-            description:
-                label: orocrm.campaign.description.label
             budget:
                 label: orocrm.campaign.budget.label
             ownerName:
@@ -50,9 +47,6 @@ datagrid:
                 endDate:
                     type:        date
                     data_name:   o.endDate
-                description:
-                    type:        string
-                    data_name:   o.description
                 budget:
                     type:        number
                     data_name:   o.budget
@@ -69,7 +63,6 @@ datagrid:
                 code:        { data_name: c.code }
                 startDate:   { data_name: c.startDate }
                 endDate:     { data_name: c.endDate }
-                description: { data_name: c.description }
                 budget:      { data_name: c.budget }
                 ownerName:   { data_name: ownerName }
             default:
