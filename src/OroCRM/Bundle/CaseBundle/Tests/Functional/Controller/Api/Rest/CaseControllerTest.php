@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\caseBundle\Tests\Functional\Controller\Api\Rest;
+namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller\Api\Rest;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -12,6 +12,8 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 class CaseControllerTest extends WebTestCase
 {
     /**
+     * @todo: update test data
+     *
      * @var array
      */
     protected $case = [
