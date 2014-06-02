@@ -12,10 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CaseOrigin
 {
-    const TYPE_EMAIL = 1;
-    const TYPE_PHONE = 2;
-    const TYPE_WEB = 3;
-    const TYPE_OTHER = 4;
+    const TYPE_EMAIL = 'email';
+    const TYPE_PHONE = 'phone';
+    const TYPE_WEB = 'web';
+    const TYPE_OTHER = 'other';
 
     /**
      * @var integer
@@ -27,26 +27,18 @@ class CaseOrigin
     protected $id;
 
     /**
-     * @var CaseEntity
-     *
-     * @ORM\ManyToOne(targetEntity="CaseEntity", inversedBy="origins", cascade={"persist"})
-     * @ORM\JoinColumn(name="case_entity_id", referencedColumnName="id")
-     */
-    protected $caseEntity;
-
-    /**
      * @var string
      *
-     * @ORM\Column(name="type", type="integer")
+     * @ORM\Column(name="type", type="string", length=100)
      */
     protected $type;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="value", type="string", length=100, nullable=true)
+     * @ORM\Column(name="label", type="string", length=100, nullable=true)
      */
-    protected $value;
+    protected $label;
 
     /**
      * @param int $id
@@ -89,13 +81,13 @@ class CaseOrigin
     }
 
     /**
-     * @param string $value
+     * @param string $label
      *
      * @return $this
      */
-    public function setValue($value)
+    public function setLabel($label)
     {
-        $this->value = $value;
+        $this->label = $label;
 
         return $this;
     }
@@ -103,28 +95,8 @@ class CaseOrigin
     /**
      * @return string
      */
-    public function getValue()
+    public function getLabel()
     {
-        return $this->value;
-    }
-
-    /**
-     * @param CaseEntity $caseEntity
-     *
-     * @return $this
-     */
-    public function setCaseEntity($caseEntity)
-    {
-        $this->caseEntity = $caseEntity;
-
-        return $this;
-    }
-
-    /**
-     * @return CaseEntity
-     */
-    public function getCaseEntity()
-    {
-        return $this->caseEntity;
+        return $this->label;
     }
 }

@@ -9,6 +9,9 @@ orocrm:
             closed_on.label:       Closed on
             closed_on.label:       Closed on
             workflow_status.label: Status
+            customer.label:        Customer
+            origin.label:          Origin
+            item.label:            'Item #'
 
         menu:
             index.label: Cases

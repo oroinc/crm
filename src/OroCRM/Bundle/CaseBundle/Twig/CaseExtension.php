@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\CaseBundle\Twig;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 
-class ViewRouteExtension extends \Twig_Extension
+class CaseExtension extends \Twig_Extension
 {
     const NAME = 'orocrm_case';
 

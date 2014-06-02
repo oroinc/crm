@@ -88,16 +88,12 @@ class CaseEntity
     protected $item;
 
     /**
-     * @var CaseOrigin[]|ArrayCollection
+     * @var CaseOrigin
      *
-     * @ORM\OneToMany(
-     *      targetEntity="CaseOrigin",
-     *      mappedBy="caseEntity",
-     *      cascade={"all"},
-     *      orphanRemoval=true
-     * )
+     * @ORM\OneToOne(targetEntity="CaseOrigin")
+     * @ORM\JoinColumn(name="origin_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $origins;
+    protected $origin;
 
     /**
      * @var WorkflowStep
@@ -143,11 +139,6 @@ class CaseEntity
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $closedOn;
-
-    public function __construct()
-    {
-        $this->origins = new ArrayCollection();
-    }
 
     /**
      * @param \DateTime $closedOn
@@ -379,44 +370,6 @@ class CaseEntity
     }
 
     /**
-     * @param CaseOrigin $origin
-     *
-     * @return CaseEntity
-     */
-    public function addOrigin(CaseOrigin $origin)
-    {
-        if (!$this->origins->contains($origin)) {
-            $this->origins->add($origin);
-
-            $origin->setCaseEntity($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param CaseOrigin $origin
-     *
-     * @return CaseEntity
-     */
-    public function removeOrigin(CaseOrigin $origin)
-    {
-        if ($this->origins->contains($origin)) {
-            $this->origins->remove($origin);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getOrigins()
-    {
-        return $this->origins;
-    }
-
-    /**
      * @param CaseReporter $reporter
      *
      * @return $this
@@ -434,6 +387,26 @@ class CaseEntity
     public function getReporter()
     {
         return $this->reporter;
+    }
+
+    /**
+     * @param CaseOrigin $origin
+     *
+     * @return $this
+     */
+    public function setOrigin($origin)
+    {
+        $this->origin = $origin;
+
+        return $this;
+    }
+
+    /**
+     * @return CaseOrigin
+     */
+    public function getOrigin()
+    {
+        return $this->origin;
     }
 
     /**

@@ -26,7 +26,7 @@ class CaseOriginTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('id', 42),
-            array('value', 'alex@gmail.com'),
+            array('label', 'email'),
             array('type', CaseOrigin::TYPE_EMAIL)
         );
     }
