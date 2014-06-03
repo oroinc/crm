@@ -104,7 +104,6 @@ class CaseController extends SoapController
         unset($data['id']);
         unset($data['createdAt']);
         unset($data['updatedAt']);
-        unset($data['reportedOn']);
 
         return true;
     }

@@ -167,7 +167,6 @@ class CaseController extends RestController implements ClassResourceInterface
             case 'owner':
             case 'reporter':
             case 'item':
-            case 'origin':
             case 'workflowItem':
             case 'workflowStep':
                 if ($value) {
