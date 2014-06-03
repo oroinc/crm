@@ -28,16 +28,16 @@ class OroCRMCaseBundle implements Migration
     {
         $table = $schema->createTable('orocrm_case');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('reporter_customer_id', 'integer', ['notnull' => false]);
+        $table->addColumn('related_customer_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
         $table->addColumn('related_cart_id', 'integer', ['notnull' => false]);
         $table->addColumn('related_order_id', 'integer', ['notnull' => false]);
         $table->addColumn('related_lead_id', 'integer', ['notnull' => false]);
-        $table->addColumn('reporter_contact_id', 'integer', ['notnull' => false]);
+        $table->addColumn('related_contact_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('origin_name', 'string', ['notnull' => false, 'length' => 16]);
-        $table->addColumn('reporter_user_id', 'integer', ['notnull' => false]);
+        $table->addColumn('reporter_id', 'integer', ['notnull' => false]);
         $table->addColumn('related_opportunity_id', 'integer', ['notnull' => false]);
         $table->addColumn('subject', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('description', 'string', ['notnull' => false, 'length' => 255]);
@@ -54,9 +54,9 @@ class OroCRMCaseBundle implements Migration
         $table->addIndex(['related_cart_id'], 'IDX_AB3BAC1E25CC071A', []);
         $table->addIndex(['related_lead_id'], 'IDX_AB3BAC1E3F4C8F28', []);
         $table->addIndex(['related_opportunity_id'], 'IDX_AB3BAC1EFA6C8510', []);
-        $table->addIndex(['reporter_user_id'], 'IDX_AB3BAC1EDF3D6D95', []);
-        $table->addIndex(['reporter_contact_id'], 'IDX_AB3BAC1E6F85A64A', []);
-        $table->addIndex(['reporter_customer_id'], 'IDX_AB3BAC1E931DE770', []);
+        $table->addIndex(['related_contact_id'], 'IDX_AB3BAC1E6D6C2DFA', []);
+        $table->addIndex(['related_customer_id'], 'IDX_AB3BAC1E587EBD77', []);
+        $table->addIndex(['reporter_id'], 'IDX_AB3BAC1EE1CFE6F5', []);
     }
 
     /**
@@ -97,67 +97,52 @@ class OroCRMCaseBundle implements Migration
     {
         $table = $schema->getTable('orocrm_case');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_magento_customer'),
-            ['reporter_customer_id'],
+            $schema->getTable('orocrm_sales_opportunity'),
+            ['related_opportunity_id'],
             ['id'],
-            [
-                'onDelete' => 'SET NULL',
-                'onUpdate' => null,
-            ]
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_workflow_item'),
             ['workflow_item_id'],
             ['id'],
-            [
-                'onDelete' => 'SET NULL',
-                'onUpdate' => null,
-            ]
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_magento_cart'),
-            ['related_cart_id'],
-            ['id'],
-            [
-                'onDelete' => 'SET NULL',
-                'onUpdate' => null,
-            ]
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_order'),
             ['related_order_id'],
             ['id'],
-            [
-                'onDelete' => 'SET NULL',
-                'onUpdate' => null,
-            ]
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_sales_lead'),
-            ['related_lead_id'],
-            ['id'],
-            [
-                'onDelete' => 'SET NULL',
-                'onUpdate' => null,
-            ]
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_contact'),
-            ['reporter_contact_id'],
+            ['related_contact_id'],
             ['id'],
-            [
-                'onDelete' => 'SET NULL',
-                'onUpdate' => null,
-            ]
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_workflow_step'),
             ['workflow_step_id'],
             ['id'],
-            [
-                'onDelete' => 'SET NULL',
-                'onUpdate' => null,
-            ]
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_magento_customer'),
+            ['related_customer_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_user'),
+            ['reporter_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_case_origin'),
+            ['origin_name'],
+            ['name'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
@@ -166,26 +151,14 @@ class OroCRMCaseBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_case_origin'),
-            ['origin_name'],
-            ['name'],
-            [
-                'onDelete' => 'SET NULL',
-                'onUpdate' => null,
-            ]
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_user'),
-            ['reporter_user_id'],
+            $schema->getTable('orocrm_magento_cart'),
+            ['related_cart_id'],
             ['id'],
-            [
-                'onDelete' => 'SET NULL',
-                'onUpdate' => null,
-            ]
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_sales_opportunity'),
-            ['related_opportunity_id'],
+            $schema->getTable('orocrm_sales_lead'),
+            ['related_lead_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
