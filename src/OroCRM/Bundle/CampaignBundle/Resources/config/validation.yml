@@ -3,15 +3,14 @@ OroCRM\Bundle\CampaignBundle\Entity\Campaign:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: code
     properties:
         name:
-            - NotBlank:
-                message: This value should not be blank
+            - NotBlank: ~
             - Length:
                 max: 255
         code:
             - NotBlank: ~
             - Regex:
                 pattern: "/^[a-zA-Z0-9_\-]*$/"
-                message: This value should contains only alphabetic symbols, underscore and numbers
+                message: "This value should contains only alphabetic symbols, underscore and numbers"
         startDate:
             - Date: ~
         endDate:

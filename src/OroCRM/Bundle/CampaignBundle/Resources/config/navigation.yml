@@ -19,7 +19,7 @@ oro_menu_config:
                         campaigns_list: ~
 
 oro_titles:
-    orocrm_campaign_index: ~
-    orocrm_campaign_view: '%%entity.name%%'
+    orocrm_campaign_index:  ~
+    orocrm_campaign_view:   %%entity.name%%
     orocrm_campaign_create: oro.ui.create_entity
-    orocrm_campaign_update: '%%entity.name%% - Edit'
+    orocrm_campaign_update: %%entity.name%% - Edit

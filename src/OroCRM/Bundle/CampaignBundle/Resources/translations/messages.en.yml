@@ -1,6 +1,6 @@
 orocrm:
     campaign:
-        entity_description:  Marketing campains
+        entity_description:  Marketing campaigns
         entity_label:        Campaign
         entity_plural_label: Campaigns
         id.label:            Id

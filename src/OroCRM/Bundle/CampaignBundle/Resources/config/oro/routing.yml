@@ -11,4 +11,3 @@ orocrm_campaign_bundle_api:
         version:  latest|v1
     defaults:
         version:  latest
-

@@ -10,11 +10,12 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class CampaignControllerTest extends WebTestCase
 {
-    const TEST_CODE = 'code-1234';
+    const TEST_CODE         = 'code-1234';
+    const UPDATED_TEST_CODE = 'updated-code-1234';
 
     public function setUp()
     {
-        $this->initClient(array('debug' => false), $this->generateBasicAuthHeader());
+        $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
     }
 
     public function testCreate()
@@ -30,8 +31,8 @@ class CampaignControllerTest extends WebTestCase
         $form['orocrm_campaign_form[budget]']      = 154.54;
 
         $this->client->followRedirects(true);
-        $this->client->submit($form);
-        $result = $this->client->getResponse();
+        $crawler = $this->client->submit($form);
+        $result  = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Campaign saved", $crawler->html());
     }
@@ -46,17 +47,18 @@ class CampaignControllerTest extends WebTestCase
         $result   = reset($result['data']);
         $crawler  = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_campaign_update', array('id' => $result['id']))
+            $this->getUrl('orocrm_campaign_update', ['id' => $result['id']])
         );
 
         $form                                 = $crawler->selectButton('Save and Close')->form();
         $form['orocrm_campaign_form[name]']   = 'new name';
         $form['orocrm_campaign_form[budget]'] = 177;
+        $form['orocrm_campaign_form[code]']   = self::UPDATED_TEST_CODE;
 
         $this->client->followRedirects(true);
 
-        $this->client->submit($form);
-        $result = $this->client->getResponse();
+        $crawler = $this->client->submit($form);
+        $result  = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Campaign saved", $crawler->html());
     }
@@ -71,6 +73,6 @@ class CampaignControllerTest extends WebTestCase
         $result   = reset($result['data']);
         $this->assertEquals('new name', $result['name']);
         $this->assertEquals('177.0000', $result['budget']);
-        $this->assertEquals(self::TEST_CODE, $result['code']);
+        $this->assertEquals(self::UPDATED_TEST_CODE, $result['code']);
     }
 }
