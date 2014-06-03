@@ -18,6 +18,8 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
+use OroCRM\Bundle\CaseBundle\Entity\CaseOrigin;
+
 /**
  * @RouteResource("case")
  * @NamePrefix("orocrm_api_")
@@ -156,7 +158,20 @@ class CaseController extends RestController implements ClassResourceInterface
     protected function transformEntityField($field, &$value)
     {
         switch ($field) {
-            case 'id':
+            case 'origin':
+                if ($value) {
+                    /** @var CaseOrigin $value */
+                    $value = $value->getCode();
+                }
+                break;
+            case 'owner':
+            case 'reporter':
+            case 'item':
+            case 'workflowItem':
+            case 'workflowStep':
+                if ($value) {
+                    $value = $value->getId();
+                }
                 break;
             default:
                 parent::transformEntityField($field, $value);

@@ -9,7 +9,7 @@ use Oro\Bundle\SoapBundle\Entity\SoapEntityInterface;
 /**
  * @Soap\Alias("OroCRM.Bundle.CaseBundle.Entity.CaseEntity")
  */
-class CaseSoap extends CaseEntity implements SoapEntityInterface
+class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
 {
     /**
      * @Soap\ComplexType("int", nillable=true)
@@ -44,7 +44,7 @@ class CaseSoap extends CaseEntity implements SoapEntityInterface
     /**
      * @Soap\ComplexType("int", nillable=true)
      */
-    protected $origins;
+    protected $origin;
 
     /**
      * @Soap\ComplexType("int", nillable=true)

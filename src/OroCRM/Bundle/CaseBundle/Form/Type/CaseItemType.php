@@ -13,7 +13,6 @@ class CaseItemType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // @todo: identify relations properties
         $builder
             ->add(
                 'order',
@@ -21,7 +20,6 @@ class CaseItemType extends AbstractType
                 [
                     'label'    => 'orocrm.case.item.order.label',
                     'class'    => 'OroCRMMagentoBundle:Order',
-                    'property' => 'id',
                     'required' => false,
                 ]
             )
@@ -31,7 +29,6 @@ class CaseItemType extends AbstractType
                 [
                     'label'    => 'orocrm.case.item.cart.label',
                     'class'    => 'OroCRMMagentoBundle:Cart',
-                    'property' => 'id',
                     'required' => false,
                 ]
             )
@@ -41,7 +38,6 @@ class CaseItemType extends AbstractType
                 [
                     'label'    => 'orocrm.case.item.lead.label',
                     'class'    => 'OroCRMSalesBundle:Lead',
-                    'property' => 'name',
                     'required' => false,
                 ]
             )
@@ -51,7 +47,6 @@ class CaseItemType extends AbstractType
                 [
                     'label'    => 'orocrm.case.item.opportunity.label',
                     'class'    => 'OroCRMSalesBundle:Opportunity',
-                    'property' => 'name',
                     'required' => false,
                 ]
             );

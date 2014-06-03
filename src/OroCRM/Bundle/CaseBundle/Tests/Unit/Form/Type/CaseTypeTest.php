@@ -51,7 +51,7 @@ class CaseTypeTest extends \PHPUnit_Framework_TestCase
                     'owner',
                     'reporter',
                     'item',
-                    'origins',
+                    'origin',
                 ]
             ]
         ];

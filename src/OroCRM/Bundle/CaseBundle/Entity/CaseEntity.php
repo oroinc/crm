@@ -79,7 +79,7 @@ class CaseEntity
     /**
      * @var CaseOrigin
      *
-     * @ORM\ManyToOne(targetEntity="CaseOrigin")
+     * @ORM\ManyToOne(targetEntity="CaseOrigin", cascade={"persist"})
      * @ORM\JoinColumn(name="origin_code", referencedColumnName="code", onDelete="SET NULL")
      */
     protected $origin;
@@ -290,7 +290,7 @@ class CaseEntity
      *
      * @return $this
      */
-    public function setOwner(User $owner)
+    public function setOwner($owner)
     {
         $this->owner = $owner;
 

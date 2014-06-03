@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller\Api\Soap;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
+use OroCRM\Bundle\CaseBundle\Entity\CaseOrigin;
+
 /**
  * @outputBuffering enabled
  * @dbIsolation
@@ -14,9 +16,11 @@ class CaseControllerTest extends WebTestCase
      * @var array
      */
     protected $case = [
-        'subject' => 'New case',
+        'subject'     => 'New case',
+        'description' => 'New description',
+        'owner'       => 1,
+        'origin'      => CaseOrigin::CODE_EMAIL
     ];
-
 
     protected function setUp()
     {

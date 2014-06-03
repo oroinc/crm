@@ -17,7 +17,7 @@ class CaseController extends SoapController
      * @Soap\Method("getCases")
      * @Soap\Param("page", phpType="int")
      * @Soap\Param("limit", phpType="int")
-     * @Soap\Result(phpType="OroCRM\Bundle\CaseBundle\Entity\CaseSoap[]")
+     * @Soap\Result(phpType="OroCRM\Bundle\CaseBundle\Entity\CaseEntitySoap[]")
      * @AclAncestor("orocrm_case_view")
      */
     public function cgetAction($page = 1, $limit = 10)
@@ -28,7 +28,7 @@ class CaseController extends SoapController
     /**
      * @Soap\Method("getCase")
      * @Soap\Param("id", phpType="int")
-     * @Soap\Result(phpType="OroCRM\Bundle\CaseBundle\Entity\CaseSoap")
+     * @Soap\Result(phpType="OroCRM\Bundle\CaseBundle\Entity\CaseEntitySoap")
      * @AclAncestor("orocrm_case_view")
      */
     public function getAction($id)
@@ -38,7 +38,7 @@ class CaseController extends SoapController
 
     /**
      * @Soap\Method("createCase")
-     * @Soap\Param("case", phpType="OroCRM\Bundle\CaseBundle\Entity\CaseSoap")
+     * @Soap\Param("case", phpType="OroCRM\Bundle\CaseBundle\Entity\CaseEntitySoap")
      * @Soap\Result(phpType="int")
      * @AclAncestor("orocrm_case_create")
      */
@@ -50,7 +50,7 @@ class CaseController extends SoapController
     /**
      * @Soap\Method("updateCase")
      * @Soap\Param("id", phpType="int")
-     * @Soap\Param("case", phpType="OroCRM\Bundle\CaseBundle\Entity\CaseSoap")
+     * @Soap\Param("case", phpType="OroCRM\Bundle\CaseBundle\Entity\CaseEntitySoap")
      * @Soap\Result(phpType="boolean")
      * @AclAncestor("orocrm_case_update")
      */
@@ -104,7 +104,6 @@ class CaseController extends SoapController
         unset($data['id']);
         unset($data['createdAt']);
         unset($data['updatedAt']);
-        unset($data['reportedOn']);
 
         return true;
     }
