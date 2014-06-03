@@ -36,17 +36,65 @@ class CaseType extends AbstractType
                 ]
             )
             ->add(
-                'reporter',
-                'orocrm_case_reporter',
+                'reporterUser',
+                'oro_user_select',
                 [
-                    'label' => 'orocrm.case.reporter.label'
+                    'required' => false,
+                    'label'    => 'orocrm.case.reporter.user.label',
                 ]
             )
             ->add(
-                'item',
-                'orocrm_case_item',
+                'reporterContact',
+                'orocrm_contact_select',
                 [
-                    'label' => 'orocrm.case.item.label'
+                    'required' => false,
+                    'label'    => 'orocrm.case.reporter.contact.label',
+                ]
+            )
+            ->add(
+                'reporterCustomer',
+                'entity',
+                [
+                    'label'    => 'orocrm.case.reporter.customer.label',
+                    'class'    => 'OroCRMMagentoBundle:Customer',
+                    'property' => 'email',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'relatedOrder',
+                'entity',
+                [
+                    'label'    => 'orocrm.case.item.order.label',
+                    'class'    => 'OroCRMMagentoBundle:Order',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'relatedCart',
+                'entity',
+                [
+                    'label'    => 'orocrm.case.item.cart.label',
+                    'class'    => 'OroCRMMagentoBundle:Cart',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'relatedLead',
+                'entity',
+                [
+                    'label'    => 'orocrm.case.item.lead.label',
+                    'class'    => 'OroCRMSalesBundle:Lead',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'relatedOpportunity',
+                'entity',
+                [
+                    'label'    => 'orocrm.case.item.opportunity.label',
+                    'class'    => 'OroCRMSalesBundle:Opportunity',
+                    'required' => false,
                 ]
             )
             ->add(
