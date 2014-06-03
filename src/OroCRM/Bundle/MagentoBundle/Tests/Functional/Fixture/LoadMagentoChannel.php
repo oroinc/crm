@@ -80,13 +80,15 @@ class LoadMagentoChannel extends AbstractFixture
         $items          = new ArrayCollection();
         $items->add($cartItem);
 
-        $cart1 = $this->createCart($cartAddress1, $cartAddress2, $customer, $items, $status);
-        $this->updateCartItem($cartItem, $cart1);
+        $cart = $this->createCart($cartAddress1, $cartAddress2, $customer, $items, $status);
+        $this->updateCartItem($cartItem, $cart);
+
+        $order = $this->createOrder($cart, $customer);
 
         $this->setReference('customer', $customer);
         $this->setReference('channel', $this->channel);
-
-        $order = $this->createOrder($cart1, $customer);
+        $this->setReference('cart', $cart);
+        $this->setReference('order', $order);
 
         $baseOrderItem = $this->createBaseOrderItem($order);
         $order->setItems([$baseOrderItem]);
@@ -127,6 +129,7 @@ class LoadMagentoChannel extends AbstractFixture
         $cart->setGrandTotal(2.54);
         $cart->setIsGuest(0);
         $cart->setStore($this->store);
+        $cart->setOwner($this->getUser());
 
         $this->em->persist($cart);
 
@@ -284,6 +287,7 @@ class LoadMagentoChannel extends AbstractFixture
         $customer->setCreatedAt(new \DateTime('now'));
         $customer->setUpdatedAt(new \DateTime('now'));
         $customer->addAddress($address);
+        $customer->setOwner($this->getUser());
 
         $this->em->persist($customer);
 
@@ -439,6 +443,7 @@ class LoadMagentoChannel extends AbstractFixture
         $order->setShippingMethod('some unique shipping method');
         $order->setRemoteIp('unique ip');
         $order->setGiftMessage('some very unique gift message');
+        $order->setOwner($this->getUser());
 
         $this->em->persist($order);
 

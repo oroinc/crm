@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -29,9 +28,6 @@ class CustomerStrategy extends BaseStrategy
     /** @var array */
     protected $groupEntityCache = [];
 
-    /** @var DefaultOwnerHelper */
-    protected $defaultOwnerHelper;
-
     /**
      * Update/Create customer and related entities based on remote data
      *
@@ -46,7 +42,12 @@ class CustomerStrategy extends BaseStrategy
             ['originId' => $remoteEntity->getOriginId(), 'channel' => $remoteEntity->getChannel()],
             $remoteEntity
         );
-        $localEntity = $localEntity ? : $remoteEntity;
+        if (!$localEntity) {
+            $localEntity = $remoteEntity;
+
+            // populate owner only for newly created entities
+            $this->defaultOwnerHelper->populateChannelOwner($localEntity, $localEntity->getChannel());
+        }
 
         // update all related entities
         $this->updateStoresAndGroup(
@@ -63,7 +64,7 @@ class CustomerStrategy extends BaseStrategy
         $this->strategyHelper->importEntity(
             $localEntity,
             $remoteEntity,
-            ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses', 'lifetime']
+            ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses', 'lifetime', 'owner']
         );
         $this->updateAddresses($localEntity, $remoteEntity->getAddresses());
 
@@ -270,13 +271,5 @@ class CustomerStrategy extends BaseStrategy
         // populate default owner only for new accounts
         $this->defaultOwnerHelper->populateChannelOwner($account, $entity->getChannel());
         $entity->setAccount($account);
-    }
-
-    /**
-     * @param DefaultOwnerHelper $helper
-     */
-    public function setOwnerHelper(DefaultOwnerHelper $helper)
-    {
-        $this->defaultOwnerHelper = $helper;
     }
 }

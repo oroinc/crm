@@ -10,9 +10,9 @@ use Symfony\Component\DomCrawler\Form;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
 /**
  * @dbIsolation
@@ -45,14 +45,21 @@ class ChannelOwnerSetListenerTest extends WebTestCase
         $channel = $this->getReference('channel');
         /** @var Customer $customer */
         $customer = $this->getReference('customer');
+        /** @var Order $customer */
+        $order = $this->getReference('order');
+        /** @var Cart $customer */
+        $cart = $this->getReference('cart');
 
-        if (!($channel && $customer)) {
+        if (!($channel && $customer && $order && $cart)) {
             $this->markTestIncomplete('Invalid fixtures, unable to perform test case');
         }
 
         if ($emptyOwnerScenario) {
             $this->resetOwner($customer->getContact());
             $this->resetOwner($customer->getAccount());
+            $this->resetOwner($customer);
+            $this->resetOwner($cart);
+            $this->resetOwner($order);
         }
 
         $this->assertNull($channel->getDefaultUserOwner(), 'Should not have owner at start');
@@ -92,11 +99,17 @@ class ChannelOwnerSetListenerTest extends WebTestCase
 
         $newOwnerId = $this->getReference('owner_user')->getId();
         if ($emptyOwnerScenario) {
-            $this->assertEquals($newOwnerId, $customer->getAccount()->getOwner()->getId());
-            $this->assertEquals($newOwnerId, $customer->getContact()->getOwner()->getId());
+            $this->assertEquals($newOwnerId, $this->getEntityOwnerId($customer->getAccount()));
+            $this->assertEquals($newOwnerId, $this->getEntityOwnerId($customer->getContact()));
+            $this->assertEquals($newOwnerId, $this->getEntityOwnerId($customer));
+            $this->assertEquals($newOwnerId, $this->getEntityOwnerId($order));
+            $this->assertEquals($newOwnerId, $this->getEntityOwnerId($cart));
         } else {
-            $this->assertNotEquals($newOwnerId, $customer->getAccount()->getOwner()->getId());
-            $this->assertNotEquals($newOwnerId, $customer->getContact()->getOwner()->getId());
+            $this->assertNotEquals($newOwnerId, $this->getEntityOwnerId($customer->getAccount()));
+            $this->assertNotEquals($newOwnerId, $this->getEntityOwnerId($customer->getContact()));
+            $this->assertNotEquals($newOwnerId, $this->getEntityOwnerId($customer));
+            $this->assertNotEquals($newOwnerId, $this->getEntityOwnerId($order));
+            $this->assertNotEquals($newOwnerId, $this->getEntityOwnerId($cart));
         }
     }
 
@@ -112,7 +125,7 @@ class ChannelOwnerSetListenerTest extends WebTestCase
     }
 
     /**
-     * @param Contact|Account $entity
+     * @param object $entity
      */
     protected function resetOwner($entity)
     {
@@ -124,5 +137,19 @@ class ChannelOwnerSetListenerTest extends WebTestCase
             ->where($qb->expr()->eq('e.id', $entity->getId()));
 
         $qb->getQuery()->execute();
+    }
+
+    /**
+     * @param object $entity
+     *
+     * @return int
+     */
+    protected function getEntityOwnerId($entity)
+    {
+        /** @var EntityManager $em */
+        $em     = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entity = $em->getRepository(ClassUtils::getClass($entity))->findOneById($entity->getId());
+
+        return $entity->getOwner()->getId();
     }
 }
