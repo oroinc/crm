@@ -2,8 +2,6 @@ parameters:
     orocrm_case.entity.class:                  OroCRM\Bundle\CaseBundle\Entity\CaseEntity
     orocrm_case.manager.api.class:             Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_case.form.type.case.class:          OroCRM\Bundle\CaseBundle\Form\Type\CaseType
-    orocrm_case.form.type.case_item.class:     OroCRM\Bundle\CaseBundle\Form\Type\CaseItemType
-    orocrm_case.form.type.case_reporter.class: OroCRM\Bundle\CaseBundle\Form\Type\CaseReporterType
     orocrm_case.form.type.case_api.class:      OroCRM\Bundle\CaseBundle\Form\Type\CaseApiType
     orocrm_caserm.handler.case_api.class:      OroCRM\Bundle\CaseBundle\Form\Handler\CaseHandler
     orocrm_case.twig.extension.case.class:     OroCRM\Bundle\CaseBundle\Twig\CaseExtension
@@ -40,16 +38,6 @@ services:
         arguments:
             - 'case'
             - 'case'
-
-    orocrm_case.form.type.case_item:
-        class: %orocrm_case.form.type.case_item.class%
-        tags:
-            - { name: form.type, alias: orocrm_case_item }
-
-    orocrm_case.form.type.case_reporter:
-        class: %orocrm_case.form.type.case_reporter.class%
-        tags:
-            - { name: form.type, alias: orocrm_case_reporter }
 
     orocrm_case.twig.extension.view_route:
         class: %orocrm_case.twig.extension.case.class%

@@ -20,9 +20,6 @@ class CaseControllerTest extends WebTestCase
         'subject'     => 'New case',
         'description' => 'New description',
         'owner'       => 1,
-        'reporter'    => [
-            'user' => 1
-        ],
         'origin'      => CaseOrigin::CODE_EMAIL
     ];
 
