@@ -176,12 +176,11 @@ services:
         arguments:
             - @oro_importexport.strategy.import.helper
             - @doctrine
+            - @oro_integration.helper.default_owner_helper
 
     orocrm_magento.import.strategy.customer.add_or_update:
         class: %orocrm_magento.import_strategy.customer.add_or_update.class%
         parent: orocrm_magento.import.strategy.base_strategy
-        calls:
-             - [setOwnerHelper, [@oro_integration.helper.default_owner_helper]]
 
     orocrm_magento.import.strategy.region.add_or_update:
         class: %orocrm_magento.import_strategy.region.add_or_update.class%
