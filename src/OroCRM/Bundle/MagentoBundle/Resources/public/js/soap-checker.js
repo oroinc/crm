@@ -30,7 +30,8 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
             '</div>'
         ),
 
-        initialize: function (options) {
+        initialize: function  (options) {
+            this.options = _.defaults(options || {}, this.options);
             this.id = options.transportEntityId || null;
             this.url = this.getUrl();
 
