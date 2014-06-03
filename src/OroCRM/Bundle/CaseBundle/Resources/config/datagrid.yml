@@ -9,36 +9,8 @@ datagrid:
                     - caseEntity.id as caseNumber
                     - caseEntity.subject
                     - CONCAT(relatedCustomer.firstName, CONCAT(' ', relatedCustomer.lastName)) as customerName
-                    - |
-                        (CASE
-                              when reporterUser IS NOT NULL
-                              THEN reporterUser.id
-                              when relatedContact IS NOT NULL
-                              THEN relatedContact.id
-                              when relatedCustomer IS NOT NULL
-                              THEN relatedCustomer.id
-                              else '0'
-                        END) as reporter_id
-                    - |
-                        (CASE
-                              when reporterUser IS NOT NULL
-                              THEN '%oro_user.entity.class%'
-                              when relatedContact IS NOT NULL
-                              THEN '%orocrm_contact.entity.class%'
-                              when relatedCustomer IS NOT NULL
-                              THEN '%orocrm_magento.customer.entity.class%'
-                              else ''
-                         END) as reporter_class
-                    - |
-                        (CASE
-                              when reporterUser IS NOT NULL
-                              THEN CONCAT(reporterUser.firstName, CONCAT(' ', reporterUser.lastName))
-                              when relatedContact IS NOT NULL
-                              THEN CONCAT(relatedContact.firstName, CONCAT(' ', relatedContact.lastName))
-                              when relatedCustomer IS NOT NULL
-                              THEN CONCAT(relatedCustomer.firstName, CONCAT(' ', relatedCustomer.lastName))
-                              else ''
-                        END) as reporter
+                    - reporter.id as reporterId
+                    - CONCAT(reporter.firstName, CONCAT(' ', reporter.lastName)) as reporterName
                     - caseEntity.reportedAt
                     - caseEntity.closedAt
                     - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as assignedTo
@@ -60,7 +32,7 @@ datagrid:
                     - { table: %orocrm_case.entity.class%, alias: caseEntity }
                 join:
                     left:
-                        - { join: caseEntity.reporter, alias: reporterUser }
+                        - { join: caseEntity.reporter, alias: reporter }
                         - { join: caseEntity.relatedContact, alias: relatedContact }
                         - { join: caseEntity.relatedCustomer, alias: relatedCustomer }
                         - { join: caseEntity.owner, alias: owner }
@@ -75,7 +47,7 @@ datagrid:
                 label: orocrm.case.datagrid.case_number.label
             subject:
                 label: orocrm.case.datagrid.subject.label
-            reporter:
+            reporterName:
                 type: twig
                 label: orocrm.case.datagrid.reporter.label
                 frontend_type: html
@@ -107,10 +79,10 @@ datagrid:
                 closedAt:
                     type: datetime
                     data_name: caseEntity.closedAt
-                reporter:
+                reporterName:
                     label: orocrm.case.datagrid.reporter.label
                     type: string
-                    data_name: reporter
+                    data_name: reporterName
                 customer:
                     label: orocrm.case.datagrid.customer.label
                     type: string
@@ -144,8 +116,8 @@ datagrid:
                     data_name: caseEntity.subject
                 caseNumber:
                     data_name: caseEntity.id
-                reporter:
-                    data_name: reporter
+                reporterName:
+                    data_name: reporterName
                 assignedTo:
                     data_name: assignedTo
                 reportedAt:
@@ -204,10 +176,12 @@ datagrid:
                 where:
                     and:
                         - |
-                            (relatedCustomer.account IS NOT NULL AND relatedCustomer.account = :account)
-                            OR (relatedContact IS NOT NULL AND relatedContactAccount.id = :account)
-                            OR (relatedOrderCustomer.account IS NOT NULL AND relatedOrderCustomer.account = :account)
-                            OR (relatedCartCustomer.account IS NOT NULL AND relatedCartCustomer.account = :account)
+                            relatedCustomer.account = :id
+                            OR relatedContactAccount.id = :id
+                            OR relatedOrderCustomer.account = :id
+                            OR relatedCartCustomer.account = :id
+                            OR relatedLead.account = :id
+                            OR relatedOpportunity.account = :id
 
                 groupBy: caseEntity.id
 
@@ -217,4 +191,44 @@ datagrid:
             query:
                 where:
                     and:
-                        - relatedContact IS NOT NULL AND relatedContact.id = :contact
+                        - relatedContact.id = :id
+
+    customer-cases-grid:
+        extends: cases-grid
+        source:
+            query:
+                where:
+                    and:
+                        - relatedCustomer.id = :id
+
+    order-cases-grid:
+        extends: cases-grid
+        source:
+            query:
+                where:
+                    and:
+                        - relatedOrder.id = :id
+
+    cart-cases-grid:
+        extends: cases-grid
+        source:
+            query:
+                where:
+                    and:
+                        - relatedCart.id = :id
+
+    lead-cases-grid:
+        extends: cases-grid
+        source:
+            query:
+                where:
+                    and:
+                        - relatedLead.id = :id
+
+    opportunity-cases-grid:
+        extends: cases-grid
+        source:
+            query:
+                where:
+                    and:
+                        - relatedOpportunity.id = :id

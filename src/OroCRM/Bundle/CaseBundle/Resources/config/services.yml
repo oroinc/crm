@@ -4,7 +4,6 @@ parameters:
     orocrm_case.form.type.case.class:          OroCRM\Bundle\CaseBundle\Form\Type\CaseType
     orocrm_case.form.type.case_api.class:      OroCRM\Bundle\CaseBundle\Form\Type\CaseApiType
     orocrm_caserm.handler.case_api.class:      OroCRM\Bundle\CaseBundle\Form\Handler\CaseHandler
-    orocrm_case.twig.extension.case.class:     OroCRM\Bundle\CaseBundle\Twig\CaseExtension
 
 services:
     orocrm_case.manager.api:
@@ -39,25 +38,17 @@ services:
             - 'case'
             - 'case'
 
-    orocrm_case.twig.extension.view_route:
-        class: %orocrm_case.twig.extension.case.class%
-        arguments:
-            - @oro_entity_config.config_manager
-        tags:
-            - { name: twig.extension }
-
     orocrm_case.event_listener.account_cases_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
-            - 'account'
+            - 'id'
             - false
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.account-cases-grid, method: onBuildAfter }
-
-    orocrm_case.event_listener.contact_cases_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'contact'
-            - false
-        tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.contact-cases-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.customer-cases-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.order-cases-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.cart-cases-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.lead-cases-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.opportunity-cases-grid, method: onBuildAfter }
+
