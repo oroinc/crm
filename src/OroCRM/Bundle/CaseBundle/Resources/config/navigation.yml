@@ -23,6 +23,6 @@ oro_menu_config:
                 orocrm_case_account_cases_tab: ~
 oro_titles:
     orocrm_case_index: ~
-    orocrm_case_view: 'View Case'
-    orocrm_case_create: 'Create Case'
-    orocrm_case_update: 'Edit case'
+    orocrm_case_view: '%%entity.subject%%'
+    orocrm_case_create: oro.ui.create_entity
+    orocrm_case_update: '%%entity.subject%% - Edit'

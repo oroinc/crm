@@ -18,23 +18,35 @@ orocrm:
         menu:
             index.label: Cases
 
-        caseentity:
-            #
-            # OroCRM/Bundle/CaseBundle/Entity/CaseEntity
-            #
-            entity_label:                Case
-            entity_plural_label:         Cases
-            entity_description:          Represent case
-            subject.label:               Subject
-            description.label:           Description
-            workflow_step.label:         Status
-            owner.label:                 Assigned To
-            closed_on.label:             Closed On
-            reported_on.label:           Reported On
-            item.label:                  Case item
-            origins.label:               Case origins
-            reporter.label:              Case reporter
-            created_at.label:            Created At
-            updated_at.label:            Updated At
-            id.label:                    Id
-            workflow_item.label:         Workflow item
+        #
+        # OroCRM/Bundle/CaseBundle/Entity/CaseEntity
+        #
+        entity_label:                Case
+        entity_plural_label:         Cases
+        entity_description:          Represent case
+        subject.label:               Subject
+        description.label:           Description
+        workflow_step.label:         Status
+        owner.label:                 Assigned To
+        closedAt.label:              Closed On
+        reportedAt.label:            Reported On
+        relatedOrder.label:          Case Order
+        relatedContact.label:        Case Contact
+        relatedCustomer.label:       Case Customer
+        relatedCart.label:           Case Cart
+        relatedLead.label:           Case Lead
+        relatedOpportunity.label:    Case Opportunity
+        origin.label:                Case origin
+        reporterUser.label:          Case Reporter User
+        reporterContact.label:       Case Reporter Contact
+        reporterCustomer.label:      Case Reporter Customer
+        created_at.label:            Created At
+        updated_at.label:            Updated At
+        id.label:                    Id
+        workflow_item.label:         Workflow item
+
+        block:
+            general: General Information
+            additional: Additional Information
+
+        saved_message: Case saved
