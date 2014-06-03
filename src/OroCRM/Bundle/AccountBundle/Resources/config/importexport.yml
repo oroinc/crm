@@ -6,3 +6,17 @@ services:
         class: %orocrm_account.importexport.account_normalizer.class%
         tags:
             - { name: oro_importexport.normalizer }
+
+    orocrm_account.importexport.data_converter:
+        parent: oro_importexport.data_converter.configurable
+
+    # Export processor
+    orocrm_account.importexport.processor.export:
+        parent: oro_importexport.processor.export_abstract
+        calls:
+            - [setDataConverter, [@orocrm_account.importexport.data_converter]]
+        tags:
+            - { name: oro_importexport.processor, type: export, entity: %orocrm_account.account.entity.class%, alias: orocrm_account }
+
+
+

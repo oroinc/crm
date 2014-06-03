@@ -4,10 +4,16 @@
 {% set pageTitle = 'orocrm.account.entity_plural_label'|trans %}
 
 {% block navButtons %}
+    {% include 'OroImportExportBundle:ImportExport:buttons.html.twig' with {
+        exportProcessor: 'orocrm_account'
+    } %}
+
     {% if resource_granted('orocrm_account_create') %}
-        {{ UI.addButton({
-            'path' : path('orocrm_account_create'),
-            'entity_label': 'orocrm.account.entity_label'|trans
-        }) }}
+        <div class="btn-group">
+            {{ UI.addButton({
+                'path' : path('orocrm_account_create'),
+                'entity_label': 'orocrm.account.entity_label'|trans
+            }) }}
+        </div>
     {% endif %}
 {% endblock %}
