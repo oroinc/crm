@@ -4,58 +4,61 @@ namespace OroCRM\Bundle\CaseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
+
 /**
  * @ORM\Entity
- * @ORM\Table(
- *      name="orocrm_case_origin"
- * )
+ * @ORM\Table(name="orocrm_case_origin")
+ * @Gedmo\TranslationEntity(class="\OroCRM\Bundle\CaseBundle\Entity\CaseOriginTranslation")
  */
-class CaseOrigin
+class CaseOrigin implements Translatable
 {
-    const CODE_EMAIL = 'email';
-    const CODE_PHONE = 'phone';
-    const CODE_WEB = 'web';
-    const CODE_OTHER = 'other';
+    const ORIGIN_EMAIL = 'email';
+    const ORIGIN_PHONE = 'phone';
+    const ORIGIN_WEB   = 'web';
+    const ORIGIN_OTHER = 'other';
 
     /**
      * @var string
      *
      * @ORM\Id
-     * @ORM\Column(name="code", type="string", length=30)
+     * @ORM\Column(name="name", type="string", length=16)
      */
-    protected $code;
+    protected $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="label", type="string", length=100, nullable=true)
+     * @ORM\Column(name="label", type="string", length=255)
+     * @Gedmo\Translatable
      */
     protected $label;
 
     /**
-     * @param string $code
-     *
-     * @return $this
+     * @Gedmo\Locale
      */
-    public function setCode($code)
-    {
-        $this->code = $code;
+    protected $locale;
 
-        return $this;
+    /**
+     * @param string $name
+     */
+    public function __construct($name)
+    {
+        $this->name = $name;
     }
 
     /**
      * @return string
      */
-    public function getCode()
+    public function getName()
     {
-        return $this->code;
+        return $this->name;
     }
 
     /**
      * @param string $label
-     *
-     * @return $this
+     * @return CaseOrigin
      */
     public function setLabel($label)
     {
@@ -70,5 +73,36 @@ class CaseOrigin
     public function getLabel()
     {
         return $this->label;
+    }
+
+    /**
+     * Set locale
+     *
+     * @param string $locale
+     * @return CaseOrigin
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * Returns locale code
+     *
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->label;
     }
 }

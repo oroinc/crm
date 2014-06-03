@@ -6,27 +6,38 @@ use OroCRM\Bundle\CaseBundle\Entity\CaseOrigin;
 
 class CaseOriginTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCreate()
-    {
-        new CaseOrigin();
-    }
     /**
-     * @dataProvider settersAndGettersDataProvider
+     * @var CaseOrigin
      */
-    public function testSettersAndGetters($property, $value)
-    {
-        $obj = new CaseOrigin();
+    protected $caseOrigin;
 
-        $result = call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
-        $this->assertInstanceOf(get_class($obj), $result);
-        $this->assertEquals($value, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
+    protected function setUp()
+    {
+        $this->caseOrigin = new CaseOrigin('test');
     }
 
-    public function settersAndGettersDataProvider()
+    public function testGetName()
     {
-        return array(
-            array('label', 'email'),
-            array('code', CaseOrigin::CODE_EMAIL)
-        );
+        $this->assertEquals('test', $this->caseOrigin->getName());
+    }
+
+    public function testLabel()
+    {
+        $this->assertNull($this->caseOrigin->getLabel());
+
+        $label = 'email';
+
+        $this->assertEquals($this->caseOrigin, $this->caseOrigin->setLabel($label));
+        $this->assertEquals($label, $this->caseOrigin->getLabel());
+    }
+
+    public function testLocale()
+    {
+        $this->assertNull($this->caseOrigin->getLocale());
+
+        $locale = 'en';
+
+        $this->assertEquals($this->caseOrigin, $this->caseOrigin->setLocale($locale));
+        $this->assertEquals($locale, $this->caseOrigin->getLocale());
     }
 }

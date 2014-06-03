@@ -36,7 +36,9 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
 
     public function settersAndGettersDataProvider()
     {
-        $origin = $this->getMock('OroCRM\Bundle\CaseBundle\Entity\CaseOrigin');
+        $origin = $this->getMockBuilder('OroCRM\Bundle\CaseBundle\Entity\CaseOrigin')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         return array(
             array('id', 42),

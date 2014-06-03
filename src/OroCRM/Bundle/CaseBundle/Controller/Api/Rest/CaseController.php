@@ -161,7 +161,7 @@ class CaseController extends RestController implements ClassResourceInterface
             case 'origin':
                 if ($value) {
                     /** @var CaseOrigin $value */
-                    $value = $value->getCode();
+                    $value = $value->getName();
                 }
                 break;
             case 'owner':

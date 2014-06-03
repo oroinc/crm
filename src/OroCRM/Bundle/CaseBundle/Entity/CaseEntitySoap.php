@@ -117,7 +117,7 @@ class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
         $this->relatedLead        = $this->getEntityId($case->getRelatedLead());
         $this->relatedOrder       = $this->getEntityId($case->getRelatedOrder());
         $this->relatedOpportunity = $this->getEntityId($case->getRelatedOpportunity());
-        $this->origin             = $case->getOrigin() ? $case->getOrigin()->getCode() : null;
+        $this->origin             = $case->getOrigin() ? $case->getOrigin()->getName() : null;
         $this->workflowStep       = $this->getEntityId($case->getWorkflowStep());
         $this->workflowItem       = $this->getEntityId($case->getWorkflowItem());
         $this->createdAt          = $case->getCreatedAt();

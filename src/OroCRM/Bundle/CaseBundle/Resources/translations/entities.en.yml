@@ -1,0 +1,5 @@
+case_origin:
+    email: Email
+    phone: Phone
+    web: Web
+    other: Other

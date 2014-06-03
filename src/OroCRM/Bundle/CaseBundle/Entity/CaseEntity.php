@@ -80,9 +80,65 @@ class CaseEntity
      * @var CaseOrigin
      *
      * @ORM\ManyToOne(targetEntity="CaseOrigin", cascade={"persist"})
-     * @ORM\JoinColumn(name="origin_code", referencedColumnName="code", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="origin_name", referencedColumnName="name", onDelete="SET NULL")
      */
     protected $origin;
+
+    /**
+     * @var Order
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Order")
+     * @ORM\JoinColumn(name="related_order_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $relatedOrder;
+
+    /**
+     * @var Cart
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Cart")
+     * @ORM\JoinColumn(name="related_cart_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $relatedCart;
+
+    /**
+     * @var Lead
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead")
+     * @ORM\JoinColumn(name="related_lead_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $relatedLead;
+
+    /**
+     * @var Opportunity
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity")
+     * @ORM\JoinColumn(name="related_opportunity_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $relatedOpportunity;
+
+    /**
+     * @var Contact
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $relatedContact;
+
+    /**
+     * @var Customer
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer")
+     * @ORM\JoinColumn(name="related_customer_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $relatedCustomer;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $reporter;
 
     /**
      * @var WorkflowStep
@@ -129,143 +185,6 @@ class CaseEntity
     protected $closedAt;
 
     /**
-     * @var Order
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Order")
-     * @ORM\JoinColumn(name="related_order_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedOrder;
-
-    /**
-     * @var Cart
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Cart")
-     * @ORM\JoinColumn(name="related_cart_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedCart;
-
-    /**
-     * @var Lead
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead")
-     * @ORM\JoinColumn(name="related_lead_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedLead;
-
-    /**
-     * @var Opportunity
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity")
-     * @ORM\JoinColumn(name="related_opportunity_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedOpportunity;
-
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $reporter;
-
-    /**
-     * @var Contact
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
-     * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedContact;
-
-    /**
-     * @var Customer
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer")
-     * @ORM\JoinColumn(name="related_customer_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedCustomer;
-
-    /**
-     * @param \DateTime $closedAt
-     *
-     * @return $this
-     */
-    public function setClosedAt(\DateTime $closedAt)
-    {
-        $this->closedAt = $closedAt;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getClosedAt()
-    {
-        return $this->closedAt;
-    }
-
-    /**
-     * @param \DateTime $reportedAt
-     *
-     * @return $this
-     */
-    public function setReportedAt(\DateTime $reportedAt)
-    {
-        $this->reportedAt = $reportedAt;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getReportedAt()
-    {
-        return $this->reportedAt;
-    }
-
-
-    /**
-     * @param \DateTime $createdAt
-     *
-     * @return $this
-     */
-    public function setCreatedAt(\DateTime $createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param string $description
-     *
-     * @return $this
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
      * @param integer $id
      *
      * @return $this
@@ -283,26 +202,6 @@ class CaseEntity
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param User $owner
-     *
-     * @return $this
-     */
-    public function setOwner($owner)
-    {
-        $this->owner = $owner;
-
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getOwner()
-    {
-        return $this->owner;
     }
 
     /**
@@ -326,71 +225,43 @@ class CaseEntity
     }
 
     /**
-     * @param \DateTime $updatedAt
+     * @param string $description
      *
      * @return $this
      */
-    public function setUpdatedAt(\DateTime $updatedAt)
+    public function setDescription($description)
     {
-        $this->updatedAt = $updatedAt;
+        $this->description = $description;
 
         return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param WorkflowItem $workflowItem
-     *
-     * @return $this
-     */
-    public function setWorkflowItem($workflowItem)
-    {
-        $this->workflowItem = $workflowItem;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowItem
-     */
-    public function getWorkflowItem()
-    {
-        return $this->workflowItem;
-    }
-
-    /**
-     * @param WorkflowStep $workflowStep
-     *
-     * @return $this
-     */
-    public function setWorkflowStep($workflowStep)
-    {
-        $this->workflowStep = $workflowStep;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowStep
-     */
-    public function getWorkflowStep()
-    {
-        return $this->workflowStep;
     }
 
     /**
      * @return string
      */
-    public function getWorkflowStepName()
+    public function getDescription()
     {
-        return $this->getWorkflowStep() ? $this->getWorkflowStep()->getName() : null;
+        return $this->description;
+    }
+
+    /**
+     * @param User $owner
+     *
+     * @return $this
+     */
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
     }
 
     /**
@@ -411,6 +282,26 @@ class CaseEntity
     public function getOrigin()
     {
         return $this->origin;
+    }
+
+    /**
+     * @param Order $relatedOrder
+     *
+     * @return $this
+     */
+    public function setRelatedOrder(Order $relatedOrder)
+    {
+        $this->relatedOrder = $relatedOrder;
+
+        return $this;
+    }
+
+    /**
+     * @return Order
+     */
+    public function getRelatedOrder()
+    {
+        return $this->relatedOrder;
     }
 
     /**
@@ -474,26 +365,6 @@ class CaseEntity
     }
 
     /**
-     * @param Order $relatedOrder
-     *
-     * @return $this
-     */
-    public function setRelatedOrder(Order $relatedOrder)
-    {
-        $this->relatedOrder = $relatedOrder;
-
-        return $this;
-    }
-
-    /**
-     * @return Order
-     */
-    public function getRelatedOrder()
-    {
-        return $this->relatedOrder;
-    }
-
-    /**
      * @param Contact $relatedContact
      *
      * @return $this
@@ -551,6 +422,134 @@ class CaseEntity
     public function getReporter()
     {
         return $this->reporter;
+    }
+
+    /**
+     * @param WorkflowStep $workflowStep
+     *
+     * @return $this
+     */
+    public function setWorkflowStep($workflowStep)
+    {
+        $this->workflowStep = $workflowStep;
+
+        return $this;
+    }
+
+    /**
+     * @return WorkflowStep
+     */
+    public function getWorkflowStep()
+    {
+        return $this->workflowStep;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWorkflowStepName()
+    {
+        return $this->getWorkflowStep() ? $this->getWorkflowStep()->getName() : null;
+    }
+
+    /**
+     * @param WorkflowItem $workflowItem
+     *
+     * @return $this
+     */
+    public function setWorkflowItem($workflowItem)
+    {
+        $this->workflowItem = $workflowItem;
+
+        return $this;
+    }
+
+    /**
+     * @return WorkflowItem
+     */
+    public function getWorkflowItem()
+    {
+        return $this->workflowItem;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     *
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     *
+     * @return $this
+     */
+    public function setUpdatedAt(\DateTime $updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $reportedAt
+     *
+     * @return $this
+     */
+    public function setReportedAt(\DateTime $reportedAt)
+    {
+        $this->reportedAt = $reportedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getReportedAt()
+    {
+        return $this->reportedAt;
+    }
+
+    /**
+     * @param \DateTime $closedAt
+     *
+     * @return $this
+     */
+    public function setClosedAt(\DateTime $closedAt)
+    {
+        $this->closedAt = $closedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getClosedAt()
+    {
+        return $this->closedAt;
     }
 
     /**
