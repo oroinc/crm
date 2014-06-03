@@ -43,19 +43,32 @@ datagrid:
                     - case_entity.closedAt
                     - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as assignedTo
                     - owner.id as ownerId
-                    - item.id as itemNumber
+                    - |
+                        (CASE
+                              when relatedOrder IS NOT NULL
+                              THEN relatedOrder.id
+                              when relatedOpportunity IS NOT NULL
+                              THEN relatedOpportunity.id
+                              when relatedLead IS NOT NULL
+                              THEN relatedLead.id
+                              when relatedCart IS NOT NULL
+                              THEN relatedCart.id
+                              else ''
+                        END) as itemNumber
                     - workflowStep.label as workflowStepLabel
                 from:
                     - { table: %orocrm_case.entity.class%, alias: case_entity }
                 join:
                     left:
-                        - { join: case_entity.reporter, alias: case_reporter }
-                        - { join: case_reporter.user, alias: reporter_user }
-                        - { join: case_reporter.contact, alias: reporter_contact }
-                        - { join: case_reporter.customer, alias: reporter_customer }
+                        - { join: case_entity.reporterUser, alias: reporter_user }
+                        - { join: case_entity.reporterContact, alias: reporter_contact }
+                        - { join: case_entity.reporterCustomer, alias: reporter_customer }
                         - { join: case_entity.owner, alias: owner }
                         - { join: case_entity.origin, alias: origin }
-                        - { join: case_entity.item, alias: item }
+                        - { join: case_entity.relatedOrder, alias: relatedOrder }
+                        - { join: case_entity.relatedOpportunity, alias: relatedOpportunity }
+                        - { join: case_entity.relatedLead, alias: relatedLead }
+                        - { join: case_entity.relatedCart, alias: relatedCart }
                         - { join: case_entity.workflowStep, alias: workflowStep }
         columns:
             caseNumber:

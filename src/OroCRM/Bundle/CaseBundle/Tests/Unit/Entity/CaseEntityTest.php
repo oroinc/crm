@@ -38,20 +38,25 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
     {
         $origin = $this->getMock('OroCRM\Bundle\CaseBundle\Entity\CaseOrigin');
 
-        return [
-            ['id', 42],
-            ['subject', 'Test subject'],
-            ['description', 'Test Description'],
-            ['owner', $this->getMock('Oro\Bundle\UserBundle\Entity\User')],
-            ['workflowStep', $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep')],
-            ['workflowItem', $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowItem')],
-            ['reporter', $this->getMock('OroCRM\Bundle\CaseBundle\Entity\CaseReporter')],
-            ['item', $this->getMock('OroCRM\Bundle\CaseBundle\Entity\CaseItem')],
-            ['origin', $origin],
-            ['createdAt', new \DateTime()],
-            ['updatedAt', new \DateTime()],
-            ['reportedAt', new \DateTime()],
-            ['closedAt', new \DateTime()],
-        ];
+        return array(
+            array('id', 42),
+            array('subject', 'Test subject'),
+            array('description', 'Test Description'),
+            array('owner', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
+            array('workflowStep', $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep')),
+            array('workflowItem', $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowItem')),
+            array('origin', $origin),
+            array('createdAt', new \DateTime()),
+            array('updatedAt', new \DateTime()),
+            array('reportedAt', new \DateTime()),
+            array('closedAt', new \DateTime()),
+            array('relatedLead', $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Lead')),
+            array('relatedOpportunity', $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Opportunity')),
+            array('relatedCart', $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Cart')),
+            array('relatedOrder', $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Order')),
+            array('reporterUser', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
+            array('reporterContact', $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact')),
+            array('reporterCustomer', $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Customer'))
+        );
     }
 }
