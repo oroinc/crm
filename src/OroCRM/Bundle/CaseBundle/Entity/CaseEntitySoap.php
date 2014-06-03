@@ -34,17 +34,17 @@ class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
     /**
      * @Soap\ComplexType("int", nillable=true)
      */
-    protected $reporterUser;
+    protected $reporter;
 
     /**
      * @Soap\ComplexType("int", nillable=true)
      */
-    protected $reporterContact;
+    protected $relatedContact;
 
     /**
      * @Soap\ComplexType("int", nillable=true)
      */
-    protected $reporterCustomer;
+    protected $relatedCustomer;
 
     /**
      * @Soap\ComplexType("int", nillable=true)
@@ -110,9 +110,9 @@ class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
         $this->subject            = $case->getSubject();
         $this->description        = $case->getDescription();
         $this->owner              = $this->getEntityId($case->getOwner());
-        $this->reporterUser       = $this->getEntityId($case->getReporterUser());
-        $this->reporterContact    = $this->getEntityId($case->getReporterContact());
-        $this->reporterCustomer   = $this->getEntityId($case->getReporterCustomer());
+        $this->reporter           = $this->getEntityId($case->getReporter());
+        $this->relatedContact     = $this->getEntityId($case->getRelatedContact());
+        $this->relatedCustomer    = $this->getEntityId($case->getRelatedCustomer());
         $this->relatedCart        = $this->getEntityId($case->getRelatedCart());
         $this->relatedLead        = $this->getEntityId($case->getRelatedLead());
         $this->relatedOrder       = $this->getEntityId($case->getRelatedOrder());

@@ -8,24 +8,24 @@ datagrid:
                     - caseEntity.id
                     - caseEntity.id as caseNumber
                     - caseEntity.subject
-                    - CONCAT(reporterCustomer.firstName, CONCAT(' ', reporterCustomer.lastName)) as customerName
+                    - CONCAT(relatedCustomer.firstName, CONCAT(' ', relatedCustomer.lastName)) as customerName
                     - |
                         (CASE
                               when reporterUser IS NOT NULL
                               THEN reporterUser.id
-                              when reporterContact IS NOT NULL
-                              THEN reporterContact.id
-                              when reporterCustomer IS NOT NULL
-                              THEN reporterCustomer.id
+                              when relatedContact IS NOT NULL
+                              THEN relatedContact.id
+                              when relatedCustomer IS NOT NULL
+                              THEN relatedCustomer.id
                               else '0'
                         END) as reporter_id
                     - |
                         (CASE
                               when reporterUser IS NOT NULL
                               THEN '%oro_user.entity.class%'
-                              when reporterContact IS NOT NULL
+                              when relatedContact IS NOT NULL
                               THEN '%orocrm_contact.entity.class%'
-                              when reporterCustomer IS NOT NULL
+                              when relatedCustomer IS NOT NULL
                               THEN '%orocrm_magento.customer.entity.class%'
                               else ''
                          END) as reporter_class
@@ -33,10 +33,10 @@ datagrid:
                         (CASE
                               when reporterUser IS NOT NULL
                               THEN CONCAT(reporterUser.firstName, CONCAT(' ', reporterUser.lastName))
-                              when reporterContact IS NOT NULL
-                              THEN CONCAT(reporterContact.firstName, CONCAT(' ', reporterContact.lastName))
-                              when reporterCustomer IS NOT NULL
-                              THEN CONCAT(reporterCustomer.firstName, CONCAT(' ', reporterCustomer.lastName))
+                              when relatedContact IS NOT NULL
+                              THEN CONCAT(relatedContact.firstName, CONCAT(' ', relatedContact.lastName))
+                              when relatedCustomer IS NOT NULL
+                              THEN CONCAT(relatedCustomer.firstName, CONCAT(' ', relatedCustomer.lastName))
                               else ''
                         END) as reporter
                     - caseEntity.reportedAt
@@ -60,9 +60,9 @@ datagrid:
                     - { table: %orocrm_case.entity.class%, alias: caseEntity }
                 join:
                     left:
-                        - { join: caseEntity.reporterUser, alias: reporterUser }
-                        - { join: caseEntity.reporterContact, alias: reporterContact }
-                        - { join: caseEntity.reporterCustomer, alias: reporterCustomer }
+                        - { join: caseEntity.reporter, alias: reporterUser }
+                        - { join: caseEntity.relatedContact, alias: relatedContact }
+                        - { join: caseEntity.relatedCustomer, alias: relatedCustomer }
                         - { join: caseEntity.owner, alias: owner }
                         - { join: caseEntity.origin, alias: origin }
                         - { join: caseEntity.relatedOrder, alias: relatedOrder }
@@ -199,14 +199,22 @@ datagrid:
                     left:
                         - { join: relatedOrder.customer, alias: relatedOrderCustomer }
                         - { join: relatedCart.customer, alias: relatedCartCustomer }
-                        - { join: reporterContact.accounts, alias: reporterContactAccount }
+                        - { join: relatedContact.accounts, alias: relatedContactAccount }
 
                 where:
                     and:
                         - |
-                            (reporterCustomer.account IS NOT NULL AND reporterCustomer.account = :account)
-                            OR (reporterContact IS NOT NULL AND reporterContactAccount.id = :account)
+                            (relatedCustomer.account IS NOT NULL AND relatedCustomer.account = :account)
+                            OR (relatedContact IS NOT NULL AND relatedContactAccount.id = :account)
                             OR (relatedOrderCustomer.account IS NOT NULL AND relatedOrderCustomer.account = :account)
                             OR (relatedCartCustomer.account IS NOT NULL AND relatedCartCustomer.account = :account)
 
                 groupBy: caseEntity.id
+
+    contact-cases-grid:
+        extends: cases-grid
+        source:
+            query:
+                where:
+                    and:
+                        - relatedContact IS NOT NULL AND relatedContact.id = :contact

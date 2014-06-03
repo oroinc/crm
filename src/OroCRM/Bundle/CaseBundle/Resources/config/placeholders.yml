@@ -1,0 +1,9 @@
+placeholders:
+    view_content_data_additional_information:
+        items:
+            orocrm_contact_cases_grid: ~
+
+items:
+    orocrm_contact_cases_grid:
+        template: OroCRMCaseBundle:Case:contactCases.html.twig
+        attribute_instance_of: [entity, %orocrm_contact.entity.class%]

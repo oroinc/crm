@@ -53,3 +53,11 @@ services:
             - false
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.account-cases-grid, method: onBuildAfter }
+
+    orocrm_case.event_listener.contact_cases_grid_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'contact'
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.contact-cases-grid, method: onBuildAfter }
