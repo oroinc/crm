@@ -14,9 +14,6 @@ datagrid:
                     - c.budget
                 from:
                     - { table: OroCRM\Bundle\CampaignBundle\Entity\Campaign, alias: c }
-                join:
-                    left:
-                        - { join: c.owner, alias: u }
         columns:
             name:
                 label: orocrm.campaign.name.label
