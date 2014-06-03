@@ -5,42 +5,42 @@ datagrid:
             acl_resource: orocrm_case_view
             query:
                 select:
-                    - case_entity.id
-                    - case_entity.id as caseNumber
-                    - case_entity.subject
-                    - CONCAT(reporter_customer.firstName, CONCAT(' ', reporter_customer.lastName)) as customerName
+                    - caseEntity.id
+                    - caseEntity.id as caseNumber
+                    - caseEntity.subject
+                    - CONCAT(reporterCustomer.firstName, CONCAT(' ', reporterCustomer.lastName)) as customerName
                     - |
                         (CASE
-                              when reporter_user IS NOT NULL
-                              THEN reporter_user.id
-                              when reporter_contact IS NOT NULL
-                              THEN reporter_contact.id
-                              when reporter_customer IS NOT NULL
-                              THEN reporter_customer.id
+                              when reporterUser IS NOT NULL
+                              THEN reporterUser.id
+                              when reporterContact IS NOT NULL
+                              THEN reporterContact.id
+                              when reporterCustomer IS NOT NULL
+                              THEN reporterCustomer.id
                               else '0'
                         END) as reporter_id
                     - |
                         (CASE
-                              when reporter_user IS NOT NULL
+                              when reporterUser IS NOT NULL
                               THEN '%oro_user.entity.class%'
-                              when reporter_contact IS NOT NULL
+                              when reporterContact IS NOT NULL
                               THEN '%orocrm_contact.entity.class%'
-                              when reporter_customer IS NOT NULL
+                              when reporterCustomer IS NOT NULL
                               THEN '%orocrm_magento.customer.entity.class%'
                               else ''
                          END) as reporter_class
                     - |
                         (CASE
-                              when reporter_user IS NOT NULL
-                              THEN CONCAT(reporter_user.firstName, CONCAT(' ', reporter_user.lastName))
-                              when reporter_contact IS NOT NULL
-                              THEN CONCAT(reporter_contact.firstName, CONCAT(' ', reporter_contact.lastName))
-                              when reporter_customer IS NOT NULL
-                              THEN CONCAT(reporter_customer.firstName, CONCAT(' ', reporter_customer.lastName))
+                              when reporterUser IS NOT NULL
+                              THEN CONCAT(reporterUser.firstName, CONCAT(' ', reporterUser.lastName))
+                              when reporterContact IS NOT NULL
+                              THEN CONCAT(reporterContact.firstName, CONCAT(' ', reporterContact.lastName))
+                              when reporterCustomer IS NOT NULL
+                              THEN CONCAT(reporterCustomer.firstName, CONCAT(' ', reporterCustomer.lastName))
                               else ''
                         END) as reporter
-                    - case_entity.reportedAt
-                    - case_entity.closedAt
+                    - caseEntity.reportedAt
+                    - caseEntity.closedAt
                     - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as assignedTo
                     - owner.id as ownerId
                     - |
@@ -57,19 +57,19 @@ datagrid:
                         END) as itemNumber
                     - workflowStep.label as workflowStepLabel
                 from:
-                    - { table: %orocrm_case.entity.class%, alias: case_entity }
+                    - { table: %orocrm_case.entity.class%, alias: caseEntity }
                 join:
                     left:
-                        - { join: case_entity.reporterUser, alias: reporter_user }
-                        - { join: case_entity.reporterContact, alias: reporter_contact }
-                        - { join: case_entity.reporterCustomer, alias: reporter_customer }
-                        - { join: case_entity.owner, alias: owner }
-                        - { join: case_entity.origin, alias: origin }
-                        - { join: case_entity.relatedOrder, alias: relatedOrder }
-                        - { join: case_entity.relatedOpportunity, alias: relatedOpportunity }
-                        - { join: case_entity.relatedLead, alias: relatedLead }
-                        - { join: case_entity.relatedCart, alias: relatedCart }
-                        - { join: case_entity.workflowStep, alias: workflowStep }
+                        - { join: caseEntity.reporterUser, alias: reporterUser }
+                        - { join: caseEntity.reporterContact, alias: reporterContact }
+                        - { join: caseEntity.reporterCustomer, alias: reporterCustomer }
+                        - { join: caseEntity.owner, alias: owner }
+                        - { join: caseEntity.origin, alias: origin }
+                        - { join: caseEntity.relatedOrder, alias: relatedOrder }
+                        - { join: caseEntity.relatedOpportunity, alias: relatedOpportunity }
+                        - { join: caseEntity.relatedLead, alias: relatedLead }
+                        - { join: caseEntity.relatedCart, alias: relatedCart }
+                        - { join: caseEntity.workflowStep, alias: workflowStep }
         columns:
             caseNumber:
                 label: orocrm.case.datagrid.case_number.label
@@ -97,16 +97,16 @@ datagrid:
             columns:
                 subject:
                     type: string
-                    data_name: subject
+                    data_name: caseEntity.subject
                 assignedTo:
                     type: string
                     data_name: assignedTo
                 reportedAt:
                     type: datetime
-                    data_name: case_entity.reportedAt
+                    data_name: caseEntity.reportedAt
                 closedAt:
                     type: datetime
-                    data_name: case_entity.closedAt
+                    data_name: caseEntity.closedAt
                 reporter:
                     label: orocrm.case.datagrid.reporter.label
                     type: string
@@ -132,7 +132,7 @@ datagrid:
                             property: label
                 workflowStepLabel:
                     type:      entity
-                    data_name: case_entity.status
+                    data_name: caseEntity.status
                     options:
                         field_type: oro_workflow_step_select
                         field_options:
@@ -141,13 +141,17 @@ datagrid:
         sorters:
             columns:
                 subject:
-                    data_name: subject
+                    data_name: caseEntity.subject
                 caseNumber:
-                    data_name: case_entity.id
+                    data_name: caseEntity.id
+                reporter:
+                    data_name: reporter
+                assignedTo:
+                    data_name: assignedTo
                 reportedAt:
-                    data_name: case_entity.reportedAt
+                    data_name: caseEntity.reportedAt
                 closedAt:
-                    data_name: case_entity.closedAt
+                    data_name: caseEntity.closedAt
                 workflowStepLabel:
                     data_name: workflowStep.stepOrder
             default:
@@ -186,3 +190,23 @@ datagrid:
                 label:         Delete
                 icon:          trash
                 link:          delete_link
+
+    account-cases-grid:
+        extends: cases-grid
+        source:
+            query:
+                join:
+                    left:
+                        - { join: relatedOrder.customer, alias: relatedOrderCustomer }
+                        - { join: relatedCart.customer, alias: relatedCartCustomer }
+                        - { join: reporterContact.accounts, alias: reporterContactAccount }
+
+                where:
+                    and:
+                        - |
+                            (reporterCustomer.account IS NOT NULL AND reporterCustomer.account = :account)
+                            OR (reporterContact IS NOT NULL AND reporterContactAccount.id = :account)
+                            OR (relatedOrderCustomer.account IS NOT NULL AND relatedOrderCustomer.account = :account)
+                            OR (relatedCartCustomer.account IS NOT NULL AND relatedCartCustomer.account = :account)
+
+                groupBy: caseEntity.id
