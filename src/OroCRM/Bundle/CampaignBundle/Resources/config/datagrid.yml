@@ -1,5 +1,5 @@
 datagrid:
-    campaing-grid:
+    orocrm-campaign-grid:
         extended_entity_name: OroCRM\Bundle\CampaignBundle\Entity\Campaign
         source:
             type: orm
@@ -21,29 +21,34 @@ datagrid:
                 label: orocrm.campaign.code.label
             startDate:
                 label: orocrm.campaign.start_date.label
-                frontend_type: date
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:Campaign:Datagrid/date.html.twig
             endDate:
                 label: orocrm.campaign.end_date.label
-                frontend_type: date
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:Campaign:Datagrid/date.html.twig
             budget:
                 label: orocrm.campaign.budget.label
+                frontend_type:   currency
         filters:
             columns:
                 name:
                     type:        string
-                    data_name:   o.name
+                    data_name:   c.name
                 code:
                     type:        string
-                    data_name:   o.code
+                    data_name:   c.code
                 startDate:
                     type:        date
-                    data_name:   o.startDate
+                    data_name:   c.startDate
                 endDate:
                     type:        date
-                    data_name:   o.endDate
+                    data_name:   c.endDate
                 budget:
                     type:        number
-                    data_name:   o.budget
+                    data_name:   c.budget
         sorters:
             columns:
                 name:        { data_name: c.name }
