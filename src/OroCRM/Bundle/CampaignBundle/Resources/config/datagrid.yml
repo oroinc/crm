@@ -12,13 +12,11 @@ datagrid:
                     - c.startDate
                     - c.endDate
                     - c.budget
-                    #- org.currency as currency
                 from:
                     - { table: OroCRM\Bundle\CampaignBundle\Entity\Campaign, alias: c }
                 join:
                     left:
                         - { join: c.owner, alias: u }
-                        #- { join: bu.organization, alias: org }
         columns:
             name:
                 label: orocrm.campaign.name.label
