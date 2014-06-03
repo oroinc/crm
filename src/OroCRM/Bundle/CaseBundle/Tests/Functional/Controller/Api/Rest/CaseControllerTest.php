@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller\Api\Rest;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
+use OroCRM\Bundle\CaseBundle\Entity\CaseOrigin;
+
 /**
  * @outputBuffering enabled
  * @dbIsolation
@@ -17,7 +19,8 @@ class CaseControllerTest extends WebTestCase
      * @var array
      */
     protected $case = [
-        'subject' => 'New case'
+        'subject' => 'New case',
+        'origin'  => CaseOrigin::CODE_EMAIL
     ];
 
     protected function setUp()
@@ -85,11 +88,11 @@ class CaseControllerTest extends WebTestCase
      */
     public function testPut($id)
     {
-        $updatedCase =  array_merge($this->case, ['subject' => 'Updated subject']);
+        $updatedCase = array_merge($this->case, ['subject' => 'Updated subject']);
         $this->client->request(
             'PUT',
             $this->getUrl('orocrm_api_put_case', ['id' => $id]),
-            ['case' =>$updatedCase],
+            ['case' => $updatedCase],
             [],
             $this->generateWsseAuthHeader()
         );

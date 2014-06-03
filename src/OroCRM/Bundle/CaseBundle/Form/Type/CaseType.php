@@ -50,13 +50,13 @@ class CaseType extends AbstractType
                 ]
             )
             ->add(
-                'origins',
-                'collection',
+                'origin',
+                'entity',
                 [
-                    'type'         => 'orocrm_case_origin',
-                    'allow_add'    => true,
-                    'allow_delete' => true,
-                    'label'        => 'orocrm.case.origins.label'
+                    'label'    => 'orocrm.case.origins.label',
+                    'class'    => 'OroCRMCaseBundle:CaseOrigin',
+                    'property' => 'code',
+                    'required' => false,
                 ]
             );
     }
