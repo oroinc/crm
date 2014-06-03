@@ -14,7 +14,7 @@ class CaseOrigin
 {
     const CODE_EMAIL = 'email';
     const CODE_PHONE = 'phone';
-    const CODE_WEB = 'web';
+    const CODE_WEB   = 'web';
     const CODE_OTHER = 'other';
 
     /**
@@ -68,6 +68,14 @@ class CaseOrigin
      * @return string
      */
     public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
     {
         return $this->label;
     }
