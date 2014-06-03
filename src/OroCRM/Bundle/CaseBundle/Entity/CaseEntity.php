@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\CaseBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -74,7 +73,7 @@ class CaseEntity
     /**
      * @var CaseReporter
      *
-     * @ORM\OneToOne(targetEntity="CaseReporter", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="CaseReporter", cascade={"persist"})
      * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $reporter;
@@ -82,22 +81,18 @@ class CaseEntity
     /**
      * @var CaseItem
      *
-     * @ORM\OneToOne(targetEntity="CaseItem", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="CaseItem", cascade={"persist"})
      * @ORM\JoinColumn(name="item_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $item;
 
     /**
-     * @var CaseOrigin[]|ArrayCollection
+     * @var CaseOrigin
      *
-     * @ORM\OneToMany(
-     *      targetEntity="CaseOrigin",
-     *      mappedBy="caseEntity",
-     *      cascade={"all"},
-     *      orphanRemoval=true
-     * )
+     * @ORM\ManyToOne(targetEntity="CaseOrigin")
+     * @ORM\JoinColumn(name="origin_code", referencedColumnName="code", onDelete="SET NULL")
      */
-    protected $origins;
+    protected $origin;
 
     /**
      * @var WorkflowStep
@@ -114,7 +109,6 @@ class CaseEntity
      * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowItem;
-
 
     /**
      * @var \DateTime
@@ -135,28 +129,23 @@ class CaseEntity
      *
      * @ORM\Column(type="datetime")
      */
-    protected $reportedOn;
+    protected $reportedAt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    protected $closedOn;
-
-    public function __construct()
-    {
-        $this->origins = new ArrayCollection();
-    }
+    protected $closedAt;
 
     /**
-     * @param \DateTime $closedOn
+     * @param \DateTime $closedAt
      *
      * @return $this
      */
-    public function setClosedOn(\DateTime $closedOn)
+    public function setClosedAt(\DateTime $closedAt)
     {
-        $this->closedOn = $closedOn;
+        $this->closedAt = $closedAt;
 
         return $this;
     }
@@ -164,19 +153,19 @@ class CaseEntity
     /**
      * @return \DateTime
      */
-    public function getClosedOn()
+    public function getClosedAt()
     {
-        return $this->closedOn;
+        return $this->closedAt;
     }
 
     /**
-     * @param \DateTime $reportedOn
+     * @param \DateTime $reportedAt
      *
      * @return $this
      */
-    public function setReportedOn(\DateTime $reportedOn)
+    public function setReportedAt(\DateTime $reportedAt)
     {
-        $this->reportedOn = $reportedOn;
+        $this->reportedAt = $reportedAt;
 
         return $this;
     }
@@ -184,9 +173,9 @@ class CaseEntity
     /**
      * @return \DateTime
      */
-    public function getReportedOn()
+    public function getReportedAt()
     {
-        return $this->reportedOn;
+        return $this->reportedAt;
     }
 
 
@@ -379,44 +368,6 @@ class CaseEntity
     }
 
     /**
-     * @param CaseOrigin $origin
-     *
-     * @return CaseEntity
-     */
-    public function addOrigin(CaseOrigin $origin)
-    {
-        if (!$this->origins->contains($origin)) {
-            $this->origins->add($origin);
-
-            $origin->setCaseEntity($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param CaseOrigin $origin
-     *
-     * @return CaseEntity
-     */
-    public function removeOrigin(CaseOrigin $origin)
-    {
-        if ($this->origins->contains($origin)) {
-            $this->origins->remove($origin);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getOrigins()
-    {
-        return $this->origins;
-    }
-
-    /**
      * @param CaseReporter $reporter
      *
      * @return $this
@@ -437,12 +388,32 @@ class CaseEntity
     }
 
     /**
+     * @param CaseOrigin $origin
+     *
+     * @return $this
+     */
+    public function setOrigin($origin)
+    {
+        $this->origin = $origin;
+
+        return $this;
+    }
+
+    /**
+     * @return CaseOrigin
+     */
+    public function getOrigin()
+    {
+        return $this->origin;
+    }
+
+    /**
      * @ORM\PrePersist
      */
     public function prePersist()
     {
-        $this->createdAt  = new \DateTime();
-        $this->reportedOn = new \DateTime();
+        $this->createdAt  = $this->createdAt ? $this->createdAt : new \DateTime();
+        $this->reportedAt = $this->reportedAt? $this->reportedAt : new \DateTime();
     }
 
     /**

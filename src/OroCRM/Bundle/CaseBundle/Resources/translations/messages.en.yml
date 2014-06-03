@@ -1,26 +1,38 @@
 orocrm:
     case:
+        datagrid:
+            case_number.label:     Case number
+            subject.label:         Subject
+            reporter.label:        Reporter
+            assigned_to.label:     Assigned to
+            reported_on.label:     Reported on
+            closed_on.label:       Closed on
+            closed_on.label:       Closed on
+            workflow_status.label: Status
+            customer.label:        Customer
+            origin.label:          Origin
+            item.label:            'Item #'
+
         menu:
-            index: Cases List
-    case_entity:
-        #
-        # OroCRM/Bundle/CaseBundle/Entity/CaseEntity
-        #
-        entity_label:                Case
-        entity_plural_label:         Cases
-        entity_description:          Represent case
-        subject.label:               Subject
-        description.label:           Description
-        workflow_step.label:         Status
-        owner.label:                 Assigned To
-        reporter_contact.label:      Reporter contact
-        reporter_customer.label:     Reporter customer
-        related_cart.label:          elated shopping cart
-        related_lead.label:          Related lead
-        related_order.label:         Related order
-        related_opportunity.label:   Related opportunity
-        created_at.label:            Created At
-        updated_at.label:            Updated At
-        id.label:                    Id
-        workflow_item.label:         Workflow item
-        assigned_to:                 Assigned to
+            index.label: Cases
+
+        caseentity:
+            #
+            # OroCRM/Bundle/CaseBundle/Entity/CaseEntity
+            #
+            entity_label:                Case
+            entity_plural_label:         Cases
+            entity_description:          Represent case
+            subject.label:               Subject
+            description.label:           Description
+            workflow_step.label:         Status
+            owner.label:                 Assigned To
+            closed_on.label:             Closed On
+            reported_on.label:           Reported On
+            item.label:                  Case item
+            origins.label:               Case origins
+            reporter.label:              Case reporter
+            created_at.label:            Created At
+            updated_at.label:            Updated At
+            id.label:                    Id
+            workflow_item.label:         Workflow item

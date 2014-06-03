@@ -4,8 +4,6 @@ namespace OroCRM\Bundle\CaseBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use Doctrine\Common\Collections\Collection;
-
 use Oro\Bundle\SoapBundle\Entity\SoapEntityInterface;
 
 /**
@@ -71,12 +69,12 @@ class CaseSoap extends CaseEntity implements SoapEntityInterface
     /**
      * @Soap\ComplexType("dateTime", nillable=true)
      */
-    protected $reportedOn;
+    protected $reportedAt;
 
     /**
      * @Soap\ComplexType("dateTime", nillable=true)
      */
-    protected $closedOn;
+    protected $closedAt;
 
     /**
      * @param CaseEntity $case
@@ -89,13 +87,13 @@ class CaseSoap extends CaseEntity implements SoapEntityInterface
         $this->owner        = $this->getEntityId($case->getOwner());
         $this->reporter     = $this->getEntityId($case->getReporter());
         $this->item         = $this->getEntityId($case->getItem());
-        $this->origins      = $this->getEntityIds($case->getOrigins());
+        $this->origin       = $case->getOrigin() ? $case->getOrigin()->getCode() : null;
         $this->workflowStep = $this->getEntityId($case->getWorkflowStep());
         $this->workflowItem = $this->getEntityId($case->getWorkflowItem());
         $this->createdAt    = $case->getCreatedAt();
         $this->updatedAt    = $case->getUpdatedAt();
-        $this->reportedOn   = $case->getReportedOn();
-        $this->closedOn     = $case->getClosedOn();
+        $this->reportedAt   = $case->getReportedAt();
+        $this->closedAt     = $case->getClosedAt();
     }
 
     /**
@@ -110,23 +108,5 @@ class CaseSoap extends CaseEntity implements SoapEntityInterface
         }
 
         return null;
-    }
-
-    /**
-     * @param Collection $collection
-     *
-     * @return array
-     */
-    protected function getEntityIds($collection)
-    {
-        $ids = [];
-
-        if ($collection->count()) {
-            foreach ($collection->getValues() as $item) {
-                $ids[] = $item->getId();
-            }
-        }
-
-        return $ids;
     }
 }

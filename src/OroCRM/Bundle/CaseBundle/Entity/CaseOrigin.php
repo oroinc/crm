@@ -12,70 +12,34 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CaseOrigin
 {
-    const TYPE_EMAIL = 1;
-    const TYPE_PHONE = 2;
-    const TYPE_WEB = 3;
-    const TYPE_OTHER = 4;
+    const CODE_EMAIL = 'email';
+    const CODE_PHONE = 'phone';
+    const CODE_WEB = 'web';
+    const CODE_OTHER = 'other';
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="code", type="string", length=30)
      */
-    protected $id;
-
-    /**
-     * @var CaseEntity
-     *
-     * @ORM\ManyToOne(targetEntity="CaseEntity", inversedBy="origins", cascade={"persist"})
-     * @ORM\JoinColumn(name="case_entity_id", referencedColumnName="id")
-     */
-    protected $caseEntity;
+    protected $code;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="integer")
+     * @ORM\Column(name="label", type="string", length=100, nullable=true)
      */
-    protected $type;
+    protected $label;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="value", type="string", length=100, nullable=true)
-     */
-    protected $value;
-
-    /**
-     * @param int $id
+     * @param string $code
      *
      * @return $this
      */
-    public function setId($id)
+    public function setCode($code)
     {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return $this
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
+        $this->code = $code;
 
         return $this;
     }
@@ -83,19 +47,19 @@ class CaseOrigin
     /**
      * @return string
      */
-    public function getType()
+    public function getCode()
     {
-        return $this->type;
+        return $this->code;
     }
 
     /**
-     * @param string $value
+     * @param string $label
      *
      * @return $this
      */
-    public function setValue($value)
+    public function setLabel($label)
     {
-        $this->value = $value;
+        $this->label = $label;
 
         return $this;
     }
@@ -103,28 +67,8 @@ class CaseOrigin
     /**
      * @return string
      */
-    public function getValue()
+    public function getLabel()
     {
-        return $this->value;
-    }
-
-    /**
-     * @param CaseEntity $caseEntity
-     *
-     * @return $this
-     */
-    public function setCaseEntity($caseEntity)
-    {
-        $this->caseEntity = $caseEntity;
-
-        return $this;
-    }
-
-    /**
-     * @return CaseEntity
-     */
-    public function getCaseEntity()
-    {
-        return $this->caseEntity;
+        return $this->label;
     }
 }

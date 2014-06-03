@@ -1,0 +1,11 @@
+{% set reporterClass = record.getValue('reporter_class') %}
+{% set viewRoute = get_view_route(reporterClass) %}
+{% if reporterClass and viewRoute %}
+    {% if resource_granted('VIEW;entity:'~reporterClass) %}
+        <a href="{{ path(viewRoute, {id:record.getValue('reporter_id')}) }}">{{ value }}</a>
+    {% else %}
+        {{ value }}
+    {% endif %}
+{% else %}
+    {{ value }}
+{% endif %}

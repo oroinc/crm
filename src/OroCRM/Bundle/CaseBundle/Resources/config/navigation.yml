@@ -1,17 +1,21 @@
 oro_menu_config:
     items:
-        orocrm_cases_index:
-            label: 'orocrm.cases.menu.index.label'
-            uri: '#'
+        orocrm_case_index:
+            label: 'orocrm.case.menu.index.label'
+            route: 'orocrm_case_index'
             extras:
                 position: 30
+                routes: ['orocrm_case_update', 'orocrm_case_create', 'orocrm_case_view']
 
     tree:
         application_menu:
             children:
                 activities_tab:
                     children:
-                        cases_list: ~
+                        orocrm_case_index: ~
 
 oro_titles:
-    orocrm_cases_index: ~
+    orocrm_case_index: ~
+    orocrm_case_view: 'View Case'
+    orocrm_case_create: 'Create Case'
+    orocrm_case_update: 'Edit case'

@@ -46,7 +46,7 @@ class CaseOriginTypeTest extends \PHPUnit_Framework_TestCase
         return [
             'all' => [
                 'widgets' => [
-                    'type',
+                    'code',
                     'value',
                 ]
             ]

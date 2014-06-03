@@ -47,11 +47,11 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
             ['workflowItem', $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowItem')],
             ['reporter', $this->getMock('OroCRM\Bundle\CaseBundle\Entity\CaseReporter')],
             ['item', $this->getMock('OroCRM\Bundle\CaseBundle\Entity\CaseItem')],
-            ['origins', $origin, new ArrayCollection([$origin])],
+            ['origin', $origin],
             ['createdAt', new \DateTime()],
             ['updatedAt', new \DateTime()],
-            ['reportedOn', new \DateTime()],
-            ['closedOn', new \DateTime()],
+            ['reportedAt', new \DateTime()],
+            ['closedAt', new \DateTime()],
         ];
     }
 }
