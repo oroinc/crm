@@ -1,0 +1,6 @@
+{% if value %}
+    {{ value|date('F j, Y') }}
+{% else %}
+    {{ 'N/A'|trans }}
+{% endif %}
+
