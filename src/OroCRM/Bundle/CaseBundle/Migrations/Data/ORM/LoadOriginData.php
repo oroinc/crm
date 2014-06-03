@@ -2,32 +2,56 @@
 
 namespace OroCRM\Bundle\CaseBundle\Migrations\Data\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use OroCRM\Bundle\CaseBundle\Entity\CaseOrigin;
 
-class LoadOriginData extends AbstractFixture
+use Oro\Bundle\TranslationBundle\DataFixtures\AbstractTranslatableEntityFixture;
+
+class LoadOriginData extends AbstractTranslatableEntityFixture
 {
+    const CASE_ORIGIN_PREFIX = 'case_origin';
+
     /**
-     * Load default origins
+     * @var array
+     */
+    protected $originNames = array(
+        CaseOrigin::ORIGIN_PHONE,
+        CaseOrigin::ORIGIN_EMAIL,
+        CaseOrigin::ORIGIN_WEB,
+        CaseOrigin::ORIGIN_OTHER
+    );
+
+    /**
+     * Load entities to DB
      *
      * @param ObjectManager $manager
      */
-    public function load(ObjectManager $manager)
+    protected function loadEntities(ObjectManager $manager)
     {
-        $origins = array(
-            CaseOrigin::CODE_PHONE => 'Phone',
-            CaseOrigin::CODE_EMAIL => 'Email',
-            CaseOrigin::CODE_WEB   => 'Web',
-            CaseOrigin::CODE_OTHER => 'Other'
-        );
-        foreach ($origins as $code => $label) {
-            $origin = new CaseOrigin();
-            $origin->setCode($code);
-            $origin->setLabel($label);
-            $manager->persist($origin);
+        $originRepository = $manager->getRepository('OroCRMCaseBundle:CaseOrigin');
+
+        $translationLocales = $this->getTranslationLocales();
+
+        foreach ($translationLocales as $locale) {
+            foreach ($this->originNames as $originName) {
+                // get case origin entity
+                /** @var CaseOrigin $caseOrigin */
+                $caseOrigin = $originRepository->findOneBy(array('name' => $originName));
+                if (!$caseOrigin) {
+                    $caseOrigin = new CaseOrigin($originName);
+                }
+
+                // set locale and label
+                $originLabel = $this->translate($originName, static::CASE_ORIGIN_PREFIX, $locale);
+                $caseOrigin->setLocale($locale)
+                    ->setLabel($originLabel);
+
+                // save
+                $manager->persist($caseOrigin);
+            }
+
+            $manager->flush();
         }
-        $manager->flush();
     }
 }

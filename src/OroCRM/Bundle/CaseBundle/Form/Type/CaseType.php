@@ -103,7 +103,7 @@ class CaseType extends AbstractType
                 [
                     'label'    => 'orocrm.case.origins.label',
                     'class'    => 'OroCRMCaseBundle:CaseOrigin',
-                    'property' => 'code',
+                    'property' => 'name',
                     'required' => false,
                 ]
             );

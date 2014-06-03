@@ -80,7 +80,7 @@ class CaseEntity
      * @var CaseOrigin
      *
      * @ORM\ManyToOne(targetEntity="CaseOrigin", cascade={"persist"})
-     * @ORM\JoinColumn(name="origin_code", referencedColumnName="code", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="origin_name", referencedColumnName="name", onDelete="SET NULL")
      */
     protected $origin;
 
