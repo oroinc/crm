@@ -10,7 +10,8 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class CampaignType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * @param FormBuilderInterface $builder
+     * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -25,7 +26,7 @@ class CampaignType extends AbstractType
             )
             ->add(
                 'code',
-                'orocrm_campaign_code_type',
+                'text',
                 [
                     'label'    => 'orocrm.campaign.code.label',
                     'required' => true,
@@ -65,7 +66,7 @@ class CampaignType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
@@ -73,7 +74,7 @@ class CampaignType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getName()
     {
