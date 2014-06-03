@@ -18,7 +18,7 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
  * @RouteResource("campaign")
  * @NamePrefix("oro_api_")
  */
-class CampaignController  extends RestController implements ClassResourceInterface
+class CampaignController extends RestController implements ClassResourceInterface
 {
     /**
      * REST DELETE

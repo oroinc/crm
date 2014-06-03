@@ -33,6 +33,7 @@ class CampaignControllerTest extends WebTestCase
         $this->client->submit($form);
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
+        $this->assertContains("Campaign saved", $crawler->html());
     }
 
     /**
@@ -40,8 +41,7 @@ class CampaignControllerTest extends WebTestCase
      */
     public function testUpdate()
     {
-
-        $response = $this->client->requestGrid('orocrm-campaing-grid');
+        $response = $this->client->requestGrid('orocrm-campaign-grid');
         $result   = $this->getJsonResponseContent($response, 200);
         $result   = reset($result['data']);
         $crawler  = $this->client->request(
@@ -58,6 +58,7 @@ class CampaignControllerTest extends WebTestCase
         $this->client->submit($form);
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
+        $this->assertContains("Campaign saved", $crawler->html());
     }
 
     /**
@@ -65,7 +66,7 @@ class CampaignControllerTest extends WebTestCase
      */
     public function testGrid()
     {
-        $response = $this->client->requestGrid('orocrm-campaing-grid');
+        $response = $this->client->requestGrid('orocrm-campaign-grid');
         $result   = $this->getJsonResponseContent($response, 200);
         $result   = reset($result['data']);
         $this->assertEquals('new name', $result['name']);

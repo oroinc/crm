@@ -21,14 +21,10 @@ datagrid:
                 label: orocrm.campaign.code.label
             startDate:
                 label: orocrm.campaign.start_date.label
-                type: twig
-                frontend_type: html
-                template: OroCRMCampaignBundle:Campaign:Datagrid/date.html.twig
+                frontend_type: date
             endDate:
                 label: orocrm.campaign.end_date.label
-                type: twig
-                frontend_type: html
-                template: OroCRMCampaignBundle:Campaign:Datagrid/date.html.twig
+                frontend_type: date
             budget:
                 label: orocrm.campaign.budget.label
                 frontend_type:   currency

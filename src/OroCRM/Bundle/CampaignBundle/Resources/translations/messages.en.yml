@@ -1,11 +1,12 @@
 orocrm:
     campaign:
-        entity_description:  Represent contact
+        entity_description:  Marketing campains
         entity_label:        Campaign
         entity_plural_label: Campaigns
         id.label:            Id
         name.label:          Name
         code.label:          Code
+        combined_name.label: Combined name
         start_date.label:    Start date
         end_date.label:      End date
         description.label:   Description
@@ -22,4 +23,3 @@ orocrm:
                 view.label: View
                 update.label: Update
                 delete.label: Delete
-    sales.lead.campaign.label: Campaign

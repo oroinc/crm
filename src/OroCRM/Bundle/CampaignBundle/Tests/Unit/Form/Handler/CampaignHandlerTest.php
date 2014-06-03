@@ -76,4 +76,16 @@ class CampaignHandlerTest extends \PHPUnit_Framework_TestCase
         $this->request->setMethod('GET');
         $this->assertFalse($this->handler->process($this->testEntity));
     }
+
+    public function testWrongForm()
+    {
+        $this->request->setMethod('POST');
+        $this->form->expects($this->once())
+            ->method('submit')
+            ->with($this->request);
+        $this->form->expects($this->once())
+            ->method('isValid')
+            ->will($this->returnValue(false));
+        $this->assertFalse($this->handler->process($this->testEntity));
+    }
 }

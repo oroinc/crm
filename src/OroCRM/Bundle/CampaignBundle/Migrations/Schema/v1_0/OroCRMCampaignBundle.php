@@ -4,27 +4,11 @@ namespace OroCRM\Bundle\CampaignBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
 
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
-
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMCampaignBundle implements Migration, ExtendExtensionAwareInterface
+class OroCRMCampaignBundle implements Migration
 {
-    /**
-     * @var ExtendExtension
-     */
-    protected $extendExtension;
-
-    /**
-     * @inheritdoc
-     */
-    public function setExtendExtension(ExtendExtension $extendExtension)
-    {
-        $this->extendExtension = $extendExtension;
-    }
-
     /**
      * @inheritdoc
      */
@@ -35,7 +19,7 @@ class OroCRMCampaignBundle implements Migration, ExtendExtensionAwareInterface
         $table->addColumn('name', 'string', ['notnull' => true, 'length' => 255]);
         $table->addColumn('code', 'string', ['notnull' => true, 'length' => 255]);
         $table->addColumn('combined_name', 'string', ['length' => 255]);
-        $table->addColumn('start_date', 'date', ['notnull' => false]);
+        $table->addColumn('start_date', 'date', ['notnull' => false, 'notnull' => false]);
         $table->addColumn('end_date', 'date', ['notnull' => false]);
         $table->addColumn('description', 'text', ['notnull' => false]);
         $table->addColumn('budget', 'money', ['notnull' => false]);
@@ -52,15 +36,6 @@ class OroCRMCampaignBundle implements Migration, ExtendExtensionAwareInterface
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_E9A064037E3C61F9'
-        );
-
-        $this->extendExtension->addManyToOneRelation(
-            $schema,
-            'orocrm_sales_lead',
-            'campaign',
-            'orocrm_campaign',
-            'combined_name',
-            ['extend' => ['owner' => 'Custom', 'is_extend' => true]]
         );
     }
 }
