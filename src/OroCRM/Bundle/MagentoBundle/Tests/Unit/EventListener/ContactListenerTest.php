@@ -7,7 +7,7 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
-use OroCRM\Bundle\MagentoBundle\EventListener\ContactSubscriber;
+use OroCRM\Bundle\MagentoBundle\EventListener\ContactListener;
 use OroCRM\Bundle\MagentoBundle\Tests\Unit\Fixtures\Entity\ExtendContact;
 use OroCRM\Bundle\MagentoBundle\Tests\Unit\Fixtures\Entity\ExtendCustomer;
 
@@ -18,10 +18,10 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 /**
  * @SuppressWarnings(PHPMD)
  */
-class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
+class ContactListenerTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var ContactSubscriber */
-    protected $subscriber;
+    /** @var ContactListener */
+    protected $listener;
 
     /**  @var \PHPUnit_Framework_MockObject_MockObject */
     protected $securityFacade;
@@ -64,7 +64,7 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
             ->method('getService')
             ->will($this->returnValue($this->schedulerService));
 
-        $this->subscriber = new ContactSubscriber($securityFacadeLink, $schedulerServiceLink);
+        $this->listener = new ContactListener($securityFacadeLink, $schedulerServiceLink);
 
         $this->em  = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
@@ -78,14 +78,6 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $this->onFlushEventArgs   = new OnFlushEventArgs($this->em);
         $this->postFlushEventArgs = new PostFlushEventArgs($this->em);
-    }
-
-    public function testGetSubscribedEvents()
-    {
-        $this->assertEquals(
-            ['onFlush'],
-            $this->subscriber->getSubscribedEvents()
-        );
     }
 
     /**
@@ -174,7 +166,7 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
                 ->method('schedule');
         }
 
-        $this->subscriber->onFlush($this->onFlushEventArgs);
+        $this->listener->onFlush($this->onFlushEventArgs);
     }
 
     public function dataTest()
@@ -289,6 +281,6 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
             ->method('hasLoggedUser')
             ->will($this->returnValue(false));
 
-        $this->subscriber->onFlush($this->onFlushEventArgs);
+        $this->listener->onFlush($this->onFlushEventArgs);
     }
 }

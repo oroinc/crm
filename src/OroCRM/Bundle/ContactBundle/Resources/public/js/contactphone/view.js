@@ -126,7 +126,7 @@ function($, _, Backbone, ContactPhoneCollection) {
             var contactId = this.contact.val();
             if (contactId) {
                 this.collection.setContactId(contactId);
-                this.collection.fetch();
+                this.collection.fetch({reset: true});
             } else {
                 this.collection.reset();
             }

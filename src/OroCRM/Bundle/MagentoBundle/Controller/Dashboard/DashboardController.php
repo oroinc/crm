@@ -37,7 +37,6 @@ class DashboardController extends Controller
         /** @var CartRepository $shoppingCartRepository */
         $shoppingCartRepository = $this->getDoctrine()->getRepository('OroCRMMagentoBundle:Cart');
 
-
         $data = $shoppingCartRepository->getFunnelChartData(
             $dateFrom,
             $dateTo,

@@ -58,7 +58,7 @@
                             widget.trigger('formSave');
                             {% if cartId is defined %}
                             $('#transition-b2c_flow_abandoned_shopping_cart-place_order').one('transitions_success', function() {
-                                {% set syncURL = path('orocrm_magento_orderplace_sync', {id: cartId}) %}
+                                {% set syncURL = path('orocrm_magento_orderplace_new_cart_order_sync', {id: cartId}) %}
                                 $.ajax({
                                     dataType: 'json',
                                     url: {{ syncURL|json_encode|raw}},
@@ -72,7 +72,7 @@
                                 });
                             });
                             {% elseif customerId is defined %}
-                                {% set syncURL = path('orocrm_magento_orderplace_customer_sync', {id: customerId}) %}
+                                {% set syncURL = path('orocrm_magento_orderplace_new_customer_order_sync', {id: customerId}) %}
                                 $.ajax({
                                     dataType: 'json',
                                     url: {{ syncURL|json_encode|raw }},
