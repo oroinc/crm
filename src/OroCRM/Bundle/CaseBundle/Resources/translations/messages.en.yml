@@ -1,5 +1,7 @@
 orocrm:
     case:
+        widgets:
+            account_cases: Cases
         datagrid:
             case_number.label:     Case number
             subject.label:         Subject
@@ -29,6 +31,8 @@ orocrm:
         closedAt.label:              Closed On
         reportedAt.label:            Reported On
         relatedOrder.label:          Case Order
+        relatedContact.label:        Case Contact
+        relatedCustomer.label:       Case Customer
         relatedCart.label:           Case Cart
         relatedLead.label:           Case Lead
         relatedOpportunity.label:    Case Opportunity

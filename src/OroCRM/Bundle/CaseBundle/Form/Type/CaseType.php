@@ -38,6 +38,24 @@ class CaseType extends AbstractType
                 ]
             )
             ->add(
+                'relatedContact',
+                'orocrm_contact_select',
+                [
+                    'required' => false,
+                    'label'    => 'orocrm.case.reporter.relatedContact.label',
+                ]
+            )
+            ->add(
+                'relatedCustomer',
+                'entity',
+                [
+                    'label'    => 'orocrm.case.reporter.relatedCustomer.label',
+                    'class'    => 'OroCRMMagentoBundle:Customer',
+                    'property' => 'email',
+                    'required' => false,
+                ]
+            )
+            ->add(
                 'relatedOrder',
                 'entity',
                 [

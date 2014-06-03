@@ -49,6 +49,8 @@ class CaseTypeTest extends \PHPUnit_Framework_TestCase
                     'subject',
                     'description',
                     'owner',
+                    'relatedContact',
+                    'relatedCustomer',
                     'relatedOrder',
                     'relatedCart',
                     'relatedLead',

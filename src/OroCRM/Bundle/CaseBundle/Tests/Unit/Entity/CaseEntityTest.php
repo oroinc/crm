@@ -54,9 +54,9 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
             array('relatedOpportunity', $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Opportunity')),
             array('relatedCart', $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Cart')),
             array('relatedOrder', $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Order')),
-            array('reporterUser', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
-            array('reporterContact', $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact')),
-            array('reporterCustomer', $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Customer'))
+            array('reporter', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
+            array('relatedContact', $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact')),
+            array('relatedCustomer', $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Customer'))
         );
     }
 }
