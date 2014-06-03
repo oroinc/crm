@@ -2,7 +2,9 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Entity;
 
-use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
+use Oro\Bundle\UserBundle\Entity\User;
+
+use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 
 class CampaignTest extends AbstractEntityTestCase
 {
@@ -24,7 +26,7 @@ class CampaignTest extends AbstractEntityTestCase
         $date        = new \DateTime('now');
         $description = 'some description';
         $budget      = 10.44;
-        $owner       = new BusinessUnit();
+        $owner       = new User();
 
         return [
             'name'        => ['name', $name, $name],
@@ -35,5 +37,31 @@ class CampaignTest extends AbstractEntityTestCase
             'budget'      => ['budget', $budget, $budget],
             'owner'       => ['owner', $owner, $owner],
         ];
+    }
+
+    public function testDates()
+    {
+        $campaign = new Campaign();
+        $testDate = new \DateTime('now', new \DateTimeZone('UTC'));
+
+        $campaign->prePersist();
+        $campaign->preUpdate();
+
+        $this->assertEquals($testDate->format('Y-m-d'), $campaign->getCreatedAt()->format('Y-m-d'));
+        $this->assertEquals($testDate->format('Y-m-d'), $campaign->getUpdatedAt()->format('Y-m-d'));
+    }
+
+    public function testCombinedName()
+    {
+        $campaign = new Campaign();
+        $campaign->setName('test name');
+        $campaign->setCode('test_code');
+
+        $campaign->prePersist();
+        $this->assertEquals('test name (test_code)', $campaign->getCombinedName());
+
+        $campaign->setCode('new_code');
+        $campaign->preUpdate();
+        $this->assertEquals('test name (new_code)', $campaign->getCombinedName());
     }
 }

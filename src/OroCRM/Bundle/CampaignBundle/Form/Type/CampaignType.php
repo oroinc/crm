@@ -10,7 +10,8 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class CampaignType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * @param FormBuilderInterface $builder
+     * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -33,7 +34,7 @@ class CampaignType extends AbstractType
             )
             ->add(
                 'startDate',
-                'oro_datetime',
+                'oro_date',
                 [
                     'label'    => 'orocrm.campaign.start_date.label',
                     'required' => false,
@@ -41,14 +42,14 @@ class CampaignType extends AbstractType
             )
             ->add(
                 'endDate',
-                'oro_datetime',
+                'oro_date',
                 [
                     'label'    => 'orocrm.campaign.end_date.label',
                     'required' => false,
                 ]
             )->add(
                 'description',
-                'text',
+                'textarea',
                 [
                     'label'    => 'orocrm.campaign.description.label',
                     'required' => false,
@@ -65,7 +66,7 @@ class CampaignType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
@@ -73,7 +74,7 @@ class CampaignType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getName()
     {

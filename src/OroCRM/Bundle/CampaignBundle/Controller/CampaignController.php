@@ -28,6 +28,8 @@ class CampaignController extends Controller
     }
 
     /**
+     * Create campaign
+     *
      * @Route("/create", name="orocrm_campaign_create")
      * @Template("OroCRMCampaignBundle:Campaign:update.html.twig")
      * @Acl(
@@ -43,12 +45,12 @@ class CampaignController extends Controller
     }
 
     /**
-     * Edit business_unit form
+     * Edit campaign
      *
      * @Route("/update/{id}", name="orocrm_campaign_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="orocrm_campaign_create",
+     *      id="orocrm_campaign_update",
      *      type="entity",
      *      permission="EDIT",
      *      class="OroCRMCampaignBundle:Campaign"
@@ -60,6 +62,8 @@ class CampaignController extends Controller
     }
 
     /**
+     * View campaign
+     *
      * @Route("/view/{id}", name="orocrm_campaign_view")
      * @Acl(
      *      id="orocrm_campaign_view",
@@ -69,12 +73,14 @@ class CampaignController extends Controller
      * )
      * @Template
      */
-    public function viewAction()
+    public function viewAction(Campaign $entity)
     {
-        return [];
+        return ['entity' => $entity];
     }
 
     /**
+     * Process save campaign entity
+     *
      * @param Campaign $entity
      * @return array
      */
@@ -83,7 +89,7 @@ class CampaignController extends Controller
         if ($this->get('orocrm_campaign.campaign.form.handler')->process($entity)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('oro.business_unit.controller.message.saved')
+                $this->get('translator')->trans('orocrm.campaign.controller.campaign.saved.message')
             );
 
             return $this->get('oro_ui.router')->redirectAfterSave(

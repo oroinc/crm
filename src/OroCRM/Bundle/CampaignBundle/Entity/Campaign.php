@@ -13,6 +13,7 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
  * @package OroCRM\Bundle\OroCRMCampaignBundle\Entity
  * @ORM\Entity()
  * @ORM\Table(name="orocrm_campaign")
+ * @ORM\HasLifecycleCallbacks()
  * @Config(
  *  defaultValues={
  *      "entity"={
@@ -51,9 +52,18 @@ class Campaign extends ExtendCampaign
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=255)
+     * @ORM\Column(name="code", type="string", length=255, unique=true)
      */
     protected $code;
+
+    /**
+     * This field needed as label in related entities drown select
+     *
+     * @var string
+     *
+     * @ORM\Column(name="combined_name", type="string", length=255, nullable=true)
+     */
+    protected $combinedName;
 
     /**
      * @var \DateTime $createdAt
@@ -90,6 +100,20 @@ class Campaign extends ExtendCampaign
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $owner;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    protected $updatedAt;
 
     /**
      * @return mixed
@@ -209,5 +233,67 @@ class Campaign extends ExtendCampaign
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    /**
+     * Get campaign created date/time
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Get campaign last update date/time
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Pre persist event handler
+     *
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->setCombinedName($this->name, $this->code);
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = clone $this->createdAt;
+    }
+
+    /**
+     * Pre update event handler
+     *
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->setCombinedName($this->name, $this->code);
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * Set combined name in format "campaign name (campaign_code)"
+     *
+     * @param string $name
+     * @param string $code
+     */
+    public function setCombinedName($name, $code)
+    {
+        $this->combinedName = sprintf('%s (%s)', $name, $code);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCombinedName()
+    {
+        return $this->combinedName;
     }
 }

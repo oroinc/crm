@@ -11,8 +11,15 @@ orocrm:
         description.label:   Description
         budget.label:        Budget
         owner.label:         Owner
+        created_at.label:    Created
+        updated_at.label:    Updated
+        controller:
+            campaign.saved.message:  "Campaign saved"
         menu:
             marketing_tab.label: Marketing
         datagrid:
             actions:
                 view.label: View
+                update.label: Update
+                delete.label: Delete
+    sales.lead.campaign.label: Campaign

@@ -9,6 +9,7 @@ oro_menu_config:
             label: 'orocrm.campaign.entity_plural_label'
             route: 'orocrm_campaign_index'
             extras:
+                routes: ['orocrm_campaign_*']
                 position: 10
     tree:
         application_menu:
@@ -16,3 +17,9 @@ oro_menu_config:
                 marketing_tab:
                     children:
                         campaigns_list: ~
+
+oro_titles:
+    orocrm_campaign_index: ~
+    orocrm_campaign_view: '%%entity.name%%'
+    orocrm_campaign_create: oro.ui.create_entity
+    orocrm_campaign_update: '%%entity.name%% - Edit'
