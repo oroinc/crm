@@ -16,9 +16,10 @@ class CaseControllerTest extends WebTestCase
      * @var array
      */
     protected $case = [
-        'subject' => 'New case',
-        'origin'  => CaseOrigin::CODE_EMAIL
-
+        'subject'     => 'New case',
+        'description' => 'New description',
+        'owner'       => 1,
+        'origin'      => CaseOrigin::CODE_EMAIL
     ];
 
     protected function setUp()

@@ -44,7 +44,7 @@ class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
     /**
      * @Soap\ComplexType("int", nillable=true)
      */
-    protected $origins;
+    protected $origin;
 
     /**
      * @Soap\ComplexType("int", nillable=true)
