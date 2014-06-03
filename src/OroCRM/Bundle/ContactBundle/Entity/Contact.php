@@ -74,6 +74,13 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(type="integer", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Soap\ComplexType("int", nillable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "identity"=true
+     *          }
+     *      }
+     * )
      */
     protected $id;
 
@@ -93,7 +100,14 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="first_name", type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={"auditable"=true},
+     *          "importexport"={
+     *              "identity"=true
+     *          }
+     *      }
+     * )
      */
     protected $firstName;
 
@@ -113,7 +127,14 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\Column(name="last_name", type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={"auditable"=true},
+     *          "importexport"={
+     *              "identity"=true
+     *          }
+     *      }
+     * )
      */
     protected $lastName;
 
@@ -321,6 +342,13 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *      }
+     * )
      */
     protected $addresses;
 

@@ -2,10 +2,10 @@ parameters:
     orocrm_account.importexport.account_normalizer.class: OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer
 
 services:
-    orocrm_account.importexport.account_normalizer:
-        class: %orocrm_account.importexport.account_normalizer.class%
-        tags:
-            - { name: oro_importexport.normalizer }
+#    orocrm_account.importexport.account_normalizer:
+#        class: %orocrm_account.importexport.account_normalizer.class%
+#        tags:
+#            - { name: oro_importexport.normalizer }
 
     orocrm_account.importexport.data_converter:
         parent: oro_importexport.data_converter.configurable

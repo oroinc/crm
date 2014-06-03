@@ -62,6 +62,13 @@ class Account extends ExtendAccount implements Taggable
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Soap\ComplexType("int", nillable=true)
+     * @ConfigField(
+     *  defaultValues={
+     *    "importexport"={
+     *       "identity"=true
+     *    }
+     *   }
+     * )
      */
     protected $id;
 
@@ -78,6 +85,9 @@ class Account extends ExtendAccount implements Taggable
      *    },
      *    "dataaudit"={
      *      "auditable"=true
+     *    },
+     *    "importexport"={
+     *       "identity"=true
      *    }
      *   }
      * )
@@ -108,7 +118,14 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(defaultValues={"merge"={"display"=true}})
+     * @ConfigField(
+     *      defaultValues={
+     *          "merge"={"display"=true},
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *      }
+     * )
      */
     protected $shippingAddress;
 
@@ -117,7 +134,14 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(defaultValues={"merge"={"display"=true}})
+     * @ConfigField(
+     *      defaultValues={
+     *          "merge"={"display"=true},
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *      }
+     * )
      */
     protected $billingAddress;
 

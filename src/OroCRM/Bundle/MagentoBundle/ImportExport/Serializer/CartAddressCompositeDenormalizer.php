@@ -46,8 +46,8 @@ class CartAddressCompositeDenormalizer extends OrderAddressCompositeDenormalizer
                 ['type' => 'datetime', 'format' => 'Y-m-d H:i:s']
             );
 
-            $result->setCreatedAt($created);
-            $result->setUpdatedAt($updated);
+            $result->setCreated($created);
+            $result->setUpdated($updated);
         }
 
         return $result;

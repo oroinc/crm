@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer;
 
 use Doctrine\Common\Collections\Collection;
 
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\AbstractContextModeAwareNormalizer;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -15,8 +16,11 @@ use OroCRM\Bundle\ContactBundle\Model\Social;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
-class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
+class ContactNormalizer extends AbstractContextModeAwareNormalizer implements SerializerAwareInterface
 {
+    const FULL_MODE  = 'full';
+    const SHORT_MODE = 'short';
+
     const CONTACT_TYPE   = 'OroCRM\Bundle\ContactBundle\Entity\Contact';
     const SOURCE_TYPE    = 'OroCRM\Bundle\ContactBundle\Entity\Source';
     const METHOD_TYPE    = 'OroCRM\Bundle\ContactBundle\Entity\Method';
@@ -62,6 +66,11 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
      */
     protected $serializer;
 
+    public function __construct()
+    {
+        parent::__construct(array(self::FULL_MODE, self::SHORT_MODE), self::FULL_MODE);
+    }
+
     public function setSerializer(SerializerInterface $serializer)
     {
         if (!$serializer instanceof NormalizerInterface || !$serializer instanceof DenormalizerInterface) {
@@ -87,7 +96,18 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
      * @param array $context
      * @return array
      */
-    public function normalize($object, $format = null, array $context = array())
+    public function normalizeShort($object, $format = null, array $context = array())
+    {
+        return $object->__toString();
+    }
+
+    /**
+     * @param Contact $object
+     * @param mixed $format
+     * @param array $context
+     * @return array
+     */
+    public function normalizeFull($object, $format = null, array $context = array())
     {
         $result = $this->getScalarFieldsValues($object);
 
