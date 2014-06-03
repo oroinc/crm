@@ -2,9 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
-use Doctrine\Common\EventSubscriber;
-
-use Doctrine\ORM\Events;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -13,7 +10,7 @@ use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
-class ContactSubscriber implements EventSubscriber
+class ContactListener
 {
     /**
      * @var ServiceLink
@@ -69,18 +66,6 @@ class ContactSubscriber implements EventSubscriber
     {
         $this->schedulerServiceLink = $schedulerServiceLink;
         $this->securityFacadeLink       = $securityFacadeLink;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSubscribedEvents()
-    {
-        return [
-            // @codingStandardsIgnoreStart
-            Events::onFlush
-            // @codingStandardsIgnoreEnd
-        ];
     }
 
     /**
