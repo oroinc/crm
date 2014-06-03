@@ -31,7 +31,7 @@ class CampaignTypeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $builder->expects($this->at(1))
             ->method('add')
-            ->with('code', 'orocrm_campaign_code_type')
+            ->with('code', 'text')
             ->will($this->returnSelf());
         $builder->expects($this->at(2))
             ->method('add')

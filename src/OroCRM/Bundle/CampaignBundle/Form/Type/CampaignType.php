@@ -26,7 +26,7 @@ class CampaignType extends AbstractType
             )
             ->add(
                 'code',
-                'orocrm_campaign_code_type',
+                'text',
                 [
                     'label'    => 'orocrm.campaign.code.label',
                     'required' => true,
