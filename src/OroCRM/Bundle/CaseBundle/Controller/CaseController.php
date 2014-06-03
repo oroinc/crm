@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CaseBundle\Controller;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -35,6 +36,18 @@ class CaseController extends Controller
     public function viewAction()
     {
         return array();
+    }
+
+    /**
+     * @Route("/widget/account-cases/{id}", name="orocrm_case_account_widget_cases", requirements={"id"="\d+"})
+     * @AclAncestor("orocrm_case_view")
+     * @Template
+     */
+    public function accountCasesAction(Account $account)
+    {
+
+
+        return array('account' => $account);
     }
 
     /**

@@ -164,25 +164,25 @@ class CaseEntity
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="reporter_user_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $reporterUser;
+    protected $reporter;
 
     /**
      * @var Contact
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
-     * @ORM\JoinColumn(name="reporter_contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $reporterContact;
+    protected $relatedContact;
 
     /**
      * @var Customer
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer")
-     * @ORM\JoinColumn(name="reporter_customer_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="related_customer_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $reporterCustomer;
+    protected $relatedCustomer;
 
     /**
      * @param \DateTime $closedAt
@@ -494,13 +494,13 @@ class CaseEntity
     }
 
     /**
-     * @param Contact $reporterContact
+     * @param Contact $relatedContact
      *
      * @return $this
      */
-    public function setReporterContact(Contact $reporterContact)
+    public function setRelatedContact(Contact $relatedContact)
     {
-        $this->reporterContact = $reporterContact;
+        $this->relatedContact = $relatedContact;
 
         return $this;
     }
@@ -508,19 +508,19 @@ class CaseEntity
     /**
      * @return Contact
      */
-    public function getReporterContact()
+    public function getRelatedContact()
     {
-        return $this->reporterContact;
+        return $this->relatedContact;
     }
 
     /**
-     * @param Customer $reporterCustomer
+     * @param Customer $relatedCustomer
      *
      * @return $this
      */
-    public function setReporterCustomer(Customer $reporterCustomer)
+    public function setRelatedCustomer(Customer $relatedCustomer)
     {
-        $this->reporterCustomer = $reporterCustomer;
+        $this->relatedCustomer = $relatedCustomer;
 
         return $this;
     }
@@ -528,19 +528,19 @@ class CaseEntity
     /**
      * @return Customer
      */
-    public function getReporterCustomer()
+    public function getRelatedCustomer()
     {
-        return $this->reporterCustomer;
+        return $this->relatedCustomer;
     }
 
     /**
-     * @param User $reporterUser
+     * @param User $reporter
      *
      * @return $this
      */
-    public function setReporterUser(User $reporterUser)
+    public function setReporter(User $reporter)
     {
-        $this->reporterUser = $reporterUser;
+        $this->reporter = $reporter;
 
         return $this;
     }
@@ -548,9 +548,9 @@ class CaseEntity
     /**
      * @return User
      */
-    public function getReporterUser()
+    public function getReporter()
     {
-        return $this->reporterUser;
+        return $this->reporter;
     }
 
     /**

@@ -36,7 +36,7 @@ class CaseType extends AbstractType
                 ]
             )
             ->add(
-                'reporterUser',
+                'reporter',
                 'oro_user_select',
                 [
                     'required' => false,
@@ -44,7 +44,7 @@ class CaseType extends AbstractType
                 ]
             )
             ->add(
-                'reporterContact',
+                'relatedContact',
                 'orocrm_contact_select',
                 [
                     'required' => false,
@@ -52,7 +52,7 @@ class CaseType extends AbstractType
                 ]
             )
             ->add(
-                'reporterCustomer',
+                'relatedCustomer',
                 'entity',
                 [
                     'label'    => 'orocrm.case.reporter.customer.label',
