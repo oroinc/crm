@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\CampaignBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
@@ -19,9 +19,9 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
  *          "icon"="icon-volume-up"
  *      },
  *      "ownership"={
- *          "owner_type"="BUSINESS_UNIT",
+ *          "owner_type"="USER",
  *          "owner_field_name"="owner",
- *          "owner_column_name"="business_unit_owner_id"
+ *          "owner_column_name"="owner_id"
  *      },
  *      "security"={
  *          "type"="ACL",
@@ -84,9 +84,9 @@ class Campaign extends ExtendCampaign
     protected $budget;
 
     /**
-     * @var BusinessUnit
+     * @var User
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\BusinessUnit")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $owner;
@@ -196,15 +196,15 @@ class Campaign extends ExtendCampaign
     }
 
     /**
-     * @param BusinessUnit $owner
+     * @param User $owner
      */
-    public function setOwner(BusinessUnit $owner)
+    public function setOwner(User $owner)
     {
         $this->owner = $owner;
     }
 
     /**
-     * @return BusinessUnit
+     * @return User
      */
     public function getOwner()
     {

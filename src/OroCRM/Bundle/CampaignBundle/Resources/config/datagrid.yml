@@ -3,7 +3,7 @@ datagrid:
         extended_entity_name: OroCRM\Bundle\CampaignBundle\Entity\Campaign
         source:
             type: orm
-            #acl_resource: orocrm_campaign_view
+            acl_resource: orocrm_campaign_view
             query:
                 select:
                     - c.id
@@ -73,7 +73,6 @@ datagrid:
                 startDate:   { data_name: c.startDate }
                 endDate:     { data_name: c.endDate }
                 budget:      { data_name: c.budget }
-                ownerName:   { data_name: ownerName }
             default:
                 startDate:  DESC
         properties:
