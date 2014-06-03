@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\EventListener;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Event\DefaultOwnerSetEvent;
 
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
@@ -76,6 +77,30 @@ class ChannelOwnerSetListener
                         ->andWhere('mc.account = a.id')
                 )
             )
+            ->setParameter('channel', $channel);
+
+        $qb->getQuery()->execute();
+
+        $magentoEntities = ['OroCRMMagentoBundle:Customer', 'OroCRMMagentoBundle:Cart', 'OroCRMMagentoBundle:Order'];
+        foreach ($magentoEntities as $entity) {
+            $this->updateMagentoEntity($entity, $channel, $event->getDefaultUserOwner()->getId());
+        }
+    }
+
+    /**
+     * Update magento entities, skip if owner is already set manually
+     *
+     * @param string  $entityName
+     * @param Channel $channel
+     * @param int     $newOwnerId
+     */
+    protected function updateMagentoEntity($entityName, Channel $channel, $newOwnerId)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->update($entityName, 'o')
+            ->set('o.owner', $newOwnerId)
+            ->where($qb->expr()->isNull('o.owner'))
+            ->andWhere($qb->expr()->eq('o.channel', ':channel'))
             ->setParameter('channel', $channel);
 
         $qb->getQuery()->execute();
