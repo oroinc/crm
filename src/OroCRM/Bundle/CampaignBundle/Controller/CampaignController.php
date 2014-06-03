@@ -89,7 +89,7 @@ class CampaignController extends Controller
         if ($this->get('orocrm_campaign.campaign.form.handler')->process($entity)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('orocrm.campaign.controller.message.saved')
+                $this->get('translator')->trans('orocrm.campaign.controller.campaign.saved.message')
             );
 
             return $this->get('oro_ui.router')->redirectAfterSave(

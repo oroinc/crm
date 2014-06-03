@@ -50,4 +50,18 @@ class CampaignTest extends AbstractEntityTestCase
         $this->assertEquals($testDate->format('Y-m-d'), $campaign->getCreatedAt()->format('Y-m-d'));
         $this->assertEquals($testDate->format('Y-m-d'), $campaign->getUpdatedAt()->format('Y-m-d'));
     }
+
+    public function testCombinedName()
+    {
+        $campaign = new Campaign();
+        $campaign->setName('test name');
+        $campaign->setCode('test_code');
+
+        $campaign->prePersist();
+        $this->assertEquals('test name (test_code)', $campaign->getCombinedName());
+
+        $campaign->setCode('new_code');
+        $campaign->preUpdate();
+        $this->assertEquals('test name (new_code)', $campaign->getCombinedName());
+    }
 }

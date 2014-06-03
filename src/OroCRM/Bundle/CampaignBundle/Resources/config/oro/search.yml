@@ -1,0 +1,20 @@
+OroCRM\Bundle\CampaignBundle\Entity\Campaign:
+    alias:                          orocrm_campaign
+    title_fields:                   [name, code]
+    route:
+        name:                       orocrm_campaign_view
+        parameters:
+            id:                     id
+    fields:
+        -
+            name:                   name
+            target_type:            text
+            target_fields:          [name]
+        -
+            name:                   code
+            target_type:            text
+            target_fields:          [code]
+        -
+            name:                   combined_name
+            target_type:            text
+            target_fields:          [combined_name]

@@ -57,6 +57,15 @@ class Campaign extends ExtendCampaign
     protected $code;
 
     /**
+     * This field needed as label in related entities drown select
+     *
+     * @var string
+     *
+     * @ORM\Column(name="combined_name", type="string", length=255, nullable=true)
+     */
+    protected $combinedName;
+
+    /**
      * @var \DateTime $createdAt
      *
      * @ORM\Column(name="start_date", type="date", nullable=true)
@@ -253,6 +262,7 @@ class Campaign extends ExtendCampaign
      */
     public function prePersist()
     {
+        $this->setCombinedName($this->name, $this->code);
         $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->updatedAt = clone $this->createdAt;
     }
@@ -264,6 +274,26 @@ class Campaign extends ExtendCampaign
      */
     public function preUpdate()
     {
+        $this->setCombinedName($this->name, $this->code);
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * Set combined name in format "campaign name (campaign_code)"
+     *
+     * @param string $name
+     * @param string $code
+     */
+    public function setCombinedName($name, $code)
+    {
+        $this->combinedName = sprintf('%s (%s)', $name, $code);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCombinedName()
+    {
+        return $this->combinedName;
     }
 }
