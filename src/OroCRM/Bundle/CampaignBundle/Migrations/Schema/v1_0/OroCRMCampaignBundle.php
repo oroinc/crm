@@ -18,8 +18,8 @@ class OroCRMCampaignBundle implements Migration
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('name', 'string', ['notnull' => true, 'length' => 255]);
         $table->addColumn('code', 'string', ['notnull' => true, 'length' => 255]);
-        $table->addColumn('combined_name', 'string', ['length' => 255]);
-        $table->addColumn('start_date', 'date', ['notnull' => false, 'notnull' => false]);
+        $table->addColumn('combined_name', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('start_date', 'date', ['notnull' => false]);
         $table->addColumn('end_date', 'date', ['notnull' => false]);
         $table->addColumn('description', 'text', ['notnull' => false]);
         $table->addColumn('budget', 'money', ['notnull' => false]);
