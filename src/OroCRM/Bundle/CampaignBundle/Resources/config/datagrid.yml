@@ -12,14 +12,13 @@ datagrid:
                     - c.startDate
                     - c.endDate
                     - c.budget
-                    - bu.name as ownerName
-                    - org.currency as currency
+                    #- org.currency as currency
                 from:
                     - { table: OroCRM\Bundle\CampaignBundle\Entity\Campaign, alias: c }
                 join:
                     left:
-                        - { join: c.owner, alias: bu }
-                        - { join: bu.organization, alias: org }
+                        - { join: c.owner, alias: u }
+                        #- { join: bu.organization, alias: org }
         columns:
             name:
                 label: orocrm.campaign.name.label
@@ -37,11 +36,7 @@ datagrid:
                 template: OroCRMCampaignBundle:Campaign:Datagrid/date.html.twig
             budget:
                 label: orocrm.campaign.budget.label
-                type:   localized_number
-                method: formatCurrency
-                context_resolver: OroCRM\Bundle\CampaignBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
-            ownerName:
-                label: orocrm.campaign.owner.label
+                frontend_type:   currency
         filters:
             columns:
                 name:
@@ -59,13 +54,6 @@ datagrid:
                 budget:
                     type:        number
                     data_name:   c.budget
-                ownerName:
-                    type:        entity
-                    data_name:   bu.id
-                    options:
-                        field_options:
-                            class: OroOrganizationBundle:BusinessUnit
-                            property: name
         sorters:
             columns:
                 name:        { data_name: c.name }
