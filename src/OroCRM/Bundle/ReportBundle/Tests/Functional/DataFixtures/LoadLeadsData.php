@@ -304,7 +304,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $workflow = $workflowManager->getWorkflow($workflowItem);
         /** @var EntityManager $em */
         $workflow->transit($workflowItem, $transition);
-        $workflowItem->setUpdated();
+        $workflowItem->setUpdatedAt();
     }
 
     /**
