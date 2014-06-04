@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -37,14 +38,19 @@ class ContactPhoneController extends RestController implements ClassResourceInte
     {
         /** @var Contact $contact */
         $contact = $this->getContactManager()->find($contactId);
-        $items = $contact->getPhones();
-        $result = array();
-        foreach ($items as $item) {
-            $result[] = $this->getPreparedItem($item);
-        }
-        unset($items);
+        $result = [];
+        if (!empty($contact)) {
+            $items = $contact->getPhones();
 
-        return new Response(json_encode($result), Codes::HTTP_OK);
+            foreach ($items as $item) {
+                $result[] = $this->getPreparedItem($item);
+            }
+        }
+
+        return new JsonResponse(
+            $result,
+            empty($contact) ? Codes::HTTP_NOT_FOUND : Codes::HTTP_OK
+        );
     }
 
     /**
@@ -107,7 +113,7 @@ class ContactPhoneController extends RestController implements ClassResourceInte
     /**
      * {@inheritDoc}
      */
-    protected function getPreparedItem($entity)
+    protected function getPreparedItem($entity, $resultFields = [])
     {
         $result['id']      = $entity->getId();
         $result['owner']   = (string) $entity->getOwner();

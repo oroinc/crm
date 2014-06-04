@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
@@ -34,6 +35,11 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
  *  routeView="orocrm_magento_order_view",
  *  defaultValues={
  *      "entity"={"icon"="icon-list-alt"},
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
@@ -215,6 +221,13 @@ class Order extends ExtendOrder
      * @ORM\Column(name="customer_email", type="string", length=255, nullable=true)
      */
     protected $customerEmail;
+
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $owner;
 
     /**
      * @param WorkflowItem $workflowItem
@@ -687,5 +700,21 @@ class Order extends ExtendOrder
     public function getCustomerEmail()
     {
         return $this->customerEmail;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setOwner(User $user)
+    {
+        $this->owner = $user;
     }
 }

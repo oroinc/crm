@@ -51,7 +51,8 @@ class CartStrategy extends BaseStrategy
                     'shippingAddress',
                     'billingAddress',
                     'workflowItem',
-                    'workflowStep'
+                    'workflowStep',
+                    'owner'
                 ]
             );
             $this->removeErrorMessage($existingEntity);
@@ -64,6 +65,9 @@ class CartStrategy extends BaseStrategy
                 return false;
             }
             $existingEntity = $newEntity;
+
+            // populate owner only for newly created entities
+            $this->defaultOwnerHelper->populateChannelOwner($newEntity, $newEntity->getChannel());
         }
 
         $this->updateCartStatus($existingEntity, $newEntity->getStatus());

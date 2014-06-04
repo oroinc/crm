@@ -1,0 +1,25 @@
+orocrm:
+    campaign:
+        entity_description:  Marketing campaigns
+        entity_label:        Campaign
+        entity_plural_label: Campaigns
+        id.label:            Id
+        name.label:          Name
+        code.label:          Code
+        combined_name.label: Combined name
+        start_date.label:    Start date
+        end_date.label:      End date
+        description.label:   Description
+        budget.label:        Budget
+        owner.label:         Owner
+        created_at.label:    Created
+        updated_at.label:    Updated
+        controller:
+            campaign.saved.message:  "Campaign saved"
+        menu:
+            marketing_tab.label: Marketing
+        datagrid:
+            actions:
+                view.label: View
+                update.label: Update
+                delete.label: Delete
