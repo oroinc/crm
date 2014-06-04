@@ -60,7 +60,6 @@ class LoadRegions extends AbstractFixture
 
         $region->setName($regionData['default_name']);
 
-
         return $region;
     }
 }

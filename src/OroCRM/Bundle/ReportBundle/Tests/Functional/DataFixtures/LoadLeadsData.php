@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures;
 
-use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -25,7 +23,9 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
+use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
 
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 

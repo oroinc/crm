@@ -1,3 +1,4 @@
+Add Address: Add Address
 oro.importexport.import.orocrm_contact.add_or_replace: Add and Replace
 orocrm:
     dashboard:
@@ -8,92 +9,92 @@ orocrm:
 
     contact:
         menu:
-            customers_tab.label: Customers
-            contact_list.description: List of contacts
-            contact_group_list.description: List of contact groups
-            shortcut_new_contact.label: Create new contact
-            shortcut_new_contact.description: Create new contact instance
-            shortcut_list_contacts.label: Show contacts list
-            shortcut_list_contacts.description: List of contacts
-            shortcut_new_contact_group.label: Create new contact group
+            contact_group_list.description:         List of contact groups
+            contact_list.description:               List of contacts
+            customers_tab.label:                    Customers
+            shortcut_list_contacts.description:     List of contacts
+            shortcut_list_contacts.label:           Show contacts list
+            shortcut_new_contact.description:       Create new contact instance
+            shortcut_new_contact.label:             Create new contact
             shortcut_new_contact_group.description: Create new contact group instance
+            shortcut_new_contact_group.label:       Create new contact group
         controller:
-            contact.saved.message: Contact saved
             contact_group.saved.message: Contact Group saved
+            contact.saved.message:       Contact saved
 
         #
         # Form
         #
         form:
-            choose_contact: Choose a contact...
-            choose_phone: Choose a phone...
+            choose_contact:        Choose a contact...
             choose_contact_method: Choose a contact method...
+            choose_phone:          Choose a phone...
         #
         # DataGrid
         #
         datagrid:
-            view: View
-            update: Update
-            delete: Delete
             contact_name: Contact name
+            delete:       Delete
+            view:         View
+            update:       Update
 
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\Contact
         #
+        entity_description:  Represent contact
         entity_label:        Contact
         entity_plural_label: Contacts
-        entity_description:  Represent contact
 
         import: Import Contacts
 
-        add_entity:        Add contact
-        id.label:          Id
-        phones.label:      Phones
-        primary_email.label:  Primary Email
-        primary_phone.label:  Primary Phone
-        email.label:       Email
-        emails.label:      Emails
-        skype.label:       Skype
-        fax.label:         Fax
-        method.label:      Contact Method
-        social.label:      Social
-        name_prefix.label: Name prefix
-        first_name.label:  First name
-        middle_name.label: Middle name
-        last_name.label:   Last name
-        name_suffix.label: Name suffix
-        gender.label:      Gender
-        birthday.label:    Birthday
-        description.label: Description
-        job_title.label:   Job Title
-        twitter.label:     Twitter
-        facebook.label:    Facebook
-        google_plus.label: Google+
-        linked_in.label:   LinkedIn
-        created_at.label:  Created At
-        updated_at.label:  Updated At
-        source.label:      Source
-        owner.label:       Owner
-        assigned_to.label: Assigned to
-        reports_to.label:  Reports to
-        addresses.label:   Addresses
-        groups.label:      Groups
-        accounts.label:    Accounts
-        created_by.label:  Created By
-        updated_by.label:  Updated By
+        accounts.label:      Accounts
+        add_entity:          Add contact
+        addresses.label:     Addresses
+        assigned_to.label:   Assigned to
+        birthday.label:      Birthday
+        created_at.label:    Created At
+        created_by.label:    Created By
+        description.label:   Description
+        email.label:         Email
+        emails.label:        Emails
+        facebook.label:      Facebook
+        fax.label:           Fax
+        first_name.label:    First name
+        gender.label:        Gender
+        google_plus.label:   Google+
+        groups.label:        Groups
+        id.label:            Id
+        linked_in.label:     LinkedIn
+        job_title.label:     Job Title
+        last_name.label:     Last name
+        method.label:        Contact Method
+        middle_name.label:   Middle name
+        name_prefix.label:   Name prefix
+        name_suffix.label:   Name suffix
+        owner.label:         Owner
+        reports_to.label:    Reports to
+        phones.label:        Phones
+        primary_email.label: Primary Email
+        primary_phone.label: Primary Phone
+        skype.label:         Skype
+        social.label:        Social
+        source.label:        Source
+        twitter.label:       Twitter
+        updated_at.label:    Updated At
+        updated_by.label:    Updated By
 
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\ContactAddress
         #
         contactaddress:
-            entity_label:        Contact Address
-            entity_plural_label: Contact Addresses
-            entity_description:  Represent contact's address
-            id.label:            Id
             city.label:          City
             country.label:       Country
             created.label:       Created
+            entity_description:  Represent contact's address
+            entity_label:        Contact Address
+            entity_plural_label: Contact Addresses
             first_name.label:    First name
+            id.label:            Id
             label.label:         Label
             last_name.label:     Last name
             middle_name.label:   Middle name
@@ -110,61 +111,67 @@ orocrm:
             types.label:         Types
             updated.label:       Updated
 
+            country_name.label:      Country name
+            country_iso2_code.label: Country ISO2 code
+            country_iso3_code.label: Country ISO3 code
+            region_name.label:       State name
+            region_code.label:       State ISO code
+
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\ContactEmail
         #
         contactemail:
+            email.label:         Email
+            entity_description:  Represent contact's email
             entity_label:        Contact Email
             entity_plural_label: Contact Emails
-            entity_description:  Represent contact's email
-            id.label:      Id
-            email.label:   Email
-            owner.label:   Owner
-            primary.label: Primary
+            id.label:            Id
+            owner.label:         Owner
+            primary.label:       Primary
 
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\ContactPhone
         #
         contactphone:
+            entity_description:  Represent contact's phone
             entity_label:        Contact Phone
             entity_plural_label: Contact Phones
-            entity_description:  Represent contact's phone
-            id.label:      Id
-            owner.label:   Owner
-            phone.label:   Phone
-            primary.label: Primary
+            id.label:            Id
+            owner.label:         Owner
+            phone.label:         Phone
+            primary.label:       Primary
 
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\Group
         #
         group:
+            entity_description:  Represent contact's group
             entity_label:        Contact Group
             entity_plural_label: Contact Groups
-            entity_description:  Represent contact's group
+            id.label:            Id
+            label.label:         Label
             manage:              Manage groups
-            id.label:    Id
-            owner.label: Owner
-            label.label: Label
+            owner.label:         Owner
 
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\Method
         #
         method:
+            entity_description:  Represent contact's method
             entity_label:        Contact Method
             entity_plural_label: Contact Methods
-            entity_description:  Represent contact's method
-            label.label: Label
-            name.label:  Name
+            label.label:         Label
+            name.label:          Name
 
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\Source
         #
         source:
+            entity_description:  Represent contact's source
             entity_label:        Contact Source
             entity_plural_label: Contact Sources
-            entity_description:  Represent contact's source
-            label.label:  Label
-            name.label:   Name
+            label.label:         Label
+            name.label:          Name
         widgets:
             account_contacts: Contacts
 

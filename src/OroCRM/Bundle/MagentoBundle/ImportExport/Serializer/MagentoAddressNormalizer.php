@@ -2,20 +2,30 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
+
+use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
 use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\TypedAddressNormalizer;
 
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class MagentoAddressNormalizer extends TypedAddressNormalizer
 {
+    /** @var PropertyAccessor */
+    protected $accessor;
+
     /**
-     * @param mixed  $data
-     * @param string $class
-     * @param mixed  $format
-     * @param array  $context
-     *
-     * @return AbstractTypedAddress
+     * @param AddressNormalizer $addressNormalizer
+     */
+    public function __construct(AddressNormalizer $addressNormalizer)
+    {
+        parent::__construct($addressNormalizer);
+        $this->accessor = PropertyAccess::createPropertyAccessor();
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
@@ -23,7 +33,22 @@ class MagentoAddressNormalizer extends TypedAddressNormalizer
 
         // can be empty when using this normalizer with cart
         if (!empty($data['customerAddressId'])) {
-            $result->setId($data['customerAddressId']);
+            $result->setOriginId($data['customerAddressId']);
+        }
+
+        foreach (['created', 'updated'] as $dateField) {
+            if (!empty($data[$dateField])) {
+                $this->accessor->setValue(
+                    $result,
+                    $dateField,
+                    $this->serializer->denormalize(
+                        $data[$dateField],
+                        'DateTime',
+                        null,
+                        ['type' => 'datetime', 'format' => 'Y-m-d H:i:s']
+                    )
+                );
+            }
         }
 
         return $result;
@@ -34,6 +59,6 @@ class MagentoAddressNormalizer extends TypedAddressNormalizer
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return is_array($data) && class_exists($type) && MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE == $type;
+        return MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE == $type;
     }
 }

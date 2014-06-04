@@ -3,41 +3,33 @@
 namespace OroCRM\Bundle\ReportBundle\Tests\Functional;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
-use Symfony\Component\DomCrawler\Form;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
- * @db_reindex
+ * @dbIsolation
+ * @dbReindex
  */
 class ControllersTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
-    public function setUp()
+    protected function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateBasicHeader());
+        $this->initClient(array(), $this->generateBasicAuthHeader());
     }
 
     /**
      * Simple controllers test
      *
-     * @param $gridName
-     * @param $report
-     * @param $group
-     * @param $reportName
+     * @param string $gridName
+     * @param string $report
+     * @param string $group
+     * @param string $reportName
      * @dataProvider reportsProvider
      */
     public function testIndex($gridName, $report, $group, $reportName)
     {
         $this->client->request(
             'GET',
-            $this->client->generate(
+            $this->getUrl(
                 'orocrm_report_index',
                 array(
                     'reportGroupName' => $group,
@@ -48,23 +40,22 @@ class ControllersTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, "text/html; charset=UTF-8");
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains($reportName, $result->getContent());
     }
 
     /**
      * Simple controllers test
      *
-     * @param $gridName
-     * @param $report
-     * @param $group
+     * @param string $gridName
+     * @param string $report
+     * @param string $group
      * @dataProvider reportsProvider
      */
     public function testGrid($gridName, $report, $group)
     {
         $reportName = $gridName . '-' . $report;
-        $result     = ToolsAPI::getEntityGrid(
-            $this->client,
+        $response = $this->client->requestGrid(
             $reportName,
             array(
                 "{$reportName}[reportGroupName]" => $group,
@@ -72,7 +63,7 @@ class ControllersTest extends WebTestCase
             )
         );
 
-        ToolsAPI::assertJsonResponse($result, 200);
+        $this->assertJsonResponseStatusCodeEquals($response, 200);
     }
 
     public function reportsProvider()

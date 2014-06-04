@@ -47,9 +47,6 @@ class OrderAddressCompositeDenormalizer extends TypedAddressNormalizer
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return
-            is_array($data)
-            && class_exists($type)
-            && MagentoConnectorInterface::ORDER_ADDRESS_TYPE == $type;
+        return MagentoConnectorInterface::ORDER_ADDRESS_TYPE === $type;
     }
 }

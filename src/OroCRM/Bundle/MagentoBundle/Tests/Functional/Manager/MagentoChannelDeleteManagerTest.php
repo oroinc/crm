@@ -4,41 +4,45 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Manager;
 
 use Doctrine\ORM\EntityManager;
 
-use OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
-use Oro\Bundle\TestFrameworkBundle\Test\Client;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 /**
  * @outputBuffering enabled
- * @db_isolation
+ * @dbIsolation
  */
 class MagentoChannelDeleteManagerTest extends WebTestCase
 {
-
-    /**
-     * @var Client
-     */
-    protected $client;
+    /** @var int */
+    protected static $channelId;
 
     /**
      * @var EntityManager
      */
     protected $em;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->client = static::createClient(
-            array(),
-            array_merge(ToolsAPI::generateBasicHeader(), array('HTTP_X-CSRF-Header' => 1))
-        );
+        $this->initClient([], array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1]));
         $this->em = $this->client->getKernel()->getContainer()->get('doctrine.orm.entity_manager');
+
+        $fixtures = ['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'];
+        $this->loadFixtures($fixtures);
+    }
+
+    protected function postFixtureLoad()
+    {
+        $channel = $this->em->getRepository('OroIntegrationBundle:Channel')->findAll();
+        $channel = reset($channel);
+        if (!$channel) {
+            $this->markTestIncomplete('Invalid fixtures, unable to perform test case');
+        }
+
+        self::$channelId = $channel->getId();
     }
 
     public function testDeleteChannel()
     {
-        $channel = $this->getChannel();
+        $channel   = $this->em->find('OroIntegrationBundle:Channel', self::$channelId);
         $channelId = $channel->getId();
         $this->assertGreaterThan(0, $this->getRecordsCount('OroCRMMagentoBundle:Cart', $channel));
         $this->assertGreaterThan(0, $this->getRecordsCount('OroCRMMagentoBundle:Order', $channel));
@@ -51,23 +55,10 @@ class MagentoChannelDeleteManagerTest extends WebTestCase
         $this->assertEquals(0, $this->getRecordsCount('OroCRMMagentoBundle:Website', $channelId));
     }
 
-    public function tearDown()
-    {
-        unset($this->client, $this->em);
-    }
-
-    /**
-     * @return Channel
-     */
-    protected function getChannel()
-    {
-        $fixture = new LoadMagentoChannel();
-        return $fixture->load($this->em);
-    }
-
     /**
      * @param $repository
      * @param $channel
+     *
      * @return integer
      */
     protected function getRecordsCount($repository, $channel)

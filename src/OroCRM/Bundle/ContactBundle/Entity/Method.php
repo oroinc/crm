@@ -10,6 +10,11 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_contact_method")
+ * @Config(
+ *      defaultValues={
+ *          "grouping"={"groups"={"dictionary"}}
+ *      }
+ * )
  */
 class Method
 {

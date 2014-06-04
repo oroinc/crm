@@ -6,7 +6,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 
 class StoresSoapIteratorTest extends BaseIteratorTestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->iterator = new StoresSoapIterator($this->transport);

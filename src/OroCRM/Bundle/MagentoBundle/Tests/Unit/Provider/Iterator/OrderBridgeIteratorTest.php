@@ -7,7 +7,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 class OrderBridgeIteratorTest extends BaseIteratorTestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

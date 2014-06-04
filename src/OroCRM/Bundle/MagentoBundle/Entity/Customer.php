@@ -6,14 +6,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
 
 /**
  * Class Customer
@@ -29,6 +30,11 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *  routeName="orocrm_magento_customer_index",
  *  routeView="orocrm_magento_customer_view",
  *  defaultValues={
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
@@ -37,7 +43,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * )
  * @Oro\Loggable
  */
-class Customer extends BasePerson
+class Customer extends ExtendCustomer
 {
     use IntegrationEntityTrait, OriginTrait;
 
@@ -220,6 +226,13 @@ class Customer extends BasePerson
      * @ORM\Column(name="currency", type="string", length=10, nullable=true)
      */
     protected $currency = 'USD';
+
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $owner;
 
     /**
      * {@inheritdoc}
@@ -447,5 +460,38 @@ class Customer extends BasePerson
     public function getCurrency()
     {
         return $this->currency;
+    }
+
+    /**
+     * Add address
+     *
+     * @param AbstractAddress $address
+     * @return $this
+     */
+    public function addAddress(AbstractAddress $address)
+    {
+        /** @var Address $address */
+        if (!$this->addresses->contains($address)) {
+            $this->addresses->add($address);
+            $address->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setOwner(User $user)
+    {
+        $this->owner = $user;
     }
 }

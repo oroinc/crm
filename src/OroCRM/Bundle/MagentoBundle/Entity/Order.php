@@ -5,16 +5,17 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseOrder;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
+use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
 
 /**
  * Class Order
@@ -34,6 +35,11 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
  *  routeView="orocrm_magento_order_view",
  *  defaultValues={
  *      "entity"={"icon"="icon-list-alt"},
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
@@ -43,8 +49,10 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
  *      }
  *  }
  * )
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Order extends BaseOrder
+class Order extends ExtendOrder
 {
     use IntegrationEntityTrait, NamesAwareTrait;
 
@@ -160,8 +168,8 @@ class Order extends BaseOrder
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\CallBundle\Entity\Call")
      * @ORM\JoinTable(name="orocrm_magento_order_calls",
-     *      joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     protected $relatedCalls;
@@ -171,8 +179,8 @@ class Order extends BaseOrder
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\EmailBundle\Entity\Email")
      * @ORM\JoinTable(name="orocrm_magento_order_emails",
-     *      joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     protected $relatedEmails;
@@ -206,6 +214,20 @@ class Order extends BaseOrder
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowStep;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="customer_email", type="string", length=255, nullable=true)
+     */
+    protected $customerEmail;
+
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $owner;
 
     /**
      * @param WorkflowItem $workflowItem
@@ -658,5 +680,41 @@ class Order extends BaseOrder
         );
 
         return $addresses->first();
+    }
+
+    /**
+     * @param string $customerEmail
+     *
+     * @return $this
+     */
+    public function setCustomerEmail($customerEmail)
+    {
+        $this->customerEmail = $customerEmail;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerEmail()
+    {
+        return $this->customerEmail;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setOwner(User $user)
+    {
+        $this->owner = $user;
     }
 }

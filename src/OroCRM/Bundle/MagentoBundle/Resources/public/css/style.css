@@ -64,7 +64,6 @@
 
 .place-order-transaction-dialog .ui-dialog-content {
     /* prevent JS resizing */
-    width: 100%!important;
     overflow: hidden;
     padding: 0;
 }

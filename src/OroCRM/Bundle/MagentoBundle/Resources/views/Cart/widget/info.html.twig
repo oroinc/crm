@@ -1,6 +1,7 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroAddressBundle::macros.html.twig' as address %}
 {% import 'OroEmailBundle::macros.html.twig' as email %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
@@ -20,6 +21,7 @@
 
                 {{ ui.renderHtmlProperty('orocrm.magento.cart.opportunity.label'|trans, opportunityView) }}
             {% endif %}
+            {{ entityConfig.renderDynamicFields(entity) }}
         </div>
 
         <div class="responsive-block">
@@ -35,4 +37,3 @@
         </div>
     </div>
 </div>
-

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\TaskBundle\DataFixtures\ORM;
+namespace OroCRM\Bundle\TaskBundle\Tests\Functional\Controller\Api\Rest\DataFixtures;
 
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 

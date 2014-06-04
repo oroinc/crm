@@ -2,17 +2,19 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCart;
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EmailBundle\Entity\Email;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
 use OroCRM\Bundle\CallBundle\Entity\Call;
+use OroCRM\Bundle\MagentoBundle\Model\ExtendCart;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
@@ -35,6 +37,11 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *  routeView="orocrm_magento_cart_view",
  *  defaultValues={
  *      "entity"={"icon"="icon-shopping-cart"},
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
@@ -45,7 +52,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *  }
  * )
  */
-class Cart extends BaseCart
+class Cart extends ExtendCart
 {
     use IntegrationEntityTrait, OriginTrait, NamesAwareTrait;
 
@@ -191,8 +198,8 @@ class Cart extends BaseCart
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\CallBundle\Entity\Call")
      * @ORM\JoinTable(name="orocrm_magento_cart_calls",
-     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     protected $relatedCalls;
@@ -202,8 +209,8 @@ class Cart extends BaseCart
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\EmailBundle\Entity\Email")
      * @ORM\JoinTable(name="orocrm_magento_cart_emails",
-     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     protected $relatedEmails;
@@ -237,6 +244,13 @@ class Cart extends BaseCart
      * @ORM\Column(name="status_message", type="string", length=255, nullable=true)
      */
     protected $statusMessage;
+
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $owner;
 
     /**
      * @param WorkflowItem $workflowItem
@@ -787,5 +801,21 @@ class Cart extends BaseCart
     public function getStatusMessage()
     {
         return $this->statusMessage;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setOwner(User $user)
+    {
+        $this->owner = $user;
     }
 }

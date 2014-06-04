@@ -6,6 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
+use OroCRM\Bundle\MagentoBundle\Model\ExtendStore;
 
 /**
  * Class Store
@@ -22,8 +25,9 @@ use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
  *      @ORM\UniqueConstraint(name="unq_code_channel_id", columns={"store_code", "channel_id"})
  *  }
  * )
+ * @Config()
  */
-class Store
+class Store extends ExtendStore
 {
     use IntegrationEntityTrait, OriginTrait;
 
