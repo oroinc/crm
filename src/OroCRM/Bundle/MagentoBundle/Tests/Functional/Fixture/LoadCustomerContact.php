@@ -1,17 +1,28 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\ImportExport;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+use Oro\Bundle\UserBundle\Entity\UserManager;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 
-class LoadCustomerContact extends AbstractFixture implements DependentFixtureInterface
+class LoadCustomerContact extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
+    /** @var ContainerInterface */
+    private $container;
+
+    /**
+     * {@inheritdoc}
+     */
     public function load(ObjectManager $manager)
     {
         /** @var Customer $customer */
@@ -27,15 +38,15 @@ class LoadCustomerContact extends AbstractFixture implements DependentFixtureInt
         $contact->setGender($customer->getGender());
         $contact->addEmail($email);
 
+        /** @var UserManager $userManager */
+        $userManager = $this->container->get('oro_user.manager');
+        $admin       = $userManager->loadUserByUsername('admin');
+        $this->setReference('admin_user', $admin);
+        $contact->setOwner($admin);
+
         $customer->setContact($contact);
 
-        $adminUser = $manager->getRepository('OroUserBundle:User')->findOneBy(['username'=>'admin']);
-        if ($adminUser) {
-            $contact->setOwner($adminUser);
-        }
-
         $this->setReference('contact', $contact);
-
         $manager->persist($contact);
 
         $manager->flush();
@@ -47,5 +58,13 @@ class LoadCustomerContact extends AbstractFixture implements DependentFixtureInt
     public function getDependencies()
     {
         return ['OroCRM\\Bundle\\MagentoBundle\\Tests\\Functional\\Fixture\\LoadMagentoChannel'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
     }
 }

@@ -9,11 +9,11 @@ use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
-
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
+use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
 
 use OroCRM\Bundle\MagentoBundle\Utils\ValidationUtils;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
@@ -36,18 +36,24 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
     /** @var ContextInterface */
     protected $context;
 
+    /** @var DefaultOwnerHelper */
+    protected $defaultOwnerHelper;
+
     /**
      * @param ImportStrategyHelper $strategyHelper
      * @param ManagerRegistry      $managerRegistry
+     * @param DefaultOwnerHelper   $defaultOwnerHelper
      */
     public function __construct(
         ImportStrategyHelper $strategyHelper,
-        ManagerRegistry $managerRegistry
+        ManagerRegistry $managerRegistry,
+        DefaultOwnerHelper $defaultOwnerHelper
     ) {
-        $this->strategyHelper  = $strategyHelper;
-        $this->managerRegistry = $managerRegistry;
-        $this->doctrineHelper  = new DoctrineHelper($this->strategyHelper);
-        $this->addressHelper   = new AddressImportHelper($this->doctrineHelper);
+        $this->strategyHelper     = $strategyHelper;
+        $this->managerRegistry    = $managerRegistry;
+        $this->doctrineHelper     = new DoctrineHelper($this->strategyHelper);
+        $this->addressHelper      = new AddressImportHelper($this->doctrineHelper);
+        $this->defaultOwnerHelper = $defaultOwnerHelper;
     }
 
     /**
