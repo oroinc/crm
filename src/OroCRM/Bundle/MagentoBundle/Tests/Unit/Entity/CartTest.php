@@ -42,27 +42,29 @@ class CartTest extends AbstractEntityTestCase
         $testCustomer        = new Customer();
         $testItemsCollection = new ArrayCollection([new CartItem()]);
         $testStore           = new Store();
+        $owner               = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
 
-        return array(
-            'status'            => array('status', $testStatus, $testStatus),
-            'storeToQuoteRate'  => array('storeToQuoteRate', 1, 1),
-            'storeToBaseRate'   => array('storeToBaseRate', 1, 1),
-            'storeCurrencyCode' => array('storeCurrencyCode', 'USD', 'USD'),
-            'baseCurrencyCode'  => array('baseCurrencyCode', 'USD', 'USD'),
-            'paymentDetails'    => array('paymentDetails', '', ''),
-            'itemsCount'        => array('itemsCount', 1, 1),
-            'isGuest'           => array('isGuest', 1, 1),
-            'giftMessage'       => array('giftMessage', 1, 1),
-            'quoteCurrencyCode' => array('quoteCurrencyCode', 'USD', 'USD'),
-            'subTotal'          => array('subTotal', 11.12, 11.12),
-            'itemsQty'          => array('itemsQty', 3, 3),
-            'email'             => array('email', 'test@example.com', 'test@example.com'),
-            'shippingAddress'   => array('shippingAddress', $testShippingAddress, $testShippingAddress),
-            'billingAddress'    => array('billingAddress', $testBillingAddress, $testBillingAddress),
-            'customer'          => array('customer', $testCustomer, $testCustomer),
-            'cartItems'         => array('cartItems', $testItemsCollection, $testItemsCollection),
-            'store'             => array('store', $testStore, $testStore),
-            'statusMessage'     => array('statusMessage', 'some message', 'some message')
-        );
+        return [
+            'status'            => ['status', $testStatus, $testStatus],
+            'storeToQuoteRate'  => ['storeToQuoteRate', 1, 1],
+            'storeToBaseRate'   => ['storeToBaseRate', 1, 1],
+            'storeCurrencyCode' => ['storeCurrencyCode', 'USD', 'USD'],
+            'baseCurrencyCode'  => ['baseCurrencyCode', 'USD', 'USD'],
+            'paymentDetails'    => ['paymentDetails', '', ''],
+            'itemsCount'        => ['itemsCount', 1, 1],
+            'isGuest'           => ['isGuest', 1, 1],
+            'giftMessage'       => ['giftMessage', 1, 1],
+            'quoteCurrencyCode' => ['quoteCurrencyCode', 'USD', 'USD'],
+            'subTotal'          => ['subTotal', 11.12, 11.12],
+            'itemsQty'          => ['itemsQty', 3, 3],
+            'email'             => ['email', 'test@example.com', 'test@example.com'],
+            'shippingAddress'   => ['shippingAddress', $testShippingAddress, $testShippingAddress],
+            'billingAddress'    => ['billingAddress', $testBillingAddress, $testBillingAddress],
+            'customer'          => ['customer', $testCustomer, $testCustomer],
+            'cartItems'         => ['cartItems', $testItemsCollection, $testItemsCollection],
+            'store'             => ['store', $testStore, $testStore],
+            'statusMessage'     => ['statusMessage', 'some message', 'some message'],
+            'owner'             => ['owner', $owner, $owner]
+        ];
     }
 }
