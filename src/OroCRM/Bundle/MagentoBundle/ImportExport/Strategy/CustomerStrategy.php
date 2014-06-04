@@ -4,8 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -42,7 +42,12 @@ class CustomerStrategy extends BaseStrategy
             ['originId' => $remoteEntity->getOriginId(), 'channel' => $remoteEntity->getChannel()],
             $remoteEntity
         );
-        $localEntity = $localEntity ? : $remoteEntity;
+        if (!$localEntity) {
+            $localEntity = $remoteEntity;
+
+            // populate owner only for newly created entities
+            $this->defaultOwnerHelper->populateChannelOwner($localEntity, $localEntity->getChannel());
+        }
 
         // update all related entities
         $this->updateStoresAndGroup(
@@ -59,7 +64,7 @@ class CustomerStrategy extends BaseStrategy
         $this->strategyHelper->importEntity(
             $localEntity,
             $remoteEntity,
-            ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses', 'lifetime']
+            ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses', 'lifetime', 'owner']
         );
         $this->updateAddresses($localEntity, $remoteEntity->getAddresses());
 
@@ -159,6 +164,8 @@ class CustomerStrategy extends BaseStrategy
                 $localData->getAddresses()->get($key)->setContactAddress($address);
             }
 
+            // populate default owner only for new contacts
+            $this->defaultOwnerHelper->populateChannelOwner($contact, $localData->getChannel());
             $localData->setContact($contact);
         }
     }
@@ -260,6 +267,9 @@ class CustomerStrategy extends BaseStrategy
                 $account->{'set' . ucfirst($key) . 'Address'}(null);
             }
         }
+
+        // populate default owner only for new accounts
+        $this->defaultOwnerHelper->populateChannelOwner($account, $entity->getChannel());
         $entity->setAccount($account);
     }
 }
