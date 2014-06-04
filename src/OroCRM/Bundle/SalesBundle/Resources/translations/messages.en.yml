@@ -16,6 +16,16 @@ orocrm:
                 InProgressCount:
                     name: In Progress Count
                     hint: Number of 'in progress' items
+            opportunity:
+                InProgressRevenueSumFunction:
+                    name: Sum revenue in progress
+                    hint: Sum close revenue for 'in_progress' items
+                WonRevenueSumFunction:
+                    name: Sum revenue won
+                    hint: Sum close revenue for 'won' items
+                LostRevenueSumFunction:
+                    name: Sum revenue lost
+                    hint: Sum close revenue for 'lost' items
 
     sales:
         dashboard:
