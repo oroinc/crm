@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CallBundle\Migrations\Schema\v1_2;
+namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_5;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -12,7 +12,7 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMCallBundle implements Migration, ExtendExtensionAwareInterface
+class OroCRMSalesBundle implements Migration, ExtendExtensionAwareInterface
 {
     /** @var  ExtendExtension */
     protected $extendExtension;
@@ -34,30 +34,43 @@ class OroCRMCallBundle implements Migration, ExtendExtensionAwareInterface
     }
 
     /**
-     * Enable notes for Call entity
+     * Enable notes for Lead and Opportunity entities
      *
      * @param Schema          $schema
      * @param ExtendExtension $extendExtension
      */
     public static function addNoteAssociations(Schema $schema, ExtendExtension $extendExtension)
     {
-        $noteTable = $schema->getTable('oro_note');
-        $callTable = $schema->getTable('orocrm_call');
+        $noteTable        = $schema->getTable('oro_note');
+        $leadTable        = $schema->getTable('orocrm_sales_lead');
+        $opportunityTable = $schema->getTable('orocrm_sales_opportunity');
 
         $options['note']['enabled'] = true;
 
-        $callTable->addOption(ExtendColumn::ORO_OPTIONS_NAME, $options);
+        $leadTable->addOption(ExtendColumn::ORO_OPTIONS_NAME, $options);
+        $opportunityTable->addOption(ExtendColumn::ORO_OPTIONS_NAME, $options);
 
-        $callAssociationName = ExtendHelper::buildAssociationName(
-            $extendExtension->getEntityClassByTableName('orocrm_call')
+        $leadAssociationName = ExtendHelper::buildAssociationName(
+            $extendExtension->getEntityClassByTableName('orocrm_sales_lead')
+        );
+        $opportunityAssociationName = ExtendHelper::buildAssociationName(
+            $extendExtension->getEntityClassByTableName('orocrm_sales_opportunity')
         );
 
         $extendExtension->addManyToOneRelation(
             $schema,
             $noteTable,
-            $callAssociationName,
-            $callTable,
-            'subject',
+            $leadAssociationName,
+            $leadTable,
+            'name',
+            ['extend' => ['owner' => 'Custom', 'is_extend' => true]]
+        );
+        $extendExtension->addManyToOneRelation(
+            $schema,
+            $noteTable,
+            $opportunityAssociationName,
+            $opportunityTable,
+            'name',
             ['extend' => ['owner' => 'Custom', 'is_extend' => true]]
         );
     }

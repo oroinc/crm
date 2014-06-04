@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CallBundle\Migrations\Schema\v1_2;
+namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_13;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -12,7 +12,7 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMCallBundle implements Migration, ExtendExtensionAwareInterface
+class OroCrmMagentoBundle implements Migration, ExtendExtensionAwareInterface
 {
     /** @var  ExtendExtension */
     protected $extendExtension;
@@ -34,30 +34,43 @@ class OroCRMCallBundle implements Migration, ExtendExtensionAwareInterface
     }
 
     /**
-     * Enable notes for Call entity
+     * Enable notes for Cart and Order entities
      *
      * @param Schema          $schema
      * @param ExtendExtension $extendExtension
      */
     public static function addNoteAssociations(Schema $schema, ExtendExtension $extendExtension)
     {
-        $noteTable = $schema->getTable('oro_note');
-        $callTable = $schema->getTable('orocrm_call');
+        $noteTable  = $schema->getTable('oro_note');
+        $cartTable  = $schema->getTable('orocrm_magento_cart');
+        $orderTable = $schema->getTable('orocrm_magento_order');
 
         $options['note']['enabled'] = true;
 
-        $callTable->addOption(ExtendColumn::ORO_OPTIONS_NAME, $options);
+        $cartTable->addOption(ExtendColumn::ORO_OPTIONS_NAME, $options);
+        $orderTable->addOption(ExtendColumn::ORO_OPTIONS_NAME, $options);
 
-        $callAssociationName = ExtendHelper::buildAssociationName(
-            $extendExtension->getEntityClassByTableName('orocrm_call')
+        $cartAssociationName = ExtendHelper::buildAssociationName(
+            $extendExtension->getEntityClassByTableName('orocrm_magento_cart')
+        );
+        $orderAssociationName = ExtendHelper::buildAssociationName(
+            $extendExtension->getEntityClassByTableName('orocrm_magento_order')
         );
 
         $extendExtension->addManyToOneRelation(
             $schema,
             $noteTable,
-            $callAssociationName,
-            $callTable,
-            'subject',
+            $cartAssociationName,
+            $cartTable,
+            'email',
+            ['extend' => ['owner' => 'Custom', 'is_extend' => true]]
+        );
+        $extendExtension->addManyToOneRelation(
+            $schema,
+            $noteTable,
+            $orderAssociationName,
+            $orderTable,
+            'customer_email',
             ['extend' => ['owner' => 'Custom', 'is_extend' => true]]
         );
     }
