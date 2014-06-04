@@ -18,14 +18,14 @@ class CaseType extends AbstractType
                 'subject',
                 'text',
                 [
-                    'label'    => 'orocrm.case.subject.label',
+                    'label'    => 'orocrm.case.caseentity.subject.label',
                 ]
             )
             ->add(
                 'description',
                 'textarea',
                 [
-                    'label'    => 'orocrm.case.description.label',
+                    'label'    => 'orocrm.case.caseentity.description.label',
                     'required' => false
                 ]
             )
@@ -33,7 +33,7 @@ class CaseType extends AbstractType
                 'owner',
                 'oro_user_select',
                 [
-                    'label' => 'orocrm.case.owner.label'
+                    'label' => 'orocrm.case.caseentity.owner.label'
                 ]
             )
             ->add(
@@ -41,14 +41,14 @@ class CaseType extends AbstractType
                 'orocrm_contact_select',
                 [
                     'required' => false,
-                    'label'    => 'orocrm.case.reporter.relatedContact.label',
+                    'label'    => 'orocrm.case.caseentity.related_contact.label',
                 ]
             )
             ->add(
                 'relatedCustomer',
                 'entity',
                 [
-                    'label'    => 'orocrm.case.reporter.relatedCustomer.label',
+                    'label'    => 'orocrm.case.caseentity.related_customer.label',
                     'class'    => 'OroCRMMagentoBundle:Customer',
                     'property' => 'email',
                     'required' => false,
@@ -58,7 +58,7 @@ class CaseType extends AbstractType
                 'relatedOrder',
                 'entity',
                 [
-                    'label'    => 'orocrm.case.relatedOrder.label',
+                    'label'    => 'orocrm.case.caseentity.related_order.label',
                     'class'    => 'OroCRMMagentoBundle:Order',
                     'required' => false,
                     'property' => 'incrementId'
@@ -68,7 +68,7 @@ class CaseType extends AbstractType
                 'relatedCart',
                 'entity',
                 [
-                    'label'    => 'orocrm.case.relatedCart.label',
+                    'label'    => 'orocrm.case.caseentity.related_cart.label',
                     'class'    => 'OroCRMMagentoBundle:Cart',
                     'required' => false,
                     'property' => 'id'
@@ -78,7 +78,7 @@ class CaseType extends AbstractType
                 'relatedLead',
                 'entity',
                 [
-                    'label'    => 'orocrm.case.relatedLead.label',
+                    'label'    => 'orocrm.case.caseentity.related_lead.label',
                     'class'    => 'OroCRMSalesBundle:Lead',
                     'required' => false,
                 ]
@@ -87,7 +87,7 @@ class CaseType extends AbstractType
                 'relatedOpportunity',
                 'entity',
                 [
-                    'label'    => 'orocrm.case.relatedOpportunity.label',
+                    'label'    => 'orocrm.case.caseentity.related_opportunity.label',
                     'class'    => 'OroCRMSalesBundle:Opportunity',
                     'required' => false,
                 ]
@@ -96,7 +96,7 @@ class CaseType extends AbstractType
                 'origin',
                 'entity',
                 [
-                    'label' => 'orocrm.case.origin.label',
+                    'label' => 'orocrm.case.caseentity.origin.label',
                     'class' => 'OroCRMCaseBundle:CaseOrigin',
                 ]
             );

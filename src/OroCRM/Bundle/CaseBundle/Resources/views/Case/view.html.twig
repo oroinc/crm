@@ -8,7 +8,7 @@
     {% if resource_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path' : path('orocrm_case_update', { id: entity.id }),
-            'entity_label': 'orocrm.case.entity_label'|trans
+            'entity_label': 'orocrm.case.caseentity.entity_label'|trans
         }) }}
     {% endif %}
     {% if resource_granted('DELETE', entity) %}
@@ -18,7 +18,7 @@
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-user',
             'dataId': entity.id,
-            'entity_label': 'orocrm.case.entity_label'|trans
+            'entity_label': 'orocrm.case.caseentity.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock navButtons %}
@@ -27,7 +27,7 @@
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('orocrm_case_index'),
-        'indexLabel': 'orocrm.case.entity_plural_label'|trans,
+        'indexLabel': 'orocrm.case.caseentity.entity_plural_label'|trans,
         'entityTitle': entity.subject
     } %}
     {{ parent() }}
@@ -37,12 +37,12 @@
     {%- set caseInformation -%}
         <div class="row-fluid form-horizontal">
             <div class="responsive-block">
-                {{ UI.renderProperty('orocrm.case.subject.label'|trans, entity.subject) }}
-                {{ UI.renderProperty('orocrm.case.description.label'|trans, entity.description) }}
-                {{ UI.renderProperty('orocrm.case.origin.label'|trans, entity.origin) }}
-                {{ UI.renderProperty('orocrm.case.reportedAt.label'|trans, entity.reportedAt|oro_format_date) }}
+                {{ UI.renderProperty('orocrm.case.caseentity.subject.label'|trans, entity.subject) }}
+                {{ UI.renderProperty('orocrm.case.caseentity.description.label'|trans, entity.description) }}
+                {{ UI.renderProperty('orocrm.case.caseentity.origin.label'|trans, entity.origin) }}
+                {{ UI.renderProperty('orocrm.case.caseentity.reported_at.label'|trans, entity.reportedAt|oro_format_date) }}
                 {% if entity.closedAt is not empty %}
-                    {{ UI.renderProperty('orocrm.case.closedAt.label'|trans, entity.closedAt|oro_format_date) }}
+                    {{ UI.renderProperty('orocrm.case.caseentity.closed_at.label'|trans, entity.closedAt|oro_format_date) }}
                 {% endif %}
 
                 {%- set owner -%}
@@ -56,7 +56,7 @@
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.case.owner.label'|trans, owner) }}
+                {{ UI.renderHtmlProperty('orocrm.case.caseentity.owner.label'|trans, owner) }}
 
                 {%- set reporterUser -%}
                     {%- if entity.reporterUser -%}
@@ -69,7 +69,7 @@
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.case.reporterUser.label'|trans, reporterUser) }}
+                {{ UI.renderHtmlProperty('orocrm.case.caseentity.reporter.label'|trans, reporterUser) }}
 
                 {%- set reporterContact -%}
                     {%- if entity.reporterContact -%}
@@ -82,7 +82,7 @@
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.case.reporterContact.label'|trans, reporterContact) }}
+                {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_contact.label'|trans, reporterContact) }}
 
                 {%- set reporterCustomer -%}
                     {%- if entity.reporterCustomer -%}
@@ -95,7 +95,7 @@
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.case.reporterCustomer.label'|trans, reporterCustomer) }}
+                {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_customer.label'|trans, reporterCustomer) }}
 
                 {%- set relatedOrder -%}
                     {%- if entity.relatedOrder -%}
@@ -108,7 +108,7 @@
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.case.relatedOrder.label'|trans, relatedOrder) }}
+                {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_order.label'|trans, relatedOrder) }}
 
                 {%- set relatedCart -%}
                     {%- if entity.relatedCart -%}
@@ -121,7 +121,7 @@
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.case.relatedCart.label'|trans, relatedCart) }}
+                {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_cart.label'|trans, relatedCart) }}
 
                 {%- set relatedLead -%}
                     {%- if entity.relatedLead -%}
@@ -134,7 +134,7 @@
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.case.relatedLead.label'|trans, relatedLead) }}
+                {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_lead.label'|trans, relatedLead) }}
 
                 {%- set relatedOpportunity -%}
                     {%- if entity.relatedOpportunity -%}
@@ -147,7 +147,7 @@
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.case.relatedOpportunity.label'|trans, relatedOpportunity) }}
+                {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_opportunity.label'|trans, relatedOpportunity) }}
             </div>
             <div class="responsive-block">
                 {{ entityConfig.renderDynamicFields(entity) }}
