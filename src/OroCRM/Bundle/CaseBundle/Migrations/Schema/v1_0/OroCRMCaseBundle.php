@@ -39,8 +39,8 @@ class OroCRMCaseBundle implements Migration
         $table->addColumn('origin_name', 'string', array('notnull' => false, 'length' => 16));
         $table->addColumn('related_opportunity_id', 'integer', array('notnull' => false));
         $table->addColumn('related_cart_id', 'integer', array('notnull' => false));
-        $table->addColumn('subject', 'string', array('notnull' => false, 'length' => 255));
-        $table->addColumn('description', 'string', array('notnull' => false, 'length' => 255));
+        $table->addColumn('subject', 'string', array('length' => 255));
+        $table->addColumn('description', 'text', array('notnull' => false));
         $table->addColumn('createdAt', 'datetime', array());
         $table->addColumn('updatedAt', 'datetime', array('notnull' => false));
         $table->addColumn('reportedAt', 'datetime', array());
