@@ -1,0 +1,52 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+{% oro_title_set({params : {"%entity.name%": entity.name|default('N/A') }}) %}
+
+{% block navButtons %}
+    {% if resource_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path' : path('orocrm_campaign_update', { id: entity.id }),
+            'entity_label': 'orocrm.campaign.entity_label'|trans
+        })  }}
+    {% endif %}
+    {% if resource_granted('DELETE', entity) %}
+        {{ UI.deleteButton({
+            'dataUrl': path('oro_api_delete_campaign', {'id': entity.id}),
+            'dataRedirect': path('orocrm_campaign_index'),
+            'aCss': 'no-hash remove-button',
+            'dataId': entity.id,
+            'entity_label': 'orocrm.campaign.entity_label'|trans
+        }) }}
+    {% endif %}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity':      entity,
+        'indexPath':   path('orocrm_campaign_index'),
+        'indexLabel':  'orocrm.campaign.entity_plural_label',
+        'entityTitle': entity.name|default('N/A'),
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set campaignInformationWidget %}
+        {% include 'OroCRMCampaignBundle:Campaign:widget/view.html.twig' %}
+    {% endset %}
+
+    {% set dataBlocks = [
+        {
+            'title': 'General Information'|trans,
+            'class': 'active',
+            'subblocks': [
+                {'data' : [campaignInformationWidget]}
+            ]
+        },
+    ] %}
+
+    {% set id = 'campaignView' %}
+    {% set data = { 'dataBlocks': dataBlocks } %}
+    {{ parent() }}
+{% endblock content_data %}

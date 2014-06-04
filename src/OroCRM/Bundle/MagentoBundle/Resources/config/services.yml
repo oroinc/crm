@@ -15,6 +15,7 @@ parameters:
     orocrm_magento.event_listener.navigation.class:                         OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener
     orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
     orocrm_magento.event_listener.order.class:                              OroCRM\Bundle\MagentoBundle\EventListener\OrderListener
+    orocrm_magento.event_listener.channel_owner_set.class:                  OroCRM\Bundle\MagentoBundle\EventListener\ChannelOwnerSetListener
 
     # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
@@ -27,7 +28,7 @@ parameters:
     # magento related records delete provider
     orocrm_magento.manager.magento_channel_delete_provider.class:           OroCRM\Bundle\MagentoBundle\Manager\MagentoChannelDeleteProvider
 
-    orocrm_magento.subscriber.customer_subscriber.class:                    OroCRM\Bundle\MagentoBundle\EventListener\ContactSubscriber
+    orocrm_magento.listener.customer_listener.class:                        OroCRM\Bundle\MagentoBundle\EventListener\ContactListener
 
     # processors
     orocrm_magento.importexport.customer.reverse.processor.class:           OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor
@@ -121,6 +122,13 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-cartitem-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-orderitem-grid, method: onBuildAfter }
 
+    orocrm_magento.event_listener.channel_owner_set:
+        class: %orocrm_magento.event_listener.channel_owner_set.class%
+        arguments:
+            - @doctrine.orm.default_entity_manager
+        tags:
+            - { name: kernel.event_listener, event: oro_integration.default_owner.set, method: onSet }
+
     orocrm_magento.service.magento_url_generator:
         class: %orocrm_magento.magento_url_generator.class%
         arguments: [@router]
@@ -146,14 +154,13 @@ services:
         tags:
             - { name: oro_integration.channel_delete_provider }
 
-    orocrm_magento.subscriber.customer_subscriber:
-        public: false
-        class: %orocrm_magento.subscriber.customer_subscriber.class%
+    orocrm_magento.listener.customer_listener:
+        class: %orocrm_magento.listener.customer_listener.class%
         arguments:
             - @oro_security.security_facade.link
             - @oro_integration.sync_scheduler.link
         tags:
-            - { name: doctrine.event_subscriber, connection: default }
+            - { name: doctrine.event_listener, event: onFlush, connection: default }
 
     orocrm_magento.importexport.customer.reverse.processor:
         class: %orocrm_magento.importexport.customer.reverse.processor.class%
