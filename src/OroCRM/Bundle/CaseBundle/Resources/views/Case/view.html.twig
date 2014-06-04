@@ -75,7 +75,7 @@
                     {%- if entity.reporterContact -%}
                         {% if resource_granted('orocrm_contact_view') %}
                             <a href="{{ path('orocrm_contact_view', {'id': entity.reporterContact.id}) }}">
-                                {{ entity.reporterContact|oro_format_name|escape }}
+                                {{ entity.reporterContact|escape }}
                             </a>
                         {% else %}
                             {{ entity.reporterContact|escape }}
@@ -88,7 +88,7 @@
                     {%- if entity.reporterCustomer -%}
                         {% if resource_granted('orocrm_magento_customer_view') %}
                             <a href="{{ path('orocrm_magento_customer_view', {'id': entity.reporterCustomer.id}) }}">
-                                {{ entity.reporterCustomer|oro_format_name|escape }}
+                                {{ entity.reporterCustomer|escape }}
                             </a>
                         {% else %}
                             {{ entity.reporterCustomer|escape }}
@@ -101,10 +101,10 @@
                     {%- if entity.relatedOrder -%}
                         {% if resource_granted('orocrm_magento_order_view') %}
                             <a href="{{ path('orocrm_magento_order_view', {'id': entity.relatedOrder.id}) }}">
-                                {{ entity.relatedOrder|oro_format_name|escape }}
+                                {{ entity.relatedOrder.incrementId|oro_format_name|escape }}
                             </a>
                         {% else %}
-                            {{ entity.relatedOrder|escape }}
+                            {{ entity.relatedOrder.incrementId|escape }}
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
@@ -114,7 +114,7 @@
                     {%- if entity.relatedCart -%}
                         {% if resource_granted('orocrm_magento_cart_view') %}
                             <a href="{{ path('orocrm_magento_cart_view', {'id': entity.relatedCart.id}) }}">
-                                {{ entity.relatedCart|oro_format_name|escape }}
+                                {{ entity.relatedCart|escape }}
                             </a>
                         {% else %}
                             {{ entity.relatedCart|escape }}
@@ -127,7 +127,7 @@
                     {%- if entity.relatedLead -%}
                         {% if resource_granted('orocrm_sales_lead_view') %}
                             <a href="{{ path('orocrm_sales_lead_view', {'id': entity.relatedLead.id}) }}">
-                                {{ entity.relatedLead|oro_format_name|escape }}
+                                {{ entity.relatedLead|escape }}
                             </a>
                         {% else %}
                             {{ entity.relatedLead|escape }}
@@ -140,7 +140,7 @@
                     {%- if entity.relatedOpportunity -%}
                         {% if resource_granted('orocrm_sales_opportunity_view') %}
                             <a href="{{ path('orocrm_sales_opportunity_view', {'id': entity.relatedOpportunity.id}) }}">
-                                {{ entity.relatedOpportunity|oro_format_name|escape }}
+                                {{ entity.relatedOpportunity|escape }}
                             </a>
                         {% else %}
                             {{ entity.relatedOpportunity|escape }}
