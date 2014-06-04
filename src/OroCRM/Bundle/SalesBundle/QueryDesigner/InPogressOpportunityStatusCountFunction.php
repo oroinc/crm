@@ -2,10 +2,10 @@
 
 namespace OroCRM\Bundle\SalesBundle\QueryDesigner;
 
-class InProgressRevenueSumFunction extends AbstractRevenueSumFunction
+class InProgressOpportunityStatusCountFunction extends AbstractOpportunityStatusCountFunction
 {
     /**
-     * {@inheritdoc}
+     * @return string
      */
     protected function getStatus()
     {

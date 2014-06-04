@@ -1,16 +1,14 @@
 query_designer:
     aggregates:
         opportunity_status:
-            applicable: [{entity: OroCRMSalesBundle:OpportunityStatus, field: name}]
+            applicable: [{entity: OroCRMSalesBundle:Opportunity, field: status_label }]
             functions:
-                - { name: WonCount,        return_type: integer, expr: SUM(CASE WHEN $column = 'won' THEN 1 ELSE 0 END) }
-                - { name: LostCount,       return_type: integer, expr: SUM(CASE WHEN $column = 'lost' THEN 1 ELSE 0 END) }
-                - { name: InProgressCount, return_type: integer, expr: SUM(CASE WHEN $column = 'in_progress' THEN 1 ELSE 0 END) }
+                - { name: WonCount,        return_type: integer, expr: @OroCRM\Bundle\SalesBundle\QueryDesigner\WonOpportunityStatusCountFunction }
+                - { name: LostCount,       return_type: integer, expr: @OroCRM\Bundle\SalesBundle\QueryDesigner\LostOpportunityStatusCountFunction }
+                - { name: InProgressCount, return_type: integer, expr: @OroCRM\Bundle\SalesBundle\QueryDesigner\InProgressOpportunityStatusCountFunction }
             query_type: [report]
         opportunity:
             applicable: [{entity: OroCRMSalesBundle:Opportunity, field: closeRevenue}]
             functions:
-                - { name: WonRevenueSumFunction,        return_type: money, expr: @OroCRM\Bundle\SalesBundle\QueryDesigner\WonRevenueSumFunction }
-                - { name: LostRevenueSumFunction,       return_type: money, expr: @OroCRM\Bundle\SalesBundle\QueryDesigner\LostRevenueSumFunction }
-                - { name: InProgressRevenueSumFunction, return_type: money, expr: @OroCRM\Bundle\SalesBundle\QueryDesigner\InProgressRevenueSumFunction }
+                - { name: WonRevenueSumFunction, return_type: money, expr: @OroCRM\Bundle\SalesBundle\QueryDesigner\WonRevenueSumFunction }
             query_type: [report]

@@ -5,20 +5,24 @@ namespace OroCRM\Bundle\SalesBundle\QueryDesigner;
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FunctionInterface;
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\AbstractQueryConverter;
 
-class WonRevenueSumFunction implements FunctionInterface
+abstract class AbstractOpportunityStatusCountFunction implements FunctionInterface
 {
+    /**
+     * @return string
+     */
+    abstract protected function getStatus();
+
     /**
      * {@inheritdoc}
      */
     public function getExpression($tableAlias, $fieldName, $columnName, $columnAlias, AbstractQueryConverter $qc)
     {
-        // Make sure status table joined
-        $opportunityStatusTableAlias = $qc->ensureChildTableJoined($tableAlias, 'status');
+        list($statusTableAlias) = explode('.', $columnName);
 
         return sprintf(
-            "SUM(CASE WHEN (%s.name='won') THEN %s ELSE 0 END)",
-            $opportunityStatusTableAlias,
-            $columnName
+            "SUM(CASE WHEN %s.name = '%s' THEN 1 ELSE 0 END)",
+            $statusTableAlias,
+            $this->getStatus()
         );
     }
 }

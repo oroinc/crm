@@ -2,10 +2,10 @@
 
 namespace OroCRM\Bundle\SalesBundle\QueryDesigner;
 
-class LostRevenueSumFunction extends AbstractRevenueSumFunction
+class LostOpportunityStatusCountFunction extends AbstractOpportunityStatusCountFunction
 {
     /**
-     * {@inheritdoc}
+     * @return string
      */
     protected function getStatus()
     {
