@@ -8,7 +8,6 @@ datagrid:
                     - caseEntity.id
                     - caseEntity.id as caseNumber
                     - caseEntity.subject
-                    - CONCAT(relatedCustomer.firstName, CONCAT(' ', relatedCustomer.lastName)) as customerName
                     - reporter.id as reporterId
                     - CONCAT(reporter.firstName, CONCAT(' ', reporter.lastName)) as reporterName
                     - caseEntity.reportedAt
@@ -111,11 +110,20 @@ datagrid:
 
     cases-grid:
         extends: base-cases-grid
+        source:
+            query:
+                select:
+                    - CONCAT(relatedCustomer.firstName, CONCAT(' ', relatedCustomer.lastName)) as customerName
+                    - CONCAT(relatedContact.firstName, CONCAT(' ', relatedContact.lastName)) as contactName
         filters:
             columns:
                 subject:
                     type: string
                     data_name: caseEntity.subject
+                reporterName:
+                    label: orocrm.case.datagrid.reporter.label
+                    type: string
+                    data_name: reporterName
                 assignedTo:
                     type: string
                     data_name: assignedTo
@@ -125,15 +133,13 @@ datagrid:
                 closedAt:
                     type: datetime
                     data_name: caseEntity.closedAt
-                reporterName:
-                    label: orocrm.case.datagrid.reporter.label
-                    type: string
-                    data_name: reporterName
-                customer:
-                    label: orocrm.case.datagrid.customer.label
-                    type: string
-                    data_name: customerName
-                    enabled: false
+                workflowStepLabel:
+                    type:      entity
+                    data_name: caseEntity.workflowStep
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %orocrm_case.entity.class%
                 origin:
                     label: orocrm.case.datagrid.origin.label
                     type: entity
@@ -143,13 +149,16 @@ datagrid:
                         field_options:
                             class: OroCRMCaseBundle:CaseOrigin
                             property: label
-                workflowStepLabel:
-                    type:      entity
-                    data_name: caseEntity.status
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_case.entity.class%
+                customer:
+                    label: orocrm.case.datagrid.customer.label
+                    type: string
+                    data_name: customerName
+                    enabled: false
+                contact:
+                    label: orocrm.case.datagrid.contact.label
+                    type: string
+                    data_name: contactName
+                    enabled: false
                 orderNumber:
                     label: orocrm.case.datagrid.order.label
                     type: string

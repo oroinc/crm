@@ -1,9 +1,10 @@
 parameters:
-    orocrm_case.entity.class:                  OroCRM\Bundle\CaseBundle\Entity\CaseEntity
-    orocrm_case.manager.api.class:             Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-    orocrm_case.form.type.case.class:          OroCRM\Bundle\CaseBundle\Form\Type\CaseType
-    orocrm_case.form.type.case_api.class:      OroCRM\Bundle\CaseBundle\Form\Type\CaseApiType
-    orocrm_caserm.handler.case_api.class:      OroCRM\Bundle\CaseBundle\Form\Handler\CaseHandler
+    orocrm_case.entity.class:                                OroCRM\Bundle\CaseBundle\Entity\CaseEntity
+    orocrm_case.manager.api.class:                           Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_case.form.type.case.class:                        OroCRM\Bundle\CaseBundle\Form\Type\CaseType
+    orocrm_case.form.type.case_api.class:                    OroCRM\Bundle\CaseBundle\Form\Type\CaseApiType
+    orocrm_caserm.handler.case_api.class:                    OroCRM\Bundle\CaseBundle\Form\Handler\CaseHandler
+    orocrm_case.event_listener.datagrid.contact_cases.class: OroCRM\Bundle\CaseBundle\EventListener\Datagrid\ContactCasesListener
 
 services:
     orocrm_case.manager.api:
@@ -53,3 +54,7 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.opportunity-cases-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.user-cases-grid, method: onBuildAfter }
 
+    orocrm_case.event_listener.datagrid.contact_cases:
+        class: %orocrm_case.event_listener.datagrid.contact_cases.class%
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.contact-cases-grid, method: onBuildBefore }

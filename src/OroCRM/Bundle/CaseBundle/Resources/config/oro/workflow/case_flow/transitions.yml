@@ -15,6 +15,13 @@ workflows:
                 frontend_options:
                     icon: 'icon-stop'
                 transition_definition: stop_progress_definition
+            resolve:
+                label: 'Resolve'
+                step_to: resolved
+                #is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-ok'
+                transition_definition: resolve_definition
             close:
                 label: 'Close'
                 step_to: closed
@@ -24,7 +31,7 @@ workflows:
                 transition_definition: closed_definition
             reopen:
                 label: 'Reopen'
-                step_to: open
+                step_to: in_progress
                 #is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-edit'
