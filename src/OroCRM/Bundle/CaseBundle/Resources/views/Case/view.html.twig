@@ -58,44 +58,44 @@
                 {%- endset -%}
                 {{ UI.renderHtmlProperty('orocrm.case.caseentity.owner.label'|trans, owner) }}
 
-                {%- set reporterUser -%}
-                    {%- if entity.reporterUser -%}
+                {%- set reporter -%}
+                    {%- if entity.reporter -%}
                         {% if resource_granted('oro_user_user_view') %}
-                            <a href="{{ path('oro_user_view', {'id': entity.reporterUser.id}) }}">
-                                {{ entity.reporterUser|oro_format_name|escape }}
+                            <a href="{{ path('oro_user_view', {'id': entity.reporter.id}) }}">
+                                {{ entity.reporter|oro_format_name|escape }}
                             </a>
                         {% else %}
-                            {{ entity.reporterUser|oro_format_name|escape }}
+                            {{ entity.reporter|oro_format_name|escape }}
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.case.caseentity.reporter.label'|trans, reporterUser) }}
+                {{ UI.renderHtmlProperty('orocrm.case.caseentity.reporter.label'|trans, reporter) }}
 
-                {%- set reporterContact -%}
-                    {%- if entity.reporterContact -%}
+                {%- set relatedContact -%}
+                    {%- if entity.relatedContact -%}
                         {% if resource_granted('orocrm_contact_view') %}
-                            <a href="{{ path('orocrm_contact_view', {'id': entity.reporterContact.id}) }}">
-                                {{ entity.reporterContact|escape }}
+                            <a href="{{ path('orocrm_contact_view', {'id': entity.relatedContact.id}) }}">
+                                {{ entity.relatedContact|escape }}
                             </a>
                         {% else %}
-                            {{ entity.reporterContact|escape }}
+                            {{ entity.relatedContact|escape }}
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_contact.label'|trans, reporterContact) }}
+                {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_contact.label'|trans, relatedContact) }}
 
-                {%- set reporterCustomer -%}
-                    {%- if entity.reporterCustomer -%}
+                {%- set relatedCustomer -%}
+                    {%- if entity.relatedCustomer -%}
                         {% if resource_granted('orocrm_magento_customer_view') %}
-                            <a href="{{ path('orocrm_magento_customer_view', {'id': entity.reporterCustomer.id}) }}">
-                                {{ entity.reporterCustomer|escape }}
+                            <a href="{{ path('orocrm_magento_customer_view', {'id': entity.relatedCustomer.id}) }}">
+                                {{ entity.relatedCustomer|escape }}
                             </a>
                         {% else %}
-                            {{ entity.reporterCustomer|escape }}
+                            {{ entity.relatedCustomer|escape }}
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_customer.label'|trans, reporterCustomer) }}
+                {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_customer.label'|trans, relatedCustomer) }}
 
                 {%- set relatedOrder -%}
                     {%- if entity.relatedOrder -%}
