@@ -184,12 +184,12 @@ datagrid:
                 where:
                     and:
                         - |
-                            relatedCustomer.account = :id
+                            (relatedCustomer.account = :id
                             OR relatedContactAccount.id = :id
                             OR relatedOrderCustomer.account = :id
                             OR relatedCartCustomer.account = :id
                             OR relatedLead.account = :id
-                            OR relatedOpportunity.account = :id
+                            OR relatedOpportunity.account = :id)
 
                 groupBy: caseEntity.id
 
