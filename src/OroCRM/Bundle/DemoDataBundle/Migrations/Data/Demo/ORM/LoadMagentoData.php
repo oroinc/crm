@@ -9,8 +9,8 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\AddressBundle\Entity\Address;
 
+use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
@@ -26,8 +26,11 @@ use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 
 class LoadMagentoData extends AbstractFixture implements DependentFixtureInterface
 {
-    const VAT = 0.0838;
+    const VAT          = 0.0838;
     const CHANNEL_NAME = 'Demo Web store';
+
+    /** @var array */
+    protected $users;
 
     /**
      * {@inheritdoc}
@@ -42,6 +45,8 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
      */
     public function load(ObjectManager $om)
     {
+        $this->users = $om->getRepository('OroUserBundle:User')->findAll();
+
         $website = new Website();
         $website->setCode('admin')
             ->setName('Admin');
@@ -166,6 +171,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $order = new Order();
         $order->setChannel($channel);
         $order->setCustomer($customer);
+        $order->setOwner($customer->getOwner());
         $order->setStatus($status);
         $order->setStore($store);
         $order->setStoreName($store->getName());
@@ -254,6 +260,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $cart = new Cart();
         $cart->setChannel($channel);
         $cart->setCustomer($customer);
+        $cart->setOwner($customer->getOwner());
         $cart->setStatus($status);
         $cart->setStore($store);
         $cart->setBaseCurrencyCode($currency);
@@ -351,11 +358,11 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
     }
 
     /**
-     * @param ObjectManager                                     $om
-     * @param Website                                           $website
-     * @param Store                                             $store
+     * @param ObjectManager $om
+     * @param Website       $website
+     * @param Store         $store
      * @param CustomerGroup $group
-     * @param Channel $channel
+     * @param Channel       $channel
      */
     protected function persistDemoCustomers(
         ObjectManager $om,
@@ -391,7 +398,8 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
                 ->setUpdatedAt(new \DateTime('now'))
                 ->setOriginId($i + 1)
                 ->setAccount($accounts[$buffer[$i]])
-                ->setContact($contact);
+                ->setContact($contact)
+                ->setOwner($this->getRandomOwner());
 
             $om->persist($customer);
         }
@@ -413,5 +421,16 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
 
         // Convert back to desired date format
         return new \DateTime(date('Y-m-d', $val), new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @return User
+     */
+    protected function getRandomOwner()
+    {
+        $randomUser = count($this->users)-1;
+        $user = $this->users[rand(0, $randomUser)];
+
+        return $user;
     }
 }

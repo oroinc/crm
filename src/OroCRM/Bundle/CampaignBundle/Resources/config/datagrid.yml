@@ -1,0 +1,92 @@
+datagrid:
+    orocrm-campaign-grid:
+        extended_entity_name: OroCRM\Bundle\CampaignBundle\Entity\Campaign
+        source:
+            type: orm
+            acl_resource: orocrm_campaign_view
+            query:
+                select:
+                    - c.id
+                    - c.name
+                    - c.code
+                    - c.startDate
+                    - c.endDate
+                    - c.budget
+                from:
+                    - { table: OroCRM\Bundle\CampaignBundle\Entity\Campaign, alias: c }
+        columns:
+            name:
+                label: orocrm.campaign.name.label
+            code:
+                label: orocrm.campaign.code.label
+            startDate:
+                label: orocrm.campaign.start_date.label
+                frontend_type: date
+            endDate:
+                label: orocrm.campaign.end_date.label
+                frontend_type: date
+            budget:
+                label: orocrm.campaign.budget.label
+                frontend_type:   currency
+        filters:
+            columns:
+                name:
+                    type:        string
+                    data_name:   c.name
+                code:
+                    type:        string
+                    data_name:   c.code
+                startDate:
+                    type:        date
+                    data_name:   c.startDate
+                endDate:
+                    type:        date
+                    data_name:   c.endDate
+                budget:
+                    type:        number
+                    data_name:   c.budget
+        sorters:
+            columns:
+                name:        { data_name: c.name }
+                code:        { data_name: c.code }
+                startDate:   { data_name: c.startDate }
+                endDate:     { data_name: c.endDate }
+                budget:      { data_name: c.budget }
+            default:
+                startDate:  DESC
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: orocrm_campaign_view
+                params: [ id ]
+            update_link:
+                type: url
+                route: orocrm_campaign_update
+                params:
+                    - id
+            delete_link:
+                type: url
+                route: oro_api_delete_campaign
+                params:
+                    - id
+        actions:
+            view:
+                type:         navigate
+                label:        orocrm.campaign.datagrid.actions.view.label
+                link:         view_link
+                icon:         eye-open
+                acl_recource: orocrm_campaign_view
+                rowAction:    true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_campaign_update
+                label:         orocrm.campaign.datagrid.actions.update.label
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_campaign_delete
+                label:         orocrm.campaign.datagrid.actions.delete.label
+                icon:          trash
+                link:          delete_link
