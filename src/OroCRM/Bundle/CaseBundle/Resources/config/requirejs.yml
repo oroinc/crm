@@ -1,0 +1,3 @@
+config:
+    paths:
+        'orocrm/case/case_relation': 'bundles/orocrmcase/js/case_relation.js'

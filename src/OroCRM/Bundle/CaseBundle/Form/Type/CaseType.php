@@ -20,9 +20,17 @@ class CaseType extends BaseCaseType
                 'relatedEntity',
                 'choice',
                 [
-                    'choices' => [
+                    'label'    => 'orocrm.case.caseentity.related_entity.label',
+                    'choices'  => [
+                        'relatedCart'        => 'orocrm.case.caseentity.related_cart.label',
+                        'relatedContact'     => 'orocrm.case.caseentity.related_contact.label',
+                        'relatedCustomer'    => 'orocrm.case.caseentity.related_customer.label',
+                        'relatedLead'        => 'orocrm.case.caseentity.related_lead.label',
+                        'relatedOpportunity' => 'orocrm.case.caseentity.related_opportunity.label',
+                        'relatedOrder'       => 'orocrm.case.caseentity.related_order.label',
                     ],
-                    'mapped'  => false
+                    'mapped'   => false,
+                    'required' => false
                 ]
             );
     }

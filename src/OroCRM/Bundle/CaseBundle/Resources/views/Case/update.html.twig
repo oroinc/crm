@@ -44,16 +44,28 @@
                     form_row(form.owner),
                     form_row(form.origin),
                     form_row(form.relatedEntity),
-                    form_row(form.relatedContact),
-                    form_row(form.relatedCustomer),
-                    form_row(form.relatedOrder),
-                    form_row(form.relatedCart),
-                    form_row(form.relatedLead),
-                    form_row(form.relatedOpportunity),
+                    form_row(form.relatedContact, {'attr': {'class': 'case-item'}} ),
+                    form_row(form.relatedCustomer, {'attr': {'class': 'case-item'}} ),
+                    form_row(form.relatedOrder, {'attr': {'class': 'case-item'}} ),
+                    form_row(form.relatedCart, {'attr': {'class': 'case-item'}} ),
+                    form_row(form.relatedLead, {'attr': {'class': 'case-item'}} ),
+                    form_row(form.relatedOpportunity, {'attr': {'class': 'case-item'}} ),
                 ]
             }
         ]
     }] %}
+
+    <script type="text/javascript">
+        require(
+            ['orocrm/case/case_relation'],
+            function (CaseRelation) {
+                CaseRelation.initialize({
+                    selector: '.case-item',
+                    control: '#orocrm_case_relatedEntity'
+                });
+            }
+        );
+    </script>
 
     {% if form.additional is defined and form.additional.children|length > 0 %}
         {% set additionalData = [] %}

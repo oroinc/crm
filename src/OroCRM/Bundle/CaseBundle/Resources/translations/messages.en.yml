@@ -35,14 +35,15 @@ orocrm:
             owner.label:                 Assigned To
             closed_at.label:             Closed On
             reported_at.label:           Reported On
-            related_order.label:         Case Order
-            related_contact.label:       Case Contact
-            related_customer.label:      Case Customer
-            related_cart.label:          Case Cart
-            related_lead.label:          Case Lead
-            related_opportunity.label:   Case Opportunity
-            origin.label:                Case origin
-            reporter.label:              Case Reporter
+            related_order.label:         Order
+            related_contact.label:       Contact
+            related_customer.label:      Customer
+            related_cart.label:          Cart
+            related_lead.label:          Lead
+            related_opportunity.label:   Opportunity
+            origin.label:                Origin
+            reporter.label:              Reporter
+            related_entity.label:        Related Entity
             created_at.label:            Created At
             updated_at.label:            Updated At
             id.label:                    Id

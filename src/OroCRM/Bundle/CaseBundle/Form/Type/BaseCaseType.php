@@ -54,32 +54,29 @@ class BaseCaseType extends AbstractType
             )
             ->add(
                 'relatedCustomer',
-                'entity',
+                'orocrm_customer_select',
                 [
-                    'label'    => 'orocrm.case.caseentity.related_customer.label',
-                    'class'    => 'OroCRMMagentoBundle:Customer',
-                    'property' => 'email',
-                    'required' => false,
+                    'label'        => 'orocrm.case.caseentity.related_customer.label',
+                    'entity_class' => 'OroCRMMagentoBundle:Customer',
+                    'required'     => false,
                 ]
             )
             ->add(
                 'relatedOrder',
-                'entity',
+                'orocrm_order_select',
                 [
-                    'label'    => 'orocrm.case.caseentity.related_order.label',
-                    'class'    => 'OroCRMMagentoBundle:Order',
-                    'required' => false,
-                    'property' => 'incrementId'
+                    'label'        => 'orocrm.case.caseentity.related_order.label',
+                    'entity_class' => 'OroCRMMagentoBundle:Order',
+                    'required'     => false,
                 ]
             )
             ->add(
                 'relatedCart',
-                'entity',
+                'orocrm_cart_select',
                 [
-                    'label'    => 'orocrm.case.caseentity.related_cart.label',
-                    'class'    => 'OroCRMMagentoBundle:Cart',
-                    'required' => false,
-                    'property' => 'id'
+                    'label'        => 'orocrm.case.caseentity.related_cart.label',
+                    'entity_class' => 'OroCRMMagentoBundle:Cart',
+                    'required'     => false,
                 ]
             )
             ->add(

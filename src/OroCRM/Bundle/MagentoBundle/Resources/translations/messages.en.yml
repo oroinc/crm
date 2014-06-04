@@ -414,6 +414,11 @@ orocrm:
         account:
             no_customers_exist: No customers exist
 
+        form:
+            choose_order:    Choose an order...
+            choose_customer: Choose a customer...
+            choose_cart: Choose a cart...
+
         menu.web_customers: Web Customers
         controller:
             transport_not_configure:       Unable to handle your request. Invalid channel configuration detected.

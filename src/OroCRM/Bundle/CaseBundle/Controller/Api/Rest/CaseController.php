@@ -196,8 +196,8 @@ class CaseController extends RestController implements ClassResourceInterface
         unset($data['createdAt']);
         unset($data['updatedAt']);
 
-        if (!$entity->getReporter()) {
-            $entity->setReporter($this->getUser());
+        if ($entity->getReporter()) {
+            unset($data['reporter']);
         }
 
         return true;

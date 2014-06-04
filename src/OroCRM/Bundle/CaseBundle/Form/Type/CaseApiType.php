@@ -32,6 +32,13 @@ class CaseApiType extends BaseCaseType
                     'required' => true,
                     'label'    => 'orocrm.case.closedAt.label'
                 ]
+            )
+            ->add(
+                'reporter',
+                'oro_user_select',
+                [
+                    'label' => 'orocrm.case.caseentity.reporter.label'
+                ]
             );
 
         $builder->addEventSubscriber(new PatchSubscriber());

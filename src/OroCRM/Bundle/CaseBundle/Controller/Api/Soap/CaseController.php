@@ -105,6 +105,10 @@ class CaseController extends SoapController
         unset($data['createdAt']);
         unset($data['updatedAt']);
 
+        if ($entity->getReporter()) {
+            unset($data['reporter']);
+        }
+
         return true;
     }
 }
