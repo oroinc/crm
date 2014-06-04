@@ -51,4 +51,5 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.cart-cases-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.lead-cases-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.opportunity-cases-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.user-cases-grid, method: onBuildAfter }
 

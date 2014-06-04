@@ -13,7 +13,10 @@ orocrm:
             workflow_status.label: Status
             customer.label:        Customer
             origin.label:          Origin
-            item.label:            'Item #'
+            order.label:           'Order #'
+            cart.label:            Cart Id
+            lead.label:            Lead name
+            opportunity.label:     Opportunity name
 
         menu:
             index.label: Cases

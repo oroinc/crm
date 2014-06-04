@@ -1,5 +1,5 @@
 datagrid:
-    cases-grid:
+    base-cases-grid:
         source:
             type: orm
             acl_resource: orocrm_case_view
@@ -15,18 +15,6 @@ datagrid:
                     - caseEntity.closedAt
                     - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as assignedTo
                     - owner.id as ownerId
-                    - |
-                        (CASE
-                              when relatedOrder IS NOT NULL
-                              THEN relatedOrder.id
-                              when relatedOpportunity IS NOT NULL
-                              THEN relatedOpportunity.id
-                              when relatedLead IS NOT NULL
-                              THEN relatedLead.id
-                              when relatedCart IS NOT NULL
-                              THEN relatedCart.id
-                              else ''
-                        END) as itemNumber
                     - workflowStep.label as workflowStepLabel
                 from:
                     - { table: %orocrm_case.entity.class%, alias: caseEntity }
@@ -46,7 +34,10 @@ datagrid:
             caseNumber:
                 label: orocrm.case.datagrid.case_number.label
             subject:
+                type: twig
                 label: orocrm.case.datagrid.subject.label
+                frontend_type: html
+                template: OroCRMCaseBundle:Case:Datagrid/Property/subject.html.twig
             reporterName:
                 type: twig
                 label: orocrm.case.datagrid.reporter.label
@@ -65,51 +56,6 @@ datagrid:
                 frontend_type: datetime
             workflowStepLabel:
                 label: orocrm.case.datagrid.workflow_status.label
-        filters:
-            columns:
-                subject:
-                    type: string
-                    data_name: caseEntity.subject
-                assignedTo:
-                    type: string
-                    data_name: assignedTo
-                reportedAt:
-                    type: datetime
-                    data_name: caseEntity.reportedAt
-                closedAt:
-                    type: datetime
-                    data_name: caseEntity.closedAt
-                reporterName:
-                    label: orocrm.case.datagrid.reporter.label
-                    type: string
-                    data_name: reporterName
-                customer:
-                    label: orocrm.case.datagrid.customer.label
-                    type: string
-                    data_name: customerName
-                    enabled: false
-                item:
-                    label: orocrm.case.datagrid.item.label
-                    type: string
-                    data_name: itemNumber
-                    enabled: false
-                origin:
-                    label: orocrm.case.datagrid.origin.label
-                    type: entity
-                    enabled: false
-                    data_name: origin.label
-                    options:
-                        field_options:
-                            class: OroCRMCaseBundle:CaseOrigin
-                            property: label
-                workflowStepLabel:
-                    type:      entity
-                    data_name: caseEntity.status
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_case.entity.class%
-
         sorters:
             columns:
                 subject:
@@ -163,6 +109,68 @@ datagrid:
                 icon:          trash
                 link:          delete_link
 
+    cases-grid:
+        extends: base-cases-grid
+        filters:
+            columns:
+                subject:
+                    type: string
+                    data_name: caseEntity.subject
+                assignedTo:
+                    type: string
+                    data_name: assignedTo
+                reportedAt:
+                    type: datetime
+                    data_name: caseEntity.reportedAt
+                closedAt:
+                    type: datetime
+                    data_name: caseEntity.closedAt
+                reporterName:
+                    label: orocrm.case.datagrid.reporter.label
+                    type: string
+                    data_name: reporterName
+                customer:
+                    label: orocrm.case.datagrid.customer.label
+                    type: string
+                    data_name: customerName
+                    enabled: false
+                origin:
+                    label: orocrm.case.datagrid.origin.label
+                    type: entity
+                    enabled: false
+                    data_name: origin.label
+                    options:
+                        field_options:
+                            class: OroCRMCaseBundle:CaseOrigin
+                            property: label
+                workflowStepLabel:
+                    type:      entity
+                    data_name: caseEntity.status
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %orocrm_case.entity.class%
+                orderNumber:
+                    label: orocrm.case.datagrid.order.label
+                    type: string
+                    data_name: relatedOrder.incrementId
+                    enabled: false
+                cartId:
+                    label: orocrm.case.datagrid.cart.label
+                    type: string
+                    data_name: relatedCart.id
+                    enabled: false
+                leadName:
+                    label: orocrm.case.datagrid.lead.label
+                    type: string
+                    data_name: relatedLead.name
+                    enabled: false
+                opportunityName:
+                    label: orocrm.case.datagrid.opportunity.label
+                    type: string
+                    data_name: relatedOpportunity.name
+                    enabled: false
+
     account-cases-grid:
         extends: cases-grid
         source:
@@ -201,8 +209,16 @@ datagrid:
                     and:
                         - relatedCustomer.id = :id
 
-    order-cases-grid:
+    user-cases-grid:
         extends: cases-grid
+        source:
+            query:
+                where:
+                    and:
+                        - reporter.id = :id OR owner.id = :id
+
+    order-cases-grid:
+        extends: base-cases-grid
         source:
             query:
                 where:
@@ -210,7 +226,7 @@ datagrid:
                         - relatedOrder.id = :id
 
     cart-cases-grid:
-        extends: cases-grid
+        extends: base-cases-grid
         source:
             query:
                 where:
@@ -218,7 +234,7 @@ datagrid:
                         - relatedCart.id = :id
 
     lead-cases-grid:
-        extends: cases-grid
+        extends: base-cases-grid
         source:
             query:
                 where:
@@ -226,7 +242,7 @@ datagrid:
                         - relatedLead.id = :id
 
     opportunity-cases-grid:
-        extends: cases-grid
+        extends: base-cases-grid
         source:
             query:
                 where:

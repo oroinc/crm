@@ -7,6 +7,7 @@ placeholders:
             orocrm_cart_cases_grid: ~
             orocrm_lead_cases_grid: ~
             orocrm_opportunity_cases_grid: ~
+            orocrm_user_cases_grid: ~
 
 items:
     orocrm_contact_cases_grid:
@@ -27,3 +28,6 @@ items:
     orocrm_opportunity_cases_grid:
         template: OroCRMCaseBundle:Case:opportunityCases.html.twig
         attribute_instance_of: [entity, %orocrm_sales.opportunity.class%]
+    orocrm_user_cases_grid:
+        template: OroCRMCaseBundle:Case:userCases.html.twig
+        attribute_instance_of: [entity, %oro_user.entity.class%]
