@@ -187,7 +187,7 @@ class CaseEntity
     /**
      * @param integer $id
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setId($id)
     {
@@ -207,7 +207,7 @@ class CaseEntity
     /**
      * @param string $subject
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setSubject($subject)
     {
@@ -227,7 +227,7 @@ class CaseEntity
     /**
      * @param string $description
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setDescription($description)
     {
@@ -247,7 +247,7 @@ class CaseEntity
     /**
      * @param User $owner
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setOwner($owner)
     {
@@ -267,7 +267,7 @@ class CaseEntity
     /**
      * @param CaseOrigin $origin
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setOrigin($origin)
     {
@@ -287,7 +287,7 @@ class CaseEntity
     /**
      * @param Order $relatedOrder
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setRelatedOrder(Order $relatedOrder)
     {
@@ -307,7 +307,7 @@ class CaseEntity
     /**
      * @param Cart $relatedCart
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setRelatedCart(Cart $relatedCart)
     {
@@ -327,7 +327,7 @@ class CaseEntity
     /**
      * @param Lead $relatedLead
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setRelatedLead(Lead $relatedLead)
     {
@@ -347,7 +347,7 @@ class CaseEntity
     /**
      * @param Opportunity $relatedOpportunity
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setRelatedOpportunity(Opportunity $relatedOpportunity)
     {
@@ -367,7 +367,7 @@ class CaseEntity
     /**
      * @param Contact $relatedContact
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setRelatedContact(Contact $relatedContact)
     {
@@ -387,7 +387,7 @@ class CaseEntity
     /**
      * @param Customer $relatedCustomer
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setRelatedCustomer(Customer $relatedCustomer)
     {
@@ -407,7 +407,7 @@ class CaseEntity
     /**
      * @param User $reporter
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setReporter(User $reporter)
     {
@@ -427,7 +427,7 @@ class CaseEntity
     /**
      * @param WorkflowStep $workflowStep
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setWorkflowStep($workflowStep)
     {
@@ -455,7 +455,7 @@ class CaseEntity
     /**
      * @param WorkflowItem $workflowItem
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setWorkflowItem($workflowItem)
     {
@@ -475,7 +475,7 @@ class CaseEntity
     /**
      * @param \DateTime $createdAt
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setCreatedAt(\DateTime $createdAt)
     {
@@ -495,7 +495,7 @@ class CaseEntity
     /**
      * @param \DateTime $updatedAt
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setUpdatedAt(\DateTime $updatedAt)
     {
@@ -515,7 +515,7 @@ class CaseEntity
     /**
      * @param \DateTime $reportedAt
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setReportedAt(\DateTime $reportedAt)
     {
@@ -535,7 +535,7 @@ class CaseEntity
     /**
      * @param \DateTime $closedAt
      *
-     * @return $this
+     * @return CaseEntity
      */
     public function setClosedAt(\DateTime $closedAt)
     {

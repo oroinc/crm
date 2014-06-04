@@ -19,6 +19,7 @@ use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
 use OroCRM\Bundle\CaseBundle\Entity\CaseOrigin;
+use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
 /**
  * @RouteResource("case")
@@ -141,7 +142,7 @@ class CaseController extends RestController implements ClassResourceInterface
      */
     public function getForm()
     {
-        return $this->get('orocrm_case.form.type.case_api');
+        return $this->get('orocrm_case.form.api');
     }
 
     /**
@@ -165,8 +166,13 @@ class CaseController extends RestController implements ClassResourceInterface
                 }
                 break;
             case 'owner':
+            case 'relatedOrder':
+            case 'relatedCart':
+            case 'relatedLead':
+            case 'relatedOpportunity':
+            case 'relatedContact':
+            case 'relatedCustomer':
             case 'reporter':
-            case 'item':
             case 'workflowItem':
             case 'workflowStep':
                 if ($value) {
@@ -183,11 +189,16 @@ class CaseController extends RestController implements ClassResourceInterface
      */
     protected function fixFormData(array &$data, $entity)
     {
+        /** @var CaseEntity $entity */
         parent::fixFormData($data, $entity);
 
         unset($data['id']);
         unset($data['createdAt']);
         unset($data['updatedAt']);
+
+        if (!$entity->getReporter()) {
+            $entity->setReporter($this->getUser());
+        }
 
         return true;
     }
