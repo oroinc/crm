@@ -60,7 +60,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
                 ['name' => 'code', 'label' => 'Code', 'func' => '', 'sorting' => ''],
                 [
                     'name'    => 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::campaign+OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::id',
-                    'label'   => 'Lead #',
+                    'label'   => 'Leads',
                     'func'    => [
                         'name'       => 'Count',
                         'group_type' => 'aggregates',
@@ -70,7 +70,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
                 ],
                 [
                     'name'    => 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::campaign+OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity::id',
-                    'label'   => 'Opportunity #',
+                    'label'   => 'Opportunities',
                     'func'    => [
                         'name'       => 'Count',
                         'group_type' => 'aggregates',
