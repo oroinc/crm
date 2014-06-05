@@ -3,7 +3,7 @@ orocrm:
         widgets:
             account_cases: Cases
         datagrid:
-            case_number.label:     Case number
+            case_number.label:     'Case #'
             subject.label:         Subject
             reporter.label:        Reporter
             assigned_to.label:     Assigned to
