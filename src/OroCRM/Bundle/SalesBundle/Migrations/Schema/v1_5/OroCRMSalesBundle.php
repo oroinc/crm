@@ -39,7 +39,7 @@ class OroCRMSalesBundle implements Migration, NoteExtensionAwareInterface
      */
     public static function addNoteAssociations(Schema $schema, NoteExtension $noteExtension)
     {
-        $noteExtension->addNoteAssociation($schema, 'orocrm_sales_lead', 'name');
-        $noteExtension->addNoteAssociation($schema, 'orocrm_sales_opportunity', 'name');
+        $noteExtension->addNoteAssociation($schema, 'orocrm_sales_lead');
+        $noteExtension->addNoteAssociation($schema, 'orocrm_sales_opportunity');
     }
 }
