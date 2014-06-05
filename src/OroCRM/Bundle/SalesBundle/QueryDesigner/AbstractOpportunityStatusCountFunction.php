@@ -17,6 +17,8 @@ abstract class AbstractOpportunityStatusCountFunction implements FunctionInterfa
      */
     public function getExpression($tableAlias, $fieldName, $columnName, $columnAlias, AbstractQueryConverter $qc)
     {
+        // split by dot $columnName
+        // there we will have tableAlias.columnName for dictionary virtual column
         list($statusTableAlias) = explode('.', $columnName);
 
         return sprintf(
