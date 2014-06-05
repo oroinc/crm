@@ -6,16 +6,91 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class CaseType extends BaseCaseType
+class CaseType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder, $options);
-
         $builder
+            ->add(
+                'subject',
+                'text',
+                ['label' => 'orocrm.case.caseentity.subject.label']
+            )
+            ->add(
+                'description',
+                'textarea',
+                [
+                    'label'    => 'orocrm.case.caseentity.description.label',
+                    'required' => false
+                ]
+            )
+            ->add(
+                'owner',
+                'oro_user_select',
+                ['label' => 'orocrm.case.caseentity.owner.label']
+            )
+            ->add(
+                'origin',
+                'entity',
+                [
+                    'label' => 'orocrm.case.caseentity.origin.label',
+                    'class' => 'OroCRMCaseBundle:CaseOrigin',
+                ]
+            )
+            ->add(
+                'relatedContact',
+                'orocrm_contact_select',
+                [
+                    'required' => false,
+                    'label'    => 'orocrm.case.caseentity.related_contact.label',
+                ]
+            )
+            ->add(
+                'relatedCustomer',
+                'orocrm_customer_select',
+                [
+                    'label'        => 'orocrm.case.caseentity.related_customer.label',
+                    'entity_class' => 'OroCRMMagentoBundle:Customer',
+                    'required'     => false,
+                ]
+            )
+            ->add(
+                'relatedOrder',
+                'orocrm_order_select',
+                [
+                    'label'        => 'orocrm.case.caseentity.related_order.label',
+                    'entity_class' => 'OroCRMMagentoBundle:Order',
+                    'required'     => false,
+                ]
+            )
+            ->add(
+                'relatedCart',
+                'orocrm_cart_select',
+                [
+                    'label'        => 'orocrm.case.caseentity.related_cart.label',
+                    'entity_class' => 'OroCRMMagentoBundle:Cart',
+                    'required'     => false,
+                ]
+            )
+            ->add(
+                'relatedLead',
+                'orocrm_sales_lead_select',
+                [
+                    'label'    => 'orocrm.case.caseentity.related_lead.label',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'relatedOpportunity',
+                'orocrm_sales_opportunity_select',
+                [
+                    'label'    => 'orocrm.case.caseentity.related_opportunity.label',
+                    'required' => false,
+                ]
+            )
             ->add(
                 'relatedEntity',
                 'choice',

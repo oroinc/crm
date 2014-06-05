@@ -4,18 +4,17 @@ namespace OroCRM\Bundle\CaseBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\AbstractType;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 
-class CaseApiType extends BaseCaseType
+class CaseApiType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder, $options);
-
         $builder
             ->add(
                 'reportedAt',
@@ -39,7 +38,8 @@ class CaseApiType extends BaseCaseType
                 [
                     'label' => 'orocrm.case.caseentity.reporter.label'
                 ]
-            );
+            )
+            ->remove('relatedEntity');
 
         $builder->addEventSubscriber(new PatchSubscriber());
     }
@@ -65,5 +65,13 @@ class CaseApiType extends BaseCaseType
     public function getName()
     {
         return 'case';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParent()
+    {
+        return 'orocrm_case';
     }
 }

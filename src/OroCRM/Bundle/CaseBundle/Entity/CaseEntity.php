@@ -518,7 +518,7 @@ class CaseEntity extends ExtendCaseEntity
      *
      * @return CaseEntity
      */
-    public function setReportedAt(\DateTime $reportedAt)
+    public function setReportedAt(\DateTime $reportedAt = null)
     {
         $this->reportedAt = $reportedAt;
 
@@ -538,7 +538,7 @@ class CaseEntity extends ExtendCaseEntity
      *
      * @return CaseEntity
      */
-    public function setClosedAt(\DateTime $closedAt)
+    public function setClosedAt(\DateTime $closedAt = null)
     {
         $this->closedAt = $closedAt;
 
