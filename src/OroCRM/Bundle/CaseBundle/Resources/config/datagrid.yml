@@ -167,7 +167,7 @@ datagrid:
                 cartId:
                     label: orocrm.case.datagrid.cart.label
                     type: string
-                    data_name: relatedCart.id
+                    data_name: relatedCart.originId
                     enabled: false
                 leadName:
                     label: orocrm.case.datagrid.lead.label
@@ -233,6 +233,9 @@ datagrid:
                 where:
                     and:
                         - relatedOrder.id = :id
+        options:
+            toolbarOptions:
+                hide: true
 
     cart-cases-grid:
         extends: base-cases-grid
@@ -241,6 +244,9 @@ datagrid:
                 where:
                     and:
                         - relatedCart.id = :id
+        options:
+            toolbarOptions:
+                hide: true
 
     lead-cases-grid:
         extends: base-cases-grid
@@ -249,6 +255,9 @@ datagrid:
                 where:
                     and:
                         - relatedLead.id = :id
+        options:
+            toolbarOptions:
+                hide: true
 
     opportunity-cases-grid:
         extends: base-cases-grid
@@ -257,3 +266,6 @@ datagrid:
                 where:
                     and:
                         - relatedOpportunity.id = :id
+        options:
+            toolbarOptions:
+                hide: true
