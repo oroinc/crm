@@ -164,6 +164,10 @@ class CustomerStrategy extends BaseStrategy
                 $localData->getAddresses()->get($key)->setContactAddress($address);
             }
 
+            foreach ($contact->getPhones() as $phone) {
+                $localData->getAddresses()->get($key)->setContactPhone($phone);
+            }
+
             // populate default owner only for new contacts
             $this->defaultOwnerHelper->populateChannelOwner($contact, $localData->getChannel());
             $localData->setContact($contact);
@@ -199,7 +203,7 @@ class CustomerStrategy extends BaseStrategy
                     $this->strategyHelper->importEntity(
                         $existingAddress,
                         $address,
-                        ['id', 'region', 'country', 'contactAddress', 'created', 'updated']
+                        ['id', 'region', 'country', 'contactAddress', 'created', 'updated', 'contactPhone']
                     );
                     // set remote data for further processing
                     $existingAddress->setRegion($address->getRegion());

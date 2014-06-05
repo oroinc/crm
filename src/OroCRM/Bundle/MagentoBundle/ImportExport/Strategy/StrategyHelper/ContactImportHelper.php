@@ -13,6 +13,7 @@ use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscri
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 
@@ -142,6 +143,14 @@ class ContactImportHelper
                         $address->setTypes($remoteAddress->getTypes());
                     }
 
+                    $contactPhone = $this->getContactPhoneFromContact($contact, $localAddress->getContactPhone());
+
+                    if ($this->isPhoneChanged($remoteAddress->getContactPhone(), $contactPhone)
+                        || $this->isRemotePrioritized()
+                    ) {
+                        $contactPhone->setPhone($remoteAddress->getContactPhone()->getPhone());
+                    }
+
                     $this->prepareAddress($address);
                     if (!$address->getCountry()) {
                         $contact->removeAddress($address);
@@ -213,6 +222,29 @@ class ContactImportHelper
             )
         );
     }
+
+
+    protected function isPhoneChanged($remotePhone, $localPhone)
+    {
+        if ($remotePhone->getPhone() != $localPhone->getPhone()) {
+            return true;
+        }
+        return false;
+    }
+
+
+    protected function getContactPhoneFromContact(Contact $contact, ContactPhone $contactPhone)
+    {
+        $filtered = $contact->getPhones()->filter(
+            function (ContactPhone $phone) use ($contactPhone) {
+                return $phone && $phone->getId() === $contactPhone->getId();
+            }
+        );
+
+        return $filtered->first();
+    }
+
+
 
     /**
      * Do merge between remote data and local data relation

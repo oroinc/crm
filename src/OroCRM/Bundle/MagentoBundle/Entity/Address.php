@@ -13,6 +13,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
 
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 
 /**
  * @ORM\Table("orocrm_magento_customer_addr")
@@ -153,6 +154,14 @@ class Address extends ExtendAddress
     protected $contactAddress;
 
     /**
+     * @var ContactPhone
+     *
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone",cascade={"persist"})
+     * @ORM\JoinColumn(name="related_contact_phone_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $contactPhone;
+
+    /**
      * Set contact as owner.
      *
      * @param Customer $owner
@@ -226,5 +235,21 @@ class Address extends ExtendAddress
     public function getUpdated()
     {
         return $this->updated;
+    }
+
+    /**
+     * @param ContactPhone $contactPhone
+     */
+    public function setContactPhone(ContactPhone $contactPhone)
+    {
+        $this->contactPhone = $contactPhone;
+    }
+
+    /**
+     * @return ContactPhone
+     */
+    public function getContactPhone()
+    {
+        return $this->contactPhone;
     }
 }

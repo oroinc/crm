@@ -16,6 +16,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
@@ -58,7 +59,8 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'region'            => 'region_id',
         'created'           => 'created_at',
         'updated'           => 'updated_at',
-        'customerAddressId' => 'customer_address_id'
+        'customerAddressId' => 'customer_address_id',
+        'contactPhone'      => 'telephone',
     ];
 
     protected $contactAddressEntityToMageMapping = [
@@ -423,6 +425,21 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $addresses = $this->denormalizeObject($data, 'addresses', MagentoConnectorInterface::CUSTOMER_ADDRESSES_TYPE);
         if (!empty($addresses)) {
             $object->resetAddresses($addresses);
+        }
+
+        $this->setPhoneToTheAddress($object, $data['addresses'], $contact);
+    }
+
+    protected function setPhoneToTheAddress($customer, $data, $contact)
+    {
+        reset($data);
+
+        foreach ($customer->getAddresses() as $address) {
+            $phone = new ContactPhone();
+            $mageData = each($data);
+            $phone->setPhone($mageData['value']['contactPhone']);
+            $phone->setOwner($contact);
+            $address->setContactPhone($phone);
         }
     }
 
