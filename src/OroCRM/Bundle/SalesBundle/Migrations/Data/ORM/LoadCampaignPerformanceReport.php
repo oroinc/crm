@@ -91,9 +91,9 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements Container
                     'func'    => [
                         'name'       => 'WonRevenueSumFunction',
                         'group_type' => 'aggregates',
-                        'group_name' => 'opportunity',
+                        'group_name' => 'opportunity'
                     ],
-                    'sorting' => 'DESC',
+                    'sorting' => 'DESC'
                 ]
             ],
             'grouping_columns' => [
