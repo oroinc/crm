@@ -117,6 +117,9 @@ datagrid:
                     - CONCAT(relatedContact.firstName, CONCAT(' ', relatedContact.lastName)) as contactName
         filters:
             columns:
+                caseNumber:
+                    type: string
+                    data_name: caseEntity.id
                 subject:
                     type: string
                     data_name: caseEntity.subject
