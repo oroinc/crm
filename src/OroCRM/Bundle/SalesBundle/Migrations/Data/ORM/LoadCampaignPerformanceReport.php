@@ -5,16 +5,29 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\ReportBundle\Entity\Report;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class LoadCampaignPerformanceReport extends AbstractFixture implements ContainerAwareInterface
+class LoadCampaignPerformanceReport extends AbstractFixture implements
+    ContainerAwareInterface,
+    DependentFixtureInterface
 {
     /** @var ContainerInterface */
     protected $container;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies()
+    {
+        return [
+            'Oro\Bundle\ReportBundle\Migrations\Data\ORM\LoadReportTypes'
+        ];
+    }
 
     /**
      * {@inheritdoc}
