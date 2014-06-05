@@ -5,14 +5,14 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 
 class OrderDenormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return $type == MagentoConnectorInterface::ORDER_TYPE;
     }

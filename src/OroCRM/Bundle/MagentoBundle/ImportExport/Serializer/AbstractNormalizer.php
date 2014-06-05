@@ -4,11 +4,11 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Doctrine\ORM\EntityManager;
 
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 
 class AbstractNormalizer implements SerializerAwareInterface
@@ -37,8 +37,8 @@ class AbstractNormalizer implements SerializerAwareInterface
             throw new \InvalidArgumentException(
                 sprintf(
                     'Serializer must implement "%s" and "%s"',
-                    'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
-                    'Symfony\Component\Serializer\Normalizer\DenormalizerInterface'
+                    'Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface',
+                    'Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface'
                 )
             );
         }

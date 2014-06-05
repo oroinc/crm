@@ -4,12 +4,12 @@ namespace OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer;
 
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Intl\Exception\NotImplementedException;
 
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\AbstractContextModeAwareNormalizer;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
@@ -45,8 +45,8 @@ class AccountNormalizer extends AbstractContextModeAwareNormalizer implements Se
             throw new InvalidArgumentException(
                 sprintf(
                     'Serializer must implement "%s" and "%s"',
-                    'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
-                    'Symfony\Component\Serializer\Normalizer\DenormalizerInterface'
+                    'Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface',
+                    'Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface'
                 )
             );
         }
@@ -186,7 +186,7 @@ class AccountNormalizer extends AbstractContextModeAwareNormalizer implements Se
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, $format = null, array $context = array())
     {
         return $data instanceof Account;
     }
@@ -194,7 +194,7 @@ class AccountNormalizer extends AbstractContextModeAwareNormalizer implements Se
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return (is_array($data) || is_string($data)) && $type == static::ACCOUNT_TYPE;
     }
