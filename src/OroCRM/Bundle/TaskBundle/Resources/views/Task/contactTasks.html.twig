@@ -5,8 +5,7 @@
         {{ oro_widget_render({
             'widgetType': 'block',
             'url': path('orocrm_task_widget_contact_tasks', {id: entity.id}),
-            'title': 'orocrm.task.entity_plural_label'|trans,
-            'cssClass': 'inner-grid',
+            'title': 'orocrm.task.entity_plural_label'|trans
         }) }}
     {% endset %}
     {{ ui.scrollSubblock(null, [widgetContent]) }}
