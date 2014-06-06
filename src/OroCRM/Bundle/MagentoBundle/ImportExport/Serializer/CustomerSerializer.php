@@ -353,13 +353,14 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
      */
     protected function setObjectFieldsValues(Customer $object, array $data, $format = null, array $context = array())
     {
+        $format = 'magento';
         // format contact data
         $data['contact']   = $this->formatContactData($data);
         $data['account']   = $this->formatAccountData($data);
         $data['addresses'] = $data['contact']['addresses'];
 
         /** @var Contact $contact */
-        $contact = $this->denormalizeObject($data, 'contact', ContactNormalizer::CONTACT_TYPE);
+        $contact = $this->denormalizeObject($data, 'contact', ContactNormalizer::CONTACT_TYPE, 'magento');
 
         /** @var Account $account */
         $account = $this->denormalizeObject(
