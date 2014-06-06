@@ -435,12 +435,39 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         reset($data);
 
         foreach ($customer->getAddresses() as $address) {
-            $phone = new ContactPhone();
             $mageData = each($data);
+
+            $phone = new ContactPhone();
             $phone->setPhone($mageData['value']['contactPhone']);
-            $phone->setOwner($contact);
-            $address->setContactPhone($phone);
+
+            $contactPhone = $this->getContactPhoneFromContact($contact, $phone);
+
+            if (!empty($contactPhone)) {
+                $address->setContactPhone($contactPhone);
+            } else {
+                $phone->setOwner($contact);
+                $address->setContactPhone($phone);
+            }
         }
+    }
+
+    /**
+     * Filtered phone by phone number from contact and return entity or null
+     *
+     * @param Contact      $contact
+     * @param ContactPhone $contactPhone
+     *
+     * @return ContactPhone|null
+     */
+    protected function getContactPhoneFromContact(Contact $contact, ContactPhone $contactPhone)
+    {
+        $filtered = $contact->getPhones()->filter(
+            function (ContactPhone $phone) use ($contactPhone) {
+                return $phone && $phone->getPhone() === $contactPhone->getPhone();
+            }
+        );
+
+        return $filtered->first();
     }
 
     /**
