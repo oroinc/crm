@@ -150,7 +150,7 @@ orocrm:
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             information:          Lead Information
-            campaign.label: Campaign
+            campaign.label:       Campaign
 
             extend_source:
                 unclassified:     Unclassified
