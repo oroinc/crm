@@ -430,6 +430,11 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $this->setPhoneToTheAddress($object, $data['addresses'], $contact);
     }
 
+    /**
+     * @param Customer $customer
+     * @param array    $data
+     * @param Contact  $contact
+     */
     protected function setPhoneToTheAddress($customer, $data, $contact)
     {
         reset($data);

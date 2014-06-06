@@ -223,7 +223,12 @@ class ContactImportHelper
         );
     }
 
-
+    /**
+     * @param $remotePhone
+     * @param $localPhone
+     *
+     * @return bool
+     */
     protected function isPhoneChanged($remotePhone, $localPhone)
     {
         if ($remotePhone->getPhone() != $localPhone->getPhone()) {
@@ -232,7 +237,14 @@ class ContactImportHelper
         return false;
     }
 
-
+    /**
+     * Get ContactPhone from contact by ContactPhone
+     *
+     * @param Contact      $contact
+     * @param ContactPhone $contactPhone
+     *
+     * @return mixed
+     */
     protected function getContactPhoneFromContact(Contact $contact, ContactPhone $contactPhone)
     {
         $filtered = $contact->getPhones()->filter(
@@ -243,8 +255,6 @@ class ContactImportHelper
 
         return $filtered->first();
     }
-
-
 
     /**
      * Do merge between remote data and local data relation
