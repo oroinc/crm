@@ -9,6 +9,7 @@ use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\TypedAddressNorm
 
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\OrderAddressDataConverter;
+use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 
 class OrderAddressCompositeDenormalizer extends TypedAddressNormalizer
 {
@@ -48,5 +49,13 @@ class OrderAddressCompositeDenormalizer extends TypedAddressNormalizer
     public function supportsDenormalization($data, $type, $format = null)
     {
         return MagentoConnectorInterface::ORDER_ADDRESS_TYPE === $type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsNormalization($data, $format = null)
+    {
+        return $data instanceof OrderAddress;
     }
 }

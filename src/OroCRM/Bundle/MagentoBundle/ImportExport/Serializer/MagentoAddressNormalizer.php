@@ -9,6 +9,7 @@ use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalize
 use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\TypedAddressNormalizer;
 
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
 
 class MagentoAddressNormalizer extends TypedAddressNormalizer
 {
@@ -60,5 +61,13 @@ class MagentoAddressNormalizer extends TypedAddressNormalizer
     public function supportsDenormalization($data, $type, $format = null)
     {
         return MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE == $type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsNormalization($data, $format = null)
+    {
+        return $data instanceof MagentoAddress;
     }
 }

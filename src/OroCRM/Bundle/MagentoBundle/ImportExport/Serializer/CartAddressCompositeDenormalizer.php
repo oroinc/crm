@@ -7,6 +7,7 @@ use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\TypedAddressNorm
 
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AddressDataConverter;
+use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 
 class CartAddressCompositeDenormalizer extends OrderAddressCompositeDenormalizer
 {
@@ -59,5 +60,13 @@ class CartAddressCompositeDenormalizer extends OrderAddressCompositeDenormalizer
     public function supportsDenormalization($data, $type, $format = null)
     {
         return MagentoConnectorInterface::CART_ADDRESS_TYPE == $type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsNormalization($data, $format = null)
+    {
+        return $data instanceof CartAddress;
     }
 }
