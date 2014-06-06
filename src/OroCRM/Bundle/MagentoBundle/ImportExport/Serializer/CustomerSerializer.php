@@ -187,6 +187,20 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         return $result;
     }
 
+    public function comparePhones($remoteData, $localData)
+    {
+        $accessor = PropertyAccess::createPropertyAccessor();
+
+        if ($accessor->getValue($localData, 'phone') !== $remoteData['telephone']) {
+            return [
+                'phone' => $remoteData['telephone'],
+                'contact_phone.phone' => $remoteData['telephone'],
+            ];
+        }
+
+        return [];
+    }
+
     /**
      * @param AbstractAddress $addressFields
      *

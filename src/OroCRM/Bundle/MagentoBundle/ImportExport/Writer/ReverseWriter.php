@@ -249,6 +249,14 @@ class ReverseWriter implements ItemWriterInterface
                         $addressEntity,
                         $remoteTypesWin
                     );
+
+                    $remotePhoneData = $this->customerSerializer->comparePhones(
+                        (array) $remoteAddress,
+                        $addressEntity
+                    );
+
+                    $remoteData = array_merge($remoteData, $remotePhoneData);
+
                     // if on remote side was not changed address types - save local types
                     if (!$remoteTypesWin) {
                         $localChanges = array_merge(
@@ -267,7 +275,8 @@ class ReverseWriter implements ItemWriterInterface
                 }
                 $dataForSend = array_merge(
                     $this->customerSerializer->convertToMagentoAddress($addressEntity),
-                    $this->regionConverter->toMagentoData($addressEntity)
+                    $this->regionConverter->toMagentoData($addressEntity),
+                    ['telephone' => $addressEntity->getPhone()]
                 );
                 $requestData = ['addressId' => $addressEntity->getOriginId(), 'addressData' => $dataForSend];
                 try {
