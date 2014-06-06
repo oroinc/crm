@@ -2,9 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer;
 
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
 use OroCRM\Bundle\ContactBundle\Entity\Source;
 
 class SourceNormalizer implements NormalizerInterface, DenormalizerInterface
@@ -37,7 +36,7 @@ class SourceNormalizer implements NormalizerInterface, DenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, $format = null, array $context = array())
     {
         return $data instanceof Source;
     }
@@ -45,7 +44,7 @@ class SourceNormalizer implements NormalizerInterface, DenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return is_string($data) && $type == static::SOURCE_TYPE;
     }
