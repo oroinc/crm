@@ -63,11 +63,12 @@ class Account extends ExtendAccount implements Taggable
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Soap\ComplexType("int", nillable=true)
      * @ConfigField(
-     *  defaultValues={
-     *    "importexport"={
-     *       "identity"=true
-     *    }
-     *   }
+     *      defaultValues={
+     *          "importexport"={
+     *              "identity"=true,
+     *              "order"=1
+     *          }
+     *      }
      * )
      */
     protected $id;
@@ -79,17 +80,18 @@ class Account extends ExtendAccount implements Taggable
      * @Soap\ComplexType("string")
      * @Oro\Versioned
      * @ConfigField(
-     *  defaultValues={
-     *    "merge"={
-     *      "display"=true
-     *    },
-     *    "dataaudit"={
-     *      "auditable"=true
-     *    },
-     *    "importexport"={
-     *       "identity"=true
-     *    }
-     *   }
+     *      defaultValues={
+     *          "merge"={
+     *              "display"=true
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          },
+     *          "importexport"={
+     *              "identity"=true,
+     *              "order"=2
+     *          }
+     *      }
      * )
      */
     protected $name;
@@ -101,14 +103,17 @@ class Account extends ExtendAccount implements Taggable
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
      * @ConfigField(
-     *  defaultValues={
-     *    "merge"={
-     *      "display"=true
-     *    },
-     *    "dataaudit"={
-     *      "auditable"=true
-     *    }
-     *  }
+     *      defaultValues={
+     *          "merge"={
+     *              "display"=true
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          },
+     *          "importexport"={
+     *              "order"=3
+     *          }
+     *      }
      * )
      */
     protected $owner;
@@ -122,7 +127,8 @@ class Account extends ExtendAccount implements Taggable
      *      defaultValues={
      *          "merge"={"display"=true},
      *          "importexport"={
-     *              "full"=true
+     *              "full"=true,
+     *              "order"=5
      *          }
      *      }
      * )
@@ -138,7 +144,8 @@ class Account extends ExtendAccount implements Taggable
      *      defaultValues={
      *          "merge"={"display"=true},
      *          "importexport"={
-     *              "full"=true
+     *              "full"=true,
+     *              "order"=6
      *          }
      *      }
      * )
@@ -152,7 +159,13 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", inversedBy="accounts")
      * @ORM\JoinTable(name="orocrm_account_to_contact")
-     * @ConfigField(defaultValues={"merge"={"display"=true}})
+     * @ConfigField(
+     *      defaultValues={
+     *          "merge"={
+     *              "display"=true
+     *          }
+     *      }
+     * )
      */
     protected $contacts;
 
@@ -163,7 +176,17 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="default_contact_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(defaultValues={"merge"={"display"=true}})
+     * @ConfigField(
+     *      defaultValues={
+     *          "merge"={
+     *              "display"=true
+     *          },
+     *          "importexport"={
+     *              "full"=true,
+     *              "order"=4
+     *          }
+     *      }
+     * )
      */
     protected $defaultContact;
 
@@ -172,6 +195,13 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\Column(type="datetime")
      * @Soap\ComplexType("dateTime", nillable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $createdAt;
 
@@ -180,12 +210,25 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\Column(type="datetime")
      * @Soap\ComplexType("dateTime", nillable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $updatedAt;
 
     /**
      * @var ArrayCollection $tags
-     * @ConfigField(defaultValues={"merge"={"display"=true}})
+     * @ConfigField(
+     *      defaultValues={
+     *          "merge"={
+     *              "display"=true
+     *          }
+     *      }
+     * )
      */
     protected $tags;
 

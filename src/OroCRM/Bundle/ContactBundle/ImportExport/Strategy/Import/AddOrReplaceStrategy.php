@@ -11,7 +11,6 @@ use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import\ContactImportStrategyHelper;
 
 class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
 {
@@ -316,9 +315,9 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
     protected function removeRelatedCreatedEntities(Contact $contact)
     {
         $contact
-            ->resetAddresses(array())
             ->resetEmails(array())
-            ->resetPhones(array());
+            ->resetPhones(array())
+            ->resetAddresses(array());
 
         return $this;
     }
