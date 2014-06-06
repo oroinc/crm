@@ -62,13 +62,6 @@ class Account extends ExtendAccount implements Taggable
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Soap\ComplexType("int", nillable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *    "importexport"={
-     *       "identity"=true
-     *    }
-     *   }
-     * )
      */
     protected $id;
 
