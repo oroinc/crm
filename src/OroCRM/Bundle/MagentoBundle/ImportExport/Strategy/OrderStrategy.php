@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Util\ClassUtils;
-
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
@@ -24,6 +22,7 @@ class OrderStrategy extends BaseStrategy
         'workflowStep',
         'relatedCalls',
         'relatedEmails',
+        'owner'
     ];
 
     /** @var StoreStrategy */
@@ -49,6 +48,9 @@ class OrderStrategy extends BaseStrategy
             $this->strategyHelper->importEntity($order, $importingOrder, self::$attributesToUpdateManual);
         } else {
             $order = $importingOrder;
+
+            // populate owner only for newly created entities
+            $this->defaultOwnerHelper->populateChannelOwner($order, $order->getChannel());
         }
         /** @var Order $order */
         $this->processStore($order);
