@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -14,11 +15,21 @@ class CartSelectType extends AbstractType
         $resolver->setDefaults(
             array(
                 'configs' => array(
-                    'placeholder' => 'orocrm.magento.form.choose_cart'
+                    'placeholder' => 'orocrm.magento.form.choose_cart',
+                    'result_template_twig' => 'OroCRMMagentoBundle:Cart:Autocomplete/result.html.twig',
+                    'selection_template_twig' => 'OroCRMMagentoBundle:Cart:Autocomplete/selection.html.twig'
                 ),
-                'autocomplete_alias' => 'carts'
+                'autocomplete_alias' => 'orocrm_magento.carts',
             )
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'orocrm_cart_select';
     }
 
     /**
@@ -27,13 +38,5 @@ class CartSelectType extends AbstractType
     public function getParent()
     {
         return 'oro_jqueryselect2_hidden';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-            return 'orocrm_cart_select';
     }
 }

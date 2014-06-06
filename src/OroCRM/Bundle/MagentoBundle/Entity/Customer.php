@@ -253,6 +253,14 @@ class Customer extends ExtendCustomer
     }
 
     /**
+     * @return string
+     */
+    public function getWebsiteName()
+    {
+        return $this->website ? $this->website->getName() : null;
+    }
+
+    /**
      * @param Store $store
      *
      * @return $this
@@ -270,6 +278,14 @@ class Customer extends ExtendCustomer
     public function getStore()
     {
         return $this->store;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStoreName()
+    {
+        return $this->store ? $this->store->getName() : null;
     }
 
     /**

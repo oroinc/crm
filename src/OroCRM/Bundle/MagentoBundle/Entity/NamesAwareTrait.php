@@ -59,4 +59,20 @@ trait NamesAwareTrait
      * @return AbstractAddress
      */
     abstract public function getBillingAddress();
+
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
 }

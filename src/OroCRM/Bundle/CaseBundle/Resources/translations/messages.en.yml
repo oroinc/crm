@@ -26,28 +26,29 @@ orocrm:
             #
             # OroCRM/Bundle/CaseBundle/Entity/CaseEntity
             #
-            entity_label:                Case
-            entity_plural_label:         Cases
-            entity_description:          Represent case
-            subject.label:               Subject
-            description.label:           Description
-            workflow_step.label:         Status
-            owner.label:                 Assigned To
-            closed_at.label:             Closed On
-            reported_at.label:           Reported On
-            related_order.label:         Order
-            related_contact.label:       Contact
-            related_customer.label:      Customer
-            related_cart.label:          Cart
-            related_lead.label:          Lead
-            related_opportunity.label:   Opportunity
-            origin.label:                Origin
-            reporter.label:              Reporter
-            related_entity.label:        Related Entity
-            created_at.label:            Created At
-            updated_at.label:            Updated At
-            id.label:                    Id
-            workflow_item.label:         Workflow item
+            entity_label:                   Case
+            entity_plural_label:            Cases
+            entity_description:             Represent case
+            subject.label:                  Subject
+            description.label:              Description
+            workflow_step.label:            Status
+            owner.label:                    Assigned To
+            closed_at.label:                Closed On
+            reported_at.label:              Reported On
+            related_order.label:            Order
+            related_contact.label:          Contact
+            related_customer.label:         Customer
+            related_cart.label:             Cart
+            related_lead.label:             Lead
+            related_opportunity.label:      Opportunity
+            origin.label:                   Origin
+            reporter.label:                 Reporter
+            related_item_entity.label:      Item Entity
+            related_customer_entity.label:  Customer Entity
+            created_at.label:               Created At
+            updated_at.label:               Updated At
+            id.label:                       Id
+            workflow_item.label:            Workflow item
 
         block:
             general: General Information

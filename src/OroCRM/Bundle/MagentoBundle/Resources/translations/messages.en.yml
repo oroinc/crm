@@ -428,3 +428,10 @@ orocrm:
             synchronization_success:       Data successfully synchronized.
             synchronization_failed_status: Cart data is not up to date
         ping_site_error: Unable to load form
+
+        order_information: Order Information
+        customer_information: Customer Information
+        general_information: General Information
+        cart_information: Cart Information
+        communications: Communications
+        entity_number: %entityName% %entityNumber%

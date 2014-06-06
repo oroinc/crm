@@ -75,10 +75,10 @@
                     {%- set relatedContact -%}
                         {% if resource_granted('orocrm_contact_view') %}
                             <a href="{{ path('orocrm_contact_view', {'id': entity.relatedContact.id}) }}">
-                                {{ entity.relatedContact|escape }}
+                                {{ entity.relatedContact|oro_format_name|escape }}
                             </a>
                         {% else %}
-                            {{ entity.relatedContact|escape }}
+                            {{ entity.relatedContact|oro_format_name|escape }}
                         {% endif %}
                     {%- endset -%}
                     {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_contact.label'|trans, relatedContact) }}
@@ -88,10 +88,10 @@
                     {%- set relatedCustomer -%}
                         {% if resource_granted('orocrm_magento_customer_view') %}
                             <a href="{{ path('orocrm_magento_customer_view', {'id': entity.relatedCustomer.id}) }}">
-                                {{ entity.relatedCustomer|escape }}
+                                {{ entity.relatedCustomer|oro_format_name|escape }}
                             </a>
                         {% else %}
-                            {{ entity.relatedCustomer|escape }}
+                            {{ entity.relatedCustomer|oro_format_name|escape }}
                         {% endif %}
                     {%- endset -%}
                     {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_customer.label'|trans, relatedCustomer) }}
@@ -99,12 +99,13 @@
 
                 {%- if entity.relatedOrder -%}
                     {%- set relatedOrder -%}
+                        {% set orderTitle = 'orocrm.magento.entity_number'|trans({'%entityName%': 'orocrm.magento.order.entity_label'|trans, '%entityNumber%': entity.relatedOrder.incrementId}) %}
                         {% if resource_granted('orocrm_magento_order_view') %}
                             <a href="{{ path('orocrm_magento_order_view', {'id': entity.relatedOrder.id}) }}">
-                                {{ entity.relatedOrder.incrementId|oro_format_name|escape }}
+                                {{ orderTitle }}
                             </a>
                         {% else %}
-                            {{ entity.relatedOrder.incrementId|escape }}
+                            {{ orderTitle }}
                         {% endif %}
                     {%- endset -%}
                     {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_order.label'|trans, relatedOrder) }}
@@ -112,12 +113,13 @@
 
                 {%- if entity.relatedCart -%}
                     {%- set relatedCart -%}
+                        {% set cartTitle = 'orocrm.magento.entity_number'|trans({'%entityName%': 'orocrm.magento.cart.entity_label'|trans, '%entityNumber%': entity.relatedCart.originId}) %}
                         {% if resource_granted('orocrm_magento_cart_view') %}
                             <a href="{{ path('orocrm_magento_cart_view', {'id': entity.relatedCart.id}) }}">
-                                {{ entity.relatedCart|escape }}
+                                {{ cartTitle }}
                             </a>
                         {% else %}
-                            {{ entity.relatedCart|escape }}
+                            {{ cartTitle }}
                         {% endif %}
                     {%- endset -%}
                     {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_cart.label'|trans, relatedCart) }}

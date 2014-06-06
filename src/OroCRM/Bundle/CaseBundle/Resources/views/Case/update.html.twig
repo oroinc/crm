@@ -43,13 +43,14 @@
                     form_row(form.description),
                     form_row(form.owner),
                     form_row(form.origin),
-                    form_row(form.relatedEntity),
-                    form_row(form.relatedContact, {'attr': {'class': 'case-item'}} ),
-                    form_row(form.relatedCustomer, {'attr': {'class': 'case-item'}} ),
-                    form_row(form.relatedOrder, {'attr': {'class': 'case-item'}} ),
-                    form_row(form.relatedCart, {'attr': {'class': 'case-item'}} ),
-                    form_row(form.relatedLead, {'attr': {'class': 'case-item'}} ),
-                    form_row(form.relatedOpportunity, {'attr': {'class': 'case-item'}} ),
+                    form_row(form.relatedCustomerEntity),
+                    form_row(form.relatedContact, {'attr': {'class': 'case-related-customer'}} ),
+                    form_row(form.relatedCustomer, {'attr': {'class': 'case-related-customer'}} ),
+                    form_row(form.relatedItemEntity),
+                    form_row(form.relatedOrder, {'attr': {'class': 'case-related-item'}} ),
+                    form_row(form.relatedCart, {'attr': {'class': 'case-related-item'}} ),
+                    form_row(form.relatedLead, {'attr': {'class': 'case-related-item'}} ),
+                    form_row(form.relatedOpportunity, {'attr': {'class': 'case-related-item'}} ),
                 ]
             }
         ]
@@ -57,11 +58,15 @@
 
     <script type="text/javascript">
         require(
-            ['orocrm/case/case_relation'],
-            function (CaseRelation) {
-                CaseRelation.initialize({
-                    selector: '.case-item',
-                    control: '#orocrm_case_relatedEntity'
+            ['orocrm/case/related-entity-form-helper'],
+            function (RelatedEntityFormHelper) {
+                RelatedEntityFormHelper.initialize({
+                    selector: '.case-related-customer',
+                    control: '#orocrm_case_relatedCustomerEntity'
+                });
+                RelatedEntityFormHelper.initialize({
+                    selector: '.case-related-item',
+                    control: '#orocrm_case_relatedItemEntity'
                 });
             }
         );

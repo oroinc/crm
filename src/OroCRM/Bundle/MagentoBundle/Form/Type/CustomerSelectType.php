@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -14,11 +15,19 @@ class CustomerSelectType extends AbstractType
         $resolver->setDefaults(
             array(
                 'configs' => array(
-                    'placeholder' => 'orocrm.magento.form.choose_customer'
+                    'placeholder' => 'orocrm.magento.form.choose_customer',
                 ),
-                'autocomplete_alias' => 'customers'
+                'autocomplete_alias' => 'orocrm_magento.customers'
             )
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'orocrm_customer_select';
     }
 
     /**
@@ -27,13 +36,5 @@ class CustomerSelectType extends AbstractType
     public function getParent()
     {
         return 'oro_jqueryselect2_hidden';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-            return 'orocrm_customer_select';
     }
 }

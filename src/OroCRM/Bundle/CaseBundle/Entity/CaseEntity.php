@@ -247,7 +247,6 @@ class CaseEntity extends ExtendCaseEntity
 
     /**
      * @param User $owner
-     *
      * @return CaseEntity
      */
     public function setOwner($owner)
@@ -266,8 +265,7 @@ class CaseEntity extends ExtendCaseEntity
     }
 
     /**
-     * @param CaseOrigin $origin
-     *
+     * @param CaseOrigin|null $origin
      * @return CaseEntity
      */
     public function setOrigin($origin)
@@ -286,11 +284,10 @@ class CaseEntity extends ExtendCaseEntity
     }
 
     /**
-     * @param Order $relatedOrder
-     *
+     * @param Order|null $relatedOrder
      * @return CaseEntity
      */
-    public function setRelatedOrder(Order $relatedOrder)
+    public function setRelatedOrder(Order $relatedOrder = null)
     {
         $this->relatedOrder = $relatedOrder;
 
@@ -306,11 +303,10 @@ class CaseEntity extends ExtendCaseEntity
     }
 
     /**
-     * @param Cart $relatedCart
-     *
+     * @param Cart|null $relatedCart
      * @return CaseEntity
      */
-    public function setRelatedCart(Cart $relatedCart)
+    public function setRelatedCart(Cart $relatedCart = null)
     {
         $this->relatedCart = $relatedCart;
 
@@ -326,11 +322,10 @@ class CaseEntity extends ExtendCaseEntity
     }
 
     /**
-     * @param Lead $relatedLead
-     *
+     * @param Lead|null $relatedLead
      * @return CaseEntity
      */
-    public function setRelatedLead(Lead $relatedLead)
+    public function setRelatedLead(Lead $relatedLead = null)
     {
         $this->relatedLead = $relatedLead;
 
@@ -346,11 +341,10 @@ class CaseEntity extends ExtendCaseEntity
     }
 
     /**
-     * @param Opportunity $relatedOpportunity
-     *
+     * @param Opportunity|null $relatedOpportunity
      * @return CaseEntity
      */
-    public function setRelatedOpportunity(Opportunity $relatedOpportunity)
+    public function setRelatedOpportunity(Opportunity $relatedOpportunity = null)
     {
         $this->relatedOpportunity = $relatedOpportunity;
 
@@ -366,11 +360,10 @@ class CaseEntity extends ExtendCaseEntity
     }
 
     /**
-     * @param Contact $relatedContact
-     *
+     * @param Contact|null $relatedContact
      * @return CaseEntity
      */
-    public function setRelatedContact(Contact $relatedContact)
+    public function setRelatedContact(Contact $relatedContact = null)
     {
         $this->relatedContact = $relatedContact;
 
@@ -386,11 +379,10 @@ class CaseEntity extends ExtendCaseEntity
     }
 
     /**
-     * @param Customer $relatedCustomer
-     *
+     * @param Customer|null $relatedCustomer
      * @return CaseEntity
      */
-    public function setRelatedCustomer(Customer $relatedCustomer)
+    public function setRelatedCustomer(Customer $relatedCustomer = null)
     {
         $this->relatedCustomer = $relatedCustomer;
 
@@ -406,11 +398,10 @@ class CaseEntity extends ExtendCaseEntity
     }
 
     /**
-     * @param User $reporter
-     *
+     * @param User|null $reporter
      * @return CaseEntity
      */
-    public function setReporter(User $reporter)
+    public function setReporter(User $reporter = null)
     {
         $this->reporter = $reporter;
 
@@ -427,7 +418,6 @@ class CaseEntity extends ExtendCaseEntity
 
     /**
      * @param WorkflowStep $workflowStep
-     *
      * @return CaseEntity
      */
     public function setWorkflowStep($workflowStep)
@@ -455,7 +445,6 @@ class CaseEntity extends ExtendCaseEntity
 
     /**
      * @param WorkflowItem $workflowItem
-     *
      * @return CaseEntity
      */
     public function setWorkflowItem($workflowItem)
@@ -475,7 +464,6 @@ class CaseEntity extends ExtendCaseEntity
 
     /**
      * @param \DateTime $createdAt
-     *
      * @return CaseEntity
      */
     public function setCreatedAt(\DateTime $createdAt)
@@ -495,7 +483,6 @@ class CaseEntity extends ExtendCaseEntity
 
     /**
      * @param \DateTime $updatedAt
-     *
      * @return CaseEntity
      */
     public function setUpdatedAt(\DateTime $updatedAt)
@@ -515,7 +502,6 @@ class CaseEntity extends ExtendCaseEntity
 
     /**
      * @param \DateTime $reportedAt
-     *
      * @return CaseEntity
      */
     public function setReportedAt(\DateTime $reportedAt = null)
@@ -535,7 +521,6 @@ class CaseEntity extends ExtendCaseEntity
 
     /**
      * @param \DateTime $closedAt
-     *
      * @return CaseEntity
      */
     public function setClosedAt(\DateTime $closedAt = null)

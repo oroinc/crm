@@ -39,7 +39,8 @@ class CaseApiType extends AbstractType
                     'label' => 'orocrm.case.caseentity.reporter.label'
                 ]
             )
-            ->remove('relatedEntity');
+            ->remove('relatedItemEntity')
+            ->remove('relatedCustomerEntity');
 
         $builder->addEventSubscriber(new PatchSubscriber());
     }
