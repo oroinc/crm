@@ -2,27 +2,27 @@ workflows:
     case_flow:
         steps:
             open:
-                label: 'Open'
+                label: orocrm.case.workflow.steps.open.label
                 order: 10
                 allowed_transitions:
                     - start_progress
                     - resolve
                     - close
             in_progress:
-                label: 'In progress'
+                label: orocrm.case.workflow.steps.in_progress.label
                 order: 20
                 allowed_transitions:
                     - stop_progress
                     - resolve
                     - close
             resolved:
-                label: 'Resolved'
+                label: orocrm.case.workflow.steps.resolved.label
                 order: 30
                 allowed_transitions:
                     - reopen
                 is_final: true
             closed:
-                label: 'Closed'
+                label: orocrm.case.workflow.steps.closed.label
                 order: 40
                 allowed_transitions:
                     - reopen

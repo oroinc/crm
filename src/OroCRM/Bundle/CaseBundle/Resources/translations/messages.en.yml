@@ -3,21 +3,34 @@ orocrm:
         widgets:
             account_cases: Cases
         datagrid:
-            case_number.label:     'Case #'
-            subject.label:         Subject
-            reporter.label:        Reporter
-            assigned_to.label:     Assigned to
-            reported_on.label:     Reported on
-            closed_on.label:       Closed on
-            closed_on.label:       Closed on
-            workflow_status.label: Status
-            customer.label:        Customer
-            contact.label:         Contact
-            origin.label:          Origin
-            order.label:           'Order #'
-            cart.label:            Cart Id
-            lead.label:            Lead name
-            opportunity.label:     Opportunity name
+            case_number.label:              Case ID
+            subject.label:                  Subject
+            reporter.label:                 Reporter
+            assigned_to.label:              Assigned to
+            reported_on.label:              Reported on
+            closed_on.label:                Closed on
+            closed_on.label:                Closed on
+            workflow_status.label:          Status
+            customer.label:                 Customer
+            contact.label:                  Contact
+            origin.label:                   Origin
+            order.label:                    'Order #'
+            cart.label:                     Cart Id
+            lead.label:                     Lead name
+            opportunity.label:              Opportunity name
+
+        workflow:
+            steps:
+                open.label:                 Open
+                in_progress.label:          In progress
+                resolved.label:             Resolved
+                closed.label:               Closed
+            transitions:
+                start_progress.label:       Start progress
+                stop_progress.label:        Stop progress
+                resolve.label:              Resolve
+                close.label:                Close
+                reopen.label:               Reopen
 
         menu:
             index.label: Cases
@@ -43,8 +56,8 @@ orocrm:
             related_opportunity.label:      Opportunity
             origin.label:                   Origin
             reporter.label:                 Reporter
-            related_item_entity.label:      Item Entity
-            related_customer_entity.label:  Customer Entity
+            related_item_entity.label:      Item Type
+            related_customer_entity.label:  Customer Type
             created_at.label:               Created At
             updated_at.label:               Updated At
             id.label:                       Id

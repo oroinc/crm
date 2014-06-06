@@ -32,13 +32,6 @@ class CaseType extends AbstractType
                 ]
             )
             ->add(
-                'owner',
-                'oro_user_select',
-                [
-                    'label'        => 'orocrm.case.caseentity.owner.label'
-                ]
-            )
-            ->add(
                 'origin',
                 'entity',
                 [
