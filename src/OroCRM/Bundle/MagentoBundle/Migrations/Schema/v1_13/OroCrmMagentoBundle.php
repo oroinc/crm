@@ -21,6 +21,7 @@ class OroCrmMagentoBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_magento_customer_addr');
+        $table->addColumn('phone', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('related_contact_phone_id', 'integer', ['notnull' => false]);
         $table->addUniqueIndex(['related_contact_phone_id'], 'UNIQ_1E239D64E3694F65');
         $table->addForeignKeyConstraint(

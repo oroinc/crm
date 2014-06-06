@@ -143,12 +143,10 @@ class ContactImportHelper
                         $address->setTypes($remoteAddress->getTypes());
                     }
 
-                    $contactPhone = $this->getContactPhoneFromContact($contact, $localAddress->getContactPhone());
-
-                    if ($this->isPhoneChanged($remoteAddress->getContactPhone(), $contactPhone)
-                        || $this->isRemotePrioritized()
-                    ) {
+                    if ($localAddress->getPhone() != $remoteAddress->getPhone() || $this->isRemotePrioritized()) {
+                        $contactPhone = $this->getContactPhoneFromContact($contact, $localAddress->getContactPhone());
                         $contactPhone->setPhone($remoteAddress->getContactPhone()->getPhone());
+                        $localAddress->setPhone($remoteAddress->getContactPhone()->getPhone());
                     }
 
                     $this->prepareAddress($address);
@@ -222,20 +220,6 @@ class ContactImportHelper
                 === ($address->getRegion() ? $address->getRegion()->getCombinedCode() : null)
             )
         );
-    }
-
-    /**
-     * @param $remotePhone
-     * @param $localPhone
-     *
-     * @return bool
-     */
-    protected function isPhoneChanged($remotePhone, $localPhone)
-    {
-        if ($remotePhone->getPhone() != $localPhone->getPhone()) {
-            return true;
-        }
-        return false;
     }
 
     /**

@@ -60,6 +60,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'created'           => 'created_at',
         'updated'           => 'updated_at',
         'customerAddressId' => 'customer_address_id',
+        'phone'             => 'telephone',
         'contactPhone'      => 'telephone',
     ];
 
@@ -453,6 +454,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
                 $phone->setOwner($contact);
                 $address->setContactPhone($phone);
             }
+            $address->setPhone($mageData['value']['contactPhone']);
         }
     }
 

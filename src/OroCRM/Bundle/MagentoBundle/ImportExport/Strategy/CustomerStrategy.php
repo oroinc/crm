@@ -203,7 +203,7 @@ class CustomerStrategy extends BaseStrategy
                     $this->strategyHelper->importEntity(
                         $existingAddress,
                         $address,
-                        ['id', 'region', 'country', 'contactAddress', 'created', 'updated', 'contactPhone']
+                        ['id', 'region', 'country', 'contactAddress', 'created', 'updated', 'contactPhone', 'phone']
                     );
                     // set remote data for further processing
                     $existingAddress->setRegion($address->getRegion());
