@@ -63,12 +63,26 @@ class Lead extends ExtendLead implements FullNameInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ConfigField(
+     *  defaultValues={
+     *      "importexport"={
+     *          "order"=0
+     *      }
+     *  }
+     * )
      */
     protected $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\LeadStatus")
      * @ORM\JoinColumn(name="status_name", referencedColumnName="name")
+     * @ConfigField(
+     *  defaultValues={
+     *      "importexport"={
+     *          "order"=10
+     *      }
+     *  }
+     * )
      */
     protected $status;
 
@@ -78,8 +92,15 @@ class Lead extends ExtendLead implements FullNameInterface
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
-     **/
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=180
+     *      }
+     *  }
+     * )
+     */
     protected $contact;
 
     /**
@@ -88,8 +109,15 @@ class Lead extends ExtendLead implements FullNameInterface
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
-     **/
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=190
+     *      }
+     *  }
+     * )
+     */
     protected $account;
 
     /**
@@ -97,7 +125,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="name", type="string", length=255)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=20
+     *      }
+     *  }
+     * )
      */
     protected $name;
 
@@ -106,7 +141,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=30
+     *      }
+     *  }
+     * )
      */
     protected $namePrefix;
 
@@ -115,7 +157,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="first_name", type="string", length=255)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=40
+     *      }
+     *  }
+     * )
      */
     protected $firstName;
 
@@ -124,7 +173,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=50
+     *      }
+     *  }
+     * )
      */
     protected $middleName;
 
@@ -133,7 +189,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="last_name", type="string", length=255)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=60
+     *      }
+     *  }
+     * )
      */
     protected $lastName;
 
@@ -142,7 +205,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=70
+     *      }
+     *  }
+     * )
      */
     protected $nameSuffix;
 
@@ -151,7 +221,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="job_title", type="string", length=255, nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=80
+     *      }
+     *  }
+     * )
      */
     protected $jobTitle;
 
@@ -160,7 +237,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=90
+     *      }
+     *  }
+     * )
      */
     protected $phoneNumber;
 
@@ -169,7 +253,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=100
+     *      }
+     *  }
+     * )
      */
     protected $email;
 
@@ -178,7 +269,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="company_name", type="string", length=255, nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=110
+     *      }
+     *  }
+     * )
      */
     protected $companyName;
 
@@ -187,7 +285,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="website", type="string", length=255, nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=120
+     *      }
+     *  }
+     * )
      */
     protected $website;
 
@@ -196,7 +301,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="number_of_employees", type="integer", nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=130
+     *      }
+     *  }
+     * )
      */
     protected $numberOfEmployees;
 
@@ -205,7 +317,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="industry", type="string", length=255, nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=140
+     *      }
+     *  }
+     * )
      */
     protected $industry;
 
@@ -214,6 +333,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=200
+     *      }
+     *  }
+     * )
      */
     protected $address;
 
@@ -221,6 +348,13 @@ class Lead extends ExtendLead implements FullNameInterface
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
+     * @ConfigField(
+     *  defaultValues={
+     *      "importexport"={
+     *          "order"=150
+     *      }
+     *  }
+     * )
      */
     protected $createdAt;
 
@@ -228,6 +362,13 @@ class Lead extends ExtendLead implements FullNameInterface
      * @var \DateTime
      *
      * @ORM\Column(type="datetime", nullable=true)
+     * @ConfigField(
+     *  defaultValues={
+     *      "importexport"={
+     *          "order"=160
+     *      }
+     *  }
+     * )
      */
     protected $updatedAt;
 
@@ -237,7 +378,14 @@ class Lead extends ExtendLead implements FullNameInterface
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=210
+     *      }
+     *  }
+     * )
      */
     protected $owner;
 
@@ -246,6 +394,13 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity",
      *      mappedBy="lead", cascade={"persist"})
+     * @ConfigField(
+     *  defaultValues={
+     *      "importexport"={
+     *          "order"=220
+     *      }
+     *  }
+     * )
      */
     protected $opportunities;
 
@@ -254,7 +409,14 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\Column(name="notes", type="text", nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=170
+     *      }
+     *  }
+     * )
      */
     protected $notes;
 
@@ -263,6 +425,13 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
      * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *  defaultValues={
+     *      "importexport"={
+     *          "order"=230
+     *      }
+     *  }
+     * )
      */
     protected $workflowItem;
 
@@ -271,6 +440,13 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *  defaultValues={
+     *      "importexport"={
+     *          "order"=240
+     *      }
+     *  }
+     * )
      */
     protected $workflowStep;
 
