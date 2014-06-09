@@ -5,6 +5,7 @@ oro_menu_config:
             uri: '#'
             extras:
                 position: 30
+                icon: icon-sitemap
         campaigns_list:
             label: 'orocrm.campaign.entity_plural_label'
             route: 'orocrm_campaign_index'
