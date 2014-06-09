@@ -2,26 +2,24 @@
 
 namespace OroCRM\Bundle\ContactBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
-use Oro\Bundle\TagBundle\Entity\Taggable;
-use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
-use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-
+use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\TagBundle\Entity\Taggable;
+use Oro\Bundle\UserBundle\Entity\User;
 
-use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -77,7 +75,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "identity"=true,
      *              "order"=1
      *          }
      *      }
@@ -290,7 +287,8 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *              "auditable"=true
      *          },
      *          "importexport"={
-     *              "order"=19
+     *              "order"=19,
+     *              "short"=true
      *          }
      *      }
      * )
@@ -309,7 +307,8 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *              "auditable"=true
      *          },
      *          "importexport"={
-     *              "order"=20
+     *              "order"=20,
+     *              "short"=true
      *          }
      *      }
      * )
@@ -347,7 +346,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *              "auditable"=true
      *          },
      *          "importexport"={
-     *              "order"=7
+     *              "order"=9
      *          }
      *      }
      * )
@@ -363,9 +362,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *      defaultValues={
      *          "dataaudit"={
      *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=21
      *          }
      *      }
      * )
@@ -380,6 +376,13 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
      * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactEmail[]", nillable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=21
+     *          }
+     *      }
+     * )
      */
     protected $emails;
 
@@ -391,6 +394,13 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * ))
      * @ORM\OrderBy({"primary" = "DESC"})
      * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactPhone[]", nillable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=22
+     *          }
+     *      }
+     * )
      */
     protected $phones;
 
@@ -542,7 +552,8 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "order"=23
+     *              "order"=23,
+     *              "short"=true
      *          }
      *      }
      * )
@@ -557,7 +568,8 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "order"=24
+     *              "order"=24,
+     *              "short"=true
      *          }
      *      }
      * )

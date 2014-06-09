@@ -2,23 +2,21 @@
 
 namespace OroCRM\Bundle\AccountBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+
+use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\TagBundle\Entity\Taggable;
+use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Model\ExtendAccount;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-
-use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\TagBundle\Entity\Taggable;
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-
-use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @ORM\Entity()
@@ -65,7 +63,6 @@ class Account extends ExtendAccount implements Taggable
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "identity"=true,
      *              "order"=1
      *          }
      *      }
@@ -111,7 +108,8 @@ class Account extends ExtendAccount implements Taggable
      *              "auditable"=true
      *          },
      *          "importexport"={
-     *              "order"=3
+     *              "order"=3,
+     *              "short"=true
      *          }
      *      }
      * )
@@ -128,7 +126,7 @@ class Account extends ExtendAccount implements Taggable
      *          "merge"={"display"=true},
      *          "importexport"={
      *              "full"=true,
-     *              "order"=5
+     *              "order"=6
      *          }
      *      }
      * )
@@ -145,7 +143,7 @@ class Account extends ExtendAccount implements Taggable
      *          "merge"={"display"=true},
      *          "importexport"={
      *              "full"=true,
-     *              "order"=6
+     *              "order"=7
      *          }
      *      }
      * )
@@ -163,6 +161,10 @@ class Account extends ExtendAccount implements Taggable
      *      defaultValues={
      *          "merge"={
      *              "display"=true
+     *          },
+     *          "importexport"={
+     *              "order"=5,
+     *              "short"=true
      *          }
      *      }
      * )
@@ -182,8 +184,8 @@ class Account extends ExtendAccount implements Taggable
      *              "display"=true
      *          },
      *          "importexport"={
-     *              "full"=true,
-     *              "order"=4
+     *              "order"=4,
+     *              "short"=true
      *          }
      *      }
      * )
