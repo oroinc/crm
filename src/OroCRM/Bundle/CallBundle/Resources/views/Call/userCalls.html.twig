@@ -6,8 +6,7 @@
             'widgetType': 'block',
             'url': path('orocrm_call_widget_calls', {userId: entity.id}),
             'title': 'orocrm.call.entity_plural_label'|trans,
-            'alias': 'calls',
-            'cssClass': 'inner-grid',
+            'alias': 'calls'
         }) }}
     {% endset %}
     {{ UI.scrollSubblock(null, [callsWidget]) }}

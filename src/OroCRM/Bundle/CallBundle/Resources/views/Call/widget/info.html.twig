@@ -2,30 +2,30 @@
 
 <div class="widget-content form-horizontal box-content row-fluid">
     <div class="responsive-block">
-        {{ ui.renderProperty('Subject'|trans, entity.subject) }}
-        {#{{ ui.renderProperty('Status'|trans, entity.callStatus ? entity.callStatus.label : null) }}#}
-        {{ ui.renderHtmlProperty('Notes'|trans, entity.notes|escape|nl2br) }}
-        {{ ui.renderProperty('Call Date & Time'|trans, entity.callDateTime|oro_format_datetime) }}
+        {{ ui.renderProperty('orocrm.call.subject.label'|trans, entity.subject) }}
+        {#{{ ui.renderProperty('orocrm.call.call_status.label'|trans, entity.callStatus ? entity.callStatus.label : null) }}#}
+        {{ ui.renderHtmlProperty('orocrm.call.notes.label'|trans, entity.notes|escape|nl2br) }}
+        {{ ui.renderProperty('orocrm.call.call_date_time.label'|trans, entity.callDateTime|oro_format_datetime) }}
     </div>
     <div class="responsive-block">
         {% set accountView = entity.relatedAccount ? entity.relatedAccount.__toString() : null %}
         {%- if accountView and resource_granted('orocrm_account_view') -%}
             {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.relatedAccount.id}) ~ '">' ~ accountView|escape ~ '</a>' %}
         {%- endif -%}
-        {{ ui.renderHtmlProperty('Related To'|trans, accountView) }}
+        {{ ui.renderHtmlProperty('orocrm.call.related_account.label'|trans, accountView) }}
 
         {% set contactView = entity.relatedContact ? entity.relatedContact|oro_format_name : null %}
         {%- if contactView and resource_granted('orocrm_contact_view') -%}
             {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.relatedContact.id}) ~ '">' ~ contactView|escape ~ '</a>' %}
         {%- endif -%}
-        {{ ui.renderHtmlProperty('Related Contact'|trans, contactView) }}
+        {{ ui.renderHtmlProperty('orocrm.call.related_contact.label'|trans, contactView) }}
 
         {% set phoneNumber = entity.contactPhoneNumber ? entity.contactPhoneNumber.phone : entity.phoneNumber %}
-        {{ ui.renderHtmlProperty('Phone Number'|trans, ui.renderPhone(phoneNumber)) }}
+        {{ ui.renderHtmlProperty('orocrm.call.phone_number.label'|trans, ui.renderPhone(phoneNumber)) }}
 
-        {{ ui.renderProperty('Direction'|trans, entity.direction ? entity.direction.label : null) }}
+        {{ ui.renderProperty('orocrm.call.direction.label'|trans, entity.direction ? entity.direction.label : null) }}
 
         {# Don't use time formatting here because it's a time interval #}
-        {{ ui.renderProperty('Duration'|trans, entity.duration|oro_format_duration) }}
+        {{ ui.renderProperty('orocrm.call.duration.label'|trans, entity.duration|oro_format_duration) }}
     </div>
 </div>

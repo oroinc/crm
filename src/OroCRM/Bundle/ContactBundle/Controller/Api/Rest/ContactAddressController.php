@@ -200,7 +200,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
     /**
      * {@inheritDoc}
      */
-    protected function getPreparedItem($entity)
+    protected function getPreparedItem($entity, $resultFields = [])
     {
         // convert addresses to plain array
         $addressTypesData = array();
