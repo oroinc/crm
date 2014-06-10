@@ -19,7 +19,7 @@ items:
 
     orocrm_contact_emails:
         template: OroCRMContactBundle:Contact:contactEmails.html.twig
-        attribute_instance_of: [entity, %orocrm_contact.entity.class%]
+        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %orocrm_contact.entity.class%)
 
     contacts_launchpad:
         template: OroCRMContactBundle:Dashboard:contactsLaunchpad.html.twig
