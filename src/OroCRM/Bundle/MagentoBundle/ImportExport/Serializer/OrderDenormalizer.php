@@ -25,20 +25,38 @@ class OrderDenormalizer extends AbstractNormalizer implements DenormalizerInterf
         $channel = $this->getChannelFromContext($context);
 
         $website = $data['store']['website'];
-        $website = $this->serializer->denormalize($website, MagentoConnectorInterface::WEBSITE_TYPE);
+        $website = $this->serializer->denormalize($website, MagentoConnectorInterface::WEBSITE_TYPE, $format, $context);
         $website->setChannel($channel);
 
-        $data['store'] = $this->denormalizeObject($data, 'store', MagentoConnectorInterface::STORE_TYPE);
+        $data['store'] = $this->denormalizeObject(
+            $data,
+            'store',
+            MagentoConnectorInterface::STORE_TYPE,
+            $format,
+            $context
+        );
         $data['store']->setWebsite($website);
         $data['store']->setChannel($channel);
 
-        $data                   = $this->denormalizeCreatedUpdated($data, $format);
+        $data = $this->denormalizeCreatedUpdated($data, $format);
         $data['paymentDetails'] = $this->denormalizePaymentDetails($data['paymentDetails']);
-        $data['addresses']      = $this
-            ->denormalizeObject($data, 'addresses', MagentoConnectorInterface::ORDER_ADDRESS_COLLECTION_TYPE);
+        $data['addresses'] = $this
+            ->denormalizeObject(
+                $data,
+                'addresses',
+                MagentoConnectorInterface::ORDER_ADDRESS_COLLECTION_TYPE,
+                $format,
+                $context
+            );
 
         $data['items'] = $this
-            ->denormalizeObject($data, 'items', MagentoConnectorInterface::ORDER_ITEM_COLLECTION_TYPE);
+            ->denormalizeObject(
+                $data,
+                'items',
+                MagentoConnectorInterface::ORDER_ITEM_COLLECTION_TYPE,
+                $format,
+                $context
+            );
 
         /** @var Order $order */
         $className = MagentoConnectorInterface::ORDER_TYPE;

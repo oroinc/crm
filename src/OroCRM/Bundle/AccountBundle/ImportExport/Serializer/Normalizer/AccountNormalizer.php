@@ -113,7 +113,7 @@ class AccountNormalizer extends AbstractContextModeAwareNormalizer implements Se
         $result = new Account();
 
         $this->setScalarFieldsValues($result, $data);
-        $this->setObjectFieldsValues($result, $data);
+        $this->setObjectFieldsValues($result, $data, $format, $context);
 
         return $result;
     }

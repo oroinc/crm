@@ -2,58 +2,28 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer;
 
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
 use Oro\Bundle\AddressBundle\Entity\AbstractEmail;
+use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\EmailNormalizer as BaceNormalizer;
 
-class EmailNormalizer implements NormalizerInterface, DenormalizerInterface
+class EmailNormalizer extends BaceNormalizer
 {
-    const ABSTRACT_EMAIL_TYPE = 'Oro\Bundle\AddressBundle\Entity\AbstractEmail';
-
     /**
-     * @param AbstractEmail $object
-     * @param mixed $format
-     * @param array $context
-     * @return array
+     * {@inheritdoc}
      */
-    public function normalize($object, $format = null, array $context = array())
+    public function supportsNormalization($data, $format = null, array $context = array())
     {
-        return $object->getEmail();
-    }
-
-    /**
-     * @param mixed $data
-     * @param string $class
-     * @param mixed $format
-     * @param array $context
-     * @return AbstractEmail
-     */
-    public function denormalize($data, $class, $format = null, array $context = array())
-    {
-        /** @var AbstractEmail $result */
-        $result = new $class();
-        $result->setEmail($data);
-        return $result;
+        return $data instanceof AbstractEmail && strpos($context['processorAlias'], 'orocrm_magento') !== false;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null)
-    {
-        return ($data instanceof AbstractEmail) && $format == 'magento';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return
             is_string($data) &&
             class_exists($type) &&
             in_array(self::ABSTRACT_EMAIL_TYPE, class_parents($type))
-            && $format == 'magento';
+            && strpos($context['processorAlias'], 'orocrm_magento') !== false;
     }
 }

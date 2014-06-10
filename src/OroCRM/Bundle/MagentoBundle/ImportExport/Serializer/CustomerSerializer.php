@@ -321,7 +321,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
         $resultObject->setChannel($this->getChannelFromContext($context));
         $this->setScalarFieldsValues($resultObject, $mappedData);
-        $this->setObjectFieldsValues($resultObject, $mappedData);
+        $this->setObjectFieldsValues($resultObject, $mappedData, $format, $context);
 
         return $resultObject;
     }
@@ -353,14 +353,13 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
      */
     protected function setObjectFieldsValues(Customer $object, array $data, $format = null, array $context = array())
     {
-        $format = 'magento';
         // format contact data
         $data['contact']   = $this->formatContactData($data);
         $data['account']   = $this->formatAccountData($data);
         $data['addresses'] = $data['contact']['addresses'];
 
         /** @var Contact $contact */
-        $contact = $this->denormalizeObject($data, 'contact', ContactNormalizer::CONTACT_TYPE, 'magento');
+        $contact = $this->denormalizeObject($data, 'contact', ContactNormalizer::CONTACT_TYPE, $format, $context);
 
         /** @var Account $account */
         $account = $this->denormalizeObject(
@@ -373,11 +372,17 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         unset($data['account']);
 
         /** @var Website $website */
-        $website = $this->denormalizeObject($data, 'website', MagentoConnectorInterface::WEBSITE_TYPE);
+        $website = $this->denormalizeObject(
+            $data,
+            'website',
+            MagentoConnectorInterface::WEBSITE_TYPE,
+            $format,
+            $context
+        );
         $website->setChannel($object->getChannel());
 
         /** @var Store $store */
-        $store = $this->denormalizeObject($data, 'store', MagentoConnectorInterface::STORE_TYPE);
+        $store = $this->denormalizeObject($data, 'store', MagentoConnectorInterface::STORE_TYPE, $format, $context);
         $store->setWebsite($website);
         $store->setChannel($object->getChannel());
 
@@ -393,7 +398,13 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             );
         }
 
-        $group = $this->denormalizeObject($data, 'group', MagentoConnectorInterface::CUSTOMER_GROUPS_TYPE);
+        $group = $this->denormalizeObject(
+            $data,
+            'group',
+            MagentoConnectorInterface::CUSTOMER_GROUPS_TYPE,
+            $format,
+            $context
+        );
         $group->setChannel($object->getChannel());
 
         $object
@@ -421,7 +432,13 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
                 )
             );
 
-        $addresses = $this->denormalizeObject($data, 'addresses', MagentoConnectorInterface::CUSTOMER_ADDRESSES_TYPE);
+        $addresses = $this->denormalizeObject(
+            $data,
+            'addresses',
+            MagentoConnectorInterface::CUSTOMER_ADDRESSES_TYPE,
+            $format,
+            $context
+        );
         if (!empty($addresses)) {
             $object->resetAddresses($addresses);
         }

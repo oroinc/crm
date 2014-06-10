@@ -30,7 +30,6 @@ class MagentoAddressNormalizer extends TypedAddressNormalizer
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $format = 'magento';
         $result = parent::denormalize($data, $class, $format, $context);
 
         // can be empty when using this normalizer with cart

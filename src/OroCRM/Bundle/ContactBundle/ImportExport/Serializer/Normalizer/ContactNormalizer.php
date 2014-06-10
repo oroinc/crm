@@ -208,7 +208,7 @@ class ContactNormalizer extends AbstractContextModeAwareNormalizer implements Se
         $data = is_array($data) ? $data : array();
         $result = new Contact();
         $this->setScalarFieldsValues($result, $data);
-        $this->setObjectFieldsValues($result, $data);
+        $this->setObjectFieldsValues($result, $data, $format, $context);
 
         return $result;
     }

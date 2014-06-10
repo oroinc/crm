@@ -36,6 +36,7 @@ parameters:
     orocrm_magento.importexport.normalizer.email.class:                         OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\EmailNormalizer
     orocrm_magento.importexport.normalizer.phone.class:                         OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\PhoneNormalizer
     orocrm_magento.importexport.normalizer.address.class:                       OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\AddressNormalizer
+    orocrm_magento.importexport.normalizer.address_type.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\AddressTypeNormalizer
 
     # strategies
     orocrm_magento.import_strategy.customer.base_strategy.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\BaseStrategy
@@ -272,5 +273,10 @@ services:
 
     orocrm_magento.importexport.normalizer.address:
         class: %orocrm_magento.importexport.normalizer.address.class%
+        tags:
+            - { name: oro_importexport.normalizer }
+
+    orocrm_magento.importexport.normalizer.address_type:
+        class: %orocrm_magento.importexport.normalizer.address_type.class%
         tags:
             - { name: oro_importexport.normalizer }

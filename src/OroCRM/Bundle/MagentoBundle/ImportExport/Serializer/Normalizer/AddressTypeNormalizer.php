@@ -2,16 +2,17 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer;
 
-use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer as BaceNormalizer;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressTypeNormalizer as BaseNormalizer;
 
-class AccountNormalizer extends BaceNormalizer
+class AddressTypeNormalizer extends BaseNormalizer
 {
     /**
      * {@inheritdoc}
      */
     public function supportsNormalization($data, $format = null, array $context = array())
     {
-        return $data instanceof Account && strpos($context['processorAlias'], 'orocrm_magento') !== false;
+        return ($data instanceof AddressType) && strpos($context['processorAlias'], 'orocrm_magento') !== false;
     }
 
     /**
@@ -19,7 +20,7 @@ class AccountNormalizer extends BaceNormalizer
      */
     public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
-        return ((is_array($data) || is_string($data)) && $type == static::ACCOUNT_TYPE)
+        return is_string($data) && $type == self::ADDRESS_TYPE_TYPE
             && strpos($context['processorAlias'], 'orocrm_magento') !== false;
     }
 }
