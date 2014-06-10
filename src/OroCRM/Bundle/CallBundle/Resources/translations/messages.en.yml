@@ -45,7 +45,7 @@ orocrm:
         related_account.label: Related to
         phone_number.label:    Phone number
         owner.label:           Owner
-        notes.label:           Notes
+        notes.label:           Additional comments
         duration.label:        Duration
         direction.label:       Direction
         call_status.label:     Call status
