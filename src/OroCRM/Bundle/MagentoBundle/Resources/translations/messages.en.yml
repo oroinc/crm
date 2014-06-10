@@ -154,7 +154,7 @@ orocrm:
             billing_address.label:     Billing address
             channel.label:             Channel
             opportunity.label:         Opportunity
-            notes.label:               Notes
+            notes.label:               Additional comments
             b2c_flow_abandoned_shopping_cart.step.label: Step
             related_calls.label:       Calls
             workflow_item.label:       Workflow item
@@ -273,7 +273,7 @@ orocrm:
             is_virtual.label:       Is virtual
             is_guest.label:         Is guest
             channel.label:          Channel
-            notes.label:            Notes
+            notes.label:            Additional comments
             feedback.label:         Feedback
             b2c_flow_order_follow_up.step.label: Step
             related_emails.label:   Emails

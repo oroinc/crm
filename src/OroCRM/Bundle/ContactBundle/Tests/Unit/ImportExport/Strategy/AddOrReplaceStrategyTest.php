@@ -369,14 +369,15 @@ class AddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
         $secondAccount = new Account();
         $secondAccount->setName('second account');
         $firstEmail = new ContactEmail();
-        $firstEmail->setEmail('first@qqwe.com');
+        $firstEmail->setEmail('first@qwe.com');
         $secondEmail = new ContactEmail();
-        $secondEmail->setEmail('second@qqwe.com');
+        $secondEmail->setEmail('second@qwe.com');
         $firstPhone = new ContactPhone();
         $firstPhone->setPhone('1111111111');
         $secondPhone = new ContactPhone();
         $secondPhone->setPhone('2222222222');
 
+        /** @var Contact $fullExistingContact */
         $fullExistingContact = new Contact();
         $fullExistingContact
             ->setId(self::CURRENT_CONTACT_ID)
@@ -386,14 +387,14 @@ class AddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
             ->setAssignedTo($assignedTo)
             ->addGroup(new Group('first group'))
             ->addGroup(new Group('second group'))
-            ->addAddress($firstAddress)
-            ->addAddress($secondAddress)
             ->addAccount($firstAccount)
             ->addAccount($secondAccount)
             ->addEmail($firstEmail)
             ->addEmail($secondEmail)
             ->addPhone($firstPhone)
-            ->addPhone($secondPhone);
+            ->addPhone($secondPhone)
+            ->addAddress($firstAddress)
+            ->addAddress($secondAddress);
 
         $expectedFullExistingContact = new Contact();
         $expectedFullExistingContact
@@ -405,6 +406,7 @@ class AddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
         foreach ($fullExistingContact->getGroups() as $group) {
             $expectedFullExistingContact->addGroup($this->getGroupOrNull($group));
         }
+        /** @var ContactAddress $address */
         foreach ($fullExistingContact->getAddresses() as $address) {
             $existingAddress = new ContactAddress();
             $existingAddress->setStreet($address->getStreet());

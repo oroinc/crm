@@ -31,7 +31,7 @@ trait NamesAwareTrait
 
     /**
      * Update denormalized names based on current cart state
-     * See docblock for firstName property
+     * See doc block for firstName property
      */
     protected function updateNames()
     {

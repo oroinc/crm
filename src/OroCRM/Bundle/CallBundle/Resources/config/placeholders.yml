@@ -11,11 +11,11 @@ placeholders:
 items:
     orocrm_call_user_calls:
         template: OroCRMCallBundle:Call:userCalls.html.twig
-        attribute_instance_of: [entity, %oro_user.entity.class%]
+        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)
 
     orocrm_call_contact_calls:
         template: OroCRMCallBundle:Call:contactCalls.html.twig
-        attribute_instance_of: [entity, %orocrm_contact.entity.class%]
+        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %orocrm_contact.entity.class%)
 
     orocrm_account_action_dropdown_add_call:
         template: OroCRMCallBundle:Account:action/logCallButton.html.twig

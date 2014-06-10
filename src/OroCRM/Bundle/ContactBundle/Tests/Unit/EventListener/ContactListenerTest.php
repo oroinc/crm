@@ -135,7 +135,7 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
             $unitOfWork->expects($this->at($callIndex++))
                 ->method('propertyChanged')
                 ->with($entity, 'updatedAt', $oldDate, $this->isInstanceOf('\DateTime'));
-            $unitOfWork->expects($this->at($callIndex++))
+            $unitOfWork->expects($this->at($callIndex))
                 ->method('propertyChanged')
                 ->with($entity, 'updatedBy', $oldUser, $newUser);
         } else {
