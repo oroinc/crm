@@ -9,6 +9,7 @@ use Oro\Bundle\AddressBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor;
 
@@ -35,6 +36,8 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var Region */
     protected $region;
 
+    protected $contactPhone;
+
     public function setUp()
     {
         $this->channel        = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
@@ -42,6 +45,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         $this->contact        = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
         $this->address        = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Address');
         $this->contactAddress = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\ContactAddress');
+        $this->contactPhone   = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\ContactPhone');
         $this->country        = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Country')
             ->disableOriginalConstructor()->getMock();
         $this->region         = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Region')
@@ -82,6 +86,11 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getContactAddress')
             ->will($this->returnValue($this->contactAddress));
+
+        $this->address
+            ->expects($this->any())
+            ->method('getContactPhone')
+            ->will($this->returnValue($this->contactPhone));
 
         $this->address
             ->expects($this->any())
@@ -134,6 +143,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
         $regionTextAddress   = 'text';
         $streetAddress       = '';
         $nameSuffixAddress   = '';
+        $phone               = '+380501231212';
 
         return [
             [
@@ -179,6 +189,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                         'streetContactAddress'       => $streetAddress,
                         'nameSuffixAddress'          => $nameSuffixAddress,
                         'nameSuffixContactAddress'   => $nameSuffixAddress,
+                        'phone'                      => $phone,
                     ],
                 (object)[
                     'object' => [
@@ -242,6 +253,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                         'streetContactAddress'       => $streetAddress,
                         'nameSuffixAddress'          => 'suf',
                         'nameSuffixContactAddress'   => $nameSuffixAddress,
+                        'phone'                      => $phone,
                     ],
                 (object)[
                     'object' => [
@@ -317,6 +329,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                         'streetContactAddress'       => $streetAddress,
                         'nameSuffixAddress'          => $nameSuffixAddress,
                         'nameSuffixContactAddress'   => $nameSuffixAddress,
+                        'phone'                      => $phone,
                     ],
                 (object)[
                     'object' => [
@@ -373,6 +386,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
                         'streetContactAddress'       => $streetAddress,
                         'nameSuffixAddress'          => $nameSuffixAddress,
                         'nameSuffixContactAddress'   => $nameSuffixAddress,
+                        'phone'                      => $phone,
                     ],
                 (object)[
                     'object' => [
@@ -505,6 +519,12 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($fields['nameSuffixAddress']));
         $this->contactAddress->expects($this->any())->method('getNameSuffix')
             ->will($this->returnValue($fields['nameSuffixContactAddress']));
+
+        $this->address->expects($this->any())->method('getPhone')
+            ->will($this->returnValue($fields['phone']));
+
+        $this->contactPhone->expects($this->any())->method('getPhone')
+            ->will($this->returnValue($fields['phone']));
 
         $this->contact
             ->expects($this->any())->method('getAddresses')
