@@ -7,14 +7,12 @@
 
 {% block navButtons %}
     {% if resource_granted('oro_email_create') %}
-        {% set sendEmailTitle = 'oro.email.send_email'|trans %}
         {{ UI.clientButton({
             'dataUrl': path('oro_email_email_create', {'to': entity.primaryEmail ? entity.primaryEmail.email : ''}) ,
             'aCss': 'no-hash',
             'iCss': 'icon-envelope',
             'dataId': entity.id,
-            'title' : sendEmailTitle,
-            'label' : sendEmailTitle,
+            'label' : 'oro.email.send_email'|trans,
             'widget' : {
                 'type' : 'dialog',
                 'multiple' : true,
@@ -22,7 +20,7 @@
                 'options' : {
                     'alias': 'email-dialog',
                     'dialogOptions' : {
-                        'title' : sendEmailTitle,
+                        'title' : 'oro.email.send_email'|trans,
                         'allowMaximize': true,
                         'allowMinimize': true,
                         'dblclick': 'maximize',

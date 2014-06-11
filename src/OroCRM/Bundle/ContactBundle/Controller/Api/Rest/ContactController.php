@@ -267,7 +267,7 @@ class ContactController extends RestController implements ClassResourceInterface
     /**
      * {@inheritDoc}
      */
-    protected function getPreparedItem($entity)
+    protected function getPreparedItem($entity, $resultFields = [])
     {
         /** @var Contact $entity */
         $result = parent::getPreparedItem($entity);
