@@ -180,7 +180,9 @@ class ContactImportHelper
                     $contact->addAddress($contactAddress);
                     $address->setContactAddress($contactAddress);
                 }
-                $address->getContactPhone()->setOwner($contact);
+                if ($address->getContactPhone()) {
+                    $address->getContactPhone()->setOwner($contact);
+                }
             }
         }
 
