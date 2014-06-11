@@ -460,18 +460,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
         foreach ($customer->getAddresses() as $address) {
             $mageData = each($data);
-
-            $phone = new ContactPhone();
+            $phone    = new ContactPhone();
             $phone->setPhone($mageData['value']['contactPhone']);
-
-            $contactPhone = $this->getContactPhoneFromContact($contact, $phone);
-
-            if (!empty($contactPhone)) {
-                $address->setContactPhone($contactPhone);
-            } else {
-                $phone->setOwner($contact);
-                $address->setContactPhone($phone);
-            }
+            $phone->setOwner($contact);
+            $address->setContactPhone($phone);
             $address->setPhone($mageData['value']['contactPhone']);
         }
     }
@@ -484,7 +476,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
      *
      * @return ContactPhone|null
      */
-    protected function getContactPhoneFromContact(Contact $contact, ContactPhone $contactPhone)
+    /*protected function getContactPhoneFromContact(Contact $contact, ContactPhone $contactPhone)
     {
         $filtered = $contact->getPhones()->filter(
             function (ContactPhone $phone) use ($contactPhone) {
@@ -493,7 +485,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         );
 
         return $filtered->first();
-    }
+    }*/
 
     /**
      * @todo Move to converter CRM-789

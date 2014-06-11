@@ -137,7 +137,7 @@ class Address extends ExtendAddress
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=255, nullable=false)
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
      */

@@ -143,10 +143,16 @@ class ContactImportHelper
                         $address->setTypes($remoteAddress->getTypes());
                     }
 
-                    if ($localAddress->getPhone() !== $remoteAddress->getPhone() || $this->isRemotePrioritized()) {
-                        $contactPhone = $this->getContactPhoneFromContact($contact, $localAddress->getContactPhone());
+                    $contactPhone = $this->getContactPhoneFromContact($contact, $localAddress->getContactPhone());
+
+                    if ($localAddress->getPhone() === $remoteAddress->getPhone() || $this->isRemotePrioritized()) {
+                        #$contactPhone = $this->getContactPhoneFromContact($contact, $localAddress->getContactPhone());
                         $contactPhone->setPhone($remoteAddress->getContactPhone()->getPhone());
                         $localAddress->setPhone($remoteAddress->getContactPhone()->getPhone());
+                    }
+
+                    if ($localAddress->getPhone() !== $contactPhone->getPhone()) {
+                        $localAddress->setPhone($contactPhone->getPhone());
                     }
 
                     $this->prepareAddress($address);
