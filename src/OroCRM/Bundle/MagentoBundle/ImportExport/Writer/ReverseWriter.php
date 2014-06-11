@@ -216,6 +216,7 @@ class ReverseWriter implements ItemWriterInterface
      * @param Customer $customer
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @throws \LogicException
      */
     protected function processAddresses($addresses, $syncPriority, Customer $customer)
