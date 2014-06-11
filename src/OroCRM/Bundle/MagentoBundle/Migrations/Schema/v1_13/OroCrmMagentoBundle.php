@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: de-key
- * Date: 6/4/14
- * Time: 3:49 PM
- */
 
 namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_13;
 

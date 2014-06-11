@@ -36,6 +36,7 @@ class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var Region */
     protected $region;
 
+    /** @var ContactPhone */
     protected $contactPhone;
 
     public function setUp()
