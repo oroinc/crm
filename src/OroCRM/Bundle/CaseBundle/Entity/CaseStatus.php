@@ -9,15 +9,15 @@ use Gedmo\Translatable\Translatable;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_case_origin")
- * @Gedmo\TranslationEntity(class="OroCRM\Bundle\CaseBundle\Entity\CaseOriginTranslation")
+ * @ORM\Table(name="orocrm_case_status")
+ * @Gedmo\TranslationEntity(class="OroCRM\Bundle\CaseBundle\Entity\CaseStatusTranslation")
  */
-class CaseOrigin implements Translatable
+class CaseStatus implements Translatable
 {
-    const ORIGIN_EMAIL = 'email';
-    const ORIGIN_PHONE = 'phone';
-    const ORIGIN_WEB   = 'web';
-    const ORIGIN_OTHER = 'other';
+    const STATUS_OPEN        = 'open';
+    const STATUS_IN_PROGRESS = 'in_progress';
+    const STATUS_RESOLVED    = 'resolved';
+    const STATUS_CLOSED      = 'closed';
 
     /**
      * @var string
@@ -26,6 +26,13 @@ class CaseOrigin implements Translatable
      * @ORM\Column(name="name", type="string", length=16)
      */
     protected $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sort_order", type="integer")
+     */
+    protected $order;
 
     /**
      * @var string
@@ -58,7 +65,7 @@ class CaseOrigin implements Translatable
 
     /**
      * @param string $label
-     * @return CaseOrigin
+     * @return CaseStatus
      */
     public function setLabel($label)
     {
@@ -76,10 +83,31 @@ class CaseOrigin implements Translatable
     }
 
     /**
+     * @return string
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * Set order
+     *
+     * @param string $order
+     * @return CaseStatus
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+
+        return $this;
+    }
+
+    /**
      * Set locale
      *
      * @param string $locale
-     * @return CaseOrigin
+     * @return CaseStatus
      */
     public function setLocale($locale)
     {
@@ -104,5 +132,18 @@ class CaseOrigin implements Translatable
     public function __toString()
     {
         return (string)$this->label;
+    }
+
+    /**
+     * @param mixed $other
+     * @return bool
+     */
+    public function isEqualTo($other)
+    {
+        if (!$other instanceof CaseStatus) {
+            return false;
+        }
+
+        return $this->getName() == $other->getName();
     }
 }

@@ -34,37 +34,12 @@ class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
     /**
      * @Soap\ComplexType("int", nillable=true)
      */
-    protected $reporter;
-
-    /**
-     * @Soap\ComplexType("int", nillable=true)
-     */
     protected $relatedContact;
 
     /**
      * @Soap\ComplexType("int", nillable=true)
      */
-    protected $relatedCustomer;
-
-    /**
-     * @Soap\ComplexType("int", nillable=true)
-     */
-    protected $relatedOrder;
-
-    /**
-     * @Soap\ComplexType("int", nillable=true)
-     */
-    protected $relatedCart;
-
-    /**
-     * @Soap\ComplexType("int", nillable=true)
-     */
-    protected $relatedLead;
-
-    /**
-     * @Soap\ComplexType("int", nillable=true)
-     */
-    protected $relatedOpportunity;
+    protected $relatedAccount;
 
     /**
      * @Soap\ComplexType("string", nillable=true)
@@ -72,14 +47,9 @@ class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
     protected $origin;
 
     /**
-     * @Soap\ComplexType("int", nillable=true)
+     * @Soap\ComplexType("string", nillable=true)
      */
-    protected $workflowStep;
-
-    /**
-     * @Soap\ComplexType("int", nillable=true)
-     */
-    protected $workflowItem;
+    protected $status;
 
     /**
      * @Soap\ComplexType("dateTime", nillable=true)
@@ -110,16 +80,11 @@ class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
         $this->subject            = $case->getSubject();
         $this->description        = $case->getDescription();
         $this->owner              = $this->getEntityId($case->getOwner());
-        $this->reporter           = $this->getEntityId($case->getReporter());
+        $this->assignedTo         = $this->getEntityId($case->getAssignedTo());
         $this->relatedContact     = $this->getEntityId($case->getRelatedContact());
-        $this->relatedCustomer    = $this->getEntityId($case->getRelatedCustomer());
-        $this->relatedCart        = $this->getEntityId($case->getRelatedCart());
-        $this->relatedLead        = $this->getEntityId($case->getRelatedLead());
-        $this->relatedOrder       = $this->getEntityId($case->getRelatedOrder());
-        $this->relatedOpportunity = $this->getEntityId($case->getRelatedOpportunity());
+        $this->relatedAccount     = $this->getEntityId($case->getRelatedAccount());
         $this->origin             = $case->getOrigin() ? $case->getOrigin()->getName() : null;
-        $this->workflowStep       = $this->getEntityId($case->getWorkflowStep());
-        $this->workflowItem       = $this->getEntityId($case->getWorkflowItem());
+        $this->origin             = $case->getStatus() ? $case->getStatus()->getName() : null;
         $this->createdAt          = $case->getCreatedAt();
         $this->updatedAt          = $case->getUpdatedAt();
         $this->reportedAt         = $case->getReportedAt();

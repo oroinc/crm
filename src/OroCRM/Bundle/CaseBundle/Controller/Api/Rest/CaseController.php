@@ -19,6 +19,7 @@ use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
 use OroCRM\Bundle\CaseBundle\Entity\CaseOrigin;
+use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
 /**
@@ -160,21 +161,16 @@ class CaseController extends RestController implements ClassResourceInterface
     {
         switch ($field) {
             case 'origin':
+            case 'status':
                 if ($value) {
-                    /** @var CaseOrigin $value */
+                    /** @var CaseOrigin|CaseStatus $value */
                     $value = $value->getName();
                 }
                 break;
             case 'owner':
-            case 'relatedOrder':
-            case 'relatedCart':
-            case 'relatedLead':
-            case 'relatedOpportunity':
+            case 'assignedTo':
             case 'relatedContact':
-            case 'relatedCustomer':
-            case 'reporter':
-            case 'workflowItem':
-            case 'workflowStep':
+            case 'relatedAccount':
                 if ($value) {
                     $value = $value->getId();
                 }
@@ -195,12 +191,6 @@ class CaseController extends RestController implements ClassResourceInterface
         unset($data['id']);
         unset($data['createdAt']);
         unset($data['updatedAt']);
-
-        if ($entity->getReporter()) {
-            unset($data['reporter']);
-        } elseif (empty($data['reporter'])) {
-            $data['reporter'] = $this->container->get('oro_security.security_facade')->getLoggedUserId();
-        }
 
         return true;
     }

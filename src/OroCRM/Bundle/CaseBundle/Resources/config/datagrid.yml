@@ -1,5 +1,5 @@
 datagrid:
-    base-cases-grid:
+    cases-grid:
         source:
             type: orm
             acl_resource: orocrm_case_view
@@ -8,27 +8,23 @@ datagrid:
                     - caseEntity.id
                     - caseEntity.id as caseNumber
                     - caseEntity.subject
-                    - reporter.id as reporterId
-                    - CONCAT(reporter.firstName, CONCAT(' ', reporter.lastName)) as reporterName
                     - caseEntity.reportedAt
                     - caseEntity.closedAt
-                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as assignedTo
-                    - owner.id as ownerId
-                    - workflowStep.label as workflowStepLabel
+                    - CONCAT(relatedContact.firstName, CONCAT(' ', relatedContact.lastName)) as relatedContactName
+                    - CONCAT(assignedTo.firstName, CONCAT(' ', assignedTo.lastName)) as assignedToName
+                    - relatedAccount.name as relatedAccountName
+                    - assignedTo.id as assignedToId
+                    - status.label as statusLabel
                 from:
                     - { table: %orocrm_case.entity.class%, alias: caseEntity }
                 join:
                     left:
-                        - { join: caseEntity.reporter, alias: reporter }
                         - { join: caseEntity.relatedContact, alias: relatedContact }
-                        - { join: caseEntity.relatedCustomer, alias: relatedCustomer }
+                        - { join: caseEntity.relatedAccount, alias: relatedAccount }
+                        - { join: caseEntity.assignedTo, alias: assignedTo }
                         - { join: caseEntity.owner, alias: owner }
                         - { join: caseEntity.origin, alias: origin }
-                        - { join: caseEntity.relatedOrder, alias: relatedOrder }
-                        - { join: caseEntity.relatedOpportunity, alias: relatedOpportunity }
-                        - { join: caseEntity.relatedLead, alias: relatedLead }
-                        - { join: caseEntity.relatedCart, alias: relatedCart }
-                        - { join: caseEntity.workflowStep, alias: workflowStep }
+                        - { join: caseEntity.status, alias: status }
         columns:
             caseNumber:
                 label: orocrm.case.datagrid.case_number.label
@@ -37,84 +33,35 @@ datagrid:
                 label: orocrm.case.datagrid.subject.label
                 frontend_type: html
                 template: OroCRMCaseBundle:Case:Datagrid/Property/subject.html.twig
-            reporterName:
-                type: twig
-                label: orocrm.case.datagrid.reporter.label
-                frontend_type: html
-                template: OroCRMCaseBundle:Case:Datagrid/Property/reporter.html.twig
-            assignedTo:
+            assignedToName:
                 type: twig
                 label: orocrm.case.datagrid.assigned_to.label
                 frontend_type: html
-                template: OroCRMCaseBundle:Case:Datagrid/Property/owner.html.twig
+                template: OroCRMCaseBundle:Case:Datagrid/Property/assignedTo.html.twig
             reportedAt:
                 label: orocrm.case.datagrid.reported_on.label
                 frontend_type: datetime
             closedAt:
                 label: orocrm.case.datagrid.closed_on.label
                 frontend_type: datetime
-            workflowStepLabel:
-                label: orocrm.case.datagrid.workflow_status.label
+            statusLabel:
+                label: orocrm.case.datagrid.status.label
         sorters:
             columns:
                 subject:
                     data_name: caseEntity.subject
                 caseNumber:
                     data_name: caseEntity.id
-                reporterName:
-                    data_name: reporterName
-                assignedTo:
-                    data_name: assignedTo
+                assignedToName:
+                    data_name: assignedToName
                 reportedAt:
                     data_name: caseEntity.reportedAt
                 closedAt:
                     data_name: caseEntity.closedAt
-                workflowStepLabel:
-                    data_name: workflowStep.stepOrder
+                statusLabel:
+                    data_name: status.order
             default:
                 reportedAt: DESC
-        properties:
-            id: ~
-            view_link:
-                type:       url
-                route:      orocrm_case_view
-                params:     [ id ]
-            update_link:
-                type:       url
-                route:      orocrm_case_update
-                params:     [ id ]
-            delete_link:
-                type:       url
-                route:      orocrm_api_delete_case
-                params:     [ id ]
-        actions:
-            view:
-                type:          navigate
-                acl_resource:  orocrm_case_view
-                label:         View
-                icon:          eye-open
-                link:          view_link
-                rowAction:     true
-            update:
-                type:          navigate
-                acl_resource:  orocrm_case_update
-                label:         Update
-                icon:          edit
-                link:          update_link
-            delete:
-                type:          delete
-                acl_resource:  orocrm_case_delete
-                label:         Delete
-                icon:          trash
-                link:          delete_link
-
-    cases-grid:
-        extends: base-cases-grid
-        source:
-            query:
-                select:
-                    - CONCAT(relatedCustomer.firstName, CONCAT(' ', relatedCustomer.lastName)) as customerName
-                    - CONCAT(relatedContact.firstName, CONCAT(' ', relatedContact.lastName)) as contactName
         filters:
             columns:
                 caseNumber:
@@ -123,26 +70,23 @@ datagrid:
                 subject:
                     type: string
                     data_name: caseEntity.subject
-                reporterName:
-                    label: orocrm.case.datagrid.reporter.label
+                assignedToName:
                     type: string
-                    data_name: reporterName
-                assignedTo:
-                    type: string
-                    data_name: assignedTo
+                    data_name: assignedToName
                 reportedAt:
                     type: datetime
                     data_name: caseEntity.reportedAt
                 closedAt:
                     type: datetime
                     data_name: caseEntity.closedAt
-                workflowStepLabel:
-                    type:      entity
-                    data_name: caseEntity.workflowStep
+                statusLabel:
+                    label: orocrm.case.datagrid.status.label
+                    type: entity
+                    data_name: status.label
                     options:
-                        field_type: oro_workflow_step_select
                         field_options:
-                            workflow_entity_class: %orocrm_case.entity.class%
+                            class: OroCRMCaseBundle:CaseStatus
+                            property: label
                 origin:
                     label: orocrm.case.datagrid.origin.label
                     type: entity
@@ -152,58 +96,58 @@ datagrid:
                         field_options:
                             class: OroCRMCaseBundle:CaseOrigin
                             property: label
-                customer:
-                    label: orocrm.case.datagrid.customer.label
+                relatedContact:
+                    label: orocrm.case.datagrid.related_contact.label
                     type: string
-                    data_name: customerName
+                    data_name: relatedContactName
                     enabled: false
-                contact:
-                    label: orocrm.case.datagrid.contact.label
+                relatedAccount:
+                    label: orocrm.case.datagrid.related_account.label
                     type: string
-                    data_name: contactName
+                    data_name: relatedAccountName
                     enabled: false
-                orderNumber:
-                    label: orocrm.case.datagrid.order.label
-                    type: string
-                    data_name: relatedOrder.incrementId
-                    enabled: false
-                cartId:
-                    label: orocrm.case.datagrid.cart.label
-                    type: string
-                    data_name: relatedCart.originId
-                    enabled: false
-                leadName:
-                    label: orocrm.case.datagrid.lead.label
-                    type: string
-                    data_name: relatedLead.name
-                    enabled: false
-                opportunityName:
-                    label: orocrm.case.datagrid.opportunity.label
-                    type: string
-                    data_name: relatedOpportunity.name
-                    enabled: false
+        properties:
+            id: ~
+            view_link:
+                type:         url
+                route:        orocrm_case_view
+                params:       [ id ]
+            update_link:
+                type:         url
+                route:        orocrm_case_update
+                params:       [ id ]
+            delete_link:
+                type:         url
+                route:        orocrm_api_delete_case
+                params:       [ id ]
+        actions:
+            view:
+                type:         navigate
+                acl_resource: orocrm_case_view
+                label:        View
+                icon:         eye-open
+                link:         view_link
+                rowAction:    true
+            update:
+                type:         navigate
+                acl_resource: orocrm_case_update
+                label:        Update
+                icon:         edit
+                link:         update_link
+            delete:
+                type:         delete
+                acl_resource: orocrm_case_delete
+                label:         Delete
+                icon:         trash
+                link:         delete_link
 
     account-cases-grid:
         extends: cases-grid
         source:
             query:
-                join:
-                    left:
-                        - { join: relatedOrder.customer, alias: relatedOrderCustomer }
-                        - { join: relatedCart.customer, alias: relatedCartCustomer }
-                        - { join: relatedContact.accounts, alias: relatedContactAccount }
-
                 where:
                     and:
-                        - |
-                            (relatedCustomer.account = :id
-                            OR relatedContactAccount.id = :id
-                            OR relatedOrderCustomer.account = :id
-                            OR relatedCartCustomer.account = :id
-                            OR relatedLead.account = :id
-                            OR relatedOpportunity.account = :id)
-
-                groupBy: caseEntity.id
+                        - relatedAccount.id = :id
 
     contact-cases-grid:
         extends: cases-grid
@@ -213,62 +157,10 @@ datagrid:
                     and:
                         - relatedContact.id = :id
 
-    customer-cases-grid:
-        extends: cases-grid
-        source:
-            query:
-                where:
-                    and:
-                        - relatedCustomer.id = :id
-
     user-cases-grid:
         extends: cases-grid
         source:
             query:
                 where:
                     and:
-                        - reporter.id = :id OR owner.id = :id
-
-    order-cases-grid:
-        extends: base-cases-grid
-        source:
-            query:
-                where:
-                    and:
-                        - relatedOrder.id = :id
-        options:
-            toolbarOptions:
-                hide: true
-
-    cart-cases-grid:
-        extends: base-cases-grid
-        source:
-            query:
-                where:
-                    and:
-                        - relatedCart.id = :id
-        options:
-            toolbarOptions:
-                hide: true
-
-    lead-cases-grid:
-        extends: base-cases-grid
-        source:
-            query:
-                where:
-                    and:
-                        - relatedLead.id = :id
-        options:
-            toolbarOptions:
-                hide: true
-
-    opportunity-cases-grid:
-        extends: base-cases-grid
-        source:
-            query:
-                where:
-                    and:
-                        - relatedOpportunity.id = :id
-        options:
-            toolbarOptions:
-                hide: true
+                        - assignedTo.id = :id OR owner.id = :id

@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller\Api\Rest;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 use OroCRM\Bundle\CaseBundle\Entity\CaseOrigin;
+use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 
 /**
  * @outputBuffering enabled
@@ -20,7 +21,8 @@ class CaseControllerTest extends WebTestCase
         'subject'     => 'New case',
         'description' => 'New description',
         'owner'       => 1,
-        'origin'      => CaseOrigin::ORIGIN_EMAIL
+        'origin'      => CaseOrigin::ORIGIN_EMAIL,
+        'status'      => CaseStatus::STATUS_OPEN
     ];
 
     protected function setUp()

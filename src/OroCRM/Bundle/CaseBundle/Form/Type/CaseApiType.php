@@ -21,7 +21,7 @@ class CaseApiType extends AbstractType
                 'oro_datetime',
                 [
                     'required' => true,
-                    'label'    => 'orocrm.case.reportedAt.label'
+                    'label'    => 'orocrm.case.reported_at.label'
                 ]
             )
             ->add(
@@ -29,18 +29,9 @@ class CaseApiType extends AbstractType
                 'oro_datetime',
                 [
                     'required' => true,
-                    'label'    => 'orocrm.case.closedAt.label'
+                    'label'    => 'orocrm.case.closed_at.label'
                 ]
-            )
-            ->add(
-                'reporter',
-                'oro_user_select',
-                [
-                    'label' => 'orocrm.case.caseentity.reporter.label'
-                ]
-            )
-            ->remove('relatedItemEntity')
-            ->remove('relatedCustomerEntity');
+            );
 
         $builder->addEventSubscriber(new PatchSubscriber());
     }
@@ -52,9 +43,6 @@ class CaseApiType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class'         => 'OroCRM\Bundle\CaseBundle\Entity\CaseEntity',
-                'intention'          => 'case',
-                'cascade_validation' => true,
                 'csrf_protection'    => false
             ]
         );

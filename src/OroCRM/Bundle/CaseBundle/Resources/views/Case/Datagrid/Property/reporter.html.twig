@@ -1,9 +1,0 @@
-{% set reporterId = record.getValue('reporterId') %}
-
-{% if resource_granted('oro_user_user_view') and reporterId %}
-    <a href="{{ path('oro_user_view', {id:reporterId}) }}">
-        {{ value }}
-    </a>
-{% else %}
-    {{ value }}
-{% endif %}

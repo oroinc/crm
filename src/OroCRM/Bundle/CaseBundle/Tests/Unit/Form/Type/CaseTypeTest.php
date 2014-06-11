@@ -48,15 +48,11 @@ class CaseTypeTest extends \PHPUnit_Framework_TestCase
                 'widgets' => [
                     'subject',
                     'description',
-                    'owner',
                     'origin',
+                    'status',
                     'relatedContact',
-                    'relatedCustomer',
-                    'relatedOrder',
-                    'relatedCart',
-                    'relatedLead',
-                    'relatedOpportunity',
-                    'relatedEntity',
+                    'relatedAccount',
+                    'assignedTo',
                 ]
             ]
         ];

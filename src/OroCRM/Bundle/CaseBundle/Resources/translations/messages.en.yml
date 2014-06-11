@@ -5,32 +5,14 @@ orocrm:
         datagrid:
             case_number.label:              Case ID
             subject.label:                  Subject
-            reporter.label:                 Reporter
-            assigned_to.label:              Assigned to
-            reported_on.label:              Reported on
-            closed_on.label:                Closed on
-            closed_on.label:                Closed on
-            workflow_status.label:          Status
-            customer.label:                 Customer
-            contact.label:                  Contact
+            related_contact.label:          Related Contact
+            related_account.label:          Related Account
+            owner.label:                    Owner
+            assigned_to.label:              Assigned To
+            reported_on.label:              Reported On
+            closed_on.label:                Closed On
             origin.label:                   Origin
-            order.label:                    'Order #'
-            cart.label:                     Cart Id
-            lead.label:                     Lead name
-            opportunity.label:              Opportunity name
-
-        workflow:
-            steps:
-                open.label:                 Open
-                in_progress.label:          In progress
-                resolved.label:             Resolved
-                closed.label:               Closed
-            transitions:
-                start_progress.label:       Start progress
-                stop_progress.label:        Stop progress
-                resolve.label:              Resolve
-                close.label:                Close
-                reopen.label:               Reopen
+            status.label:                   Status
 
         menu:
             index.label: Cases
@@ -44,24 +26,17 @@ orocrm:
             entity_description:             Represent case
             subject.label:                  Subject
             description.label:              Description
-            workflow_step.label:            Status
-            owner.label:                    Assigned To
+            owner.label:                    Owner
+            assigned_to.label:              Assigned To
             closed_at.label:                Closed On
             reported_at.label:              Reported On
-            related_order.label:            Order
-            related_contact.label:          Contact
-            related_customer.label:         Customer
-            related_cart.label:             Cart
-            related_lead.label:             Lead
-            related_opportunity.label:      Opportunity
+            related_contact.label:          Related Contact
+            related_account.label:          Related Account
             origin.label:                   Origin
-            reporter.label:                 Reporter
-            related_item_entity.label:      Item Type
-            related_customer_entity.label:  Customer Type
+            status.label:                   Status
             created_at.label:               Created At
             updated_at.label:               Updated At
             id.label:                       Id
-            workflow_item.label:            Workflow item
 
         block:
             general: General Information

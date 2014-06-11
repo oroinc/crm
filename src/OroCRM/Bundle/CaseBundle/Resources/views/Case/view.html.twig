@@ -40,9 +40,10 @@
                 {{ UI.renderProperty('orocrm.case.caseentity.subject.label'|trans, entity.subject) }}
                 {{ UI.renderProperty('orocrm.case.caseentity.description.label'|trans, entity.description) }}
                 {{ UI.renderProperty('orocrm.case.caseentity.origin.label'|trans, entity.origin) }}
-                {{ UI.renderProperty('orocrm.case.caseentity.reported_at.label'|trans, entity.reportedAt|oro_format_date) }}
+                {{ UI.renderProperty('orocrm.case.caseentity.status.label'|trans, entity.status) }}
+                {{ UI.renderProperty('orocrm.case.caseentity.reported_at.label'|trans, entity.reportedAt|oro_format_datetime) }}
                 {% if entity.closedAt is not empty %}
-                    {{ UI.renderProperty('orocrm.case.caseentity.closed_at.label'|trans, entity.closedAt|oro_format_date) }}
+                    {{ UI.renderProperty('orocrm.case.caseentity.closed_at.label'|trans, entity.closedAt|oro_format_datetime) }}
                 {% endif %}
 
                 {%- if entity.owner -%}
@@ -58,17 +59,17 @@
                     {{ UI.renderHtmlProperty('orocrm.case.caseentity.owner.label'|trans, owner) }}
                 {%- endif -%}
 
-                {%- if entity.reporter -%}
-                    {%- set reporter -%}
+                {%- if entity.assignedTo -%}
+                    {%- set assignedTo -%}
                         {% if resource_granted('oro_user_user_view') %}
-                            <a href="{{ path('oro_user_view', {'id': entity.reporter.id}) }}">
-                                {{ entity.reporter|oro_format_name|escape }}
+                            <a href="{{ path('oro_user_view', {'id': entity.assignedTo.id}) }}">
+                                {{ entity.assignedTo|oro_format_name|escape }}
                             </a>
                         {% else %}
-                            {{ entity.reporter|oro_format_name|escape }}
+                            {{ entity.assignedTo|oro_format_name|escape }}
                         {% endif %}
                     {%- endset -%}
-                    {{ UI.renderHtmlProperty('orocrm.case.caseentity.reporter.label'|trans, reporter) }}
+                    {{ UI.renderHtmlProperty('orocrm.case.caseentity.assigned_to.label'|trans, assignedTo) }}
                 {%- endif -%}
 
                 {%- if entity.relatedContact -%}
@@ -84,71 +85,17 @@
                     {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_contact.label'|trans, relatedContact) }}
                 {%- endif -%}
 
-                {%- if entity.relatedCustomer -%}
-                    {%- set relatedCustomer -%}
-                        {% if resource_granted('orocrm_magento_customer_view') %}
-                            <a href="{{ path('orocrm_magento_customer_view', {'id': entity.relatedCustomer.id}) }}">
-                                {{ entity.relatedCustomer|oro_format_name|escape }}
+                {%- if entity.relatedAccount -%}
+                    {%- set relatedAccount -%}
+                        {% if resource_granted('orocrm_account_view') %}
+                            <a href="{{ path('orocrm_account_view', {'id': entity.relatedAccount.id}) }}">
+                                {{ entity.relatedAccount.name }}
                             </a>
                         {% else %}
-                            {{ entity.relatedCustomer|oro_format_name|escape }}
+                            {{ entity.relatedAccount.name }}
                         {% endif %}
                     {%- endset -%}
-                    {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_customer.label'|trans, relatedCustomer) }}
-                {%- endif -%}
-
-                {%- if entity.relatedOrder -%}
-                    {%- set relatedOrder -%}
-                        {% set orderTitle = 'orocrm.magento.entity_number'|trans({'%entityName%': 'orocrm.magento.order.entity_label'|trans, '%entityNumber%': entity.relatedOrder.incrementId}) %}
-                        {% if resource_granted('orocrm_magento_order_view') %}
-                            <a href="{{ path('orocrm_magento_order_view', {'id': entity.relatedOrder.id}) }}">
-                                {{ orderTitle }}
-                            </a>
-                        {% else %}
-                            {{ orderTitle }}
-                        {% endif %}
-                    {%- endset -%}
-                    {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_order.label'|trans, relatedOrder) }}
-                {%- endif -%}
-
-                {%- if entity.relatedCart -%}
-                    {%- set relatedCart -%}
-                        {% set cartTitle = 'orocrm.magento.entity_number'|trans({'%entityName%': 'orocrm.magento.cart.entity_label'|trans, '%entityNumber%': entity.relatedCart.originId}) %}
-                        {% if resource_granted('orocrm_magento_cart_view') %}
-                            <a href="{{ path('orocrm_magento_cart_view', {'id': entity.relatedCart.id}) }}">
-                                {{ cartTitle }}
-                            </a>
-                        {% else %}
-                            {{ cartTitle }}
-                        {% endif %}
-                    {%- endset -%}
-                    {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_cart.label'|trans, relatedCart) }}
-                {%- endif -%}
-
-                {%- if entity.relatedLead -%}
-                    {%- set relatedLead -%}
-                        {% if resource_granted('orocrm_sales_lead_view') %}
-                            <a href="{{ path('orocrm_sales_lead_view', {'id': entity.relatedLead.id}) }}">
-                                {{ entity.relatedLead|escape }}
-                            </a>
-                        {% else %}
-                            {{ entity.relatedLead|escape }}
-                        {% endif %}
-                    {%- endset -%}
-                    {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_lead.label'|trans, relatedLead) }}
-                {%- endif -%}
-
-                {%- if entity.relatedOpportunity -%}
-                    {%- set relatedOpportunity -%}
-                        {% if resource_granted('orocrm_sales_opportunity_view') %}
-                            <a href="{{ path('orocrm_sales_opportunity_view', {'id': entity.relatedOpportunity.id}) }}">
-                                {{ entity.relatedOpportunity|escape }}
-                            </a>
-                        {% else %}
-                            {{ entity.relatedOpportunity|escape }}
-                        {% endif %}
-                    {%- endset -%}
-                    {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_opportunity.label'|trans, relatedOpportunity) }}
+                    {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_account.label'|trans, relatedAccount) }}
                 {%- endif -%}
             </div>
             <div class="responsive-block">

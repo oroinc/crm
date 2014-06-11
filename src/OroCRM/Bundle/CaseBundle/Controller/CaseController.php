@@ -69,8 +69,6 @@ class CaseController extends Controller
     public function createAction()
     {
         $case = new CaseEntity();
-        $case->setReporter($this->getUser());
-
         return $this->update($case);
     }
 

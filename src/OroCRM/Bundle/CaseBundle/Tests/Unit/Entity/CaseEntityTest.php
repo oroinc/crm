@@ -15,23 +15,15 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider settersAndGettersDataProvider
      */
-    public function testSettersAndGetters($property, $value, $expected = null)
+    public function testSettersAndGetters($property, $value)
     {
         $entity = new CaseEntity();
 
-        $method = 'set' . $property;
-        if (method_exists($entity, $method)) {
-            $result = $entity->$method($value);
-        }
-
-        $method = 'add' . rtrim($property, 's');
-        if (method_exists($entity, $method)) {
-            $result = $entity->$method($value);
-        }
+        $method = 'set' . ucfirst($property);
+        $result = $entity->$method($value);
 
         $this->assertInstanceOf(get_class($entity), $result);
-
-        $this->assertEquals($expected ? : $value, $entity->{'get' . $property}());
+        $this->assertEquals($value, $entity->{'get' . $property}());
     }
 
     public function settersAndGettersDataProvider()
@@ -40,25 +32,23 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $status = $this->getMockBuilder('OroCRM\Bundle\CaseBundle\Entity\CaseStatus')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         return array(
-            array('id', 42),
             array('subject', 'Test subject'),
             array('description', 'Test Description'),
+            array('assignedTo', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
             array('owner', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
-            array('workflowStep', $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep')),
-            array('workflowItem', $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowItem')),
             array('origin', $origin),
+            array('status', $status),
             array('createdAt', new \DateTime()),
             array('updatedAt', new \DateTime()),
             array('reportedAt', new \DateTime()),
             array('closedAt', new \DateTime()),
-            array('relatedLead', $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Lead')),
-            array('relatedOpportunity', $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Opportunity')),
-            array('relatedCart', $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Cart')),
-            array('relatedOrder', $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Order')),
-            array('reporter', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
             array('relatedContact', $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact')),
-            array('relatedCustomer', $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Customer'))
+            array('relatedAccount', $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account'))
         );
     }
 }

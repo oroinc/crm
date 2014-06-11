@@ -5,17 +5,12 @@ namespace OroCRM\Bundle\CaseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use OroCRM\Bundle\CaseBundle\Model\ExtendCaseEntity;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @ORM\Entity
@@ -23,10 +18,12 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *      name="orocrm_case"
  * )
  * @ORM\HasLifecycleCallbacks()
+ * @Oro\Loggable
  * @Config(
  *  routeName="orocrm_case_index",
  *  routeView="orocrm_case_view",
  *  defaultValues={
+ *      "dataaudit"={"auditable"=true},
  *      "entity"={
  *          "icon"="icon-list-alt"
  *      },
@@ -37,10 +34,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *      },
  *      "security"={
  *          "type"="ACL"
- *      },
- *      "workflow"={
- *          "active_workflow"="case_flow"
- *      },
+ *      }
  *  }
  * )
  */
@@ -59,6 +53,7 @@ class CaseEntity extends ExtendCaseEntity
      * @var string
      *
      * @ORM\Column(name="subject", type="string", length=255)
+     * @Oro\Versioned
      */
     protected $subject;
 
@@ -66,56 +61,27 @@ class CaseEntity extends ExtendCaseEntity
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
+     * @Oro\Versioned
      */
     protected $description;
-
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $owner;
 
     /**
      * @var CaseOrigin
      *
      * @ORM\ManyToOne(targetEntity="CaseOrigin", cascade={"persist"})
      * @ORM\JoinColumn(name="origin_name", referencedColumnName="name", onDelete="SET NULL")
+     * @Oro\Versioned
      */
     protected $origin;
 
     /**
-     * @var Order
+     * @var CaseOrigin
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Order")
-     * @ORM\JoinColumn(name="related_order_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity="CaseStatus", cascade={"persist"})
+     * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
+     * @Oro\Versioned
      */
-    protected $relatedOrder;
-
-    /**
-     * @var Cart
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Cart")
-     * @ORM\JoinColumn(name="related_cart_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedCart;
-
-    /**
-     * @var Lead
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead")
-     * @ORM\JoinColumn(name="related_lead_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedLead;
-
-    /**
-     * @var Opportunity
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity")
-     * @ORM\JoinColumn(name="related_opportunity_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedOpportunity;
+    protected $status;
 
     /**
      * @var Contact
@@ -126,36 +92,30 @@ class CaseEntity extends ExtendCaseEntity
     protected $relatedContact;
 
     /**
-     * @var Customer
+     * @var Contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer")
-     * @ORM\JoinColumn(name="related_customer_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
+     * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $relatedCustomer;
+    protected $relatedAccount;
 
     /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="assigned_to_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
      */
-    protected $reporter;
+    protected $assignedTo;
 
     /**
-     * @var WorkflowStep
+     * @var User
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
-     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
      */
-    protected $workflowStep;
-
-    /**
-     * @var WorkflowItem
-     *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
-     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowItem;
+    protected $owner;
 
     /**
      * @var \DateTime
@@ -246,25 +206,6 @@ class CaseEntity extends ExtendCaseEntity
     }
 
     /**
-     * @param User $owner
-     * @return CaseEntity
-     */
-    public function setOwner($owner)
-    {
-        $this->owner = $owner;
-
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getOwner()
-    {
-        return $this->owner;
-    }
-
-    /**
      * @param CaseOrigin|null $origin
      * @return CaseEntity
      */
@@ -284,79 +225,37 @@ class CaseEntity extends ExtendCaseEntity
     }
 
     /**
-     * @param Order|null $relatedOrder
+     * @param CaseStatus|null $status
      * @return CaseEntity
      */
-    public function setRelatedOrder(Order $relatedOrder = null)
+    public function setStatus($status)
     {
-        $this->relatedOrder = $relatedOrder;
+        $this->updateClosedAt($status, $this->status);
+        $this->status = $status;
 
         return $this;
     }
 
     /**
-     * @return Order
+     * @param mixed $newStatus
+     * @param mixed $oldStatus
      */
-    public function getRelatedOrder()
+    protected function updateClosedAt($newStatus, $oldStatus)
     {
-        return $this->relatedOrder;
+        if ($newStatus instanceof CaseStatus &&
+            $newStatus->getName() == CaseStatus::STATUS_CLOSED &&
+            !$newStatus->isEqualTo($oldStatus)
+        ) {
+            $this->closedAt = new \DateTime();
+        }
     }
 
     /**
-     * @param Cart|null $relatedCart
-     * @return CaseEntity
+     * @return CaseStatus
      */
-    public function setRelatedCart(Cart $relatedCart = null)
+    public function getStatus()
     {
-        $this->relatedCart = $relatedCart;
-
-        return $this;
-    }
-
-    /**
-     * @return Cart
-     */
-    public function getRelatedCart()
-    {
-        return $this->relatedCart;
-    }
-
-    /**
-     * @param Lead|null $relatedLead
-     * @return CaseEntity
-     */
-    public function setRelatedLead(Lead $relatedLead = null)
-    {
-        $this->relatedLead = $relatedLead;
-
-        return $this;
-    }
-
-    /**
-     * @return Lead
-     */
-    public function getRelatedLead()
-    {
-        return $this->relatedLead;
-    }
-
-    /**
-     * @param Opportunity|null $relatedOpportunity
-     * @return CaseEntity
-     */
-    public function setRelatedOpportunity(Opportunity $relatedOpportunity = null)
-    {
-        $this->relatedOpportunity = $relatedOpportunity;
-
-        return $this;
-    }
-
-    /**
-     * @return Opportunity
-     */
-    public function getRelatedOpportunity()
-    {
-        return $this->relatedOpportunity;
+        return $this->status;
     }
 
     /**
@@ -379,31 +278,50 @@ class CaseEntity extends ExtendCaseEntity
     }
 
     /**
-     * @param Customer|null $relatedCustomer
+     * @param Account|null $relatedAccount
      * @return CaseEntity
      */
-    public function setRelatedCustomer(Customer $relatedCustomer = null)
+    public function setRelatedAccount(Account $relatedAccount = null)
     {
-        $this->relatedCustomer = $relatedCustomer;
+        $this->relatedAccount = $relatedAccount;
 
         return $this;
     }
 
     /**
-     * @return Customer
+     * @return Account
      */
-    public function getRelatedCustomer()
+    public function getRelatedAccount()
     {
-        return $this->relatedCustomer;
+        return $this->relatedAccount;
     }
 
     /**
-     * @param User|null $reporter
+     * @param User $assignee
      * @return CaseEntity
      */
-    public function setReporter(User $reporter = null)
+    public function setAssignedTo($assignee)
     {
-        $this->reporter = $reporter;
+        $this->assignedTo = $assignee;
+
+        return $this;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getAssignedTo()
+    {
+        return $this->assignedTo;
+    }
+
+    /**
+     * @param User $owner
+     * @return CaseEntity
+     */
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
 
         return $this;
     }
@@ -411,55 +329,9 @@ class CaseEntity extends ExtendCaseEntity
     /**
      * @return User
      */
-    public function getReporter()
+    public function getOwner()
     {
-        return $this->reporter;
-    }
-
-    /**
-     * @param WorkflowStep $workflowStep
-     * @return CaseEntity
-     */
-    public function setWorkflowStep($workflowStep)
-    {
-        $this->workflowStep = $workflowStep;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowStep
-     */
-    public function getWorkflowStep()
-    {
-        return $this->workflowStep;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWorkflowStepName()
-    {
-        return $this->getWorkflowStep() ? $this->getWorkflowStep()->getName() : null;
-    }
-
-    /**
-     * @param WorkflowItem $workflowItem
-     * @return CaseEntity
-     */
-    public function setWorkflowItem($workflowItem)
-    {
-        $this->workflowItem = $workflowItem;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowItem
-     */
-    public function getWorkflowItem()
-    {
-        return $this->workflowItem;
+        return $this->owner;
     }
 
     /**

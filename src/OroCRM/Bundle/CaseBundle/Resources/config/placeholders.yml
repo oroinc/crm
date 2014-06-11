@@ -2,32 +2,12 @@ placeholders:
     view_content_data_additional_information:
         items:
             orocrm_contact_cases_grid: ~
-            orocrm_customer_cases_grid: ~
-            orocrm_order_cases_grid: ~
-            orocrm_cart_cases_grid: ~
-            orocrm_lead_cases_grid: ~
-            orocrm_opportunity_cases_grid: ~
             orocrm_user_cases_grid: ~
 
 items:
     orocrm_contact_cases_grid:
         template: OroCRMCaseBundle:Case:contactCases.html.twig
-        attribute_instance_of: [entity, %orocrm_contact.entity.class%]
-    orocrm_customer_cases_grid:
-        template: OroCRMCaseBundle:Case:customerCases.html.twig
-        attribute_instance_of: [entity, %orocrm_magento.customer.entity.class%]
-    orocrm_order_cases_grid:
-        template: OroCRMCaseBundle:Case:orderCases.html.twig
-        attribute_instance_of: [entity, %orocrm_magento.order.entity.class%]
-    orocrm_cart_cases_grid:
-        template: OroCRMCaseBundle:Case:cartCases.html.twig
-        attribute_instance_of: [entity, %orocrm_magento.cart.entity.class%]
-    orocrm_lead_cases_grid:
-        template: OroCRMCaseBundle:Case:leadCases.html.twig
-        attribute_instance_of: [entity, %orocrm_sales.lead.entity.class%]
-    orocrm_opportunity_cases_grid:
-        template: OroCRMCaseBundle:Case:opportunityCases.html.twig
-        attribute_instance_of: [entity, %orocrm_sales.opportunity.class%]
+        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %orocrm_contact.entity.class%)
     orocrm_user_cases_grid:
         template: OroCRMCaseBundle:Case:userCases.html.twig
-        attribute_instance_of: [entity, %oro_user.entity.class%]
+        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)

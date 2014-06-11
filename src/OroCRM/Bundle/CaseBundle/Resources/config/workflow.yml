@@ -1,2 +1,0 @@
-imports:
-    - { resource: 'oro/workflow/case_flow.yml' } # Workflow for Ticket entity

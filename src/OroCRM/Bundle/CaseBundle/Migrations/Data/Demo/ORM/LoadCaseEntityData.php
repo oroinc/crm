@@ -69,18 +69,8 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
      * @var array
      */
     static protected $relatedEntities = array(
-        'OroCRMMagentoBundle:Order'     => 'setRelatedOrder',
-        'OroCRMMagentoBundle:Cart'      => 'setRelatedCart',
-        'OroCRMSalesBundle:Lead'        => 'setRelatedLead',
-        'OroCRMSalesBundle:Opportunity' => 'setRelatedOpportunity',
-    );
-
-    /**
-     * @var array
-     */
-    static protected $relatedPersons = array(
-        'OroCRMMagentoBundle:Customer'  => 'setRelatedCustomer',
         'OroCRMContactBundle:Contact'   => 'setRelatedContact',
+        'OroCRMAccountBundle:Account'   => 'setRelatedAccount',
     );
 
     /**
@@ -95,10 +85,8 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     {
         return array(
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadMagentoData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadOpportunitiesData',
         );
     }
 
@@ -108,12 +96,13 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     public function load(ObjectManager $manager)
     {
         for ($i = 0; $i < self::FIXTURES_COUNT; ++$i) {
-            $reporter = $this->getRandomEntity('OroUserBundle:User', $manager);
             $owner = $this->getRandomEntity('OroUserBundle:User', $manager);
+            $assignedTo = $this->getRandomEntity('OroUserBundle:User', $manager);
             $origin = $this->getRandomEntity('OroCRMCaseBundle:CaseOrigin', $manager);
+            $status = $this->getRandomEntity('OroCRMCaseBundle:CaseStatus', $manager);
 
-            if (!$reporter || !$origin || !$owner) {
-                // If we don't have users and origins we cannot load fixture cases
+            if (!$owner || !$assignedTo || !$origin || !$status) {
+                // If we don't have users, origins and status we cannot load fixture cases
                 break;
             }
 
@@ -127,32 +116,31 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
             $case->setDescription(self::$fixtureDescriptions[$i]);
             $case->setReportedAt($this->getRandomDate());
 
-            $case->setReporter($reporter);
             $case->setOwner($owner);
+            $case->setAssignedTo($assignedTo);
             $case->setOrigin($origin);
+            $case->setStatus($status);
 
-            $this->setRandomRelatedEntity($case, self::$relatedEntities, $manager);
-            $this->setRandomRelatedEntity($case, self::$relatedPersons, $manager);
+            switch (rand(0, 1)) {
+                case 0:
+                    $contact = $this->getRandomEntity('OroCRMContactBundle:Contact', $manager);
+                    if ($contact) {
+                        $case->setRelatedContact($contact);
+                    }
+                    break;
+                case 1:
+                default:
+                    $account = $this->getRandomEntity('OroCRMAccountBundle:Account', $manager);
+                    if ($account) {
+                        $case->setRelatedAccount($account);
+                    }
+                    break;
+            }
 
             $manager->persist($case);
         }
 
         $manager->flush();
-    }
-
-    /**
-     * @param CaseEntity $case
-     * @param array $relatedEntities
-     * @param EntityManager $manager
-     */
-    protected function setRandomRelatedEntity(CaseEntity $case, array $relatedEntities, EntityManager $manager)
-    {
-        $relatedEntityName = array_keys($relatedEntities)[rand(0, count($relatedEntities) - 1)];
-        $relatedEntity = $this->getRandomEntity($relatedEntityName, $manager);
-        if ($relatedEntity) {
-            $setter = $relatedEntities[$relatedEntityName];
-            $case->$setter($relatedEntity);
-        }
     }
 
     /**

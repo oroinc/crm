@@ -3,3 +3,8 @@ case_origin:
     phone: Phone
     web: Web
     other: Other
+case_status:
+    open: Open
+    in_progress: In Progress
+    resolved: Resolved
+    closed: Closed

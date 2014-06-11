@@ -2,11 +2,11 @@
 
 namespace OroCRM\Bundle\CaseBundle\Form\Type;
 
+use Doctrine\ORM\EntityRepository;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-use OroCRM\Bundle\CaseBundle\Form\EventListener\RelatedEntitySubscriber;
 
 class CaseType extends AbstractType
 {
@@ -38,82 +38,19 @@ class CaseType extends AbstractType
                     'label'        => 'orocrm.case.caseentity.origin.label',
                     'class'        => 'OroCRMCaseBundle:CaseOrigin',
                 ]
-            );
-
-        $this->addRelatedItemEntityFields($builder, $options);
-        $this->addRelatedCustomerEntityFields($builder, $options);
-    }
-
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    protected function addRelatedItemEntityFields(FormBuilderInterface $builder, array $options)
-    {
-        $builder
-            ->add(
-                'relatedOrder',
-                'orocrm_order_select',
-                [
-                    'label'         => 'orocrm.case.caseentity.related_order.label',
-                    'required'      => false,
-                ]
             )
             ->add(
-                'relatedCart',
-                'orocrm_cart_select',
+                'status',
+                'entity',
                 [
-                    'label'         => 'orocrm.case.caseentity.related_cart.label',
-                    'required'      => false,
+                    'label'         => 'orocrm.case.caseentity.status.label',
+                    'class'         => 'OroCRMCaseBundle:CaseStatus',
+                    'query_builder' => function (EntityRepository $entityRepository) {
+                        return $entityRepository->createQueryBuilder('status')
+                            ->orderBy('status.order', 'ASC');
+                    }
                 ]
             )
-            ->add(
-                'relatedLead',
-                'orocrm_sales_lead_select',
-                [
-                    'label'         => 'orocrm.case.caseentity.related_lead.label',
-                    'required'      => false,
-                ]
-            )
-            ->add(
-                'relatedOpportunity',
-                'orocrm_sales_opportunity_select',
-                [
-                    'label'         => 'orocrm.case.caseentity.related_opportunity.label',
-                    'required'      => false,
-                ]
-            )
-            ->add(
-                'relatedItemEntity',
-                'choice',
-                [
-                    'label'         => 'orocrm.case.caseentity.related_item_entity.label',
-                    'choices'       => [
-                        'relatedCart'        => 'orocrm.case.caseentity.related_cart.label',
-                        'relatedOrder'       => 'orocrm.case.caseentity.related_order.label',
-                        'relatedLead'        => 'orocrm.case.caseentity.related_lead.label',
-                        'relatedOpportunity' => 'orocrm.case.caseentity.related_opportunity.label',
-                    ],
-                    'mapped'        => false,
-                    'required'      => false
-                ]
-            );
-
-        $builder->addEventSubscriber(
-            new RelatedEntitySubscriber(
-                'relatedItemEntity',
-                ['relatedCart', 'relatedLead', 'relatedOpportunity', 'relatedOrder']
-            )
-        );
-    }
-
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    protected function addRelatedCustomerEntityFields(FormBuilderInterface $builder, array $options)
-    {
-        $builder
             ->add(
                 'relatedContact',
                 'orocrm_contact_select',
@@ -123,33 +60,21 @@ class CaseType extends AbstractType
                 ]
             )
             ->add(
-                'relatedCustomer',
-                'orocrm_customer_select',
+                'relatedAccount',
+                'orocrm_account_select',
                 [
-                    'label'         => 'orocrm.case.caseentity.related_customer.label',
                     'required'      => false,
+                    'label'         => 'orocrm.case.caseentity.related_account.label',
                 ]
             )
             ->add(
-                'relatedCustomerEntity',
-                'choice',
+                'assignedTo',
+                'oro_user_select',
                 [
-                    'label'         => 'orocrm.case.caseentity.related_customer_entity.label',
-                    'choices'       => [
-                        'relatedContact'     => 'orocrm.case.caseentity.related_contact.label',
-                        'relatedCustomer'    => 'orocrm.case.caseentity.related_customer.label',
-                    ],
-                    'mapped'        => false,
-                    'required'      => false
+                    'required'      => false,
+                    'label'         => 'orocrm.case.caseentity.assigned_to.label',
                 ]
             );
-
-        $builder->addEventSubscriber(
-            new RelatedEntitySubscriber(
-                'relatedCustomerEntity',
-                ['relatedContact', 'relatedCustomer']
-            )
-        );
     }
 
     /**

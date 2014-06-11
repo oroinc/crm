@@ -105,12 +105,6 @@ class CaseController extends SoapController
         unset($data['createdAt']);
         unset($data['updatedAt']);
 
-        if ($entity->getReporter()) {
-            unset($data['reporter']);
-        } elseif (empty($data['reporter'])) {
-            $data['reporter'] = $this->container->get('oro_security.security_facade')->getLoggedUserId();
-        }
-
         return true;
     }
 }
