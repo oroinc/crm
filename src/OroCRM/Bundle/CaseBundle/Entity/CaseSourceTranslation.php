@@ -6,14 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Translatable\Entity\MappedSuperclass\AbstractTranslation;
 
 /**
- * @ORM\Table(name="orocrm_case_origin_trans", indexes={
+ * @ORM\Table(name="orocrm_case_source_trans", indexes={
  *      @ORM\Index(
- *          name="orocrm_case_origin_trans_idx", columns={"locale", "object_class", "field", "foreign_key"}
+ *          name="orocrm_case_source_trans_idx", columns={"locale", "object_class", "field", "foreign_key"}
  *      )
  * })
  * @ORM\Entity(repositoryClass="Gedmo\Translatable\Entity\Repository\TranslationRepository")
  */
-class CaseOriginTranslation extends AbstractTranslation
+class CaseSourceTranslation extends AbstractTranslation
 {
     /**
      * @var string $foreignKey

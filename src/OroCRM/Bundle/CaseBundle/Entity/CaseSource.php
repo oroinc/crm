@@ -9,15 +9,15 @@ use Gedmo\Translatable\Translatable;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_case_origin")
- * @Gedmo\TranslationEntity(class="OroCRM\Bundle\CaseBundle\Entity\CaseOriginTranslation")
+ * @ORM\Table(name="orocrm_case_source")
+ * @Gedmo\TranslationEntity(class="OroCRM\Bundle\CaseBundle\Entity\CaseSourceTranslation")
  */
-class CaseOrigin implements Translatable
+class CaseSource implements Translatable
 {
-    const ORIGIN_EMAIL = 'email';
-    const ORIGIN_PHONE = 'phone';
-    const ORIGIN_WEB   = 'web';
-    const ORIGIN_OTHER = 'other';
+    const SOURCE_EMAIL = 'email';
+    const SOURCE_PHONE = 'phone';
+    const SOURCE_WEB   = 'web';
+    const SOURCE_OTHER = 'other';
 
     /**
      * @var string
@@ -58,7 +58,7 @@ class CaseOrigin implements Translatable
 
     /**
      * @param string $label
-     * @return CaseOrigin
+     * @return CaseSource
      */
     public function setLabel($label)
     {
@@ -79,7 +79,7 @@ class CaseOrigin implements Translatable
      * Set locale
      *
      * @param string $locale
-     * @return CaseOrigin
+     * @return CaseSource
      */
     public function setLocale($locale)
     {

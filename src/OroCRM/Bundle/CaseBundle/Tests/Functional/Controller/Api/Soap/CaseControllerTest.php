@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller\Api\Soap;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-use OroCRM\Bundle\CaseBundle\Entity\CaseOrigin;
+use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
 use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 
 /**
@@ -20,7 +20,7 @@ class CaseControllerTest extends WebTestCase
         'subject'     => 'New case',
         'description' => 'New description',
         'owner'       => 1,
-        'origin'      => CaseOrigin::ORIGIN_EMAIL,
+        'source'      => CaseSource::SOURCE_EMAIL,
         'status'      => CaseStatus::STATUS_OPEN
     ];
 

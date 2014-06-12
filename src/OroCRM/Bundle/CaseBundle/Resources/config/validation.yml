@@ -4,7 +4,7 @@ OroCRM\Bundle\CaseBundle\Entity\CaseEntity:
             - NotBlank: ~
             - Length:
                 max: 255
-        origin:
+        source:
             - NotBlank: ~
         status:
             - NotBlank: ~
