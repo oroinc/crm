@@ -4,20 +4,10 @@
 {% set pageTitle = 'orocrm.contact.entity_plural_label'|trans %}
 
 {% block navButtons %}
-    {% if resource_granted('oro_importexport_import') %}
-        <div class="btn-group">
-            <a type="button"
-               class="btn no-hash"
-               target="_blank"
-               href="{{ asset('bundles/orocrmcontact/import/contacts_sample.csv') }}">
-                {{ 'oro.importexport.import.tempate'|trans }}
-            </a>
-        </div>
-    {% endif %}
-
     {% include 'OroImportExportBundle:ImportExport:buttons.html.twig' with {
-        entityClass: 'OroCRM\\Bundle\\ContactBundle\\Entity\\Contact',
+        entity_class: entity_class,
         exportProcessor: 'orocrm_contact',
+        importProcessor: 'orocrm_contact',
         importTitle: 'orocrm.contact.import'|trans,
         dataGridName: gridName
     } %}
