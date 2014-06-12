@@ -1,0 +1,48 @@
+orocrm:
+    case:
+        widgets:
+            account_cases: Cases
+        datagrid:
+            case_number.label:              Case ID
+            subject.label:                  Subject
+            related_contact.label:          Related Contact
+            related_account.label:          Related Account
+            owner.label:                    Owner
+            assigned_to.label:              Assigned To
+            reported_on.label:              Reported On
+            closed_on.label:                Closed On
+            origin.label:                   Origin
+            status.label:                   Status
+            priority.label:                 Priority
+
+        menu:
+            index.label: Cases
+
+        caseentity:
+            #
+            # OroCRM/Bundle/CaseBundle/Entity/CaseEntity
+            #
+            entity_label:                   Case
+            entity_plural_label:            Cases
+            entity_description:             Represent case
+            subject.label:                  Subject
+            description.label:              Description
+            resolution.label:               Resolution
+            owner.label:                    Owner
+            assigned_to.label:              Assigned To
+            closed_at.label:                Closed On
+            reported_at.label:              Reported On
+            related_contact.label:          Related Contact
+            related_account.label:          Related Account
+            origin.label:                   Origin
+            status.label:                   Status
+            priority.label:                 Priority
+            created_at.label:               Created At
+            updated_at.label:               Updated At
+            id.label:                       Id
+
+        block:
+            general: General Information
+            additional: Additional Information
+
+        saved_message: Case saved

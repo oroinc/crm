@@ -1,0 +1,12 @@
+OroCRM\Bundle\CaseBundle\Entity\CaseEntity:
+    properties:
+        subject:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        origin:
+            - NotBlank: ~
+        status:
+            - NotBlank: ~
+        priority:
+            - NotBlank: ~
