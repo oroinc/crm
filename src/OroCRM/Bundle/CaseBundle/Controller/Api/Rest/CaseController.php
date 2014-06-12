@@ -18,7 +18,7 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
-use OroCRM\Bundle\CaseBundle\Entity\CaseOrigin;
+use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
 use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
@@ -160,10 +160,10 @@ class CaseController extends RestController implements ClassResourceInterface
     protected function transformEntityField($field, &$value)
     {
         switch ($field) {
-            case 'origin':
+            case 'source':
             case 'status':
                 if ($value) {
-                    /** @var CaseOrigin|CaseStatus $value */
+                    /** @var CaseSource|CaseStatus $value */
                     $value = $value->getName();
                 }
                 break;
