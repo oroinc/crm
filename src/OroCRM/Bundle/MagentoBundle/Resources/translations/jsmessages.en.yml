@@ -6,3 +6,5 @@ orocrm:
         external_error:             External error occured
         performing_synchronization: Performing synchronization...
         view_order: View order
+        autocomplete:
+            entity_number: "{{ entityName }} {{ entityNumber }}"
