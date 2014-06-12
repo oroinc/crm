@@ -32,6 +32,14 @@ class CaseType extends AbstractType
                 ]
             )
             ->add(
+                'resolution',
+                'textarea',
+                [
+                    'label'        => 'orocrm.case.caseentity.resolution.label',
+                    'required'     => false
+                ]
+            )
+            ->add(
                 'origin',
                 'entity',
                 [
