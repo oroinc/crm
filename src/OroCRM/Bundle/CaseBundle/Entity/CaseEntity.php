@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\CaseBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -77,7 +79,7 @@ class CaseEntity extends ExtendCaseEntity
      * @var CaseSource
      *
      * @ORM\ManyToOne(targetEntity="CaseSource", cascade={"persist"})
-     * @ORM\JoinColumn(name="source_name", referencedColumnName="name", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="source_name", referencedColumnName="name", onDelete="CASCADE")
      * @Oro\Versioned
      */
     protected $source;
@@ -135,6 +137,19 @@ class CaseEntity extends ExtendCaseEntity
     protected $owner;
 
     /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="CaseComment",
+     *     mappedBy="case",
+     *     cascade={"ALL"},
+     *     orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"createdAt"="DESC"})
+     */
+    protected $comments;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -162,15 +177,9 @@ class CaseEntity extends ExtendCaseEntity
      */
     protected $closedAt;
 
-    /**
-     * @param integer $id
-     * @return CaseEntity
-     */
-    public function setId($id)
+    public function __construct()
     {
-        $this->id = $id;
-
-        return $this;
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -387,6 +396,26 @@ class CaseEntity extends ExtendCaseEntity
     }
 
     /**
+     * @return Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param CaseComment $comment
+     * @return CaseEntity
+     */
+    public function addComment(CaseComment $comment)
+    {
+        $this->comments->add($comment);
+        $comment->setCase($this);
+
+        return $this;
+    }
+
+    /**
      * @param \DateTime $createdAt
      * @return CaseEntity
      */
@@ -467,8 +496,8 @@ class CaseEntity extends ExtendCaseEntity
      */
     public function prePersist()
     {
-        $this->createdAt  = $this->createdAt ? $this->createdAt : new \DateTime();
-        $this->reportedAt = $this->reportedAt? $this->reportedAt : new \DateTime();
+        $this->createdAt  = $this->createdAt ? $this->createdAt : new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->reportedAt = $this->reportedAt? $this->reportedAt : new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -476,6 +505,6 @@ class CaseEntity extends ExtendCaseEntity
      */
     public function preUpdate()
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }
