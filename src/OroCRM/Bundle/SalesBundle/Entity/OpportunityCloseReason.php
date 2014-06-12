@@ -3,8 +3,9 @@
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_sales_opport_close_rsn")
@@ -19,6 +20,13 @@ class OpportunityCloseReason
     /**
      * @ORM\Column(name="name", type="string", length=32)
      * @ORM\Id
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "identity"=true
+     *          }
+     *      }
+     * )
      */
     protected $name;
 

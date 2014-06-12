@@ -77,7 +77,8 @@ class Opportunity extends ExtendOpportunity
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=110
+     *          "order"=90,
+     *          "short"=true
      *      }
      *  }
      * )
@@ -94,7 +95,8 @@ class Opportunity extends ExtendOpportunity
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=120
+     *          "order"=100,
+     *          "short"=true
      *      }
      *  }
      * )
@@ -111,7 +113,8 @@ class Opportunity extends ExtendOpportunity
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=130
+     *          "order"=110,
+     *          "short"=true
      *      }
      *  }
      * )
@@ -128,7 +131,8 @@ class Opportunity extends ExtendOpportunity
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=140
+     *          "order"=120,
+     *          "short"=true
      *      }
      *  }
      * )
@@ -145,7 +149,8 @@ class Opportunity extends ExtendOpportunity
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=150
+     *          "order"=130,
+     *          "short"=true
      *      }
      *  }
      * )
@@ -161,7 +166,8 @@ class Opportunity extends ExtendOpportunity
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=160
+     *          "order"=140,
+     *          "short"=true
      *      }
      *  }
      * )
@@ -177,7 +183,8 @@ class Opportunity extends ExtendOpportunity
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=10
+     *          "order"=10,
+     *          "identity"=true
      *      }
      *  }
      * )
@@ -311,7 +318,7 @@ class Opportunity extends ExtendOpportunity
      * @ConfigField(
      *  defaultValues={
      *      "importexport"={
-     *          "order"=80
+     *          "excluded"=true
      *      }
      *  }
      * )
@@ -325,7 +332,7 @@ class Opportunity extends ExtendOpportunity
      * @ConfigField(
      *  defaultValues={
      *      "importexport"={
-     *          "order"=90
+     *          "excluded"=true
      *      }
      *  }
      * )
@@ -341,7 +348,7 @@ class Opportunity extends ExtendOpportunity
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=100
+     *          "order"=80
      *      }
      *  }
      * )
@@ -353,13 +360,6 @@ class Opportunity extends ExtendOpportunity
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
      * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "importexport"={
-     *          "order"=170
-     *      }
-     *  }
-     * )
      */
     protected $workflowItem;
 
@@ -368,13 +368,6 @@ class Opportunity extends ExtendOpportunity
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "importexport"={
-     *          "order"=180
-     *      }
-     *  }
-     * )
      */
     protected $workflowStep;
 

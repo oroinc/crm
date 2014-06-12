@@ -79,7 +79,8 @@ class Lead extends ExtendLead implements FullNameInterface
      * @ConfigField(
      *  defaultValues={
      *      "importexport"={
-     *          "order"=10
+     *          "order"=10,
+     *          "short"=true
      *      }
      *  }
      * )
@@ -96,7 +97,8 @@ class Lead extends ExtendLead implements FullNameInterface
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=180
+     *          "order"=150,
+     *          "short"=true
      *      }
      *  }
      * )
@@ -113,7 +115,8 @@ class Lead extends ExtendLead implements FullNameInterface
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=190
+     *          "order"=160,
+     *          "short"=true
      *      }
      *  }
      * )
@@ -129,7 +132,8 @@ class Lead extends ExtendLead implements FullNameInterface
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=20
+     *          "order"=20,
+     *          "identity"=true
      *      }
      *  }
      * )
@@ -337,7 +341,8 @@ class Lead extends ExtendLead implements FullNameInterface
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=200
+     *          "order"=170,
+     *          "full"=true
      *      }
      *  }
      * )
@@ -351,7 +356,7 @@ class Lead extends ExtendLead implements FullNameInterface
      * @ConfigField(
      *  defaultValues={
      *      "importexport"={
-     *          "order"=150
+     *          "excluded"=true
      *      }
      *  }
      * )
@@ -365,7 +370,7 @@ class Lead extends ExtendLead implements FullNameInterface
      * @ConfigField(
      *  defaultValues={
      *      "importexport"={
-     *          "order"=160
+     *          "excluded"=true
      *      }
      *  }
      * )
@@ -382,7 +387,8 @@ class Lead extends ExtendLead implements FullNameInterface
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=210
+     *          "order"=180,
+     *          "short"=true
      *      }
      *  }
      * )
@@ -397,7 +403,8 @@ class Lead extends ExtendLead implements FullNameInterface
      * @ConfigField(
      *  defaultValues={
      *      "importexport"={
-     *          "order"=220
+     *          "order"=190,
+     *          "short"=true
      *      }
      *  }
      * )
@@ -413,7 +420,7 @@ class Lead extends ExtendLead implements FullNameInterface
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=170
+     *          "order"=140
      *      }
      *  }
      * )
@@ -425,13 +432,6 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
      * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "importexport"={
-     *          "order"=230
-     *      }
-     *  }
-     * )
      */
     protected $workflowItem;
 
@@ -440,13 +440,6 @@ class Lead extends ExtendLead implements FullNameInterface
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "importexport"={
-     *          "order"=240
-     *      }
-     *  }
-     * )
      */
     protected $workflowStep;
 
@@ -767,7 +760,7 @@ class Lead extends ExtendLead implements FullNameInterface
      * @param LeadStatus $status
      * @return Lead
      */
-    public function setStatus(LeadStatus $status)
+    public function setStatus($status)
     {
         $this->status = $status;
 
@@ -790,7 +783,7 @@ class Lead extends ExtendLead implements FullNameInterface
      * @param Address $address
      * @return Lead
      */
-    public function setAddress(Address $address)
+    public function setAddress($address)
     {
         $this->address = $address;
 
