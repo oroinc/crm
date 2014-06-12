@@ -45,12 +45,4 @@ class Calls extends AbstractPageFilteredGrid
 
         return new Call($this->test);
     }
-
-    public function openRandom()
-    {
-        $cart = $this->getRandomEntity();
-        $this->open($cart);
-
-        return new MagentoCart($this->test);
-    }
 }

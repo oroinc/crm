@@ -5,8 +5,8 @@ namespace OroCRM\Bundle\CallBundle\Tests\Selenium\Pages;
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 /**
- * Class MagentoCart
- * @package OroCRM\Bundle\MagentoBundle\Tests\Selenium\Pages
+ * Class Call
+ * @package OroCRM\Bundle\CallBundle\Tests\Selenium\Pages
  */
 class Call extends AbstractPageEntity
 {
