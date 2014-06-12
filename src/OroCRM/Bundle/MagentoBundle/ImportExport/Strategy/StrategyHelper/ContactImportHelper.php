@@ -151,18 +151,12 @@ class ContactImportHelper
 
                     if ($contactPhone) {
                         $this->mergeScalars(['phone'], $remoteAddress, $localAddress, $contactPhone);
-                        #$contactPhone->setPhone($remoteAddress->getContactPhone()->getPhone());
-                        #$localAddress->setPhone($remoteAddress->getContactPhone()->getPhone());
                     } elseif ($this->isRemotePrioritized() && $remoteAddress->getPhone()!=='no phone') {
                         $contactPhone = new ContactPhone();
                         $contactPhone->setPhone($remoteAddress->getPhone());
                         $contactPhone->setPrimary(!$contact->getPrimaryPhone());
                         $contact->addPhone($contactPhone);
                     }
-
-                    /*if ($contactPhone && $localAddress->getPhone() !== $contactPhone->getPhone()) {
-                        $localAddress->setPhone($contactPhone->getPhone());
-                    }*/
 
                     $this->prepareAddress($address);
                     if (!$address->getCountry()) {
