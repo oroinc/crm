@@ -9,6 +9,7 @@ use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
@@ -164,14 +165,41 @@ class CustomerStrategy extends BaseStrategy
                 $localData->getAddresses()->get($key)->setContactAddress($address);
             }
 
-            foreach ($contact->getPhones() as $phone) {
-                $localData->getAddresses()->get($key)->setContactPhone($phone);
+            // @TODO find possible solution
+            // guess parent $phone by key
+            foreach ($contact->getPhones() as $key => $phone) {
+                $contactPhone = $this->getContactPhoneFromContact($contact, $phone);
+
+                if ($contactPhone) {
+                    $localData->getAddresses()->get($key)->setContactPhone($contactPhone);
+                } else {
+                    $localData->getAddresses()->get($key)->setContactPhone($phone);
+                }
             }
 
             // populate default owner only for new contacts
             $this->defaultOwnerHelper->populateChannelOwner($contact, $localData->getChannel());
             $localData->setContact($contact);
         }
+    }
+
+    /**
+     * Filtered phone by phone number from contact and return entity or null
+     *
+     * @param Contact      $contact
+     * @param ContactPhone $contactPhone
+     *
+     * @return ContactPhone|null
+     */
+    protected function getContactPhoneFromContact(Contact $contact, ContactPhone $contactPhone)
+    {
+        $filtered = $contact->getPhones()->filter(
+            function (ContactPhone $phone) use ($contactPhone) {
+                return $phone && $phone->getPhone() === $contactPhone->getPhone();
+            }
+        );
+
+        return $filtered->first();
     }
 
     /**
@@ -203,7 +231,7 @@ class CustomerStrategy extends BaseStrategy
                     $this->strategyHelper->importEntity(
                         $existingAddress,
                         $address,
-                        ['id', 'region', 'country', 'contactAddress', 'created', 'updated', 'contactPhone', 'phone']
+                        ['id', 'region', 'country', 'contactAddress', 'created', 'updated', 'contactPhone']
                     );
                     // set remote data for further processing
                     $existingAddress->setRegion($address->getRegion());

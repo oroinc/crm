@@ -469,25 +469,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     }
 
     /**
-     * Filtered phone by phone number from contact and return entity or null
-     *
-     * @param Contact      $contact
-     * @param ContactPhone $contactPhone
-     *
-     * @return ContactPhone|null
-     */
-    /*protected function getContactPhoneFromContact(Contact $contact, ContactPhone $contactPhone)
-    {
-        $filtered = $contact->getPhones()->filter(
-            function (ContactPhone $phone) use ($contactPhone) {
-                return $phone && $phone->getPhone() === $contactPhone->getPhone();
-            }
-        );
-
-        return $filtered->first();
-    }*/
-
-    /**
      * @todo Move to converter CRM-789
      *
      * @param $data

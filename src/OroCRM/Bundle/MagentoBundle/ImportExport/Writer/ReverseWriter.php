@@ -277,7 +277,7 @@ class ReverseWriter implements ItemWriterInterface
                 $dataForSend = array_merge(
                     $this->customerSerializer->convertToMagentoAddress($addressEntity),
                     $this->regionConverter->toMagentoData($addressEntity),
-                    ['telephone' => $addressEntity->getPhone()]
+                    ['telephone' => ($addressEntity->getPhone() ? $addressEntity->getPhone() : 'no phone')]
                 );
                 $requestData = ['addressId' => $addressEntity->getOriginId(), 'addressData' => $dataForSend];
                 try {
