@@ -100,6 +100,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
             $assignedTo = $this->getRandomEntity('OroUserBundle:User', $manager);
             $origin = $this->getRandomEntity('OroCRMCaseBundle:CaseOrigin', $manager);
             $status = $this->getRandomEntity('OroCRMCaseBundle:CaseStatus', $manager);
+            $priority = $this->getRandomEntity('OroCRMCaseBundle:CasePriority', $manager);
 
             if (!$owner || !$assignedTo || !$origin || !$status) {
                 // If we don't have users, origins and status we cannot load fixture cases
@@ -120,6 +121,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
             $case->setAssignedTo($assignedTo);
             $case->setOrigin($origin);
             $case->setStatus($status);
+            $case->setPriority($priority);
 
             switch (rand(0, 1)) {
                 case 0:

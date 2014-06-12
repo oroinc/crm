@@ -8,3 +8,5 @@ OroCRM\Bundle\CaseBundle\Entity\CaseEntity:
             - NotBlank: ~
         status:
             - NotBlank: ~
+        priority:
+            - NotBlank: ~

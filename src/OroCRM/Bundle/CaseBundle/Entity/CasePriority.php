@@ -9,15 +9,14 @@ use Gedmo\Translatable\Translatable;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_case_status")
- * @Gedmo\TranslationEntity(class="OroCRM\Bundle\CaseBundle\Entity\CaseStatusTranslation")
+ * @ORM\Table(name="orocrm_case_priority")
+ * @Gedmo\TranslationEntity(class="OroCRM\Bundle\CaseBundle\Entity\CasePriorityTranslation")
  */
-class CaseStatus implements Translatable
+class CasePriority implements Translatable
 {
-    const STATUS_OPEN        = 'open';
-    const STATUS_IN_PROGRESS = 'in_progress';
-    const STATUS_RESOLVED    = 'resolved';
-    const STATUS_CLOSED      = 'closed';
+    const PRIORITY_LOW     = 'low';
+    const PRIORITY_NORMAL  = 'normal';
+    const PRIORITY_HIGH    = 'high';
 
     /**
      * @var string
@@ -65,7 +64,7 @@ class CaseStatus implements Translatable
 
     /**
      * @param string $label
-     * @return CaseStatus
+     * @return CasePriority
      */
     public function setLabel($label)
     {
@@ -94,7 +93,7 @@ class CaseStatus implements Translatable
      * Set order
      *
      * @param string $order
-     * @return CaseStatus
+     * @return CasePriority
      */
     public function setOrder($order)
     {
@@ -107,7 +106,7 @@ class CaseStatus implements Translatable
      * Set locale
      *
      * @param string $locale
-     * @return CaseStatus
+     * @return CasePriority
      */
     public function setLocale($locale)
     {
@@ -140,7 +139,7 @@ class CaseStatus implements Translatable
      */
     public function isEqualTo($other)
     {
-        if (!$other instanceof CaseStatus) {
+        if (!$other instanceof CasePriority) {
             return false;
         }
 

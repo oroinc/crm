@@ -13,6 +13,7 @@ orocrm:
             closed_on.label:                Closed On
             origin.label:                   Origin
             status.label:                   Status
+            priority.label:                 Priority
 
         menu:
             index.label: Cases
@@ -26,6 +27,7 @@ orocrm:
             entity_description:             Represent case
             subject.label:                  Subject
             description.label:              Description
+            resolution.label:               Resolution
             owner.label:                    Owner
             assigned_to.label:              Assigned To
             closed_at.label:                Closed On
@@ -34,6 +36,7 @@ orocrm:
             related_account.label:          Related Account
             origin.label:                   Origin
             status.label:                   Status
+            priority.label:                 Priority
             created_at.label:               Created At
             updated_at.label:               Updated At
             id.label:                       Id

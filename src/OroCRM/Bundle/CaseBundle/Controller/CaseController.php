@@ -11,6 +11,8 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+
+use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
 class CaseController extends Controller
@@ -69,6 +71,12 @@ class CaseController extends Controller
     public function createAction()
     {
         $case = new CaseEntity();
+
+        $priority = $this->getDoctrine()->getRepository('OroCRMCaseBundle:CasePriority')
+            ->findOneBy(array('name' => CasePriority::PRIORITY_NORMAL));
+
+        $case->setPriority($priority);
+
         return $this->update($case);
     }
 

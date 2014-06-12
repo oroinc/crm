@@ -8,3 +8,7 @@ case_status:
     in_progress: In Progress
     resolved: Resolved
     closed: Closed
+case_priority:
+    low: Low
+    normal: Normal
+    high: High

@@ -15,6 +15,7 @@ datagrid:
                     - relatedAccount.name as relatedAccountName
                     - assignedTo.id as assignedToId
                     - status.label as statusLabel
+                    - priority.label as priorityLabel
                 from:
                     - { table: %orocrm_case.entity.class%, alias: caseEntity }
                 join:
@@ -25,6 +26,7 @@ datagrid:
                         - { join: caseEntity.owner, alias: owner }
                         - { join: caseEntity.origin, alias: origin }
                         - { join: caseEntity.status, alias: status }
+                        - { join: caseEntity.priority, alias: priority }
         columns:
             caseNumber:
                 label: orocrm.case.datagrid.case_number.label
@@ -46,6 +48,8 @@ datagrid:
                 frontend_type: datetime
             statusLabel:
                 label: orocrm.case.datagrid.status.label
+            priorityLabel:
+                label: orocrm.case.datagrid.priority.label
         sorters:
             columns:
                 subject:
@@ -60,6 +64,8 @@ datagrid:
                     data_name: caseEntity.closedAt
                 statusLabel:
                     data_name: status.order
+                priorityLabel:
+                    data_name: priority.order
             default:
                 reportedAt: DESC
         filters:
@@ -86,6 +92,14 @@ datagrid:
                     options:
                         field_options:
                             class: OroCRMCaseBundle:CaseStatus
+                            property: label
+                priorityLabel:
+                    label: orocrm.case.datagrid.priority.label
+                    type: entity
+                    data_name: priority.label
+                    options:
+                        field_options:
+                            class: OroCRMCaseBundle:CasePriority
                             property: label
                 origin:
                     label: orocrm.case.datagrid.origin.label

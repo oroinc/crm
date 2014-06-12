@@ -39,8 +39,10 @@
             <div class="responsive-block">
                 {{ UI.renderProperty('orocrm.case.caseentity.subject.label'|trans, entity.subject) }}
                 {{ UI.renderProperty('orocrm.case.caseentity.description.label'|trans, entity.description) }}
+                {{ UI.renderProperty('orocrm.case.caseentity.resolution.label'|trans, entity.resolution) }}
                 {{ UI.renderProperty('orocrm.case.caseentity.origin.label'|trans, entity.origin) }}
                 {{ UI.renderProperty('orocrm.case.caseentity.status.label'|trans, entity.status) }}
+                {{ UI.renderProperty('orocrm.case.caseentity.priority.label'|trans, entity.priority) }}
                 {{ UI.renderProperty('orocrm.case.caseentity.reported_at.label'|trans, entity.reportedAt|oro_format_datetime) }}
                 {% if entity.closedAt is not empty %}
                     {{ UI.renderProperty('orocrm.case.caseentity.closed_at.label'|trans, entity.closedAt|oro_format_datetime) }}

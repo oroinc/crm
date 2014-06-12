@@ -52,6 +52,18 @@ class CaseType extends AbstractType
                 ]
             )
             ->add(
+                'priority',
+                'entity',
+                [
+                    'label'         => 'orocrm.case.caseentity.priority.label',
+                    'class'         => 'OroCRMCaseBundle:CasePriority',
+                    'query_builder' => function (EntityRepository $entityRepository) {
+                        return $entityRepository->createQueryBuilder('priority')
+                            ->orderBy('priority.order', 'ASC');
+                    }
+                ]
+            )
+            ->add(
                 'relatedContact',
                 'orocrm_contact_select',
                 [

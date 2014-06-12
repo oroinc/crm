@@ -66,6 +66,14 @@ class CaseEntity extends ExtendCaseEntity
     protected $description;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="resolution", type="text", nullable=true)
+     * @Oro\Versioned
+     */
+    protected $resolution;
+
+    /**
      * @var CaseOrigin
      *
      * @ORM\ManyToOne(targetEntity="CaseOrigin", cascade={"persist"})
@@ -75,13 +83,22 @@ class CaseEntity extends ExtendCaseEntity
     protected $origin;
 
     /**
-     * @var CaseOrigin
+     * @var CaseStatus
      *
      * @ORM\ManyToOne(targetEntity="CaseStatus", cascade={"persist"})
      * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
      * @Oro\Versioned
      */
     protected $status;
+
+    /**
+     * @var CasePriority
+     *
+     * @ORM\ManyToOne(targetEntity="CasePriority", cascade={"persist"})
+     * @ORM\JoinColumn(name="priority_name", referencedColumnName="name", onDelete="SET NULL")
+     * @Oro\Versioned
+     */
+    protected $priority;
 
     /**
      * @var Contact
@@ -147,7 +164,6 @@ class CaseEntity extends ExtendCaseEntity
 
     /**
      * @param integer $id
-     *
      * @return CaseEntity
      */
     public function setId($id)
@@ -167,7 +183,6 @@ class CaseEntity extends ExtendCaseEntity
 
     /**
      * @param string $subject
-     *
      * @return CaseEntity
      */
     public function setSubject($subject)
@@ -187,7 +202,6 @@ class CaseEntity extends ExtendCaseEntity
 
     /**
      * @param string $description
-     *
      * @return CaseEntity
      */
     public function setDescription($description)
@@ -203,6 +217,25 @@ class CaseEntity extends ExtendCaseEntity
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * @param string $resolution
+     * @return CaseEntity
+     */
+    public function setResolution($resolution)
+    {
+        $this->resolution = $resolution;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResolution()
+    {
+        return $this->resolution;
     }
 
     /**
@@ -256,6 +289,25 @@ class CaseEntity extends ExtendCaseEntity
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * @param CasePriority|null $priority
+     * @return CaseEntity
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * @return CasePriority
+     */
+    public function getPriority()
+    {
+        return $this->priority;
     }
 
     /**

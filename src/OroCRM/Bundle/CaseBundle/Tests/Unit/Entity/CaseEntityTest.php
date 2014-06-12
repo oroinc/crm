@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\CaseBundle\Tests\Unit\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
 class CaseEntityTest extends \PHPUnit_Framework_TestCase
@@ -36,13 +35,19 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $priority = $this->getMockBuilder('OroCRM\Bundle\CaseBundle\Entity\CasePriority')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         return array(
             array('subject', 'Test subject'),
             array('description', 'Test Description'),
+            array('resolution', 'Test Resolution'),
             array('assignedTo', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
             array('owner', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
             array('origin', $origin),
             array('status', $status),
+            array('priority', $priority),
             array('createdAt', new \DateTime()),
             array('updatedAt', new \DateTime()),
             array('reportedAt', new \DateTime()),
