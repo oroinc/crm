@@ -74,13 +74,13 @@ class CaseEntity extends ExtendCaseEntity
     protected $resolution;
 
     /**
-     * @var CaseOrigin
+     * @var CaseSource
      *
-     * @ORM\ManyToOne(targetEntity="CaseOrigin", cascade={"persist"})
-     * @ORM\JoinColumn(name="origin_name", referencedColumnName="name", onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity="CaseSource", cascade={"persist"})
+     * @ORM\JoinColumn(name="source_name", referencedColumnName="name", onDelete="SET NULL")
      * @Oro\Versioned
      */
-    protected $origin;
+    protected $source;
 
     /**
      * @var CaseStatus
@@ -239,22 +239,22 @@ class CaseEntity extends ExtendCaseEntity
     }
 
     /**
-     * @param CaseOrigin|null $origin
+     * @param CaseSource|null $source
      * @return CaseEntity
      */
-    public function setOrigin($origin)
+    public function setSource($source)
     {
-        $this->origin = $origin;
+        $this->source = $source;
 
         return $this;
     }
 
     /**
-     * @return CaseOrigin
+     * @return CaseSource
      */
-    public function getOrigin()
+    public function getSource()
     {
-        return $this->origin;
+        return $this->source;
     }
 
     /**

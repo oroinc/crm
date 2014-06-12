@@ -11,7 +11,7 @@ orocrm:
             assigned_to.label:              Assigned To
             reported_on.label:              Reported On
             closed_on.label:                Closed On
-            origin.label:                   Origin
+            source.label:                   Source
             status.label:                   Status
             priority.label:                 Priority
 
@@ -34,7 +34,7 @@ orocrm:
             reported_at.label:              Reported On
             related_contact.label:          Related Contact
             related_account.label:          Related Account
-            origin.label:                   Origin
+            source.label:                   Source
             status.label:                   Status
             priority.label:                 Priority
             created_at.label:               Created At

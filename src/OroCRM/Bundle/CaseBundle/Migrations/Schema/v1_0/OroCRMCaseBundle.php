@@ -15,8 +15,8 @@ class OroCRMCaseBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->createCaseTable($schema);
-        $this->createCaseOriginTable($schema);
-        $this->createCaseOriginTranslationTable($schema);
+        $this->createCaseSourceTable($schema);
+        $this->createCaseSourceTranslationTable($schema);
         $this->createCaseStatusTable($schema);
         $this->createCaseStatusTranslationTable($schema);
         $this->createCasePriorityTable($schema);
@@ -39,7 +39,7 @@ class OroCRMCaseBundle implements Migration
         $table->addColumn('related_account_id', 'integer', array('notnull' => false));
         $table->addColumn('assigned_to_id', 'integer', array('notnull' => false));
         $table->addColumn('owner_id', 'integer', array('notnull' => false));
-        $table->addColumn('origin_name', 'string', array('notnull' => false, 'length' => 16));
+        $table->addColumn('source_name', 'string', array('notnull' => false, 'length' => 16));
         $table->addColumn('status_name', 'string', array('notnull' => false, 'length' => 16));
         $table->addColumn('priority_name', 'string', array('notnull' => false, 'length' => 16));
         $table->addColumn('createdAt', 'datetime', array());
@@ -52,30 +52,30 @@ class OroCRMCaseBundle implements Migration
         $table->addIndex(array('assigned_to_id'), 'IDX_AB3BAC1EF4BD7827', array());
         $table->addIndex(array('related_contact_id'), 'IDX_AB3BAC1E6D6C2DFA', array());
         $table->addIndex(array('related_account_id'), 'IDX_AB3BAC1E11A6570A', array());
-        $table->addIndex(array('origin_name'), 'IDX_AB3BAC1EB03BC868', array());
+        $table->addIndex(array('source_name'), 'IDX_AB3BAC1E5FA9FB05', array());
         $table->addIndex(array('priority_name'), 'IDX_AB3BAC1E965BD3DF', array());
     }
 
     /**
      * @param Schema $schema
      */
-    protected function createCaseOriginTable(Schema $schema)
+    protected function createCaseSourceTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_case_origin');
+        $table = $schema->createTable('orocrm_case_source');
         $table->addColumn('name', 'string', array('length' => 16));
         $table->addColumn('label', 'string', array('length' => 255));
         $table->setPrimaryKey(array('name'));
     }
 
     /**
-     * Generate table orocrm_case_origin_trans
+     * Generate table orocrm_case_source_trans
      *
      * @param Schema $schema
      */
-    public static function createCaseOriginTranslationTable(Schema $schema)
+    public static function createCaseSourceTranslationTable(Schema $schema)
     {
-        /** Generate table orocrm_case_origin_trans **/
-        $table = $schema->createTable('orocrm_case_origin_trans');
+        /** Generate table orocrm_case_source_trans **/
+        $table = $schema->createTable('orocrm_case_source_trans');
         $table->addColumn('id', 'integer', array('autoincrement' => true));
         $table->addColumn('foreign_key', 'string', array('length' => 16));
         $table->addColumn('content', 'string', array('length' => 255));
@@ -85,10 +85,10 @@ class OroCRMCaseBundle implements Migration
         $table->setPrimaryKey(array('id'));
         $table->addIndex(
             array('locale', 'object_class', 'field', 'foreign_key'),
-            'case_origin_translation_idx',
+            'case_source_translation_idx',
             array()
         );
-        /** End of generate table orocrm_case_origin_trans **/
+        /** End of generate table orocrm_case_source_trans **/
     }
 
     /**
@@ -182,8 +182,8 @@ class OroCRMCaseBundle implements Migration
             array('onDelete' => 'SET NULL', 'onUpdate' => null)
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_case_origin'),
-            array('origin_name'),
+            $schema->getTable('orocrm_case_source'),
+            array('source_name'),
             array('name'),
             array('onDelete' => 'SET NULL', 'onUpdate' => null)
         );

@@ -1,4 +1,4 @@
-case_origin:
+case_source:
     email: Email
     phone: Phone
     web: Web

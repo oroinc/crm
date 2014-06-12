@@ -24,7 +24,7 @@ datagrid:
                         - { join: caseEntity.relatedAccount, alias: relatedAccount }
                         - { join: caseEntity.assignedTo, alias: assignedTo }
                         - { join: caseEntity.owner, alias: owner }
-                        - { join: caseEntity.origin, alias: origin }
+                        - { join: caseEntity.source, alias: source }
                         - { join: caseEntity.status, alias: status }
                         - { join: caseEntity.priority, alias: priority }
         columns:
@@ -101,14 +101,14 @@ datagrid:
                         field_options:
                             class: OroCRMCaseBundle:CasePriority
                             property: label
-                origin:
-                    label: orocrm.case.datagrid.origin.label
+                source:
+                    label: orocrm.case.datagrid.source.label
                     type: entity
                     enabled: false
-                    data_name: origin.label
+                    data_name: source.label
                     options:
                         field_options:
-                            class: OroCRMCaseBundle:CaseOrigin
+                            class: OroCRMCaseBundle:CaseSource
                             property: label
                 relatedContact:
                     label: orocrm.case.datagrid.related_contact.label
@@ -162,14 +162,6 @@ datagrid:
                 where:
                     and:
                         - relatedAccount.id = :id
-
-    contact-cases-grid:
-        extends: cases-grid
-        source:
-            query:
-                where:
-                    and:
-                        - relatedContact.id = :id
 
     user-cases-grid:
         extends: cases-grid
