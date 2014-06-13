@@ -3,7 +3,14 @@
 namespace OroCRM\Bundle\CallBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use OroCRM\Bundle\CallBundle\Tests\Selenium\Pages\Calls;
 
+/**
+ * Class CreateCallTest
+ *
+ * @package OroCRM\Bundle\CallBundle\Tests\Selenium
+ * {@inheritdoc}
+ */
 class CreateCallTest extends Selenium2TestCase
 {
     /**
@@ -16,6 +23,7 @@ class CreateCallTest extends Selenium2TestCase
         $phoneNumber = mt_rand(100, 999).'-'.mt_rand(100, 999).'-'.mt_rand(1000, 9999);
 
         $login = $this->login();
+        /** @var Calls $login */
         $login->openCalls('OroCRM\Bundle\CallBundle')
             ->add()
             ->assertTitle('Log Call - Calls - Activities')
@@ -40,6 +48,7 @@ class CreateCallTest extends Selenium2TestCase
         $newCallSubject = 'Update_' . $callSubject;
 
         $login = $this->login();
+        /** @var Calls $login */
         $login->openCalls('OroCRM\Bundle\CallBundle')
             ->filterBy('Subject', $callSubject)
             ->open(array($callSubject))
@@ -61,13 +70,13 @@ class CreateCallTest extends Selenium2TestCase
     public function testDeleteCall($newCallSubject)
     {
         $login = $this->login();
+        /** @var Calls $login */
         $login->openCalls('OroCRM\Bundle\CallBundle')
             ->filterBy('Subject', $newCallSubject)
             ->deleteEntity(array($newCallSubject))
             ->assertMessage('Item deleted');
 
         $login->openCalls('OroCRM\Bundle\CallBundle')
-            ->filterBy('Subject', $newCallSubject)
-            ->assertNoDataMessage('No calls was found to match your search. Try modifying your search criteria...');
+            ->assertNoDataMessage('No records found');
     }
 }

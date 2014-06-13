@@ -7,6 +7,7 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 /**
  * Class Call
  * @package OroCRM\Bundle\CallBundle\Tests\Selenium\Pages
+ * {@inheritdoc}
  */
 class Call extends AbstractPageEntity
 {
@@ -17,7 +18,7 @@ class Call extends AbstractPageEntity
 
     /**
      * @param string $call
-     * @return object $this
+     * @return $this
      */
     public function setCallSubject($call)
     {
@@ -30,7 +31,7 @@ class Call extends AbstractPageEntity
 
     /**
      * @param string $phone
-     * @return object $this
+     * @return $this
      */
     public function setPhoneNumber($phone)
     {
@@ -41,6 +42,10 @@ class Call extends AbstractPageEntity
         return $this;
     }
 
+    /**
+     * @param $contact
+     * @return $this
+     */
     public function setContact($contact)
     {
         $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_call_form_relatedContact')]/a")->click();
@@ -52,5 +57,6 @@ class Call extends AbstractPageEntity
             "Assigned to autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$contact}')]")->click();
+        return $this;
     }
 }

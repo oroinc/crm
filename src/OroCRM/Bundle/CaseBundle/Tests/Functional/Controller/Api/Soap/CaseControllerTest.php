@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller\Api\Soap;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
+use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
 use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
 use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 
@@ -21,7 +22,8 @@ class CaseControllerTest extends WebTestCase
         'description' => 'New description',
         'owner'       => 1,
         'source'      => CaseSource::SOURCE_EMAIL,
-        'status'      => CaseStatus::STATUS_OPEN
+        'status'      => CaseStatus::STATUS_OPEN,
+        'priority'    => CasePriority::PRIORITY_NORMAL,
     ];
 
     protected function setUp()
