@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\TestsBundle\Tests\Selenium\Acl;
+namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium\Acl;
 
 use Oro\Bundle\DataAuditBundle\Tests\Selenium\Pages\DataAudit;
 use Oro\Bundle\NavigationBundle\Tests\Selenium\Pages\Navigation;
@@ -24,6 +24,7 @@ class AclTest extends Selenium2TestCase
     {
         $randomPrefix = mt_rand();
         $login = $this->login();
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->add()
             ->setLabel($this->newRole['LABEL'] . $randomPrefix)
@@ -51,7 +52,7 @@ class AclTest extends Selenium2TestCase
         /** @var Users $login */
         $login->openUsers('Oro\Bundle\UserBundle')
             ->add()
-            ->assertTitle('Create User - Users - Users Management - System')
+            ->assertTitle('Create User - Users - User Management - System')
             ->setUsername($username)
             ->setOwner('Main')
             ->enable()
@@ -66,7 +67,7 @@ class AclTest extends Selenium2TestCase
             ->assertMessage('User saved')
             ->toGrid()
             ->close()
-            ->assertTitle('Users - Users Management - System');
+            ->assertTitle('Users - User Management - System');
 
         return $username;
     }
@@ -119,6 +120,7 @@ class AclTest extends Selenium2TestCase
     public function testEditRole($roleName)
     {
         $login = $this->login();
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
@@ -138,6 +140,7 @@ class AclTest extends Selenium2TestCase
     public function testViewAccountsContacts($username)
     {
         $login = new Login($this);
+
         $login->setUsername($username)
             ->setPassword('123123q')
             ->submit()
@@ -165,10 +168,12 @@ class AclTest extends Selenium2TestCase
     public function testEditUserProfile($username)
     {
         $login = new Login($this);
+        /** @var Login $login */
         $login = $login->setUsername($username)
             ->setPassword('123123q')
             ->submit();
 
+        /** @var User $login */
         $login->openUser('Oro\Bundle\UserBundle')
             ->viewInfo($username)
             ->checkRoleSelector();
