@@ -30,9 +30,7 @@ class ContactFixture implements TemplateFixtureInterface
     }
 
     /**
-     * Get fixtures for template data.
-     *
-     * @return \Iterator
+     * {@inheritdoc}
      */
     public function getData()
     {

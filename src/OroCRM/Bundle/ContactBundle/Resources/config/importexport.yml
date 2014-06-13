@@ -66,6 +66,9 @@ services:
     orocrm_contact.importexport.data_converter.contact:
         parent: oro_importexport.data_converter.configurable
 
+    orocrm_contact.importexport.template_fixture.data_converter.contact:
+        parent: oro_importexport.data_converter.template_fixture.configurable
+
     # Strategy
 #    orocrm_contact.importexport.strategy.import.contact.add_or_replace:
 #        class: %orocrm_contact.importexport.strategy.import.contact.add_or_replace.class%
@@ -100,6 +103,13 @@ services:
             - [setDataConverter, [@orocrm_contact.importexport.data_converter.contact]]
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_contact }
+
+    orocrm_contact.importexport.processor.export_template:
+        parent: oro_importexport.processor.export_abstract
+        calls:
+            - [setDataConverter, [@orocrm_contact.importexport.template_fixture.data_converter.contact]]
+        tags:
+            - { name: oro_importexport.processor, type: export_template, entity: %orocrm_contact.entity.class%, alias: orocrm_contact }
 
 #    orocrm_contact.importexport.processor.export:
 #        parent: oro_importexport.processor.export_abstract
