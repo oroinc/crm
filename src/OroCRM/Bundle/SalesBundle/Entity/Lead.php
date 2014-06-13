@@ -486,7 +486,7 @@ class Lead extends ExtendLead implements FullNameInterface
 
     /**
      * @param string $namePrefix
-     * @return Contact
+     * @return Lead
      */
     public function setNamePrefix($namePrefix)
     {
@@ -536,7 +536,7 @@ class Lead extends ExtendLead implements FullNameInterface
 
     /**
      * @param string $middleName
-     * @return Contact
+     * @return Lead
      */
     public function setMiddleName($middleName)
     {
@@ -570,7 +570,7 @@ class Lead extends ExtendLead implements FullNameInterface
 
     /**
      * @param string $nameSuffix
-     * @return Contact
+     * @return Lead
      */
     public function setNameSuffix($nameSuffix)
     {

@@ -7,6 +7,7 @@
     {% include 'OroImportExportBundle:ImportExport:buttons.html.twig' with {
         entity_class: entity_class,
         exportProcessor: 'orocrm_sales_lead',
+        exportTemplateProcessor: 'orocrm_sales_lead',
         importProcessor: 'orocrm_sales_lead',
         importTitle: 'oro.importexport.import.entity'|trans({'%entityName%': 'orocrm.sales.lead.entity_plural_label'|trans}),
         dataGridName: gridName
