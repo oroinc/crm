@@ -30,6 +30,7 @@ use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImpo
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  * TODO Should be fixed during CRM-1185
  */
 class ReverseWriter implements ItemWriterInterface
@@ -216,7 +217,6 @@ class ReverseWriter implements ItemWriterInterface
      * @param Customer $customer
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @throws \LogicException
      */
     protected function processAddresses($addresses, $syncPriority, Customer $customer)

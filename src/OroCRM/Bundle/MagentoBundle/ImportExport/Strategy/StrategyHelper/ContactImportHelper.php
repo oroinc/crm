@@ -156,6 +156,7 @@ class ContactImportHelper
                         $contactPhone->setPhone($remoteAddress->getPhone());
                         $contactPhone->setPrimary(!$contact->getPrimaryPhone());
                         $contact->addPhone($contactPhone);
+                        $localAddress->setContactPhone($contactPhone);
                     }
 
                     $this->prepareAddress($address);
