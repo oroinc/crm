@@ -52,6 +52,11 @@ class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
     protected $status;
 
     /**
+     * @Soap\ComplexType("string", nillable=true)
+     */
+    protected $priority;
+
+    /**
      * @Soap\ComplexType("dateTime", nillable=true)
      */
     protected $createdAt;
@@ -84,7 +89,8 @@ class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
         $this->relatedContact     = $this->getEntityId($case->getRelatedContact());
         $this->relatedAccount     = $this->getEntityId($case->getRelatedAccount());
         $this->source             = $case->getSource() ? $case->getSource()->getName() : null;
-        $this->source             = $case->getStatus() ? $case->getStatus()->getName() : null;
+        $this->status             = $case->getStatus() ? $case->getStatus()->getName() : null;
+        $this->priority           = $case->getPriority() ? $case->getPriority()->getName() : null;
         $this->createdAt          = $case->getCreatedAt();
         $this->updatedAt          = $case->getUpdatedAt();
         $this->reportedAt         = $case->getReportedAt();
