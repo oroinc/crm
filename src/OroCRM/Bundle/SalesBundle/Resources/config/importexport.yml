@@ -1,5 +1,6 @@
 parameters:
     orocrm_sales.importexport.templatefixture.lead_fixture.class: OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture\LeadFixture
+    orocrm_sales.importexport.templatefixture.opportunity_fixture.class: OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture\OpportunityFixture
 
 services:
     orocrm_sales.importexport.templatefixture.lead_fixture:
@@ -11,6 +12,13 @@ services:
         tags:
             - { name: oro_importexport.template_fixture, entity: %orocrm_sales.lead.entity.class% }
 
+    orocrm_sales.importexport.templatefixture.opportunity_fixture:
+        class: %orocrm_sales.importexport.templatefixture.opportunity_fixture.class%
+        arguments:
+            - @orocrm_sales.importexport.templatefixture.lead_fixture
+        tags:
+            - { name: oro_importexport.template_fixture, entity: %orocrm_sales.opportunity.class% }
+
     # Converter
     orocrm_sales.importexport.data_converter.lead:
         parent: oro_importexport.data_converter.configurable
@@ -19,6 +27,9 @@ services:
         parent: oro_importexport.data_converter.configurable
 
     orocrm_sales.importexport.template_fixture.data_converter.lead:
+        parent: oro_importexport.data_converter.template_fixture.configurable
+
+    orocrm_sales.importexport.template_fixture.data_converter.opportunity:
         parent: oro_importexport.data_converter.template_fixture.configurable
 
     # Export processor
@@ -36,12 +47,19 @@ services:
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_sales.opportunity.class%, alias: orocrm_sales_opportunity }
 
-    orocrm_contact.importexport.processor.export_template:
+    orocrm_sales.importexport.processor.export_template.lead:
         parent: oro_importexport.processor.export_abstract
         calls:
             - [setDataConverter, [@orocrm_sales.importexport.template_fixture.data_converter.lead]]
         tags:
             - { name: oro_importexport.processor, type: export_template, entity: %orocrm_sales.lead.entity.class%, alias: orocrm_sales_lead }
+
+    orocrm_sales.importexport.processor.export_template.opportunity:
+        parent: oro_importexport.processor.export_abstract
+        calls:
+            - [setDataConverter, [@orocrm_sales.importexport.template_fixture.data_converter.opportunity]]
+        tags:
+            - { name: oro_importexport.processor, type: export_template, entity: %orocrm_sales.opportunity.class%, alias: orocrm_sales_opportunity }
 
     # Strategy
     orocrm_sales.importexport.strategy.contact.add_or_replace.lead:
