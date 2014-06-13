@@ -41,8 +41,20 @@ orocrm:
             updated_at.label:               Updated At
             id.label:                       Id
 
+        casecomment:
+            #
+            # OroCRM/Bundle/CaseBundle/Entity/CaseComment
+            #
+            entity_label:                   Case Comment
+            entity_plural_label:            Case Comments
+            entity_description:             Represent case comment
+            body.label:                     Text
+            public.label:                   Is Public
+            contact.label:                  Contact Author
+            owner.label:                    Owner
+
         block:
             general: General Information
-            additional: Additional Information
+            comments: Comments
 
         saved_message: Case saved

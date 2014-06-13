@@ -12,16 +12,20 @@ use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
  * @outputBuffering enabled
  * @dbIsolation
  */
-class CaseControllerTest extends WebTestCase
+class CommentControllerTest extends WebTestCase
 {
     /**
      * @var array
      */
-    protected $caseCreateData = [
-        'subject'     => 'New case',
-        'description' => 'New description',
-        'owner'       => 1,
+    protected $commentCreateData = [
+        'body'  => 'New comment',
+        'owner' => 1,
     ];
+
+    /**
+     * @var int
+     */
+    protected static $caseId;
 
     /**
      * @var int
@@ -43,12 +47,18 @@ class CaseControllerTest extends WebTestCase
 
     protected function postFixtureLoad()
     {
+        $case = $this->getContainer()->get('doctrine.orm.entity_manager')
+            ->getRepository('OroCRMCaseBundle:CaseEntity')
+            ->findOneBySubject('Case #1');
+
         $contact = $this->getContainer()->get('doctrine.orm.entity_manager')
             ->getRepository('OroCRMContactBundle:Contact')
             ->findOneByEmail('daniel.case@example.com');
 
+        $this->assertNotNull($case);
         $this->assertNotNull($contact);
 
+        self::$caseId = $case->getId();
         self::$contactId = $contact->getId();
     }
 
@@ -57,7 +67,7 @@ class CaseControllerTest extends WebTestCase
      */
     public function testCreate()
     {
-        $result = $this->soapClient->createCase($this->caseCreateData);
+        $result = $this->soapClient->createCaseComment(self::$caseId, $this->commentCreateData);
         $this->assertGreaterThan(0, $result, $this->soapClient->__getLastResponse());
 
         return $result;
@@ -69,31 +79,26 @@ class CaseControllerTest extends WebTestCase
      */
     public function testCget($id)
     {
-        $result = $this->soapClient->getCases();
+        $result = $this->soapClient->getCaseComments(self::$caseId);
         $result = $this->valueToArray($result);
-        $cases = $result['item'];
+        $comments = $result['item'];
 
-        $this->assertCount(4, $cases);
+        $this->assertCount(4, $comments);
 
         $this->assertArrayIntersectEquals(
             array(
                 'id' => $id,
-                'subject' => $this->caseCreateData['subject'],
-                'description' => $this->caseCreateData['description'],
+                'body' => $this->commentCreateData['body'],
+                'public' => true,
+                'case' => self::$caseId,
                 'owner' => self::$adminUserId,
-                'relatedContact' => null,
-                'relatedAccount' => null,
-                'source' => CaseSource::SOURCE_OTHER,
-                'status' => CaseStatus::STATUS_OPEN,
-                'priority' => CasePriority::PRIORITY_NORMAL,
+                'contact' => null,
                 'updatedAt' => null,
-                'closedAt' => null,
             ),
-            $cases[0]
+            $comments[0]
         );
 
-        $this->assertNotEmpty($cases[0]['createdAt']);
-        $this->assertNotEmpty($cases[0]['reportedAt']);
+        $this->assertNotEmpty($comments[0]['createdAt']);
     }
 
     /**
@@ -103,64 +108,52 @@ class CaseControllerTest extends WebTestCase
      */
     public function testGet($id)
     {
-        $result = $this->soapClient->getCase($id);
-        $case = $this->valueToArray($result);
+        $result = $this->soapClient->getCaseComment($id);
+        $comment = $this->valueToArray($result);
 
         $this->assertArrayIntersectEquals(
             array(
                 'id' => $id,
-                'subject' => $this->caseCreateData['subject'],
-                'description' => $this->caseCreateData['description'],
+                'body' => $this->commentCreateData['body'],
+                'public' => true,
+                'case' => self::$caseId,
                 'owner' => self::$adminUserId,
-                'relatedContact' => null,
-                'relatedAccount' => null,
-                'source' => CaseSource::SOURCE_OTHER,
-                'status' => CaseStatus::STATUS_OPEN,
-                'priority' => CasePriority::PRIORITY_NORMAL,
+                'contact' => null,
                 'updatedAt' => null,
-                'closedAt' => null,
             ),
-            $case
+            $comment
         );
 
-        $this->assertNotEmpty($case['createdAt']);
-        $this->assertNotEmpty($case['reportedAt']);
+        $this->assertNotEmpty($comment['createdAt']);
 
-        return $case;
+        return $comment;
     }
 
     /**
      * @depends testGet
-     * @param array $originalCase
+     * @param array $originalComment
      * @return integer
      */
-    public function testUpdate(array $originalCase)
+    public function testUpdate(array $originalComment)
     {
-        $id = $originalCase['id'];
+        $id = $originalComment['id'];
 
         $updateData = [
-            'subject' => 'Updated subject',
-            'description' => 'Updated description',
-            'resolution' => 'Updated resolution',
-            'status' => CaseStatus::STATUS_CLOSED,
-            'priority' => CasePriority::PRIORITY_LOW,
-            'source' => CaseSource::SOURCE_WEB,
-            'relatedContact' => self::$contactId,
-            'assignedTo' => self::$adminUserId,
+            'body' => 'Updated comment',
+            'public' => false,
+            'contact' => self::$contactId
         ];
 
-        $result = $this->soapClient->updateCase($id, $updateData);
+        $result = $this->soapClient->updateCaseComment($id, $updateData);
         $this->assertTrue($result, $this->soapClient->__getLastResponse());
 
-        $updatedCase = $this->soapClient->getCase($id);
+        $updatedCase = $this->soapClient->getCaseComment($id);
         $updatedCase = $this->valueToArray($updatedCase);
 
         $this->assertNotEmpty($updatedCase['updatedAt']);
-        $this->assertNotEmpty($updatedCase['closedAt']);
 
-        $expectedCase = array_merge($originalCase, $updateData);
+        $expectedCase = array_merge($originalComment, $updateData);
         $expectedCase['updatedAt'] = $updatedCase['updatedAt'];
-        $expectedCase['closedAt'] = $updatedCase['closedAt'];
 
         return $id;
     }
@@ -171,10 +164,10 @@ class CaseControllerTest extends WebTestCase
      */
     public function testDelete($id)
     {
-        $result = $this->soapClient->deleteCase($id);
+        $result = $this->soapClient->deleteCaseComment($id);
         $this->assertTrue($result);
 
         $this->setExpectedException('\SoapFault', 'Record with ID "' . $id . '" can not be found');
-        $this->soapClient->getCase($id);
+        $this->soapClient->getCaseComment($id);
     }
 }

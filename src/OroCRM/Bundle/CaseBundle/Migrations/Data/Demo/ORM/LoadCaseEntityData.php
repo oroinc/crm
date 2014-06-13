@@ -7,11 +7,14 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 
+use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
 class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInterface
 {
-    const FIXTURES_COUNT = 20;
+    const CASES_COUNT = 20;
+    const MIN_COMMENTS_PER_CASE = 0;
+    const MAX_COMMENTS_PER_CASE = 20;
 
     /**
      * @var array
@@ -42,7 +45,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     /**
      * @var array
      */
-    static protected $fixtureDescriptions = array(
+    static protected $fixtureText = array(
         'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.',
         'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
         'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.',
@@ -74,6 +77,11 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     );
 
     /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    /**
      * @var array
      */
     protected $entitiesCount;
@@ -95,72 +103,106 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
      */
     public function load(ObjectManager $manager)
     {
-        for ($i = 0; $i < self::FIXTURES_COUNT; ++$i) {
-            $owner = $this->getRandomEntity('OroUserBundle:User', $manager);
-            $assignedTo = $this->getRandomEntity('OroUserBundle:User', $manager);
-            $source = $this->getRandomEntity('OroCRMCaseBundle:CaseSource', $manager);
-            $status = $this->getRandomEntity('OroCRMCaseBundle:CaseStatus', $manager);
-            $priority = $this->getRandomEntity('OroCRMCaseBundle:CasePriority', $manager);
+        $this->entityManager = $manager;
 
-            if (!$owner || !$assignedTo || !$source || !$status) {
-                // If we don't have users, sources and status we cannot load fixture cases
-                break;
-            }
+        for ($i = 0; $i < self::CASES_COUNT; ++$i) {
+            $subject = self::$fixtureSubjects[$i];
+            $description = self::$fixtureText[$i];
 
-            if ($manager->getRepository('OroCRMCaseBundle:CaseEntity')->findOneBySubject(self::$fixtureSubjects[$i])) {
+            if ($manager->getRepository('OroCRMCaseBundle:CaseEntity')->findOneBySubject($subject)) {
                 // Case with this title is already exist
                 continue;
             }
 
-            $case = new CaseEntity();
-            $case->setSubject(self::$fixtureSubjects[$i]);
-            $case->setDescription(self::$fixtureDescriptions[$i]);
-            $case->setReportedAt($this->getRandomDate());
-
-            $case->setOwner($owner);
-            $case->setAssignedTo($assignedTo);
-            $case->setSource($source);
-            $case->setStatus($status);
-            $case->setPriority($priority);
-
-            switch (rand(0, 1)) {
-                case 0:
-                    $contact = $this->getRandomEntity('OroCRMContactBundle:Contact', $manager);
-                    if ($contact) {
-                        $case->setRelatedContact($contact);
-                    }
-                    break;
-                case 1:
-                default:
-                    $account = $this->getRandomEntity('OroCRMAccountBundle:Account', $manager);
-                    if ($account) {
-                        $case->setRelatedAccount($account);
-                    }
-                    break;
-            }
-
-            $manager->persist($case);
+            $case = $this->createCaseEntity($subject);
+            $this->entityManager->persist($case);
         }
 
         $manager->flush();
     }
 
     /**
+     * @param string $subject
+     * @return CaseEntity|null
+     */
+    protected function createCaseEntity($subject)
+    {
+        $owner = $this->getRandomEntity('OroUserBundle:User');
+        $assignedTo = $this->getRandomEntity('OroUserBundle:User');
+        $source = $this->getRandomEntity('OroCRMCaseBundle:CaseSource');
+        $status = $this->getRandomEntity('OroCRMCaseBundle:CaseStatus');
+        $priority = $this->getRandomEntity('OroCRMCaseBundle:CasePriority');
+
+        if (!$owner || !$assignedTo || !$source || !$status) {
+            // If we don't have users, sources and status we cannot load fixture cases
+            return null;
+        }
+
+        $case = new CaseEntity();
+        $case->setSubject($subject);
+        $case->setDescription($this->getRandomText());
+        $case->setReportedAt($this->getRandomDate());
+
+        $case->setOwner($owner);
+        $case->setAssignedTo($assignedTo);
+        $case->setSource($source);
+        $case->setStatus($status);
+        $case->setPriority($priority);
+
+        switch (rand(0, 1)) {
+            case 0:
+                $contact = $this->getRandomEntity('OroCRMContactBundle:Contact');
+                $case->setRelatedContact($contact);
+                break;
+            case 1:
+            default:
+                $account = $this->getRandomEntity('OroCRMAccountBundle:Account');
+                $case->setRelatedAccount($account);
+                break;
+        }
+
+        $commentsCount = rand(self::MIN_COMMENTS_PER_CASE, self::MAX_COMMENTS_PER_CASE);
+        for ($i = 0; $i < $commentsCount; ++$i) {
+            $comment = $this->createComment($this->getRandomText());
+            $case->addComment($comment);
+        }
+
+        return $case;
+    }
+
+    /**
+     * @param string $text
+     * @return CaseComment
+     */
+    protected function createComment($text)
+    {
+        $comment = new CaseComment();
+        $comment->setBody($text);
+        $comment->setOwner($this->getRandomEntity('OroUserBundle:User'));
+        $comment->setPublic(rand(0, 3));
+        $comment->setCreatedAt($this->getRandomDate());
+        if (rand(0, 3) == 3) {
+            $contact = $this->getRandomEntity('OroCRMContactBundle:Contact');
+            $comment->setContact($contact);
+        }
+        return $comment;
+    }
+
+    /**
      * @param string $entityName
-     * @param EntityManager $manager
      * @return object|null
      */
-    protected function getRandomEntity($entityName, EntityManager $manager)
+    protected function getRandomEntity($entityName)
     {
-        $count = $this->getEntityCount($entityName, $manager);
+        $count = $this->getEntityCount($entityName);
 
         if ($count) {
-            return $manager->createQueryBuilder()
+            return $this->entityManager->createQueryBuilder()
                 ->select('e')
                 ->from($entityName, 'e')
                 ->setFirstResult(rand(0, $count - 1))
                 ->setMaxResults(1)
-                ->orderBy('e.' . $manager->getClassMetadata($entityName)->getSingleIdentifierFieldName())
+                ->orderBy('e.' . $this->entityManager->getClassMetadata($entityName)->getSingleIdentifierFieldName())
                 ->getQuery()
                 ->getSingleResult();
         }
@@ -170,13 +212,12 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
 
     /**
      * @param string $entityName
-     * @param EntityManager $manager
      * @return int
      */
-    protected function getEntityCount($entityName, EntityManager $manager)
+    protected function getEntityCount($entityName)
     {
         if (!isset($this->entitiesCount[$entityName])) {
-            $this->entitiesCount[$entityName] = (int)$manager->createQueryBuilder()
+            $this->entitiesCount[$entityName] = (int)$this->entityManager->createQueryBuilder()
                 ->select('COUNT(e)')
                 ->from($entityName, 'e')
                 ->getQuery()
@@ -195,5 +236,13 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
         $result->sub(new \DateInterval(sprintf('P%dDT%dM', rand(0, 30), rand(0, 1440))));
 
         return $result;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getRandomText()
+    {
+        return self::$fixtureText[rand(0, count(self::$fixtureText) - 1)];
     }
 }

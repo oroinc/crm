@@ -1,0 +1,83 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+<div class="widget-content notes">
+    {% include 'OroNoteBundle:Note:js/list.js.twig' with {'id': 'template-note-list'} %}
+    {% include 'OroNoteBundle:Note:js/view.js.twig' with {'id': 'template-note-item'} %}
+
+    <div class="widget-actions">
+        {{ UI.clientLink({
+            'aCss': 'collapse-all-button btn-mini',
+            'label' : 'Collapse All'|trans,
+            'dataAttributes': {'action-name': 'collapse_all'}
+        }) }}
+        {{ UI.clientLink({
+            'aCss': 'btn refresh-button icons-holder-text',
+            'iCss': 'icon-refresh',
+            'title' : 'Refresh'|trans,
+            'dataAttributes': {'action-name': 'refresh'}
+        }) }}
+        {{ UI.clientLink({
+            'aCss': 'btn sort-button icons-holder-text',
+            'iCss': 'icon-arrow-up',
+            'title' : 'Descending Order'|trans,
+            'dataAttributes': {
+                'action-name': 'toggle_sorting',
+                'title-alt': 'Ascending Order'|trans,
+                'icon-alt': 'icon-arrow-down'
+            }
+        }) }}
+    </div>
+    <div class="accordion" id="note-list"></div>
+
+    <script type="text/javascript">
+    require(['jquery', 'underscore', 'routing', 'oroui/js/mediator', 'oronote/js/note-list', 'oroui/js/widget-manager'],
+    function($, _, routing, mediator, NoteList, widgetManager) {
+        widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget){
+            /** @type oronote.NoteList */
+            var noteList = new NoteList({
+                el: '#note-list',
+                template: '#template-note-list',
+                itemTemplate: '#template-note-item',
+                labels: {
+                    addDialogTitle: {{ "oro.note.add_note_title"|trans|json_encode|raw }},
+                    editDialogTitle: {{ "oro.note.edit_note_title"|trans|json_encode|raw }},
+                    itemSaved: {{ "oro.note.note_saved"|trans|json_encode|raw }},
+                    itemRemoved: {{ "oro.note.note_removed"|trans|json_encode|raw }},
+                    deleteConfirmation: {{ "oro.note.note_delete_confirmation"|trans|json_encode|raw }}
+                },
+                urls: {
+                    list: {{ path('oro_note_notes', {
+                        'entityClass': oro_class_name(entity, true),
+                        'entityId': entity.id})|json_encode|raw
+                    }},
+                    createItem: {{ path('oro_note_create', {
+                        'entityClass': oro_class_name(entity, true),
+                        'entityId': entity.id})|json_encode|raw
+                    }},
+                    updateItem: function(model) {
+                        return routing.generate('oro_note_update', {'id': model.get('id')});
+                    },
+                    deleteItem: function(model) {
+                        return routing.generate('oro_api_delete_note', {'id': model.get('id')});
+                    }
+                }
+            });
+            widget.getAction('collapse_all', 'adopted', function(action) {
+                action.on('click', _.bind(noteList.collapseAll, noteList));
+            });
+            widget.getAction('refresh', 'adopted', function(action) {
+                action.on('click', _.bind(noteList.refresh, noteList));
+            });
+            widget.getAction('toggle_sorting', 'adopted', function(action) {
+                action.on('click', _.bind(noteList.toggleSorting, noteList));
+            });
+            noteList
+                .render()
+                .getCollection()
+                .reset({{ render(path('oro_note_notes', {
+                    entityClass: oro_class_name(entity, true),
+                    entityId: entity.id
+                })) }});
+        });
+    });
+    </script>
+</div>

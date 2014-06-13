@@ -151,7 +151,7 @@ class CaseComment
      * @param CaseEntity|null $case
      * @return CaseComment
      */
-    public function setCase(CaseEntity $case = null)
+    public function setCase($case)
     {
         $this->case = $case;
 
@@ -170,7 +170,7 @@ class CaseComment
      * @param Contact|null $contact
      * @return CaseComment
      */
-    public function setContact(Contact $contact = null)
+    public function setContact($contact)
     {
         $this->contact = $contact;
 

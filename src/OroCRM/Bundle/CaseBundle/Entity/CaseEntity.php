@@ -177,6 +177,14 @@ class CaseEntity extends ExtendCaseEntity
      */
     protected $closedAt;
 
+    /**
+     * Flag to update closedAt field when status is set to closed.
+     * Use null instead of false because of behaviour of BeSimpleSoapBundle.
+     *
+     * @var bool
+     */
+    private $updateClosedAt = null;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -288,7 +296,9 @@ class CaseEntity extends ExtendCaseEntity
             $newStatus->getName() == CaseStatus::STATUS_CLOSED &&
             !$newStatus->isEqualTo($oldStatus)
         ) {
-            $this->closedAt = new \DateTime();
+            $this->updateClosedAt = true;
+        } else {
+            $this->updateClosedAt = null;
         }
     }
 
@@ -323,7 +333,7 @@ class CaseEntity extends ExtendCaseEntity
      * @param Contact|null $relatedContact
      * @return CaseEntity
      */
-    public function setRelatedContact(Contact $relatedContact = null)
+    public function setRelatedContact($relatedContact = null)
     {
         $this->relatedContact = $relatedContact;
 
@@ -342,7 +352,7 @@ class CaseEntity extends ExtendCaseEntity
      * @param Account|null $relatedAccount
      * @return CaseEntity
      */
-    public function setRelatedAccount(Account $relatedAccount = null)
+    public function setRelatedAccount($relatedAccount = null)
     {
         $this->relatedAccount = $relatedAccount;
 
@@ -480,6 +490,10 @@ class CaseEntity extends ExtendCaseEntity
     {
         $this->closedAt = $closedAt;
 
+        if ($this->closedAt) {
+            unset($this->updateClosedAt);
+        }
+
         return $this;
     }
 
@@ -498,6 +512,9 @@ class CaseEntity extends ExtendCaseEntity
     {
         $this->createdAt  = $this->createdAt ? $this->createdAt : new \DateTime('now', new \DateTimeZone('UTC'));
         $this->reportedAt = $this->reportedAt? $this->reportedAt : new \DateTime('now', new \DateTimeZone('UTC'));
+        if ($this->updateClosedAt && !$this->closedAt) {
+            $this->setClosedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+        }
     }
 
     /**
@@ -506,5 +523,8 @@ class CaseEntity extends ExtendCaseEntity
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        if ($this->updateClosedAt) {
+            $this->setClosedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+        }
     }
 }

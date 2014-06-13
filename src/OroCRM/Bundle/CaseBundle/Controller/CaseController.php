@@ -2,10 +2,10 @@
 
 namespace OroCRM\Bundle\CaseBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -101,41 +101,21 @@ class CaseController extends Controller
      */
     protected function update(CaseEntity $case)
     {
-        $form = $this->createForm(
-            $this->get('orocrm_case.form.type.case'),
-            $case
-        );
+        if ($this->get('orocrm_case.form.handler.entity')->process($case)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.case.saved_message')
+            );
 
-        $request = $this->getRequest();
-        if ($request->isMethod('POST')) {
-            $form->submit($request);
-            if ($form->isValid()) {
-                $this->getDoctrine()->getManager()->persist($case);
-                $this->getDoctrine()->getManager()->flush();
-
-                if (!$this->getRequest()->request->has('_widgetContainer')) {
-                    $this->get('session')->getFlashBag()->add(
-                        'success',
-                        $this->get('translator')->trans('orocrm.case.saved_message')
-                    );
-
-                    return $this->get('oro_ui.router')->redirectAfterSave(
-                        [
-                            'route'      => 'orocrm_case_update',
-                            'parameters' => ['id' => $case->getId()],
-                        ],
-                        [
-                            'route'      => 'orocrm_case_view',
-                            'parameters' => ['id' => $case->getId()],
-                        ]
-                    );
-                }
-            }
+            return $this->get('oro_ui.router')->redirectAfterSave(
+                ['route' => 'orocrm_case_update', 'parameters' => ['id' => $case->getId()]],
+                ['route' => 'orocrm_case_view', 'parameters' => ['id' => $case->getId()]]
+            );
         }
 
-        return [
-            'form'   => $form->createView(),
-            'entity' => $case
-        ];
+        return array(
+            'entity' => $case,
+            'form'   => $this->get('orocrm_sales.lead.form')->createView()
+        );
     }
 }
