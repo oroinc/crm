@@ -48,8 +48,6 @@ services:
             - [setDataConverter, [@orocrm_contact.importexport.data_converter.contact]]
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_contact }
-<<<<<<< HEAD
-=======
 
     orocrm_contact.importexport.processor.export_template:
         parent: oro_importexport.processor.export_abstract
@@ -57,11 +55,3 @@ services:
             - [setDataConverter, [@orocrm_contact.importexport.template_fixture.data_converter.contact]]
         tags:
             - { name: oro_importexport.processor, type: export_template, entity: %orocrm_contact.entity.class%, alias: orocrm_contact }
-
-#    orocrm_contact.importexport.processor.export:
-#        parent: oro_importexport.processor.export_abstract
-#        calls:
-#            - [setDataConverter, [@orocrm_contact.importexport.data_converter.contact]]
-#        tags:
-#            - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_contact }
->>>>>>> a019757e3c52b199f26df63d6d5c3396753b5572
