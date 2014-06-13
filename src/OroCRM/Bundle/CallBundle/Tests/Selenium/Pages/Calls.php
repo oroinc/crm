@@ -34,12 +34,13 @@ class Calls extends AbstractPageFilteredGrid
 
     /**
      * @param array $entityData
-     * @return mixed|Call
+     * @return Call
      */
     public function open($entityData = array())
     {
-        $cart = $this->getEntity($entityData);
+        $cart = $this->getEntity($entityData, 3);
         $cart->click();
+        sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
 
