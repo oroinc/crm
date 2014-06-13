@@ -251,7 +251,7 @@ class Account extends ExtendAccount implements Taggable
 
     /**
      * @param int $id
-     * @return mixed
+     * @return Account
      */
     public function setId($id)
     {
