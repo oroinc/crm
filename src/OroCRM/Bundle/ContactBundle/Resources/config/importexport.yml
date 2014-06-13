@@ -11,7 +11,16 @@ parameters:
     orocrm_contact.importexport.strategy.import.contact.helper.class: OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import\ContactImportStrategyHelper
     orocrm_contact.importexport.strategy.import.contact.add_or_replace.class: OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import\AddOrReplaceStrategy
 
+    orocrm_contact.importexport.templatefixture.contactfixture.class: OroCRM\Bundle\ContactBundle\ImportExport\TemplateFixture\ContactFixture
+
 services:
+    orocrm_contact.importexport.templatefixture.contactfixture:
+        class: %orocrm_contact.importexport.templatefixture.contactfixture.class%
+        arguments:
+            - @oro_user.importexport.templatefixture.userfixture
+        tags:
+            - { name: oro_importexport.template_fixture, entity: %orocrm_contact.entity.class% }
+
     # Normalizers
     orocrm_contact.importexport.normalizer.contact:
         class: %orocrm_contact.importexport.normalizer.contact.class%
