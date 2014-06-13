@@ -44,7 +44,7 @@
                             navigation.processClicks($('.order-link'));
                             },
                             chooseMessage = function (data) {
-                                if (navigation.loadingMask.$el.is(':visible')) {
+                                if (navigation.isInAction()) {
                                     mediator.once('hash_navigation_request:complete', function() {showMessage(data)});
                                 } else {
                                     showMessage(data);
@@ -63,7 +63,7 @@
                                     dataType: 'json',
                                     url: {{ syncURL|json_encode|raw}},
                                     success: function(data) {
-                                        if (navigation.loadingMask.$el.is(':visible')) {
+                                        if (navigation.isInAction()) {
                                             mediator.once('hash_navigation_request:complete', function() {showMessage(data)});
                                         } else {
                                             showMessage(data);

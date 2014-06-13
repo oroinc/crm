@@ -75,12 +75,12 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
             });
             var navigation = Navigation.getInstance();
             if (navigation) {
-                navigation.loadingMask.show();
+                navigation.showLoading();
             }
             $.post(this.getUrl(typeData), data, _.bind(this.responseHandler, this), 'json')
                 .always(_.bind(function (respose, status) {
                     if (navigation) {
-                        navigation.loadingMask.hide();
+                        navigation.hideLoading();
                     }
                     if (status !== 'success') {
                         this.renderResult('error', __('orocrm.magento.error'));
