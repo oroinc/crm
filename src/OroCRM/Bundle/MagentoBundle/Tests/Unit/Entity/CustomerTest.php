@@ -54,4 +54,30 @@ class CustomerTest extends AbstractEntityTestCase
         $this->assertInstanceOf('Doctrine\Common\Collections\Collection', $this->entity->getAddresses());
         $this->assertFalse($this->entity->getAddressByOriginId(1));
     }
+
+    public function getGetWebsiteName()
+    {
+        $this->assertNull($this->entity->getWebsiteName());
+
+        $expectedValue = 'test';
+        $website = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Website');
+        $website->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue($expectedValue));
+
+        $this->assertEquals($expectedValue, $website->getWebsiteName());
+    }
+
+    public function getGetStoreName()
+    {
+        $this->assertNull($this->entity->getStoreName());
+
+        $expectedValue = 'test';
+        $website = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Store');
+        $website->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue($expectedValue));
+
+        $this->assertEquals($expectedValue, $website->getStoreName());
+    }
 }

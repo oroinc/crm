@@ -414,6 +414,11 @@ orocrm:
         account:
             no_customers_exist: No customers exist
 
+        form:
+            choose_order:    Choose an order...
+            choose_customer: Choose a customer...
+            choose_cart: Choose a cart...
+
         menu.web_customers: Web Customers
         controller:
             transport_not_configure:       Unable to handle your request. Invalid channel configuration detected.
@@ -423,3 +428,10 @@ orocrm:
             synchronization_success:       Data successfully synchronized.
             synchronization_failed_status: Cart data is not up to date
         ping_site_error: Unable to load form
+
+        order_information: Order Information
+        customer_information: Customer Information
+        general_information: General Information
+        cart_information: Cart Information
+        communications: Communications
+        entity_number: %entityName% %entityNumber%

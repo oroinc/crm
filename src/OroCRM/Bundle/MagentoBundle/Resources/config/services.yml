@@ -10,6 +10,9 @@ parameters:
     orocrm_magento.form.type.order_place.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\OrderPlaceType
     orocrm_magento.form.type.soap_transport_setting.class:                  OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
     orocrm_magento.form.subscriber.soap_transport_setting.class:            OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
+    orocrm_magento.form.type.order_select.class:                            OroCRM\Bundle\MagentoBundle\Form\Type\OrderSelectType
+    orocrm_magento.form.type.customer_select.class:                         OroCRM\Bundle\MagentoBundle\Form\Type\CustomerSelectType
+    orocrm_magento.form.type.cart_select.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\CartSelectType
 
     # event listeners
     orocrm_magento.event_listener.navigation.class:                         OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener
@@ -75,10 +78,53 @@ services:
         tags:
             - { name: form.type, alias: orocrm_magento_soap_transport_setting_form_type }
 
+    orocrm_magento.form.type.order_select:
+        class: %orocrm_magento.form.type.order_select.class%
+        tags:
+            - { name: form.type, alias: orocrm_order_select }
+
+    orocrm_magento.form.type.customer_select:
+        class: %orocrm_magento.form.type.customer_select.class%
+        tags:
+            - { name: form.type, alias: orocrm_customer_select }
+
+    orocrm_magento.form.type.cart_select:
+        class: %orocrm_magento.form.type.cart_select.class%
+        tags:
+            - { name: form.type, alias: orocrm_cart_select }
+
     orocrm_magento.form.type.order_place:
         class: %orocrm_magento.form.type.order_place.class%
         tags:
             - { name: form.type, alias: orocrm_magento_order_place_form_type }
+
+    # Search handler
+    orocrm_magento.form.autocomplete.order.search_handler:
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - %orocrm_magento.order.entity.class%
+            - ["incrementId"]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: orocrm_magento.orders, acl_resource: orocrm_magento_order_view }
+        lazy: true
+        
+    orocrm_magento.form.autocomplete.customer.search_handler:
+        parent: oro_form.autocomplete.full_name.search_handler
+        arguments:
+            - %orocrm_magento.customer.entity.class%
+            - ["namePrefix", "firstName", "middleName", "lastName", "nameSuffix"]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: orocrm_magento.customers, acl_resource: orocrm_magento_customer_view }
+        lazy: true
+        
+    orocrm_magento.form.autocomplete.cart.search_handler:
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - %orocrm_magento.cart.entity.class%
+            - ["originId"]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: orocrm_magento.carts, acl_resource: orocrm_magento_cart_view }
+        lazy: true
 
     # event listeners
     orocrm_magento.event_listener.navigation:

@@ -1,7 +1,16 @@
 parameters:
     orocrm_contact.importexport.normalizer.contact.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer
 
+    orocrm_contact.importexport.templatefixture.contactfixture.class: OroCRM\Bundle\ContactBundle\ImportExport\TemplateFixture\ContactFixture
+
 services:
+    orocrm_contact.importexport.templatefixture.contactfixture:
+        class: %orocrm_contact.importexport.templatefixture.contactfixture.class%
+        arguments:
+            - @oro_user.importexport.templatefixture.userfixture
+        tags:
+            - { name: oro_importexport.template_fixture, entity: %orocrm_contact.entity.class% }
+
     # Normalizers
     orocrm_contact.importexport.normalizer.contact:
         class: %orocrm_contact.importexport.normalizer.contact.class%
@@ -14,6 +23,9 @@ services:
     # Converter
     orocrm_contact.importexport.data_converter.contact:
         parent: oro_importexport.data_converter.configurable
+
+    orocrm_contact.importexport.template_fixture.data_converter.contact:
+        parent: oro_importexport.data_converter.template_fixture.configurable
 
     # Strategy
     orocrm_contact.importexport.strategy.contact.add_or_replace:
@@ -36,3 +48,20 @@ services:
             - [setDataConverter, [@orocrm_contact.importexport.data_converter.contact]]
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_contact }
+<<<<<<< HEAD
+=======
+
+    orocrm_contact.importexport.processor.export_template:
+        parent: oro_importexport.processor.export_abstract
+        calls:
+            - [setDataConverter, [@orocrm_contact.importexport.template_fixture.data_converter.contact]]
+        tags:
+            - { name: oro_importexport.processor, type: export_template, entity: %orocrm_contact.entity.class%, alias: orocrm_contact }
+
+#    orocrm_contact.importexport.processor.export:
+#        parent: oro_importexport.processor.export_abstract
+#        calls:
+#            - [setDataConverter, [@orocrm_contact.importexport.data_converter.contact]]
+#        tags:
+#            - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_contact }
+>>>>>>> a019757e3c52b199f26df63d6d5c3396753b5572

@@ -1,5 +1,6 @@
 parameters:
     orocrm_account.importexport.account_normalizer.class: OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer
+    orocrm_account.importexport.templatefixture.contactfixture.class: OroCRM\Bundle\AccountBundle\ImportExport\TemplateFixture\AccountFixture
 
 services:
 #    orocrm_account.importexport.account_normalizer:
@@ -10,6 +11,9 @@ services:
     orocrm_account.importexport.data_converter:
         parent: oro_importexport.data_converter.configurable
 
+    orocrm_account.importexport.template_fixture.data_converter.contact:
+        parent: oro_importexport.data_converter.template_fixture.configurable
+
     # Export processor
     orocrm_account.importexport.processor.export:
         parent: oro_importexport.processor.export_abstract
@@ -18,5 +22,17 @@ services:
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_account.account.entity.class%, alias: orocrm_account }
 
+    orocrm_account.importexport.processor.export_template:
+        parent: oro_importexport.processor.export_abstract
+        calls:
+            - [setDataConverter, [@orocrm_account.importexport.template_fixture.data_converter.contact]]
+        tags:
+            - { name: oro_importexport.processor, type: export_template, entity: %orocrm_account.account.entity.class%, alias: orocrm_account }
 
-
+    orocrm_account.importexport.templatefixture.contactfixture:
+        class: %orocrm_account.importexport.templatefixture.contactfixture.class%
+        arguments:
+            - @oro_user.importexport.templatefixture.userfixture
+            - @orocrm_contact.importexport.templatefixture.contactfixture
+        tags:
+            - { name: oro_importexport.template_fixture, entity: %orocrm_account.account.entity.class% }

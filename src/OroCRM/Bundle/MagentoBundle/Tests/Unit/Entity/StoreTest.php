@@ -29,4 +29,17 @@ class StoreTest extends AbstractEntityTestCase
             'website' => ['website', $website, $website]
         ];
     }
+
+    public function getGetWebsiteName()
+    {
+        $this->assertNull($this->entity->getWebsiteName());
+
+        $expectedValue = 'test';
+        $website = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Website');
+        $website->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue($expectedValue));
+
+        $this->assertEquals($expectedValue, $website->getWebsiteName());
+    }
 }

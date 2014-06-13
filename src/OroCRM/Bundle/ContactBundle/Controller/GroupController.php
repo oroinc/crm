@@ -69,7 +69,9 @@ class GroupController extends Controller
      */
     public function indexAction()
     {
-        return [];
+        return [
+            'entity_class' => $this->container->getParameter('orocrm_contact.group.entity.class')
+        ];
     }
 
     /**
