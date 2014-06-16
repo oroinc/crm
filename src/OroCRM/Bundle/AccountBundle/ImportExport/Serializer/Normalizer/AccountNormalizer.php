@@ -7,6 +7,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Intl\Exception\NotImplementedException;
 
+use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\AbstractContextModeAwareNormalizer;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
@@ -140,6 +141,7 @@ class AccountNormalizer extends AbstractContextModeAwareNormalizer implements Se
      */
     protected function setObjectFieldsValues(Account $object, array $data, $format = null, array $context = array())
     {
+        /** @var Address $shippingAddress */
         $shippingAddress = $this->denormalizeObject(
             $data,
             'shipping_address',
@@ -151,6 +153,7 @@ class AccountNormalizer extends AbstractContextModeAwareNormalizer implements Se
             $object->setShippingAddress($shippingAddress);
         }
 
+        /** @var Address $billingAddress */
         $billingAddress = $this->denormalizeObject(
             $data,
             'billing_address',

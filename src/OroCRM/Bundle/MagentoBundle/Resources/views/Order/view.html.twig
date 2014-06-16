@@ -9,17 +9,17 @@
         'entity': entity,
         'indexPath': path('orocrm_magento_order_index'),
         'indexLabel': 'orocrm.magento.order.entity_plural_label'|trans,
-        'entityTitle': 'orocrm.magento.order.entity_label'|trans ~ ' ' ~ entity.incrementId
+        'entityTitle': 'orocrm.magento.entity_number'|trans({'%entityName%': 'orocrm.magento.order.entity_label'|trans, '%entityNumber%': entity.incrementId})
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
 
 {% block navButtons %}
     {{ UI.button({
-    'path':  path('orocrm_magento_order_actualize', {'id': entity.id}),
-    'label': 'orocrm.magento.order.refresh_label'|trans,
-    'title': 'orocrm.magento.order.refresh_label'|trans,
-    'iCss': 'icon-refresh'
+        'path':  path('orocrm_magento_order_actualize', {'id': entity.id}),
+        'label': 'orocrm.magento.order.refresh_label'|trans,
+        'title': 'orocrm.magento.order.refresh_label'|trans,
+        'iCss': 'icon-refresh'
     }) }}
 {% endblock navButtons %}
 
@@ -30,7 +30,7 @@
         {{ oro_widget_render({
             'widgetType': 'block',
             'url': path('orocrm_magento_order_widget_info', {id: entity.id}),
-            'title': 'Order Information'|trans
+            'title': 'orocrm.magento.order_information'|trans
         }) }}
     {% endset %}
     {% set generalSubblocks = generalSubblocks|merge([{'data' : [orderInformationWidget] }]) %}
@@ -40,7 +40,7 @@
             {{ oro_widget_render({
                 'widgetType': 'block',
                 'url': path('orocrm_magento_customer_info', {id: entity.customer.id}),
-                'title': 'Customer Information'|trans
+                'title': 'orocrm.magento.customer_information'|trans
             }) }}
         {% endset %}
         {% set generalSubblocks = generalSubblocks|merge([{'data' : [customerInformationWidget] }]) %}
@@ -48,7 +48,7 @@
 
     {% set dataBlocks = [
         {
-            'title': 'General Information'|trans,
+            'title': 'orocrm.magento.general_information'|trans,
             'class': 'active',
             'subblocks': generalSubblocks
         }
@@ -119,7 +119,7 @@
     {% if relatedInformation is not empty %}
         {% set dataBlocks = dataBlocks|merge([
             {
-                'title': 'Communications'|trans,
+                'title': 'orocrm.magento.communications'|trans,
                 'subblocks': relatedInformation
             }
         ]) %}

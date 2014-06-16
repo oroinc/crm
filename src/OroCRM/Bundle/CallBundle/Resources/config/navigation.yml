@@ -4,6 +4,7 @@ oro_menu_config:
             label: 'orocrm.call.menu.activities_tab.label'
             uri: '#'
             extras:
+                icon: icon-puzzle-piece
                 position: 30
         call_list:
             label: 'orocrm.call.entity_plural_label'

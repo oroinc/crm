@@ -359,7 +359,8 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
                                 'created_at' => null,
                                 'updated_at' => null,
                                 'is_default_billing' => false,
-                                'is_default_shipping' => false
+                                'is_default_shipping' => false,
+                                'telephone' => 'no phone',
                             ]
                     ]
                 )

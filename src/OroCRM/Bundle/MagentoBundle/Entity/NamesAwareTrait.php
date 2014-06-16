@@ -31,7 +31,7 @@ trait NamesAwareTrait
 
     /**
      * Update denormalized names based on current cart state
-     * See docblock for firstName property
+     * See doc block for firstName property
      */
     protected function updateNames()
     {
@@ -59,4 +59,20 @@ trait NamesAwareTrait
      * @return AbstractAddress
      */
     abstract public function getBillingAddress();
+
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
 }

@@ -4,6 +4,7 @@ oro_menu_config:
             label: 'orocrm.account.menu.customers_tab.label'
             uri: '#'
             extras:
+                icon: icon-group
                 position: 10
 
         account_list:
