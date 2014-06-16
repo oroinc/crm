@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
@@ -21,7 +22,6 @@ use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
-use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 
 /**
@@ -388,9 +388,9 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $account = $this->denormalizeObject(
             $data,
             'account',
-            AccountNormalizer::ACCOUNT_TYPE,
+            'OroCRM\Bundle\AccountBundle\Entity\Account',
             $format,
-            array_merge($context, ['mode' => AccountNormalizer::FULL_MODE])
+            array_merge($context, ['mode' => ConfigurableEntityNormalizer::FULL_MODE])
         );
         unset($data['account']);
 

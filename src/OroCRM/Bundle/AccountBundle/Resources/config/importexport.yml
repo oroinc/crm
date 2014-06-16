@@ -1,5 +1,4 @@
 parameters:
-    orocrm_account.importexport.account_normalizer.class: OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer
     orocrm_account.importexport.templatefixture.account_fixture.class: OroCRM\Bundle\AccountBundle\ImportExport\TemplateFixture\AccountFixture
 
 services:
