@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer;
 
-use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer as BaceNormalizer;
+use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer as BaseNormalizer;
 
-class AccountNormalizer extends BaceNormalizer
+class AccountNormalizer extends BaseNormalizer
 {
     /**
      * {@inheritdoc}
