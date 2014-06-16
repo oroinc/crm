@@ -62,6 +62,7 @@ class ContactNormalizer extends ConfigurableEntityNormalizer implements Serializ
 
         return $result;
     }
+
     /**
      * {@inheritdoc}
      */

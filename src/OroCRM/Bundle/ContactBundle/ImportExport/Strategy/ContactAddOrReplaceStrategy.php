@@ -30,14 +30,18 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     public function process($entity)
     {
         $entity = parent::process($entity);
-        $g = 1;
 
-        return $this->updateAddresses($entity);
+        if ($entity) {
+            $this
+                ->updateAddresses($entity);
+        }
+
+        return $entity;
     }
 
     /**
      * @param Contact $contact
-     * @return Contact
+     * @return ContactAddOrReplaceStrategy
      */
     protected function updateAddresses(Contact $contact)
     {
@@ -83,7 +87,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
             }
         }
 
-        return $contact;
+        return $this;
     }
 
     /**

@@ -106,7 +106,7 @@ class ContactFixture implements TemplateFixtureInterface
             ->addEmail(new ContactEmail('JerryAColeman@teleworm.us'))
             ->addPhone($primaryPhone)
             ->addPhone(new ContactPhone('914-412-0298'))
-            ->addPhone(new ContactPhone('310-430-7875'))
+            ->addPhone(new ContactPhone('310-430-7876'))
             ->addGroup(new Group('Marketing Group'))
             ->addGroup(new Group('Sales Group'))
             ->addAccount($accountOne)
