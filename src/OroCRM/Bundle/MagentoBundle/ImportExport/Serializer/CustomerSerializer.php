@@ -189,8 +189,9 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     }
 
     /**
-     * @param array $remoteData
+     * @param array   $remoteData
      * @param Address $localData
+     *
      * @return array
      */
     public function comparePhones($remoteData, $localData)
@@ -200,7 +201,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         if ($accessor->getValue($localData, 'phone') !== $remoteData['telephone']) {
             return [
                 'phone' => $remoteData['telephone'],
-                'contact_phone.phone' => $remoteData['telephone'],
             ];
         }
 
