@@ -18,7 +18,6 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 
 /**
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * TODO Should be fixed during CRM-1185
  */
 class ContactImportHelper
@@ -90,8 +89,7 @@ class ContactImportHelper
      * @param Customer $localData
      * @param Contact  $contact
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD)
      * TODO Should be fixed during CRM-1185
      */
     public function mergeObjects(Customer $remoteData, Customer $localData, Contact $contact)
@@ -151,7 +149,7 @@ class ContactImportHelper
 
                     if ($contactPhone) {
                         $this->mergeScalars(['phone'], $remoteAddress, $localAddress, $contactPhone);
-                    } elseif ($this->isRemotePrioritized() && $remoteAddress->getPhone()!=='no phone') {
+                    } elseif ($this->isRemotePrioritized() && $remoteAddress->getPhone() !== 'no phone') {
                         $contactPhone = new ContactPhone();
                         $contactPhone->setPhone($remoteAddress->getPhone());
                         $contactPhone->setPrimary(!$contact->getPrimaryPhone());
