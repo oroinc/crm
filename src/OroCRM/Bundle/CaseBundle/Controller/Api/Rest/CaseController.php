@@ -9,7 +9,6 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
@@ -19,7 +18,7 @@ use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
 /**
  * @Rest\RouteResource("case")
- * @Rest\NamePrefix("orocrm_api_")
+ * @Rest\NamePrefix("orocrm_case_api_")
  */
 class CaseController extends RestController implements ClassResourceInterface
 {
@@ -110,12 +109,7 @@ class CaseController extends RestController implements ClassResourceInterface
      *     description="Delete CaseEntity",
      *     resource=true
      * )
-     * @Acl(
-     *     id="orocrm_case_delete",
-     *     type="entity",
-     *     permission="DELETE",
-     *     class="OroCRMCaseBundle:CaseEntity"
-     * )
+     * @AclAncestor("orocrm_case_delete")
      * @return Response
      */
     public function deleteAction($id)

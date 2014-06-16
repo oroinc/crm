@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -30,12 +29,7 @@ class CaseController extends Controller
     /**
      * @Route("/view/{id}", name="orocrm_case_view", requirements={"id"="\d+"})
      * @Template
-     * @Acl(
-     *     id="orocrm_case_view",
-     *     type="entity",
-     *     permission="VIEW",
-     *     class="OroCRMCaseBundle:CaseEntity"
-     * )
+     * @AclAncestor("orocrm_case_view")
      */
     public function viewAction(CaseEntity $case)
     {
@@ -60,12 +54,7 @@ class CaseController extends Controller
      * Create case form
      *
      * @Route("/create", name="orocrm_case_create")
-     * @Acl(
-     *     id="orocrm_case_create",
-     *     type="entity",
-     *     permission="CREATE",
-     *     class="OroCRMCaseBundle:CaseEntity"
-     * )
+     * @AclAncestor("orocrm_case_create")
      * @Template("OroCRMCaseBundle:Case:update.html.twig")
      */
     public function createAction()
@@ -83,12 +72,7 @@ class CaseController extends Controller
     /**
      * @Route("/update/{id}", name="orocrm_case_update", requirements={"id"="\d+"})
      * @Template
-     * @Acl(
-     *     id="orocrm_case_update",
-     *     type="entity",
-     *     permission="EDIT",
-     *     class="OroCRMCaseBundle:CaseEntity"
-     * )
+     * @AclAncestor("orocrm_case_update")
      */
     public function updateAction(CaseEntity $case)
     {
@@ -104,7 +88,7 @@ class CaseController extends Controller
         if ($this->get('orocrm_case.form.handler.entity')->process($case)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('orocrm.case.saved_message')
+                $this->get('translator')->trans('orocrm.case.message.saved')
             );
 
             return $this->get('oro_ui.router')->redirectAfterSave(

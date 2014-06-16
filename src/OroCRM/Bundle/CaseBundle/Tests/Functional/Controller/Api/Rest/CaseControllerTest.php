@@ -60,7 +60,7 @@ class CaseControllerTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            $this->getUrl('orocrm_api_post_case'),
+            $this->getUrl('orocrm_case_api_post_case'),
             $request
         );
 
@@ -76,7 +76,7 @@ class CaseControllerTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_api_get_cases'),
+            $this->getUrl('orocrm_case_api_get_cases'),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -113,7 +113,7 @@ class CaseControllerTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_api_get_case', ['id' => $id]),
+            $this->getUrl('orocrm_case_api_get_case', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -163,7 +163,7 @@ class CaseControllerTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            $this->getUrl('orocrm_api_put_case', ['id' => $id]),
+            $this->getUrl('orocrm_case_api_put_case', ['id' => $id]),
             ['case' => $putData],
             [],
             $this->generateWsseAuthHeader()
@@ -174,7 +174,7 @@ class CaseControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_api_get_case', ['id' => $id])
+            $this->getUrl('orocrm_case_api_get_case', ['id' => $id])
         );
 
         $updatedCase = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -199,7 +199,7 @@ class CaseControllerTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('orocrm_api_delete_case', ['id' => $id]),
+            $this->getUrl('orocrm_case_api_delete_case', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -208,7 +208,7 @@ class CaseControllerTest extends WebTestCase
         $this->assertJsonResponseStatusCodeEquals($result, 204);
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_api_get_case', ['id' => $id]),
+            $this->getUrl('orocrm_case_api_get_case', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()

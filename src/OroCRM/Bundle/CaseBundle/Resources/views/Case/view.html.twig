@@ -5,6 +5,23 @@
 {% oro_title_set({params : {"%entity.subject%": entity.subject|default('N/A') }}) %}
 
 {% block navButtons %}
+    {% if resource_granted('orocrm_case_comment_create') %}
+        {{ UI.clientButton({
+            'id': 'add-case-comment-button',
+            'aCss': 'no-hash',
+            'iCss': 'icon-comment-alt hide-text',
+            'label' : 'orocrm.case.casecomment.action.add'|trans
+        }) }}
+        <script type="text/javascript">
+            require(['jquery', 'oroui/js/mediator'],
+            function($, mediator){
+                $('#add-case-comment-button').on('click', function(e) {
+                    e.preventDefault();
+                    mediator.trigger('comment:add');
+                });
+            });
+        </script>
+    {% endif %}
     {% if resource_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path' : path('orocrm_case_update', { id: entity.id }),
@@ -13,7 +30,7 @@
     {% endif %}
     {% if resource_granted('DELETE', entity) %}
         {{ UI.deleteButton({
-            'dataUrl': path('orocrm_api_delete_case', {'id': entity.id}),
+            'dataUrl': path('orocrm_case_api_delete_case', {'id': entity.id}),
             'dataRedirect': path('orocrm_case_index'),
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-user',
@@ -116,23 +133,25 @@
         }
     ] %}
 
-    {#{% set caseComments %}#}
-        {#{{ oro_widget_render({#}
-            {#'widgetType': 'block',#}
-            {#'url': path('orocrm_case_comment_widget_list', { caseId: entity.id }),#}
-            {#'title': 'orocrm.case.casecomment.entity_plural_label'|trans,#}
-            {#'cssClass': 'list-widget notes-widget',#}
-        {#}) }}#}
-    {#{% endset %}#}
+    {% if resource_granted('orocrm_case_comment_view') %}
+        {% set caseComments %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('orocrm_case_widget_comments', { id: entity.id }),
+                'cssClass': 'list-widget comments-widget',
+                'title': '',
+            }) }}
+        {% endset %}
 
-    {#{% set dataBlocks = dataBlocks|merge([#}
-        {#{#}
-            {#'title': 'orocrm.case.block.comments'|trans,#}
-            {#'subblocks': [#}
-                {#{'data' : [caseComments]}#}
-            {#]#}
-        {#}#}
-    {#]) %}#}
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title': 'orocrm.case.casecomment.entity_plural_label'|trans,
+                'subblocks': [
+                    {'data' : [caseComments]}
+                ]
+            }
+        ]) %}
+    {% endif %}
 
     {% set id = 'caseView' %}
     {% set data = { 'dataBlocks': dataBlocks } %}

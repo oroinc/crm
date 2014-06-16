@@ -7,7 +7,7 @@ use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
 use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
 use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
 use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
-use OroCRM\Bundle\CaseBundle\Entity\Manager\CaseEntityManager;
+use OroCRM\Bundle\CaseBundle\Model\CaseEntityManager;
 
 /**
  * @outputBuffering enabled
@@ -57,7 +57,7 @@ class CaseEntityManagerTest extends WebTestCase
     /**
      * @dataProvider getCommentsDataProvider
      */
-    public function testGetComments($caseSubject, $order, $expectedCommentsBody)
+    public function testGetComments($caseSubject, $order, $expectedCommentsMessage)
     {
         $case = $this->getContainer()->get('doctrine.orm.entity_manager')
             ->getRepository('OroCRMCaseBundle:CaseEntity')
@@ -67,12 +67,12 @@ class CaseEntityManagerTest extends WebTestCase
 
         $comments = $this->manager->getCaseComments($case, $order);
 
-        $this->assertCount(count($expectedCommentsBody), $comments);
+        $this->assertCount(count($expectedCommentsMessage), $comments);
         $this->assertSame(
-            $expectedCommentsBody,
+            $expectedCommentsMessage,
             array_map(
                 function (CaseComment $comment) {
-                    return $comment->getBody();
+                    return $comment->getMessage();
                 },
                 $comments
             )
@@ -85,7 +85,7 @@ class CaseEntityManagerTest extends WebTestCase
             'DESC' => array(
                 'caseSubject' => 'Case #1',
                 'order' => 'DESC',
-                'expectedCommentsBody' => array(
+                'expectedCommentsMessage' => array(
                     'Case #1 Comment #3',
                     'Case #1 Comment #2',
                     'Case #1 Comment #1',
@@ -94,7 +94,7 @@ class CaseEntityManagerTest extends WebTestCase
             'ASC' => array(
                 'caseSubject' => 'Case #1',
                 'order' => 'ASC',
-                'expectedCommentsBody' => array(
+                'expectedCommentsMessage' => array(
                     'Case #1 Comment #1',
                     'Case #1 Comment #2',
                     'Case #1 Comment #3',

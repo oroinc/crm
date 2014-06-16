@@ -48,10 +48,10 @@ class CaseComment
     /**
      * @var string
      *
-     * @ORM\Column(name="body", type="text")
+     * @ORM\Column(name="message", type="text")
      * @Oro\Versioned
      */
-    protected $body;
+    protected $message;
 
     /**
      * @var string
@@ -77,6 +77,14 @@ class CaseComment
      * @Oro\Versioned
      */
     protected $contact;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="updated_by_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $updatedBy;
 
     /**
      * @var User
@@ -110,12 +118,12 @@ class CaseComment
     }
 
     /**
-     * @param string $body
+     * @param string $message
      * @return CaseComment
      */
-    public function setBody($body)
+    public function setMessage($message)
     {
-        $this->body = $body;
+        $this->message = $message;
 
         return $this;
     }
@@ -123,9 +131,9 @@ class CaseComment
     /**
      * @return string
      */
-    public function getBody()
+    public function getMessage()
     {
-        return $this->body;
+        return $this->message;
     }
 
     /**
@@ -202,6 +210,25 @@ class CaseComment
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    /**
+     * @param User $updatedBy
+     * @return CaseComment
+     */
+    public function setUpdatedBy($updatedBy)
+    {
+        $this->updatedBy = $updatedBy;
+
+        return $this;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
     }
 
     /**

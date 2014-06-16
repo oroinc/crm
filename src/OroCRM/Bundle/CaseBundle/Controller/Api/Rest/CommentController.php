@@ -18,8 +18,7 @@ use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
 /**
  * @Rest\RouteResource("case/comment")
- * @Rest\NamePrefix("orocrm_api_")
- * @TODO Fix ACL annotations
+ * @Rest\NamePrefix("orocrm_case_api_")
  */
 class CommentController extends RestController implements ClassResourceInterface
 {
@@ -40,7 +39,7 @@ class CommentController extends RestController implements ClassResourceInterface
      *     description="Get list of case comments",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_view")
+     * @AclAncestor("orocrm_case_comment_view")
      */
     public function cgetAction(CaseEntity $case)
     {
@@ -64,7 +63,7 @@ class CommentController extends RestController implements ClassResourceInterface
      *     description="Get CaseComment item",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_view")
+     * @AclAncestor("orocrm_case_comment_view")
      * @return Response
      */
     public function getAction($id)
@@ -81,7 +80,7 @@ class CommentController extends RestController implements ClassResourceInterface
      *     description="Update CaseComment",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_update")
+     * @AclAncestor("orocrm_case_comment_update")
      * @return Response
      */
     public function putAction($id)
@@ -100,7 +99,7 @@ class CommentController extends RestController implements ClassResourceInterface
      *     description="Create new CaseComment",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_create")
+     * @AclAncestor("orocrm_case_comment_create")
      */
     public function postAction(CaseEntity $case)
     {
@@ -116,12 +115,7 @@ class CommentController extends RestController implements ClassResourceInterface
      *     description="Delete CaseComment",
      *     resource=true
      * )
-     * @Acl(
-     *     id="orocrm_case_delete",
-     *     type="entity",
-     *     permission="DELETE",
-     *     class="OroCRMCaseBundle:CaseComment"
-     * )
+     * @AclAncestor("orocrm_case_comment_delete")
      * @return Response
      */
     public function deleteAction($id)

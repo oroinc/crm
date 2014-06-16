@@ -15,10 +15,10 @@ class CaseCommentType extends AbstractType
     {
         $builder
             ->add(
-                'body',
-                'text',
+                'message',
+                'textarea',
                 [
-                    'label'     => 'orocrm.case.casecomment.body.label'
+                    'label'     => 'orocrm.case.casecomment.message.label'
                 ]
             )
             ->add(
@@ -26,14 +26,6 @@ class CaseCommentType extends AbstractType
                 'checkbox',
                 [
                     'label'     => 'orocrm.case.casecomment.public.label',
-                    'required'  => false,
-                ]
-            )
-            ->add(
-                'contact',
-                'orocrm_contact_select',
-                [
-                    'label'     => 'orocrm.case.casecomment.contact.label',
                     'required'  => false,
                 ]
             );
@@ -48,6 +40,7 @@ class CaseCommentType extends AbstractType
             [
                 'data_class'         => 'OroCRM\\Bundle\\CaseBundle\\Entity\\CaseComment',
                 'intention'          => 'orocrm_case_comment',
+                'ownership_disabled' => true,
                 'cascade_validation' => true,
             ]
         );

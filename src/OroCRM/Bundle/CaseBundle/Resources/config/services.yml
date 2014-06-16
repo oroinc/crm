@@ -1,9 +1,10 @@
 parameters:
     orocrm_case.entity.class:              OroCRM\Bundle\CaseBundle\Entity\CaseEntity
     orocrm_case.comment.class:             OroCRM\Bundle\CaseBundle\Entity\CaseComment
-    orocrm_case.manager.class:             OroCRM\Bundle\CaseBundle\Entity\Manager\CaseEntityManager
-    orocrm_case.manager.api.class:         OroCRM\Bundle\CaseBundle\Entity\Manager\CaseApiEntityManager
-    orocrm_case.manager.comment.api.class: OroCRM\Bundle\CaseBundle\Entity\Manager\CommentApiEntityManager
+    orocrm_case.manager.class:             OroCRM\Bundle\CaseBundle\Model\CaseEntityManager
+    orocrm_case.manager.api.class:         OroCRM\Bundle\CaseBundle\Model\CaseApiEntityManager
+    orocrm_case.manager.comment.api.class: OroCRM\Bundle\CaseBundle\Model\CommentApiEntityManager
+    orocrm_case.view_factory.class:        OroCRM\Bundle\CaseBundle\Model\ViewFactory
 
 services:
     orocrm_case.manager:
@@ -26,6 +27,15 @@ services:
             - @doctrine.orm.entity_manager
             - @orocrm_case.manager
 
+    orocrm_case.view_factory:
+        class: %orocrm_case.view_factory.class%
+        arguments:
+            - @oro_security.security_facade
+            - @router
+            - @oro_locale.formatter.name
+            - @oro_locale.formatter.date_time
+            - @liip_imagine.cache.manager
+
     orocrm_case.event_listener.account_cases_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
@@ -35,3 +45,4 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.account-cases-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.contact-cases-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.user-cases-grid, method: onBuildAfter }
+

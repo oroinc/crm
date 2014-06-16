@@ -17,7 +17,7 @@ class CommentControllerTest extends WebTestCase
      * @var array
      */
     protected $commentPostData = [
-        'body' => 'New comment',
+        'message' => 'New comment',
         'owner' => 1,
         'public' => true,
     ];
@@ -65,7 +65,7 @@ class CommentControllerTest extends WebTestCase
     {
         $this->client->request(
             'POST',
-            $this->getUrl('orocrm_api_post_comment', ['id' => self::$caseId]),
+            $this->getUrl('orocrm_case_api_post_comment', ['id' => self::$caseId]),
             ['comment' => $this->commentPostData],
             [],
             $this->generateWsseAuthHeader()
@@ -86,7 +86,7 @@ class CommentControllerTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_api_get_comments', ['id' => self::$caseId]),
+            $this->getUrl('orocrm_case_api_get_comments', ['id' => self::$caseId]),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -98,7 +98,7 @@ class CommentControllerTest extends WebTestCase
 
         $this->assertCommentDataEquals(
             [
-                'body' => $this->commentPostData['body'],
+                'message' => $this->commentPostData['message'],
                 'public' => true,
                 'case' => self::$caseId,
                 'owner' => self::$adminUserId,
@@ -118,7 +118,7 @@ class CommentControllerTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_api_get_comment', ['id' => $id]),
+            $this->getUrl('orocrm_case_api_get_comment', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -128,7 +128,7 @@ class CommentControllerTest extends WebTestCase
 
         $this->assertCommentDataEquals(
             [
-                'body' => $this->commentPostData['body'],
+                'message' => $this->commentPostData['message'],
                 'public' => true,
                 'case' => self::$caseId,
                 'owner' => self::$adminUserId,
@@ -150,14 +150,14 @@ class CommentControllerTest extends WebTestCase
         $id = $originalComment['id'];
 
         $putData = [
-            'body' => 'Updated comment',
+            'message' => 'Updated comment',
             'public' => false,
             'contact' => self::$contactId
         ];
 
         $this->client->request(
             'PUT',
-            $this->getUrl('orocrm_api_put_comment', ['id' => $id]),
+            $this->getUrl('orocrm_case_api_put_comment', ['id' => $id]),
             ['comment' => $putData],
             [],
             $this->generateWsseAuthHeader()
@@ -168,7 +168,7 @@ class CommentControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_api_get_comment', ['id' => $id])
+            $this->getUrl('orocrm_case_api_get_comment', ['id' => $id])
         );
 
         $updatedComment = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -190,7 +190,7 @@ class CommentControllerTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('orocrm_api_delete_comment', ['id' => $id]),
+            $this->getUrl('orocrm_case_api_delete_comment', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -201,7 +201,7 @@ class CommentControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_api_get_comment', ['id' => $id]),
+            $this->getUrl('orocrm_case_api_get_comment', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -221,7 +221,7 @@ class CommentControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $actual['id']);
         $this->assertInternalType('integer', $actual['id']);
 
-        $this->assertArrayHasKey('body', $actual);
+        $this->assertArrayHasKey('message', $actual);
 
         $this->assertArrayHasKey('public', $actual);
 

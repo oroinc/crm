@@ -8,12 +8,9 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
 
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
-use OroCRM\Bundle\CaseBundle\Entity\Manager\CaseApiEntityManager;
-use OroCRM\Bundle\CaseBundle\Entity\Manager\CommentApiEntityManager;
+use OroCRM\Bundle\CaseBundle\Model\CaseApiEntityManager;
+use OroCRM\Bundle\CaseBundle\Model\CommentApiEntityManager;
 
-/**
- * @todo Fix ACL annotations
- */
 class CommentController extends SoapController
 {
     /**
@@ -21,7 +18,7 @@ class CommentController extends SoapController
      * @Soap\Param("caseId", phpType="int")
      * @Soap\Param("order", phpType="string")
      * @Soap\Result(phpType="OroCRM\Bundle\CaseBundle\Entity\CaseCommentSoap[]")
-     * @AclAncestor("orocrm_case_view")
+     * @AclAncestor("orocrm_case_comment_view")
      */
     public function cgetAction($caseId, $order = 'DESC')
     {
@@ -35,7 +32,7 @@ class CommentController extends SoapController
      * @Soap\Method("getCaseComment")
      * @Soap\Param("id", phpType="int")
      * @Soap\Result(phpType="OroCRM\Bundle\CaseBundle\Entity\CaseCommentSoap")
-     * @AclAncestor("orocrm_case_view")
+     * @AclAncestor("orocrm_case_comment_view")
      */
     public function getAction($id)
     {
@@ -47,7 +44,7 @@ class CommentController extends SoapController
      * @Soap\Param("caseId", phpType="int")
      * @Soap\Param("comment", phpType="OroCRM\Bundle\CaseBundle\Entity\CaseCommentSoap")
      * @Soap\Result(phpType="int")
-     * @AclAncestor("orocrm_case_create")
+     * @AclAncestor("orocrm_case_comment_create")
      */
     public function createAction($caseId)
     {
@@ -60,7 +57,7 @@ class CommentController extends SoapController
      * @Soap\Param("id", phpType="int")
      * @Soap\Param("comment", phpType="OroCRM\Bundle\CaseBundle\Entity\CaseCommentSoap")
      * @Soap\Result(phpType="boolean")
-     * @AclAncestor("orocrm_case_update")
+     * @AclAncestor("orocrm_case_comment_update")
      */
     public function updateAction($id)
     {
@@ -71,7 +68,7 @@ class CommentController extends SoapController
      * @Soap\Method("deleteCaseComment")
      * @Soap\Param("id", phpType="int")
      * @Soap\Result(phpType="boolean")
-     * @AclAncestor("orocrm_case_delete")
+     * @AclAncestor("orocrm_case_comment_delete")
      */
     public function deleteAction($id)
     {

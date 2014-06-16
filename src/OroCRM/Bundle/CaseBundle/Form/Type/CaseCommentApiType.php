@@ -15,6 +15,24 @@ class CaseCommentApiType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder
+            ->add(
+                'updatedBy',
+                'oro_user_select',
+                [
+                    'label'     => 'orocrm.case.casecomment.updatedBy.label',
+                    'required'  => false,
+                ]
+            )
+            ->add(
+                'contact',
+                'orocrm_contact_select',
+                [
+                    'label'     => 'orocrm.case.casecomment.contact.label',
+                    'required'  => false,
+                ]
+            );
+
         $builder->addEventSubscriber(new PatchSubscriber());
     }
 
@@ -25,7 +43,8 @@ class CaseCommentApiType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'csrf_protection' => false
+                'csrf_protection' => false,
+                'ownership_disabled' => false,
             ]
         );
     }

@@ -1,10 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Entity\Manager;
+namespace OroCRM\Bundle\CaseBundle\Model;
 
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
 use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
@@ -17,7 +18,6 @@ class CaseEntityManager
      * @var EntityManager
      */
     protected $entityManager;
-
     /**
      * @var AclHelper
      */
@@ -27,8 +27,10 @@ class CaseEntityManager
      * @param EntityManager $entityManager
      * @param AclHelper $aclHelper
      */
-    public function __construct(EntityManager $entityManager, AclHelper $aclHelper)
-    {
+    public function __construct(
+        EntityManager $entityManager,
+        AclHelper $aclHelper
+    ) {
         $this->entityManager = $entityManager;
         $this->aclHelper = $aclHelper;
     }

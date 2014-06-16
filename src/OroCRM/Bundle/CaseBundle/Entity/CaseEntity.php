@@ -79,7 +79,7 @@ class CaseEntity extends ExtendCaseEntity
      * @var CaseSource
      *
      * @ORM\ManyToOne(targetEntity="CaseSource", cascade={"persist"})
-     * @ORM\JoinColumn(name="source_name", referencedColumnName="name", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="source_name", referencedColumnName="name", onDelete="SET NULL")
      * @Oro\Versioned
      */
     protected $source;

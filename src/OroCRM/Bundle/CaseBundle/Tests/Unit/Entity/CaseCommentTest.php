@@ -29,14 +29,14 @@ class CaseCommentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($value, $this->comment->getId());
     }
 
-    public function testBody()
+    public function testMessage()
     {
-        $this->assertNull($this->comment->getBody());
+        $this->assertNull($this->comment->getMessage());
 
         $value = 'Test';
 
-        $this->assertEquals($this->comment, $this->comment->setBody($value));
-        $this->assertEquals($value, $this->comment->getBody());
+        $this->assertEquals($this->comment, $this->comment->setMessage($value));
+        $this->assertEquals($value, $this->comment->getMessage());
     }
 
     public function testPublic()
@@ -69,6 +69,18 @@ class CaseCommentTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->comment, $this->comment->setCase($value));
         $this->assertEquals($value, $this->comment->getCase());
+    }
+
+    public function testUpdatedBy()
+    {
+        $this->assertNull($this->comment->getUpdatedBy());
+
+        $value = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertEquals($this->comment, $this->comment->setUpdatedBy($value));
+        $this->assertEquals($value, $this->comment->getUpdatedBy());
     }
 
     public function testOwner()

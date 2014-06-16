@@ -177,13 +177,18 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     protected function createComment($text)
     {
         $comment = new CaseComment();
-        $comment->setBody($text);
+        $comment->setMessage($text);
         $comment->setOwner($this->getRandomEntity('OroUserBundle:User'));
-        $comment->setPublic(rand(0, 3));
+        $comment->setPublic(rand(0, 5));
         $comment->setCreatedAt($this->getRandomDate());
         if (rand(0, 3) == 3) {
             $contact = $this->getRandomEntity('OroCRMContactBundle:Contact');
             $comment->setContact($contact);
+        }
+        if (rand(0, 5) == 5) {
+            $updatedBy = $this->getRandomEntity('OroUserBundle:User');
+            $comment->setUpdatedBy($updatedBy);
+            $comment->setUpdatedAt($this->getRandomDate());
         }
         return $comment;
     }

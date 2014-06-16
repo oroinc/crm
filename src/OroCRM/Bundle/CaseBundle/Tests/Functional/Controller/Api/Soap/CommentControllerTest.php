@@ -18,7 +18,7 @@ class CommentControllerTest extends WebTestCase
      * @var array
      */
     protected $commentCreateData = [
-        'body'  => 'New comment',
+        'message' => 'New comment',
         'owner' => 1,
     ];
 
@@ -88,7 +88,7 @@ class CommentControllerTest extends WebTestCase
         $this->assertArrayIntersectEquals(
             array(
                 'id' => $id,
-                'body' => $this->commentCreateData['body'],
+                'message' => $this->commentCreateData['message'],
                 'public' => true,
                 'case' => self::$caseId,
                 'owner' => self::$adminUserId,
@@ -114,7 +114,7 @@ class CommentControllerTest extends WebTestCase
         $this->assertArrayIntersectEquals(
             array(
                 'id' => $id,
-                'body' => $this->commentCreateData['body'],
+                'message' => $this->commentCreateData['message'],
                 'public' => true,
                 'case' => self::$caseId,
                 'owner' => self::$adminUserId,
@@ -139,7 +139,7 @@ class CommentControllerTest extends WebTestCase
         $id = $originalComment['id'];
 
         $updateData = [
-            'body' => 'Updated comment',
+            'message' => 'Updated comment',
             'public' => false,
             'contact' => self::$contactId
         ];

@@ -19,7 +19,7 @@ class CaseCommentSoap extends CaseComment implements SoapEntityInterface
     /**
      * @Soap\ComplexType("string", nillable=true)
      */
-    protected $body;
+    protected $message;
 
     /**
      * @Soap\ComplexType("boolean", nillable=true)
@@ -35,6 +35,11 @@ class CaseCommentSoap extends CaseComment implements SoapEntityInterface
      * @Soap\ComplexType("int", nillable=true)
      */
     protected $contact;
+
+    /**
+     * @Soap\ComplexType("int", nillable=true)
+     */
+    protected $updatedBy;
 
     /**
      * @Soap\ComplexType("int", nillable=true)
@@ -57,10 +62,11 @@ class CaseCommentSoap extends CaseComment implements SoapEntityInterface
     public function soapInit($comment)
     {
         $this->id        = $comment->getId();
-        $this->body      = $comment->getBody();
+        $this->message      = $comment->getMessage();
         $this->public    = $comment->isPublic();
         $this->case      = $this->getEntityId($comment->getCase());
         $this->contact   = $this->getEntityId($comment->getContact());
+        $this->updatedBy = $this->getEntityId($comment->getUpdatedBy());
         $this->owner     = $this->getEntityId($comment->getOwner());
         $this->createdAt = $comment->getCreatedAt();
         $this->updatedAt = $comment->getUpdatedAt();

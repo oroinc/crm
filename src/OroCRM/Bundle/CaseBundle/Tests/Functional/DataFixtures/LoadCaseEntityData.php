@@ -25,18 +25,18 @@ class LoadCaseEntityData extends AbstractFixture implements ContainerAwareInterf
             'description'   => 'Case #1: Description',
             'comments'      => array(
                 array(
-                    'body'      => 'Case #1 Comment #1',
+                    'message'      => 'Case #1 Comment #1',
                     'public'    => true,
                     'createdAt' => '2014-01-01 13:00:00',
                     'contact'   => 'orocrm_case_contact'
                 ),
                 array(
-                    'body'      => 'Case #1 Comment #2',
+                    'message'      => 'Case #1 Comment #2',
                     'public'        => true,
                     'createdAt' => '2014-01-01 14:00:00',
                 ),
                 array(
-                    'body'      => 'Case #1 Comment #3',
+                    'message'   => 'Case #1 Comment #3',
                     'public'    => false,
                     'createdAt' => '2014-01-01 15:00:00',
                 )
@@ -80,7 +80,7 @@ class LoadCaseEntityData extends AbstractFixture implements ContainerAwareInterf
 
             foreach ($caseData['comments'] as $commentData) {
                 $comment = $caseManager->createComment($case)
-                    ->setBody($commentData['body'])
+                    ->setMessage($commentData['message'])
                     ->setPublic($commentData['public'])
                     ->setCreatedAt(new \DateTime($commentData['createdAt'], new \DateTimeZone('UTC')))
                     ->setOwner($adminUser);
