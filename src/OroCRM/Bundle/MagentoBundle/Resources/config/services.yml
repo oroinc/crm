@@ -29,7 +29,7 @@ parameters:
     orocrm_magento.datagrid_helper.class:                                   OroCRM\Bundle\MagentoBundle\Datagrid\MagentoDatagridHelper
 
     # magento related records delete provider
-    orocrm_magento.manager.magento_channel_delete_provider.class:           OroCRM\Bundle\MagentoBundle\Manager\MagentoChannelDeleteProvider
+    orocrm_magento.manager.magento_delete_provider.class:                   OroCRM\Bundle\MagentoBundle\Manager\MagentoDeleteProvider
 
     orocrm_magento.listener.customer_listener.class:                        OroCRM\Bundle\MagentoBundle\EventListener\ContactListener
 
@@ -107,7 +107,7 @@ services:
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: orocrm_magento.orders, acl_resource: orocrm_magento_order_view }
         lazy: true
-        
+
     orocrm_magento.form.autocomplete.customer.search_handler:
         parent: oro_form.autocomplete.full_name.search_handler
         arguments:
@@ -116,7 +116,7 @@ services:
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: orocrm_magento.customers, acl_resource: orocrm_magento_customer_view }
         lazy: true
-        
+
     orocrm_magento.form.autocomplete.cart.search_handler:
         parent: oro_form.autocomplete.search_handler
         arguments:
@@ -193,12 +193,12 @@ services:
     orocrm_magento.country.datagrid_helper:
         class: %orocrm_magento.country.datagrid_helper.class%
 
-    orocrm_magento.manager.magento_channel_delete_provider:
-        class: %orocrm_magento.manager.magento_channel_delete_provider.class%
+    orocrm_magento.manager.magento_delete_provider:
+        class: %orocrm_magento.manager.magento_delete_provider.class%
         arguments:
             - @doctrine.orm.entity_manager
         tags:
-            - { name: oro_integration.channel_delete_provider }
+            - { name: oro_integration.delete_provider }
 
     orocrm_magento.listener.customer_listener:
         class: %orocrm_magento.listener.customer_listener.class%

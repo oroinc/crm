@@ -66,7 +66,7 @@ class ChannelOwnerSetListenerTest extends WebTestCase
 
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('oro_integration_channel_update', ['id' => $channel->getId()])
+            $this->getUrl('oro_integration_update', ['id' => $channel->getId()])
         );
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();

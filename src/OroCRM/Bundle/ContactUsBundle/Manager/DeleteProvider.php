@@ -5,9 +5,9 @@ namespace OroCRM\Bundle\ContactUsBundle\Manager;
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\IntegrationBundle\Manager\ChannelDeleteProviderInterface;
+use Oro\Bundle\IntegrationBundle\Manager\DeleteProviderInterface;
 
-class ChannelRelatedDataDeleteProvider implements ChannelDeleteProviderInterface
+class DeleteProvider implements DeleteProviderInterface
 {
     /**
      * @var EntityManager
@@ -15,19 +15,19 @@ class ChannelRelatedDataDeleteProvider implements ChannelDeleteProviderInterface
     protected $em;
 
     /**
-     * {@inheritdoc}
-     */
-    public function isSupport($channelType)
-    {
-        return true;
-    }
-
-    /**
      * @param EntityManager $em
      */
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports($channelType)
+    {
+        return true;
     }
 
     /**
