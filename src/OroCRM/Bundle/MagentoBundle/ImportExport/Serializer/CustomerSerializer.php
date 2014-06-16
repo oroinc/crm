@@ -3,12 +3,12 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-use Oro\Bundle\UserBundle\Model\Gender;
-use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
+use Oro\Bundle\UserBundle\Model\Gender;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -299,7 +299,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, $format = null, array $context = array())
     {
         return $data instanceof Customer;
     }
@@ -307,7 +307,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return $type == MagentoConnectorInterface::CUSTOMER_TYPE;
     }

@@ -83,7 +83,7 @@ class ContactNormalizer extends ConfigurableEntityNormalizer implements Serializ
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, $format = null, array $context = array())
     {
         return $data instanceof Contact;
     }
@@ -91,7 +91,7 @@ class ContactNormalizer extends ConfigurableEntityNormalizer implements Serializ
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return is_array($data) && $type == static::CONTACT_TYPE;
     }

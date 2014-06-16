@@ -58,7 +58,7 @@ class MagentoAddressNormalizer extends TypedAddressNormalizer
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE == $type;
     }
@@ -66,7 +66,7 @@ class MagentoAddressNormalizer extends TypedAddressNormalizer
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, $format = null, array $context = array())
     {
         return $data instanceof MagentoAddress;
     }
