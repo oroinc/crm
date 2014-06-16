@@ -94,6 +94,9 @@ class Task extends AbstractPageEntity
         return new Tasks($this->test, false);
     }
 
+    /**
+     * @return Task
+     */
     public function edit()
     {
         $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Task']")->click();
