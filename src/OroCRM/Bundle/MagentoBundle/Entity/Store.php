@@ -142,4 +142,12 @@ class Store extends ExtendStore
     {
         return $this->website;
     }
+
+    /**
+     * @return string
+     */
+    public function getWebsiteName()
+    {
+        return $this->website ? $this->website->getName() : null;
+    }
 }

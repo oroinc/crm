@@ -1,0 +1,55 @@
+parameters:
+    orocrm_case.entity.class:                                OroCRM\Bundle\CaseBundle\Entity\CaseEntity
+    orocrm_case.manager.api.class:                           Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_case.form.type.case.class:                        OroCRM\Bundle\CaseBundle\Form\Type\CaseType
+    orocrm_case.form.type.case_api.class:                    OroCRM\Bundle\CaseBundle\Form\Type\CaseApiType
+    orocrm_caserm.handler.case_api.class:                    OroCRM\Bundle\CaseBundle\Form\Handler\CaseHandler
+    orocrm_case.event_listener.datagrid.contact_cases.class: OroCRM\Bundle\CaseBundle\EventListener\Datagrid\ContactCasesListener
+
+services:
+    orocrm_case.manager.api:
+        class: %orocrm_case.manager.api.class%
+        arguments:
+            - %orocrm_case.entity.class%
+            - @doctrine.orm.entity_manager
+
+    orocrm_case.form.type.case:
+        class: %orocrm_case.form.type.case.class%
+        tags:
+            - { name: form.type, alias: orocrm_case }
+
+    orocrm_case.form.type.case_api:
+        class: %orocrm_case.form.type.case_api.class%
+        tags:
+            - { name: form.type, alias: case }
+
+    orocrm_case.form.handler.case_api:
+        class: %orocrm_caserm.handler.case_api.class%
+        scope: request
+        arguments:
+            - @orocrm_case.form.api
+            - @request
+            - @doctrine.orm.entity_manager
+
+    orocrm_case.form.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - 'case'
+            - 'case'
+
+    orocrm_case.event_listener.account_cases_grid_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'id'
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.account-cases-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.contact-cases-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.user-cases-grid, method: onBuildAfter }
+
+    orocrm_case.event_listener.datagrid.contact_cases:
+        class: %orocrm_case.event_listener.datagrid.contact_cases.class%
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.contact-cases-grid, method: onBuildBefore }

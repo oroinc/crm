@@ -1,0 +1,10 @@
+<%= highlight(
+    _.escape(
+        _.__(
+            'orocrm.magento.autocomplete.entity_number', {
+                "entityName": "{{ 'orocrm.magento.cart.entity_label'|trans }}",
+                "entityNumber": originId
+            }
+        )
+    )
+) %>
