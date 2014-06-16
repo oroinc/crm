@@ -13,6 +13,7 @@ use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscri
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 
@@ -89,8 +90,7 @@ class ContactImportHelper
      * @param Customer $localData
      * @param Contact  $contact
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD)
      * TODO Should be fixed during CRM-1185
      */
     public function mergeObjects(Customer $remoteData, Customer $localData, Contact $contact)
@@ -142,6 +142,22 @@ class ContactImportHelper
                         $address->setTypes($remoteAddress->getTypes());
                     }
 
+                    $contactPhone = null;
+
+                    if ($localAddress->getContactPhone()) {
+                        $contactPhone = $this->getContactPhoneFromContact($contact, $localAddress->getContactPhone());
+                    }
+
+                    if ($contactPhone) {
+                        $this->mergeScalars(['phone'], $remoteAddress, $localAddress, $contactPhone);
+                    } elseif ($this->isRemotePrioritized() && $remoteAddress->getPhone() !== 'no phone') {
+                        $contactPhone = new ContactPhone();
+                        $contactPhone->setPhone($remoteAddress->getPhone());
+                        $contactPhone->setPrimary(!$contact->getPrimaryPhone());
+                        $contact->addPhone($contactPhone);
+                        $localAddress->setContactPhone($contactPhone);
+                    }
+
                     $this->prepareAddress($address);
                     if (!$address->getCountry()) {
                         $contact->removeAddress($address);
@@ -172,6 +188,9 @@ class ContactImportHelper
                 if ($contactAddress->getCountry()) {
                     $contact->addAddress($contactAddress);
                     $address->setContactAddress($contactAddress);
+                }
+                if ($address->getContactPhone()) {
+                    $address->getContactPhone()->setOwner($contact);
                 }
             }
         }
@@ -212,6 +231,25 @@ class ContactImportHelper
                 === ($address->getRegion() ? $address->getRegion()->getCombinedCode() : null)
             )
         );
+    }
+
+    /**
+     * Get ContactPhone from contact by ContactPhone
+     *
+     * @param Contact      $contact
+     * @param ContactPhone $contactPhone
+     *
+     * @return mixed
+     */
+    protected function getContactPhoneFromContact(Contact $contact, ContactPhone $contactPhone)
+    {
+        $filtered = $contact->getPhones()->filter(
+            function (ContactPhone $phone) use ($contactPhone) {
+                return $phone && $phone->getId() === $contactPhone->getId();
+            }
+        );
+
+        return $filtered->first();
     }
 
     /**
