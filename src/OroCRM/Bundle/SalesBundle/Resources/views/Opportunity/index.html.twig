@@ -8,7 +8,7 @@
         entity_class: entity_class,
         exportProcessor: 'orocrm_sales_opportunity',
         exportTemplateProcessor: 'orocrm_sales_opportunity',
-        importProcessor: 'orocrm_sales_opportunity',
+        importProcessor: 'orocrm_sales_opportunity.add_or_replace',
         importTitle: 'oro.importexport.import.entity'|trans({'%entityName%': 'orocrm.sales.opportunity.entity_plural_label'|trans}),
         dataGridName: gridName
     } %}

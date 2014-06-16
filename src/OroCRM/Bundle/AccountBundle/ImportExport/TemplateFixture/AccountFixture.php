@@ -65,7 +65,7 @@ class AccountFixture implements TemplateFixtureInterface
         $account->setId(1)
             ->setName('Oro Inc.')
             ->setOwner($user)
-            ->setBillingAddress($shippingAddress)
+            ->setBillingAddress($billingAddress)
             ->setShippingAddress($shippingAddress)
             ->addContact($contact)
             ->setDefaultContact($contact);

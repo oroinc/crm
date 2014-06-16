@@ -8,7 +8,7 @@
         entity_class: entity_class,
         exportProcessor: 'orocrm_account',
         exportTemplateProcessor: 'orocrm_account',
-        importProcessor: 'orocrm_account',
+        importProcessor: 'orocrm_account.add_or_replace',
         importTitle: 'oro.importexport.import.entity'|trans({'%entityName%': 'orocrm.account.entity_plural_label'|trans}),
         dataGridName: gridName
     } %}
