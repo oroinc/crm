@@ -35,16 +35,16 @@ items:
 
     create_task_contact_button:
         template: OroCRMTaskBundle:Entities:createContactTaskButton.html.twig
-        attribute_instance_of: [entity, %orocrm_contact.entity.class%]
+        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %orocrm_contact.entity.class%)
 
     create_task_user_button:
         template: OroCRMTaskBundle:Entities:createUserTaskButton.html.twig
-        attribute_instance_of: [entity, %oro_user.entity.class%]
+        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)
 
     orocrm_task_contact_tasks:
         template: OroCRMTaskBundle:Task:contactTasks.html.twig
-        attribute_instance_of: [entity, %orocrm_contact.entity.class%]
+        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %orocrm_contact.entity.class%)
 
     orocrm_task_user_tasks:
         template: OroCRMTaskBundle:Task:userTasks.html.twig
-        attribute_instance_of: [entity, %oro_user.entity.class%]
+        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)

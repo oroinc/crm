@@ -1,0 +1,6 @@
+{% if value|length > 30 %}
+    {{ value|slice(0, 30) }}...
+{% else %}
+    {{ value }}
+{% endif %}
+

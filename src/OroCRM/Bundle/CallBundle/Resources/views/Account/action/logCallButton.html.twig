@@ -1,14 +1,12 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
 {% if resource_granted('orocrm_call_create') %}
-    {% set title = 'orocrm.call.log_call'|trans %}
     {{ UI.dropdownClientItem({
         'dataUrl': path('orocrm_call_create', {'accountId': entity.id}),
         'aCss': 'no-hash',
         'iCss': 'icon-phone-sign',
         'dataId': entity.id,
-        'title' : title,
-        'label' : title,
+        'label' : 'orocrm.call.log_call'|trans,
         'widget' : {
             'type' : 'dialog',
             'multiple' : false,
@@ -16,7 +14,7 @@
             'options' : {
                 'alias': 'call-dialog',
                 'dialogOptions' : {
-                    'title' : title,
+                    'title' : 'orocrm.call.log_call'|trans,
                     'allowMaximize': true,
                     'allowMinimize': true,
                     'dblclick': 'maximize',

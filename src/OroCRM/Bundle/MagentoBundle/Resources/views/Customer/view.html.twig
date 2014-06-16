@@ -6,15 +6,13 @@
 
 {% block navButtons %}
     {% if entity.channel.transport.adminUrl|default(false) %}
-        {% set createOrder = 'orocrm.magento.customer.create_order'|trans %}
         {{
             UI.clientButton({
                 'dataUrl': path('orocrm_magento_customer_orderplace', {'id': entity.id }),
                 'aCss':    'no-hash',
                 'iCss':    'icon-money',
                 'dataId':  entity.id,
-                'title' : createOrder,
-                'label' : createOrder,
+                'label' : 'orocrm.magento.customer.create_order'|trans,
                 'widget' : {
                     'type' : 'dialog',
                     'options' : {
@@ -24,7 +22,7 @@
                         'loadingMaskEnabled':  false,
                         'dialogOptions' : {
                             'dialogClass':   'place-order-transaction-dialog',
-                            'title' :        createOrder,
+                            'title' :        'orocrm.magento.customer.create_order'|trans,
                             'allowMaximize': true,
                             'allowMinimize': false,
                             'width':         1000,

@@ -2,16 +2,14 @@
 
 namespace OroCRM\Bundle\ContactBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-
-use Oro\Bundle\UserBundle\Entity\User;
-
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @ORM\Entity
@@ -38,13 +36,6 @@ class Group
      * @ORM\Column(type="smallint", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Soap\ComplexType("int", nillable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "identity"=true
-     *          }
-     *      }
-     * )
      */
     protected $id;
 

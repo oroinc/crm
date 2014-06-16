@@ -16,6 +16,10 @@ orocrm:
                 InProgressCount:
                     name: In Progress Count
                     hint: Number of 'in progress' items
+            opportunity:
+                WonRevenueSumFunction:
+                    name: Sum revenue won
+                    hint: Sum close revenue for 'won' items
 
     sales:
         dashboard:
@@ -91,7 +95,7 @@ orocrm:
             contact.label:        Potential Customer
             account.label:        Account
             owner.label:          Owner
-            notes.label:          Notes
+            notes.label:          Additional comments
             lead.label:           Lead
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
@@ -141,12 +145,12 @@ orocrm:
             address.label:        Address
             details.label:        Lead Details
             extend_source.label:  Source
-            notes.label:          Notes
+            notes.label:          Additional comments
             opportunities.label:  Opportunities
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             information:          Lead Information
-            campaign.label: Campaign
+            campaign.label:       Campaign
 
             extend_source:
                 unclassified:     Unclassified

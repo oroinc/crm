@@ -30,6 +30,7 @@ use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImpo
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  * TODO Should be fixed during CRM-1185
  */
 class ReverseWriter implements ItemWriterInterface
@@ -249,6 +250,14 @@ class ReverseWriter implements ItemWriterInterface
                         $addressEntity,
                         $remoteTypesWin
                     );
+
+                    $remotePhoneData = $this->customerSerializer->comparePhones(
+                        (array) $remoteAddress,
+                        $addressEntity
+                    );
+
+                    $remoteData = array_merge($remoteData, $remotePhoneData);
+
                     // if on remote side was not changed address types - save local types
                     if (!$remoteTypesWin) {
                         $localChanges = array_merge(
@@ -267,7 +276,8 @@ class ReverseWriter implements ItemWriterInterface
                 }
                 $dataForSend = array_merge(
                     $this->customerSerializer->convertToMagentoAddress($addressEntity),
-                    $this->regionConverter->toMagentoData($addressEntity)
+                    $this->regionConverter->toMagentoData($addressEntity),
+                    ['telephone' => ($addressEntity->getPhone() ? $addressEntity->getPhone() : 'no phone')]
                 );
                 $requestData = ['addressId' => $addressEntity->getOriginId(), 'addressData' => $dataForSend];
                 try {

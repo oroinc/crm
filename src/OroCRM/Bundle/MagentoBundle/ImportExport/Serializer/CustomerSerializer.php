@@ -3,23 +3,25 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
-
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
-use Oro\Bundle\UserBundle\Model\Gender;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Store;
-use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\UserBundle\Model\Gender;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
+use OroCRM\Bundle\MagentoBundle\Entity\Store;
+use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
-use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 
 /**
@@ -58,7 +60,9 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'region'            => 'region_id',
         'created'           => 'created_at',
         'updated'           => 'updated_at',
-        'customerAddressId' => 'customer_address_id'
+        'customerAddressId' => 'customer_address_id',
+        'phone'             => 'telephone',
+        'contactPhone'      => 'telephone',
     ];
 
     protected $contactAddressEntityToMageMapping = [
@@ -182,6 +186,25 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         }
 
         return $result;
+    }
+
+    /**
+     * @param array   $remoteData
+     * @param Address $localData
+     *
+     * @return array
+     */
+    public function comparePhones($remoteData, $localData)
+    {
+        $accessor = PropertyAccess::createPropertyAccessor();
+
+        if ($accessor->getValue($localData, 'phone') !== $remoteData['telephone']) {
+            return [
+                'phone' => $remoteData['telephone'],
+            ];
+        }
+
+        return [];
     }
 
     /**
@@ -365,9 +388,9 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $account = $this->denormalizeObject(
             $data,
             'account',
-            AccountNormalizer::ACCOUNT_TYPE,
+            'OroCRM\Bundle\AccountBundle\Entity\Account',
             $format,
-            array_merge($context, ['mode' => AccountNormalizer::FULL_MODE])
+            array_merge($context, ['mode' => ConfigurableEntityNormalizer::FULL_MODE])
         );
         unset($data['account']);
 
@@ -387,17 +410,18 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $store->setChannel($object->getChannel());
 
         if (!empty($data['birthday'])) {
-            $object->setBirthday(
-                $this->denormalizeObject(
-                    $data,
-                    'birthday',
-                    'DateTime',
-                    $format,
-                    array_merge($context, ['type' => 'date'])
-                )
+            /** @var \DateTime $birthday */
+            $birthday = $this->denormalizeObject(
+                $data,
+                'birthday',
+                'DateTime',
+                $format,
+                array_merge($context, ['type' => 'date'])
             );
+            $object->setBirthday($birthday);
         }
 
+        /** @var CustomerGroup $group */
         $group = $this->denormalizeObject(
             $data,
             'group',
@@ -407,31 +431,33 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         );
         $group->setChannel($object->getChannel());
 
+        /** @var \DateTime $createdAt */
+        $createdAt = $this->denormalizeObject(
+            $data,
+            'created_at',
+            'DateTime',
+            $format,
+            array_merge($context, ['type' => 'datetime', 'format' => 'Y-m-d H:i:s'])
+        );
+
+        /** @var \DateTime $updatedAt */
+        $updatedAt = $this->denormalizeObject(
+            $data,
+            'updated_at',
+            'DateTime',
+            $format,
+            array_merge($context, ['type' => 'datetime', 'format' => 'Y-m-d H:i:s'])
+        );
         $object
             ->setWebsite($website)
             ->setStore($store)
             ->setGroup($group)
             ->setContact($contact)
             ->setAccount($account)
-            ->setCreatedAt(
-                $this->denormalizeObject(
-                    $data,
-                    'created_at',
-                    'DateTime',
-                    $format,
-                    array_merge($context, ['type' => 'datetime', 'format' => 'Y-m-d H:i:s'])
-                )
-            )
-            ->setUpdatedAt(
-                $this->denormalizeObject(
-                    $data,
-                    'updated_at',
-                    'DateTime',
-                    $format,
-                    array_merge($context, ['type' => 'datetime', 'format' => 'Y-m-d H:i:s'])
-                )
-            );
+            ->setCreatedAt($createdAt)
+            ->setUpdatedAt($updatedAt);
 
+        /** @var \Doctrine\Common\Collections\Collection $addresses */
         $addresses = $this->denormalizeObject(
             $data,
             'addresses',
@@ -441,6 +467,27 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         );
         if (!empty($addresses)) {
             $object->resetAddresses($addresses);
+        }
+
+        $this->setPhoneToTheAddress($object, $data['addresses'], $contact);
+    }
+
+    /**
+     * @param Customer $customer
+     * @param array    $data
+     * @param Contact  $contact
+     */
+    protected function setPhoneToTheAddress($customer, $data, $contact)
+    {
+        reset($data);
+
+        foreach ($customer->getAddresses() as $address) {
+            $mageData = each($data);
+            $phone    = new ContactPhone();
+            $phone->setPhone($mageData['value']['contactPhone']);
+            $phone->setOwner($contact);
+            $address->setContactPhone($phone);
+            $address->setPhone($mageData['value']['contactPhone']);
         }
     }
 
