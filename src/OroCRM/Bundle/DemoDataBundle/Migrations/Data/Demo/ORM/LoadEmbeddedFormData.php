@@ -3,26 +3,17 @@
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Oro\Bundle\EmailBundle\Builder\EmailEntityBuilder;
-use Oro\Bundle\EmailBundle\Entity\EmailFolder;
-use Oro\Bundle\EmailBundle\Entity\InternalEmailOrigin;
+use Doctrine\Common\Persistence\ObjectManager;
+
 use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
-use Oro\Bundle\EmbeddedFormBundle\Manager\EmbeddedFormManager;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+
 use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
 use OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
+
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
-
-use Oro\Bundle\EmailBundle\Entity\Email;
-use Oro\Bundle\EmailBundle\Entity\EmailRecipient;
-use Oro\Bundle\EmailBundle\Entity\Util\EmailUtil;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\CallBundle\Entity\Call;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
@@ -33,7 +24,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
         array(
             'firstName' => 'Jason',
             'lastName' => 'Mahler',
-            'emailAddress' => 'jmahler@testemail.com',
+            'emailAddress' => 'Jason@test-email.com',
             'phone' => '3943948415',
             'comment' => 'I’m very interested in what you have to offer in your web store. I would love to find out more information',
             'contactReason' => 'Want to know more about the product',
@@ -41,15 +32,15 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
         array(
             'firstName' => 'Thomas',
             'lastName' => 'Parker',
-            'emailAddress' => 'tparker@testemail.com',
+            'emailAddress' => 'Thomas@test-email.com',
             'phone' => '39448248415',
             'comment' => 'A potential partnership with your team is something we would love to pursue. Let’s set up a call for next week – I’m available M-W in the morning',
             'contactReason' => 'Interested in partnership',
         ),
         array(
             'firstName' => 'Elizabeth',
-            'lastName' => 'Hinck',
-            'emailAddress' => 'ehinck@testemail.com',
+            'lastName' => 'Hick',
+            'emailAddress' => 'Elizabeth@test-email.com',
             'phone' => '25448248415',
             'comment' => 'What does your team offer in the way of layout design for website building?',
             'contactReason' => 'Need help or assistance',

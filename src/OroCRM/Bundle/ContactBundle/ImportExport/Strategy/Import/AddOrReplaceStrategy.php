@@ -10,6 +10,7 @@ use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import\ContactImportStrategyHelper;
 
 class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
@@ -114,6 +115,7 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
      */
     protected function updateRelatedEntitiesOwner(Contact $contact)
     {
+        /** @var ContactAddress $address */
         foreach ($contact->getAddresses() as $address) {
             $address->setOwner($contact);
         }
@@ -169,6 +171,7 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
      */
     protected function updateAddresses(Contact $contact)
     {
+        /** @var ContactAddress $contactAddress */
         foreach ($contact->getAddresses() as $contactAddress) {
             // update country
             $country = $contactAddress->getCountry();
@@ -313,9 +316,9 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
     protected function removeRelatedCreatedEntities(Contact $contact)
     {
         $contact
-            ->resetAddresses(array())
             ->resetEmails(array())
-            ->resetPhones(array());
+            ->resetPhones(array())
+            ->resetAddresses(array());
 
         return $this;
     }

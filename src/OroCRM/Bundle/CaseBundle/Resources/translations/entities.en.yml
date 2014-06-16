@@ -1,0 +1,14 @@
+case_source:
+    email: Email
+    phone: Phone
+    web: Web
+    other: Other
+case_status:
+    open: Open
+    in_progress: In Progress
+    resolved: Resolved
+    closed: Closed
+case_priority:
+    low: Low
+    normal: Normal
+    high: High

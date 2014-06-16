@@ -412,7 +412,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
      */
     private function generateBirthday()
     {
-        // Convert to timetamps
+        // Convert to timestamps
         $min = strtotime('1950-01-01');
         $max = strtotime('2000-01-01');
 
