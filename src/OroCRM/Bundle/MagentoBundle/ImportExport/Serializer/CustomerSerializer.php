@@ -45,24 +45,23 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     ];
 
     /** @var array */
-    protected $addressBapToMageMapping = [
-        'namePrefix'        => 'prefix',
-        'firstName'         => 'firstname',
-        'middleName'        => 'middlename',
-        'lastName'          => 'lastname',
-        'nameSuffix'        => 'suffix',
-        'organization'      => 'company',
-        'street'            => 'street',
-        'city'              => 'city',
-        'postalCode'        => 'postcode',
-        'country'           => 'country_id',
-        'regionText'        => 'region',
-        'region'            => 'region_id',
-        'created'           => 'created_at',
-        'updated'           => 'updated_at',
-        'customerAddressId' => 'customer_address_id',
-        'phone'             => 'telephone',
-        'contactPhone'      => 'telephone',
+    protected $addressMageToBapMapping = [
+        'prefix' => '[namePrefix]',
+        'firstname' => '[firstName]',
+        'middlename' => '[middleName]',
+        'lastname' => '[lastName]',
+        'suffix' => '[nameSuffix]',
+        'company' => '[organization]',
+        'street' => '[street]',
+        'city' => '[city]',
+        'postcode' => '[postalCode]',
+        'country_id' => '[country][iso2Code]',
+        'region' => '[regionText]',
+        'region_id' => '[region][combinedCode]',
+        'created_at' => '[created]',
+        'updated_at' => '[updated]',
+        'customer_address_id' => '[customerAddressId]',
+        'telephone' => '[phone]'
     ];
 
     protected $contactAddressEntityToMageMapping = [
@@ -469,25 +468,20 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             $object->resetAddresses($addresses);
         }
 
-        $this->setPhoneToTheAddress($object, $data['addresses'], $contact);
+        $this->setAddressPhoneOwner($object, $contact);
     }
 
     /**
      * @param Customer $customer
-     * @param array    $data
      * @param Contact  $contact
      */
-    protected function setPhoneToTheAddress($customer, $data, $contact)
+    protected function setAddressPhoneOwner($customer, $contact)
     {
-        reset($data);
-
+        /** @var Address $address */
         foreach ($customer->getAddresses() as $address) {
-            $mageData = each($data);
-            $phone    = new ContactPhone();
-            $phone->setPhone($mageData['value']['contactPhone']);
-            $phone->setOwner($contact);
-            $address->setContactPhone($phone);
-            $address->setPhone($mageData['value']['contactPhone']);
+            if ($contactPhone = $address->getContactPhone()) {
+                $contactPhone->setOwner($contact);
+            }
         }
     }
 
@@ -506,10 +500,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         foreach ($data['addresses'] as $address) {
             $addressTypes = array();
             if (!empty($address['is_default_shipping'])) {
-                $addressTypes[] = AddressType::TYPE_SHIPPING . '_address';
+                $addressTypes[] = AddressType::TYPE_SHIPPING . 'Address';
             }
             if (!empty($address['is_default_billing'])) {
-                $addressTypes[] = AddressType::TYPE_BILLING . '_address';
+                $addressTypes[] = AddressType::TYPE_BILLING . 'Address';
             }
 
             foreach ($addressTypes as $addressType) {
@@ -549,31 +543,46 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             $bapAddress = $this->getBapAddressData(
                 $address,
                 array(
-                     'firstName' => $contact['firstName'],
-                     'lastName'  => $contact['lastName']
+                     'firstname' => $contact['firstName'],
+                     'lastname'  => $contact['lastName']
                 )
             );
 
             // prepare address types
             if (!empty($address['is_default_shipping'])) {
-                $bapAddress['types'][] = AddressType::TYPE_SHIPPING;
+                $bapAddress['types'][] = array('name' => AddressType::TYPE_SHIPPING);
             }
             if (!empty($address['is_default_billing'])) {
-                $bapAddress['types'][] = AddressType::TYPE_BILLING;
+                $bapAddress['types'][] = array('name' => AddressType::TYPE_BILLING);
             }
 
-            if (!empty($address['telephone']) && !in_array($address['telephone'], $contact['phones'])) {
-                $contact['phones'][] = $address['telephone'];
+            if (!empty($address['telephone'])) {
+                $phone = $address['telephone'];
+                $bapAddress['contactPhone'] = array('phone' => $phone);
+                if (!$this->arrayHasValueForKey($contact, 'phones', $phone)) {
+                    $contact['phones'][] = array('phone' => $phone);
+                }
             }
             $contact['addresses'][$key] = $bapAddress;
         }
 
         if (!empty($contact['email'])) {
-            $contact['emails'][] = $contact['email'];
+            $contact['emails'][] = array('email' => $contact['email']);
             unset($contact['email']);
         }
 
         return $contact;
+    }
+
+    protected function arrayHasValueForKey($array, $key, $value)
+    {
+        foreach ($array as $item) {
+            if (isset($item[$key]) && $item[$key] == $value) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -587,21 +596,27 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     protected function getBapAddressData(array $address, array $defaultValues = array())
     {
         $bapAddress = array();
-        foreach ($this->addressBapToMageMapping as $bapKey => $mageKey) {
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+
+        foreach ($this->addressMageToBapMapping as $mageKey => $bapKey) {
+            $value = null;
             if (array_key_exists($mageKey, $address)) {
-                $bapAddress[$bapKey] = $address[$mageKey];
-            } else {
-                $bapAddress[$bapKey] = null;
+                $value = $address[$mageKey];
             }
 
             if (array_key_exists($bapKey, $defaultValues) && empty($bapAddress[$bapKey])) {
-                $bapAddress[$bapKey] = $defaultValues[$bapKey];
+                $value = $defaultValues[$bapKey];
             }
+            $propertyAccessor->setValue($bapAddress, $bapKey, $value);
         }
 
         // Magento API return address as $street1 . "\n" . $street2
         if (strpos($bapAddress['street'], "\n") !== false) {
             list($bapAddress['street'], $bapAddress['street2']) = explode("\n", $bapAddress['street']);
+        }
+
+        if (empty($bapAddress['region']['combinedCode'])) {
+            $bapAddress['region'] = null;
         }
 
         return $bapAddress;

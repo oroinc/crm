@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer;
 
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
@@ -12,7 +11,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
 use OroCRM\Bundle\ContactBundle\Model\Social;
 
-class ContactNormalizer extends ConfigurableEntityNormalizer implements SerializerAwareInterface
+class ContactNormalizer extends ConfigurableEntityNormalizer
 {
     const CONTACT_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Contact';
 

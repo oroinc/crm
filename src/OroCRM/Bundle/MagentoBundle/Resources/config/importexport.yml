@@ -31,12 +31,7 @@ parameters:
     orocrm_magento.importexport.denormalizer.order_address.class:               OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\OrderAddressCompositeDenormalizer
     orocrm_magento.importexport.denormalizer.order_item.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\OrderItemCompositeDenormalizer
 
-    orocrm_magento.importexport.normalizer.contact.class:                       OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\ContactNormalizer
-    orocrm_magento.importexport.normalizer.account.class:                       OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\AccountNormalizer
-    orocrm_magento.importexport.normalizer.email.class:                         OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\EmailNormalizer
-    orocrm_magento.importexport.normalizer.phone.class:                         OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\PhoneNormalizer
-    orocrm_magento.importexport.normalizer.address.class:                       OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\AddressNormalizer
-    orocrm_magento.importexport.normalizer.address_type.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\AddressTypeNormalizer
+    orocrm_magento.importexport.normalizer.datetime.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\DateTimeNormalizer
 
     # strategies
     orocrm_magento.import_strategy.customer.base_strategy.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\BaseStrategy
@@ -128,7 +123,7 @@ services:
     orocrm_magento.importexport.magento_address_normalizer:
         class: %orocrm_magento.importexport.typed_address_normalizer.class%
         arguments:
-            - @oro_address.importexport.address_normalizer
+            - @oro_importexport.field.field_helper
         tags:
             - { name: oro_importexport.normalizer, priority: -1 }
 
@@ -155,7 +150,7 @@ services:
     orocrm_magento.importexport.denormalizer.order_address:
         class: %orocrm_magento.importexport.denormalizer.order_address.class%
         arguments:
-            - @oro_address.importexport.address_normalizer
+            - @oro_importexport.field.field_helper
             - @orocrm_magento.importexport.data_converter.order_address
         tags:
             - { name: oro_importexport.normalizer, priority: 200 }
@@ -163,7 +158,7 @@ services:
     orocrm_magento.importexport.denormalizer.cart_address:
         class: %orocrm_magento.importexport.denormalizer.cart_address.class%
         arguments:
-            - @oro_address.importexport.address_normalizer
+            - @oro_importexport.field.field_helper
             - @orocrm_magento.importexport.data_converter.address
         tags:
             - { name: oro_importexport.normalizer, priority: 200 }
@@ -248,35 +243,7 @@ services:
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_magento }
 
-
-    orocrm_magento.importexport.normalizer.contact:
-        class: %orocrm_magento.importexport.normalizer.contact.class%
-        calls:
-            - [setSocialUrlFormatter, [@orocrm_contact.social_url_formatter]]
-        tags:
-            - { name: oro_importexport.normalizer }
-
-    orocrm_magento.importexport.normalizer.account:
-        class: %orocrm_magento.importexport.normalizer.account.class%
-        tags:
-            - { name: oro_importexport.normalizer }
-
-    orocrm_magento.importexport.normalizer.email:
-        class: %orocrm_magento.importexport.normalizer.email.class%
-        tags:
-            - { name: oro_importexport.normalizer }
-
-    orocrm_magento.importexport.normalizer.phone:
-        class: %orocrm_magento.importexport.normalizer.phone.class%
-        tags:
-            - { name: oro_importexport.normalizer }
-
-    orocrm_magento.importexport.normalizer.address:
-        class: %orocrm_magento.importexport.normalizer.address.class%
-        tags:
-            - { name: oro_importexport.normalizer }
-
-    orocrm_magento.importexport.normalizer.address_type:
-        class: %orocrm_magento.importexport.normalizer.address_type.class%
+    orocrm_magento.importexport.normalizer.datetime:
+        class: %orocrm_magento.importexport.normalizer.datetime.class%
         tags:
             - { name: oro_importexport.normalizer }

@@ -216,7 +216,6 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
             - @orocrm_magento.importexport.denormalizer.customer
-            - @oro_address.importexport.address_normalizer
             - @orocrm_magento.transport.soap_transport
             - @orocrm_magento.importexport.address_import_helper
             - @orocrm_magento.converter.region

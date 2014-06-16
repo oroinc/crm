@@ -13,7 +13,6 @@ use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use Oro\Bundle\AddressBundle\Entity\Country as BAPCountry;
-use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
 
 use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
@@ -70,9 +69,6 @@ class ReverseWriter implements ItemWriterInterface
     /** @var CustomerSerializer */
     protected $customerSerializer;
 
-    /** @var AddressNormalizer */
-    protected $addressNormalizer;
-
     /** @var SoapTransport */
     protected $transport;
 
@@ -88,7 +84,6 @@ class ReverseWriter implements ItemWriterInterface
     /**
      * @param EntityManager       $em
      * @param CustomerSerializer  $customerSerializer
-     * @param AddressNormalizer   $addressNormalizer
      * @param SoapTransport       $transport
      * @param AddressImportHelper $addressImportHelper
      * @param RegionConverter     $regionConverter
@@ -96,14 +91,12 @@ class ReverseWriter implements ItemWriterInterface
     public function __construct(
         EntityManager $em,
         CustomerSerializer $customerSerializer,
-        AddressNormalizer $addressNormalizer,
         SoapTransport $transport,
         AddressImportHelper $addressImportHelper,
         RegionConverter $regionConverter
     ) {
         $this->em                  = $em;
         $this->customerSerializer  = $customerSerializer;
-        $this->addressNormalizer   = $addressNormalizer;
         $this->transport           = $transport;
         $this->accessor            = PropertyAccess::createPropertyAccessor();
         $this->addressImportHelper = $addressImportHelper;

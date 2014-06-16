@@ -2,9 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
-use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\TypedAddressNormalizer;
-
+use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AddressDataConverter;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
@@ -17,9 +16,13 @@ class CartAddressCompositeDenormalizer extends OrderAddressCompositeDenormalizer
     /** @var AddressDataConverter */
     protected $dataConverter;
 
-    public function __construct(AddressNormalizer $addressNormalizer, AddressDataConverter $dataConverter)
+    /**
+     * @param FieldHelper $fieldHelper
+     * @param AddressDataConverter $dataConverter
+     */
+    public function __construct(FieldHelper $fieldHelper, AddressDataConverter $dataConverter)
     {
-        TypedAddressNormalizer::__construct($addressNormalizer);
+        ConfigurableEntityNormalizer::__construct($fieldHelper);
         $this->dataConverter = $dataConverter;
     }
 
