@@ -13,6 +13,7 @@ use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
@@ -59,7 +60,9 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'region'            => 'region_id',
         'created'           => 'created_at',
         'updated'           => 'updated_at',
-        'customerAddressId' => 'customer_address_id'
+        'customerAddressId' => 'customer_address_id',
+        'phone'             => 'telephone',
+        'contactPhone'      => 'telephone',
     ];
 
     protected $contactAddressEntityToMageMapping = [
@@ -183,6 +186,25 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         }
 
         return $result;
+    }
+
+    /**
+     * @param array   $remoteData
+     * @param Address $localData
+     *
+     * @return array
+     */
+    public function comparePhones($remoteData, $localData)
+    {
+        $accessor = PropertyAccess::createPropertyAccessor();
+
+        if ($accessor->getValue($localData, 'phone') !== $remoteData['telephone']) {
+            return [
+                'phone' => $remoteData['telephone'],
+            ];
+        }
+
+        return [];
     }
 
     /**
@@ -427,6 +449,27 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $addresses = $this->denormalizeObject($data, 'addresses', MagentoConnectorInterface::CUSTOMER_ADDRESSES_TYPE);
         if (!empty($addresses)) {
             $object->resetAddresses($addresses);
+        }
+
+        $this->setPhoneToTheAddress($object, $data['addresses'], $contact);
+    }
+
+    /**
+     * @param Customer $customer
+     * @param array    $data
+     * @param Contact  $contact
+     */
+    protected function setPhoneToTheAddress($customer, $data, $contact)
+    {
+        reset($data);
+
+        foreach ($customer->getAddresses() as $address) {
+            $mageData = each($data);
+            $phone    = new ContactPhone();
+            $phone->setPhone($mageData['value']['contactPhone']);
+            $phone->setOwner($contact);
+            $address->setContactPhone($phone);
+            $address->setPhone($mageData['value']['contactPhone']);
         }
     }
 
