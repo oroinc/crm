@@ -11,7 +11,7 @@ use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
  * @outputBuffering enabled
  * @dbIsolation
  */
-class ChannelDeleteManagerTest extends AbstractChannelDataDeleteTest
+class DeleteManagerTest extends AbstractChannelDataDeleteTest
 {
     protected function setUp()
     {

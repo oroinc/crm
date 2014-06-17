@@ -10,7 +10,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  * @outputBuffering enabled
  * @dbIsolation
  */
-class MagentoChannelDeleteManagerTest extends WebTestCase
+class MagentoDeleteManagerTest extends WebTestCase
 {
     /** @var int */
     protected static $channelId;

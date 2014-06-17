@@ -79,7 +79,7 @@ class ChannelOwnerSetListenerTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Channel saved", $crawler->html());
+        $this->assertContains("Integration saved", $crawler->html());
 
         /** @var EntityManager $em */
         $notAssociatedAccount = $em->merge($this->getReference('not_associated_account'));
