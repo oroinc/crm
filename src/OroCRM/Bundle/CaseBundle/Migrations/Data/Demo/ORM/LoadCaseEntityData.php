@@ -260,11 +260,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     }
 
     /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     *
-     * @api
+     * {@inheritdoc}
      */
     public function setContainer(ContainerInterface $container = null)
     {
