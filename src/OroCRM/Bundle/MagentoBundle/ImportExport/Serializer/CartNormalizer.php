@@ -39,16 +39,24 @@ class CartNormalizer extends ConfigurableEntityNormalizer
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $data['billingAddress'] = $this->importHelper->getFixedAddress($data['billingAddress']);
-        $data['shippingAddress'] = $this->importHelper->getFixedAddress($data['shippingAddress']);
-        $data['paymentDetails'] = $this->importHelper->denormalizePaymentDetails($data['paymentDetails']);
+        if (!empty($data['billingAddress'])) {
+            $data['billingAddress'] = $this->importHelper->getFixedAddress($data['billingAddress']);
+        }
+        if (!empty($data['shippingAddress'])) {
+            $data['shippingAddress'] = $this->importHelper->getFixedAddress($data['shippingAddress']);
+        }
+        if (!empty($data['paymentDetails'])) {
+            $data['paymentDetails'] = $this->importHelper->denormalizePaymentDetails($data['paymentDetails']);
+        }
 
         /** @var Cart $cart */
         $cart = parent::denormalize($data, $class, $format, $context);
 
         $channel = $this->importHelper->getChannelFromContext($context);
         $cart->setChannel($channel);
-        $cart->getStore()->setChannel($channel);
+        if ($cart->getStore()) {
+            $cart->getStore()->setChannel($channel);
+        }
 
         if (!empty($data['email'])) {
             $cart->getCustomer()->setEmail($data['email']);

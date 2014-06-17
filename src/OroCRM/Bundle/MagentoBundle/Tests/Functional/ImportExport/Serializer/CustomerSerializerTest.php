@@ -16,7 +16,7 @@ class CustomerSerializerTest extends WebTestCase
     {
         $this->initClient();
 
-        $this->normalizer = $this->getContainer()->get('orocrm_magento.importexport.normalizer.cart');
+        $this->normalizer = $this->getContainer()->get('orocrm_magento.importexport.denormalizer.order');
         $this->normalizer->setSerializer($this->getContainer()->get('oro_importexport.serializer'));
     }
 
@@ -26,7 +26,7 @@ class CustomerSerializerTest extends WebTestCase
      */
     public function testDenormalize($data)
     {
-        $class = 'OroCRM\Bundle\MagentoBundle\Entity\Cart';
+        $class = 'OroCRM\Bundle\MagentoBundle\Entity\Order';
         $obj = $this->normalizer->denormalize(
             $data,
             $class,
@@ -39,8 +39,8 @@ class CustomerSerializerTest extends WebTestCase
             )
         );
 
-        $processor = $this->getContainer()->get('orocrm_magento.import.strategy.cart.add_or_update');
-        $processor->process($obj);
+//        $processor = $this->getContainer()->get('orocrm_magento.import.strategy.cart.add_or_update');
+//        $processor->process($obj);
     }
 
     public function denormalizeDataProvider()
@@ -48,7 +48,7 @@ class CustomerSerializerTest extends WebTestCase
         return array(
             array(
                 json_decode(
-                    file_get_contents('/tmp/cart.json'),
+                    file_get_contents('/tmp/order.json'),
                     JSON_OBJECT_AS_ARRAY
                 )
             )

@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
 use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
@@ -12,9 +10,6 @@ use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 
 class OrderAddressCompositeDenormalizer extends ConfigurableEntityNormalizer
 {
-    /** @var array */
-    protected $additionalProperties = ['fax', 'phone'];
-
     /** @var OrderAddressDataConverter */
     protected $dataConverter;
 
@@ -33,17 +28,8 @@ class OrderAddressCompositeDenormalizer extends ConfigurableEntityNormalizer
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $data             = $this->dataConverter->convertToImportFormat($data);
-        $propertyAccessor = PropertyAccess::createPropertyAccessor();
-
-        $result = parent::denormalize($data, $class, $format, $context);
-        foreach ($this->additionalProperties as $property) {
-            if (!empty($data[$property])) {
-                $propertyAccessor->setValue($result, $property, $data[$property]);
-            }
-        }
-
-        return $result;
+        $data = $this->dataConverter->convertToImportFormat($data);
+        return parent::denormalize($data, $class, $format, $context);
     }
 
     /**

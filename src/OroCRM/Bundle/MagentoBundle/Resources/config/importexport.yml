@@ -109,6 +109,7 @@ services:
     orocrm_magento.importexport.denormalizer.order:
         class: %orocrm_magento.importexport.denormalizer.order.class%
         arguments:
+            - @oro_importexport.field.field_helper
             - @orocrm_magento.service.import_helper
         tags:
             - { name: oro_importexport.normalizer }
@@ -154,7 +155,7 @@ services:
             - @oro_importexport.field.field_helper
             - @orocrm_magento.importexport.data_converter.order_address
         tags:
-#            - { name: oro_importexport.normalizer, priority: 200 }
+            - { name: oro_importexport.normalizer, priority: 200 }
 
     orocrm_magento.importexport.normalizer.cart_address:
         class: %orocrm_magento.importexport.normalizer.cart_address.class%
