@@ -7,10 +7,13 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
-class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInterface
+class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
     const CASES_COUNT = 20;
     const MIN_COMMENTS_PER_CASE = 0;
@@ -82,6 +85,11 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     protected $entityManager;
 
     /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
      * @var array
      */
     protected $entitiesCount;
@@ -138,7 +146,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
             return null;
         }
 
-        $case = new CaseEntity();
+        $case = $this->container->get('orocrm_case.manager')->createCase();
         $case->setSubject($subject);
         $case->setDescription($this->getRandomText());
         $case->setReportedAt($this->getRandomDate());
@@ -176,7 +184,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
      */
     protected function createComment($text)
     {
-        $comment = new CaseComment();
+        $comment = $this->container->get('orocrm_case.manager')->createComment();
         $comment->setMessage($text);
         $comment->setOwner($this->getRandomEntity('OroUserBundle:User'));
         $comment->setPublic(rand(0, 5));
@@ -249,5 +257,17 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     protected function getRandomText()
     {
         return self::$fixtureText[rand(0, count(self::$fixtureText) - 1)];
+    }
+
+    /**
+     * Sets the Container.
+     *
+     * @param ContainerInterface|null $container A ContainerInterface instance or null
+     *
+     * @api
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        // TODO: Implement setContainer() method.
     }
 }

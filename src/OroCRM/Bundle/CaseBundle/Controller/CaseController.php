@@ -59,12 +59,7 @@ class CaseController extends Controller
      */
     public function createAction()
     {
-        $case = new CaseEntity();
-
-        $priority = $this->getDoctrine()->getRepository('OroCRMCaseBundle:CasePriority')
-            ->findOneBy(array('name' => CasePriority::PRIORITY_NORMAL));
-
-        $case->setPriority($priority);
+        $case = $this->get('orocrm_case.manager')->createCase();
 
         return $this->update($case);
     }
@@ -99,7 +94,7 @@ class CaseController extends Controller
 
         return array(
             'entity' => $case,
-            'form'   => $this->get('orocrm_sales.lead.form')->createView()
+            'form'   => $this->get('orocrm_case.form.entity')->createView()
         );
     }
 }
