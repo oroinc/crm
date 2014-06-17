@@ -424,9 +424,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             $format,
             $context
         );
-        $group->setChannel($object->getChannel());
-
-        $object->setGroup($group);
+        if ($group) {
+            $group->setChannel($object->getChannel());
+            $object->setGroup($group);
+        }
     }
 
     protected function setStore(Customer $object, array $data, $format = null, array $context = array())
@@ -439,10 +440,11 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             $format,
             $context
         );
-        $store->setWebsite($object->getWebsite());
-        $store->setChannel($object->getChannel());
-
-        $object->setStore($store);
+        if ($store) {
+            $store->setWebsite($object->getWebsite());
+            $store->setChannel($object->getChannel());
+            $object->setStore($store);
+        }
     }
 
     protected function setWebsite(Customer $object, array $data, $format = null, array $context = array())
@@ -455,9 +457,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             $format,
             $context
         );
-        $website->setChannel($object->getChannel());
-
-        $object->setWebsite($website);
+        if ($website) {
+            $website->setChannel($object->getChannel());
+            $object->setWebsite($website);
+        }
     }
 
     protected function setContact(Customer $object, array $data, $format = null, array $context = array())
@@ -472,10 +475,12 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             $format,
             $context
         );
-        $contact->setBirthday($object->getBirthday());
-        $object->setContact($contact);
+        if ($contact) {
+            $contact->setBirthday($object->getBirthday());
+            $object->setContact($contact);
+        }
+
         $this->setAddresses($object, $data, $format, $context);
-        unset($data['contact']);
     }
 
     protected function setAccount(Customer $object, array $data, $format = null, array $context = array())
@@ -491,14 +496,15 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             array_merge($context, ['mode' => ConfigurableEntityNormalizer::FULL_MODE])
         );
 
-        $contact = $object->getContact();
-        if (!$account->getContacts()->contains($contact)) {
-            $account->addContact($contact);
+        if ($account) {
+            $contact = $object->getContact();
+            if (!$account->getContacts()->contains($contact)) {
+                $account->addContact($contact);
+            }
+            if (!$account->getDefaultContact()) {
+                $account->setDefaultContact($contact);
+            }
         }
-        if (!$account->getDefaultContact()) {
-            $account->setDefaultContact($contact);
-        }
-        unset($data['account']);
 
         $object->setAccount($account);
     }
@@ -515,16 +521,14 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             $context
         );
 
-        $contact = $object->getContact();
-        /** @var Address $address */
-        foreach ($addresses as $address) {
-            if ($contactPhone = $address->getContactPhone()) {
-                $contactPhone->setOwner($contact);
-            }
-        }
-        unset($data['addresses']);
-
         if (!empty($addresses)) {
+            $contact = $object->getContact();
+            /** @var Address $address */
+            foreach ($addresses as $address) {
+                if ($contactPhone = $address->getContactPhone()) {
+                    $contactPhone->setOwner($contact);
+                }
+            }
             $object->resetAddresses($addresses);
         }
     }
@@ -663,24 +667,5 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         }
 
         return $bapAddress;
-    }
-
-    /**
-     * @param array  $data
-     * @param string $name
-     * @param string $type
-     * @param mixed  $format
-     * @param array  $context
-     *
-     * @return null|object
-     */
-    protected function denormalizeObject(array $data, $name, $type, $format = null, $context = array())
-    {
-        $result = null;
-        if (!empty($data[$name])) {
-            $result = $this->serializer->denormalize($data[$name], $type, $format, $context);
-        }
-
-        return $result;
     }
 }
