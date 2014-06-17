@@ -2,14 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use Doctrine\ORM\EntityManager;
-
+use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
-use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 
 class AbstractNormalizer implements SerializerAwareInterface
 {
@@ -18,12 +16,17 @@ class AbstractNormalizer implements SerializerAwareInterface
      */
     protected $serializer;
 
-    /** @var  ChannelRepository */
-    protected $channelRepository;
+    /**
+     * @var ImportHelper
+     */
+    protected $importHelper;
 
-    public function __construct(EntityManager $em)
+    /**
+     * @param ImportHelper $contextHelper
+     */
+    public function __construct(ImportHelper $contextHelper)
     {
-        $this->channelRepository = $em->getRepository('OroIntegrationBundle:Channel');
+        $this->importHelper = $contextHelper;
     }
 
     /**
@@ -118,33 +121,6 @@ class AbstractNormalizer implements SerializerAwareInterface
     }
 
     /**
-     * Format payment info
-     * Magento brings only CC payments info,
-     * for different types information could not be taken from order info
-     *
-     * @param array $paymentDetails
-     *
-     * @return string
-     */
-    public function denormalizePaymentDetails($paymentDetails)
-    {
-        $paymentDetails['cc_type']  = isset($paymentDetails['cc_type']) ? trim($paymentDetails['cc_type']) : null;
-        $paymentDetails['cc_last4'] = isset($paymentDetails['cc_last4']) ? trim($paymentDetails['cc_last4']) : null;
-
-        if (!empty($paymentDetails['cc_type']) && !empty($paymentDetails['cc_last4'])) {
-            $paymentDetails = sprintf(
-                "Card [%s, %s]",
-                $paymentDetails['cc_type'],
-                $paymentDetails['cc_last4']
-            );
-        } else {
-            $paymentDetails = null;
-        }
-
-        return $paymentDetails;
-    }
-
-    /**
      * @param array  $data
      * @param string $name
      * @param string $type
@@ -155,8 +131,10 @@ class AbstractNormalizer implements SerializerAwareInterface
      */
     protected function denormalizeObject(array $data, $name, $type, $format = null, $context = array())
     {
-        $toDenormalize = empty($data[$name]) ? null : $data[$name];
-        $result        = $this->serializer->denormalize($toDenormalize, $type, $format, $context);
+        $result = null;
+        if (!empty($data[$name])) {
+            $result = $this->serializer->denormalize($data[$name], $type, $format, $context);
+        }
 
         return $result;
     }
@@ -169,10 +147,6 @@ class AbstractNormalizer implements SerializerAwareInterface
      */
     protected function getChannelFromContext(array $context)
     {
-        if (!isset($context['channel'])) {
-            throw new \LogicException('Context should contain reference to channel');
-        }
-
-        return $this->channelRepository->getOrLoadById($context['channel']);
+        return $this->importHelper->getChannelFromContext($context);
     }
 }

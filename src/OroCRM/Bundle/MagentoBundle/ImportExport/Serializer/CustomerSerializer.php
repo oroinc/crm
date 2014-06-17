@@ -386,26 +386,29 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             unset($data['birthday']);
         }
 
-        /** @var \DateTime $createdAt */
-        $createdAt = $this->denormalizeObject(
-            $data,
-            'created_at',
-            'DateTime',
-            $format,
-            $context
-        );
+        if (!empty($data['created_at'])) {
+            /** @var \DateTime $createdAt */
+            $createdAt = $this->denormalizeObject(
+                $data,
+                'created_at',
+                'DateTime',
+                $format,
+                $context
+            );
+            $object->setCreatedAt($createdAt);
+        }
 
-        /** @var \DateTime $updatedAt */
-        $updatedAt = $this->denormalizeObject(
-            $data,
-            'updated_at',
-            'DateTime',
-            $format,
-            $context
-        );
-        $object
-            ->setCreatedAt($createdAt)
-            ->setUpdatedAt($updatedAt);
+        if (!empty($data['updated_at'])) {
+            /** @var \DateTime $updatedAt */
+            $updatedAt = $this->denormalizeObject(
+                $data,
+                'updated_at',
+                'DateTime',
+                $format,
+                $context
+            );
+            $object->setUpdatedAt($updatedAt);
+        }
 
         $this->setContact($object, $data, $format, $context);
         $this->setAccount($object, $data, $format, $context);
@@ -511,25 +514,27 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
     protected function setAddresses(Customer $object, array $data, $format = null, array $context = array())
     {
-        $data['addresses'] = $data['contact']['addresses'];
-        /** @var \Doctrine\Common\Collections\Collection $addresses */
-        $addresses = $this->denormalizeObject(
-            $data,
-            'addresses',
-            MagentoConnectorInterface::CUSTOMER_ADDRESSES_TYPE,
-            $format,
-            $context
-        );
+        if (!empty($data['contact']['addresses'])) {
+            $data['addresses'] = $data['contact']['addresses'];
+            /** @var \Doctrine\Common\Collections\Collection $addresses */
+            $addresses = $this->denormalizeObject(
+                $data,
+                'addresses',
+                MagentoConnectorInterface::CUSTOMER_ADDRESSES_TYPE,
+                $format,
+                $context
+            );
 
-        if (!empty($addresses)) {
-            $contact = $object->getContact();
-            /** @var Address $address */
-            foreach ($addresses as $address) {
-                if ($contactPhone = $address->getContactPhone()) {
-                    $contactPhone->setOwner($contact);
+            if (!empty($addresses)) {
+                $contact = $object->getContact();
+                /** @var Address $address */
+                foreach ($addresses as $address) {
+                    if ($contactPhone = $address->getContactPhone()) {
+                        $contactPhone->setOwner($contact);
+                    }
                 }
+                $object->resetAddresses($addresses);
             }
-            $object->resetAddresses($addresses);
         }
     }
 
@@ -545,17 +550,19 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $nameParts = array_intersect_key($data, array_flip(['first_name', 'last_name']));
         $account   = ['name' => implode(' ', $nameParts)];
 
-        foreach ($data['addresses'] as $address) {
-            $addressTypes = array();
-            if (!empty($address['is_default_shipping'])) {
-                $addressTypes[] = AddressType::TYPE_SHIPPING . 'Address';
-            }
-            if (!empty($address['is_default_billing'])) {
-                $addressTypes[] = AddressType::TYPE_BILLING . 'Address';
-            }
+        if (!empty($data['addresses'])) {
+            foreach ($data['addresses'] as $address) {
+                $addressTypes = array();
+                if (!empty($address['is_default_shipping'])) {
+                    $addressTypes[] = AddressType::TYPE_SHIPPING . 'Address';
+                }
+                if (!empty($address['is_default_billing'])) {
+                    $addressTypes[] = AddressType::TYPE_BILLING . 'Address';
+                }
 
-            foreach ($addressTypes as $addressType) {
-                $account[$addressType] = $this->getBapAddressData($address);
+                foreach ($addressTypes as $addressType) {
+                    $account[$addressType] = $this->getBapAddressData($address);
+                }
             }
         }
 

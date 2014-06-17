@@ -2,14 +2,30 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
+use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
 
-class CartNormalizer extends AbstractNormalizer implements DenormalizerInterface
+class CartNormalizer extends ConfigurableEntityNormalizer
 {
+    /**
+     * @var ImportHelper
+     */
+    protected $importHelper;
+
+    /**
+     * @param FieldHelper $fieldHelper
+     * @param ImportHelper $contextHelper
+     */
+    public function __construct(FieldHelper $fieldHelper, ImportHelper $contextHelper)
+    {
+        parent::__construct($fieldHelper);
+        $this->importHelper = $contextHelper;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -23,109 +39,21 @@ class CartNormalizer extends AbstractNormalizer implements DenormalizerInterface
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $cartClass = MagentoConnectorInterface::CART_TYPE;
+        $data['billingAddress'] = $this->importHelper->getFixedAddress($data['billingAddress']);
+        $data['shippingAddress'] = $this->importHelper->getFixedAddress($data['shippingAddress']);
+        $data['paymentDetails'] = $this->importHelper->denormalizePaymentDetails($data['paymentDetails']);
+
         /** @var Cart $cart */
-        $cart = new $cartClass();
-        if (!is_array($data)) {
-            return $cart;
-        }
-        $channel    = $this->getChannelFromContext($context);
-        $serializer = $this->serializer;
+        $cart = parent::denormalize($data, $class, $format, $context);
 
-        $this->setCartItems($cart, $data, $format, $context);
-        $this->setCustomer($cart, $data, $format, $context);
-
-        $website = $serializer->denormalize(
-            $data['store']['website'],
-            MagentoConnectorInterface::WEBSITE_TYPE,
-            $format,
-            $context
-        );
-        if ($website) {
-            $website->setChannel($channel);
-        }
-
-        $data['store'] = $serializer->denormalize(
-            $data['store'],
-            MagentoConnectorInterface::STORE_TYPE,
-            $format,
-            $context
-        );
-        $data['store']->setWebsite($website);
-        $data['store']->setChannel($channel);
-
-        $data = $this->denormalizeCreatedUpdated($data, $format, $context);
-
-        $data['shippingAddress'] = $this->serializer->denormalize(
-            $data['shipping_address'],
-            MagentoConnectorInterface::CART_ADDRESS_TYPE,
-            $format,
-            $context
-        );
-        $data['billingAddress']  = $this->serializer->denormalize(
-            $data['billing_address'],
-            MagentoConnectorInterface::CART_ADDRESS_TYPE,
-            $format,
-            $context
-        );
-
-        $data['paymentDetails'] = $this->denormalizePaymentDetails($data['paymentDetails']);
-
-        $isActive       = isset($data['is_active']) ? (bool)$data['is_active'] : true;
-        $data['status'] = $this->denormalizeStatus($isActive);
-
-        $this->fillResultObject($cart, $data);
+        $channel = $this->importHelper->getChannelFromContext($context);
         $cart->setChannel($channel);
+        $cart->getStore()->setChannel($channel);
+
+        if (!empty($data['email'])) {
+            $cart->getCustomer()->setEmail($data['email']);
+        }
 
         return $cart;
-    }
-
-    protected function setCartItems(Cart $object, $data, $format, $context)
-    {
-        $cartItems = $this->denormalizeObject(
-            $data,
-            'cartItems',
-            MagentoConnectorInterface::CART_ITEMS_TYPE,
-            $format,
-            $context
-        );
-        if (!empty($cartItems)) {
-            $object->setCartItems($cartItems);
-        }
-    }
-
-    /**
-     * @param Cart $cart
-     * @param array $data
-     * @param string $format
-     * @param array $context
-     */
-    protected function setCustomer(Cart $cart, $data, $format, $context)
-    {
-        $customer = $this->serializer->denormalize(
-            $data['customer'],
-            MagentoConnectorInterface::CUSTOMER_TYPE,
-            $format,
-            $context
-        );
-        if (!empty($data['email'])) {
-            $customer->setEmail($data['email']);
-        }
-        if ($customer) {
-            $cart->setCustomer($customer);
-        }
-    }
-
-    /**
-     * Denormalize status based on isActive field
-     *
-     * @param bool $isActive
-     */
-    protected function denormalizeStatus($isActive)
-    {
-        $statusClass = MagentoConnectorInterface::CART_STATUS_TYPE;
-        $status      = new $statusClass($isActive ? 'open' : 'expired');
-
-        return $status;
     }
 }

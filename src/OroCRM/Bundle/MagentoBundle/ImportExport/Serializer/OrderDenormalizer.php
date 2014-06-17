@@ -6,6 +6,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
+use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
 
 class OrderDenormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
@@ -39,7 +40,7 @@ class OrderDenormalizer extends AbstractNormalizer implements DenormalizerInterf
         $data['store']->setChannel($channel);
 
         $data = $this->denormalizeCreatedUpdated($data, $format);
-        $data['paymentDetails'] = $this->denormalizePaymentDetails($data['paymentDetails']);
+        $data['paymentDetails'] = $this->importHelper->denormalizePaymentDetails($data['paymentDetails']);
         $data['addresses'] = $this
             ->denormalizeObject(
                 $data,
