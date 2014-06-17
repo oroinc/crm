@@ -20,7 +20,7 @@ class SoapController extends Controller
 {
     /**
      * @Route("/check", name="orocrm_magento_soap_check")
-     * @AclAncestor("oro_integration_channel_update")
+     * @AclAncestor("oro_integration_update")
      */
     public function checkAction(Request $request)
     {
