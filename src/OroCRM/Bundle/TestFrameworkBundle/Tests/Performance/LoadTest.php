@@ -12,7 +12,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 class LoadTest extends WebTestCase
 {
     const MAX_PAGES = 1000;
-    const MAX_PAGE_TESTS = 1;
+    const MAX_PAGE_TESTS = 100;
 
     protected $resultData;
     protected $resultLimit;
