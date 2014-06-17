@@ -268,6 +268,6 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
      */
     public function setContainer(ContainerInterface $container = null)
     {
-        // TODO: Implement setContainer() method.
+        $this->container = $container;
     }
 }
