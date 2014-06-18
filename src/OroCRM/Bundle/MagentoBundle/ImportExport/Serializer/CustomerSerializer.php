@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
@@ -212,12 +213,12 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     }
 
     /**
-     * @param Address $addressFields
+     * @param AbstractAddress $addressFields
      * @param array $defaultData
      *
      * @return array
      */
-    public function convertToMagentoAddress(Address $addressFields, array $defaultData = [])
+    public function convertToMagentoAddress(AbstractAddress $addressFields, array $defaultData = [])
     {
         $result   = [];
         $accessor = PropertyAccess::createPropertyAccessor();

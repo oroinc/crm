@@ -17,7 +17,7 @@ class CartNormalizer extends ConfigurableEntityNormalizer
     protected $importHelper;
 
     /**
-     * @param FieldHelper $fieldHelper
+     * @param FieldHelper  $fieldHelper
      * @param ImportHelper $contextHelper
      */
     public function __construct(FieldHelper $fieldHelper, ImportHelper $contextHelper)
@@ -61,6 +61,10 @@ class CartNormalizer extends ConfigurableEntityNormalizer
         if (!empty($data['email'])) {
             $cart->getCustomer()->setEmail($data['email']);
         }
+
+        $statusClass = MagentoConnectorInterface::CART_STATUS_TYPE;
+        $isActive    = isset($data['is_active']) ? (bool)$data['is_active'] : true;
+        $cart->setStatus(new $statusClass($isActive ? 'open' : 'expired'));
 
         return $cart;
     }

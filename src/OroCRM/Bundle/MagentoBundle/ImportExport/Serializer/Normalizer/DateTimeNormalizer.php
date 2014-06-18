@@ -41,6 +41,7 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface
     public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return $this->magentoNormalizer->supportsDenormalization($data, $type, $format, $context)
+            && !empty($context['processorAlias'])
             && strpos($context['processorAlias'], 'orocrm_magento') !== false;
     }
 
@@ -50,6 +51,7 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface
     public function supportsNormalization($data, $format = null, array $context = array())
     {
         return $this->magentoNormalizer->supportsNormalization($data, $format, $context)
+            && !empty($context['processorAlias'])
             && strpos($context['processorAlias'], 'orocrm_magento') !== false;
     }
 }
