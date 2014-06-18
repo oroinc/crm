@@ -57,6 +57,13 @@ class Opportunity extends ExtendOpportunity
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ConfigField(
+     *  defaultValues={
+     *      "importexport"={
+     *          "order"=0
+     *      }
+     *  }
+     * )
      */
     protected $id;
 
@@ -66,7 +73,15 @@ class Opportunity extends ExtendOpportunity
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus")
      * @ORM\JoinColumn(name="status_name", referencedColumnName="name")
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=90,
+     *          "short"=true
+     *      }
+     *  }
+     * )
      **/
     protected $status;
 
@@ -76,7 +91,15 @@ class Opportunity extends ExtendOpportunity
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason")
      * @ORM\JoinColumn(name="close_reason_name", referencedColumnName="name")
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=100,
+     *          "short"=true
+     *      }
+     *  }
+     * )
      **/
     protected $closeReason;
 
@@ -86,7 +109,15 @@ class Opportunity extends ExtendOpportunity
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=110,
+     *          "short"=true
+     *      }
+     *  }
+     * )
      **/
     protected $contact;
 
@@ -96,7 +127,15 @@ class Opportunity extends ExtendOpportunity
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=120,
+     *          "short"=true
+     *      }
+     *  }
+     * )
      **/
     protected $account;
 
@@ -106,7 +145,15 @@ class Opportunity extends ExtendOpportunity
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead", inversedBy="opportunities")
      * @ORM\JoinColumn(name="lead_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=130,
+     *          "short"=true
+     *      }
+     *  }
+     * )
      **/
     protected $lead;
 
@@ -115,7 +162,15 @@ class Opportunity extends ExtendOpportunity
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=140,
+     *          "short"=true
+     *      }
+     *  }
+     * )
      */
     protected $owner;
 
@@ -124,7 +179,15 @@ class Opportunity extends ExtendOpportunity
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=10,
+     *          "identity"=true
+     *      }
+     *  }
+     * )
      */
     protected $name;
 
@@ -133,7 +196,14 @@ class Opportunity extends ExtendOpportunity
      *
      * @ORM\Column(name="close_date", type="date", nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=20
+     *      }
+     *  }
+     * )
      */
     protected $closeDate;
 
@@ -152,6 +222,9 @@ class Opportunity extends ExtendOpportunity
      *      },
      *      "dataaudit"={
      *          "auditable"=true
+     *      },
+     *      "importexport"={
+     *          "order"=30
      *      }
      *  }
      * )
@@ -173,6 +246,9 @@ class Opportunity extends ExtendOpportunity
      *      },
      *      "dataaudit"={
      *          "auditable"=true
+     *      },
+     *      "importexport"={
+     *          "order"=40
      *      }
      *  }
      * )
@@ -194,6 +270,9 @@ class Opportunity extends ExtendOpportunity
      *      },
      *      "dataaudit"={
      *          "auditable"=true
+     *      },
+     *      "importexport"={
+     *          "order"=50
      *      }
      *  }
      * )
@@ -205,7 +284,14 @@ class Opportunity extends ExtendOpportunity
      *
      * @ORM\Column(name="customer_need", type="text", nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=60
+     *      }
+     *  }
+     * )
      */
     protected $customerNeed;
 
@@ -214,7 +300,14 @@ class Opportunity extends ExtendOpportunity
      *
      * @ORM\Column(name="proposed_solution", type="text", nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=70
+     *      }
+     *  }
+     * )
      */
     protected $proposedSolution;
 
@@ -222,6 +315,13 @@ class Opportunity extends ExtendOpportunity
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @ConfigField(
+     *  defaultValues={
+     *      "importexport"={
+     *          "excluded"=true
+     *      }
+     *  }
+     * )
      */
     protected $createdAt;
 
@@ -229,6 +329,13 @@ class Opportunity extends ExtendOpportunity
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
+     * @ConfigField(
+     *  defaultValues={
+     *      "importexport"={
+     *          "excluded"=true
+     *      }
+     *  }
+     * )
      */
     protected $updatedAt;
 
@@ -237,7 +344,14 @@ class Opportunity extends ExtendOpportunity
      *
      * @ORM\Column(name="notes", type="text", nullable=true)
      * @Oro\Versioned
-     * @ConfigField(defaultValues={"dataaudit"={"auditable"=true}})
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=80
+     *      }
+     *  }
+     * )
      */
     protected $notes;
 

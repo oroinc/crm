@@ -30,7 +30,7 @@ class SalesFunnelController extends Controller
     public function indexAction()
     {
         return array(
-            'entityClass' => $this->container->getParameter('orocrm_sales.salesfunnel.entity.class')
+            'entity_class' => $this->container->getParameter('orocrm_sales.salesfunnel.entity.class')
         );
     }
 
