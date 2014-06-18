@@ -2,26 +2,25 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use Oro\Bundle\AddressBundle\Tests\Unit\Fixtures\TypedAddress;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
-use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
 
-use Oro\Bundle\UserBundle\Model\Gender;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
+use Oro\Bundle\UserBundle\Model\Gender;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
-use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -29,6 +28,8 @@ use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormal
  */
 class CustomerSerializer extends AbstractNormalizer implements DenormalizerInterface, NormalizerInterface
 {
+    const PROCESSOR_ALIAS = 'orocrm_magento';
+
     /** @var array */
     protected $importFieldsMap = [
         'customer_id' => 'origin_id',
@@ -143,7 +144,12 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $result = [];
 
         $addressData   = $this->getBapAddressData($remoteData);
-        $remoteAddress = $this->serializer->denormalize($addressData, MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE);
+        $remoteAddress = $this->serializer->denormalize(
+            $addressData,
+            MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE,
+            null,
+            ['processorAlias' => self::PROCESSOR_ALIAS]
+        );
 
         $accessor = PropertyAccess::createPropertyAccessor();
 
@@ -206,12 +212,12 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     }
 
     /**
-     * @param TypedAddress $addressFields
+     * @param Address $addressFields
      * @param array $defaultData
      *
      * @return array
      */
-    public function convertToMagentoAddress(TypedAddress $addressFields, array $defaultData = [])
+    public function convertToMagentoAddress(Address $addressFields, array $defaultData = [])
     {
         $result   = [];
         $accessor = PropertyAccess::createPropertyAccessor();
