@@ -17,9 +17,8 @@ class OpportunityFixture implements TemplateFixtureInterface
     /**
      * @param TemplateFixtureInterface $leadFixture
      */
-    public function __construct(
-        TemplateFixtureInterface $leadFixture
-    ) {
+    public function __construct(TemplateFixtureInterface $leadFixture)
+    {
         $this->leadFixture = $leadFixture;
     }
 
