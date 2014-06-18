@@ -2,22 +2,20 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
-
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CartItemDataConverter;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
 
 class CartItemCompositeDenormalizer extends AbstractNormalizer implements DenormalizerInterface
 {
     /** @var CartItemDataConverter */
     protected $itemConverter;
 
-    public function __construct(EntityManager $em, CartItemDataConverter $itemConverter)
+    public function __construct(ImportHelper $contextHelper, CartItemDataConverter $itemConverter)
     {
-        parent::__construct($em);
+        parent::__construct($contextHelper);
         $this->itemConverter = $itemConverter;
     }
 

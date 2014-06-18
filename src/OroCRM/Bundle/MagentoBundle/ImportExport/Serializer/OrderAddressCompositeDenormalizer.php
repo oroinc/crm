@@ -2,26 +2,24 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
-use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
-use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\TypedAddressNormalizer;
-
+use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\OrderAddressDataConverter;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 
-class OrderAddressCompositeDenormalizer extends TypedAddressNormalizer
+class OrderAddressCompositeDenormalizer extends ConfigurableEntityNormalizer
 {
-    /** @var array */
-    protected $additionalProperties = ['fax', 'phone'];
-
     /** @var OrderAddressDataConverter */
     protected $dataConverter;
 
-    public function __construct(AddressNormalizer $addressNormalizer, OrderAddressDataConverter $dataConverter)
+    /**
+     * @param FieldHelper $fieldHelper
+     * @param OrderAddressDataConverter $dataConverter
+     */
+    public function __construct(FieldHelper $fieldHelper, OrderAddressDataConverter $dataConverter)
     {
-        parent::__construct($addressNormalizer);
+        parent::__construct($fieldHelper);
         $this->dataConverter = $dataConverter;
     }
 
@@ -30,17 +28,8 @@ class OrderAddressCompositeDenormalizer extends TypedAddressNormalizer
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $data             = $this->dataConverter->convertToImportFormat($data);
-        $propertyAccessor = PropertyAccess::createPropertyAccessor();
-
-        $result = parent::denormalize($data, $class, $format, $context);
-        foreach ($this->additionalProperties as $property) {
-            if (!empty($data[$property])) {
-                $propertyAccessor->setValue($result, $property, $data[$property]);
-            }
-        }
-
-        return $result;
+        $data = $this->dataConverter->convertToImportFormat($data);
+        return parent::denormalize($data, $class, $format, $context);
     }
 
     /**

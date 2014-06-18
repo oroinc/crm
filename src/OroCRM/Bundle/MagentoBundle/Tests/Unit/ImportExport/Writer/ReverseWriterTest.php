@@ -17,7 +17,6 @@ use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImpo
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
-use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
 
 class ReverseWriterTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,9 +38,6 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
 
     /** @var CustomerSerializer */
     protected $customerSerializer;
-
-    /** @var AddressNormalizer */
-    protected $addressNormalizer;
 
     /** @var SoapTransport|\PHPUnit_Framework_MockObject_MockObject */
     protected $transport;
@@ -69,12 +65,10 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
 
         $this->customerSerializer = new CustomerSerializer($this->em);
-        $this->addressNormalizer  = new AddressNormalizer();
 
         $this->writer = new ReverseWriter(
             $this->em,
             $this->customerSerializer,
-            $this->addressNormalizer,
             $this->transport,
             $this->addressImportHelper,
             $this->regionConverter

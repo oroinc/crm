@@ -2,13 +2,29 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
 
-use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
-
-class OrderDenormalizer extends AbstractNormalizer implements DenormalizerInterface
+class OrderDenormalizer extends ConfigurableEntityNormalizer
 {
+    /**
+     * @var ImportHelper
+     */
+    protected $importHelper;
+
+    /**
+     * @param FieldHelper $fieldHelper
+     * @param ImportHelper $contextHelper
+     */
+    public function __construct(FieldHelper $fieldHelper, ImportHelper $contextHelper)
+    {
+        parent::__construct($fieldHelper);
+        $this->importHelper = $contextHelper;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -22,30 +38,23 @@ class OrderDenormalizer extends AbstractNormalizer implements DenormalizerInterf
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $channel = $this->getChannelFromContext($context);
-
-        $website = $data['store']['website'];
-        $website = $this->serializer->denormalize($website, MagentoConnectorInterface::WEBSITE_TYPE);
-        $website->setChannel($channel);
-
-        $data['store'] = $this->denormalizeObject($data, 'store', MagentoConnectorInterface::STORE_TYPE);
-        $data['store']->setWebsite($website);
-        $data['store']->setChannel($channel);
-
-        $data                   = $this->denormalizeCreatedUpdated($data, $format);
-        $data['paymentDetails'] = $this->denormalizePaymentDetails($data['paymentDetails']);
-        $data['addresses']      = $this
-            ->denormalizeObject($data, 'addresses', MagentoConnectorInterface::ORDER_ADDRESS_COLLECTION_TYPE);
-
-        $data['items'] = $this
-            ->denormalizeObject($data, 'items', MagentoConnectorInterface::ORDER_ITEM_COLLECTION_TYPE);
+        if (!empty($data['paymentDetails'])) {
+            $data['paymentDetails'] = $this->importHelper->denormalizePaymentDetails($data['paymentDetails']);
+        }
+        if (!empty($data['addresses'])) {
+            foreach ($data['addresses'] as $idx => $address) {
+                $data['addresses'][$idx] = $this->importHelper->getFixedAddress($address);
+            }
+        }
 
         /** @var Order $order */
-        $className = MagentoConnectorInterface::ORDER_TYPE;
-        $order     = new $className();
-        $this->fillResultObject($order, $data);
+        $order = parent::denormalize($data, $class, $format, $context);
 
+        $channel = $this->importHelper->getChannelFromContext($context);
         $order->setChannel($channel);
+        if ($order->getStore()) {
+            $order->getStore()->setChannel($channel);
+        }
 
         return $order;
     }
