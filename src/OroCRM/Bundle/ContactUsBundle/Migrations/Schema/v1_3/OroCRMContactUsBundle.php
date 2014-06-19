@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_2;
+namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_3;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
@@ -14,8 +14,6 @@ class OroCRMContactUsBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_contactus_request');
-        $table->removeForeignKey('FK_342872E872F5A1AA');
-        $table->dropIndex('IDX_342872E872F5A1AA');
-        $table->dropColumn('channel_id');
+        $table->addIndex(array('created_at'), 'request_create_idx');
     }
 }
