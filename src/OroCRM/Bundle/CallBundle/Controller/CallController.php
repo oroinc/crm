@@ -64,7 +64,9 @@ class CallController extends Controller
      */
     public function indexAction()
     {
-        return array();
+        return array(
+            'entity_class' => $this->container->getParameter('orocrm_call.call.entity.class')
+        );
     }
 
     /**
