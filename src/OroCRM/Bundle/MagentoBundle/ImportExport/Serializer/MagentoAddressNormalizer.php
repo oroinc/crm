@@ -5,22 +5,22 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
-use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\TypedAddressNormalizer;
-
+use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
 
-class MagentoAddressNormalizer extends TypedAddressNormalizer
+class MagentoAddressNormalizer extends ConfigurableEntityNormalizer
 {
     /** @var PropertyAccessor */
     protected $accessor;
 
     /**
-     * @param AddressNormalizer $addressNormalizer
+     * @param FieldHelper $fieldHelper
      */
-    public function __construct(AddressNormalizer $addressNormalizer)
+    public function __construct(FieldHelper $fieldHelper)
     {
-        parent::__construct($addressNormalizer);
+        parent::__construct($fieldHelper);
         $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
@@ -57,8 +57,16 @@ class MagentoAddressNormalizer extends TypedAddressNormalizer
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE == $type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsNormalization($data, $format = null, array $context = array())
+    {
+        return $data instanceof MagentoAddress;
     }
 }
