@@ -7,6 +7,8 @@ use Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository as BatchJobRepository;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Crawler;
 
+use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
+use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -16,9 +18,16 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class ImportExportTest extends WebTestCase
 {
+    /**
+     * @var string
+     */
+    protected $file;
+
     protected function setUp()
     {
         $this->initClient(array(), $this->generateBasicAuthHeader());
+
+        $this->file = $this->getImportTemplate();
     }
 
     protected function tearDown()
@@ -50,12 +59,12 @@ class ImportExportTest extends WebTestCase
             $this->getUrl(
                 'oro_importexport_import_form',
                 array(
-                    'entity' => 'OroCRM\Bundle\ContactBundle\Entity\Contact',
+                    'entity'           => 'OroCRM\Bundle\ContactBundle\Entity\Contact',
                     '_widgetContainer' => 'dialog'
                 )
             )
         );
-        $result = $this->client->getResponse();
+        $result  = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
         return $crawler;
@@ -68,10 +77,7 @@ class ImportExportTest extends WebTestCase
      */
     public function testImportValidateAction(Crawler $crawler)
     {
-        $path = $this->client
-            ->getKernel()
-            ->locateResource('@OroCRMContactBundle/Resources/public/import/contacts_sample.csv');
-        $this->assertTrue(file_exists($path));
+        $this->assertTrue(file_exists($this->file));
 
         /** @var Form $form */
         $form = $crawler->selectButton('Submit')->form();
@@ -82,7 +88,7 @@ class ImportExportTest extends WebTestCase
             $form->getFormNode()->getAttribute('action') . '&_widgetContainer=dialog'
         );
 
-        $form['oro_importexport_import[file]']->upload($path);
+        $form['oro_importexport_import[file]']->upload($this->file);
 
         $this->client->followRedirects(true);
         $this->client->submit($form);
@@ -107,7 +113,7 @@ class ImportExportTest extends WebTestCase
                 'oro_importexport_import_process',
                 array(
                     'processorAlias' => 'orocrm_contact.add_or_replace',
-                    '_format' =>'json'
+                    '_format'        => 'json'
                 )
             )
         );
@@ -116,8 +122,8 @@ class ImportExportTest extends WebTestCase
 
         $this->assertEquals(
             array(
-                'success' => true,
-                'message' => 'File was successful imported.',
+                'success'   => true,
+                'message'   => 'File was successful imported.',
                 'errorsUrl' => null
             ),
             $data
@@ -136,7 +142,7 @@ class ImportExportTest extends WebTestCase
                 'oro_importexport_export_instant',
                 array(
                     'processorAlias' => 'orocrm_contact',
-                    '_format' =>'json'
+                    '_format'        => 'json'
                 )
             )
         );
@@ -144,7 +150,7 @@ class ImportExportTest extends WebTestCase
         $data = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertTrue($data['success']);
-        $this->assertEquals(2, $data['readsCount']);
+        $this->assertEquals(1, $data['readsCount']);
         $this->assertEquals(0, $data['errorsCount']);
 
         return $data['url'];
@@ -165,58 +171,93 @@ class ImportExportTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertResponseStatusCodeEquals($result, 200);
         $this->assertResponseContentTypeEquals($result, 'text/csv');
+    }
 
-        // Enable the output buffer
-        ob_start();
-        // Send the response to the output buffer
-        $result->sendContent();
-        // Get the contents of the output buffer
-        $content = ob_get_contents();
-        // Clean the output buffer and end it
-        ob_end_clean();
+    /**
+     * @depends testDownloadExportResultAction
+     */
+    public function testDataValid()
+    {
+        $data    = $this->getFileContents($this->file);
+        $content = $this->getFileContents($this->getExportFile());
 
+        $excludedProperties = [
+            'Accounts 1 Account name',
+            'Accounts 2 Account name',
+        ];
+
+        $this->assertEquals($content[0], $data[0]);
+
+        foreach ($excludedProperties as $excludedProperty) {
+            $key = array_search($excludedProperty, $data[0]);
+            if (false !== $key) {
+                unset($data[0][$key], $data[1][$key], $content[0][$key]);
+            }
+        }
+
+        $content = array_combine($content[0], $content[1]);
+        $data    = array_combine($data[0], $data[1]);
+
+        // @todo: fix date BAP-4560
+        unset($data['Birthday'], $content['Birthday'], $data['Id'], $content['Id']);
+
+        $this->assertEquals($data, $content);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getImportTemplate()
+    {
+        $result = $this
+            ->getContainer()
+            ->get('oro_importexport.handler.export')
+            ->getExportResult(
+                JobExecutor::JOB_EXPORT_TEMPLATE_TO_CSV,
+                'orocrm_contact',
+                ProcessorRegistry::TYPE_EXPORT_TEMPLATE
+            );
+
+        $chains = explode('/', $result['url']);
+        return $this
+            ->getContainer()
+            ->get('oro_importexport.file.file_system_operator')
+            ->getTemporaryFile(end($chains))
+            ->getRealPath();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getExportFile()
+    {
+        $result = $this
+            ->getContainer()
+            ->get('oro_importexport.handler.export')
+            ->handleExport(
+                JobExecutor::JOB_EXPORT_TO_CSV,
+                'orocrm_contact',
+                ProcessorRegistry::TYPE_EXPORT
+            );
+
+        $result = json_decode($result->getContent(), true);
+        $chains = explode('/', $result['url']);
+        return $this
+            ->getContainer()
+            ->get('oro_importexport.file.file_system_operator')
+            ->getTemporaryFile(end($chains))
+            ->getRealPath();
+    }
+
+    /**
+     * @param string $fileName
+     * @return array
+     */
+    protected function getFileContents($fileName)
+    {
+        $content = file_get_contents($fileName);
         $content = explode("\n", $content);
         $content = array_filter($content, 'strlen');
-        $content = array_map('str_getcsv', $content);
-        $path = $this->client
-            ->getKernel()
-            ->locateResource('@OroCRMContactBundle/Resources/public/import/contacts_sample.csv');
-
-        $data = file_get_contents($path);
-        $data = explode("\n", $data);
-        $data = array_filter($data, 'strlen');
-        $data = array_map('str_getcsv', $data);
-
-        // compare header
-        for ($column = 0; $column < count($data[0]); $column++) {
-            //skip account
-            if (strpos($column, 'Account') != 0) {
-                $this->assertTrue(in_array($data[0][$column], $content[0]), $data[0][$column]);
-            }
-        }
-
-        $headerData = $data[0];
-        $headerContent = $content[0];
-
-        for ($row = 1; $row < count($data); $row++) {
-            $data[$row] = array_combine($headerData, array_values($data[$row]));
-            $content[$row] = array_combine($headerContent, array_values($content[$row]));
-
-            //prepare data
-            $data[$row]['Facebook'] = "https://www.facebook.com/" . $data[$row]['Facebook'];
-            $data[$row]['Twitter'] = "https://twitter.com/" . $data[$row]['Twitter'];
-            $data[$row]['Owner Username'] = 'admin';
-            $data[$row]['Owner'] = 'John Doe';
-            $data[$row]['Assigned To Username'] = '';
-            $data[$row]['Assigned To'] = '';
-            $data[$row]['Group 1'] = 'Sales Group';
-            $data[$row]['Group 2'] = 'Marketing Group';
-
-            foreach ($headerData as $column) {
-                if ($column != 'ID' && strlen($data[$row][$column]) > 0 && strpos($column, 'Account') != 0) {
-                    $this->assertEquals($data[$row][$column], $content[$row][$column], $column);
-                }
-            }
-        }
+        return array_map('str_getcsv', $content);
     }
 }

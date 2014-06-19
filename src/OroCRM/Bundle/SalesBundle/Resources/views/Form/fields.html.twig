@@ -18,7 +18,7 @@
                 {{ form_row(form.notes) }}
 
                 {% if form.additional is defined and form.additional.children|length > 0 %}
-                    <h5 class="user-fiedset">
+                    <h5 class="user-fieldset">
                         <span>{{ 'Additional'|trans }}</span>
                     </h5>
 
@@ -35,7 +35,7 @@
     <div class="row-fluid row-fluid-divider">
         <fieldset class="form-horizontal">
             <div class="responsive-block">
-                <h5 class="user-fiedset">
+                <h5 class="user-fieldset">
                     <span>{{ 'orocrm.sales.lead.details.label'|trans }}</span>
                 </h5>
                 {% if form.owner is defined %}
@@ -60,7 +60,7 @@
                 {{ form_row(form.notes) }}
 
                 {% if form.additional is defined and form.additional.children|length > 0 %}
-                    <h5 class="user-fiedset">
+                    <h5 class="user-fieldset">
                         <span>{{ 'Additional'|trans }}</span>
                     </h5>
                     {% for value in form.additional %}
@@ -69,7 +69,7 @@
                 {% endif %}
             </div>
             <div class="responsive-cell">
-                <h5 class="user-fiedset">
+                <h5 class="user-fieldset">
                     <span>{{ 'orocrm.sales.lead.address.label'|trans }}</span>
                 </h5>
                 {{ form_widget(form.address) }}

@@ -55,7 +55,7 @@
             $(function () {
                 /** @type {orodatagrid.datagrid.listener.CallbackListener} */
                 new CallbackListener({
-                    $gridContainer: $('#grid-' + gridName),
+                    $gridContainer: $('[data-wid="{{ wid }}"]'),
                     gridName: gridName,
                     dataField: 'id',
                     columnName: 'hasContact',

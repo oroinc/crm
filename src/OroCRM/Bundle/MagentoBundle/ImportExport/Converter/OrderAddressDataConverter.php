@@ -27,7 +27,7 @@ class OrderAddressDataConverter extends AbstractTableDataConverter
             'company'      => 'organization',
             'postcode'     => 'postalCode',
             'customer_id'  => 'customerId',
-            'address_type' => 'types:0'
+            'address_type' => 'types:0:name'
         ];
     }
 

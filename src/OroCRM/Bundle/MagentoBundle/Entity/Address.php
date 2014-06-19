@@ -13,6 +13,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
 
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 
 /**
  * @ORM\Table("orocrm_magento_customer_addr")
@@ -134,6 +135,15 @@ class Address extends ExtendAddress
     protected $owner;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     */
+    protected $phone;
+
+    /**
      * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType",cascade={"persist"})
@@ -151,6 +161,14 @@ class Address extends ExtendAddress
      * @var ContactAddress
      */
     protected $contactAddress;
+
+    /**
+     * @var ContactPhone
+     *
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone",cascade={"persist"})
+     * @ORM\JoinColumn(name="related_contact_phone_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $contactPhone;
 
     /**
      * Set contact as owner.
@@ -226,5 +244,37 @@ class Address extends ExtendAddress
     public function getUpdated()
     {
         return $this->updated;
+    }
+
+    /**
+     * @param ContactPhone $contactPhone
+     */
+    public function setContactPhone(ContactPhone $contactPhone)
+    {
+        $this->contactPhone = $contactPhone;
+    }
+
+    /**
+     * @return ContactPhone
+     */
+    public function getContactPhone()
+    {
+        return $this->contactPhone;
+    }
+
+    /**
+     * @param string $phone
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
     }
 }
