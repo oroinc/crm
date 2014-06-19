@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\ContactUsBundle\Tests\Unit\Form\Type;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-use Oro\Bundle\EmbeddedFormBundle\Form\Type\ChannelAwareFormType;
 use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
 
 use OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
@@ -65,12 +64,9 @@ class ContactRequestTypeTest extends TypeTestCase
         $mockRepo->expects($this->any())->method('findAll')
             ->will($this->returnValue([]));
 
-        $parentType = new ChannelAwareFormType();
-
         return [
             new PreloadedExtension(
                 array(
-                    $parentType->getName()     => $parentType,
                     $mockEntityType->getName() => $mockEntityType
                 ),
                 array()
@@ -83,9 +79,9 @@ class ContactRequestTypeTest extends TypeTestCase
         $this->assertEquals('orocrm_contactus_contact_request', $this->formType->getName());
     }
 
-    public function testHasChannelAwareParent()
+    public function testParent()
     {
-        $this->assertEquals('oro_form', $this->formType->getParent());
+        $this->assertEquals('form', $this->formType->getParent());
     }
 
     public function testImplementEmbeddedFormInterface()
