@@ -77,17 +77,12 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
     protected function persistDemoEmbeddedForm(
         ObjectManager $om
     ) {
-        /** @var Channel $channel */
-        $channel = $om->getRepository('OroIntegrationBundle:Channel')
-            ->findOneBy(array('type' => 'magento'));
-
         $embeddedForm = new EmbeddedForm();
         /** @var ContactRequestType $contactUs */
         $contactUs = $this->container->get('orocrm_contact_us.embedded_form');
         $embeddedForm->setFormType('orocrm_contact_us.embedded_form');
         $embeddedForm->setCss($contactUs->getDefaultCss());
         $embeddedForm->setSuccessMessage($contactUs->getDefaultSuccessMessage());
-        $embeddedForm->setChannel($channel);
         $embeddedForm->setTitle('Contact Us Form');
         $om->persist($embeddedForm);
     }
@@ -98,10 +93,6 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
     protected function persistDemoContactUsForm(
         ObjectManager $om
     ) {
-        /** @var Channel $channel */
-        $channel = $om->getRepository('OroIntegrationBundle:Channel')
-            ->findOneBy(array('type' => 'magento'));
-
         foreach ($this->contactRequests as $contactRequest) {
             $request = new ContactRequest();
             $contactRequest['contactReason'] = $om->getRepository('OroCRMContactUsBundle:ContactReason')
@@ -109,7 +100,6 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
             foreach ($contactRequest as $property => $value) {
                 call_user_func_array(array($request, 'set' . ucfirst($property)), array($value));
             }
-            $request->setChannel($channel);
             $request->setPreferredContactMethod(ContactRequest::CONTACT_METHOD_BOTH);
             $request->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
             $om->persist($request);
