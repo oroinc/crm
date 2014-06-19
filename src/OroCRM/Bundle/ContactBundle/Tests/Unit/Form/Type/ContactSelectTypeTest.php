@@ -32,7 +32,7 @@ class ContactSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParent()
     {
-        $this->assertEquals('oro_jqueryselect2_hidden', $this->type->getParent());
+        $this->assertEquals('oro_entity_create_or_select_inline', $this->type->getParent());
     }
 
     public function testGetName()
