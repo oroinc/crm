@@ -9,6 +9,7 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 class ContactListener
 {
@@ -181,9 +182,21 @@ class ContactListener
         if ($contactEntity->getId() && !isset($this->processIds[$contactEntity->getId()])) {
             $magentoCustomer = $em->getRepository('OroCRMMagentoBundle:Customer')
                 ->findOneBy(['contact' => $contactEntity]);
-            if ($magentoCustomer && $magentoCustomer->getChannel()->getIsTwoWaySyncEnabled()) {
+            if ($this->isTwoWaySyncEnabled($magentoCustomer)) {
                 $this->processIds[$contactEntity->getId()] = $magentoCustomer;
             }
         }
+    }
+
+    /**
+     * @param Customer $magentoCustomer
+     *
+     * @return bool
+     */
+    protected function isTwoWaySyncEnabled($magentoCustomer)
+    {
+        return ($magentoCustomer
+        && $magentoCustomer->getChannel()->getIsTwoWaySyncEnabled()
+        && !$magentoCustomer->getChannel()->getDisabled());
     }
 }
