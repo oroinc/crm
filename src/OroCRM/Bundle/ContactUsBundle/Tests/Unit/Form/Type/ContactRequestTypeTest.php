@@ -85,7 +85,7 @@ class ContactRequestTypeTest extends TypeTestCase
 
     public function testHasChannelAwareParent()
     {
-        $this->assertEquals('oro_channel_aware_form', $this->formType->getParent());
+        $this->assertEquals('oro_form', $this->formType->getParent());
     }
 
     public function testImplementEmbeddedFormInterface()
