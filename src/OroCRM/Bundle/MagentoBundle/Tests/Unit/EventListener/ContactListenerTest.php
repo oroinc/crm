@@ -182,7 +182,7 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
 
         $testMagentoCustomer = new ExtendCustomer();
         $channel             = new Channel();
-        $channel->setIsTwoWaySyncEnabled(true);
+        $channel->getSynchronizationSettings()->offsetSet('isTwoWaySyncEnabled', true);
         $channel->setName('test');
         $testMagentoCustomer->setChannel($channel);
 

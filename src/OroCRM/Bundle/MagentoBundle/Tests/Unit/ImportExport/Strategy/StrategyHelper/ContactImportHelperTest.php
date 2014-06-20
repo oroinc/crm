@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
+use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
@@ -71,7 +71,7 @@ class ContactImportHelperTest extends \PHPUnit_Framework_TestCase
         array $expectedTypeNames
     ) {
         $channel = new Channel();
-        $channel->setSyncPriority($priority);
+        $channel->getSynchronizationSettings()->offsetSet('syncPriority', $priority);
 
         $testCountry = new Country('US');
 
@@ -121,21 +121,21 @@ class ContactImportHelperTest extends \PHPUnit_Framework_TestCase
 
         return [
             'remote wins use remote types even if changed locally'   => [
-                ChannelFormTwoWaySyncSubscriber::REMOTE_WINS,
+                TwoWaySyncConnectorInterface::REMOTE_WINS,
                 new ArrayCollection([$billingType]),
                 new ArrayCollection([]),
                 new ArrayCollection([$shippingType]),
                 ['billing']
             ],
             'local wins use local types even if changed remote'      => [
-                ChannelFormTwoWaySyncSubscriber::LOCAL_WINS,
+                TwoWaySyncConnectorInterface::LOCAL_WINS,
                 new ArrayCollection([$billingType]),
                 new ArrayCollection([]),
                 new ArrayCollection([$shippingType]),
                 ['shipping']
             ],
             'should update type even if local wins but no conflicts' => [
-                ChannelFormTwoWaySyncSubscriber::LOCAL_WINS,
+                TwoWaySyncConnectorInterface::LOCAL_WINS,
                 new ArrayCollection([$billingType]),
                 new ArrayCollection([$shippingType]),
                 new ArrayCollection([$shippingType]),

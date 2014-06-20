@@ -51,7 +51,7 @@ class CustomerReverseSyncTest extends WebTestCase
         $em      = $this->getEM();
         $channel = $em->find('OroIntegrationBundle:Channel', self::$channelId);
 
-        $channel->setIsTwoWaySyncEnabled($twoWaySyncEnabled);
+        $channel->getSynchronizationSettings()->offsetSet('isTwoWaySyncEnabled', $twoWaySyncEnabled);
         $em->flush();
 
         $this->assertEmpty($this->getRecordsCount('JMSJobQueueBundle:Job'), 'Empty jobs table on start of the test');
