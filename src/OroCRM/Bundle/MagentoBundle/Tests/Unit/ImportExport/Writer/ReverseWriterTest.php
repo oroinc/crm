@@ -5,19 +5,18 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Writer;
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
-use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
+
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class ReverseWriterTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,9 +39,6 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
     /** @var CustomerSerializer */
     protected $customerSerializer;
 
-    /** @var AddressNormalizer */
-    protected $addressNormalizer;
-
     /** @var SoapTransport|\PHPUnit_Framework_MockObject_MockObject */
     protected $transport;
 
@@ -51,6 +47,9 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
 
     /** @var RegionConverter|\PHPUnit_Framework_MockObject_MockObject */
     protected $regionConverter;
+
+    /** @var RegionConverter|\PHPUnit_Framework_MockObject_MockObject */
+    protected $importHelper;
 
     /** @var ReverseWriter */
     protected $writer;
@@ -67,14 +66,14 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->regionConverter = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Converter\RegionConverter')
             ->disableOriginalConstructor()->getMock();
+        $this->importHelper = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Service\ImportHelper')
+            ->disableOriginalConstructor()->getMock();
 
-        $this->customerSerializer = new CustomerSerializer($this->em);
-        $this->addressNormalizer  = new AddressNormalizer();
+        $this->customerSerializer = new CustomerSerializer($this->importHelper);
 
         $this->writer = new ReverseWriter(
             $this->em,
             $this->customerSerializer,
-            $this->addressNormalizer,
             $this->transport,
             $this->addressImportHelper,
             $this->regionConverter

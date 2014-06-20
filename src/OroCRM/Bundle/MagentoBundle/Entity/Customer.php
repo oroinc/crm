@@ -10,6 +10,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -111,6 +112,13 @@ class Customer extends ExtendCustomer
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "identity"=true
+     *          }
+     *      }
+     * )
      */
     protected $email;
 
