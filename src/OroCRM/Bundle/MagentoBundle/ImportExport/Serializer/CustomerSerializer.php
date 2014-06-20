@@ -47,22 +47,22 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
     /** @var array */
     protected $addressMageToBapMapping = [
-        'prefix' => '[namePrefix]',
-        'firstname' => '[firstName]',
-        'middlename' => '[middleName]',
-        'lastname' => '[lastName]',
-        'suffix' => '[nameSuffix]',
-        'company' => '[organization]',
-        'street' => '[street]',
-        'city' => '[city]',
-        'postcode' => '[postalCode]',
-        'country_id' => '[country][iso2Code]',
-        'region' => '[regionText]',
-        'region_id' => '[region][combinedCode]',
-        'created_at' => '[created]',
-        'updated_at' => '[updated]',
+        'prefix'              => '[namePrefix]',
+        'firstname'           => '[firstName]',
+        'middlename'          => '[middleName]',
+        'lastname'            => '[lastName]',
+        'suffix'              => '[nameSuffix]',
+        'company'             => '[organization]',
+        'street'              => '[street]',
+        'city'                => '[city]',
+        'postcode'            => '[postalCode]',
+        'country_id'          => '[country][iso2Code]',
+        'region'              => '[regionText]',
+        'region_id'           => '[region][code]',
+        'created_at'          => '[created]',
+        'updated_at'          => '[updated]',
         'customer_address_id' => '[customerAddressId]',
-        'telephone' => '[phone]'
+        'telephone'           => '[phone]'
     ];
 
     protected $contactAddressEntityToMageMapping = [
@@ -77,7 +77,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'postal_code'          => 'postcode',
         'country.iso2_code'    => 'country_id',
         'region_text'          => 'region',
-        'region.combined_code' => 'region_id',
+        'region.code'          => 'region_id',
         'created'              => 'created_at',
         'updated'              => 'updated_at'
     ];
@@ -676,7 +676,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             list($bapAddress['street'], $bapAddress['street2']) = explode("\n", $bapAddress['street']);
         }
 
-        if (empty($bapAddress['region']['combinedCode'])) {
+        if (empty($bapAddress['region']['code'])) {
             $bapAddress['region'] = null;
         }
 
