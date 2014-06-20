@@ -193,13 +193,22 @@ class CustomerStrategy extends BaseStrategy
      */
     protected function getContactPhoneFromContact(Contact $contact, ContactPhone $contactPhone)
     {
-        $filtered = $contact->getPhones()->filter(
-            function (ContactPhone $phone) use ($contactPhone) {
-                return $phone && $phone->getPhone() === $contactPhone->getPhone();
+        $contact->getPhones()->forAll(
+            function ($key, ContactPhone $phone) use ($contactPhone) {
+                if ($phone->getPhone() === $contactPhone->getPhone()) {
+                    $contactPhoneAddress = $this->doctrineHelper->getEntityByCriteria(
+                        ['contactPhone' => $phone->getId()],
+                        'OroCRM\Bundle\MagentoBundle\Entity\Address'
+                    );
+
+                    if (!$contactPhoneAddress) {
+                        return $phone;
+                    }
+                }
             }
         );
 
-        return $filtered->first();
+        return null;
     }
 
     /**
