@@ -16,7 +16,7 @@ class ContactSelectType extends AbstractType
                     'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                 ),
                 'autocomplete_alias' => 'contacts',
-                'grid_name' => 'contacts-grid',
+                'grid_name' => 'contacts-select-grid',
                 'create_form_route' => 'orocrm_contact_create'
             )
         );

@@ -131,30 +131,13 @@ class ContactController extends Controller
             $entity = $this->getManager()->createEntity();
         }
 
-        if ($this->get('orocrm_contact.form.handler.contact')->process($entity)) {
-            if ($this->getRequest()->get('_wid')) {
-                return array(
-                    'form'   => $this->get('orocrm_contact.form.contact')->createView(),
-                    'entity' => $entity,
-                    'savedId' => $entity->getId()
-                );
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    $this->get('translator')->trans('orocrm.contact.controller.contact.saved.message')
-                );
-
-                return $this->get('oro_ui.router')->redirectAfterSave(
-                    ['route' => 'orocrm_contact_update', 'parameters' => ['id' => $entity->getId()]],
-                    ['route' => 'orocrm_contact_view', 'parameters' => ['id' => $entity->getId()]],
-                    $entity
-                );
-            }
-        }
-
-        return array(
-            'entity' => $entity,
-            'form'   => $this->get('orocrm_contact.form.contact')->createView(),
+        return $this->get('oro_form.model.update_handler')->handleUpdate(
+            $entity,
+            $this->get('orocrm_contact.form.contact'),
+            array('route' => 'orocrm_contact_update', 'parameters' => array('id' => $entity->getId())),
+            array('route' => 'orocrm_contact_view', 'parameters' => array('id' => $entity->getId())),
+            $this->get('translator')->trans('orocrm.contact.controller.contact.saved.message'),
+            $this->get('orocrm_contact.form.handler.contact')
         );
     }
 

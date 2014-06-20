@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
 use OroCRM\Bundle\AccountBundle\Form\Type\AccountSelectType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AccountSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +27,7 @@ class AccountSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testParent()
     {
-        $this->assertEquals('oro_jqueryselect2_hidden', $this->type->getParent());
+        $this->assertEquals('oro_entity_create_or_select_inline', $this->type->getParent());
     }
 
     public function testSetDefaultOptions()
