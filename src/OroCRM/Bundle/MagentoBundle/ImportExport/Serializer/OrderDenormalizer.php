@@ -38,7 +38,7 @@ class OrderDenormalizer extends ConfigurableEntityNormalizer
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        if (!empty($data['paymentDetails'])) {
+        if (array_key_exists('paymentDetails', $data)) {
             $data['paymentDetails'] = $this->importHelper->denormalizePaymentDetails($data['paymentDetails']);
         }
         if (!empty($data['addresses'])) {

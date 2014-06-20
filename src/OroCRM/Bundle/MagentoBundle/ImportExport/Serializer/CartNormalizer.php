@@ -45,7 +45,7 @@ class CartNormalizer extends ConfigurableEntityNormalizer
         if (!empty($data['shippingAddress'])) {
             $data['shippingAddress'] = $this->importHelper->getFixedAddress($data['shippingAddress']);
         }
-        if (!empty($data['paymentDetails'])) {
+        if (array_key_exists('paymentDetails', $data)) {
             $data['paymentDetails'] = $this->importHelper->denormalizePaymentDetails($data['paymentDetails']);
         }
 
