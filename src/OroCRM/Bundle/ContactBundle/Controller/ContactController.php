@@ -134,8 +134,18 @@ class ContactController extends Controller
         return $this->get('oro_form.model.update_handler')->handleUpdate(
             $entity,
             $this->get('orocrm_contact.form.contact'),
-            array('route' => 'orocrm_contact_update', 'parameters' => array('id' => $entity->getId())),
-            array('route' => 'orocrm_contact_view', 'parameters' => array('id' => $entity->getId())),
+            function (Contact $entity) {
+                return array(
+                    'route' => 'orocrm_contact_update',
+                    'parameters' => array('id' => $entity->getId())
+                );
+            },
+            function (Contact $entity) {
+                return array(
+                    'route' => 'orocrm_contact_view',
+                    'parameters' => array('id' => $entity->getId())
+                );
+            },
             $this->get('translator')->trans('orocrm.contact.controller.contact.saved.message'),
             $this->get('orocrm_contact.form.handler.contact')
         );

@@ -118,8 +118,18 @@ class OpportunityController extends Controller
         return $this->get('oro_form.model.update_handler')->handleUpdate(
             $entity,
             $this->get('orocrm_sales.opportunity.form'),
-            array('route' => 'orocrm_sales_opportunity_update', 'parameters' => array('id' => $entity->getId())),
-            array('route' => 'orocrm_sales_opportunity_view', 'parameters' => array('id' => $entity->getId())),
+            function (Opportunity $entity) {
+                return array(
+                    'route' => 'orocrm_sales_opportunity_update',
+                    'parameters' => array('id' => $entity->getId())
+                );
+            },
+            function (Opportunity $entity) {
+                return array(
+                    'route' => 'orocrm_sales_opportunity_view',
+                    'parameters' => array('id' => $entity->getId())
+                );
+            },
             $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),
             $this->get('orocrm_sales.opportunity.form.handler')
         );
