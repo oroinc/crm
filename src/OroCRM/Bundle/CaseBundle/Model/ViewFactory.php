@@ -85,8 +85,10 @@ class ViewFactory
     {
         $result = [
             'id'            => $comment->getId(),
-            'message'       => nl2br($comment->getMessage()),
-            'briefMessage'  => mb_substr(preg_replace('/[\\n\\r]+/', ' ', $comment->getMessage()), 0, 200),
+            'message'       => nl2br(htmlspecialchars($comment->getMessage())),
+            'briefMessage'  => htmlspecialchars(
+                mb_substr(preg_replace('/[\\n\\r]+/', ' ', $comment->getMessage()), 0, 200)
+            ),
             'public'        => $comment->isPublic(),
             'createdAt'     => $comment->getCreatedAt() ?
                 $this->dateTimeFormatter->format($comment->getCreatedAt()) : null,
