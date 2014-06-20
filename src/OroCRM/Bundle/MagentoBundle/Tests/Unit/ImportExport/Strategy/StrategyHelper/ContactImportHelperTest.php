@@ -71,7 +71,7 @@ class ContactImportHelperTest extends \PHPUnit_Framework_TestCase
         array $expectedTypeNames
     ) {
         $channel = new Channel();
-        $channel->getSynchronizationSettings()->offsetSet('syncPriority', $priority);
+        $channel->getSynchronizationSettingsReference()->offsetSet('syncPriority', $priority);
 
         $testCountry = new Country('US');
 

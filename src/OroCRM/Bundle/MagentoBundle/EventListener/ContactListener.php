@@ -180,8 +180,11 @@ class ContactListener
         if ($contactEntity->getId() && !isset($this->processIds[$contactEntity->getId()])) {
             $magentoCustomer    = $em->getRepository('OroCRMMagentoBundle:Customer')
                 ->findOneBy(['contact' => $contactEntity]);
-            $isTwoWaySyncNeeded = $magentoCustomer
-                && $magentoCustomer->getChannel()->getSynchronizationSettings()->offsetGet('isTwoWaySyncEnabled');
+            $isTwoWaySyncNeeded = $magentoCustomer &&
+                $magentoCustomer
+                    ->getChannel()
+                    ->getSynchronizationSettings()
+                    ->offsetGetOr('isTwoWaySyncEnabled', false);
 
             if ($isTwoWaySyncNeeded) {
                 $this->processIds[$contactEntity->getId()] = $magentoCustomer;

@@ -97,7 +97,8 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
     {
         $transportSetting = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Transport');
         $channel          = new Channel();
-        $channel->getSynchronizationSettings()->offsetSet('syncPriority', TwoWaySyncConnectorInterface::LOCAL_WINS);
+        $channel->getSynchronizationSettingsReference()
+            ->offsetSet('syncPriority', TwoWaySyncConnectorInterface::LOCAL_WINS);
         $channel->setTransport($transportSetting);
         $customer = new Customer();
         $customer->setChannel($channel);
@@ -296,7 +297,8 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
         $transportSetting = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Transport');
         $channel          = new Channel();
         $channel->setTransport($transportSetting);
-        $channel->getSynchronizationSettings()->offsetSet('syncPriority', TwoWaySyncConnectorInterface::LOCAL_WINS);
+        $channel->getSynchronizationSettingsReference()
+            ->offsetSet('syncPriority', TwoWaySyncConnectorInterface::LOCAL_WINS);
         $customer = new Customer();
         $customer->setOriginId(self::TEST_CUSTOMER_ID);
         $customer->setChannel($channel);
