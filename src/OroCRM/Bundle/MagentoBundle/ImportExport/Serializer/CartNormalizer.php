@@ -62,10 +62,19 @@ class CartNormalizer extends ConfigurableEntityNormalizer
             $cart->getCustomer()->setEmail($data['email']);
         }
 
+        $this->updateStatus($cart, $data);
+
+        return $cart;
+    }
+
+    /**
+     * @param Cart  $cart
+     * @param array $data
+     */
+    protected function updateStatus(Cart $cart, array $data)
+    {
         $statusClass = MagentoConnectorInterface::CART_STATUS_TYPE;
         $isActive    = isset($data['is_active']) ? (bool)$data['is_active'] : true;
         $cart->setStatus(new $statusClass($isActive ? 'open' : 'expired'));
-
-        return $cart;
     }
 }
