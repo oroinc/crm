@@ -7,7 +7,7 @@ parameters:
     orocrm_account.account.manager.api.class:       Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_account.type.account.api.class:          OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType
 
-    orocrm_account.activity_widget_provider.class:  %oro_activity.widget_provider.menu.class%
+    orocrm_account.activity_widget_provider.class:  %oro_activity.widget_provider.activities.menu.class%
 
 services:
     orocrm_account.form.account:
@@ -93,9 +93,9 @@ services:
     orocrm_account.activity_widget_provider:
         class: %orocrm_account.activity_widget_provider.class%
         arguments:
-           - @oro_entity.doctrine_helper
+           - @oro_entity.entity_identifier_accessor
            - @oro_ui.twig.tab_extension
            - 'account_activity_tab_panel'
            - %orocrm_account.account.entity.class%
         tags:
-           - { name: oro_activity.widget_provider }
+           - { name: oro_activity.activity_widget_provider }
