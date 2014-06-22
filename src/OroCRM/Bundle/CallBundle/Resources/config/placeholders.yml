@@ -1,9 +1,9 @@
 placeholders:
     orocrm_account_action_dropdown:
         items:
-            orocrm_account_action_dropdown_add_call: ~
+            orocrm_account_action_dropdown_add_call:
+                order: 40
 
 items:
     orocrm_account_action_dropdown_add_call:
         template: OroCRMCallBundle:Account:action/logCallButton.html.twig
-        order: 40
