@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\TagBundle\Entity\Taggable;
@@ -53,7 +54,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *  }
  * )
  */
-class Account extends ExtendAccount implements Taggable
+class Account extends ExtendAccount implements Taggable, EmailHolderInterface
 {
     /**
      * @ORM\Id
@@ -518,5 +519,20 @@ class Account extends ExtendAccount implements Taggable
     public function getDefaultContact()
     {
         return $this->defaultContact;
+    }
+
+    /**
+     * Get the primary email address of the default contact
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        $contact = $this->getDefaultContact();
+        if (!$contact) {
+            return null;
+        }
+
+        return $contact->getEmail();
     }
 }
