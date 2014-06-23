@@ -8,7 +8,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
+use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -65,7 +65,7 @@ class ContactImportHelper
      */
     public function __construct(Channel $channel, AddressImportHelper $addressImportHelper)
     {
-        $this->priority            = $channel->getSyncPriority();
+        $this->priority            = $channel->getSynchronizationSettings()->offsetGetOr('syncPriority');
         $this->addressImportHelper = $addressImportHelper;
         $this->accessor            = new PropertyAccessor();
     }
@@ -278,7 +278,7 @@ class ContactImportHelper
      */
     protected function isRemotePrioritized()
     {
-        return $this->priority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS;
+        return $this->priority === TwoWaySyncConnectorInterface::REMOTE_WINS;
     }
 
     /**

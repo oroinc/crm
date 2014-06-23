@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
