@@ -12,6 +12,8 @@ parameters:
     orocrm_magento.importexport.data_converter.order.class:                     OroCRM\Bundle\MagentoBundle\ImportExport\Converter\OrderDataConverter
     orocrm_magento.importexport.data_converter.order_address.class:             OroCRM\Bundle\MagentoBundle\ImportExport\Converter\OrderAddressDataConverter
     orocrm_magento.importexport.data_converter.order_item.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Converter\OrderItemDataConverter
+    orocrm_magento.importexport.data_converter.cart_address.class:              OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CartAddressDataConverter
+    orocrm_magento.importexport.data_converter.magento_address.class:           OroCRM\Bundle\MagentoBundle\ImportExport\Converter\MagentoAddressDataConverter
 
     # connectors
     orocrm_magento.mage.region_connector.class:                                 OroCRM\Bundle\MagentoBundle\Provider\RegionConnector
@@ -59,6 +61,12 @@ services:
 
     orocrm_magento.importexport.data_converter.order_item:
         class: %orocrm_magento.importexport.data_converter.order_item.class%
+
+    orocrm_magento.importexport.data_converter.cart_address:
+        class: %orocrm_magento.importexport.data_converter.cart_address.class%
+
+    orocrm_magento.importexport.data_converter.magento_address:
+        class: %orocrm_magento.importexport.data_converter.magento_address.class%
 
     # Connectors
     orocrm_magento.mage.customer_connector:
@@ -124,6 +132,7 @@ services:
         class: %orocrm_magento.importexport.typed_address_normalizer.class%
         arguments:
             - @oro_importexport.field.field_helper
+            - @orocrm_magento.importexport.data_converter.magento_address
         tags:
             - { name: oro_importexport.normalizer, priority: -1 }
 
@@ -155,6 +164,7 @@ services:
         class: %orocrm_magento.importexport.normalizer.cart_address.class%
         arguments:
             - @oro_importexport.field.field_helper
+            - @orocrm_magento.importexport.data_converter.cart_address
         tags:
             - { name: oro_importexport.normalizer, priority: 200 }
 
