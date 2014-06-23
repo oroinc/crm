@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
@@ -179,9 +178,15 @@ class ContactListener
     protected function scheduleSync(Contact $contactEntity, EntityManager $em)
     {
         if ($contactEntity->getId() && !isset($this->processIds[$contactEntity->getId()])) {
-            $magentoCustomer = $em->getRepository('OroCRMMagentoBundle:Customer')
+            $magentoCustomer    = $em->getRepository('OroCRMMagentoBundle:Customer')
                 ->findOneBy(['contact' => $contactEntity]);
-            if ($magentoCustomer && $magentoCustomer->getChannel()->getIsTwoWaySyncEnabled()) {
+            $isTwoWaySyncNeeded = $magentoCustomer &&
+                $magentoCustomer
+                    ->getChannel()
+                    ->getSynchronizationSettings()
+                    ->offsetGetOr('isTwoWaySyncEnabled', false);
+
+            if ($isTwoWaySyncNeeded) {
                 $this->processIds[$contactEntity->getId()] = $magentoCustomer;
             }
         }
