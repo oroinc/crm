@@ -1027,6 +1027,19 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEmail()
+    {
+        $primaryEmail = $this->getPrimaryEmail();
+        if (!$primaryEmail) {
+            return null;
+        }
+
+        return $primaryEmail->getEmail();
+    }
+
+    /**
      * Gets primary email if it's available.
      *
      * @return ContactEmail|null
