@@ -15,8 +15,6 @@ orocrm:
                 label: Phone
             comment:
                 label: Comment
-            channel:
-                label: Channel
             created_at:
                 label: Created
             updated_at:
