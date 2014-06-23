@@ -29,6 +29,9 @@ class CustomerStrategy extends BaseStrategy
     /** @var array */
     protected $groupEntityCache = [];
 
+    /** @var array */
+    protected $processedEntities = [];
+
     /**
      * Update/Create customer and related entities based on remote data
      *
@@ -193,20 +196,19 @@ class CustomerStrategy extends BaseStrategy
      */
     protected function getContactPhoneFromContact(Contact $contact, ContactPhone $contactPhone)
     {
-        $contact->getPhones()->forAll(
-            function ($key, ContactPhone $phone) use ($contactPhone) {
-                if ($phone->getPhone() === $contactPhone->getPhone()) {
-                    $contactPhoneAddress = $this->doctrineHelper->getEntityByCriteria(
-                        ['contactPhone' => $phone->getId()],
-                        'OroCRM\Bundle\MagentoBundle\Entity\Address'
-                    );
-
-                    if (!$contactPhoneAddress) {
-                        return $phone;
-                    }
+        foreach ($contact->getPhones() as $phone) {
+            if ($phone->getPhone() === $contactPhone->getPhone()) {
+                $hash = spl_object_hash($phone);
+                if (array_key_exists($hash, $this->processedEntities)) {
+                    // skip if contact phone used for previously imported phone
+                    continue;
                 }
+
+                $this->processedEntities[$hash] = $phone;
+
+                return $phone;
             }
-        );
+        }
 
         return null;
     }
