@@ -3,92 +3,77 @@
 namespace OroCRM\Bundle\TaskBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use OroCRM\Bundle\TaskBundle\Tests\Selenium\Pages\Tasks;
+use OroCRM\Bundle\CaseBundle\Tests\Selenium\Pages\Cases;
 
 /**
- * Class CreateTaskTest
+ * Class CasesTest
  *
- * @package OroCRM\Bundle\TaskBundle\Tests\Selenium
+ * @package OroCRM\Bundle\CaseBundle\Tests\Selenium
  */
-class TasksTest extends Selenium2TestCase
+class CasesTest extends Selenium2TestCase
 {
     /**
      * @return string
      */
-    public function testCreateTask()
+    public function testCreate()
     {
-        $subject = 'Tasks_' . mt_rand();
+        $subject = 'Case_' . mt_rand();
 
         $login = $this->login();
-        /** @var Tasks $login */
-        $login->openTasks('OroCRM\Bundle\TaskBundle')
+        /** @var Cases $login */
+        $login->openCases('OroCRM\Bundle\CaseBundle')
             ->add()
             ->setSubject($subject)
             ->setDescription($subject)
-            ->setDueDate('Apr 9, 2014 12:51 PM')
             ->save()
-            ->assertMessage('Task saved')
+            ->assertMessage('Case saved')
             ->toGrid()
-            ->assertTitle('Tasks - Activities');
+            ->assertTitle('Cases - Activities');
 
         return $subject;
     }
 
     /**
-     * @depends testCreateTask
+     * @depends testCreate
      * @param $subject
      * @return string
      */
-    public function testUpdateTask($subject)
+    public function testUpdate($subject)
     {
         $newSubject = 'Update_' . $subject;
 
         $login = $this->login();
-        /** @var Tasks $login */
-        $login->openTasks('OroCRM\Bundle\TaskBundle')
+        /** @var Cases $login */
+        $login->openCases('OroCRM\Bundle\CaseBundle')
             ->filterBy('Subject', $subject)
             ->open(array($subject))
             ->edit()
-            ->assertTitle($subject . ' - Edit - Tasks - Activities')
+            ->assertTitle($subject . ' - Edit - Cases - Activities')
             ->setSubject($newSubject)
             ->save()
-            ->assertMessage('Task saved')
+            ->assertMessage('Case saved')
             ->toGrid()
-            ->assertTitle('Tasks - Activities')
-            ->close();
+            ->assertTitle('Cases - Activities');
 
         return $newSubject;
     }
 
     /**
-     * @depends testUpdateTask
+     * @depends testUpdate
      * @param $subject
      */
-    public function testWorkflow($subject)
+    public function testDelete($subject)
     {
         $login = $this->login();
-        /** @var Tasks $login */
-        $login->openTasks('OroCRM\Bundle\TaskBundle')
-            ->filterBy('Subject', $subject)
-            ->open(array($subject))
-            ->process(array('Start progress' => 'In progress', 'Close' => null, 'Reopen' => null))
-            ->process(array('Start progress' => null, 'Stop progress' => null, 'Close' => null));
-    }
-
-    /**
-     * @depends testUpdateTask
-     * @param $subject
-     */
-    public function testDeleteTask($subject)
-    {
-        $login = $this->login();
-        /** @var Tasks $login */
-        $login->openTasks('OroCRM\Bundle\TaskBundle')
+        /** @var Cases $login */
+        $login->openCases('OroCRM\Bundle\CaseBundle')
             ->filterBy('Subject', $subject)
             ->open(array($subject))
             ->delete()
-            ->assertTitle('Tasks - Activities')
-            ->assertMessage('Task deleted')
+            ->assertTitle('Cases - Activities')
+            ->assertMessage('Case deleted');
+        /** @var Cases $login */
+        $login->openCases('OroCRM\Bundle\CaseBundle')
             ->assertNoDataMessage('No records found');
     }
 }
