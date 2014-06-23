@@ -32,7 +32,6 @@ class CaseEntity extends AbstractPageEntity
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $reminders;
 
-
     public function __construct($testCase, $redirect = true)
     {
         parent::__construct($testCase, $redirect);
