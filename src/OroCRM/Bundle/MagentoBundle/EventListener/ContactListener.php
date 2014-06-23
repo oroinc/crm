@@ -195,7 +195,7 @@ class ContactListener
     protected function isTwoWaySyncEnabled($magentoCustomer)
     {
         return ($magentoCustomer
-        && $magentoCustomer->getChannel()->getIsTwoWaySyncEnabled()
-        && !$magentoCustomer->getChannel()->getDisabled());
+        && $magentoCustomer->getChannel()->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled', false)
+        && $magentoCustomer->getChannel()->getEnabled());
     }
 }
