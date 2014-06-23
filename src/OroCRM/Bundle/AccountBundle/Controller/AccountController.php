@@ -78,7 +78,9 @@ class AccountController extends Controller
      */
     public function indexAction()
     {
-        return [];
+        return [
+            'entity_class' => $this->container->getParameter('orocrm_account.account.entity.class')
+        ];
     }
 
     /**

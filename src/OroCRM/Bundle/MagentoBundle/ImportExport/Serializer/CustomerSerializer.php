@@ -3,26 +3,25 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-use Oro\Bundle\UserBundle\Model\Gender;
-use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
+use Oro\Bundle\UserBundle\Model\Gender;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
-use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
-use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -30,6 +29,8 @@ use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormal
  */
 class CustomerSerializer extends AbstractNormalizer implements DenormalizerInterface, NormalizerInterface
 {
+    const PROCESSOR_ALIAS = 'orocrm_magento';
+
     /** @var array */
     protected $importFieldsMap = [
         'customer_id' => 'origin_id',
@@ -45,24 +46,23 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     ];
 
     /** @var array */
-    protected $addressBapToMageMapping = [
-        'namePrefix'        => 'prefix',
-        'firstName'         => 'firstname',
-        'middleName'        => 'middlename',
-        'lastName'          => 'lastname',
-        'nameSuffix'        => 'suffix',
-        'organization'      => 'company',
-        'street'            => 'street',
-        'city'              => 'city',
-        'postalCode'        => 'postcode',
-        'country'           => 'country_id',
-        'regionText'        => 'region',
-        'region'            => 'region_id',
-        'created'           => 'created_at',
-        'updated'           => 'updated_at',
-        'customerAddressId' => 'customer_address_id',
-        'phone'             => 'telephone',
-        'contactPhone'      => 'telephone',
+    protected $addressMageToBapMapping = [
+        'prefix'              => '[namePrefix]',
+        'firstname'           => '[firstName]',
+        'middlename'          => '[middleName]',
+        'lastname'            => '[lastName]',
+        'suffix'              => '[nameSuffix]',
+        'company'             => '[organization]',
+        'street'              => '[street]',
+        'city'                => '[city]',
+        'postcode'            => '[postalCode]',
+        'country_id'          => '[country][iso2Code]',
+        'region'              => '[regionText]',
+        'region_id'           => '[region][code]',
+        'created_at'          => '[created]',
+        'updated_at'          => '[updated]',
+        'customer_address_id' => '[customerAddressId]',
+        'telephone'           => '[phone]'
     ];
 
     protected $contactAddressEntityToMageMapping = [
@@ -77,7 +77,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'postal_code'          => 'postcode',
         'country.iso2_code'    => 'country_id',
         'region_text'          => 'region',
-        'region.combined_code' => 'region_id',
+        'region.code'          => 'region_id',
         'created'              => 'created_at',
         'updated'              => 'updated_at'
     ];
@@ -145,7 +145,12 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $result = [];
 
         $addressData   = $this->getBapAddressData($remoteData);
-        $remoteAddress = $this->serializer->denormalize($addressData, MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE);
+        $remoteAddress = $this->serializer->denormalize(
+            $addressData,
+            MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE,
+            null,
+            ['processorAlias' => self::PROCESSOR_ALIAS]
+        );
 
         $accessor = PropertyAccess::createPropertyAccessor();
 
@@ -209,7 +214,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
     /**
      * @param AbstractAddress $addressFields
-     *
      * @param array $defaultData
      *
      * @return array
@@ -299,7 +303,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, $format = null, array $context = array())
     {
         return $data instanceof Customer;
     }
@@ -307,7 +311,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return $type == MagentoConnectorInterface::CUSTOMER_TYPE;
     }
@@ -344,7 +348,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
         $resultObject->setChannel($this->getChannelFromContext($context));
         $this->setScalarFieldsValues($resultObject, $mappedData);
-        $this->setObjectFieldsValues($resultObject, $mappedData);
+        $this->setObjectFieldsValues($resultObject, $mappedData, $format, $context);
 
         return $resultObject;
     }
@@ -376,33 +380,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
      */
     protected function setObjectFieldsValues(Customer $object, array $data, $format = null, array $context = array())
     {
-        // format contact data
-        $data['contact']   = $this->formatContactData($data);
-        $data['account']   = $this->formatAccountData($data);
-        $data['addresses'] = $data['contact']['addresses'];
-
-        /** @var Contact $contact */
-        $contact = $this->denormalizeObject($data, 'contact', ContactNormalizer::CONTACT_TYPE);
-
-        /** @var Account $account */
-        $account = $this->denormalizeObject(
-            $data,
-            'account',
-            AccountNormalizer::ACCOUNT_TYPE,
-            $format,
-            array_merge($context, ['mode' => AccountNormalizer::FULL_MODE])
-        );
-        unset($data['account']);
-
-        /** @var Website $website */
-        $website = $this->denormalizeObject($data, 'website', MagentoConnectorInterface::WEBSITE_TYPE);
-        $website->setChannel($object->getChannel());
-
-        /** @var Store $store */
-        $store = $this->denormalizeObject($data, 'store', MagentoConnectorInterface::STORE_TYPE);
-        $store->setWebsite($website);
-        $store->setChannel($object->getChannel());
-
         if (!empty($data['birthday'])) {
             /** @var \DateTime $birthday */
             $birthday = $this->denormalizeObject(
@@ -413,63 +390,158 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
                 array_merge($context, ['type' => 'date'])
             );
             $object->setBirthday($birthday);
+            unset($data['birthday']);
         }
 
-        /** @var CustomerGroup $group */
-        $group = $this->denormalizeObject($data, 'group', MagentoConnectorInterface::CUSTOMER_GROUPS_TYPE);
-        $group->setChannel($object->getChannel());
-
-        /** @var \DateTime $createdAt */
-        $createdAt = $this->denormalizeObject(
-            $data,
-            'created_at',
-            'DateTime',
-            $format,
-            array_merge($context, ['type' => 'datetime', 'format' => 'Y-m-d H:i:s'])
-        );
-
-        /** @var \DateTime $updatedAt */
-        $updatedAt = $this->denormalizeObject(
-            $data,
-            'updated_at',
-            'DateTime',
-            $format,
-            array_merge($context, ['type' => 'datetime', 'format' => 'Y-m-d H:i:s'])
-        );
-        $object
-            ->setWebsite($website)
-            ->setStore($store)
-            ->setGroup($group)
-            ->setContact($contact)
-            ->setAccount($account)
-            ->setCreatedAt($createdAt)
-            ->setUpdatedAt($updatedAt);
-
-        /** @var \Doctrine\Common\Collections\Collection $addresses */
-        $addresses = $this->denormalizeObject($data, 'addresses', MagentoConnectorInterface::CUSTOMER_ADDRESSES_TYPE);
-        if (!empty($addresses)) {
-            $object->resetAddresses($addresses);
+        if (!empty($data['created_at'])) {
+            /** @var \DateTime $createdAt */
+            $createdAt = $this->denormalizeObject(
+                $data,
+                'created_at',
+                'DateTime',
+                $format,
+                $context
+            );
+            $object->setCreatedAt($createdAt);
         }
 
-        $this->setPhoneToTheAddress($object, $data['addresses'], $contact);
+        if (!empty($data['updated_at'])) {
+            /** @var \DateTime $updatedAt */
+            $updatedAt = $this->denormalizeObject(
+                $data,
+                'updated_at',
+                'DateTime',
+                $format,
+                $context
+            );
+            $object->setUpdatedAt($updatedAt);
+        }
+
+        $this->setContact($object, $data, $format, $context);
+        $this->setAccount($object, $data, $format, $context);
+        $this->setWebsite($object, $data, $format, $context);
+        $this->setStore($object, $data, $format, $context);
+        $this->setGroup($object, $data, $format, $context);
     }
 
-    /**
-     * @param Customer $customer
-     * @param array    $data
-     * @param Contact  $contact
-     */
-    protected function setPhoneToTheAddress($customer, $data, $contact)
+    protected function setGroup(Customer $object, array $data, $format = null, array $context = array())
     {
-        reset($data);
+        /** @var CustomerGroup $group */
+        $group = $this->denormalizeObject(
+            $data,
+            'group',
+            MagentoConnectorInterface::CUSTOMER_GROUPS_TYPE,
+            $format,
+            $context
+        );
+        if ($group) {
+            $group->setChannel($object->getChannel());
+            $object->setGroup($group);
+        }
+    }
 
-        foreach ($customer->getAddresses() as $address) {
-            $mageData = each($data);
-            $phone    = new ContactPhone();
-            $phone->setPhone($mageData['value']['contactPhone']);
-            $phone->setOwner($contact);
-            $address->setContactPhone($phone);
-            $address->setPhone($mageData['value']['contactPhone']);
+    protected function setStore(Customer $object, array $data, $format = null, array $context = array())
+    {
+        /** @var Store $store */
+        $store = $this->denormalizeObject(
+            $data,
+            'store',
+            MagentoConnectorInterface::STORE_TYPE,
+            $format,
+            $context
+        );
+        if ($store) {
+            $store->setWebsite($object->getWebsite());
+            $store->setChannel($object->getChannel());
+            $object->setStore($store);
+        }
+    }
+
+    protected function setWebsite(Customer $object, array $data, $format = null, array $context = array())
+    {
+        /** @var Website $website */
+        $website = $this->denormalizeObject(
+            $data,
+            'website',
+            MagentoConnectorInterface::WEBSITE_TYPE,
+            $format,
+            $context
+        );
+        if ($website) {
+            $website->setChannel($object->getChannel());
+            $object->setWebsite($website);
+        }
+    }
+
+    protected function setContact(Customer $object, array $data, $format = null, array $context = array())
+    {
+        $data['contact'] = $this->formatContactData($data);
+
+        /** @var Contact $contact */
+        $contact = $this->denormalizeObject(
+            $data,
+            'contact',
+            ContactNormalizer::CONTACT_TYPE,
+            $format,
+            $context
+        );
+        if ($contact) {
+            $contact->setBirthday($object->getBirthday());
+            $object->setContact($contact);
+        }
+
+        $this->setAddresses($object, $data, $format, $context);
+    }
+
+    protected function setAccount(Customer $object, array $data, $format = null, array $context = array())
+    {
+        $data['account'] = $this->formatAccountData($data);
+
+        /** @var Account $account */
+        $account = $this->denormalizeObject(
+            $data,
+            'account',
+            'OroCRM\Bundle\AccountBundle\Entity\Account',
+            $format,
+            array_merge($context, ['mode' => ConfigurableEntityNormalizer::FULL_MODE])
+        );
+
+        if ($account) {
+            $contact = $object->getContact();
+            if (!$account->getContacts()->contains($contact)) {
+                $account->addContact($contact);
+            }
+            if (!$account->getDefaultContact()) {
+                $account->setDefaultContact($contact);
+            }
+        }
+
+        $object->setAccount($account);
+    }
+
+    protected function setAddresses(Customer $object, array $data, $format = null, array $context = array())
+    {
+        if (!empty($data['contact']['addresses'])) {
+            $data['addresses'] = $data['contact']['addresses'];
+            /** @var \Doctrine\Common\Collections\Collection $addresses */
+            $addresses = $this->denormalizeObject(
+                $data,
+                'addresses',
+                MagentoConnectorInterface::CUSTOMER_ADDRESSES_TYPE,
+                $format,
+                $context
+            );
+
+            if (!empty($addresses)) {
+                $contact = $object->getContact();
+                /** @var Address $address */
+                foreach ($addresses as $address) {
+                    if ($contactPhone = $address->getContactPhone()) {
+                        $contactPhone->setOwner($contact);
+                    }
+                }
+                $object->resetAddresses($addresses);
+            }
         }
     }
 
@@ -485,17 +557,19 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $nameParts = array_intersect_key($data, array_flip(['first_name', 'last_name']));
         $account   = ['name' => implode(' ', $nameParts)];
 
-        foreach ($data['addresses'] as $address) {
-            $addressTypes = array();
-            if (!empty($address['is_default_shipping'])) {
-                $addressTypes[] = AddressType::TYPE_SHIPPING . '_address';
-            }
-            if (!empty($address['is_default_billing'])) {
-                $addressTypes[] = AddressType::TYPE_BILLING . '_address';
-            }
+        if (!empty($data['addresses'])) {
+            foreach ($data['addresses'] as $address) {
+                $addressTypes = array();
+                if (!empty($address['is_default_shipping'])) {
+                    $addressTypes[] = AddressType::TYPE_SHIPPING . 'Address';
+                }
+                if (!empty($address['is_default_billing'])) {
+                    $addressTypes[] = AddressType::TYPE_BILLING . 'Address';
+                }
 
-            foreach ($addressTypes as $addressType) {
-                $account[$addressType] = $this->getBapAddressData($address);
+                foreach ($addressTypes as $addressType) {
+                    $account[$addressType] = $this->getBapAddressData($address);
+                }
             }
         }
 
@@ -520,7 +594,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             'nameSuffix' => null,
             'gender'     => null,
             'addresses'  => [],
-            'birthday'   => null,
             'phones'     => [],
             'emails'     => []
         );
@@ -531,31 +604,46 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             $bapAddress = $this->getBapAddressData(
                 $address,
                 array(
-                     'firstName' => $contact['firstName'],
-                     'lastName'  => $contact['lastName']
+                     'firstname' => $contact['firstName'],
+                     'lastname'  => $contact['lastName']
                 )
             );
 
             // prepare address types
             if (!empty($address['is_default_shipping'])) {
-                $bapAddress['types'][] = AddressType::TYPE_SHIPPING;
+                $bapAddress['types'][] = array('name' => AddressType::TYPE_SHIPPING);
             }
             if (!empty($address['is_default_billing'])) {
-                $bapAddress['types'][] = AddressType::TYPE_BILLING;
+                $bapAddress['types'][] = array('name' => AddressType::TYPE_BILLING);
             }
 
-            if (!empty($address['telephone']) && !in_array($address['telephone'], $contact['phones'])) {
-                $contact['phones'][] = $address['telephone'];
+            if (!empty($address['telephone'])) {
+                $phone = $address['telephone'];
+                $bapAddress['contactPhone'] = array('phone' => $phone);
+                if (!$this->arrayHasValueForKey($contact, 'phones', $phone)) {
+                    $contact['phones'][] = array('phone' => $phone);
+                }
             }
             $contact['addresses'][$key] = $bapAddress;
         }
 
         if (!empty($contact['email'])) {
-            $contact['emails'][] = $contact['email'];
+            $contact['emails'][] = array('email' => $contact['email']);
             unset($contact['email']);
         }
 
         return $contact;
+    }
+
+    protected function arrayHasValueForKey($array, $key, $value)
+    {
+        foreach ($array as $item) {
+            if (isset($item[$key]) && $item[$key] == $value) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -569,16 +657,18 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     protected function getBapAddressData(array $address, array $defaultValues = array())
     {
         $bapAddress = array();
-        foreach ($this->addressBapToMageMapping as $bapKey => $mageKey) {
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+
+        foreach ($this->addressMageToBapMapping as $mageKey => $bapKey) {
+            $value = null;
             if (array_key_exists($mageKey, $address)) {
-                $bapAddress[$bapKey] = $address[$mageKey];
-            } else {
-                $bapAddress[$bapKey] = null;
+                $value = $address[$mageKey];
             }
 
             if (array_key_exists($bapKey, $defaultValues) && empty($bapAddress[$bapKey])) {
-                $bapAddress[$bapKey] = $defaultValues[$bapKey];
+                $value = $defaultValues[$bapKey];
             }
+            $propertyAccessor->setValue($bapAddress, $bapKey, $value);
         }
 
         // Magento API return address as $street1 . "\n" . $street2
@@ -586,25 +676,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             list($bapAddress['street'], $bapAddress['street2']) = explode("\n", $bapAddress['street']);
         }
 
-        return $bapAddress;
-    }
-
-    /**
-     * @param array  $data
-     * @param string $name
-     * @param string $type
-     * @param mixed  $format
-     * @param array  $context
-     *
-     * @return null|object
-     */
-    protected function denormalizeObject(array $data, $name, $type, $format = null, $context = array())
-    {
-        $result = null;
-        if (!empty($data[$name])) {
-            $result = $this->serializer->denormalize($data[$name], $type, $format, $context);
+        if (empty($bapAddress['region']['code'])) {
+            $bapAddress['region'] = null;
         }
 
-        return $result;
+        return $bapAddress;
     }
 }
