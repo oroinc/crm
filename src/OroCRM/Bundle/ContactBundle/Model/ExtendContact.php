@@ -15,5 +15,6 @@ class ExtendContact extends BasePerson
      */
     public function __construct()
     {
+        parent::__construct();
     }
 }

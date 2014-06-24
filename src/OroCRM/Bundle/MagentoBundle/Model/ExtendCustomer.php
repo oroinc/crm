@@ -15,5 +15,6 @@ class ExtendCustomer extends BasePerson
      */
     public function __construct()
     {
+        parent::__construct();
     }
 }
