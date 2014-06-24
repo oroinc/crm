@@ -4,10 +4,6 @@ namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller\Api\Soap;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
-use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
-
 /**
  * @outputBuffering enabled
  * @dbIsolation
@@ -89,7 +85,7 @@ class CommentControllerTest extends WebTestCase
             array(
                 'id' => $id,
                 'message' => $this->commentCreateData['message'],
-                'public' => true,
+                'public' => false,
                 'case' => self::$caseId,
                 'owner' => self::$adminUserId,
                 'contact' => null,
@@ -115,7 +111,7 @@ class CommentControllerTest extends WebTestCase
             array(
                 'id' => $id,
                 'message' => $this->commentCreateData['message'],
-                'public' => true,
+                'public' => false,
                 'case' => self::$caseId,
                 'owner' => self::$adminUserId,
                 'contact' => null,
@@ -140,7 +136,7 @@ class CommentControllerTest extends WebTestCase
 
         $updateData = [
             'message' => 'Updated comment',
-            'public' => false,
+            'public' => true,
             'contact' => self::$contactId
         ];
 

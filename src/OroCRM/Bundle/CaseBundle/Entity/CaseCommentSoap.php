@@ -24,7 +24,7 @@ class CaseCommentSoap extends CaseComment implements SoapEntityInterface
     /**
      * @Soap\ComplexType("boolean", nillable=true)
      */
-    protected $public = true;
+    protected $public = false;
 
     /**
      * @Soap\ComplexType("int", nillable=true)

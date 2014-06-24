@@ -54,7 +54,6 @@ class CommentControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('Save')->form();
         $form['orocrm_case_comment_form[message]'] = 'New comment';
-        $form['orocrm_case_comment_form[public]'] = 1;
 
         /** TODO Change after BAP-1813 */
         $form->getFormNode()->setAttribute(

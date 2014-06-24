@@ -13,15 +13,15 @@ class CaseCommentType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add(
-                'message',
-                'textarea',
-                [
-                    'label'     => 'orocrm.case.casecomment.message.label'
-                ]
-            )
-            ->add(
+        $builder->add(
+            'message',
+            'textarea',
+            [
+                'label'     => 'orocrm.case.casecomment.message.label'
+            ]
+        );
+        if ($options['add_public_field']) {
+            $builder->add(
                 'public',
                 'checkbox',
                 [
@@ -29,6 +29,7 @@ class CaseCommentType extends AbstractType
                     'required'  => false,
                 ]
             );
+        }
     }
 
     /**
@@ -38,6 +39,7 @@ class CaseCommentType extends AbstractType
     {
         $resolver->setDefaults(
             [
+                'add_public_field'   => false,
                 'data_class'         => 'OroCRM\\Bundle\\CaseBundle\\Entity\\CaseComment',
                 'intention'          => 'orocrm_case_comment',
                 'ownership_disabled' => true,

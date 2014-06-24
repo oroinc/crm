@@ -59,7 +59,7 @@ class CaseComment
      * @ORM\Column(name="public", type="boolean", options={"default"=false})
      * @Oro\Versioned
      */
-    protected $public = true;
+    protected $public = false;
 
     /**
      * @var CaseEntity
