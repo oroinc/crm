@@ -2,7 +2,7 @@ workflows:
     b2b_flow_sales:
         transition_definitions:
             qualify_definition:
-                conditions: # if opportunity.status = "in_progress"
+                pre_conditions: # if opportunity.status = "in_progress"
                     @equal: [$opportunity.status.name, 'in_progress']
             develop_definition:
                 pre_conditions: # if opportunity.status = "in_progress"

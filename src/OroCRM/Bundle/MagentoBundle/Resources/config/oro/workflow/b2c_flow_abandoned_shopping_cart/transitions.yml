@@ -1,6 +1,11 @@
 workflows:
     b2c_flow_abandoned_shopping_cart:
         transitions:
+#            __start__:
+#                label: 'Start Abandoned Shopping Cart'
+#                is_unavailable_hidden: true
+#                step_to: open
+#                transition_definition: __start___definition
             log_call:
                 label: 'Log call'
                 step_to: contacted
