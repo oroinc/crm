@@ -39,13 +39,7 @@ class CartNormalizer extends ConfigurableEntityNormalizer
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        if (!empty($data['billingAddress'])) {
-            $data['billingAddress'] = $this->importHelper->getFixedAddress($data['billingAddress']);
-        }
-        if (!empty($data['shippingAddress'])) {
-            $data['shippingAddress'] = $this->importHelper->getFixedAddress($data['shippingAddress']);
-        }
-        if (!empty($data['paymentDetails'])) {
+        if (array_key_exists('paymentDetails', $data)) {
             $data['paymentDetails'] = $this->importHelper->denormalizePaymentDetails($data['paymentDetails']);
         }
 

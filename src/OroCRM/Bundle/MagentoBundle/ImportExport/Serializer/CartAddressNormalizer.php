@@ -2,29 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\CompositeNormalizer;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 
-class CartAddressNormalizer extends ConfigurableEntityNormalizer
+class CartAddressNormalizer extends CompositeNormalizer
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function denormalize($data, $class, $format = null, array $context = array())
-    {
-        /** @var CartAddress $result */
-        $result = parent::denormalize($data, $class, $format, $context);
-        if (!empty($data['address_id'])) {
-            $result->setOriginId($data['address_id']);
-        }
-        if (!$result->getCountry()) {
-            return null;
-        }
-
-        return $result;
-    }
-
     /**
      * {@inheritdoc}
      */

@@ -29,6 +29,9 @@ class CustomerStrategy extends BaseStrategy
     /** @var array */
     protected $groupEntityCache = [];
 
+    /** @var array */
+    protected $processedEntities = [];
+
     /**
      * Update/Create customer and related entities based on remote data
      *
@@ -193,13 +196,21 @@ class CustomerStrategy extends BaseStrategy
      */
     protected function getContactPhoneFromContact(Contact $contact, ContactPhone $contactPhone)
     {
-        $filtered = $contact->getPhones()->filter(
-            function (ContactPhone $phone) use ($contactPhone) {
-                return $phone && $phone->getPhone() === $contactPhone->getPhone();
-            }
-        );
+        foreach ($contact->getPhones() as $phone) {
+            if ($phone->getPhone() === $contactPhone->getPhone()) {
+                $hash = spl_object_hash($phone);
+                if (array_key_exists($hash, $this->processedEntities)) {
+                    // skip if contact phone used for previously imported phone
+                    continue;
+                }
 
-        return $filtered->first();
+                $this->processedEntities[$hash] = $phone;
+
+                return $phone;
+            }
+        }
+
+        return null;
     }
 
     /**

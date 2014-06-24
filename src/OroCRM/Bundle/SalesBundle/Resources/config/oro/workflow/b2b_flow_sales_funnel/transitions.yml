@@ -28,10 +28,9 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         lead:
-                            form_type: orocrm_sales_lead_create_select
+                            form_type: orocrm_sales_lead_select
                             options:
                                 required: true
-                                grid_name: 'sales-funnel-lead-grid'
                                 constraints:
                                     - NotBlank:
                                         message: 'Lead must be set'
@@ -73,10 +72,9 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         opportunity:
-                            form_type: orocrm_sales_opportunity_create_select
+                            form_type: orocrm_sales_opportunity_select
                             options:
                                 required: true
-                                grid_name: 'sales-funnel-opportunity-grid'
                                 constraints:
                                     - NotBlank:
                                         message: 'Opportunity must be set'
