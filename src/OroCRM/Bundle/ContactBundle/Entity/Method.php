@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
  * @ORM\Entity
@@ -24,6 +25,13 @@ class Method
      * @ORM\Column(name="name", type="string", length=32)
      * @ORM\Id
      * @Soap\ComplexType("string", nillable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "identity"=true
+     *          }
+     *      }
+     * )
      */
     protected $name;
 

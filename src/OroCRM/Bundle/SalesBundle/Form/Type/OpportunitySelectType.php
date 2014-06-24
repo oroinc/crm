@@ -13,14 +13,16 @@ class OpportunitySelectType extends AbstractType
                 'configs' => array(
                     'placeholder' => 'orocrm.sales.form.choose_opportunity'
                 ),
-                'autocomplete_alias' => 'opportunities'
+                'autocomplete_alias' => 'opportunities',
+                'grid_name' => 'sales-opportunity-grid',
+                'create_form_route' => 'orocrm_sales_opportunity_create'
             )
         );
     }
 
     public function getParent()
     {
-        return 'oro_jqueryselect2_hidden';
+        return 'oro_entity_create_or_select_inline';
     }
 
     /**

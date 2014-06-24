@@ -13,10 +13,8 @@ use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use Oro\Bundle\AddressBundle\Entity\Country as BAPCountry;
-use Oro\Bundle\AddressBundle\ImportExport\Serializer\Normalizer\AddressNormalizer;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
 
-use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
@@ -30,6 +28,7 @@ use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImpo
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  * TODO Should be fixed during CRM-1185
  */
 class ReverseWriter implements ItemWriterInterface
@@ -69,9 +68,6 @@ class ReverseWriter implements ItemWriterInterface
     /** @var CustomerSerializer */
     protected $customerSerializer;
 
-    /** @var AddressNormalizer */
-    protected $addressNormalizer;
-
     /** @var SoapTransport */
     protected $transport;
 
@@ -87,7 +83,6 @@ class ReverseWriter implements ItemWriterInterface
     /**
      * @param EntityManager       $em
      * @param CustomerSerializer  $customerSerializer
-     * @param AddressNormalizer   $addressNormalizer
      * @param SoapTransport       $transport
      * @param AddressImportHelper $addressImportHelper
      * @param RegionConverter     $regionConverter
@@ -95,14 +90,12 @@ class ReverseWriter implements ItemWriterInterface
     public function __construct(
         EntityManager $em,
         CustomerSerializer $customerSerializer,
-        AddressNormalizer $addressNormalizer,
         SoapTransport $transport,
         AddressImportHelper $addressImportHelper,
         RegionConverter $regionConverter
     ) {
         $this->em                  = $em;
         $this->customerSerializer  = $customerSerializer;
-        $this->addressNormalizer   = $addressNormalizer;
         $this->transport           = $transport;
         $this->accessor            = PropertyAccess::createPropertyAccessor();
         $this->addressImportHelper = $addressImportHelper;
@@ -249,6 +242,14 @@ class ReverseWriter implements ItemWriterInterface
                         $addressEntity,
                         $remoteTypesWin
                     );
+
+                    $remotePhoneData = $this->customerSerializer->comparePhones(
+                        (array) $remoteAddress,
+                        $addressEntity
+                    );
+
+                    $remoteData = array_merge($remoteData, $remotePhoneData);
+
                     // if on remote side was not changed address types - save local types
                     if (!$remoteTypesWin) {
                         $localChanges = array_merge(
@@ -267,7 +268,8 @@ class ReverseWriter implements ItemWriterInterface
                 }
                 $dataForSend = array_merge(
                     $this->customerSerializer->convertToMagentoAddress($addressEntity),
-                    $this->regionConverter->toMagentoData($addressEntity)
+                    $this->regionConverter->toMagentoData($addressEntity),
+                    ['telephone' => ($addressEntity->getPhone() ? $addressEntity->getPhone() : 'no phone')]
                 );
                 $requestData = ['addressId' => $addressEntity->getOriginId(), 'addressData' => $dataForSend];
                 try {

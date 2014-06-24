@@ -43,7 +43,9 @@ class ContactRequestController extends Controller
      */
     public function indexAction()
     {
-        return [];
+        return [
+            'entity_class' => $this->container->getParameter('orocrm_contact_us.contactrequest.entity.class')
+        ];
     }
 
     /**

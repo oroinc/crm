@@ -69,7 +69,7 @@ class SalesFunnel extends AbstractPageEntity
     public function selectEntity($type, $entity)
     {
         $this->opportunity = $this->test->byXpath(
-            "//a[@class = 'entity-select-btn' and normalize-space(.) = 'Choose Existing']"
+            "(//button[contains(@class, 'entity-select-btn')])[last()]"
         );
         $this->opportunity->click();
         $this->waitPageToLoad();

@@ -22,6 +22,7 @@ parameters:
 
     # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
+    orocrm_magento.service.import_helper.class:                             OroCRM\Bundle\MagentoBundle\Service\ImportHelper
 
     orocrm_magento.customer.manager.api.class:                              Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     # datagrid helpers
@@ -180,6 +181,11 @@ services:
         arguments: [@router]
         scope: prototype
 
+    orocrm_magento.service.import_helper:
+        class: %orocrm_magento.service.import_helper.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+
     # Customer API
     orocrm_magento.customer.manager.api:
         class: %orocrm_magento.customer.manager.api.class%
@@ -216,7 +222,6 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
             - @orocrm_magento.importexport.denormalizer.customer
-            - @oro_address.importexport.address_normalizer
             - @orocrm_magento.transport.soap_transport
             - @orocrm_magento.importexport.address_import_helper
             - @orocrm_magento.converter.region
