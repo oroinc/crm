@@ -10,6 +10,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
@@ -44,6 +45,7 @@ class ContactImportHelperTest extends \PHPUnit_Framework_TestCase
 
         $address = new Address();
         $address->setCountry(new Country('US'));
+        $address->setContactPhone(new ContactPhone());
         $remoteCustomer->addAddress($address);
 
         $helper = $this->getHelper($channel);
@@ -80,11 +82,18 @@ class ContactImportHelperTest extends \PHPUnit_Framework_TestCase
         $contactAddress->setCountry($testCountry);
         $contact->addAddress($contactAddress);
 
+        $phone = new ContactPhone();
+        $phone->setPhone('123-123-123');
+        $phone->setOwner($contact);
+        $contact->addPhone($phone);
+
         $localCustomer = new Customer();
         $localAddress  = new Address();
         $localAddress->setContactAddress($contactAddress);
         $localAddress->setTypes($localTypes);
         $localAddress->setCountry($testCountry);
+        $localAddress->setPhone('123-123-123');
+        $localAddress->setContactPhone($phone);
         $localCustomer->addAddress($localAddress);
 
         $remoteCustomer = new Customer();
@@ -92,6 +101,7 @@ class ContactImportHelperTest extends \PHPUnit_Framework_TestCase
         $remoteAddress->setContactAddress($contactAddress);
         $remoteAddress->setTypes($remoteTypes);
         $remoteAddress->setCountry($testCountry);
+        $remoteAddress->setContactPhone($phone);
         $remoteCustomer->addAddress($remoteAddress);
 
         $helper = $this->getHelper($channel);

@@ -2,25 +2,23 @@
 
 namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
 
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Response;
-
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Response;
+
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-
+use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType;
 
 /**
@@ -197,7 +195,7 @@ class ContactController extends RestController implements ClassResourceInterface
 
         // convert addresses to plain array
         $addressData = array();
-        /** @var $entity Contact */
+        /** @var $address ContactAddress */
         foreach ($entity->getAddresses() as $address) {
             $addressArray = parent::getPreparedItem($address);
             $addressArray['types'] = $address->getTypeNames();
