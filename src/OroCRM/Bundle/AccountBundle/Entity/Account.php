@@ -237,6 +237,8 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->contacts = new ArrayCollection();
     }
 

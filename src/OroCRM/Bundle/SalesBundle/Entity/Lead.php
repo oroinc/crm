@@ -449,6 +449,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->opportunities = new ArrayCollection();
     }
 

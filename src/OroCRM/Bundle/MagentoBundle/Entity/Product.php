@@ -112,6 +112,8 @@ class Product extends ExtendProduct
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->websites = new ArrayCollection();
     }
 

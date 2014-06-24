@@ -217,6 +217,8 @@ class Task extends ExtendTask implements RemindableInterface
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->reminders = new ArrayCollection();
     }
 
