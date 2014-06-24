@@ -147,7 +147,11 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
                         $modifier = $methods[self::CHECKING] . '.' . $methods[self::MODIFIER];
                         $result[$resultFieldName] = $this->getValue($entity, $modifier);
                     } else {
-                        $result[$resultFieldName] = $this->getValue($entity, $methods[self::CHECKING]);
+                        try {
+                            $result[$resultFieldName] = $this->getValue($entity, $methods[self::CHECKING]);
+                        } catch (\Exception $e) {
+                            $result[$resultFieldName] = null;
+                        }
                     }
                 }
             }
@@ -162,12 +166,16 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
      */
     protected function isChanged($entity, array $paths)
     {
-        if (!empty($paths[self::MODIFIER])) {
-            $checking = $this->getValue($entity, $paths[self::CHECKING] . '.' . $paths[self::MODIFIER]);
-            $source   = $this->getValue($entity, $paths[self::SOURCE] . '.' . $paths[self::MODIFIER]);
-        } else {
-            $checking = $this->getValue($entity, $paths[self::CHECKING]);
-            $source   = $this->getValue($entity, $paths[self::SOURCE]);
+        try {
+            if (!empty($paths[self::MODIFIER])) {
+                $checking = $this->getValue($entity, $paths[self::CHECKING] . '.' . $paths[self::MODIFIER]);
+                $source   = $this->getValue($entity, $paths[self::SOURCE] . '.' . $paths[self::MODIFIER]);
+            } else {
+                $checking = $this->getValue($entity, $paths[self::CHECKING]);
+                $source   = $this->getValue($entity, $paths[self::SOURCE]);
+            }
+        } catch (\Exception $e) {
+            return true;
         }
 
         if (is_object($checking) && !($checking instanceof \DateTime)) {

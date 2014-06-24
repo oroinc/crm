@@ -42,6 +42,8 @@ class CartDataConverter extends AbstractTableDataConverter
             'shipping_address_id' => 'shipping_address:originId',
             'billing_address_id'  => 'billing_address:originId',
             'payment'             => 'paymentDetails',
+            'billing_address'     => 'billingAddress',
+            'shipping_address'    => 'shippingAddress'
         ];
     }
 

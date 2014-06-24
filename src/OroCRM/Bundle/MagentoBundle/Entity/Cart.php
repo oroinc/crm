@@ -12,6 +12,7 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCart;
@@ -159,6 +160,13 @@ class Cart extends ExtendCart
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CartAddress", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *      }
+     * )
      */
     protected $shippingAddress;
 
@@ -167,6 +175,13 @@ class Cart extends ExtendCart
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CartAddress", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *      }
+     * )
      */
     protected $billingAddress;
 
@@ -294,6 +309,8 @@ class Cart extends ExtendCart
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->status        = new CartStatus('open');
         $this->cartItems     = new ArrayCollection();
         $this->relatedCalls  = new ArrayCollection();

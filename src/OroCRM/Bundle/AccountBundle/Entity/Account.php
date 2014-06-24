@@ -2,23 +2,22 @@
 
 namespace OroCRM\Bundle\AccountBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+
+use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\TagBundle\Entity\Taggable;
+use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Model\ExtendAccount;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-
-use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\TagBundle\Entity\Taggable;
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-
-use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @ORM\Entity()
@@ -55,13 +54,20 @@ use Oro\Bundle\UserBundle\Entity\User;
  *  }
  * )
  */
-class Account extends ExtendAccount implements Taggable
+class Account extends ExtendAccount implements Taggable, EmailHolderInterface
 {
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Soap\ComplexType("int", nillable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=10
+     *          }
+     *      }
+     * )
      */
     protected $id;
 
@@ -72,14 +78,18 @@ class Account extends ExtendAccount implements Taggable
      * @Soap\ComplexType("string")
      * @Oro\Versioned
      * @ConfigField(
-     *  defaultValues={
-     *    "merge"={
-     *      "display"=true
-     *    },
-     *    "dataaudit"={
-     *      "auditable"=true
-     *    }
-     *   }
+     *      defaultValues={
+     *          "merge"={
+     *              "display"=true
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          },
+     *          "importexport"={
+     *              "identity"=true,
+     *              "order"=20
+     *          }
+     *      }
      * )
      */
     protected $name;
@@ -91,14 +101,18 @@ class Account extends ExtendAccount implements Taggable
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
      * @ConfigField(
-     *  defaultValues={
-     *    "merge"={
-     *      "display"=true
-     *    },
-     *    "dataaudit"={
-     *      "auditable"=true
-     *    }
-     *  }
+     *      defaultValues={
+     *          "merge"={
+     *              "display"=true
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          },
+     *          "importexport"={
+     *              "order"=30,
+     *              "short"=true
+     *          }
+     *      }
      * )
      */
     protected $owner;
@@ -108,7 +122,15 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(defaultValues={"merge"={"display"=true}})
+     * @ConfigField(
+     *      defaultValues={
+     *          "merge"={"display"=true},
+     *          "importexport"={
+     *              "full"=true,
+     *              "order"=60
+     *          }
+     *      }
+     * )
      */
     protected $shippingAddress;
 
@@ -117,7 +139,15 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(defaultValues={"merge"={"display"=true}})
+     * @ConfigField(
+     *      defaultValues={
+     *          "merge"={"display"=true},
+     *          "importexport"={
+     *              "full"=true,
+     *              "order"=70
+     *          }
+     *      }
+     * )
      */
     protected $billingAddress;
 
@@ -128,7 +158,17 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", inversedBy="accounts")
      * @ORM\JoinTable(name="orocrm_account_to_contact")
-     * @ConfigField(defaultValues={"merge"={"display"=true}})
+     * @ConfigField(
+     *      defaultValues={
+     *          "merge"={
+     *              "display"=true
+     *          },
+     *          "importexport"={
+     *              "order"=50,
+     *              "short"=true
+     *          }
+     *      }
+     * )
      */
     protected $contacts;
 
@@ -139,7 +179,17 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="default_contact_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(defaultValues={"merge"={"display"=true}})
+     * @ConfigField(
+     *      defaultValues={
+     *          "merge"={
+     *              "display"=true
+     *          },
+     *          "importexport"={
+     *              "order"=40,
+     *              "short"=true
+     *          }
+     *      }
+     * )
      */
     protected $defaultContact;
 
@@ -148,6 +198,13 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\Column(type="datetime")
      * @Soap\ComplexType("dateTime", nillable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $createdAt;
 
@@ -156,17 +213,32 @@ class Account extends ExtendAccount implements Taggable
      *
      * @ORM\Column(type="datetime")
      * @Soap\ComplexType("dateTime", nillable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $updatedAt;
 
     /**
      * @var ArrayCollection $tags
-     * @ConfigField(defaultValues={"merge"={"display"=true}})
+     * @ConfigField(
+     *      defaultValues={
+     *          "merge"={
+     *              "display"=true
+     *          }
+     *      }
+     * )
      */
     protected $tags;
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->contacts = new ArrayCollection();
     }
 
@@ -182,7 +254,7 @@ class Account extends ExtendAccount implements Taggable
 
     /**
      * @param int $id
-     * @return mixed
+     * @return Account
      */
     public function setId($id)
     {
@@ -449,5 +521,20 @@ class Account extends ExtendAccount implements Taggable
     public function getDefaultContact()
     {
         return $this->defaultContact;
+    }
+
+    /**
+     * Get the primary email address of the default contact
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        $contact = $this->getDefaultContact();
+        if (!$contact) {
+            return null;
+        }
+
+        return $contact->getEmail();
     }
 }

@@ -6,6 +6,7 @@ workflows:
                 step_to: qualify
                 is_start: true
                 is_hidden: true
+                is_unavailable_hidden: true
                 transition_definition: qualify_definition
             develop:
                 label: 'Develop'
