@@ -2,36 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
-use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\CompositeNormalizer;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\OrderAddressDataConverter;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 
-class OrderAddressCompositeDenormalizer extends ConfigurableEntityNormalizer
+class OrderAddressCompositeDenormalizer extends CompositeNormalizer
 {
-    /** @var OrderAddressDataConverter */
-    protected $dataConverter;
-
-    /**
-     * @param FieldHelper $fieldHelper
-     * @param OrderAddressDataConverter $dataConverter
-     */
-    public function __construct(FieldHelper $fieldHelper, OrderAddressDataConverter $dataConverter)
-    {
-        parent::__construct($fieldHelper);
-        $this->dataConverter = $dataConverter;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function denormalize($data, $class, $format = null, array $context = array())
-    {
-        $data = $this->dataConverter->convertToImportFormat($data);
-        return parent::denormalize($data, $class, $format, $context);
-    }
-
     /**
      * {@inheritdoc}
      */

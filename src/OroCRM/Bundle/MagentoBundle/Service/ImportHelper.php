@@ -62,27 +62,4 @@ class ImportHelper
 
         return $paymentDetails;
     }
-
-    /**
-     * @param array $address
-     * @return array
-     */
-    public function getFixedAddress(array $address)
-    {
-        $propertyAccess = PropertyAccess::createPropertyAccessor();
-        if (!empty($address['country_id'])) {
-            $propertyAccess->setValue($address, '[country][iso2Code]', $address['country_id']);
-        }
-        if (array_key_exists('region', $address)) {
-            $address['regionText'] = $address['region'];
-            unset($address['region']);
-        }
-        if (!empty($address['region_id'])) {
-            $propertyAccess->setValue($address, '[region][combinedCode]', $address['region_id']);
-        }
-        unset($address['country_id']);
-        unset($address['region_id']);
-
-        return $address;
-    }
 }

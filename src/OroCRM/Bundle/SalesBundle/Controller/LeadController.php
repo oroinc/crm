@@ -141,22 +141,23 @@ class LeadController extends Controller
      */
     protected function update(Lead $entity)
     {
-        if ($this->get('orocrm_sales.lead.form.handler')->process($entity)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                $this->get('translator')->trans('orocrm.sales.controller.lead.saved.message')
-            );
-
-            return $this->get('oro_ui.router')->redirectAfterSave(
-                ['route' => 'orocrm_sales_lead_update', 'parameters' => ['id' => $entity->getId()]],
-                ['route' => 'orocrm_sales_lead_view', 'parameters' => ['id' => $entity->getId()]],
-                $entity
-            );
-        }
-
-        return array(
-            'entity' => $entity,
-            'form'   => $this->get('orocrm_sales.lead.form')->createView()
+        return $this->get('oro_form.model.update_handler')->handleUpdate(
+            $entity,
+            $this->get('orocrm_sales.lead.form'),
+            function (Lead $entity) {
+                return array(
+                    'route' => 'orocrm_sales_lead_update',
+                    'parameters' => array('id' => $entity->getId())
+                );
+            },
+            function (Lead $entity) {
+                return array(
+                    'route' => 'orocrm_sales_lead_view',
+                    'parameters' => array('id' => $entity->getId())
+                );
+            },
+            $this->get('translator')->trans('orocrm.sales.controller.lead.saved.message'),
+            $this->get('orocrm_sales.lead.form.handler')
         );
     }
 }
