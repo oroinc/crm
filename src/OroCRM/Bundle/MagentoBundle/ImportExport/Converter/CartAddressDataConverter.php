@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Converter;
 
-class OrderAddressDataConverter extends AddressDataConverter
+class CartAddressDataConverter extends AddressDataConverter
 {
     /**
      * {@inheritdoc}
@@ -12,11 +12,7 @@ class OrderAddressDataConverter extends AddressDataConverter
         return array_merge(
             parent::getHeaderConversionRules(),
             array(
-                'fax'          => 'fax',
-                'telephone'    => 'phone',
-                'company'      => 'organization',
-                'customer_id'  => 'customerId',
-                'address_type' => 'types:0:name'
+                'address_id' => 'originId',
             )
         );
     }
