@@ -133,8 +133,8 @@ services:
         arguments:
             - @oro_importexport.field.field_helper
             - @orocrm_magento.importexport.data_converter.magento_address
-        tags:
-            - { name: oro_importexport.normalizer, priority: -1 }
+#        tags:
+#            - { name: oro_importexport.normalizer, priority: -1 }
 
     orocrm_magento.importexport.normalizer.cart:
         class: %orocrm_magento.importexport.normalizer.cart.class%
