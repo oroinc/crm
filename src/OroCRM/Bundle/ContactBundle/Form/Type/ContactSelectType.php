@@ -15,14 +15,16 @@ class ContactSelectType extends AbstractType
                     'result_template_twig' => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
                     'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                 ),
-                'autocomplete_alias' => 'contacts'
+                'autocomplete_alias' => 'contacts',
+                'grid_name' => 'contacts-select-grid',
+                'create_form_route' => 'orocrm_contact_create'
             )
         );
     }
 
     public function getParent()
     {
-        return 'oro_jqueryselect2_hidden';
+        return 'oro_entity_create_or_select_inline';
     }
 
     /**

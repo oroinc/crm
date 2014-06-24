@@ -4,8 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper;
 
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+
+use Symfony\Component\Security\Core\Util\ClassUtils;
 
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 
@@ -48,7 +49,7 @@ class DoctrineHelper
             if (method_exists($entity, $setterMethod)) {
                 $entity->$setterMethod(null);
             } elseif (property_exists($entity, $identifier)) {
-                $reflection = new \ReflectionProperty(ClassUtils::getClass($entity), $identifier);
+                $reflection = new \ReflectionProperty(ClassUtils::getRealClass($entity), $identifier);
                 $reflection->setAccessible(true);
                 $reflection->setValue($entity, null);
             }
@@ -58,16 +59,20 @@ class DoctrineHelper
     }
 
     /**
-     * @param mixed  $entity
-     * @param string $entityIdField
-     * @param string $entityClass
+     * @param mixed       $entity
+     * @param string      $entityIdField
+     * @param string|null $entityClass
      *
      * @return object|null
      */
-    public function getEntityOrNull($entity, $entityIdField, $entityClass)
+    public function getEntityOrNull($entity, $entityIdField, $entityClass = null)
     {
         $existingEntity = null;
         $entityId       = $entity->{'get' . ucfirst($entityIdField)}();
+
+        if (!$entityClass) {
+            $entityClass = ClassUtils::getRealClass($entity);
+        }
 
         if ($entityId) {
             $existingEntity = $this->getEntityByCriteria([$entityIdField => $entityId], $entityClass);
@@ -84,11 +89,7 @@ class DoctrineHelper
      */
     public function getEntityByCriteria(array $criteria, $entity)
     {
-        if (is_object($entity)) {
-            $entityClass = ClassUtils::getClass($entity);
-        } else {
-            $entityClass = $entity;
-        }
+        $entityClass = ClassUtils::getRealClass($entity);
 
         return $this->getEntityRepository($entityClass)->findOneBy($criteria);
     }
@@ -124,7 +125,7 @@ class DoctrineHelper
          * Reload entity instead merge due to strange behavior with spl_object_hash
          * EntityManager#find has own cache, so query will be performed only once per batch (until EntityManager#clear)
          */
-        $cn = ClassUtils::getClass($entity);
+        $cn = ClassUtils::getRealClass($entity);
         $em = $this->getEntityManager($cn);
         if ($em->getUnitOfWork()->getEntityState($entity) !== UnitOfWork::STATE_MANAGED) {
             $id = $em->getClassMetadata($cn)->getIdentifierValues($entity);
