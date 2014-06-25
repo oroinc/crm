@@ -1,6 +1,0 @@
-{% import 'OroEmailBundle::macros.html.twig' as email %}
-{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
-
-<div class="widget-content">
-    {{ dataGrid.renderGrid('contacts-email-grid', {contactId: entity.id}) }}
-</div>
