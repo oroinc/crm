@@ -1,0 +1,19 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+
+{% oro_title_set({params : {"%channel.name%": entity.name|default('N/A')} }) %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('orocrm_channel_index'),
+        'indexLabel': 'orocrm.channel.entity_plural_label'|trans,
+        'entityTitle': entity.name|default('N/A')
+    } %}
+
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block stats %}{% endblock stats %}
+
+{% block content_data %}{% endblock content_data %}
