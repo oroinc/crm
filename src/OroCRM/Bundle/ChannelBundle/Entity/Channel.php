@@ -15,7 +15,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
  * @Config(
  *  routeView="orocrm_channel_view",
  *  defaultValues={
- *      "entity"={"icon"="icon-cogs"},
+ *      "entity"={"icon"="icon-cubes"},
  *      "ownership"={
  *          "owner_type"="ORGANIZATION",
  *          "owner_field_name"="owner",

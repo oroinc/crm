@@ -1,3 +1,4 @@
 orocrm:
   channel:
-    entity_plural_label: Channel entities
+    entity_plural_label: Channels entities
+    entity_label: Channels entity
