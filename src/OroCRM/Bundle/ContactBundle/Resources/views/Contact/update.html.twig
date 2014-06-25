@@ -37,6 +37,7 @@
             'entityTitle': fullname
         }
         %}
+        {% set avatar = oro_configured_image_url(form.vars.value, 'photo') %}
         {{ parent() }}
     {% else %}
         {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.contact.entity_label'|trans}) %}

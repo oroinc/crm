@@ -83,6 +83,7 @@
         'indexLabel': 'orocrm.contact.entity_plural_label'|trans,
         'entityTitle': fullname
     } %}
+    {% set avatar = oro_configured_image_url(entity, 'photo') %}
     {{ parent() }}
 {% endblock pageHeader %}
 
