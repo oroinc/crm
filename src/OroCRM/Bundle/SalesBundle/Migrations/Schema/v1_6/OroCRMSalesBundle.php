@@ -32,7 +32,7 @@ class OroCRMSalesBundle implements Migration, ActivityExtensionAwareInterface
     }
 
     /**
-     * Enable Email activity for Account entity
+     * Enables Email activity for Lead and Opportunity entities
      *
      * @param Schema            $schema
      * @param ActivityExtension $activityExtension

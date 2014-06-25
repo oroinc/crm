@@ -32,7 +32,7 @@ class OroCRMContactBundle implements Migration, ActivityExtensionAwareInterface
     }
 
     /**
-     * Enable Email activity for Account entity
+     * Enables Email activity for Contact entity
      *
      * @param Schema            $schema
      * @param ActivityExtension $activityExtension

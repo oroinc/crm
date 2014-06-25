@@ -32,7 +32,7 @@ class OroCRMAccountBundle implements Migration, ActivityExtensionAwareInterface
     }
 
     /**
-     * Enable Email activity for Account entity
+     * Enables Email activity for Account entity
      *
      * @param Schema            $schema
      * @param ActivityExtension $activityExtension
