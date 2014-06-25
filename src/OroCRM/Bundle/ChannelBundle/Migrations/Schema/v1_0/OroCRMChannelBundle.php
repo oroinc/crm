@@ -18,7 +18,7 @@ class OroCRMChannelBundle implements Migration
         $table->addColumn('name', 'string', ['notnull' => true, 'length' => 255]);
         $table->addColumn('description', 'text', ['notnull' => false]);
         $table->addColumn('entities', 'json_array', ['notnull' => false]);
-        $table->addColumn('integration', 'json_array', ['notnull' => false]);
+        $table->addColumn('integrations', 'json_array', ['notnull' => false]);
         $table->addColumn('organization_owner_id', 'integer', ['notnull' => false]);
 
         $table->setPrimaryKey(['id']);
