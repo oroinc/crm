@@ -11,12 +11,8 @@ datagrid:
                     - c.description
                     - c.entities
                     - c.integration
-                    - o.name as owner
                 from:
                     - { table: OroCRM\Bundle\ChannelBundle\Entity\Channel , alias: c }
-                join:
-                    left:
-                        - { join: c.owner, alias: o }
                 groupBy: c.id
         columns:
             name:
@@ -27,5 +23,19 @@ datagrid:
                 label: orocrm.channel.entities.label
             integration:
                 label: orocrm.channel.integration.label
-            owner:
-                label: orocrm.channel.owner.label
+        sorters:
+            columns:
+                name:          { data_name: c.name }
+                description:   { data_name: c.description }
+                entities:      { data_name: c.entities }
+                integration:   { data_name: c.integration }
+            default:
+                name:  ASC
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: c.name
+                description:
+                    type: string
+                    data_name: c.name
