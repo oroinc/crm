@@ -188,13 +188,6 @@ services:
         arguments:
             - %oro_contact.social_url_format%
 
-    orocrm_contact.event_listener.contact_email_grid_listener:
-        class: %orocrm_contact.event_listener.contact_email_grid_listener.class%
-        arguments:
-          - @doctrine.orm.entity_manager
-        tags:
-          - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.contacts-email-grid, method: onBuildAfter }
-
     orocrm_contact.event_listener.contactgroup_contacts_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
