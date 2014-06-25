@@ -1,0 +1,4 @@
+OroCRMMagentoBundle
+===================
+
+Bundle provides channel.

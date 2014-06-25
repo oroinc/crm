@@ -1,0 +1,4 @@
+oro_crm_channel_bundle:
+    resource: "@OroCRMChannelBundle/Controller"
+    type:     annotation
+    prefix:   /channel
