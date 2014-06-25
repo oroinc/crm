@@ -8,34 +8,39 @@ datagrid:
                 select:
                     - c.id
                     - c.name
-                    - c.description
-                    - c.entities
-                    - c.integration
                 from:
-                    - { table: OroCRM\Bundle\ChannelBundle\Entity\Channel , alias: c }
+                    - { table: OroCRM\Bundle\ChannelBundle\Entity\Channel, alias: c }
                 groupBy: c.id
         columns:
+            id:
+                label: orocrm.channel.id.label
             name:
                 label: orocrm.channel.name.label
-            description:
-                label: orocrm.channel.description.label
-            entities:
-                label: orocrm.channel.entities.label
-            integration:
-                label: orocrm.channel.integration.label
         sorters:
             columns:
-                name:          { data_name: c.name }
-                description:   { data_name: c.description }
-                entities:      { data_name: c.entities }
-                integration:   { data_name: c.integration }
+                id:   { data_name: c.id }
+                name: { data_name: c.name }
             default:
                 name:  ASC
         filters:
             columns:
+                id:
+                    type: string
+                    data_name: c.id
                 name:
                     type: string
                     data_name: c.name
-                description:
-                    type: string
-                    data_name: c.name
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: orocrm_channel_view
+                params: [ id ]
+        actions:
+            view:
+                type:         navigate
+                label:        orocrm.channel.datagrid.actions.view.label
+                link:         view_link
+                icon:         eye-open
+                acl_recource: orocrm_channel_view
+                rowAction:    true

@@ -8,3 +8,7 @@ orocrm:
       owner.label: Owner
       entities.label: Entities
       integrations.label: Integrations
+
+      datagrid:
+          actions:
+              view.label: View
