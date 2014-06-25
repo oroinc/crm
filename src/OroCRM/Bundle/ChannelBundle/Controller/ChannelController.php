@@ -34,8 +34,8 @@ class ChannelController extends Controller
      * )
      * @Template
      */
-    public function viewAction(Channel $cart)
+    public function viewAction(Channel $channel)
     {
-        return ['entity' => $cart];
+        return ['entity' => $channel];
     }
 }
