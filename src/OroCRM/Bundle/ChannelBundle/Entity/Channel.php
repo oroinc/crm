@@ -141,7 +141,7 @@ class Channel
     /**
      * @return array
      */
-    public function getIntegration()
+    public function getIntegrations()
     {
         return $this->integrations;
     }

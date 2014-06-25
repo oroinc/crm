@@ -17,18 +17,18 @@ class ChannelTest extends AbstractEntityTestCase
      */
     public function getDataProvider()
     {
-        $owner       = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
-        $name        = 'Some name';
-        $description = 'Some description';
-        $entities    = ['a', 'b', 'c'];
-        $integration = ['d', 'e', 'f'];
-
+        $name         = 'Some name';
+        $description  = 'Some description';
+        $entities     = ['a', 'b', 'c'];
+        $integrations = ['d', 'e', 'f'];
+        $owner        = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        
         return [
-            'name'        => ['name', $name, $name],
-            'description' => ['description', $description, $description],
-            'entities'    => ['entities', $entities, $entities],
-            'integration' => ['integration', $integration, $integration],
-            'owner'       => ['owner', $owner, $owner],
+            'name'         => ['name', $name, $name],
+            'description'  => ['description', $description, $description],
+            'entities'     => ['entities', $entities, $entities],
+            'integrations' => ['integrations', $integrations, $integrations],
+            'owner'        => ['owner', $owner, $owner],
         ];
     }
 }
