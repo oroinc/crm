@@ -14,8 +14,6 @@ use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
  */
 abstract class AbstractContactRequest implements FirstNameInterface, LastNameInterface
 {
-    use IntegrationEntityTrait;
-
     /**
      * @var integer
      *
