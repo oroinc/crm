@@ -158,7 +158,7 @@ class LoadMagentoChannel extends AbstractFixture
      */
     protected function createChannel()
     {
-        $channel = new Channel;
+        $channel = new Channel();
         $channel->setName('Demo Web store');
         $channel->setType('magento');
         $channel->setConnectors(["customer", "order", "cart", "region"]);
