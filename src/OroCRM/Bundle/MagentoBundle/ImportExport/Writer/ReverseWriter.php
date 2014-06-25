@@ -13,7 +13,7 @@ use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use Oro\Bundle\AddressBundle\Entity\Country as BAPCountry;
-use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormTwoWaySyncSubscriber;
+use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
 
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
@@ -120,7 +120,9 @@ class ReverseWriter implements ItemWriterInterface
                     $localUpdatedData = $this->customerSerializer->normalize($item->entity, null, $item->object);
 
                     // REMOTE WINS
-                    if ($channel->getSyncPriority() === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
+                    $isRemoteWins = $channel->getSynchronizationSettings()->offsetGetOr('syncPriority')
+                        === TwoWaySyncConnectorInterface::REMOTE_WINS;
+                    if ($isRemoteWins) {
                         $remoteChanges = $this->getCustomerRemoteChangeSet(
                             $item,
                             array_keys($localUpdatedData)
@@ -141,7 +143,7 @@ class ReverseWriter implements ItemWriterInterface
                     if (isset($item->object['addresses'])) {
                         $this->processAddresses(
                             $item->object['addresses'],
-                            $channel->getSyncPriority(),
+                            $isRemoteWins,
                             $customer
                         );
                     }
@@ -205,13 +207,13 @@ class ReverseWriter implements ItemWriterInterface
      * Process address write  to remote instance and to DB
      *
      * @param array    $addresses
-     * @param string   $syncPriority
+     * @param bool     $isRemoteWins
      * @param Customer $customer
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @throws \LogicException
      */
-    protected function processAddresses($addresses, $syncPriority, Customer $customer)
+    protected function processAddresses($addresses, $isRemoteWins, Customer $customer)
     {
         $remoteAddresses = $this->transport->getCustomerAddresses($customer);
         $remoteTypesWin  = $this->isRemoteAddressesTypesChanged($addresses, $remoteAddresses);
@@ -232,7 +234,7 @@ class ReverseWriter implements ItemWriterInterface
                     ]
                 );
 
-                if ($syncPriority === ChannelFormTwoWaySyncSubscriber::REMOTE_WINS) {
+                if ($isRemoteWins) {
                     $remoteAddress = $this->getRemoteAddressByOriginId($remoteAddresses, $addressEntity->getOriginId());
                     if (!$remoteAddress) {
                         continue;
