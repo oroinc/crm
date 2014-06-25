@@ -12,15 +12,14 @@ class AddressDataConverter extends AbstractTableDataConverter
     protected function getHeaderConversionRules()
     {
         return [
-            'address_id' => 'originId',
             'firstname'  => 'firstName',
             'lastname'   => 'lastName',
             'middlename' => 'middleName',
             'prefix'     => 'namePrefix',
             'suffix'     => 'nameSuffix',
             'region'     => 'regionText',
-            'region_id'  => 'region',
-            'country_id' => 'country',
+            'region_id'  => 'region:code',
+            'country_id' => 'country:iso2Code',
             'created_at' => 'created',
             'updated_at' => 'updated',
             'postcode'   => 'postalCode',

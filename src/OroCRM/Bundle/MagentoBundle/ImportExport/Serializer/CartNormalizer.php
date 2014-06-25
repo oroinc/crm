@@ -29,6 +29,14 @@ class CartNormalizer extends ConfigurableEntityNormalizer
     /**
      * {@inheritdoc}
      */
+    public function supportsNormalization($data, $format = null, array $context = array())
+    {
+        return $data instanceof Cart;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return $type == MagentoConnectorInterface::CART_TYPE;
@@ -39,13 +47,7 @@ class CartNormalizer extends ConfigurableEntityNormalizer
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        if (!empty($data['billingAddress'])) {
-            $data['billingAddress'] = $this->importHelper->getFixedAddress($data['billingAddress']);
-        }
-        if (!empty($data['shippingAddress'])) {
-            $data['shippingAddress'] = $this->importHelper->getFixedAddress($data['shippingAddress']);
-        }
-        if (!empty($data['paymentDetails'])) {
+        if (array_key_exists('paymentDetails', $data)) {
             $data['paymentDetails'] = $this->importHelper->denormalizePaymentDetails($data['paymentDetails']);
         }
 
@@ -62,10 +64,19 @@ class CartNormalizer extends ConfigurableEntityNormalizer
             $cart->getCustomer()->setEmail($data['email']);
         }
 
+        $this->updateStatus($cart, $data);
+
+        return $cart;
+    }
+
+    /**
+     * @param Cart  $cart
+     * @param array $data
+     */
+    protected function updateStatus(Cart $cart, array $data)
+    {
         $statusClass = MagentoConnectorInterface::CART_STATUS_TYPE;
         $isActive    = isset($data['is_active']) ? (bool)$data['is_active'] : true;
         $cart->setStatus(new $statusClass($isActive ? 'open' : 'expired'));
-
-        return $cart;
     }
 }
