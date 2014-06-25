@@ -45,7 +45,7 @@
                             },
                             chooseMessage = function (data) {
                                 if (navigation.isInAction()) {
-                                    mediator.once('hash_navigation_request:complete', function() {showMessage(data)});
+                                    mediator.once('page:afterChange', function() {showMessage(data)});
                                 } else {
                                     showMessage(data);
                                 }
@@ -64,7 +64,7 @@
                                     url: {{ syncURL|json_encode|raw}},
                                     success: function(data) {
                                         if (navigation.isInAction()) {
-                                            mediator.once('hash_navigation_request:complete', function() {showMessage(data)});
+                                            mediator.once('page:afterChange', function() {showMessage(data)});
                                         } else {
                                             showMessage(data);
                                         }
