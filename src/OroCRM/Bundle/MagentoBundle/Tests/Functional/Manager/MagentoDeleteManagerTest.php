@@ -10,7 +10,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  * @outputBuffering enabled
  * @dbIsolation
  */
-class MagentoChannelDeleteManagerTest extends WebTestCase
+class MagentoDeleteManagerTest extends WebTestCase
 {
     /** @var int */
     protected static $channelId;
@@ -47,7 +47,7 @@ class MagentoChannelDeleteManagerTest extends WebTestCase
         $this->assertGreaterThan(0, $this->getRecordsCount('OroCRMMagentoBundle:Cart', $channel));
         $this->assertGreaterThan(0, $this->getRecordsCount('OroCRMMagentoBundle:Order', $channel));
         $this->assertGreaterThan(0, $this->getRecordsCount('OroCRMMagentoBundle:Website', $channel));
-        $this->client->getKernel()->getContainer()->get('oro_integration.channel_delete_manager')->deleteChannel(
+        $this->client->getKernel()->getContainer()->get('oro_integration.delete_manager')->delete(
             $channel
         );
         $this->assertEquals(0, $this->getRecordsCount('OroCRMMagentoBundle:Cart', $channelId));

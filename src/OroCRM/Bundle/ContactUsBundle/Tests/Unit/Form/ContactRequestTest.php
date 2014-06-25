@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\ContactUsBundle\Tests\Unit\Entity;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-
 use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
 
 class ContactRequestTest extends \PHPUnit_Framework_TestCase
@@ -31,8 +29,6 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $emailEntity            = $this->getMock('Oro\Bundle\EmailBundle\Entity\Email');
         $workflowStep           = $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep');
         $workflowItem           = $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowItem');
-        /** @var Channel $channel */
-        $channel                = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
         $contactReason          = $this->getMock(
             'OroCRM\Bundle\ContactUsBundle\Entity\ContactReason',
             [],
@@ -55,7 +51,6 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($request->getWorkflowStep());
         $this->assertNull($request->getWorkflowStep());
-        $this->assertNull($request->getChannel());
         $this->assertNull($request->getContactReason());
         $this->assertNull($request->getLead());
         $this->assertNull($request->getOpportunity());
@@ -66,13 +61,11 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $request->setOpportunity($opportunity);
         $request->addCall($call);
         $request->addEmail($emailEntity);
-        $request->setChannel($channel);
         $request->setContactReason($contactReason);
         $request->setWorkflowItem($workflowItem);
         $request->setWorkflowStep($workflowStep);
 
         $this->assertNull($request->getId());
-        $this->assertSame($channel, $request->getChannel());
         $this->assertSame($contactReason, $request->getContactReason());
         $this->assertEquals($comment, $request->getComment());
         $this->assertEquals($feedback, $request->getFeedback());
