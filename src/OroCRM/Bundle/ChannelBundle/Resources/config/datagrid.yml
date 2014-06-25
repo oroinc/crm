@@ -1,0 +1,31 @@
+datagrid:
+    channels-grid:
+        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Customer
+        source:
+            type: orm
+            acl_resource: orocrm_channel_view
+            query:
+                select:
+                    - c.id
+                    - c.name
+                    - c.description
+                    - c.entities
+                    - c.integration
+                    - o.name as owner
+                from:
+                    - { table: OroCRM\Bundle\ChannelBundle\Entity\Channel , alias: c }
+                join:
+                    left:
+                        - { join: c.owner, alias: o }
+                groupBy: c.id
+        columns:
+            name:
+                label: orocrm.channel.name.label
+            description:
+                label: orocrm.channel.description.label
+            entities:
+                label: orocrm.channel.entities.label
+            integration:
+                label: orocrm.channel.integration.label
+            owner:
+                label: orocrm.channel.owner.label
