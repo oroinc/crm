@@ -33,4 +33,3 @@ class OroCRMChannelBundle implements Migration
         );
     }
 }
-

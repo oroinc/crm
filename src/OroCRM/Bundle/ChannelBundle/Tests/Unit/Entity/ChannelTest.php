@@ -31,5 +31,4 @@ class ChannelTest extends AbstractEntityTestCase
             'owner'       => ['owner', $owner, $owner],
         ];
     }
-
 }

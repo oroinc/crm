@@ -74,11 +74,6 @@ class Channel
      */
     protected $owner;
 
-    public function __construct()
-    {
-        $this->entities = new ArrayCollection();
-    }
-
     /**
      * @return int
      */
