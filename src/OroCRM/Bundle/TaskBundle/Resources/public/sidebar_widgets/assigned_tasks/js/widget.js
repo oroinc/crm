@@ -1,7 +1,7 @@
 /*jslint nomen: true, vars: true*/
 /*global define*/
-define(['jquery', 'underscore', 'backbone', 'routing', 'oronavigation/js/navigation', 'oroui/js/loading-mask'],
-    function ($, _, Backbone, routing, Navigation, LoadingMask) {
+define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/mediator', 'oroui/js/loading-mask'],
+    function ($, _, Backbone, routing, mediator, LoadingMask) {
         /**
          * @export  orotask/widget/assigned-task
          */
@@ -27,10 +27,7 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oronavigation/js/navigat
 
                 onClickTask: function (event) {
                     var taskUrl = $(event.currentTarget).data('url');
-                    var navigation = Navigation.getInstance();
-                    if (navigation) {
-                        navigation.setLocation(taskUrl);
-                    }
+                    mediator.execute('redirectTo', {url: taskUrl});
                 },
 
                 reloadTasks: function () {
