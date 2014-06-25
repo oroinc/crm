@@ -1,7 +1,13 @@
 /*global define*/
-define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/translator',
-        'oronavigation/js/navigation', 'oroui/js/messenger'
-    ], function ($, _, routing, Backbone, __, Navigation, messenger) {
+define([
+    'jquery',
+    'underscore',
+    'routing',
+    'backbone',
+    'orotranslation/js/translator',
+    'oroui/js/mediator',
+    'oroui/js/messenger'
+], function ($, _, routing, Backbone, __, mediator, messenger) {
     "use strict";
 
     return Backbone.View.extend({
@@ -73,15 +79,10 @@ define(['jquery', 'underscore', 'routing', 'backbone', 'orotranslation/js/transl
                 field.name = field.name.replace(/.+\[(.+)\]$/, 'soap-check[$1]')
                 return field;
             });
-            var navigation = Navigation.getInstance();
-            if (navigation) {
-                navigation.showLoading();
-            }
+            mediator.execute('showLoading');
             $.post(this.getUrl(typeData), data, _.bind(this.responseHandler, this), 'json')
                 .always(_.bind(function (respose, status) {
-                    if (navigation) {
-                        navigation.hideLoading();
-                    }
+                    mediator.execute('hideLoading');
                     if (status !== 'success') {
                         this.renderResult('error', __('orocrm.magento.error'));
                     }
