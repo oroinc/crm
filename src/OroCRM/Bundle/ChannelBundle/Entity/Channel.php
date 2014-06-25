@@ -15,7 +15,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
  * @Config(
  *  routeView="orocrm_channel_view",
  *  defaultValues={
- *      "entity"={"icon"="icon-cubes"},
+ *      "entity"={"icon"="icon-sitemap"},
  *      "ownership"={
  *          "owner_type"="ORGANIZATION",
  *          "owner_field_name"="owner",
@@ -63,9 +63,9 @@ class Channel
     /**
      * @var string
      *
-     * @ORM\Column(name="integration", type="json_array", nullable=true)
+     * @ORM\Column(name="integrations", type="json_array", nullable=true)
      */
-    protected $integration;
+    protected $integrations;
 
     /**
      * @var Organization
@@ -131,11 +131,11 @@ class Channel
     }
 
     /**
-     * @param array $integration
+     * @param array $integrations
      */
-    public function setIntegration(array $integration)
+    public function setIntegrations(array $integrations)
     {
-        $this->integration = $integration;
+        $this->integrations = $integrations;
     }
 
     /**
@@ -143,7 +143,7 @@ class Channel
      */
     public function getIntegration()
     {
-        return $this->integration;
+        return $this->integrations;
     }
 
     /**
