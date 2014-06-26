@@ -29,6 +29,7 @@ workflows:
                     - @create_entity: # create Call
                         class: OroCRM\Bundle\CallBundle\Entity\Call
                         attribute: $call
+                        flush: false
                         data:
                             relatedContact: $contact
                             relatedAccount: $account
