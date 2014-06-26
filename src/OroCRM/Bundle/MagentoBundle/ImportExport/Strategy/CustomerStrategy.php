@@ -61,6 +61,8 @@ class CustomerStrategy extends BaseStrategy
             $remoteEntity->getGroup()
         );
 
+        // account and contact for new customer should be created automatically
+        // by the appropriate queued process to improve initial import performance
         if ($localEntity->getId()) {
             $this->updateContact($remoteEntity, $localEntity, $remoteEntity->getContact());
             $this->updateAccount($localEntity, $remoteEntity->getAccount());
