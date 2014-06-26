@@ -1,18 +1,18 @@
 <?php
 
-namespace OroCRM\Bundle\CallBundle\Tests\Selenium\Pages;
+namespace OroCRM\Bundle\CampaignBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
 
 /**
- * Class Calls
- * @package OroCRM\Bundle\CallBundle\Tests\Selenium\Pages
- * @method Calls openCalls openCalls(string)
+ * Class Campaigns
+ * @package OroCRM\Bundle\CampaignBundle\Tests\Selenium\Pages
+ * @method Campaigns openCampaigns openCampaigns(string)
  * {@inheritdoc}
  */
-class Calls extends AbstractPageFilteredGrid
+class Campaigns extends AbstractPageFilteredGrid
 {
-    const URL = 'call';
+    const URL = 'campaign';
 
     public function __construct($testCase, $redirect = true)
     {
@@ -21,20 +21,20 @@ class Calls extends AbstractPageFilteredGrid
     }
 
     /**
-     * @return Call
+     * @return Campaign
      */
     public function add()
     {
-        $this->test->byXPath("//a[@title='Log call']")->click();
+        $this->test->byXPath("//a[@title='Create Campaign']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
 
-        return new Call($this->test);
+        return new Campaign($this->test);
     }
 
     /**
      * @param array $entityData
-     * @return Call
+     * @return Campaign
      */
     public function open($entityData = array())
     {
@@ -44,6 +44,6 @@ class Calls extends AbstractPageFilteredGrid
         $this->waitPageToLoad();
         $this->waitForAjax();
 
-        return new Call($this->test);
+        return new Campaign($this->test);
     }
 }
