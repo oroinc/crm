@@ -193,7 +193,7 @@ class Address extends ExtendAddress
     /**
      * @param ContactAddress $contactAddress
      */
-    public function setContactAddress(ContactAddress $contactAddress = null)
+    public function setContactAddress($contactAddress)
     {
         $this->contactAddress = $contactAddress;
     }
@@ -249,7 +249,7 @@ class Address extends ExtendAddress
     /**
      * @param ContactPhone $contactPhone
      */
-    public function setContactPhone(ContactPhone $contactPhone)
+    public function setContactPhone($contactPhone)
     {
         $this->contactPhone = $contactPhone;
     }

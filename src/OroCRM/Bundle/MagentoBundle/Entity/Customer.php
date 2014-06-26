@@ -333,7 +333,7 @@ class Customer extends ExtendCustomer
      *
      * @return $this
      */
-    public function setContact(Contact $contact)
+    public function setContact($contact)
     {
         $this->contact = $contact;
 
@@ -353,7 +353,7 @@ class Customer extends ExtendCustomer
      *
      * @return $this
      */
-    public function setAccount(Account $account)
+    public function setAccount($account)
     {
         $this->account = $account;
 
