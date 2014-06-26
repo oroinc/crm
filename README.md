@@ -7,6 +7,8 @@ This document contains information on how to download, install, and start
 using OroCRM. For a more detailed explanation, see the [Installation]
 chapter.
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/orocrm/crm/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/orocrm/crm/?branch=master)
+
 Requirements
 ------------
 
