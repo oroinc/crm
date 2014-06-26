@@ -6,7 +6,6 @@ use Oro\Bundle\ReportBundle\Tests\Selenium\Pages\Reports;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use OroCRM\Bundle\CampaignBundle\Tests\Selenium\Pages\Campaigns;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
-use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnel;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
 
 /**
@@ -67,10 +66,10 @@ class CampaignManagementTest extends Selenium2TestCase
     /**
      * Test create new sales activity with lead assigned company
      * @depends testCreateLead
+     * @param $leadName
      */
-    public function testCreateCompanySales()
+    public function testCreateCompanySales($leadName)
     {
-        $leadName = 'Lead_' . mt_rand();
 
         $login = $this->login();
         /** @var SalesFunnels $login */
@@ -96,6 +95,7 @@ class CampaignManagementTest extends Selenium2TestCase
             ->submit()
             ->checkStep('Won Opportunity');
     }
+
     /**
      * Test report on active company
      * @depends testCreateCampaign
@@ -106,11 +106,11 @@ class CampaignManagementTest extends Selenium2TestCase
     {
         $login = $this->login();
         /** @var Reports $login */
-        $login = $login->openReports('Oro\Bundle\ReportBundle')
+        $data = $login = $login->openReports('Oro\Bundle\ReportBundle')
             ->open(array('Campaign Performance'))
-            ->filterBy('Code', $campaignCode);
-        $rows = $login->getRows();
-        $data = $login->getData($rows);
-        $this->assertEquals($data[0]['CLOSE REVENUE'], '100');
+            ->filterBy('Code', $campaignCode)
+            ->getAllData();
+
+        $this->assertEquals('$100.00', $data[0]['CLOSE REVENUE']);
     }
 }
