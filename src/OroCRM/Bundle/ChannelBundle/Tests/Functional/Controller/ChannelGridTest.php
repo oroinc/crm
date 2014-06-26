@@ -9,26 +9,23 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
  * @outputBuffering enabled
  * @dbIsolation
  */
-class ChannelController extends WebTestCase
+class ChannelGridTest extends WebTestCase
 {
     const CHANNEL_NAME = 'some name';
+    const GRID_NAME    = 'channels-grid';
 
     /** @var Channel */
     public static $channel;
 
     public function setUp()
     {
-        $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
+        $this->initClient(
+            ['debug' => false],
+            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+        );
         $this->loadFixtures(['OroCRM\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel']);
     }
 
-    protected function postFixtureLoad()
-    {
-        self::$channel = $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroCRMChannelBundle:Channel')
-            ->findOneByName(self::CHANNEL_NAME);
-    }
     /**
      * @dataProvider gridProvider
      *
@@ -60,19 +57,43 @@ class ChannelController extends WebTestCase
     public function gridProvider()
     {
         return [
-            'Channel grid' => [
+            'Channel grid'                => [
                 [
                     'gridParameters'      => [
-                        'gridName' => 'channels-grid'
+                        'gridName' => self::GRID_NAME
                     ],
                     'gridFilters'         => [],
                     'assert'              => [
-                        'name'  => self::CHANNEL_NAME,
+                        'name'        => self::CHANNEL_NAME,
+                        'description' => 'some description',
                     ],
                     'expectedResultCount' => 1
                 ],
             ],
+            'Channel grid without result' => [
+                [
+                    'gridParameters'      => [
+                        'gridName' => self::GRID_NAME
+                    ],
+                    'gridFilters'         => [
+                        self::GRID_NAME . '[_filter][name][value]' => 'Not found',
+                    ],
+                    'assert'              => [
+                        'name'        => self::CHANNEL_NAME,
+                        'description' => 'some description',
+                    ],
+                    'expectedResultCount' => 0
+                ],
+            ],
         ];
+    }
+
+    protected function postFixtureLoad()
+    {
+        self::$channel = $this->getContainer()
+            ->get('doctrine')
+            ->getRepository('OroCRMChannelBundle:Channel')
+            ->findOneByName(self::CHANNEL_NAME);
     }
 
     protected function getMainEntityId()

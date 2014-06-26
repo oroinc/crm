@@ -12,7 +12,6 @@ use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
-#use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 /**
  * @RouteResource("channel")

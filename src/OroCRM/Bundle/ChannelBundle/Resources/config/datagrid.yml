@@ -32,6 +32,7 @@ datagrid:
                     type: string
                     data_name: c.description
         properties:
+            id: ~
             update_link:
                 type: url
                 route: orocrm_channel_update

@@ -1,19 +1,23 @@
 orocrm:
-  channel:
-      entity_plural_label: Channels
-      entity_label: Channel
-      id.label: Id
-      name.label: Name
-      description.label: Description
-      owner.label: Owner
-      entities.label: Entities
-      integrations.label: Integrations
+    channel:
+        entity_plural_label: Channels
+        entity_label: Channel
+        id.label: Id
+        name.label: Name
+        description.label: Description
+        owner.label: Owner
+        entities.label: Entities
+        integrations.label: Integrations
 
-      datagrid:
-          action:
-              update.label: Update
-              delete.label: Delete
+        datagrid:
+            action:
+                update.label: Update
+                delete.label: Delete
 
-      form:
-          name.label: Name
-          description.label: Description
+        form:
+            name.label: Name
+            description.label: Description
+
+        controller:
+                message:
+                    saved: Channel saved
