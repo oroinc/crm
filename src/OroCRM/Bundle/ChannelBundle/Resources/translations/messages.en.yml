@@ -10,5 +10,10 @@ orocrm:
       integrations.label: Integrations
 
       datagrid:
-          actions:
-              view.label: View
+          action:
+              update.label: Update
+              delete.label: Delete
+
+      form:
+          name.label: Name
+          description.label: Description

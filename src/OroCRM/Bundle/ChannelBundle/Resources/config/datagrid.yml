@@ -8,39 +8,49 @@ datagrid:
                 select:
                     - c.id
                     - c.name
+                    - c.description
                 from:
                     - { table: OroCRM\Bundle\ChannelBundle\Entity\Channel, alias: c }
                 groupBy: c.id
         columns:
-            id:
-                label: orocrm.channel.id.label
             name:
                 label: orocrm.channel.name.label
+            description:
+                label: orocrm.channel.description.label
         sorters:
             columns:
-                id:   { data_name: c.id }
-                name: { data_name: c.name }
+                name:        { data_name: c.name }
+                description: { data_name: c.description }
             default:
                 name:  ASC
         filters:
             columns:
-                id:
-                    type: string
-                    data_name: c.id
                 name:
                     type: string
                     data_name: c.name
+                description:
+                    type: string
+                    data_name: c.description
         properties:
-            id: ~
-            view_link:
+            update_link:
                 type: url
-                route: orocrm_channel_view
+                route: orocrm_channel_update
                 params: [ id ]
+            delete_link:
+                type:    url
+                route:   orocrm_api_delete_channel
+                params:  [ id ]
         actions:
-            view:
+            update:
                 type:         navigate
-                label:        orocrm.channel.datagrid.actions.view.label
-                link:         view_link
-                icon:         eye-open
-                acl_recource: orocrm_channel_view
+                link:         update_link
+                acl_resource: orocrm_channel_update
+                icon:         edit
+                label:        orocrm.channel.datagrid.action.update.label
                 rowAction:    true
+            delete:
+                type:         delete
+                link:         delete_link
+                acl_resource: orocrm_channel_delete
+                icon:         trash
+                label:        orocrm.channel.datagrid.action.delete.label

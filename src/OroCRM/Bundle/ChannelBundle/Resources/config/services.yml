@@ -1,5 +1,43 @@
 parameters:
-    #some parameters
+    #entity
+    orocrm_channel.entity.class:               OroCRM\Bundle\ChannelBundle\Entity\Channel
+
+    #handler
+    orocrm_channel.channel_form.handler.class: OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelHandler
+
+    #form
+    orocrm_channel.form.type.channel.class:    OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
+
+    #manager
+    orocrm_channel.delete_manager.class:       OroCRM\Bundle\ChannelBundle\Manager\DeleteManager
 
 services:
-    #some services
+    orocrm_channel.manager.api:
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+        arguments:
+            - %orocrm_channel.entity.class%
+            - @doctrine.orm.entity_manager
+
+    orocrm_channel.form.type.channel:
+        class: %orocrm_channel.form.type.channel.class%
+        tags:
+            - { name: form.type, alias: orocrm_channel_form }
+
+    orocrm_channel.form.channel:
+        class:                        Symfony\Component\Form\Form
+        factory_method:               createNamed
+        factory_service:              form.factory
+        arguments:                    ["orocrm_channel_form", "orocrm_channel_form", null]
+
+    orocrm_channel.channel_form.handler:
+        class: %orocrm_channel.channel_form.handler.class%
+        scope: request
+        arguments:
+            - @request
+            - @orocrm_channel.form.channel
+            - @doctrine.orm.entity_manager
+            - @event_dispatcher
+
+    orocrm_channel.channel.delete_manager:
+        class: %orocrm_channel.delete_manager.class%
+        arguments: [ @doctrine.orm.entity_manager ]
