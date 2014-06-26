@@ -260,6 +260,16 @@ class CustomerStrategy extends BaseStrategy
                 $entity->addAddress($address);
                 $processedRemote[] = $address;
             }
+
+            $contact = $entity->getContact();
+            $contactAddress = $address->getContactAddress();
+            $contactPhone = $address->getContactPhone();
+            if ($contactAddress) {
+                $contactAddress->setOwner($contact);
+            }
+            if ($contactPhone) {
+                $contactPhone->setOwner($contact);
+            }
         }
 
         // remove not processed addresses
