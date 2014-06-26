@@ -2,18 +2,18 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
-use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
-
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
+use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
 
 /**
  * @ORM\Table("orocrm_magento_customer_addr")
@@ -210,10 +210,13 @@ class Address extends ExtendAddress
      * Set address created date/time
      *
      * @param \DateTime $created
+     * @return $this|AbstractAddress
      */
     public function setCreated($created)
     {
         $this->created = $created;
+
+        return $this;
     }
 
     /**
@@ -230,10 +233,12 @@ class Address extends ExtendAddress
      * Set address updated date/time
      *
      * @param \DateTime $updated
+     * @return $this|AbstractAddress
      */
     public function setUpdated($updated)
     {
         $this->updated = $updated;
+        return $this;
     }
 
     /**
