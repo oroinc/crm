@@ -60,9 +60,15 @@ class CustomerStrategy extends BaseStrategy
             $remoteEntity->getWebsite(),
             $remoteEntity->getGroup()
         );
-        $this->updateContact($remoteEntity, $localEntity, $remoteEntity->getContact());
-        $this->updateAccount($localEntity, $remoteEntity->getAccount());
-        $localEntity->getAccount()->setDefaultContact($localEntity->getContact());
+
+        if ($localEntity->getId()) {
+            $this->updateContact($remoteEntity, $localEntity, $remoteEntity->getContact());
+            $this->updateAccount($localEntity, $remoteEntity->getAccount());
+            $localEntity->getAccount()->setDefaultContact($localEntity->getContact());
+        } else {
+            $localEntity->setContact(null);
+            $localEntity->setAccount(null);
+        }
 
         // modify local entity after all relations done
         $this->strategyHelper->importEntity(
@@ -262,13 +268,18 @@ class CustomerStrategy extends BaseStrategy
             }
 
             $contact = $entity->getContact();
-            $contactAddress = $address->getContactAddress();
-            $contactPhone = $address->getContactPhone();
-            if ($contactAddress) {
-                $contactAddress->setOwner($contact);
-            }
-            if ($contactPhone) {
-                $contactPhone->setOwner($contact);
+            if ($contact) {
+                $contactAddress = $address->getContactAddress();
+                $contactPhone = $address->getContactPhone();
+                if ($contactAddress) {
+                    $contactAddress->setOwner($contact);
+                }
+                if ($contactPhone) {
+                    $contactPhone->setOwner($contact);
+                }
+            } else {
+                $address->setContactAddress(null);
+                $address->setContactPhone(null);
             }
         }
 
