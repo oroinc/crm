@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
 
 /**
  * Class CreateLeadTest
@@ -28,6 +29,7 @@ class CreateLeadTest extends Selenium2TestCase
         $name = 'Lead_'.mt_rand();
 
         $login = $this->login();
+        /** @var Leads $login */
         $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->add()
             ->setName($name)
@@ -59,6 +61,7 @@ class CreateLeadTest extends Selenium2TestCase
         $newName = 'Update_' . $name;
 
         $login = $this->login();
+        /** @var Leads $login */
         $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->filterBy('Lead name', $name)
             ->open(array($name))
@@ -81,6 +84,7 @@ class CreateLeadTest extends Selenium2TestCase
     public function testDeleteLead($name)
     {
         $login = $this->login();
+        /** @var Leads $login */
         $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->filterBy('Lead name', $name)
             ->open(array($name))

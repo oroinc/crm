@@ -155,7 +155,9 @@ class CustomerStrategy extends BaseStrategy
         if ($localData->getContact() && $localData->getContact()->getId()) {
             $helper->merge($remoteData, $localData, $localData->getContact());
         } else {
+            $addresses = $localData->getAddresses();
             // loop by imported addresses, add new only
+            /** @var \OroCRM\Bundle\ContactBundle\Entity\ContactAddress $address */
             foreach ($contact->getAddresses() as $key => $address) {
                 $helper->prepareAddress($address);
 
@@ -165,19 +167,14 @@ class CustomerStrategy extends BaseStrategy
                 }
                 // @TODO find possible solution
                 // guess parent address by key
-                $localData->getAddresses()->get($key)->setContactAddress($address);
+                $addresses->get($key)->setContactAddress($address);
             }
 
             // @TODO find possible solution
             // guess parent $phone by key
             foreach ($contact->getPhones() as $key => $phone) {
                 $contactPhone = $this->getContactPhoneFromContact($contact, $phone);
-
-                if ($contactPhone) {
-                    $localData->getAddresses()->get($key)->setContactPhone($contactPhone);
-                } else {
-                    $localData->getAddresses()->get($key)->setContactPhone($phone);
-                }
+                $addresses->get($key)->setContactPhone($contactPhone ? $contactPhone : $phone);
             }
 
             // populate default owner only for new contacts
@@ -260,6 +257,16 @@ class CustomerStrategy extends BaseStrategy
                 $entity->addAddress($address);
                 $processedRemote[] = $address;
             }
+
+            $contact = $entity->getContact();
+            $contactAddress = $address->getContactAddress();
+            $contactPhone = $address->getContactPhone();
+            if ($contactAddress) {
+                $contactAddress->setOwner($contact);
+            }
+            if ($contactPhone) {
+                $contactPhone->setOwner($contact);
+            }
         }
 
         // remove not processed addresses
@@ -314,5 +321,7 @@ class CustomerStrategy extends BaseStrategy
         // populate default owner only for new accounts
         $this->defaultOwnerHelper->populateChannelOwner($account, $entity->getChannel());
         $entity->setAccount($account);
+
+        return $this;
     }
 }
