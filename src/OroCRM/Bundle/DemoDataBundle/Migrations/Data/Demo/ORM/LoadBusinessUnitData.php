@@ -12,6 +12,10 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
+/**
+  * @SuppressWarnings(PHPMD.ShortVariable)
+  * @SuppressWarnings(PHPMD.LongVariable)
+ */
 class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInterface
 {
     /**
@@ -46,11 +50,10 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
      */
     public function load(ObjectManager $manager)
     {
-
         /** @var Organization $organization */
-        $organization = $this->organizationRepository->findOneBy(array('name' => 'default'));
+        $organization = $this->organizationRepository->findOneByName('default');
         if (!$organization) {
-            $organization = $this->organizationRepository->findOneBy(array('name' => 'Acme, Inc'));
+            $organization = $this->organizationRepository->findOneByName('Acme, Inc');
         }
         if (!$organization) {
             throw new \Exception('"default" company is not defined');

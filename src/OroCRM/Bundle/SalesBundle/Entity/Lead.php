@@ -16,6 +16,7 @@ use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
 
@@ -57,6 +58,8 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  */
 class Lead extends ExtendLead implements FullNameInterface
 {
+    use ChannelEntityTrait;
+
     /**
      * @var integer
      *

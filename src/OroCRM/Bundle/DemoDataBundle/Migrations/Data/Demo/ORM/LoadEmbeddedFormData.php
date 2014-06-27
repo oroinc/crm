@@ -4,19 +4,28 @@ namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
 use OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.ShortVariable)
+ */
 class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInterface
 {
     /** @var ContainerInterface */
     private $container;
+
+    /** @var  EntityRepository */
+    protected $channelRepository;
+
     // @codingStandardsIgnoreStart
     protected $contactRequests = array(
         array(
@@ -46,9 +55,22 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
     );
     // @codingStandardsIgnoreEnd
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies()
+    {
+        return ['OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData'];
+    }
+
+    /**
+     * @param ContainerInterface $container
+     */
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
+        $this->channelRepository = $this->container->get('doctrine.orm.entity_manager')
+            ->getRepository('OroCRMChannelBundle:Channel');
     }
 
     /**
@@ -56,8 +78,15 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
      */
     public function load(ObjectManager $om)
     {
+        /** @var Channel $channel */
+        $channel = $this->channelRepository->findOneByName('default');
+
+        if (!$channel) {
+            throw new \Exception('"default" channel is not defined');
+        }
+
         $this->persistDemoEmbeddedForm($om);
-        $this->persistDemoContactUsForm($om);
+        $this->persistDemoContactUsForm($om, $channel);
         $om->flush();
     }
 
@@ -79,10 +108,10 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
 
     /**
      * @param ObjectManager $om
+     * @param Channel $channel
      */
-    protected function persistDemoContactUsForm(
-        ObjectManager $om
-    ) {
+    protected function persistDemoContactUsForm(ObjectManager $om, Channel $channel)
+    {
         foreach ($this->contactRequests as $contactRequest) {
             $request = new ContactRequest();
             $contactRequest['contactReason'] = $om->getRepository('OroCRMContactUsBundle:ContactReason')
@@ -90,6 +119,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
             foreach ($contactRequest as $property => $value) {
                 call_user_func_array(array($request, 'set' . ucfirst($property)), array($value));
             }
+            $request->setChannel($channel);
             $request->setPreferredContactMethod(ContactRequest::CONTACT_METHOD_BOTH);
             $request->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
             $om->persist($request);
