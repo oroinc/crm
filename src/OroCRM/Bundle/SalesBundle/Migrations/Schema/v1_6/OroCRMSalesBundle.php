@@ -29,8 +29,8 @@ class OroCRMSalesBundle implements Migration
     public static function addFieldToOrocrmSalesLead(Schema $schema)
     {
         $table = $schema->getTable('orocrm_sales_lead');
-        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['channel_id'], 'IDX_73DB463372F5A1AA', []);
+        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
+        $table->addIndex(['data_channel_id'], 'IDX_73DB463372F5A1AA', []);
     }
 
     /**
@@ -39,8 +39,8 @@ class OroCRMSalesBundle implements Migration
     public static function addFieldToOrocrmSalesOpportunity(Schema $schema)
     {
         $table = $schema->getTable('orocrm_sales_opportunity');
-        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['channel_id'], 'IDX_C0FE4AAC72F5A1AA', []);
+        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
+        $table->addIndex(['data_channel_id'], 'IDX_C0FE4AAC72F5A1AA', []);
     }
 
     /**
@@ -49,8 +49,8 @@ class OroCRMSalesBundle implements Migration
     public static function addFieldToOrocrmSalesFunnel(Schema $schema)
     {
         $table = $schema->getTable('orocrm_sales_funnel');
-        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['channel_id'], 'IDX_E20C734472F5A1AA', []);
+        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
+        $table->addIndex(['data_channel_id'], 'IDX_E20C734472F5A1AA', []);
     }
 
     /**
@@ -61,7 +61,7 @@ class OroCRMSalesBundle implements Migration
         $table = $schema->getTable('orocrm_sales_lead');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_channel'),
-            ['channel_id'],
+            ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_73DB463372F5A1AA'
@@ -76,7 +76,7 @@ class OroCRMSalesBundle implements Migration
         $table = $schema->getTable('orocrm_sales_opportunity');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_channel'),
-            ['channel_id'],
+            ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_C0FE4AAC72F5A1AA'
@@ -91,7 +91,7 @@ class OroCRMSalesBundle implements Migration
         $table = $schema->getTable('orocrm_sales_funnel');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_channel'),
-            ['channel_id'],
+            ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_E20C734472F5A1AA'

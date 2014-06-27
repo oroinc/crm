@@ -48,7 +48,7 @@ class LeadTest extends \PHPUnit_Framework_TestCase
             'createdAt' => array('createdAt', $now, $now),
             'updatedAt' => array('updatedAt', $now, $now),
             'notes' => array('notes', 'test', 'test'),
-            'channel' => ['channel', $channel, $channel]
+            'dataChannel' => ['dataChannel', $channel, $channel]
         );
     }
 }

@@ -15,11 +15,11 @@ class OroCRMContactUsBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_contactus_request');
-        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['channel_id'], 'IDX_342872E872F5A1AA', []);
+        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
+        $table->addIndex(['data_channel_id'], 'IDX_342872E872F5A1AA', []);
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_channel'),
-            ['channel_id'],
+            ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_342872E872F5A1AA'

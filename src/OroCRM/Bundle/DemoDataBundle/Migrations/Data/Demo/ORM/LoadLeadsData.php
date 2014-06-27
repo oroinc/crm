@@ -70,7 +70,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     public function load(ObjectManager $manager)
     {
         $this->initSupportingEntities($manager);
-        $this->loadLeads($this->getChannel());
+        $this->loadLeads($this->getChannelData());
         $this->loadSources();
     }
 
@@ -78,7 +78,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
      * @return Channel
      * @throws \Exception
      */
-    protected function getChannel()
+    protected function getChannelData()
     {
         /** @var Channel $channel */
         $channel = $this->container->get('doctrine.orm.entity_manager')->getRepository('OroCRMChannelBundle:Channel')
@@ -198,7 +198,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setPhoneNumber($data['TelephoneNumber']);
         $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
-        $lead->setChannel($channel);
+        $lead->setDataChannel($channel);
 
         /** @var Address $address */
         $address = new Address();

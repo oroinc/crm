@@ -48,7 +48,7 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
             'workflowStep' => array('workflowStep', $workflowStep, $workflowStep),
             'createdAt' => array('createdAt', $now, $now),
             'updatedAt' => array('updatedAt', $now, $now),
-            'channel' => ['channel', $channel, $channel],
+            'dataChannel' => ['dataChannel', $channel, $channel],
         );
     }
 

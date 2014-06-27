@@ -126,7 +126,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
             foreach ($contactRequest as $property => $value) {
                 call_user_func_array(array($request, 'set' . ucfirst($property)), array($value));
             }
-            $request->setChannel($channel);
+            $request->setDataChannel($channel);
             $request->setPreferredContactMethod(ContactRequest::CONTACT_METHOD_BOTH);
             $request->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
             $om->persist($request);

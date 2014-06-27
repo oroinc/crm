@@ -70,14 +70,14 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     public function load(ObjectManager $manager)
     {
         $this->initSupportingEntities($manager);
-        $this->loadFlows($this->getChannel());
+        $this->loadFlows($this->getDataChannel());
     }
 
     /**
      * @return Channel
      * @throws \Exception
      */
-    protected function getChannel()
+    protected function getDataChannel()
     {
         /** @var Channel $channel */
         $channel = $this->container->get('doctrine.orm.entity_manager')->getRepository('OroCRMChannelBundle:Channel')
@@ -151,7 +151,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
         ), $parameters);
 
         $salesFunnel = new SalesFunnel();
-        $salesFunnel->setChannel($channel);
+        $salesFunnel->setDataChannel($channel);
 
         if (!$this->workflowManager->isStartTransitionAvailable(
             'b2b_flow_sales_funnel',

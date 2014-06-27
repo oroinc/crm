@@ -68,14 +68,14 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
     public function load(ObjectManager $manager)
     {
         $this->initSupportingEntities($manager);
-        $this->loadOpportunities($this->getChannel());
+        $this->loadOpportunities($this->getDataChannel());
     }
 
     /**
      * @return Channel
      * @throws \Exception
      */
-    protected function getChannel()
+    protected function getDataChannel()
     {
         /** @var Channel $channel */
         $channel = $this->container->get('doctrine.orm.entity_manager')->getRepository('OroCRMChannelBundle:Channel')
@@ -148,7 +148,7 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
         $opportunity->setContact($contact);
         $opportunity->setAccount($account);
         $opportunity->setOwner($user);
-        $opportunity->setChannel($channel);
+        $opportunity->setDataChannel($channel);
 
         return $opportunity;
     }
