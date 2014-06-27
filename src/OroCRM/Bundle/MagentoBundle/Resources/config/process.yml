@@ -1,0 +1,58 @@
+definitions:
+    magento_contact_initional_definition:
+        label:   'Create Contacts based on the Customers that was imported from Magento'
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
+        order:   10
+        actions_configuration:
+            - @create_entity:
+                class:     OroCRM\Bundle\ContactBundle\Entity\Contact
+                attribute: $contact
+                flush:     true
+                data:
+                    birthday:    $birthday
+                    email:       $email
+                    firstName:   $firstName
+                    gender:      $gender
+                    lastName:    $lastName
+                    middleName:  $middleName
+                    namePrefix:  $namePrefix
+                    nameSuffix:  $nameSuffix
+                    owner:       $owner
+
+    magento_account_initional_definition:
+        label:  'Create Accounts based on the Customers that was imported from Magento'
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
+        order:   20
+        actions_configuration:
+            - @create_entity:
+                class:     OroCRM\Bundle\AccountBundle\Entity\Account
+                attribute: $account
+                flush:     true
+                data:
+                    name:  'tmp'
+                    owner: $owner
+            - @format_string:
+                attribute: $account.name
+                string:    '%namePrefix% %firstName% %middleName% %lastname% %nameSuffix%'
+                arguments:
+                    firstName:  $firstName
+                    lastname:   $lastname
+                    middleName: $middleName
+                    namePrefix: $namePrefix
+                    nameSuffix: $nameSuffix
+
+
+triggers:
+    magento_contact_initional_definition:
+        -
+            event:    create
+            priority: 100
+            queued:   true
+
+    magento_account_initional_definition:
+        -
+            event:    create
+            priority: 90
+            queued:   true

@@ -175,14 +175,18 @@ class CustomerStrategy extends BaseStrategy
                 }
                 // @TODO find possible solution
                 // guess parent address by key
-                $addresses->get($key)->setContactAddress($address);
+                if ($entity = $addresses->get($key)) {
+                    $entity->setContactAddress($address);
+                }
             }
 
             // @TODO find possible solution
             // guess parent $phone by key
             foreach ($contact->getPhones() as $key => $phone) {
                 $contactPhone = $this->getContactPhoneFromContact($contact, $phone);
-                $addresses->get($key)->setContactPhone($contactPhone ? $contactPhone : $phone);
+                if ($entity = $addresses->get($key)) {
+                    $entity->setContactPhone($contactPhone ? $contactPhone : $phone);
+                }
             }
 
             // populate default owner only for new contacts
@@ -324,11 +328,8 @@ class CustomerStrategy extends BaseStrategy
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
             $this->updateAddressCountryRegion($address, $mageRegionId);
 
-            if ($address->getCountry()) {
-                $account->{'set' . ucfirst($key) . 'Address'}($address);
-            } else {
-                $account->{'set' . ucfirst($key) . 'Address'}(null);
-            }
+            $setter = 'set' . ucfirst($key) . 'Address';
+            $account->$setter($address->getCountry() ? $address : null);
         }
 
         // populate default owner only for new accounts
