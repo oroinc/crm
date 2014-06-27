@@ -2,8 +2,8 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -16,9 +16,6 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class LoadChannelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    /** @var ContainerInterface */
-    protected $container;
-
     /** @var  EntityRepository */
     protected $organizationRepository;
 
@@ -35,8 +32,7 @@ class LoadChannelData extends AbstractFixture implements ContainerAwareInterface
      */
     public function setContainer(ContainerInterface $container = null)
     {
-        $this->container = $container;
-        $this->organizationRepository = $this->container->get('doctrine.orm.entity_manager')
+        $this->organizationRepository = $container->get('doctrine.orm.entity_manager')
             ->getRepository('OroOrganizationBundle:Organization');
     }
 

@@ -1,7 +1,6 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -10,44 +9,31 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Collections\Collection;
-
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Oro\Bundle\WorkflowBundle\Model\Workflow;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
+use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-/**
- * @SuppressWarnings(PHPMD.ShortVariable)
- */
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     const FLUSH_MAX = 50;
 
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface */
     protected $container;
 
-    /**
-     * @var User[]
-     */
+    /** @var User[] */
     protected $users;
 
-    /**
-     * @var Country[]
-     */
+    /** @var Country[] */
     protected $countries;
 
     /** @var  EntityManager */
@@ -84,7 +70,16 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     public function load(ObjectManager $manager)
     {
         $this->initSupportingEntities($manager);
+        $this->loadLeads($this->getChannel());
+        $this->loadSources();
+    }
 
+    /**
+     * @return Channel
+     * @throws \Exception
+     */
+    protected function getChannel()
+    {
         /** @var Channel $channel */
         $channel = $this->container->get('doctrine.orm.entity_manager')->getRepository('OroCRMChannelBundle:Channel')
             ->findOneByName('default');
@@ -93,10 +88,12 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             throw new \Exception('"default" channel is not defined');
         }
 
-        $this->loadLeads($channel);
-        $this->loadSources();
+        return $channel;
     }
 
+    /**
+     * @param ObjectManager $manager
+     */
     protected function initSupportingEntities(ObjectManager $manager = null)
     {
         if ($manager) {
@@ -138,6 +135,9 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $this->flush($this->em);
     }
 
+    /**
+     * @param Channel $channel
+     */
     public function loadLeads(Channel $channel)
     {
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR. "leads.csv", "r");

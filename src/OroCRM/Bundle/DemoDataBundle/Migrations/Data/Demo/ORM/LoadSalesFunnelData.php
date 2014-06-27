@@ -23,10 +23,10 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
 {
     const FLUSH_MAX = 50;
 
+    /** @var array */
     protected $probabilities = array (0.2, 0.5, 0.8);
-    /**
-     * @var ContainerInterface
-     */
+
+    /** @var ContainerInterface */
     protected $container;
 
     /** @var  User[] */
@@ -69,6 +69,16 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
      */
     public function load(ObjectManager $manager)
     {
+        $this->initSupportingEntities($manager);
+        $this->loadFlows($this->getChannel());
+    }
+
+    /**
+     * @return Channel
+     * @throws \Exception
+     */
+    protected function getChannel()
+    {
         /** @var Channel $channel */
         $channel = $this->container->get('doctrine.orm.entity_manager')->getRepository('OroCRMChannelBundle:Channel')
             ->findOneByName('default');
@@ -77,10 +87,12 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
             throw new \Exception('"default" channel is not defined');
         }
 
-        $this->initSupportingEntities($manager);
-        $this->loadFlows($channel);
+        return $channel;
     }
 
+    /**
+     * @param ObjectManager $manager
+     */
     protected function initSupportingEntities(ObjectManager $manager = null)
     {
         if ($manager) {
@@ -92,6 +104,9 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
         $this->opportunities = $this->em->getRepository('OroCRMSalesBundle:Opportunity')->findAll();
     }
 
+    /**
+     * @param Channel $channel
+     */
     protected function loadFlows(Channel $channel)
     {
         $randomUser = count($this->users) - 1;

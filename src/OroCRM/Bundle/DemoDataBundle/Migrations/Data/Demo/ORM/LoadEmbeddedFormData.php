@@ -76,6 +76,17 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
      */
     public function load(ObjectManager $om)
     {
+        $this->persistDemoEmbeddedForm($om);
+        $this->persistDemoContactUsForm($om, $this->getChannel());
+        $om->flush();
+    }
+
+    /**
+     * @return Channel
+     * @throws \Exception
+     */
+    protected function getChannel()
+    {
         /** @var Channel $channel */
         $channel = $this->channelRepository->findOneByName('default');
 
@@ -83,9 +94,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
             throw new \Exception('"default" channel is not defined');
         }
 
-        $this->persistDemoEmbeddedForm($om);
-        $this->persistDemoContactUsForm($om, $channel);
-        $om->flush();
+        return $channel;
     }
 
     /**

@@ -11,7 +11,6 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;

@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_4;
 
 use Doctrine\DBAL\Schema\Schema;
+
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
@@ -23,6 +24,5 @@ class OroCRMContactUsBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_342872E872F5A1AA'
         );
-
     }
 }

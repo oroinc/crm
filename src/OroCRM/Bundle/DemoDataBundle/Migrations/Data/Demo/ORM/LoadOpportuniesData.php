@@ -67,6 +67,16 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
      */
     public function load(ObjectManager $manager)
     {
+        $this->initSupportingEntities($manager);
+        $this->loadOpportunities($this->getChannel());
+    }
+
+    /**
+     * @return Channel
+     * @throws \Exception
+     */
+    protected function getChannel()
+    {
         /** @var Channel $channel */
         $channel = $this->container->get('doctrine.orm.entity_manager')->getRepository('OroCRMChannelBundle:Channel')
             ->findOneByName('default');
@@ -75,10 +85,12 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
             throw new \Exception('"default" channel is not defined');
         }
 
-        $this->initSupportingEntities($manager);
-        $this->loadOpportunities($channel);
+        return $channel;
     }
 
+    /**
+     * @param ObjectManager $manager
+     */
     protected function initSupportingEntities(ObjectManager $manager = null)
     {
         if ($manager) {
