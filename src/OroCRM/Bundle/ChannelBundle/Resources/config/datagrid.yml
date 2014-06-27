@@ -1,0 +1,56 @@
+datagrid:
+    channels-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_channel_view
+            query:
+                select:
+                    - c.id
+                    - c.name
+                    - c.description
+                from:
+                    - { table: %orocrm_channel.entity.class%, alias: c }
+                groupBy: c.id
+        columns:
+            name:
+                label: orocrm.channel.name.label
+            description:
+                label: orocrm.channel.description.label
+        sorters:
+            columns:
+                name:        { data_name: c.name }
+                description: { data_name: c.description }
+            default:
+                name:  ASC
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: c.name
+                description:
+                    type: string
+                    data_name: c.description
+        properties:
+            id: ~
+            update_link:
+                type: url
+                route: orocrm_channel_update
+                params: [ id ]
+            delete_link:
+                type:    url
+                route:   orocrm_api_delete_channel
+                params:  [ id ]
+        actions:
+            update:
+                type:         navigate
+                link:         update_link
+                acl_resource: orocrm_channel_update
+                icon:         edit
+                label:        orocrm.channel.datagrid.action.update.label
+                rowAction:    true
+            delete:
+                type:         delete
+                link:         delete_link
+                acl_resource: orocrm_channel_delete
+                icon:         trash
+                label:        orocrm.channel.datagrid.action.delete.label
