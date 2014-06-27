@@ -7,7 +7,6 @@ use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-
 class OroCRMSalesBundle implements Migration
 {
     /**
@@ -16,12 +15,12 @@ class OroCRMSalesBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         self::addFieldToOrocrmSalesLead($schema);
-        #self::addFieldToOrocrmSalesOpportunity($schema);
-        #self::addFieldToOrocrmSalesFunnel($schema);
+        self::addFieldToOrocrmSalesOpportunity($schema);
+        self::addFieldToOrocrmSalesFunnel($schema);
 
         self::addForeignKeyToOrocrmSalesLead($schema);
-        #self::addForeignKeyToOrocrmSalesOpportunity($schema);
-        #self::addForeignKeyToOrocrmSalesFunnel($schema);
+        self::addForeignKeyToOrocrmSalesOpportunity($schema);
+        self::addForeignKeyToOrocrmSalesFunnel($schema);
     }
 
     /**

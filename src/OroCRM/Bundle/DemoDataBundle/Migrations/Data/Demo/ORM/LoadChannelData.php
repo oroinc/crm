@@ -2,17 +2,23 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadChannelData extends AbstractFixture
+/**
+ * @SuppressWarnings(PHPMD.ShortVariable)
+ * * @SuppressWarnings(PHPMD.LongVariable)
+ */
+class LoadChannelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     /** @var ContainerInterface */
     protected $container;
@@ -44,10 +50,10 @@ class LoadChannelData extends AbstractFixture
     public function load(ObjectManager $om)
     {
         /** @var Organization $organization */
-        $organization = $this->organizationRepository->findOneBy(['name' => 'default']);
+        $organization = $this->organizationRepository->findOneByName('default');
 
         if (!$organization) {
-            $organization = $this->organizationRepository->findOneBy(['name' => 'Acme, Inc']);
+            $organization = $this->organizationRepository->findOneByName('Acme, Inc');
         }
         if (!$organization) {
             throw new \Exception('"default" company is not defined');
