@@ -34,7 +34,7 @@ class ChannelController extends Controller
      * @Acl(
      *      id="orocrm_channel_create",
      *      type="entity",
-     *      permission="VIEW",
+     *      permission="CREATE",
      *      class="OroCRMChannelBundle:Channel"
      * )
      * @Template("OroCRMChannelBundle:Channel:update.html.twig")

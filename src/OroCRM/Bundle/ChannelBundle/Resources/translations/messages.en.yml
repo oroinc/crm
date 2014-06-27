@@ -14,10 +14,6 @@ orocrm:
                 update.label: Update
                 delete.label: Delete
 
-        form:
-            name.label: Name
-            description.label: Description
-
         controller:
                 message:
                     saved: Channel saved

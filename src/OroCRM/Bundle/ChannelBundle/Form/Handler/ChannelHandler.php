@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ChannelBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManager;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,21 +27,23 @@ class ChannelHandler
     /** @var FormInterface */
     protected $form;
 
-    /** @var EventDispatcherInterface */
-    protected $eventDispatcher;
-
-    public function __construct(
-        Request $request,
-        FormInterface $form,
-        EntityManager $em,
-        EventDispatcherInterface $eventDispatcher
-    ) {
+    /**
+     * @param Request       $request
+     * @param FormInterface $form
+     * @param EntityManager $em
+     */
+    public function __construct(Request $request, FormInterface $form, EntityManager $em)
+    {
         $this->request         = $request;
         $this->form            = $form;
         $this->em              = $em;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param Channel $entity
+     *
+     * @return bool
+     */
     public function process(Channel $entity)
     {
         $this->form->setData($entity);

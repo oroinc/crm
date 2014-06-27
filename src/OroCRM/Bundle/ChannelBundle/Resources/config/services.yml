@@ -36,7 +36,6 @@ services:
             - @request
             - @orocrm_channel.form.channel
             - @doctrine.orm.entity_manager
-            - @event_dispatcher
 
     # Channel API
     orocrm_channel.channel.manager:

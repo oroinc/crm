@@ -6,16 +6,16 @@
 {% set formAction = entity.id ? path('orocrm_channel_update', { id: entity.id }) : path('orocrm_channel_create') %}
 
 {% if entity.id %}
-    {% oro_title_set({params : {"%integration.name%": entity.name } }) %}
+    {% oro_title_set({params : {"%channel.name%": entity.name } }) %}
 {% endif %}
 
 {% block pageHeader %}
     {% if entity.id %}
         {% set breadcrumbs = {
-        'entity':      entity,
-        'indexPath':   path('orocrm_channel_index'),
-        'indexLabel':  'orocrm.channel.entity_plural_label'|trans,
-        'entityTitle': entity.name|default('N/A')
+            'entity':      entity,
+            'indexPath':   path('orocrm_channel_index'),
+            'indexLabel':  'orocrm.channel.entity_plural_label'|trans,
+            'entityTitle': entity.name|default('N/A')
         } %}
         {{ parent() }}
     {% else %}
@@ -30,12 +30,12 @@
 
     {% if entity.id and resource_granted('DELETE', entity) %}
         {{ UI.deleteButton({
-        'dataUrl': path('orocrm_api_delete_channel', {'id': entity.id}),
-        'dataRedirect': path('orocrm_channel_index'),
-        'aCss': 'no-hash remove-button',
-        'id': 'btn-remove-channel',
-        'dataId': entity.id,
-        'entity_label': 'orocrm.channel.entity_label'|trans,
+            'dataUrl': path('orocrm_api_delete_channel', {'id': entity.id}),
+            'dataRedirect': path('orocrm_channel_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-channel',
+            'dataId': entity.id,
+            'entity_label': 'orocrm.channel.entity_label'|trans,
         }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}

@@ -20,7 +20,7 @@ class ChannelType extends AbstractType
             'text',
             [
                 'required' => true,
-                'label'    => 'orocrm.channel.form.name.label'
+                'label'    => 'orocrm.channel.name.label'
             ]
         );
         $builder->add(
@@ -28,7 +28,7 @@ class ChannelType extends AbstractType
             'text',
             [
                 'required' => true,
-                'label'    => 'orocrm.channel.form.description.label'
+                'label'    => 'orocrm.channel.description.label'
             ]
         );
     }

@@ -1,6 +1,6 @@
 datagrid:
     channels-grid:
-        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Customer
+        entity_name: OroCRM\Bundle\ChannelBundle\Entity\Channel
         source:
             type: orm
             acl_resource: orocrm_channel_view
@@ -10,7 +10,7 @@ datagrid:
                     - c.name
                     - c.description
                 from:
-                    - { table: OroCRM\Bundle\ChannelBundle\Entity\Channel, alias: c }
+                    - { table: %orocrm_channel.entity.class%, alias: c }
                 groupBy: c.id
         columns:
             name:
