@@ -9,7 +9,7 @@ parameters:
     orocrm_channel.form.type.channel.class:    OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
 
     #manager
-    orocrm_channel.delete_manager.class:       OroCRM\Bundle\ChannelBundle\Manager\DeleteManager
+    orocrm_channel.manager.api.class:          Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
 services:
     orocrm_channel.manager.api:
@@ -36,8 +36,10 @@ services:
             - @request
             - @orocrm_channel.form.channel
             - @doctrine.orm.entity_manager
-            - @event_dispatcher
 
-    orocrm_channel.channel.delete_manager:
-        class: %orocrm_channel.delete_manager.class%
-        arguments: [ @doctrine.orm.entity_manager ]
+    # Channel API
+    orocrm_channel.channel.manager:
+        class: %orocrm_channel.manager.api.class%
+        arguments:
+            - %orocrm_channel.entity.class%
+            - @doctrine.orm.entity_manager

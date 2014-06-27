@@ -19,23 +19,12 @@ class ChannelControllerTest extends WebTestCase
     const CHANNEL_NAME = 'some name';
     const GRID_NAME    = 'channels-grid';
 
-    /** @var Channel */
-    public static $channel;
-
     public function setUp()
     {
         $this->initClient(
             ['debug' => false],
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
-    }
-
-    protected function postFixtureLoad()
-    {
-        self::$channel = $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroCRMChannelBundle:Channel')
-            ->findOneByName(self::CHANNEL_NAME);
     }
 
     public function testCreateChannel()
@@ -122,7 +111,6 @@ class ChannelControllerTest extends WebTestCase
                 self::GRID_NAME . '[_filter][name][value]' => $channel['name']
             ]
         );
-
 
         $result = $this->getJsonResponseContent($response, 200);
 

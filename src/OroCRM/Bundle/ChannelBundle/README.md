@@ -1,4 +1,4 @@
-OroCRMMagentoBundle
+OroCRMChannelBundle
 ===================
 
 Bundle provides channel.

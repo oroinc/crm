@@ -62,6 +62,29 @@ class CasesTest extends Selenium2TestCase
      * @depends testUpdate
      * @param $subject
      */
+    public function testManage($subject)
+    {
+        $login = $this->login();
+        /** @var Cases $login */
+        $login->openCases('OroCRM\Bundle\CaseBundle')
+            ->filterBy('Subject', $subject)
+            ->open(array($subject))
+            ->edit()
+            ->assertTitle($subject . ' - Edit - Cases - Activities')
+            ->setStatus('In Progress') //Open, Resolved, Closed
+            ->save()
+            ->assertMessage('Case saved')
+            ->toGrid()
+            ->assertTitle('Cases - Activities');
+
+        //$login = $login->openCases('OroCRM\Bundle\CaseBundle')
+        //    ->filterBy('Subject', $subject);
+    }
+
+    /**
+     * @depends testUpdate
+     * @param $subject
+     */
     public function testDelete($subject)
     {
         $login = $this->login();

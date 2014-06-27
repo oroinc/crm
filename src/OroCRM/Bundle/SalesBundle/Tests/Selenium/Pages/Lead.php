@@ -36,6 +36,10 @@ class Lead extends AbstractPageEntity
     protected $industry;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $address;
+    /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
+    protected $owner;
+    /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
+    protected $campaign;
 
     public function __construct($testCase, $redirect = true)
     {
@@ -56,7 +60,9 @@ class Lead extends AbstractPageEntity
         $this->employees = $this->test->byId('orocrm_sales_lead_form_numberOfEmployees');
         $this->industry = $this->test->byId('orocrm_sales_lead_form_industry');
         $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_lead_form_owner')]/a");
-
+        $this->campaign = $this->test->byXpath(
+            "//div[starts-with(@id,'s2id_orocrm_sales_lead_form_additional_campaign')]/a"
+        );
         return $this;
     }
 
@@ -186,17 +192,18 @@ class Lead extends AbstractPageEntity
         return $this->employees->value();
     }
 
-    public function setOwner($owner)
+    public function setCampaign($campaign)
     {
-        $this->owner->click();
+        $this->test->moveto($this->campaign);
+        $this->campaign->click();
         $this->waitForAjax();
-        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($owner);
+        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($campaign);
         $this->waitForAjax();
         $this->assertElementPresent(
-            "//div[@id='select2-drop']//div[contains(., '{$owner}')]",
+            "//div[@id='select2-drop']//div[contains(., '{$campaign}')]",
             "Owner autocomplete doesn't return search value"
         );
-        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$owner}')]")->click();
+        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$campaign}')]")->click();
 
         return $this;
     }

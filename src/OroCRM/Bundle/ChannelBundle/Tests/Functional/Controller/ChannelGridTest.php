@@ -35,7 +35,7 @@ class ChannelGridTest extends WebTestCase
     {
         if (isset($filters['gridParameters']['id'])) {
             $gridId = $filters['gridParameters']['gridName'] . '[' . $filters['gridParameters']['id'] . ']';
-            $filters['gridParameters'][$gridId] = $this->getMainEntityId();
+            $filters['gridParameters'][$gridId] = $this->getReference('default_channel')->getId();
         }
 
         $this->client->requestGrid($filters['gridParameters'], $filters['gridFilters']);
@@ -86,18 +86,5 @@ class ChannelGridTest extends WebTestCase
                 ],
             ],
         ];
-    }
-
-    protected function postFixtureLoad()
-    {
-        self::$channel = $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroCRMChannelBundle:Channel')
-            ->findOneByName(self::CHANNEL_NAME);
-    }
-
-    protected function getMainEntityId()
-    {
-        return self::$channel->getid();
     }
 }

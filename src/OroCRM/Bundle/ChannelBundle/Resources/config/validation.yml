@@ -1,0 +1,12 @@
+OroCRM/Bundle/ChannelBundle/Entity/Channel:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 250
+        description:
+            - NotBlank: ~
+            - Length:
+                max: 250
+        owner:
+            - NotBlank: ~
