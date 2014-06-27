@@ -16,9 +16,6 @@ use OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * @SuppressWarnings(PHPMD.ShortVariable)
- */
 class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     /** @var ContainerInterface */

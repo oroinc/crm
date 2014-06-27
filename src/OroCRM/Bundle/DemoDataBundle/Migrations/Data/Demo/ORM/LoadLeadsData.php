@@ -56,9 +56,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /** @var  ConfigManager */
     protected $configManager;
 
-    /** @var  EntityRepository */
-    protected $channelRepository;
-
     /**
      * {@inheritdoc}
      */
@@ -79,8 +76,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $this->container = $container;
         $this->configManager = $container->get('oro_entity_config.config_manager');
-        $this->channelRepository = $this->container->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCRMChannelBundle:Channel');
     }
 
     /**
@@ -91,7 +86,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $this->initSupportingEntities($manager);
 
         /** @var Channel $channel */
-        $channel = $this->channelRepository->findOneByName('default');
+        $channel = $this->container->get('doctrine.orm.entity_manager')->getRepository('OroCRMChannelBundle:Channel')
+            ->findOneByName('default');
 
         if (!$channel) {
             throw new \Exception('"default" channel is not defined');

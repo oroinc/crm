@@ -14,10 +14,6 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-/**
- * @SuppressWarnings(PHPMD.ShortVariable)
- * * @SuppressWarnings(PHPMD.LongVariable)
- */
 class LoadChannelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     /** @var ContainerInterface */
