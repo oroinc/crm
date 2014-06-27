@@ -104,6 +104,7 @@
             {% set dataBlocks = dataBlocks|merge([
                 {
                     'title': channel.name,
+                    'priority': 255,
                     'subblocks': [
                         {'data' : [accountChannelInfoSection]}
                     ]
