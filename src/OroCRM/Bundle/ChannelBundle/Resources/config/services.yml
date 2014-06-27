@@ -12,12 +12,6 @@ parameters:
     orocrm_channel.manager.api.class:          Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
 services:
-    orocrm_channel.manager.api:
-        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-        arguments:
-            - %orocrm_channel.entity.class%
-            - @doctrine.orm.entity_manager
-
     orocrm_channel.form.type.channel:
         class: %orocrm_channel.form.type.channel.class%
         tags:

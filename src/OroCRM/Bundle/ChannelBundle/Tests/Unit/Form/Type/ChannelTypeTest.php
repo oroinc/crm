@@ -8,7 +8,7 @@ use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
 
 class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  FormBuilder */
+    /** @var FormBuilder|\PHPUnit_Framework_MockObject_MockObject */
     protected $builder;
 
     /** @var ChannelType */

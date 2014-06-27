@@ -2,10 +2,6 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Controller\Api\Rest;
 
-use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -14,12 +10,11 @@ use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
 /**
  * @RouteResource("channel")
  * @NamePrefix("orocrm_api_")
-
- * @SuppressWarnings(PHPMD.ShortVariable)
  */
 class ChannelController extends RestController
 {
@@ -46,7 +41,7 @@ class ChannelController extends RestController
     }
 
     /**
-     * @return FormInterface
+     * {@inheritdoc}
      */
     public function getForm()
     {
@@ -54,9 +49,7 @@ class ChannelController extends RestController
     }
 
     /**
-     * Get entity Manager
-     *
-     * @return ApiEntityManager
+     * {@inheritdoc}
      */
     public function getManager()
     {
@@ -64,9 +57,10 @@ class ChannelController extends RestController
     }
 
     /**
-     * @return ApiFormHandler
+     * {@inheritdoc}
      */
     public function getFormHandler()
     {
+        throw new \BadMethodCallException('FormHandler is not available.');
     }
 }

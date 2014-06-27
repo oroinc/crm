@@ -25,7 +25,7 @@ class ChannelType extends AbstractType
         );
         $builder->add(
             'description',
-            'text',
+            'textarea',
             [
                 'required' => true,
                 'label'    => 'orocrm.channel.description.label'
