@@ -82,7 +82,7 @@ orocrm:
         twitter.label:       Twitter
         updated_at.label:    Updated At
         updated_by.label:    Updated By
-        photo.label:         Photo
+        picture.label:       Picture
 
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\ContactAddress
