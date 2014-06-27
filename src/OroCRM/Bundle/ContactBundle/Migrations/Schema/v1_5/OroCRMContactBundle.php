@@ -43,14 +43,7 @@ class OroCRMContactBundle implements Migration, AttachmentExtensionAwareInterfac
                 'orocrm_contact',
                 'picture',
                 'attachmentImage',
-                [
-                    'view'   => [
-                        'is_displayable' => false,
-                    ],
-                    'form'   => [
-                        'is_enabled' => false
-                    ]
-                ],
+                [],
                 2,
                 58,
                 58
