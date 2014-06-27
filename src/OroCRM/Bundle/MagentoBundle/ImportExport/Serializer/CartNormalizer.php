@@ -29,6 +29,14 @@ class CartNormalizer extends ConfigurableEntityNormalizer
     /**
      * {@inheritdoc}
      */
+    public function supportsNormalization($data, $format = null, array $context = array())
+    {
+        return $data instanceof Cart;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return $type == MagentoConnectorInterface::CART_TYPE;

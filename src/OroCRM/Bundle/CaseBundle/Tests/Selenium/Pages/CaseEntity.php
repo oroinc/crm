@@ -19,6 +19,8 @@ class CaseEntity extends AbstractPageEntity
     protected $description;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $resolution;
+    /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element_Select */
+    protected $status;
 
     public function __construct($testCase, $redirect = true)
     {
@@ -30,7 +32,8 @@ class CaseEntity extends AbstractPageEntity
     {
         $this->subject = $this->test->byId('orocrm_case_subject');
         $this->description = $this->test->byId('orocrm_case_description');
-        $this->resoltion = $this->test->byId('orocrm_case_resolution');
+        $this->resolution = $this->test->byId('orocrm_case_resolution');
+        $this->status = $this->test->select($this->test->byId('orocrm_case_status'));
 
         return $this;
     }
@@ -57,6 +60,13 @@ class CaseEntity extends AbstractPageEntity
     public function getDescription()
     {
         return $this->description->value();
+    }
+
+    public function setStatus($status)
+    {
+        $this->status->selectOptionByLabel($status);
+
+        return $this;
     }
 
     public function delete()

@@ -136,15 +136,10 @@ class Workflow extends AbstractPageEntity
 
     public function setCompanyName($company)
     {
-        $field = $this->test->byId('oro_workflow_transition_company_name');
+        $field = $this->test->byId('oro_workflow_transition_new_company_name');
         $field->clear();
         $field->value($company);
         return $this;
-    }
-
-    public function getCompanyName()
-    {
-        return $this->test->byId('oro_workflow_transition_company_name')->value();
     }
 
     public function qualify()

@@ -5,9 +5,9 @@ namespace OroCRM\Bundle\MagentoBundle\Manager;
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\IntegrationBundle\Manager\ChannelDeleteProviderInterface;
+use Oro\Bundle\IntegrationBundle\Manager\DeleteProviderInterface;
 
-class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
+class MagentoDeleteProvider implements DeleteProviderInterface
 {
     /** @var EntityManager */
     protected $em;
@@ -26,7 +26,7 @@ class MagentoChannelDeleteProvider implements ChannelDeleteProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function isSupport($channelType)
+    public function supports($channelType)
     {
         return 'magento' === $channelType;
     }
