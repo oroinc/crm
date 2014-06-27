@@ -9,13 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-/**
- * Class ChannelHandler
- *
- * @package OroCRM\Bundle\ChannelBundle\Form\Handler
- *
- * @SuppressWarnings(PHPMD.ShortVariable)
- */
 class ChannelHandler
 {
     /** @var Request */
@@ -34,9 +27,9 @@ class ChannelHandler
      */
     public function __construct(Request $request, FormInterface $form, EntityManager $em)
     {
-        $this->request         = $request;
-        $this->form            = $form;
-        $this->em              = $em;
+        $this->request = $request;
+        $this->form    = $form;
+        $this->em      = $em;
     }
 
     /**
@@ -48,7 +41,7 @@ class ChannelHandler
     {
         $this->form->setData($entity);
 
-        if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
+        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {

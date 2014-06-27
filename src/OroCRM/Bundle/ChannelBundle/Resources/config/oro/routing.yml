@@ -1,9 +1,9 @@
-oro_crm_channel_bundle:
+orocrm_channel_bundle:
     resource: "@OroCRMChannelBundle/Controller"
     type:     annotation
     prefix:   /channel
 
-oro_crm_channel_bundle_api:
+orocrm_channel_bundle_api:
     resource: "@OroCRMChannelBundle/Controller/Api/Rest/ChannelController.php"
     type:     rest
     prefix:   api/rest/{version}/

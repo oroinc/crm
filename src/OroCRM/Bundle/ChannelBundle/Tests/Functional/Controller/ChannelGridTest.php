@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ChannelBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 /**

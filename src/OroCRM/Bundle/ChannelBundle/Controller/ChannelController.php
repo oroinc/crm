@@ -2,8 +2,8 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -22,7 +22,7 @@ class ChannelController extends Controller
      *      permission="VIEW",
      *      class="OroCRMChannelBundle:Channel"
      * )
-     * @Template
+     * @Template()
      */
     public function indexAction()
     {
@@ -79,21 +79,9 @@ class ChannelController extends Controller
             );
         }
 
-        $form = $this->getForm();
-
         return [
             'entity' => $channel,
-            'form'   => $form->createView(),
+            'form'   => $this->get('orocrm_channel.form.channel')->createView(),
         ];
-    }
-
-    /**
-     * Returns form instance
-     *
-     * @return FormInterface
-     */
-    protected function getForm()
-    {
-        return $this->get('orocrm_channel.form.channel');
     }
 }

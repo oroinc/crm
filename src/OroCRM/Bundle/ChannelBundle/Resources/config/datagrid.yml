@@ -1,6 +1,5 @@
 datagrid:
     channels-grid:
-        entity_name: OroCRM\Bundle\ChannelBundle\Entity\Channel
         source:
             type: orm
             acl_resource: orocrm_channel_view
