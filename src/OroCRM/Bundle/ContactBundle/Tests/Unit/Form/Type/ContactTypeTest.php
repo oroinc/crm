@@ -51,6 +51,7 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
             'facebook' => 'text',
             'googlePlus' => 'text',
             'linkedIn' => 'text',
+            'picture' => 'oro_image',
 
             'source' => 'entity',
             'assignedTo' => 'oro_user_select',
