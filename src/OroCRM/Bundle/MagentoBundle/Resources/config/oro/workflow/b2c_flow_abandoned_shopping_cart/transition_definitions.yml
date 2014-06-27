@@ -32,7 +32,6 @@ workflows:
                     - @create_entity: # create Call
                         class: OroCRM\Bundle\CallBundle\Entity\Call
                         attribute: $call
-                        flush: false
                         data:
                             relatedContact: $contact
                             relatedAccount: $account
@@ -122,7 +121,6 @@ workflows:
                     - @create_entity: # create an opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $cart.opportunity
-                        flush: false
                         data:
                             name: $opportunity_name
                             owner: $opportunity_owner

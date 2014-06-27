@@ -51,7 +51,6 @@ workflows:
                             - @create_entity: # create Contact based on Lead
                                 class: OroCRM\Bundle\ContactBundle\Entity\Contact
                                 attribute: $lead.contact
-                                flush: false
                                 data:
                                     namePrefix: $lead.namePrefix
                                     firstName: $lead.firstName
@@ -67,7 +66,6 @@ workflows:
                                     - @create_entity: # create Contact Address based on Lead address
                                         class: OroCRM\Bundle\ContactBundle\Entity\ContactAddress
                                         attribute: $.result.address
-                                        flush: false
                                         data:
                                             label: $lead.address.label
                                             street: $lead.address.street
@@ -96,7 +94,6 @@ workflows:
                                     - @create_entity: # create Contact Address based on Lead address
                                         class: OroCRM\Bundle\ContactBundle\Entity\ContactEmail
                                         attribute: $.result.email
-                                        flush: false
                                         data:
                                             email: $lead.email
                                             owner: $lead.contact
@@ -114,7 +111,6 @@ workflows:
                                     - @create_entity: # create Contact Address based on Lead address
                                         class: OroCRM\Bundle\ContactBundle\Entity\ContactPhone
                                         attribute: $.result.phone
-                                        flush: false
                                         data:
                                             phone: $lead.phoneNumber
                                             primary: true
@@ -142,7 +138,6 @@ workflows:
                                 parameters:
                                     class: OroCRM\Bundle\AccountBundle\Entity\Account
                                     attribute: $new_account
-                                    flush: false
                                     data:
                                         name: $new_company_name
                                         extendWebsite: $lead.website
@@ -154,6 +149,7 @@ workflows:
                     - @create_entity: # create an opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $opportunity
+                        flush: true
                         data:
                             name: $new_opportunity_name
                             contact: $lead.contact
