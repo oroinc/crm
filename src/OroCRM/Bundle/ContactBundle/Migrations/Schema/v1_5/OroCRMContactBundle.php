@@ -7,20 +7,20 @@ use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
+use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 
-class OroCRMContactBundle implements Migration, ActivityExtensionAwareInterface
+class OroCRMContactBundle implements Migration, AttachmentExtensionAwareInterface
 {
-    /** @var ActivityExtension */
-    protected $activityExtension;
+    /** @var AttachmentExtension */
+    protected $attachmentExtension;
 
     /**
      * {@inheritdoc}
      */
-    public function setActivityExtension(ActivityExtension $activityExtension)
+    public function setAttachmentExtension(AttachmentExtension $attachmentExtension)
     {
-        $this->activityExtension = $activityExtension;
+        $this->attachmentExtension = $attachmentExtension;
     }
 
     /**
@@ -28,17 +28,24 @@ class OroCRMContactBundle implements Migration, ActivityExtensionAwareInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addActivityAssociations($schema, $this->activityExtension);
+        self::addPhotoToContact($schema, $this->attachmentExtension);
     }
 
     /**
-     * Enables Email activity for Contact entity
-     *
-     * @param Schema            $schema
-     * @param ActivityExtension $activityExtension
+     * @param Schema              $schema
+     * @param AttachmentExtension $attachmentExtension
      */
-    public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
+    public static function addPhotoToContact(Schema $schema, AttachmentExtension $attachmentExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_contact');
+        $attachmentExtension->addAttachmentRelation(
+            $schema,
+            'orocrm_contact',
+            'picture',
+            'attachmentImage',
+            [],
+            2,
+            58,
+            58
+        );
     }
 }

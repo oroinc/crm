@@ -60,7 +60,15 @@ class ContactType extends AbstractType
             ->add('twitter', 'text', array('required' => false, 'label' => 'orocrm.contact.twitter.label'))
             ->add('facebook', 'text', array('required' => false, 'label' => 'orocrm.contact.facebook.label'))
             ->add('googlePlus', 'text', array('required' => false, 'label' => 'orocrm.contact.google_plus.label'))
-            ->add('linkedIn', 'text', array('required' => false, 'label' => 'orocrm.contact.linked_in.label'));
+            ->add('linkedIn', 'text', array('required' => false, 'label' => 'orocrm.contact.linked_in.label'))
+            ->add(
+                'picture',
+                'oro_image',
+                array(
+                    'label'          => 'orocrm.contact.picture.label',
+                    'required'       => false
+                )
+            );
     }
 
     /**
