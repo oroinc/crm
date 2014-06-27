@@ -1,0 +1,12 @@
+{% block orocrm_channel_form_widget %}
+
+    {{ form_row(form.name) }}
+    {{ form_row(form.description) }}
+
+    {% if (form.organization is defined) %}
+        {{ form_row(form.organization) }}
+    {% endif %}
+
+    {{ form_end(form, {'render_rest': false}) }}
+
+{% endblock %}

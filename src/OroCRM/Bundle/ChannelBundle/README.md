@@ -1,0 +1,4 @@
+OroCRMChannelBundle
+===================
+
+Bundle provides channel.
