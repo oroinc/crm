@@ -10,10 +10,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
+/**
+ * Class ChannelHandler
+ *
+ * @package OroCRM\Bundle\ChannelBundle\Form\Handler
+ *
+ * @SuppressWarnings(PHPMD.ShortVariable)
+ */
 class ChannelHandler
 {
-    const UPDATE_MARKER = 'formUpdateMarker';
-
     /** @var Request */
     protected $request;
 
@@ -45,7 +50,7 @@ class ChannelHandler
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
             $this->form->submit($this->request);
 
-            if (!$this->request->get(self::UPDATE_MARKER, false) && $this->form->isValid()) {
+            if ($this->form->isValid()) {
                 $this->em->persist($entity);
                 $this->em->flush();
 

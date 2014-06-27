@@ -2,12 +2,14 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Controller\Api\Rest;
 
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-use FOS\Rest\Util\Codes;
-use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 
@@ -16,8 +18,10 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 /**
  * @RouteResource("channel")
  * @NamePrefix("orocrm_api_")
+
+ * @SuppressWarnings(PHPMD.ShortVariable)
  */
-class ChannelController extends FOSRestController
+class ChannelController extends RestController
 {
     /**
      * REST DELETE
@@ -38,16 +42,31 @@ class ChannelController extends FOSRestController
      */
     public function deleteAction($id)
     {
-        $entity = $this->get('orocrm_channel.manager.api')->find($id);
+        return $this->handleDeleteRequest($id);
+    }
 
-        if (!$entity) {
-            return $this->handleView($this->view(null, Codes::HTTP_NOT_FOUND));
-        }
+    /**
+     * @return FormInterface
+     */
+    public function getForm()
+    {
+        return $this->get('orocrm_channel.form.channel');
+    }
 
-        if (!$this->get('orocrm_channel.channel.delete_manager')->delete($entity)) {
-            return $this->handleView($this->view(null, Codes::HTTP_INTERNAL_SERVER_ERROR));
-        }
+    /**
+     * Get entity Manager
+     *
+     * @return ApiEntityManager
+     */
+    public function getManager()
+    {
+        return $this->get('orocrm_channel.channel.manager');
+    }
 
-        return $this->handleView($this->view(null, Codes::HTTP_NO_CONTENT));
+    /**
+     * @return ApiFormHandler
+     */
+    public function getFormHandler()
+    {
     }
 }
