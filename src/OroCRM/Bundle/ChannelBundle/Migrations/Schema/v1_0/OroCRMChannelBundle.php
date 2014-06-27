@@ -18,7 +18,6 @@ class OroCRMChannelBundle implements Migration
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('name', 'string', ['notnull' => true, 'length' => 255]);
         $table->addColumn('description', 'text', ['notnull' => false]);
-        $table->addColumn('entities', 'json_array', ['notnull' => false]);
         $table->addColumn('integrations', 'json_array', ['notnull' => false]);
         $table->addColumn('organization_owner_id', 'integer', ['notnull' => false]);
 
@@ -31,6 +30,21 @@ class OroCRMChannelBundle implements Migration
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_AEA90B929124A35B'
+        );
+
+        $table = $schema->createTable('orocrm_channel_entity_name');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('name', 'string', ['length' => 255]);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['channel_id'], 'IDX_92BC967172F5A1AA', []);
+
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_channel'),
+            ['channel_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null],
+            'FK_92BC967172F5A1AA'
         );
     }
 }
