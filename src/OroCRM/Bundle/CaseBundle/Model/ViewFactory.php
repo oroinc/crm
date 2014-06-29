@@ -10,6 +10,7 @@ use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
@@ -42,24 +43,29 @@ class ViewFactory
     protected $imageCacheManager;
 
     /**
+     * @var AttachmentManager
+     */
+    protected $attachmentManager;
+
+    /**
      * @param SecurityFacade $securityFacade
      * @param RouterInterface $router
      * @param NameFormatter $nameFormatter
      * @param DateTimeFormatter $dateTimeFormatter
-     * @param CacheManager $imageCacheManager
+     * @param AttachmentManager $attachmentManager
      */
     public function __construct(
         SecurityFacade $securityFacade,
         RouterInterface $router,
         NameFormatter $nameFormatter,
         DateTimeFormatter $dateTimeFormatter,
-        CacheManager $imageCacheManager
+        AttachmentManager $attachmentManager
     ) {
         $this->securityFacade = $securityFacade;
         $this->router = $router;
         $this->nameFormatter = $nameFormatter;
         $this->dateTimeFormatter = $dateTimeFormatter;
-        $this->imageCacheManager = $imageCacheManager;
+        $this->attachmentManager = $attachmentManager;
     }
 
     /**
@@ -156,8 +162,9 @@ class ViewFactory
             'id' => $user->getId(),
             'url' => $this->router->generate('oro_user_view', array('id' => $user->getId())),
             'fullName' => $this->nameFormatter->format($user),
-            'avatar' => $user->getImagePath() ?
-                $this->imageCacheManager->getBrowserPath($user->getImagePath(), 'avatar_xsmall') : null,
+            'avatar' => $user->getAvatar()
+                ? $this->attachmentManager->getFilteredImageUrl($user->getAvatar(), 'avatar_xsmall')
+                : null,
             'permissions' => array(
                 'view' => $this->securityFacade->isGranted('VIEW', $user)
             ),

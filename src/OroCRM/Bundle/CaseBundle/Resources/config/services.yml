@@ -34,7 +34,7 @@ services:
             - @router
             - @oro_locale.formatter.name
             - @oro_locale.formatter.date_time
-            - @liip_imagine.cache.manager
+            - @oro_attachment.manager
 
     orocrm_case.event_listener.account_cases_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%

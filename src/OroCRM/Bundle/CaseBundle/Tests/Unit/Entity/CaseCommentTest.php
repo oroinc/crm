@@ -41,10 +41,10 @@ class CaseCommentTest extends \PHPUnit_Framework_TestCase
 
     public function testPublic()
     {
-        $this->assertTrue($this->comment->isPublic());
-
-        $this->assertEquals($this->comment, $this->comment->setPublic(false));
         $this->assertFalse($this->comment->isPublic());
+
+        $this->assertEquals($this->comment, $this->comment->setPublic(true));
+        $this->assertTrue($this->comment->isPublic());
     }
 
     public function testContact()
