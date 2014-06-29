@@ -22,7 +22,7 @@ oro_menu_config:
         user_calls_tab:
             label: 'orocrm.call.entity_plural_label'
             extras:
-                position: 10
+                position: 30
                 widgetRoute: 'orocrm_call_widget_calls'
                 widgetAcl: 'orocrm_call_view'
                 widgetRouteParametersMap:
@@ -31,7 +31,7 @@ oro_menu_config:
         account_calls_tab:
             label: 'orocrm.call.entity_plural_label'
             extras:
-                position: 10
+                position: 30
                 widgetRoute: 'orocrm_call_widget_calls'
                 widgetAcl: 'orocrm_call_view'
                 widgetRouteParametersMap:
@@ -40,7 +40,7 @@ oro_menu_config:
         contact_calls_tab:
             label: 'orocrm.call.entity_plural_label'
             extras:
-                position: 10
+                position: 30
                 widgetRoute: 'orocrm_call_widget_calls'
                 widgetAcl: 'orocrm_call_view'
                 widgetRouteParametersMap:
