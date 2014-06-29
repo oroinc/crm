@@ -213,4 +213,4 @@ services:
            - 'contact_activity_tab_panel'
            - %orocrm_contact.entity.class%
         tags:
-           - { name: oro_activity.activity_widget_provider }
+           - { name: oro_activity.activity_widget_provider, priority: -10 }

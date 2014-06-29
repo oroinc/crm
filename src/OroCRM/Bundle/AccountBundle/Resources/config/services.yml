@@ -98,4 +98,4 @@ services:
            - 'account_activity_tab_panel'
            - %orocrm_account.account.entity.class%
         tags:
-           - { name: oro_activity.activity_widget_provider }
+           - { name: oro_activity.activity_widget_provider, priority: -10 }
