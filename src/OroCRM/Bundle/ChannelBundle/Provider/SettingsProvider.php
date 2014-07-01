@@ -46,18 +46,6 @@ class SettingsProvider
     }
 
     /**
-     * Return whether entity dependent to any business entity
-     *
-     * @param string $entityFQCN entity full class name
-     *
-     * @return bool
-     */
-    public function isDependentEntity($entityFQCN)
-    {
-        return $this->getDependentEntityData($entityFQCN) !== false;
-    }
-
-    /**
      * Return whether given entity is related to channel
      *
      * @param string $entityFQCN entity full class name
@@ -77,6 +65,18 @@ class SettingsProvider
         }
 
         return in_array($entityFQCN, $this->channelEntitiesHashMap, true);
+    }
+
+    /**
+     * Return whether entity dependent to any business entity
+     *
+     * @param string $entityFQCN entity full class name
+     *
+     * @return bool
+     */
+    public function isDependentOnChannelEntity($entityFQCN)
+    {
+        return $this->getDependentEntityData($entityFQCN) !== false;
     }
 
     /**

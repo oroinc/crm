@@ -11,6 +11,9 @@ class EntityExclusionProvider implements ExclusionProviderInterface
     /** @var SettingsProvider */
     protected $settingsProvider;
 
+    /**
+     * @param SettingsProvider $settingsProvider
+     */
     public function __construct(SettingsProvider $settingsProvider)
     {
         $this->settingsProvider = $settingsProvider;
@@ -48,12 +51,12 @@ class EntityExclusionProvider implements ExclusionProviderInterface
     protected function isIncludedByChannels($entityFQCN)
     {
         if (!($this->settingsProvider->isChannelEntity($entityFQCN)
-            || $this->settingsProvider->isDependentEntity($entityFQCN))
+            || $this->settingsProvider->isDependentOnChannelEntity($entityFQCN))
         ) {
             return true;
         }
 
-        // @TODO check if it's in any integration
-
+        // TODO check if it's in any integration
+        // TODO check if it's enabled in any channel
     }
 }
