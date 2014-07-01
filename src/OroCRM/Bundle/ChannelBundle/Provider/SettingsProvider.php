@@ -70,9 +70,9 @@ class SettingsProvider
             $settings                     = $this->getChannelSettings();
             $this->channelEntitiesHashMap = array_map(
                 function ($singleEntitySetting) {
-                    return $singleEntitySetting['name'];
+                    return trim($singleEntitySetting['name']);
                 },
-                $settings
+                $settings['entity_data']
             );
         }
 
@@ -98,11 +98,13 @@ class SettingsProvider
 
                 $dependentEntities = array_values($singleEntityData['dependent']);
                 foreach ($dependentEntities as $entityName) {
+                    $entityName = trim($entityName);
+
                     if (!isset($this->dependentEntitiesHashMap[$entityName])) {
                         $this->dependentEntitiesHashMap[$entityName] = [];
                     }
 
-                    $this->dependentEntitiesHashMap[$entityName][] = $singleEntityData['name'];
+                    $this->dependentEntitiesHashMap[$entityName][] = trim($singleEntityData['name']);
                 }
             }
         }
