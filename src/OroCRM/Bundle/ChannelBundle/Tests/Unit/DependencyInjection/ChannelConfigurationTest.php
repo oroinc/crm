@@ -10,7 +10,6 @@ use OroCRM\Bundle\ChannelBundle\Tests\Unit\Bundles\TestBundle2\TestBundle2;
 
 class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testProcess()
     {
         $expected = [
