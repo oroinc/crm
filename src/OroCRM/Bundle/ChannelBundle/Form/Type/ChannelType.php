@@ -43,12 +43,13 @@ class ChannelType extends AbstractType
         );
         $builder->add(
             'integrations',
-            'genemu_jqueryselect2_choice',
+            'genemu_jqueryselect2_entity',
             [
                 'required' => false,
                 'multiple' => true,
                 'label'    => 'orocrm.channel.integrations.label',
-                'choices'  => $this->choiceProvider->getChoices(),
+                #'choices'  => $this->choiceProvider->getChoices(),
+                'class'    => 'Oro\Bundle\IntegrationBundle\Entity\Channel',
                 'configs'  => ['placeholder' => 'orocrm.channel.form.select_integrations.label'],
 
             ]
