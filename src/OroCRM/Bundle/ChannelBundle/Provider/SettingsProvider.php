@@ -21,5 +21,4 @@ class SettingsProvider
         $this->settings = $settings;
         $this->resolver = $resolver;
     }
-
 }
