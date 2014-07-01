@@ -2,13 +2,12 @@
 namespace OroCRM\Bundle\ChannelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
- * Channel Entity
- *
  * @ORM\Entity()
  * @ORM\Table(name="orocrm_channel")
  * @Config(
@@ -53,9 +52,9 @@ class Channel
     protected $description;
 
     /**
-     * @var string
+     * @var ArrayCollection
      *
-     * @ORM\Column(name="entities", type="json_array", nullable=true)
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\EntityName",cascade={"all"}, mappedBy="channel")
      */
     protected $entities;
 
