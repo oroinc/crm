@@ -25,33 +25,33 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *  routeName="orocrm_account_index",
- *  routeView="orocrm_account_view",
- *  defaultValues={
- *      "entity"={
- *          "label"="Account",
- *          "plural_label"="Accounts",
- *          "icon"="icon-suitcase"
- *      },
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="user_owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "merge"={
- *          "enable"=true
- *      },
- *      "form"={
- *          "form_type"="orocrm_account_select"
- *      },
- *      "dataaudit"={
- *          "auditable"=true
+ *      routeName="orocrm_account_index",
+ *      routeView="orocrm_account_view",
+ *      defaultValues={
+ *          "entity"={
+ *              "label"="Account",
+ *              "plural_label"="Accounts",
+ *              "icon"="icon-suitcase"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="user_owner_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "merge"={
+ *              "enable"=true
+ *          },
+ *          "form"={
+ *              "form_type"="orocrm_account_select"
+ *          },
+ *          "dataaudit"={
+ *              "auditable"=true
+ *          }
  *      }
- *  }
  * )
  */
 class Account extends ExtendAccount implements Taggable, EmailHolderInterface
