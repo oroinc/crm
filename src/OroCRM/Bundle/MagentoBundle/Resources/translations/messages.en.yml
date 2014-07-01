@@ -18,7 +18,7 @@ orocrm:
                 email:            Email
                 phone:            Phone
                 group:            Group
-                channel:          Channel
+                channel:          Integration
                 website:          Website
                 created_at:       Created At
                 updated_at:       Updated At
@@ -100,11 +100,12 @@ orocrm:
             account.label:       Account
             addresses.label:     Adresses
             carts.label:         Carts
-            channel.label:       Channel
+            channel.label:       Integration
             name.label:          Name
             orders.label:        Customer orders
             lifetime.label:      Lifetime value
             currency.label:      Currency
+            data_channel.label:  Channel
 
         customergroup:
             entity_label:        Customer Group
@@ -112,7 +113,7 @@ orocrm:
             name.label:          Name
             id.label:            Id
             origin_id.label:     Origin Id
-            channel.label:       Channel
+            channel.label:       Integration
 
         cart:
             entity_label:         Shopping Cart
@@ -152,7 +153,7 @@ orocrm:
             store.label:               Store
             shipping_address.label:    Shipping address
             billing_address.label:     Billing address
-            channel.label:             Channel
+            channel.label:             Integration
             opportunity.label:         Opportunity
             notes.label:               Additional comments
             b2c_flow_abandoned_shopping_cart.step.label: Step
@@ -161,6 +162,7 @@ orocrm:
             workflow_step.label:       Workflow step
             website.label:             Website
             status_message.label:      Status message
+            data_channel.label:        Channel
 
         cartitem:
             entity_label:              Shopping Cart Item
@@ -272,7 +274,7 @@ orocrm:
             items.label:            Order items
             is_virtual.label:       Is virtual
             is_guest.label:         Is guest
-            channel.label:          Channel
+            channel.label:          Integration
             notes.label:            Additional comments
             feedback.label:         Feedback
             b2c_flow_order_follow_up.step.label: Step
@@ -282,6 +284,7 @@ orocrm:
             workflow_item.label:    Workflow item
             workflow_step.label:    Workflow step
             website.label:          Website
+            data_channel.label:     Channel
 
         product:
             entity_label:         Product
@@ -297,9 +300,10 @@ orocrm:
             price.label:          Price
             cost.label:           Cost
             websites.label:       Websites
-            channel.label:        Channel
+            channel.label:        Integration
             created_at.label:     Created at
             updated_at.label:     Updated at
+            data_channel.label:   Channel
 
         address:
             entity_label:          Magento Customer Address
@@ -398,7 +402,7 @@ orocrm:
             origin_id.label:     Origin Id
             code.label:          Code
             name.label:          Name
-            channel.label:       Channel
+            channel.label:       Integration
             website.label:       Website
 
         website:
@@ -409,7 +413,7 @@ orocrm:
             origin_id.label:     Origin Id
             code.label:          Code
             name.label:          Name
-            channel.label:       Channel
+            channel.label:       Integration
 
         account:
             no_customers_exist: No customers exist
@@ -421,7 +425,7 @@ orocrm:
 
         menu.web_customers: Web Customers
         controller:
-            transport_not_configure:       Unable to handle your request. Invalid channel configuration detected.
+            transport_not_configure:       Unable to handle your request. Invalid Integration configuration detected.
             extension_required:            Unable to perform this operation, Oro Bridge extension not found.
             synchronization_error:         Unable to synchronize from remote.
             sync_error_with_magento:       Synchronization with remote server failed and orders should be re-synced. If the problem persists, please contact your Administrator.

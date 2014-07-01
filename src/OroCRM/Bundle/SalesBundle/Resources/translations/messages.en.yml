@@ -99,6 +99,7 @@ orocrm:
             lead.label:           Lead
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
+            data_channel.label:   Channel
 
             datagrid:
                 view: View
@@ -151,6 +152,7 @@ orocrm:
             workflow_step.label:  Step
             information:          Lead Information
             campaign.label:       Campaign
+            data_channel.label:   Channel
 
             extend_source:
                 unclassified:     Unclassified
@@ -178,6 +180,7 @@ orocrm:
             owner.label:          Owner
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
+            data_channel.label:   Channel
 
             hint: 'Sales Process #%id%'
 

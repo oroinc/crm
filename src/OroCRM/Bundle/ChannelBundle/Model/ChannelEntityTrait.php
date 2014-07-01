@@ -29,4 +29,4 @@ trait ChannelEntityTrait
     {
         return $this->dataChannel;
     }
- }
+}
