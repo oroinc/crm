@@ -1,6 +1,6 @@
 definitions:
-    magento_contact_initional_definition:
-        label:   'Create Contacts based on the Customers that was imported from Magento'
+    magento_initional_definition:
+        label:   'Create Accounts and Contacts that related to magento Customers'
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
         order:   10
@@ -8,7 +8,6 @@ definitions:
             - @create_entity:
                 class:     OroCRM\Bundle\ContactBundle\Entity\Contact
                 attribute: $contact
-                flush:     true
                 data:
                     birthday:    $birthday
                     email:       $email
@@ -19,40 +18,35 @@ definitions:
                     namePrefix:  $namePrefix
                     nameSuffix:  $nameSuffix
                     owner:       $owner
-
-    magento_account_initional_definition:
-        label:  'Create Accounts based on the Customers that was imported from Magento'
-        enabled: true
-        entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
-        order:   20
-        actions_configuration:
+            - @create_entity:
+                class:     OroCRM\Bundle\ContactBundle\Entity\ContactEmail
+                attribute: $.contactEmail
+                data:
+                    email:   $email
+                    primary: true
+            - @call_method:
+                object: $contact
+                method: addEmail
+                method_parameters: [$.contactEmail]
+            - @format_string:
+                attribute: $.accountName
+                string:    '%firstName% %lastName%'
+                arguments:
+                    firstName: $firstName
+                    lastName:  $lastName
             - @create_entity:
                 class:     OroCRM\Bundle\AccountBundle\Entity\Account
                 attribute: $account
-                flush:     true
                 data:
-                    name:  'tmp'
-                    owner: $owner
-            - @format_string:
-                attribute: $account.name
-                string:    '%namePrefix% %firstName% %middleName% %lastname% %nameSuffix%'
-                arguments:
-                    firstName:  $firstName
-                    lastname:   $lastname
-                    middleName: $middleName
-                    namePrefix: $namePrefix
-                    nameSuffix: $nameSuffix
+                    defaultContact: $contact
+                    name:           $.accountName
+                    owner:          $owner
+            - @unset_value: [$.accountName]
 
 
 triggers:
-    magento_contact_initional_definition:
+    magento_initional_definition:
         -
             event:    create
-            priority: 100
-            queued:   true
-
-    magento_account_initional_definition:
-        -
-            event:    create
-            priority: 90
+            priority: 5
             queued:   true
