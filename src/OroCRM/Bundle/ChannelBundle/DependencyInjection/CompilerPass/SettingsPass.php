@@ -2,15 +2,14 @@
 
 namespace OroCRM\Bundle\ChannelBundle\DependencyInjection\CompilerPass;
 
-use OroCRM\Bundle\ChannelBundle\DependencyInjection\ChannelConfiguration;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use Oro\Bundle\IntegrationBundle\DependencyInjection\IntegrationConfiguration;
-
 use Oro\Component\Config\Loader\CumulativeConfigLoader;
 use Oro\Component\Config\Loader\YamlCumulativeFileLoader;
+
+use OroCRM\Bundle\ChannelBundle\DependencyInjection\ChannelConfiguration;
 
 class SettingsPass implements CompilerPassInterface
 {
@@ -22,13 +21,12 @@ class SettingsPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $settingsProvider = $container->getDefinition(self::SETTINGS_PROVIDER_ID);
-
-        $configs      = [];
-        $configLoader = new CumulativeConfigLoader(
+        $configs          = [];
+        $configLoader     = new CumulativeConfigLoader(
             'orocrm_channel_settings',
-            new YamlCumulativeFileLoader('Resources/config/entity_data.yml')
+            new YamlCumulativeFileLoader('Resources/config/channel_configuration.yml')
         );
-        $resources    = $configLoader->load($container);
+        $resources        = $configLoader->load($container);
         foreach ($resources as $resource) {
             $configs[] = $resource->data[ChannelConfiguration::ROOT_NODE_NAME];
         }
