@@ -29,6 +29,7 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $emailEntity            = $this->getMock('Oro\Bundle\EmailBundle\Entity\Email');
         $workflowStep           = $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep');
         $workflowItem           = $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowItem');
+        $channel                = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
         $contactReason          = $this->getMock(
             'OroCRM\Bundle\ContactUsBundle\Entity\ContactReason',
             [],
@@ -44,6 +45,7 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $request->setPhone($phone);
         $request->setOrganizationName($organizationName);
         $request->setPreferredContactMethod($preferredContactMethod);
+        $request->setDataChannel($channel);
 
         $request->setCreatedAt($createdAt);
         $request->setUpdatedAt($updatedAt);
@@ -81,7 +83,7 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($opportunity, $request->getOpportunity());
         $this->assertSame($workflowStep, $request->getWorkflowStep());
         $this->assertSame($workflowItem, $request->getWorkflowItem());
-
+        $this->assertSame($channel, $request->getDataChannel());
         // should not provoke fatal error, because it's not mandatory field
         $request->setContactReason(null);
 
