@@ -7,8 +7,9 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\CartItem
               - OroCRM\Bundle\MagentoBundle\Entity\CartStatus
               - OroCRM\Bundle\MagentoBundle\Entity\Store
-          navigation_items:
-              - account_sales_tab_panel.orocrm_magento_account_orders_tab
+              - OroCRM\Bundle\MagentoBundle\Entity\Website
+              - OroCRM\Bundle\MagentoBundle\Entity\Region
+          navigation_items: ~
 
        -
           name: OroCRM\Bundle\MagentoBundle\Entity\Customer
@@ -18,8 +19,7 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\Region
               - OroCRM\Bundle\MagentoBundle\Entity\Website
               - OroCRM\Bundle\MagentoBundle\Entity\Store
-          navigation_items:
-              - account_sales_tab_panel.orocrm_magento_account_orders_tab
+          navigation_items: ~
 
        -
           name: OroCRM\Bundle\MagentoBundle\Entity\Order
@@ -27,12 +27,12 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\OrderAddress
               - OroCRM\Bundle\MagentoBundle\Entity\OrderItem
               - OroCRM\Bundle\MagentoBundle\Entity\Store
-          navigation_items:
-              - account_sales_tab_panel.orocrm_magento_account_orders_tab
+              - OroCRM\Bundle\MagentoBundle\Entity\Website
+          navigation_items: ~
 
        -
           name: OroCRM\Bundle\MagentoBundle\Entity\Product
           dependent:
               - OroCRM\Bundle\MagentoBundle\Entity\Website
-          navigation_items:
-              - account_sales_tab_panel.orocrm_magento_account_orders_tab
+              - OroCRM\Bundle\MagentoBundle\Entity\Store
+          navigation_items: ~
