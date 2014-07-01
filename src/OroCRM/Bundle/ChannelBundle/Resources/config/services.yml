@@ -1,15 +1,21 @@
 parameters:
     #entity
-    orocrm_channel.entity.class:               OroCRM\Bundle\ChannelBundle\Entity\Channel
+    orocrm_channel.entity.class:                     OroCRM\Bundle\ChannelBundle\Entity\Channel
 
     #handler
-    orocrm_channel.channel_form.handler.class: OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelHandler
+    orocrm_channel.channel_form.handler.class:       OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelHandler
 
     #form
-    orocrm_channel.form.type.channel.class:    OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
+    orocrm_channel.form.type.channel.class:          OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
 
     #manager
-    orocrm_channel.manager.api.class:          Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_channel.manager.api.class:                Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
+    #provider
+    orocrm_channel.provider.settings_provider.class: OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider
+
+    #config resolver
+    orocrm_channel.config_resolver.class:            Oro\Component\Config\Resolver\SystemAwareResolver
 
 services:
     orocrm_channel.form.type.channel:
@@ -37,3 +43,15 @@ services:
         arguments:
             - %orocrm_channel.entity.class%
             - @doctrine.orm.entity_manager
+
+    # Config provider
+    orocrm_channel.provider.settings_provider:
+        class: %orocrm_channel.provider.settings_provider.class%
+        arguments:
+            - []
+            - @orocrm_channel.config_resolver
+
+    orocrm_channel.config_resolver:
+        class: %orocrm_channel.config_resolver.class%
+        arguments:
+            - @service_container
