@@ -6,7 +6,7 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
 
 /**
  * Class Calls
- * @package OroCRM\Bundle\MagentoBundle\Tests\Selenium\Pages
+ * @package OroCRM\Bundle\CallBundle\Tests\Selenium\Pages
  * @method Calls openCalls openCalls(string)
  * {@inheritdoc}
  */

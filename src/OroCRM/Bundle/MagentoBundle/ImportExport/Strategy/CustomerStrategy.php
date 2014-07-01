@@ -29,6 +29,9 @@ class CustomerStrategy extends BaseStrategy
     /** @var array */
     protected $groupEntityCache = [];
 
+    /** @var array */
+    protected $processedEntities = [];
+
     /**
      * Update/Create customer and related entities based on remote data
      *
@@ -152,7 +155,9 @@ class CustomerStrategy extends BaseStrategy
         if ($localData->getContact() && $localData->getContact()->getId()) {
             $helper->merge($remoteData, $localData, $localData->getContact());
         } else {
+            $addresses = $localData->getAddresses();
             // loop by imported addresses, add new only
+            /** @var \OroCRM\Bundle\ContactBundle\Entity\ContactAddress $address */
             foreach ($contact->getAddresses() as $key => $address) {
                 $helper->prepareAddress($address);
 
@@ -162,19 +167,14 @@ class CustomerStrategy extends BaseStrategy
                 }
                 // @TODO find possible solution
                 // guess parent address by key
-                $localData->getAddresses()->get($key)->setContactAddress($address);
+                $addresses->get($key)->setContactAddress($address);
             }
 
             // @TODO find possible solution
             // guess parent $phone by key
             foreach ($contact->getPhones() as $key => $phone) {
                 $contactPhone = $this->getContactPhoneFromContact($contact, $phone);
-
-                if ($contactPhone) {
-                    $localData->getAddresses()->get($key)->setContactPhone($contactPhone);
-                } else {
-                    $localData->getAddresses()->get($key)->setContactPhone($phone);
-                }
+                $addresses->get($key)->setContactPhone($contactPhone ? $contactPhone : $phone);
             }
 
             // populate default owner only for new contacts
@@ -193,13 +193,21 @@ class CustomerStrategy extends BaseStrategy
      */
     protected function getContactPhoneFromContact(Contact $contact, ContactPhone $contactPhone)
     {
-        $filtered = $contact->getPhones()->filter(
-            function (ContactPhone $phone) use ($contactPhone) {
-                return $phone && $phone->getPhone() === $contactPhone->getPhone();
-            }
-        );
+        foreach ($contact->getPhones() as $phone) {
+            if ($phone->getPhone() === $contactPhone->getPhone()) {
+                $hash = spl_object_hash($phone);
+                if (array_key_exists($hash, $this->processedEntities)) {
+                    // skip if contact phone used for previously imported phone
+                    continue;
+                }
 
-        return $filtered->first();
+                $this->processedEntities[$hash] = $phone;
+
+                return $phone;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -248,6 +256,16 @@ class CustomerStrategy extends BaseStrategy
                 $address->setOwner($entity);
                 $entity->addAddress($address);
                 $processedRemote[] = $address;
+            }
+
+            $contact = $entity->getContact();
+            $contactAddress = $address->getContactAddress();
+            $contactPhone = $address->getContactPhone();
+            if ($contactAddress) {
+                $contactAddress->setOwner($contact);
+            }
+            if ($contactPhone) {
+                $contactPhone->setOwner($contact);
             }
         }
 
@@ -303,5 +321,7 @@ class CustomerStrategy extends BaseStrategy
         // populate default owner only for new accounts
         $this->defaultOwnerHelper->populateChannelOwner($account, $entity->getChannel());
         $entity->setAccount($account);
+
+        return $this;
     }
 }

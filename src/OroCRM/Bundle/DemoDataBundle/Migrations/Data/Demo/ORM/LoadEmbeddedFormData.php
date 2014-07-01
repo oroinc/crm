@@ -3,11 +3,9 @@
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
 use OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
@@ -15,7 +13,7 @@ use OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
+class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInterface
 {
     /** @var ContainerInterface */
     private $container;
@@ -48,14 +46,6 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
     );
     // @codingStandardsIgnoreEnd
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDependencies()
-    {
-        return ['OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadMagentoData',];
-    }
-
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
@@ -77,17 +67,12 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
     protected function persistDemoEmbeddedForm(
         ObjectManager $om
     ) {
-        /** @var Channel $channel */
-        $channel = $om->getRepository('OroIntegrationBundle:Channel')
-            ->findOneBy(array('type' => 'magento'));
-
         $embeddedForm = new EmbeddedForm();
         /** @var ContactRequestType $contactUs */
         $contactUs = $this->container->get('orocrm_contact_us.embedded_form');
         $embeddedForm->setFormType('orocrm_contact_us.embedded_form');
         $embeddedForm->setCss($contactUs->getDefaultCss());
         $embeddedForm->setSuccessMessage($contactUs->getDefaultSuccessMessage());
-        $embeddedForm->setChannel($channel);
         $embeddedForm->setTitle('Contact Us Form');
         $om->persist($embeddedForm);
     }
@@ -98,10 +83,6 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
     protected function persistDemoContactUsForm(
         ObjectManager $om
     ) {
-        /** @var Channel $channel */
-        $channel = $om->getRepository('OroIntegrationBundle:Channel')
-            ->findOneBy(array('type' => 'magento'));
-
         foreach ($this->contactRequests as $contactRequest) {
             $request = new ContactRequest();
             $contactRequest['contactReason'] = $om->getRepository('OroCRMContactUsBundle:ContactReason')
@@ -109,7 +90,6 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
             foreach ($contactRequest as $property => $value) {
                 call_user_func_array(array($request, 'set' . ucfirst($property)), array($value));
             }
-            $request->setChannel($channel);
             $request->setPreferredContactMethod(ContactRequest::CONTACT_METHOD_BOTH);
             $request->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
             $om->persist($request);

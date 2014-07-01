@@ -28,6 +28,14 @@ class OrderDenormalizer extends ConfigurableEntityNormalizer
     /**
      * {@inheritdoc}
      */
+    public function supportsNormalization($data, $format = null, array $context = array())
+    {
+        return $data instanceof Order;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return $type == MagentoConnectorInterface::ORDER_TYPE;
@@ -38,13 +46,8 @@ class OrderDenormalizer extends ConfigurableEntityNormalizer
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        if (!empty($data['paymentDetails'])) {
+        if (array_key_exists('paymentDetails', $data)) {
             $data['paymentDetails'] = $this->importHelper->denormalizePaymentDetails($data['paymentDetails']);
-        }
-        if (!empty($data['addresses'])) {
-            foreach ($data['addresses'] as $idx => $address) {
-                $data['addresses'][$idx] = $this->importHelper->getFixedAddress($address);
-            }
         }
 
         /** @var Order $order */
