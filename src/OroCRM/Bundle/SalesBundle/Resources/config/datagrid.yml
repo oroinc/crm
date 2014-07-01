@@ -457,6 +457,9 @@ datagrid:
                     and:
                         - lead.status = 'new'
         columns:
+            id:
+                label: orocrm.sales.lead.id.label
+                renderable: false
             name:
                 label: orocrm.sales.lead.name.label
             firstName:
@@ -473,8 +476,6 @@ datagrid:
                 label: orocrm.sales.lead.datagrid.region
             addressPostalCode:
                 label: orocrm.sales.lead.datagrid.postal_code
-        properties:
-            id: ~
         sorters:
             columns:
                 name:
@@ -498,6 +499,11 @@ datagrid:
                 lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
         filters:
             columns:
+                 id:
+                     type: string
+                     data_name: lead.id
+                     enabled: false
+                     frontend_type: integer
                  name:
                      type: string
                      data_name: lead.name
@@ -556,6 +562,9 @@ datagrid:
                     and:
                         - opportunity.status = 'in_progress'
         columns:
+            id:
+                label: orocrm.sales.opportunity.id.label
+                renderable: false
             name:
                 label: orocrm.sales.opportunity.name.label
             contactName:
@@ -579,6 +588,11 @@ datagrid:
                     data_name: email.email
         filters:
             columns:
+                id:
+                    type: string
+                    data_name: opportunity.id
+                    enabled: false
+                    frontend_type: integer
                 name:
                     type: string
                     data_name: opportunity.name
