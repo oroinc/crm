@@ -4,21 +4,16 @@ namespace OroCRM\Bundle\ChannelBundle\Provider;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 
-use Oro\Bundle\EntityBundle\EntityConfig\BusinessScope;
-use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityBundle\Provider\ExclusionProviderInterface;
 
 class EntityExclusionProvider implements ExclusionProviderInterface
 {
-    /** @var ConfigProvider */
-    protected $groupingConfigProvider;
+    /** @var SettingsProvider */
+    protected $settingsProvider;
 
-    /**
-     * @param ConfigProvider $groupingConfigProvider
-     */
-    public function __construct(ConfigProvider $groupingConfigProvider)
+    public function __construct(SettingsProvider $settingsProvider)
     {
-        $this->groupingConfigProvider = $groupingConfigProvider;
+        $this->settingsProvider = $settingsProvider;
     }
 
     /**
@@ -26,7 +21,7 @@ class EntityExclusionProvider implements ExclusionProviderInterface
      */
     public function isIgnoredEntity($className)
     {
-        return $this->isIncludedByChannels($className);
+        return !$this->isIncludedByChannels($className);
     }
 
     /**
@@ -42,7 +37,7 @@ class EntityExclusionProvider implements ExclusionProviderInterface
      */
     public function isIgnoredRelation(ClassMetadata $metadata, $associationName)
     {
-        return $this->isIncludedByChannels($metadata->getAssociationTargetClass($associationName));
+        return !$this->isIncludedByChannels($metadata->getAssociationTargetClass($associationName));
     }
 
     /**
@@ -52,25 +47,13 @@ class EntityExclusionProvider implements ExclusionProviderInterface
      */
     protected function isIncludedByChannels($entityFQCN)
     {
-        if (!$this->isBusinessEntity($entityFQCN)) {
-            return false;
+        if (!($this->settingsProvider->isChannelEntity($entityFQCN)
+            || $this->settingsProvider->isDependentEntity($entityFQCN))
+        ) {
+            return true;
         }
 
         // @TODO check if it's in any integration
 
-    }
-
-    /**
-     * Is given entity in "business entities" group
-     *
-     * @param string $entityFQCN - entity class name
-     *
-     * @return bool
-     */
-    protected function isBusinessEntity($entityFQCN)
-    {
-        $groups = $this->groupingConfigProvider->getConfig($entityFQCN)->get('groups');
-
-        return in_array(BusinessScope::GROUP_BUSINESS, $groups, true);
     }
 }
