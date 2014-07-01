@@ -45,6 +45,7 @@ class OrderTest extends AbstractEntityTestCase
         $updatedAt    = new \DateTime('now');
         $channel      = new Channel();
         $owner        = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
+        $dataChannel  = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
 
         return [
             'incrementId'         => ['incrementId', 1, 1],
@@ -80,7 +81,8 @@ class OrderTest extends AbstractEntityTestCase
             'createdAt'           => ['createdAt', $createdAt, $createdAt],
             'updatedAt'           => ['updatedAt', $updatedAt, $updatedAt],
             'channel'             => ['channel', $channel, $channel],
-            'owner'               => ['owner', $owner, $owner]
+            'owner'               => ['owner', $owner, $owner],
+            'dataChannel'         => ['dataChannel', $dataChannel, $dataChannel],
         ];
     }
 }

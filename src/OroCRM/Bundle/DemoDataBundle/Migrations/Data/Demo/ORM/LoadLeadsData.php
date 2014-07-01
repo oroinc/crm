@@ -1,7 +1,6 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Oro\Bundle\WorkflowBundle\Model\Workflow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -10,39 +9,31 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Collections\Collection;
-
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
+use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     const FLUSH_MAX = 50;
 
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface */
     protected $container;
 
-    /**
-     * @var User[]
-     */
+    /** @var User[] */
     protected $users;
 
-    /**
-     * @var Country[]
-     */
+    /** @var Country[] */
     protected $countries;
 
     /** @var  EntityManager */
@@ -59,7 +50,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         return [
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadSourceData'
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadSourceData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData'
         ];
     }
 
@@ -78,10 +70,30 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     public function load(ObjectManager $manager)
     {
         $this->initSupportingEntities($manager);
-        $this->loadLeads();
+        $this->loadLeads($this->getChannelData());
         $this->loadSources();
     }
 
+    /**
+     * @return Channel
+     * @throws \Exception
+     */
+    protected function getChannelData()
+    {
+        /** @var Channel $channel */
+        $channel = $this->container->get('doctrine.orm.entity_manager')->getRepository('OroCRMChannelBundle:Channel')
+            ->findOneByName('default');
+
+        if (!$channel) {
+            throw new \Exception('"default" channel is not defined');
+        }
+
+        return $channel;
+    }
+
+    /**
+     * @param ObjectManager $manager
+     */
     protected function initSupportingEntities(ObjectManager $manager = null)
     {
         if ($manager) {
@@ -123,7 +135,10 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $this->flush($this->em);
     }
 
-    public function loadLeads()
+    /**
+     * @param Channel $channel
+     */
+    public function loadLeads(Channel $channel)
     {
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR. "leads.csv", "r");
         if ($handle) {
@@ -140,7 +155,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
                 $data = array_combine($headers, array_values($data));
 
-                $lead = $this->createLead($data, $user);
+                $lead = $this->createLead($data, $user, $channel);
                 $this->persist($this->em, $lead);
 
                 $i++;
@@ -166,10 +181,11 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /**
      * @param  array $data
      * @param User $user
+     * @param Channel $channel
      *
      * @return Lead
      */
-    protected function createLead(array $data, $user)
+    protected function createLead(array $data, $user, $channel)
     {
         $lead = new Lead();
         /** @var LeadStatus $defaultStatus */
@@ -182,6 +198,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setPhoneNumber($data['TelephoneNumber']);
         $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
+        $lead->setDataChannel($channel);
+
         /** @var Address $address */
         $address = new Address();
         $address->setLabel('Primary Address');

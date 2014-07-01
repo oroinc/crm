@@ -15,6 +15,7 @@ use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
 
 /**
@@ -46,7 +47,8 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
  *      },
  *      "workflow"={
  *          "active_workflow"="b2c_flow_order_follow_up"
- *      }
+ *      },
+ *      "grouping"={"groups"={"business"}}
  *  }
  * )
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -54,7 +56,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
  */
 class Order extends ExtendOrder
 {
-    use IntegrationEntityTrait, NamesAwareTrait;
+    use IntegrationEntityTrait, NamesAwareTrait, ChannelEntityTrait;
 
     /**
      * @var string

@@ -10,6 +10,8 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+
 /**
  * @ORM\Table(
  *      name="orocrm_sales_funnel",
@@ -37,12 +39,15 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
  *      },
  *      "workflow"={
  *          "active_workflow"="b2b_flow_sales_funnel"
- *      }
+ *      },
+ *      "grouping"={"groups"={"business"}}
  *  }
  * )
  */
 class SalesFunnel
 {
+    use ChannelEntityTrait;
+
     /**
      * @var integer
      *
