@@ -107,12 +107,12 @@ definitions:
                                 method: hasTypeWithName
                                 method_parameters: ['billing']
                                 attribute: $.isBillingAddress
-                            - @create_entity: # create billing Address
-                                conditions:
+                            - @create_entity:
+                                conditions: # if account billing address is empty and magento address is billing
                                     @and:
                                         - @empty: $account.billingAddress
                                         - @equal: [$.isBillingAddress, true]
-                                parameters:
+                                parameters: # create billing address
                                     class:     Oro\Bundle\AddressBundle\Entity\Address
                                     attribute: $account.billingAddress
                                     data:
@@ -135,12 +135,12 @@ definitions:
                                 method: hasTypeWithName
                                 method_parameters: ['shipping']
                                 attribute: $.isShippingAddress
-                            - @create_entity: # create shipping Address
-                                conditions:
+                            - @create_entity:
+                                conditions: # if account shipping address is empty and magento address is shipping
                                     @and:
                                         - @empty: $account.shippingAddress
                                         - @equal: [$.isShippingAddress, true]
-                                parameters:
+                                parameters: # create shipping Address
                                     class:     Oro\Bundle\AddressBundle\Entity\Address
                                     attribute: $account.shippingAddress
                                     data:
