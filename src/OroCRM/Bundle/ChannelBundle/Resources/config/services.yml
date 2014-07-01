@@ -14,6 +14,7 @@ parameters:
     # providers
     orocrm_channel.provider.settings_provider.class:    OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider
     orocrm_channel.provider.exclusion_provider.class:   OroCRM\Bundle\ChannelBundle\Provider\EntityExclusionProvider
+    orocrm_channel.provider.integration_select.class:   OroCRM\Bundle\ChannelBundle\Provider\IntegrationChoicesProvider
 
     # config resolver
     orocrm_channel.config_resolver.class:               Oro\Component\Config\Resolver\SystemAwareResolver
@@ -21,6 +22,8 @@ parameters:
 services:
     orocrm_channel.form.type.channel:
         class: %orocrm_channel.form.type.channel.class%
+        arguments:
+            - @orocrm_channel.provider.integration_select
         tags:
             - { name: form.type, alias: orocrm_channel_form }
 
@@ -63,3 +66,8 @@ services:
         class: %orocrm_channel.config_resolver.class%
         arguments:
             - @service_container
+
+    orocrm_channel.provider.integration_select:
+        class: %orocrm_channel.provider.integration_select.class%
+        arguments:
+            - @doctrine.orm.entity_manager

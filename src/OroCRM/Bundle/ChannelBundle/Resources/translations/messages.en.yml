@@ -17,3 +17,6 @@ orocrm:
         controller:
                 message:
                     saved: Channel saved
+
+        form:
+            select_integrations.label: Please select integrations

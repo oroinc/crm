@@ -6,9 +6,19 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use OroCRM\Bundle\ChannelBundle\Provider\IntegrationChoicesProvider;
+
 class ChannelType extends AbstractType
 {
     const NAME = 'orocrm_channel_form';
+
+    /** @var IntegrationChoicesProvider */
+    protected $choiceProvider;
+
+    public function __construct(IntegrationChoicesProvider $choiceProvider)
+    {
+        $this->choiceProvider = $choiceProvider;
+    }
 
     /**
      * {@inheritdoc}
@@ -29,6 +39,18 @@ class ChannelType extends AbstractType
             [
                 'required' => true,
                 'label'    => 'orocrm.channel.description.label'
+            ]
+        );
+        $builder->add(
+            'integrations',
+            'genemu_jqueryselect2_choice',
+            [
+                'required' => false,
+                'multiple' => true,
+                'label'    => 'orocrm.channel.integrations.label',
+                'choices'  => $this->choiceProvider->getChoices(),
+                'configs'  => ['placeholder' => 'orocrm.channel.form.select_integrations.label'],
+
             ]
         );
     }
