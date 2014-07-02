@@ -29,7 +29,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildForm()
     {
-        $this->builder->expects($this->exactly(2))->method('add');
+        $this->builder->expects($this->exactly(3))->method('add');
         $this->type->buildForm($this->builder, []);
     }
 
