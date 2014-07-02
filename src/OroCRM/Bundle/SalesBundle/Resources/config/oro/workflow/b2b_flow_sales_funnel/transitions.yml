@@ -30,6 +30,11 @@ workflows:
                         lead:
                             form_type: orocrm_sales_lead_select
                             options:
+                                grid_name: 'sales-funnel-lead-grid'
+                                configs:
+                                    extra_config: 'grid'
+                                    grid:
+                                        name: 'sales-funnel-lead-grid'
                                 required: true
                                 constraints:
                                     - NotBlank:
@@ -74,6 +79,11 @@ workflows:
                         opportunity:
                             form_type: orocrm_sales_opportunity_select
                             options:
+                                grid_name: 'sales-funnel-opportunity-grid'
+                                configs:
+                                    extra_config: 'grid'
+                                    grid:
+                                        name: 'sales-funnel-opportunity-grid'
                                 required: true
                                 constraints:
                                     - NotBlank:
