@@ -34,6 +34,9 @@ class EntityName
      */
     protected $channel;
 
+    /**
+     * @param string $value
+     */
     public function __construct($value)
     {
         $this->value = $value;

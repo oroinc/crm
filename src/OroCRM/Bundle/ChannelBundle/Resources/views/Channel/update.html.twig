@@ -2,7 +2,7 @@
 
 {% form_theme form with ['OroCRMChannelBundle:Form:fields.html.twig'] %}
 
-{% set entity = form.vars.value.unwrap is defined ? form.vars.value.unwrap : form.vars.value %}
+{% set entity = form.vars.value %}
 {% set formAction = entity.id ? path('orocrm_channel_update', { id: entity.id }) : path('orocrm_channel_create') %}
 
 {% if entity.id %}
