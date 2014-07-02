@@ -90,3 +90,11 @@ datagrid:
                 label:         orocrm.campaign.datagrid.actions.delete.label
                 icon:          trash
                 link:          delete_link
+
+    campaign-tracking-events-grid:
+        extends: tracking-events-grid
+        source:
+            query:
+                where:
+                    and:
+                        - e.code = :code

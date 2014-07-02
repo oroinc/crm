@@ -23,3 +23,7 @@ orocrm:
                 view.label: View
                 update.label: Update
                 delete.label: Delete
+
+        block:
+            general: General Information
+            events: Events
