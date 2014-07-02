@@ -133,7 +133,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
      */
     public function updateDataChannel(Integration $integration, ObjectManager $om)
     {
-        $this->channel->addIntegrations($integration);
+        $this->channel->addIntegration($integration);
         $om->persist($this->channel);
     }
 

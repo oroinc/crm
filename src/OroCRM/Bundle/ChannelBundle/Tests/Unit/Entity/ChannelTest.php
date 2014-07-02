@@ -41,7 +41,7 @@ class ChannelTest extends AbstractEntityTestCase
         $collection = new ArrayCollection();
         $collection->add($integration);
         $channel = new Channel();
-        $channel->addIntegrations($integration);
+        $channel->addIntegration($integration);
 
         $this->assertEquals(
             $channel->getIntegrations(),
@@ -49,7 +49,7 @@ class ChannelTest extends AbstractEntityTestCase
         );
 
         $collection->removeElement($integration);
-        $channel->removeIntegrations($integration);
+        $channel->removeIntegration($integration);
 
         $this->assertEquals(
             $channel->getIntegrations(),

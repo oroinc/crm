@@ -152,7 +152,7 @@ class Channel
      *
      * @return $this
      */
-    public function addIntegrations(Integration $integration)
+    public function addIntegration(Integration $integration)
     {
         if (!$this->getIntegrations()->contains($integration)) {
             $this->getIntegrations()->add($integration);
@@ -168,7 +168,7 @@ class Channel
      *
      * @return $this
      */
-    public function removeIntegrations(Integration $integration)
+    public function removeIntegration(Integration $integration)
     {
         if ($this->getIntegrations()->contains($integration)) {
             $this->getIntegrations()->removeElement($integration);
