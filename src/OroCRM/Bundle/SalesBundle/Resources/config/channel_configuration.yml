@@ -4,7 +4,7 @@ orocrm_channel:
           name: OroCRM\Bundle\SalesBundle\Entity\Opportunity
           dependent:
               - OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
-              - OroCRM\Bundle\SalesBundle\Entity\OppurtunityCloseReason
+              - OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
           navigation_items:
               - application_menu.sales_tab.opportunity_list
               - shortcuts.shortcut_list_opportunities
