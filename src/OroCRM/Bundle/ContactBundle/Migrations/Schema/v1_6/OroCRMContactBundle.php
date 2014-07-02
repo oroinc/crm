@@ -86,30 +86,16 @@ class OroCRMContactBundle implements
     public function up(Schema $schema, QueryBag $queries)
     {
         self::addActivityAssociations($schema, $this->activityExtension);
-
-        // prepare select email:user sql
-        $fromAndRecipients = '
-            SELECT DISTINCT email_id, owner_id FROM (
-                SELECT e.id as email_id, ea.{owner} as owner_id
-                FROM oro_email_address ea
-                    INNER JOIN oro_email e ON e.from_email_address_id = ea.id
-                WHERE ea.{owner} IS NOT NULL
-                UNION
-                SELECT er.email_id as email_id, ea.{owner} as owner_id
-                FROM oro_email_address ea
-                    INNER JOIN oro_email_recipient er ON er.email_address_id = ea.id
-                WHERE ea.{owner} IS NOT NULL
-            ) as subq';
-        $sourceClassName = $this->extendExtension->getEntityClassByTableName('oro_email');
-        $targetClassName = $this->extendExtension->getEntityClassByTableName('orocrm_contact');
-
-        $select = str_replace(
-            '{owner}',
+        self::assignActivities(
+            $this->extendExtension->getEntityClassByTableName('oro_email'),
+            $this->extendExtension->getEntityClassByTableName('orocrm_contact'),
             'owner_contact_id',
-            $fromAndRecipients
+            $this->nameGenerator,
+            $queries
         );
 
-        $this->assignActivities($sourceClassName, $targetClassName, $select, $queries);
+
+
     }
 
     /**
@@ -124,24 +110,46 @@ class OroCRMContactBundle implements
     }
 
     /**
-     * @param string   $sourceClassName
-     * @param string   $targetClassName
-     * @param string   $selectQuery
-     * @param QueryBag $queries
+     * @param string                          $sourceClassName
+     * @param string                          $targetClassName
+     * @param string                          $ownerFieldName
+     * @param ExtendDbIdentifierNameGenerator $nameGenerator
+     * @param QueryBag                        $queries
      */
-    public function assignActivities($sourceClassName, $targetClassName, $selectQuery, QueryBag $queries)
-    {
+    public static function assignActivities(
+        $sourceClassName,
+        $targetClassName,
+        $ownerFieldName,
+        ExtendDbIdentifierNameGenerator $nameGenerator,
+        QueryBag $queries
+    ) {
+        // prepare select email_id:contact_id sql
+        $fromAndRecipients = '
+            SELECT DISTINCT email_id, owner_id FROM (
+                SELECT e.id as email_id, ea.{owner} as owner_id
+                FROM oro_email_address ea
+                    INNER JOIN oro_email e ON e.from_email_address_id = ea.id
+                WHERE ea.{owner} IS NOT NULL
+                UNION
+                SELECT er.email_id as email_id, ea.{owner} as owner_id
+                FROM oro_email_address ea
+                    INNER JOIN oro_email_recipient er ON er.email_address_id = ea.id
+                WHERE ea.{owner} IS NOT NULL
+            ) as subq';
+
+        $fromAndRecipients = str_replace('{owner}', $ownerFieldName, $fromAndRecipients);
+
         $associationName = ExtendHelper::buildAssociationName(
             $targetClassName,
             ActivityScope::ASSOCIATION_KIND
         );
 
-        $tableName = $this->nameGenerator->generateManyToManyJoinTableName(
+        $tableName = $nameGenerator->generateManyToManyJoinTableName(
             $sourceClassName,
             $associationName,
             $targetClassName
         );
 
-        $queries->addQuery(sprintf("INSERT INTO %s %s", $tableName, $selectQuery));
+        $queries->addQuery(sprintf("INSERT INTO %s %s", $tableName, $fromAndRecipients));
     }
 }
