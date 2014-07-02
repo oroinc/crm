@@ -89,11 +89,11 @@
     ]) %}
 
     {% set dataBlocks = [{
-        'title': 'General',
+        'title': 'General'|trans,
         'class': 'active',
         'subblocks': [
             {
-                'title': 'Opportunity Information',
+                'title': 'Opportunity Information'|trans,
                 'data': formFields
             }
         ]
@@ -106,7 +106,7 @@
         {% endfor %}
 
         {% set dataBlocks = dataBlocks|merge([{
-            'title': 'Additional',
+            'title': 'Additional'|trans,
             'subblocks': [{
                 'title': '',
                 'useSpan': false,

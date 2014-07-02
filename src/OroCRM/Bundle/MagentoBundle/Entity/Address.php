@@ -18,7 +18,16 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
 /**
  * @ORM\Table("orocrm_magento_customer_addr")
  * @ORM\HasLifecycleCallbacks()
- * @Config()
+ * @Config(
+ *      defaultValues={
+ *          "note"={
+ *              "immutable"=true
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
+ *      }
+ * )
  * @ORM\Entity
  * @Oro\Loggable
  */
