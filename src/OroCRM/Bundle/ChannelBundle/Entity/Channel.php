@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\ChannelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -78,6 +79,7 @@ class Channel
 
     public function __construct()
     {
+        $this->entities     = new ArrayCollection();
         $this->integrations = new ArrayCollection();
     }
 

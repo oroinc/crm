@@ -47,8 +47,6 @@ class OroCRMChannelBundle implements Migration
         );
 
         self::addChannelIntegrationTable($schema);
-
-        self::addChannelIntegrationTableForeignKeys($schema);
     }
 
     /**
@@ -62,29 +60,21 @@ class OroCRMChannelBundle implements Migration
         $table->setPrimaryKey(['channel_id', 'integrations_id']);
         $table->addIndex(['channel_id'], 'IDX_1E77222472F5A1AA', []);
         $table->addIndex(['integrations_id'], 'IDX_1E772224A730349E', []);
-    }
-
-    /**
-     * @param Schema $schema
-     */
-    protected static function addChannelIntegrationTableForeignKeys(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_channel_integrations');
 
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_channel'),
             ['channel_id'],
             ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]/*,
-            'FK_1E77222472F5A1AA'*/
+            ['onDelete' => 'CASCADE', 'onUpdate' => null],
+            'FK_1E77222472F5A1AA'
         );
 
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['integrations_id'],
             ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]/*,
-            'FK_1E772224A730349E'*/
+            ['onDelete' => 'CASCADE', 'onUpdate' => null],
+            'FK_1E772224A730349E'
         );
     }
 }
