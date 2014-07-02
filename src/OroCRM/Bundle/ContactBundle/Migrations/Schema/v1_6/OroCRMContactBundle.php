@@ -86,16 +86,8 @@ class OroCRMContactBundle implements
     public function up(Schema $schema, QueryBag $queries)
     {
         self::addActivityAssociations($schema, $this->activityExtension);
-        self::assignActivities(
-            $this->extendExtension->getEntityClassByTableName('oro_email'),
-            $this->extendExtension->getEntityClassByTableName('orocrm_contact'),
-            'owner_contact_id',
-            $this->nameGenerator,
-            $queries
-        );
 
-
-
+        $this->assignActivities('oro_email', 'orocrm_contact', 'owner_contact_id', $queries);
     }
 
     /**
@@ -110,17 +102,15 @@ class OroCRMContactBundle implements
     }
 
     /**
-     * @param string                          $sourceClassName
-     * @param string                          $targetClassName
-     * @param string                          $ownerFieldName
-     * @param ExtendDbIdentifierNameGenerator $nameGenerator
-     * @param QueryBag                        $queries
+     * @param string   $sourceTableName
+     * @param string   $targetTableName
+     * @param string   $ownerColumnName
+     * @param QueryBag $queries
      */
-    public static function assignActivities(
-        $sourceClassName,
-        $targetClassName,
-        $ownerFieldName,
-        ExtendDbIdentifierNameGenerator $nameGenerator,
+    public function assignActivities(
+        $sourceTableName,
+        $targetTableName,
+        $ownerColumnName,
         QueryBag $queries
     ) {
         // prepare select email_id:contact_id sql
@@ -137,14 +127,16 @@ class OroCRMContactBundle implements
                 WHERE ea.{owner} IS NOT NULL
             ) as subq';
 
-        $fromAndRecipients = str_replace('{owner}', $ownerFieldName, $fromAndRecipients);
+        $sourceClassName   = $this->extendExtension->getEntityClassByTableName($sourceTableName);
+        $targetClassName   = $this->extendExtension->getEntityClassByTableName($targetTableName);
+        $fromAndRecipients = str_replace('{owner}', $ownerColumnName, $fromAndRecipients);
 
         $associationName = ExtendHelper::buildAssociationName(
             $targetClassName,
             ActivityScope::ASSOCIATION_KIND
         );
 
-        $tableName = $nameGenerator->generateManyToManyJoinTableName(
+        $tableName = $this->nameGenerator->generateManyToManyJoinTableName(
             $sourceClassName,
             $associationName,
             $targetClassName
