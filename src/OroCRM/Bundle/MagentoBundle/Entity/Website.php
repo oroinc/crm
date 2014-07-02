@@ -21,7 +21,16 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendWebsite;
  *  name="orocrm_magento_website",
  *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_site_idx", columns={"website_code", "origin_id", "channel_id"})}
  * )
- * @Config()
+ * @Config(
+ *      defaultValues={
+ *          "note"={
+ *              "immutable"=true
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
+ *      }
+ * )
  */
 class Website extends ExtendWebsite
 {

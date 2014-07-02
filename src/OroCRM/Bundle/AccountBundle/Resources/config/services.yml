@@ -7,6 +7,8 @@ parameters:
     orocrm_account.account.manager.api.class:       Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_account.type.account.api.class:          OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType
 
+    orocrm_account.activity_widget_provider.class:  %oro_activity.widget_provider.activities.menu.class%
+
 services:
     orocrm_account.form.account:
         class:                                      Symfony\Component\Form\Form
@@ -87,3 +89,13 @@ services:
            - 'account'
         tags:
            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.account-contacts-update-grid, method: onBuildAfter }
+
+    orocrm_account.activity_widget_provider:
+        class: %orocrm_account.activity_widget_provider.class%
+        arguments:
+           - @oro_entity.entity_identifier_accessor
+           - @oro_ui.twig.tab_extension
+           - 'account_activity_tab_panel'
+           - %orocrm_account.account.entity.class%
+        tags:
+           - { name: oro_activity.activity_widget_provider, priority: -10 }

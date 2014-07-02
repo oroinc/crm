@@ -23,7 +23,6 @@ orocrm:
 
         sections:
             general:                General
-            activity:               Activity
             sales:                  Sales
         form:
             choose_account:         Choose an account...

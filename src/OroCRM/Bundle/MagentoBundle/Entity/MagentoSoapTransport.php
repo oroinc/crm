@@ -15,7 +15,19 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *
  * @package OroCRM\Bundle\MagentoBundle\Entity
  * @ORM\Entity
- * @Config()
+ * @Config(
+ *      defaultValues={
+ *          "note"={
+ *              "immutable"=true
+ *          },
+ *          "note"={
+ *              "immutable"=true
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
+ *      }
+ * )
  * @Oro\Loggable()
  */
 class MagentoSoapTransport extends Transport

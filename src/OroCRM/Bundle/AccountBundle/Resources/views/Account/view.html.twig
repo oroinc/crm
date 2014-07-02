@@ -78,10 +78,6 @@
         {{ menuTabPanel('account_sales_tab_panel', {'id': entity.id}) }}
     {% endset %}
 
-    {% set activitySection %}
-        {{ menuTabPanel('account_activity_tab_panel', {'id': entity.id}) }}
-    {% endset %}
-
     {% set dataBlocks = [
         {
             'title': 'orocrm.account.sections.general'|trans,
@@ -92,12 +88,6 @@
             'title': 'orocrm.account.sections.sales'|trans,
             'subblocks': [
                 {'data' : [accountSalesSection]}
-            ]
-        },
-        {
-            'title': 'orocrm.account.sections.activity'|trans,
-            'subblocks': [
-                {'data' : [activitySection]}
             ]
         }
     ] %}
@@ -114,6 +104,7 @@
             {% set dataBlocks = dataBlocks|merge([
                 {
                     'title': channel.name,
+                    'priority': 255,
                     'subblocks': [
                         {'data' : [accountChannelInfoSection]}
                     ]

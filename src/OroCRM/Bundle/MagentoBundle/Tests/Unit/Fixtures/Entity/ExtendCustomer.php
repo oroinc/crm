@@ -8,6 +8,8 @@ class ExtendCustomer extends Customer
 {
     /**
      * @param int $id
+     *
+     * @return void
      */
     public function setId($id)
     {

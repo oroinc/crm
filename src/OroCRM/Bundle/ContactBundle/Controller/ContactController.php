@@ -195,15 +195,4 @@ class ContactController extends Controller
             'contactsWithoutDefault' => $contactsWithoutDefault
         );
     }
-
-    /**
-     * @Route("/widget/email/{contactId}", name="orocrm_contact_widget_email", requirements={"contactId"="\d+"})
-     * @ParamConverter("contact", options={"id"="contactId"})
-     * @Template("OroCRMContactBundle:Contact:email.html.twig")
-     * @AclAncestor("oro_email_view")
-     */
-    public function widgetEmailAction(Contact $contact)
-    {
-        return array('entity' => $contact);
-    }
 }

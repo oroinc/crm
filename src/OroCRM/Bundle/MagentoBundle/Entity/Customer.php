@@ -29,20 +29,20 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
  *      indexes={@ORM\Index(name="magecustomer_name_idx",columns={"first_name", "last_name"})}
  * )
  * @Config(
- *  routeName="orocrm_magento_customer_index",
- *  routeView="orocrm_magento_customer_view",
- *  defaultValues={
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="user_owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "grouping"={"groups"={"business"}}
- *  }
+ *      routeName="orocrm_magento_customer_index",
+ *      routeView="orocrm_magento_customer_view",
+ *      defaultValues={
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="user_owner_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "grouping"={"groups"={"business"}}
+ *      }
  * )
  * @Oro\Loggable
  */
@@ -335,7 +335,7 @@ class Customer extends ExtendCustomer
      *
      * @return $this
      */
-    public function setContact(Contact $contact)
+    public function setContact($contact)
     {
         $this->contact = $contact;
 
@@ -355,7 +355,7 @@ class Customer extends ExtendCustomer
      *
      * @return $this
      */
-    public function setAccount(Account $account)
+    public function setAccount($account)
     {
         $this->account = $account;
 

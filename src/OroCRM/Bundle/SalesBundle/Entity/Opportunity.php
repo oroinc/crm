@@ -6,6 +6,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -26,32 +27,32 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *  routeName="orocrm_sales_opportunity_index",
- *  routeView="orocrm_sales_opportunity_view",
- *  defaultValues={
- *      "entity"={
- *          "icon"="icon-usd"
- *      },
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="user_owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "form"={
- *          "form_type"="orocrm_sales_opportunity_select"
- *      },
- *      "dataaudit"={
- *          "auditable"=true
- *      },
- *      "grouping"={"groups"={"business"}}
- *  }
+ *      routeName="orocrm_sales_opportunity_index",
+ *      routeView="orocrm_sales_opportunity_view",
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-usd"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="user_owner_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "form"={
+ *              "form_type"="orocrm_sales_opportunity_select"
+ *          },
+ *          "dataaudit"={
+ *              "auditable"=true
+ *          },
+ *          "grouping"={"groups"={"business"}}
+ *      }
  * )
  */
-class Opportunity extends ExtendOpportunity
+class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 {
     use ChannelEntityTrait;
 
@@ -669,6 +670,21 @@ class Opportunity extends ExtendOpportunity
     {
         $this->updatedAt = $updated;
         return $this;
+    }
+
+    /**
+     * Get the primary email address of the related contact
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        $contact = $this->getContact();
+        if (!$contact) {
+            return null;
+        }
+
+        return $contact->getEmail();
     }
 
     public function __toString()
