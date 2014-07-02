@@ -6,7 +6,6 @@ use Oro\Bundle\ReportBundle\Tests\Selenium\Pages\Reports;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use OroCRM\Bundle\CampaignBundle\Tests\Selenium\Pages\Campaigns;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
-use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnel;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
 
 /**
@@ -17,8 +16,8 @@ use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
  */
 class CampaignManagementTest extends Selenium2TestCase
 {
-
     /**
+     * Test create new campaign functionality
      * @return string
      */
     public function testCreateCampaign()
@@ -40,6 +39,7 @@ class CampaignManagementTest extends Selenium2TestCase
     }
 
     /**
+     * Test create new lead with company assignment
      * @depends testCreateCampaign
      * @param string $campaign
      *
@@ -63,29 +63,54 @@ class CampaignManagementTest extends Selenium2TestCase
         return $leadName;
     }
 
-    public function testCreateSales()
+    /**
+     * Test create new sales activity with lead assigned company
+     * @depends testCreateLead
+     * @param $leadName
+     */
+    public function testCreateCompanySales($leadName)
     {
-        $leadName = 'Lead_' . mt_rand();
 
         $login = $this->login();
         /** @var SalesFunnels $login */
-        //$login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
-
-
+        $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
+            ->startFromLead()
+            ->selectEntity('Lead', $leadName)
+            ->submit()
+            ->openWorkflow('OroCRM\Bundle\SalesBundle')
+            ->checkStep('New Lead')
+            ->qualify()
+            ->setCompanyName('Test company name_'.mt_rand())
+            ->submit()
+            ->checkStep('New Opportunity')
+            ->develop()
+            ->setBudget('100')
+            ->setProbability('100')
+            ->setCustomerNeed('Some customer need')
+            ->setSolution('Some solution')
+            ->submit()
+            ->checkStep('Developed Opportunity')
+            ->closeAsWon()
+            ->setCloseRevenue('100')
+            ->submit()
+            ->checkStep('Won Opportunity');
     }
+
     /**
+     * Test report on active company
      * @depends testCreateCampaign
+     * @depends testCreateCompanySales
      * @param string $campaignCode
-     *
      */
     public function testCheckReport($campaignCode)
     {
         $login = $this->login();
         /** @var Reports $login */
-        $login = $login->openReports('Oro\Bundle\ReportBundle')
+        $data = $login = $login->openReports('Oro\Bundle\ReportBundle')
             ->open(array('Campaign Performance'))
-            ->filterBy('Code', $campaignCode);
-        $rows = $login->getRows();
-        $data = $login->getData($rows);
+            ->filterBy('Code', $campaignCode)
+            ->getAllData();
+
+        $this->assertEquals('$100.00', $data[0]['CLOSE REVENUE']);
     }
 }

@@ -532,10 +532,21 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
                 $context
             );
 
+            // TODO Should be fixed during CRM-1185
+            $originIds = array();
+            foreach ($data['addresses'] as $key => $address) {
+                if (!empty($address['customerAddressId'])) {
+                    $originIds[$key] = $address['customerAddressId'];
+                }
+            }
+
             if (!empty($addresses)) {
                 $contact = $object->getContact();
                 /** @var Address $address */
-                foreach ($addresses as $address) {
+                foreach ($addresses as $key => $address) {
+                    if (!empty($originIds[$key])) {
+                        $address->setOriginId($originIds[$key]);
+                    }
                     if ($contactPhone = $address->getContactPhone()) {
                         $contactPhone->setOwner($contact);
                     }

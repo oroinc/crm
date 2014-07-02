@@ -60,9 +60,17 @@ class CustomerStrategy extends BaseStrategy
             $remoteEntity->getWebsite(),
             $remoteEntity->getGroup()
         );
-        $this->updateContact($remoteEntity, $localEntity, $remoteEntity->getContact());
-        $this->updateAccount($localEntity, $remoteEntity->getAccount());
-        $localEntity->getAccount()->setDefaultContact($localEntity->getContact());
+
+        // account and contact for new customer should be created automatically
+        // by the appropriate queued process to improve initial import performance
+        if ($localEntity->getId()) {
+            $this->updateContact($remoteEntity, $localEntity, $remoteEntity->getContact());
+            $this->updateAccount($localEntity, $remoteEntity->getAccount());
+            $localEntity->getAccount()->setDefaultContact($localEntity->getContact());
+        } else {
+            $localEntity->setContact(null);
+            $localEntity->setAccount(null);
+        }
 
         // modify local entity after all relations done
         $this->strategyHelper->importEntity(
@@ -155,7 +163,9 @@ class CustomerStrategy extends BaseStrategy
         if ($localData->getContact() && $localData->getContact()->getId()) {
             $helper->merge($remoteData, $localData, $localData->getContact());
         } else {
+            $addresses = $localData->getAddresses();
             // loop by imported addresses, add new only
+            /** @var \OroCRM\Bundle\ContactBundle\Entity\ContactAddress $address */
             foreach ($contact->getAddresses() as $key => $address) {
                 $helper->prepareAddress($address);
 
@@ -165,18 +175,17 @@ class CustomerStrategy extends BaseStrategy
                 }
                 // @TODO find possible solution
                 // guess parent address by key
-                $localData->getAddresses()->get($key)->setContactAddress($address);
+                if ($entity = $addresses->get($key)) {
+                    $entity->setContactAddress($address);
+                }
             }
 
             // @TODO find possible solution
             // guess parent $phone by key
             foreach ($contact->getPhones() as $key => $phone) {
                 $contactPhone = $this->getContactPhoneFromContact($contact, $phone);
-
-                if ($contactPhone) {
-                    $localData->getAddresses()->get($key)->setContactPhone($contactPhone);
-                } else {
-                    $localData->getAddresses()->get($key)->setContactPhone($phone);
+                if ($entity = $addresses->get($key)) {
+                    $entity->setContactPhone($contactPhone ? $contactPhone : $phone);
                 }
             }
 
@@ -260,6 +269,21 @@ class CustomerStrategy extends BaseStrategy
                 $entity->addAddress($address);
                 $processedRemote[] = $address;
             }
+
+            $contact = $entity->getContact();
+            if ($contact) {
+                $contactAddress = $address->getContactAddress();
+                $contactPhone = $address->getContactPhone();
+                if ($contactAddress) {
+                    $contactAddress->setOwner($contact);
+                }
+                if ($contactPhone) {
+                    $contactPhone->setOwner($contact);
+                }
+            } else {
+                $address->setContactAddress(null);
+                $address->setContactPhone(null);
+            }
         }
 
         // remove not processed addresses
@@ -304,15 +328,14 @@ class CustomerStrategy extends BaseStrategy
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
             $this->updateAddressCountryRegion($address, $mageRegionId);
 
-            if ($address->getCountry()) {
-                $account->{'set' . ucfirst($key) . 'Address'}($address);
-            } else {
-                $account->{'set' . ucfirst($key) . 'Address'}(null);
-            }
+            $setter = 'set' . ucfirst($key) . 'Address';
+            $account->$setter($address->getCountry() ? $address : null);
         }
 
         // populate default owner only for new accounts
         $this->defaultOwnerHelper->populateChannelOwner($account, $entity->getChannel());
         $entity->setAccount($account);
+
+        return $this;
     }
 }
