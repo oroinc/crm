@@ -27,10 +27,6 @@ orocrm:
             update: Update
             delete: Delete
 
-        block:
-            general: General Information
-            additional: Additional Information
-
         add_entity: Add task
         saved_message: Task saved
 

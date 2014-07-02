@@ -15,9 +15,17 @@ use Oro\Bundle\EmailBundle\Entity\EmailInterface;
  *      @ORM\Index(name="primary_email_idx", columns={"email", "is_primary"})
  * })
  * @Config(
- *   defaultValues={
- *      "entity"={"icon"="icon-envelope"}
- *  }
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-envelope"
+ *          },
+ *          "note"={
+ *              "immutable"=true
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
+ *      }
  * )
  */
 class ContactEmail extends AbstractEmail implements EmailInterface

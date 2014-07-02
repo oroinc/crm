@@ -1,0 +1,167 @@
+definitions:
+    magento_customer_creation:
+        label:   'Create Account and Contact for Magento Customer'
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
+        order:   10
+        actions_configuration:
+            - @tree: # set Contact
+                conditions: # if Contact not exists
+                    @empty: $contact
+                actions:
+                    - @create_entity: # create Contact
+                        class:     OroCRM\Bundle\ContactBundle\Entity\Contact
+                        attribute: $contact
+                        data:
+                            birthday:    $birthday
+                            email:       $email
+                            firstName:   $firstName
+                            gender:      $gender
+                            lastName:    $lastName
+                            middleName:  $middleName
+                            namePrefix:  $namePrefix
+                            nameSuffix:  $nameSuffix
+                            owner:       $owner
+                    - @tree: # add Contact Email
+                        conditions:
+                            @not_empty: $email
+                        actions:
+                            - @create_entity: # create Contact Email
+                                class:     OroCRM\Bundle\ContactBundle\Entity\ContactEmail
+                                attribute: $.contactEmail
+                                data:
+                                    email:   $email
+                                    primary: true
+                            - @call_method: # add Contact Email to Contact
+                                object: $contact
+                                method: addEmail
+                                method_parameters: [$.contactEmail]
+                            - @unset_value: [$.contactEmail]
+                    - @foreach: # for all Magento addresses
+                        array: $addresses
+                        value: $.magentoAddress
+                        actions:
+                            - @create_entity: # create Contact Address
+                                class:     OroCRM\Bundle\ContactBundle\Entity\ContactAddress
+                                attribute: $.magentoAddress.contactAddress
+                                data:
+                                    label:        $.magentoAddress.label
+                                    street:       $.magentoAddress.street
+                                    street2:      $.magentoAddress.street2
+                                    city:         $.magentoAddress.city
+                                    postalCode:   $.magentoAddress.postalCode
+                                    country:      $.magentoAddress.country
+                                    organization: $.magentoAddress.organization
+                                    region:       $.magentoAddress.region
+                                    regionText:   $.magentoAddress.regionText
+                                    namePrefix:   $.magentoAddress.namePrefix
+                                    firstName:    $.magentoAddress.firstName
+                                    middleName:   $.magentoAddress.middleName
+                                    lastName:     $.magentoAddress.lastName
+                                    nameSuffix:   $.magentoAddress.nameSuffix
+                                    types:        $.magentoAddress.types
+                                    primary:      $.magentoAddress.primary
+                            - @call_method: # add Contact Address to Contact
+                                object: $contact
+                                method: addAddress
+                                method_parameters: [$.magentoAddress.contactAddress]
+                            - @tree: # add Contact Phone
+                                  conditions:
+                                      @not_empty: $.magentoAddress.phone
+                                  actions:
+                                      - @create_entity: # create Contact phone
+                                          class:     OroCRM\Bundle\ContactBundle\Entity\ContactPhone
+                                          attribute: $.magentoAddress.contactPhone
+                                          data:
+                                              phone:   $.magentoAddress.phone
+                                              primary: $.magentoAddress.primary
+                                      - @call_method: # add Contact Phone to Contact
+                                          object: $contact
+                                          method: addPhone
+                                          method_parameters: [$.magentoAddress.contactPhone]
+
+            - @tree: # set Account
+                conditions: # if Account not exists
+                    @empty: $account
+                actions:
+                    - @format_string: # generate Account name
+                        attribute: $.accountName
+                        string:    '%firstName% %lastName%'
+                        arguments:
+                            firstName: $firstName
+                            lastName:  $lastName
+                    - @create_entity: # create Account
+                        class:     OroCRM\Bundle\AccountBundle\Entity\Account
+                        attribute: $account
+                        data:
+                            defaultContact: $contact
+                            name:           $.accountName
+                            owner:          $owner
+                    - @unset_value: [$.accountName]
+                    - @foreach: # for all Magento addresses
+                        array: $addresses
+                        value: $.magentoAddress
+                        actions:
+                            - @call_method: # is billing address
+                                object: $.magentoAddress
+                                method: hasTypeWithName
+                                method_parameters: ['billing']
+                                attribute: $.isBillingAddress
+                            - @create_entity:
+                                conditions: # if account billing address is empty and magento address is billing
+                                    @and:
+                                        - @empty: $account.billingAddress
+                                        - @equal: [$.isBillingAddress, true]
+                                parameters: # create billing address
+                                    class:     Oro\Bundle\AddressBundle\Entity\Address
+                                    attribute: $account.billingAddress
+                                    data:
+                                        label:        $.magentoAddress.label
+                                        street:       $.magentoAddress.street
+                                        street2:      $.magentoAddress.street2
+                                        city:         $.magentoAddress.city
+                                        postalCode:   $.magentoAddress.postalCode
+                                        country:      $.magentoAddress.country
+                                        organization: $.magentoAddress.organization
+                                        region:       $.magentoAddress.region
+                                        regionText:   $.magentoAddress.regionText
+                                        namePrefix:   $.magentoAddress.namePrefix
+                                        firstName:    $.magentoAddress.firstName
+                                        middleName:   $.magentoAddress.middleName
+                                        lastName:     $.magentoAddress.lastName
+                                        nameSuffix:   $.magentoAddress.nameSuffix
+                            - @call_method: # is shipping address
+                                object: $.magentoAddress
+                                method: hasTypeWithName
+                                method_parameters: ['shipping']
+                                attribute: $.isShippingAddress
+                            - @create_entity:
+                                conditions: # if account shipping address is empty and magento address is shipping
+                                    @and:
+                                        - @empty: $account.shippingAddress
+                                        - @equal: [$.isShippingAddress, true]
+                                parameters: # create shipping Address
+                                    class:     Oro\Bundle\AddressBundle\Entity\Address
+                                    attribute: $account.shippingAddress
+                                    data:
+                                        label:        $.magentoAddress.label
+                                        street:       $.magentoAddress.street
+                                        street2:      $.magentoAddress.street2
+                                        city:         $.magentoAddress.city
+                                        postalCode:   $.magentoAddress.postalCode
+                                        country:      $.magentoAddress.country
+                                        organization: $.magentoAddress.organization
+                                        region:       $.magentoAddress.region
+                                        regionText:   $.magentoAddress.regionText
+                                        namePrefix:   $.magentoAddress.namePrefix
+                                        firstName:    $.magentoAddress.firstName
+                                        middleName:   $.magentoAddress.middleName
+                                        lastName:     $.magentoAddress.lastName
+                                        nameSuffix:   $.magentoAddress.nameSuffix
+
+triggers:
+    magento_customer_creation:
+        -
+            event:    create
+            priority: 5
+            queued:   true

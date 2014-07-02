@@ -149,6 +149,7 @@ workflows:
                     - @create_entity: # create an opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $opportunity
+                        flush: true
                         data:
                             name: $new_opportunity_name
                             contact: $lead.contact

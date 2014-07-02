@@ -23,15 +23,17 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  * )
  *
  * @Config(
- *  routeName="orocrm_contactus_request_index",
- *  defaultValues={
- *      "entity"={"icon"="icon-envelope"},
- *      "security"={
- *          "type"="ACL",
- *          "permissions"="All",
- *          "group_name"=""
+ *      routeName="orocrm_contactus_request_index",
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-envelope"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "permissions"="All",
+ *              "group_name"=""
+ *          }
  *      }
- *  }
  * )
  */
 class ContactRequest extends AbstractContactRequest
