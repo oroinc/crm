@@ -6,6 +6,7 @@ oro_menu_config:
             extras:
                 position: 30
                 routes: ['orocrm_contactus_request_*']
+            display: false
     tree:
         application_menu:
             children:

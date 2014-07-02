@@ -423,7 +423,10 @@ orocrm:
             choose_customer: Choose a customer...
             choose_cart: Choose a cart...
 
-        menu.web_customers: Web Customers
+        menu:
+            web_customers: Web Customers
+            orders: Orders
+            shopping_carts: Shopping Carts
         controller:
             transport_not_configure:       Unable to handle your request. Invalid Integration configuration detected.
             extension_required:            Unable to perform this operation, Oro Bridge extension not found.

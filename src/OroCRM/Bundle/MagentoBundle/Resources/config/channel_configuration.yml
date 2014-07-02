@@ -9,7 +9,8 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\Store
               - OroCRM\Bundle\MagentoBundle\Entity\Website
               - OroCRM\Bundle\MagentoBundle\Entity\Region
-          navigation_items: ~
+          navigation_items:
+              - application_menu.sales_tab.magento_cart
 
        -
           name: OroCRM\Bundle\MagentoBundle\Entity\Customer
@@ -19,7 +20,8 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\Region
               - OroCRM\Bundle\MagentoBundle\Entity\Website
               - OroCRM\Bundle\MagentoBundle\Entity\Store
-          navigation_items: ~
+          navigation_items:
+              - application_menu.customers_tab.magento_customer
 
        -
           name: OroCRM\Bundle\MagentoBundle\Entity\Order
@@ -28,7 +30,8 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\OrderItem
               - OroCRM\Bundle\MagentoBundle\Entity\Store
               - OroCRM\Bundle\MagentoBundle\Entity\Website
-          navigation_items: ~
+          navigation_items:
+              - application_menu.sales_tab.magento_order
 
        -
           name: OroCRM\Bundle\MagentoBundle\Entity\Product
