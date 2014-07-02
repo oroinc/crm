@@ -54,7 +54,7 @@ class OroCRMChannelBundle implements Migration
      */
     protected static function addChannelIntegrationTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_channel_integrations');
+        $table = $schema->createTable('orocrm_chl_to_integration_chl');
         $table->addColumn('channel_id', 'integer', ['notnull' => true]);
         $table->addColumn('integrations_id', 'smallint', ['notnull' => true]);
         $table->setPrimaryKey(['channel_id', 'integrations_id']);

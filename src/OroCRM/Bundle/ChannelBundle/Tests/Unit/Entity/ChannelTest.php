@@ -2,6 +2,10 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+
 class ChannelTest extends AbstractEntityTestCase
 {
     /**
@@ -27,8 +31,29 @@ class ChannelTest extends AbstractEntityTestCase
             'name'         => ['name', $name, $name],
             'description'  => ['description', $description, $description],
             'entities'     => ['entities', $entities, $entities],
-            'integrations' => ['integrations', $integrations, $integrations],
             'owner'        => ['owner', $owner, $owner],
         ];
+    }
+
+    public function testAddRemoveIntegrations()
+    {
+        $integration = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
+        $collection = new ArrayCollection();
+        $collection->add($integration);
+        $channel = new Channel();
+        $channel->addIntegrations($integration);
+
+        $this->assertEquals(
+            $channel->getIntegrations(),
+            $collection
+        );
+
+        $collection->removeElement($integration);
+        $channel->removeIntegrations($integration);
+
+        $this->assertEquals(
+            $channel->getIntegrations(),
+            $collection
+        );
     }
 }
