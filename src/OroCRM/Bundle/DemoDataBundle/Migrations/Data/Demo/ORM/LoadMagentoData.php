@@ -74,19 +74,16 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $website = new Website();
         $website->setCode('admin')
             ->setName('Admin');
-
         $om->persist($website);
 
         $store = new Store();
         $store->setCode('admin')
             ->setName('Admin')
             ->setWebsite($website);
-
         $om->persist($website);
 
         $group = new CustomerGroup();
         $group->setName('General');
-
         $om->persist($group);
 
         $transport = new MagentoSoapTransport();
@@ -100,15 +97,17 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $integration->setConnectors(['customer', 'cart', 'order']);
         $integration->setName(self::INTEGRATION_NAME);
         $integration->setTransport($transport);
-
         $om->persist($integration);
 
-        $this->setDataChannel();
+        $this->loadDataChannel();
 
         $this->persistDemoCustomers($om, $website, $store, $group, $integration);
         $om->flush();
+
         $this->persistDemoCarts($om, $store, $integration);
+        $this->updateDataChannel($integration, $om);
         $om->flush();
+
         $this->persistDemoOrders($om, $store, $integration);
         $om->flush();
     }
@@ -118,7 +117,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
      *
      * @throws \Exception
      */
-    public function setDataChannel()
+    public function loadDataChannel()
     {
         /** @var channel $channel */
         $this->channel = $this->channelRepository->findOneByName('default');
@@ -126,6 +125,16 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         if (!$this->channel) {
             throw new \Exception('"default" channel is not defined!');
         }
+    }
+
+    /**
+     * @param Integration   $integration
+     * @param ObjectManager $om
+     */
+    public function updateDataChannel(Integration $integration, ObjectManager $om)
+    {
+        $this->channel->addIntegrations($integration);
+        $om->persist($this->channel);
     }
 
     /**

@@ -6,19 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use OroCRM\Bundle\ChannelBundle\Provider\IntegrationChoicesProvider;
-
 class ChannelType extends AbstractType
 {
     const NAME = 'orocrm_channel_form';
-
-    /** @var IntegrationChoicesProvider */
-    protected $choiceProvider;
-
-    public function __construct(IntegrationChoicesProvider $choiceProvider)
-    {
-        $this->choiceProvider = $choiceProvider;
-    }
 
     /**
      * {@inheritdoc}
@@ -48,7 +38,6 @@ class ChannelType extends AbstractType
                 'required' => false,
                 'multiple' => true,
                 'label'    => 'orocrm.channel.integrations.label',
-                #'choices'  => $this->choiceProvider->getChoices(),
                 'class'    => 'Oro\Bundle\IntegrationBundle\Entity\Channel',
                 'configs'  => ['placeholder' => 'orocrm.channel.form.select_integrations.label'],
 
