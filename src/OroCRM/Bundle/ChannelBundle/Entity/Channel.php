@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\ChannelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -6,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 /**
  * @ORM\Entity()
@@ -59,10 +61,13 @@ class Channel
     protected $entities;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="integrations", type="json_array", nullable=true)
-     */
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
+     * @ORM\JoinTable(
+     *      name="orocrm_chl_to_integration_chl",
+     *      joinColumns={@ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="integrations_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
+     **/
     protected $integrations;
 
     /**
@@ -71,6 +76,12 @@ class Channel
      * @ORM\JoinColumn(name="organization_owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $owner;
+
+    public function __construct()
+    {
+        $this->entities     = new ArrayCollection();
+        $this->integrations = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -129,19 +140,41 @@ class Channel
     }
 
     /**
-     * @param array $integrations
-     */
-    public function setIntegrations(array $integrations)
-    {
-        $this->integrations = $integrations;
-    }
-
-    /**
-     * @return array
+     * @return ArrayCollection
      */
     public function getIntegrations()
     {
         return $this->integrations;
+    }
+
+    /**
+     * @param Integration $integration
+     *
+     * @return $this
+     */
+    public function addIntegration(Integration $integration)
+    {
+        if (!$this->getIntegrations()->contains($integration)) {
+            $this->getIntegrations()->add($integration);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove specified integration
+     *
+     * @param Integration $integration
+     *
+     * @return $this
+     */
+    public function removeIntegration(Integration $integration)
+    {
+        if ($this->getIntegrations()->contains($integration)) {
+            $this->getIntegrations()->removeElement($integration);
+        }
+
+        return $this;
     }
 
     /**
