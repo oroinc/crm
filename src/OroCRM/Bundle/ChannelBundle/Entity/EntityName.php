@@ -34,6 +34,11 @@ class EntityName
      */
     protected $channel;
 
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
+
     /**
      * @return int
      */
@@ -56,5 +61,21 @@ class EntityName
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @param Channel $channel
+     */
+    public function setChannel(Channel $channel)
+    {
+        $this->channel = $channel;
+    }
+
+    /**
+     * @return Channel
+     */
+    public function getChannel()
+    {
+        return $this->channel;
     }
 }

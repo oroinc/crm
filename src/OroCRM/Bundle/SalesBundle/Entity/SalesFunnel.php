@@ -39,8 +39,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
  *      },
  *      "workflow"={
  *          "active_workflow"="b2b_flow_sales_funnel"
- *      },
- *      "grouping"={"groups"={"business"}}
+ *      }
  *  }
  * )
  */

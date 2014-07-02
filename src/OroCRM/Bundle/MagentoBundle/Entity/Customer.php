@@ -40,8 +40,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
- *      },
- *      "grouping"={"groups"={"business"}}
+ *      }
  *  }
  * )
  * @Oro\Loggable

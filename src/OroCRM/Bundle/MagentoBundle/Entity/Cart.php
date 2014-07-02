@@ -50,8 +50,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *      },
  *      "workflow"={
  *          "active_workflow"="b2c_flow_abandoned_shopping_cart"
- *      },
- *      "grouping"={"groups"={"business"}}
+ *      }
  *  }
  * )
  */

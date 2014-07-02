@@ -30,8 +30,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *          "type"="ACL",
  *          "permissions"="All",
  *          "group_name"=""
- *      },
- *      "grouping"={"groups"={"business"}}
+ *      }
  *  }
  * )
  */

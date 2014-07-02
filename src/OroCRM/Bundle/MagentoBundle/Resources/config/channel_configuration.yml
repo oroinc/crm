@@ -10,6 +10,7 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\Website
               - OroCRM\Bundle\MagentoBundle\Entity\Region
           navigation_items: ~
+          belongs_to_integration: magento
 
        -
           name: OroCRM\Bundle\MagentoBundle\Entity\Customer
@@ -20,15 +21,18 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\Website
               - OroCRM\Bundle\MagentoBundle\Entity\Store
           navigation_items: ~
+          belongs_to_integration: magento
 
        -
           name: OroCRM\Bundle\MagentoBundle\Entity\Order
           dependent:
               - OroCRM\Bundle\MagentoBundle\Entity\OrderAddress
               - OroCRM\Bundle\MagentoBundle\Entity\OrderItem
+              - OroCRM\Bundle\MagentoBundle\Entity\Region
               - OroCRM\Bundle\MagentoBundle\Entity\Store
               - OroCRM\Bundle\MagentoBundle\Entity\Website
           navigation_items: ~
+          belongs_to_integration: magento
 
        -
           name: OroCRM\Bundle\MagentoBundle\Entity\Product
@@ -36,3 +40,4 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\Website
               - OroCRM\Bundle\MagentoBundle\Entity\Store
           navigation_items: ~
+          belongs_to_integration: magento

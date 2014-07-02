@@ -56,7 +56,10 @@ class Channel
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\EntityName",cascade={"all"}, mappedBy="channel")
+     * @ORM\OneToMany(
+     *     targetEntity="OroCRM\Bundle\ChannelBundle\Entity\EntityName",
+     *     cascade={"all"}, mappedBy="channel", orphanRemoval=true
+     * )
      */
     protected $entities;
 
@@ -128,13 +131,52 @@ class Channel
      */
     public function setEntities(array $entities)
     {
-        $this->entities = $entities;
+        list($stillPresent, $removed) = $this->getEntitiesCollection()->partition(
+            function ($k, EntityName $entityName) use ($entities) {
+                return in_array($entityName->getValue(), $entities, true);
+            }
+        );
+
+        $stillPresent = array_map(
+            function (EntityName $entityName) {
+                return $entityName->getValue();
+            },
+            $stillPresent->toArray()
+        );
+
+        $added = array_diff($entities, $stillPresent);
+        foreach ($added as $entity) {
+            $entityName = new EntityName($entity);
+            $this->getEntitiesCollection()->add($entityName);
+            $entityName->setChannel($this);
+        }
+
+        foreach ($removed as $entityName) {
+            $this->getEntitiesCollection()->removeElement($entityName);
+        }
     }
 
     /**
      * @return array
      */
     public function getEntities()
+    {
+        $entitiesCollection = $this->getEntitiesCollection();
+
+        $values = array_map(
+            function (EntityName $entityName) {
+                return $entityName->getValue();
+            },
+            $entitiesCollection->toArray()
+        );
+
+        return $values;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getEntitiesCollection()
     {
         return $this->entities;
     }
@@ -149,32 +191,22 @@ class Channel
 
     /**
      * @param Integration $integration
-     *
-     * @return $this
      */
     public function addIntegration(Integration $integration)
     {
         if (!$this->getIntegrations()->contains($integration)) {
             $this->getIntegrations()->add($integration);
         }
-
-        return $this;
     }
 
     /**
-     * Remove specified integration
-     *
      * @param Integration $integration
-     *
-     * @return $this
      */
     public function removeIntegration(Integration $integration)
     {
         if ($this->getIntegrations()->contains($integration)) {
             $this->getIntegrations()->removeElement($integration);
         }
-
-        return $this;
     }
 
     /**

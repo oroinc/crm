@@ -25,8 +25,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendProduct;
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
- *      },
- *      "grouping"={"groups"={"business"}}
+ *      }
  *  }
  * )
  * @Oro\Loggable
