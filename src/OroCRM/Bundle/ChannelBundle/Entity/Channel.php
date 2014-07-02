@@ -63,7 +63,7 @@ class Channel
     /**
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
      * @ORM\JoinTable(
-     *      name="orocrm_channel_integrations",
+     *      name="orocrm_chl_to_integration_chl",
      *      joinColumns={@ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="integrations_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
@@ -152,7 +152,7 @@ class Channel
      *
      * @return $this
      */
-    public function addIntegrations(Integration $integration)
+    public function addIntegration(Integration $integration)
     {
         if (!$this->getIntegrations()->contains($integration)) {
             $this->getIntegrations()->add($integration);
@@ -168,7 +168,7 @@ class Channel
      *
      * @return $this
      */
-    public function removeIntegrations(Integration $integration)
+    public function removeIntegration(Integration $integration)
     {
         if ($this->getIntegrations()->contains($integration)) {
             $this->getIntegrations()->removeElement($integration);

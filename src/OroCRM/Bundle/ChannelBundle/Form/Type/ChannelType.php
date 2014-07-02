@@ -40,7 +40,7 @@ class ChannelType extends AbstractType
                 'label'    => 'orocrm.channel.integrations.label',
                 'class'    => 'Oro\Bundle\IntegrationBundle\Entity\Channel',
                 'configs'  => ['placeholder' => 'orocrm.channel.form.select_integrations.label'],
-
+                'property' => 'name',
             ]
         );
     }
