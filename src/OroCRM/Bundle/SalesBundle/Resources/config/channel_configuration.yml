@@ -10,6 +10,9 @@ orocrm_channel:
               - shortcuts.shortcut_list_opportunities
               - shortcuts.shortcut_new_opportunity
               - account_sales_tab_panel.orocrm_sales_account_opportunities_tab
+              - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.opportunities_by_status
+              - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_by_opportunities
+              - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.won_by_period
 
        -
           name: OroCRM\Bundle\SalesBundle\Entity\Lead
@@ -32,6 +35,3 @@ orocrm_channel:
           navigation_items:
               - application_menu.sales_tab.sales_salesfunnel_list
               - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_life_time_value
-              - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_by_opportunities
-              - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.opportunities_by_status
-              - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.won_by_period
