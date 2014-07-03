@@ -90,7 +90,8 @@ services:
             - @orocrm_channel.state_cache
             - @doctrine.orm.entity_manager
         tags:
-            - { name: kernel.event_listener, event: 'orocrm_channel.channel.save_succeed', method: processChannelSave}
+            - { name: kernel.event_listener, event: 'orocrm_channel.channel.save_succeed', method: processChannelChange}
+            - { name: kernel.event_listener, event: 'orocrm_channel.channel.delete_succeed', method: processChannelChange}
 
     orocrm_channel.config_resolver:
         class: %orocrm_channel.config_resolver.class%

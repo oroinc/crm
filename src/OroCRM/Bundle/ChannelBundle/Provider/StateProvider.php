@@ -50,7 +50,7 @@ class StateProvider
     /**
      * Event listener subscribed  on 'orocrm_channel.channel.save_succeed' event.
      */
-    public function processChannelSave()
+    public function processChannelChange()
     {
         $this->cache->delete(self::CACHE_ID);
     }
