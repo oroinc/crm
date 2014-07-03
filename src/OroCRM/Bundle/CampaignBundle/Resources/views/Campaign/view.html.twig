@@ -36,8 +36,12 @@
         {% include 'OroCRMCampaignBundle:Campaign:widget/view.html.twig' %}
     {% endset %}
 
-    {% set trackingEventsGrid %}
-        {{ dataGrid.renderGrid('campaign-tracking-events-grid', {code: entity.code}) }}
+    {% set trackingEventsReport %}
+        {{ dataGrid.renderGrid('campaign-tracking-total-report-grid', {code: entity.code}) }}
+    {% endset %}
+
+    {% set trackingPlot %}
+        {{ dataGrid.renderGrid('campaign-tracking-detailed-report-%s-grid'|format('hourly'), {code: entity.code}) }}
     {% endset %}
 
     {% set dataBlocks = [
@@ -51,7 +55,10 @@
         {
             'title': 'orocrm.campaign.block.events'|trans,
             'subblocks': [
-                {'data' : [trackingEventsGrid]}
+                {'data' : [
+                    trackingEventsReport,
+                    trackingPlot
+                ]}
             ]
         }
     ] %}

@@ -27,3 +27,7 @@ orocrm:
         block:
             general: General Information
             events: Events
+
+        trackingevent:
+            report:
+                visits_count.label: Visits
