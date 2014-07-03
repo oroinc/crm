@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
@@ -23,6 +25,9 @@ class NavigationListener
     /** @var StateProvider  */
     protected $state;
 
+    /** @var ArrayCollection */
+    protected $channels;
+
     /**
      * @param EntityManager    $em
      * @param SettingsProvider $settings
@@ -33,6 +38,7 @@ class NavigationListener
         $this->em       = $em;
         $this->settings = $settings;
         $this->state    = $state;
+        $this->channels = $this->em->getRepository('OroCRMChannelBundle:Channel')->findAll();
     }
 
     /**
@@ -40,9 +46,7 @@ class NavigationListener
      */
     public function onNavigationConfigure(ConfigureMenuEvent $event)
     {
-        $channels = $this->em->getRepository('OroCRMChannelBundle:Channel')->findAll();
-
-        if (!empty($channels)) {
+        if (!empty($this->channels)) {
             foreach ($this->getSettings() as $setting) {
                 if (!$this->state->isEntityEnabled($setting['name'])) {
                     continue;

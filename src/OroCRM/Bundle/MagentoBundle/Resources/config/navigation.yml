@@ -9,30 +9,30 @@ oro_menu_config:
                 widgetRoute: 'orocrm_magento_widget_account_orders'
 
         magento_cart:
-            label: 'orocrm.magento.menu.shopping_carts'
+            label: 'orocrm.magento.cart.entity_plural_label'
             route: 'orocrm_magento_cart_index'
             display: false
             extras:
                 routes: ['/^orocrm_magento_cart_(index|view)|orocrm_magento_orderplace_cart$/']
                 position: 40
-                description: 'orocrm.magento.menu.shopping_carts'
+                description: 'orocrm.magento.cart.entity_plural_label'
 
         magento_order:
-            label: 'orocrm.magento.menu.orders'
+            label: 'orocrm.magento.order.entity_plural_label'
             route: 'orocrm_magento_order_index'
             display: false
             extras:
                 routes: ['/^orocrm_magento_order_(index|view)$/']
                 position: 50
-                description: 'orocrm.magento.menu.orders'
+                description: 'orocrm.magento.order.entity_plural_label'
 
         magento_customer:
-            label: 'orocrm.magento.menu.web_customers'
+            label: 'orocrm.magento.customer.entity_plural_label'
             route: 'orocrm_magento_customer_index'
             display: false
             extras:
                 routes: ['/^orocrm_magento_customer_(index|view)$/']
-                description: 'orocrm.magento.menu.web_customers'
+                description: 'orocrm.magento.customer.entity_plural_label'
 
     tree:
         account_sales_tab_panel:
