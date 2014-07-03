@@ -103,6 +103,7 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
             - @orocrm_channel.provider.settings_provider
+            - @orocrm_channel.provider.state_provider
         tags:
             - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
             - { name: kernel.event_listener, event: oro_menu.configure.shortcuts, method: onNavigationConfigure }

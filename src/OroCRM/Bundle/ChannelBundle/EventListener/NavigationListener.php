@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
 
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
 
 class NavigationListener
 {
@@ -16,14 +17,19 @@ class NavigationListener
     /** @var SettingsProvider */
     protected $settings;
 
+    /** @var StateProvider  */
+    protected $state;
+
     /**
      * @param EntityManager    $em
      * @param SettingsProvider $settings
+     * @param StateProvider    $state
      */
-    public function __construct(EntityManager $em, SettingsProvider $settings)
+    public function __construct(EntityManager $em, SettingsProvider $settings, StateProvider $state)
     {
         $this->em       = $em;
         $this->settings = $settings;
+        $this->state    = $state;
     }
 
     /**
@@ -34,8 +40,11 @@ class NavigationListener
         $channels = $this->em->getRepository('OroCRMChannelBundle:Channel')->findAll();
 
         if (!empty($channels)) {
-
             foreach ($this->getSettings() as $setting) {
+                if (!$this->state->isEntityEnabled($setting['name'])) {
+                    continue;
+                }
+
                 foreach ($setting['navigation_items'] as $item) {
                     $navigateArray = explode('.', $item);
                     $menu          = $event->getMenu();
@@ -63,7 +72,7 @@ class NavigationListener
      */
     protected function getSettings()
     {
-        $settings = $this->settings->getChannelSettings();
+        $settings = $this->settings->getSettings();
         return !empty($settings['entity_data']) ? $settings['entity_data'] : [];
     }
 }

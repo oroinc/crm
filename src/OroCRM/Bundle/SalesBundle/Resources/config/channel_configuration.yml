@@ -20,6 +20,7 @@ orocrm_channel:
               - shortcuts.shortcut_list_leads
               - shortcuts.shortcut_new_lead
               - account_sales_tab_panel.orocrm_sales_account_leads_tab
+              - application_menu.reports_tab.static_reports_tab.leads_report_tab.leads_by_date
 
        -
           name: OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
@@ -30,3 +31,7 @@ orocrm_channel:
           dependencies_condition: OR
           navigation_items:
               - application_menu.sales_tab.sales_salesfunnel_list
+              - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_life_time_value
+              - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_by_opportunities
+              - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.opportunities_by_status
+              - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.won_by_period

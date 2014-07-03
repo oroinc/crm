@@ -3,12 +3,14 @@ oro_menu_config:
         static_reports_tab:
             label: 'orocrm.report.menu.static_reports_tab.label'
             uri: '#'
+            display: false
             extras:
                 position: 5
 
         accounts_report_tab:
             label: 'orocrm.report.menu.accounts_report_tab.label'
             uri: '#'
+            display: false
             extras:
                 position: 10
                 skipBreadcrumbs: true
@@ -16,6 +18,7 @@ oro_menu_config:
         leads_report_tab:
             label: 'orocrm.report.menu.leads_report_tab.label'
             uri: '#'
+            display: false
             extras:
                 position: 20
                 skipBreadcrumbs: true
@@ -23,6 +26,7 @@ oro_menu_config:
         opportunities_report_tab:
             label: 'orocrm.report.menu.opportunities_report_tab.label'
             uri: '#'
+            display: false
             extras:
                 position: 30
                 skipBreadcrumbs: true
@@ -33,6 +37,7 @@ oro_menu_config:
             routeParameters:
                 reportGroupName: 'accounts'
                 reportName:      'life_time_value'
+            display: false
             extras:
                 description: 'orocrm.report.menu.accounts_life_time_value.description'
                 skipBreadcrumbs: true
@@ -43,6 +48,7 @@ oro_menu_config:
             routeParameters:
                 reportGroupName: 'accounts'
                 reportName:      'by_opportunities'
+            display: false
             extras:
                 description: 'orocrm.report.menu.accounts_by_opportunities.description'
                 skipBreadcrumbs: true
@@ -53,6 +59,7 @@ oro_menu_config:
             routeParameters:
                 reportGroupName: 'leads'
                 reportName:      'by_date'
+            display: false
             extras:
                 description: 'orocrm.report.menu.leads_by_date.description'
                 skipBreadcrumbs: true
@@ -63,6 +70,7 @@ oro_menu_config:
             routeParameters:
                 reportGroupName: 'opportunities'
                 reportName:      'by_status'
+            display: false
             extras:
                 description: 'orocrm.report.menu.opportunities_by_status.description'
                 skipBreadcrumbs: true
@@ -73,6 +81,7 @@ oro_menu_config:
             routeParameters:
                 reportGroupName: 'opportunities'
                 reportName:      'won_by_period'
+            display: false
             extras:
                 description: 'orocrm.report.menu.won_by_period.description'
                 skipBreadcrumbs: true
