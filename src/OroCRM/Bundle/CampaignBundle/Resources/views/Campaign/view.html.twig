@@ -41,7 +41,11 @@
     {% endset %}
 
     {% set trackingPlot %}
-        {{ dataGrid.renderGrid('campaign-tracking-detailed-report-%s-grid'|format('hourly'), {code: entity.code}) }}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('orocrm_campaign_event_plot', {period: 'hourly', campaignCode: entity.code}),
+            'title': 'Detailed Events Report'|trans
+        }) }}
     {% endset %}
 
     {% set dataBlocks = [
