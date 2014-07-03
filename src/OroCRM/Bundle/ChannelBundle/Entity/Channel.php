@@ -132,7 +132,7 @@ class Channel
     public function setEntities(array $entities)
     {
         list($stillPresent, $removed) = $this->getEntitiesCollection()->partition(
-            function ($k, EntityName $entityName) use ($entities) {
+            function ($key, EntityName $entityName) use ($entities) {
                 return in_array($entityName->getValue(), $entities, true);
             }
         );
