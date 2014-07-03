@@ -32,6 +32,16 @@ class ChannelType extends AbstractType
             ]
         );
         $builder->add(
+            'entities',
+            'orocrm_channel_entity_choice_form',
+            [
+                'required' => false,
+                'multiple' => true,
+                'label'    => 'orocrm.channel.entities.label',
+                'configs'  => ['placeholder' => 'orocrm.channel.form.select_entities.label']
+            ]
+        );
+        $builder->add(
             'integrations',
             'genemu_jqueryselect2_entity',
             [
@@ -52,8 +62,7 @@ class ChannelType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class'         => 'OroCRM\\Bundle\\ChannelBundle\\Entity\\Channel',
-                'intention'          => 'channel'
+                'data_class' => 'OroCRM\\Bundle\\ChannelBundle\\Entity\\Channel'
             ]
         );
     }

@@ -47,8 +47,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
- *          },
- *          "grouping"={"groups"={"business"}}
+ *          }
  *      }
  * )
  */

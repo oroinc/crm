@@ -49,8 +49,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
  *          },
  *          "workflow"={
  *              "active_workflow"="b2c_flow_order_follow_up"
- *          },
- *          "grouping"={"groups"={"business"}}
+ *          }
  *      }
  * )
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
