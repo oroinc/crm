@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Bundles\TestBundle2;
+namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle2;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
