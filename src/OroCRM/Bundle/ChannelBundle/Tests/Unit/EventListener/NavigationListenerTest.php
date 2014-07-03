@@ -14,6 +14,7 @@ use Oro\Component\Config\Resolver\ResolverInterface;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\EventListener\NavigationListener;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
 
 class NavigationListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,6 +27,9 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
     /** @var EntityRepository */
     protected $repo;
 
+    /** @var StateProvider */
+    protected $state;
+
     protected function setUp()
     {
         $this->resolver = $this->getMockBuilder('Oro\Component\Config\Resolver\ResolverInterface')
@@ -35,6 +39,9 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->repo     = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->state     = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\StateProvider')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -56,8 +63,12 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
             ->method('findAll')
             ->will($this->returnValue([$channel]));
 
+        $this->state->expects($this->at(0))
+            ->method('isEntityEnabled')
+            ->will($this->returnValue(true));
+
         $settingsProvider = new SettingsProvider($settings, $this->resolver);
-        $listener         = new NavigationListener($this->em, $settingsProvider);
+        $listener         = new NavigationListener($this->em, $settingsProvider, $this->state);
         $menu             = new MenuItem('test_menu', $factory);
         $salesTab         = new MenuItem('sales_tab', $factory);
 

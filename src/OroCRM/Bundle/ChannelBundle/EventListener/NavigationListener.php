@@ -9,6 +9,9 @@ use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
 
+/**
+ * Hide menu items that were not enabled it config
+ */
 class NavigationListener
 {
     /** @var EntityManager */
