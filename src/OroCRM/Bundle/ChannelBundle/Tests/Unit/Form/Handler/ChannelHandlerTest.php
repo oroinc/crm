@@ -6,8 +6,10 @@ use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelHandler;
 
 class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
@@ -21,6 +23,9 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager */
     protected $em;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface */
+    protected $dispatcher;
+
     /** @var ChannelHandler */
     protected $handler;
 
@@ -29,15 +34,15 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request   = new Request();
-        $this->form      = $this->getMockBuilder('Symfony\Component\Form\Form')
+        $this->request    = new Request();
+        $this->form       = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()->getMock();
-        $this->em        = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+        $this->em         = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
-        $eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
         $this->entity  = new Channel();
-        $this->handler = new ChannelHandler($this->request, $this->form, $this->em, $eventDispatcher);
+        $this->handler = new ChannelHandler($this->request, $this->form, $this->em, $this->dispatcher);
     }
 
     public function testProcessUnsupportedRequest()
@@ -46,6 +51,7 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($this->entity);
 
         $this->form->expects($this->never())->method('submit');
+        $this->dispatcher->expects($this->never())->method('dispatch');
 
         $this->assertFalse($this->handler->process($this->entity));
     }
@@ -63,6 +69,7 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($this->entity);
         $this->form->expects($this->once())->method('submit')
             ->with($this->request);
+        $this->dispatcher->expects($this->never())->method('dispatch');
 
         $this->assertFalse($this->handler->process($this->entity));
     }
@@ -86,6 +93,11 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->em->expects($this->once())->method('persist')->with($this->entity);
         $this->em->expects($this->once())->method('flush');
+        $this->dispatcher->expects($this->once())->method('dispatch')
+            ->with(
+                $this->equalTo(ChannelSaveEvent::EVENT_NAME),
+                $this->isInstanceOf('OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent')
+            );
 
         $this->assertTrue($this->handler->process($this->entity));
     }

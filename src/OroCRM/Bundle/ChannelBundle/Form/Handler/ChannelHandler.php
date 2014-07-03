@@ -6,8 +6,10 @@ use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
 class ChannelHandler
 {
@@ -20,16 +22,25 @@ class ChannelHandler
     /** @var FormInterface */
     protected $form;
 
+    /** @var EventDispatcherInterface */
+    protected $dispatcher;
+
     /**
-     * @param Request       $request
-     * @param FormInterface $form
-     * @param EntityManager $em
+     * @param Request                  $request
+     * @param FormInterface            $form
+     * @param EntityManager            $em
+     * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct(Request $request, FormInterface $form, EntityManager $em)
-    {
-        $this->request = $request;
-        $this->form    = $form;
-        $this->em      = $em;
+    public function __construct(
+        Request $request,
+        FormInterface $form,
+        EntityManager $em,
+        EventDispatcherInterface $dispatcher
+    ) {
+        $this->request    = $request;
+        $this->form       = $form;
+        $this->em         = $em;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -45,13 +56,25 @@ class ChannelHandler
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
-                $this->em->persist($entity);
-                $this->em->flush();
+                $this->doSave($entity);
 
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Saves entity and dispatches needed events
+     *
+     * @param Channel $entity
+     */
+    protected function doSave(Channel $entity)
+    {
+        $this->em->persist($entity);
+        $this->em->flush();
+
+        $this->dispatcher->dispatch(ChannelSaveEvent::EVENT_NAME, new ChannelSaveEvent($entity));
     }
 }

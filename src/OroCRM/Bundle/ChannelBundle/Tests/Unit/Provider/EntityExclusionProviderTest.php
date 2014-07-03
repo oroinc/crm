@@ -2,8 +2,9 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\ChannelBundle\Provider\EntityExclusionProvider;
+use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use OroCRM\Bundle\ChannelBundle\Provider\EntityExclusionProvider;
 
 class EntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +18,7 @@ class EntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
     /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $settingsProvider;
 
-    /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StateProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $stateProvider;
 
     public function setUp()

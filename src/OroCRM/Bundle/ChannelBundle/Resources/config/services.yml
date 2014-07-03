@@ -48,6 +48,7 @@ services:
             - @request
             - @orocrm_channel.form.channel
             - @doctrine.orm.entity_manager
+            - @event_dispatcher
 
     # Channel API
     orocrm_channel.channel.manager:
@@ -86,9 +87,17 @@ services:
         class: %orocrm_channel.provider.state_provider.class%
         arguments:
             - @orocrm_channel.provider.settings_provider
+            - @orocrm_channel.state_cache
             - @doctrine.orm.entity_manager
+        tags:
+            - { name: kernel.event_listener, event: 'orocrm_channel.channel.save_succeed', method: processChannelSave}
 
     orocrm_channel.config_resolver:
         class: %orocrm_channel.config_resolver.class%
         arguments:
             - @service_container
+
+    orocrm_channel.state_cache:
+          parent: oro.cache.abstract
+          calls:
+              - [setNamespace, ['orocrm_channel.state_cache']]
