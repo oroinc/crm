@@ -3,7 +3,7 @@ parameters:
     orocrm_case.form.type.entity.api.class:                  OroCRM\Bundle\CaseBundle\Form\Type\CaseEntityApiType
     orocrm_case.form.type.comment.class:                     OroCRM\Bundle\CaseBundle\Form\Type\CaseCommentType
     orocrm_case.form.type.comment.api.class:                 OroCRM\Bundle\CaseBundle\Form\Type\CaseCommentApiType
-    orocrm_case.form.handler.entity.class:                   Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler
+    orocrm_case.form.handler.entity.class:                   OroCRM\Bundle\CaseBundle\Form\Handler\CaseApiFormHandler
 
 services:
     orocrm_case.form.type.entity:
@@ -65,6 +65,7 @@ services:
             - @orocrm_case.form.entity
             - @request
             - @doctrine.orm.entity_manager
+            - @event_dispatcher
 
     orocrm_case.form.handler.entity.api:
         class: %orocrm_case.form.handler.entity.class%
@@ -73,6 +74,7 @@ services:
             - @orocrm_case.form.entity.api
             - @request
             - @doctrine.orm.entity_manager
+            - @event_dispatcher
 
     orocrm_case.form.handler.comment:
         class: %orocrm_case.form.handler.entity.class%
@@ -81,6 +83,7 @@ services:
             - @orocrm_case.form.comment
             - @request
             - @doctrine.orm.entity_manager
+            - @event_dispatcher
 
     orocrm_case.form.handler.comment.api:
         class: %orocrm_case.form.handler.entity.class%
@@ -89,3 +92,4 @@ services:
             - @orocrm_case.form.comment.api
             - @request
             - @doctrine.orm.entity_manager
+            - @event_dispatcher
