@@ -101,7 +101,6 @@ services:
     orocrm_channel.event_listener.navigation:
         class: %orocrm_channel.event_listener.navigation.class%
         arguments:
-            - @doctrine.orm.entity_manager
             - @orocrm_channel.provider.settings_provider
             - @orocrm_channel.provider.state_provider
         tags:

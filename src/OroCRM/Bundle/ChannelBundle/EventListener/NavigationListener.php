@@ -16,29 +16,20 @@ use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
  */
 class NavigationListener
 {
-    /** @var EntityManager */
-    protected $em;
-
     /** @var SettingsProvider */
     protected $settings;
 
     /** @var StateProvider  */
     protected $state;
 
-    /** @var ArrayCollection */
-    protected $channels;
-
     /**
-     * @param EntityManager    $em
      * @param SettingsProvider $settings
      * @param StateProvider    $state
      */
-    public function __construct(EntityManager $em, SettingsProvider $settings, StateProvider $state)
+    public function __construct(SettingsProvider $settings, StateProvider $state)
     {
-        $this->em       = $em;
         $this->settings = $settings;
         $this->state    = $state;
-        $this->channels = $this->em->getRepository('OroCRMChannelBundle:Channel')->findAll();
     }
 
     /**
@@ -46,28 +37,26 @@ class NavigationListener
      */
     public function onNavigationConfigure(ConfigureMenuEvent $event)
     {
-        if (!empty($this->channels)) {
-            foreach ($this->getSettings() as $setting) {
-                if (!$this->state->isEntityEnabled($setting['name'])) {
+        foreach ($this->getSettings() as $setting) {
+            if (!$this->state->isEntityEnabled($setting['name'])) {
+                continue;
+            }
+
+            foreach ($setting['navigation_items'] as $item) {
+                $navigateArray = explode('.', $item);
+                $menu          = $event->getMenu();
+
+                if ($menu->getName() !== $navigateArray[0]) {
                     continue;
                 }
 
-                foreach ($setting['navigation_items'] as $item) {
-                    $navigateArray = explode('.', $item);
-                    $menu          = $event->getMenu();
-
-                    if ($menu->getName() !== $navigateArray[0]) {
-                        continue;
+                for ($i = 1; $i < count($navigateArray); $i++) {
+                    if ($menu->getChild($navigateArray[$i])) {
+                        /** redefinition of variable $menu */
+                        $menu = $menu->getChild($navigateArray[$i]);
                     }
-
-                    for ($i = 1; $i < count($navigateArray); $i++) {
-                        if ($menu->getChild($navigateArray[$i])) {
-                            /** redefinition of variable $menu */
-                            $menu = $menu->getChild($navigateArray[$i]);
-                        }
-                        if ($menu && !$menu->isDisplayed()) {
-                            $menu->setDisplay(true);
-                        }
+                    if ($menu && !$menu->isDisplayed()) {
+                        $menu->setDisplay(true);
                     }
                 }
             }
