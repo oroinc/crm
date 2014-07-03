@@ -36,28 +36,28 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *  routeName="orocrm_contact_index",
- *  routeView="orocrm_contact_view",
- *  defaultValues={
- *      "entity"={
- *          "icon"="icon-group"
- *      },
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="user_owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "form"={
- *          "form_type"="orocrm_contact_select"
- *      },
- *      "dataaudit"={
- *          "auditable"=true
+ *      routeName="orocrm_contact_index",
+ *      routeView="orocrm_contact_view",
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-group"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="user_owner_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "form"={
+ *              "form_type"="orocrm_contact_select"
+ *          },
+ *          "dataaudit"={
+ *              "auditable"=true
+ *          }
  *      }
- *  }
  * )
  */
 class Contact extends ExtendContact implements Taggable, EmailOwnerInterface

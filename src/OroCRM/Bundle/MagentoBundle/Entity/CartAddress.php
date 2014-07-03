@@ -13,7 +13,15 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCartAddress;
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *       defaultValues={
- *          "entity"={"icon"="icon-map-marker"},
+ *          "entity"={
+ *              "icon"="icon-map-marker"
+ *          },
+ *          "note"={
+ *              "immutable"=true
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
  *      }
  * )
  * @ORM\Entity

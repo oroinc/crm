@@ -16,7 +16,15 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *       defaultValues={
- *          "entity"={"icon"="icon-map-marker"},
+ *          "entity"={
+ *              "icon"="icon-map-marker"
+ *          },
+ *          "note"={
+ *              "immutable"=true
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
  *      }
  * )
  * @ORM\Entity

@@ -15,5 +15,6 @@ class ExtendOrderAddress extends AbstractTypedAddress
      */
     public function __construct()
     {
+        parent::__construct();
     }
 }

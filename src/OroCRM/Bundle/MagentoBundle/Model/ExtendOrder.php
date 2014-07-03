@@ -15,5 +15,6 @@ class ExtendOrder extends BaseOrder
      */
     public function __construct()
     {
+        parent::__construct();
     }
 }

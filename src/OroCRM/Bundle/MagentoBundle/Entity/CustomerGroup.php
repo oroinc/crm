@@ -18,9 +18,17 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomerGroup;
  * @ORM\Entity
  * @ORM\Table(name="orocrm_magento_customer_group")
  * @Config(
- *   defaultValues={
- *      "entity"={"icon"="icon-group"}
- *  }
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-group"
+ *          },
+ *          "note"={
+ *              "immutable"=true
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
+ *      }
  * )
  * @Oro\Loggable
  */
