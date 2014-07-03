@@ -79,7 +79,7 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
         $menuFactory = new MenuFactory();
 
         return [
-            'navigation test' => [
+            'navigation listener test' => [
                 'settings' => [
                     'entity_data' => [
                         [
@@ -99,7 +99,6 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
                 $menuFactory,
                 $channel,
             ],
-
         ];
     }
 }

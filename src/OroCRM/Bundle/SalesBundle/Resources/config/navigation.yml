@@ -100,7 +100,6 @@ oro_menu_config:
             children:
                 orocrm_sales_account_leads_tab: ~
                 orocrm_sales_account_opportunities_tab: ~
-                orocrm_magento_account_orders_tab: ~
 
 oro_titles:
     orocrm_sales_opportunity_index: ~

@@ -87,20 +87,28 @@
             'title': 'orocrm.account.sections.general'|trans,
             'class': 'active',
             'subblocks': generalSectionBlocks
-        },
-        {
-            'title': 'orocrm.account.sections.sales'|trans,
-            'subblocks': [
-                {'data' : [accountSalesSection]}
-            ]
-        },
+        }
+    ] %}
+
+    {% if accountSalesSection|trim is not empty %}
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title': 'orocrm.account.sections.sales'|trans,
+                'subblocks': [
+                    {'data' : [accountSalesSection]}
+                ]
+            }
+        ]) %}
+    {% endif %}
+
+    {% set dataBlocks = dataBlocks|merge([
         {
             'title': 'orocrm.account.sections.activity'|trans,
             'subblocks': [
                 {'data' : [activitySection]}
             ]
         }
-    ] %}
+    ])%}
 
     {# Render account channels #}
     {% for channel in channels %}

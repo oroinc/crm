@@ -2,6 +2,7 @@ oro_menu_config:
     items:
         orocrm_magento_account_orders_tab:
             label: 'orocrm.magento.order.entity_plural_label'
+            display: false
             extras:
                 position: 30
                 widgetAcl: 'orocrm_magento_order_view'
@@ -46,7 +47,6 @@ oro_menu_config:
                 customers_tab:
                     children:
                         magento_customer: ~
-
 
 oro_titles:
     orocrm_magento_customer_index: 'Web Customers'
