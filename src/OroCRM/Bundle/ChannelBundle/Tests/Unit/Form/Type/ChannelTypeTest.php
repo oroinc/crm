@@ -16,7 +16,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->builder  = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
+        $this->builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()->getMock();
 
         $this->type = new ChannelType();
@@ -29,8 +29,27 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildForm()
     {
-        $this->builder->expects($this->exactly(3))->method('add');
+        $fields = [];
+        $this->builder->expects($this->exactly(4))->method('add')
+            ->will(
+                $this->returnCallback(
+                    function ($filedName, $fieldType) use (&$fields) {
+                        $fields[$filedName] = $fieldType;
+                    }
+                )
+            );
+
         $this->type->buildForm($this->builder, []);
+
+        $this->assertSame(
+            [
+                'name'         => 'text',
+                'description'  => 'textarea',
+                'entities'     => 'orocrm_channel_entity_choice_form',
+                'integrations' => 'genemu_jqueryselect2_entity'
+            ],
+            $fields
+        );
     }
 
     public function testGetName()

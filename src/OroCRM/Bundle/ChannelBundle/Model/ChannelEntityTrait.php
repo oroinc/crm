@@ -17,7 +17,7 @@ trait ChannelEntityTrait
     /**
      * @param Channel $dataChannel
      */
-    public function setDataChannel($dataChannel)
+    public function setDataChannel(Channel $dataChannel)
     {
         $this->dataChannel = $dataChannel;
     }
