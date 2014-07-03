@@ -20,21 +20,21 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
  * )
  * @ORM\Entity
  * @Config(
- *  routeName="orocrm_call_index",
- *  defaultValues={
- *      "entity"={
- *          "icon"="icon-phone-sign"
- *      },
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
+ *      routeName="orocrm_call_index",
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-phone-sign"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="owner_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          }
  *      }
- *  }
  * )
  */
 class Call

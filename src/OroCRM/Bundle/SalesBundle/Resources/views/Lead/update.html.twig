@@ -92,11 +92,11 @@
     ]) %}
 
     {% set dataBlocks = [{
-            'title': 'General',
+            'title': 'General'|trans,
             'class': 'active',
             'subblocks': [
                 {
-                    'title': 'orocrm.sales.lead.information',
+                    'title': 'orocrm.sales.lead.information'|trans,
                     'data': formFields
                 },
                 {
@@ -116,7 +116,7 @@
         {% endfor %}
 
         {% set dataBlocks = dataBlocks|merge([{
-            'title': 'Additional',
+            'title': 'Additional'|trans,
             'subblocks': [{
                 'title': '',
                 'useSpan': false,

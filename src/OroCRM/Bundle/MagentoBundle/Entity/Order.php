@@ -274,6 +274,7 @@ class Order extends ExtendOrder
     public function __construct()
     {
         parent::__construct();
+
         $this->relatedCalls  = new ArrayCollection();
         $this->relatedEmails = new ArrayCollection();
     }

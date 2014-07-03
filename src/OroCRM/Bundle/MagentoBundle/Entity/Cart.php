@@ -311,6 +311,8 @@ class Cart extends ExtendCart
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->status        = new CartStatus('open');
         $this->cartItems     = new ArrayCollection();
         $this->relatedCalls  = new ArrayCollection();

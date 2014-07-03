@@ -15,9 +15,17 @@ use Oro\Bundle\AddressBundle\Entity\AbstractPhone;
  * })
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\ContactBundle\Entity\Repository\ContactPhoneRepository")
  * @Config(
- *   defaultValues={
- *      "entity"={"icon"="icon-phone"}
- *  }
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-phone"
+ *          },
+ *          "note"={
+ *              "immutable"=true
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
+ *      }
  * )
  */
 class ContactPhone extends AbstractPhone

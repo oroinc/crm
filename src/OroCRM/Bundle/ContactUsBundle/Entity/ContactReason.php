@@ -9,7 +9,13 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_contactus_contact_rsn")
- * @Config()
+ * @Config(
+ *      defaultValues={
+ *          "grouping"={
+ *              "groups"={"dictionary"}
+ *          }
+ *      }
+ * )
  */
 class ContactReason
 {

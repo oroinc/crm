@@ -75,7 +75,7 @@
     ]) %}
 
     {% set dataBlocks = [{
-            'title': 'General',
+            'title': 'General'|trans,
             'class': 'active',
             'subblocks': [
                 {
@@ -92,7 +92,7 @@
         {% endfor %}
 
         {% set dataBlocks = dataBlocks|merge([{
-            'title': 'Additional',
+            'title': 'Additional'|trans,
             'subblocks': [{
                 'title': '',
                 'useSpan': false,

@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -57,7 +58,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  *  }
  * )
  */
-class Lead extends ExtendLead implements FullNameInterface
+class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
 {
     use ChannelEntityTrait;
 
@@ -452,6 +453,8 @@ class Lead extends ExtendLead implements FullNameInterface
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->opportunities = new ArrayCollection();
     }
 

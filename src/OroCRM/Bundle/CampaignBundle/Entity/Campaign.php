@@ -15,20 +15,20 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
  * @ORM\Table(name="orocrm_campaign")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
- *  defaultValues={
- *      "entity"={
- *          "icon"="icon-volume-up"
- *      },
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-volume-up"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="owner_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          }
  *      }
- *  }
  * )
  */
 class Campaign extends ExtendCampaign

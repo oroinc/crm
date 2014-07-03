@@ -6,95 +6,39 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 
-class OroCRMSalesBundle implements Migration
+class OroCRMSalesBundle implements Migration, ActivityExtensionAwareInterface
 {
+    /** @var ActivityExtension */
+    protected $activityExtension;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActivityExtension(ActivityExtension $activityExtension)
+    {
+        $this->activityExtension = $activityExtension;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addFieldToOrocrmSalesLead($schema);
-        self::addFieldToOrocrmSalesOpportunity($schema);
-        self::addFieldToOrocrmSalesFunnel($schema);
-
-        self::addForeignKeyToOrocrmSalesLead($schema);
-        self::addForeignKeyToOrocrmSalesOpportunity($schema);
-        self::addForeignKeyToOrocrmSalesFunnel($schema);
+        self::addActivityAssociations($schema, $this->activityExtension);
     }
 
     /**
-     * @param Schema $schema
+     * Enables Email activity for Lead and Opportunity entities
+     *
+     * @param Schema            $schema
+     * @param ActivityExtension $activityExtension
      */
-    public static function addFieldToOrocrmSalesLead(Schema $schema)
+    public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $table = $schema->getTable('orocrm_sales_lead');
-        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['data_channel_id'], 'IDX_73DB463372F5A1AA', []);
-    }
-
-    /**
-     * @param Schema $schema
-     */
-    public static function addFieldToOrocrmSalesOpportunity(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_sales_opportunity');
-        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['data_channel_id'], 'IDX_C0FE4AAC72F5A1AA', []);
-    }
-
-    /**
-     * @param Schema $schema
-     */
-    public static function addFieldToOrocrmSalesFunnel(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_sales_funnel');
-        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['data_channel_id'], 'IDX_E20C734472F5A1AA', []);
-    }
-
-    /**
-     * @param Schema $schema
-     */
-    public static function addForeignKeyToOrocrmSalesLead(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_sales_lead');
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
-            ['data_channel_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null],
-            'FK_73DB463372F5A1AA'
-        );
-    }
-
-    /**
-     * @param Schema $schema
-     */
-    public static function addForeignKeyToOrocrmSalesOpportunity(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_sales_opportunity');
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
-            ['data_channel_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null],
-            'FK_C0FE4AAC72F5A1AA'
-        );
-    }
-
-    /**
-     * @param Schema $schema
-     */
-    public static function addForeignKeyToOrocrmSalesFunnel(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_sales_funnel');
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
-            ['data_channel_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null],
-            'FK_E20C734472F5A1AA'
-        );
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_sales_lead');
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_sales_opportunity');
     }
 }

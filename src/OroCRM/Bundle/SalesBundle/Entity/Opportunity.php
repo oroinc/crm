@@ -6,6 +6,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -51,7 +52,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  *  }
  * )
  */
-class Opportunity extends ExtendOpportunity
+class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 {
     use ChannelEntityTrait;
 
@@ -669,6 +670,21 @@ class Opportunity extends ExtendOpportunity
     {
         $this->updatedAt = $updated;
         return $this;
+    }
+
+    /**
+     * Get the primary email address of the related contact
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        $contact = $this->getContact();
+        if (!$contact) {
+            return null;
+        }
+
+        return $contact->getEmail();
     }
 
     public function __toString()
