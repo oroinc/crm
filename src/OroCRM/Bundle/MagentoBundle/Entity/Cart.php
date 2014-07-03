@@ -36,24 +36,23 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *  }
  * )
  * @Config(
- *      routeView="orocrm_magento_cart_view",
- *      defaultValues={
- *          "entity"={
- *              "icon"="icon-shopping-cart"
- *          },
- *          "ownership"={
- *              "owner_type"="USER",
- *              "owner_field_name"="owner",
- *              "owner_column_name"="user_owner_id"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "workflow"={
- *              "active_workflow"="b2c_flow_abandoned_shopping_cart"
- *          }
- *      }
+ *  routeView="orocrm_magento_cart_view",
+ *  defaultValues={
+ *      "entity"={"icon"="icon-shopping-cart"},
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      },
+ *      "workflow"={
+ *          "active_workflow"="b2c_flow_abandoned_shopping_cart"
+ *      },
+ *      "grouping"={"groups"={"business"}}
+ *  }
  * )
  */
 class Cart extends ExtendCart
