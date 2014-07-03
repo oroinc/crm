@@ -4,58 +4,59 @@ namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_14;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCrmMagentoBundle implements Migration
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+
+class OroCRMMagentoBundle implements Migration, ActivityExtensionAwareInterface
 {
+    /** @var ActivityExtension */
+    protected $activityExtension;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActivityExtension(ActivityExtension $activityExtension)
+    {
+        $this->activityExtension = $activityExtension;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_magento_cart');
-        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['data_channel_id'], 'IDX_96661A80BDC09B73', []);
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
-            ['data_channel_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null],
-            'FK_96661A80BDC09B73'
-        );
+        self::addActivityAssociations($schema, $this->activityExtension);
+        self::disableActivityAssociations($schema);
+    }
 
-        $table = $schema->getTable('orocrm_magento_order');
-        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['data_channel_id'], 'IDX_4D09F305BDC09B73', []);
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
-            ['data_channel_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null],
-            'FK_4D09F305BDC09B73'
-        );
+    /**
+     * Enables Email activity for Customer entity
+     *
+     * @param Schema            $schema
+     * @param ActivityExtension $activityExtension
+     */
+    public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
+    {
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_magento_customer');
+    }
 
-        $table = $schema->getTable('orocrm_magento_customer');
-        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['data_channel_id'], 'IDX_2A61EE7DBDC09B73', []);
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
-            ['data_channel_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null],
-            'FK_2A61EE7DBDC09B73'
-        );
+    /**
+     * Prohibits to enable any activity to Cart and Order entities
+     *
+     * This is temporary solution till workflows cannot use system wide actions
+     *
+     * @param Schema $schema
+     */
+    public static function disableActivityAssociations(Schema $schema)
+    {
+        $options = new OroOptions();
+        $options->set('activity', 'immutable', true);
 
-        $table = $schema->getTable('orocrm_magento_product');
-        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['data_channel_id'], 'IDX_5A172982BDC09B73', []);
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
-            ['data_channel_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null],
-            'FK_5A172982BDC09B73'
-        );
+        $schema->getTable('orocrm_magento_cart')->addOption(OroOptions::KEY, $options);
+        $schema->getTable('orocrm_magento_order')->addOption(OroOptions::KEY, $options);
     }
 }

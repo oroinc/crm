@@ -33,6 +33,11 @@ abstract class AbstractEntityTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, call_user_func_array(array($this->entity, 'get' . ucfirst($property)), array()));
     }
 
+    public function testEmptyIdConstruction()
+    {
+        $this->assertNull($this->entity->getId());
+    }
+
     /**
      * @return array
      */

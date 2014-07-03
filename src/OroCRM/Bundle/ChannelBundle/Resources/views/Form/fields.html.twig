@@ -3,9 +3,8 @@
     {{ form_row(form.name) }}
     {{ form_row(form.description) }}
 
-    {% if (form.organization is defined) %}
-        {{ form_row(form.organization) }}
-    {% endif %}
+    {{ form_row(form.entities) }}
+    {{ form_row(form.integrations) }}
 
     {{ form_end(form, {'render_rest': false}) }}
 

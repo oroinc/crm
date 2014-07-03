@@ -6,17 +6,26 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 
 use Oro\Bundle\EntityBundle\Provider\ExclusionProviderInterface;
 
+/**
+ * This class is registered as global exclusion provider in order to exclude entities
+ * that are not included by any channel.
+ */
 class EntityExclusionProvider implements ExclusionProviderInterface
 {
     /** @var SettingsProvider */
     protected $settingsProvider;
 
+    /** @var StateProvider */
+    protected $stateProvider;
+
     /**
      * @param SettingsProvider $settingsProvider
+     * @param StateProvider    $stateProvider
      */
-    public function __construct(SettingsProvider $settingsProvider)
+    public function __construct(SettingsProvider $settingsProvider, StateProvider $stateProvider)
     {
         $this->settingsProvider = $settingsProvider;
+        $this->stateProvider    = $stateProvider;
     }
 
     /**
@@ -44,19 +53,24 @@ class EntityExclusionProvider implements ExclusionProviderInterface
     }
 
     /**
-     * @param $entityFQCN
+     * @param string $entityFQCN entity full class name
      *
      * @return bool
      */
     protected function isIncludedByChannels($entityFQCN)
     {
-        if (!($this->settingsProvider->isChannelEntity($entityFQCN)
-            || $this->settingsProvider->isDependentOnChannelEntity($entityFQCN))
-        ) {
-            return true;
+        if ($this->settingsProvider->isChannelEntity($entityFQCN)) {
+            return $this->stateProvider->isEntityEnabled($entityFQCN);
+        } elseif ($this->settingsProvider->isDependentOnChannelEntity($entityFQCN)) {
+            $enabled      = false;
+            $dependencies = $this->settingsProvider->getDependentEntityData($entityFQCN);
+            foreach ($dependencies as $entityName) {
+                $enabled |= $this->stateProvider->isEntityEnabled($entityName);
+            }
+
+            return $enabled;
         }
 
-        // TODO check if it's in any integration
-        // TODO check if it's enabled in any channel
+        return true;
     }
 }
