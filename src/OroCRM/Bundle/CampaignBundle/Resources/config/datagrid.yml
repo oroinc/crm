@@ -171,7 +171,7 @@ datagrid:
                 label: orocrm.campaign.trackingevent.report.visits_count.label
                 frontend_type: integer
             logTime:
-                label: 'Date'
+                label: orocrm.campaign.trackingevent.report.date.label
 
     campaign-tracking-detailed-report-daily-grid:
         source:
@@ -195,7 +195,7 @@ datagrid:
                 label: orocrm.campaign.trackingevent.report.visits_count.label
                 frontend_type: integer
             logTime:
-                label: 'Date'
+                label: orocrm.campaign.trackingevent.report.date.label
 
     campaign-tracking-detailed-report-monthly-grid:
         source:
@@ -221,5 +221,5 @@ datagrid:
                 label: orocrm.campaign.trackingevent.report.visits_count.label
                 frontend_type: integer
             logTime:
-                label: 'Date'
+                label: orocrm.campaign.trackingevent.report.date.label
 

@@ -1,0 +1,24 @@
+oro_chart:
+    campaign_line_chart:
+        label: oro.chart.line_chart.label
+        data_schema:
+            label:
+                name: label
+                label: orocrm.campaign.trackingevent.report.date.label
+                required: true
+                default_type: string
+                field_name: logTime
+            value:
+                name: value
+                label: orocrm.campaign.trackingevent.report.visits_count.label
+                required: true
+                default_type: integer
+                field_name: visitsCount
+        default_settings:
+            connect_dots_with_line: true
+            available_in_reports: true
+            chartColors: ['#ACD39C', '#BE9DE2', '#6598DA', '#ECC87E', '#A4A2F6', '#6487BF', '#65BC87', '#8985C2', '#ECB574', '#84A377']
+            chartFontSize: 9
+            chartFontColor: '#454545'
+            chartHighlightColor: '#FF5E5E'
+        template: OroChartBundle:Chart:line.html.twig

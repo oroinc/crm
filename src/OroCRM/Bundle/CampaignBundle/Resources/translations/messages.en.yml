@@ -31,3 +31,4 @@ orocrm:
         trackingevent:
             report:
                 visits_count.label: Visits
+                date.label:         Date

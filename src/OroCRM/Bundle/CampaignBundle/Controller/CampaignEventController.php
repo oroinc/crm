@@ -14,13 +14,17 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 class CampaignEventController extends Controller
 {
     /**
+     * @param string $period
+     * @param string $campaignCode
+     * @return array
+     *
      * @Route("/plot/{period}/{campaignCode}", name="orocrm_campaign_event_plot")
      * @AclAncestor("orocrm_campaign_view")
      * @Template
      */
     public function plotAction($period, $campaignCode)
     {
-        $supportedPeriods = array('hourly', 'daily', 'monthly');
+        $supportedPeriods = ['hourly', 'daily', 'monthly'];
         if (!in_array($period, $supportedPeriods)) {
             throw new \InvalidArgumentException(
                 sprintf(
@@ -31,26 +35,33 @@ class CampaignEventController extends Controller
             );
         }
 
-        $gridName = sprintf('campaign-tracking-detailed-report-%s-grid', $period);
-        $gridParameters = array('code'=> $campaignCode);
+        $gridName       = sprintf('campaign-tracking-detailed-report-%s-grid', $period);
+        $gridParameters = ['code' => $campaignCode];
 
-        // todo: Load chart options correctly
-        /*
-        $datagrid = $this->get('oro_datagrid.datagrid.manager')->getDatagridByRequestParams(
-            $gridName,
-            $gridParameters
-        );
-        $chartOptions = array();
-        $chartView = $this->get('oro_chart.view_builder')
+        $datagrid = $this
+            ->get('oro_datagrid.datagrid.manager')
+            ->getDatagridByRequestParams(
+                $gridName,
+                $gridParameters
+            );
+
+        $chartView = $this
+            ->get('oro_chart.view_builder')
             ->setDataGrid($datagrid)
-            ->setOptions($chartOptions)
+            ->setOptions(
+                array_merge(
+                    ['name' => 'campaign_line_chart'],
+                    $this
+                        ->get('oro_chart.config_provider')
+                        ->getChartConfig('campaign_line_chart')
+                )
+            )
             ->getView();
-        */
 
-        return array(
-            //'chartView' => $chartView,
-            'gridName' => $gridName,
+        return [
+            'chartView'      => $chartView,
+            'gridName'       => $gridName,
             'gridParameters' => $gridParameters
-        );
+        ];
     }
 }
