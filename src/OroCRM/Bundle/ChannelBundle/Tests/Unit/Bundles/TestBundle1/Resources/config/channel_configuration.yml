@@ -8,6 +8,6 @@ orocrm_channel:
            dependencies:
                - OroCRM\Bundle\TestBundle1\Entity\Entity2
                - OroCRM\Bundle\TestBundle1\Entity\Entity3
-           dependenciesCondition: OR
+           dependencies_condition: OR
            navigation_items:
                - application_menu.menu1.list

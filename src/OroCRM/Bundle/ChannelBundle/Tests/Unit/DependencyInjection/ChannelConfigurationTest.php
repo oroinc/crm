@@ -27,7 +27,7 @@ class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
                         'OroCRM\Bundle\TestBundle1\Entity\Entity2',
                         'OroCRM\Bundle\TestBundle1\Entity\Entity3'
                     ],
-                    'dependenciesCondition' => 'OR',
+                    'dependencies_condition' => 'OR',
                 ],
                 [
                     'name'                  => 'OroCRM\Bundle\TestBundle2\Entity\Entity',
@@ -38,7 +38,7 @@ class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
                         'application_menu.activities_tab.contact',
                     ],
                     'dependencies'          => [],
-                    'dependenciesCondition' => 'AND',
+                    'dependencies_condition' => 'AND',
                 ],
             ],
         ];
