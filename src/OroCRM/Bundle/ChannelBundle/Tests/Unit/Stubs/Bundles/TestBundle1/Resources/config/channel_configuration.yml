@@ -11,3 +11,4 @@ orocrm_channel:
            dependencies_condition: OR
            navigation_items:
                - application_menu.menu1.list
+           belongs_to_integration: testIntegrationType

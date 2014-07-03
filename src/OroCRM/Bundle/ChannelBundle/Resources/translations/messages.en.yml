@@ -20,3 +20,4 @@ orocrm:
 
         form:
             select_integrations.label: Please select integrations
+            select_entities.label:     Please select entities

@@ -17,17 +17,22 @@ class EntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
     /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $settingsProvider;
 
+    /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
+    protected $stateProvider;
+
     public function setUp()
     {
         $this->settingsProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
+        $this->stateProvider    = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\StateProvider')
+            ->disableOriginalConstructor()->getMock();
 
-        $this->exclusionProvider = new EntityExclusionProvider($this->settingsProvider);
+        $this->exclusionProvider = new EntityExclusionProvider($this->settingsProvider, $this->stateProvider);
     }
 
     public function tearDown()
     {
-        unset($this->exclusionProvider, $this->settingsProvider);
+        unset($this->exclusionProvider, $this->stateProvider, $this->settingsProvider);
     }
 
     /**

@@ -18,9 +18,6 @@ class SettingsProvider
     /** @var null|array */
     protected $dependentEntitiesHashMap;
 
-    /** @var null|array */
-    protected $channelEntitiesHashMap;
-
     /**
      * @param array             $settings
      * @param ResolverInterface $resolver
@@ -34,15 +31,27 @@ class SettingsProvider
     /**
      * Get settings that were collected from channel_configuration config files
      *
+     * @param null $section
+     *
      * @return array|null
      */
-    public function getChannelSettings()
+    public function getSettings($section = null)
     {
         if (null === $this->resolvedSettings) {
-            $this->resolvedSettings = $this->resolver->resolve($this->settings);
+            $settings = $this->resolver->resolve($this->settings);
+            $this->resolvedSettings['entity_data'] = [];
+            foreach ($settings['entity_data'] as $singleEntitySetting) {
+                $this->resolvedSettings['entity_data'][trim($singleEntitySetting['name'])] = $singleEntitySetting;
+            }
         }
 
-        return $this->resolvedSettings;
+        if ($section === null) {
+            return $this->resolvedSettings;
+        } elseif (isset($this->resolvedSettings[$section])) {
+            return $this->resolvedSettings[$section];
+        }
+
+        return null;
     }
 
     /**
@@ -54,17 +63,9 @@ class SettingsProvider
      */
     public function isChannelEntity($entityFQCN)
     {
-        if (null === $this->channelEntitiesHashMap) {
-            $settings                     = $this->getChannelSettings();
-            $this->channelEntitiesHashMap = array_map(
-                function ($singleEntitySetting) {
-                    return trim($singleEntitySetting['name']);
-                },
-                $settings['entity_data']
-            );
-        }
+        $settings = $this->getSettings('entity_data');
 
-        return in_array($entityFQCN, $this->channelEntitiesHashMap, true);
+        return array_key_exists($entityFQCN, $settings);
     }
 
     /**
@@ -80,18 +81,30 @@ class SettingsProvider
     }
 
     /**
+     * Return whether entity is channel related and belongs to any integration
+     *
+     * @param string $entityFQCN entity full class name
+     *
+     * @return bool
+     */
+    public function belongsToIntegration($entityFQCN)
+    {
+        return $this->getIntegrationTypeData($entityFQCN) !== false;
+    }
+
+    /**
      * Get entity dependencies
      *
      * @param string $entityFQCN entity full class name
      *
      * @return bool|array
      */
-    protected function getDependentEntityData($entityFQCN)
+    public function getDependentEntityData($entityFQCN)
     {
         if (null === $this->dependentEntitiesHashMap) {
-            $settings = $this->getChannelSettings();
+            $settings = $this->getSettings('entity_data');
 
-            foreach ($settings['entity_data'] as $singleEntityData) {
+            foreach ($settings as $singleEntityData) {
                 if (empty($singleEntityData['dependent'])) {
                     continue;
                 }
@@ -112,5 +125,24 @@ class SettingsProvider
         return isset($this->dependentEntitiesHashMap[$entityFQCN])
             ? $this->dependentEntitiesHashMap[$entityFQCN]
             : false;
+    }
+
+    /**
+     * Returns integration type that entity belongs to
+     *
+     * @param string $entityFQCN entity full class name
+     *
+     * @return bool|string
+     */
+    public function getIntegrationTypeData($entityFQCN)
+    {
+        if (!$this->isChannelEntity($entityFQCN)) {
+            return false;
+        }
+
+        $settings = $this->getSettings('entity_data');
+
+        return !empty($settings[$entityFQCN]['belongs_to_integration']) ?
+            $settings[$entityFQCN]['belongs_to_integration'] : false;
     }
 }

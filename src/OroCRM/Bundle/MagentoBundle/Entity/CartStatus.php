@@ -10,7 +10,13 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_magento_cart_status")
- * @Config()
+ * @Config(
+ *      defaultValues={
+ *          "grouping"={
+ *              "groups"={"dictionary"}
+ *          }
+ *      }
+ * )
  */
 class CartStatus
 {

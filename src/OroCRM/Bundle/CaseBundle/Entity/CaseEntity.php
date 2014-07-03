@@ -20,22 +20,24 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *  routeName="orocrm_case_index",
- *  routeView="orocrm_case_view",
- *  defaultValues={
- *      "dataaudit"={"auditable"=true},
- *      "entity"={
- *          "icon"="icon-list-alt"
- *      },
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="owner_id"
- *      },
- *      "security"={
- *          "type"="ACL"
+ *      routeName="orocrm_case_index",
+ *      routeView="orocrm_case_view",
+ *      defaultValues={
+ *          "dataaudit"={
+ *              "auditable"=true
+ *          },
+ *          "entity"={
+ *              "icon"="icon-list-alt"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="owner_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL"
+ *          }
  *      }
- *  }
  * )
  */
 class CaseEntity extends ExtendCaseEntity

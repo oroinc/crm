@@ -1,4 +1,4 @@
-OroCRM/Bundle/ChannelBundle/Entity/Channel:
+OroCRM\Bundle\ChannelBundle\Entity\Channel:
     properties:
         name:
             - NotBlank: ~

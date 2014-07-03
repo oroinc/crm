@@ -29,28 +29,28 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository")
  * @Config(
- *  routeName="orocrm_task_index",
- *  routeView="orocrm_task_view",
- *  defaultValues={
- *      "entity"={
- *          "icon"="icon-list-alt"
- *      },
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="owner_id"
- *      },
- *      "security"={
- *          "type"="ACL"
- *      },
- *      "workflow"={
- *          "active_workflow"="task_flow"
- *      },
- *      "reminder"={
- *          "reminder_template_name"="task_reminder",
- *          "reminder_flash_template_identifier"="task_template"
- *      },
- *  }
+ *      routeName="orocrm_task_index",
+ *      routeView="orocrm_task_view",
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-list-alt"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="owner_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL"
+ *          },
+ *          "workflow"={
+ *              "active_workflow"="task_flow"
+ *          },
+ *          "reminder"={
+ *              "reminder_template_name"="task_reminder",
+ *              "reminder_flash_template_identifier"="task_template"
+ *          }
+ *      }
  * )
  */
 class Task extends ExtendTask implements RemindableInterface
@@ -217,6 +217,8 @@ class Task extends ExtendTask implements RemindableInterface
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->reminders = new ArrayCollection();
     }
 

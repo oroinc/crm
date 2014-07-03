@@ -1,31 +1,42 @@
 parameters:
     # entity
-    orocrm_channel.entity.class:                        OroCRM\Bundle\ChannelBundle\Entity\Channel
+    orocrm_channel.entity.class:                                       OroCRM\Bundle\ChannelBundle\Entity\Channel
 
     # handler
-    orocrm_channel.channel_form.handler.class:          OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelHandler
+    orocrm_channel.channel_form.handler.class:                         OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelHandler
 
-    # form
-    orocrm_channel.form.type.channel.class:             OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
+    # forms
+    orocrm_channel.form.type.channel.class:                            OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
+    orocrm_channel.form.type.entity_choice.class:                      OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityChoiceType
 
     # manager
-    orocrm_channel.manager.api.class:                   Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_channel.manager.api.class:                                  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
     # providers
-    orocrm_channel.provider.settings_provider.class:    OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider
-    orocrm_channel.provider.exclusion_provider.class:   OroCRM\Bundle\ChannelBundle\Provider\EntityExclusionProvider
+    orocrm_channel.provider.settings_provider.class:                   OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider
+    orocrm_channel.provider.exclusion_provider.class:                  OroCRM\Bundle\ChannelBundle\Provider\EntityExclusionProvider
+    orocrm_channel.provider.channel_entity_exclusion_provider.class:   OroCRM\Bundle\ChannelBundle\Provider\ChannelEntityExclusionProvider
+    orocrm_channel.provider.state_provider.class:                      OroCRM\Bundle\ChannelBundle\Provider\StateProvider
 
     # config resolver
-    orocrm_channel.config_resolver.class:               Oro\Component\Config\Resolver\SystemAwareResolver
+    orocrm_channel.config_resolver.class:                              Oro\Component\Config\Resolver\SystemAwareResolver
 
     # event listener
     orocrm_channel.event_listener.navigation.class:     OroCRM\Bundle\ChannelBundle\EventListener\NavigationListener
 
 services:
+    # forms
     orocrm_channel.form.type.channel:
         class: %orocrm_channel.form.type.channel.class%
         tags:
             - { name: form.type, alias: orocrm_channel_form }
+
+    orocrm_channel.form.type.entity_choice:
+        class: %orocrm_channel.form.type.entity_choice.class%
+        arguments:
+            - @orocrm_channel.provider.channel_entity_provider
+        tags:
+            - { name: form.type, alias: orocrm_channel_entity_choice_form }
 
     orocrm_channel.form.channel:
         class:                        Symfony\Component\Form\Form
@@ -59,10 +70,28 @@ services:
         class: %orocrm_channel.provider.exclusion_provider.class%
         arguments:
             - @orocrm_channel.provider.settings_provider
+            - @orocrm_channel.provider.state_provider
         tags:
             - { name: oro_entity.exclusion_provider.default }
 
     # config resolver
+    orocrm_channel.provider.channel_entity_exclusion_provider:
+        class: %orocrm_channel.provider.channel_entity_exclusion_provider.class%
+        arguments:
+            - @orocrm_channel.provider.settings_provider
+
+    orocrm_channel.provider.channel_entity_provider:
+        class: %oro_entity.entity_provider.class%
+        parent: oro_entity.entity_provider.abstract
+        calls:
+            - [setExclusionProvider, [@orocrm_channel.provider.channel_entity_exclusion_provider]]
+
+    orocrm_channel.provider.state_provider:
+        class: %orocrm_channel.provider.state_provider.class%
+        arguments:
+            - @orocrm_channel.provider.settings_provider
+            - @doctrine.orm.entity_manager
+
     orocrm_channel.config_resolver:
         class: %orocrm_channel.config_resolver.class%
         arguments:

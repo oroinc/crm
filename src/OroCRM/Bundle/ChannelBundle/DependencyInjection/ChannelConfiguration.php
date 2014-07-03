@@ -39,6 +39,7 @@ class ChannelConfiguration implements ConfigurationInterface
                                     ->thenInvalid('Invalid param %s')
                                 ->end()
                             ->end()
+                            ->scalarNode('belongs_to_integration')->cannotBeEmpty()->end()
                         ->end()
                     ->end()
                 ->end()

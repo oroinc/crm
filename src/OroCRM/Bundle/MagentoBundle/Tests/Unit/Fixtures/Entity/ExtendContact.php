@@ -8,6 +8,8 @@ class ExtendContact extends Contact
 {
     /**
      * @param int $id
+     *
+     * @return void
      */
     public function setId($id)
     {

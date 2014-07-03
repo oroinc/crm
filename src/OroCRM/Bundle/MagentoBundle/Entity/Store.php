@@ -26,7 +26,16 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendStore;
  *      @ORM\UniqueConstraint(name="unq_code_channel_id", columns={"store_code", "channel_id"})
  *  }
  * )
- * @Config()
+ * @Config(
+ *      defaultValues={
+ *          "note"={
+ *              "immutable"=true
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
+ *      }
+ * )
  */
 class Store extends ExtendStore
 {

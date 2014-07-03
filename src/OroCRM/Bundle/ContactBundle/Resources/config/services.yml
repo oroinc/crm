@@ -1,28 +1,30 @@
 parameters:
-    orocrm_contact.entity.class:                    OroCRM\Bundle\ContactBundle\Entity\Contact
-    orocrm_contact.type.contact.class:              OroCRM\Bundle\ContactBundle\Form\Type\ContactType
-    orocrm_contact.type.group.class:                OroCRM\Bundle\ContactBundle\Form\Type\GroupType
-    orocrm_contact.handler.contact.class:           OroCRM\Bundle\ContactBundle\Form\Handler\ContactHandler
-    orocrm_contact.form.type.contact_select.class:  OroCRM\Bundle\ContactBundle\Form\Type\ContactSelectType
-    orocrm_contact.handler.group.class:             OroCRM\Bundle\ContactBundle\Form\Handler\GroupHandler
+    orocrm_contact.entity.class:                      OroCRM\Bundle\ContactBundle\Entity\Contact
+    orocrm_contact.type.contact.class:                OroCRM\Bundle\ContactBundle\Form\Type\ContactType
+    orocrm_contact.type.group.class:                  OroCRM\Bundle\ContactBundle\Form\Type\GroupType
+    orocrm_contact.handler.contact.class:             OroCRM\Bundle\ContactBundle\Form\Handler\ContactHandler
+    orocrm_contact.form.type.contact_select.class:    OroCRM\Bundle\ContactBundle\Form\Type\ContactSelectType
+    orocrm_contact.handler.group.class:               OroCRM\Bundle\ContactBundle\Form\Handler\GroupHandler
 
     orocrm_contact.contact.manager.api.class:         Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_contact.contact_address.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_contact.form.type.contact.api.class:       OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType
 
-    orocrm_contact.group.entity.class:              OroCRM\Bundle\ContactBundle\Entity\Group
-    orocrm_contact.group.manager.api.class:         Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-    orocrm_contact.form.type.group.api.class:       OroCRM\Bundle\ContactBundle\Form\Type\GroupApiType
+    orocrm_contact.group.entity.class:                OroCRM\Bundle\ContactBundle\Entity\Group
+    orocrm_contact.group.manager.api.class:           Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_contact.form.type.group.api.class:         OroCRM\Bundle\ContactBundle\Form\Type\GroupApiType
 
-    orocrm_contact.contact_address.entity.class:        OroCRM\Bundle\ContactBundle\Entity\ContactAddress
+    orocrm_contact.contact_address.entity.class:      OroCRM\Bundle\ContactBundle\Entity\ContactAddress
     orocrm_contact.subscriber.contact_listener.class: OroCRM\Bundle\ContactBundle\EventListener\ContactListener
 
-    orocrm_contact.email.owner.provider.class: OroCRM\Bundle\ContactBundle\Entity\Provider\EmailOwnerProvider
+    orocrm_contact.email.owner.provider.class:        OroCRM\Bundle\ContactBundle\Entity\Provider\EmailOwnerProvider
 
-    orocrm_contact.social_url_formatter.class: OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter
+    orocrm_contact.social_url_formatter.class:        OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter
     orocrm_contact.event_listener.contact_email_grid_listener.class: OroCRM\Bundle\ContactBundle\EventListener\ContactEmailGridListener
 
-    orocrm_contact.contact.datagrid_helper.class: Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
+    orocrm_contact.contact.datagrid_helper.class:     Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
+
+    orocrm_contact.activity_widget_provider.class:    %oro_activity.widget_provider.activities.menu.class%
 
 services:
     orocrm_contact.form.contact:
@@ -186,13 +188,6 @@ services:
         arguments:
             - %oro_contact.social_url_format%
 
-    orocrm_contact.event_listener.contact_email_grid_listener:
-        class: %orocrm_contact.event_listener.contact_email_grid_listener.class%
-        arguments:
-          - @doctrine.orm.entity_manager
-        tags:
-          - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.contacts-email-grid, method: onBuildAfter }
-
     orocrm_contact.event_listener.contactgroup_contacts_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
@@ -209,3 +204,13 @@ services:
 
     orocrm_contact.contact.datagrid_helper:
         class: %orocrm_contact.contact.datagrid_helper.class%
+
+    orocrm_contact.activity_widget_provider:
+        class: %orocrm_contact.activity_widget_provider.class%
+        arguments:
+           - @oro_entity.entity_identifier_accessor
+           - @oro_ui.twig.tab_extension
+           - 'contact_activity_tab_panel'
+           - %orocrm_contact.entity.class%
+        tags:
+           - { name: oro_activity.activity_widget_provider, priority: -10 }

@@ -21,13 +21,18 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendProduct;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_sku_channel_id", columns={"sku", "channel_id"})}
  * )
  * @Config(
- *  defaultValues={
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "grouping"={"groups"={"business"}}
- *  }
+ *      defaultValues={
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "note"={
+ *              "immutable"=true
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
+ *      }
  * )
  * @Oro\Loggable
  */
@@ -114,6 +119,8 @@ class Product extends ExtendProduct
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->websites = new ArrayCollection();
     }
 
