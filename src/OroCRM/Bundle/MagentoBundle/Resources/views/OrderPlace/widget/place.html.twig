@@ -7,7 +7,7 @@
                 var ORO_ORDER_EMBED_API = {};
 
                 require(['jquery', 'underscore', 'oroui/js/mediator', 'oroui/js/widget-manager', 'oroui/js/messenger',
-                    'orotranslation/js/translator', 'oronavigation/js/navigation'], function ($, _, mediator, widgetManager, messenger, __, Navigation) {
+                    'orotranslation/js/translator'], function ($, _, mediator, widgetManager, messenger, __) {
                     var $frame = $('#orderPlaceFrame'),
                         modalWidgetAlias = 'transaction-dialog',
                         messageTemplate = _.template("<%= message %> <a href=\"<%= url %>\" class=\"order-link\"><%= urlLabel %></a> ");
@@ -28,23 +28,21 @@
                         );
                     });
                     ORO_ORDER_EMBED_API.success = function () {
-                        var navigation = Navigation.getInstance(),
-                            showMessage = function(data) {
-                            var message = data.message;
-                            if (data.statusType == 'success') {
-                                message = messageTemplate(
-                                        {
-                                            message: data.message,
-                                            url: data.url,
-                                            urlLabel: __('orocrm.magento.view_order')
-                                        }
-                                );
-                            }
-                            messenger.notificationFlashMessage(data.statusType, message);
-                            navigation.processClicks($('.order-link'));
+                        var showMessage = function(data) {
+                                var message = data.message;
+                                if (data.statusType == 'success') {
+                                    message = messageTemplate(
+                                            {
+                                                message: data.message,
+                                                url: data.url,
+                                                urlLabel: __('orocrm.magento.view_order')
+                                            }
+                                    );
+                                }
+                                messenger.notificationFlashMessage(data.statusType, message);
                             },
                             chooseMessage = function (data) {
-                                if (navigation.isInAction()) {
+                                if (mediator.execute('isInAction')) {
                                     mediator.once('page:afterChange', function() {showMessage(data)});
                                 } else {
                                     showMessage(data);
@@ -63,7 +61,7 @@
                                     dataType: 'json',
                                     url: {{ syncURL|json_encode|raw}},
                                     success: function(data) {
-                                        if (navigation.isInAction()) {
+                                        if (mediator.execute('isInAction')) {
                                             mediator.once('page:afterChange', function() {showMessage(data)});
                                         } else {
                                             showMessage(data);
