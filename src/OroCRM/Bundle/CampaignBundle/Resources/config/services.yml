@@ -4,6 +4,7 @@ parameters:
     orocrm_campaign.campaign.form.type.class:      OroCRM\Bundle\CampaignBundle\Form\Type\CampaignType
     orocrm_campaign.campaign.manager.api.class:    Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
+    orocrm_campaign.data_transformer.multi_line.class: OroCRM\Bundle\CampaignBundle\Model\Data\Transformer\MultiLineDataTransformer
 services:
     orocrm_campaign.campaign.form.handler:
             class: %orocrm_campaign.campaign.form.handler.class%
@@ -55,3 +56,6 @@ services:
         arguments: ['code', false]
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.campaign-tracking-detailed-report-monthly-grid, method: onBuildAfter }
+
+    orocrm_campaign.data_transformer.multi_line:
+        class: %orocrm_campaign.data_transformer.multi_line.class%

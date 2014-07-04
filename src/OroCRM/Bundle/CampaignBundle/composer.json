@@ -10,6 +10,7 @@
         "symfony/symfony": "2.3.*",
         "oro/ui-bundle": "dev-master",
         "oro/dashboard-bundle": "dev-master",
+        "oro/chart-bundle": "dev-master",
         "oro/tracking-bundle": "dev-master"
     },
     "autoload": {

@@ -51,7 +51,9 @@ class CampaignEventController extends Controller
             ->setDataGrid($datagrid)
             ->setOptions(
                 array_merge(
-                    ['name' => $chartName],
+                    [
+                        'name' => $chartName
+                    ],
                     $this
                         ->get('oro_chart.config_provider')
                         ->getChartConfig($chartName)
