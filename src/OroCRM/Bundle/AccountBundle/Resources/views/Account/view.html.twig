@@ -97,15 +97,6 @@
         ]) %}
     {% endif %}
 
-    {% set dataBlocks = dataBlocks|merge([
-        {
-            'title': 'orocrm.account.sections.activity'|trans,
-            'subblocks': [
-                {'data' : [activitySection]}
-            ]
-        }
-    ])%}
-
     {# Render account channels #}
     {% for channel in channels %}
         {%- set accountChannelInfoSection -%}
