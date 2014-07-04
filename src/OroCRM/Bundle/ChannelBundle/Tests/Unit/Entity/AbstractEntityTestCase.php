@@ -27,10 +27,10 @@ abstract class AbstractEntityTestCase extends \PHPUnit_Framework_TestCase
     public function testSetGet($property, $value = null, $expected = null)
     {
         if ($value !== null) {
-            call_user_func_array(array($this->entity, 'set' . ucfirst($property)), array($value));
+            call_user_func([$this->entity, 'set' . ucfirst($property)], $value);
         }
 
-        $this->assertEquals($expected, call_user_func_array(array($this->entity, 'get' . ucfirst($property)), array()));
+        $this->assertEquals($expected, call_user_func([$this->entity, 'get' . ucfirst($property)]));
     }
 
     public function testEmptyIdConstruction()

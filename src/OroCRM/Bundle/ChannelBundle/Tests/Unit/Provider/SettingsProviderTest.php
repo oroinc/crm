@@ -101,6 +101,115 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider belongsToIntegrationConfigProvider
+     *
+     * @param string $entityName
+     * @param array  $config
+     * @param bool   $expectedResult
+     */
+    public function testBelongsToIntegration($entityName, $config, $expectedResult)
+    {
+        $this->assertSame(
+            $expectedResult,
+            $this->getSettingsProvider($config)->belongsToIntegration($entityName)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function belongsToIntegrationConfigProvider()
+    {
+        return [
+            'empty config, entity is not channel related'                            => [
+                self::TEST_ENTITY_NAME,
+                ['entity_data' => []],
+                false
+            ],
+            'config given, entity is in config, but does not belongs to integration' => [
+                self::TEST_ENTITY_NAME,
+                [
+                    'entity_data' => [
+                        ['name' => self::TEST_ENTITY_NAME, 'dependent' => [], 'dependencies' => []]
+                    ]
+                ],
+                false
+            ],
+            'config given, entity belongs to integration'                            => [
+                self::TEST_ENTITY_NAME,
+                [
+                    'entity_data' => [
+                        [
+                            'name'                   => self::TEST_ENTITY_NAME,
+                            'dependent'              => [],
+                            'dependencies'           => [],
+                            'belongs_to_integration' => 'test'
+                        ],
+                    ]
+                ],
+                true
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider configProvider
+     *
+     * @param array $config
+     * @param bool  $expectedResult
+     * @param null  $section
+     */
+    public function testGetSettings($config, $expectedResult, $section = null)
+    {
+        $provider = $this->getSettingsProvider($config);
+        $this->assertSame($expectedResult, $provider->getSettings($section));
+    }
+
+    /**
+     * @return array
+     */
+    public function configProvider()
+    {
+        return [
+            'should return all config'                => [
+                [
+                    'entity_data'  => [
+                        [
+                            'name'         => self::TEST_ENTITY_NAME,
+                            'dependent'    => [],
+                            'dependencies' => []
+                        ]
+                    ],
+                    'some_section' => 'test'
+                ],
+                [
+                    'entity_data'  => [
+                        self::TEST_ENTITY_NAME => [
+                            'name'         => self::TEST_ENTITY_NAME,
+                            'dependent'    => [],
+                            'dependencies' => []
+                        ]
+                    ],
+                    'some_section' => 'test'
+                ]
+            ],
+            'should return asked section'             => [
+                [
+                    'entity_data'  => [],
+                    'some_section' => 'test'
+                ],
+                [],
+                'entity_data'
+            ],
+            'should return null if section not found' => [
+                ['entity_data' => [],],
+                null,
+                'some_section'
+            ]
+        ];
+    }
+
+    /**
      * @param array $settings
      *
      * @return SettingsProvider

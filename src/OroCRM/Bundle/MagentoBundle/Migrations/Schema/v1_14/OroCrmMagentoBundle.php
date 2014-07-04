@@ -11,7 +11,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 
-class OroCRMMagentoBundle implements Migration, ActivityExtensionAwareInterface
+class OroCrmMagentoBundle implements Migration, ActivityExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
