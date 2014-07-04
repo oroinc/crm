@@ -7,7 +7,8 @@ orocrm:
         description.label:   Description
         owner.label:         Owner
         entities.label:      Entities
-        integrations.label:  Integrations
+        integrations.label:  Inegrations
+        data_source.label:   Customer
 
         datagrid:
             action:
@@ -21,3 +22,4 @@ orocrm:
         form:
             select_integrations.label: Please select integrations
             select_entities.label:     Please select entities
+            select_data_source.label:  Please select customer source

@@ -1,11 +1,16 @@
 {% block orocrm_channel_form_widget %}
-
     {{ form_row(form.name) }}
     {{ form_row(form.description) }}
 
-    {{ form_row(form.entities) }}
-    {{ form_row(form.integrations) }}
+    {% if form.entities is defined %}
+        {{ form_row(form.entities) }}
+    {% endif %}
+
+    {#{ form_row(form.integrations) }#}
+
+    {% if form.dataSource is defined %}
+        {{ form_row(form.dataSource) }}
+    {% endif %}
 
     {{ form_end(form, {'render_rest': false}) }}
-
 {% endblock %}
