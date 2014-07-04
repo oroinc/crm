@@ -8,7 +8,7 @@ orocrm:
         owner.label:         Owner
         entities.label:      Entities
         integrations.label:  Integrations
-        data_source.label:   Customer
+        data_source.label:   Customer source
 
         datagrid:
             action:

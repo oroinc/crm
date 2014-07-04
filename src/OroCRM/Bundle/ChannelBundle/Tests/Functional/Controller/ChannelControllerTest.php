@@ -6,7 +6,6 @@ use Symfony\Component\Form\Form;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
 
 /**
@@ -29,7 +28,6 @@ class ChannelControllerTest extends WebTestCase
     public function testCreateChannel()
     {
         $organization = $this->getOrganization();
-        $dataSource   = $this->getDataSource();
         $crawler      = $this->client->request('GET', $this->getUrl('orocrm_channel_create'));
         $form         = $crawler->selectButton('Save and Close')->form();
 
@@ -37,11 +35,9 @@ class ChannelControllerTest extends WebTestCase
         $form['orocrm_channel_form[name]']        = $name;
         $form['orocrm_channel_form[description]'] = 'some description';
         $form['orocrm_channel_form[owner]']       = $organization->getId();
-        $form['orocrm_channel_form[dataSource]']  = $dataSource->getId();
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
-
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains('Channel saved', $crawler->html());
@@ -87,8 +83,6 @@ class ChannelControllerTest extends WebTestCase
 
         $channel['name'] = $name;
         return $channel;
-
-
     }
 
     /**
@@ -128,16 +122,5 @@ class ChannelControllerTest extends WebTestCase
             ->get('doctrine')
             ->getRepository('OroOrganizationBundle:Organization')
             ->findOneByName(LoadOrganizationAndBusinessUnitData::MAIN_ORGANIZATION);
-    }
-
-    /**
-     * @return Integration
-     */
-    protected function getDataSource()
-    {
-        return $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroIntegrationBundle:Channel')
-            ->findOneByName('default');
     }
 }

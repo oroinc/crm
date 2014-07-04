@@ -235,7 +235,7 @@ class Channel
     /**
      * @param Integration $dataSource
      */
-    public function setDataSource($dataSource)
+    public function setDataSource(Integration $dataSource)
     {
         $this->dataSource = $dataSource;
     }
