@@ -31,7 +31,8 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendProduct;
  *          },
  *          "activity"={
  *              "immutable"=true
- *          }
+ *          },
+ *          "grouping"={"groups"={"business"}}
  *      }
  * )
  * @Oro\Loggable

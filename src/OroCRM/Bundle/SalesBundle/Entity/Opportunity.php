@@ -27,28 +27,29 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *      routeName="orocrm_sales_opportunity_index",
- *      routeView="orocrm_sales_opportunity_view",
- *      defaultValues={
- *          "entity"={
- *              "icon"="icon-usd"
- *          },
- *          "ownership"={
- *              "owner_type"="USER",
- *              "owner_field_name"="owner",
- *              "owner_column_name"="user_owner_id"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "form"={
- *              "form_type"="orocrm_sales_opportunity_select"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
+ *  routeName="orocrm_sales_opportunity_index",
+ *  routeView="orocrm_sales_opportunity_view",
+ *  defaultValues={
+ *      "entity"={
+ *          "icon"="icon-usd"
+ *      },
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      },
+ *      "form"={
+ *          "form_type"="orocrm_sales_opportunity_select"
+ *      },
+ *      "dataaudit"={
+ *          "auditable"=true
+ *      },
+ *      "grouping"={"groups"={"business"}}
+ *  }
  * )
  */
 class Opportunity extends ExtendOpportunity implements EmailHolderInterface
