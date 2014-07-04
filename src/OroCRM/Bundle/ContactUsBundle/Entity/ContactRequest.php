@@ -34,7 +34,6 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *              "group_name"=""
  *          }
  *      }
- *  }
  * )
  */
 class ContactRequest extends AbstractContactRequest
