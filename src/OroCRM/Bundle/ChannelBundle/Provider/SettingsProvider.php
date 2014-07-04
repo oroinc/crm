@@ -38,7 +38,7 @@ class SettingsProvider
     public function getSettings($section = null)
     {
         if (null === $this->resolvedSettings) {
-            $settings = $this->resolver->resolve($this->settings);
+            $settings = $this->resolvedSettings = $this->resolver->resolve($this->settings);
             $this->resolvedSettings['entity_data'] = [];
             foreach ($settings['entity_data'] as $singleEntitySetting) {
                 $this->resolvedSettings['entity_data'][trim($singleEntitySetting['name'])] = $singleEntitySetting;
