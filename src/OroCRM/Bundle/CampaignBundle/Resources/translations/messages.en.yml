@@ -14,6 +14,7 @@ orocrm:
         owner.label:         Owner
         created_at.label:    Created
         updated_at.label:    Updated
+        report_period.label: Report Period
         controller:
             campaign.saved.message:  "Campaign saved"
         menu:
@@ -30,5 +31,12 @@ orocrm:
 
         trackingevent:
             report:
-                visits_count.label: Visits
-                date.label:         Date
+                visits_count.label: Number of Hits
+                date.label:           Date
+
+        tracking_code:
+            label: Tracking Code
+            info: |
+                To enable campaign tracking add <code>?pk_campaign=%campaignCode%</code> to your URL.
+                Another option is to add <code>_paq.push(['setCampaignName', '%campaignCode%']);</code>
+                to tracking script after <strong>setUserId</strong> call.

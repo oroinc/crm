@@ -130,20 +130,6 @@ datagrid:
                     filter_by_having: true
                     options:
                         data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_INTEGER
-        totals:
-            total:
-                extends: grand_total
-                per_page: true
-                hide_if_one_page: true
-                columns:
-                    name:
-                        label: 'Page total'
-            grand_total:
-                columns:
-                    name:
-                        label: 'Grand Total'
-                    visitsCount:
-                        expr: COUNT(e.id)
         options:
             export: true
 
