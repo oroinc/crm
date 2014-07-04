@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
+use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
+use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
 
 /**
  * Class CreateOpportunityTest
@@ -21,7 +23,7 @@ class CreateOpportunityTest extends Selenium2TestCase
 
         $opportunityName = 'Opportunity_'.mt_rand();
         $accountName = $this->createAccount($login);
-
+        /** @var Opportunities $login */
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->add()
             ->setName($opportunityName)
@@ -48,7 +50,7 @@ class CreateOpportunityTest extends Selenium2TestCase
     protected function createAccount(Login $login)
     {
         $accountName = 'Account_'.mt_rand();
-
+        /** @var Accounts $login */
         $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
             ->setAccountName($accountName)
@@ -68,6 +70,7 @@ class CreateOpportunityTest extends Selenium2TestCase
         $newName = 'Update_' . $name;
 
         $login = $this->login();
+        /** @var Opportunities $login */
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $name)
             ->open(array($name))
@@ -90,6 +93,7 @@ class CreateOpportunityTest extends Selenium2TestCase
     public function testDeleteOpportunity($name)
     {
         $login = $this->login();
+        /** @var Opportunities $login */
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $name)
             ->open(array($name))
