@@ -53,6 +53,17 @@ class ChannelType extends AbstractType
                 'property' => 'name',
             ]
         );
+        $builder->add(
+            'dataSource',
+            'genemu_jqueryselect2_entity',
+            [
+                'required' => false,
+                'label'    => 'orocrm.channel.data_source.label',
+                'class'    => 'Oro\Bundle\IntegrationBundle\Entity\Channel',
+                'configs'  => ['placeholder' => 'orocrm.channel.form.select_data_source.label'],
+                'property' => 'name',
+            ]
+        );
     }
 
     /**

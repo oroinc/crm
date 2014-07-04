@@ -21,6 +21,9 @@ parameters:
     # config resolver
     orocrm_channel.config_resolver.class:                              Oro\Component\Config\Resolver\SystemAwareResolver
 
+    # event listener
+    orocrm_channel.event_listener.navigation.class:                    OroCRM\Bundle\ChannelBundle\EventListener\NavigationListener
+
 services:
     # forms
     orocrm_channel.form.type.channel:
@@ -72,6 +75,7 @@ services:
         tags:
             - { name: oro_entity.exclusion_provider.default }
 
+    # config resolver
     orocrm_channel.provider.channel_entity_exclusion_provider:
         class: %orocrm_channel.provider.channel_entity_exclusion_provider.class%
         arguments:
@@ -97,6 +101,17 @@ services:
         class: %orocrm_channel.config_resolver.class%
         arguments:
             - @service_container
+
+    # event listeners
+    orocrm_channel.event_listener.navigation:
+        class: %orocrm_channel.event_listener.navigation.class%
+        arguments:
+            - @orocrm_channel.provider.settings_provider
+            - @orocrm_channel.provider.state_provider
+        tags:
+            - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
+            - { name: kernel.event_listener, event: oro_menu.configure.shortcuts, method: onNavigationConfigure }
+            - { name: kernel.event_listener, event: oro_menu.configure.account_sales_tab_panel, method: onNavigationConfigure }
 
     orocrm_channel.state_cache:
           parent: oro.cache.abstract

@@ -15,7 +15,6 @@ parameters:
     orocrm_magento.form.type.cart_select.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\CartSelectType
 
     # event listeners
-    orocrm_magento.event_listener.navigation.class:                         OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener
     orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
     orocrm_magento.event_listener.order.class:                              OroCRM\Bundle\MagentoBundle\EventListener\OrderListener
     orocrm_magento.event_listener.channel_owner_set.class:                  OroCRM\Bundle\MagentoBundle\EventListener\ChannelOwnerSetListener
@@ -128,13 +127,6 @@ services:
         lazy: true
 
     # event listeners
-    orocrm_magento.event_listener.navigation:
-        class: %orocrm_magento.event_listener.navigation.class%
-        arguments:
-            - @doctrine.orm.entity_manager
-        tags:
-            - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
-
     orocrm_magento.event_listener.account_orders_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:

@@ -33,7 +33,7 @@ class ChannelConfiguration implements ConfigurationInterface
                             ->arrayNode('dependencies')
                                 ->prototype('scalar')->cannotBeEmpty()->end()
                             ->end()
-                            ->scalarNode('dependenciesCondition')
+                            ->scalarNode('dependencies_condition')
                                 ->defaultValue('AND')->cannotBeEmpty()
                                 ->validate()->ifNotInArray(['OR', 'AND'])
                                     ->thenInvalid('Invalid param %s')

@@ -80,6 +80,13 @@ class Channel
      */
     protected $owner;
 
+    /**
+     * @var Integration
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
+     * @ORM\JoinColumn(name="data_source_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $dataSource;
+
     public function __construct()
     {
         $this->entities     = new ArrayCollection();
@@ -223,5 +230,21 @@ class Channel
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    /**
+     * @param Integration $dataSource
+     */
+    public function setDataSource(Integration $dataSource)
+    {
+        $this->dataSource = $dataSource;
+    }
+
+    /**
+     * @return Integration
+     */
+    public function getDataSource()
+    {
+        return $this->dataSource;
     }
 }
