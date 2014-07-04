@@ -22,4 +22,4 @@ oro_chart:
             chartFontColor: '#454545'
             chartHighlightColor: '#FF5E5E'
         data_transformer: oro_chart.data_transformer.multi_line
-        template: OroChartBundle:Chart:line.html.twig
+        template: OroCRMCampaignBundle:Chart:multiline.html.twig
