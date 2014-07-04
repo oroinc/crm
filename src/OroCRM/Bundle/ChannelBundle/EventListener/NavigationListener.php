@@ -15,7 +15,7 @@ class NavigationListener
     /** @var SettingsProvider */
     protected $settings;
 
-    /** @var StateProvider  */
+    /** @var StateProvider */
     protected $state;
 
     /**
@@ -33,7 +33,7 @@ class NavigationListener
      */
     public function onNavigationConfigure(ConfigureMenuEvent $event)
     {
-        foreach ($this->getSettings() as $setting) {
+        foreach ((array)$this->settings->getSettings('entity_data') as $setting) {
             if (!$this->state->isEntityEnabled($setting['name'])) {
                 continue;
             }
@@ -57,14 +57,5 @@ class NavigationListener
                 }
             }
         }
-    }
-
-    /**
-     * @return array
-     */
-    protected function getSettings()
-    {
-        $settings = $this->settings->getSettings();
-        return !empty($settings['entity_data']) ? $settings['entity_data'] : [];
     }
 }

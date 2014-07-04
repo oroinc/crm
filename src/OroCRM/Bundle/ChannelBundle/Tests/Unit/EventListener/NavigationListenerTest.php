@@ -15,37 +15,34 @@ use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
 
 class NavigationListenerTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var ResolverInterface */
+    /** @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $resolver;
 
-    /** @var StateProvider */
+    /** @var StateProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $state;
 
     protected function setUp()
     {
         $this->resolver = $this->getMockBuilder('Oro\Component\Config\Resolver\ResolverInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->disableOriginalConstructor()->getMock();
         $this->state    = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\StateProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->disableOriginalConstructor()->getMock();
     }
 
     /**
      * @dataProvider navigationConfigureDataProvider
      *
-     * @param array       $settings
-     * @param MenuFactory $factory
-     * @param boolean     $isDisplayed default is true
+     * @param array   $settings
+     * @param boolean $isDisplayed default is true
      */
-    public function testOnNavigationConfigure($settings, MenuFactory $factory, $isDisplayed = true)
+    public function testOnNavigationConfigure($settings, $isDisplayed = true)
     {
-        $this->resolver->expects($this->once())
-            ->method('resolve')
-            ->will($this->returnValue($settings));
+        $factory = new MenuFactory();
 
-        $this->state->expects($this->once())
-            ->method('isEntityEnabled')
+        $this->resolver->expects($this->any())->method('resolve')
+            ->will($this->returnArgument(0));
+
+        $this->state->expects($this->once())->method('isEntityEnabled')
             ->will($this->returnValue($isDisplayed));
 
         $settingsProvider = new SettingsProvider($settings, $this->resolver);
@@ -67,12 +64,13 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function navigationConfigureDataProvider()
     {
-        $menuFactory = new MenuFactory();
-
         return [
-            'child is shown' => [
+            'child is shown'  => [
                 'settings' => [
                     'entity_data' => [
                         [
@@ -89,7 +87,6 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
                         ],
                     ]
                 ],
-                $menuFactory,
             ],
             'child is hidden' => [
                 'settings' => [
@@ -108,7 +105,6 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
                         ],
                     ]
                 ],
-                $menuFactory,
                 false
             ],
         ];
