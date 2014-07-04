@@ -32,22 +32,24 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
  *     }
  * )
  * @Config(
- *  routeView="orocrm_magento_order_view",
- *  defaultValues={
- *      "entity"={"icon"="icon-list-alt"},
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="user_owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "workflow"={
- *          "active_workflow"="b2c_flow_order_follow_up"
+ *      routeView="orocrm_magento_order_view",
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-list-alt"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="user_owner_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "workflow"={
+ *              "active_workflow"="b2c_flow_order_follow_up"
+ *          }
  *      }
- *  }
  * )
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -272,6 +274,7 @@ class Order extends ExtendOrder
     public function __construct()
     {
         parent::__construct();
+
         $this->relatedCalls  = new ArrayCollection();
         $this->relatedEmails = new ArrayCollection();
     }

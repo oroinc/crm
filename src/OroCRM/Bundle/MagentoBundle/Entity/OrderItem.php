@@ -12,13 +12,21 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderItem;
  * @ORM\Table("orocrm_magento_order_items")
  * @ORM\Entity
  * @Config(
- *  defaultValues={
- *      "entity"={"icon"="icon-list-alt"},
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-list-alt"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "note"={
+ *              "immutable"=true
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
  *      }
- *  }
  * )
  */
 class OrderItem extends ExtendOrderItem
