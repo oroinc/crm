@@ -37,9 +37,9 @@ class Lead extends AbstractPageEntity
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $address;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $owner;
-    /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $campaign;
+
+    protected $owner = "//div[starts-with(@id,'s2id_orocrm_sales_lead_form_owner')]/a";
 
     public function __construct($testCase, $redirect = true)
     {
@@ -59,7 +59,6 @@ class Lead extends AbstractPageEntity
         $this->website = $this->test->byId('orocrm_sales_lead_form_website');
         $this->employees = $this->test->byId('orocrm_sales_lead_form_numberOfEmployees');
         $this->industry = $this->test->byId('orocrm_sales_lead_form_industry');
-        $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_lead_form_owner')]/a");
         $this->campaign = $this->test->byXpath(
             "//div[starts-with(@id,'s2id_orocrm_sales_lead_form_additional_campaign')]/a"
         );
