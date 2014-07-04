@@ -10,7 +10,7 @@ use Oro\Bundle\EmbeddedFormBundle\Tests\Selenium\Pages\EmbeddedForms;
  *
  * @package OroCRM\Bundle\ContactUsBundle\Tests\Selenium
  */
-class CreateLeadTest extends Selenium2TestCase
+class CreateEmbeddedFormTest extends Selenium2TestCase
 {
     /**
      * @return string
@@ -70,8 +70,11 @@ class CreateLeadTest extends Selenium2TestCase
             ->open(array($title))
             ->delete()
             ->assertTitle('Embedded Forms - Integrations - System')
-            ->assertMessage('Embedded Form deleted')
-            ->filterBy('Title', $title)
-            ->assertNoDataMessage('No embedded form was found to match your search');
+            ->assertMessage('Embedded Form deleted');  /** @var EmbeddedForms $login */
+        $login->openEmbeddedForms('Oro\Bundle\EmbeddedFormBundle');
+        if ($login->getRowsCount() > 0) {
+            $login->filterBy('Title', $title)
+                ->assertNoDataMessage('No embedded form was found to match your search');
+        }
     }
 }
