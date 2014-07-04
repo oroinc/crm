@@ -5,26 +5,35 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 use Symfony\Component\Form\FormBuilder;
 
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
+use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 {
     /** @var FormBuilder|\PHPUnit_Framework_MockObject_MockObject */
     protected $builder;
 
+    /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
+    protected $settingsProvider;
+
     /** @var ChannelType */
     protected $type;
 
     public function setUp()
     {
-        $this->builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
+        $this->builder          = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
+            ->disableOriginalConstructor()->getMock();
+        $this->settingsProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
 
-        $this->type = new ChannelType();
+        $this->settingsProvider->expects($this->any())->method('getSettings')
+            ->will($this->returnValue([]));
+
+        $this->type = new ChannelType($this->settingsProvider);
     }
 
     public function tearDown()
     {
-        unset($this->type, $this->builder);
+        unset($this->type, $this->settingsProvider, $this->builder);
     }
 
     public function testBuildForm()
@@ -47,7 +56,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
                 'description'  => 'textarea',
                 'entities'     => 'orocrm_channel_entity_choice_form',
                 'integrations' => 'genemu_jqueryselect2_entity',
-                'dataSource'   => 'genemu_jqueryselect2_entity'
+                'dataSource'   => 'oro_integration_select'
             ],
             $fields
         );

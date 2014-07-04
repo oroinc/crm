@@ -28,6 +28,8 @@ services:
     # forms
     orocrm_channel.form.type.channel:
         class: %orocrm_channel.form.type.channel.class%
+        arguments:
+            - @orocrm_channel.provider.settings_provider
         tags:
             - { name: form.type, alias: orocrm_channel_form }
 

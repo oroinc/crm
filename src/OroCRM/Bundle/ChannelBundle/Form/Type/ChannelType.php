@@ -6,9 +6,22 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+
 class ChannelType extends AbstractType
 {
     const NAME = 'orocrm_channel_form';
+
+    /** @var SettingsProvider */
+    protected $settingsProvider;
+
+    /**
+     * @param SettingsProvider $settingsProvider
+     */
+    public function __construct(SettingsProvider $settingsProvider)
+    {
+        $this->settingsProvider = $settingsProvider;
+    }
 
     /**
      * {@inheritdoc}
@@ -55,15 +68,31 @@ class ChannelType extends AbstractType
         );
         $builder->add(
             'dataSource',
-            'genemu_jqueryselect2_entity',
+            'oro_integration_select',
             [
-                'required' => false,
-                'label'    => 'orocrm.channel.data_source.label',
-                'class'    => 'Oro\Bundle\IntegrationBundle\Entity\Channel',
-                'configs'  => ['placeholder' => 'orocrm.channel.form.select_data_source.label'],
-                'property' => 'name',
+                'required'      => false,
+                'allowed_types' => $this->getAllowedDataSourceIntegrationTypes(),
+                'label'         => 'orocrm.channel.data_source.label',
+                'configs'       => ['placeholder' => 'orocrm.channel.form.select_data_source.label'],
             ]
         );
+    }
+
+    /**
+     * @return array
+     */
+    protected function getAllowedDataSourceIntegrationTypes()
+    {
+        $settings     = $this->settingsProvider->getSettings('entity_data');
+        $allowedTypes = [];
+
+        foreach (array_keys($settings) as $entityName) {
+            if ($this->settingsProvider->belongsToIntegration($entityName)) {
+                $allowedTypes[] = $this->settingsProvider->getIntegrationTypeData($entityName);
+            }
+        }
+
+        return $allowedTypes;
     }
 
     /**
