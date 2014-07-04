@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Entity\EntityName;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 class ChannelTest extends AbstractEntityTestCase
 {
@@ -26,11 +27,13 @@ class ChannelTest extends AbstractEntityTestCase
         $name        = 'Some name';
         $description = 'Some description';
         $owner       = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $integration = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
 
         return [
             'name'        => ['name', $name, $name],
             'description' => ['description', $description, $description],
             'owner'       => ['owner', $owner, $owner],
+            'dataSource'  => ['dataSource', $integration, $integration]
         ];
     }
 
