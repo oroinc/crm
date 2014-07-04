@@ -60,7 +60,7 @@ class CampaignEventController extends Controller
             ->getView();
 
         return [
-            'chartView'      => $chartView
+            'chartView' => $chartView
         ];
     }
 }
