@@ -16,9 +16,10 @@ oro_chart:
                 field_name: visitsCount
         default_settings:
             connect_dots_with_line: true
-            available_in_reports: true
+            available_in_reports: false
             chartColors: ['#ACD39C', '#BE9DE2', '#6598DA', '#ECC87E', '#A4A2F6', '#6487BF', '#65BC87', '#8985C2', '#ECB574', '#84A377']
             chartFontSize: 9
             chartFontColor: '#454545'
             chartHighlightColor: '#FF5E5E'
+        data_transformer: oro_chart.data_transformer.multi_line
         template: OroChartBundle:Chart:line.html.twig

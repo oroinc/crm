@@ -45,23 +45,22 @@ class CampaignEventController extends Controller
                 $gridParameters
             );
 
+        $chartName = 'campaign_line_chart';
         $chartView = $this
             ->get('oro_chart.view_builder')
             ->setDataGrid($datagrid)
             ->setOptions(
                 array_merge(
-                    ['name' => 'campaign_line_chart'],
+                    ['name' => $chartName],
                     $this
                         ->get('oro_chart.config_provider')
-                        ->getChartConfig('campaign_line_chart')
+                        ->getChartConfig($chartName)
                 )
             )
             ->getView();
 
         return [
-            'chartView'      => $chartView,
-            'gridName'       => $gridName,
-            'gridParameters' => $gridParameters
+            'chartView'      => $chartView
         ];
     }
 }

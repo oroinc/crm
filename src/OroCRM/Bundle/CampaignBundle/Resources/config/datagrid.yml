@@ -172,6 +172,7 @@ datagrid:
                 frontend_type: integer
             logTime:
                 label: orocrm.campaign.trackingevent.report.date.label
+                frontend_type: datetime
 
     campaign-tracking-detailed-report-daily-grid:
         source:
@@ -196,6 +197,7 @@ datagrid:
                 frontend_type: integer
             logTime:
                 label: orocrm.campaign.trackingevent.report.date.label
+                frontend_type: datetime
 
     campaign-tracking-detailed-report-monthly-grid:
         source:
@@ -222,4 +224,4 @@ datagrid:
                 frontend_type: integer
             logTime:
                 label: orocrm.campaign.trackingevent.report.date.label
-
+                frontend_type: datetime
