@@ -53,6 +53,7 @@ class OroCRMChannelBundle implements Migration
         $table = $schema->createTable('orocrm_chl_to_integration_chl');
         $table->addColumn('channel_id', 'integer', ['notnull' => true]);
         $table->addColumn('integrations_id', 'smallint', ['notnull' => true]);
+
         $table->setPrimaryKey(['channel_id', 'integrations_id']);
         $table->addIndex(['channel_id'], 'IDX_1E77222472F5A1AA', []);
         $table->addIndex(['integrations_id'], 'IDX_1E772224A730349E', []);
@@ -83,6 +84,7 @@ class OroCRMChannelBundle implements Migration
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
+
         $table->setPrimaryKey(['id']);
         $table->addIndex(['channel_id'], 'IDX_92BC967172F5A1AA', []);
 

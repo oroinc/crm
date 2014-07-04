@@ -7,7 +7,7 @@ orocrm:
         description.label:   Description
         owner.label:         Owner
         entities.label:      Entities
-        integrations.label:  Inegrations
+        integrations.label:  Integrations
         data_source.label:   Customer
 
         datagrid:

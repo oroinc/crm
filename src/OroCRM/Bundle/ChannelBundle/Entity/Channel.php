@@ -87,7 +87,6 @@ class Channel
      */
     protected $dataSource;
 
-
     public function __construct()
     {
         $this->entities     = new ArrayCollection();

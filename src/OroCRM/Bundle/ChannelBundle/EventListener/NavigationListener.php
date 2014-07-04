@@ -2,10 +2,6 @@
 
 namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
-use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
 
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;

@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Entity\EntityName;
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 class ChannelTest extends AbstractEntityTestCase
 {

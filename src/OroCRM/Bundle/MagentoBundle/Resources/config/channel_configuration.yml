@@ -21,7 +21,6 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\Region
               - OroCRM\Bundle\MagentoBundle\Entity\Website
               - OroCRM\Bundle\MagentoBundle\Entity\Store
-
           navigation_items:
               - application_menu.customers_tab.magento_customer
           belongs_to_integration: magento
@@ -34,7 +33,6 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\Region
               - OroCRM\Bundle\MagentoBundle\Entity\Store
               - OroCRM\Bundle\MagentoBundle\Entity\Website
-
           navigation_items:
               - application_menu.sales_tab.magento_order
               - account_sales_tab_panel.orocrm_magento_account_orders_tab

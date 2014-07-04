@@ -6,7 +6,9 @@
         {{ form_row(form.entities) }}
     {% endif %}
 
-    {#{ form_row(form.integrations) }#}
+    {#% if form.integrations is defined %}
+        {{ form_row(form.integrations) }}
+    {% endif %#}
 
     {% if form.dataSource is defined %}
         {{ form_row(form.dataSource) }}
