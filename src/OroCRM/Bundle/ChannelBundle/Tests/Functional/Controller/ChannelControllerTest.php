@@ -4,10 +4,10 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Functional\Controller;
 
 use Symfony\Component\Form\Form;
 
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
 
 /**
  * @outputBuffering enabled
@@ -22,7 +22,7 @@ class ChannelControllerTest extends WebTestCase
     {
         $this->initClient(
             ['debug' => false],
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
         );
     }
 
@@ -71,7 +71,7 @@ class ChannelControllerTest extends WebTestCase
 
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_channel_update', array('id' => $result['id']))
+            $this->getUrl('orocrm_channel_update', ['id' => $result['id']])
         );
         /** @var Form $form */
         $form                              = $crawler->selectButton('Save and Close')->form();
@@ -100,7 +100,7 @@ class ChannelControllerTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('orocrm_api_delete_channel', array('id' => $channel['id']))
+            $this->getUrl('orocrm_api_delete_channel', ['id' => $channel['id']])
         );
 
         $response = $this->client->getResponse();

@@ -2,15 +2,21 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Controller\Api\Rest;
 
+use Doctrine\ORM\EntityNotFoundException;
+
 use Symfony\Component\HttpFoundation\Response;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
+use FOS\Rest\Util\Codes;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+
+use OroCRM\Bundle\ChannelBundle\Event\ChannelDeleteEvent;
 
 /**
  * @RouteResource("channel")
@@ -37,7 +43,20 @@ class ChannelController extends RestController
      */
     public function deleteAction($id)
     {
-        return $this->handleDeleteRequest($id);
+        try {
+            $channel = $this->getManager()->find($id);
+
+            $this->getDeleteHandler()->handleDelete($id, $this->getManager());
+            $this->get('event_dispatcher')->dispatch(ChannelDeleteEvent::EVENT_NAME, new ChannelDeleteEvent($channel));
+        } catch (EntityNotFoundException $notFoundEx) {
+            return $this->handleView($this->view(null, Codes::HTTP_NOT_FOUND));
+        } catch (ForbiddenException $forbiddenEx) {
+            return $this->handleView(
+                $this->view(['reason' => $forbiddenEx->getReason()], Codes::HTTP_FORBIDDEN)
+            );
+        }
+
+        return $this->handleView($this->view(null, Codes::HTTP_NO_CONTENT));
     }
 
     /**
