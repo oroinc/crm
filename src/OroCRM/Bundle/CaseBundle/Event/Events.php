@@ -4,5 +4,9 @@ namespace OroCRM\Bundle\CaseBundle\Event;
 
 final class Events
 {
-    const CASE_FORM_HANDLER_SUCCESS = 'orcrm_case.form_handler_on_success';
+    const BEFORE_SAVE = 'orcrm_case.before_save';
+
+    private function __construct()
+    {
+    }
 }

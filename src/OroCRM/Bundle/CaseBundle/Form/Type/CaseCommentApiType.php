@@ -43,7 +43,6 @@ class CaseCommentApiType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'add_public_field' => true,
                 'csrf_protection' => false,
                 'ownership_disabled' => false,
             ]

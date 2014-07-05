@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\CaseBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CaseCommentType extends AbstractType
@@ -20,15 +22,30 @@ class CaseCommentType extends AbstractType
                 'label'     => 'orocrm.case.casecomment.message.label'
             ]
         );
-        if ($options['add_public_field']) {
-            $builder->add(
-                'public',
-                'checkbox',
-                [
-                    'label'     => 'orocrm.case.casecomment.public.label',
-                    'required'  => false,
-                ]
-            );
+
+        $builder->add(
+            'public',
+            'checkbox',
+            [
+                'label'     => 'orocrm.case.casecomment.public.label',
+                'required'  => false,
+            ]
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        if (isset($view->vars['public_field_hidden'])) {
+            $publicFieldHidden = $view->vars['public_field_hidden'];
+        } else {
+            $publicFieldHidden = $options['public_field_hidden'];
+        }
+
+        if ($publicFieldHidden) {
+            unset($view['public']);
         }
     }
 
@@ -39,11 +56,11 @@ class CaseCommentType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'add_public_field'   => false,
-                'data_class'         => 'OroCRM\\Bundle\\CaseBundle\\Entity\\CaseComment',
-                'intention'          => 'orocrm_case_comment',
-                'ownership_disabled' => true,
-                'cascade_validation' => true,
+                'public_field_hidden'   => true,
+                'data_class'            => 'OroCRM\\Bundle\\CaseBundle\\Entity\\CaseComment',
+                'intention'             => 'orocrm_case_comment',
+                'ownership_disabled'    => true,
+                'cascade_validation'    => true,
             ]
         );
     }

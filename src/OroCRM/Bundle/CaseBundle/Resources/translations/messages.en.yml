@@ -49,7 +49,7 @@ orocrm:
             entity_plural_label:            Case Comments
             entity_description:             Represent case comment
             message.label:                  Message
-            public.label:                   Is Public
+            public.label:                   Make Public
             contact.label:                  Contact Author
             updatedBy.label:                Updated By
             owner.label:                    Owner

@@ -5,7 +5,6 @@
 {% oro_title_set({params : {"%entity.subject%": entity.subject|default('N/A') }}) %}
 
 {% block navButtons %}
-    {% placeholder orocrm_case_integrations_nav_buttons with {'entity': entity} %}
     {% if resource_granted('orocrm_case_comment_create') %}
         {{ UI.clientButton({
             'id': 'add-case-comment-button',
@@ -146,7 +145,7 @@
 
         {% set dataBlocks = dataBlocks|merge([
             {
-                'title': 'orocrm.case.casecomment.entity_plural_label'|trans,
+                'title': 'orocrm.case.block.comments'|trans,
                 'subblocks': [
                     {'data' : [caseComments]}
                 ]

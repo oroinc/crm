@@ -3,7 +3,7 @@ parameters:
     orocrm_case.form.type.entity.api.class:                  OroCRM\Bundle\CaseBundle\Form\Type\CaseEntityApiType
     orocrm_case.form.type.comment.class:                     OroCRM\Bundle\CaseBundle\Form\Type\CaseCommentType
     orocrm_case.form.type.comment.api.class:                 OroCRM\Bundle\CaseBundle\Form\Type\CaseCommentApiType
-    orocrm_case.form.handler.entity.class:                   OroCRM\Bundle\CaseBundle\Form\Handler\CaseApiFormHandler
+    orocrm_case.form.handler.entity.class:                   OroCRM\Bundle\CaseBundle\Form\Handler\CaseEntityHandler
 
 services:
     orocrm_case.form.type.entity:
