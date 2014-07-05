@@ -51,11 +51,6 @@
                         }
 
                         var rawData = {{ data|json_encode|raw }};
-
-                        // single-multi bc
-                        if (_.isArray(rawData)) {
-                            rawData = {data: rawData};
-                        }
                         var length = _.size(rawData[_.first(_.keys(rawData))]);
 
                         if (dataFormatter.isValueNumerical(xFormat)) {
@@ -107,7 +102,6 @@
 
                         var makeChart = function (rawData, count, key) {
                             var chartData = [];
-                            var yMax = null, yMin = null, xMax = null, xMin = null;
                             var prevYValue = 0;
 
                             for (var i in rawData) {
@@ -116,61 +110,29 @@
                                 yValue = yValue + prevYValue;
                                 var xValue = dataFormatter.parseValue(rawData[i]['label'], xFormat);
                                 xValue = xValue === null ? parseInt(i) : xValue;
-                                if (xMax === null) {
-                                    xMax = xValue;
-                                    yMax = yValue;
-                                    yMin = yValue;
-                                    xMin = xValue;
-                                }
-                                xMax = xMax < xValue ? xValue : xMax;
-                                xMin = xMin > xValue ? xValue : xMin;
-                                yMax = yMax < yValue ? yValue : yMax;
-                                yMin = yMin > yValue ? yValue : yMin;
 
                                 var item = [xValue, yValue];
                                 chartData.push(item);
                                 prevYValue = yValue;
                             }
-                            var deltaX = xMax - xMin;
-                            var deltaY = yMax - yMin;
-                            var xStep = (deltaX > 0 ? deltaX / rawData.length : 1);
-                            var yStep = (deltaY > 0 ? deltaY / rawData.length : 1);
-                            xMax += xStep;
-                            yMax += yStep;
-                            xMin -= xStep;
-                            yMin -= yStep;
 
-                            var chart = {
+                            return {
                                 label: key,
                                 data: chartData,
                                 color: colors[Math.ceil(colors.length/count)],
                                 markers: { show: false },
                                 points: { show: true }
                             };
-
-                            return {
-                                chart: chart,
-                                axis: {
-                                    xMax: xMax,
-                                    yMax: yMax,
-                                    xMin: xMin,
-                                    yMin: yMin
-                                }
-                            }
                         };
 
-                        var xMax = [], yMax = [], xMin = [], yMin = [], charts = [];
+                        var charts = [];
                         var count = 0;
 
                         _.each(rawData, function (rawData, key) {
                             var result = makeChart(rawData, count, key);
                             count++;
 
-                            charts.push(result.chart);
-                            xMax.push(result.axis.xMax);
-                            yMax.push(result.axis.yMax);
-                            xMin.push(result.axis.xMin);
-                            yMin.push(result.axis.yMin);
+                            charts.push(result);
                         });
 
                         Flotr.draw(
@@ -191,17 +153,12 @@
                                         }
                                     },
                                     yaxis: {
-                                        max: _.max(yMax),
-                                        min: _.min(yMin),
                                         tickFormatter: function (y) {
                                             return getYLabel(y);
                                         },
                                         title: {{ options.data_schema.value.label|trans|json_encode|raw }}
                                     },
                                     xaxis: {
-                                        noTicks: length,
-                                        max: _.max(xMax),
-                                        min: _.min(xMin),
                                         tickFormatter: function (x) {
                                             return getXLabel(x);
                                         },
