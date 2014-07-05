@@ -56,6 +56,7 @@
                         if (_.isArray(rawData)) {
                             rawData = {data: rawData};
                         }
+                        var length = _.size(rawData[_.first(_.keys(rawData))]);
 
                         if (dataFormatter.isValueNumerical(xFormat)) {
                             var sort = function (rawData) {
@@ -104,7 +105,7 @@
                         var connectDots = {{ options.settings.connect_dots_with_line|json_encode|raw }};
                         var colors = {{ config.default_settings.chartColors|json_encode|raw }};
 
-                        var makeChart = function (rawData, count) {
+                        var makeChart = function (rawData, count, key) {
                             var chartData = [];
                             var yMax = null, yMin = null, xMax = null, xMin = null;
                             var prevYValue = 0;
@@ -140,6 +141,7 @@
                             yMin -= yStep;
 
                             var chart = {
+                                label: key,
                                 data: chartData,
                                 color: colors[Math.ceil(colors.length/count)],
                                 markers: { show: false },
@@ -161,7 +163,7 @@
                         var count = 0;
 
                         _.each(rawData, function (rawData, key) {
-                            var result = makeChart(rawData, count);
+                            var result = makeChart(rawData, count, key);
                             count++;
 
                             charts.push(result.chart);
@@ -197,6 +199,7 @@
                                         title: {{ options.data_schema.value.label|trans|json_encode|raw }}
                                     },
                                     xaxis: {
+                                        noTicks: length,
                                         max: _.max(xMax),
                                         min: _.min(xMin),
                                         tickFormatter: function (x) {
@@ -211,13 +214,7 @@
                                     legend: {
                                         show: true,
                                         noColumns: 1,
-                                        labelFormatter: null,
-                                        labelBoxBorderColor: '#ccc',
-                                        container: null,
-                                        position: 'ne',
-                                        margin: 50,
-                                        backgroundColor: null,
-                                        backgroundOpacity: 0.85
+                                        position: 'nw'
                                     }
                                 }
                         );

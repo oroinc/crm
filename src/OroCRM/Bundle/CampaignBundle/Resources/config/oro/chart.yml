@@ -21,5 +21,6 @@ oro_chart:
             chartFontSize: 9
             chartFontColor: '#454545'
             chartHighlightColor: '#FF5E5E'
+            groupingOption: name
         data_transformer: orocrm_campaign.data_transformer.multi_line
         template: OroCRMCampaignBundle:Chart:multiline.html.twig
