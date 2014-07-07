@@ -78,6 +78,10 @@ class MultiLineDataTransformerTest extends \PHPUnit_Framework_TestCase
                             'value' => 'v1'
                         ],
                         [
+                            'label' => '2014-07-06',
+                            'value' => 0
+                        ],
+                        [
                             'label' => '2014-07-08',
                             'value' => 0
                         ],
@@ -90,6 +94,10 @@ class MultiLineDataTransformerTest extends \PHPUnit_Framework_TestCase
                         [
                             'label' => '2014-07-09',
                             'value' => 'v2'
+                        ],
+                        [
+                            'label' => '2014-07-06',
+                            'value' => 0
                         ],
                         [
                             'label' => '2014-07-07',

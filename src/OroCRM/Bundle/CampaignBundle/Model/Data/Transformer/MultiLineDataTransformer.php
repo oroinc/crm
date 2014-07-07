@@ -152,8 +152,11 @@ class MultiLineDataTransformer implements TransformerInterface
         }
 
         $format = $this->dateFormatMap[$this->period];
+
         $start  = \DateTime::createFromFormat($format, reset($labels));
-        $end    = \DateTime::createFromFormat($format, end($labels));
+        $start->modify(sprintf('-1 %s', $this->period));
+
+        $end = \DateTime::createFromFormat($format, end($labels));
         $end->modify(sprintf('+1 %s', $this->period));
 
         $fulfilledLabels = [];
