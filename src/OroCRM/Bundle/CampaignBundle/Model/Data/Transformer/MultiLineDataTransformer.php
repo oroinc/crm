@@ -67,6 +67,10 @@ class MultiLineDataTransformer implements TransformerInterface
     {
         $this->initialize($data, $chartOptions);
 
+        if (!$data->toArray()) {
+            return new ArrayData([]);
+        }
+
         $labels = $this->getLabels($this->sourceData, $this->labelKey);
 
         // create default values
@@ -154,9 +158,9 @@ class MultiLineDataTransformer implements TransformerInterface
         $format = $this->dateFormatMap[$this->period];
 
         $start  = \DateTime::createFromFormat($format, reset($labels));
-        $start->modify(sprintf('-1 %s', $this->period));
-
         $end = \DateTime::createFromFormat($format, end($labels));
+
+        $start->modify(sprintf('-1 %s', $this->period));
         $end->modify(sprintf('+1 %s', $this->period));
 
         $fulfilledLabels = [];
