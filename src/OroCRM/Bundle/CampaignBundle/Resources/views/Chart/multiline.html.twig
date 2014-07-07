@@ -35,7 +35,7 @@
                         var chartWidth = Math.round($widgetContent.width() * 0.9);
                         if (chartWidth != $chart.width()) {
                             $chart.width(chartWidth);
-                            $chart.height(Math.min(Math.round(chartWidth * 0.4), 350));
+                            $chart.height(Math.min(Math.round(chartWidth * 0.4), 450));
                             return true;
                         }
                         return false;
@@ -149,12 +149,15 @@
                                         track: true,
                                         relative: true,
                                         trackFormatter: function (pointData) {
-                                            return getXLabel(pointData.x) + ': ' + getYLabel(pointData.y);
+                                            return {{ options.data_schema.label.label|trans|json_encode|raw }}
+                                                + ': ' + getXLabel(pointData.x)
+                                                + '; ' + {{ options.data_schema.value.label|trans|json_encode|raw }}
+                                                + ': ' + getYLabel(pointData.y);
                                         }
                                     },
                                     yaxis: {
                                         autoscale: true,
-                                        autoscaleMargin: 0,
+                                        autoscaleMargin: 1,
                                         tickFormatter: function (y) {
                                             return getYLabel(y);
                                         },
@@ -163,6 +166,7 @@
                                     xaxis: {
                                         autoscale: true,
                                         autoscaleMargin: 0,
+                                        labelsAngle: 45,
                                         mode: 'time',
                                         noTicks: length * 2,
                                         tickFormatter: function (x) {

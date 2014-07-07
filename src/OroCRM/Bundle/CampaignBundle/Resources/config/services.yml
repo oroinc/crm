@@ -7,12 +7,12 @@ parameters:
     orocrm_campaign.data_transformer.multi_line.class: OroCRM\Bundle\CampaignBundle\Model\Data\Transformer\MultiLineDataTransformer
 services:
     orocrm_campaign.campaign.form.handler:
-            class: %orocrm_campaign.campaign.form.handler.class%
-            scope: request
-            arguments:
-                - @orocrm_campaign.campaign.form
-                - @request
-                - @doctrine.orm.entity_manager
+        class: %orocrm_campaign.campaign.form.handler.class%
+        scope: request
+        arguments:
+            - @orocrm_campaign.campaign.form
+            - @request
+            - @doctrine.orm.entity_manager
 
     orocrm_campaign.campaign.form.type:
         class: %orocrm_campaign.campaign.form.type.class%
