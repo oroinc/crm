@@ -115,7 +115,7 @@ class MultiLineDataTransformer implements TransformerInterface
      * @param DataInterface $data
      * @param array         $chartOptions
      */
-    public function initialize(DataInterface $data, array $chartOptions)
+    protected function initialize(DataInterface $data, array $chartOptions)
     {
         if (empty($chartOptions['default_settings']['groupingOption'])) {
             throw new \InvalidArgumentException(
