@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\ChannelBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
@@ -98,6 +100,19 @@ class ChannelType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        if (isset($view->children['owner'], $view->children['owner']->vars['choices'])
+            && count($view->children['owner']->vars['choices']) === 1
+        ) {
+
+            $this->appendClassAttr($view->children['owner']->vars, 'hide');
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
@@ -113,5 +128,17 @@ class ChannelType extends AbstractType
     public function getName()
     {
         return self::NAME;
+    }
+
+    /**
+     * @param array  $options
+     * @param string $cssClass
+     */
+    protected function appendClassAttr(array &$options, $cssClass)
+    {
+        $options['attr']          = isset($options['attr']) ? $options['attr'] : [];
+        $options['attr']['class'] = isset($options['attr']['class']) ? $options['attr']['class'] : '';
+
+        $options['attr']['class'] = implode(' ', [$options['attr']['class'], $cssClass]);
     }
 }
