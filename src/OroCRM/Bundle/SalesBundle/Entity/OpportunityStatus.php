@@ -12,7 +12,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  * @ORM\Table(name="orocrm_sales_opport_status")
  * @Config(
  *      defaultValues={
- *          "grouping"={"groups"={"dictionary"}}
+ *          "grouping"={
+ *              "groups"={"dictionary"}
+ *          }
  *      }
  * )
  */

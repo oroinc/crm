@@ -33,6 +33,8 @@ class Opportunity extends AbstractPageEntity
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $closeDate;
 
+    protected $owned = "//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_owner')]/a";
+
     public function __construct($testCase, $redirect = true)
     {
         parent::__construct($testCase, $redirect);
@@ -50,7 +52,6 @@ class Opportunity extends AbstractPageEntity
         $this->closeReason = $this->test->select($this->test->byId('orocrm_sales_opportunity_form_closeReason'));
         $this->closeRevenue = $this->test->byId('orocrm_sales_opportunity_form_closeRevenue');
         $this->closeDate = $this->test->byId('date_selector_orocrm_sales_opportunity_form_closeDate');
-        $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_owner')]/a");
 
         return $this;
     }
@@ -120,27 +121,6 @@ class Opportunity extends AbstractPageEntity
     public function getProbability()
     {
         return $this->probability->value();
-    }
-
-    public function setOwner($owner)
-    {
-        $this->owner->click();
-        $this->waitForAjax();
-        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($owner);
-        $this->waitForAjax();
-        $this->assertElementPresent(
-            "//div[@id='select2-drop']//div[contains(., '{$owner}')]",
-            "Owner autocomplete doesn't return search value"
-        );
-        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$owner}')]")->click();
-
-        return $this;
-
-    }
-
-    public function getOwner()
-    {
-        return;
     }
 
     public function seBudget($budget)

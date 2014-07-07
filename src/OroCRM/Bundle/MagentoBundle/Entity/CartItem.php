@@ -17,13 +17,21 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      @ORM\Index(name="magecartitem_sku_idx", columns={"sku"}),*
  * })
  * @Config(
- *  defaultValues={
- *      "entity"={"icon"="icon-shopping-cart"},
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-shopping-cart"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "note"={
+ *              "immutable"=true
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
  *      }
- *  }
  * )
  */
 class CartItem extends ExtendCartItem

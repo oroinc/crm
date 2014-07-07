@@ -56,7 +56,7 @@ class CustomerReverseSyncTest extends WebTestCase
         $channel->setSynchronizationSettings($settings);
         $em->flush();
 
-        $this->assertEmpty($this->getRecordsCount('JMSJobQueueBundle:Job'), 'Empty jobs table on start of the test');
+        $this->assertEmpty($this->getSyncJobsCount(), 'Sync job exists on start of the test');
 
         // update contact via UI needed by requirements
         $crawler = $this->client->request(
@@ -76,8 +76,8 @@ class CustomerReverseSyncTest extends WebTestCase
 
         $this->assertEquals(
             $expectedJobsCount,
-            $this->getRecordsCount('JMSJobQueueBundle:Job'),
-            'Job should be created depends on channel setting'
+            $this->getSyncJobsCount('JMSJobQueueBundle:Job'),
+            'Only one sync job must be created depends on channel setting'
         );
     }
 
@@ -101,18 +101,15 @@ class CustomerReverseSyncTest extends WebTestCase
     }
 
     /**
-     * @param $entity
-     *
      * @return integer
      */
-    protected function getRecordsCount($entity)
+    protected function getSyncJobsCount()
     {
-        $result = $this->getEM()->createQueryBuilder()
-            ->select('count(e)')
-            ->from($entity, 'e')
+        return (int)$this->getEM()->createQueryBuilder()
+            ->select('count(j)')
+            ->from('JMSJobQueueBundle:Job', 'j')
+            ->where('j.command = :command')->setParameter('command', 'oro:integration:reverse:sync')
             ->getQuery()
-            ->getSingleResult();
-
-        return reset($result);
+            ->getSingleScalarResult();
     }
 }

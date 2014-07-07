@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -31,31 +32,31 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *  routeName="orocrm_sales_lead_index",
- *  routeView="orocrm_sales_lead_view",
- *  defaultValues={
- *      "entity"={
- *          "icon"="icon-phone"
- *      },
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="user_owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "form"={
- *          "form_type"="orocrm_sales_lead_select"
- *      },
- *      "dataaudit"={
- *          "auditable"=true
+ *      routeName="orocrm_sales_lead_index",
+ *      routeView="orocrm_sales_lead_view",
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-phone"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="user_owner_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "form"={
+ *              "form_type"="orocrm_sales_lead_select"
+ *          },
+ *          "dataaudit"={
+ *              "auditable"=true
+ *          }
  *      }
- *  }
  * )
  */
-class Lead extends ExtendLead implements FullNameInterface
+class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
 {
     /**
      * @var integer
@@ -448,6 +449,8 @@ class Lead extends ExtendLead implements FullNameInterface
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->opportunities = new ArrayCollection();
     }
 
