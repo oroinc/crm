@@ -7,8 +7,8 @@ orocrm:
         name.label:          Name
         code.label:          Code
         combined_name.label: Combined name
-        start_date.label:    Start date
-        end_date.label:      End date
+        start_date.label:    Start Date
+        end_date.label:      End Date
         description.label:   Description
         budget.label:        Budget
         owner.label:         Owner
