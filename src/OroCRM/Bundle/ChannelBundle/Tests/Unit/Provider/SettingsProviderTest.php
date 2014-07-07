@@ -6,7 +6,8 @@ use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class SettingsProviderTest extends \PHPUnit_Framework_TestCase
 {
-    const TEST_ENTITY_NAME = 'TestBundle\Entity\Test';
+    const TEST_ENTITY_NAME         = 'TestBundle\Entity\Test';
+    const TEST_ANOTHER_ENTITY_NAME = 'TestBundle\Entity\Test2';
 
     /**
      * @dataProvider channelEntityConfigProvider
@@ -205,6 +206,57 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
                 ['entity_data' => [],],
                 null,
                 'some_section'
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider sourceTypesDataProvider
+     *
+     * @param array $config
+     * @param array $expectedResults
+     */
+    public function testGetSourceIntegrationTypes(array $config, array $expectedResults)
+    {
+        $this->assertSame($expectedResults, $this->getSettingsProvider($config)->getSourceIntegrationTypes());
+    }
+
+    /**
+     * @return array
+     */
+    public function sourceTypesDataProvider()
+    {
+        return [
+            'no one integration comes with entities'                   => [
+                '$config'          => [
+                    'entity_data' => [
+                        [
+                            'name'         => self::TEST_ENTITY_NAME,
+                            'dependent'    => [],
+                            'dependencies' => []
+                        ]
+                    ],
+                ],
+                '$expectedResults' => []
+            ],
+            'should found one integration, should return unique array' => [
+                '$config'          => [
+                    'entity_data' => [
+                        [
+                            'name'                   => self::TEST_ENTITY_NAME,
+                            'dependent'              => [],
+                            'dependencies'           => [],
+                            'belongs_to_integration' => 'test'
+                        ],
+                        [
+                            'name'                   => self::TEST_ANOTHER_ENTITY_NAME,
+                            'dependent'              => [],
+                            'dependencies'           => [],
+                            'belongs_to_integration' => 'test'
+                        ]
+                    ],
+                ],
+                '$expectedResults' => ['test']
             ]
         ];
     }

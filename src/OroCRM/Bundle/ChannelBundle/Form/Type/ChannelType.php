@@ -2,7 +2,9 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Form\Type;
 
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -40,7 +42,7 @@ class ChannelType extends AbstractType
             'description',
             'textarea',
             [
-                'required' => true,
+                'required' => false,
                 'label'    => 'orocrm.channel.description.label'
             ]
         );
@@ -71,7 +73,7 @@ class ChannelType extends AbstractType
             'oro_integration_select',
             [
                 'required'      => false,
-                'allowed_types' => $this->getAllowedDataSourceIntegrationTypes(),
+                'allowed_types' => $this->settingsProvider->getSourceIntegrationTypes(),
                 'label'         => 'orocrm.channel.data_source.label',
                 'configs'       => ['placeholder' => 'orocrm.channel.form.select_data_source.label'],
             ]
@@ -79,20 +81,16 @@ class ChannelType extends AbstractType
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    protected function getAllowedDataSourceIntegrationTypes()
+    public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        $settings     = $this->settingsProvider->getSettings('entity_data');
-        $allowedTypes = [];
+        if (isset($view->children['owner'], $view->children['owner']->vars['choices'])
+            && count($view->children['owner']->vars['choices']) < 2
+        ) {
 
-        foreach (array_keys($settings) as $entityName) {
-            if ($this->settingsProvider->belongsToIntegration($entityName)) {
-                $allowedTypes[] = $this->settingsProvider->getIntegrationTypeData($entityName);
-            }
+            $this->appendClassAttr($view->children['owner']->vars, 'hide');
         }
-
-        return $allowedTypes;
     }
 
     /**
@@ -113,5 +111,17 @@ class ChannelType extends AbstractType
     public function getName()
     {
         return self::NAME;
+    }
+
+    /**
+     * @param array  $options
+     * @param string $cssClass
+     */
+    protected function appendClassAttr(array &$options, $cssClass)
+    {
+        $options['attr']          = isset($options['attr']) ? $options['attr'] : [];
+        $options['attr']['class'] = isset($options['attr']['class']) ? $options['attr']['class'] : '';
+
+        $options['attr']['class'] = implode(' ', [$options['attr']['class'], $cssClass]);
     }
 }

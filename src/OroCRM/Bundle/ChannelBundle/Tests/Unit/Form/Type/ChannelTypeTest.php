@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormBuilder;
 
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
@@ -79,5 +80,67 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
             ->method('setDefaults')
             ->with($this->isType('array'));
         $this->type->setDefaultOptions($resolver);
+    }
+
+    public function testFinishViewShouldNotFailsIfNoOwnerField()
+    {
+        $this->type->finishView(new FormView(), $this->getMock('Symfony\Component\Form\Test\FormInterface'), []);
+    }
+
+    /**
+     * @dataProvider choicesDataProvider
+     *
+     * @param array $choices
+     * @param bool  $shouldAdd
+     */
+    public function testFinishViewShouldAddHideClassRelyOnChoices(array $choices, $shouldAdd)
+    {
+        $mainView                    = new FormView();
+        $ownerView                   = new FormView($mainView);
+        $mainView->children['owner'] = $ownerView;
+
+        $ownerView->vars['choices'] = $choices;
+
+        $this->type->finishView($mainView, $this->getMock('Symfony\Component\Form\Test\FormInterface'), []);
+
+        if ($shouldAdd) {
+            $this->assertArrayHasKey('attr', $ownerView->vars);
+            $this->assertArrayHasKey('class', $ownerView->vars['attr']);
+            $this->assertContains('hide', $ownerView->vars['attr']['class']);
+        } else {
+            $class = isset($ownerView->vars['attr'], $ownerView->vars['attr']['class'])
+                ? $ownerView->vars['attr']['class'] : '';
+            $this->assertNotContains('hide', $class);
+        }
+    }
+
+    public function testFinishViewShouldAddHideClassAndNotOverrideOld()
+    {
+        $mainView                    = new FormView();
+        $ownerView                   = new FormView($mainView);
+        $mainView->children['owner'] = $ownerView;
+        $ownerView->vars             = ['choices' => [], 'attr' => ['class' => 'testClass']];
+
+        $this->type->finishView($mainView, $this->getMock('Symfony\Component\Form\Test\FormInterface'), []);
+
+        $this->assertContains('hide', $ownerView->vars['attr']['class']);
+        $this->assertContains('testClass', $ownerView->vars['attr']['class']);
+    }
+
+    /**
+     * @return array
+     */
+    public function choicesDataProvider()
+    {
+        return [
+            'should hide, single choice'            => [
+                '$choices'   => ['test'],
+                '$shouldAdd' => true
+            ],
+            'multiple choices, should keep visible' => [
+                '$choices'   => ['test', 'test2'],
+                '$shouldAdd' => false
+            ]
+        ];
     }
 }

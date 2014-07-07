@@ -2,16 +2,15 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
-use Knp\Menu\MenuFactory;
 use Knp\Menu\MenuItem;
-
-use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
+use Knp\Menu\MenuFactory;
 
 use Oro\Component\Config\Resolver\ResolverInterface;
+use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
 
-use OroCRM\Bundle\ChannelBundle\EventListener\NavigationListener;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
+use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use OroCRM\Bundle\ChannelBundle\EventListener\NavigationListener;
 
 class NavigationListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,10 +31,11 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider navigationConfigureDataProvider
      *
-     * @param array   $settings
-     * @param boolean $isDisplayed default is true
+     * @param array $settings
+     * @param bool  $isEnabled
+     * @param bool  $expectedResult
      */
-    public function testOnNavigationConfigure($settings, $isDisplayed = true)
+    public function testOnNavigationConfigure($settings, $isEnabled, $expectedResult)
     {
         $factory = new MenuFactory();
 
@@ -43,7 +43,7 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnArgument(0));
 
         $this->state->expects($this->once())->method('isEntityEnabled')
-            ->will($this->returnValue($isDisplayed));
+            ->will($this->returnValue($isEnabled));
 
         $settingsProvider = new SettingsProvider($settings, $this->resolver);
         $listener         = new NavigationListener($settingsProvider, $this->state);
@@ -59,7 +59,7 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
         $listener->onNavigationConfigure($eventData);
 
         $this->assertEquals(
-            $isDisplayed,
+            $expectedResult,
             $salesTab->getChild('test_item')->isDisplayed()
         );
     }
@@ -70,7 +70,7 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
     public function navigationConfigureDataProvider()
     {
         return [
-            'child is shown'  => [
+            'child is shown'                               => [
                 'settings' => [
                     'entity_data' => [
                         [
@@ -87,8 +87,10 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
                         ],
                     ]
                 ],
+                true,
+                true
             ],
-            'child is hidden' => [
+            'child is hidden'                              => [
                 'settings' => [
                     'entity_data' => [
                         [
@@ -105,6 +107,24 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
                         ],
                     ]
                 ],
+                false,
+                false
+            ],
+            'another menu is configured, should skip item' => [
+                'settings' => [
+                    'entity_data' => [
+                        [
+                            'name'                   => 'Oro\Bundle\AcmeBundle\Entity\Test',
+                            'dependent'              => [],
+                            'navigation_items'       => [
+                                'test_menu_another.sales_tab.test_item'
+                            ],
+                            'dependencies'           => [],
+                            'dependencies_condition' => 'AND'
+                        ],
+                    ]
+                ],
+                true,
                 false
             ],
         ];
