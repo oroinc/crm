@@ -13,12 +13,12 @@ class SalesFunnel extends AbstractPageEntity
 {
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $startDate;
-    /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $owner;
-    /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
+      /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $lead;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $opportunity;
+
+    protected $owner = "//div[starts-with(@id,'s2id_oro_workflow_transition_sales_funnel_owner')]/a";
 
     public function __construct($testCase, $redirect = true)
     {
@@ -30,23 +30,6 @@ class SalesFunnel extends AbstractPageEntity
         $this->startDate = $this->test->byId('oro_workflow_transition_sales_funnel_name');
         $this->startDate->clear();
         $this->startDate->value($date);
-        return $this;
-    }
-
-    public function setOwner($owner)
-    {
-        $this->owner = $this->test
-            ->byXpath("//div[starts-with(@id,'s2id_oro_workflow_transition_sales_funnel_owner')]/a");
-        $this->owner->click();
-        $this->waitForAjax();
-        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($owner);
-        $this->waitForAjax();
-        $this->assertElementPresent(
-            "//div[@id='select2-drop']//div[contains(., '{$owner}')]",
-            "Owner autocomplete doesn't return search value"
-        );
-        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$owner}')]")->click();
-
         return $this;
     }
 
