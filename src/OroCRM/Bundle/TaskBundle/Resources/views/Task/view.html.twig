@@ -38,7 +38,7 @@
         <div class="row-fluid form-horizontal">
             <div class="responsive-block">
                 {{ UI.renderProperty('orocrm.task.subject.label'|trans, entity.subject) }}
-                {{ UI.renderProperty('orocrm.task.description.label'|trans, entity.description) }}
+                {{ UI.renderHtmlProperty('orocrm.task.description.label'|trans, entity.description|nl2br) }}
                 {{ UI.renderProperty('orocrm.task.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
                 {{ UI.renderProperty('orocrm.task.task_priority.label'|trans, entity.taskPriority) }}
 
@@ -102,7 +102,7 @@
 
     {% set dataBlocks = [
         {
-            'title': 'orocrm.task.block.general'|trans,
+            'title': 'General Information'|trans,
             'class': 'active',
             'subblocks': [
                 {'data' : [taskInformation]}

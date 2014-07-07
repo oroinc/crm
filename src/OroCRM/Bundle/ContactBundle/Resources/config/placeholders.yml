@@ -1,11 +1,8 @@
 placeholders:
-    view_content_data_communications:
-        items:
-            orocrm_contact_emails: ~
-
     orocrm_account_action_dropdown:
         items:
-            orocrm_account_action_dropdown_add_contact: ~
+            orocrm_account_action_dropdown_add_contact:
+                order: 10
 
     quick_launchpad_right_column:
         items:
@@ -15,11 +12,6 @@ placeholders:
 items:
     orocrm_account_action_dropdown_add_contact:
         template: OroCRMContactBundle:Account:action/addContactButton.html.twig
-        order: 10
-
-    orocrm_contact_emails:
-        template: OroCRMContactBundle:Contact:contactEmails.html.twig
-        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %orocrm_contact.entity.class%)
 
     contacts_launchpad:
         template: OroCRMContactBundle:Dashboard:contactsLaunchpad.html.twig

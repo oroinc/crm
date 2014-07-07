@@ -15,7 +15,15 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderAddress;
  * @ORM\Entity
  * @Config(
  *       defaultValues={
- *          "entity"={"icon"="icon-map-marker"},
+ *          "entity"={
+ *              "icon"="icon-map-marker"
+ *          },
+ *          "note"={
+ *              "immutable"=true
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
  *      }
  * )
  */

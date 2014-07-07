@@ -33,7 +33,7 @@
     {% set id = 'task-form' %}
 
     {% set dataBlocks = [{
-        'title': 'orocrm.task.block.general'|trans,
+        'title': 'General Information'|trans,
         'class': 'active',
         'subblocks': [
             {
@@ -61,7 +61,7 @@
         {% endfor %}
 
         {% set dataBlocks = dataBlocks|merge([{
-            'title': 'orocrm.task.block.additional'|trans,
+            'title': 'Additional Information'|trans,
             'subblocks': [{
                 'title': '',
                 'useSpan': false,

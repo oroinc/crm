@@ -1,22 +1,9 @@
 placeholders:
-    view_content_data_communications:
-        items:
-            orocrm_call_user_calls: ~
-            orocrm_call_contact_calls: ~
-
     orocrm_account_action_dropdown:
         items:
-            orocrm_account_action_dropdown_add_call: ~
+            orocrm_account_action_dropdown_add_call:
+                order: 40
 
 items:
-    orocrm_call_user_calls:
-        template: OroCRMCallBundle:Call:userCalls.html.twig
-        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)
-
-    orocrm_call_contact_calls:
-        template: OroCRMCallBundle:Call:contactCalls.html.twig
-        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %orocrm_contact.entity.class%)
-
     orocrm_account_action_dropdown_add_call:
         template: OroCRMCallBundle:Account:action/logCallButton.html.twig
-        order: 40

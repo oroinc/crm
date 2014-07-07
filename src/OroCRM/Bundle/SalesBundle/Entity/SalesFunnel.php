@@ -20,25 +20,25 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *  routeName="orocrm_sales_salesfunnel_index",
- *  routeView="orocrm_sales_salesfunnel_view",
- *  defaultValues={
- *      "entity"={
- *          "icon"="icon-filter"
- *      },
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="user_owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "workflow"={
- *          "active_workflow"="b2b_flow_sales_funnel"
+ *      routeName="orocrm_sales_salesfunnel_index",
+ *      routeView="orocrm_sales_salesfunnel_view",
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-filter"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="user_owner_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "workflow"={
+ *              "active_workflow"="b2b_flow_sales_funnel"
+ *          }
  *      }
- *  }
  * )
  */
 class SalesFunnel
