@@ -153,12 +153,18 @@
                                         }
                                     },
                                     yaxis: {
+                                        autoscale: true,
+                                        autoscaleMargin: 0,
                                         tickFormatter: function (y) {
                                             return getYLabel(y);
                                         },
                                         title: {{ options.data_schema.value.label|trans|json_encode|raw }}
                                     },
                                     xaxis: {
+                                        autoscale: true,
+                                        autoscaleMargin: 0,
+                                        mode: 'time',
+                                        noTicks: length * 2,
                                         tickFormatter: function (x) {
                                             return getXLabel(x);
                                         },
@@ -166,7 +172,8 @@
                                     },
                                     HtmlText: false,
                                     grid: {
-                                        verticalLines: false
+                                        verticalLines: false,
+                                        labelMargin: 10
                                     },
                                     legend: {
                                         show: true,
@@ -177,11 +184,13 @@
                         );
                     };
 
-                    layout.onPageRendered(function () {
-                        setChartSize();
-                        drawChart();
-                        setChartContainerSize();
-                    });
+                    setTimeout(function(){
+                        layout.onPageRendered(function () {
+                            setChartSize();
+                            drawChart();
+                            setChartContainerSize();
+                        });
+                    }, 200);
 
                     $(window).resize(function () {
                         if (setChartSize()) {
