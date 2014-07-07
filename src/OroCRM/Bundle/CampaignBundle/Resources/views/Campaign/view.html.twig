@@ -31,6 +31,12 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
+{% block stats %}
+    <li>{{ 'Created'|trans }}: {{ breadcrumbs.entity.createdAt ? breadcrumbs.entity.createdAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'orocrm.campaign.start_date.label'|trans }}: {{ breadcrumbs.entity.startDate ? breadcrumbs.entity.startDate|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'orocrm.campaign.end_date.label'|trans }}: {{ breadcrumbs.entity.endDate ? breadcrumbs.entity.endDate|oro_format_datetime : 'N/A' }}</li>
+{% endblock stats %}
+
 {% block content_data %}
     {% set campaignInformationWidget %}
         {% include 'OroCRMCampaignBundle:Campaign:widget/view.html.twig' %}
