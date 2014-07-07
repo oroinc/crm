@@ -73,7 +73,7 @@ class StateProvider
             $qb->distinct(true);
             $qb->select('i.type')
                 ->from('OroCRMChannelBundle:Channel', 'c')
-                ->innerJoin('c.integrations', 'i');
+                ->innerJoin('c.dataSource', 'i');
 
             $assignedIntegrationTypes = $qb->getQuery()->getArrayResult();
             $assignedIntegrationTypes = array_map(
