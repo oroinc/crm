@@ -2,10 +2,10 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
@@ -42,7 +42,7 @@ class ChannelType extends AbstractType
             'description',
             'textarea',
             [
-                'required' => true,
+                'required' => false,
                 'label'    => 'orocrm.channel.description.label'
             ]
         );
@@ -73,28 +73,11 @@ class ChannelType extends AbstractType
             'oro_integration_select',
             [
                 'required'      => false,
-                'allowed_types' => $this->getAllowedDataSourceIntegrationTypes(),
+                'allowed_types' => $this->settingsProvider->getSourceIntegrationTypes(),
                 'label'         => 'orocrm.channel.data_source.label',
                 'configs'       => ['placeholder' => 'orocrm.channel.form.select_data_source.label'],
             ]
         );
-    }
-
-    /**
-     * @return array
-     */
-    protected function getAllowedDataSourceIntegrationTypes()
-    {
-        $settings     = $this->settingsProvider->getSettings('entity_data');
-        $allowedTypes = [];
-
-        foreach (array_keys($settings) as $entityName) {
-            if ($this->settingsProvider->belongsToIntegration($entityName)) {
-                $allowedTypes[] = $this->settingsProvider->getIntegrationTypeData($entityName);
-            }
-        }
-
-        return $allowedTypes;
     }
 
     /**
@@ -103,7 +86,7 @@ class ChannelType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         if (isset($view->children['owner'], $view->children['owner']->vars['choices'])
-            && count($view->children['owner']->vars['choices']) === 1
+            && count($view->children['owner']->vars['choices']) < 2
         ) {
 
             $this->appendClassAttr($view->children['owner']->vars, 'hide');

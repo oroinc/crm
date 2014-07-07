@@ -4,7 +4,5 @@ OroCRM\Bundle\ChannelBundle\Entity\Channel:
             - NotBlank: ~
             - Length:
                 max: 250
-        description:
-            - NotBlank: ~
         owner:
             - NotBlank: ~
