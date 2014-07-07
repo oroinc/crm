@@ -2,11 +2,11 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormBuilder;
 
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
-use Symfony\Component\Form\FormView;
 
 class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 {
