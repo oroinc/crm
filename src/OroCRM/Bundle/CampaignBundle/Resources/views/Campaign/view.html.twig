@@ -43,7 +43,13 @@
     {% set trackingPlot %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'url': path('orocrm_campaign_event_plot', {period: entity.reportPeriod, campaignCode: entity.code}),
+            'url': path(
+                'orocrm_campaign_event_plot',
+                {
+                    period: entity.reportPeriod|default('daily'),
+                    campaignCode: entity.code
+                }
+            ),
             'title': 'Detailed Events Report'|trans
         }) }}
     {% endset %}
