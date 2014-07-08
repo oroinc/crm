@@ -37,6 +37,7 @@ orocrm:
             source.label:                   Source
             status.label:                   Status
             priority.label:                 Priority
+            comments.label:                 Comments
             created_at.label:               Created At
             updated_at.label:               Updated At
             id.label:                       Id

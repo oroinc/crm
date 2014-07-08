@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\UserBundle\Entity\User;
@@ -50,6 +51,13 @@ class CaseEntity extends ExtendCaseEntity
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $id;
 
@@ -58,6 +66,13 @@ class CaseEntity extends ExtendCaseEntity
      *
      * @ORM\Column(name="subject", type="string", length=255)
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $subject;
 
@@ -66,6 +81,13 @@ class CaseEntity extends ExtendCaseEntity
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $description;
 
@@ -74,6 +96,13 @@ class CaseEntity extends ExtendCaseEntity
      *
      * @ORM\Column(name="resolution", type="text", nullable=true)
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $resolution;
 
@@ -83,6 +112,13 @@ class CaseEntity extends ExtendCaseEntity
      * @ORM\ManyToOne(targetEntity="CaseSource", cascade={"persist"})
      * @ORM\JoinColumn(name="source_name", referencedColumnName="name", onDelete="SET NULL")
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $source;
 
@@ -92,6 +128,13 @@ class CaseEntity extends ExtendCaseEntity
      * @ORM\ManyToOne(targetEntity="CaseStatus", cascade={"persist"})
      * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $status;
 
@@ -101,6 +144,13 @@ class CaseEntity extends ExtendCaseEntity
      * @ORM\ManyToOne(targetEntity="CasePriority", cascade={"persist"})
      * @ORM\JoinColumn(name="priority_name", referencedColumnName="name", onDelete="SET NULL")
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $priority;
 
@@ -109,6 +159,13 @@ class CaseEntity extends ExtendCaseEntity
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $relatedContact;
 
@@ -117,6 +174,13 @@ class CaseEntity extends ExtendCaseEntity
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $relatedAccount;
 
@@ -125,6 +189,13 @@ class CaseEntity extends ExtendCaseEntity
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="assigned_to_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      * @Oro\Versioned
      */
     protected $assignedTo;
@@ -135,6 +206,13 @@ class CaseEntity extends ExtendCaseEntity
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $owner;
 
@@ -528,5 +606,13 @@ class CaseEntity extends ExtendCaseEntity
         if ($this->updateClosedAt) {
             $this->setClosedAt(new \DateTime('now', new \DateTimeZone('UTC')));
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->subject;
     }
 }
