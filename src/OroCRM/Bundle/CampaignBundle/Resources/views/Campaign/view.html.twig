@@ -31,19 +31,60 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
+{% block stats %}
+    <li>{{ 'Created'|trans }}: {{ breadcrumbs.entity.createdAt ? breadcrumbs.entity.createdAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'orocrm.campaign.start_date.label'|trans }}: {{ breadcrumbs.entity.startDate ? breadcrumbs.entity.startDate|oro_format_date : 'N/A' }}</li>
+    <li>{{ 'orocrm.campaign.end_date.label'|trans }}: {{ breadcrumbs.entity.endDate ? breadcrumbs.entity.endDate|oro_format_date : 'N/A' }}</li>
+{% endblock stats %}
+
 {% block content_data %}
     {% set campaignInformationWidget %}
         {% include 'OroCRMCampaignBundle:Campaign:widget/view.html.twig' %}
     {% endset %}
 
+    {% set trackingEventsReport %}
+        {{ dataGrid.renderGrid('campaign-tracking-total-report-grid', {code: entity.code}) }}
+    {% endset %}
+
+    {% set trackingPlot %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path(
+                'orocrm_campaign_event_plot',
+                {
+                    period: entity.reportPeriod|default('daily'),
+                    campaignCode: entity.code
+                }
+            ),
+            'title': 'Detailed Events Report'|trans
+        }) }}
+    {% endset %}
+
     {% set dataBlocks = [
         {
-            'title': 'General Information'|trans,
+            'title': 'orocrm.campaign.block.general'|trans,
             'class': 'active',
             'subblocks': [
                 {'data' : [campaignInformationWidget]}
             ]
         },
+        {
+            'title': 'orocrm.campaign.block.events'|trans,
+            'subblocks': [
+                {'data' : [
+                    trackingPlot,
+                    trackingEventsReport
+                ]}
+            ]
+        },
+        {
+            'title': 'orocrm.campaign.tracking_code.label'|trans,
+            'subblocks': [
+                {'data' : [
+                    'orocrm.campaign.tracking_code.info'|trans({'%campaignCode%': entity.code})
+                ]}
+            ]
+        }
     ] %}
 
     {% set id = 'campaignView' %}
