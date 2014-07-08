@@ -61,6 +61,19 @@ class CampaignType extends AbstractType
                     'label'    => 'orocrm.campaign.budget.label',
                     'required' => false,
                 ]
+            )
+            ->add(
+                'reportPeriod',
+                'choice',
+                [
+                    'label' => 'orocrm.campaign.report_period.label',
+                    'required' => false,
+                    'choices' => [
+                        'hourly' => 'Hourly',
+                        'daily'  => 'Daily',
+                        'monthly' => 'Monthly'
+                    ]
+                ]
             );
     }
 
