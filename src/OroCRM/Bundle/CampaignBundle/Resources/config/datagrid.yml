@@ -90,3 +90,124 @@ datagrid:
                 label:         orocrm.campaign.datagrid.actions.delete.label
                 icon:          trash
                 link:          delete_link
+
+    campaign-tracking-total-report-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_campaign_view
+            query:
+                select:
+                    - e.name
+                    - COUNT(e.id) as visitsCount
+                from:
+                    - { table: %oro_tracking.tracking_event.class%, alias: e }
+                where:
+                    and:
+                        - e.code = :code
+                groupBy: e.name
+        columns:
+            name:
+                label: oro.tracking.trackingevent.name.label
+            visitsCount:
+                label: orocrm.campaign.trackingevent.report.visits_count.label
+                frontend_type: integer
+        sorters:
+            columns:
+                name:
+                    data_name: e.name
+                visitsCount:
+                    data_name: visitsCount
+            default:
+                name: ASC
+        filters:
+            columns:
+                name:
+                    type:      string
+                    data_name: e.name
+                visitsCount:
+                    type:      number
+                    data_name: visitsCount
+                    filter_by_having: true
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_INTEGER
+        options:
+            export: true
+
+    campaign-tracking-detailed-report-hourly-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_campaign_view
+            query:
+                select:
+                    - e.name
+                    - COUNT(e.id) as visitsCount
+                    - DATE(e.loggedAt) as dateLoggedAt
+                    - HOUR(e.loggedAt) as hourLoggedAt
+                    - CONCAT(DATE(e.loggedAt), ' ', TIME(CONCAT(HOUR(e.loggedAt), ':00:00'))) as logTime
+                from:
+                    - { table: %oro_tracking.tracking_event.class%, alias: e }
+                where:
+                    and:
+                        - e.code = :code
+                groupBy: e.name, dateLoggedAt, hourLoggedAt
+        columns:
+            name:
+                label: oro.tracking.trackingevent.name.label
+            visitsCount:
+                label: orocrm.campaign.trackingevent.report.visits_count.label
+                frontend_type: integer
+            logTime:
+                label: orocrm.campaign.trackingevent.report.date.label
+                frontend_type: datetime
+
+    campaign-tracking-detailed-report-daily-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_campaign_view
+            query:
+                select:
+                    - e.name
+                    - COUNT(e.id) as visitsCount
+                    - DATE(e.loggedAt) as logTime
+                from:
+                    - { table: %oro_tracking.tracking_event.class%, alias: e }
+                where:
+                    and:
+                        - e.code = :code
+                groupBy: e.name, logTime
+        columns:
+            name:
+                label: oro.tracking.trackingevent.name.label
+            visitsCount:
+                label: orocrm.campaign.trackingevent.report.visits_count.label
+                frontend_type: integer
+            logTime:
+                label: orocrm.campaign.trackingevent.report.date.label
+                frontend_type: date
+
+    campaign-tracking-detailed-report-monthly-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_campaign_view
+            query:
+                select:
+                    - e.name
+                    - COUNT(e.id) as visitsCount
+                    - YEAR(e.loggedAt) as yearLoggedAt
+                    - MONTH(e.loggedAt) as monthLoggedAt
+                    - DATE(CONCAT(YEAR(e.loggedAt), '-', MONTH(e.loggedAt), '-01')) as logTime
+                from:
+                    - { table: %oro_tracking.tracking_event.class%, alias: e }
+                where:
+                    and:
+                        - e.code = :code
+                groupBy: e.name, yearLoggedAt, monthLoggedAt
+        columns:
+            name:
+                label: oro.tracking.trackingevent.name.label
+            visitsCount:
+                label: orocrm.campaign.trackingevent.report.visits_count.label
+                frontend_type: integer
+            logTime:
+                label: orocrm.campaign.trackingevent.report.date.label
+                frontend_type: date

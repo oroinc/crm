@@ -102,6 +102,13 @@ class Campaign extends ExtendCampaign
     protected $owner;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="report_period", type="string", length=25, nullable=true)
+     */
+    protected $reportPeriod;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -295,5 +302,28 @@ class Campaign extends ExtendCampaign
     public function getCombinedName()
     {
         return $this->combinedName;
+    }
+
+    /**
+     *  Get report period.
+     *
+     * @return string
+     */
+    public function getReportPeriod()
+    {
+        return $this->reportPeriod;
+    }
+
+    /**
+     * Set report period.
+     *
+     * @param string $reportPeriod
+     * @return Campaign
+     */
+    public function setReportPeriod($reportPeriod)
+    {
+        $this->reportPeriod = $reportPeriod;
+
+        return $this;
     }
 }
