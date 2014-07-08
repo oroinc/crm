@@ -145,4 +145,23 @@ class SettingsProvider
         return !empty($settings[$entityFQCN]['belongs_to_integration']) ?
             $settings[$entityFQCN]['belongs_to_integration'] : false;
     }
+
+    /**
+     * Returns integration types that could be used as customer datasource
+     *
+     * @return array
+     */
+    public function getSourceIntegrationTypes()
+    {
+        $settings     = $this->getSettings('entity_data');
+        $allowedTypes = [];
+
+        foreach (array_keys($settings) as $entityName) {
+            if ($this->belongsToIntegration($entityName)) {
+                $allowedTypes[] = $this->getIntegrationTypeData($entityName);
+            }
+        }
+
+        return array_unique($allowedTypes);
+    }
 }

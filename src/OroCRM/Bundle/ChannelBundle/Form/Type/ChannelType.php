@@ -2,13 +2,28 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Form\Type;
 
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelType extends AbstractType
 {
     const NAME = 'orocrm_channel_form';
+
+    /** @var SettingsProvider */
+    protected $settingsProvider;
+
+    /**
+     * @param SettingsProvider $settingsProvider
+     */
+    public function __construct(SettingsProvider $settingsProvider)
+    {
+        $this->settingsProvider = $settingsProvider;
+    }
 
     /**
      * {@inheritdoc}
@@ -27,7 +42,7 @@ class ChannelType extends AbstractType
             'description',
             'textarea',
             [
-                'required' => true,
+                'required' => false,
                 'label'    => 'orocrm.channel.description.label'
             ]
         );
@@ -55,15 +70,27 @@ class ChannelType extends AbstractType
         );
         $builder->add(
             'dataSource',
-            'genemu_jqueryselect2_entity',
+            'oro_integration_select',
             [
-                'required' => false,
-                'label'    => 'orocrm.channel.data_source.label',
-                'class'    => 'Oro\Bundle\IntegrationBundle\Entity\Channel',
-                'configs'  => ['placeholder' => 'orocrm.channel.form.select_data_source.label'],
-                'property' => 'name',
+                'required'      => false,
+                'allowed_types' => $this->settingsProvider->getSourceIntegrationTypes(),
+                'label'         => 'orocrm.channel.data_source.label',
+                'configs'       => ['placeholder' => 'orocrm.channel.form.select_data_source.label'],
             ]
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        if (isset($view->children['owner'], $view->children['owner']->vars['choices'])
+            && count($view->children['owner']->vars['choices']) < 2
+        ) {
+
+            $this->appendClassAttr($view->children['owner']->vars, 'hide');
+        }
     }
 
     /**
@@ -84,5 +111,17 @@ class ChannelType extends AbstractType
     public function getName()
     {
         return self::NAME;
+    }
+
+    /**
+     * @param array  $options
+     * @param string $cssClass
+     */
+    protected function appendClassAttr(array &$options, $cssClass)
+    {
+        $options['attr']          = isset($options['attr']) ? $options['attr'] : [];
+        $options['attr']['class'] = isset($options['attr']['class']) ? $options['attr']['class'] : '';
+
+        $options['attr']['class'] = implode(' ', [$options['attr']['class'], $cssClass]);
     }
 }
