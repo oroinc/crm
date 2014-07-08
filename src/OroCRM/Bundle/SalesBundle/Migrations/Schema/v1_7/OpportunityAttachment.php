@@ -9,8 +9,7 @@ use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInte
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-
-class OpportuninyAttachment  implements Migration, AttachmentExtensionAwareInterface
+class OpportunityAttachment implements Migration, AttachmentExtensionAwareInterface
 {
     /** @var AttachmentExtension */
     protected $attachmentExtension;
