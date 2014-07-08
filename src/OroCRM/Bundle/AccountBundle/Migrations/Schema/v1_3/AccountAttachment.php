@@ -33,7 +33,7 @@ class AccountAttachment implements Migration, AttachmentExtensionAwareInterface
                 'application/zip',
                 'application/x-gzip',
                 'application/msword',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.docume',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 'application/vnd.ms-excel',
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 'application/vnd.ms-powerpoint',
