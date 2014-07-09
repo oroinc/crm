@@ -42,7 +42,7 @@ class ControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Call logged successfully", $crawler->html());
+        $this->assertContains("Call saved", $crawler->html());
     }
 
     /**
@@ -72,7 +72,7 @@ class ControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Call logged successfully", $crawler->html());
+        $this->assertContains("Call saved", $crawler->html());
 
         return $id;
     }
