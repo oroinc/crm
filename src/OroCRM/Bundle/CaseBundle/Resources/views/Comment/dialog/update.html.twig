@@ -1,0 +1,29 @@
+{% form_theme form with ['OroFormBundle:Form:fields.html.twig', _self] %}
+
+<div class="widget-content">
+    {% if saved %}
+        <script type="text/javascript">
+        require(['oroui/js/widget-manager'],
+        function(widgetManager) {
+            widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
+                widget.trigger('formSave', {{ data|json_encode|raw }});
+            });
+        });
+        </script>
+    {% else %}
+        <div class="form-container">
+            <form id="{{ form.vars.name }}" action="{{ formAction }}" method="post" class="note-form">
+                <fieldset class="form-horizontal">
+                    {{ form_errors(form) }}
+                    {{ form_row(form.message) }}
+                    {{ form_rest(form) }}
+                    <div class="widget-actions form-actions" style="display: none;">
+                        <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
+                        <button class="btn btn-primary" type="submit">{{ 'Save'|trans }}</button>
+                    </div>
+                </fieldset>
+            </form>
+            {{ oro_form_js_validation(form) }}
+        </div>
+    {% endif %}
+</div>

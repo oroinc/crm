@@ -6,50 +6,51 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
+use FOS\Rest\Util\Codes;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
-use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
 /**
- * @Rest\RouteResource("case")
+ * @Rest\RouteResource("case/comment")
  * @Rest\NamePrefix("orocrm_case_api_")
  */
-class CaseController extends RestController implements ClassResourceInterface
+class CommentController extends RestController implements ClassResourceInterface
 {
     /**
      * REST GET list
      *
-     * @Rest\QueryParam(
-     *     name="page",
-     *     requirements="\d+",
-     *     nullable=true,
-     *     description="Page number, starting from 1. Defaults to 1."
+     * @Rest\Get(
+     *      "/case/{id}/comments",
+     *      requirements={"id"="\d+"}
      * )
      * @Rest\QueryParam(
-     *     name="limit",
-     *     requirements="\d+",
+     *     name="order",
+     *     requirements="ASC|DESC",
      *     nullable=true,
-     *     description="Number of items per page. defaults to 10."
+     *     description="Order of comments by created at field."
      * )
      * @ApiDoc(
-     *     description="Get all CaseEntity items",
+     *     description="Get list of case comments",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_view")
-     * @return Response
+     * @AclAncestor("orocrm_case_comment_view")
      */
-    public function cgetAction()
+    public function cgetAction(CaseEntity $case)
     {
-        $page  = (int)$this->getRequest()->get('page', 1);
-        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+        $comments = $this->get('orocrm_case.manager')
+            ->getCaseComments(
+                $case,
+                $this->getRequest()->get('order', 'DESC')
+            );
 
-        return $this->handleGetListRequest($page, $limit);
+        return $this->handleView(
+            $this->view($this->getPreparedItems($comments), Codes::HTTP_OK)
+        );
     }
 
     /**
@@ -58,10 +59,10 @@ class CaseController extends RestController implements ClassResourceInterface
      * @param string $id
      *
      * @ApiDoc(
-     *     description="Get CaseEntity item",
+     *     description="Get CaseComment item",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_view")
+     * @AclAncestor("orocrm_case_comment_view")
      * @return Response
      */
     public function getAction($id)
@@ -72,13 +73,13 @@ class CaseController extends RestController implements ClassResourceInterface
     /**
      * REST PUT
      *
-     * @param int $id CaseEntity item id
+     * @param int $id CaseComment item id
      *
      * @ApiDoc(
-     *     description="Update CaseEntity",
+     *     description="Update CaseComment",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_update")
+     * @AclAncestor("orocrm_case_comment_update")
      * @return Response
      */
     public function putAction($id)
@@ -88,16 +89,20 @@ class CaseController extends RestController implements ClassResourceInterface
 
     /**
      * Create new case
-     *
+
+     * @Rest\Post(
+     *      "/case/{id}/comment",
+     *      requirements={"id"="\d+"}
+     * )
      * @ApiDoc(
-     *     description="Create new CaseEntity",
+     *     description="Create new CaseComment",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_create")
+     * @AclAncestor("orocrm_case_comment_create")
      */
-    public function postAction()
+    public function postAction(CaseEntity $case)
     {
-        return $this->handleCreateRequest();
+        return $this->handleCreateRequest($case);
     }
 
     /**
@@ -106,10 +111,10 @@ class CaseController extends RestController implements ClassResourceInterface
      * @param int $id
      *
      * @ApiDoc(
-     *     description="Delete CaseEntity",
+     *     description="Delete CaseComment",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_delete")
+     * @AclAncestor("orocrm_case_comment_delete")
      * @return Response
      */
     public function deleteAction($id)
@@ -122,7 +127,7 @@ class CaseController extends RestController implements ClassResourceInterface
      */
     public function getManager()
     {
-        return $this->get('orocrm_case.manager.api');
+        return $this->get('orocrm_case.manager.comment.api');
     }
 
     /**
@@ -130,7 +135,7 @@ class CaseController extends RestController implements ClassResourceInterface
      */
     public function getForm()
     {
-        return $this->get('orocrm_case.form.entity.api');
+        return $this->get('orocrm_case.form.type.comment.api');
     }
 
     /**
@@ -138,7 +143,7 @@ class CaseController extends RestController implements ClassResourceInterface
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_case.form.handler.entity.api');
+        return $this->get('orocrm_case.form.handler.comment.api');
     }
 
     /**
@@ -147,19 +152,11 @@ class CaseController extends RestController implements ClassResourceInterface
     protected function transformEntityField($field, &$value)
     {
         switch ($field) {
-            case 'source':
-            case 'priority':
-            case 'status':
-                if ($value) {
-                    /** @var CaseSource|CaseStatus $value */
-                    $value = $value->getName();
-                }
-                break;
+            case 'case':
             case 'owner':
-            case 'assignedTo':
-            case 'relatedContact':
-            case 'relatedAccount':
+            case 'contact':
                 if ($value) {
+                    /** @var CaseEntity $value */
                     $value = $value->getId();
                 }
                 break;

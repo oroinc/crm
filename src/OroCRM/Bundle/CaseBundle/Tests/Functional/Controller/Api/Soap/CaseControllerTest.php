@@ -17,19 +17,39 @@ class CaseControllerTest extends WebTestCase
     /**
      * @var array
      */
-    protected $case = [
+    protected $caseCreateData = [
         'subject'     => 'New case',
         'description' => 'New description',
         'owner'       => 1,
-        'source'      => CaseSource::SOURCE_EMAIL,
-        'status'      => CaseStatus::STATUS_OPEN,
-        'priority'    => CasePriority::PRIORITY_NORMAL,
     ];
+
+    /**
+     * @var int
+     */
+    protected static $adminUserId = 1;
+
+    /**
+     * @var int
+     */
+    protected static $contactId;
 
     protected function setUp()
     {
         $this->initClient(array(), $this->generateWsseAuthHeader());
         $this->initSoapClient();
+
+        $this->loadFixtures(['OroCRM\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
+    }
+
+    protected function postFixtureLoad()
+    {
+        $contact = $this->getContainer()->get('doctrine.orm.entity_manager')
+            ->getRepository('OroCRMContactBundle:Contact')
+            ->findOneByEmail('daniel.case@example.com');
+
+        $this->assertNotNull($contact);
+
+        self::$contactId = $contact->getId();
     }
 
     /**
@@ -37,48 +57,112 @@ class CaseControllerTest extends WebTestCase
      */
     public function testCreate()
     {
-        $result = $this->soapClient->createCase($this->case);
-        $this->assertTrue((bool)$result, $this->soapClient->__getLastResponse());
+        $result = $this->soapClient->createCase($this->caseCreateData);
+        $this->assertGreaterThan(0, $result, $this->soapClient->__getLastResponse());
 
         return $result;
     }
 
     /**
      * @depends testCreate
+     * @param integer $id
      */
-    public function testCget()
+    public function testCget($id)
     {
-        $cases = $this->soapClient->getCases();
-        $cases = $this->valueToArray($cases);
-        $this->assertCount(1, $cases);
+        $result = $this->soapClient->getCases();
+        $result = $this->valueToArray($result);
+        $cases = $result['item'];
+
+        $this->assertCount(4, $cases);
+
+        $this->assertArrayIntersectEquals(
+            array(
+                'id' => $id,
+                'subject' => $this->caseCreateData['subject'],
+                'description' => $this->caseCreateData['description'],
+                'owner' => self::$adminUserId,
+                'relatedContact' => null,
+                'relatedAccount' => null,
+                'source' => CaseSource::SOURCE_OTHER,
+                'status' => CaseStatus::STATUS_OPEN,
+                'priority' => CasePriority::PRIORITY_NORMAL,
+                'updatedAt' => null,
+                'closedAt' => null,
+            ),
+            $cases[0]
+        );
+
+        $this->assertNotEmpty($cases[0]['createdAt']);
+        $this->assertNotEmpty($cases[0]['reportedAt']);
     }
 
     /**
-     * @param integer $id
      * @depends testCreate
+     * @param integer $id
+     * @return array
      */
     public function testGet($id)
     {
-        $case = $this->soapClient->getCase($id);
-        $case = $this->valueToArray($case);
-        $this->assertEquals($this->case['subject'], $case['subject']);
+        $result = $this->soapClient->getCase($id);
+        $case = $this->valueToArray($result);
+
+        $this->assertArrayIntersectEquals(
+            array(
+                'id' => $id,
+                'subject' => $this->caseCreateData['subject'],
+                'description' => $this->caseCreateData['description'],
+                'owner' => self::$adminUserId,
+                'relatedContact' => null,
+                'relatedAccount' => null,
+                'source' => CaseSource::SOURCE_OTHER,
+                'status' => CaseStatus::STATUS_OPEN,
+                'priority' => CasePriority::PRIORITY_NORMAL,
+                'updatedAt' => null,
+                'closedAt' => null,
+            ),
+            $case
+        );
+
+        $this->assertNotEmpty($case['createdAt']);
+        $this->assertNotEmpty($case['reportedAt']);
+
+        return $case;
     }
 
     /**
-     * @param integer $id
-     * @depends testCreate
+     * @depends testGet
+     * @param array $originalCase
+     * @return integer
      */
-    public function testUpdate($id)
+    public function testUpdate(array $originalCase)
     {
-        $case = array_merge($this->case, ['subject' => 'Updated subject']);
+        $id = $originalCase['id'];
 
-        $result = $this->soapClient->updateCase($id, $case);
-        $this->assertTrue($result);
+        $updateData = [
+            'subject' => 'Updated subject',
+            'description' => 'Updated description',
+            'resolution' => 'Updated resolution',
+            'status' => CaseStatus::STATUS_CLOSED,
+            'priority' => CasePriority::PRIORITY_LOW,
+            'source' => CaseSource::SOURCE_WEB,
+            'relatedContact' => self::$contactId,
+            'assignedTo' => self::$adminUserId,
+        ];
+
+        $result = $this->soapClient->updateCase($id, $updateData);
+        $this->assertTrue($result, $this->soapClient->__getLastResponse());
 
         $updatedCase = $this->soapClient->getCase($id);
         $updatedCase = $this->valueToArray($updatedCase);
 
-        $this->assertEquals($case['subject'], $updatedCase['subject']);
+        $this->assertNotEmpty($updatedCase['updatedAt']);
+        $this->assertNotEmpty($updatedCase['closedAt']);
+
+        $expectedCase = array_merge($originalCase, $updateData);
+        $expectedCase['updatedAt'] = $updatedCase['updatedAt'];
+        $expectedCase['closedAt'] = $updatedCase['closedAt'];
+
+        return $id;
     }
 
     /**
