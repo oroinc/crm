@@ -253,8 +253,8 @@ datagrid:
                 updatedAt:
                     data_name: c.updatedAt
             default:
-                firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
                 lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+                firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
         filters:
             columns:
                 firstName:
@@ -520,8 +520,8 @@ datagrid:
                 addressPostalCode:
                     data_name: address.postalCode
             default:
-                firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
                 lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+                firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
         filters:
             columns:
                 firstName:
