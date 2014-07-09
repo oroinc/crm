@@ -3,7 +3,7 @@
 'Add call log': 'Add call log'
 'Update call log': 'Update call log'
 'Log': 'Log'
-'Call logged successfully': 'Call logged successfully'
+'Call logged successfully': 'Call saved'
 'Call deleted successfully': 'Call deleted successfully'
 'Phone number is required field': 'Phone number is required field'
 
@@ -24,7 +24,7 @@ orocrm:
         form.call.other: Other...
 
         controller:
-            call.saved.message: Call logged successfully
+            call.saved.message: Call saved
             call.deleted.message: Call deleted successfully
 
         datagrid:

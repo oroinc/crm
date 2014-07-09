@@ -97,10 +97,10 @@
         {%- set accountChannelInfoSection -%}
             {% spaceless %}
                 {% set placeHolderName = 'orocrm_account_channel_info_' ~ channel.type %}
-                {{ placeholder(placeHolderName, {'account': entity, 'channel': channel}) }}
+                {{ placeholder(placeHolderName, {'accountId': entity.id, 'channelId': channel.id}) }}
             {% endspaceless %}
         {%- endset -%}
-        {% if accountChannelInfoSection %}
+        {% if accountChannelInfoSection|striptags|trim is not empty %}
             {% set dataBlocks = dataBlocks|merge([
                 {
                     'title': channel.name,

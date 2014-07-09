@@ -81,20 +81,20 @@ class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
      */
     public function soapInit($case)
     {
-        $this->id                 = $case->getId();
-        $this->subject            = $case->getSubject();
-        $this->description        = $case->getDescription();
-        $this->owner              = $this->getEntityId($case->getOwner());
-        $this->assignedTo         = $this->getEntityId($case->getAssignedTo());
-        $this->relatedContact     = $this->getEntityId($case->getRelatedContact());
-        $this->relatedAccount     = $this->getEntityId($case->getRelatedAccount());
-        $this->source             = $case->getSource() ? $case->getSource()->getName() : null;
-        $this->status             = $case->getStatus() ? $case->getStatus()->getName() : null;
-        $this->priority           = $case->getPriority() ? $case->getPriority()->getName() : null;
-        $this->createdAt          = $case->getCreatedAt();
-        $this->updatedAt          = $case->getUpdatedAt();
-        $this->reportedAt         = $case->getReportedAt();
-        $this->closedAt           = $case->getClosedAt();
+        $this->id             = $case->getId();
+        $this->subject        = $case->getSubject();
+        $this->description    = $case->getDescription();
+        $this->owner          = $this->getEntityId($case->getOwner());
+        $this->assignedTo     = $this->getEntityId($case->getAssignedTo());
+        $this->relatedContact = $this->getEntityId($case->getRelatedContact());
+        $this->relatedAccount = $this->getEntityId($case->getRelatedAccount());
+        $this->source         = $case->getSource() ? $case->getSource()->getName() : null;
+        $this->status         = $case->getStatus() ? $case->getStatus()->getName() : null;
+        $this->priority       = $case->getPriority() ? $case->getPriority()->getName() : null;
+        $this->createdAt      = $case->getCreatedAt();
+        $this->updatedAt      = $case->getUpdatedAt();
+        $this->reportedAt     = $case->getReportedAt();
+        $this->closedAt       = $case->getClosedAt();
     }
 
     /**

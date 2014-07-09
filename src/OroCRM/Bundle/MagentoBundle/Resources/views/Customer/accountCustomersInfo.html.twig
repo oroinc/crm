@@ -1,5 +1,5 @@
-<div class="widget-content">
-    {% if customers|length > 0 %}
+{% if resource_granted('orocrm_magento_customer_view') and customers|length > 0 %}
+    <div class="widget-content">
         {% set tabs = [] %}
         {% for customer in customers %}
             {% set tabs = tabs|merge([
@@ -12,9 +12,5 @@
             ]) %}
         {% endfor %}
         {{ tabPanel(tabs) }}
-    {% else %}
-        <div class="no-data">
-            <span>{{ "orocrm.magento.account.no_customers_exist"|trans }}</span>
-        </div>
-    {% endif %}
-</div>
+    </div>
+{% endif %}
