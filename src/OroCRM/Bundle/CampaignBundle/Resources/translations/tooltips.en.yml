@@ -1,0 +1,4 @@
+orocrm:
+    campaign:
+        name.tooltip: This value should not exceed 100 characters.
+        code.tooltip: This value should not exceed 20 characters.
