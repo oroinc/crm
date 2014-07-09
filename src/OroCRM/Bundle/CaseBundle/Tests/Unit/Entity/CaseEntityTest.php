@@ -6,9 +6,14 @@ use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
 class CaseEntityTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCreate()
+    /**
+     * @var CaseEntity
+     */
+    protected $case;
+
+    protected function setUp()
     {
-        new CaseEntity();
+        $this->case = new CaseEntity();
     }
 
     /**
@@ -16,13 +21,11 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testSettersAndGetters($property, $value)
     {
-        $entity = new CaseEntity();
-
         $method = 'set' . ucfirst($property);
-        $result = $entity->$method($value);
+        $result = $this->case->$method($value);
 
-        $this->assertInstanceOf(get_class($entity), $result);
-        $this->assertEquals($value, $entity->{'get' . $property}());
+        $this->assertInstanceOf(get_class($this->case), $result);
+        $this->assertEquals($value, $this->case->{'get' . $property}());
     }
 
     public function settersAndGettersDataProvider()
@@ -55,5 +58,24 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
             array('relatedContact', $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact')),
             array('relatedAccount', $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account'))
         );
+    }
+
+    public function testGetComments()
+    {
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $this->case->getComments());
+
+        $this->assertEquals(0, $this->case->getComments()->count());
+    }
+
+    public function testAddComment()
+    {
+        $comment = $this->getMock('OroCRM\Bundle\CaseBundle\Entity\CaseComment');
+        $comment->expects($this->once())
+            ->method('setCase')
+            ->with($this->case);
+
+        $this->assertEquals($this->case, $this->case->addComment($comment));
+
+        $this->assertEquals($comment, $this->case->getComments()->get(0));
     }
 }
