@@ -16,6 +16,7 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/mediator', 'oro
                 },
 
                 initialize: function () {
+                    this.off('refresh', this.reloadTasks);
                     this.on('refresh', this.reloadTasks);
                     Backbone.View.prototype.initialize.apply(this, arguments);
                 },
@@ -66,6 +67,7 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/mediator', 'oro
                 },
 
                 initialize: function () {
+                    this.off('ok');
                     this.on('ok', this.onSubmit);
                     Backbone.View.prototype.initialize.apply(this, arguments);
                 },

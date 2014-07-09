@@ -21,6 +21,7 @@ class CampaignType extends AbstractType
                 [
                     'label'    => 'orocrm.campaign.name.label',
                     'required' => true,
+                    'tooltip'  => 'orocrm.campaign.name.tooltip',
                 ]
             )
             ->add(
@@ -29,6 +30,7 @@ class CampaignType extends AbstractType
                 [
                     'label'    => 'orocrm.campaign.code.label',
                     'required' => true,
+                    'tooltip'  => 'orocrm.campaign.code.tooltip',
                 ]
             )
             ->add(
