@@ -1,0 +1,74 @@
+OroCRM\Bundle\CallBundle\Entity\Call:
+    alias: orocrm_call
+    label: orocrm.call.entity_plural_label
+    title_fields: [subject, phoneNumber, contactPhoneNumber]
+    route:
+        name: orocrm_call_update
+        parameters:
+            id: id
+    search_template: OroCRMCallBundle:Call:searchResult.html.twig
+    fields:
+        -
+            name: subject
+            target_type: text
+            target_fields: [subject]
+        -
+            name: phoneNumber
+            target_type: text
+            target_fields: [phoneNumber]
+        -
+            name: notes
+            target_type: text
+            target_fields: [notes]
+        -
+            name: relatedContact
+            relation_type: many-to-one
+            relation_fields:
+                -
+                    name:                   namePrefix
+                    target_type:            text
+                    target_fields:          [namePrefix]
+                -
+                    name:                   firstName
+                    target_type:            text
+                    target_fields:          [firstName]
+                -
+                    name:                   middleName
+                    target_type:            text
+                    target_fields:          [middleName]
+                -
+                    name:                   lastName
+                    target_type:            text
+                    target_fields:          [lastName]
+                -
+                    name:                   nameSuffix
+                    target_type:            text
+                    target_fields:          [nameSuffix]
+        -
+            name: relatedAccount
+            relation_type: many-to-one
+            relation_fields:
+                -
+                    name:                   name
+                    target_type:            text
+                    target_fields:          [name]
+        -
+            name: contactPhoneNumber
+            relation_type: many-to-one
+            relation_fields:
+                -
+                    name:                   phone
+                    target_type:            text
+                    target_fields:          [phone]
+        -
+            name: direction
+            relation_type: many-to-one
+            relation_fields:
+                -
+                    name:                   name
+                    target_type:            text
+                    target_fields:          [name]
+                -
+                    name:                   label
+                    target_type:            text
+                    target_fields:          [label]
