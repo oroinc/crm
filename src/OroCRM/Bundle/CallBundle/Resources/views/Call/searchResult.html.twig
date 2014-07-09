@@ -1,0 +1,18 @@
+{#
+    Available variables:
+    * entity       - user entity OroCRM\Bundle\CallBundle\Entity\Call or null
+    * indexer_item - indexer item Oro\Bundle\SearchBundle\Query\Result\Item
+#}
+{% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
+
+{% set showImage = false %}
+
+{% set recordUrl = indexer_item.recordUrl %}
+{% set title = indexer_item.recordTitle %}
+
+{% set entityType = 'orocrm.call.entity_label'|trans %}
+
+{% set entityInfo = [
+    {'title': 'orocrm.call.call_date_time.label'|trans, 'value': entity.callDateTime ? entity.callDateTime|oro_format_datetime : 'N/A'},
+]
+%}

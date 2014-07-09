@@ -2,20 +2,14 @@
 
 namespace OroCRM\Bundle\CaseBundle\Controller\Api\Rest;
 
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
 use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
@@ -23,21 +17,21 @@ use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
 /**
- * @RouteResource("case")
- * @NamePrefix("orocrm_api_")
+ * @Rest\RouteResource("case")
+ * @Rest\NamePrefix("orocrm_case_api_")
  */
 class CaseController extends RestController implements ClassResourceInterface
 {
     /**
      * REST GET list
      *
-     * @QueryParam(
+     * @Rest\QueryParam(
      *     name="page",
      *     requirements="\d+",
      *     nullable=true,
      *     description="Page number, starting from 1. Defaults to 1."
      * )
-     * @QueryParam(
+     * @Rest\QueryParam(
      *     name="limit",
      *     requirements="\d+",
      *     nullable=true,
@@ -115,12 +109,7 @@ class CaseController extends RestController implements ClassResourceInterface
      *     description="Delete CaseEntity",
      *     resource=true
      * )
-     * @Acl(
-     *     id="orocrm_case_delete",
-     *     type="entity",
-     *     permission="DELETE",
-     *     class="OroCRMCaseBundle:CaseEntity"
-     * )
+     * @AclAncestor("orocrm_case_delete")
      * @return Response
      */
     public function deleteAction($id)
@@ -129,9 +118,7 @@ class CaseController extends RestController implements ClassResourceInterface
     }
 
     /**
-     * Get entity Manager
-     *
-     * @return ApiEntityManager
+     * {@inheritdoc}
      */
     public function getManager()
     {
@@ -139,19 +126,19 @@ class CaseController extends RestController implements ClassResourceInterface
     }
 
     /**
-     * @return FormInterface
+     * {@inheritdoc}
      */
     public function getForm()
     {
-        return $this->get('orocrm_case.form.api');
+        return $this->get('orocrm_case.form.entity.api');
     }
 
     /**
-     * @return ApiFormHandler
+     * {@inheritdoc}
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_case.form.handler.case_api');
+        return $this->get('orocrm_case.form.handler.entity.api');
     }
 
     /**
@@ -161,6 +148,7 @@ class CaseController extends RestController implements ClassResourceInterface
     {
         switch ($field) {
             case 'source':
+            case 'priority':
             case 'status':
                 if ($value) {
                     /** @var CaseSource|CaseStatus $value */
