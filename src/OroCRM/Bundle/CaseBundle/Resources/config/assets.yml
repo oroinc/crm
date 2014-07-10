@@ -1,0 +1,3 @@
+css:
+    'orocrmcase':
+      - 'bundles/orocrmcase/css/less/comment.less'

@@ -4,9 +4,9 @@ orocrm_case_bundle:
     prefix:   /case
 
 orocrm_case_bundle_api:
-    resource:     "@OroCRMCaseBundle/Controller/Api/Rest/CaseController.php"
-    type:         rest
-    prefix:       api/rest/{version}
+    resource: "@OroCRMCaseBundle/Resources/config/oro/routing_api.yml"
+    type: rest
+    prefix: api/rest/{version}
     requirements:
         version:  latest|v1
     defaults:

@@ -415,6 +415,8 @@ datagrid:
             entityHint: cart item
             toolbarOptions:
                 hide: true
+                pagination:
+                    hide: true
 
     magento-products-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Product
@@ -799,6 +801,8 @@ datagrid:
             entityHint: order item
             toolbarOptions:
                 hide: true
+                pagination:
+                    hide: true
 
     magento-customer-order-grid:
         source:

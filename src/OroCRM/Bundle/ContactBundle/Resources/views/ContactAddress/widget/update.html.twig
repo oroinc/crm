@@ -10,8 +10,8 @@
         });
         </script>
     {% else %}
-        {% if not form.vars.valid %}
-        <div class="alert alert-error">
+        {% if not form.vars.valid and form_errors(form) %}
+        <div class="alert alert-error" style="margin:0">
             <div class="message">
                 {{ form_errors(form) }}
             </div>
@@ -20,8 +20,8 @@
 
         <form id="{{ form.vars.name }}"
               action="{{ form.vars.value and form.vars.value.id > 0
-              ? path('orocrm_contact_address_update', { id: form.vars.value.id, contactId: contact.id })
-              : path('orocrm_contact_address_create', { contactId: contact.id })
+                  ? path('orocrm_contact_address_update', { id: form.vars.value.id, contactId: contact.id })
+                  : path('orocrm_contact_address_create', { contactId: contact.id })
               }}"
               method="post" class="form-register form-dialog">
             <fieldset class="form-horizontal">

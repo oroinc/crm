@@ -132,7 +132,7 @@ datagrid:
                 params:       [ id ]
             delete_link:
                 type:         url
-                route:        orocrm_api_delete_case
+                route:        orocrm_case_api_delete_case
                 params:       [ id ]
         actions:
             view:
