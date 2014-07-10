@@ -31,7 +31,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  * @ORM\Entity
  * @ORM\Table(
  *      name="orocrm_contact",
- *      indexes={@ORM\Index(name="contact_name_idx",columns={"first_name", "last_name"})}
+ *      indexes={@ORM\Index(name="contact_name_idx",columns={"last_name", "first_name"})}
  * )
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
