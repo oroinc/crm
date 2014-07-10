@@ -20,7 +20,7 @@ class CaseCommentApiType extends AbstractType
                 'updatedBy',
                 'oro_user_select',
                 [
-                    'label'     => 'orocrm.case.casecomment.updatedBy.label',
+                    'label'     => 'orocrm.case.casecomment.updated_by.label',
                     'required'  => false,
                 ]
             )
