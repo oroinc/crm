@@ -2,18 +2,18 @@
 
 namespace OroCRM\Bundle\CaseBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\CaseBundle\Form\Type\CaseType;
+use OroCRM\Bundle\CaseBundle\Form\Type\CaseEntityType;
 
-class CaseTypeTest extends \PHPUnit_Framework_TestCase
+class CaseEntityTypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CaseType
+     * @var CaseEntityType
      */
     protected $formType;
 
     protected function setUp()
     {
-        $this->formType = new CaseType();
+        $this->formType = new CaseEntityType();
     }
 
     /**
@@ -62,7 +62,7 @@ class CaseTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('orocrm_case', $this->formType->getName());
+        $this->assertEquals('orocrm_case_entity', $this->formType->getName());
     }
 
     public function testSetDefaultOptions()

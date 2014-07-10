@@ -30,7 +30,7 @@ class CreateCallTest extends Selenium2TestCase
             ->setCallSubject($callSubject)
             ->setPhoneNumber($phoneNumber)
             ->save()
-            ->assertMessage('Call logged successfully')
+            ->assertMessage('Call saved')
             ->assertTitle('Calls - Activities')
             ->close();
 
@@ -55,7 +55,7 @@ class CreateCallTest extends Selenium2TestCase
             ->assertTitle($callSubject . ' - Edit - Calls - Activities')
             ->setCallSubject($newCallSubject)
             ->save()
-            ->assertMessage('Call logged successfully')
+            ->assertMessage('Call saved')
             ->assertTitle('Calls - Activities')
             ->close();
 

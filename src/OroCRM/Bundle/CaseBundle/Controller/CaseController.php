@@ -2,12 +2,11 @@
 
 namespace OroCRM\Bundle\CaseBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -30,12 +29,7 @@ class CaseController extends Controller
     /**
      * @Route("/view/{id}", name="orocrm_case_view", requirements={"id"="\d+"})
      * @Template
-     * @Acl(
-     *     id="orocrm_case_view",
-     *     type="entity",
-     *     permission="VIEW",
-     *     class="OroCRMCaseBundle:CaseEntity"
-     * )
+     * @AclAncestor("orocrm_case_view")
      */
     public function viewAction(CaseEntity $case)
     {
@@ -60,22 +54,12 @@ class CaseController extends Controller
      * Create case form
      *
      * @Route("/create", name="orocrm_case_create")
-     * @Acl(
-     *     id="orocrm_case_create",
-     *     type="entity",
-     *     permission="CREATE",
-     *     class="OroCRMCaseBundle:CaseEntity"
-     * )
+     * @AclAncestor("orocrm_case_create")
      * @Template("OroCRMCaseBundle:Case:update.html.twig")
      */
     public function createAction()
     {
-        $case = new CaseEntity();
-
-        $priority = $this->getDoctrine()->getRepository('OroCRMCaseBundle:CasePriority')
-            ->findOneBy(array('name' => CasePriority::PRIORITY_NORMAL));
-
-        $case->setPriority($priority);
+        $case = $this->get('orocrm_case.manager')->createCase();
 
         return $this->update($case);
     }
@@ -83,12 +67,7 @@ class CaseController extends Controller
     /**
      * @Route("/update/{id}", name="orocrm_case_update", requirements={"id"="\d+"})
      * @Template
-     * @Acl(
-     *     id="orocrm_case_update",
-     *     type="entity",
-     *     permission="EDIT",
-     *     class="OroCRMCaseBundle:CaseEntity"
-     * )
+     * @AclAncestor("orocrm_case_update")
      */
     public function updateAction(CaseEntity $case)
     {
@@ -101,41 +80,21 @@ class CaseController extends Controller
      */
     protected function update(CaseEntity $case)
     {
-        $form = $this->createForm(
-            $this->get('orocrm_case.form.type.case'),
-            $case
-        );
+        if ($this->get('orocrm_case.form.handler.entity')->process($case)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.case.message.saved')
+            );
 
-        $request = $this->getRequest();
-        if ($request->isMethod('POST')) {
-            $form->submit($request);
-            if ($form->isValid()) {
-                $this->getDoctrine()->getManager()->persist($case);
-                $this->getDoctrine()->getManager()->flush();
-
-                if (!$this->getRequest()->request->has('_widgetContainer')) {
-                    $this->get('session')->getFlashBag()->add(
-                        'success',
-                        $this->get('translator')->trans('orocrm.case.saved_message')
-                    );
-
-                    return $this->get('oro_ui.router')->redirectAfterSave(
-                        [
-                            'route'      => 'orocrm_case_update',
-                            'parameters' => ['id' => $case->getId()],
-                        ],
-                        [
-                            'route'      => 'orocrm_case_view',
-                            'parameters' => ['id' => $case->getId()],
-                        ]
-                    );
-                }
-            }
+            return $this->get('oro_ui.router')->redirectAfterSave(
+                ['route' => 'orocrm_case_update', 'parameters' => ['id' => $case->getId()]],
+                ['route' => 'orocrm_case_view', 'parameters' => ['id' => $case->getId()]]
+            );
         }
 
-        return [
-            'form'   => $form->createView(),
-            'entity' => $case
-        ];
+        return array(
+            'entity' => $case,
+            'form'   => $this->get('orocrm_case.form.entity')->createView()
+        );
     }
 }
