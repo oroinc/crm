@@ -5,12 +5,14 @@ OroCRM\Bundle\CampaignBundle\Entity\Campaign:
         name:
             - NotBlank: ~
             - Length:
-                max: 255
+                max: 100
         code:
             - NotBlank: ~
             - Regex:
                 pattern: "/^[a-zA-Z0-9_\-]*$/"
                 message: "This value should contains only alphabetic symbols, underscore, hyphen and numbers"
+            - Length:
+                max: 20
         startDate:
             - Date: ~
         endDate:

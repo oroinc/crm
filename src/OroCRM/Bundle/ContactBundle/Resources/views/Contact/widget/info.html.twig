@@ -19,7 +19,7 @@
 
     <ul class="extra-list">
         {% if primaryElement %}
-            <li>
+            <li class="contact-collection-element">
                 <strong>
                     {% if isEmail %}
                         {{ email.email_address_simple(primaryElement) }}
@@ -30,7 +30,7 @@
             </li>
         {% endif %}
         {% for secondaryElement in secondaryElements %}
-            <li>
+            <li class="contact-collection-element">
                 {% if isEmail %}
                     {{ email.email_address_simple(secondaryElement) }}
                 {% else %}

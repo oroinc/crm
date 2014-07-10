@@ -8,7 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class CaseType extends AbstractType
+class CaseEntityType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -105,7 +105,7 @@ class CaseType extends AbstractType
         $resolver->setDefaults(
             [
                 'data_class'         => 'OroCRM\\Bundle\\CaseBundle\\Entity\\CaseEntity',
-                'intention'          => 'case',
+                'intention'          => 'orocrm_case_entity',
                 'cascade_validation' => true
             ]
         );
@@ -116,6 +116,6 @@ class CaseType extends AbstractType
      */
     public function getName()
     {
-        return 'orocrm_case';
+        return 'orocrm_case_entity';
     }
 }
