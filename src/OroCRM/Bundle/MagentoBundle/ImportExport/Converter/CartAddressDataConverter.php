@@ -13,6 +13,7 @@ class CartAddressDataConverter extends AddressDataConverter
             parent::getHeaderConversionRules(),
             array(
                 'address_id' => 'originId',
+                'telephone'  => 'phone',
             )
         );
     }

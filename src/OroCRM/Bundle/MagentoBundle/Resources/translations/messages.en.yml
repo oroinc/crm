@@ -356,6 +356,7 @@ orocrm:
             origin_id.label:     Origin Id
             country.label:       Country
             region.label:        State
+            phone.label:         Phone
 
             country_name.label:      Country
             country_iso2_code.label: Country ISO2 Code
