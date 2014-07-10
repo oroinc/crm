@@ -52,8 +52,12 @@ orocrm:
             message.label:                  Message
             public.label:                   Make Public
             contact.label:                  Contact Author
-            updatedBy.label:                Updated By
+            case.label:                     Related case
+            created_at.label:               Created At
+            updated_at.label:               Updated At
+            updated_by.label:               Updated By
             owner.label:                    Owner
+            id.label:                       Id
 
             action:
                 add: Add Comment
