@@ -27,3 +27,8 @@
 .contact-box-row span:first-of-type{
     padding-right: 5px;
 }
+.contact-collection-element {
+    vertical-align: top;
+    line-height: 1.2em;
+    padding-bottom: 5px;
+}
