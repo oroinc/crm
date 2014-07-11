@@ -27,7 +27,6 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: c.website, alias: cw }
-                groupBy: c.id
         columns:
             channelName:
                 label: orocrm.magento.customer.channel.label
@@ -549,15 +548,12 @@ datagrid:
                         - { join: o.workflowStep, alias: step }
                         - { join: o.customer, alias: customer }
                         - { join: o.addresses, alias: address }
-                        - { join: address.types, alias: type }
                         - { join: address.country, alias: country }
+                        - { join: address.types, alias: type, conditionType: WITH, condition: type.name = 'billing' }
                         - { join: address.region, alias: region }
                         - { join: o.channel, alias: ch }
                         - { join: o.store, alias: cs }
                         - { join: cs.website, alias: cw }
-                where:
-                    and:
-                        - type.name IN ('billing') OR type.name IS NULL
         columns:
             channelName:
                 label: orocrm.magento.order.channel.label
