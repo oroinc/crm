@@ -51,6 +51,48 @@ class MultiLineDataTransformerTest extends \PHPUnit_Framework_TestCase
     public function dataProvider()
     {
         return [
+            'one label' => [
+                [
+                    [
+                        'option' => 'o1',
+                        'label'  => '2014-07-09',
+                        'value'  => 'v1',
+                    ],
+                    [
+                        'option' => 'o2',
+                        'label'  => '2014-07-09',
+                        'value'  => 'v2',
+                    ]
+                ],
+                [
+                    'data_schema'      => [
+                        'label' => [
+                            'field_name' => 'label'
+                        ],
+                        'value' => [
+                            'field_name' => 'value'
+                        ]
+                    ],
+                    'default_settings' => [
+                        'groupingOption' => 'option',
+                        'period'         => 'daily'
+                    ]
+                ],
+                [
+                    'o1' => [
+                        [
+                            'label' => '2014-07-09',
+                            'value' => 'v1'
+                        ],
+                    ],
+                    'o2' => [
+                        [
+                            'label' => '2014-07-09',
+                            'value' => 'v2'
+                        ],
+                    ],
+                ]
+            ],
             'fill_labels' => [
                 [
                     [

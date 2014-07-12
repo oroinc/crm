@@ -80,6 +80,7 @@ orocrm:
             create_order:        Create Order
             sales.label:         Sales
             id.label:            Id
+            owner.label:         Owner
             origin_id.label:     Origin Id
             name_prefix.label:   Name prefix
             first_name.label:    First name
@@ -122,6 +123,7 @@ orocrm:
             refresh_label:             Sync Data
 
             id.label:                  Cart Id
+            owner.label:               Owner
             origin_id.label:           Origin Id
             items_qty.label:           Items qty
             items_count.label:         Items count
@@ -241,6 +243,7 @@ orocrm:
 
             refresh_label:      Sync Data
             id.label:           Id
+            owner.label:        Owner
             increment_id.label: "Order #"
             items_qty.label:    Items qty
             gift_message.label: Gift message
@@ -327,6 +330,8 @@ orocrm:
             country.label:         Country
             region.label:          State
             contact_address.label: Contact address
+            contact_phone.label:   Contact phone
+            phone.label:           Phone
 
             country_name.label:      Country name
             country_iso2_code.label: Country ISO2 code
@@ -356,6 +361,7 @@ orocrm:
             origin_id.label:     Origin Id
             country.label:       Country
             region.label:        State
+            phone.label:         Phone
 
             country_name.label:      Country
             country_iso2_code.label: Country ISO2 Code

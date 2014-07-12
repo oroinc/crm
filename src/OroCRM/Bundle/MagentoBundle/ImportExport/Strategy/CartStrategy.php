@@ -4,14 +4,19 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerAwareInterface;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
-class CartStrategy extends BaseStrategy
+class CartStrategy extends BaseStrategy implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     const ENTITY_NAME = 'OroCRM\Bundle\MagentoBundle\Entity\Cart';
 
     /** @var StoreStrategy */
@@ -30,10 +35,12 @@ class CartStrategy extends BaseStrategy
      */
     public function process($newEntity)
     {
+        $oid = $newEntity->getOriginId();
+
         /** @var Cart $newEntity */
         /** @var Cart $existingEntity */
         $existingEntity = $this->getEntityByCriteria(
-            ['originId' => $newEntity->getOriginId(), 'channel' => $newEntity->getChannel()],
+            ['originId' => $oid, 'channel' => $newEntity->getChannel()],
             $newEntity
         );
         if ($existingEntity) {
@@ -57,11 +64,18 @@ class CartStrategy extends BaseStrategy
             );
             $this->removeErrorMessage($existingEntity);
         } else {
+            $hasContactInfo = ($newEntity->getBillingAddress() && $newEntity->getBillingAddress()->getPhone())
+                || $newEntity->getEmail();
+
             if (!$newEntity->getItemsCount()) {
-                // newly created cart without items should be skipped
+                $this->context->incrementErrorEntriesCount();
+                $this->logger->debug(sprintf('Cart ID: %d was skipped because it does not have items', $oid));
+
                 return false;
-            } elseif (!($newEntity->getBillingAddress() || $newEntity->getEmail())) {
-                // newly created cart without contact information should be skipped
+            } elseif (!$hasContactInfo) {
+                $this->context->incrementErrorEntriesCount();
+                $this->logger->debug(sprintf('Cart ID: %d was skipped because lack of contact info', $oid));
+
                 return false;
             }
             $existingEntity = $newEntity;
