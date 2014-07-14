@@ -3,9 +3,11 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer;
 
 use Symfony\Component\Serializer\Exception\RuntimeException;
+
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DateTimeNormalizer as BaseNormalizer;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
+use Oro\Bundle\ImportExportBundle\Serializer\Serializer;
 
 class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface
 {
@@ -41,8 +43,8 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface
     public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return $this->magentoNormalizer->supportsDenormalization($data, $type, $format, $context)
-            && !empty($context['processorAlias'])
-            && strpos($context['processorAlias'], 'orocrm_magento') !== false;
+            && !empty($context[Serializer::PROCESSOR_ALIAS_KEY])
+            && strpos($context[Serializer::PROCESSOR_ALIAS_KEY], 'orocrm_magento') !== false;
     }
 
     /**
@@ -51,7 +53,7 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface
     public function supportsNormalization($data, $format = null, array $context = array())
     {
         return $this->magentoNormalizer->supportsNormalization($data, $format, $context)
-            && !empty($context['processorAlias'])
-            && strpos($context['processorAlias'], 'orocrm_magento') !== false;
+            && !empty($context[Serializer::PROCESSOR_ALIAS_KEY])
+            && strpos($context[Serializer::PROCESSOR_ALIAS_KEY], 'orocrm_magento') !== false;
     }
 }

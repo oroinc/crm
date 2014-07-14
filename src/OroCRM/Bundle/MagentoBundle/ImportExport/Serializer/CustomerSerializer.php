@@ -10,6 +10,7 @@ use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormal
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
 use Oro\Bundle\UserBundle\Model\Gender;
+use Oro\Bundle\ImportExportBundle\Serializer\Serializer;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -149,7 +150,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             $addressData,
             MagentoConnectorInterface::CUSTOMER_ADDRESS_TYPE,
             null,
-            ['processorAlias' => self::PROCESSOR_ALIAS]
+            [Serializer::PROCESSOR_ALIAS_KEY => self::PROCESSOR_ALIAS]
         );
 
         $accessor = PropertyAccess::createPropertyAccessor();
