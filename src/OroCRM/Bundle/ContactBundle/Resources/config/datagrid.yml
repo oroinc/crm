@@ -345,7 +345,7 @@ datagrid:
     contact-accounts-grid:
         source:
             type: orm
-            acl_resource: orocrm_contact_update
+            acl_resource: orocrm_contact_view
             query:
                 select:
                     - a.id
