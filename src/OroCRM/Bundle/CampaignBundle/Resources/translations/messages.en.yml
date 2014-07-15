@@ -14,7 +14,11 @@ orocrm:
         owner.label:         Owner
         created_at.label:    Created
         updated_at.label:    Updated
-        report_period.label: Report Period
+        report_period:
+            label:   Report Scale
+            hourly:  Hourly
+            daily:   Daily
+            monthly: Monthly
         controller:
             campaign.saved.message:  "Campaign saved"
         menu:
@@ -28,6 +32,7 @@ orocrm:
         block:
             general: General Information
             events: Events
+            detailed_report: Detailed Events Report
 
         trackingevent:
             report:

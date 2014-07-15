@@ -22,3 +22,5 @@ OroCRM\Bundle\CampaignBundle\Entity\Campaign:
                 min: 0
         owner:
             - NotBlank: ~
+        reportPeriod:
+            - NotBlank: ~

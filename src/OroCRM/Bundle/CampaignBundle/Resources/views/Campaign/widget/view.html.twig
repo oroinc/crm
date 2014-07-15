@@ -13,7 +13,7 @@
             {{ ui.renderHtmlProperty('orocrm.campaign.budget.label'|trans, entity.budget|oro_format_currency) }}
             {{ ui.renderHtmlProperty('orocrm.campaign.start_date.label'|trans, entity.startDate is empty ? 'N/A'|trans : entity.startDate|oro_format_date) }}
             {{ ui.renderHtmlProperty('orocrm.campaign.end_date.label'|trans, entity.endDate is empty ? 'N/A'|trans : entity.endDate|oro_format_date) }}
-            {{ ui.renderProperty('orocrm.campaign.report_period.label'|trans, entity.reportPeriod|capitalize) }}
+            {{ ui.renderProperty('orocrm.campaign.report_period.label'|trans, ('orocrm.campaign.report_period.' ~ entity.reportPeriod)|trans) }}
         </div>
     </div>
 </div>
