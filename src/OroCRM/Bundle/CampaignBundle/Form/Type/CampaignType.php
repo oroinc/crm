@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Form\Type;
 
+use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -68,13 +69,14 @@ class CampaignType extends AbstractType
                 'reportPeriod',
                 'choice',
                 [
-                    'label' => 'orocrm.campaign.report_period.label',
-                    'required' => false,
+                    'label'   => 'orocrm.campaign.report_period.label',
+                    'data'    => Campaign::PERIOD_DAILY,
                     'choices' => [
-                        'hourly' => 'Hourly',
-                        'daily'  => 'Daily',
-                        'monthly' => 'Monthly'
-                    ]
+                        Campaign::PERIOD_HOURLY  => 'orocrm.campaign.report_period.hourly',
+                        Campaign::PERIOD_DAILY   => 'orocrm.campaign.report_period.daily',
+                        Campaign::PERIOD_MONTHLY => 'orocrm.campaign.report_period.monthly',
+                    ],
+                    'tooltip' => 'orocrm.campaign.report_period.tooltip'
                 ]
             );
     }

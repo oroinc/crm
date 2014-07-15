@@ -33,6 +33,10 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
  */
 class Campaign extends ExtendCampaign
 {
+    const PERIOD_HOURLY = 'hourly';
+    const PERIOD_DAILY = 'daily';
+    const PERIOD_MONTHLY = 'monthly';
+
     /**
      * @var int
      *
@@ -104,7 +108,7 @@ class Campaign extends ExtendCampaign
     /**
      * @var string
      *
-     * @ORM\Column(name="report_period", type="string", length=25, nullable=true)
+     * @ORM\Column(name="report_period", type="string", length=25)
      */
     protected $reportPeriod;
 
