@@ -127,6 +127,14 @@ class Campaign extends ExtendCampaign
     protected $updatedAt;
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reportPeriod = self::PERIOD_DAILY;
+    }
+
+    /**
      * @return mixed
      */
     public function getId()
