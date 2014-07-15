@@ -1,23 +1,17 @@
 parameters:
-    orocrm_sales.importexport.templatefixture.lead_fixture.class: OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture\LeadFixture
-    orocrm_sales.importexport.templatefixture.opportunity_fixture.class: OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture\OpportunityFixture
+    orocrm_sales.importexport.template_fixture.lead.class:        OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture\LeadFixture
+    orocrm_sales.importexport.template_fixture.opportunity.class: OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture\OpportunityFixture
 
 services:
-    orocrm_sales.importexport.templatefixture.lead_fixture:
-        class: %orocrm_sales.importexport.templatefixture.lead_fixture.class%
-        arguments:
-            - @oro_user.importexport.templatefixture.userfixture
-            - @orocrm_contact.importexport.templatefixture.contactfixture
-            - @orocrm_account.importexport.templatefixture.account_fixture
+    orocrm_sales.importexport.template_fixture.lead:
+        class: %orocrm_sales.importexport.template_fixture.lead.class%
         tags:
-            - { name: oro_importexport.template_fixture, entity: %orocrm_sales.lead.entity.class% }
+            - { name: oro_importexport.template_fixture }
 
-    orocrm_sales.importexport.templatefixture.opportunity_fixture:
-        class: %orocrm_sales.importexport.templatefixture.opportunity_fixture.class%
-        arguments:
-            - @orocrm_sales.importexport.templatefixture.lead_fixture
+    orocrm_sales.importexport.template_fixture.opportunity:
+        class: %orocrm_sales.importexport.template_fixture.opportunity.class%
         tags:
-            - { name: oro_importexport.template_fixture, entity: %orocrm_sales.opportunity.class% }
+            - { name: oro_importexport.template_fixture }
 
     # Converter
     orocrm_sales.importexport.data_converter.lead:
