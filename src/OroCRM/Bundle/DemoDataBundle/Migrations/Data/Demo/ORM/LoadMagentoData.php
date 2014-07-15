@@ -75,7 +75,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $channel->setType('magento');
         $channel->setConnectors(['customer', 'cart', 'order']);
         $channel->setName(self::CHANNEL_NAME);
-
+        $channel->setEnabled(false);
         $channel->setTransport($transport);
 
         $om->persist($channel);
