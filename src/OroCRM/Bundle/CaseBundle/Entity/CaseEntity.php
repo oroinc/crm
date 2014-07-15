@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
@@ -43,7 +44,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *      }
  * )
  */
-class CaseEntity extends ExtendCaseEntity
+class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
 {
     /**
      * @var integer
@@ -583,6 +584,21 @@ class CaseEntity extends ExtendCaseEntity
     public function getClosedAt()
     {
         return $this->closedAt;
+    }
+
+    /**
+     * Get the primary email address of the related contact
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        $contact = $this->getRelatedContact();
+        if (!$contact) {
+            return null;
+        }
+
+        return $contact->getEmail();
     }
 
     /**
