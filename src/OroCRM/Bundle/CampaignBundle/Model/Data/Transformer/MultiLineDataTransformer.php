@@ -133,9 +133,12 @@ class MultiLineDataTransformer implements TransformerInterface
         $this->valueKey       = $chartOptions['data_schema']['value']['field_name'];
         $this->groupingOption = $chartOptions['default_settings']['groupingOption'];
 
-        if (!empty($chartOptions['default_settings']['period'])) {
-            $this->period = $this->periodMap[$chartOptions['default_settings']['period']];
+        if (empty($chartOptions['default_settings']['period'])) {
+            throw new \InvalidArgumentException(
+                'Options "period" is not set'
+            );
         }
+        $this->period = $this->periodMap[$chartOptions['default_settings']['period']];
     }
 
     /**
@@ -150,10 +153,6 @@ class MultiLineDataTransformer implements TransformerInterface
             $labels[] = $sourceDataValue[$labelKey];
         }
         asort($labels);
-
-        if (!$this->period) {
-            return array_unique($labels);
-        }
 
         $format = $this->dateFormatMap[$this->period];
         $start  = \DateTime::createFromFormat($format, reset($labels));
