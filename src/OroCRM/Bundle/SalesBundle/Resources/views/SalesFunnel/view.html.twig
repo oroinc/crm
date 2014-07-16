@@ -7,7 +7,6 @@
 {% endif %}
 
 {% oro_title_set({params : {"%sales_funnel%": salesFunnelHint} }) %}
-{% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_SalesFunnel' %}
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}

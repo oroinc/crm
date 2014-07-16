@@ -7,7 +7,6 @@
 {% endif %}
 
 {% oro_title_set({params : {"%sales_funnel%": salesFunnelHint} }) %}
-{% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_SalesFunnel' %}
 {% set formAction = form.vars.value.id ? path('orocrm_sales_salesfunnel_update', { 'id': form.vars.value.id }) : path('orocrm_sales_salesfunnel_create')  %}
 
 {% block head_script %}
