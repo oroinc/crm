@@ -3,6 +3,11 @@ orocrm_campaign_bundle:
     type:         annotation
     prefix:       /
 
+orocrm_campaign_dashboard:
+    resource:     "@OroCRMCampaignBundle/Controller/Dashboard"
+    type:         annotation
+    prefix:       /dashboard
+
 orocrm_campaign_bundle_api:
     resource:     "@OroCRMCampaignBundle/Controller/Api/Rest/CampaignController.php"
     type:         rest

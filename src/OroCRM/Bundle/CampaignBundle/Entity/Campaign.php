@@ -11,7 +11,7 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
 
 /**
  * @package OroCRM\Bundle\OroCRMCampaignBundle\Entity
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\CampaignBundle\Entity\Repository\CampaignRepository")
  * @ORM\Table(name="orocrm_campaign")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
