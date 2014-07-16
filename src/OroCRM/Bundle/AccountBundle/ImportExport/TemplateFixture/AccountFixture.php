@@ -2,32 +2,18 @@
 
 namespace OroCRM\Bundle\AccountBundle\ImportExport\TemplateFixture;
 
-use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\AddressBundle\Entity\Country;
-use Oro\Bundle\AddressBundle\Entity\Region;
+use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
-class AccountFixture implements TemplateFixtureInterface
+class AccountFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
     /**
-     * @var TemplateFixtureInterface
+     * {@inheritdoc}
      */
-    protected $userFixture;
-
-    /**
-     * @var TemplateFixtureInterface
-     */
-    protected $contactFixture;
-
-    /**
-     * @param TemplateFixtureInterface $userFixture
-     * @param TemplateFixtureInterface $contactFixture
-     */
-    public function __construct(TemplateFixtureInterface $userFixture, TemplateFixtureInterface $contactFixture)
+    public function getEntityClass()
     {
-        $this->userFixture = $userFixture;
-        $this->contactFixture = $contactFixture;
+        return 'OroCRM\Bundle\AccountBundle\Entity\Account';
     }
 
     /**
@@ -35,41 +21,53 @@ class AccountFixture implements TemplateFixtureInterface
      */
     public function getData()
     {
-        $user = $this->userFixture->getData()->current();
-        $contact = $this->contactFixture->getData()->current();
+        return $this->getEntityData('Coleman');
+    }
 
-        $region = new Region('US-NY');
-        $region->setCode('NY');
+    /**
+     * {@inheritdoc}
+     */
+    protected function createEntity($key)
+    {
+        return new Account();
+    }
 
-        $country = new Country('US');
+    /**
+     * @param string  $key
+     * @param Account $entity
+     */
+    public function fillEntityData($key, $entity)
+    {
+        $addressRepo = $this->templateManager
+            ->getEntityRepository('Oro\Bundle\AddressBundle\Entity\Address');
+        $userRepo    = $this->templateManager
+            ->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
+        $contactRepo = $this->templateManager
+            ->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
 
-        $billingAddress = new Address();
-        $billingAddress->setCity('Rochester')
-            ->setStreet('1215 Caldwell Road')
-            ->setPostalCode('14608')
-            ->setFirstName('Jerry')
-            ->setLastName('Coleman')
-            ->setRegion($region)
-            ->setCountry($country);
+        switch ($key) {
+            case 'Coleman':
+                $entity
+                    ->setId(1)
+                    ->setName($key)
+                    ->setOwner($userRepo->getEntity('John Doo'))
+                    ->setBillingAddress($addressRepo->getEntity('John Doo'))
+                    ->setShippingAddress($addressRepo->getEntity('Jerry Coleman'))
+                    ->addContact($contactRepo->getEntity('Jerry Coleman'))
+                    ->setDefaultContact($contactRepo->getEntity('Jerry Coleman'));
+                return;
+            case 'Smith':
+                $entity
+                    ->setId(2)
+                    ->setName($key)
+                    ->setOwner($userRepo->getEntity('John Doo'))
+                    ->setBillingAddress($addressRepo->getEntity('John Doo'))
+                    ->setShippingAddress($addressRepo->getEntity('John Smith'))
+                    ->addContact($contactRepo->getEntity('John Smith'))
+                    ->setDefaultContact($contactRepo->getEntity('John Smith'));
+                return;
+        }
 
-        $shippingAddress = new Address();
-        $shippingAddress->setCity('New York')
-            ->setStreet('4677 Pallet Street')
-            ->setPostalCode('10011')
-            ->setFirstName('Jerry')
-            ->setLastName('Coleman')
-            ->setRegion($region)
-            ->setCountry($country);
-
-        $account = new Account();
-        $account->setId(1)
-            ->setName('Oro Inc.')
-            ->setOwner($user)
-            ->setBillingAddress($billingAddress)
-            ->setShippingAddress($shippingAddress)
-            ->addContact($contact)
-            ->setDefaultContact($contact);
-
-        return new \ArrayIterator(array($account));
+        parent::fillEntityData($key, $entity);
     }
 }
