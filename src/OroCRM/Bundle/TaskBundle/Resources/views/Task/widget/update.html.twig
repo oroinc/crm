@@ -30,7 +30,9 @@
                     <div class="span6">
                         {{ form_row(form.dueDate) }}
                         {{ form_row(form.taskPriority) }}
-                        {{ form_row(form.owner) }}
+                        {% if form.owner is defined %}
+                            {{ form_row(form.owner) }}
+                        {% endif %}
                         {{ form_row(form.relatedAccount) }}
                         {{ form_row(form.relatedContact) }}
                         {{ form_row(form.reporter) }}
