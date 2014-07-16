@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
-{% set audit_entity_class = 'OroCRM_Bundle_CaseBundle_Entity_CaseEntity' %}
+
 {% oro_title_set({params : {"%entity.subject%": entity.subject|default('N/A') }}) %}
 
 {% block navButtons %}
