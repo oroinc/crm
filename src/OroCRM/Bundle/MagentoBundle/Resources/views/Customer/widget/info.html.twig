@@ -47,7 +47,7 @@
 
             {{ ui.renderProperty('orocrm.magento.customer.birthday.label'|trans, entity.birthday ? birthdayData : null) }}
             {{ ui.renderProperty('orocrm.magento.customer.gender.label'|trans, oro_gender(entity.gender)) }}
-            {{ ui.renderProperty('orocrm.magento.customer.vat.label'|trans, entity.vat) }}
+            {{ ui.renderProperty('orocrm.magento.customer.vat.label'|trans, entity.vat ~ ' %'|raw) }}
         </div>
     </div>
 </div>

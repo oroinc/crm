@@ -378,7 +378,7 @@ class Customer extends ExtendCustomer
      */
     public function setVat($vat)
     {
-        $this->vat = $vat;
+        $this->vat = (float)$vat / 100;
 
         return $this;
     }
@@ -388,7 +388,7 @@ class Customer extends ExtendCustomer
      */
     public function getVat()
     {
-        return $this->vat;
+        return (float)$this->vat * 100;
     }
 
     /**
