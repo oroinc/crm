@@ -42,12 +42,18 @@
                 {% if entity.birthday is not empty %} ({{ entity.birthday|age_string({'default': 'N/A'}) }}){% endif %}
             {%- endset -%}
 
+            {% if customer.birthday == null %}
+                {% set vat = 'oro.ui.empty'|trans %}
+            {% else %}
+                {% set vat = customer.vat|oro_format_percent %}
+            {% endif %}
+
             {{ ui.renderHtmlProperty('orocrm.magento.customer.account.label'|trans, accountData) }}
             {{ ui.renderHtmlProperty('orocrm.magento.customer.contact.label'|trans, contactData) }}
 
             {{ ui.renderProperty('orocrm.magento.customer.birthday.label'|trans, entity.birthday ? birthdayData : null) }}
             {{ ui.renderProperty('orocrm.magento.customer.gender.label'|trans, oro_gender(entity.gender)) }}
-            {{ ui.renderProperty('orocrm.magento.customer.vat.label'|trans, entity.vat|oro_format_percent) }}
+            {{ ui.renderProperty('orocrm.magento.customer.vat.label'|trans, vat) }}
         </div>
     </div>
 </div>
