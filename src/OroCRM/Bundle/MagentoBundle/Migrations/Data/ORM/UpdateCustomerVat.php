@@ -4,10 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
-
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use Doctrine\ORM\EntityManager;
 
 class UpdateCustomerVat extends AbstractFixture
 {
@@ -16,24 +13,10 @@ class UpdateCustomerVat extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        /** @var QueryBuilder $queryBuilder */
-        /** @var EntityRepository $repository */
-        $repository = $manager->getRepository('OroCRMMagentoBundle:Customer');
-        $queryBuilder = $repository->createQueryBuilder('customer');
-
-        $queryBuilder
-            ->select('customer.id, customer.vat')
-            ->where($queryBuilder->expr()->isNotNull('customer.vat'));
-
-        $query = 'UPDATE OroCRMMagentoBundle:Customer customer SET customer.vat = :vat WHERE customer.id = :id';
-
-        // update lifetime for all customers
-        $iterator = new BufferedQueryResultIterator($queryBuilder);
-        foreach ($iterator as $row) {
-            $manager->createQuery($query)
-                ->setParameter('id', $row['id'])
-                ->setParameter('vat', $row['vat'] / 100)
-                ->execute();
-        }
+        /** @var EntityManager $manager */
+        $query = 'UPDATE OroCRMMagentoBundle:Customer customer ' .
+            'SET customer.vat = customer.vat / 100 ' .
+            'WHERE customer.vat is not null';
+        $manager->createQuery($query)->execute();
     }
 }

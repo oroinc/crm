@@ -40,15 +40,9 @@
             {% if customer.birthday is not empty %} ({{ customer.birthday|age_string({'default': 'N/A'}) }}){% endif %}
         {%- endset -%}
 
-        {% if customer.birthday == null %}
-            {% set vat = 'oro.ui.empty'|trans %}
-        {% else %}
-            {% set vat = customer.vat|oro_format_percent %}
-        {% endif %}
-
         {{ UI.renderProperty("orocrm.magento.customer.birthday.label"|trans, customer.birthday ? birthdayData : null) }}
         {{ UI.renderProperty("orocrm.magento.customer.gender.label"|trans, oro_gender(customer.gender)) }}
-        {{ UI.renderProperty("orocrm.magento.customer.vat.label"|trans, vat) }}
+        {{ UI.renderProperty("orocrm.magento.customer.vat.label"|trans, customer.vat is null ? null : customer.vat|oro_format_percent ) }}
     </div>
     <div class="responsive-cell" id="magento-without-border-tabs">
         {% set uniqueSuffix = '_customer_' ~ customer.id ~ '_channel_' ~ channel.id %}
