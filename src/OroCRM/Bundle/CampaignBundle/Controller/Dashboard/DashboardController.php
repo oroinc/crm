@@ -99,7 +99,7 @@ class DashboardController extends Controller
                     'name' => 'bar_chart',
                     'data_schema' => array(
                         'label' => array('field_name' => 'label'),
-                        'value' => array('field_name' => 'closeRevenue')
+                        'value' => array('field_name' => 'closeRevenue', 'formatter' => 'formatCurrency')
                     ),
                     'settings' => array('xNoTicks' => self::CAMPAIGN_CLOSE_REVENUE_COUNT),
                 )
