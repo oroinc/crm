@@ -1,7 +1,6 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 
 {% oro_title_set({params : {"%account.name%": entity.name|default('N/A')} }) %}
-{% set audit_entity_class = 'OroCRM_Bundle_AccountBundle_Entity_Account' %}
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
