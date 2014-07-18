@@ -51,7 +51,7 @@ class MultiLineDataTransformerTest extends \PHPUnit_Framework_TestCase
     public function dataProvider()
     {
         return [
-            'one label' => [
+            'one_label'   => [
                 [
                     [
                         'option' => 'o1',
@@ -190,7 +190,8 @@ class MultiLineDataTransformerTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                     'default_settings' => [
-                        'groupingOption' => 'option'
+                        'groupingOption' => 'option',
+                        'period'         => 'hourly'
                     ]
                 ],
                 [
@@ -230,6 +231,33 @@ class MultiLineDataTransformerTest extends \PHPUnit_Framework_TestCase
         $this->transformer->transform($data, []);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Options "period" is not set
+     */
+    public function testPeriodOptionNotSet()
+    {
+        $sourceData = new ArrayData([]);
+        $data       = new MappedData([], $sourceData);
+
+
+        $chartOptions = [
+            'data_schema'      => [
+                'label' => [
+                    'field_name' => 'label'
+                ],
+                'value' => [
+                    'field_name' => 'value'
+                ]
+            ],
+            'default_settings' => [
+                'groupingOption' => 'option'
+            ]
+        ];
+
+        $this->transformer->transform($data, $chartOptions);
+    }
+
     public function testEmptyData()
     {
         $sourceData   = new ArrayData([]);
@@ -245,6 +273,7 @@ class MultiLineDataTransformerTest extends \PHPUnit_Framework_TestCase
             ],
             'default_settings' => [
                 'groupingOption' => 'option',
+                'period'         => 'daily'
             ]
         ];
 
