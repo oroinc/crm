@@ -41,11 +41,13 @@ class CustomerStrategy extends BaseStrategy
      */
     public function process($remoteEntity)
     {
+
         /** @var Customer $localEntity */
         $localEntity = $this->getEntityByCriteria(
             ['originId' => $remoteEntity->getOriginId(), 'channel' => $remoteEntity->getChannel()],
             $remoteEntity
         );
+
         if (!$localEntity) {
             $localEntity = $remoteEntity;
 
@@ -78,7 +80,9 @@ class CustomerStrategy extends BaseStrategy
             $remoteEntity,
             ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses', 'lifetime', 'owner']
         );
+
         $this->updateAddresses($localEntity, $remoteEntity->getAddresses());
+        $localEntity->setVat($localEntity->getVat() / 100);
 
         // validate and update context - increment counter or add validation error
         return $this->validateAndUpdateContext($localEntity);
