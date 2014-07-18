@@ -141,15 +141,13 @@ datagrid:
                 select:
                     - e.name
                     - COUNT(e.id) as visitsCount
-                    - DATE(e.loggedAt) as dateLoggedAt
-                    - HOUR(e.loggedAt) as hourLoggedAt
                     - CONCAT(DATE(e.loggedAt), ' ', TIME(CONCAT(HOUR(e.loggedAt), ':00:00'))) as logTime
                 from:
                     - { table: %oro_tracking.tracking_event.class%, alias: e }
                 where:
                     and:
                         - e.code = :code
-                groupBy: e.name, dateLoggedAt, hourLoggedAt
+                groupBy: e.name, logTime
         columns:
             name:
                 label: oro.tracking.trackingevent.name.label

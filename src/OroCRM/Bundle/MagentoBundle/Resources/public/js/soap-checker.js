@@ -60,10 +60,8 @@ define([
 
         /**
          * Click handler
-         *
-         * @param e
          */
-        processClick: function (e) {
+        processClick: function () {
             var data = this.$el.parents('form').serializeArray();
             var typeData = _.filter(data, function (field) {
                 return field.name.indexOf('[type]') !== -1;
@@ -76,12 +74,12 @@ define([
                 return field.name.indexOf('[transport]') !== -1;
             });
             data = _.map(data, function (field) {
-                field.name = field.name.replace(/.+\[(.+)\]$/, 'soap-check[$1]')
+                field.name = field.name.replace(/.+\[(.+)\]$/, 'soap-check[$1]');
                 return field;
             });
             mediator.execute('showLoading');
             $.post(this.getUrl(typeData), data, _.bind(this.responseHandler, this), 'json')
-                .always(_.bind(function (respose, status) {
+                .always(_.bind(function (response, status) {
                     mediator.execute('hideLoading');
                     if (status !== 'success') {
                         this.renderResult('error', __('orocrm.magento.error'));
