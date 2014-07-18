@@ -46,6 +46,7 @@ class CustomerStrategy extends BaseStrategy
             ['originId' => $remoteEntity->getOriginId(), 'channel' => $remoteEntity->getChannel()],
             $remoteEntity
         );
+
         if (!$localEntity) {
             $localEntity = $remoteEntity;
 
@@ -72,12 +73,19 @@ class CustomerStrategy extends BaseStrategy
             $localEntity->setAccount(null);
         }
 
+        // VAT must be stored in percent representation
+        $vat = $remoteEntity->getVat();
+        if (null !== $vat) {
+            $remoteEntity->setVat((float)$vat / 100);
+        }
+
         // modify local entity after all relations done
         $this->strategyHelper->importEntity(
             $localEntity,
             $remoteEntity,
             ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses', 'lifetime', 'owner']
         );
+
         $this->updateAddresses($localEntity, $remoteEntity->getAddresses());
 
         // validate and update context - increment counter or add validation error
