@@ -41,7 +41,6 @@ class CustomerStrategy extends BaseStrategy
      */
     public function process($remoteEntity)
     {
-
         /** @var Customer $localEntity */
         $localEntity = $this->getEntityByCriteria(
             ['originId' => $remoteEntity->getOriginId(), 'channel' => $remoteEntity->getChannel()],
@@ -82,7 +81,11 @@ class CustomerStrategy extends BaseStrategy
         );
 
         $this->updateAddresses($localEntity, $remoteEntity->getAddresses());
-        $localEntity->setVat($localEntity->getVat() / 100);
+        $vat = $remoteEntity->getVat();
+
+        if (null !== $vat) {
+            $localEntity->setVat((float)$vat / 100);
+        }
 
         // validate and update context - increment counter or add validation error
         return $this->validateAndUpdateContext($localEntity);
