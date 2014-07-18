@@ -27,29 +27,29 @@ datagrid:
                         - { join: task.workflowStep, alias: workflowStep }
         columns:
             subject:
-                label: orocrm.task.subject.label
+                label:         orocrm.task.subject.label
             dueDate:
-                label: orocrm.task.due_date.label
+                label:         orocrm.task.due_date.label
                 frontend_type: datetime
             workflowStepLabel:
-                label: orocrm.task.workflow_step.label
+                label:         orocrm.task.workflow_step.label
             priorityLabel:
-                label: orocrm.task.task_priority.label
+                label:         orocrm.task.task_priority.label
             ownerName:
-                type: twig
-                label: orocrm.task.owner.label
+                type:          twig
+                label:         orocrm.task.owner.label
                 frontend_type: html
-                template: OroCRMTaskBundle:Task:Datagrid/Property/owner.html.twig
+                template:      OroCRMTaskBundle:Task:Datagrid/Property/owner.html.twig
             reporterName:
-                type: twig
-                label: orocrm.task.reporter.label
+                type:          twig
+                label:         orocrm.task.reporter.label
                 frontend_type: html
-                template: OroCRMTaskBundle:Task:Datagrid/Property/reporter.html.twig
+                template:      OroCRMTaskBundle:Task:Datagrid/Property/reporter.html.twig
             createdAt:
-                label:   orocrm.task.created_at.label
+                label:         oro.ui.created_at
                 frontend_type: datetime
             updatedAt:
-                label:   orocrm.task.updated_at.label
+                label:         oro.ui.updated_at
                 frontend_type: datetime
         sorters:
             columns:

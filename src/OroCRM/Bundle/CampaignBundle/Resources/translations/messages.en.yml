@@ -12,8 +12,6 @@ orocrm:
         description.label:   Description
         budget.label:        Budget
         owner.label:         Owner
-        created_at.label:    Created
-        updated_at.label:    Updated
         report_period:
             label:   Report Scale
             hourly:  Hourly

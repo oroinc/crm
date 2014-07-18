@@ -17,8 +17,6 @@ orocrm:
         related_account.label:      Account
         related_contact.label:      Contact
         reporter.label:             Reporter
-        created_at.label:           Created At
-        updated_at.label:           Updated At
         id.label:                   Id
         workflow_item.label:        Workflow item
 
