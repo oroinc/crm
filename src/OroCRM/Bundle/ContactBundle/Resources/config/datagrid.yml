@@ -175,7 +175,7 @@ datagrid:
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionLabel
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
-                    - contactGroup
+                    - GROUP_CONCAT(contactGroup.label ORDER BY contactGroup.label SEPARATOR ', ') AS groupLabelsAsString
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
                 join:
@@ -187,6 +187,7 @@ datagrid:
                         - { join: c.source, alias: contactSource }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+                groupBy: c.id
             hints:
                 - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
         columns:
@@ -466,7 +467,7 @@ datagrid:
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionLabel
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
-                    - contactGroup
+                    - GROUP_CONCAT(contactGroup.label ORDER BY contactGroup.label SEPARATOR ', ') AS groupLabelsAsString
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
                 join:
@@ -478,6 +479,7 @@ datagrid:
                         - { join: c.source, alias: contactSource }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+                groupBy: c.id
             hints:
                 - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
         columns:
