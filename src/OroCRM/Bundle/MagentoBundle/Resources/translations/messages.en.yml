@@ -20,8 +20,6 @@ orocrm:
                 group:            Group
                 channel:          Channel
                 website:          Website
-                created_at:       Created At
-                updated_at:       Updated At
                 name:             Name
                 sku:              Sku
                 type:             Type
@@ -90,8 +88,6 @@ orocrm:
             gender.label:        Gender
             birthday.label:      Birthday
             email.label:         Email
-            created_at.label:    Created At
-            updated_at.label:    Updated At
             is_active.label:     Is active
             vat.label:           Tax/Vat
             website.label:       Website
@@ -147,8 +143,6 @@ orocrm:
             sub_total_amount.label:    Subtotal Amount
             grand_total.label:         Grand total
             tax_amount.label:          Tax
-            created_at.label:          Created At
-            updated_at.label:          Updated At
             cart_items.label:          Cart Items
             customer.label:            Customer
             store.label:               Store
@@ -167,8 +161,6 @@ orocrm:
         cartitem:
             entity_label:              Shopping Cart Item
             entity_plural_label:       Cart items
-            created_at.label:          Created At
-            updated_at.label:          Updated At
             custom_price.label:        Custom price
             description.label:         Description
             discount_amount.label:     Discount amount
@@ -266,8 +258,6 @@ orocrm:
             discount_percent.label: Discount percent
             total_amount.label:     Total amount
             status.label:           Status
-            created_at.label:       Created At
-            updated_at.label:       Updated At
             customer.label:         Customer
             addresses.label:        Addresses
             store.label:            Store
@@ -301,8 +291,6 @@ orocrm:
             cost.label:           Cost
             websites.label:       Websites
             channel.label:        Channel
-            created_at.label:     Created At
-            updated_at.label:     Updated At
 
         address:
             entity_label:          Magento Customer Address
@@ -322,8 +310,6 @@ orocrm:
             primary.label:         Primary
             id.label:              Id
             organization.label:    Organization
-            created.label:         Created At
-            updated.label:         Updated At
             origin_id.label:       Origin id
             owner.label:           Owner
             types.label:           Types
@@ -356,8 +342,6 @@ orocrm:
             middle_name.label:   Middle name
             last_name.label:     Last name
             name_suffix.label:   Name suffix
-            created.label:       Created At
-            updated.label:       Updated At
             origin_id.label:     Origin Id
             country.label:       Country
             region.label:        State

@@ -12,8 +12,6 @@ orocrm:
         description.label:   Description
         budget.label:        Budget
         owner.label:         Owner
-        created_at.label:    Created At
-        updated_at.label:    Updated At
         report_period.label: Report Period
         controller:
             campaign.saved.message:  "Campaign saved"

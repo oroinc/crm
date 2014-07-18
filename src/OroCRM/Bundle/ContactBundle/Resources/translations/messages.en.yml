@@ -52,7 +52,6 @@ orocrm:
         addresses.label:     Addresses
         assigned_to.label:   Assigned to
         birthday.label:      Birthday
-        created_at.label:    Created At
         created_by.label:    Created By
         description.label:   Description
         email.label:         Email
@@ -80,7 +79,6 @@ orocrm:
         social.label:        Social
         source.label:        Source
         twitter.label:       Twitter
-        updated_at.label:    Updated At
         updated_by.label:    Updated By
         picture.label:       Picture
 
@@ -90,7 +88,6 @@ orocrm:
         contactaddress:
             city.label:          City
             country.label:       Country
-            created.label:       Created At
             entity_description:  Represent contact's address
             entity_label:        Contact Address
             entity_plural_label: Contact Addresses
@@ -110,7 +107,6 @@ orocrm:
             street.label:        Street
             street2.label:       Street 2
             types.label:         Types
-            updated.label:       Updated At
 
             country_name.label:      Country name
             country_iso2_code.label: Country ISO2 code

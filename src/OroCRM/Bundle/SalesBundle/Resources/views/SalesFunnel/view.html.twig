@@ -29,8 +29,8 @@
 {% endblock navButtons %}
 
 {% block stats %}
-    <li>{{ 'orocrm.sales.salesfunnel.created_at.label'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
-    <li>{{ 'orocrm.sales.salesfunnel.updated_at.label'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'oro.ui.created_at'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
 {% endblock stats %}
 
 {% block pageHeader %}

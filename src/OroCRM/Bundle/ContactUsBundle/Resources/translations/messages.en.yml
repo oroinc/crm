@@ -9,8 +9,6 @@ orocrm:
             email_address.label:            Email
             phone.label:                    Phone
             comment.label:                  Comment
-            created_at.label:               Created At
-            updated_at.label:               Updated At
             feedback.label:                 Feedback
             contact_reason.label:           Contact reason
             choose_contact_reason.label:    Choose contact reason...

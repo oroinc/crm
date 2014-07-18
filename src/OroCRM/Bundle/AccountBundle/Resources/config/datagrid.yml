@@ -87,20 +87,20 @@ datagrid:
                 params:     [ id ]
         columns:
             name:
-                label:   orocrm.account.name.label
+                label:         orocrm.account.name.label
             contactName:
-                label:   orocrm.account.contact.name
+                label:         orocrm.account.contact.name
             contactEmail:
-                label:   orocrm.account.contact.email
+                label:         orocrm.account.contact.email
             contactPhone:
-                label:   orocrm.account.contact.phone
+                label:         orocrm.account.contact.phone
             ownerName:
-                label:   orocrm.account.owner.label
+                label:         orocrm.account.owner.label
             createdAt:
-                label:   orocrm.account.created_at.label
+                label:         oro.ui.created_at
                 frontend_type: datetime
             updatedAt:
-                label:   orocrm.account.updated_at.label
+                label:         oro.ui.updated_at
                 frontend_type: datetime
         sorters:
             columns:
