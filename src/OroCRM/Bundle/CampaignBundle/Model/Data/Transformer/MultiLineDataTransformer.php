@@ -173,10 +173,7 @@ class MultiLineDataTransformer implements TransformerInterface
             return array_unique($labels);
         }
 
-        if (
-            $this->period == Campaign::PERIOD_HOURLY
-            && $end->diff($start)->days > self::MAX_DAYS
-        ) {
+        if ($this->period == Campaign::PERIOD_HOURLY && $end->diff($start)->days > self::MAX_DAYS) {
             $this->period = Campaign::PERIOD_DAILY;
 
             $this->sourceData = array_map(
