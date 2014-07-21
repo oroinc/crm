@@ -216,6 +216,57 @@ class MultiLineDataTransformerTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                 ]
+            ],
+            'force_daily' => [
+                [
+                    [
+                        'option' => 'o1',
+                        'label'  => '2014-07-15 00:00:00.000000',
+                        'value'  => 1,
+                    ],
+                    [
+                        'option' => 'o1',
+                        'label'  => '2014-08-01 00:00:00.000000',
+                        'value'  => 3,
+                    ]
+                ],
+                [
+                    'data_schema'      => [
+                        'label' => [
+                            'field_name' => 'label'
+                        ],
+                        'value' => [
+                            'field_name' => 'value'
+                        ]
+                    ],
+                    'default_settings' => [
+                        'groupingOption' => 'option',
+                        'period'         => 'hourly'
+                    ]
+                ],
+                [
+                    'o1' => [
+                        ['label' => '2014-07-15', 'value' => 1],
+                        ['label' => '2014-08-01', 'value' => 3],
+                        ['label' => '2014-07-14', 'value' => 0],
+                        ['label' => '2014-07-16', 'value' => 0],
+                        ['label' => '2014-07-17', 'value' => 0],
+                        ['label' => '2014-07-18', 'value' => 0],
+                        ['label' => '2014-07-19', 'value' => 0],
+                        ['label' => '2014-07-20', 'value' => 0],
+                        ['label' => '2014-07-21', 'value' => 0],
+                        ['label' => '2014-07-22', 'value' => 0],
+                        ['label' => '2014-07-23', 'value' => 0],
+                        ['label' => '2014-07-24', 'value' => 0],
+                        ['label' => '2014-07-25', 'value' => 0],
+                        ['label' => '2014-07-26', 'value' => 0],
+                        ['label' => '2014-07-27', 'value' => 0],
+                        ['label' => '2014-07-28', 'value' => 0],
+                        ['label' => '2014-07-29', 'value' => 0],
+                        ['label' => '2014-07-30', 'value' => 0],
+                        ['label' => '2014-07-31', 'value' => 0],
+                    ]
+                ]
             ]
         ];
     }

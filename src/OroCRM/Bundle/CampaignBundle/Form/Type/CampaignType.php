@@ -71,9 +71,9 @@ class CampaignType extends AbstractType
                 [
                     'label'   => 'orocrm.campaign.report_period.label',
                     'choices' => [
-                        Campaign::PERIOD_HOURLY  => 'orocrm.campaign.report_period.hourly',
-                        Campaign::PERIOD_DAILY   => 'orocrm.campaign.report_period.daily',
-                        Campaign::PERIOD_MONTHLY => 'orocrm.campaign.report_period.monthly',
+                        Campaign::PERIOD_HOURLY  => 'orocrm.campaign.report_period.hour',
+                        Campaign::PERIOD_DAILY   => 'orocrm.campaign.report_period.day',
+                        Campaign::PERIOD_MONTHLY => 'orocrm.campaign.report_period.month',
                     ],
                     'tooltip' => 'orocrm.campaign.report_period.tooltip'
                 ]
