@@ -49,7 +49,7 @@ class OroCRMContactUsBundle implements Migration
         /** Generate table orocrm_contactus_request **/
         $table = $schema->createTable('orocrm_contactus_request');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
         $table->addColumn('contact_reason_id', 'integer', ['notnull' => false]);
         $table->addColumn('lead_id', 'integer', ['notnull' => false]);

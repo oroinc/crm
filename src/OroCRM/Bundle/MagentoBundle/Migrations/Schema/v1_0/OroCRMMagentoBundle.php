@@ -85,7 +85,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate table orocrm_magento_cart **/
         $table = $schema->createTable('orocrm_magento_cart');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
         $table->addColumn('shipping_address_id', 'integer', ['notnull' => false]);
         $table->addColumn('status_name', 'string', ['notnull' => false, 'length' => 32]);
@@ -260,7 +260,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate table orocrm_magento_customer **/
         $table = $schema->createTable('orocrm_magento_customer');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('website_id', 'integer', ['notnull' => false]);
         $table->addColumn('account_id', 'integer', ['notnull' => false]);
         $table->addColumn('store_id', 'integer', ['notnull' => false]);
@@ -355,7 +355,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate table orocrm_magento_customer_group **/
         $table = $schema->createTable('orocrm_magento_customer_group');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'unsigned' => true]);
         $table->setPrimaryKey(['id']);
@@ -373,7 +373,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate table orocrm_magento_order **/
         $table = $schema->createTable('orocrm_magento_order');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
         $table->addColumn('cart_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
@@ -536,7 +536,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate table orocrm_magento_product **/
         $table = $schema->createTable('orocrm_magento_product');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('sku', 'string', ['length' => 255]);
         $table->addColumn('type', 'string', ['length' => 255]);
@@ -601,7 +601,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate table orocrm_magento_store **/
         $table = $schema->createTable('orocrm_magento_store');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('website_id', 'integer', []);
         $table->addColumn('store_code', 'string', ['length' => 32]);
         $table->addColumn('store_name', 'string', ['length' => 255]);
@@ -623,7 +623,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate table orocrm_magento_website **/
         $table = $schema->createTable('orocrm_magento_website');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('website_code', 'string', ['length' => 32]);
         $table->addColumn('website_name', 'string', ['length' => 255]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'unsigned' => true]);
