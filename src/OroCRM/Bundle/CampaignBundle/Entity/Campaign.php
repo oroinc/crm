@@ -11,7 +11,7 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
 
 /**
  * @package OroCRM\Bundle\OroCRMCampaignBundle\Entity
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\CampaignBundle\Entity\Repository\CampaignRepository")
  * @ORM\Table(name="orocrm_campaign")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
@@ -33,6 +33,10 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
  */
 class Campaign extends ExtendCampaign
 {
+    const PERIOD_HOURLY = 'hourly';
+    const PERIOD_DAILY = 'daily';
+    const PERIOD_MONTHLY = 'monthly';
+
     /**
      * @var int
      *
@@ -104,7 +108,7 @@ class Campaign extends ExtendCampaign
     /**
      * @var string
      *
-     * @ORM\Column(name="report_period", type="string", length=25, nullable=true)
+     * @ORM\Column(name="report_period", type="string", length=25)
      */
     protected $reportPeriod;
 
@@ -121,6 +125,14 @@ class Campaign extends ExtendCampaign
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reportPeriod = self::PERIOD_DAILY;
+    }
 
     /**
      * @return mixed

@@ -123,6 +123,7 @@ class ContactRequest extends AbstractPageEntity
     public function resolve()
     {
         $this->test->byXPath("//div[@class='btn-group']/a[@title='Resolve']")->click();
+        $this->waitPageToLoad();
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[starts-with(@class, 'ui-dialog-titlebar')]/span[normalize-space(.)='Resolve']",
@@ -151,6 +152,7 @@ class ContactRequest extends AbstractPageEntity
     public function submit()
     {
         $this->test->byXPath("//div[@class='widget-actions-section']//button[normalize-space()='Submit']")->click();
+        $this->waitPageToLoad();
         $this->waitForAjax();
         $this->assertElementNotPresent(
             "//div[starts-with(@class, 'ui-dialog-titlebar')]",
@@ -165,6 +167,7 @@ class ContactRequest extends AbstractPageEntity
     public function logCall()
     {
         $this->test->byXPath("//div[@class='btn-group']/a[@title='Log call']")->click();
+        $this->waitPageToLoad();
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[starts-with(@class, 'ui-dialog-titlebar')]/span[normalize-space(.)='Log call']",

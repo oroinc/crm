@@ -7,8 +7,15 @@ use Oro\Bundle\ChartBundle\Model\Data\DataInterface;
 use Oro\Bundle\ChartBundle\Model\Data\MappedData;
 use Oro\Bundle\ChartBundle\Model\Data\Transformer\TransformerInterface;
 
+use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
+
 class MultiLineDataTransformer implements TransformerInterface
 {
+    /**
+     * Force daily scale if more than N days where used for hourly period
+     */
+    const MAX_DAYS = 15;
+
     /**
      * @var array
      */
@@ -40,21 +47,26 @@ class MultiLineDataTransformer implements TransformerInterface
     protected $period = null;
 
     /**
+     * @var string
+     */
+    protected $format = null;
+
+    /**
      * @var array
      */
     protected $periodMap = [
-        'hourly'  => 'hour',
-        'daily'   => 'day',
-        'monthly' => 'month'
+        Campaign::PERIOD_HOURLY  => 'hour',
+        Campaign::PERIOD_DAILY   => 'day',
+        Campaign::PERIOD_MONTHLY => 'month'
     ];
 
     /**
      * @var array
      */
     protected $dateFormatMap = [
-        'hour'  => 'Y-m-d H:i:s.u',
-        'day'   => 'Y-m-d',
-        'month' => 'Y-m-d'
+        Campaign::PERIOD_HOURLY  => 'Y-m-d H:i:s.u',
+        Campaign::PERIOD_DAILY   => 'Y-m-d',
+        Campaign::PERIOD_MONTHLY => 'Y-m-d'
     ];
 
     /**
@@ -71,7 +83,7 @@ class MultiLineDataTransformer implements TransformerInterface
             return new ArrayData([]);
         }
 
-        $labels = $this->getLabels($this->sourceData, $this->labelKey);
+        $labels = $this->getLabels();
 
         // create default values
         $values = array_fill(0, sizeof($labels), 0);
@@ -133,52 +145,61 @@ class MultiLineDataTransformer implements TransformerInterface
         $this->valueKey       = $chartOptions['data_schema']['value']['field_name'];
         $this->groupingOption = $chartOptions['default_settings']['groupingOption'];
 
-        if (!empty($chartOptions['default_settings']['period'])) {
-            $this->period = $this->periodMap[$chartOptions['default_settings']['period']];
+        if (empty($chartOptions['default_settings']['period'])) {
+            throw new \InvalidArgumentException(
+                'Options "period" is not set'
+            );
         }
+        $this->period = $chartOptions['default_settings']['period'];
     }
 
     /**
-     * @param array  $sourceData
-     * @param string $labelKey
      * @return array
      */
-    protected function getLabels(array $sourceData, $labelKey)
+    protected function getLabels()
     {
         $labels = [];
-        foreach ($sourceData as $sourceDataValue) {
-            $labels[] = $sourceDataValue[$labelKey];
+        foreach ($this->sourceData as $sourceDataValue) {
+            $labels[] = $sourceDataValue[$this->labelKey];
         }
         asort($labels);
 
-        if (!$this->period) {
+        $format = $this->dateFormatMap[$this->period];
+
+        $start = \DateTime::createFromFormat($format, reset($labels));
+        $end   = \DateTime::createFromFormat($format, end($labels));
+
+        if (!$start || !$end) {
             return array_unique($labels);
         }
 
-        $format = $this->dateFormatMap[$this->period];
+        if ($this->period == Campaign::PERIOD_HOURLY && $end->diff($start)->days > self::MAX_DAYS) {
+            $this->period = Campaign::PERIOD_DAILY;
 
-        $start  = \DateTime::createFromFormat($format, reset($labels));
-        if (!$start) {
-            $start = \DateTime::createFromFormat($format, 'now');
-        }
-        $end = \DateTime::createFromFormat($format, end($labels));
-        if (!$end) {
-            $end = \DateTime::createFromFormat($format, 'now');
+            $this->sourceData = array_map(
+                function ($item) {
+                    $chains = explode(' ', $item[$this->labelKey]);
+
+                    $item[$this->labelKey] = reset($chains);
+
+                    return $item;
+                },
+                $this->sourceData
+            );
+
+            return $this->getLabels();
         }
 
         $fulfilledLabels = [];
-        if ($start == $end) {
-            $fulfilledLabels = [$start->format($format)];
-        } else {
-            $start->modify(sprintf('-1 %s', $this->period));
-            $end->modify(sprintf('+1 %s', $this->period));
+        $modifyPeriod    = $this->periodMap[$this->period];
+        $start->modify(sprintf('-1 %s', $modifyPeriod));
+        $end->modify(sprintf('+1 %s', $modifyPeriod));
 
-            do {
-                $fulfilledLabels[] = $start->format($format);
+        do {
+            $fulfilledLabels[] = $start->format($format);
 
-                $start->modify(sprintf('+1 %s', $this->period));
-            } while ($end > $start);
-        }
+            $start->modify(sprintf('+1 %s', $modifyPeriod));
+        } while ($end > $start);
 
         return $fulfilledLabels;
     }

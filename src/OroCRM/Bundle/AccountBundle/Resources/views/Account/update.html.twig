@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
 {% oro_title_set({params : {"%account.name%": form.vars.value.name|default('N/A')} }) %}
-{% set audit_entity_class = 'OroCRM_Bundle_AccountBundle_Entity_Account' %}
+
 {% set formAction = form.vars.value.id ? path('orocrm_account_update', { 'id': form.vars.value.id }) : path('orocrm_account_create')  %}
 
 {% block head_script %}
@@ -48,8 +48,8 @@
 {% endblock pageHeader %}
 
 {% block stats %}
-    <li>{{ 'orocrm.account.created_at.label'|trans }}: {{ form.vars.value.createdAt ? form.vars.value.createdAt|oro_format_datetime : 'N/A' }}</li>
-    <li>{{ 'orocrm.account.updated_at.label'|trans }}: {{ form.vars.value.updatedAt ? form.vars.value.updatedAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'oro.ui.created_at'|trans }}: {{ form.vars.value.createdAt ? form.vars.value.createdAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'oro.ui.updated_at'|trans }}: {{ form.vars.value.updatedAt ? form.vars.value.updatedAt|oro_format_datetime : 'N/A' }}</li>
 {% endblock stats %}
 
 {% block content_data %}

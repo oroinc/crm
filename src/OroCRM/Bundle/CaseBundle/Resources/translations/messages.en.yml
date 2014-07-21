@@ -38,8 +38,6 @@ orocrm:
             status.label:                   Status
             priority.label:                 Priority
             comments.label:                 Comments
-            created_at.label:               Created At
-            updated_at.label:               Updated At
             id.label:                       Id
 
         casecomment:
@@ -53,8 +51,6 @@ orocrm:
             public.label:                   Make Public
             contact.label:                  Contact Author
             case.label:                     Related case
-            created_at.label:               Created At
-            updated_at.label:               Updated At
             updated_by.label:               Updated By
             owner.label:                    Owner
             id.label:                       Id

@@ -175,7 +175,6 @@ datagrid:
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionLabel
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
-                    - contactGroup
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
                 join:
@@ -183,7 +182,6 @@ datagrid:
                         - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
                         - { join: c.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: c.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
-                        - { join: c.groups, alias: contactGroup }
                         - { join: c.source, alias: contactSource }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
@@ -191,28 +189,26 @@ datagrid:
                 - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
         columns:
             firstName:
-                label: orocrm.contact.first_name.label
+                label:         orocrm.contact.first_name.label
             lastName:
-                label: orocrm.contact.last_name.label
+                label:         orocrm.contact.last_name.label
             primaryEmail:
-                label: orocrm.contact.email.label
+                label:         orocrm.contact.email.label
             primaryPhone:
-                label: orocrm.contact.contactphone.phone.label
-            groupLabelsAsString:
-                label: orocrm.contact.groups.label
+                label:         orocrm.contact.contactphone.phone.label
             contactSourceLabel:
-                label: orocrm.contact.source.label
+                label:         orocrm.contact.source.label
             countryName:
-                label: orocrm.contact.contactaddress.country.label
+                label:         orocrm.contact.contactaddress.country.label
             regionLabel:
-                label: orocrm.contact.contactaddress.region.label
+                label:         orocrm.contact.contactaddress.region.label
             addressPostalCode:
-                label: orocrm.contact.contactaddress.postal_code.label
+                label:         orocrm.contact.contactaddress.postal_code.label
             createdAt:
-                label: orocrm.contact.created_at.label
+                label:         oro.ui.created_at
                 frontend_type: datetime
             updatedAt:
-                label: orocrm.contact.updated_at.label
+                label:         oro.ui.updated_at
                 frontend_type: datetime
         properties:
             id: ~
@@ -238,8 +234,6 @@ datagrid:
                     data_name: email.email
                 primaryPhone:
                     data_name: phone.phone
-                groupLabelsAsString:
-                    data_name: contactGroup.label
                 contactSourceLabel:
                     data_name: contactSource.label
                 countryName:
@@ -269,14 +263,6 @@ datagrid:
                 primaryPhone:
                     type: string
                     data_name: phone.phone
-                groupLabelsAsString:
-                    type: entity
-                    data_name: contactGroup.id
-                    enabled: false
-                    options:
-                        field_options:
-                            class: OroCRMContactBundle:Group
-                            property: label
                 contactSourceLabel:
                     type: entity
                     data_name: contactSource.name
@@ -345,7 +331,7 @@ datagrid:
     contact-accounts-grid:
         source:
             type: orm
-            acl_resource: orocrm_contact_update
+            acl_resource: orocrm_contact_view
             query:
                 select:
                     - a.id
@@ -375,26 +361,26 @@ datagrid:
                         - { join: a.owner, alias: accountOwner }
         columns:
             hasContact:
-                label:   Assigned
-                editable: true
+                label:         orocrm.contact.assigned_to.label
+                editable:      true
                 frontend_type: boolean
             name:
-                label:   orocrm.account.name.label
+                label:         orocrm.account.name.label
             contactFirstName:
-                label:   orocrm.contact.first_name.label
+                label:         orocrm.contact.first_name.label
             contactLastName:
-                label:   orocrm.contact.last_name.label
+                label:         orocrm.contact.last_name.label
             contactEmail:
-                label:   orocrm.contact.contactemail.email.label
+                label:         orocrm.contact.contactemail.email.label
             contactPhone:
-                label:   orocrm.contact.contactphone.phone.label
+                label:         orocrm.contact.contactphone.phone.label
             ownerName:
-                label:   orocrm.contact.owner.label
+                label:         orocrm.contact.owner.label
             createdAt:
-                label:   orocrm.contact.created_at.label
+                label:         oro.ui.created_at
                 frontend_type: datetime
             updatedAt:
-                label:   orocrm.contact.updated_at.label
+                label:         oro.ui.updated_at
                 frontend_type: datetime
         sorters:
             columns:
@@ -466,7 +452,7 @@ datagrid:
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionLabel
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
-                    - contactGroup
+                    - GROUP_CONCAT(contactGroup.label ORDER BY contactGroup.label SEPARATOR ', ') AS groupLabelsAsString
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
                 join:
@@ -478,6 +464,7 @@ datagrid:
                         - { join: c.source, alias: contactSource }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+                groupBy: c.id
             hints:
                 - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
         columns:

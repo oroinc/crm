@@ -1,7 +1,6 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 
 {% oro_title_set({params : {"%account.name%": entity.name|default('N/A')} }) %}
-{% set audit_entity_class = 'OroCRM_Bundle_AccountBundle_Entity_Account' %}
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
@@ -43,8 +42,8 @@
 {% endblock pageHeader %}
 
 {% block stats %}
-    <li>{{ 'orocrm.account.created_at.label'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
-    <li>{{ 'orocrm.account.updated_at.label'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'oro.ui.created_at'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
 {% endblock stats %}
 
 {% block content_data %}

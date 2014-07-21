@@ -32,7 +32,7 @@
                     var $chart = $('#{{ containerId }}-chart');
                     var $widgetContent = $chart.parents('.chart-container').parent();
                     var setChartSize = function () {
-                        var chartWidth = Math.round($widgetContent.width() * 0.9);
+                        var chartWidth = Math.round($widgetContent.width() * 0.75);
                         if (chartWidth != $chart.width()) {
                             $chart.width(chartWidth);
                             $chart.height(Math.min(Math.round(chartWidth * 0.4), 450));
@@ -151,7 +151,7 @@
                                         trackFormatter: function (pointData) {
                                             return {{ options.data_schema.label.label|trans|json_encode|raw }}
                                                 + ': ' + getXLabel(pointData.x)
-                                                + '; ' + {{ options.data_schema.value.label|trans|json_encode|raw }}
+                                                + ';</br>' + {{ options.data_schema.value.label|trans|json_encode|raw }}
                                                 + ': ' + getYLabel(pointData.y);
                                         }
                                     },

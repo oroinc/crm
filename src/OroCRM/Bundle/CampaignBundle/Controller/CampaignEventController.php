@@ -2,11 +2,13 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
 
 /**
  * @Route("/campaign/event")
@@ -35,8 +37,14 @@ class CampaignEventController extends Controller
             );
         }
 
-        $gridName       = sprintf('campaign-tracking-detailed-report-%s-grid', $period);
-        $gridParameters = ['code' => $campaignCode];
+        $gridName = sprintf('campaign-tracking-detailed-report-%s-grid', $period);
+
+        $gridParameters = [
+            'code'                           => $campaignCode,
+            PagerInterface::PAGER_ROOT_PARAM => [
+                PagerInterface::DISABLED_PARAM => true
+            ]
+        ];
 
         $datagrid = $this
             ->get('oro_datagrid.datagrid.manager')
@@ -52,7 +60,7 @@ class CampaignEventController extends Controller
             ->setOptions(
                 array_merge_recursive(
                     [
-                        'name' => $chartName,
+                        'name'             => $chartName,
                         'default_settings' => [
                             'period' => $period
                         ]

@@ -13,6 +13,6 @@
 {% set entityType = 'orocrm.account.entity_label'|trans %}
 
 {% set entityInfo = [
-    {'title': 'orocrm.account.created_at.label'|trans, 'value': entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A'},
-    {'title': 'orocrm.account.updated_at.label'|trans, 'value': entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A'},
+    {'title': 'oro.ui.created_at'|trans, 'value': entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A'},
+    {'title': 'oro.ui.updated_at'|trans, 'value': entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A'},
 ] %}

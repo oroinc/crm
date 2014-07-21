@@ -1,5 +1,5 @@
 parameters:
-    orocrm_account.importexport.templatefixture.account_fixture.class: OroCRM\Bundle\AccountBundle\ImportExport\TemplateFixture\AccountFixture
+    orocrm_account.importexport.template_fixture.account.class: OroCRM\Bundle\AccountBundle\ImportExport\TemplateFixture\AccountFixture
 
 services:
     orocrm_account.importexport.data_converter:
@@ -37,10 +37,7 @@ services:
         tags:
             - { name: oro_importexport.processor, type: export_template, entity: %orocrm_account.account.entity.class%, alias: orocrm_account }
 
-    orocrm_account.importexport.templatefixture.account_fixture:
-        class: %orocrm_account.importexport.templatefixture.account_fixture.class%
-        arguments:
-            - @oro_user.importexport.templatefixture.userfixture
-            - @orocrm_contact.importexport.templatefixture.contactfixture
+    orocrm_account.importexport.template_fixture.account:
+        class: %orocrm_account.importexport.template_fixture.account.class%
         tags:
-            - { name: oro_importexport.template_fixture, entity: %orocrm_account.account.entity.class% }
+            - { name: oro_importexport.template_fixture }

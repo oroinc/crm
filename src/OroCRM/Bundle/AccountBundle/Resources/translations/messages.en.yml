@@ -37,8 +37,6 @@ orocrm:
         entity_description:         Represent account
         id.label:                   Id
         name.label:                 Account name
-        created_at.label:           Created
-        updated_at.label:           Updated
         owner.label:                Owner
         shipping_address.label:     Shipping Address
         billing_address.label:      Billing Address

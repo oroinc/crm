@@ -3,7 +3,6 @@
 
 {% set fullname = entity|oro_format_name|default('N/A'|trans) %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
-{% set audit_entity_class = 'OroCRM_Bundle_ContactBundle_Entity_Contact' %}
 
 {% block navButtons %}
     {% if resource_granted('orocrm_call_create') %}
