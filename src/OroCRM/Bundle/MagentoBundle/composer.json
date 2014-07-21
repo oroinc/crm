@@ -8,7 +8,7 @@
         "php": ">=5.3.3",
         "symfony/symfony": "2.3.*",
         "doctrine/orm": ">=2.3,<2.4-dev",
-
+        "oro/log": "dev-master",
         "oro/ui-bundle": "dev-master",
         "oro/business-entities-bundle": "dev-master",
         "orocrm/contact-bundle": "dev-master",
