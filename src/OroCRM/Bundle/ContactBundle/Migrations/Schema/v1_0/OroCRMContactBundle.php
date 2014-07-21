@@ -160,7 +160,7 @@ class OroCRMContactBundle implements Migration
     {
         /** Generate table orocrm_contact_group **/
         $table = $schema->createTable('orocrm_contact_group');
-        $table->addColumn('id', 'smallint', ['autoincrement' => true]);
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('label', 'string', ['length' => 30]);
         $table->setPrimaryKey(['id']);
@@ -231,7 +231,7 @@ class OroCRMContactBundle implements Migration
         /** Generate table orocrm_contact_to_contact_group **/
         $table = $schema->createTable($tableName ? : 'orocrm_contact_to_contact_group');
         $table->addColumn('contact_id', 'integer', []);
-        $table->addColumn('contact_group_id', 'smallint', []);
+        $table->addColumn('contact_group_id', 'integer', []);
         $table->setPrimaryKey(['contact_id', 'contact_group_id']);
         $table->addIndex(['contact_id'], 'IDX_885CCB12E7A1254A', []);
         $table->addIndex(['contact_group_id'], 'IDX_885CCB12647145D0', []);

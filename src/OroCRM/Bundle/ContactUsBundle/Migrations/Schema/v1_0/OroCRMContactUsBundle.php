@@ -33,7 +33,7 @@ class OroCRMContactUsBundle implements Migration
     {
         /** Generate table orocrm_contactus_contact_reason **/
         $table = $schema->createTable($tableName ? : 'orocrm_contactus_contact_reason');
-        $table->addColumn('id', 'smallint', ['autoincrement' => true]);
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('label', 'string', ['length' => 255]);
         $table->setPrimaryKey(['id']);
         /** End of generate table orocrm_contactus_contact_reason **/
@@ -51,7 +51,7 @@ class OroCRMContactUsBundle implements Migration
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
-        $table->addColumn('contact_reason_id', 'smallint', ['notnull' => false]);
+        $table->addColumn('contact_reason_id', 'integer', ['notnull' => false]);
         $table->addColumn('lead_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
         $table->addColumn('opportunity_id', 'integer', ['notnull' => false]);
