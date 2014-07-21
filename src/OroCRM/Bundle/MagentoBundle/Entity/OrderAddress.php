@@ -23,6 +23,9 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderAddress;
  *          },
  *          "activity"={
  *              "immutable"=true
+ *          },
+ *          "attachment"={
+ *              "immutable"=true
  *          }
  *      }
  * )
