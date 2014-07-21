@@ -33,9 +33,10 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
  */
 class Campaign extends ExtendCampaign
 {
-    const PERIOD_HOURLY = 'hourly';
-    const PERIOD_DAILY = 'daily';
-    const PERIOD_MONTHLY = 'monthly';
+    const PERIOD_HOURLY  = 'hour';
+    const PERIOD_DAILY   = 'day';
+    const PERIOD_MONTHLY = 'month';
+    const PERIOD_YEARLY  = 'year';
 
     /**
      * @var int
