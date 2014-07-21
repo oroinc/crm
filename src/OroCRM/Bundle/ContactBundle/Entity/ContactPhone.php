@@ -24,6 +24,9 @@ use Oro\Bundle\AddressBundle\Entity\AbstractPhone;
  *          },
  *          "activity"={
  *              "immutable"=true
+ *          },
+ *          "attachment"={
+ *              "immutable"=true
  *          }
  *      }
  * )

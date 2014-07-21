@@ -27,6 +27,9 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomerGroup;
  *          },
  *          "activity"={
  *              "immutable"=true
+ *          },
+ *          "attachment"={
+ *              "immutable"=true
  *          }
  *      }
  * )

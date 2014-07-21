@@ -24,6 +24,9 @@ use Oro\Bundle\EmailBundle\Entity\EmailInterface;
  *          },
  *          "activity"={
  *              "immutable"=true
+ *          },
+ *          "attachment"={
+ *              "immutable"=true
  *          }
  *      }
  * )
