@@ -355,11 +355,14 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      *
      * @ORM\Column(type="datetime")
      * @ConfigField(
-     *  defaultValues={
-     *      "importexport"={
-     *          "excluded"=true
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          },
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
      *      }
-     *  }
      * )
      */
     protected $createdAt;
@@ -369,11 +372,14 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      *
      * @ORM\Column(type="datetime", nullable=true)
      * @ConfigField(
-     *  defaultValues={
-     *      "importexport"={
-     *          "excluded"=true
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          },
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
      *      }
-     *  }
      * )
      */
     protected $updatedAt;

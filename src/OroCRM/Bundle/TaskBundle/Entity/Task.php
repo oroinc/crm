@@ -196,9 +196,14 @@ class Task extends ExtendTask implements RemindableInterface
      *
      * @ORM\Column(type="datetime")
      * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
+     *      defaultValues={
+     *          "email"={
+     *              "available_in_template"=true
+     *          },
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          }
+     *      }
      * )
      */
     protected $createdAt;
@@ -208,9 +213,14 @@ class Task extends ExtendTask implements RemindableInterface
      *
      * @ORM\Column(type="datetime", nullable=true)
      * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
+     *      defaultValues={
+     *          "email"={
+     *              "available_in_template"=true
+     *          },
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          }
+     *      }
      * )
      */
     protected $updatedAt;

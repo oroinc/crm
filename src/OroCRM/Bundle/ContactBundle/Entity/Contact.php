@@ -613,6 +613,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @Soap\ComplexType("dateTime", nillable=true)
      * @ConfigField(
      *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          },
      *          "importexport"={
      *              "excluded"=true
      *          }
@@ -628,6 +631,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @Soap\ComplexType("dateTime", nillable=true)
      * @ConfigField(
      *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          },
      *          "importexport"={
      *              "excluded"=true
      *          }

@@ -234,6 +234,13 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          }
+     *      }
+     * )
      */
     protected $createdAt;
 
@@ -241,6 +248,13 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      * @var \DateTime
      *
      * @ORM\Column(type="datetime", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          }
+     *      }
+     * )
      */
     protected $updatedAt;
 
