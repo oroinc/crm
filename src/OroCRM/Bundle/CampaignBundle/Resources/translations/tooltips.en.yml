@@ -5,5 +5,5 @@ orocrm:
 
         report_period.tooltip: |
             This is the time scale of the recorded events graph.
-            We strongly recommend to avoid setting the scale to Hourly if the
-            anticipated duration of the campaign is over 15 days
+            In case when items amount is more than 40 it will be
+            increased to larger scale
