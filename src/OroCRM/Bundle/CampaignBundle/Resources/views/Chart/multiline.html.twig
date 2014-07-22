@@ -26,8 +26,8 @@
     </div>
 
     <script type="text/javascript">
-    require(['jquery', 'oroui/js/layout', 'flotr2', 'orochart/js/data_formatter'],
-            function ($, layout, Flotr, dataFormatter) {
+    require(['jquery', 'oroui/js/layout', 'flotr2', 'orochart/js/data_formatter', 'oroui/js/mediator'],
+            function ($, layout, Flotr, dataFormatter, mediator) {
                 $(function () {
                     var $chart = $('#{{ containerId }}-chart');
                     var $widgetContent = $chart.parents('.chart-container').parent();
@@ -188,13 +188,11 @@
                         );
                     };
 
-                    setTimeout(function(){
-                        layout.onPageRendered(function () {
-                            setChartSize();
-                            drawChart();
-                            setChartContainerSize();
-                        });
-                    }, 200);
+                    mediator.on('page-rendered', function(){
+                        setChartSize();
+                        drawChart();
+                        setChartContainerSize();
+                    });
 
                     $(window).resize(function () {
                         if (setChartSize()) {
