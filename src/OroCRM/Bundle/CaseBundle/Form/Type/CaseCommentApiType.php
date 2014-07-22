@@ -2,34 +2,34 @@
 
 namespace OroCRM\Bundle\CaseBundle\Form\Type;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\AbstractType;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 
-class CaseApiType extends AbstractType
+class CaseCommentApiType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add(
-                'reportedAt',
-                'oro_datetime',
+                'updatedBy',
+                'oro_user_select',
                 [
-                    'required' => true,
-                    'label'    => 'orocrm.case.reported_at.label'
+                    'label'     => 'orocrm.case.casecomment.updated_by.label',
+                    'required'  => false,
                 ]
             )
             ->add(
-                'closedAt',
-                'oro_datetime',
+                'contact',
+                'orocrm_contact_select',
                 [
-                    'required' => true,
-                    'label'    => 'orocrm.case.closed_at.label'
+                    'label'     => 'orocrm.case.casecomment.contact.label',
+                    'required'  => false,
                 ]
             );
 
@@ -43,7 +43,8 @@ class CaseApiType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'csrf_protection'    => false
+                'csrf_protection' => false,
+                'ownership_disabled' => false,
             ]
         );
     }
@@ -53,7 +54,7 @@ class CaseApiType extends AbstractType
      */
     public function getName()
     {
-        return 'case';
+        return 'orocrm_case_comment_api';
     }
 
     /**
@@ -61,6 +62,6 @@ class CaseApiType extends AbstractType
      */
     public function getParent()
     {
-        return 'orocrm_case';
+        return 'orocrm_case_comment';
     }
 }

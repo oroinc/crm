@@ -1,15 +1,13 @@
 parameters:
-    orocrm_contact.importexport.normalizer.contact.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer
-    orocrm_contact.importexport.strategy.contact.class: OroCRM\Bundle\ContactBundle\ImportExport\Strategy\ContactAddOrReplaceStrategy
-    orocrm_contact.importexport.templatefixture.contactfixture.class: OroCRM\Bundle\ContactBundle\ImportExport\TemplateFixture\ContactFixture
+    orocrm_contact.importexport.normalizer.contact.class:       OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer
+    orocrm_contact.importexport.strategy.contact.class:         OroCRM\Bundle\ContactBundle\ImportExport\Strategy\ContactAddOrReplaceStrategy
+    orocrm_contact.importexport.template_fixture.contact.class: OroCRM\Bundle\ContactBundle\ImportExport\TemplateFixture\ContactFixture
 
 services:
-    orocrm_contact.importexport.templatefixture.contactfixture:
-        class: %orocrm_contact.importexport.templatefixture.contactfixture.class%
-        arguments:
-            - @oro_user.importexport.templatefixture.userfixture
+    orocrm_contact.importexport.template_fixture.contact:
+        class: %orocrm_contact.importexport.template_fixture.contact.class%
         tags:
-            - { name: oro_importexport.template_fixture, entity: %orocrm_contact.entity.class% }
+            - { name: oro_importexport.template_fixture }
 
     # Normalizers
     orocrm_contact.importexport.normalizer.contact:

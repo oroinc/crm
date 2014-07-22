@@ -1,7 +1,6 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% set name = entity.name|default('N/A') %}
 {% oro_title_set({params : {"%opportunity.name%": name} }) %}
-{% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Opportunity' %}
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
@@ -33,8 +32,8 @@
 {% endblock pageHeader %}
 
 {% block stats %}
-    <li>{{ 'orocrm.sales.opportunity.created_at.label'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
-    <li>{{ 'orocrm.sales.opportunity.updated_at.label'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'oro.ui.created_at'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
 {% endblock stats %}
 
 {% block breadcrumbs %}

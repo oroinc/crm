@@ -46,6 +46,7 @@ class OroCrmMagentoBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_2A61EE7DBDC09B73'
         );
+        $table->addIndex(['last_name', 'first_name'], 'magecustomer_rev_name_idx');
 
         $table = $schema->getTable('orocrm_magento_product');
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
@@ -57,5 +58,10 @@ class OroCrmMagentoBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_5A172982BDC09B73'
         );
+
+        $table = $schema->getTable('orocrm_magento_cart_address');
+        $table->addColumn('phone', 'string', ['notnull' => false, 'length' => 255]);
+        $table = $schema->getTable('orocrm_magento_website');
+        $table->addIndex(['website_name'], 'orocrm_magento_website_name_idx');
     }
 }

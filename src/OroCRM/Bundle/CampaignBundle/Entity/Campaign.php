@@ -4,14 +4,15 @@ namespace OroCRM\Bundle\CampaignBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
 
 /**
  * @package OroCRM\Bundle\OroCRMCampaignBundle\Entity
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\CampaignBundle\Entity\Repository\CampaignRepository")
  * @ORM\Table(name="orocrm_campaign")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
@@ -33,6 +34,10 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
  */
 class Campaign extends ExtendCampaign
 {
+    const PERIOD_HOURLY = 'hourly';
+    const PERIOD_DAILY = 'daily';
+    const PERIOD_MONTHLY = 'monthly';
+
     /**
      * @var int
      *
@@ -104,7 +109,7 @@ class Campaign extends ExtendCampaign
     /**
      * @var string
      *
-     * @ORM\Column(name="report_period", type="string", length=25, nullable=true)
+     * @ORM\Column(name="report_period", type="string", length=25)
      */
     protected $reportPeriod;
 
@@ -112,6 +117,13 @@ class Campaign extends ExtendCampaign
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          }
+     *      }
+     * )
      */
     protected $createdAt;
 
@@ -119,8 +131,23 @@ class Campaign extends ExtendCampaign
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          }
+     *      }
+     * )
      */
     protected $updatedAt;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reportPeriod = self::PERIOD_DAILY;
+    }
 
     /**
      * @return mixed

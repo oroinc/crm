@@ -88,8 +88,6 @@ orocrm:
             close_revenue.label:  Close revenue
             customer_need.label:  Customer need
             proposed_solution.label: Proposed solution
-            created_at.label:     Created
-            updated_at.label:     Updated
             status.label:         Status
             close_reason.label:   Close reason
             contact.label:        Potential Customer
@@ -137,8 +135,6 @@ orocrm:
             website.label:        Website
             number_of_employees.label: Number of employees
             industry.label:       Industry
-            created_at.label:     Created At
-            updated_at.label:     Updated
             status.label:         Status
             contact.label:        Contact
             account.label:        Account
@@ -172,8 +168,6 @@ orocrm:
             entity_plural_label:  Sales Processes
             new_entity:           New Sales Process
             id.label:             'Sales #'
-            created_at.label:     Created
-            updated_at.label:     Updated
             start_date.label:     Start Date
             lead.label:           Lead
             opportunity.label:    Opportunity

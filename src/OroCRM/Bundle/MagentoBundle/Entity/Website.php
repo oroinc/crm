@@ -19,7 +19,10 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendWebsite;
  * @ORM\Entity
  * @ORM\Table(
  *  name="orocrm_magento_website",
- *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_site_idx", columns={"website_code", "origin_id", "channel_id"})}
+ *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_site_idx", columns={"website_code", "origin_id", "channel_id"})},
+ *  indexes={
+ *       @ORM\Index(name="orocrm_magento_website_name_idx",columns={"website_name"})
+ *  }
  * )
  * @Config(
  *      defaultValues={
@@ -27,6 +30,9 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendWebsite;
  *              "immutable"=true
  *          },
  *          "activity"={
+ *              "immutable"=true
+ *          },
+ *          "attachment"={
  *              "immutable"=true
  *          }
  *      }

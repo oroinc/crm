@@ -2,7 +2,7 @@
 {% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
 
 {% oro_title_set({params : {"%lead.name%": entity.name} }) %}
-{% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Lead' %}
+
 {% set formAction = form.vars.value.id ? path('orocrm_sales_lead_update', { 'id': form.vars.value.id }) : path('orocrm_sales_lead_create')  %}
 
 {% block head_script %}
@@ -49,8 +49,8 @@
 {% endblock pageHeader %}
 
 {% block stats %}
-    <li>{{ 'orocrm.sales.lead.created_at.label'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
-    <li>{{ 'orocrm.sales.lead.updated_at.label'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'oro.ui.created_at'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
 {% endblock stats %}
 
 {% block breadcrumbs %}

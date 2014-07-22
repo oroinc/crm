@@ -37,12 +37,44 @@ orocrm:
             source.label:                   Source
             status.label:                   Status
             priority.label:                 Priority
-            created_at.label:               Created At
-            updated_at.label:               Updated At
+            comments.label:                 Comments
             id.label:                       Id
+
+        casecomment:
+            #
+            # OroCRM/Bundle/CaseBundle/Entity/CaseComment
+            #
+            entity_label:                   Case Comment
+            entity_plural_label:            Case Comments
+            entity_description:             Represent case comment
+            message.label:                  Message
+            public.label:                   Make Public
+            contact.label:                  Contact Author
+            case.label:                     Related case
+            updated_by.label:               Updated By
+            owner.label:                    Owner
+            id.label:                       Id
+
+            action:
+                add: Add Comment
+                edit: Edit Comment
+                delete: Remove Comment
+            dialog:
+                add: Add Comment
+                edit: Edit Comment
+            message:
+                saved: Comment Saved
+                removed: Comment Removed
+                no_records: There are no comments.
+                delete_confirmation: Are you sure you want to delete this comment?
+                updated_by: Updated by {{ user }} at {{ date }}
+            error:
+                load: Sorry, comments were not loaded correctly.
+                delete: Sorry, comment deleting failed.
 
         block:
             general: General Information
-            additional: Additional Information
+            comments: Comments
 
-        saved_message: Case saved
+        message:
+            saved: Case saved

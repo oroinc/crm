@@ -31,7 +31,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  * @ORM\Entity
  * @ORM\Table(
  *      name="orocrm_contact",
- *      indexes={@ORM\Index(name="contact_name_idx",columns={"first_name", "last_name"})}
+ *      indexes={@ORM\Index(name="contact_name_idx",columns={"last_name", "first_name"})}
  * )
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
@@ -613,6 +613,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @Soap\ComplexType("dateTime", nillable=true)
      * @ConfigField(
      *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          },
      *          "importexport"={
      *              "excluded"=true
      *          }
@@ -628,6 +631,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @Soap\ComplexType("dateTime", nillable=true)
      * @ConfigField(
      *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          },
      *          "importexport"={
      *              "excluded"=true
      *          }

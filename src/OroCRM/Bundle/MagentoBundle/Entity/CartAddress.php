@@ -21,6 +21,9 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCartAddress;
  *          },
  *          "activity"={
  *              "immutable"=true
+ *          },
+ *          "attachment"={
+ *              "immutable"=true
  *          }
  *      }
  * )
@@ -30,4 +33,27 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCartAddress;
 class CartAddress extends ExtendCartAddress
 {
     use OriginTrait;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
+     */
+    protected $phone;
+
+    /**
+     * @param string $phone
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
 }

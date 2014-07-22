@@ -4,12 +4,8 @@ namespace OroCRM\Bundle\CaseBundle\Controller\Api\Soap;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use Symfony\Component\Form\FormInterface;
-
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
-use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 
 class CaseController extends SoapController
 {
@@ -17,12 +13,14 @@ class CaseController extends SoapController
      * @Soap\Method("getCases")
      * @Soap\Param("page", phpType="int")
      * @Soap\Param("limit", phpType="int")
+     * @Soap\Param("order", phpType="string")
      * @Soap\Result(phpType="OroCRM\Bundle\CaseBundle\Entity\CaseEntitySoap[]")
      * @AclAncestor("orocrm_case_view")
      */
-    public function cgetAction($page = 1, $limit = 10)
+    public function cgetAction($page = 1, $limit = 10, $order = 'DESC')
     {
-        return $this->handleGetListRequest($page, $limit);
+        $order = (strtoupper($order) == 'ASC') ? $order : 'DESC';
+        return $this->handleGetListRequest($page, $limit, array('reportedAt' => $order));
     }
 
     /**
@@ -42,7 +40,7 @@ class CaseController extends SoapController
      * @Soap\Result(phpType="int")
      * @AclAncestor("orocrm_case_create")
      */
-    public function createAction($case)
+    public function createAction()
     {
         return $this->handleCreateRequest();
     }
@@ -54,7 +52,7 @@ class CaseController extends SoapController
      * @Soap\Result(phpType="boolean")
      * @AclAncestor("orocrm_case_update")
      */
-    public function updateAction($id, $case)
+    public function updateAction($id)
     {
         return $this->handleUpdateRequest($id);
     }
@@ -71,7 +69,7 @@ class CaseController extends SoapController
     }
 
     /**
-     * @return ApiEntityManager
+     * {@inheritdoc}
      */
     public function getManager()
     {
@@ -79,19 +77,19 @@ class CaseController extends SoapController
     }
 
     /**
-     * @return FormInterface
+     * {@inheritdoc}
      */
     public function getForm()
     {
-        return $this->container->get('orocrm_case.form.api');
+        return $this->container->get('orocrm_case.form.entity.api');
     }
 
     /**
-     * @return ApiFormHandler
+     * {@inheritdoc}
      */
     public function getFormHandler()
     {
-        return $this->container->get('orocrm_case.form.handler.case_api');
+        return $this->container->get('orocrm_case.form.handler.entity.api');
     }
 
     /**

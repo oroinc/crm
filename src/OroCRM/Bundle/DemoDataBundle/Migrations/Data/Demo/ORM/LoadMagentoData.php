@@ -438,7 +438,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
                 ->setLastName($contact->getLastName())
                 ->setEmail($contact->getPrimaryEmail())
                 ->setBirthday($birthday)
-                ->setVat(self::VAT * 100.0)
+                ->setVat(self::VAT)
                 ->setGroup($group)
                 ->setCreatedAt(new \DateTime('now'))
                 ->setUpdatedAt(new \DateTime('now'))

@@ -200,6 +200,9 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
      * @Soap\ComplexType("dateTime", nillable=true)
      * @ConfigField(
      *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          },
      *          "importexport"={
      *              "excluded"=true
      *          }
@@ -215,6 +218,9 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
      * @Soap\ComplexType("dateTime", nillable=true)
      * @ConfigField(
      *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          },
      *          "importexport"={
      *              "excluded"=true
      *          }

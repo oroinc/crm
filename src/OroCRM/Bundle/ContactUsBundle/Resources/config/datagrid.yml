@@ -15,16 +15,16 @@ datagrid:
                     - { table: OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest, alias: cr }
         columns:
             firstName:
-                label: orocrm.contactus.contactrequest.first_name.label
+                label:         orocrm.contactus.contactrequest.first_name.label
             lastName:
-                label: orocrm.contactus.contactrequest.last_name.label
+                label:         orocrm.contactus.contactrequest.last_name.label
             phone:
-                label: orocrm.contactus.contactrequest.phone.label
+                label:         orocrm.contactus.contactrequest.phone.label
             emailAddress:
-                label: orocrm.contactus.contactrequest.email_address.label
+                label:         orocrm.contactus.contactrequest.email_address.label
             createdAt:
                 frontend_type: datetime
-                label:         orocrm.contactus.contactrequest.created_at.label
+                label:         oro.ui.created_at
         sorters:
             columns:
                 firstName:

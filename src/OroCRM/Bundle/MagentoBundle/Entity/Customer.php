@@ -26,7 +26,10 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
  * @ORM\Table(
  *      name="orocrm_magento_customer",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})},
- *      indexes={@ORM\Index(name="magecustomer_name_idx",columns={"first_name", "last_name"})}
+ *      indexes={
+ *          @ORM\Index(name="magecustomer_name_idx",columns={"first_name", "last_name"}),
+ *          @ORM\Index(name="magecustomer_rev_name_idx",columns={"last_name", "first_name"})
+ *      }
  * )
  * @Config(
  *      routeName="orocrm_magento_customer_index",
@@ -128,6 +131,13 @@ class Customer extends ExtendCustomer
      *
      * @ORM\Column(type="datetime", name="created_at")
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          }
+     *      }
+     * )
      */
     protected $createdAt;
 
@@ -136,6 +146,13 @@ class Customer extends ExtendCustomer
      *
      * @ORM\Column(type="datetime", name="updated_at")
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          }
+     *      }
+     * )
      */
     protected $updatedAt;
 

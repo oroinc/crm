@@ -41,7 +41,7 @@ class CampaignTest extends Selenium2TestCase
      */
     public function testUpdate($campaignCode)
     {
-        $newСampaignCode = 'Update_' . $campaignCode;
+        $newСampaignCode = substr('Update_' . $campaignCode, 0, 20);
 
         $login = $this->login();
         /** @var Campaigns $login */

@@ -20,8 +20,6 @@ orocrm:
                 group:            Group
                 channel:          Integration
                 website:          Website
-                created_at:       Created At
-                updated_at:       Updated At
                 name:             Name
                 sku:              Sku
                 type:             Type
@@ -80,6 +78,7 @@ orocrm:
             create_order:        Create Order
             sales.label:         Sales
             id.label:            Id
+            owner.label:         Owner
             origin_id.label:     Origin Id
             name_prefix.label:   Name prefix
             first_name.label:    First name
@@ -89,8 +88,6 @@ orocrm:
             gender.label:        Gender
             birthday.label:      Birthday
             email.label:         Email
-            created_at.label:    Created on
-            updated_at.label:    Updated on
             is_active.label:     Is active
             vat.label:           Tax/Vat
             website.label:       Website
@@ -123,6 +120,7 @@ orocrm:
             refresh_label:             Sync Data
 
             id.label:                  Cart Id
+            owner.label:               Owner
             origin_id.label:           Origin Id
             items_qty.label:           Items qty
             items_count.label:         Items count
@@ -146,8 +144,6 @@ orocrm:
             sub_total_amount.label:    Subtotal Amount
             grand_total.label:         Grand total
             tax_amount.label:          Tax
-            created_at.label:          Created on
-            updated_at.label:          Updated on
             cart_items.label:          Cart Items
             customer.label:            Customer
             store.label:               Store
@@ -167,8 +163,6 @@ orocrm:
         cartitem:
             entity_label:              Shopping Cart Item
             entity_plural_label:       Cart items
-            created_at.label:          Created at
-            updated_at.label:          Updated at
             custom_price.label:        Custom price
             description.label:         Description
             discount_amount.label:     Discount amount
@@ -243,6 +237,7 @@ orocrm:
 
             refresh_label:      Sync Data
             id.label:           Id
+            owner.label:        Owner
             increment_id.label: "Order #"
             items_qty.label:    Items qty
             gift_message.label: Gift message
@@ -265,8 +260,6 @@ orocrm:
             discount_percent.label: Discount percent
             total_amount.label:     Total amount
             status.label:           Status
-            created_at.label:       Placed on
-            updated_at.label:       Updated on
             customer.label:         Customer
             addresses.label:        Addresses
             store.label:            Store
@@ -301,8 +294,6 @@ orocrm:
             cost.label:           Cost
             websites.label:       Websites
             channel.label:        Integration
-            created_at.label:     Created at
-            updated_at.label:     Updated at
             data_channel.label:   Channel
 
         address:
@@ -323,14 +314,14 @@ orocrm:
             primary.label:         Primary
             id.label:              Id
             organization.label:    Organization
-            created.label:         Created at
-            updated.label:         Updated at
             origin_id.label:       Origin id
             owner.label:           Owner
             types.label:           Types
             country.label:         Country
             region.label:          State
             contact_address.label: Contact address
+            contact_phone.label:   Contact phone
+            phone.label:           Phone
 
             country_name.label:      Country name
             country_iso2_code.label: Country ISO2 code
@@ -355,12 +346,10 @@ orocrm:
             middle_name.label:   Middle name
             last_name.label:     Last name
             name_suffix.label:   Name suffix
-            created.label:       Created at
-            updated.label:       Updated at
             origin_id.label:     Origin Id
             country.label:       Country
             region.label:        State
-
+            phone.label:         Phone
             country_name.label:      Country
             country_iso2_code.label: Country ISO2 Code
             country_iso3_code.label: Country ISO3 Code

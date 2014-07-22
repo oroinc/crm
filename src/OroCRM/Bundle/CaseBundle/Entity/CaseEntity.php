@@ -2,9 +2,13 @@
 
 namespace OroCRM\Bundle\CaseBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\UserBundle\Entity\User;
@@ -40,7 +44,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *      }
  * )
  */
-class CaseEntity extends ExtendCaseEntity
+class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
 {
     /**
      * @var integer
@@ -48,6 +52,13 @@ class CaseEntity extends ExtendCaseEntity
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $id;
 
@@ -56,6 +67,13 @@ class CaseEntity extends ExtendCaseEntity
      *
      * @ORM\Column(name="subject", type="string", length=255)
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $subject;
 
@@ -64,6 +82,13 @@ class CaseEntity extends ExtendCaseEntity
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $description;
 
@@ -72,6 +97,13 @@ class CaseEntity extends ExtendCaseEntity
      *
      * @ORM\Column(name="resolution", type="text", nullable=true)
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $resolution;
 
@@ -81,6 +113,13 @@ class CaseEntity extends ExtendCaseEntity
      * @ORM\ManyToOne(targetEntity="CaseSource", cascade={"persist"})
      * @ORM\JoinColumn(name="source_name", referencedColumnName="name", onDelete="SET NULL")
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $source;
 
@@ -90,6 +129,13 @@ class CaseEntity extends ExtendCaseEntity
      * @ORM\ManyToOne(targetEntity="CaseStatus", cascade={"persist"})
      * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $status;
 
@@ -99,6 +145,13 @@ class CaseEntity extends ExtendCaseEntity
      * @ORM\ManyToOne(targetEntity="CasePriority", cascade={"persist"})
      * @ORM\JoinColumn(name="priority_name", referencedColumnName="name", onDelete="SET NULL")
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $priority;
 
@@ -107,6 +160,13 @@ class CaseEntity extends ExtendCaseEntity
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $relatedContact;
 
@@ -115,6 +175,13 @@ class CaseEntity extends ExtendCaseEntity
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $relatedAccount;
 
@@ -123,6 +190,13 @@ class CaseEntity extends ExtendCaseEntity
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="assigned_to_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      * @Oro\Versioned
      */
     protected $assignedTo;
@@ -133,13 +207,40 @@ class CaseEntity extends ExtendCaseEntity
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $owner;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="CaseComment",
+     *     mappedBy="case",
+     *     cascade={"ALL"},
+     *     orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"createdAt"="DESC"})
+     */
+    protected $comments;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          }
+     *      }
+     * )
      */
     protected $createdAt;
 
@@ -147,6 +248,13 @@ class CaseEntity extends ExtendCaseEntity
      * @var \DateTime
      *
      * @ORM\Column(type="datetime", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          }
+     *      }
+     * )
      */
     protected $updatedAt;
 
@@ -165,14 +273,16 @@ class CaseEntity extends ExtendCaseEntity
     protected $closedAt;
 
     /**
-     * @param integer $id
-     * @return CaseEntity
+     * Flag to update closedAt field when status is set to closed.
+     * Use null instead of false because of behaviour of BeSimpleSoapBundle.
+     *
+     * @var bool
      */
-    public function setId($id)
-    {
-        $this->id = $id;
+    private $updateClosedAt = null;
 
-        return $this;
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -281,7 +391,9 @@ class CaseEntity extends ExtendCaseEntity
             $newStatus->getName() == CaseStatus::STATUS_CLOSED &&
             !$newStatus->isEqualTo($oldStatus)
         ) {
-            $this->closedAt = new \DateTime();
+            $this->updateClosedAt = true;
+        } else {
+            $this->updateClosedAt = null;
         }
     }
 
@@ -316,7 +428,7 @@ class CaseEntity extends ExtendCaseEntity
      * @param Contact|null $relatedContact
      * @return CaseEntity
      */
-    public function setRelatedContact(Contact $relatedContact = null)
+    public function setRelatedContact($relatedContact = null)
     {
         $this->relatedContact = $relatedContact;
 
@@ -335,7 +447,7 @@ class CaseEntity extends ExtendCaseEntity
      * @param Account|null $relatedAccount
      * @return CaseEntity
      */
-    public function setRelatedAccount(Account $relatedAccount = null)
+    public function setRelatedAccount($relatedAccount = null)
     {
         $this->relatedAccount = $relatedAccount;
 
@@ -386,6 +498,26 @@ class CaseEntity extends ExtendCaseEntity
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param CaseComment $comment
+     * @return CaseEntity
+     */
+    public function addComment(CaseComment $comment)
+    {
+        $this->comments->add($comment);
+        $comment->setCase($this);
+
+        return $this;
     }
 
     /**
@@ -453,6 +585,10 @@ class CaseEntity extends ExtendCaseEntity
     {
         $this->closedAt = $closedAt;
 
+        if ($this->closedAt) {
+            unset($this->updateClosedAt);
+        }
+
         return $this;
     }
 
@@ -465,12 +601,30 @@ class CaseEntity extends ExtendCaseEntity
     }
 
     /**
+     * Get the primary email address of the related contact
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        $contact = $this->getRelatedContact();
+        if (!$contact) {
+            return null;
+        }
+
+        return $contact->getEmail();
+    }
+
+    /**
      * @ORM\PrePersist
      */
     public function prePersist()
     {
-        $this->createdAt  = $this->createdAt ? $this->createdAt : new \DateTime();
-        $this->reportedAt = $this->reportedAt? $this->reportedAt : new \DateTime();
+        $this->createdAt  = $this->createdAt ? $this->createdAt : new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->reportedAt = $this->reportedAt? $this->reportedAt : new \DateTime('now', new \DateTimeZone('UTC'));
+        if ($this->updateClosedAt && !$this->closedAt) {
+            $this->setClosedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+        }
     }
 
     /**
@@ -478,6 +632,17 @@ class CaseEntity extends ExtendCaseEntity
      */
     public function preUpdate()
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        if ($this->updateClosedAt) {
+            $this->setClosedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->subject;
     }
 }
