@@ -25,6 +25,9 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderItem;
  *          },
  *          "activity"={
  *              "immutable"=true
+ *          },
+ *          "attachment"={
+ *              "immutable"=true
  *          }
  *      }
  * )

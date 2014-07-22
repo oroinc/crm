@@ -130,6 +130,13 @@ class Customer extends ExtendCustomer
      *
      * @ORM\Column(type="datetime", name="created_at")
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          }
+     *      }
+     * )
      */
     protected $createdAt;
 
@@ -138,6 +145,13 @@ class Customer extends ExtendCustomer
      *
      * @ORM\Column(type="datetime", name="updated_at")
      * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          }
+     *      }
+     * )
      */
     protected $updatedAt;
 

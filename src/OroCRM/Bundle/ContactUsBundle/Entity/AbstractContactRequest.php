@@ -4,9 +4,10 @@ namespace OroCRM\Bundle\ContactUsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 
 /**
  * @ORM\MappedSuperclass
@@ -62,6 +63,13 @@ abstract class AbstractContactRequest implements FirstNameInterface, LastNameInt
      * @var \DateTime $created
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          }
+     *      }
+     * )
      */
     protected $createdAt;
 
@@ -69,6 +77,13 @@ abstract class AbstractContactRequest implements FirstNameInterface, LastNameInt
      * @var \DateTime $updated
      *
      * @ORM\Column(name="updated_at", type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          }
+     *      }
+     * )
      */
     protected $updatedAt;
 
