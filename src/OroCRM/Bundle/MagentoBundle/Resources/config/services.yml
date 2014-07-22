@@ -184,7 +184,7 @@ services:
     orocrm_magento.service.import_helper:
         class: %orocrm_magento.service.import_helper.class%
         arguments:
-            - @doctrine.orm.entity_manager
+            - @doctrine
 
     # Customer API
     orocrm_magento.customer.manager.api:
@@ -239,4 +239,4 @@ services:
     orocrm_magento.converter.region:
         class: %orocrm_magento.converter.region.class%
         arguments:
-            - @doctrine.orm.entity_manager
+            - @orocrm_magento.orm.regions_repository
