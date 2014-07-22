@@ -156,7 +156,7 @@ datagrid:
                 frontend_type: integer
             logTime:
                 label: orocrm.campaign.trackingevent.report.date.label
-                frontend_type: datetime
+                frontend_type: string
 
     campaign-tracking-detailed-report-day-grid:
         source:
