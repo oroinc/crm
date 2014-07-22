@@ -188,7 +188,7 @@
                         );
                     };
 
-                    mediator.on('page-rendered', function(){
+                    mediator.on('page-rendered page:afterChange', function(){
                         setChartSize();
                         drawChart();
                         setChartContainerSize();
