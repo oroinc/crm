@@ -31,6 +31,9 @@ use Oro\Bundle\UserBundle\Entity\User;
  *          },
  *          "activity"={
  *              "immutable"=true
+ *          },
+ *          "attachment"={
+ *              "immutable"=true
  *          }
  *      }
  * )
