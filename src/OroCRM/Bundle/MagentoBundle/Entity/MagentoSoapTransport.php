@@ -20,10 +20,10 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *          "note"={
  *              "immutable"=true
  *          },
- *          "note"={
+ *          "activity"={
  *              "immutable"=true
  *          },
- *          "activity"={
+ *          "attachment"={
  *              "immutable"=true
  *          }
  *      }

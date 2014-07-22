@@ -317,11 +317,14 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
      *
      * @ORM\Column(name="created_at", type="datetime")
      * @ConfigField(
-     *  defaultValues={
-     *      "importexport"={
-     *          "excluded"=true
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          },
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
      *      }
-     *  }
      * )
      */
     protected $createdAt;
@@ -331,11 +334,14 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
      *
      * @ORM\Column(name="updated_at", type="datetime")
      * @ConfigField(
-     *  defaultValues={
-     *      "importexport"={
-     *          "excluded"=true
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          },
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
      *      }
-     *  }
      * )
      */
     protected $updatedAt;
@@ -346,12 +352,14 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
      * @ORM\Column(name="notes", type="text", nullable=true)
      * @Oro\Versioned
      * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=80
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          },
+     *          "importexport"={
+     *              "order"=80
+     *          }
      *      }
-     *  }
      * )
      */
     protected $notes;
