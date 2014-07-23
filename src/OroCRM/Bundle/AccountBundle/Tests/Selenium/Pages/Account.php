@@ -33,7 +33,7 @@ class Account extends AbstractPageEntity
 
         if ($this->test->byXpath("//input[starts-with(@id,'orocrm_account_form_billingAddress_region_text')]")
             ->displayed()) {
-            $this->state = $this->test->byId(
+            $this->state = $this->test->byXpath(
                 "//input[starts-with(@id,'orocrm_account_form_billingAddress_region_text')]"
             );
         } else {
@@ -168,8 +168,12 @@ class Account extends AbstractPageEntity
 
     public function setRegion($state)
     {
-        if ($this->test->byId('orocrm_account_form_billingAddress_region_text')->displayed()) {
-            $this->state = $this->test->byId('orocrm_account_form_billingAddress_region_text');
+
+        if ($this->test->byXPath("//input[starts-with('orocrm_account_form_billingAddress_region_text')]")
+            ->displayed()) {
+            $this->state = $this->test->byXPath(
+                "//input[starts-with('orocrm_account_form_billingAddress_region_text')]"
+            );
         } else {
             $this->state = $this->test
                 ->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_billingAddress_region')]/a");
