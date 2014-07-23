@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
 
+use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
+
 /**
  * @Route("/campaign/event")
  */
@@ -26,7 +28,11 @@ class CampaignEventController extends Controller
      */
     public function plotAction($period, $campaignCode)
     {
-        $supportedPeriods = ['hourly', 'daily', 'monthly'];
+        $supportedPeriods = [
+            Campaign::PERIOD_HOURLY,
+            Campaign::PERIOD_DAILY,
+            Campaign::PERIOD_MONTHLY,
+        ];
         if (!in_array($period, $supportedPeriods)) {
             throw new \InvalidArgumentException(
                 sprintf(
