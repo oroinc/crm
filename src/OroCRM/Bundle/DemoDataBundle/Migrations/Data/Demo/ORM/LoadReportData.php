@@ -21,7 +21,7 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
         array(
             'name' => 'Total Forecast',
             'description' => 'This report forecasts maximum projected income from all current opportunities.',
-            'type' => 'table',
+            'type' => ReportType::TYPE_TABLE,
             'owner' => 'Acme, General',
             'entity' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
             'definition' => '{"filters":[{"columnName":"probability","criterion":{"filter":"number","data":{"value":0,"type":"4"}}},"AND",{"columnName":"probability","criterion":{"filter":"number","data":{"value":1,"type":"4"}}}],"grouping_columns":[{"name":"probability","oro_report_form[grouping][columnNames]":"probability"}],"columns":[{"name":"budgetAmount","label":"Budget amount","func":{"name":"Sum","group_type":"aggregates","group_name":"number"},"sorting":""},{"name":"probability","label":"Probability","func":"","sorting":"DESC"}]}'
@@ -29,7 +29,7 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
         array(
             'name' => 'Leads by Geography',
             'description' => 'Geographical distribution of Leads',
-            'type' => 'table',
+            'type' => ReportType::TYPE_TABLE,
             'owner' => 'Acme, General',
             'entity' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
             'definition' => '	{"filters":[],"grouping_columns":[{"name":"address+Oro\\\\Bundle\\\\AddressBundle\\\\Entity\\\\Address::region+Oro\\\\Bundle\\\\AddressBundle\\\\Entity\\\\Region::name","oro_report_form[grouping][columnNames]":"address+Oro\\\\Bundle\\\\AddressBundle\\\\Entity\\\\Address::region+Oro\\\\Bundle\\\\AddressBundle\\\\Entity\\\\Region::name"}],"columns":[{"name":"address+Oro\\\\Bundle\\\\AddressBundle\\\\Entity\\\\Address::region+Oro\\\\Bundle\\\\AddressBundle\\\\Entity\\\\Region::name","label":"State","func":"","sorting":"ASC"},{"name":"id","label":"NUMBER OF LEADS","func":{"name":"Count","group_type":"aggregates","group_name":"number"},"sorting":""}]}'
