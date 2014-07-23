@@ -2,23 +2,19 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Service;
 
-use Doctrine\ORM\EntityManager;
-use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
-use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ImportHelper
 {
-    /**
-     * @var ChannelRepository
-     */
-    protected $channelRepository;
+    /** @var RegistryInterface */
+    protected $registry;
 
     /**
-     * @param EntityManager $em
+     * @param RegistryInterface $registry
      */
-    public function __construct(EntityManager $em)
+    public function __construct(RegistryInterface $registry)
     {
-        $this->channelRepository = $em->getRepository('OroIntegrationBundle:Channel');
+        $this->registry = $registry;
     }
 
     /**
@@ -33,7 +29,9 @@ class ImportHelper
             throw new \LogicException('Context should contain reference to channel');
         }
 
-        return $this->channelRepository->getOrLoadById($context['channel']);
+        return $this->registry
+            ->getRepository('OroIntegrationBundle:Channel')
+            ->getOrLoadById($context['channel']);
     }
 
     /**
