@@ -49,6 +49,9 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *          "reminder"={
  *              "reminder_template_name"="task_reminder",
  *              "reminder_flash_template_identifier"="task_template"
+ *          },
+ *          "activity"={
+ *              "immutable"=true
  *          }
  *      }
  * )

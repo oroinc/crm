@@ -33,6 +33,9 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
  *          "security"={
  *              "type"="ACL",
  *              "group_name"=""
+ *          },
+ *          "activity"={
+ *              "immutable"=true
  *          }
  *      }
  * )

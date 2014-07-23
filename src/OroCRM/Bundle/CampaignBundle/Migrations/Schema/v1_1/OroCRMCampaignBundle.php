@@ -20,7 +20,7 @@ class OroCRMCampaignBundle implements Migration
 
         $queries->addPostQuery(
             sprintf(
-                "UPDATE orocrm_campaign SET report_period = '%s' WHERE report_period IS NULL",
+                "UPDATE orocrm_campaign SET report_period = '%s'",
                 Campaign::PERIOD_DAILY
             )
         );

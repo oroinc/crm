@@ -13,10 +13,10 @@ orocrm:
         budget.label:        Budget
         owner.label:         Owner
         report_period:
-            label:   Report Scale
-            hourly:  Hourly
-            daily:   Daily
-            monthly: Monthly
+            label: Report Scale
+            hour:  Hourly
+            day:   Daily
+            month: Monthly
         controller:
             campaign.saved.message:  "Campaign saved"
         menu:
