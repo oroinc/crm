@@ -31,8 +31,11 @@ class Account extends AbstractPageEntity
         $this->zipcode = $this->test->byId('orocrm_account_form_billingAddress_postalCode');
         $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_owner')]/a");
 
-        if ($this->test->byId('orocrm_account_form_billingAddress_region_text')->displayed()) {
-            $this->state = $this->test->byId('orocrm_account_form_billingAddress_region_text');
+        if ($this->test->byXpath("//input[starts-with(@id,'orocrm_account_form_billingAddress_region_text')]")
+            ->displayed()) {
+            $this->state = $this->test->byId(
+                "//input[starts-with(@id,'orocrm_account_form_billingAddress_region_text')]"
+            );
         } else {
             $this->state = $this->test
                 ->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_billingAddress_region')]/a");
