@@ -291,8 +291,9 @@ class Lead extends AbstractPageEntity
 
     public function setAddressRegion($value)
     {
-        if ($this->test->byId("orocrm_sales_lead_form_address_region_text")->displayed()) {
-            $state = $this->test->byId("orocrm_sales_lead_form_region_region_text");
+        if ($this->test->byXPath("//input[starts-with(@id, 'orocrm_sales_lead_form_address_region_text')]")
+            ->displayed()) {
+            $state = $this->test->byXPath("//input[starts-with(@id, 'orocrm_sales_lead_form_address_region_text')]");
             $state->clear();
             $state->value($value);
         } else {

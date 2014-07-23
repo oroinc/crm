@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Converter;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectRepository;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
@@ -11,18 +11,18 @@ use OroCRM\Bundle\MagentoBundle\Entity\Region;
 
 class RegionConverter
 {
-    /** @var EntityManager */
-    protected $em;
+    /** @var ObjectRepository */
+    protected $repository;
 
     /** @var array [combinedCode => MagentoRegion] precache magento region by code */
     protected $MRIdentityMap = [];
 
     /**
-     * @param EntityManager $em
+     * @paramRegistryInterface $registry
      */
-    public function __construct(EntityManager $em)
+    public function __construct(ObjectRepository $repository)
     {
-        $this->em = $em;
+        $this->repository = $repository;
     }
 
     /**
@@ -68,8 +68,7 @@ class RegionConverter
     protected function tryGetMRByCode($code)
     {
         if (!isset($this->MRIdentityMap[$code]) && !array_key_exists($code, $this->MRIdentityMap)) {
-            $repository                 = $this->em->getRepository('OroCRMMagentoBundle:Region');
-            $this->MRIdentityMap[$code] = $repository->findOneBy(['combinedCode' => $code]);
+            $this->MRIdentityMap[$code] = $this->repository->findOneBy(['combinedCode' => $code]);
         }
 
         return $this->MRIdentityMap[$code];

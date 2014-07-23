@@ -51,7 +51,7 @@ class MultiLineDataTransformer implements TransformerInterface
      * @var array
      */
     protected $dateFormatMap = [
-        Campaign::PERIOD_HOURLY  => 'Y-m-d H:i:s.u',
+        Campaign::PERIOD_HOURLY  => 'Y-m-d H:i:s',
         Campaign::PERIOD_DAILY   => 'Y-m-d',
         Campaign::PERIOD_MONTHLY => 'Y-m',
         Campaign::PERIOD_YEARLY  => 'Y',
