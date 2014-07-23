@@ -309,7 +309,7 @@ class Contact extends AbstractPageEntity
     public function getAddressCountry($addressId = 0)
     {
         return $this->test
-            ->byXpath("//div[@id = 's2id_orocrm_contact_form_addresses_{$addressId}_country']/a/span")
+            ->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_addresses_{$addressId}_country')]/a/span")
             ->text();
     }
 
@@ -360,7 +360,7 @@ class Contact extends AbstractPageEntity
     public function getAddressRegion($addressId = 0)
     {
         return $this->test
-            ->byXpath("//div[@id = 's2id_orocrm_contact_form_addresses_{$addressId}_region']/a/span")
+            ->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_addresses_{$addressId}_region')]/a/span")
             ->text();
     }
 
