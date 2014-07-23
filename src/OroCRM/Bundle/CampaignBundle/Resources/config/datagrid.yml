@@ -133,7 +133,7 @@ datagrid:
         options:
             export: true
 
-    campaign-tracking-detailed-report-hourly-grid:
+    campaign-tracking-detailed-report-hour-grid:
         source:
             type: orm
             acl_resource: orocrm_campaign_view
@@ -158,7 +158,7 @@ datagrid:
                 label: orocrm.campaign.trackingevent.report.date.label
                 frontend_type: datetime
 
-    campaign-tracking-detailed-report-daily-grid:
+    campaign-tracking-detailed-report-day-grid:
         source:
             type: orm
             acl_resource: orocrm_campaign_view
@@ -183,7 +183,7 @@ datagrid:
                 label: orocrm.campaign.trackingevent.report.date.label
                 frontend_type: date
 
-    campaign-tracking-detailed-report-monthly-grid:
+    campaign-tracking-detailed-report-month-grid:
         source:
             type: orm
             acl_resource: orocrm_campaign_view

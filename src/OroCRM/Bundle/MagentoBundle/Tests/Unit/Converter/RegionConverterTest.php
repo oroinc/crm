@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectRepository;
 
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 
@@ -16,23 +16,22 @@ class RegionConverterTest extends \PHPUnit_Framework_TestCase
     const TEST_REGION_COMBINED_CODE = 'UA-61';
     const TEST_REGION_NAME          = 'Kharkivs\'ka oblast\'';
 
-    /** @var EntityManager|\PHPUnit_Framework_MockObject_MockObject */
-    protected $em;
+    /** @var ObjectRepository|\PHPUnit_Framework_MockObject_MockObject */
+    protected $repository;
 
     /** @var RegionConverter */
     protected $converter;
 
     public function setUp()
     {
-        $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+        $this->repository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')
             ->disableOriginalConstructor()->getMock();
-
-        $this->converter = new RegionConverter($this->em);
+        $this->converter  = new RegionConverter($this->repository);
     }
 
     public function tearDown()
     {
-        unset($this->em, $this->converter);
+        unset($this->repository, $this->converter);
     }
 
     /**
@@ -53,24 +52,11 @@ class RegionConverterTest extends \PHPUnit_Framework_TestCase
             $region = new Region();
             $region->setRegionId(self::TEST_MAGENTO_REGION_ID);
 
-            $repository = $this->getMockBuilder('\Doctrine\ORM\EntityRepository')
-                ->disableOriginalConstructor()->getMock();
-            $this->em->expects($this->once())->method('getRepository')
-                ->with($this->equalTo('OroCRMMagentoBundle:Region'))
-                ->will($this->returnValue($repository));
-
-            $repository->expects($this->once())->method('findOneBy')
+            $this->repository->expects($this->once())->method('findOneBy')
                 ->will($this->returnValue($region));
         } elseif ($foundInDatabase === false) {
-            $repository = $this->getMockBuilder('\Doctrine\ORM\EntityRepository')
-                ->disableOriginalConstructor()->getMock();
-            $this->em->expects($this->once())->method('getRepository')
-                ->with($this->equalTo('OroCRMMagentoBundle:Region'))
-                ->will($this->returnValue($repository));
-            $repository->expects($this->once())->method('findOneBy')
+            $this->repository->expects($this->once())->method('findOneBy')
                 ->will($this->returnValue(null));
-        } else {
-            $this->em->expects($this->never())->method('getEntityManager');
         }
 
         // more than one call should not provoke expectation errors

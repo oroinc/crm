@@ -18,6 +18,7 @@ parameters:
     orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
     orocrm_magento.event_listener.order.class:                              OroCRM\Bundle\MagentoBundle\EventListener\OrderListener
     orocrm_magento.event_listener.channel_owner_set.class:                  OroCRM\Bundle\MagentoBundle\EventListener\ChannelOwnerSetListener
+    orocrm_magento.event_listener.writer_error.class:                       OroCRM\Bundle\MagentoBundle\EventListener\IntegrationWriteErrorListener
 
     # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
@@ -168,6 +169,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_integration.default_owner.set, method: onSet }
 
+    orocrm_magento.event_listener.writer_error:
+        class: %orocrm_magento.event_listener.writer_error.class%
+        tags:
+            - { name: kernel.event_listener, event: oro_integration.writer_error, method: handleError }
+
     orocrm_magento.service.magento_url_generator:
         class: %orocrm_magento.magento_url_generator.class%
         arguments: [@router]
@@ -176,7 +182,7 @@ services:
     orocrm_magento.service.import_helper:
         class: %orocrm_magento.service.import_helper.class%
         arguments:
-            - @doctrine.orm.entity_manager
+            - @doctrine
 
     # Customer API
     orocrm_magento.customer.manager.api:
@@ -231,4 +237,4 @@ services:
     orocrm_magento.converter.region:
         class: %orocrm_magento.converter.region.class%
         arguments:
-            - @doctrine.orm.entity_manager
+            - @orocrm_magento.orm.regions_repository
