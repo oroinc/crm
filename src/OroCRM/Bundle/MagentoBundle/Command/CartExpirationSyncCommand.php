@@ -6,8 +6,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Oro\Component\Log\OutputLogger;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\CronBundle\Command\Logger\OutputLogger;
 use Oro\Bundle\IntegrationBundle\Command\AbstractSyncCronCommand;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 
