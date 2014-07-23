@@ -54,7 +54,7 @@ class IntegrationWriteErrorListener
                 return;
         }
 
-        $warning .= sprintf('Following entities were not imported due to errors: %s', $entity, implode(', ', $ids));
+        $warning .= sprintf('Following %s were not imported due to errors: %s', $entity, implode(', ', $ids));
 
         $event->addWarningText($warning);
         $event->setCouldBeSkipped(true);
