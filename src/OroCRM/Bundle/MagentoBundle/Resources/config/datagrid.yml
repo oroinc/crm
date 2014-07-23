@@ -806,8 +806,12 @@ datagrid:
             acl_resource: orocrm_magento_order_view
             query:
                 select:
-                    - o
-                    - step.label as stepLabel
+                    - o.id
+                    - o.incrementId
+                    - o.totalAmount
+                    - o.totalPaidAmount
+                    - o.status
+                    - MAX(step.label) as stepLabel
                     - COUNT(items.id) as itemsCount
                 from:
                     - { table: %orocrm_magento.order.entity.class%, alias: o }
@@ -876,8 +880,8 @@ datagrid:
                     - c.createdAt
                     - c.updatedAt
                     - c.quoteCurrencyCode as currency
-                    - cstatus.label as statusLabel
-                    - step.label as stepLabel
+                    - MAX(cstatus.label) as statusLabel
+                    - MAX(step.label) as stepLabel
                     - c.itemsCount
                 from:
                     - { table: %orocrm_magento.cart.entity.class% , alias: c }
