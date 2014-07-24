@@ -1,21 +1,21 @@
 UPGRADE FROM 1.2 to 1.3
 =======================
 
-### General
+### General notes
 
-* Campaign bundle was added
-* Case bundle was added
-* Contact bundle changed:
-	* Removed `GroupNormalizer`, `MethodNormalizer`, `SourceNormalizer`, `AddOrReplaceStrategy`, `ContactImportStrategyHelper` - removed as it is not needed.
-* Account bundle change:
-	* Remove `AccountNormalizer` as it is not needed
-* Call bundle changed:
-	* Remove `view_content_data_communications` placeholder use.
-* Contact us bundle changed:
-	* Removed `ChannelRelatedDataDeleteProvider` as it is not needed
-* Magento bundle changed:
-	* Added Cart select form type `orocrm_cart_select`
-	* Added Customer select form type `orocrm_customer_select`
-	* Added Order select form type `orocrm_order_select`
-	* Renamed `MagentoChannelDeleteProvider` -> `MagentoDeleteProvider`
-	* Add `ImportHelper` which provide functionality to get channel from import export context
+* Campaign bundle has been added
+* Case bundle has been added
+* Contact bundle has been changed:
+	*	`GroupNormalizer`, `MethodNormalizer`, `SourceNormalizer`, `AddOrReplaceStrategy`, `ContactImportStrategyHelper` have been removed as they are no longer needed.
+* Account bundle has been changed:
+	*	`AccountNormalizer` has been removed as it is no longer needed
+* Call bundle has been changed:
+	*	`view_content_data_communications` placeholder use has been removed.
+* Contact us bundle has been changed:
+	*	Removed `ChannelRelatedDataDeleteProvider` as it is not needed.
+*	Magento bundle has been changed:
+	*	`orocrm_cart_select` cart select form type has been added.
+	*	`orocrm_customer_select` customer select form type has been added.
+	*	`orocrm_order_select` order select form type has been added.
+	*	`MagentoChannelDeleteProvider` has been renamed to `MagentoDeleteProvider`.
+	*	`ImportHelper` that provides functionality to get channel from import export context has been added
