@@ -96,8 +96,10 @@ class CreateAccountTest extends Selenium2TestCase
             ->assertTitle('Accounts - Customers')
             ->assertMessage('Account deleted');
 
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
-            ->filterBy('Account name', $accountName)
-            ->assertNoDataMessage('No account was found to match your search');
+        $login->openAccounts('OroCRM\Bundle\AccountBundle');
+        if ($login->getRowsCount() > 0) {
+            $login->filterBy('Account name', $accountName)
+                ->assertNoDataMessage('No account was found to match your search');
+        }
     }
 }
