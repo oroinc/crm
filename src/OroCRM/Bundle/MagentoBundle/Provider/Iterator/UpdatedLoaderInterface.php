@@ -17,7 +17,12 @@ interface UpdatedLoaderInterface extends \Iterator
     /**
      * Set mode
      *
-     * @param int $mode
+     * @param string $mode
      */
     public function setMode($mode);
+
+    /**
+     * @return string
+     */
+    public function getMode();
 }
