@@ -60,7 +60,6 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             } else {
                 $iterator->setStartDate($status->getDate());
             }
-
         } elseif (!empty($status)) {
             if (!empty($data['lastSyncItemData'])) {
                 $iterator->setStartDate(new \DateTime($data['lastSyncItemData']));
@@ -119,12 +118,15 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
      */
     protected function getInitDate($item)
     {
+        $date = null;
+
         if (!empty($item['createdAt'])) {
-            return $item['createdAt'];
+            $date = $item['createdAt'];
         } elseif (!empty($item['created_at'])) {
-            return $item['created_at'];
+            $date = $item['created_at'];
         }
-        return null;
+
+        return $date;
     }
 
     /**
@@ -134,12 +136,14 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
      */
     protected function getUpdateDate($item)
     {
+        $date = null;
+
         if (!empty($item['updatedAt'])) {
-            return $item['updatedAt'];
+            $date = $item['updatedAt'];
         } elseif (!empty($item['updated_at'])) {
-            return $item['updated_at'];
+            $date = $item['updated_at'];
         }
 
-        return null;
+        return $date;
     }
 }
