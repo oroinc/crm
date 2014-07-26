@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use Oro\Bundle\ImportExportBundle\Exception\LogicException;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
@@ -28,7 +27,7 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         $iterator    = $this->getSourceIterator();
         $isForceSync = $context->getOption('force') && $this->supportsForceSync();
 
-        if ($iterator instanceof UpdatedLoaderInterface && false !== $status && !$isForceSync) {
+        if ($iterator instanceof UpdatedLoaderInterface && !empty($status) && !$isForceSync) {
             /** @var Status $status */
             $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
             $data = $status->getData();
@@ -40,8 +39,8 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             }
 
         } elseif (!empty($status)) {
-            if ($status->hasLastSyncedItemDate()) {
-                $iterator->setStartDate($status->getLastSyncedItemDate());
+            if (!empty($data['lastSyncItemData'])) {
+                $iterator->setStartDate(new \DateTime($data['lastSyncItemData']));
             }
         }
 
@@ -76,8 +75,7 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
      */
     public function read()
     {
-        $item = parent::read();
-
+        $item     = parent::read();
         $iterator = $this->getSourceIterator();
 
         if (!$iterator->valid()) {
@@ -100,17 +98,19 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
      * @param string $mode
      * @param object $item
      *
-     * @return null|string
+     * @return string|null
      */
     protected function getDateAccordingWithTheMode($mode, $item)
     {
+        $date = null;
+
         if ($mode === UpdatedLoaderInterface::IMPORT_MODE_INITIAL) {
-            return $this->getInitDate($item);
+            $date = $this->getInitDate($item);
         } elseif ($mode === UpdatedLoaderInterface::IMPORT_MODE_UPDATE) {
-            return $this->getUpdateDate($item);
+            $date = $this->getUpdateDate($item);
         }
 
-        return null;
+        return $date;
     }
 
     /**

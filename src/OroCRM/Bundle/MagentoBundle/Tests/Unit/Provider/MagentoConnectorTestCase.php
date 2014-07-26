@@ -176,7 +176,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 
         $iteratorMock->expects($this->once())->method('rewind');
         $iteratorMock->expects($this->once())->method('next');
-        $iteratorMock->expects($this->exactly(2))->method('valid')->will($this->onConsecutiveCalls(true, false));
+        $iteratorMock->expects($this->any())->method('valid')->will($this->onConsecutiveCalls(true, false));
         $iteratorMock->expects($this->once())->method('current')->will($this->returnValue($testValue));
 
         $this->assertEquals($testValue, $connector->read());
