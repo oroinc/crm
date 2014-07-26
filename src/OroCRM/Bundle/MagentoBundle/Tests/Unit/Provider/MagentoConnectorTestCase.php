@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
@@ -160,19 +161,32 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $connector->setStepExecution($this->stepExecutionMock);
     }
 
-    public function testRead()
+    /**
+     * @dataProvider readProvider
+    */
+    public function testRead($isUpdate = false)
     {
-        $iteratorMock = $this->getMock('\Iterator');
+        $iteratorMock = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
+
+        if ($isUpdate) {
+            $iteratorMock->expects($this->exactly(2))->method('getMode')
+                ->will($this->returnValue(UpdatedLoaderInterface::IMPORT_MODE_UPDATE));
+        } else {
+            $iteratorMock->expects($this->exactly(2))->method('getMode')
+                ->will($this->returnValue(UpdatedLoaderInterface::IMPORT_MODE_INITIAL));
+        }
 
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
 
         $this->transportMock->expects($this->once())->method('init');
-
         $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iteratorMock));
         $connector->setStepExecution($this->stepExecutionMock);
 
-        $testValue = 'test';
+        $testValue = [
+            'created_at' => new \DateTime('01.01.2000 14:15:08'),
+            'updatedAt'  => new \DateTime('02.02.2002 15:17:28'),
+        ];
 
         $iteratorMock->expects($this->once())->method('rewind');
         $iteratorMock->expects($this->once())->method('next');
@@ -181,6 +195,14 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($testValue, $connector->read());
         $this->assertNull($connector->read());
+    }
+
+    public function readProvider()
+    {
+        return [
+            'initial' => [],
+            'update' => [true],
+        ];
     }
 
     /**

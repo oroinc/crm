@@ -18,6 +18,29 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     /**
      * {@inheritdoc}
      */
+    public function read()
+    {
+        $item     = parent::read();
+        $iterator = $this->getSourceIterator();
+
+        if (!$iterator->valid()) {
+            $data = null;
+
+            if ($iterator instanceof UpdatedLoaderInterface) {
+                $mode = $iterator->getMode();
+                $data = $this->getDateAccordingWithTheMode($mode, $item);
+            }
+
+            if (!empty($data)) {
+                $this->addStatusData('lastSyncItemData', $data);
+            }
+        }
+        return $item;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function initializeFromContext(ContextInterface $context)
     {
         parent::initializeFromContext($context);
@@ -71,30 +94,6 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function read()
-    {
-        $item     = parent::read();
-        $iterator = $this->getSourceIterator();
-
-        if (!$iterator->valid()) {
-            $data = null;
-
-            if ($iterator instanceof UpdatedLoaderInterface) {
-                $mode = $iterator->getMode();
-                $data = $this->getDateAccordingWithTheMode($mode, $item);
-            }
-
-            if (!empty($data)) {
-                $this->addStatusData('lastSyncItemData', $data);
-            }
-        }
-
-        return $item;
-    }
-
-    /**
      * @param string $mode
      * @param object $item
      *
@@ -122,7 +121,7 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     {
         if (!empty($item['createdAt'])) {
             return $item['createdAt'];
-        } elseif ($item['created_at']) {
+        } elseif (!empty($item['created_at'])) {
             return $item['created_at'];
         }
         return null;
@@ -137,7 +136,7 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     {
         if (!empty($item['updatedAt'])) {
             return $item['updatedAt'];
-        } elseif ($item['updated_at']) {
+        } elseif (!empty($item['updated_at'])) {
             return $item['updated_at'];
         }
 
