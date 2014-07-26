@@ -69,10 +69,10 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         // pass filters from connector
         if ($context->hasOption('filters') || $context->hasOption('complex_filters')) {
             if ($iterator instanceof PredefinedFiltersAwareInterface) {
-                $filters        = $context->getOption('filters') ? : [];
-                $complexFilters = $context->getOption('complex_filters') ? : [];
-
+                $filters           = $context->getOption('filters') ? : [];
+                $complexFilters    = $context->getOption('complex_filters') ? : [];
                 $predefinedFilters = new BatchFilterBag($filters, $complexFilters);
+
                 $iterator->setPredefinedFiltersBag($predefinedFilters);
             } else {
                 throw new \LogicException('Iterator does not support predefined filters');
