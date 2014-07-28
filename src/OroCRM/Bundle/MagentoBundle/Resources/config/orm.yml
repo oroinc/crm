@@ -1,0 +1,10 @@
+parameters:
+    orocrm_magento.orm.repository.class: Doctrine\Common\Persistence\ObjectRepository
+
+services:
+    orocrm_magento.orm.regions_repository:
+        class:           %orocrm_magento.orm.repository.class%
+        factory_service: doctrine
+        factory_method:  getRepository
+        arguments:
+            - OroCRMMagentoBundle:Region

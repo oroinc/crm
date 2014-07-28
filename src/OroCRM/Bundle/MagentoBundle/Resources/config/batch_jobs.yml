@@ -3,7 +3,7 @@ connector:
     jobs:
         # Customer import job
         mage_customer_import:
-            title: "Entity Import from Magento SOAP API"
+            title: "Customer Import from Magento"
             type: import
             steps:
                 import:
@@ -18,7 +18,7 @@ connector:
 
         # Customer export job
         mage_customer_reverse_sync:
-            title: "Entity reverse to Magento SOAP API"
+            title: "Customer's updates push to Magento"
             type:  export
             steps:
                 export:
@@ -47,7 +47,7 @@ connector:
                         batch_size: 100
         # Order import job
         mage_order_import:
-            title: "Order Import from Magento SOAP API"
+            title: "Order Import from Magento"
             type: import
             steps:
                 import:
