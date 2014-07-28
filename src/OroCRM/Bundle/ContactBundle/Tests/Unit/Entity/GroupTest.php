@@ -49,4 +49,14 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($user, $entity->getOwner());
     }
+
+    public function testOrganization()
+    {
+        $entity         = new Group();
+        $organization   = new Organization();
+
+        $this->assertNull($entity->getOrganization());
+        $entity->setOrganization($organization);
+        $this->assertSame($organization, $entity->getOrganization());
+    }
 }

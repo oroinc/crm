@@ -21,21 +21,23 @@ class CampaignTest extends AbstractEntityTestCase
      */
     public function getSetDataProvider()
     {
-        $name        = 'Some Name';
-        $code        = '123-abc';
-        $date        = new \DateTime('now');
-        $description = 'some description';
-        $budget      = 10.44;
-        $owner       = new User();
+        $name           = 'Some Name';
+        $code           = '123-abc';
+        $date           = new \DateTime('now');
+        $description    = 'some description';
+        $budget         = 10.44;
+        $owner          = new User();
+        $organization   = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [
-            'name'        => ['name', $name, $name],
-            'code'        => ['code', $code, $code],
-            'startDate'   => ['startDate', $date, $date],
-            'endDate'     => ['endDate', $date, $date],
-            'description' => ['description', $description, $description],
-            'budget'      => ['budget', $budget, $budget],
-            'owner'       => ['owner', $owner, $owner],
+            'name'         => ['name', $name, $name],
+            'code'         => ['code', $code, $code],
+            'startDate'    => ['startDate', $date, $date],
+            'endDate'      => ['endDate', $date, $date],
+            'description'  => ['description', $description, $description],
+            'budget'       => ['budget', $budget, $budget],
+            'owner'        => ['owner', $owner, $owner],
+            'organization' => ['organization', $organization, $organization],
         ];
     }
 
@@ -63,5 +65,16 @@ class CampaignTest extends AbstractEntityTestCase
         $campaign->setCode('new_code');
         $campaign->preUpdate();
         $this->assertEquals('test name (new_code)', $campaign->getCombinedName());
+    }
+
+    /**
+     * @dataProvider getSetDataProvider
+     */
+    public function testGetSet($property, $value, $expected)
+    {
+        $obj = new Campaign();
+
+        call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
+        $this->assertEquals($expected, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
     }
 }
