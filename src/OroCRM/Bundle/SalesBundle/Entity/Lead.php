@@ -11,6 +11,7 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 
@@ -41,7 +42,9 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",
- *              "owner_column_name"="user_owner_id"
+ *              "owner_column_name"="user_owner_id",
+ *              "organization_field_name"="organization",
+ *              "organization_column_name"="organization_id"
  *          },
  *          "security"={
  *              "type"="ACL",
@@ -449,6 +452,14 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowStep;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
 
     /**
      * Constructor
@@ -1014,5 +1025,28 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
         /** @var LeadStatus $defaultStatus */
         $defaultStatus   = $em->getReference('OroCRMSalesBundle:LeadStatus', 'new');
         $this->setStatus($defaultStatus);
+    }
+
+    /**
+     * Set organization
+     *
+     * @param Organization $organization
+     * @return Lead
+     */
+    public function setOrganization(Organization $organization = null)
+    {
+        $this->organization = $organization;
+
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return Organization
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
     }
 }

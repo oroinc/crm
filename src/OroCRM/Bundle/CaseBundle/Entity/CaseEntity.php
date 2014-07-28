@@ -11,6 +11,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\CaseBundle\Model\ExtendCaseEntity;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -36,7 +37,9 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",
- *              "owner_column_name"="owner_id"
+ *              "owner_column_name"="owner_id",
+ *              "organization_field_name"="organization",
+ *              "organization_column_name"="organization_id"
  *          },
  *          "security"={
  *              "type"="ACL"
@@ -279,6 +282,14 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      * @var bool
      */
     private $updateClosedAt = null;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
 
     public function __construct()
     {
@@ -644,5 +655,28 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
     public function __toString()
     {
         return (string)$this->subject;
+    }
+
+    /**
+     * Set organization
+     *
+     * @param Organization $organization
+     * @return CaseEntity
+     */
+    public function setOrganization(Organization $organization = null)
+    {
+        $this->organization = $organization;
+
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return Organization
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
     }
 }

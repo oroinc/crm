@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
@@ -37,7 +38,9 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",
- *              "owner_column_name"="user_owner_id"
+ *              "owner_column_name"="user_owner_id",
+ *              "organization_field_name"="organization",
+ *              "organization_column_name"="organization_id"
  *          },
  *          "security"={
  *              "type"="ACL",
@@ -258,6 +261,14 @@ class Customer extends ExtendCustomer
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $owner;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
 
     /**
      * {@inheritdoc}
@@ -534,5 +545,28 @@ class Customer extends ExtendCustomer
     public function setOwner(User $user)
     {
         $this->owner = $user;
+    }
+
+    /**
+     * Set organization
+     *
+     * @param Organization $organization
+     * @return Customer
+     */
+    public function setOrganization(Organization $organization = null)
+    {
+        $this->organization = $organization;
+
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return Organization
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
     }
 }

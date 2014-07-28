@@ -217,6 +217,7 @@ class TaskTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $testTaskPriority->expects($this->once())->method('getName')->will($this->returnValue('low'));
         $testTaskPriority->expects($this->once())->method('getLabel')->will($this->returnValue('Low label'));
+        $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
         return array(
             array('id', 42),
             array('subject', 'Test subject'),
@@ -224,7 +225,8 @@ class TaskTest extends \PHPUnit_Framework_TestCase
             array('taskPriority', $testTaskPriority),
             array('dueDate', new \DateTime()),
             array('createdAt', new \DateTime()),
-            array('updatedAt', new \DateTime())
+            array('updatedAt', new \DateTime()),
+            array('organization', $organization, $organization)
         );
     }
 }

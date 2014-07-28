@@ -21,21 +21,23 @@ class CampaignTest extends AbstractEntityTestCase
      */
     public function getSetDataProvider()
     {
-        $name        = 'Some Name';
-        $code        = '123-abc';
-        $date        = new \DateTime('now');
-        $description = 'some description';
-        $budget      = 10.44;
-        $owner       = new User();
+        $name           = 'Some Name';
+        $code           = '123-abc';
+        $date           = new \DateTime('now');
+        $description    = 'some description';
+        $budget         = 10.44;
+        $owner          = new User();
+        $organization   = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [
-            'name'        => ['name', $name, $name],
-            'code'        => ['code', $code, $code],
-            'startDate'   => ['startDate', $date, $date],
-            'endDate'     => ['endDate', $date, $date],
-            'description' => ['description', $description, $description],
-            'budget'      => ['budget', $budget, $budget],
-            'owner'       => ['owner', $owner, $owner],
+            'name'         => ['name', $name, $name],
+            'code'         => ['code', $code, $code],
+            'startDate'    => ['startDate', $date, $date],
+            'endDate'      => ['endDate', $date, $date],
+            'description'  => ['description', $description, $description],
+            'budget'       => ['budget', $budget, $budget],
+            'owner'        => ['owner', $owner, $owner],
+            'organization' => ['organization', $organization, $organization],
         ];
     }
 

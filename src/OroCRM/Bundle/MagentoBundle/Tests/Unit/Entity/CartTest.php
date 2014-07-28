@@ -43,6 +43,7 @@ class CartTest extends AbstractEntityTestCase
         $testItemsCollection = new ArrayCollection([new CartItem()]);
         $testStore           = new Store();
         $owner               = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
+        $organization        = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [
             'status'            => ['status', $testStatus, $testStatus],
@@ -64,7 +65,8 @@ class CartTest extends AbstractEntityTestCase
             'cartItems'         => ['cartItems', $testItemsCollection, $testItemsCollection],
             'store'             => ['store', $testStore, $testStore],
             'statusMessage'     => ['statusMessage', 'some message', 'some message'],
-            'owner'             => ['owner', $owner, $owner]
+            'owner'             => ['owner', $owner, $owner],
+            'organization'      => ['organization', $organization, $organization]
         ];
     }
 }

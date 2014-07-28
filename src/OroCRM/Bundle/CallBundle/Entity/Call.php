@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CallBundle\Entity;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\Validator\ExecutionContext;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -28,7 +29,9 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",
- *              "owner_column_name"="owner_id"
+ *              "owner_column_name"="owner_id",
+ *              "organization_field_name"="organization",
+ *              "organization_column_name"="organization_id"
  *          },
  *          "security"={
  *              "type"="ACL",
@@ -131,6 +134,14 @@ class Call
      * @ORM\JoinColumn(name="call_direction_name", referencedColumnName="name", onDelete="SET NULL")
      */
     protected $direction;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
 
     public function __construct()
     {
@@ -410,5 +421,28 @@ class Call
                 'orocrm.call.phone.required.message'
             );
         }
+    }
+
+    /**
+     * Set organization
+     *
+     * @param Organization $organization
+     * @return Call
+     */
+    public function setOrganization(Organization $organization = null)
+    {
+        $this->organization = $organization;
+
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return Organization
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
     }
 }

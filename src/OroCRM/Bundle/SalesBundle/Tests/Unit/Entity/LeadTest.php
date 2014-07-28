@@ -26,6 +26,7 @@ class LeadTest extends \PHPUnit_Framework_TestCase
         $address = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Address')
             ->disableOriginalConstructor()
             ->getMock();
+        $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
         return array(
             'namePrefix' => array('namePrefix', 'test', 'test'),
             'firstName' => array('firstName', 'test', 'test'),
@@ -43,7 +44,8 @@ class LeadTest extends \PHPUnit_Framework_TestCase
             'owner' => array('owner', $user, $user),
             'createdAt' => array('createdAt', $now, $now),
             'updatedAt' => array('updatedAt', $now, $now),
-            'notes' => array('notes', 'test', 'test')
+            'notes' => array('notes', 'test', 'test'),
+            'organization' => array('organization', $organization, $organization)
         );
     }
 }
