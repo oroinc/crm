@@ -66,15 +66,4 @@ class CampaignTest extends AbstractEntityTestCase
         $campaign->preUpdate();
         $this->assertEquals('test name (new_code)', $campaign->getCombinedName());
     }
-
-    /**
-     * @dataProvider getSetDataProvider
-     */
-    public function testGetSet($property, $value, $expected)
-    {
-        $obj = new Campaign();
-
-        call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
-        $this->assertEquals($expected, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
-    }
 }

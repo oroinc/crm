@@ -14,6 +14,16 @@ class OroCRMTaskBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
+        self::addOrganization($schema);
+    }
+
+    /**
+     * Adds organization_id field
+     *
+     * @param Schema $schema
+     */
+    public static function addOrganization(Schema $schema)
+    {
         $table = $schema->getTable('orocrm_task');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addIndex(['organization_id'], 'IDX_814DEE3F32C8A3DE', []);

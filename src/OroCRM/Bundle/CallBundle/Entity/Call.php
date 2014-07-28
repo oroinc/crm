@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CallBundle\Entity;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\Validator\ExecutionContext;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -425,10 +426,10 @@ class Call
     /**
      * Set organization
      *
-     * @param \Oro\Bundle\OrganizationBundle\Entity\Organization $organization
-     * @return Customer
+     * @param Organization $organization
+     * @return Call
      */
-    public function setOrganization(\Oro\Bundle\OrganizationBundle\Entity\Organization $organization = null)
+    public function setOrganization(Organization $organization = null)
     {
         $this->organization = $organization;
 
@@ -438,7 +439,7 @@ class Call
     /**
      * Get organization
      *
-     * @return \Oro\Bundle\OrganizationBundle\Entity\Organization
+     * @return Organization
      */
     public function getOrganization()
     {

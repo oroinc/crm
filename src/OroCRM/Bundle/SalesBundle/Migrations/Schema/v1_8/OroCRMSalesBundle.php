@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_8;
 
 use Doctrine\DBAL\Schema\Schema;
+
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
@@ -11,9 +12,19 @@ use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface
 class OroCRMSalesBundle implements Migration
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
+    {
+        self::addOrganization($schema);
+    }
+
+    /**
+     * Adds organization_id field
+     *
+     * @param Schema $schema
+     */
+    public static function addOrganization(Schema $schema)
     {
         $table = $schema->getTable('orocrm_sales_lead');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
