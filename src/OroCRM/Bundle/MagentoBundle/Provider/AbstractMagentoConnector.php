@@ -60,10 +60,6 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             } else {
                 $iterator->setStartDate($status->getDate());
             }
-        } elseif (!empty($status)) {
-            if (!empty($data['lastSyncItemData'])) {
-                $iterator->setStartDate(new \DateTime($data['lastSyncItemData']));
-            }
         }
 
         // pass filters from connector

@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
-use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
