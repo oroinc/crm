@@ -32,7 +32,7 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             }
 
             if (!empty($data)) {
-                $this->addStatusData('lastSyncItemData', $data);
+                $this->addStatusData('lastSyncItemDate', $data);
             }
         }
         return $item;
@@ -55,8 +55,8 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
             $data = $status->getData();
 
-            if (!empty($data['lastSyncItemData'])) {
-                $iterator->setStartDate(new \DateTime($data['lastSyncItemData']));
+            if (!empty($data['lastSyncItemDate'])) {
+                $iterator->setStartDate(new \DateTime($data['lastSyncItemDate']));
             } else {
                 $iterator->setStartDate($status->getDate());
             }
