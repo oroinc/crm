@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
@@ -182,9 +183,11 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($iteratorMock));
         $connector->setStepExecution($this->stepExecutionMock);
 
-        $testValue = [
-            'created_at' => new \DateTime('01.01.2000 14:15:08'),
-            'updatedAt'  => new \DateTime('02.02.2002 15:17:28'),
+        $dateCreate = new \DateTime('01.01.2000 14:15:08');
+        $dateUpdate = new \DateTime('02.02.2002 15:17:28');
+        $testValue  = [
+            'created_at' => $dateCreate,
+            'updatedAt'  => $dateUpdate,
         ];
 
         $iteratorMock->expects($this->once())->method('rewind');
@@ -194,6 +197,17 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($testValue, $connector->read());
         $this->assertNull($connector->read());
+
+        $context = $this->stepExecutionMock->getExecutionContext();
+        $date    = $context->get(ConnectorInterface::CONTEXT_CONNECTOR_DATA_KEY);
+
+        $this->assertArrayHasKey('lastSyncItemDate', $date);
+
+        if ($isUpdate) {
+            $this->assertSame($dateUpdate, $date['lastSyncItemDate']);
+        } else {
+            $this->assertSame($dateCreate, $date['lastSyncItemDate']);
+        }
     }
 
     public function readProvider()
