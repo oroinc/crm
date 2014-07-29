@@ -20,21 +20,15 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
      */
     public function read()
     {
-        $item     = parent::read();
-        $iterator = $this->getSourceIterator();
+        $item = parent::read();
 
-        if (!$iterator->valid()) {
-            $data = null;
-
-            if ($iterator instanceof UpdatedLoaderInterface) {
-                $mode = $iterator->getMode();
-                $data = $this->getDateAccordingWithTheMode($mode, $item);
-            }
-
-            if (!empty($data)) {
-                $this->addStatusData('lastSyncItemDate', $data);
-            }
+        if (null !== $item) {
+            $this->addStatusData(
+                'lastSyncItemDate',
+                $this->getMaxUpdatedDate($item, $this->getStatusData('lastSyncItemDate'))
+            );
         }
+
         return $item;
     }
 
@@ -89,57 +83,40 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     }
 
     /**
-     * @param string $mode
-     * @param object $item
+     * @param array       $item
+     * @param string|null $prevDateToCompare
      *
-     * @return string|null
+     * @return null|string
      */
-    protected function getDateAccordingWithTheMode($mode, $item)
+    protected function getMaxUpdatedDate(array $item, $prevDateToCompare)
     {
-        $date = null;
+        $itemUpdatedDate = $this->getUpdatedDate($item);
 
-        if ($mode === UpdatedLoaderInterface::IMPORT_MODE_INITIAL) {
-            $date = $this->getInitDate($item);
-        } elseif ($mode === UpdatedLoaderInterface::IMPORT_MODE_UPDATE) {
-            $date = $this->getUpdateDate($item);
+        if (!$prevDateToCompare) {
+            return $itemUpdatedDate;
+        } elseif (!$itemUpdatedDate) {
+            return $prevDateToCompare;
         }
 
-        return $date;
+        return strtotime($itemUpdatedDate) > strtotime($prevDateToCompare) ? $itemUpdatedDate : $prevDateToCompare;
     }
 
     /**
-     * @param object $item
+     * @param array $item
      *
      * @return string|null
      */
-    protected function getInitDate($item)
+    protected function getUpdatedDate(array $item)
     {
-        $date = null;
-
-        if (!empty($item['createdAt'])) {
-            $date = $item['createdAt'];
-        } elseif (!empty($item['created_at'])) {
-            $date = $item['created_at'];
+        switch (true) {
+            case !empty($item['updatedAt']):
+                return $item['updatedAt'];
+                break;
+            case !empty($item['updated_at']):
+                return $item['updated_at'];
+                break;
+            default:
+                return null;
         }
-
-        return $date;
-    }
-
-    /**
-     * @param $item
-     *
-     * @return string|null
-     */
-    protected function getUpdateDate($item)
-    {
-        $date = null;
-
-        if (!empty($item['updatedAt'])) {
-            $date = $item['updatedAt'];
-        } elseif (!empty($item['updated_at'])) {
-            $date = $item['updated_at'];
-        }
-
-        return $date;
     }
 }

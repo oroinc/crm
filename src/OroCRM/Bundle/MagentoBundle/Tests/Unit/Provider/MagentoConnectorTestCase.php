@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
+use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
@@ -23,7 +24,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     /** @var MagentoTransportInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $transportMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var StepExecution|\PHPUnit_Framework_MockObject_MockObject */
     protected $stepExecutionMock;
 
     protected function setUp()
@@ -162,32 +163,29 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider readProvider
-    */
-    public function testRead($isUpdate = false)
+     * @dataProvider readItemDatesDataProvider
+     *
+     * @param string $dateInContext
+     * @param string $dateInItem
+     * @param string $expectedDate
+     */
+    public function testRead($dateInContext, $dateInItem, $expectedDate)
     {
         $iteratorMock = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
-
-        if ($isUpdate) {
-            $iteratorMock->expects($this->exactly(2))->method('getMode')
-                ->will($this->returnValue(UpdatedLoaderInterface::IMPORT_MODE_UPDATE));
-        } else {
-            $iteratorMock->expects($this->exactly(2))->method('getMode')
-                ->will($this->returnValue(UpdatedLoaderInterface::IMPORT_MODE_INITIAL));
-        }
 
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
 
         $this->transportMock->expects($this->once())->method('init');
         $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iteratorMock));
-        $connector->setStepExecution($this->stepExecutionMock);
 
-        $dateCreate = new \DateTime('01.01.2000 14:15:08');
-        $dateUpdate = new \DateTime('02.02.2002 15:17:28');
-        $testValue  = [
-            'created_at' => $dateCreate,
-            'updatedAt'  => $dateUpdate,
+        $connector->setStepExecution($this->stepExecutionMock);
+        $context = $this->stepExecutionMock->getExecutionContext();
+        $context->put(ConnectorInterface::CONTEXT_CONNECTOR_DATA_KEY, ['lastSyncItemDate' => $dateInContext]);
+
+        $testValue = [
+            'created_at' => '01.01.2200 14:15:08',
+            'updatedAt'  => $dateInItem
         ];
 
         $iteratorMock->expects($this->once())->method('rewind');
@@ -198,23 +196,38 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals($testValue, $connector->read());
         $this->assertNull($connector->read());
 
-        $context = $this->stepExecutionMock->getExecutionContext();
-        $date    = $context->get(ConnectorInterface::CONTEXT_CONNECTOR_DATA_KEY);
+        $connectorData = $context->get(ConnectorInterface::CONTEXT_CONNECTOR_DATA_KEY);
 
-        $this->assertArrayHasKey('lastSyncItemDate', $date);
-
-        if ($isUpdate) {
-            $this->assertSame($dateUpdate, $date['lastSyncItemDate']);
-        } else {
-            $this->assertSame($dateCreate, $date['lastSyncItemDate']);
-        }
+        $this->assertArrayHasKey('lastSyncItemDate', $connectorData);
+        $this->assertSame($expectedDate, $connectorData['lastSyncItemDate']);
     }
 
-    public function readProvider()
+    /**
+     * @return array
+     */
+    public function readItemDatesDataProvider()
     {
         return [
-            'initial' => [],
-            'update' => [true],
+            'empty context, should take updated date from item'                 => [
+                '$dateInContext' => null,
+                '$dateInItem'    => '01.01.2000 14:15:08',
+                '$expectedDate'  => '01.01.2000 14:15:08',
+            ],
+            'date in context given but empty date in item, should not override' => [
+                '$dateInContext' => '01.01.2000 14:15:08',
+                '$dateInItem'    => null,
+                '$expectedDate'  => '01.01.2000 14:15:08',
+            ],
+            'should take greater from item'                                     => [
+                '$dateInContext' => '01.01.2000 14:15:08',
+                '$dateInItem'    => '01.02.2000 14:15:08',
+                '$expectedDate'  => '01.02.2000 14:15:08',
+            ],
+            'should take greater from context'                                  => [
+                '$dateInContext' => '01.01.2001 14:15:08',
+                '$dateInItem'    => '01.01.2000 14:15:08',
+                '$expectedDate'  => '01.01.2001 14:15:08',
+            ],
         ];
     }
 
