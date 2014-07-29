@@ -529,7 +529,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress",
      *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
-     * @ORM\OrderBy({"primary" = "DESC"})
+     * @ORM\OrderBy({"primary" = "DESC", "postalCode" = "ASC"})
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
