@@ -165,14 +165,6 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getMode()
-    {
-        return $this->mode;
-    }
-
-    /**
      * @param \DateTime $date
      * @param array     $websiteIds
      * @param array     $storeIds
