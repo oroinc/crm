@@ -309,17 +309,18 @@ datagrid:
             type: orm
             acl_resource: oro_report_view
             query:
-                from:
-                    - { table: OroCRMSalesBundle:Opportunity, alias: o }
                 select:
                     - CONCAT(MONTH(o.closeDate), ' / ', YEAR(o.closeDate)) as monthPeriod
                     - CONCAT(QUARTER(o.closeDate), ' / ', YEAR(o.closeDate)) as quarterPeriod
                     - YEAR(o.closeDate) as yearPeriod
                     - SUM(o.closeRevenue) as value
                     - COUNT(o.id) as cnt
+                from:
+                    - { table: OroCRMSalesBundle:Opportunity, alias: o }
                 join:
                     inner:
                         - { join: o.status, alias: s }
+                groupBy: o.id
                 where:
                     and:
                         - s.name = 'won'
