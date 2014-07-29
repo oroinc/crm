@@ -320,7 +320,7 @@ datagrid:
                 join:
                     inner:
                         - { join: o.status, alias: s }
-                groupBy: o.id
+                groupBy: yearPeriod, quarterPeriod, monthPeriod
                 where:
                     and:
                         - s.name = 'won'
