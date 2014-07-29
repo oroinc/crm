@@ -165,11 +165,13 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider readItemDatesDataProvider
      *
-     * @param string $dateInContext
-     * @param string $dateInItem
-     * @param string $expectedDate
+     * @param string  $dateInContext
+     * @param string  $dateInItem
+     * @param string  $expectedDate
+     * @param boolean $hasData
+     * @param string  $dateInIterator
      */
-    public function testRead($dateInContext, $dateInItem, $expectedDate)
+    public function testRead($dateInContext, $dateInItem, $expectedDate, $hasData = true, $dateInIterator = null)
     {
         $iteratorMock = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
 
@@ -188,18 +190,38 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
             'updatedAt'  => $dateInItem
         ];
 
-        $iteratorMock->expects($this->once())->method('rewind');
-        $iteratorMock->expects($this->once())->method('next');
-        $iteratorMock->expects($this->any())->method('valid')->will($this->onConsecutiveCalls(true, false));
-        $iteratorMock->expects($this->once())->method('current')->will($this->returnValue($testValue));
+        if ($hasData) {
+            $context->put(ConnectorInterface::CONTEXT_CONNECTOR_DATA_KEY, ['lastSyncItemDate' => $dateInContext]);
 
-        $this->assertEquals($testValue, $connector->read());
+            $iteratorMock->expects($this->once())->method('rewind');
+            $iteratorMock->expects($this->once())->method('next');
+            $iteratorMock->expects($this->any())->method('valid')->will($this->onConsecutiveCalls(true, false));
+            $iteratorMock->expects($this->once())->method('current')->will($this->returnValue($testValue));
+
+            $this->assertEquals($testValue, $connector->read());
+        } else {
+            $context->put(ConnectorInterface::CONTEXT_CONNECTOR_DATA_KEY, ['lastSyncItemDate' => $dateInIterator]);
+
+            $iteratorMock->expects($this->once())->method('rewind');
+            $iteratorMock->expects($this->never())->method('next');
+            $iteratorMock->expects($this->any())->method('valid')->will($this->returnValue(false));
+            $iteratorMock->expects($this->never())->method('current')->will($this->returnValue(null));
+            $iteratorMock->expects($this->at(0))->method('getStartDate')
+                ->will($this->returnValue(new \Datetime($dateInIterator)));
+            $iteratorMock->expects($this->at(1))->method('getStartDate')->will($this->returnValue($dateInIterator));
+        }
+
         $this->assertNull($connector->read());
 
         $connectorData = $context->get(ConnectorInterface::CONTEXT_CONNECTOR_DATA_KEY);
 
         $this->assertArrayHasKey('lastSyncItemDate', $connectorData);
-        $this->assertSame($expectedDate, $connectorData['lastSyncItemDate']);
+
+        if ($hasData) {
+            $this->assertSame($expectedDate, $connectorData['lastSyncItemDate']);
+        } else {
+            $this->assertSame($dateInIterator, $connectorData['lastSyncItemDate']);
+        }
     }
 
     /**
@@ -227,6 +249,13 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
                 '$dateInContext' => '01.01.2001 14:15:08',
                 '$dateInItem'    => '01.01.2000 14:15:08',
                 '$expectedDate'  => '01.01.2001 14:15:08',
+            ],
+            'without data'                                                      => [
+                '$dateInContext' => null,
+                '$dateInItem'    => null,
+                '$expectedDate'  => null,
+                false,
+                '01.01.2010 14:15:08',
             ],
         ];
     }
