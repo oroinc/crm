@@ -15,6 +15,13 @@ interface UpdatedLoaderInterface extends \Iterator
     public function setStartDate(\DateTime $date);
 
     /**
+     * Returns date from what read was started
+     *
+     * @return \DateTime
+     */
+    public function getStartDate();
+
+    /**
      * Set mode
      *
      * @param string $mode

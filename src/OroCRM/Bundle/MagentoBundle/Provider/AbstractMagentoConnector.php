@@ -25,7 +25,17 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         if (null !== $item) {
             $this->addStatusData(
                 'lastSyncItemDate',
-                $this->getMaxUpdatedDate($item, $this->getStatusData('lastSyncItemDate'))
+                $this->getMaxUpdatedDate($this->getUpdatedDate($item), $this->getStatusData('lastSyncItemDate'))
+            );
+        }
+        $iterator = $this->getSourceIterator();
+        if (!$iterator->valid() && $iterator instanceof UpdatedLoaderInterface) {
+            // cover case, when no one item was synced
+            // then just take point from what it was started
+            $dateFromReadStarted = $iterator->getStartDate() ? $iterator->getStartDate()->format('Y-m-d H:i:s') : null;
+            $this->addStatusData(
+                'lastSyncItemDate',
+                $this->getMaxUpdatedDate($this->getStatusData('lastSyncItemDate'), $dateFromReadStarted)
             );
         }
 
@@ -83,22 +93,20 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     }
 
     /**
-     * @param array       $item
+     * @param string|null $currDateToCompare
      * @param string|null $prevDateToCompare
      *
      * @return null|string
      */
-    protected function getMaxUpdatedDate(array $item, $prevDateToCompare)
+    protected function getMaxUpdatedDate($currDateToCompare, $prevDateToCompare)
     {
-        $itemUpdatedDate = $this->getUpdatedDate($item);
-
         if (!$prevDateToCompare) {
-            return $itemUpdatedDate;
-        } elseif (!$itemUpdatedDate) {
+            return $currDateToCompare;
+        } elseif (!$currDateToCompare) {
             return $prevDateToCompare;
         }
 
-        return strtotime($itemUpdatedDate) > strtotime($prevDateToCompare) ? $itemUpdatedDate : $prevDateToCompare;
+        return strtotime($currDateToCompare) > strtotime($prevDateToCompare) ? $currDateToCompare : $prevDateToCompare;
     }
 
     /**
