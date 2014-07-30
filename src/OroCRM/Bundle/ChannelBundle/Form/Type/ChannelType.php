@@ -2,11 +2,15 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Form\Type;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
@@ -30,6 +34,8 @@ class ChannelType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $factory = $builder->getFormFactory();
+
         $builder->add(
             'name',
             'text',
@@ -56,15 +62,36 @@ class ChannelType extends AbstractType
                 'configs'  => ['placeholder' => 'orocrm.channel.form.select_entities.label']
             ]
         );
-        $builder->add(
-            'dataSource',
-            'oro_integration_select',
-            [
-                'required'      => false,
-                'allowed_types' => $this->settingsProvider->getSourceIntegrationTypes(),
-                'label'         => 'orocrm.channel.data_source.label',
-                'configs'       => ['placeholder' => 'orocrm.channel.form.select_data_source.label'],
-            ]
+
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) use ($factory) {
+                /** @var Channel $data */
+                $data = $event->getData();
+                $form = $event->getForm();
+
+                if (null === $data) {
+                    return;
+                }
+
+                // TODO get type from channel
+                $type = 'magento';
+                // TODO check if type is based on integration
+                if ($type) {
+                    // TODO get integration type from config
+                    $integrationType = $type;
+                    $integration     = new Integration();
+                    $integration->setType($integrationType);
+
+                    $integrationEmbeddedForm = $factory->createNamed(
+                        'dataSource',
+                        'oro_integration_channel_form',
+                        $integration,
+                        ['auto_initialize' => false]
+                    );
+                    $form->add($integrationEmbeddedForm);
+                }
+            }
         );
     }
 

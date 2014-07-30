@@ -12,3 +12,34 @@
 
     {{ form_end(form, {'render_rest': false}) }}
 {% endblock %}
+
+{% block oro_integration_channel_form_widget %}
+    {{ form_row(form.name) }}
+
+    {% if (form.organization is defined) %}
+        {{ form_row(form.organization) }}
+    {% endif %}
+
+    {{ form_row(form.transportType) }}
+
+    {% if (form.transport is defined) %}
+        {{ form_widget(form.transport) }}
+    {% endif %}
+
+    {% if (form.synchronizationSettings is defined) %}
+        {{ form_widget(form.synchronizationSettings) }}
+    {% endif %}
+
+    {% if (form.mappingSettings is defined) %}
+        {{ form_widget(form.mappingSettings) }}
+    {% endif %}
+
+    {% if (form.connectors is defined) %}
+        <div {% if form.connectors.vars.choices is empty %}{{ 'class="hide"' }}{% endif %}>
+            {{ form_row(form.connectors) }}
+        </div>
+    {% endif %}
+
+    {% import 'OroIntegrationBundle:Form:javascript.html.twig' as jsRenderer %}
+    {{ jsRenderer.renderIntegrationFormJS(form) }}
+{% endblock %}
