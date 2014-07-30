@@ -36,28 +36,6 @@ class ChannelTest extends AbstractEntityTestCase
         ];
     }
 
-    public function testAddRemoveIntegrations()
-    {
-        $integration = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
-        $collection  = new ArrayCollection();
-        $collection->add($integration);
-        $channel = new Channel();
-        $channel->addIntegration($integration);
-
-        $this->assertEquals(
-            $channel->getIntegrations(),
-            $collection
-        );
-
-        $collection->removeElement($integration);
-        $channel->removeIntegration($integration);
-
-        $this->assertEquals(
-            $channel->getIntegrations(),
-            $collection
-        );
-    }
-
     /**
      * @dataProvider entitiesDataProvider
      *

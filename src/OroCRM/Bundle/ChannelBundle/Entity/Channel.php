@@ -64,16 +64,6 @@ class Channel
     protected $entities;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
-     * @ORM\JoinTable(
-     *      name="orocrm_chl_to_integration_chl",
-     *      joinColumns={@ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="integrations_id", referencedColumnName="id", onDelete="CASCADE")}
-     * )
-     **/
-    protected $integrations;
-
-    /**
      * @var Organization
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
      * @ORM\JoinColumn(name="organization_owner_id", referencedColumnName="id", onDelete="SET NULL")
@@ -90,7 +80,6 @@ class Channel
     public function __construct()
     {
         $this->entities     = new ArrayCollection();
-        $this->integrations = new ArrayCollection();
     }
 
     /**
@@ -186,34 +175,6 @@ class Channel
     public function getEntitiesCollection()
     {
         return $this->entities;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getIntegrations()
-    {
-        return $this->integrations;
-    }
-
-    /**
-     * @param Integration $integration
-     */
-    public function addIntegration(Integration $integration)
-    {
-        if (!$this->getIntegrations()->contains($integration)) {
-            $this->getIntegrations()->add($integration);
-        }
-    }
-
-    /**
-     * @param Integration $integration
-     */
-    public function removeIntegration(Integration $integration)
-    {
-        if ($this->getIntegrations()->contains($integration)) {
-            $this->getIntegrations()->removeElement($integration);
-        }
     }
 
     /**
