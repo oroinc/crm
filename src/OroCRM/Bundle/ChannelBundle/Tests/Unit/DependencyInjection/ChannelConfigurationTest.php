@@ -13,7 +13,7 @@ class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testProcess()
     {
         $expected = [
-            'entity_data' => [
+            'entity_data'   => [
                 [
                     'name'                   => 'OroCRM\Bundle\TestBundle1\Entity\Entity1',
                     'dependent'              => [
@@ -28,19 +28,19 @@ class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
                         'OroCRM\Bundle\TestBundle1\Entity\Entity3'
                     ],
                     'dependencies_condition' => 'OR',
-                    'belongs_to' => [
+                    'belongs_to'             => [
                         'integration' => 'testIntegrationType'
                     ]
                 ],
                 [
-                    'name'                  => 'OroCRM\Bundle\TestBundle2\Entity\Entity',
-                    'dependent'             => [
+                    'name'                   => 'OroCRM\Bundle\TestBundle2\Entity\Entity',
+                    'dependent'              => [
                         'OroCRM\Bundle\TestBundle2\Entity\EntityContact'
                     ],
-                    'navigation_items'      => [
+                    'navigation_items'       => [
                         'application_menu.activities_tab.contact',
                     ],
-                    'dependencies'          => [],
+                    'dependencies'           => [],
                     'dependencies_condition' => 'AND',
                 ],
             ],
