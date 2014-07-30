@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Tests\Unit\Stub\TestPageableSoapIterator;
 
 class AbstractPageableSoapIteratorTest extends BaseIteratorTestCase
 {
@@ -18,7 +17,10 @@ class AbstractPageableSoapIteratorTest extends BaseIteratorTestCase
             'start_sync_date' => $date
         ];
 
-        $iterator = new TestPageableSoapIterator($this->transport, $settings);
+        $iterator = $this->getMockForAbstractClass(
+            'OroCRM\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableSoapIterator',
+            [$this->transport, $settings]
+        );
 
         $this->assertEquals(
             $date,
