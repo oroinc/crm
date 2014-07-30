@@ -67,7 +67,7 @@ class StateProvider
                 return;
             }
 
-            $settings = $this->settingsProvider->getSettings('entity_data');
+            $settings = $this->settingsProvider->getSettings(SettingsProvider::DATA_PATH);
 
             $qb = $this->em->createQueryBuilder();
             $qb->distinct(true);

@@ -13,6 +13,8 @@ orocrm_channel:
               - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.opportunities_by_status
               - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_by_opportunities
               - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.won_by_period
+          belongs_to:
+              integration: system
 
        -
           name: OroCRM\Bundle\SalesBundle\Entity\Lead
@@ -24,6 +26,8 @@ orocrm_channel:
               - shortcuts.shortcut_new_lead
               - account_sales_tab_panel.orocrm_sales_account_leads_tab
               - application_menu.reports_tab.static_reports_tab.leads_report_tab.leads_by_date
+          belongs_to:
+              integration: system
 
        -
           name: OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
@@ -35,3 +39,13 @@ orocrm_channel:
           navigation_items:
               - application_menu.sales_tab.sales_salesfunnel_list
               - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_life_time_value
+          belongs_to:
+              integration: system
+
+   channel_types:
+        b2b:
+            label: B2B
+            entities:
+                - OroCRM\Bundle\SalesBundle\Entity\Lead
+                - OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                - OroCRM\Bundle\SalesBundle\Entity\SalesProcess

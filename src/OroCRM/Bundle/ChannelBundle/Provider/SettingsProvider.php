@@ -6,6 +6,8 @@ use Oro\Component\Config\Resolver\ResolverInterface;
 
 class SettingsProvider
 {
+    const DATA_PATH = 'entity_data';
+
     /** @var array */
     protected $settings = [];
 
@@ -39,9 +41,9 @@ class SettingsProvider
     {
         if (null === $this->resolvedSettings) {
             $settings = $this->resolvedSettings = $this->resolver->resolve($this->settings);
-            $this->resolvedSettings['entity_data'] = [];
-            foreach ($settings['entity_data'] as $singleEntitySetting) {
-                $this->resolvedSettings['entity_data'][trim($singleEntitySetting['name'])] = $singleEntitySetting;
+            $this->resolvedSettings[self::DATA_PATH] = [];
+            foreach ($settings[self::DATA_PATH] as $singleEntitySetting) {
+                $this->resolvedSettings[self::DATA_PATH][trim($singleEntitySetting['name'])] = $singleEntitySetting;
             }
         }
 
@@ -63,7 +65,7 @@ class SettingsProvider
      */
     public function isChannelEntity($entityFQCN)
     {
-        $settings = $this->getSettings('entity_data');
+        $settings = $this->getSettings(self::DATA_PATH);
 
         return array_key_exists($entityFQCN, $settings);
     }
@@ -102,7 +104,7 @@ class SettingsProvider
     public function getDependentEntityData($entityFQCN)
     {
         if (null === $this->dependentEntitiesHashMap) {
-            $settings = $this->getSettings('entity_data');
+            $settings = $this->getSettings(self::DATA_PATH);
 
             foreach ($settings as $singleEntityData) {
                 if (empty($singleEntityData['dependent'])) {
@@ -140,10 +142,10 @@ class SettingsProvider
             return false;
         }
 
-        $settings = $this->getSettings('entity_data');
+        $settings = $this->getSettings(self::DATA_PATH);
 
-        return !empty($settings[$entityFQCN]['belongs_to_integration']) ?
-            $settings[$entityFQCN]['belongs_to_integration'] : false;
+        return isset($settings[$entityFQCN]['belongs_to'], $settings[$entityFQCN]['belongs_to']['integration']) ?
+            $settings[$entityFQCN]['belongs_to']['integration'] : false;
     }
 
     /**
@@ -153,7 +155,7 @@ class SettingsProvider
      */
     public function getSourceIntegrationTypes()
     {
-        $settings     = $this->getSettings('entity_data');
+        $settings     = $this->getSettings(self::DATA_PATH);
         $allowedTypes = [];
 
         foreach (array_keys($settings) as $entityName) {

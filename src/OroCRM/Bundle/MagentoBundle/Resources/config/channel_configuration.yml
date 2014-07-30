@@ -11,7 +11,9 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\Region
           navigation_items:
               - application_menu.sales_tab.magento_cart
-          belongs_to_integration: magento
+          belongs_to:
+              integration: magento
+              connector: cart
 
        -
           name: OroCRM\Bundle\MagentoBundle\Entity\Customer
@@ -23,7 +25,9 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\Store
           navigation_items:
               - application_menu.customers_tab.magento_customer
-          belongs_to_integration: magento
+          belongs_to:
+              integration: magento
+              connector: customer
 
        -
           name: OroCRM\Bundle\MagentoBundle\Entity\Order
@@ -36,7 +40,9 @@ orocrm_channel:
           navigation_items:
               - application_menu.sales_tab.magento_order
               - account_sales_tab_panel.orocrm_magento_account_orders_tab
-          belongs_to_integration: magento
+          belongs_to:
+              integration: magento
+              connector: order
 
        -
           name: OroCRM\Bundle\MagentoBundle\Entity\Product
@@ -44,4 +50,16 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\Website
               - OroCRM\Bundle\MagentoBundle\Entity\Store
           navigation_items: ~
-          belongs_to_integration: magento
+          belongs_to:
+              integration: magento
+
+   channel_types:
+        magento:
+            label: Magento type # required
+            entities:
+                - OroCRM\Bundle\MagentoBundle\Entity\Cart
+                - OroCRM\Bundle\MagentoBundle\Entity\Customer
+                - OroCRM\Bundle\MagentoBundle\Entity\Order
+            integration_type: magento # optional
+            customer_identity: OroCRM\Bundle\MagentoBundle\Entity\Customer # optional
+            is_customer_identity_user_defined: false # optional, default true
