@@ -25,6 +25,7 @@ class SoapController extends Controller
     public function checkAction(Request $request)
     {
         $transport = $this->get('orocrm_magento.transport.soap_transport');
+        $transport->setMultipleAttemptsEnabled(false);
 
         /*
          * Transport setting entity should be set to form
