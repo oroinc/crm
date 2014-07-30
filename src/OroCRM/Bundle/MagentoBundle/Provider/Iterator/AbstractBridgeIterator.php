@@ -51,11 +51,13 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
     {
         if ($this->mode == self::IMPORT_MODE_INITIAL) {
             $dateField = 'created_at';
+            $operator  = 'from';
         } else {
             $dateField = 'updated_at';
+            $operator  = 'gt';
         }
 
-        $this->filter->addDateFilter($dateField, 'from', $this->lastSyncDate);
+        $this->filter->addDateFilter($dateField, $operator, $this->lastSyncDate);
 
         if (null !== $this->predefinedFilters) {
             $this->filter->merge($this->predefinedFilters);
