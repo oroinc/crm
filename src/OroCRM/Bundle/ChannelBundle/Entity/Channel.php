@@ -87,6 +87,25 @@ class Channel
      */
     protected $dataSource;
 
+    /**
+     * @var boolean
+     * @ORM\Column(name="status", type="boolean")
+     */
+    protected $status;
+
+    /**
+     * @var EntityName
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\EntityName")
+     * @ORM\JoinColumn(name="customer_identity_id", referencedColumnName="id")
+     */
+    protected $customerIdentity;
+
+    /**
+     * @var string
+     * @ORM\Column(name="channel_type", type="string", nullable=false)
+     */
+    protected $channelType;
+
     public function __construct()
     {
         $this->entities     = new ArrayCollection();
@@ -246,5 +265,53 @@ class Channel
     public function getDataSource()
     {
         return $this->dataSource;
+    }
+
+    /**
+     * @param boolean $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param EntityName $customerIdentity
+     */
+    public function setCustomerIdentity(EntityName $customerIdentity)
+    {
+        $this->customerIdentity = $customerIdentity;
+    }
+
+    /**
+     * @return EntityName
+     */
+    public function getCustomerIdentity()
+    {
+        return $this->customerIdentity;
+    }
+
+    /**
+     * @param string $channelType
+     */
+    public function setChannelType($channelType)
+    {
+        $this->channelType = $channelType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getChannelType()
+    {
+        return $this->channelType;
     }
 }
