@@ -47,13 +47,6 @@ class Channel
     protected $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
-    protected $description;
-
-    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(
@@ -104,22 +97,6 @@ class Channel
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**

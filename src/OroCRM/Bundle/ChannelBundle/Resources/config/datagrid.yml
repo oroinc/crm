@@ -7,19 +7,15 @@ datagrid:
                 select:
                     - c.id
                     - c.name
-                    - c.description
                 from:
                     - { table: %orocrm_channel.entity.class%, alias: c }
                 groupBy: c.id
         columns:
             name:
                 label: orocrm.channel.name.label
-            description:
-                label: orocrm.channel.description.label
         sorters:
             columns:
                 name:        { data_name: c.name }
-                description: { data_name: c.description }
             default:
                 name:  ASC
         filters:
@@ -27,9 +23,6 @@ datagrid:
                 name:
                     type: string
                     data_name: c.name
-                description:
-                    type: string
-                    data_name: c.description
         properties:
             id: ~
             update_link:

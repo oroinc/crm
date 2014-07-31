@@ -66,7 +66,6 @@ class ChannelGridTest extends WebTestCase
                     'gridFilters'         => [],
                     'assert'              => [
                         'name'        => self::CHANNEL_NAME,
-                        'description' => 'some description',
                     ],
                     'expectedResultCount' => 1
                 ],
@@ -81,7 +80,6 @@ class ChannelGridTest extends WebTestCase
                     ],
                     'assert'              => [
                         'name'        => self::CHANNEL_NAME,
-                        'description' => 'some description',
                     ],
                     'expectedResultCount' => 0
                 ],

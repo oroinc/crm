@@ -17,7 +17,6 @@ class OroCRMChannelBundle implements Migration
         $table = $schema->createTable('orocrm_channel');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('name', 'string', ['notnull' => true, 'length' => 255]);
-        $table->addColumn('description', 'text', ['notnull' => false]);
         $table->addColumn('organization_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('data_source_id', 'smallint', ['notnull' => false]);
 

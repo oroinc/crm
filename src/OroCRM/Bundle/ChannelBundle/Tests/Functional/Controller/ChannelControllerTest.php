@@ -31,14 +31,13 @@ class ChannelControllerTest extends WebTestCase
         $crawler      = $this->client->request('GET', $this->getUrl('orocrm_channel_create'));
         $form         = $crawler->selectButton('Save and Close')->form();
 
-        $name                                     = 'Simple channel';
-        $form['orocrm_channel_form[name]']        = $name;
-        $form['orocrm_channel_form[description]'] = 'some description';
-        $form['orocrm_channel_form[owner]']       = $organization->getId();
+        $name                               = 'Simple channel';
+        $form['orocrm_channel_form[name]']  = $name;
+        $form['orocrm_channel_form[owner]'] = $organization->getId();
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
-        $result = $this->client->getResponse();
+        $result  = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains('Channel saved', $crawler->html());
 
