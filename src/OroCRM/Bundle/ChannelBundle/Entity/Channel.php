@@ -75,6 +75,7 @@ class Channel
 
     /**
      * @var Organization
+     *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
      * @ORM\JoinColumn(name="organization_owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
@@ -82,6 +83,7 @@ class Channel
 
     /**
      * @var Integration
+     *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
      * @ORM\JoinColumn(name="data_source_id", referencedColumnName="id", onDelete="SET NULL")
      */
@@ -89,12 +91,14 @@ class Channel
 
     /**
      * @var boolean
+     *
      * @ORM\Column(name="status", type="boolean")
      */
     protected $status;
 
     /**
      * @var EntityName
+     *
      * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\EntityName")
      * @ORM\JoinColumn(name="customer_identity_id", referencedColumnName="id")
      */
@@ -102,6 +106,7 @@ class Channel
 
     /**
      * @var string
+     *
      * @ORM\Column(name="channel_type", type="string", nullable=false)
      */
     protected $channelType;
