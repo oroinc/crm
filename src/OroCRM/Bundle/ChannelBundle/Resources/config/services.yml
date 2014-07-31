@@ -8,6 +8,7 @@ parameters:
     # forms
     orocrm_channel.form.type.channel.class:                            OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
     orocrm_channel.form.type.entity_choice.class:                      OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityChoiceType
+    orocrm_channel.form.type.customer_identity.class:                  OroCRM\Bundle\ChannelBundle\Form\Type\ChannelCustomerIdentityType
 
     # manager
     orocrm_channel.manager.api.class:                                  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
@@ -23,6 +24,7 @@ parameters:
 
     # event listener
     orocrm_channel.event_listener.navigation.class:                    OroCRM\Bundle\ChannelBundle\EventListener\NavigationListener
+    orocrm_channel.form.subscriber.channel_subscriber.class:           OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
 
 services:
     # forms
@@ -39,6 +41,14 @@ services:
             - @orocrm_channel.provider.channel_entity_provider
         tags:
             - { name: form.type, alias: orocrm_channel_entity_choice_form }
+
+    orocrm_channel.form.type.customer_identity:
+        class: %orocrm_channel.form.type.customer_identity.class%
+        arguments:
+            - @orocrm_channel.provider.channel_entity_provider
+        scope: request
+        tags:
+            - { name: form.type, alias: orocrm_channel_customer_identity_select_form }
 
     orocrm_channel.form.channel:
         class:                        Symfony\Component\Form\Form
@@ -119,3 +129,6 @@ services:
           parent: oro.cache.abstract
           calls:
               - [setNamespace, ['orocrm_channel.state_cache']]
+
+    orocrm_channel.form.subscriber.channel_subscriber:
+        class: %orocrm_channel.form.subscriber.channel_subscriber.class%

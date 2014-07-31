@@ -9,6 +9,7 @@ orocrm:
         entities.label:      Entities
         integrations.label:  Integrations
         data_source.label:   Customer source
+        customer_identity.label: Customer identity
 
         datagrid:
             action:
@@ -23,3 +24,4 @@ orocrm:
             select_integrations.label: Please select integrations
             select_entities.label:     Please select entities
             select_data_source.label:  Please select customer source
+            select_customer_identity.label: Please select customer identity

@@ -87,6 +87,13 @@ class Channel
      */
     protected $dataSource;
 
+    /**
+     * @var EntityName
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\EntityName")
+     * @ORM\JoinColumn(name="customer_identity_id", referencedColumnName="id")
+     */
+    protected $customerIdentity;
+
     public function __construct()
     {
         $this->entities     = new ArrayCollection();
@@ -246,5 +253,21 @@ class Channel
     public function getDataSource()
     {
         return $this->dataSource;
+    }
+
+    /**
+     * @param EntityName $customerIdentity
+     */
+    public function setCustomerIdentity($customerIdentity)
+    {
+        $this->customerIdentity = $customerIdentity;
+    }
+
+    /**
+     * @return EntityName
+     */
+    public function getCustomerIdentity()
+    {
+        return $this->customerIdentity;
     }
 }
