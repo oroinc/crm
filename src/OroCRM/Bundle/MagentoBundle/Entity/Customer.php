@@ -231,9 +231,9 @@ class Customer extends ExtendCustomer
     protected $isActive = false;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="vat", type="string", length=255, nullable=true)
+     * @ORM\Column(name="vat", type="float", nullable=true)
      * @Oro\Versioned
      */
     protected $vat;
@@ -386,7 +386,7 @@ class Customer extends ExtendCustomer
     }
 
     /**
-     * @param string $vat
+     * @param float $vat
      *
      * @return $this
      */
@@ -398,7 +398,7 @@ class Customer extends ExtendCustomer
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getVat()
     {
