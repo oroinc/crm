@@ -117,20 +117,21 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
 
     /**
      * @param Contact $contact
-     * @param User $user
+     * @param User    $user
      *
      * @return Opportunity
      */
     protected function createOpportunity($contact, $user)
     {
         /** @var Account $account */
-        $account = $contact->getAccounts()->first();
+        $account     = $contact->getAccounts()->first();
         $opportunity = new Opportunity();
         $opportunity->setName($account->getName());
         $opportunity->setContact($contact);
         $opportunity->setAccount($account);
         $opportunity->setOwner($user);
         $opportunity->setOrganization($this->organization);
+
         return $opportunity;
     }
 
