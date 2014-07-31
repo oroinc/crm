@@ -21,14 +21,20 @@ class ChannelTest extends AbstractEntityTestCase
      */
     public function getDataProvider()
     {
-        $name        = 'Some name';
-        $owner       = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
-        $integration = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
+        $name             = 'Some name';
+        $owner            = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $integration      = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
+        $customerIdentity = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\EntityName', [], ['phone']);
+        $status           = true;
+        $channelType      = 'Custom';
 
         return [
-            'name'        => ['name', $name, $name],
-            'owner'       => ['owner', $owner, $owner],
-            'dataSource'  => ['dataSource', $integration, $integration]
+            'name'             => ['name', $name, $name],
+            'owner'            => ['owner', $owner, $owner],
+            'dataSource'       => ['dataSource', $integration, $integration],
+            'status'           => ['status', $status, $status],
+            'customerIdentity' => ['customerIdentity', $customerIdentity, $customerIdentity],
+            'channelType'      => ['channelType', $channelType, $channelType]
         ];
     }
 
