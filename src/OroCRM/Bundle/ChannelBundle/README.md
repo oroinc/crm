@@ -31,13 +31,14 @@ In order to implement ability to enable feature in scope of channel  - configura
                 navigation_items:
                     - menu.tab.entity_funnel_list
                     - menu.tab.some_tab.some_tab.some_value
-                belongs_to_integration: integration_type_name                   # If entity belongs to integration, correspondent node should be set
+                belongs_to:
+                    integration: integration_type_name                   # If entity belongs to integration, correspondent node should be set
 ```
 
  - `name` - entity name
  - `dependent` - list of entities which will be shown/hidden too. (Related entities to the entity in field 'name')
  - `navigation_items` - list of menu items which should be enabled/disabled in any menu.
- - `belongs_to_integration` - integration type name
+ - `belongs_to.integration` - integration type name
 
 Menu item should be hidden by default in navigation configuration using parameter 'display' with value 'false'.
 
