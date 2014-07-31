@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ChannelBundle\DependencyInjection;
 
+use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -18,7 +20,7 @@ class ChannelConfiguration implements ConfigurationInterface
         $root        = $treeBuilder->root(self::ROOT_NODE_NAME);
         $root
             ->children()
-                ->arrayNode('entity_data')->isRequired()->cannotBeEmpty()
+                ->arrayNode(SettingsProvider::DATA_PATH)->isRequired()->cannotBeEmpty()
                     ->prototype('array')
                         ->children()
                             ->scalarNode('name')
