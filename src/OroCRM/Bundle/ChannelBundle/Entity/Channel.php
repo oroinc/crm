@@ -75,6 +75,7 @@ class Channel
 
     /**
      * @var Organization
+     *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
      * @ORM\JoinColumn(name="organization_owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
@@ -82,10 +83,33 @@ class Channel
 
     /**
      * @var Integration
+     *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
      * @ORM\JoinColumn(name="data_source_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $dataSource;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean")
+     */
+    protected $status;
+
+    /**
+     * @var EntityName
+     *
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\EntityName")
+     * @ORM\JoinColumn(name="customer_identity_id", referencedColumnName="id")
+     */
+    protected $customerIdentity;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="channel_type", type="string", nullable=false)
+     */
+    protected $channelType;
 
     public function __construct()
     {
@@ -246,5 +270,53 @@ class Channel
     public function getDataSource()
     {
         return $this->dataSource;
+    }
+
+    /**
+     * @param boolean $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param EntityName $customerIdentity
+     */
+    public function setCustomerIdentity(EntityName $customerIdentity)
+    {
+        $this->customerIdentity = $customerIdentity;
+    }
+
+    /**
+     * @return EntityName
+     */
+    public function getCustomerIdentity()
+    {
+        return $this->customerIdentity;
+    }
+
+    /**
+     * @param string $channelType
+     */
+    public function setChannelType($channelType)
+    {
+        $this->channelType = $channelType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getChannelType()
+    {
+        return $this->channelType;
     }
 }
