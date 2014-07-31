@@ -22,6 +22,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository")

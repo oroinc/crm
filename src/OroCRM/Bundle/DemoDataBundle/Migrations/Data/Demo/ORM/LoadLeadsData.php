@@ -22,6 +22,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
@@ -50,6 +51,11 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
     /** @var  ConfigManager */
     protected $configManager;
+
+    /**
+     * @var Organization
+     */
+    protected $organization;
 
     /**
      * {@inheritdoc}
@@ -90,6 +96,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
         $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
         $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
+        $this->organization = $this->getReference('default_organization');
     }
 
     public function loadSources()
@@ -182,6 +189,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setPhoneNumber($data['TelephoneNumber']);
         $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
+        $lead->setOrganization($this->organization);
         /** @var Address $address */
         $address = new Address();
         $address->setLabel('Primary Address');

@@ -38,9 +38,10 @@ class LoadGroupData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $entityManager = $this->container->get('doctrine.orm.entity_manager');
         //$role = $entityManager->getRepository('OroUserBundle:Role')->findOneBy(array('role' => 'ROLE_MANAGER'));
-        $defaultCrmBU = $this->getBusinessUnit($manager, 'Acme, West');
-        $defaultCoreBU = $this->getBusinessUnit($manager, 'Acme, East');
-        $defaultMainBU = $this->getBusinessUnit($manager, 'Acme, General');
+        $organization   = $this->getReference('default_organization');
+        $defaultCrmBU   = $this->getBusinessUnit($manager, 'Acme, West');
+        $defaultCoreBU  = $this->getBusinessUnit($manager, 'Acme, East');
+        $defaultMainBU  = $this->getBusinessUnit($manager, 'Acme, General');
         $groups = array(
             'Marketing Manager' =>  $defaultCrmBU,
             'Executive Marketing' =>  $defaultCrmBU,
@@ -53,6 +54,7 @@ class LoadGroupData extends AbstractFixture implements ContainerAwareInterface, 
         foreach ($groups as $group => $user) {
             $newGroup = new Group($group);
             $newGroup->setOwner($user);
+            $newGroup->setOrganization($organization);
             //$newGroup->setRoles(array($role));
             $entityManager->persist($newGroup);
         }
