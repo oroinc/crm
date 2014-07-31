@@ -410,6 +410,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
                 ->setContact($contact)
                 ->setOrganization($this->organization)
                 ->setOwner($this->getRandomOwner());
+
             $om->persist($customer);
         }
     }
