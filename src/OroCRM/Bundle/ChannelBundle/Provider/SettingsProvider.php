@@ -173,13 +173,13 @@ class SettingsProvider
      *
      * @return array
      */
-    public function getChannelTypes()
+    public function getChannelTypeChoiceList()
     {
         $settings     = $this->getSettings(self::CHANNEL_TYPE_PATH);
         $channelTypes = [];
 
         foreach (array_keys($settings) as $entityName) {
-                $channelTypes[$entityName] = $settings[$entityName]['label'];
+            $channelTypes[$entityName] = $settings[$entityName]['label'];
         }
 
         return $channelTypes;
