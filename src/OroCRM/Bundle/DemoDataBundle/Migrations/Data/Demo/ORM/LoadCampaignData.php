@@ -17,7 +17,6 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 
-
 class LoadCampaignData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     /**
