@@ -85,7 +85,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate table orocrm_magento_cart **/
         $table = $schema->createTable('orocrm_magento_cart');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
         $table->addColumn('shipping_address_id', 'integer', ['notnull' => false]);
         $table->addColumn('status_name', 'string', ['notnull' => false, 'length' => 32]);
@@ -260,7 +260,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate table orocrm_magento_customer **/
         $table = $schema->createTable('orocrm_magento_customer');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('website_id', 'integer', ['notnull' => false]);
         $table->addColumn('account_id', 'integer', ['notnull' => false]);
         $table->addColumn('store_id', 'integer', ['notnull' => false]);
@@ -299,7 +299,7 @@ class OroCRMMagentoBundle implements Migration
     public static function orocrmMagentoCustomerAddressTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_magento_customer_address **/
-        $table = $schema->createTable($tableName ? : 'orocrm_magento_customer_address');
+        $table = $schema->createTable($tableName ?: 'orocrm_magento_customer_address');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('region_code', 'string', ['notnull' => false, 'length' => 16]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
@@ -336,7 +336,7 @@ class OroCRMMagentoBundle implements Migration
     public static function orocrmMagentoCustomerAddressToAddressTypeTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_magento_customer_address_to_address_type **/
-        $table = $schema->createTable($tableName ? : 'orocrm_magento_customer_address_to_address_type');
+        $table = $schema->createTable($tableName ?: 'orocrm_magento_customer_address_to_address_type');
         $table->addColumn('customer_address_id', 'integer', []);
         $table->addColumn('type_name', 'string', ['length' => 16]);
         $table->setPrimaryKey(['customer_address_id', 'type_name']);
@@ -355,7 +355,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate table orocrm_magento_customer_group **/
         $table = $schema->createTable('orocrm_magento_customer_group');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'unsigned' => true]);
         $table->setPrimaryKey(['id']);
@@ -373,7 +373,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate table orocrm_magento_order **/
         $table = $schema->createTable('orocrm_magento_order');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
         $table->addColumn('cart_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
@@ -536,7 +536,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate table orocrm_magento_product **/
         $table = $schema->createTable('orocrm_magento_product');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('sku', 'string', ['length' => 255]);
         $table->addColumn('type', 'string', ['length' => 255]);
@@ -561,7 +561,7 @@ class OroCRMMagentoBundle implements Migration
     public static function orocrmMagentoProductToWebsiteTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_magento_product_to_website **/
-        $table = $schema->createTable($tableName ? : 'orocrm_magento_product_to_website');
+        $table = $schema->createTable($tableName ?: 'orocrm_magento_product_to_website');
         $table->addColumn('product_id', 'integer', []);
         $table->addColumn('website_id', 'integer', []);
         $table->setPrimaryKey(['product_id', 'website_id']);
@@ -601,7 +601,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate table orocrm_magento_store **/
         $table = $schema->createTable('orocrm_magento_store');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('website_id', 'integer', []);
         $table->addColumn('store_code', 'string', ['length' => 32]);
         $table->addColumn('store_name', 'string', ['length' => 255]);
@@ -623,7 +623,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate table orocrm_magento_website **/
         $table = $schema->createTable('orocrm_magento_website');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('website_code', 'string', ['length' => 32]);
         $table->addColumn('website_name', 'string', ['length' => 255]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'unsigned' => true]);
@@ -846,7 +846,7 @@ class OroCRMMagentoBundle implements Migration
     public static function orocrMagentoCustomerAddressForeignKeys(Schema $schema, $tableName = null)
     {
         /** Generate foreign keys for table orocrm_magento_customer_address **/
-        $table = $schema->getTable($tableName ? : 'orocrm_magento_customer_address');
+        $table = $schema->getTable($tableName ?: 'orocrm_magento_customer_address');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_dictionary_region'),
             ['region_code'],
@@ -881,7 +881,7 @@ class OroCRMMagentoBundle implements Migration
         $customerAddressTableName = null
     ) {
         /** Generate foreign keys for table orocrm_magento_customer_address_to_address_type **/
-        $table = $schema->getTable($tableName ? : 'orocrm_magento_customer_address_to_address_type');
+        $table = $schema->getTable($tableName ?: 'orocrm_magento_customer_address_to_address_type');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_address_type'),
             ['type_name'],
@@ -889,7 +889,7 @@ class OroCRMMagentoBundle implements Migration
             ['onDelete' => null, 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable($customerAddressTableName ? : 'orocrm_magento_customer_address'),
+            $schema->getTable($customerAddressTableName ?: 'orocrm_magento_customer_address'),
             ['customer_address_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
@@ -1110,7 +1110,7 @@ class OroCRMMagentoBundle implements Migration
     public static function orocrmMagentoProductToWebsiteForeignKeys(Schema $schema, $tableName = null)
     {
         /** Generate foreign keys for table orocrm_magento_product_to_website **/
-        $table = $schema->getTable($tableName ? : 'orocrm_magento_product_to_website');
+        $table = $schema->getTable($tableName ?: 'orocrm_magento_product_to_website');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_website'),
             ['website_id'],

@@ -32,8 +32,8 @@ class OroCRMContactUsBundle implements Migration
     public static function orocrmContactusContactReasonTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_contactus_contact_reason **/
-        $table = $schema->createTable($tableName ? : 'orocrm_contactus_contact_reason');
-        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table = $schema->createTable($tableName ?: 'orocrm_contactus_contact_reason');
+        $table->addColumn('id', 'smallint', ['autoincrement' => true]);
         $table->addColumn('label', 'string', ['length' => 255]);
         $table->setPrimaryKey(['id']);
         /** End of generate table orocrm_contactus_contact_reason **/
@@ -49,9 +49,9 @@ class OroCRMContactUsBundle implements Migration
         /** Generate table orocrm_contactus_request **/
         $table = $schema->createTable('orocrm_contactus_request');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
-        $table->addColumn('contact_reason_id', 'integer', ['notnull' => false]);
+        $table->addColumn('contact_reason_id', 'smallint', ['notnull' => false]);
         $table->addColumn('lead_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
         $table->addColumn('opportunity_id', 'integer', ['notnull' => false]);
@@ -101,7 +101,7 @@ class OroCRMContactUsBundle implements Migration
     public static function orocrmContactusRequestEmailsTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_contactus_request_emails **/
-        $table = $schema->createTable($tableName ? : 'orocrm_contactus_request_emails');
+        $table = $schema->createTable($tableName ?: 'orocrm_contactus_request_emails');
         $table->addColumn('request_id', 'integer', []);
         $table->addColumn('email_id', 'integer', []);
         $table->setPrimaryKey(['request_id', 'email_id']);
@@ -133,7 +133,7 @@ class OroCRMContactUsBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable($contactReasonTableName ? : 'orocrm_contactus_contact_reason'),
+            $schema->getTable($contactReasonTableName ?: 'orocrm_contactus_contact_reason'),
             ['contact_reason_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
@@ -192,7 +192,7 @@ class OroCRMContactUsBundle implements Migration
     public static function orocrmContactusRequestEmailsForeignKeys(Schema $schema, $tableName = null)
     {
         /** Generate foreign keys for table orocrm_contactus_request_emails **/
-        $table = $schema->getTable($tableName ? : 'orocrm_contactus_request_emails');
+        $table = $schema->getTable($tableName ?: 'orocrm_contactus_request_emails');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_email'),
             ['email_id'],

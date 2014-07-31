@@ -29,7 +29,7 @@ class OroCRMCampaignBundle implements Migration
 
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['code'], 'UNIQ_E9A0640377153098');
-        $table->addIndex(['owner_id'], 'cmpgn_owner_idx', []);
+        $table->addIndex(['owner_id'], 'IDX_55153CAD7E3C61F9', []);
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
             ['owner_id'],
