@@ -34,7 +34,6 @@ class ChannelCustomerIdentityType extends AbstractType
             [
                 'empty_value' => '',
                 'choices'     => $this->getChoices(true),
-                'configs'     => []
             ]
         );
     }
