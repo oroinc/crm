@@ -7,6 +7,7 @@ use Oro\Component\Config\Resolver\ResolverInterface;
 class SettingsProvider
 {
     const DATA_PATH = 'entity_data';
+    const CHANNEL_TYPE_PATH = 'channel_types';
 
     /** @var array */
     protected $settings = [];
@@ -165,5 +166,22 @@ class SettingsProvider
         }
 
         return array_unique($allowedTypes);
+    }
+
+    /**
+     * Returns channel types that could be used in channel type selector
+     *
+     * @return array
+     */
+    public function getChannelTypes()
+    {
+        $settings     = $this->getSettings(self::CHANNEL_TYPE_PATH);
+        $channelTypes = [];
+
+        foreach (array_keys($settings) as $entityName) {
+                $channelTypes[$entityName] = $settings[$entityName]['label'];
+        }
+
+        return $channelTypes;
     }
 }
