@@ -87,6 +87,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
+        $organization = $this->getReference('default_organization');
         for ($i = 0; $i < self::FIXTURES_COUNT; ++$i) {
             $reporter = $this->getRandomEntity('OroUserBundle:User', $manager);
             $assignedTo = $this->getRandomEntity('OroUserBundle:User', $manager);
@@ -111,6 +112,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
             $task->setReporter($reporter);
             $task->setOwner($assignedTo);
             $task->setTaskPriority($taskPriority);
+            $task->setOrganization($organization);
 
             $contact = $this->getRandomEntity('OroCRMContactBundle:Contact', $manager);
             if ($contact) {

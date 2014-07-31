@@ -3,6 +3,7 @@ namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\TagBundle\Entity\Tag;
 use Oro\Bundle\TagBundle\Entity\TagManager;
 
@@ -59,6 +60,11 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
     protected $em;
 
     /**
+     * @var Organization
+     */
+    protected $organization;
+
+    /**
      * {@inheritdoc}
      */
     public function getDependencies()
@@ -109,6 +115,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
         $this->randomUser = count($this->usersRepository)-1;
         $this->randomUserTag = count($this->tagsUser)-1;
         $this->tagManager = $this->container->get('oro_tag.tag.manager');
+        $this->organization = $this->getReference('default_organization');
     }
 
     /**
@@ -119,7 +126,9 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
     {
         $tags = array();
         foreach ($tagsNames as $tagName) {
-            $tags[] = new Tag($tagName);
+            $tag = new Tag($tagName);
+            $tag->setOrganization($this->organization);
+            $tags[] = $tag;
         }
 
         return $tags;

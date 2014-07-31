@@ -10,6 +10,7 @@ use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
@@ -33,6 +34,11 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
     protected $users;
 
     /**
+     * @var Organization
+     */
+    protected $organization;
+
+    /**
      * {@inheritdoc}
      */
     public function getDependencies()
@@ -45,6 +51,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
      */
     public function load(ObjectManager $om)
     {
+        $this->organization = $this->getReference('default_organization');
         $this->users = $om->getRepository('OroUserBundle:User')->findAll();
 
         $website = new Website();
@@ -169,6 +176,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $origin
     ) {
         $order = new Order();
+        $order->setOrganization($this->organization);
         $order->setChannel($channel);
         $order->setCustomer($customer);
         $order->setOwner($customer->getOwner());
@@ -258,6 +266,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $rate = 1
     ) {
         $cart = new Cart();
+        $cart->setOrganization($this->organization);
         $cart->setChannel($channel);
         $cart->setCustomer($customer);
         $cart->setOwner($customer->getOwner());
@@ -399,8 +408,8 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
                 ->setOriginId($i + 1)
                 ->setAccount($accounts[$buffer[$i]])
                 ->setContact($contact)
+                ->setOrganization($this->organization)
                 ->setOwner($this->getRandomOwner());
-
             $om->persist($customer);
         }
     }

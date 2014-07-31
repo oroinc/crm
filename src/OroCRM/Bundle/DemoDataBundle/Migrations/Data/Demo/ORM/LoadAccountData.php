@@ -1,6 +1,7 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -14,6 +15,7 @@ use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 class LoadAccountData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
@@ -35,6 +37,11 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
      * @var Country[]
      */
     protected $countries;
+
+    /**
+     * @var Organization
+     */
+    protected $organization;
 
     /**
      * {@inheritdoc}
@@ -71,9 +78,9 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
         if ($manager) {
             $this->em = $manager;
         }
-
-        $this->users = $manager->getRepository('OroUserBundle:User')->findAll();
-        $this->countries = $manager->getRepository('OroAddressBundle:Country')->findAll();
+        $this->organization = $this->getReference('default_organization');
+        $this->users        = $manager->getRepository('OroUserBundle:User')->findAll();
+        $this->countries    = $manager->getRepository('OroAddressBundle:Country')->findAll();
     }
 
     /**
@@ -158,6 +165,7 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
 
         $account->setShippingAddress($address);
         $account->setBillingAddress(clone $address);
+        $account->setOrganization($this->organization);
 
         return $account;
     }

@@ -24,6 +24,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @ORM\Table(
  *      name="orocrm_sales_lead",

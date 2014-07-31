@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -38,6 +39,11 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
 
     /** @var  EntityManager */
     protected $em;
+
+    /**
+     * @var Organization
+     */
+    protected $organization;
 
     /**
      * {@inheritdoc}
@@ -80,6 +86,7 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
             ->innerJoin('contact.accounts', 'account')
             ->getQuery()
             ->execute();
+        $this->organization = $this->getReference('default_organization');
     }
 
     public function loadOpportunities()
@@ -123,7 +130,7 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
         $opportunity->setContact($contact);
         $opportunity->setAccount($account);
         $opportunity->setOwner($user);
-
+        $opportunity->setOrganization($this->organization);
         return $opportunity;
     }
 

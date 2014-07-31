@@ -58,6 +58,8 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
 
     public function load(ObjectManager $manager)
     {
+        $organization = $this->getReference('default_organization');
+
         /** @var \Oro\Bundle\UserBundle\Entity\Role $marketingRole */
         $marketingRole = $this->roles->findOneBy(array('role' => 'ROLE_MARKETING_MANAGER'));
         /** @var \Oro\Bundle\UserBundle\Entity\Role $saleRole */
@@ -80,6 +82,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
             ->addRole($saleRole)
             ->addGroup($salesGroup)
             ->setEmail('sale@example.com')
+            ->setOrganization($organization)
             ->setBusinessUnits(
                 new ArrayCollection(
                     array(
@@ -107,6 +110,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
             ->addRole($marketingRole)
             ->addGroup($marketingGroup)
             ->setEmail('marketing@example.com')
+            ->setOrganization($organization)
             ->setBusinessUnits(
                 new ArrayCollection(
                     array(
