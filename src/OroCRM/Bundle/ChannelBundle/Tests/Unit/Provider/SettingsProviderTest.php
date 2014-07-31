@@ -136,15 +136,15 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
                 ],
                 false
             ],
-            'config given, entity belongs to integration'                            => [
+            'config given, entity belongs to integration' => [
                 self::TEST_ENTITY_NAME,
                 [
                     'entity_data' => [
                         [
-                            'name'                   => self::TEST_ENTITY_NAME,
-                            'dependent'              => [],
-                            'dependencies'           => [],
-                            'belongs_to_integration' => 'test'
+                            'name'         => self::TEST_ENTITY_NAME,
+                            'dependent'    => [],
+                            'dependencies' => [],
+                            'belongs_to'   => ['integration' => 'test']
                         ],
                     ]
                 ],
@@ -243,16 +243,16 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
                 '$config'          => [
                     'entity_data' => [
                         [
-                            'name'                   => self::TEST_ENTITY_NAME,
-                            'dependent'              => [],
-                            'dependencies'           => [],
-                            'belongs_to_integration' => 'test'
+                            'name'         => self::TEST_ENTITY_NAME,
+                            'dependent'    => [],
+                            'dependencies' => [],
+                            'belongs_to'   => ['integration' => 'test']
                         ],
                         [
-                            'name'                   => self::TEST_ANOTHER_ENTITY_NAME,
-                            'dependent'              => [],
-                            'dependencies'           => [],
-                            'belongs_to_integration' => 'test'
+                            'name'         => self::TEST_ANOTHER_ENTITY_NAME,
+                            'dependent'    => [],
+                            'dependencies' => [],
+                            'belongs_to'   => ['integration' => 'test']
                         ]
                     ],
                 ],

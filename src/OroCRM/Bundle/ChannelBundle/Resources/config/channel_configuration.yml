@@ -1,0 +1,5 @@
+orocrm_channel:
+    channel_types:
+        custom:
+            label: Custom
+            entities: []
