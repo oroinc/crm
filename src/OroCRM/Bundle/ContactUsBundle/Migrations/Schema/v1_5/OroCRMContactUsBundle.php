@@ -18,9 +18,9 @@ class OroCRMContactUsBundle implements Migration
         $queries->addPreQuery('ALTER TABLE orocrm_contactus_request DROP FOREIGN KEY FK_342872E8374A36E9;');
 
         $table = $schema->getTable('orocrm_contactus_request');
-        $table->changeColumn('contact_reason_id', ['type' => Type::getType('integer')]);
+        $table->getColumn('contact_reason_id')->setType(Type::getType('integer'));
 
         $table = $schema->getTable('orocrm_contactus_contact_rsn');
-        $table->changeColumn('id', ['type' => Type::getType('integer')]);
+        $table->getColumn('id')->setType(Type::getType('integer'));
     }
 }

@@ -18,7 +18,7 @@ class OroCRMContactBundle implements migration
         $queries->addPreQuery('ALTER TABLE orocrm_contact_to_contact_grp DROP FOREIGN KEY FK_A748EE19647145D0;');
 
         $table = $schema->getTable('orocrm_contact_to_contact_grp');
-        $table->changeColumn('contact_group_id', ['type' => Type::getType('integer')]);
+        $table->getColumn('contact_group_id')->setType(Type::getType('integer'));
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_contact_group'),
             ['contact_group_id'],
@@ -28,6 +28,6 @@ class OroCRMContactBundle implements migration
         );
 
         $table = $schema->getTable('orocrm_contact_group');
-        $table->changeColumn('id', ['type' => Type::getType('integer')]);
+        $table->getColumn('id')->setType(Type::getType('integer'));
     }
 }

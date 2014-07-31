@@ -26,25 +26,22 @@ class OroCRMMagentoBundle implements Migration
         ];
 
         foreach ($tables as $table => $foreignKey) {
-            if (!empty($foreignKey)) {
-                $queries->addPreQuery(
-                    sprintf('ALTER TABLE %s DROP FOREIGN KEY %s;', $table, $foreignKey)
-                );
-            }
+            $queries->addPreQuery(
+                sprintf('ALTER TABLE %s DROP FOREIGN KEY %s;', $table, $foreignKey)
+            );
 
             $table = $schema->getTable($table);
-            $table->changeColumn('channel_id', ['type' => Type::getType('integer')]);
+            $table->getColumn('channel_id')->setType(Type::getType('integer'));
             $table->addForeignKeyConstraint(
                 $schema->getTable('oro_integration_channel'),
                 ['channel_id'],
                 ['id'],
-                ['onDelete' => 'SET NULL', 'onUpdate' => null],
-                $foreignKey ?: null
+                ['onDelete' => 'SET NULL', 'onUpdate' => null]
             );
         }
 
         $table = $schema->getTable('orocrm_magento_customer');
-        $table->changeColumn('vat', ['type' => Type::getType('decimal')]);
+        $table->getColumn('vat')->setType(Type::getType('decimal'));
         $table->dropIndex('unq_origin_id_channel_id');
         $table->addUniqueIndex(['origin_id', 'channel_id'], 'magecustomer_oid_cid_unq');
     }
