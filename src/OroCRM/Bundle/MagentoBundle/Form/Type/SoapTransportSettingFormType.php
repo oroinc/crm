@@ -63,16 +63,16 @@ class SoapTransportSettingFormType extends AbstractType
             'checkbox',
             ['label' => 'orocrm.magento.magentosoaptransport.is_wsi_mode.label', 'required' => false]
         );
-        $builder->add(
-            'syncStartDate',
-            'oro_date',
-            [
-                'label'      => 'orocrm.magento.magentosoaptransport.sync_start_date.label',
-                'required'   => true,
-                'tooltip'    => 'orocrm.magento.magentosoaptransport.sync_start_date.tooltip',
-                'empty_data' => new \DateTime('2007-01-01', new \DateTimeZone('UTC'))
-            ]
-        );
+//        $builder->add(
+//            'syncStartDate',
+//            'oro_date',
+//            [
+//                'label'      => 'orocrm.magento.magentosoaptransport.sync_start_date.label',
+//                'required'   => true,
+//                'tooltip'    => 'orocrm.magento.magentosoaptransport.sync_start_date.tooltip',
+//                'empty_data' => new \DateTime('2007-01-01', new \DateTimeZone('UTC'))
+//            ]
+//        );
         $builder->add(
             'check',
             'orocrm_magento_soap_transport_check_button',

@@ -3,9 +3,7 @@
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Entity;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Entity\EntityName;
 
 class ChannelTest extends AbstractEntityTestCase

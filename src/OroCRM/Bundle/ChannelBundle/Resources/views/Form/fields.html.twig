@@ -13,32 +13,70 @@
 {% endblock %}
 
 {% block oro_integration_channel_form_widget %}
-    {{ form_row(form.name) }}
+    {% set title = form.vars.value.id ? form.name.vars.value : 'Create integration'|trans %}
+    <a href="#" class="no-hash open-integration-dialog">{{ title }}</a>
 
-    {% if (form.organization is defined) %}
-        {{ form_row(form.organization) }}
-    {% endif %}
+    <div class="integration-embedded-form-widget widget-content form-register form-dialog" data-validation-ignore>
+        <fieldset class="form-horizontal">
+            {{ form_row(form.name) }}
 
-    {{ form_row(form.transportType) }}
+            {% if (form.organization is defined) %}
+                {{ form_row(form.organization) }}
+            {% endif %}
 
-    {% if (form.transport is defined) %}
-        {{ form_widget(form.transport) }}
-    {% endif %}
+            {{ form_row(form.transportType) }}
 
-    {% if (form.synchronizationSettings is defined) %}
-        {{ form_widget(form.synchronizationSettings) }}
-    {% endif %}
+            {% if (form.transport is defined) %}
+                {{ form_widget(form.transport) }}
+            {% endif %}
 
-    {% if (form.mappingSettings is defined) %}
-        {{ form_widget(form.mappingSettings) }}
-    {% endif %}
+            {% if (form.synchronizationSettings is defined) %}
+                {{ form_widget(form.synchronizationSettings) }}
+            {% endif %}
 
-    {% if (form.connectors is defined) %}
-        <div {% if form.connectors.vars.choices is empty %}{{ 'class="hide"' }}{% endif %}>
-            {{ form_row(form.connectors) }}
-        </div>
-    {% endif %}
+            {% if (form.mappingSettings is defined) %}
+                {{ form_widget(form.mappingSettings) }}
+            {% endif %}
 
-    {% import 'OroIntegrationBundle:Form:javascript.html.twig' as jsRenderer %}
-    {{ jsRenderer.renderIntegrationFormJS(form) }}
+            {% if (form.connectors is defined) %}
+                <div {% if form.connectors.vars.choices is empty %}{{ 'class="hide"' }}{% endif %}>
+                    {{ form_row(form.connectors) }}
+                </div>
+            {% endif %}
+
+            <div class="widget-actions form-actions" style="display: none;">
+                <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
+                <button class="btn btn-primary" type="button" data-action="save-widget-data">{{ 'Save'|trans }}</button>
+            </div>
+        </fieldset>
+        {% import 'OroIntegrationBundle:Form:javascript.html.twig' as jsRenderer %}
+        {{ jsRenderer.renderIntegrationFormJS(form, form.parent.vars.id, form.parent._token.vars.full_name) }}
+    </div>
+
+    <script type="text/javascript">
+        require(['jquery', 'oro/dialog-widget'], function ($, DialogWidget) {
+            var dettachedForm;
+
+            $(function () {
+                dettachedForm = $('.integration-embedded-form-widget').detach();
+
+                $('.open-integration-dialog').click(function() {
+                    var widget = new DialogWidget({
+                        el:                  dettachedForm,
+                        title:               {{ title|json_encode|raw }},
+                        stateEnabled:        false,
+                        incrementalPosition: false,
+                        elementFirst:        true,
+                        dialogOptions: {
+                            modal:      true,
+                            resizable:  true,
+                            autoResize: true,
+                            width:      650
+                        }
+                    });
+                    widget.render();
+                });
+            });
+        });
+    </script>
 {% endblock %}
