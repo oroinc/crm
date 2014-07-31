@@ -105,7 +105,6 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $om->flush();
 
         $this->persistDemoCarts($om, $store, $integration);
-        $this->updateDataChannel($integration, $om);
         $om->flush();
 
         $this->persistDemoOrders($om, $store, $integration);
@@ -125,16 +124,6 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         if (!$this->channel) {
             throw new \Exception('"default" channel is not defined!');
         }
-    }
-
-    /**
-     * @param Integration   $integration
-     * @param ObjectManager $om
-     */
-    public function updateDataChannel(Integration $integration, ObjectManager $om)
-    {
-        $this->channel->addIntegration($integration);
-        $om->persist($this->channel);
     }
 
     /**

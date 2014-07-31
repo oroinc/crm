@@ -65,6 +65,8 @@ class LoadChannelData extends AbstractFixture implements ContainerAwareInterface
         $channel->setName('default');
         $channel->setDescription('some description');
         $channel->setOwner($organization);
+        $channel->setStatus(true);
+        $channel->setChannelType('Custom');
         $om->persist($channel);
 
         $this->addReference('default_channel', $channel);
