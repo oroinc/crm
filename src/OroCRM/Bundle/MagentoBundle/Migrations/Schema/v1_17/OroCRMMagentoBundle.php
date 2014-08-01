@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_17;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 
+use Oro\Bundle\EntityBundle\Migrations\MigrateTypesQuery;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
@@ -15,33 +16,23 @@ class OroCRMMagentoBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $tables = [
-            'orocrm_magento_cart'           => 'FK_96661A8072F5A1AA',
-            'orocrm_magento_customer'       => 'FK_2A61EE7D72F5A1AA',
-            'orocrm_magento_customer_group' => 'FK_71E09CA872F5A1AA',
-            'orocrm_magento_order'          => 'FK_4D09F30572F5A1AA',
-            'orocrm_magento_product'        => 'FK_5A17298272F5A1AA',
-            'orocrm_magento_store'          => 'FK_477738EA72F5A1AA',
-            'orocrm_magento_website'        => 'FK_CE3270C872F5A1AA',
-        ];
+        /** placed here to load in last order */
+        $queries->addQuery(new MigrateTypesQuery($schema, 'orocrm_contactus_contact_rsn', 'id', Type::INTEGER));
+        $queries->addQuery(new MigrateTypesQuery($schema, 'orocrm_contact_group', 'id', Type::INTEGER));
 
-        foreach ($tables as $table => $foreignKey) {
-            $queries->addPreQuery(
-                sprintf('ALTER TABLE %s DROP FOREIGN KEY %s;', $table, $foreignKey)
-            );
+        /** override platform queries */
+        $queries->addQuery(new MigrateTypesQuery($schema, 'oro_integration_channel', 'id', Type::INTEGER));
+        $queries->addQuery(new MigrateTypesQuery($schema, 'oro_integration_channel_status', 'id', Type::INTEGER));
+        $queries->addQuery(new MigrateTypesQuery($schema, 'oro_integration_transport', 'id', Type::INTEGER));
 
-            $table = $schema->getTable($table);
-            $table->getColumn('channel_id')->setType(Type::getType('integer'));
-            $table->addForeignKeyConstraint(
-                $schema->getTable('oro_integration_channel'),
-                ['channel_id'],
-                ['id'],
-                ['onDelete' => 'SET NULL', 'onUpdate' => null]
-            );
-        }
+        $queries->addQuery(new MigrateTypesQuery($schema, 'oro_access_group', 'id', Type::INTEGER));
+        $queries->addQuery(new MigrateTypesQuery($schema, 'oro_access_role', 'id', Type::INTEGER));
+        $queries->addQuery(new MigrateTypesQuery($schema, 'oro_user_email', 'id', Type::INTEGER));
+        $queries->addQuery(new MigrateTypesQuery($schema, 'oro_user_status', 'id', Type::INTEGER));
 
         $table = $schema->getTable('orocrm_magento_customer');
-        $table->getColumn('vat')->setType(Type::getType('decimal'));
+        $table->changeColumn('vat', ['type' => Type::getType('float'), 'notnull' => true]);
+        $table->changeColumn('vat', ['type' => Type::getType('float'), 'notnull' => true]);
         $table->dropIndex('unq_origin_id_channel_id');
         $table->addUniqueIndex(['origin_id', 'channel_id'], 'magecustomer_oid_cid_unq');
     }
