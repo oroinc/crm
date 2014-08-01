@@ -282,14 +282,14 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
     public function channelTypesProvider()
     {
         return [
-            'withot channels types' => [
+            'without channels types' => [
                 '$config' => [
                     'entity_data' => [],
                     'channel_types' => [],
                 ],
                 '$expectedResults' => []
             ],
-            'two cahannel type' => [
+            'two channel type' => [
                 '$config' => [
                     'entity_data' => [],
                     'channel_types' => [

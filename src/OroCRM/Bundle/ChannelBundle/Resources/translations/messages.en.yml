@@ -1,14 +1,16 @@
 orocrm:
     channel:
-        entity_plural_label: Channels
-        entity_label:        Channel
-        id.label:            Id
-        name.label:          Name
-        description.label:   Description
-        owner.label:         Owner
-        entities.label:      Entities
-        data_source.label:   Customer source
-        channel_type.label:  Channel type
+        entity_plural_label:      Channels
+        entity_label:             Channel
+        id.label:                 Id
+        name.label:               Name
+        description.label:        Description
+        owner.label:              Owner
+        entities.label:           Entities
+        data_source.label:        Customer source
+        channel_type.label:       Channel type
+        customer_identity.label:  Customer identity
+        status.label:             Status
 
         datagrid:
             action:
