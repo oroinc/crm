@@ -86,7 +86,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $this->addOrocrmMagentoStoreForeignKeys($schema);
         $this->addOrocrmMagentoOrderItemsForeignKeys($schema);
 
-        /** Enable ativities */
+        /** Enable activities */
         MagentoActivities::addActivityAssociations($schema, $this->activityExtension);
         MagentoActivities::disableActivityAssociations($schema);
     }
