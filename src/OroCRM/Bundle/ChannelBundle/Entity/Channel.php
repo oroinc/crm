@@ -30,6 +30,9 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
  */
 class Channel
 {
+    const STATUS_ENABLED = 1;
+    const STATUS_DISABLED = 0;
+
     /**
      * @var integer
      *
@@ -96,6 +99,7 @@ class Channel
 
     public function __construct()
     {
+        $this->status       = self::STATUS_DISABLED;
         $this->entities     = new ArrayCollection();
     }
 

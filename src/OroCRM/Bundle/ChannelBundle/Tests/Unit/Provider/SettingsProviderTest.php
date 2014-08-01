@@ -275,4 +275,54 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
 
         return new SettingsProvider($settings, $resolverMock);
     }
+
+    /**
+     * @return array
+     */
+    public function channelTypesProvider()
+    {
+        return [
+            'without channels types' => [
+                '$config' => [
+                    'entity_data' => [],
+                    'channel_types' => [],
+                ],
+                '$expectedResults' => []
+            ],
+            'two channel type' => [
+                '$config' => [
+                    'entity_data' => [],
+                    'channel_types' => [
+                        'magento' => [
+                            'label' => 'Magento type',
+                            'entities' => [
+                                'OroCRM\Bundle\MagentoBundle\Entity\Cart',
+                                'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                                'OroCRM\Bundle\MagentoBundle\Entity\Order'
+                            ],
+                            'integration_type' => 'magento',
+                            'customer_identity' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                            'is_customer_identity_user_defined' => false
+                        ],
+                        'custom' => [
+                            'label' => 'Custom',
+                            'entities' => [],
+                        ]
+                    ],
+                ],
+                '$expectedResults' => ['magento' => 'Magento type', 'custom' => 'Custom']
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider channelTypesProvider
+     *
+     * @param array $config
+     * @param array $expectedResults
+     */
+    public function testGetChannelTypeChoiceList(array $config, array $expectedResults)
+    {
+        $this->assertSame($expectedResults, $this->getSettingsProvider($config)->getChannelTypeChoiceList());
+    }
 }

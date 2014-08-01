@@ -53,9 +53,9 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             [
-                'name'         => 'text',
-                'entities'     => 'orocrm_channel_entity_choice_form',
-                'dataSource'   => 'oro_integration_select'
+                'name'        => 'text',
+                'entities'    => 'orocrm_channel_entity_choice_form',
+                'channelType' => 'genemu_jqueryselect2_choice'
             ],
             $fields
         );
