@@ -32,6 +32,7 @@ services:
         class: %orocrm_channel.form.type.channel.class%
         arguments:
             - @orocrm_channel.provider.settings_provider
+            - @orocrm_channel.form.subscriber.channel_subscriber
         tags:
             - { name: form.type, alias: orocrm_channel_form }
 
@@ -44,9 +45,6 @@ services:
 
     orocrm_channel.form.type.customer_identity:
         class: %orocrm_channel.form.type.customer_identity.class%
-        arguments:
-            - @orocrm_channel.provider.channel_entity_provider
-        scope: request
         tags:
             - { name: form.type, alias: orocrm_channel_customer_identity_select_form }
 

@@ -56,20 +56,4 @@ class ChannelCustomerIdentityTypeTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('OroCRM\Bundle\ChannelBundle\Form\Type\ChannelCustomerIdentityType', $this->type);
     }
-
-    public function testSetDefaultOptions()
-    {
-        $resolver = $this->getMockBuilder('Symfony\Component\OptionsResolver\OptionsResolver')
-            ->disableOriginalConstructor()->getMock();
-
-        $provider = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityProvider')
-            ->disableOriginalConstructor()->getMock();
-
-        $provider->expects($this->once())
-            ->method('getEntities')
-            ->will($this->returnValue($this->provider_result));
-
-        $type = new ChannelCustomerIdentityType($provider);
-        $type->setDefaultOptions($resolver);
-    }
 }

@@ -42,7 +42,7 @@ class Channel
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     protected $name;
 
@@ -92,15 +92,14 @@ class Channel
     /**
      * @var boolean
      *
-     * @ORM\Column(name="status", type="boolean")
+     * @ORM\Column(name="status", type="boolean", nullable=false)
      */
     protected $status;
 
     /**
-     * @var EntityName
+     * @var string
      *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\EntityName")
-     * @ORM\JoinColumn(name="customer_identity_id", referencedColumnName="id")
+     * @ORM\Column(name="customer_identity", type="string", length=255, nullable=false)
      */
     protected $customerIdentity;
 
@@ -289,9 +288,9 @@ class Channel
     }
 
     /**
-     * @param EntityName $customerIdentity
+     * @param string $customerIdentity
      */
-    public function setCustomerIdentity(EntityName $customerIdentity)
+    public function setCustomerIdentity($customerIdentity)
     {
         $this->customerIdentity = $customerIdentity;
     }

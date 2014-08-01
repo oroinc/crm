@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilder;
 
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 
 class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,6 +20,9 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
     /** @var ChannelType */
     protected $type;
 
+    /** @var ChannelTypeSubscriber */
+    protected $channelTypeSubscriber;
+
     public function setUp()
     {
         $this->builder          = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
@@ -26,10 +30,14 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
         $this->settingsProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
 
+        $this->channelTypeSubscriber = $this
+            ->getMockBuilder('OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber')
+            ->disableOriginalConstructor()->getMock();
+
         $this->settingsProvider->expects($this->any())->method('getSettings')
             ->will($this->returnValue([]));
 
-        $this->type = new ChannelType($this->settingsProvider);
+        $this->type = new ChannelType($this->settingsProvider, $this->channelTypeSubscriber);
     }
 
     public function tearDown()
@@ -40,6 +48,10 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
     public function testBuildForm()
     {
         $fields = [];
+        $this->builder->expects($this->once())
+            ->method('addEventSubscriber')
+            ->with($this->channelTypeSubscriber);
+
         $this->builder->expects($this->exactly(6))->method('add')
             ->will(
                 $this->returnCallback(
@@ -55,10 +67,10 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
             [
                 'name'             => 'text',
                 'description'      => 'textarea',
-                'entities'         => 'orocrm_channel_entity_choice_form',
                 'integrations'     => 'genemu_jqueryselect2_entity',
                 'dataSource'       => 'oro_integration_select',
-                'customerIdentity' => 'orocrm_channel_customer_identity_select_form'
+                'customerIdentity' => 'orocrm_channel_customer_identity_select_form',
+                'entities'         => 'orocrm_channel_entity_choice_form'
             ],
             $fields
         );
