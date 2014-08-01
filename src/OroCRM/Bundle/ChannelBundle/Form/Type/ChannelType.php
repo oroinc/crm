@@ -78,6 +78,16 @@ class ChannelType extends AbstractType
                 'configs'       => ['placeholder' => 'orocrm.channel.form.select_data_source.label'],
             ]
         );
+        $builder->add(
+            'channelType',
+            'genemu_jqueryselect2_choice',
+            [
+                'choices'       => $this->settingsProvider->getChannelTypeChoiceList(),
+                'required'      => true,
+                'label'         => 'orocrm.channel.channel_type.label',
+                'configs'       => ['placeholder' => 'orocrm.channel.form.select_channel_type.label'],
+            ]
+        );
     }
 
     /**
