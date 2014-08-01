@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Form\Type;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormView;
@@ -10,8 +10,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelType extends AbstractType
@@ -54,37 +56,38 @@ class ChannelType extends AbstractType
                 'configs'  => ['placeholder' => 'orocrm.channel.form.select_entities.label']
             ]
         );
+        $builder->add('dataSource', 'orocrm_channel_datasource_form');
 
-        $builder->addEventListener(
-            FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use ($factory) {
-                /** @var Channel $data */
-                $data = $event->getData();
-                $form = $event->getForm();
-
-                if (null === $data) {
-                    return;
-                }
-
-                // TODO get type from channel
-                $type = 'magento';
-                // TODO check if type is based on integration
-                if ($type) {
-                    // TODO get integration type from config
-                    $integrationType = $type;
-                    $integration     = new Integration();
-                    $integration->setType($integrationType);
-
-                    $integrationEmbeddedForm = $factory->createNamed(
-                        'dataSource',
-                        'oro_integration_channel_form',
-                        $integration,
-                        ['auto_initialize' => false]
-                    );
-                    $form->add($integrationEmbeddedForm);
-                }
-            }
-        );
+//        $builder->addEventListener(
+//            FormEvents::PRE_SET_DATA,
+//            function (FormEvent $event) use ($factory) {
+//                /** @var Channel $data */
+//                $data = $event->getData();
+//                $form = $event->getForm();
+//
+//                if (null === $data) {
+//                    return;
+//                }
+//
+//                // TODO get type from channel
+//                $type = 'magento';
+//                // TODO check if type is based on integration
+//                if ($type) {
+//                    // TODO get integration type from config
+//                    $integrationType = $type;
+//                    $integration     = new Integration();
+//                    $integration->setType($integrationType);
+//
+//                    $integrationEmbeddedForm = $factory->createNamed(
+//                        'dataSource',
+//                        'oro_integration_channel_form',
+//                        $integration,
+//                        ['auto_initialize' => false]
+//                    );
+//                    $form->add($integrationEmbeddedForm);
+//                }
+//            }
+//        );
         $builder->add(
             'channelType',
             'genemu_jqueryselect2_choice',
@@ -105,8 +108,7 @@ class ChannelType extends AbstractType
         if (isset($view->children['owner'], $view->children['owner']->vars['choices'])
             && count($view->children['owner']->vars['choices']) < 2
         ) {
-
-            $this->appendClassAttr($view->children['owner']->vars, 'hide');
+            FormUtils::appendClass($view->children['owner'], 'hide');
         }
     }
 
@@ -128,17 +130,5 @@ class ChannelType extends AbstractType
     public function getName()
     {
         return self::NAME;
-    }
-
-    /**
-     * @param array  $options
-     * @param string $cssClass
-     */
-    protected function appendClassAttr(array &$options, $cssClass)
-    {
-        $options['attr']          = isset($options['attr']) ? $options['attr'] : [];
-        $options['attr']['class'] = isset($options['attr']['class']) ? $options['attr']['class'] : '';
-
-        $options['attr']['class'] = implode(' ', [$options['attr']['class'], $cssClass]);
     }
 }

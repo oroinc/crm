@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Controller;
 
-use Symfony\Component\Form\FormInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

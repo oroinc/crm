@@ -1,0 +1,20 @@
+{% set isWidgetContext = true %}
+{% set formAction = app.request.uri %}
+{% extends 'OroIntegrationBundle:Integration:update.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% block content_data %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        require(['oroui/js/mediator', 'oroui/js/widget-manager'],
+        function(mediator, widgetManager) {
+            widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function (widget) {
+                mediator.on('integrationFormReload:after', function(event) {
+                    // @TODO run content widget decorators here
+                    widget._onContentLoad(event.loadedContent);
+                });
+            });
+        });
+    </script>
+{% endblock content_data %}
