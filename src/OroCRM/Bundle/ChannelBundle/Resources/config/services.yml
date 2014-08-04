@@ -95,6 +95,7 @@ services:
             - @orocrm_channel.provider.settings_provider
             - @oro_entity.entity_provider
             - @oro_entity_config.config_manager
+            - @router
 
     # config resolver
     orocrm_channel.provider.channel_entity_exclusion_provider:
