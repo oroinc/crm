@@ -102,6 +102,8 @@ class DatasourceDataTransformerTest extends \PHPUnit_Framework_TestCase
      */
     public function reverseTransformDataProvider()
     {
+        $integration = new Integration();
+
         return [
             'should return null if empty data given'          => [
                 '$data'           => null,
@@ -131,6 +133,17 @@ class DatasourceDataTransformerTest extends \PHPUnit_Framework_TestCase
                     'name' => self::TEST_NAME,
                     'type' => self::TEST_TYPE
                 ],
+                '$expectedSubmit' => true,
+            ],
+            'should bind on data that comes form setData'     => [
+                '$data'           => [
+                    'data'       => [
+                        'name' => self::TEST_NAME,
+                        'type' => self::TEST_TYPE
+                    ],
+                    'identifier' => $integration
+                ],
+                '$expectedResult' => $integration,
                 '$expectedSubmit' => true,
             ]
         ];
