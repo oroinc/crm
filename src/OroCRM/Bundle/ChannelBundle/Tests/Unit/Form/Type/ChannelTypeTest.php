@@ -52,7 +52,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
             ->method('addEventSubscriber')
             ->with($this->channelTypeSubscriber);
 
-        $this->builder->expects($this->exactly(6))->method('add')
+        $this->builder->expects($this->exactly(7))->method('add')
             ->will(
                 $this->returnCallback(
                     function ($filedName, $fieldType) use (&$fields) {
@@ -70,7 +70,8 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
                 'integrations'     => 'genemu_jqueryselect2_entity',
                 'dataSource'       => 'oro_integration_select',
                 'customerIdentity' => 'orocrm_channel_customer_identity_select_form',
-                'entities'         => 'orocrm_channel_entity_choice_form'
+                'entities'         => 'orocrm_channel_entity_choice_form',
+                'channelType'      => 'genemu_jqueryselect2_choice'
             ],
             $fields
         );
