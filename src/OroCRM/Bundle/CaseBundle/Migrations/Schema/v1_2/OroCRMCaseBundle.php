@@ -33,5 +33,15 @@ class OroCRMCaseBundle implements Migration
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
+
+        $table = $schema->getTable('orocrm_case_comment');
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addIndex(['organization_id'], 'IDX_604C70FB32C8A3DE', []);
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
     }
 }

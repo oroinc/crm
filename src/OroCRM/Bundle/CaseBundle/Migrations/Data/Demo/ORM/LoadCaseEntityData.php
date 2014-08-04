@@ -180,6 +180,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
         $commentsCount = rand(self::MIN_COMMENTS_PER_CASE, self::MAX_COMMENTS_PER_CASE);
         for ($i = 0; $i < $commentsCount; ++$i) {
             $comment = $this->createComment($this->getRandomText());
+            $comment->setOrganization($this->organization);
             $case->addComment($comment);
         }
 

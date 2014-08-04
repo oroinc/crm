@@ -11,8 +11,9 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory;
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 
 class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -36,6 +37,11 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
 
     /** @var  EntityManager */
     protected $em;
+
+    /**
+     * @var Organization
+     */
+    protected $organization;
 
     /**
      * {@inheritdoc}
@@ -62,6 +68,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $manager)
     {
+        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
         $this->initSupportingEntities();
         $this->loadUsersTags();
     }
@@ -122,7 +129,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
         foreach ($this->users as $user) {
             $securityContext = $this->container->get('security.context');
 
-            $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
+            $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
 
             $securityContext->setToken($token);
             foreach ($params as $param) {
