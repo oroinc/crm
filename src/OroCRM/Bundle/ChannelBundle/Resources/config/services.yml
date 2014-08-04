@@ -44,6 +44,9 @@ services:
 
     orocrm_channel.form.type.channel_datasource:
         class: %orocrm_channel.form.type.channel_datasource.class%
+        arguments:
+            - @doctrine
+            - %oro_integration.entity.class%
         tags:
             - { name: form.type, alias: orocrm_channel_datasource_form }
 

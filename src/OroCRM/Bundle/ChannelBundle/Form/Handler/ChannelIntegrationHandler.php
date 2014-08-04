@@ -12,6 +12,8 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 class ChannelIntegrationHandler
 {
+    const DATA_PARAM_NAME = 'data';
+
     /** @var Request */
     protected $request;
 
@@ -37,10 +39,14 @@ class ChannelIntegrationHandler
     {
         $this->form->setData($integration);
 
+        $data = $this->request->get(self::DATA_PARAM_NAME, false);
         if ('POST' === $this->request->getMethod()) {
             $this->form->submit($this->request);
 
             return (!$this->request->get(ChannelHandler::UPDATE_MARKER, false) && $this->form->isValid());
+        } elseif ('GET' === $this->request->getMethod() && $data) {
+            $this->request->query->set(ChannelHandler::UPDATE_MARKER, true);
+            $this->form->submit($data);
         }
 
         return false;

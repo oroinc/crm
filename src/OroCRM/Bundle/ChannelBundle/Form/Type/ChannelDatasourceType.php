@@ -3,11 +3,34 @@
 namespace OroCRM\Bundle\ChannelBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+use Oro\Bundle\FormBundle\Form\DataTransformer\EntityToIdTransformer;
+use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
+
+use OroCRM\Bundle\ChannelBundle\Form\DataTransformer\DatasourceDataTransformer;
 
 class ChannelDatasourceType extends AbstractType
 {
     const NAME = 'orocrm_channel_datasource_form';
+
+    /** @var ManagerRegistry */
+    protected $registry;
+
+    /** @var string */
+    protected $integrationEntityFQCN;
+
+    /**
+     * @param ManagerRegistry $registry
+     * @param string          $integrationEntityFQCN
+     */
+    public function __construct(ManagerRegistry $registry, $integrationEntityFQCN)
+    {
+        $this->registry              = $registry;
+        $this->integrationEntityFQCN = $integrationEntityFQCN;
+    }
 
     /**
      * {@inheritdoc}
@@ -20,9 +43,21 @@ class ChannelDatasourceType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        return 'hidden';
+        $em          = $this->registry->getManagerForClass($this->integrationEntityFQCN);
+        $formFactory = $builder->getFormFactory();
+
+        $data = $builder->create('data', 'hidden');
+        $data->addViewTransformer(new ArrayToJsonTransformer());
+        $identifier = $builder->create('identifier', 'hidden');
+        $identifier->addViewTransformer(new EntityToIdTransformer($em, $this->integrationEntityFQCN));
+        $builder->addViewTransformer(new DatasourceDataTransformer($formFactory));
+
+        $builder->add($data);
+        $builder->add($identifier);
+        $builder->add('type', 'hidden', ['data' => $options['channelType']]);
+        $builder->add('name', 'hidden');
     }
 
     /**
@@ -30,6 +65,6 @@ class ChannelDatasourceType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(['data' => json_encode(['type' => 'magento'])]);
+        $resolver->setRequired(['channelType']);
     }
 }

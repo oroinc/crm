@@ -11,40 +11,51 @@ define(['underscore', 'backbone', 'orotranslation/js/translator', 'routing', 'or
          */
         return Backbone.View.extend({
             /**
-             * @type {jQuery|null}
+             * @type {jQuery}
              */
-            $valueEl: null,
+            $dataEl: null,
+
+            /**
+             * @type {jQuery}
+             */
+            $idEl: null,
+
+            /**
+             * @type {jQuery}
+             */
+            $typeEl: null,
+
+            /**
+             * @type {jQuery}
+             */
+            $nameEl: null,
 
             /**
              * @type {function(object):string} linkTemplate
              */
-            linkTemplate: _.template('<a href="#" class="no-hash" data-role="open-form-widget"><%= title %></a>'),
-
-            /**
-             * @type {Object|null}
-             * {
-             *    id: {number?},
-             *    data: {Object.<string, *>?}
-             * }
-             */
-            parsedValue: null,
+            linkTemplate: _.template('<a href="#" class="no-hash open-form-widget"><%= title %></a>'),
 
             /**
              * @type {Object.<string, *>}
              */
             events: {
-                'click [data-role="open-form-widget"]': 'openDialog'
+                'click .open-form-widget': 'openDialog'
             },
 
             /**
-             * @param {{valueEl: string}} options
+             * Initialize.
+             *
+             * @param {Object} options
              */
             initialize: function (options) {
-                if (!options.valueEl) {
-                    throw new TypeError('"valueEl" is required option for IntegrationWidgetHandlerView');
+                if (!(options.dataEl && options.idEl && options.typeEl && options.nameEl)) {
+                    throw new TypeError('Missing required options for IntegrationWidgetHandlerView');
                 }
 
-                this.$valueEl = $(options.valueEl);
+                this.$dataEl = $(options.dataEl);
+                this.$idEl   = $(options.idEl);
+                this.$typeEl = $(options.typeEl);
+                this.$nameEl = $(options.nameEl);
             },
 
             /**
@@ -68,8 +79,12 @@ define(['underscore', 'backbone', 'orotranslation/js/translator', 'routing', 'or
                 });
 
                 var processFormSave = function (data) {
+                    data = _.omit(data, ['_token']);
+
+                    this._setValue('name', data.name || '');
                     this._setValue('data', data);
                     formDialog.remove();
+                    this.render();
                 };
 
                 formDialog.on('formSave', _.bind(processFormSave, this));
@@ -112,42 +127,68 @@ define(['underscore', 'backbone', 'orotranslation/js/translator', 'routing', 'or
              * @returns {string}
              * @private
              */
-            _getTitle: function() {
-                var entityId = this._getValue('id'),
-                    name = this._getValue('integrationName');
+            _getTitle: function () {
+                var name = this._getValue('name');
 
-                return entityId ? name : __('Create integration');
+                return name ? name : __('Create integration');
             },
 
             /**
-             * Get value by key from valueEl
+             * Get value by key
              *
              * @param {string?} key
              * @returns {*}
              * @private
              */
             _getValue: function (key) {
-                if (null === this.parsedValue) {
-                    var value = this.$valueEl.val();
-                    this.parsedValue = value !== '' ? JSON.parse(value) : {};
+                this._assertAllowedValueKey(key);
+
+                var preparedData,
+                    data =this[['$', key, 'El'].join('')].val();
+
+                switch (key) {
+                    case 'data':
+                        preparedData = data !== '' ? JSON.parse(data) : {};
+                        break;
+                    default:
+                        preparedData = data;
                 }
 
-                return key ? this.parsedValue[key] : this.parsedValue;
+                return preparedData;
             },
 
             /**
-             * Set value to valueEl
+             * Set value by key
              *
              * @param {string}key
              * @param {*} data
              * @private
              */
             _setValue: function (key, data) {
-                var currentData = this._getValue();
-                currentData[key] = data;
+                var preparedData;
 
-                this.$valueEl.val(JSON.stringify(currentData));
-                this.parsedValue = null;
+                this._assertAllowedValueKey(key);
+                switch (key) {
+                    case 'data':
+                        preparedData = JSON.stringify(data);
+                        break;
+                    default:
+                        preparedData = data;
+                }
+
+                this[['$', key, 'El'].join('')].val(preparedData);
+            },
+
+            /**
+             * Checks whether data key is supported
+             *
+             * @param {string}key
+             * @private
+             */
+            _assertAllowedValueKey: function (key) {
+                if (['id', 'data', 'type', 'name'].indexOf(key) === -1) {
+                    throw new TypeError('Unknown option: ' + key);
+                }
             }
         });
     });

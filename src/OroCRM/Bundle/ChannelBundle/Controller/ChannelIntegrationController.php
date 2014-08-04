@@ -11,6 +11,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
+/**
+ * @Route("/integration")
+ */
 class ChannelIntegrationController extends Controller
 {
     /**

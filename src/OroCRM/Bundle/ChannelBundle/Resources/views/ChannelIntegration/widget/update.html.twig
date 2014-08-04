@@ -7,12 +7,12 @@
     {{ parent() }}
 
     <script type="text/javascript">
-        require(['oroui/js/mediator', 'oroui/js/widget-manager'],
-        function(mediator, widgetManager) {
+        require(['jquery', 'oroui/js/mediator', 'oroui/js/widget-manager'],
+        function($, mediator, widgetManager) {
             widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function (widget) {
-                mediator.on('integrationFormReload:after', function(event) {
-                    // @TODO run content widget decorators here
-                    widget._onContentLoad(event.loadedContent);
+                mediator.on('integrationFormReload:before', function(event) {
+                    event.reloadManually = false;
+                    widget.loadContent($.param(event.data), event.formEl.attr('method'));
                 });
             });
         });
