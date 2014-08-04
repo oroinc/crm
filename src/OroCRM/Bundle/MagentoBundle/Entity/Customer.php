@@ -272,7 +272,7 @@ class Customer extends ExtendCustomer
     /**
      * @param Website $website
      *
-     * @return $this
+     * @return Customer
      */
     public function setWebsite(Website $website)
     {
@@ -300,7 +300,7 @@ class Customer extends ExtendCustomer
     /**
      * @param Store $store
      *
-     * @return $this
+     * @return Customer
      */
     public function setStore(Store $store)
     {
@@ -328,7 +328,7 @@ class Customer extends ExtendCustomer
     /**
      * @param CustomerGroup $group
      *
-     * @return $this
+     * @return Customer
      */
     public function setGroup(CustomerGroup $group)
     {
@@ -348,7 +348,7 @@ class Customer extends ExtendCustomer
     /**
      * @param Contact $contact
      *
-     * @return $this
+     * @return Customer
      */
     public function setContact($contact)
     {
@@ -368,7 +368,7 @@ class Customer extends ExtendCustomer
     /**
      * @param Account $account
      *
-     * @return $this
+     * @return Customer
      */
     public function setAccount($account)
     {
@@ -388,7 +388,7 @@ class Customer extends ExtendCustomer
     /**
      * @param float $vat
      *
-     * @return $this
+     * @return Customer
      */
     public function setVat($vat)
     {
@@ -408,7 +408,7 @@ class Customer extends ExtendCustomer
     /**
      * @param bool $isActive
      *
-     * @return $this
+     * @return Customer
      */
     public function setIsActive($isActive)
     {
@@ -466,7 +466,7 @@ class Customer extends ExtendCustomer
     /**
      * @param double $lifetime
      *
-     * @return $this
+     * @return Customer
      */
     public function setLifetime($lifetime)
     {
@@ -486,7 +486,7 @@ class Customer extends ExtendCustomer
     /**
      * @param string $currency
      *
-     * @return $this
+     * @return Customer
      */
     public function setCurrency($currency)
     {
@@ -507,7 +507,7 @@ class Customer extends ExtendCustomer
      * Add address
      *
      * @param AbstractAddress $address
-     * @return $this
+     * @return Customer
      */
     public function addAddress(AbstractAddress $address)
     {

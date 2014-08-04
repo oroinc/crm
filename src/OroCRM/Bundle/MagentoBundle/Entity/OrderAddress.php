@@ -82,7 +82,7 @@ class OrderAddress extends ExtendOrderAddress
     /**
      * @param Order $owner
      *
-     * @return $this
+     * @return OrderAddress
      */
     public function setOwner(Order $owner)
     {
@@ -102,7 +102,7 @@ class OrderAddress extends ExtendOrderAddress
     /**
      * @param string $fax
      *
-     * @return $this
+     * @return OrderAddress
      */
     public function setFax($fax)
     {
@@ -122,7 +122,7 @@ class OrderAddress extends ExtendOrderAddress
     /**
      * @param string $phone
      *
-     * @return $this
+     * @return OrderAddress
      */
     public function setPhone($phone)
     {

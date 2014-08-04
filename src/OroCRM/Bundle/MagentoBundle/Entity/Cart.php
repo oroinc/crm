@@ -466,7 +466,7 @@ class Cart extends ExtendCart
     /**
      * @param CartAddress $shippingAddress
      *
-     * @return $this
+     * @return Cart
      */
     public function setShippingAddress(CartAddress $shippingAddress = null)
     {
@@ -478,7 +478,7 @@ class Cart extends ExtendCart
     /**
      * @param CartAddress $billingAddress
      *
-     * @return $this
+     * @return Cart
      */
     public function setBillingAddress(CartAddress $billingAddress = null)
     {

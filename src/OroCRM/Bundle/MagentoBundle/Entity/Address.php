@@ -222,7 +222,7 @@ class Address extends ExtendAddress
      * Set address created date/time
      *
      * @param \DateTime $created
-     * @return $this|AbstractAddress
+     * @return Address|AbstractAddress
      */
     public function setCreated($created)
     {
@@ -245,7 +245,7 @@ class Address extends ExtendAddress
      * Set address updated date/time
      *
      * @param \DateTime $updated
-     * @return $this|AbstractAddress
+     * @return Address|AbstractAddress
      */
     public function setUpdated($updated)
     {
