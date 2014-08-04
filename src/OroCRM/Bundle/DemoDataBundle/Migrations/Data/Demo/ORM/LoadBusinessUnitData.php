@@ -48,8 +48,6 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
     {
         /** @var Organization $organization */
         $organization = $this->organizationRepository->getFirst();
-        $organization->setName('Acme, Inc');
-        $this->persist($this->organizationManager, $organization);
 
         $this->addReference('default_organization', $organization);
 
@@ -80,7 +78,6 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
         $oroUnit
             ->setName('Acme, West')
             ->setWebsite('http://www.orocrm.com')
-            ->setOrganization($organization)
             ->setEmail('west@acme.inc')
             ->setPhone('798-682-5918')
             ->setOwner($oroMain);
@@ -91,7 +88,6 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
         $mageCoreUnit
             ->setName('Acme, East')
             ->setWebsite('http://www.magecore.com/')
-            ->setOrganization($organization)
             ->setEmail('east@acme.inc')
             ->setPhone('798-682-5919')
             ->setOwner($oroMain);
