@@ -752,13 +752,13 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_customer'),
             ['customer_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_store'),
             ['store_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_cart'),
@@ -770,25 +770,25 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('oro_workflow_item'),
             ['workflow_item_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_workflow_step'),
             ['workflow_step_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
             ['user_owner_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
     }
 
@@ -804,13 +804,13 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_order'),
             ['order_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_call'),
             ['call_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
     }
 
@@ -826,13 +826,13 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_order'),
             ['order_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_email'),
             ['email_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
     }
 
@@ -848,7 +848,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
     }
 
@@ -864,43 +864,43 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_website'),
             ['website_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_store'),
             ['store_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_customer_group'),
             ['customer_group_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_contact'),
             ['contact_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_account'),
             ['account_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
             ['user_owner_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
     }
 
@@ -916,7 +916,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_cart'),
             ['cart_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
     }
 
@@ -932,19 +932,19 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_customer'),
             ['owner_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_contact_address'),
             ['related_contact_address_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_contact_phone'),
             ['related_contact_phone_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_dictionary_country'),
@@ -972,7 +972,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_customer_addr'),
             ['customer_address_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_address_type'),
@@ -994,7 +994,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_order'),
             ['owner_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_dictionary_country'),
@@ -1022,7 +1022,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_order_address'),
             ['order_address_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_address_type'),
@@ -1044,7 +1044,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
     }
 
@@ -1060,13 +1060,13 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_product'),
             ['product_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_website'),
             ['website_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
     }
 
@@ -1082,7 +1082,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
     }
 
@@ -1098,61 +1098,61 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_customer'),
             ['customer_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_store'),
             ['store_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_cart_address'),
             ['shipping_address_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_cart_address'),
             ['billing_address_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_cart_status'),
             ['status_name'],
             ['name'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_sales_opportunity'),
             ['opportunity_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_workflow_item'),
             ['workflow_item_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_workflow_step'),
             ['workflow_step_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
             ['user_owner_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
     }
 
@@ -1168,13 +1168,13 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_cart'),
             ['cart_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_call'),
             ['call_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
     }
 
@@ -1190,13 +1190,13 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_cart'),
             ['cart_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_email'),
             ['email_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
     }
 
@@ -1212,13 +1212,13 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_website'),
             ['website_id'],
             ['id'],
-            ['onDelete' => 'cascade',]
+            ['onDelete' => 'cascade']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
             ['id'],
-            ['onDelete' => 'SET NULL',]
+            ['onDelete' => 'SET NULL']
         );
     }
 
@@ -1234,7 +1234,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_order'),
             ['order_id'],
             ['id'],
-            ['onDelete' => 'CASCADE',]
+            ['onDelete' => 'CASCADE']
         );
     }
 }
