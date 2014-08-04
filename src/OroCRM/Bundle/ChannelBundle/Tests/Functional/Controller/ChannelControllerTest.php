@@ -90,6 +90,23 @@ class ChannelControllerTest extends WebTestCase
      *
      * @param $channel
      */
+    public function testChangeStatusChannel($channel)
+    {
+        $crawler = $this->client->request(
+            'GET',
+            $this->getUrl('orocrm_channel_change_status', ['status' => 'deactive', 'id' => $channel['id']])
+        );
+
+        $this->client->getResponse();
+        $this->assertContains('Channel inactivated', $crawler->html());
+        return $channel;
+    }
+
+    /**
+     * @depends testChangeStatusChannel
+     *
+     * @param $channel
+     */
     public function testDeleteChannel($channel)
     {
         $this->client->request(

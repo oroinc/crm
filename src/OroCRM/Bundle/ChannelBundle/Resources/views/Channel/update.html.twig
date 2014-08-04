@@ -25,6 +25,25 @@
 {% endblock pageHeader %}
 
 {% block navButtons %}
+    {% if entity.id %}
+        {% if entity.status %}
+            {{ UI.button({
+            'aCss':  'btn-danger',
+            'iCss':  'icon-remove',
+            'label': 'orocrm.channel.button.deactivate.label',
+            'path':  path('orocrm_channel_change_status', {'id' : entity.id, 'status' : 'deactive'}),
+            'title': 'orocrm.channel.button.deactivate.label',
+            }) }}
+        {% else %}
+            {{ UI.button({
+            'aCss':  'btn-success',
+            'iCss':  'icon-ok',
+            'label': 'orocrm.channel.button.activate.label',
+            'path':  path('orocrm_channel_change_status', {'id' : entity.id, 'status' : 'active'}),
+            'title': 'orocrm.channel.button.activate.label',
+            }) }}
+        {% endif %}
+    {% endif %}
 
     {% if entity.id and resource_granted('DELETE', entity) %}
         {{ UI.deleteButton({
@@ -67,3 +86,16 @@
 
     {{ parent() }}
 {% endblock %}
+
+{% block breadcrumbs %}
+    {{ parent() }}
+    <div class="pull-left">
+        {% if entity.status %}
+            <div class="badge badge-enabled status-enabled">
+                <i class="icon-status-enabled icon-circle"></i>{{ 'orocrm.channel.active.label'|trans }}</div>
+        {% else %}
+            <div class="badge badge-disabled status-disabled">
+                <i class="icon-status-disabled icon-circle"></i>{{ 'orocrm.channel.inactive.label'|trans }}</div>
+        {% endif %}
+    </div>
+{% endblock breadcrumbs %}
