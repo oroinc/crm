@@ -277,10 +277,10 @@ class OroCRMMagentoBundle implements Migration
         $table->addColumn('created_at', 'datetime', []);
         $table->addColumn('updated_at', 'datetime', []);
         $table->addColumn('is_active', 'boolean', []);
-        $table->addColumn('vat', 'float', ['notnull' => false]);
+        $table->addColumn('vat', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'unsigned' => true]);
         $table->setPrimaryKey(['id']);
-        $table->addUniqueIndex(['origin_id', 'channel_id'], 'magecustomer_oid_cid_unq');
+        $table->addUniqueIndex(['origin_id', 'channel_id'], 'unq_origin_id_channel_id');
         $table->addIndex(['website_id'], 'IDX_2A61EE7D18F45C82', []);
         $table->addIndex(['store_id'], 'IDX_2A61EE7DB092A811', []);
         $table->addIndex(['customer_group_id'], 'IDX_2A61EE7DD2919A68', []);
