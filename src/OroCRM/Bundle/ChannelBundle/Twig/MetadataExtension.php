@@ -36,7 +36,7 @@ class MetadataExtension extends \Twig_Extension
      */
     public function getListOfIntegrationEntities()
     {
-        $this->metaDataProvider->getMetadataList();
+        return $this->metaDataProvider->getMetadataList();
     }
 
     /**

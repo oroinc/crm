@@ -30,8 +30,8 @@ class MetadataProvider implements MetadataInterface
         $result = [];
 
         foreach ($this->settings->getSettings(SettingsProvider::DATA_PATH) as $setting) {
-            if (!empty($setting['belongs_to_integration'])) {
-                $result[$setting['belongs_to_integration']][] = $this->entityProvider
+            if (!empty($setting['belongs_to']['integration'])) {
+                $result[$setting['belongs_to']['integration']][] = $this->entityProvider
                     ->getEntity($setting['name'], true);
             }
         }

@@ -27,6 +27,9 @@ parameters:
     orocrm_channel.event_listener.navigation.class:                    OroCRM\Bundle\ChannelBundle\EventListener\NavigationListener
     orocrm_channel.form.subscriber.channel_subscriber.class:           OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
 
+    #twig
+    orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
+
 services:
     # forms
     orocrm_channel.form.type.channel:
@@ -137,3 +140,11 @@ services:
 
     orocrm_channel.form.subscriber.channel_subscriber:
         class: %orocrm_channel.form.subscriber.channel_subscriber.class%
+
+    #twig
+    orocrm_channel.twig.metadata_extension:
+        class: %orocrm_channel.twig.metadata_extension.class%
+        arguments:
+            - @orocrm_channel.provider.metadata_provider
+        tags:
+            - { name: twig.extension }
