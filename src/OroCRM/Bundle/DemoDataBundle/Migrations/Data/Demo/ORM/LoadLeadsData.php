@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 use Oro\Bundle\WorkflowBundle\Model\Workflow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -13,6 +12,7 @@ use Doctrine\Common\Collections\Collection;
 
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
@@ -167,7 +167,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     protected function setSecurityContext($user)
     {
         $securityContext = $this->container->get('security.context');
-        $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
+        $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
         $securityContext->setToken($token);
     }
     /**

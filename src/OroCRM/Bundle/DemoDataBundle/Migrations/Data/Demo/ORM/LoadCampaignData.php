@@ -8,10 +8,10 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 
@@ -128,7 +128,7 @@ class LoadCampaignData extends AbstractFixture implements ContainerAwareInterfac
     protected function setSecurityContext($user)
     {
         $securityContext = $this->container->get('security.context');
-        $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
+        $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
         $securityContext->setToken($token);
     }
 }

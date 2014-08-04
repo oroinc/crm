@@ -6,7 +6,6 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -14,6 +13,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -111,7 +111,7 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
     protected function setSecurityContext($user)
     {
         $securityContext = $this->container->get('security.context');
-        $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
+        $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
         $securityContext->setToken($token);
     }
 

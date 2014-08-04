@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -13,6 +12,7 @@ use Doctrine\Common\Collections\Collection;
 
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
@@ -24,6 +24,7 @@ use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
 use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
@@ -58,6 +59,11 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     protected $configManager;
 
     /**
+     * @var Organization
+     */
+    protected $organization;
+
+    /**
      * {@inheritDoc}
      */
     public function setContainer(ContainerInterface $container = null)
@@ -72,6 +78,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
      */
     public function load(ObjectManager $manager)
     {
+        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
         $this->initSupportingEntities($manager);
         $this->loadLeads();
         $this->loadSources();
@@ -226,7 +233,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     protected function setSecurityContext($user)
     {
         $securityContext = $this->container->get('security.context');
-        $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
+        $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
         $securityContext->setToken($token);
     }
     /**
