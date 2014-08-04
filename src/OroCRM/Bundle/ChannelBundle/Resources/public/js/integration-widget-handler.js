@@ -33,7 +33,13 @@ define(['underscore', 'backbone', 'orotranslation/js/translator', 'routing', 'or
             /**
              * @type {function(object):string} linkTemplate
              */
-            linkTemplate: _.template('<a href="#" class="no-hash open-form-widget"><%= title %></a>'),
+            linkTemplate: _.template(
+                '<% if (name) {%>' +
+                    ' <%= name %> (<a href="#" class="no-hash open-form-widget"><%= title %></a>)' +
+                '<% } else { %>' +
+                    '<a href="#" class="no-hash open-form-widget"><%= title %></a>' +
+                '<% } %>'
+            ),
 
             /**
              * @type {Object.<string, *>}
@@ -91,8 +97,17 @@ define(['underscore', 'backbone', 'orotranslation/js/translator', 'routing', 'or
                 formDialog.render();
             },
 
+            /**
+             * {@inheritDoc}
+             */
             render: function () {
-                this.$el.html(this.linkTemplate({title: this._getTitle()}))
+                var name = this._getValue('name'),
+                    templateContext = {
+                    name: name ,
+                    title: name ? __('configure') : __('Configure integration')
+                };
+
+                this.$el.html(this.linkTemplate(templateContext))
             },
 
             /**
@@ -130,7 +145,7 @@ define(['underscore', 'backbone', 'orotranslation/js/translator', 'routing', 'or
             _getTitle: function () {
                 var name = this._getValue('name');
 
-                return name ? name : __('Create integration');
+                return name ? name : __('Configure integration');
             },
 
             /**
