@@ -2,13 +2,13 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Form\Handler;
 
-use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use Oro\Bundle\IntegrationBundle\Form\Handler\ChannelHandler;
+use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Form\Handler\ChannelHandler as IntegrationChannelHandler;
 
 class ChannelIntegrationHandler
 {
@@ -43,9 +43,9 @@ class ChannelIntegrationHandler
         if ('POST' === $this->request->getMethod()) {
             $this->form->submit($this->request);
 
-            return (!$this->request->get(ChannelHandler::UPDATE_MARKER, false) && $this->form->isValid());
+            return (!$this->request->get(IntegrationChannelHandler::UPDATE_MARKER, false) && $this->form->isValid());
         } elseif ('GET' === $this->request->getMethod() && $data) {
-            $this->request->query->set(ChannelHandler::UPDATE_MARKER, true);
+            $this->request->query->set(IntegrationChannelHandler::UPDATE_MARKER, true);
             $this->form->submit($data);
         }
 
@@ -69,7 +69,7 @@ class ChannelIntegrationHandler
      */
     public function getFormView()
     {
-        $isUpdateOnly = $this->request->get(ChannelHandler::UPDATE_MARKER, false);
+        $isUpdateOnly = $this->request->get(IntegrationChannelHandler::UPDATE_MARKER, false);
 
         $form = $this->form;
         if ($isUpdateOnly) {
