@@ -8,8 +8,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
 
 class ChannelController extends Controller
 {
@@ -82,5 +84,30 @@ class ChannelController extends Controller
             'entity' => $channel,
             'form'   => $this->get('orocrm_channel.form.channel')->createView(),
         ];
+    }
+
+    /**
+     * @Route("/status/change/{id}", requirements={"id"="\d+"}, name="orocrm_channel_change_status")
+     * @AclAncestor("orocrm_channel_update")
+     */
+    public function changeStatusAction(Channel $channel)
+    {
+        if ($channel->getStatus() == Channel::STATUS_ACTIVE) {
+            $message = 'orocrm.channel.controller.message.status.deactivated';
+            $channel->setStatus($channel::STATUS_INACTIVE);
+        } else {
+            $message = 'orocrm.channel.controller.message.status.activated';
+            $channel->setStatus($channel::STATUS_ACTIVE);
+        }
+
+        $this->getDoctrine()
+            ->getManager()
+            ->flush();
+
+        $event = new ChannelChangeStatusEvent($channel);
+        $this->get('event_dispatcher')->dispatch(ChannelChangeStatusEvent::EVENT_NAME, $event);
+        $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($message));
+
+        return $this->redirect($this->generateUrl('orocrm_channel_update', ['id' => $channel->getId()]));
     }
 }

@@ -81,11 +81,30 @@ class ChannelControllerTest extends WebTestCase
         $this->assertContains('Channel saved', $crawler->html());
 
         $channel['name'] = $name;
+
         return $channel;
     }
 
     /**
      * @depends testUpdateChannel
+     *
+     * @param $channel
+     */
+    public function testChangeStatusChannel($channel)
+    {
+        $crawler = $this->client->request(
+            'GET',
+            $this->getUrl('orocrm_channel_change_status', ['id' => $channel['id']])
+        );
+
+        $this->client->getResponse();
+        $this->assertContains('Channel activated', $crawler->html());
+
+        return $channel;
+    }
+
+    /**
+     * @depends testChangeStatusChannel
      *
      * @param $channel
      */
@@ -97,7 +116,7 @@ class ChannelControllerTest extends WebTestCase
         );
 
         $response = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($response, 204);
+        $this->assertResponseStatusCodeEquals($response, 204);
 
         $response = $this->client->requestGrid(
             self::GRID_NAME,
