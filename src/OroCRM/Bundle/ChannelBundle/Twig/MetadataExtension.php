@@ -41,11 +41,13 @@ class MetadataExtension extends \Twig_Extension
     }
 
     /**
+     * @param string $type
+     *
      * @return array
      */
-    public function getMetadataByIntegrationType()
+    public function getMetadataByIntegrationType($type)
     {
-        return $this->metaDataProvider->getMetadataByIntegrationType('magento');
+        return $this->metaDataProvider->getMetadataByIntegrationType($type);
     }
 
     /**
