@@ -73,14 +73,19 @@ class SoapTransportSettingFormType extends AbstractType
                 'empty_data' => new \DateTime('2007-01-01', new \DateTimeZone('UTC'))
             ]
         );
-        $builder->add('check', 'button', ['label' => 'Check connection']);
+        $builder->add(
+            'check',
+            'orocrm_magento_soap_transport_check_button',
+            [
+                'label' => 'orocrm.magento.magentosoaptransport.check_connection.label'
+            ]
+        );
         $builder->add(
             'websiteId',
-            'choice',
+            'orocrm_magento_website_select',
             [
                 'label'    => 'orocrm.magento.magentosoaptransport.website_id.label',
-                'required' => true,
-                'tooltip'  => 'orocrm.magento.magentosoaptransport.website_id.tooltip',
+                'required' => true
             ]
         );
         $builder->add(
