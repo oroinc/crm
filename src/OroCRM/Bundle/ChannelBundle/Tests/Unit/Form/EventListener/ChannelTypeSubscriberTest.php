@@ -91,7 +91,7 @@ class ChannelTypeSubscriberTest extends \PHPUnit_Framework_TestCase
         $channel->expects($this->any())->method('getId')
             ->will($this->returnValue(123));
 
-        $ChoiceListItem1 = new ChoiceListItem(
+        $choiceListItem1 = new ChoiceListItem(
             'test Entity1',
             [
                 'data-label'        => 'test Entity1',
@@ -100,7 +100,7 @@ class ChannelTypeSubscriberTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $ChoiceListItem2 = new ChoiceListItem(
+        $choiceListItem2 = new ChoiceListItem(
             'test Entity2',
             [
                 'data-label'        => 'test Entity2',
@@ -110,8 +110,8 @@ class ChannelTypeSubscriberTest extends \PHPUnit_Framework_TestCase
         );
 
         $entityChoices = [
-            'OroCRM\Bundle\AcmeBundle\Entity\Test1' => $ChoiceListItem1,
-            'OroCRM\Bundle\AcmeBundle\Entity\Test2' => $ChoiceListItem2,
+            'OroCRM\Bundle\AcmeBundle\Entity\Test1' => $choiceListItem1,
+            'OroCRM\Bundle\AcmeBundle\Entity\Test2' => $choiceListItem2,
         ];
 
         return [
