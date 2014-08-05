@@ -13,7 +13,7 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 class ChannelGridTest extends WebTestCase
 {
     const CHANNEL_NAME = 'some name';
-    const GRID_NAME    = 'channels-grid';
+    const GRID_NAME    = 'orocrm-channels-grid';
 
     /** @var Channel */
     public static $channel;
@@ -66,7 +66,6 @@ class ChannelGridTest extends WebTestCase
                     'gridFilters'         => [],
                     'assert'              => [
                         'name'        => self::CHANNEL_NAME,
-                        'description' => 'some description',
                     ],
                     'expectedResultCount' => 1
                 ],
@@ -81,7 +80,6 @@ class ChannelGridTest extends WebTestCase
                     ],
                     'assert'              => [
                         'name'        => self::CHANNEL_NAME,
-                        'description' => 'some description',
                     ],
                     'expectedResultCount' => 0
                 ],

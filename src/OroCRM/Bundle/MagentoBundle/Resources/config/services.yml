@@ -9,10 +9,12 @@ parameters:
     # forms
     orocrm_magento.form.type.order_place.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\OrderPlaceType
     orocrm_magento.form.type.soap_transport_setting.class:                  OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
+    orocrm_magento.form.type.soap_transport_check.class:                    OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportCheckButtonType
     orocrm_magento.form.subscriber.soap_transport_setting.class:            OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
     orocrm_magento.form.type.order_select.class:                            OroCRM\Bundle\MagentoBundle\Form\Type\OrderSelectType
     orocrm_magento.form.type.customer_select.class:                         OroCRM\Bundle\MagentoBundle\Form\Type\CustomerSelectType
     orocrm_magento.form.type.cart_select.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\CartSelectType
+    orocrm_magento.form.type.website_select.class:                          OroCRM\Bundle\MagentoBundle\Form\Type\WebsiteSelectType
 
     # event listeners
     orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
@@ -81,6 +83,11 @@ services:
         tags:
             - { name: form.type, alias: orocrm_magento_soap_transport_setting_form_type }
 
+    orocrm_magento.form.type.soap_transport_check:
+        class: %orocrm_magento.form.type.soap_transport_check.class%
+        tags:
+            - { name: form.type, alias: orocrm_magento_soap_transport_check_button }
+
     orocrm_magento.form.type.order_select:
         class: %orocrm_magento.form.type.order_select.class%
         tags:
@@ -95,6 +102,11 @@ services:
         class: %orocrm_magento.form.type.cart_select.class%
         tags:
             - { name: form.type, alias: orocrm_cart_select }
+
+    orocrm_magento.form.type.website_select:
+        class: %orocrm_magento.form.type.website_select.class%
+        tags:
+            - { name: form.type, alias: orocrm_magento_website_select }
 
     orocrm_magento.form.type.order_place:
         class: %orocrm_magento.form.type.order_place.class%

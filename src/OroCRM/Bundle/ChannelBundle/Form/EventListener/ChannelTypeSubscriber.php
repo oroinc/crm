@@ -19,8 +19,8 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FormEvents::PRE_SET_DATA  => 'preSet',
-            FormEvents::PRE_SUBMIT    => 'preSubmit',
+            FormEvents::PRE_SET_DATA => 'preSet',
+            FormEvents::PRE_SUBMIT   => 'preSubmit',
         ];
     }
 
@@ -52,16 +52,17 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
     public function preSubmit(FormEvent $event)
     {
         $form = $event->getForm();
+        $data = $event->getData();
 
-        /** @var Channel $data */
-        $originalData = $form->getData();
+        if (!empty($data['customerIdentity'])) {
 
-        $selectedEntities = $originalData->getEntities();
-        $entityChoices    = $form->get('entities')->getConfig()->getOption('choices');
-        $choices          = array_intersect_key($entityChoices, array_flip($selectedEntities));
+            $selectedEntities = [$data['customerIdentity']];
+            $entityChoices    = $form->get('entities')->getConfig()->getOption('choices');
+            $choices          = array_intersect_key($entityChoices, array_flip($selectedEntities));
 
-        $customerIdentityModifier = $this->getCustomerIdentityModifierClosure($choices);
-        $customerIdentityModifier($form);
+            $customerIdentityModifier = $this->getCustomerIdentityModifierClosure($choices);
+            $customerIdentityModifier($form);
+        }
     }
 
     /**

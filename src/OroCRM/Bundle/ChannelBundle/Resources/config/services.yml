@@ -2,13 +2,15 @@ parameters:
     # entity
     orocrm_channel.entity.class:                                       OroCRM\Bundle\ChannelBundle\Entity\Channel
 
-    # handler
+    # handlers
     orocrm_channel.channel_form.handler.class:                         OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelHandler
+    orocrm_channel.channel_integration_form.handler.class:             OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler
 
     # forms
     orocrm_channel.form.type.channel.class:                            OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
     orocrm_channel.form.type.entity_choice.class:                      OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityChoiceType
     orocrm_channel.form.type.customer_identity.class:                  OroCRM\Bundle\ChannelBundle\Form\Type\ChannelCustomerIdentityType
+    orocrm_channel.form.type.channel_datasource.class:                 OroCRM\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType
 
     # manager
     orocrm_channel.manager.api.class:                                  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
@@ -52,12 +54,21 @@ services:
         tags:
             - { name: form.type, alias: orocrm_channel_customer_identity_select_form }
 
+    orocrm_channel.form.type.channel_datasource:
+        class: %orocrm_channel.form.type.channel_datasource.class%
+        arguments:
+            - @doctrine
+            - %oro_integration.entity.class%
+        tags:
+            - { name: form.type, alias: orocrm_channel_datasource_form }
+
     orocrm_channel.form.channel:
         class:                        Symfony\Component\Form\Form
         factory_method:               createNamed
         factory_service:              form.factory
         arguments:                    ["orocrm_channel_form", "orocrm_channel_form", null]
 
+    # handlers
     orocrm_channel.channel_form.handler:
         class: %orocrm_channel.channel_form.handler.class%
         scope: request
@@ -66,6 +77,13 @@ services:
             - @orocrm_channel.form.channel
             - @doctrine.orm.entity_manager
             - @event_dispatcher
+
+    orocrm_channel.channel_integration_form.handler:
+        class: %orocrm_channel.channel_integration_form.handler.class%
+        scope: request
+        arguments:
+            - @request
+            - @oro_integration.form.channel
 
     # Channel API
     orocrm_channel.channel.manager:

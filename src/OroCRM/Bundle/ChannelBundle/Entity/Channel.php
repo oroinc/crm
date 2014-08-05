@@ -30,8 +30,8 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
  */
 class Channel
 {
-    const STATUS_ENABLED = 1;
-    const STATUS_DISABLED = 0;
+    const STATUS_ACTIVE   = 1;
+    const STATUS_INACTIVE = 0;
 
     /**
      * @var integer
@@ -50,13 +50,6 @@ class Channel
     protected $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
-    protected $description;
-
-    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(
@@ -65,16 +58,6 @@ class Channel
      * )
      */
     protected $entities;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
-     * @ORM\JoinTable(
-     *      name="orocrm_chl_to_integration_chl",
-     *      joinColumns={@ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="integrations_id", referencedColumnName="id", onDelete="CASCADE")}
-     * )
-     **/
-    protected $integrations;
 
     /**
      * @var Organization
@@ -87,7 +70,7 @@ class Channel
     /**
      * @var Integration
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel", cascade={"all"})
      * @ORM\JoinColumn(name="data_source_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $dataSource;
@@ -115,9 +98,8 @@ class Channel
 
     public function __construct()
     {
-        $this->status       = self::STATUS_DISABLED;
+        $this->status       = self::STATUS_INACTIVE;
         $this->entities     = new ArrayCollection();
-        $this->integrations = new ArrayCollection();
     }
 
     /**
@@ -142,22 +124,6 @@ class Channel
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**
@@ -213,34 +179,6 @@ class Channel
     public function getEntitiesCollection()
     {
         return $this->entities;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getIntegrations()
-    {
-        return $this->integrations;
-    }
-
-    /**
-     * @param Integration $integration
-     */
-    public function addIntegration(Integration $integration)
-    {
-        if (!$this->getIntegrations()->contains($integration)) {
-            $this->getIntegrations()->add($integration);
-        }
-    }
-
-    /**
-     * @param Integration $integration
-     */
-    public function removeIntegration(Integration $integration)
-    {
-        if ($this->getIntegrations()->contains($integration)) {
-            $this->getIntegrations()->removeElement($integration);
-        }
     }
 
     /**

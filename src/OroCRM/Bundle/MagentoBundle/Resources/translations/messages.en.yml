@@ -229,6 +229,7 @@ orocrm:
             website_id.label:             Website
             websites.label:               Websites
             wsdl_url.label:               SOAP WSDL URL
+            check_connection.label:       Check connection
 
         order:
             entity_label:        Order
