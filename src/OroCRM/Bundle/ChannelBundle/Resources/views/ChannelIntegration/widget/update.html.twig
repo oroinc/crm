@@ -5,6 +5,10 @@
 
 {% block content_data %}
     {{ parent() }}
+    <div class="widget-actions">
+        <button type="reset" class="btn">{{ 'Cancel'|trans }}</button>
+        <button type="submit" class="btn btn-success">{{ 'Done'|trans }}</button>
+    </div>
 
     <script type="text/javascript">
         require(['jquery', 'oroui/js/mediator', 'oroui/js/widget-manager'],

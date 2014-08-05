@@ -55,9 +55,13 @@ class ChannelIntegrationHandler
     /**
      * @return string
      */
-    public function getFormName()
+    public function getFormSubmittedData()
     {
-        return $this->form->getConfig()->getName();
+        if ('POST' !== $this->request->getMethod()) {
+            throw new \LogicException('Unable to fetch submitted data, only POST request supported');
+        }
+
+        return $this->request->get($this->form->getName(), []);
     }
 
     /**
@@ -73,8 +77,9 @@ class ChannelIntegrationHandler
 
         $form = $this->form;
         if ($isUpdateOnly) {
-            $form = $this->form->getConfig()->getFormFactory()
-                ->createNamed('oro_integration_channel_form', 'oro_integration_channel_form', $form->getData());
+            $config = $this->form->getConfig();
+            $form   = $config->getFormFactory()
+                ->createNamed($this->form->getName(), $config->getType()->getName(), $form->getData());
         }
 
         $view = $form->createView();

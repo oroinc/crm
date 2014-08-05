@@ -50,7 +50,7 @@ class ChannelIntegrationController extends Controller
 
         $data = null;
         if ($handler->process($integration)) {
-            $data = $this->get('request')->request->get($handler->getFormName(), []);
+            $data = $handler->getFormSubmittedData();
         }
 
         return [
