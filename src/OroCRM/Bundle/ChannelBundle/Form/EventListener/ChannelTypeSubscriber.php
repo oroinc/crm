@@ -57,8 +57,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         if (!empty($data['customerIdentity'])) {
 
             $selectedEntities = [$data['customerIdentity']];
-            $entityChoices    = $form->get('entities')->getConfig()->getOption('choices');
-            $choices          = array_intersect_key($entityChoices, array_flip($selectedEntities));
+            $choices          = array_intersect($data['entities'], $selectedEntities);
 
             $customerIdentityModifier = $this->getCustomerIdentityModifierClosure($choices);
             $customerIdentityModifier($form);
