@@ -86,7 +86,7 @@ class RestLeadTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 204);
+        $this->assertResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
@@ -136,7 +136,7 @@ class RestLeadTest extends WebTestCase
             $this->getUrl('oro_api_delete_lead', array('id' => $request['id']))
         );
         $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 204);
+        $this->assertResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',

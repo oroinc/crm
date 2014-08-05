@@ -91,7 +91,7 @@ class RestCallsTest extends WebTestCase
         );
         $result = $this->client->getResponse();
 
-        $this->assertJsonResponseStatusCodeEquals($result, 204);
+        $this->assertResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
@@ -117,7 +117,7 @@ class RestCallsTest extends WebTestCase
             $this->getUrl('oro_api_delete_call', array('id' => $request['id']))
         );
         $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 204);
+        $this->assertResponseStatusCodeEquals($result, 204);
         $this->client->request(
             'GET',
             $this->getUrl('oro_api_get_call', array('id' => $request['id']))

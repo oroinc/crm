@@ -82,7 +82,7 @@ class RestContactGroupsApiTest extends WebTestCase
             $request
         );
         $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 204);
+        $this->assertResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
@@ -106,7 +106,7 @@ class RestContactGroupsApiTest extends WebTestCase
             $this->getUrl('oro_api_delete_contactgroup', array('id' => $group['id']))
         );
         $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 204);
+        $this->assertResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
