@@ -3,9 +3,7 @@
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Entity;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Entity\EntityName;
 
 class ChannelTest extends AbstractEntityTestCase
@@ -23,45 +21,21 @@ class ChannelTest extends AbstractEntityTestCase
      */
     public function getDataProvider()
     {
-        $name               = 'Some name';
-        $description        = 'Some description';
-        $owner              = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
-        $integration        = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
-        $customerIdentity   = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\EntityName', [], ['phone']);
-        $status             = true;
-        $channelType        = 'Custom';
+        $name             = 'Some name';
+        $owner            = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $integration      = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
+        $customerIdentity = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\EntityName', [], ['phone']);
+        $status           = true;
+        $channelType      = 'Custom';
 
         return [
-            'name'              => ['name', $name, $name],
-            'description'       => ['description', $description, $description],
-            'owner'             => ['owner', $owner, $owner],
-            'dataSource'        => ['dataSource', $integration, $integration],
-            'status'            => ['status', $status, $status],
-            'customerIdentity'  => ['customerIdentity', $customerIdentity, $customerIdentity],
-            'channelType'       => ['channelType', $channelType, $channelType]
+            'name'             => ['name', $name, $name],
+            'owner'            => ['owner', $owner, $owner],
+            'dataSource'       => ['dataSource', $integration, $integration],
+            'status'           => ['status', $status, $status],
+            'customerIdentity' => ['customerIdentity', $customerIdentity, $customerIdentity],
+            'channelType'      => ['channelType', $channelType, $channelType]
         ];
-    }
-
-    public function testAddRemoveIntegrations()
-    {
-        $integration = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
-        $collection  = new ArrayCollection();
-        $collection->add($integration);
-        $channel = new Channel();
-        $channel->addIntegration($integration);
-
-        $this->assertEquals(
-            $channel->getIntegrations(),
-            $collection
-        );
-
-        $collection->removeElement($integration);
-        $channel->removeIntegration($integration);
-
-        $this->assertEquals(
-            $channel->getIntegrations(),
-            $collection
-        );
     }
 
     /**

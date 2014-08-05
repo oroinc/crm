@@ -8,6 +8,8 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use Oro\Bundle\FormBundle\Utils\FormUtils;
+
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 use OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 
@@ -66,12 +68,11 @@ class ChannelType extends AbstractType
         );
         $builder->add(
             'dataSource',
-            'oro_integration_select',
+            'orocrm_channel_datasource_form',
             [
-                'required'      => false,
-                'allowed_types' => $this->settingsProvider->getSourceIntegrationTypes(),
-                'label'         => 'orocrm.channel.data_source.label',
-                'configs'       => ['placeholder' => 'orocrm.channel.form.select_data_source.label'],
+                'label'       => 'orocrm.channel.data_source.label',
+                'channelType' => 'magento',
+                'required'    => false,
             ]
         );
         $builder->add(
@@ -114,8 +115,7 @@ class ChannelType extends AbstractType
         if (isset($view->children['owner'], $view->children['owner']->vars['choices'])
             && count($view->children['owner']->vars['choices']) < 2
         ) {
-
-            $this->appendClassAttr($view->children['owner']->vars, 'hide');
+            FormUtils::appendClass($view->children['owner'], 'hide');
         }
     }
 
@@ -137,17 +137,5 @@ class ChannelType extends AbstractType
     public function getName()
     {
         return self::NAME;
-    }
-
-    /**
-     * @param array  $options
-     * @param string $cssClass
-     */
-    protected function appendClassAttr(array &$options, $cssClass)
-    {
-        $options['attr']          = isset($options['attr']) ? $options['attr'] : [];
-        $options['attr']['class'] = isset($options['attr']['class']) ? $options['attr']['class'] : '';
-
-        $options['attr']['class'] = implode(' ', [$options['attr']['class'], $cssClass]);
     }
 }

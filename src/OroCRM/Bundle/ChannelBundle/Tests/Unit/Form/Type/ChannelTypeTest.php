@@ -68,7 +68,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
                 'name'             => 'text',
                 'description'      => 'textarea',
                 'integrations'     => 'genemu_jqueryselect2_entity',
-                'dataSource'       => 'oro_integration_select',
+                'dataSource'       => 'orocrm_channel_datasource_form',
                 'customerIdentity' => 'orocrm_channel_customer_identity_select_form',
                 'entities'         => 'orocrm_channel_entity_choice_form',
                 'channelType'      => 'genemu_jqueryselect2_choice'

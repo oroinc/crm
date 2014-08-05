@@ -3,15 +3,9 @@
 
     {{ form_row(form.channelType) }}
 
-    {{ form_row(form.description) }}
-
     {% if form.entities is defined %}
         {{ form_row(form.entities) }}
     {% endif %}
-
-    {#% if form.integrations is defined %}
-        {{ form_row(form.integrations) }}
-    {% endif %#}
 
     {% if form.dataSource is defined %}
         {{ form_row(form.dataSource) }}
@@ -23,4 +17,29 @@
 
 
     {{ form_end(form, {'render_rest': false}) }}
+{% endblock %}
+
+{% block orocrm_channel_datasource_form_row %}
+    {{ block('form_row') }}
+{% endblock %}
+
+{% block orocrm_channel_datasource_form_widget %}
+    {% set containerElementId = form.vars.id ~ '-el' %}
+
+    <div id="{{ containerElementId }}"></div>
+    {{ form_widget(form) }}
+
+    <script type="text/javascript">
+        require(['jquery', 'orocrmchannel/js/integration-widget-handler'],
+        function ($, IntegrationWidgetHandlerView) {
+            var view = new IntegrationWidgetHandlerView({
+                el: {{ ('#' ~ containerElementId)|json_encode|raw }},
+                idEl: {{ ('#' ~ form.identifier.vars.id)|json_encode|raw }},
+                dataEl: {{ ('#' ~ form.data.vars.id)|json_encode|raw }},
+                typeEl: {{ ('#' ~ form.type.vars.id)|json_encode|raw }},
+                nameEl: {{ ('#' ~ form.name.vars.id)|json_encode|raw }}
+            });
+            view.render();
+        });
+    </script>
 {% endblock %}
