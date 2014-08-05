@@ -30,7 +30,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
  */
 class Channel
 {
-    const STATUS_ACTIVE = 1;
+    const STATUS_ACTIVE   = 1;
     const STATUS_INACTIVE = 0;
 
     /**

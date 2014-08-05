@@ -2,12 +2,6 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Controller;
 
-use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -15,6 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
 
 class ChannelController extends Controller
 {
@@ -90,31 +87,27 @@ class ChannelController extends Controller
     }
 
     /**
-     * @Route("/status/change/{id}",
-     * requirements={"id"="\d+"}, name="orocrm_channel_change_status")
+     * @Route("/status/change/{id}", requirements={"id"="\d+"}, name="orocrm_channel_change_status")
      * @AclAncestor("orocrm_channel_update")
      */
     public function changeStatusAction(Channel $channel)
     {
-        $event = new ChannelChangeStatusEvent($channel);
-
         if ($channel->getStatus() == Channel::STATUS_ACTIVE) {
-            $message = 'orocrm.channel.controller.message.status.inactivated';
+            $message = 'orocrm.channel.controller.message.status.deactivated';
             $channel->setStatus($channel::STATUS_INACTIVE);
         } else {
             $message = 'orocrm.channel.controller.message.status.activated';
             $channel->setStatus($channel::STATUS_ACTIVE);
         }
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($channel);
-        $em->flush();
-        $this->get('event_dispatcher')->dispatch(ChannelChangeStatusEvent::EVENT_NAME, $event);
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            $this->get('translator')->trans($message)
-        );
+        $this->getDoctrine()
+            ->getManager()
+            ->flush();
 
-        return new RedirectResponse($this->generateUrl('orocrm_channel_update', ['id' => $channel->getId()]));
+        $event = new ChannelChangeStatusEvent($channel);
+        $this->get('event_dispatcher')->dispatch(ChannelChangeStatusEvent::EVENT_NAME, $event);
+        $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($message));
+
+        return $this->redirect($this->generateUrl('orocrm_channel_update', ['id' => $channel->getId()]));
     }
 }

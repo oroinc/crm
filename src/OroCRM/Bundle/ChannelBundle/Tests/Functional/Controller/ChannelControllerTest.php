@@ -38,7 +38,7 @@ class ChannelControllerTest extends WebTestCase
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
-        $result = $this->client->getResponse();
+        $result  = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains('Channel saved', $crawler->html());
 
@@ -82,6 +82,7 @@ class ChannelControllerTest extends WebTestCase
         $this->assertContains('Channel saved', $crawler->html());
 
         $channel['name'] = $name;
+
         return $channel;
     }
 
@@ -99,6 +100,7 @@ class ChannelControllerTest extends WebTestCase
 
         $this->client->getResponse();
         $this->assertContains('Channel activated', $crawler->html());
+
         return $channel;
     }
 

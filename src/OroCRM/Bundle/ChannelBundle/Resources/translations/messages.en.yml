@@ -27,7 +27,7 @@ orocrm:
                     saved: Channel saved
                     status:
                         activated:     Channel activated
-                        inactivated:   Channel inactivated
+                        deactivated:   Channel deactivated
         form:
             select_entities.label:     Please select entities
             select_data_source.label:  Please select customer source
