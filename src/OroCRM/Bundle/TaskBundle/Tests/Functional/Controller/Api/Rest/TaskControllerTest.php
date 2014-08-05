@@ -97,7 +97,7 @@ class TaskControllerTest extends WebTestCase
             $this->generateWsseAuthHeader()
         );
         $result = $this->client->getResponse();
-        $this->assertResponseStatusCodeEquals($result, 204);
+        $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
@@ -128,7 +128,7 @@ class TaskControllerTest extends WebTestCase
             $this->generateWsseAuthHeader()
         );
         $result = $this->client->getResponse();
-        $this->assertResponseStatusCodeEquals($result, 204);
+        $this->assertEmptyResponseStatusCodeEquals($result, 204);
         $this->client->request(
             'GET',
             $this->getUrl('orocrm_api_get_task', ['id' => $id]),

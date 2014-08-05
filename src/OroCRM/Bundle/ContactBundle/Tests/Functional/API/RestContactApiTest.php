@@ -222,7 +222,7 @@ class RestContactApiTest extends WebTestCase
             $request
         );
         $result = $this->client->getResponse();
-        $this->assertResponseStatusCodeEquals($result, 204);
+        $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
@@ -253,7 +253,7 @@ class RestContactApiTest extends WebTestCase
             $this->getUrl('oro_api_delete_contact', array('id' => $contact['id']))
         );
         $result = $this->client->getResponse();
-        $this->assertResponseStatusCodeEquals($result, 204);
+        $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',

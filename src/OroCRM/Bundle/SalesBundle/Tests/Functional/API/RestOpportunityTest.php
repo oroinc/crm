@@ -102,7 +102,7 @@ class RestOpportunityTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        $this->assertResponseStatusCodeEquals($result, 204);
+        $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
@@ -148,7 +148,7 @@ class RestOpportunityTest extends WebTestCase
             $this->getUrl('oro_api_delete_opportunity', array('id' => $request['id']))
         );
         $result = $this->client->getResponse();
-        $this->assertResponseStatusCodeEquals($result, 204);
+        $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
