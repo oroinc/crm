@@ -2,14 +2,13 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Provider;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 use Oro\Bundle\EntityBundle\Provider\EntityProvider;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
 
-class MetadataProvider implements MetadataInterface
+class MetadataProvider implements MetadataProviderInterface
 {
     const ENTITY_EDIT_ROUTE = 'oro_entityconfig_update';
     const ENTITY_VIEW_ROUTE = 'oro_entityconfig_view';
@@ -44,7 +43,7 @@ class MetadataProvider implements MetadataInterface
     /**
      * {@inheritdoc}
      */
-    public function getMetadataList()
+    public function getEntitiesMetadata()
     {
         $result = [];
 
@@ -53,7 +52,7 @@ class MetadataProvider implements MetadataInterface
             $configEntityModel = $this->configManager->getConfigEntityModel($setting['name']);
 
             if ($configEntityModel instanceof EntityConfigModel) {
-                $this->addLinks($configEntityModel, $entityConfig);
+                $entityConfig = array_merge($entityConfig, $this->getEntityLinks($configEntityModel));
             }
 
             $result[$setting['name']] = $entityConfig;
@@ -65,17 +64,33 @@ class MetadataProvider implements MetadataInterface
     /**
      * {@inheritdoc}
      */
-    public function getMetadataByIntegrationType($integrationType)
+    public function getIntegrationEntities()
     {
         $result = [];
 
         foreach ($this->settings->getSettings(SettingsProvider::DATA_PATH) as $setting) {
-            if ($this->isBelongsToIntegrationType($setting, $integrationType)) {
-                $result[$integrationType][] = $setting['name'];
+            $integration = isset($setting['belongs_to']['integration']) ? $setting['belongs_to']['integration'] : false;
+            if (false !== $integration) {
+                $result[$integration]   = isset($result[$integration]) ? $result[$integration] : [];
+                $result[$integration][] = $setting['name'];
             }
         }
 
         return $result;
+    }
+
+    /**
+     * @param EntityConfigModel $configEntityModel
+     *
+     * @return array
+     */
+    protected function getEntityLinks(EntityConfigModel $configEntityModel)
+    {
+        return [
+            'entity_id' => $configEntityModel->getId(),
+            'edit_link' => $this->generateUrl(self::ENTITY_EDIT_ROUTE, ['id' => $configEntityModel->getId()]),
+            'view_link' => $this->generateUrl(self::ENTITY_VIEW_ROUTE, ['id' => $configEntityModel->getId()]),
+        ];
     }
 
     /**
@@ -87,34 +102,5 @@ class MetadataProvider implements MetadataInterface
     protected function generateUrl($route, $parameters = [])
     {
         return $this->router->generate($route, $parameters);
-    }
-
-    /**
-     * @param EntityConfigModel $configEntityModel
-     * @param array             $entityConfig
-     */
-    protected function addLinks(EntityConfigModel $configEntityModel, array &$entityConfig)
-    {
-        $entityConfig['entity_id'] = $configEntityModel->getId();
-        $entityConfig['edit_link'] = $this->generateUrl(
-            self::ENTITY_EDIT_ROUTE,
-            ['id' => $configEntityModel->getId()]
-        );
-        $entityConfig['view_link'] = $this->generateUrl(
-            self::ENTITY_VIEW_ROUTE,
-            ['id' => $configEntityModel->getId()]
-        );
-    }
-
-    /**
-     * @param array  $setting
-     * @param string $integrationType
-     *
-     * @return bool
-     */
-    protected function isBelongsToIntegrationType(array $setting, $integrationType)
-    {
-        return (!empty($setting['belongs_to']['integration'])
-            && $integrationType === $setting['belongs_to']['integration']);
     }
 }

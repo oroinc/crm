@@ -16,13 +16,13 @@ class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
     }
 
-    public function testGetMetadataList()
+    public function testGetEntitiesMetadata()
     {
         $this->provider->expects($this->once())
-            ->method('getMetadataList');
+            ->method('getEntitiesMetadata');
 
         $integrationEntities = new MetadataExtension($this->provider);
-        $integrationEntities->getListOfIntegrationEntities();
+        $integrationEntities->getEntitiesMetadata();
     }
 
     public function testGetName()
@@ -36,10 +36,7 @@ class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
         $integrationEntities = new MetadataExtension($this->provider);
         $result              = $integrationEntities->getFunctions();
 
-        $this->assertArrayHasKey('orocrm_integration_entities', $result);
-        $this->assertEquals(
-            $result['orocrm_integration_entities'],
-            new \Twig_Function_Method($integrationEntities, 'getListOfIntegrationEntities')
-        );
+        $this->assertArrayHasKey('orocrm_channel_entities_metadata', $result);
+        $this->assertArrayHasKey('orocrm_channel_integration_metadata', $result);
     }
 }

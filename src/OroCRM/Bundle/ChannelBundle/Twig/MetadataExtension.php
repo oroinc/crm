@@ -2,19 +2,19 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Twig;
 
-use OroCRM\Bundle\ChannelBundle\Provider\MetadataInterface;
+use OroCRM\Bundle\ChannelBundle\Provider\MetadataProviderInterface;
 
 class MetadataExtension extends \Twig_Extension
 {
     const EXTENSION_NAME = 'orocrm_list_of_integrations_entities';
 
-    /** @var MetadataInterface */
+    /** @var MetadataProviderInterface */
     protected $metaDataProvider;
 
     /**
-     * @param MetadataInterface $provider
+     * @param MetadataProviderInterface $provider
      */
-    public function __construct(MetadataInterface $provider)
+    public function __construct(MetadataProviderInterface $provider)
     {
         $this->metaDataProvider = $provider;
     }
@@ -26,28 +26,41 @@ class MetadataExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
+        $entitiesMetadataFunction    = new \Twig_SimpleFunction(
+            'orocrm_channel_entities_metadata',
+            [
+                $this,
+                'getEntitiesMetadata'
+            ]
+        );
+        $integrationMetadataFunction = new \Twig_SimpleFunction(
+            'orocrm_channel_integration_metadata',
+            [
+                $this,
+                'getIntegrationEntities'
+            ]
+        );
+
         return [
-            'orocrm_channel_metadata_list' => new \Twig_Function_Method($this, 'getListOfIntegrationEntities'),
-            'orocrm_integration_entities' => new \Twig_Function_Method($this, 'getMetadataByIntegrationType')
+            $entitiesMetadataFunction->getName()    => $entitiesMetadataFunction,
+            $integrationMetadataFunction->getName() => $integrationMetadataFunction
         ];
     }
 
     /**
      * @return array
      */
-    public function getListOfIntegrationEntities()
+    public function getEntitiesMetadata()
     {
-        return $this->metaDataProvider->getMetadataList();
+        return $this->metaDataProvider->getEntitiesMetadata();
     }
 
     /**
-     * @param string $type
-     *
      * @return array
      */
-    public function getMetadataByIntegrationType($type)
+    public function getIntegrationEntities()
     {
-        return $this->metaDataProvider->getMetadataByIntegrationType($type);
+        return $this->metaDataProvider->getIntegrationEntities();
     }
 
     /**

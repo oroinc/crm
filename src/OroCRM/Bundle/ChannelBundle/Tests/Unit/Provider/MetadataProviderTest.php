@@ -20,7 +20,7 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
     protected $entityId2 = 84;
 
     /** @var array */
-    protected $expected = [
+    protected $testConfig = [
         'OroCRM\Bundle\TestBundle1\Entity\Entity1' => [
             'name'                   => 'OroCRM\Bundle\TestBundle1\Entity\Entity1',
             'dependent'              => [],
@@ -56,7 +56,7 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
 
     /** @var array */
     protected $entityConfig2 = [
-        'name'         => 'OroCRM\Bundle\TestBundle1\Entity\Entity2',
+        'name'         => 'OroCRM\Bundle\TestBundle2\Entity\Entity2',
         'label'        => 'Entity 2',
         'plural_label' => 'Entities 2',
         'icon'         => '',
@@ -64,10 +64,10 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
 
     /** @var array */
     protected $entityConfig3 = [
-        'name'         => 'OroCRM\Bundle\TestBundle1\Entity\Entity3',
+        'name'         => 'OroCRM\Bundle\TestBundle2\Entity\Entity3',
         'label'        => 'Entity 3',
         'plural_label' => 'Entities 3',
-        'icon'         => ''
+        'icon'         => '',
     ];
 
     /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
@@ -92,14 +92,16 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->settingsProvider   = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
+        $this->settingsProvider->expects($this->once())
+            ->method('getSettings')
+            ->will($this->returnvalue($this->testConfig));
+
         $this->entityProvider     = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityProvider')
             ->disableOriginalConstructor()->getMock();
         $this->configManager      = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\ConfigManager')
             ->disableOriginalConstructor()->getMock();
-        $this->entityConfigModel1 = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel')
-            ->disableOriginalConstructor()->getMock();
-        $this->entityConfigModel2 = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel')
-            ->disableOriginalConstructor()->getMock();
+        $this->entityConfigModel1 = $this->getMock('Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel');
+        $this->entityConfigModel2 = $this->getMock('Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel');
 
         $this->entityConfigModel1->expects($this->any())
             ->method('getId')
@@ -113,18 +115,35 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
     }
 
-    public function testGetListOfIntegrationEntities()
+    public function testGetIntegrationEntities()
     {
-        $this->settingsProvider->expects($this->once())
-            ->method('getSettings')
-            ->will($this->returnvalue($this->expected));
+        /** @var MetadataProvider $provider */
+        $provider = new MetadataProvider(
+            $this->settingsProvider,
+            $this->entityProvider,
+            $this->configManager,
+            $this->router
+        );
 
+        $result = $provider->getIntegrationEntities();
+
+        $expectedResult = ['OroCRM\Bundle\TestBundle1\Entity\Entity1', 'OroCRM\Bundle\TestBundle2\Entity\Entity2'];
+        $this->assertArrayHasKey('testIntegrationType', $result);
+        $this->assertCount(2, $result['testIntegrationType']);
+        $this->assertSame($expectedResult, $result['testIntegrationType']);
+    }
+
+    public function testGetEntitiesMetadata()
+    {
         $this->entityProvider->expects($this->at(0))
             ->method('getEntity')
             ->will($this->returnvalue($this->entityConfig1));
         $this->entityProvider->expects($this->at(1))
             ->method('getEntity')
             ->will($this->returnvalue($this->entityConfig2));
+        $this->entityProvider->expects($this->at(2))
+            ->method('getEntity')
+            ->will($this->returnvalue($this->entityConfig3));
 
         $this->configManager->expects($this->at(0))
             ->method('getConfigEntityModel')
@@ -143,13 +162,13 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
             $this->configManager,
             $this->router
         );
-        $result   = $provider->getMetadataList();
 
-        $this->assertArrayHasKey('testIntegrationType', $result);
-        $this->assertCount(2, $result['testIntegrationType']);
+        $result = $provider->getEntitiesMetadata();
+        for ($i = 1; $i < 3; $i++) {
+            $expectedConfig = $this->getExpectedConfig($i);
+            $entityName     = $expectedConfig['name'];
 
-        for ($i = 0; $i < 2; $i++) {
-            $this->assertEquals($result['testIntegrationType'][$i], $this->getConfig($i));
+            $this->assertEquals($expectedConfig, $result[$entityName]);
         }
     }
 
@@ -158,10 +177,10 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function getConfig($index)
+    protected function getExpectedConfig($index)
     {
-        $configName          = 'entityConfig' . ($index + 1);
-        $entityId            = 'entityId' . ($index + 1);
+        $configName          = 'entityConfig' . $index;
+        $entityId            = 'entityId' . $index;
         $result              = $this->$configName;
         $result['entity_id'] = $this->$entityId;
         $result['edit_link'] = null;
