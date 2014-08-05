@@ -27,7 +27,8 @@ class MetadataExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            'orocrm_integration_entities' => new \Twig_Function_Method($this, 'getListOfIntegrationEntities')
+            'orocrm_channel_metadata_list' => new \Twig_Function_Method($this, 'getListOfIntegrationEntities'),
+            'orocrm_integration_entities' => new \Twig_Function_Method($this, 'getMetadataByIntegrationType')
         ];
     }
 
@@ -37,6 +38,14 @@ class MetadataExtension extends \Twig_Extension
     public function getListOfIntegrationEntities()
     {
         return $this->metaDataProvider->getMetadataList();
+    }
+
+    /**
+     * @return array
+     */
+    public function getMetadataByIntegrationType()
+    {
+        return $this->metaDataProvider->getMetadataByIntegrationType('magento');
     }
 
     /**
