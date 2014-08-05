@@ -170,7 +170,7 @@ class CaseControllerTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        $this->assertResponseStatusCodeEquals($result, 204);
+        $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
@@ -205,7 +205,7 @@ class CaseControllerTest extends WebTestCase
             $this->generateWsseAuthHeader()
         );
         $result = $this->client->getResponse();
-        $this->assertResponseStatusCodeEquals($result, 204);
+        $this->assertEmptyResponseStatusCodeEquals($result, 204);
         $this->client->request(
             'GET',
             $this->getUrl('orocrm_case_api_get_case', ['id' => $id]),

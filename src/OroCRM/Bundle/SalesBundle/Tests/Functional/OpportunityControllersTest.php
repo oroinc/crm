@@ -163,7 +163,7 @@ class OpportunityControllersTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        $this->assertResponseStatusCodeEquals($result, 204);
+        $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
