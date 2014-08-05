@@ -37,10 +37,6 @@ class ChannelCustomerIdentityTypeTest extends \PHPUnit_Framework_TestCase
         $provider = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityProvider')
             ->disableOriginalConstructor()->getMock();
 
-        $provider->expects($this->any())
-            ->method('getEntities')
-            ->will($this->returnValue($this->provideResult));
-
         $this->type = new ChannelCustomerIdentityType($provider);
     }
 
