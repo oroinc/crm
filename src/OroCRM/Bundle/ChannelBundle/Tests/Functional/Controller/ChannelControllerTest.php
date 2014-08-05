@@ -117,7 +117,7 @@ class ChannelControllerTest extends WebTestCase
         );
 
         $response = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($response, 204);
+        $this->assertResponseStatusCodeEquals($response, 204);
 
         $response = $this->client->requestGrid(
             self::GRID_NAME,

@@ -25,6 +25,7 @@ class LoadChannel extends AbstractFixture
         $channel->setName('some name');
         $channel->setDescription('some description');
         $channel->setOwner($this->loadOwner());
+        $channel->setChannelType('testType');
 
         $manager->persist($channel);
 
