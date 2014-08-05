@@ -45,9 +45,8 @@ class OroCRMMagentoBundle implements Migration, DatabasePlatformAwareInterface
         $table->getColumn('qty')->setType(Type::getType('float'));
 
         $table = $schema->getTable('orocrm_magento_customer');
-        $table->changeColumn('vat', ['type' => Type::getType('float'), 'notnull' => true]);
+        $table->changeColumn('vat', ['type' => Type::getType('float')]);
         $table->dropIndex('unq_origin_id_channel_id');
         $table->addUniqueIndex(['origin_id', 'channel_id'], 'magecustomer_oid_cid_unq');
-
     }
 }
