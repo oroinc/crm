@@ -40,7 +40,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
     public function testBuildForm()
     {
         $fields = [];
-        $this->builder->expects($this->exactly(6))->method('add')
+        $this->builder->expects($this->exactly(4))->method('add')
             ->will(
                 $this->returnCallback(
                     function ($filedName, $fieldType) use (&$fields) {
@@ -53,12 +53,10 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             [
-                'name'         => 'text',
-                'description'  => 'textarea',
-                'entities'     => 'orocrm_channel_entity_choice_form',
-                'integrations' => 'genemu_jqueryselect2_entity',
-                'dataSource'   => 'oro_integration_select',
-                'channelType'  => 'genemu_jqueryselect2_choice'
+                'name'        => 'text',
+                'entities'    => 'orocrm_channel_entity_choice_form',
+                'dataSource'  => 'orocrm_channel_datasource_form',
+                'channelType' => 'genemu_jqueryselect2_choice'
             ],
             $fields
         );

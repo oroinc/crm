@@ -1,0 +1,3 @@
+config:
+    paths:
+        'orocrmchannel/js/integration-widget-handler': 'bundles/orocrmchannel/js/integration-widget-handler.js'

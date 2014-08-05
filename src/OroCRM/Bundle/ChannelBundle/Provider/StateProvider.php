@@ -48,7 +48,8 @@ class StateProvider
     }
 
     /**
-     * Event listener subscribed  on 'orocrm_channel.channel.save_succeed' event.
+     * Event listener subscribed  on 'orocrm_channel.channel.save_succeed' and on
+     * 'orocrm_channel.channel.delete_succeed' event.
      */
     public function processChannelChange()
     {
