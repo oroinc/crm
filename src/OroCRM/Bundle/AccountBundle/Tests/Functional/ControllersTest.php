@@ -134,7 +134,7 @@ class ControllersTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 204);
+        $this->assertResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
