@@ -55,12 +55,11 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         $data = $event->getData();
 
         if (!empty($data['customerIdentity'])) {
-
-            $selectedEntities = [$data['customerIdentity']];
-            $choices          = array_intersect($data['entities'], $selectedEntities);
-
-            $customerIdentityModifier = $this->getCustomerIdentityModifierClosure($choices);
-            $customerIdentityModifier($form);
+            if (in_array($data['customerIdentity'], $data['entities'])) {
+                $choices = array_flip([$data['customerIdentity']]);
+                $customerIdentityModifier = $this->getCustomerIdentityModifierClosure($choices);
+                $customerIdentityModifier($form);
+            }
         }
     }
 
