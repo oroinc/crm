@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
