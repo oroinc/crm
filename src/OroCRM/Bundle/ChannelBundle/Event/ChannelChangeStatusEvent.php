@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\ChannelBundle\Event;
 
 /**

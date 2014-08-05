@@ -3,14 +3,18 @@
 namespace OroCRM\Bundle\ChannelBundle\Controller;
 
 use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 class ChannelController extends Controller
 {
@@ -86,33 +90,26 @@ class ChannelController extends Controller
     }
 
     /**
-     * @Route("/status/{status}/{id}",
-     * requirements={"id"="\d+", "status"="active|deactive"}, name="orocrm_channel_change_status")
-     * @Acl(
-     *      id="orocrm_channel_update",
-     *      type="entity",
-     *      permission="EDIT",
-     *      class="OroCRMChannelBundle:Channel"
-     * )
-     *
+     * @Route("/status/change/{id}",
+     * requirements={"id"="\d+"}, name="orocrm_channel_change_status")
+     * @AclAncestor("orocrm_channel_update")
      */
     public function changeStatusAction(Channel $channel)
     {
-        $newStatus  = $this->getRequest()->get('status');
-        $event      = new ChannelChangeStatusEvent($channel);
-        $dispatcher = new EventDispatcher();
-        if ($newStatus == 'active') {
-            $message = 'orocrm.channel.controller.message.status.activated';
-            $channel->setStatus($channel::STATUS_ENABLED);
-        } else {
+        $event = new ChannelChangeStatusEvent($channel);
+
+        if ($channel->getStatus() == Channel::STATUS_ACTIVE) {
             $message = 'orocrm.channel.controller.message.status.inactivated';
-            $channel->setStatus($channel::STATUS_DISABLED);
+            $channel->setStatus($channel::STATUS_INACTIVE);
+        } else {
+            $message = 'orocrm.channel.controller.message.status.activated';
+            $channel->setStatus($channel::STATUS_ACTIVE);
         }
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($channel);
         $em->flush();
-        $dispatcher->dispatch($event::EVENT_NAME, $event);
+        $this->get('event_dispatcher')->dispatch(ChannelChangeStatusEvent::EVENT_NAME, $event);
         $this->get('session')->getFlashBag()->add(
             'success',
             $this->get('translator')->trans($message)

@@ -28,19 +28,19 @@
     {% if entity.id %}
         {% if entity.status %}
             {{ UI.button({
-            'aCss':  'btn-danger',
-            'iCss':  'icon-remove',
-            'label': 'orocrm.channel.button.deactivate.label',
-            'path':  path('orocrm_channel_change_status', {'id' : entity.id, 'status' : 'deactive'}),
-            'title': 'orocrm.channel.button.deactivate.label',
+                'aCss':  'btn-danger',
+                'iCss':  'icon-remove',
+                'label': 'orocrm.channel.button.deactivate.label',
+                'path':  path('orocrm_channel_change_status', {'id' : entity.id}),
+                'title': 'orocrm.channel.button.deactivate.label',
             }) }}
         {% else %}
             {{ UI.button({
-            'aCss':  'btn-success',
-            'iCss':  'icon-ok',
-            'label': 'orocrm.channel.button.activate.label',
-            'path':  path('orocrm_channel_change_status', {'id' : entity.id, 'status' : 'active'}),
-            'title': 'orocrm.channel.button.activate.label',
+                'aCss':  'btn-success',
+                'iCss':  'icon-ok',
+                'label': 'orocrm.channel.button.activate.label',
+                'path':  path('orocrm_channel_change_status', {'id' : entity.id}),
+                'title': 'orocrm.channel.button.activate.label',
             }) }}
         {% endif %}
     {% endif %}

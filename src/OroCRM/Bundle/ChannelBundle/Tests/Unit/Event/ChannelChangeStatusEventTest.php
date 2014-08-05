@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: konstantinp
- * Date: 8/4/14
- * Time: 2:36 PM
- */
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Event;
-
 
 use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
 

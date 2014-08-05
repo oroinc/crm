@@ -94,11 +94,11 @@ class ChannelControllerTest extends WebTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_channel_change_status', ['status' => 'deactive', 'id' => $channel['id']])
+            $this->getUrl('orocrm_channel_change_status', ['id' => $channel['id']])
         );
 
         $this->client->getResponse();
-        $this->assertContains('Channel inactivated', $crawler->html());
+        $this->assertContains('Channel activated', $crawler->html());
         return $channel;
     }
 
