@@ -53,7 +53,9 @@ class ChannelIntegrationHandler
     }
 
     /**
-     * @return string
+     * @throws \LogicException
+     *
+     * @return array
      */
     public function getFormSubmittedData()
     {
