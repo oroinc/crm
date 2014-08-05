@@ -21,12 +21,11 @@ class OroCRMChannelBundle implements Migration
         $table->addColumn('data_source_id', 'smallint', ['notnull' => false]);
         $table->addColumn('status', 'boolean', ['notnull' => true]);
         $table->addColumn('channel_type', 'string', ['notnull' => true]);
-        $table->addColumn('customer_identity_id', 'integer', ['notnull' => false]);
+        $table->addColumn('customer_identity', 'string', ['notnull' => true]);
 
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_owner_id'], 'IDX_AEA90B929124A35B', []);
         $table->addIndex(['data_source_id'], 'IDX_AEA90B921A935C57', []);
-        $table->addUniqueIndex(['customer_identity_id'], 'UNIQ_AEA90B92FC75FFA0', []);
 
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
@@ -46,14 +45,6 @@ class OroCRMChannelBundle implements Migration
 
         self::addChannelToIntegrationTable($schema);
         self::addChannelEntityNameTable($schema);
-
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel_entity_name'),
-            ['customer_identity_id'],
-            ['id'],
-            [],
-            'FK_AEA90B92FC75FFA0'
-        );
     }
 
     /**

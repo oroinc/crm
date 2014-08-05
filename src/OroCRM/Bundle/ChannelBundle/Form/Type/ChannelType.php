@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 
 class ChannelType extends AbstractType
 {
@@ -19,12 +20,15 @@ class ChannelType extends AbstractType
     /** @var SettingsProvider */
     protected $settingsProvider;
 
-    /**
-     * @param SettingsProvider $settingsProvider
-     */
-    public function __construct(SettingsProvider $settingsProvider)
-    {
-        $this->settingsProvider = $settingsProvider;
+    /** @var ChannelTypeSubscriber */
+    protected $channelTypeSubscriber;
+
+    public function __construct(
+        SettingsProvider $settingsProvider,
+        ChannelTypeSubscriber $channelTypeSubscriber
+    ) {
+        $this->settingsProvider      = $settingsProvider;
+        $this->channelTypeSubscriber = $channelTypeSubscriber;
     }
 
     /**
@@ -32,12 +36,33 @@ class ChannelType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->addEventSubscriber($this->channelTypeSubscriber);
+
         $builder->add(
             'name',
             'text',
             [
                 'required' => true,
                 'label'    => 'orocrm.channel.name.label'
+            ]
+        );
+        $builder->add(
+            'dataSource',
+            'orocrm_channel_datasource_form',
+            [
+                'label'       => 'orocrm.channel.data_source.label',
+                'channelType' => 'magento',
+                'required'    => false,
+            ]
+        );
+        $builder->add(
+            'customerIdentity',
+            'orocrm_channel_customer_identity_select_form',
+            [
+                'required' => true,
+                'label'    => 'orocrm.channel.customer_identity.label',
+                'choices'  => [],
+                'configs'  => ['placeholder' => 'orocrm.channel.form.select_customer_identity.label'],
             ]
         );
         $builder->add(
@@ -48,15 +73,6 @@ class ChannelType extends AbstractType
                 'multiple' => true,
                 'label'    => 'orocrm.channel.entities.label',
                 'configs'  => ['placeholder' => 'orocrm.channel.form.select_entities.label']
-            ]
-        );
-        $builder->add(
-            'dataSource',
-            'orocrm_channel_datasource_form',
-            [
-                'label'       => 'orocrm.channel.data_source.label',
-                'channelType' => 'magento',
-                'required'    => false,
             ]
         );
         $builder->add(

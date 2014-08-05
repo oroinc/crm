@@ -11,6 +11,10 @@
         {{ form_row(form.dataSource) }}
     {% endif %}
 
+    {% if form.customerIdentity is defined %}
+        {{ form_row(form.customerIdentity) }}
+    {% endif %}
+
     {{ form_end(form, {'render_rest': false}) }}
 {% endblock %}
 

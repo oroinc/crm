@@ -9,6 +9,7 @@ parameters:
     # forms
     orocrm_channel.form.type.channel.class:                            OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
     orocrm_channel.form.type.entity_choice.class:                      OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityChoiceType
+    orocrm_channel.form.type.customer_identity.class:                  OroCRM\Bundle\ChannelBundle\Form\Type\ChannelCustomerIdentityType
     orocrm_channel.form.type.channel_datasource.class:                 OroCRM\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType
 
     # manager
@@ -19,12 +20,17 @@ parameters:
     orocrm_channel.provider.exclusion_provider.class:                  OroCRM\Bundle\ChannelBundle\Provider\EntityExclusionProvider
     orocrm_channel.provider.channel_entity_exclusion_provider.class:   OroCRM\Bundle\ChannelBundle\Provider\ChannelEntityExclusionProvider
     orocrm_channel.provider.state_provider.class:                      OroCRM\Bundle\ChannelBundle\Provider\StateProvider
+    orocrm_channel.provider.entity_metadata.class:                     OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider
 
     # config resolver
     orocrm_channel.config_resolver.class:                              Oro\Component\Config\Resolver\SystemAwareResolver
 
     # event listener
     orocrm_channel.event_listener.navigation.class:                    OroCRM\Bundle\ChannelBundle\EventListener\NavigationListener
+    orocrm_channel.form.subscriber.channel_subscriber.class:           OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
+
+    #twig
+    orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
 
 services:
     # forms
@@ -32,6 +38,7 @@ services:
         class: %orocrm_channel.form.type.channel.class%
         arguments:
             - @orocrm_channel.provider.settings_provider
+            - @orocrm_channel.form.subscriber.channel_subscriber
         tags:
             - { name: form.type, alias: orocrm_channel_form }
 
@@ -41,6 +48,11 @@ services:
             - @orocrm_channel.provider.channel_entity_provider
         tags:
             - { name: form.type, alias: orocrm_channel_entity_choice_form }
+
+    orocrm_channel.form.type.customer_identity:
+        class: %orocrm_channel.form.type.customer_identity.class%
+        tags:
+            - { name: form.type, alias: orocrm_channel_customer_identity_select_form }
 
     orocrm_channel.form.type.channel_datasource:
         class: %orocrm_channel.form.type.channel_datasource.class%
@@ -95,6 +107,14 @@ services:
         tags:
             - { name: oro_entity.exclusion_provider.default }
 
+    orocrm_channel.provider.metadata_provider:
+        class: %orocrm_channel.provider.entity_metadata.class%
+        arguments:
+            - @orocrm_channel.provider.settings_provider
+            - @oro_entity.entity_provider
+            - @oro_entity_config.config_manager
+            - @router
+
     # config resolver
     orocrm_channel.provider.channel_entity_exclusion_provider:
         class: %orocrm_channel.provider.channel_entity_exclusion_provider.class%
@@ -137,3 +157,14 @@ services:
           parent: oro.cache.abstract
           calls:
               - [setNamespace, ['orocrm_channel.state_cache']]
+
+    orocrm_channel.form.subscriber.channel_subscriber:
+        class: %orocrm_channel.form.subscriber.channel_subscriber.class%
+
+    #twig
+    orocrm_channel.twig.metadata_extension:
+        class: %orocrm_channel.twig.metadata_extension.class%
+        arguments:
+            - @orocrm_channel.provider.metadata_provider
+        tags:
+            - { name: twig.extension }
