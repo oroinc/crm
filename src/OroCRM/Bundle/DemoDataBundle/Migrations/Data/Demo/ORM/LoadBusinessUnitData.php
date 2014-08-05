@@ -48,8 +48,6 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
     {
         /** @var Organization $organization */
         $organization = $this->organizationRepository->getFirst();
-        $organization->setName('Acme, Inc');
-        $this->persist($this->organizationManager, $organization);
 
         $this->addReference('default_organization', $organization);
 
