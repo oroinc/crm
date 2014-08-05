@@ -11,7 +11,7 @@ class ChannelCustomerIdentityTypeTest extends \PHPUnit_Framework_TestCase
     /** @var ChannelCustomerIdentityType */
     protected $type;
 
-    protected $provider_result = [
+    protected $provideResult = [
         [
             'name'         => 'OroCRM\Bundle\AcmeBundle\Entity\Test1',
             'label'        => 'label1',
@@ -39,7 +39,7 @@ class ChannelCustomerIdentityTypeTest extends \PHPUnit_Framework_TestCase
 
         $provider->expects($this->any())
             ->method('getEntities')
-            ->will($this->returnValue($this->provider_result));
+            ->will($this->returnValue($this->provideResult));
 
         $this->type = new ChannelCustomerIdentityType($provider);
     }
