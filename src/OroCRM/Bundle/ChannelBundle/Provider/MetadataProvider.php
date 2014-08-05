@@ -49,7 +49,36 @@ class MetadataProvider implements MetadataInterface
         $result = [];
 
         foreach ($this->settings->getSettings(SettingsProvider::DATA_PATH) as $setting) {
-            if (!empty($setting['belongs_to']['integration'])) {
+
+            $entityConfig      = $this->entityProvider->getEntity($setting['name'], true);
+            $configEntityModel = $this->configManager->getConfigEntityModel($setting['name']);
+
+            if ($configEntityModel instanceof EntityConfigModel) {
+                $entityConfig['entity_id'] = $configEntityModel->getId();
+                $entityConfig['edit_link'] = $this->generateUrl(
+                    self::ENTITY_EDIT_ROUTE,
+                    ['id' => $configEntityModel->getId()]
+                );
+                $entityConfig['view_link'] = $this->generateUrl(
+                    self::ENTITY_VIEW_ROUTE,
+                    ['id' => $configEntityModel->getId()]
+                );
+            }
+            $result[$setting['name']][] = $entityConfig;
+        }
+
+        return $result;
+    }
+
+    public function getMetadataByIntegrationType($integrationType)
+    {
+        $result = [];
+
+        foreach ($this->settings->getSettings(SettingsProvider::DATA_PATH) as $setting) {
+            if (
+                !empty($setting['belongs_to']['integration'])
+                && $integrationType === $setting['belongs_to']['integration']
+            ) {
                 $entityConfig      = $this->entityProvider->getEntity($setting['name'], true);
                 $configEntityModel = $this->configManager->getConfigEntityModel($setting['name']);
 
@@ -65,7 +94,7 @@ class MetadataProvider implements MetadataInterface
                     );
                 }
 
-                $result[$setting['belongs_to']['integration']][] = $entityConfig;
+                $result[$integrationType][] = $entityConfig;
             }
         }
 
@@ -75,12 +104,11 @@ class MetadataProvider implements MetadataInterface
     /**
      * @param string      $route
      * @param array       $parameters
-     * @param bool|string $referenceType
      *
      * @return string The generated URL
      */
-    protected function generateUrl($route, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    protected function generateUrl($route, $parameters = [])
     {
-        return $this->router->generate($route, $parameters, $referenceType);
+        return $this->router->generate($route, $parameters);
     }
 }

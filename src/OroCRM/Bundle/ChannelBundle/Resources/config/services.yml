@@ -18,7 +18,7 @@ parameters:
     orocrm_channel.provider.exclusion_provider.class:                  OroCRM\Bundle\ChannelBundle\Provider\EntityExclusionProvider
     orocrm_channel.provider.channel_entity_exclusion_provider.class:   OroCRM\Bundle\ChannelBundle\Provider\ChannelEntityExclusionProvider
     orocrm_channel.provider.state_provider.class:                      OroCRM\Bundle\ChannelBundle\Provider\StateProvider
-    orocrm_channel.provider.metadata_extension.class:                  OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider
+    orocrm_channel.provider.entity_metadata.class:                     OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider
 
     # config resolver
     orocrm_channel.config_resolver.class:                              Oro\Component\Config\Resolver\SystemAwareResolver
@@ -90,7 +90,7 @@ services:
             - { name: oro_entity.exclusion_provider.default }
 
     orocrm_channel.provider.metadata_provider:
-        class: %orocrm_channel.provider.metadata_extension.class%
+        class: %orocrm_channel.provider.entity_metadata.class%
         arguments:
             - @orocrm_channel.provider.settings_provider
             - @oro_entity.entity_provider
