@@ -11,6 +11,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
+use Oro\Bundle\IntegrationBundle\Form\Handler\ChannelHandler as IntegrationChannelHandler;
+
 class ChannelHandler
 {
     /** @var Request */
@@ -55,7 +57,7 @@ class ChannelHandler
         if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
             $this->form->submit($this->request);
 
-            if ($this->form->isValid()) {
+            if (!$this->request->get(IntegrationChannelHandler::UPDATE_MARKER, false) && $this->form->isValid()) {
                 $this->doSave($entity);
 
                 return true;

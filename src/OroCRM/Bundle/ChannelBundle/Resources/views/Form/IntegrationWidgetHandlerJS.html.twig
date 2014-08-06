@@ -1,0 +1,21 @@
+{#
+    Renders javascript handler for integration widget form
+    param:
+        form - Symfony\Component\Form\FormView
+        containerElementId - string
+#}
+{% macro IntegrationWidgetHandlerViewJS(form, containerElementId) %}
+    <script type="text/javascript">
+        require(['jquery', 'orocrmchannel/js/integration-widget-handler'],
+                function ($, IntegrationWidgetHandlerView) {
+                    var view = new IntegrationWidgetHandlerView({
+                        el: {{ ('#' ~ containerElementId)|json_encode|raw }},
+                        idEl: {{ ('#' ~ form.identifier.vars.id)|json_encode|raw }},
+                        dataEl: {{ ('#' ~ form.data.vars.id)|json_encode|raw }},
+                        typeEl: {{ ('#' ~ form.type.vars.id)|json_encode|raw }},
+                        nameEl: {{ ('#' ~ form.name.vars.id)|json_encode|raw }}
+                    });
+                    view.render();
+                });
+    </script>
+{% endmacro %}
