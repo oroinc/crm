@@ -67,11 +67,6 @@ class Task extends ExtendTask implements RemindableInterface
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
-     * )
      */
     protected $id;
 
@@ -79,11 +74,6 @@ class Task extends ExtendTask implements RemindableInterface
      * @var string
      *
      * @ORM\Column(name="subject", type="string", length=255, nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
-     * )
      */
     protected $subject;
 
@@ -91,11 +81,6 @@ class Task extends ExtendTask implements RemindableInterface
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
-     * )
      */
     protected $description;
 
@@ -103,11 +88,6 @@ class Task extends ExtendTask implements RemindableInterface
      * @var \DateTime
      *
      * @ORM\Column(name="due_date", type="datetime")
-     * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
-     * )
      */
     protected $dueDate;
 
@@ -116,11 +96,6 @@ class Task extends ExtendTask implements RemindableInterface
      *
      * @ORM\ManyToOne(targetEntity="TaskPriority")
      * @ORM\JoinColumn(name="task_priority_name", referencedColumnName="name", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
-     * )
      */
     protected $taskPriority;
 
@@ -129,11 +104,6 @@ class Task extends ExtendTask implements RemindableInterface
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
-     * )
      */
     protected $owner;
 
@@ -142,11 +112,6 @@ class Task extends ExtendTask implements RemindableInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
-     * )
      */
     protected $relatedAccount;
 
@@ -155,11 +120,6 @@ class Task extends ExtendTask implements RemindableInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
-     * )
      */
     protected $relatedContact;
 
@@ -168,11 +128,6 @@ class Task extends ExtendTask implements RemindableInterface
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "email"={"available_in_template"=true}
-     *  }
-     * )
      */
     protected $reporter;
 
@@ -203,9 +158,6 @@ class Task extends ExtendTask implements RemindableInterface
      * @ORM\Column(type="datetime")
      * @ConfigField(
      *      defaultValues={
-     *          "email"={
-     *              "available_in_template"=true
-     *          },
      *          "entity"={
      *              "label"="oro.ui.created_at"
      *          }
@@ -220,9 +172,6 @@ class Task extends ExtendTask implements RemindableInterface
      * @ORM\Column(type="datetime", nullable=true)
      * @ConfigField(
      *      defaultValues={
-     *          "email"={
-     *              "available_in_template"=true
-     *          },
      *          "entity"={
      *              "label"="oro.ui.updated_at"
      *          }
