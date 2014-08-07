@@ -49,10 +49,10 @@ services:
         tags:
             - { name: form.type, alias: orocrm_channel_entity_choice_form }
 
-    orocrm_channel.form.type.customer_identity:
-        class: %orocrm_channel.form.type.customer_identity.class%
-        tags:
-            - { name: form.type, alias: orocrm_channel_customer_identity_select_form }
+    #orocrm_channel.form.type.customer_identity:
+    #    class: %orocrm_channel.form.type.customer_identity.class%
+    #    tags:
+    #        - { name: form.type, alias: orocrm_channel_customer_identity_select_form }
 
     orocrm_channel.form.type.channel_datasource:
         class: %orocrm_channel.form.type.channel_datasource.class%

@@ -57,12 +57,10 @@ class ChannelType extends AbstractType
         );
         $builder->add(
             'customerIdentity',
-            'orocrm_channel_customer_identity_select_form',
+            'text',
             [
                 'required' => true,
                 'label'    => 'orocrm.channel.customer_identity.label',
-                'choices'  => [],
-                'configs'  => ['placeholder' => 'orocrm.channel.form.select_customer_identity.label'],
             ]
         );
         $builder->add(

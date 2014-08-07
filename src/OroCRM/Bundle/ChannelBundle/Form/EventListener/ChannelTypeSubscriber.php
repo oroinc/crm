@@ -29,21 +29,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
      */
     public function preSet(FormEvent $event)
     {
-        $form = $event->getForm();
 
-        /** @var Channel $data */
-        $data = $event->getData();
-
-        if ($data === null) {
-            return;
-        }
-
-        $selectedEntities = $data->getEntities();
-        $entityChoices    = $form->get('entities')->getConfig()->getOption('choices');
-        $choices          = array_intersect_key($entityChoices, array_flip($selectedEntities));
-
-        $customerIdentityModifier = $this->getCustomerIdentityModifierClosure($choices);
-        $customerIdentityModifier($form);
     }
 
     /**
@@ -56,25 +42,27 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
 
         if (!empty($data['customerIdentity'])) {
             if (in_array($data['customerIdentity'], $data['entities'])) {
-                $choices = array_flip([$data['customerIdentity']]);
-                $customerIdentityModifier = $this->getCustomerIdentityModifierClosure($choices);
+                
+                $value = $data['customerIdentity'];
+
+                $customerIdentityModifier = $this->getCustomerIdentityModifierClosure($value);
                 $customerIdentityModifier($form);
             }
         }
     }
 
     /**
-     * @param array $choices
+     * @param string $choices
      *
      * @return callable
      */
-    protected function getCustomerIdentityModifierClosure(array $choices)
+    protected function getCustomerIdentityModifierClosure($value)
     {
-        return function (FormInterface $form) use ($choices) {
-            if (!$choices) {
+        return function (FormInterface $form) use ($value) {
+            if (!$value) {
                 return;
             }
-            FormUtils::replaceField($form, 'customerIdentity', ['choices' => $choices], ['choice_list']);
+            FormUtils::replaceField($form, 'customerIdentity', ['data' => $value]);
         };
     }
 }
