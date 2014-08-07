@@ -1,4 +1,0 @@
-OroCRM\Bundle\AccountBundle\Entity\Account:
-    icon_class:                         icon-user
-    name:                               orocrm.account.entity_label
-    description:                        orocrm.account.entity_description
