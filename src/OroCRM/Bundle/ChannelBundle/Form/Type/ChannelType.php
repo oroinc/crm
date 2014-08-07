@@ -36,8 +36,6 @@ class ChannelType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventSubscriber($this->channelTypeSubscriber);
-
         $builder->add(
             'name',
             'text',

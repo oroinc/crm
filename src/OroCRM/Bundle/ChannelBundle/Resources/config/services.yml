@@ -9,7 +9,6 @@ parameters:
     # forms
     orocrm_channel.form.type.channel.class:                            OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
     orocrm_channel.form.type.entity_choice.class:                      OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityChoiceType
-    orocrm_channel.form.type.customer_identity.class:                  OroCRM\Bundle\ChannelBundle\Form\Type\ChannelCustomerIdentityType
     orocrm_channel.form.type.channel_datasource.class:                 OroCRM\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType
 
     # manager
@@ -48,11 +47,6 @@ services:
             - @orocrm_channel.provider.channel_entity_provider
         tags:
             - { name: form.type, alias: orocrm_channel_entity_choice_form }
-
-    #orocrm_channel.form.type.customer_identity:
-    #    class: %orocrm_channel.form.type.customer_identity.class%
-    #    tags:
-    #        - { name: form.type, alias: orocrm_channel_customer_identity_select_form }
 
     orocrm_channel.form.type.channel_datasource:
         class: %orocrm_channel.form.type.channel_datasource.class%

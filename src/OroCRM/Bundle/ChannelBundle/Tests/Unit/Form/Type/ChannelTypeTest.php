@@ -48,9 +48,6 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
     public function testBuildForm()
     {
         $fields = [];
-        $this->builder->expects($this->once())
-            ->method('addEventSubscriber')
-            ->with($this->channelTypeSubscriber);
 
         $this->builder->expects($this->exactly(5))->method('add')
             ->will(
