@@ -39,6 +39,9 @@ define(['underscore', 'orotranslation/js/translator', 'backbone', 'oroui/js/medi
                 channelType: []
             },
 
+            /**
+             * Store items from `entities` field
+             */
             items: [],
 
             /**
@@ -54,15 +57,17 @@ define(['underscore', 'orotranslation/js/translator', 'backbone', 'oroui/js/medi
                 }
 
                 _.extend(this.fieldsSets, options.fieldsSets);
-                this.$channelTypeEl = $(options.channelTypeEl);
+
+                this.$channelTypeEl     = $(options.channelTypeEl);
                 this.$channelEntitiesEl = $(options.channelEntitiesEl);
-                this.$customerIdentity = $('#'+options.fieldsSets.customerIdentity);
+                this.$customerIdentity  = $('#' + options.fieldsSets.customerIdentity);
 
                 $(options.channelTypeEl).on('change', _.bind(this.changeHandler, this));
-                $('#'+this.fieldsSets.entities).on('change', _.bind(this.entitiesHandler, this));
+                $('#' + this.fieldsSets.entities).on('change', _.bind(this.entitiesHandler, this));
+
                 this.initSelect2(options.fieldsSets.customerIdentity);
 
-                if ([].length  === this.items.length) {
+                if ([].length === this.items.length) {
                     this.entitiesHandler();
                     this.setCustomerIdentityValue(this.$customerIdentity.val());
                 }
@@ -77,6 +82,7 @@ define(['underscore', 'orotranslation/js/translator', 'backbone', 'oroui/js/medi
                     url = $form.attr('action');
 
                 data.push({name: this.UPDATE_MARKER, value: 1});
+
                 var event = { formEl: $form, data: data, reloadManually: true };
 
                 mediator.trigger('channelViewFormReload:before', event);
@@ -153,18 +159,11 @@ define(['underscore', 'orotranslation/js/translator', 'backbone', 'oroui/js/medi
             },
 
             /**
+             * Set `Customer Identity` field value
              *
              * @param value
              */
             setCustomerIdentityValue: function(value) {
-                var self = this;
-
-                $.each(this.items, function(key, va) {
-                    if (_.findWhere(self.items, {id: va})) {
-                        console.log(this);
-                    }
-                });
-
                 this.$customerIdentity.select2('val', value);
             }
         });

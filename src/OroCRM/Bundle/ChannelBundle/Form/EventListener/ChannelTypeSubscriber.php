@@ -24,7 +24,6 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
      */
     public function preSet(FormEvent $event)
     {
-
     }
 
     /**
