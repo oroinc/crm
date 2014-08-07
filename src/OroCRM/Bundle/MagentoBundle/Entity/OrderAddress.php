@@ -35,10 +35,10 @@ class OrderAddress extends ExtendOrderAddress
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType",cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType")
      * @ORM\JoinTable(
      *     name="orocrm_magento_order_addr_type",
-     *     joinColumns={@ORM\JoinColumn(name="order_address_id", referencedColumnName="id", onDelete="CASCADE")},
+     *     joinColumns={@ORM\JoinColumn(name="order_address_id", referencedColumnName="id", onDelete="SET NULL")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )
      **/
