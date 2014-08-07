@@ -159,6 +159,14 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /**
      * {@inheritdoc}
      */
+    public function getStartDate()
+    {
+        return $this->lastSyncDateInitialValue;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setMode($mode)
     {
         $this->mode = $mode;
