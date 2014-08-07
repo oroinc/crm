@@ -87,7 +87,7 @@ class RestAccountTest extends WebTestCase
         );
         $result = $this->client->getResponse();
 
-        $this->assertJsonResponseStatusCodeEquals($result, 204);
+        $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
@@ -113,7 +113,7 @@ class RestAccountTest extends WebTestCase
             $this->getUrl('oro_api_delete_account', array('id' => $request['id']))
         );
         $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 204);
+        $this->assertEmptyResponseStatusCodeEquals($result, 204);
         $this->client->request('GET', $this->getUrl('oro_api_get_account', array('id' => $request['id'])));
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 404);

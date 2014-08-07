@@ -91,7 +91,7 @@ class DeleteChannelTest extends WebTestCase
             $this->getUrl('oro_api_delete_integration', ['id' => $this->channel->getId()])
         );
         $result = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($result, 204);
+        $this->assertEmptyResponseStatusCodeEquals($result, 204);
         $this->assertNull($this->getChannel());
         $this->assertNull($this->getCartByChannel($oldChannel));
         $this->assertNull($this->getOrderByChannel($oldChannel));
