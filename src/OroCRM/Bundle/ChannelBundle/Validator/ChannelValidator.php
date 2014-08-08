@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ChannelBundle\Validator;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
@@ -29,6 +30,10 @@ class ChannelValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
+        if (!($value instanceof Channel)) {
+            throw new UnexpectedTypeException($value, 'Channel');
+        }
+
         $this->constraint = $constraint;
 
         $this->validateCustomerIdentity($value);
@@ -42,7 +47,7 @@ class ChannelValidator extends ConstraintValidator
         $errorLabel = 'orocrm.channel.form.customer_identity_selected_not_correctly.label';
         $entities   = $channel->getEntities();
 
-        if (in_array($channel->getCustomerIdentity(), $entities)) {
+        if (!in_array($channel->getCustomerIdentity(), $entities)) {
             $this->addErrorMessage($errorLabel);
         }
     }
