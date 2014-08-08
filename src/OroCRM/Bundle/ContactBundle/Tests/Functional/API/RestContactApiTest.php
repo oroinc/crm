@@ -219,7 +219,16 @@ class RestContactApiTest extends WebTestCase
 
         /** @var Contact $entity */
         $entity = array_pop($entities);
-        $this->assertEquals('Contact_fname_1351068533', $entity->getFirstName());
+        $this->assertEquals($requestData['contact']['firstName'], $entity['firstName']);
+        $this->assertEquals($requestData['contact']['lastName'], $entity['lastName']);
+
+        $this->client->request(
+            'GET',
+            $this->getUrl('oro_api_get_contacts') . '?createdAt>2050-10-10T09:09:09+02:00'
+        );
+
+        $entities = $this->getJsonResponseContent($this->client->getResponse(), 200);
+        $this->assertEmpty($entities);
     }
 
     /**
