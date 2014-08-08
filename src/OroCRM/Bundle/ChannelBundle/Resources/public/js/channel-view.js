@@ -20,7 +20,7 @@ define(['underscore', 'orotranslation/js/translator', 'backbone', 'oroui/js/medi
              * @type {jQuery}
              */
             $channelTypeEl: null,
-            
+
             /**
              * @type {jQuery}
              */
