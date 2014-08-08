@@ -2,9 +2,11 @@
 
 namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
 
+use Doctrine\Common\Collections\Criteria;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
+use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -36,19 +38,131 @@ class ContactController extends RestController implements ClassResourceInterface
      * @QueryParam(
      *     name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10."
      * )
+     * @QueryParam(
+     *     name="createdAt", requirements="\w+", nullable=true,
+     *     description="Date string in 2008-07-01T22:35:17+08:00 format"
+     * )
+     * @QueryParam(
+     *     name="updatedAt", requirements="\w+", nullable=true,
+     *     description="Date string in 2008-07-01T22:35:17+08:00 format"
+     * )
+     * @QueryParam(
+     *     name="gender", requirements="male|female", nullable=true, description="Gender: male or female"
+     * )
      * @ApiDoc(
      *      description="Get all contacts items",
      *      resource=true
      * )
      * @AclAncestor("orocrm_contact_view")
+     *
+     * @throws \Exception
      * @return Response
      */
     public function cgetAction()
     {
-        $page = (int)$this->getRequest()->get('page', 1);
+        $page  = (int)$this->getRequest()->get('page', 1);
         $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
 
-        return $this->handleGetListRequest($page, $limit);
+        $dateClosure = function ($value) {
+            // datetime value hack due to the fact that some clients pass + encoded as %20 and not %2B,
+            // so it becomes space on symfony side due to parse_str php function in HttpFoundation\Request
+            $value = str_replace(' ', '+', $value);
+
+            // The timezone is ignored when DateTime value either are
+            // a UNIX timestamp (e.g. @946684800) or specifies a timezone (e.g. 2010-01-28T15:00:00+02:00)
+            return new \DateTime($value, new \DateTimeZone('UTC'));
+        };
+
+        $filterParameters = [
+            'createdAt' => [
+                'closure' => $dateClosure,
+            ],
+            'updatedAt' => [
+                'closure' => $dateClosure,
+            ],
+            'page' => [],
+        ];
+
+
+        $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters);
+
+        return $this->handleGetListRequest($page, $limit, $criteria);
+    }
+
+    /**
+     * @param array $supportedApiParams valid parameters that can be passed
+     * @param array $filterParameters   assoc array with filter params, like closure
+     *                                  [filterName => [closure => \Closure(...), ...]]
+     *
+     * @return array
+     * @throws \Exception
+     */
+    protected function getFilterCriteria($supportedApiParams, $filterParameters = [])
+    {
+        if (false === preg_match_all(
+            '#([\w\d_-]+)([<>=]{1,2})([^&]+)#',
+            rawurldecode($this->getRequest()->getQueryString()),
+            $matches,
+            PREG_SET_ORDER
+        )) {
+            throw new \Exception('No parameters found in query string');
+        }
+
+        $criteria = [];
+
+        $criteria    = Criteria::create();
+        $exprBuilder = Criteria::expr();
+
+
+        $allowedFilters = array_keys($filterParameters);
+
+        foreach ($matches as $paramData) {
+            list (,$paramName, $operator, $value) = $paramData;
+            $paramName = urldecode($paramName);
+
+            if (false === in_array($paramName, $supportedApiParams)) {
+                throw new \Exception(sprintf('Parameter "%s" not defined', $paramName));
+            }
+
+            if (empty($value) || !in_array($paramName, $allowedFilters)) {
+                continue;
+            }
+
+            $value   = urldecode($value);
+            $closure = empty($filterParameters[$paramName]['closure']) ?
+                false :
+                $filterParameters[$paramName]['closure'];
+
+            $value = is_callable($closure) ? $closure($value, $operator) : $value;
+
+
+            switch ($operator) {
+                case '>':
+                    $expr = $exprBuilder->gt($paramName, $value);
+                    break;
+                case '<':
+                    $expr = $exprBuilder->lt($paramName, $value);
+                    break;
+                case '>=':
+                    $expr = $exprBuilder->gte($paramName, $value);
+                    break;
+                case '<=':
+                    $expr = $exprBuilder->lte($paramName, $value);
+                    break;
+                case '<>':
+                    $expr = $exprBuilder->neq($paramName, $value);
+                    break;
+                case '=':
+                default:
+                    $expr = $exprBuilder->eq($paramName, $value);
+                    break;
+
+            }
+
+            $criteria->andWhere($expr);
+        }
+
+        return $criteria;
     }
 
     /**
