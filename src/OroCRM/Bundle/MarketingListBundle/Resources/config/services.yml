@@ -1,0 +1,4 @@
+parameters:
+    orocrm_marketing_list.entity.class:  OroCRM\Bundle\MarketingListBundle\Entity\MarketingList
+
+services:
