@@ -547,9 +547,12 @@ datagrid:
                     left:
                         - { join: o.workflowStep, alias: step }
                         - { join: o.customer, alias: customer }
-                        - { join: o.addresses, alias: address }
+                        -
+                            join: o.addresses
+                            alias: address
+                            conditionType: WITH
+                            condition: "address.id IN (SELECT oa.id FROM OroCRMMagentoBundle:OrderAddress oa LEFT JOIN oa.types type WHERE type.name = 'billing')"
                         - { join: address.country, alias: country }
-                        - { join: address.types, alias: type, conditionType: WITH, condition: type.name = 'billing' }
                         - { join: address.region, alias: region }
                         - { join: o.channel, alias: ch }
                         - { join: o.store, alias: cs }
