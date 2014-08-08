@@ -9,6 +9,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\Group;
 
 /**
@@ -147,7 +148,6 @@ class RestContactApiTest extends WebTestCase
      */
     public function testGetContact($request)
     {
-        $this->markTestSkipped('DEBUG');
         $this->client->request(
             'GET',
             $this->getUrl('oro_api_get_contacts')
@@ -215,6 +215,11 @@ class RestContactApiTest extends WebTestCase
         $entities = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertNotEmpty($entities);
+        $this->assertCount(1, $entities);
+
+        /** @var Contact $entity */
+        $entity = array_pop($entities);
+        $this->assertEquals('Contact_fname_1351068533', $entity->getFirstName());
     }
 
     /**
