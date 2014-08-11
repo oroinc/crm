@@ -49,9 +49,6 @@ class ContactController extends RestController implements ClassResourceInterface
      *     nullable=true,
      *     description="Date in RFC 3339 format. For example: 2009-11-05T13:15:30Z, 2008-07-01T22:35:17+08:00"
      * )
-     * @QueryParam(
-     *     name="gender", requirements="male|female", nullable=true, description="Gender: male or female"
-     * )
      * @ApiDoc(
      *      description="Get all contacts items",
      *      resource=true
@@ -82,7 +79,6 @@ class ContactController extends RestController implements ClassResourceInterface
             'updatedAt' => [
                 'closure' => $dateClosure,
             ],
-            'gender' => [],
         ];
 
         $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters);
