@@ -36,8 +36,6 @@ class ChannelType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventSubscriber($this->channelTypeSubscriber);
-
         $builder->add(
             'name',
             'text',
@@ -57,12 +55,10 @@ class ChannelType extends AbstractType
         );
         $builder->add(
             'customerIdentity',
-            'orocrm_channel_customer_identity_select_form',
+            'text',
             [
                 'required' => true,
                 'label'    => 'orocrm.channel.customer_identity.label',
-                'choices'  => [],
-                'configs'  => ['placeholder' => 'orocrm.channel.form.select_customer_identity.label'],
             ]
         );
         $builder->add(

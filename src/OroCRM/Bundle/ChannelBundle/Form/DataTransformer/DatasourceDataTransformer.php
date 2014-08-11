@@ -52,7 +52,7 @@ class DatasourceDataTransformer implements DataTransformerInterface
         }
 
         $data        = $value['data'];
-        $integration = $value['identifier'] ? $value['identifier'] : new Integration();
+        $integration = $value['identifier'] ? $value['identifier'] : (!empty($data) ? new Integration() : null);
 
         $form = $this->formFactory->create('oro_integration_channel_form', $integration, ['csrf_protection' => false]);
         if (!empty($data)) {
