@@ -209,7 +209,7 @@ class RestContactApiTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_contacts') . '?createdAt>2010-10-10T09:09:09+02:00'
+            $this->getUrl('oro_api_get_contacts') . '?createdAt>2010-10-10T09:09:09+02:00&page=1'
         );
 
         $entities = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -224,7 +224,7 @@ class RestContactApiTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_contacts') . '?createdAt>2050-10-10T09:09:09+02:00'
+            $this->getUrl('oro_api_get_contacts') . '?createdAt>2050-10-10T09:09:09+02:00&limit=20'
         );
 
         $entities = $this->getJsonResponseContent($this->client->getResponse(), 200);
