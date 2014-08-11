@@ -32,5 +32,3 @@ orocrm:
             select_data_source.label:  Please select customer source
             select_customer_identity.label: Please select customer identity
             select_channel_type.label: Choose channel type...
-            customer_identity_selected_not_correctly.label: Customer identity selected not correctly
-
