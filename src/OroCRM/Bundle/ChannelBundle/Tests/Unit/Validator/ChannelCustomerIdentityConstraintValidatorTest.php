@@ -2,19 +2,18 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Validator;
 
-use OroCRM\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityValidator;
-use OroCRM\Bundle\ChannelBundle\Validator\Constraints\ChannelCustomerIdentityConstraint;
+use OroCRM\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraintValidator;
+use OroCRM\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraint;
 
-class ChannelValidatorTest extends \PHPUnit_Framework_TestCase
+class ChannelCustomerIdentityConstraintValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
      */
     public function testValidateException()
     {
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
         $constraint = $this->getMock('Symfony\Component\Validator\Constraint');
-        $validator  = new ChannelCustomerIdentityValidator($translator);
+        $validator  = new ChannelCustomerIdentityConstraintValidator();
         $validator->validate(false, $constraint);
     }
 
@@ -32,8 +31,6 @@ class ChannelValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerIdentity')
             ->will($this->returnValue($customerIdentity));
 
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
-
         $context = $this->getMockBuilder('Symfony\Component\Validator\ExecutionContext')
             ->disableOriginalConstructor()->getMock();
 
@@ -44,7 +41,7 @@ class ChannelValidatorTest extends \PHPUnit_Framework_TestCase
         }
 
         $constraint = new ChannelCustomerIdentityConstraint();
-        $validator  = new ChannelCustomerIdentityValidator($translator);
+        $validator  = new ChannelCustomerIdentityConstraintValidator();
 
         $validator->initialize($context);
         $validator->validate($channel, $constraint);

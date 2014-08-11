@@ -2,28 +2,16 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Validator;
 
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-class ChannelCustomerIdentityValidator extends ConstraintValidator
+class ChannelCustomerIdentityConstraintValidator extends ConstraintValidator
 {
     /** @var Constraint */
     protected $constraint;
-
-    /** @var TranslatorInterface */
-    protected $translator;
-
-    /**
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
 
     /**
      * {@inheritdoc}
@@ -49,19 +37,7 @@ class ChannelCustomerIdentityValidator extends ConstraintValidator
         $entities   = $channel->getEntities();
 
         if (!in_array($channel->getCustomerIdentity(), $entities)) {
-            $this->addErrorMessage($fieldName, $errorLabel);
+            $this->context->addViolationAt($fieldName, $errorLabel);
         }
-    }
-
-    /**
-     * @param string $fieldName
-     * @param string $errorLabel
-     */
-    protected function addErrorMessage($fieldName, $errorLabel)
-    {
-        $this->context->addViolationAt(
-            $fieldName,
-            $this->translator->trans($errorLabel)
-        );
     }
 }
