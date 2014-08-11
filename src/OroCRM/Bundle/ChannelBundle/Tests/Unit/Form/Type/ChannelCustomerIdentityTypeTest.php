@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelCustomerIdentityType;
 
 class ChannelCustomerIdentityTypeTest extends \PHPUnit_Framework_TestCase

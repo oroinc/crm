@@ -77,9 +77,9 @@ class ChannelEntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
     public function exclusionProvider()
     {
         return [
-            'not related to channel entity given, should be skipped'                            => [true, false, null],
-            'related to channel entity given, should skip entities that belongs to integration' => [true, true, true],
-            'related to channel entity given, should not skip'                                  => [false, true, false],
+            'not related to channel entity given, should be skipped'                          => [true, false, null],
+            'related to channel entity given, should not skip entities belong to integration' => [true, false, true],
+            'related to channel entity given, should not skip'                                => [false, true, false],
         ];
     }
 }

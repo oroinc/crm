@@ -8,16 +8,28 @@ use Symfony\Component\Form\FormEvents;
 use Oro\Bundle\FormBundle\Form\Type\ChoiceListItem;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 use OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 
 class ChannelTypeSubscriberTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
+    protected $settingsProvider;
+
     /** @var ChannelTypeSubscriber */
     protected $subscriber;
 
     public function setUp()
     {
-        $this->subscriber = new ChannelTypeSubscriber();
+        $this->settingsProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
+            ->disableOriginalConstructor()->getMock();
+
+        $this->subscriber = new ChannelTypeSubscriber($this->settingsProvider);
+    }
+
+    public function tearDown()
+    {
+        unset($this->subscriber, $this->settingsProvider);
     }
 
     /**
