@@ -22,12 +22,17 @@ define(['jquery', 'underscore', 'backbone', 'oroui/js/mediator', 'oroui/js/delet
             $channelTypeEl: null,
 
             /**
+             * @type {jQuery}
+             */
+            $tokenEl: null,
+
+            /**
              * Array of fields that should be submitted for form update
              * Depends on what exact field changed
              */
             fields: {
-                name:        [],
-                channelType: []
+                name: null,
+                channelType: null
             },
 
             /**
@@ -44,6 +49,7 @@ define(['jquery', 'underscore', 'backbone', 'oroui/js/mediator', 'oroui/js/delet
 
                 _.extend(this.fields, options.fields);
                 this.$channelTypeEl = $(options.channelTypeEl);
+                this.$tokenEl = $(options.tokenEl);
                 this.$channelTypeEl.on('change', _.bind(this.changeHandler, this));
             },
 
@@ -57,8 +63,8 @@ define(['jquery', 'underscore', 'backbone', 'oroui/js/mediator', 'oroui/js/delet
                 var prevEl = e.removed;
 
                 var confirm = new DeleteConfirmation({
-                    title:   __('orocrm.channel.change_type'),
-                    okText:  __('Yes, I Agree'),
+                    title: __('orocrm.channel.change_type'),
+                    okText: __('Yes, I Agree'),
                     content: __('orocrm.channel.submit')
                 });
 
@@ -75,23 +81,23 @@ define(['jquery', 'underscore', 'backbone', 'oroui/js/mediator', 'oroui/js/delet
 
             /**
              * Reload form on change form type
-              */
-            processChange: function() {
+             */
+            processChange: function () {
                 var $form = $(this.options.formSelector),
-                    data  = $form.serializeArray(),
-                    url   = $form.attr('action'),
+                    data = $form.serializeArray(),
+                    url = $form.attr('action'),
                     elementNames = [];
 
-                $.each(this.options.fields,  function(key, value) {
-                    elementNames.push($('#' + value).attr('name'));
+                $.each(this.options.fields, function (key, value) {
+                    elementNames.push($(value).attr('name'));
                 });
 
                 var nd = _.pick(data, _.keys(elementNames)),
-                    newDataArray = $.map(nd, function(value, index) {
-                    return [value];
-                });
+                    newDataArray = $.map(nd, function (value, index) {
+                        return [value];
+                    });
 
-                newDataArray.push({name: 'orocrm_channel_form[_token]', value: $('#orocrm_channel_form__token').val()});
+                newDataArray.push({name: this.$tokenEl.name, value: this.$tokenEl.value});
                 newDataArray.push({name: this.UPDATE_MARKER, value: 1});
 
                 var event = { formEl: $form, data: data, reloadManually: true };
