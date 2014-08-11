@@ -1,12 +1,11 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
 {% if resource_granted('orocrm_task_create') %}
-    {# Find a way to pass here parameter from container to not hard-code class name #}
-    {% set task_entity_config = oro_entity_config('OroCRM\\Bundle\\TaskBundle\\Entity\\Task') %}
+    {# Find a way to pass here parameter from container to not hard-code class name for Task entity #}
     {{ UI.dropdownClientItem({
         'dataUrl': path('orocrm_task_create', { 'accountId': entity.id }) ,
         'aCss': 'no-hash',
-        'iCss': task_entity_config.icon|default(''),
+        'iCss': oro_entity_config_value('OroCRM\\Bundle\\TaskBundle\\Entity\\Task', 'icon')|default(''),
         'label' : 'orocrm.task.add_entity'|trans,
         'widget' : {
             'type' : 'dialog',

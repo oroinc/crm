@@ -305,12 +305,12 @@ class MagentoSoapTransport extends Transport
         if (null === $this->settings) {
             $this->settings = new ParameterBag(
                 [
-                    'api_user' => $this->getApiUser(),
-                    'api_key' => $this->getApiKey(),
-                    'wsdl_url' => $this->getWsdlUrl(),
-                    'sync_range' => $this->getSyncRange(),
-                    'wsi_mode' => $this->getIsWsiMode(),
-                    'website_id' => $this->getWebsiteId(),
+                    'api_user'        => $this->getApiUser(),
+                    'api_key'         => $this->getApiKey(),
+                    'wsdl_url'        => $this->getWsdlUrl(),
+                    'sync_range'      => $this->getSyncRange(),
+                    'wsi_mode'        => $this->getIsWsiMode(),
+                    'website_id'      => $this->getWebsiteId(),
                     'start_sync_date' => $this->getSyncStartDate(),
                 ]
             );
