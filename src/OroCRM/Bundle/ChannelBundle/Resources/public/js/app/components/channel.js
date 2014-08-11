@@ -68,10 +68,11 @@ define([
             this.$customerIdentityEl = $(options.customerIdentityEl);
 
             this.$channelTypeEl.on('change', _.bind(this.changeTypeHandler, this));
-            this.$customerIdentityEl.on('change', _.bind(this.changeEntitiesHandler, this));
+            this.$channelEntitiesEl.on('change', _.bind(this.changeEntitiesHandler, this));
 
             this._initCustomerIdentityField(this.$customerIdentityEl);
             this.changeEntitiesHandler();
+            this._setCustomerIdentityValue(this.$customerIdentityEl.val());
         },
 
         /**
@@ -151,10 +152,8 @@ define([
             var value = this.$customerIdentityEl.val();
 
             if (value) {
-                if (!_.findWhere(this.items, {id: value})) {
+                if (!_.findWhere(this.selectedEntities, {id: value})) {
                     this._setCustomerIdentityValue('');
-                } else {
-                    this._setCustomerIdentityValue(value);
                 }
             }
         },

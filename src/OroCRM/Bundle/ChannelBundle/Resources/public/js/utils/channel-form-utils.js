@@ -1,5 +1,4 @@
 define(['underscore'], function (_) {
-
     /**
      * @class orocrmchannel.utils.channelFormUtils
      */
@@ -17,7 +16,7 @@ define(['underscore'], function (_) {
                 results: []
             };
 
-            _.each(items, function (key, value) {
+            _.each(items, function (value) {
                 data.results.push(value);
             });
 
