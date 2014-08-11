@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
 
-use Doctrine\Common\Collections\Criteria;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -80,89 +79,12 @@ class ContactController extends RestController implements ClassResourceInterface
             'updatedAt' => [
                 'closure' => $dateClosure,
             ],
-            'page' => [],
+            'gender' => [],
         ];
-
 
         $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters);
 
         return $this->handleGetListRequest($page, $limit, $criteria);
-    }
-
-    /**
-     * @param array $supportedApiParams valid parameters that can be passed
-     * @param array $filterParameters   assoc array with filter params, like closure
-     *                                  [filterName => [closure => \Closure(...), ...]]
-     *
-     * @return array
-     * @throws \Exception
-     */
-    protected function getFilterCriteria($supportedApiParams, $filterParameters = [])
-    {
-        if (false === preg_match_all(
-            '#([\w\d_-]+)([<>=]{1,2})([^&]+)#',
-            rawurldecode($this->getRequest()->getQueryString()),
-            $matches,
-            PREG_SET_ORDER
-        )) {
-            throw new \Exception('No parameters found in query string');
-        }
-
-        $criteria = [];
-
-        $criteria    = Criteria::create();
-        $exprBuilder = Criteria::expr();
-
-
-        $allowedFilters = array_keys($filterParameters);
-
-        foreach ($matches as $paramData) {
-            list (,$paramName, $operator, $value) = $paramData;
-            $paramName = urldecode($paramName);
-
-            if (false === in_array($paramName, $supportedApiParams)) {
-                throw new \Exception(sprintf('Parameter "%s" not defined', $paramName));
-            }
-
-            if (empty($value) || !in_array($paramName, $allowedFilters)) {
-                continue;
-            }
-
-            $value   = urldecode($value);
-            $closure = empty($filterParameters[$paramName]['closure']) ?
-                false :
-                $filterParameters[$paramName]['closure'];
-
-            $value = is_callable($closure) ? $closure($value, $operator) : $value;
-
-
-            switch ($operator) {
-                case '>':
-                    $expr = $exprBuilder->gt($paramName, $value);
-                    break;
-                case '<':
-                    $expr = $exprBuilder->lt($paramName, $value);
-                    break;
-                case '>=':
-                    $expr = $exprBuilder->gte($paramName, $value);
-                    break;
-                case '<=':
-                    $expr = $exprBuilder->lte($paramName, $value);
-                    break;
-                case '<>':
-                    $expr = $exprBuilder->neq($paramName, $value);
-                    break;
-                case '=':
-                default:
-                    $expr = $exprBuilder->eq($paramName, $value);
-                    break;
-
-            }
-
-            $criteria->andWhere($expr);
-        }
-
-        return $criteria;
     }
 
     /**
