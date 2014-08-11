@@ -3,26 +3,33 @@
 {% endblock %}
 
 {% block orocrm_channel_datasource_form_widget %}
-    {% set containerElementId = form.vars.id ~ '-el' %}
-
-    <div id="{{ containerElementId }}"></div>
     {{ form_widget(form) }}
 
-    <script type="text/javascript">
-        require(['jquery', 'orocrmchannel/js/integration-widget-handler'],
-        function ($, IntegrationWidgetHandlerView) {
-            var view = new IntegrationWidgetHandlerView({
-                el: {{ ('#' ~ containerElementId)|json_encode|raw }},
-                idEl: {{ ('#' ~ form.identifier.vars.id)|json_encode|raw }},
-                dataEl: {{ ('#' ~ form.data.vars.id)|json_encode|raw }},
-                typeEl: {{ ('#' ~ form.type.vars.id)|json_encode|raw }},
-                nameEl: {{ ('#' ~ form.name.vars.id)|json_encode|raw }}
-            });
-            view.render();
-        });
-    </script>
+    {% set options = {
+        idEl:   '#' ~ form.identifier.vars.id,
+        dataEl: '#' ~ form.data.vars.id,
+        typeEl: '#' ~ form.type.vars.id,
+        nameEl: '#' ~ form.name.vars.id,
+    } %}
+
+    <div data-page-component-module="orocrmchannel/js/app/components/integration-widget"
+         data-page-component-options="{{ options|json_encode }}"></div>
 {% endblock %}
 
-{% block orocrm_channel_entity_choice_form_widget %}
-    {{ form_widget(form) }}
+{% block orocrm_channel_entity_choice_form_row %}
+    {# Storage element will be hidden field #}
+    {{ block('hidden_widget') }}
+
+    {#{{ _self.renderEntitySelectionJS(form) }}#}
+
+    {#
+        Renders JS for instantiation of "Entity selection" component
+        @TODO move to other macroses
+    #}
+    {% macro renderEntitySelectionJS(form) %}
+        {% set options = {} %}
+
+        <div data-page-component-module="orocrmchannel/js/entity-management/entity-selection-view"
+             data-page-component-options="{{ options|json_encode }}"></div>
+    {% endmacro %}
 {% endblock %}
