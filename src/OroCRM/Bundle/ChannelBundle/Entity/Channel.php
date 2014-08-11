@@ -70,7 +70,7 @@ class Channel
     /**
      * @var Integration
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel", cascade={"all"}, orphanRemoval=true)
      * @ORM\JoinColumn(name="data_source_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $dataSource;
