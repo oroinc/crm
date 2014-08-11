@@ -114,7 +114,10 @@ class CasesTest extends Selenium2TestCase
             ->assertTitle('Cases - Activities')
             ->assertMessage('Case deleted');
         /** @var Cases $login */
-        $login->openCases('OroCRM\Bundle\CaseBundle')
-            ->assertNoDataMessage('No records found');
+        $login->openCases('OroCRM\Bundle\CaseBundle');
+        if ($login->getRowsCount() > 0) {
+            $login->filterBy('Subject', $subject)
+                ->assertNoDataMessage('No entity was found to match your search');
+        }
     }
 }
