@@ -67,7 +67,9 @@ class ChannelController extends Controller
      */
     protected function update(Channel $channel)
     {
-        if ($this->get('orocrm_channel.channel_form.handler')->process($channel)) {
+        $handler = $this->get('orocrm_channel.channel_form.handler');
+
+        if ($handler->process($channel)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
                 $this->get('translator')->trans('orocrm.channel.controller.message.saved')
@@ -82,7 +84,7 @@ class ChannelController extends Controller
 
         return [
             'entity' => $channel,
-            'form'   => $this->get('orocrm_channel.form.channel')->createView(),
+            'form'   => $handler->getFormView(),
         ];
     }
 

@@ -12,8 +12,15 @@
         nameEl: '#' ~ form.name.vars.id,
     } %}
 
+<<<<<<< HEAD
     <div data-page-component-module="orocrmchannel/js/app/components/integration-widget"
          data-page-component-options="{{ options|json_encode }}"></div>
+=======
+    {% import 'OroCRMChannelBundle:Form:channelViewJS.html.twig' as channelViewJS %}
+    {{ channelViewJS.renderChannelFormJS(form) }}
+
+    {{ form_end(form, {'render_rest': false}) }}
+>>>>>>> feature/CRM-1567
 {% endblock %}
 
 {% block orocrm_channel_entity_choice_form_row %}
@@ -29,7 +36,12 @@
     {% macro renderEntitySelectionJS(form) %}
         {% set options = {} %}
 
+<<<<<<< HEAD
         <div data-page-component-module="orocrmchannel/js/entity-management/entity-selection-view"
              data-page-component-options="{{ options|json_encode }}"></div>
     {% endmacro %}
+=======
+    {% import 'OroCRMChannelBundle:Form:integrationWidgetHandlerJS.html.twig' as integrationWidgetHandlerJS %}
+    {{ integrationWidgetHandlerJS.integrationWidgetHandlerViewJS(form, containerElementId) }}
+>>>>>>> feature/CRM-1567
 {% endblock %}

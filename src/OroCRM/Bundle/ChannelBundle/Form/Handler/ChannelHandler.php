@@ -11,6 +11,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
+use Oro\Bundle\IntegrationBundle\Form\Handler\ChannelHandler as IntegrationChannelHandler;
+
 class ChannelHandler
 {
     /** @var Request */
@@ -55,7 +57,7 @@ class ChannelHandler
         if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
             $this->form->submit($this->request);
 
-            if ($this->form->isValid()) {
+            if (!$this->request->get(IntegrationChannelHandler::UPDATE_MARKER, false) && $this->form->isValid()) {
                 $this->doSave($entity);
 
                 return true;
@@ -76,5 +78,25 @@ class ChannelHandler
         $this->em->flush();
 
         $this->dispatcher->dispatch(ChannelSaveEvent::EVENT_NAME, new ChannelSaveEvent($entity));
+    }
+
+    /**
+     * Returns form instance
+     *
+     * @return FormInterface
+     */
+    public function getFormView()
+    {
+        $isUpdateOnly = $this->request->get(IntegrationChannelHandler::UPDATE_MARKER, false);
+
+        $form = $this->form;
+        // take different form due to JS validation should be shown even in case when it was not validated on backend
+        if ($isUpdateOnly) {
+            $config = $this->form->getConfig();
+            $form   = $config->getFormFactory()
+                ->createNamed('orocrm_channel_form', 'orocrm_channel_form', $form->getData());
+        }
+
+        return $form->createView();
     }
 }
