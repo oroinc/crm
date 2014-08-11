@@ -38,12 +38,16 @@ class ContactController extends RestController implements ClassResourceInterface
      *     name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10."
      * )
      * @QueryParam(
-     *     name="createdAt", requirements="\w+", nullable=true,
-     *     description="Date string in 2008-07-01T22:35:17+08:00 format"
+     *     name="createdAt",
+     *     requirements="\d{4}(-\d{2}(-\d{2}([T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|([-+]\d{2}(:?\d{2})?))?)?)?)?",
+     *     nullable=true,
+     *     description="Date in RFC 3339 format. For example: 2009-11-05T13:15:30Z, 2008-07-01T22:35:17+08:00"
      * )
      * @QueryParam(
-     *     name="updatedAt", requirements="\w+", nullable=true,
-     *     description="Date string in 2008-07-01T22:35:17+08:00 format"
+     *     name="updatedAt",
+     *     requirements="\d{4}(-\d{2}(-\d{2}([T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|([-+]\d{2}(:?\d{2})?))?)?)?)?",
+     *     nullable=true,
+     *     description="Date in RFC 3339 format. For example: 2009-11-05T13:15:30Z, 2008-07-01T22:35:17+08:00"
      * )
      * @QueryParam(
      *     name="gender", requirements="male|female", nullable=true, description="Gender: male or female"
@@ -67,8 +71,7 @@ class ContactController extends RestController implements ClassResourceInterface
             // so it becomes space on symfony side due to parse_str php function in HttpFoundation\Request
             $value = str_replace(' ', '+', $value);
 
-            // The timezone is ignored when DateTime value either are
-            // a UNIX timestamp (e.g. @946684800) or specifies a timezone (e.g. 2010-01-28T15:00:00+02:00)
+            // The timezone is ignored when DateTime value specifies a timezone (e.g. 2010-01-28T15:00:00+02:00)
             return new \DateTime($value, new \DateTimeZone('UTC'));
         };
 
