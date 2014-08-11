@@ -12,8 +12,7 @@
                         fieldsSets: {
                             name: {{ form.name.vars.id|json_encode|raw }},
                             channelType: {{ form.channelType.vars.id|json_encode|raw }},
-                            entities: {{ form.entities.vars.id|json_encode|raw }},
-                            customerIdentity: {{ form.customerIdentity.vars.id|json_encode|raw }}
+                            _token: {{ form._token.vars.id|json_encode|raw }}
                         },
                         channelTypeEl: {{ ('#' ~ form.channelType.vars.id)|json_encode|raw }}
                     });
