@@ -18,7 +18,7 @@ class ChannelEntityChoiceType extends EntityChoiceType
     {
         parent::buildForm($builder, $options);
 
-        $builder->addViewTransformer(new ArrayToJsonTransformer());
+//        $builder->addViewTransformer(new ArrayToJsonTransformer());
     }
 
     /**

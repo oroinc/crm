@@ -1,4 +1,5 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
+{% import 'OroCRMChannelBundle::macros.html.twig' as channelMacro %}
 
 {% form_theme form with ['OroCRMChannelBundle:Form:fields.html.twig'] %}
 
@@ -97,6 +98,8 @@
     } %}
 
     {{ parent() }}
+
+    {{ channelMacro.initializeChannelForm(form, orocrm_channel_entities_metadata(), orocrm_channel_integration_metadata()) }}
 {% endblock %}
 
 {% block breadcrumbs %}
