@@ -9,9 +9,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\IntegrationBundle\Form\Handler\ChannelHandler as IntegrationChannelHandler;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
+use Symfony\Component\Form\FormInterface;
 
 class ChannelController extends Controller
 {
@@ -80,9 +82,11 @@ class ChannelController extends Controller
             );
         }
 
+        $form = $this->getForm();
+
         return [
             'entity' => $channel,
-            'form'   => $this->get('orocrm_channel.form.channel')->createView(),
+            'form'   => $form->createView(),
         ];
     }
 
@@ -109,5 +113,24 @@ class ChannelController extends Controller
         $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($message));
 
         return $this->redirect($this->generateUrl('orocrm_channel_update', ['id' => $channel->getId()]));
+    }
+
+    /**
+     * Returns form instance
+     *
+     * @return FormInterface
+     */
+    protected function getForm()
+    {
+        $isUpdateOnly = $this->get('request')->get(IntegrationChannelHandler::UPDATE_MARKER, false);
+
+        $form = $this->get('orocrm_channel.form.channel');
+        // take different form due to JS validation should be shown even in case when it was not validated on backend
+        if ($isUpdateOnly) {
+            $form = $this->get('form.factory')
+                ->createNamed('orocrm_channel_form', 'orocrm_channel_form', $form->getData());
+        }
+
+        return $form;
     }
 }

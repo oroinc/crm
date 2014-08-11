@@ -93,7 +93,7 @@ define(['jquery', 'underscore', 'backbone', 'oroui/js/mediator', 'oroui/js/delet
 
                 newDataArray.push({name: 'orocrm_channel_form[_token]', value: $('#orocrm_channel_form__token').val()});
                 newDataArray.push({name: this.UPDATE_MARKER, value: 1});
-                
+
                 var event = { formEl: $form, data: data, reloadManually: true };
                 mediator.trigger('channelViewFormReload:before', event);
 
