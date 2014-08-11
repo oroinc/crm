@@ -3,5 +3,7 @@
 
 orocrm:
     channel:
-        submit: Are you sure you want to change type?
-        change_type: Change Type
+        confirmation:
+            submit: Are you sure you want to change type?
+            change_type: Change Type
+            agree: Yes, I Agree

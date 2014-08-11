@@ -63,9 +63,9 @@ define(['jquery', 'underscore', 'backbone', 'oroui/js/mediator', 'oroui/js/delet
                 var prevEl = e.removed;
 
                 var confirm = new DeleteConfirmation({
-                    title: __('orocrm.channel.change_type'),
-                    okText: __('Yes, I Agree'),
-                    content: __('orocrm.channel.submit')
+                    title: __('orocrm.channel.confirmation.change_type'),
+                    okText: __('orocrm.channel.confirmation.agree'),
+                    content: __('orocrm.channel.confirmation.submit')
                 });
 
                 confirm.on('ok', _.bind(function () {
