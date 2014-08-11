@@ -9,7 +9,7 @@
                 function ($, ChannelView) {
                     var view = new ChannelView({
                         formSelector: '#{{ form.vars.id }}',
-                        fieldsSets: {
+                        fields: {
                             name: {{ form.name.vars.id|json_encode|raw }},
                             channelType: {{ form.channelType.vars.id|json_encode|raw }},
                             _token: {{ form._token.vars.id|json_encode|raw }}

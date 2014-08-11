@@ -25,7 +25,7 @@ define(['jquery', 'underscore', 'backbone', 'oroui/js/mediator', 'oroui/js/delet
              * Array of fields that should be submitted for form update
              * Depends on what exact field changed
              */
-            fieldsSets: {
+            fields: {
                 name:        [],
                 channelType: []
             },
@@ -42,7 +42,7 @@ define(['jquery', 'underscore', 'backbone', 'oroui/js/mediator', 'oroui/js/delet
                     throw new TypeError('Missing required options for ChannelView');
                 }
 
-                _.extend(this.fieldsSets, options.fieldsSets);
+                _.extend(this.fields, options.fields);
                 this.$channelTypeEl = $(options.channelTypeEl);
                 this.$channelTypeEl.on('change', _.bind(this.changeHandler, this));
             },
@@ -82,7 +82,7 @@ define(['jquery', 'underscore', 'backbone', 'oroui/js/mediator', 'oroui/js/delet
                     url   = $form.attr('action'),
                     elementNames = [];
 
-                $.each(this.options.fieldsSets,  function(key, value) {
+                $.each(this.options.fields,  function(key, value) {
                     elementNames.push($('#' + value).attr('name'));
                 });
 
