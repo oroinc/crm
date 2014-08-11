@@ -1,3 +1,12 @@
 "Configure integration": "Configure integration"
 "configure": "configure"
-orocrm.channel.form.select_customer_identity: Please select customer identity
+
+orocrm:
+    channel:
+        form:
+            select_customer_identity: Please select customer identity
+        confirmation:
+            text: Are you sure you want to change type?
+            title: Change Type
+            agree: Yes, I Agree
+

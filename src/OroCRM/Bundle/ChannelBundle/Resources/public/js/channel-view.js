@@ -1,8 +1,15 @@
-define(['underscore', 'orotranslation/js/translator', 'backbone', 'oroui/js/mediator', 'jquery.select2'],
-    function (_, __, Backbone, mediator) {
+define(
+    [
+        'underscore',
+        'orotranslation/js/translator',
+        'backbone',
+        'jquery',
+        'oroui/js/mediator',
+        'oroui/js/delete-confirmation',
+        'jquery.select2'
+    ],
+    function (_, __, Backbone, $, mediator, DeleteConfirmation) {
         'use strict';
-
-        var $ = Backbone.$;
 
         /**
          * @export  orocrmchannel/js/channel-view
@@ -24,6 +31,11 @@ define(['underscore', 'orotranslation/js/translator', 'backbone', 'oroui/js/medi
             /**
              * @type {jQuery}
              */
+            $tokenEl: null,
+
+            /**
+             * @type {jQuery}
+             */
             $channelEntitiesEl: null,
 
             /**
@@ -35,9 +47,9 @@ define(['underscore', 'orotranslation/js/translator', 'backbone', 'oroui/js/medi
              * Array of fields that should be submitted for form update
              * Depends on what exact field changed
              */
-            fieldsSets: {
-                name:        [],
-                channelType: []
+            fields: {
+                name: null,
+                channelType: null
             },
 
             /**
@@ -57,39 +69,76 @@ define(['underscore', 'orotranslation/js/translator', 'backbone', 'oroui/js/medi
                     throw new TypeError('Missing required options for ChannelView');
                 }
 
-                _.extend(this.fieldsSets, options.fieldsSets);
-
-                this.$channelTypeEl     = $(options.channelTypeEl);
+                _.extend(this.fields, options.fields);
+                this.$channelTypeEl = $(options.channelTypeEl);
+                this.$tokenEl = $(options.tokenEl);
                 this.$channelEntitiesEl = $(options.channelEntitiesEl);
-                this.$customerIdentity  = $('#' + options.fieldsSets.customerIdentity);
+                this.$customerIdentity = $(options.fields.customerIdentity);
 
-                $(options.channelTypeEl).on('change', _.bind(this.changeHandler, this));
-                $('#' + this.fieldsSets.entities).on('change', _.bind(this.entitiesHandler, this));
+                $(options.channelTypeEl).on('change', _.bind(this.changeTypeHandler, this));
+                $(this.fields.entities).on('change', _.bind(this.entitiesHandler, this));
 
-                this.initSelect2(options.fieldsSets.customerIdentity);
+                this.initSelect2(options.fields.customerIdentity);
 
-                if ([].length === this.items.length) {
+                if (0 === this.items.length) {
                     this.entitiesHandler();
                     this.setCustomerIdentityValue(this.$customerIdentity.val());
                 }
             },
 
             /**
-             * This is listening changes in channel type field and submit form
+             * Open modal window
+             *
+             * @param e
              */
-            changeHandler: function () {
+            changeTypeHandler: function (e) {
+                var prevEl = e.removed,
+                    confirm = new DeleteConfirmation({
+                    title: __('orocrm.channel.confirmation.title'),
+                    okText: __('orocrm.channel.confirmation.agree'),
+                    content: __('orocrm.channel.confirmation.text')
+                });
+
+                confirm.on('ok', _.bind(function () {
+                    this.processChangeType(this.$channelTypeEl);
+                }, this));
+
+                confirm.on('cancel', _.bind(function () {
+                    this.$channelTypeEl.select2('val', prevEl.id)
+                }, this));
+
+                confirm.open();
+            },
+
+            /**
+             * Reload form on change form type
+             */
+            processChangeType: function () {
                 var $form = $(this.options.formSelector),
                     data = $form.serializeArray(),
-                    url = $form.attr('action');
+                    url = $form.attr('action'),
+                    elementNames = [];
 
-                data.push({name: this.UPDATE_MARKER, value: 1});
+                $.each(this.options.fields, function (key, value) {
+                    elementNames.push($(value).attr('name'));
+                });
+
+                var nd = _.pick(data, _.keys(elementNames)),
+                    newDataArray = $.map(nd, function (value, index) {
+                        return [value];
+                    });
+
+                newDataArray.push({name: this.$tokenEl.name, value: this.$tokenEl.value});
+                newDataArray.push({name: this.UPDATE_MARKER, value: 1});
 
                 var event = { formEl: $form, data: data, reloadManually: true };
-
                 mediator.trigger('channelViewFormReload:before', event);
 
                 if (event.reloadManually) {
-                    mediator.execute('submitPage', {url: url, type: $form.attr('method'), data: $.param(data)});
+                    mediator.execute(
+                        'submitPage',
+                        {url: url, type: $form.attr('method'), data: $.param(newDataArray)}
+                    );
                 }
             },
 
@@ -101,7 +150,7 @@ define(['underscore', 'orotranslation/js/translator', 'backbone', 'oroui/js/medi
                     self = this;
                 this.items = [];
 
-                $.each(selectedEntities, function(key, value) {
+                $.each(selectedEntities, function (key, value) {
                     var jqOption = $(value),
                         item = {
                             id: jqOption.val(),
@@ -116,7 +165,7 @@ define(['underscore', 'orotranslation/js/translator', 'backbone', 'oroui/js/medi
              * Validate `select2` if you delete value from `Entities` field and don't delete from `Customer identity`
              * field, it will reset value in `Customer identity` field
              */
-            validateSelect2: function() {
+            validateSelect2: function () {
                 var value = this.$customerIdentity.val();
 
                 if (value) {
@@ -133,10 +182,10 @@ define(['underscore', 'orotranslation/js/translator', 'backbone', 'oroui/js/medi
              */
             initSelect2: function (id) {
                 var self = this;
-                $('#' + id).select2({
+                $(id).select2({
                     placeholder: __('orocrm.channel.form.select_customer_identity'),
                     data: function () {
-                        return self.data();
+                        return self.select2Data();
                     }
                 });
             },
@@ -146,13 +195,13 @@ define(['underscore', 'orotranslation/js/translator', 'backbone', 'oroui/js/medi
              *
              * @returns Object
              */
-            data: function() {
+            select2Data: function () {
                 var data = {
                     more: false,
                     results: []
                 };
 
-                $.each(this.items, function(key, value) {
+                $.each(this.items, function (key, value) {
                     data.results.push(value);
                 });
 
@@ -164,7 +213,7 @@ define(['underscore', 'orotranslation/js/translator', 'backbone', 'oroui/js/medi
              *
              * @param value
              */
-            setCustomerIdentityValue: function(value) {
+            setCustomerIdentityValue: function (value) {
                 this.$customerIdentity.select2('val', value);
             }
         });

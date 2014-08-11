@@ -1,6 +1,6 @@
 OroCRM\Bundle\ChannelBundle\Entity\Channel:
     constraints:
-        - OroCRM\Bundle\ChannelBundle\Validator\Constraints\ChannelConstraint: ~
+        - OroCRM\Bundle\ChannelBundle\Validator\Constraints\ChannelCustomerIdentityConstraint: ~
     properties:
         name:
             - NotBlank: ~

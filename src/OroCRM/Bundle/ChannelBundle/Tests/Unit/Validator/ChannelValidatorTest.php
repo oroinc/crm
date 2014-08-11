@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Validator;
 
-use OroCRM\Bundle\ChannelBundle\Validator\ChannelValidator;
+use OroCRM\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityValidator;
 
 class ChannelValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +13,7 @@ class ChannelValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
         $constraint = $this->getMock('Symfony\Component\Validator\Constraint');
-        $validator  = new ChannelValidator($translator);
+        $validator  = new ChannelCustomerIdentityValidator($translator);
         $validator->validate(false, $constraint);
     }
 
@@ -42,8 +42,9 @@ class ChannelValidatorTest extends \PHPUnit_Framework_TestCase
             $context->expects($this->once())->method('addViolation');
         }
 
-        $constraint = $this->getMock('OroCRM\Bundle\ChannelBundle\Validator\Constraints\ChannelConstraint');
-        $validator  = new ChannelValidator($translator);
+        $constraint = $this
+            ->getMock('OroCRM\Bundle\ChannelBundle\Validator\Constraints\ChannelCustomerIdentityConstraint');
+        $validator  = new ChannelCustomerIdentityValidator($translator);
 
         $validator->initialize($context);
         $validator->validate($channel, $constraint);

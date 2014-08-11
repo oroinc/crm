@@ -8,15 +8,19 @@
         require(['jquery', 'orocrmchannel/js/channel-view'],
                 function ($, ChannelView) {
                     var view = new ChannelView({
-                        formSelector: '#{{ form.vars.id }}',
-                        fieldsSets: {
-                            name: {{ form.name.vars.id|json_encode|raw }},
-                            channelType: {{ form.channelType.vars.id|json_encode|raw }},
-                            entities: {{ form.entities.vars.id|json_encode|raw }},
-                            customerIdentity: {{ form.customerIdentity.vars.id|json_encode|raw }}
+                        formSelector: {{ ('#' ~ form.vars.id)|json_encode|raw }},
+                        fields: {
+                            name: {{ ('#' ~ form.name.vars.id)|json_encode|raw }},
+                            channelType: {{ ('#' ~ form.channelType.vars.id)|json_encode|raw }},
+                            entities: {{ ('#' ~ form.entities.vars.id)|json_encode|raw }},
+                            customerIdentity: {{ ('#' ~ form.customerIdentity.vars.id)|json_encode|raw }}
                         },
                         channelTypeEl: {{ ('#' ~ form.channelType.vars.id)|json_encode|raw }},
-                        channelEntitiesEl: {{ ('#' ~ form.entities.vars.id)|json_encode|raw }}
+                        channelEntitiesEl: {{ ('#' ~ form.entities.vars.id)|json_encode|raw }},
+                        tokenEl: {
+                            name: {{ form._token.vars.full_name|json_encode|raw }},
+                            value: {{ form._token.vars.value|json_encode|raw }}
+                        }
                     });
                     view.render();
                 });

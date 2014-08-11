@@ -4,14 +4,14 @@ namespace OroCRM\Bundle\ChannelBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 
-class ChannelConstraint extends Constraint
+class ChannelCustomerIdentityConstraint extends Constraint
 {
     /**
      * {@inheritdoc}
      */
     public function validatedBy()
     {
-        return 'orocrm_channle.channel_validator';
+        return 'orocrm_channle.channel_validator.customer_identity';
     }
 
     /**

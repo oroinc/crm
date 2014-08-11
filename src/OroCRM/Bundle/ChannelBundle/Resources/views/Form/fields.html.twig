@@ -31,6 +31,6 @@
     <div id="{{ containerElementId }}"></div>
     {{ form_widget(form) }}
 
-    {% import 'OroCRMChannelBundle:Form:IntegrationWidgetHandlerJS.html.twig' as integrationWidgetHandlerJS %}
-    {{ integrationWidgetHandlerJS.IntegrationWidgetHandlerViewJS(form, containerElementId) }}
+    {% import 'OroCRMChannelBundle:Form:integrationWidgetHandlerJS.html.twig' as integrationWidgetHandlerJS %}
+    {{ integrationWidgetHandlerJS.integrationWidgetHandlerViewJS(form, containerElementId) }}
 {% endblock %}

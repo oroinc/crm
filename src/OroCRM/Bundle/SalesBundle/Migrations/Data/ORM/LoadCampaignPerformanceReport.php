@@ -111,8 +111,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
             ],
             'grouping_columns' => [
                 [
-                    'name'                                   => 'id',
-                    'oro_report_form[grouping][columnNames]' => 'id'
+                    'name' => 'id'
                 ]
             ]
         ];

@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-class ChannelValidator extends ConstraintValidator
+class ChannelCustomerIdentityValidator extends ConstraintValidator
 {
     /** @var Constraint */
     protected $constraint;
@@ -45,19 +45,22 @@ class ChannelValidator extends ConstraintValidator
     protected function validateCustomerIdentity(Channel $channel)
     {
         $errorLabel = 'orocrm.channel.form.customer_identity_selected_not_correctly.label';
+        $fieldName  = 'customerIdentity';
         $entities   = $channel->getEntities();
 
-        if (!in_array($channel->getCustomerIdentity(), $entities)) {
-            $this->addErrorMessage($errorLabel);
+        if (in_array($channel->getCustomerIdentity(), $entities)) {
+            $this->addErrorMessage($fieldName, $errorLabel);
         }
     }
 
     /**
+     * @param string $fieldName
      * @param string $errorLabel
      */
-    protected function addErrorMessage($errorLabel)
+    protected function addErrorMessage($fieldName, $errorLabel)
     {
-        $this->context->addViolation(
+        $this->context->addViolationAt(
+            $fieldName,
             $this->translator->trans($errorLabel)
         );
     }
