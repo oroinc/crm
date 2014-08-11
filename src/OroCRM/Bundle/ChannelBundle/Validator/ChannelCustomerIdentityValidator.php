@@ -48,7 +48,7 @@ class ChannelCustomerIdentityValidator extends ConstraintValidator
         $fieldName  = 'customerIdentity';
         $entities   = $channel->getEntities();
 
-        if (in_array($channel->getCustomerIdentity(), $entities)) {
+        if (!in_array($channel->getCustomerIdentity(), $entities)) {
             $this->addErrorMessage($fieldName, $errorLabel);
         }
     }

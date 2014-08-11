@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Validator;
 
 use OroCRM\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityValidator;
+use OroCRM\Bundle\ChannelBundle\Validator\Constraints\ChannelCustomerIdentityConstraint;
 
 class ChannelValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,13 +38,12 @@ class ChannelValidatorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
 
         if ($isValid) {
-            $context->expects($this->never())->method('addViolation');
+            $context->expects($this->never())->method('addViolationAt');
         } else {
-            $context->expects($this->once())->method('addViolation');
+            $context->expects($this->once())->method('addViolationAt');
         }
 
-        $constraint = $this
-            ->getMock('OroCRM\Bundle\ChannelBundle\Validator\Constraints\ChannelCustomerIdentityConstraint');
+        $constraint = new ChannelCustomerIdentityConstraint();
         $validator  = new ChannelCustomerIdentityValidator($translator);
 
         $validator->initialize($context);
