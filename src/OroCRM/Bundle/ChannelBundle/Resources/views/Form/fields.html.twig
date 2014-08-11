@@ -15,6 +15,9 @@
         {{ form_row(form.customerIdentity) }}
     {% endif %}
 
+    {% import 'OroCRMChannelBundle:Form:channelViewJS.html.twig' as channelViewJS %}
+    {{ channelViewJS.renderChannelFormJS(form) }}
+
     {{ form_end(form, {'render_rest': false}) }}
 {% endblock %}
 
@@ -28,17 +31,6 @@
     <div id="{{ containerElementId }}"></div>
     {{ form_widget(form) }}
 
-    <script type="text/javascript">
-        require(['jquery', 'orocrmchannel/js/integration-widget-handler'],
-        function ($, IntegrationWidgetHandlerView) {
-            var view = new IntegrationWidgetHandlerView({
-                el: {{ ('#' ~ containerElementId)|json_encode|raw }},
-                idEl: {{ ('#' ~ form.identifier.vars.id)|json_encode|raw }},
-                dataEl: {{ ('#' ~ form.data.vars.id)|json_encode|raw }},
-                typeEl: {{ ('#' ~ form.type.vars.id)|json_encode|raw }},
-                nameEl: {{ ('#' ~ form.name.vars.id)|json_encode|raw }}
-            });
-            view.render();
-        });
-    </script>
+    {% import 'OroCRMChannelBundle:Form:integrationWidgetHandlerJS.html.twig' as integrationWidgetHandlerJS %}
+    {{ integrationWidgetHandlerJS.integrationWidgetHandlerViewJS(form, containerElementId) }}
 {% endblock %}
