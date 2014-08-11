@@ -39,4 +39,13 @@ class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('orocrm_channel_entities_metadata', $result);
         $this->assertArrayHasKey('orocrm_channel_integration_metadata', $result);
     }
+
+    public function testGetIntegrationEntitiesMetadata()
+    {
+        $this->provider->expects($this->once())
+            ->method('getIntegrationEntities');
+
+        $integrationEntities = new MetadataExtension($this->provider);
+        $integrationEntities->getIntegrationEntities();
+    }
 }
