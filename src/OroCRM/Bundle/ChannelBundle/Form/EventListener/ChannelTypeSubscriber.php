@@ -7,8 +7,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Oro\Bundle\FormBundle\Utils\FormUtils;
-
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
@@ -50,14 +48,6 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // rebuilds customer identity field
-        $selectedEntities = $data->getEntities();
-        $entityChoices    = $form->get('entities')->getConfig()->getOption('choices');
-        $choices          = array_intersect_key($entityChoices, array_flip($selectedEntities));
-
-        $customerIdentityModifier = $this->getCustomerIdentityModifierClosure($choices);
-        $customerIdentityModifier($form);
-
         // builds datasource field
         $datasourceModifier = $this->getDatasourceModifierClosure($data->getChannelType());
         $datasourceModifier($form);
@@ -68,37 +58,12 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
      */
     public function preSubmit(FormEvent $event)
     {
-        $form     = $event->getForm();
-        $data     = $event->getData();
-        $entities = !empty($data['entities']) ? $data['entities'] : [];
+        $form = $event->getForm();
+        $data = $event->getData();
 
-        if (!empty($data['customerIdentity'])) {
-            if (in_array($data['customerIdentity'], $entities)) {
-                $choices                  = array_flip([$data['customerIdentity']]);
-                $customerIdentityModifier = $this->getCustomerIdentityModifierClosure($choices);
-                $customerIdentityModifier($form);
-            }
-        }
-
-        // builds datasource field
         $channelType        = !empty($data['channelType']) ? $data['channelType'] : null;
         $datasourceModifier = $this->getDatasourceModifierClosure($channelType);
         $datasourceModifier($form);
-    }
-
-    /**
-     * @param array $choices
-     *
-     * @return callable
-     */
-    protected function getCustomerIdentityModifierClosure(array $choices)
-    {
-        return function (FormInterface $form) use ($choices) {
-            if (!$choices) {
-                return;
-            }
-            FormUtils::replaceField($form, 'customerIdentity', ['choices' => $choices], ['choice_list']);
-        };
     }
 
     /**

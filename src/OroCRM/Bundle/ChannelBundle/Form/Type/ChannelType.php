@@ -23,10 +23,8 @@ class ChannelType extends AbstractType
     /** @var ChannelTypeSubscriber */
     protected $channelTypeSubscriber;
 
-    public function __construct(
-        SettingsProvider $settingsProvider,
-        ChannelTypeSubscriber $channelTypeSubscriber
-    ) {
+    public function __construct(SettingsProvider $settingsProvider, ChannelTypeSubscriber $channelTypeSubscriber)
+    {
         $this->settingsProvider      = $settingsProvider;
         $this->channelTypeSubscriber = $channelTypeSubscriber;
     }
@@ -36,8 +34,6 @@ class ChannelType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventSubscriber($this->channelTypeSubscriber);
-
         $builder->add(
             'name',
             'text',
@@ -48,12 +44,10 @@ class ChannelType extends AbstractType
         );
         $builder->add(
             'customerIdentity',
-            'orocrm_channel_customer_identity_select_form',
+            'text',
             [
                 'required' => true,
                 'label'    => 'orocrm.channel.customer_identity.label',
-                'choices'  => ['OroCRM\Bundle\SalesBundle\Entity\Lead'],
-                'configs'  => ['placeholder' => 'orocrm.channel.form.select_customer_identity.label'],
             ]
         );
         $builder->add(
@@ -95,11 +89,7 @@ class ChannelType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(
-            [
-                'data_class' => 'OroCRM\\Bundle\\ChannelBundle\\Entity\\Channel'
-            ]
-        );
+        $resolver->setDefaults(['data_class' => 'OroCRM\\Bundle\\ChannelBundle\\Entity\\Channel']);
     }
 
     /**
