@@ -28,13 +28,7 @@ class ChannelEntityExclusionProvider implements ExclusionProviderInterface
      */
     public function isIgnoredEntity($className)
     {
-        // show channel entities that doesn't belongs to integrations
-        if ($this->settingsProvider->isChannelEntity($className)) {
-            return $this->settingsProvider->belongsToIntegration($className);
-        }
-
-        // all not related to channel entities will be ignored
-        return true;
+        return !$this->settingsProvider->isChannelEntity($className);
     }
 
     /**

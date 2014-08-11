@@ -6,7 +6,7 @@ use Oro\Component\Config\Resolver\ResolverInterface;
 
 class SettingsProvider
 {
-    const DATA_PATH = 'entity_data';
+    const DATA_PATH         = 'entity_data';
     const CHANNEL_TYPE_PATH = 'channel_types';
 
     /** @var array */
@@ -175,13 +175,34 @@ class SettingsProvider
      */
     public function getChannelTypeChoiceList()
     {
-        $settings     = $this->getSettings(self::CHANNEL_TYPE_PATH);
+        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
         $channelTypes = [];
 
-        foreach (array_keys($settings) as $entityName) {
-            $channelTypes[$entityName] = $settings[$entityName]['label'];
+        foreach (array_keys($settings) as $channelTypeName) {
+            $channelTypes[$channelTypeName] = $settings[$channelTypeName]['label'];
         }
 
         return $channelTypes;
+    }
+
+    /**
+     * Get required integration type for given channel type
+     *
+     * @param string $channelType
+     *
+     * @return bool|string     Returns false if channel type does not require to include integration,
+     *                         integration type otherwise
+     * @throws \LogicException If channel type config not found
+     */
+    public function getIntegrationType($channelType)
+    {
+        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
+
+        if (!isset($settings[$channelType])) {
+            throw new \LogicException(sprintf('Unable to find "%s" channel type\'s config', $channelType));
+        }
+
+        return !empty($settings[$channelType]['integration_type'])
+            ? $settings[$channelType]['integration_type'] : false;
     }
 }

@@ -68,16 +68,27 @@
 
 {% block content_data %}
     {% set id = 'channel-update' %}
-    {% set dataBlocks = [] %}
 
-    {% set dataBlocks = [{
-        'title': 'General'|trans,
-        'class': 'active',
-        'subblocks': [{
-            'title': 'Basic Information'|trans,
-            'data':  [form_widget(form)]
-        }]
-    }]|merge(dataBlocks) %}
+    {% set dataBlocks = [
+        {
+            'title': 'General'|trans,
+            'subblocks': [{
+                'title': '',
+                'data':  [
+                    form_row(form.name),
+                    form_row(form.channelType),
+                    form.dataSource is defined ? form_row(form.dataSource) : ''
+                ]
+            }]
+        },
+        {
+            'title': 'Entities'|trans,
+            'subblocks': [{
+                'title': '',
+                'data':  [form_row(form.entities)]
+            }]
+        }
+    ] %}
 
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
