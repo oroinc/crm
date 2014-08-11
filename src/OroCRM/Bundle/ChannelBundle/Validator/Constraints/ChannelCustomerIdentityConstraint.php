@@ -11,7 +11,7 @@ class ChannelCustomerIdentityConstraint extends Constraint
      */
     public function validatedBy()
     {
-        return 'orocrm_channle.channel_validator.customer_identity';
+        return 'orocrm_channel.channel_validator.customer_identity';
     }
 
     /**

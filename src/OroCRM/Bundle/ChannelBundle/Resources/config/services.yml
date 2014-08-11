@@ -32,7 +32,7 @@ parameters:
     orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
 
     #validator
-    orocrm_channle.validator.customer_identity.class:                  OroCRM\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityValidator
+    orocrm_channel.validator.customer_identity.class:                  OroCRM\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityValidator
 
 services:
     # forms
@@ -167,9 +167,9 @@ services:
             - { name: twig.extension }
 
     #validator
-    orocrm_channle.validator.customer_identity:
-        class: %orocrm_channle.validator.customer_identity.class%
+    orocrm_channel.validator.customer_identity:
+        class: %orocrm_channel.validator.customer_identity.class%
         arguments:
             - @translator
         tags:
-            - { name: validator.constraint_validator, alias: orocrm_channle.channel_validator.customer_identity }
+            - { name: validator.constraint_validator, alias: orocrm_channel.channel_validator.customer_identity }
