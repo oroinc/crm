@@ -22,7 +22,7 @@
     ],
     "require": {
         "php": ">=5.4.4",
-        "oro/platform": "1.3.0"
+        "oro/platform": "1.x-dev"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
