@@ -412,7 +412,7 @@ class Customer extends ExtendCustomer
      */
     public function setIsActive($isActive)
     {
-        $this->isActive = (bool)$isActive;
+        $this->isActive = $isActive;
 
         return $this;
     }
@@ -457,7 +457,7 @@ class Customer extends ExtendCustomer
     public function getAddressByOriginId($originId)
     {
         return $this->addresses->filter(
-            function (Address $item) use ($originId) {
+            function ($item) use ($originId) {
                 return $item->getOriginId() == $originId;
             }
         )->first();

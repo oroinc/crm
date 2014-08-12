@@ -418,7 +418,7 @@ class Order extends ExtendOrder
      */
     public function setIsGuest($isGuest)
     {
-        $this->isGuest = (bool)$isGuest;
+        $this->isGuest = $isGuest;
 
         return $this;
     }
@@ -438,7 +438,7 @@ class Order extends ExtendOrder
      */
     public function setIsVirtual($isVirtual)
     {
-        $this->isVirtual = (bool)$isVirtual;
+        $this->isVirtual = $isVirtual;
 
         return $this;
     }

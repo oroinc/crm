@@ -124,7 +124,7 @@ class CartItem extends ExtendCartItem
      *
      * @ORM\Column(name="tax_amount", type="money")
      */
-    protected $taxAmount = 0;
+    protected $taxAmount;
 
     /**
      * @var string
@@ -216,8 +216,7 @@ class CartItem extends ExtendCartItem
      */
     public function setIsVirtual($isVirtual)
     {
-        $this->isVirtual = (bool)$isVirtual;
-
+        $this->isVirtual = $isVirtual;
         return $this;
     }
 
@@ -325,13 +324,13 @@ class CartItem extends ExtendCartItem
     }
 
     /**
-     * @param double $taxAmount
+     * @param float $taxAmount
      *
      * @return CartItem
      */
     public function setTaxAmount($taxAmount)
     {
-        $this->taxAmount = (double)$taxAmount;
+        $this->taxAmount = $taxAmount;
         return $this;
     }
 
