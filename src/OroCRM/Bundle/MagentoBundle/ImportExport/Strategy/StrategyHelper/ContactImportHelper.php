@@ -200,6 +200,13 @@ class ContactImportHelper
         if (!$contact->getPrimaryAddress() && $toBePrimary) {
             $toBePrimary->setPrimary(true);
         }
+
+        // Set contact primary phone if none
+        if (!$contact->getPrimaryPhone()) {
+            if ($contact->getPhones()->count() > 0) {
+                $contact->getPhones()->first()->setPrimary(true);
+            }
+        }
     }
 
     /**

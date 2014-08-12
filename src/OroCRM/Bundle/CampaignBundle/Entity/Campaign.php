@@ -13,7 +13,10 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
 /**
  * @package OroCRM\Bundle\OroCRMCampaignBundle\Entity
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\CampaignBundle\Entity\Repository\CampaignRepository")
- * @ORM\Table(name="orocrm_campaign")
+ * @ORM\Table(
+ *      name="orocrm_campaign",
+ *      indexes={@ORM\Index(name="cmpgn_owner_idx", columns={"owner_id"})}
+ * )
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      defaultValues={
