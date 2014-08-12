@@ -43,23 +43,5 @@ class OroCRMMagentoBundle implements Migration, DatabasePlatformAwareInterface
 
         $table = $schema->getTable('orocrm_magento_order_items');
         $table->getColumn('qty')->setType(Type::getType('float'));
-
-        $table = $schema->getTable('orocrm_magento_cust_addr_type');
-        $table->removeForeignKey('FK_308A31F187EABF7');
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_magento_customer_addr'),
-            ['customer_address_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
-        );
-
-        $table = $schema->getTable('orocrm_magento_order_addr_type');
-        $table->removeForeignKey('FK_E927A18F466D5220');
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_magento_order_address'),
-            ['order_address_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
-        );
     }
 }
