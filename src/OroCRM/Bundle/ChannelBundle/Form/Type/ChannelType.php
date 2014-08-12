@@ -23,10 +23,8 @@ class ChannelType extends AbstractType
     /** @var ChannelTypeSubscriber */
     protected $channelTypeSubscriber;
 
-    public function __construct(
-        SettingsProvider $settingsProvider,
-        ChannelTypeSubscriber $channelTypeSubscriber
-    ) {
+    public function __construct(SettingsProvider $settingsProvider, ChannelTypeSubscriber $channelTypeSubscriber)
+    {
         $this->settingsProvider      = $settingsProvider;
         $this->channelTypeSubscriber = $channelTypeSubscriber;
     }
@@ -42,15 +40,6 @@ class ChannelType extends AbstractType
             [
                 'required' => true,
                 'label'    => 'orocrm.channel.name.label'
-            ]
-        );
-        $builder->add(
-            'dataSource',
-            'orocrm_channel_datasource_form',
-            [
-                'label'       => 'orocrm.channel.data_source.label',
-                'channelType' => 'magento',
-                'required'    => false,
             ]
         );
         $builder->add(
@@ -100,11 +89,7 @@ class ChannelType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(
-            [
-                'data_class' => 'OroCRM\\Bundle\\ChannelBundle\\Entity\\Channel'
-            ]
-        );
+        $resolver->setDefaults(['data_class' => 'OroCRM\\Bundle\\ChannelBundle\\Entity\\Channel']);
     }
 
     /**

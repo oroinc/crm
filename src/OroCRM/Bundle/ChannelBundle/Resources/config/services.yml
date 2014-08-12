@@ -154,6 +154,8 @@ services:
 
     orocrm_channel.form.subscriber.channel_subscriber:
         class: %orocrm_channel.form.subscriber.channel_subscriber.class%
+        arguments:
+            - @orocrm_channel.provider.settings_provider
 
     #twig
     orocrm_channel.twig.metadata_extension:

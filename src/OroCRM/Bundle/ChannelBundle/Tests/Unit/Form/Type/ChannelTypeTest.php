@@ -49,7 +49,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
     {
         $fields = [];
 
-        $this->builder->expects($this->exactly(5))->method('add')
+        $this->builder->expects($this->exactly(4))->method('add')
             ->will(
                 $this->returnCallback(
                     function ($filedName, $fieldType) use (&$fields) {
@@ -63,7 +63,6 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             [
                 'name'             => 'text',
-                'dataSource'       => 'orocrm_channel_datasource_form',
                 'customerIdentity' => 'text',
                 'entities'         => 'orocrm_channel_entity_choice_form',
                 'channelType'      => 'genemu_jqueryselect2_choice',
