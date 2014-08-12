@@ -21,7 +21,7 @@ datagrid:
                             join: Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem
                             alias: history
                             conditionType: WITH
-                            condition: "c.id = substring(history.url, locate('/', history.url, locate('/contact/', history.url) + 9) + 1)"
+                            condition: "CONCAT(c.id, '') = substring(history.url, locate('/', history.url, locate('/contact/', history.url) + 9) + 1)"
                 where:
                     and:
                       - locate('/contact/', history.url) <> 0
@@ -452,7 +452,6 @@ datagrid:
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionLabel
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
-                    - GROUP_CONCAT(contactGroup.label ORDER BY contactGroup.label SEPARATOR ', ') AS groupLabelsAsString
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
                 join:
@@ -460,11 +459,9 @@ datagrid:
                         - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
                         - { join: c.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: c.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
-                        - { join: c.groups, alias: contactGroup }
                         - { join: c.source, alias: contactSource }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
-                groupBy: c.id
             hints:
                 - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
         columns:
@@ -476,8 +473,6 @@ datagrid:
                 label: orocrm.contact.email.label
             primaryPhone:
                 label: orocrm.contact.contactphone.phone.label
-            groupLabelsAsString:
-                label: orocrm.contact.groups.label
             contactSourceLabel:
                 label: orocrm.contact.source.label
             countryName:
@@ -496,8 +491,6 @@ datagrid:
                     data_name: email.email
                 primaryPhone:
                     data_name: phone.phone
-                groupLabelsAsString:
-                    data_name: contactGroup.label
                 contactSourceLabel:
                     data_name: contactSource.label
                 countryName:
@@ -523,14 +516,6 @@ datagrid:
                 primaryPhone:
                     type: string
                     data_name: phone.phone
-                groupLabelsAsString:
-                    type: entity
-                    data_name: contactGroup.id
-                    enabled: false
-                    options:
-                        field_options:
-                            class: OroCRMContactBundle:Group
-                            property: label
                 contactSourceLabel:
                     type: entity
                     data_name: contactSource.name
