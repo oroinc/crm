@@ -33,7 +33,7 @@ class CustomerBridgeIteratorTest extends BaseIteratorTestCase
                 $this->returnValue(new \ArrayIterator($groups))
             );
 
-        $this->transport->expects($this->at(3))->method('call')
+        $this->transport->expects($this->at(4))->method('call')
             ->with($this->equalTo('oroCustomerList'))
             ->will($this->returnValue($customerArray));
 

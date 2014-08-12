@@ -10,6 +10,8 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class SoapTransportTest extends \PHPUnit_Framework_TestCase
 {
+    const TEST_SERVER_TIME = '2013-01-01 22:00:00';
+
     /** @var SoapTransport|\PHPUnit_Framework_MockObject_MockObject */
     protected $transport;
 
@@ -243,12 +245,19 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider isExtensionInstalledProvider
      *
-     * @param bool  $expectedResult
+     * @param mixed $isInstalledResult
+     * @param mixed $adminUrlResult
+     * @param mixed $serverTimeResult
      * @param mixed $soapResult
      * @param bool  $throwsException
      */
-    public function testIsExtensionInstalled($expectedResult, $soapResult, $throwsException = false)
-    {
+    public function testIsExtensionInstalled(
+        $isInstalledResult,
+        $adminUrlResult,
+        $serverTimeResult,
+        $soapResult,
+        $throwsException = false
+    ) {
         $this->initSettings();
         if ($throwsException) {
             $this->soapClientMock->expects($this->at(1))
@@ -266,35 +275,17 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         $result1 = $this->transport->isExtensionInstalled();
         $result2 = $this->transport->isExtensionInstalled();
         $this->assertSame($result1, $result2, 'All results should be same, and call remote service only once');
-        $this->assertSame($expectedResult, $result1);
-    }
+        $this->assertSame($isInstalledResult, $result1);
 
-    /**
-     * @dataProvider getAdminUrlProvider
-     *
-     * @param mixed  $expectedResult
-     * @param mixed  $soapResult
-     * @param bool   $throwsException
-     */
-    public function testGetAdminUrl($expectedResult, $soapResult, $throwsException = false)
-    {
-        $this->initSettings();
-        if ($throwsException) {
-            $this->soapClientMock->expects($this->at(1))
-                ->method('__soapCall')
-                ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
-                ->will($this->throwException(new \Exception()));
-        } else {
-            $this->soapClientMock->expects($this->at(1))
-                ->method('__soapCall')
-                ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
-                ->will($this->returnValue($soapResult));
-        }
-        $this->transport->init($this->transportEntity);
         $result1 = $this->transport->getAdminUrl();
         $result2 = $this->transport->getAdminUrl();
         $this->assertSame($result1, $result2, 'All results should be same, and call remote service only once');
-        $this->assertSame($expectedResult, $result1);
+        $this->assertSame($adminUrlResult, $result1);
+
+        $result1 = $this->transport->getServerTime();
+        $result2 = $this->transport->getServerTime();
+        $this->assertSame($result1, $result2, 'All results should be same, and call remote service only once');
+        $this->assertSame($serverTimeResult, $result1);
     }
 
     /**
@@ -310,7 +301,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ],
             'good result with admin_url'                     => [
                 'http://localhost/admin/',
-                (Object)['admin_url' => 'http://localhost/admin/']
+                (Object)[]
             ],
             'good result with out admin_url'                 => [
                 false,
@@ -327,14 +318,24 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         return [
             'exception result is perceived as not installed' => [
                 false,
+                false,
+                false,
                 null,
                 true
             ],
             'good result with version'                       => [
                 true,
-                (object)['version' => '1.2.3']
+                'http://localhost/admin/',
+                self::TEST_SERVER_TIME,
+                (object)[
+                    'version'     => '1.2.3',
+                    'server_time' => self::TEST_SERVER_TIME,
+                    'admin_url'   => 'http://localhost/admin/'
+                ]
             ],
             'good result with out version'                   => [
+                false,
+                false,
                 false,
                 (object)[null]
             ]

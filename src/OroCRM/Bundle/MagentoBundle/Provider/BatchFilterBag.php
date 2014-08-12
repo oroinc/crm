@@ -97,7 +97,7 @@ class BatchFilterBag
     public function addDateFilter($dateField, $dateKey, \DateTime $date, $format = 'Y-m-d H:i:s')
     {
         $this->addComplexFilter(
-            'date',
+            $dateField . '-' . $dateKey,
             [
                 'key'   => $dateField,
                 'value' => [
@@ -194,8 +194,8 @@ class BatchFilterBag
     {
         if (is_null($filterType) && is_null($filterName)) {
             $this->filters = [
-                'complex_filter' => [],
-                'filter'         => [],
+                self::FILTER_TYPE_COMPLEX => [],
+                self::FILTER_TYPE_SIMPLE  => [],
             ];
         }
 
