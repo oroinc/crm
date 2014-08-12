@@ -112,8 +112,11 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
             ],
             'grouping_columns' => [
                 [
-                    'name' => 'id'
-                ]
+                    'name' => 'code'
+                ],
+                [
+                    'name' => 'name'
+                ],
             ]
         ];
         // @codingStandardsIgnoreEnd
