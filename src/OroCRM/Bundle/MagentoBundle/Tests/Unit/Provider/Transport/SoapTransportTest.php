@@ -10,8 +10,6 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class SoapTransportTest extends \PHPUnit_Framework_TestCase
 {
-    const TEST_SERVER_TIME = '2013-01-01 22:00:00';
-
     /** @var SoapTransport|\PHPUnit_Framework_MockObject_MockObject */
     protected $transport;
 
@@ -247,14 +245,12 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
      *
      * @param mixed $isInstalledResult
      * @param mixed $adminUrlResult
-     * @param mixed $serverTimeResult
      * @param mixed $soapResult
      * @param bool  $throwsException
      */
     public function testIsExtensionInstalled(
         $isInstalledResult,
         $adminUrlResult,
-        $serverTimeResult,
         $soapResult,
         $throwsException = false
     ) {
@@ -281,33 +277,6 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         $result2 = $this->transport->getAdminUrl();
         $this->assertSame($result1, $result2, 'All results should be same, and call remote service only once');
         $this->assertSame($adminUrlResult, $result1);
-
-        $result1 = $this->transport->getServerTime();
-        $result2 = $this->transport->getServerTime();
-        $this->assertSame($result1, $result2, 'All results should be same, and call remote service only once');
-        $this->assertSame($serverTimeResult, $result1);
-    }
-
-    /**
-     * @return array
-     */
-    public function getAdminUrlProvider()
-    {
-        return [
-            'exception result is perceived as not installed' => [
-                false,
-                null,
-                true
-            ],
-            'good result with admin_url'                     => [
-                'http://localhost/admin/',
-                (Object)[]
-            ],
-            'good result with out admin_url'                 => [
-                false,
-                (object)[null]
-            ]
-        ];
     }
 
     /**
@@ -319,22 +288,18 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             'exception result is perceived as not installed' => [
                 false,
                 false,
-                false,
                 null,
                 true
             ],
             'good result with version'                       => [
                 true,
                 'http://localhost/admin/',
-                self::TEST_SERVER_TIME,
                 (object)[
                     'version'     => '1.2.3',
-                    'server_time' => self::TEST_SERVER_TIME,
                     'admin_url'   => 'http://localhost/admin/'
                 ]
             ],
             'good result with out version'                   => [
-                false,
                 false,
                 false,
                 (object)[null]

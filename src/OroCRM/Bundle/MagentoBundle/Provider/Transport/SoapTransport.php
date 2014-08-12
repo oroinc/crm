@@ -120,6 +120,8 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
             $result = parent::call($action, $params);
         }
 
+        $this->lookUpForServerTime();
+
         return $result;
     }
 
@@ -147,11 +149,9 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
                 $result                     = $this->call(self::ACTION_PING);
                 $this->isExtensionInstalled = !empty($result->version);
                 $this->adminUrl             = !empty($result->admin_url) ? $result->admin_url : false;
-                $this->serverTime           = !empty($result->server_time) ? $result->server_time : false;
             } catch (\Exception $e) {
                 $this->isExtensionInstalled
                     = $this->adminUrl
-                    = $this->serverTime
                     = false;
             }
         }
@@ -176,10 +176,6 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getServerTime()
     {
-        if (null === $this->serverTime) {
-            $this->pingMagento();
-        }
-
         return $this->serverTime;
     }
 
@@ -302,5 +298,18 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function getSettingsEntityFQCN()
     {
         return 'OroCRM\\Bundle\\MagentoBundle\\Entity\\MagentoSoapTransport';
+    }
+
+    /**
+     * Tries to fetch date from response headers
+     */
+    protected function lookUpForServerTime()
+    {
+        if (null === $this->serverTime) {
+            $parsedResponse = $this->getLastResponseHeaders();
+
+            $this->serverTime = isset($parsedResponse['headers'], $parsedResponse['headers']['Date'])
+                ? $parsedResponse['headers']['Date'] : false;
+        }
     }
 }
