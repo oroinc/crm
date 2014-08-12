@@ -73,8 +73,9 @@ orocrm:
                 delete: Sorry, comment deleting failed.
 
         block:
-            general: General Information
-            comments: Comments
+            additional: Additional
+            comments:   Comments
+            general:    General Information
 
         message:
             saved: Case saved
