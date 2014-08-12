@@ -149,7 +149,7 @@ class OrderItem extends ExtendOrderItem
      */
     public function setIsVirtual($isVirtual)
     {
-        $this->isVirtual = (bool)$isVirtual;
+        $this->isVirtual = $isVirtual;
 
         return $this;
     }

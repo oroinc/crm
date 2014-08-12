@@ -654,7 +654,7 @@ class Cart extends ExtendCart
      */
     public function setIsGuest($isGuest)
     {
-        $this->isGuest = (bool)$isGuest;
+        $this->isGuest = $isGuest;
 
         return $this;
     }
