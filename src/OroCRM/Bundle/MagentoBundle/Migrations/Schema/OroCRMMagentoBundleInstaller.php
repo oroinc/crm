@@ -972,7 +972,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_customer_addr'),
             ['customer_address_id'],
             ['id'],
-            ['onDelete' => 'CASCADE']
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_address_type'),
@@ -1022,7 +1022,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             $schema->getTable('orocrm_magento_order_address'),
             ['order_address_id'],
             ['id'],
-            ['onDelete' => 'CASCADE']
+            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_address_type'),
