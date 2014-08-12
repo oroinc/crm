@@ -4,10 +4,11 @@ oro:
             b2b: B2B
             b2c: B2C
     entityextend:
-        lead_source:
-            entity_label:         Lead Source
-            entity_plural_label:  Lead Sources
-            entity_description:   Represents a list of all lead sources
+        enums:
+            lead_source:
+                entity_label:         Lead Source
+                entity_plural_label:  Lead Sources
+                entity_description:   Represents a list of all lead sources
 
 orocrm:
     query_designer:
