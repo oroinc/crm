@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle;
+namespace OroCRM\Bundle\MarketingListBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

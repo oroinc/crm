@@ -1,6 +1,6 @@
 <?php
 
-namespace OOroCRM\Bundle\MarketingListBundle\Entity;
+namespace OroCRM\Bundle\MarketingListBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -27,7 +27,7 @@ class MarketingListUnsubscribedItem
     /**
      * @var string
      *
-     * @ORM\Column(name="entity_id", type="string", nullable=false)
+     * @ORM\Column(name="entity_id", type="integer", nullable=false)
      */
     protected $entityId;
 
@@ -35,8 +35,8 @@ class MarketingListUnsubscribedItem
     /**
      * @var MarketingList
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\CampaignBundle\Entity\MarketingList")
-     * @ORM\JoinColumn(name="segment_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * @ORM\ManyToOne(targetEntity="MarketingList")
+     * @ORM\JoinColumn(name="marketing_list_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     protected $marketingList;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\DependencyInjection;
+namespace OroCRM\Bundle\MarketingListBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader;
