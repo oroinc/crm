@@ -7,10 +7,11 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-use Oro\Bundle\ReportBundle\Entity\Report;
-
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+use Oro\Bundle\ReportBundle\Entity\Report;
+use Oro\Bundle\ReportBundle\Entity\ReportType;
 
 class LoadCampaignPerformanceReport extends AbstractFixture implements
     ContainerAwareInterface,
@@ -51,7 +52,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
         $report = new Report();
         $report->setName('Campaign Performance');
         $report->setEntity('OroCRM\Bundle\CampaignBundle\Entity\Campaign');
-        $type = $em->getReference('OroReportBundle:ReportType', 'TABLE');
+        $type = $em->getReference('OroReportBundle:ReportType', ReportType::TYPE_TABLE);
         $report->setType($type);
         // @codingStandardsIgnoreStart
         $definition = [
@@ -112,8 +113,11 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
             ],
             'grouping_columns' => [
                 [
-                    'name' => 'id'
-                ]
+                    'name' => 'code'
+                ],
+                [
+                    'name' => 'name'
+                ],
             ]
         ];
         // @codingStandardsIgnoreEnd
