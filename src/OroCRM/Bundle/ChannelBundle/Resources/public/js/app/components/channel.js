@@ -38,6 +38,16 @@ define([
         $customerIdentityEl: null,
 
         /**
+         * @type array
+         */
+        selectedEntities: [],
+
+        predefinedCustomerIdentity: {
+            name: null,
+            FQCN: null
+        },
+
+        /**
          * Array of fields that should be submitted for form update
          * Depends on what exact field changed
          */
@@ -168,6 +178,14 @@ define([
         _initCustomerIdentityField: function (selector) {
             var self = this;
 
+            if ("disabled" === $(selector).attr('disabled')) {
+                var customerIdentityFQCN = $(selector).val();
+                self.predefinedCustomerIdentity.FQCN = customerIdentityFQCN;
+                self.predefinedCustomerIdentity.name = customerIdentityFQCN.split('\\').pop();
+
+                self.selectedEntities.push(self.predefinedCustomerIdentity.name);
+            }
+
             $(selector).select2({
                 placeholder: __('orocrm.channel.form.select_customer_identity'),
                 data: function () {
@@ -175,7 +193,6 @@ define([
                 }
             });
         },
-
 
         /**
          * Set `Customer Identity` field value

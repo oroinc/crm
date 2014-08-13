@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Form\EventListener;
 
+use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -30,6 +31,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
     {
         return [
             FormEvents::PRE_SET_DATA => 'preSet',
+            FormEvents::POST_SET_DATA => 'postSet',
             FormEvents::PRE_SUBMIT   => 'preSubmit',
         ];
     }
@@ -51,6 +53,26 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         // builds datasource field
         $datasourceModifier = $this->getDatasourceModifierClosure($data->getChannelType());
         $datasourceModifier($form);
+
+        if (false === $this->settingsProvider->isCustomerIdentityUserDefined($data->getChannelType())) {
+            $customerIdentityValue = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
+            $customerIdentityClosure = $this->getCustomerIdentityClosure($customerIdentityValue);
+            $customerIdentityClosure($form);
+        }
+    }
+
+    public function postSet(FormEvent $event)
+    {
+        $form = $event->getForm();
+
+        /** @var Channel $data */
+        $data = $event->getData();
+
+        if ($data === null) {
+            return;
+        }
+
+        $form;
     }
 
     /**
@@ -90,6 +112,18 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                     );
                 }
             }
+        };
+    }
+
+    /**
+     * @param string $data
+     *
+     * @return callable
+     */
+    protected function getCustomerIdentityClosure($data)
+    {
+        return function (FormInterface $form) use ($data) {
+            FormUtils::replaceField($form, 'customerIdentity', ['data' => $data, 'disabled' => true]);
         };
     }
 }
