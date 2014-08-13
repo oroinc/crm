@@ -34,6 +34,9 @@ class DisableCustomerIdentitySubscriber implements EventSubscriberInterface
         return array(FormEvents::PRE_SET_DATA => 'preSetData');
     }
 
+    /**
+     * @param FormEvent $event
+     */
     public function preSetData(FormEvent $event)
     {
         $form = $event->getForm();
@@ -44,7 +47,7 @@ class DisableCustomerIdentitySubscriber implements EventSubscriberInterface
         }
 
         if (($data && $data->getId())) {
-            $field  = $form->get('customerIdentity');
+            $field = $form->get('customerIdentity');
             $config = $field->getConfig()->getOptions();
 
             FormUtils::replaceField(
