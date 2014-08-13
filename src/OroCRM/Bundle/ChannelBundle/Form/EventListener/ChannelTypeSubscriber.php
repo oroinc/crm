@@ -31,7 +31,6 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
     {
         return [
             FormEvents::PRE_SET_DATA => 'preSet',
-            FormEvents::POST_SET_DATA => 'postSet',
             FormEvents::PRE_SUBMIT   => 'preSubmit',
         ];
     }
@@ -59,20 +58,6 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             $customerIdentityClosure = $this->getCustomerIdentityClosure($customerIdentityValue);
             $customerIdentityClosure($form);
         }
-    }
-
-    public function postSet(FormEvent $event)
-    {
-        $form = $event->getForm();
-
-        /** @var Channel $data */
-        $data = $event->getData();
-
-        if ($data === null) {
-            return;
-        }
-
-        $form;
     }
 
     /**
