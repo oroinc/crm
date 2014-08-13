@@ -1,4 +1,7 @@
 config:
     paths:
-        'orocrmchannel/js/integration-widget-handler': 'bundles/orocrmchannel/js/integration-widget-handler.js'
-        'orocrmchannel/js/integration-widget-handler': 'bundles/orocrmchannel/js/channel-view.js'
+        'orocrmchannel/js/app/components/integration-widget':       'bundles/orocrmchannel/js/app/components/integration-widget.js'
+        'orocrmchannel/js/app/components/channel':                  'bundles/orocrmchannel/js/app/components/channel.js'
+        'orocrmchannel/js/entity-management/entity-selection-view': 'bundles/orocrmchannel/js/entity-management/entity-selection-view.js'
+        'orocrmchannel/js/entity-management/entity-model':          'bundles/orocrmchannel/js/entity-management/entity-model.js'
+        'orocrmchannel/js/utils/channel-form-utils':                'bundles/orocrmchannel/js/utils/channel-form-utils.js'

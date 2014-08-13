@@ -56,7 +56,7 @@ class ChannelDatasourceType extends AbstractType
 
         $builder->add($data);
         $builder->add($identifier);
-        $builder->add('type', 'hidden', ['data' => $options['channelType']]);
+        $builder->add('type', 'hidden', ['data' => $options['type']]);
         $builder->add('name', 'hidden');
     }
 
@@ -65,6 +65,6 @@ class ChannelDatasourceType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setRequired(['channelType']);
+        $resolver->setRequired(['type']);
     }
 }

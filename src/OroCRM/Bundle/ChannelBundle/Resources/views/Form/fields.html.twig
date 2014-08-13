@@ -1,36 +1,21 @@
-{% block orocrm_channel_form_widget %}
-    {{ form_row(form.name) }}
-
-    {{ form_row(form.channelType) }}
-
-    {% if form.entities is defined %}
-        {{ form_row(form.entities) }}
-    {% endif %}
-
-    {% if form.dataSource is defined %}
-        {{ form_row(form.dataSource) }}
-    {% endif %}
-
-    {% if form.customerIdentity is defined %}
-        {{ form_row(form.customerIdentity) }}
-    {% endif %}
-
-    {% import 'OroCRMChannelBundle:Form:channelViewJS.html.twig' as channelViewJS %}
-    {{ channelViewJS.renderChannelFormJS(form) }}
-
-    {{ form_end(form, {'render_rest': false}) }}
-{% endblock %}
-
 {% block orocrm_channel_datasource_form_row %}
     {{ block('form_row') }}
 {% endblock %}
 
 {% block orocrm_channel_datasource_form_widget %}
-    {% set containerElementId = form.vars.id ~ '-el' %}
-
-    <div id="{{ containerElementId }}"></div>
     {{ form_widget(form) }}
 
-    {% import 'OroCRMChannelBundle:Form:integrationWidgetHandlerJS.html.twig' as integrationWidgetHandlerJS %}
-    {{ integrationWidgetHandlerJS.integrationWidgetHandlerViewJS(form, containerElementId) }}
+    {% set options = {
+        idEl:   '#' ~ form.identifier.vars.id,
+        dataEl: '#' ~ form.data.vars.id,
+        typeEl: '#' ~ form.type.vars.id,
+        nameEl: '#' ~ form.name.vars.id,
+    } %}
+
+    <div data-page-component-module="orocrmchannel/js/app/components/integration-widget"
+         data-page-component-options="{{ options|json_encode }}"></div>
+{% endblock %}
+
+{% block orocrm_channel_entity_choice_form_row %}
+    {{ form_row(form) }}
 {% endblock %}

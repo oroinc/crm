@@ -29,12 +29,13 @@ class ChannelTest extends AbstractEntityTestCase
         $channelType      = 'Custom';
 
         return [
-            'name'             => ['name', $name, $name],
-            'owner'            => ['owner', $owner, $owner],
-            'dataSource'       => ['dataSource', $integration, $integration],
-            'status'           => ['status', $status, $status],
-            'customerIdentity' => ['customerIdentity', $customerIdentity, $customerIdentity],
-            'channelType'      => ['channelType', $channelType, $channelType]
+            'name'                     => ['name', $name, $name],
+            'owner'                    => ['owner', $owner, $owner],
+            'dataSource'               => ['dataSource', $integration, $integration],
+            'dataSource nullable data' => ['dataSource', null, null],
+            'status'                   => ['status', $status, $status],
+            'customerIdentity'         => ['customerIdentity', $customerIdentity, $customerIdentity],
+            'channelType'              => ['channelType', $channelType, $channelType]
         ];
     }
 

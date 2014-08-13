@@ -1,4 +1,5 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
+{% import 'OroCRMChannelBundle::macros.html.twig' as channelMacro %}
 
 {% form_theme form with ['OroCRMChannelBundle:Form:fields.html.twig'] %}
 
@@ -68,16 +69,28 @@
 
 {% block content_data %}
     {% set id = 'channel-update' %}
-    {% set dataBlocks = [] %}
 
-    {% set dataBlocks = [{
-        'title': 'General'|trans,
-        'class': 'active',
-        'subblocks': [{
-            'title': 'Basic Information'|trans,
-            'data':  [form_widget(form)]
-        }]
-    }]|merge(dataBlocks) %}
+    {% set dataBlocks = [
+        {
+            'title': 'General'|trans,
+            'subblocks': [{
+                'title': '',
+                'data':  [
+                    form_row(form.name),
+                    form_row(form.channelType),
+                    form.dataSource is defined ? form_row(form.dataSource) : '',
+                    form_row(form.customerIdentity),
+                ]
+            }]
+        },
+        {
+            'title': 'Entities'|trans,
+            'subblocks': [{
+                'title': '',
+                'data':  [form_row(form.entities)]
+            }]
+        }
+    ] %}
 
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
@@ -85,6 +98,8 @@
     } %}
 
     {{ parent() }}
+
+    {{ channelMacro.initializeChannelForm(form, orocrm_channel_entities_metadata(), orocrm_channel_integration_metadata()) }}
 {% endblock %}
 
 {% block breadcrumbs %}

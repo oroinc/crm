@@ -30,12 +30,12 @@ use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType;
 
 class ChannelDatasourceTypeTest extends FormIntegrationTestCase
 {
-    const TEST_ID = 1;
-    const TEST_NAME = 'name';
-    const TEST_TYPE = 'type';
-    const TEST_ID_FIELD_NAME = 'id';
+    const TEST_ID             = 1;
+    const TEST_NAME           = 'name';
+    const TEST_TYPE           = 'type';
+    const TEST_ID_FIELD_NAME  = 'id';
     const TEST_SUBMITTED_NAME = 'nameSubmitted';
-    const TEST_CHANNEL_TYPE = 'channelType';
+    const TEST_CHANNEL_TYPE   = 'channelType';
 
     /** @var ChannelDatasourceType */
     protected $type;
@@ -83,7 +83,6 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
         $searchRegistry = new SearchRegistry();
         $searchRegistry->addSearchHandler('users', $searchHandler);
 
-
         $validator = new Validator(
             new ClassMetadataFactory(new LoaderChain([])),
             new ConstraintValidatorFactory(),
@@ -128,7 +127,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
             $this->type,
             null,
             [
-                'channelType'     => self::TEST_CHANNEL_TYPE,
+                'type'            => self::TEST_CHANNEL_TYPE,
                 'csrf_protection' => false
             ]
         );
