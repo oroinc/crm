@@ -19,3 +19,24 @@
 {% block orocrm_channel_entity_choice_form_row %}
     {{ form_row(form) }}
 {% endblock %}
+
+{% block _orocrm_channel_form_customerIdentity_widget %}
+    {% if form.parent.vars.value.id %}
+        {% set metadata = orocrm_channel_entities_metadata() %}
+        <label class="control-label">{{ metadata[form.vars.value]['label'] }}</label>
+    {% else %}
+        {{ form_widget(form) }}
+    {% endif %}
+{% endblock %}
+
+{% block _orocrm_channel_form_channelType_widget %}
+    {% if form.parent.vars.value.id %}
+        {% for choice in choices %}
+            {% if choice is selectedchoice(value) %}
+                <label class="control-label">{{ choice.label|trans({}, translation_domain) }}</label>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {{ form_widget(form) }}
+    {% endif %}
+{% endblock %}
