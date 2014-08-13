@@ -28,6 +28,6 @@ class MigrateLeadSource implements Migration, ExtendExtensionAwareInterface
     public function up(Schema $schema, QueryBag $queries)
     {
         // @todo: this is just a start point. this migration will be implemented later
-        $this->extendExtension->createEnum($schema, $queries, 'lead_source');
+        $this->extendExtension->createEnum($schema, 'lead_source');
     }
 }
