@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormEvents;
 
 class IntegrationTypeExtension extends AbstractTypeExtension
 {
-    /** @var \OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider */
+    /** @var SettingsProvider */
     protected $settingsProvider;
 
     /**
@@ -48,9 +48,9 @@ class IntegrationTypeExtension extends AbstractTypeExtension
                 }
 
                 if (!($data && $data->getId())) {
-                    $field = $form->get('type');
-                    $config = $field->getConfig()->getOptions();
-                    $sourceTypes = $this->settingsProvider->getSourceIntegrationTypes();
+                    $field          = $form->get('type');
+                    $config         = $field->getConfig()->getOptions();
+                    $sourceTypes    = $this->settingsProvider->getSourceIntegrationTypes();
                     foreach ($sourceTypes as $sourceType) {
                         unset($config['choices'][$sourceType]);
                     }

@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Form;
 
-use OroCRM\Bundle\ChannelBundle\Tests\Unit\Extension\IntegrationTypeExtensionTest;
+use OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Extension\IntegrationTypeExtensionTest;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
