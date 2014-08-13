@@ -108,7 +108,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
     protected function getCustomerIdentityClosure($data)
     {
         return function (FormInterface $form) use ($data) {
-            FormUtils::replaceField($form, 'customerIdentity', ['data' => $data, 'disabled' => true]);
+            FormUtils::replaceField($form, 'customerIdentity', ['data' => $data, 'read_only' => true]);
         };
     }
 }

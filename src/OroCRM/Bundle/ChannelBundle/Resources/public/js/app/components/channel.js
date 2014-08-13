@@ -42,9 +42,15 @@ define([
          */
         selectedEntities: [],
 
+        /**
+         * Keeps predefined customer identity value
+         *
+         * @type Object
+         */
         predefinedCustomerIdentity: {
+            id: null,
             name: null,
-            FQCN: null
+            locked: false
         },
 
         /**
@@ -133,7 +139,6 @@ define([
             }
         },
 
-
         /**
          * This is listening changes in `Entities` field and fill `Customer identity` field
          */
@@ -178,13 +183,7 @@ define([
         _initCustomerIdentityField: function (selector) {
             var self = this;
 
-            if ("disabled" === $(selector).attr('disabled')) {
-                var customerIdentityFQCN = $(selector).val();
-                self.predefinedCustomerIdentity.FQCN = customerIdentityFQCN;
-                self.predefinedCustomerIdentity.name = customerIdentityFQCN.split('\\').pop();
-
-                self.selectedEntities.push(self.predefinedCustomerIdentity.name);
-            }
+            this._checkOnReadOnly(selector, self);
 
             $(selector).select2({
                 placeholder: __('orocrm.channel.form.select_customer_identity'),
@@ -192,6 +191,37 @@ define([
                     return utils.prepareSelect2Data(self.selectedEntities)
                 }
             });
+        },
+
+        /**
+         * Check whether the item is read-only to select predefined value, if it exists
+         *
+         * @param selector
+         * @param self
+         *
+         * @private
+         */
+        _checkOnReadOnly: function (selector, self) {
+            if ("readonly" === $(selector).attr('readonly')) {
+                var customerIdentityFQCN = $(selector).val();
+                var entityOptions = this.$channelEntitiesEl.find('option');
+
+                _.each(entityOptions, function (value) {
+                    if ($(value).val() === customerIdentityFQCN) {
+                        $(value).attr("selected", "selected").attr("locked", "locked");
+
+                        self.predefinedCustomerIdentity.id = $(value).val();
+                        self.predefinedCustomerIdentity.text = $(value).text();
+                        self.predefinedCustomerIdentity.locked = true;
+
+                        self.selectedEntities.push(self.predefinedCustomerIdentity);
+                    }
+                });
+
+                self.selectedEntities.push(self.predefinedCustomerIdentity.name);
+
+                this.$channelEntitiesEl.select2();
+            }
         },
 
         /**
