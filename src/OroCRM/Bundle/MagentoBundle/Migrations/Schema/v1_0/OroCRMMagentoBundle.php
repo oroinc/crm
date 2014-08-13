@@ -299,7 +299,7 @@ class OroCRMMagentoBundle implements Migration
     public static function orocrmMagentoCustomerAddressTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_magento_customer_address **/
-        $table = $schema->createTable($tableName ? : 'orocrm_magento_customer_address');
+        $table = $schema->createTable($tableName ?: 'orocrm_magento_customer_address');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('region_code', 'string', ['notnull' => false, 'length' => 16]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
@@ -336,7 +336,7 @@ class OroCRMMagentoBundle implements Migration
     public static function orocrmMagentoCustomerAddressToAddressTypeTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_magento_customer_address_to_address_type **/
-        $table = $schema->createTable($tableName ? : 'orocrm_magento_customer_address_to_address_type');
+        $table = $schema->createTable($tableName ?: 'orocrm_magento_customer_address_to_address_type');
         $table->addColumn('customer_address_id', 'integer', []);
         $table->addColumn('type_name', 'string', ['length' => 16]);
         $table->setPrimaryKey(['customer_address_id', 'type_name']);
@@ -561,7 +561,7 @@ class OroCRMMagentoBundle implements Migration
     public static function orocrmMagentoProductToWebsiteTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_magento_product_to_website **/
-        $table = $schema->createTable($tableName ? : 'orocrm_magento_product_to_website');
+        $table = $schema->createTable($tableName ?: 'orocrm_magento_product_to_website');
         $table->addColumn('product_id', 'integer', []);
         $table->addColumn('website_id', 'integer', []);
         $table->setPrimaryKey(['product_id', 'website_id']);
@@ -846,7 +846,7 @@ class OroCRMMagentoBundle implements Migration
     public static function orocrMagentoCustomerAddressForeignKeys(Schema $schema, $tableName = null)
     {
         /** Generate foreign keys for table orocrm_magento_customer_address **/
-        $table = $schema->getTable($tableName ? : 'orocrm_magento_customer_address');
+        $table = $schema->getTable($tableName ?: 'orocrm_magento_customer_address');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_dictionary_region'),
             ['region_code'],
@@ -881,7 +881,7 @@ class OroCRMMagentoBundle implements Migration
         $customerAddressTableName = null
     ) {
         /** Generate foreign keys for table orocrm_magento_customer_address_to_address_type **/
-        $table = $schema->getTable($tableName ? : 'orocrm_magento_customer_address_to_address_type');
+        $table = $schema->getTable($tableName ?: 'orocrm_magento_customer_address_to_address_type');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_address_type'),
             ['type_name'],
@@ -889,7 +889,7 @@ class OroCRMMagentoBundle implements Migration
             ['onDelete' => null, 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable($customerAddressTableName ? : 'orocrm_magento_customer_address'),
+            $schema->getTable($customerAddressTableName ?: 'orocrm_magento_customer_address'),
             ['customer_address_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
@@ -1110,7 +1110,7 @@ class OroCRMMagentoBundle implements Migration
     public static function orocrmMagentoProductToWebsiteForeignKeys(Schema $schema, $tableName = null)
     {
         /** Generate foreign keys for table orocrm_magento_product_to_website **/
-        $table = $schema->getTable($tableName ? : 'orocrm_magento_product_to_website');
+        $table = $schema->getTable($tableName ?: 'orocrm_magento_product_to_website');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_website'),
             ['website_id'],

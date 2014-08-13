@@ -2,6 +2,8 @@ orocrm:
     case:
         widgets:
             account_cases: Cases
+            contact_cases: Cases
+
         datagrid:
             case_number.label:              Case ID
             subject.label:                  Subject
@@ -73,8 +75,9 @@ orocrm:
                 delete: Sorry, comment deleting failed.
 
         block:
-            general: General Information
-            comments: Comments
+            additional: Additional
+            comments:   Comments
+            general:    General Information
 
         message:
             saved: Case saved

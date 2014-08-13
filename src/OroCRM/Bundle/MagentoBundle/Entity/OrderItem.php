@@ -85,7 +85,7 @@ class OrderItem extends ExtendOrderItem
     /**
      * @param float $originalPrice
      *
-     * @return $this
+     * @return OrderItem
      */
     public function setOriginalPrice($originalPrice)
     {
@@ -105,7 +105,7 @@ class OrderItem extends ExtendOrderItem
     /**
      * @param string $productOptions
      *
-     * @return $this
+     * @return OrderItem
      */
     public function setProductOptions($productOptions)
     {
@@ -125,7 +125,7 @@ class OrderItem extends ExtendOrderItem
     /**
      * @param string $productType
      *
-     * @return $this
+     * @return OrderItem
      */
     public function setProductType($productType)
     {
@@ -145,7 +145,7 @@ class OrderItem extends ExtendOrderItem
     /**
      * @param boolean $isVirtual
      *
-     * @return $this
+     * @return OrderItem
      */
     public function setIsVirtual($isVirtual)
     {
@@ -165,7 +165,7 @@ class OrderItem extends ExtendOrderItem
     /**
      * @param float $discountPercent
      *
-     * @return $this
+     * @return OrderItem
      */
     public function setDiscountPercent($discountPercent)
     {

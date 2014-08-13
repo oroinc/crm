@@ -16,10 +16,10 @@ class CampaignRepository extends EntityRepository
     public function getCampaignsLeads(AclHelper $aclHelper, $recordsCount)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('campaign.name as label', 'COUNT(lead.id) as number')
+        $qb->select('campaign.name as label', 'COUNT(lead.id) as number', 'MAX(campaign.createdAt) as maxCreated')
             ->from('OroCRMCampaignBundle:Campaign', 'campaign')
             ->leftJoin('OroCRMSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
-            ->orderBy('campaign.createdAt', 'DESC')
+            ->orderBy('maxCreated', 'DESC')
             ->groupBy('campaign.name')
             ->setMaxResults($recordsCount);
 
