@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9ebb186dcb905ef4b637475ce2d24b37",
+    "hash": "0f5d8e5a6e32b6a2c59140a5c4cf4918",
     "packages": [
         {
             "name": "a2lix/translation-form-bundle",
@@ -770,16 +770,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "v2.4.2",
+            "version": "2.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "fec965d330c958e175c39e61c3f6751955af32d0"
+                "reference": "1b62e9f76fce135ed1b4c2caca57e2257b0cd651"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/fec965d330c958e175c39e61c3f6751955af32d0",
-                "reference": "fec965d330c958e175c39e61c3f6751955af32d0",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/1b62e9f76fce135ed1b4c2caca57e2257b0cd651",
+                "reference": "1b62e9f76fce135ed1b4c2caca57e2257b0cd651",
                 "shasum": ""
             },
             "require": {
@@ -791,7 +791,7 @@
                 "symfony/console": "~2.0"
             },
             "suggest": {
-                "symfony/console": "Allows use of the command line interface"
+                "symfony/console": "For helpful console commands such as SQL execution and import of files."
             },
             "type": "library",
             "autoload": {
@@ -805,23 +805,20 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
-                    "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/",
-                    "role": "Creator"
-                },
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com",
-                    "homepage": "http://www.instaclick.com"
-                },
-                {
                     "name": "Roman Borschel",
                     "email": "roman@code-factory.org"
                 },
                 {
                     "name": "Benjamin Eberlei",
                     "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com"
                 }
             ],
             "description": "Database Abstraction Layer",
@@ -832,7 +829,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2014-01-01 16:43:57"
+            "time": "2014-08-04 10:25:05"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -3311,12 +3308,65 @@
             "time": "2013-06-30 16:44:31"
         },
         {
+            "name": "oro/doctrine-extensions",
+            "version": "1.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orocrm/doctrine-extensions.git",
+                "reference": "250471c9fcd9cd2e6c6d7000e58493dda757f0aa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orocrm/doctrine-extensions/zipball/250471c9fcd9cd2e6c6d7000e58493dda757f0aa",
+                "reference": "250471c9fcd9cd2e6c6d7000e58493dda757f0aa",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": ">=2.2.3",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "doctrine/data-fixtures": "dev-master",
+                "phpunit/phpunit": "3.7.*",
+                "symfony/yaml": ">=2.0.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Oro\\DBAL": "src/",
+                    "Oro\\ORM": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oro, Inc",
+                    "homepage": "http://www.orocrm.com"
+                }
+            ],
+            "description": "Doctrine Extensions for MySQL and PostgreSQL.",
+            "homepage": "https://github.com/orocrm/doctrine-extensions/",
+            "keywords": [
+                "database",
+                "doctrine",
+                "dql",
+                "function",
+                "mysql",
+                "postgresql",
+                "type"
+            ],
+            "time": "2014-08-08 19:26:37"
+        },
+        {
             "name": "oro/platform",
-            "version": "1.3.x-dev",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "git@github.com:orocrm/platform.git",
-                "reference": "69b7b3cc0791ebc598a82537b722d0094b973fb3"
+                "reference": "d51c0bc6f2d93224d7918224b5bd6ee8a6e5c89e"
             },
             "require": {
                 "a2lix/translation-form-bundle": "1.2",
@@ -3325,6 +3375,7 @@
                 "besimple/soap": "0.2.2",
                 "composer/composer": "1.0.0-alpha8",
                 "doctrine/data-fixtures": "1.0.0",
+                "doctrine/dbal": "2.4.x-dev",
                 "doctrine/doctrine-bundle": "1.2.0",
                 "doctrine/doctrine-fixtures-bundle": "2.2.0",
                 "doctrine/orm": "2.4.3",
@@ -3355,7 +3406,9 @@
                 "nelmio/api-doc-bundle": "2.4.4",
                 "nesbot/carbon": "1.8.*",
                 "ocramius/proxy-manager": "0.4.*",
-                "php": ">=5.4.4",
+                "oro/doctrine-extensions": "1.0.x-dev",
+                "php": ">=5.4.9",
+                "rhumsaa/uuid": "~2.7",
                 "sensio/distribution-bundle": "2.3.4",
                 "sensio/framework-extra-bundle": "2.3.4",
                 "sensio/generator-bundle": "2.3.4",
@@ -3393,7 +3446,7 @@
             ],
             "description": "Business Application Platform (BAP)",
             "homepage": "https://github.com/orocrm/platform.git",
-            "time": "2014-08-07 10:41:41"
+            "time": "2014-08-14 16:10:52"
         },
         {
             "name": "phpcollection/phpcollection",
@@ -3661,6 +3714,72 @@
                 "stream"
             ],
             "time": "2014-02-16 19:48:52"
+        },
+        {
+            "name": "rhumsaa/uuid",
+            "version": "2.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ramsey/uuid.git",
+                "reference": "ccabc07c649fbac6b409fe42439e042232f9db58"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/ccabc07c649fbac6b409fe42439e042232f9db58",
+                "reference": "ccabc07c649fbac6b409fe42439e042232f9db58",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "doctrine/dbal": ">=2.3",
+                "moontoast/math": "~1.1",
+                "phpunit/phpunit": "~4.1",
+                "satooshi/php-coveralls": "~0.6",
+                "symfony/console": "~2.3"
+            },
+            "suggest": {
+                "doctrine/dbal": "Allow the use of a UUID as doctrine field type.",
+                "moontoast/math": "Support for converting UUID to 128-bit integer (in string form).",
+                "symfony/console": "Support for use of the bin/uuid command line tool."
+            },
+            "bin": [
+                "bin/uuid"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.7.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Rhumsaa\\Uuid\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marijn Huizendveld",
+                    "email": "marijn.huizendveld@gmail.com"
+                },
+                {
+                    "name": "Ben Ramsey",
+                    "homepage": "http://benramsey.com"
+                }
+            ],
+            "description": "A PHP 5.3+ library for generating RFC 4122 version 1, 3, 4, and 5 universally unique identifiers (UUID).",
+            "homepage": "https://github.com/ramsey/uuid",
+            "keywords": [
+                "guid",
+                "identifier",
+                "uuid"
+            ],
+            "time": "2014-07-28 17:51:57"
         },
         {
             "name": "seld/jsonlint",
@@ -4921,9 +5040,9 @@
 
     ],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "oro/platform": 20
-    },
+    "stability-flags": [
+
+    ],
     "prefer-stable": true,
     "platform": {
         "php": ">=5.4.4"

@@ -94,7 +94,7 @@ class Store extends ExtendStore
 
     /**
      * @param int $id
-     * @return $this
+     * @return Store
      */
     public function setId($id)
     {
@@ -106,7 +106,7 @@ class Store extends ExtendStore
     /**
      * @param string $code
      *
-     * @return $this
+     * @return Store
      */
     public function setCode($code)
     {
@@ -126,7 +126,7 @@ class Store extends ExtendStore
     /**
      * @param string $name
      *
-     * @return $this
+     * @return Store
      */
     public function setName($name)
     {
@@ -146,7 +146,7 @@ class Store extends ExtendStore
     /**
      * @param Website $website
      *
-     * @return $this
+     * @return Store
      */
     public function setWebsite(Website $website)
     {
