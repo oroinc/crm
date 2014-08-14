@@ -32,21 +32,21 @@ class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
 
         $this->filter->addDateFilter('updated_at', 'from', new \DateTime());
         $filters = $this->getAppliedFilters($this->filter);
-        $this->assertCount(2, $filters['complex_filter']); // still should be two filters
-        $this->assertContains('updated_at', $filters['complex_filter'][1]);
-        $this->assertEquals('from', $filters['complex_filter'][1]['value']['key']);
+        $this->assertCount(3, $filters['complex_filter']); // still should be two filters
+        $this->assertContains('updated_at', $filters['complex_filter'][2]);
+        $this->assertEquals('from', $filters['complex_filter'][2]['value']['key']);
 
         // add website filter
         $this->filter->addWebsiteFilter([1]);
         $filters = $this->getAppliedFilters($this->filter);
-        $this->assertCount(3, $filters['complex_filter']);
-        $this->assertContains('website_id', $filters['complex_filter'][2]);
+        $this->assertCount(4, $filters['complex_filter']);
+        $this->assertContains('website_id', $filters['complex_filter'][3]);
 
         // add store filter
         $this->filter->addStoreFilter([1]);
         $filters = $this->getAppliedFilters($this->filter);
-        $this->assertCount(4, $filters['complex_filter']);
-        $this->assertContains('store_id', $filters['complex_filter'][3]);
+        $this->assertCount(5, $filters['complex_filter']);
+        $this->assertContains('store_id', $filters['complex_filter'][4]);
     }
 
     public function testReset()
