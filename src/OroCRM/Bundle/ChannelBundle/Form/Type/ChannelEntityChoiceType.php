@@ -2,13 +2,14 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Form\Type;
 
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\EntityBundle\Form\Type\EntityChoiceType;
 use Oro\Bundle\FormBundle\Form\Type\ChoiceListItem;
 use Oro\Bundle\EntityBundle\Provider\EntityProvider;
+
+use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelEntityChoiceType extends EntityChoiceType
 {
