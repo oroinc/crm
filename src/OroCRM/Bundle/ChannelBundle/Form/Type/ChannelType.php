@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Form\Type;
 
-use OroCRM\Bundle\ChannelBundle\Form\EventListener\DisableCustomerIdentitySubscriber;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
@@ -71,7 +70,7 @@ class ChannelType extends AbstractType
                 'configs'  => ['placeholder' => 'orocrm.channel.form.select_channel_type.label'],
             ]
         );
-        $builder->addEventSubscriber(new DisableCustomerIdentitySubscriber());
+        $builder->addEventSubscriber(new ChannelTypeSubscriber($this->settingsProvider));
     }
 
     /**
