@@ -10,7 +10,6 @@ use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
-use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityChoiceType;
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
