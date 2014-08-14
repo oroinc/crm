@@ -66,7 +66,7 @@ class Region
     /**
      * @param string $code
      *
-     * @return $this
+     * @return Region
      */
     public function setCode($code)
     {
@@ -86,7 +86,7 @@ class Region
     /**
      * @param string $combinedCode
      *
-     * @return $this
+     * @return Region
      */
     public function setCombinedCode($combinedCode)
     {
@@ -106,7 +106,7 @@ class Region
     /**
      * @param string $countryCode
      *
-     * @return $this
+     * @return Region
      */
     public function setCountryCode($countryCode)
     {
@@ -126,7 +126,7 @@ class Region
     /**
      * @param int $id
      *
-     * @return $this
+     * @return Region
      */
     public function setId($id)
     {
@@ -146,7 +146,7 @@ class Region
     /**
      * @param int $regionId
      *
-     * @return $this
+     * @return Region
      */
     public function setRegionId($regionId)
     {
@@ -166,7 +166,7 @@ class Region
     /**
      * @param string $name
      *
-     * @return $this
+     * @return Region
      */
     public function setName($name)
     {

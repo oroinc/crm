@@ -35,10 +35,10 @@ class OrderAddress extends ExtendOrderAddress
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType",cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType")
      * @ORM\JoinTable(
      *     name="orocrm_magento_order_addr_type",
-     *     joinColumns={@ORM\JoinColumn(name="order_address_id", referencedColumnName="id", onDelete="CASCADE")},
+     *     joinColumns={@ORM\JoinColumn(name="order_address_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )
      **/
@@ -82,7 +82,7 @@ class OrderAddress extends ExtendOrderAddress
     /**
      * @param Order $owner
      *
-     * @return $this
+     * @return OrderAddress
      */
     public function setOwner(Order $owner)
     {
@@ -102,7 +102,7 @@ class OrderAddress extends ExtendOrderAddress
     /**
      * @param string $fax
      *
-     * @return $this
+     * @return OrderAddress
      */
     public function setFax($fax)
     {
@@ -122,7 +122,7 @@ class OrderAddress extends ExtendOrderAddress
     /**
      * @param string $phone
      *
-     * @return $this
+     * @return OrderAddress
      */
     public function setPhone($phone)
     {

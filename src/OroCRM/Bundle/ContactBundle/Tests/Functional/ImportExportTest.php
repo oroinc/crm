@@ -201,7 +201,7 @@ class ImportExportTest extends WebTestCase
         // @todo: fix date BAP-4560
         unset($data['Birthday'], $content['Birthday'], $data['Id'], $content['Id']);
 
-        $this->assertEquals($data, $content);
+        $this->assertEmpty(array_diff($data, $content));
     }
 
     /**
