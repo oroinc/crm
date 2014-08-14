@@ -15,8 +15,8 @@ class UpdateCustomerVat extends AbstractFixture
     {
         /** @var EntityManager $manager */
         $query = 'UPDATE OroCRMMagentoBundle:Customer customer ' .
-            'SET customer.vat = customer.vat / 100 ' .
-            'WHERE customer.vat is not null';
+            'SET customer.vat = customer.vat/100.0 ' .
+            'WHERE customer.vat IS NOT NULL';
         $manager->createQuery($query)->execute();
     }
 }

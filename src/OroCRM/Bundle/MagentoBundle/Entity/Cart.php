@@ -87,14 +87,14 @@ class Cart extends ExtendCart
     /**
      * Total items qty
      *
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="items_qty", type="integer", options={"unsigned"=true})
+     * @ORM\Column(name="items_qty", type="float")
      */
     protected $itemsQty;
 
     /**
-     * Items qty
+     * Items count
      *
      * @var integer
      *
@@ -467,7 +467,7 @@ class Cart extends ExtendCart
     /**
      * @param CartAddress $shippingAddress
      *
-     * @return $this
+     * @return Cart
      */
     public function setShippingAddress(CartAddress $shippingAddress = null)
     {
@@ -479,7 +479,7 @@ class Cart extends ExtendCart
     /**
      * @param CartAddress $billingAddress
      *
-     * @return $this
+     * @return Cart
      */
     public function setBillingAddress(CartAddress $billingAddress = null)
     {
@@ -525,7 +525,7 @@ class Cart extends ExtendCart
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getItemsQty()
     {

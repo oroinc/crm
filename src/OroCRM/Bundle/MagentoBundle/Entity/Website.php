@@ -84,7 +84,7 @@ class Website extends ExtendWebsite
 
     /**
      * @param int $id
-     * @return $this
+     * @return Website
      */
     public function setId($id)
     {
@@ -96,7 +96,7 @@ class Website extends ExtendWebsite
     /**
      * @param string $code
      *
-     * @return $this
+     * @return Website
      */
     public function setCode($code)
     {
@@ -116,7 +116,7 @@ class Website extends ExtendWebsite
     /**
      * @param string $name
      *
-     * @return $this
+     * @return Website
      */
     public function setName($name)
     {
