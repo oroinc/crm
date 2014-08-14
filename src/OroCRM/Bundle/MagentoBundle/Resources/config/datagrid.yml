@@ -424,7 +424,7 @@ datagrid:
             acl_resource: orocrm_magento_product_view
             query:
                 select:
-                    - p
+                    - partial p.{id, name, sku, type, price, specialPrice, createdAt, updatedAt}
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Product , alias: p }
                 join:
@@ -723,7 +723,19 @@ datagrid:
             acl_resource: orocrm_magento_order_view
             query:
                 select:
-                    - oi
+                    - oi.id
+                    - oi.sku
+                    - oi.name
+                    - oi.qty
+                    - oi.productType
+                    - oi.weight
+                    - oi.price
+                    - oi.originalPrice
+                    - oi.discountPercent
+                    - oi.discountAmount
+                    - oi.taxPercent
+                    - oi.taxAmount
+                    - oi.rowTotal
                     - o.currency
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\OrderItem , alias: oi }
@@ -957,7 +969,14 @@ datagrid:
             acl_resource: orocrm_magento_order_view
             query:
                 select:
-                    - o
+                    - o.id
+                    - o.incrementId
+                    - o.totalInvoicedAmount
+                    - o.shippingAmount
+                    - o.subtotalAmount
+                    - o.status
+                    - o.createdAt
+                    - o.updatedAt
                     - step.label as stepLabel
                 from:
                     - { table: %orocrm_magento.order.entity.class%, alias: o }
@@ -1073,7 +1092,13 @@ datagrid:
             acl_resource: orocrm_magento_order_view
             query:
                 select:
-                    - o
+                    - o.id
+                    - o.incrementId
+                    - o.createdAt
+                    - o.updatedAt
+                    - o.subtotalAmount
+                    - o.totalAmount
+                    - o.status
                     - MAX(step.label) as stepLabel
                     - COUNT(items.id) as itemsCount
                 from:
