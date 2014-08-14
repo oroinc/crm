@@ -3,13 +3,15 @@
 namespace OroCRM\Bundle\ChannelBundle\Form\Extension;
 
 use Oro\Bundle\FormBundle\Utils\FormUtils;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
-use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class IntegrationTypeExtension extends AbstractTypeExtension
 {
@@ -37,23 +39,31 @@ class IntegrationTypeExtension extends AbstractTypeExtension
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        if (!$options['disable_customer_datasource_types']) {
+            return;
+        }
+
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) {
-                $form = $event->getForm();
+                /** @var Integration $data */
                 $data = $event->getData();
+                $form = $event->getForm();
 
                 if ($data === null) {
                     return;
                 }
 
-                if (!($data && $data->getId())) {
-                    $field          = $form->get('type');
-                    $config         = $field->getConfig()->getOptions();
-                    $sourceTypes    = $this->settingsProvider->getSourceIntegrationTypes();
+                // Remove integration types that could be created only in scope of the channel
+                // if type is already set, then keep choice list as is
+                $sourceTypes = $this->settingsProvider->getSourceIntegrationTypes();
+                if (!in_array($data->getType(), $sourceTypes)) {
+                    $field  = $form->get('type');
+                    $config = $field->getConfig()->getOptions();
                     foreach ($sourceTypes as $sourceType) {
                         unset($config['choices'][$sourceType]);
                     }
+
                     FormUtils::replaceField(
                         $form,
                         'type',
@@ -64,5 +74,13 @@ class IntegrationTypeExtension extends AbstractTypeExtension
             },
             100
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(['disable_customer_datasource_types' => true]);
     }
 }
