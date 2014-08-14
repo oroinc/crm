@@ -4,12 +4,12 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\EventListener;
 
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2Type;
 
-use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 
+use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityChoiceType;
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
