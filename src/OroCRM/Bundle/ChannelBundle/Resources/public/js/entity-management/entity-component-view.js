@@ -5,13 +5,14 @@ define(function (require) {
     'use strict';
 
     var Backbone = require('backbone'),
-        $ = require('jquery'),
         _ = require('underscore'),
         __ = require('orotranslation/js/translator'),
         EntityModel = require('./model'),
         componentTemplate = require('text!./templates/component.html'),
         entityTemplate = require('text!./templates/entity-item.html'),
         formTemplate = require('text!./templates/form.html');
+
+    require('oroui/js/items-manager/editor');
 
     var modes = {
         VIEW_MODE: 1,
@@ -26,6 +27,7 @@ define(function (require) {
 
         /**
          * Widget mode constants
+         *
          * @const
          */
         MODES: _.clone(modes),
@@ -86,7 +88,7 @@ define(function (require) {
                 throw new Error('Missing "metadata" options for entity selection compoment');
             }
 
-            var models = this.options.data.length > 0 ? this._prepareRawData(this.options.data) : [];
+            var models = this.options.data.length > 0 ? _.map(this.options.data, _.bind(this._createModel, this)) : [];
             this.collection = this.collection || new (Backbone.Collection)(models, {model: EntityModel});
 
             this.listenTo(this.collection, 'add', this._onItemAdded);
@@ -108,7 +110,7 @@ define(function (require) {
 
             if (this.options.mode === modes.EDIT_MODE) {
                 this.$formContainer.html(this.formTemplate(_.extend({}, templateContext)));
-                this._initializeForm();
+                _.defer(_.bind(this._initializeForm, this));
             }
             this.renderList(this.collection.models);
         },
@@ -147,6 +149,20 @@ define(function (require) {
         },
 
         /**
+         * Appends single item to list
+         *
+         * @param {Object.<orocrmchannel.entityManagement.Model>} model
+         * @private
+         */
+        _onItemAdded: function(model) {
+            model.set(this._prepareModelAttributes(model));
+
+            var $itemsContainer = this.$listContainer.find('tbody');
+            $itemsContainer.append(this._renderItem(model));
+            this._hideEmptyMessage();
+        },
+
+        /**
          * Initialize form component
          *
          * @private
@@ -154,10 +170,22 @@ define(function (require) {
         _initializeForm: function () {
             this.$formContainer.find('[data-purpose="entity-selector"]').select2({
                 placeholder: __('orocrm.channel.form.entity'),
-                data: function () {
-                    return {more: false, results: []};
-                }
+                data: _.bind(function () {
+                    var notSelected = _.filter(this.options.metadata, _.bind(function(entityMetadata) {
+                        return !this.collection.findWhere({name: entityMetadata.name});
+                    }, this)),
+
+                        choices = _.map(notSelected, function(entityMetadata) {
+                            return {id: entityMetadata.name, text: entityMetadata.label};
+                        });
+
+                    return {more: false, results: choices};
+                }, this)
             });
+
+            this.$formContainer.itemsManagerEditor($.extend({}, {
+                collection: this.collection
+            }));
         },
 
         /**
@@ -181,18 +209,17 @@ define(function (require) {
         },
 
         /**
-         * Creates model objects from raw data
+         * Prepares model attributes
          *
-         * @param   {string[]} data
-         * @returns {*}
+         * @param   {Object.<orocrmchannel.entityManagement.Model>} model
+         * @returns {object}
          * @private
          */
-        _prepareRawData: function (data) {
-            return _.map(data, _.bind(function(entityName) {
-                var entityMetadata = this.options.metadata[entityName] || {};
+        _prepareModelAttributes: function (model) {
+            var entityName = model.get('name'),
+                entityMetadata = this.options.metadata[entityName] || {};
 
-                return new EntityModel(_.defaults(entityMetadata, {name: entityName, label: entityName}));
-            }, this));
+            return _.defaults(entityMetadata, {name: entityName, label: entityName});
         }
     });
 });
