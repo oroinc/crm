@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\ServerTimeAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator implements PredefinedFiltersAwareInterface
@@ -58,10 +59,20 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
         }
 
         $this->filter->addDateFilter($dateField, $operator, $this->lastSyncDate);
+        if ($this->transport instanceof ServerTimeAwareInterface) {
+            // fix time frame if it's possible to retrieve server time
+            $time = $this->transport->getServerTime();
+            if (false !== $time) {
+                $frameLimit = new \DateTime($time, new \DateTimeZone('UTC'));
+                $this->filter->addDateFilter($dateField, 'lte', $frameLimit);
+            }
+        }
 
         if (null !== $this->predefinedFilters) {
             $this->filter->merge($this->predefinedFilters);
         }
+
+        $this->logAppliedFilters($this->filter);
     }
 
     /**

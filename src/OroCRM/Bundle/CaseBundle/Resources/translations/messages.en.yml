@@ -2,6 +2,8 @@ orocrm:
     case:
         widgets:
             account_cases: Cases
+            contact_cases: Cases
+
         datagrid:
             case_number.label:              Case ID
             subject.label:                  Subject

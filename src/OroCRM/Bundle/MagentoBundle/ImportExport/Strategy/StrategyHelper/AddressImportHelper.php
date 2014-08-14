@@ -56,7 +56,7 @@ class AddressImportHelper
             return;
         }
 
-        if (!empty($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId])) {
+        if (!empty($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId]) && is_numeric($mageRegionId)) {
             $this->mageRegionsCache[$mageRegionId] = $this->findRegionByRegionId($mageRegionId);
         }
 

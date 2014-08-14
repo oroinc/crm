@@ -1,5 +1,5 @@
 datagrid:
-    cases-grid:
+    base-case-grid:
         source:
             type: orm
             acl_resource: orocrm_case_view
@@ -110,16 +110,6 @@ datagrid:
                         field_options:
                             class: OroCRMCaseBundle:CaseSource
                             property: label
-                relatedContact:
-                    label: orocrm.case.datagrid.related_contact.label
-                    type: string
-                    data_name: relatedContactName
-                    enabled: false
-                relatedAccount:
-                    label: orocrm.case.datagrid.related_account.label
-                    type: string
-                    data_name: relatedAccountName
-                    enabled: false
         properties:
             id: ~
             view_link:
@@ -154,14 +144,49 @@ datagrid:
                 label:         Delete
                 icon:         trash
                 link:         delete_link
-
+    cases-grid:
+        extends: base-case-grid
+        filters:
+            columns:
+                relatedContact:
+                    label: orocrm.case.datagrid.related_contact.label
+                    type: string
+                    data_name: relatedContactName
+                    enabled: false
+                relatedAccount:
+                    label: orocrm.case.datagrid.related_account.label
+                    type: string
+                    data_name: relatedAccountName
+                    enabled: false
     account-cases-grid:
-        extends: cases-grid
+        extends: base-case-grid
+        filters:
+            columns:
+                relatedContact:
+                    label: orocrm.case.datagrid.related_contact.label
+                    type: string
+                    data_name: relatedContactName
+                    enabled: false
         source:
             query:
                 where:
                     and:
                         - relatedAccount.id = :id
+
+    contact-cases-grid:
+        extends: base-case-grid
+        filters:
+            columns:
+                relatedAccount:
+                    label: orocrm.case.datagrid.related_account.label
+                    type: string
+                    data_name: relatedAccountName
+                    enabled: false
+        source:
+            query:
+                where:
+                    and:
+                        - relatedContact.id = :id
 
     user-cases-grid:
         extends: cases-grid

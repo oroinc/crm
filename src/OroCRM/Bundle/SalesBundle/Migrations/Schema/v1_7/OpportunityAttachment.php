@@ -22,9 +22,23 @@ class OpportunityAttachment implements Migration, AttachmentExtensionAwareInterf
         $this->attachmentExtension = $attachmentExtension;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->attachmentExtension->addAttachmentAssociation(
+        self::addOpportunityAttachment($schema, $this->attachmentExtension);
+    }
+
+    /**
+     * Add Attachment for Opportunity.
+     *
+     * @param Schema $schema
+     * @param AttachmentExtension $attachmentExtension
+     */
+    public static function addOpportunityAttachment(Schema $schema, AttachmentExtension $attachmentExtension)
+    {
+        $attachmentExtension->addAttachmentAssociation(
             $schema,
             'orocrm_sales_opportunity',
             [

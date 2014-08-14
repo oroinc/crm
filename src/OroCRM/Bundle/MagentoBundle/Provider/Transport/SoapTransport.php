@@ -28,7 +28,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
  *
  * @package OroCRM\Bundle\MagentoBundle
  */
-class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterface
+class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterface, ServerTimeAwareInterface
 {
     const ACTION_CUSTOMER_LIST           = 'customerCustomerList';
     const ACTION_CUSTOMER_INFO           = 'customerCustomerInfo';
@@ -69,6 +69,9 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
 
     /** @var string */
     protected $adminUrl;
+
+    /** @var  string */
+    protected $serverTime;
 
     public function __construct(Mcrypt $encoder)
     {
@@ -117,6 +120,8 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
             $result = parent::call($action, $params);
         }
 
+        $this->lookUpForServerTime();
+
         return $result;
     }
 
@@ -139,17 +144,15 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     protected function pingMagento()
     {
-        if (null === $this->isExtensionInstalled  && null === $this->adminUrl) {
+        if (null === $this->isExtensionInstalled && null === $this->adminUrl) {
             try {
-                $magentoPing                = $this->call(self::ACTION_PING);
-                $this->isExtensionInstalled = !empty($magentoPing->version);
-                $this->adminUrl             = !empty($magentoPing->admin_url)
-                                                    ? $magentoPing->admin_url
-                                                    : false;
-
+                $result                     = $this->call(self::ACTION_PING);
+                $this->isExtensionInstalled = !empty($result->version);
+                $this->adminUrl             = !empty($result->admin_url) ? $result->admin_url : false;
             } catch (\Exception $e) {
-                $this->isExtensionInstalled = false;
-                $this->adminUrl = false;
+                $this->isExtensionInstalled
+                    = $this->adminUrl
+                    = false;
             }
         }
 
@@ -164,7 +167,16 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         if (null === $this->adminUrl) {
             $this->pingMagento();
         }
+
         return $this->adminUrl;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getServerTime()
+    {
+        return $this->serverTime;
     }
 
     /**
@@ -286,5 +298,18 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function getSettingsEntityFQCN()
     {
         return 'OroCRM\\Bundle\\MagentoBundle\\Entity\\MagentoSoapTransport';
+    }
+
+    /**
+     * Tries to fetch date from response headers
+     */
+    protected function lookUpForServerTime()
+    {
+        if (null === $this->serverTime) {
+            $parsedResponse = $this->getLastResponseHeaders();
+
+            $this->serverTime = isset($parsedResponse['headers'], $parsedResponse['headers']['Date'])
+                ? $parsedResponse['headers']['Date'] : false;
+        }
     }
 }

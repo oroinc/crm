@@ -211,6 +211,8 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
             $this->filter->addLastIdFilter($lastId, $this->getIdFieldName());
         }
 
+        $this->logAppliedFilters($this->filter);
+
         return $this->filter->getAppliedFilters();
     }
 
@@ -330,6 +332,29 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     protected function processCollectionResponse($response)
     {
         return WSIUtils::processCollectionResponse($response);
+    }
+
+    /**
+     * Add debug records about applied filters to logger
+     *
+     * @param BatchFilterBag $filterBag
+     */
+    protected function logAppliedFilters(BatchFilterBag $filterBag)
+    {
+        $filters  = $filterBag->getAppliedFilters();
+        $filters = $filters['filters'];
+        $filters = array_merge(
+            !empty($filters[BatchFilterBag::FILTER_TYPE_COMPLEX]) ? $filters[BatchFilterBag::FILTER_TYPE_COMPLEX] : [],
+            !empty($filters[BatchFilterBag::FILTER_TYPE_SIMPLE]) ? $filters[BatchFilterBag::FILTER_TYPE_SIMPLE] : []
+        );
+        $template = 'Filter applied: %s %s';
+        foreach ($filters as $filter) {
+            $field = $filter['key'];
+            $value = $filter['value'];
+            $value = is_array($value) ? http_build_query($value, '', '; ') : '= ' . $value;
+
+            $this->logger->debug(sprintf($template, $field, urldecode($value)));
+        }
     }
 
     /**

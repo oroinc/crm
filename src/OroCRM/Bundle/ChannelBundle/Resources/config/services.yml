@@ -182,3 +182,10 @@ services:
             - @orocrm_channel.provider.metadata_provider
         tags:
             - { name: twig.extension }
+
+    orocrm_channel_bundle.integration_type_extension:
+        class: OroCRM\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension
+        arguments:
+            - @orocrm_channel.provider.settings_provider
+        tags:
+            - { name: form.type_extension, alias: oro_integration_channel_form }
