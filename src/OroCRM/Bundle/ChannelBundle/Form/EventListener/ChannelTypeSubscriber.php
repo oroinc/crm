@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Form\EventListener;
 
+use Oro\Bundle\FormBundle\Utils\FormUtils;
+
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -51,6 +53,19 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         // builds datasource field
         $datasourceModifier = $this->getDatasourceModifierClosure($data->getChannelType());
         $datasourceModifier($form);
+
+        if ($data && $data->getId()) {
+            FormUtils::replaceField(
+                $form,
+                'customerIdentity',
+                ['required' => false, 'disabled' => true]
+            );
+            FormUtils::replaceField(
+                $form,
+                'channelType',
+                ['required' => false, 'disabled' => true]
+            );
+        }
     }
 
     /**
