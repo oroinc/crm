@@ -2,14 +2,20 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\EventListener;
 
+use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2Type;
+
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\PreloadedExtension;
+use Symfony\Component\Form\Test\FormIntegrationTestCase;
 
+use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
+use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 use OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 
-class ChannelTypeSubscriberTest extends \PHPUnit_Framework_TestCase
+class ChannelTypeSubscriberTest extends FormIntegrationTestCase
 {
     /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $settingsProvider;
@@ -23,6 +29,7 @@ class ChannelTypeSubscriberTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
 
         $this->subscriber = new ChannelTypeSubscriber($this->settingsProvider);
+        parent::setUp();
     }
 
     public function tearDown()
@@ -93,6 +100,10 @@ class ChannelTypeSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function formDataProviderForPreSet()
     {
+        $channelUpdate = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $channelUpdate->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(1));
         $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
 
         return [
@@ -129,5 +140,41 @@ class ChannelTypeSubscriberTest extends \PHPUnit_Framework_TestCase
         $events = ChannelTypeSubscriber::getSubscribedEvents();
         $this->assertArrayHasKey(FormEvents::PRE_SET_DATA, $events);
         $this->assertArrayHasKey(FormEvents::PRE_SUBMIT, $events);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getExtensions()
+    {
+        $channelType = new ChannelType($this->settingsProvider, $this->subscriber);
+        $provider = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityProvider')
+            ->disableOriginalConstructor()->getMock();
+        $provider->expects($this->any())
+            ->method('getEntities')
+            ->will(
+                $this->returnValue(
+                    [
+                        [
+                            'name'          => 'name',
+                            'label'         => 'label',
+                            'plural_label'  => 'plural_label',
+                            'icon'          => 'icon'
+                        ]
+                    ]
+                )
+            );
+        return [
+            new PreloadedExtension(
+                [
+                    $channelType->getName() => $channelType,
+                    'orocrm_channel_entities' => new ChannelEntityType(),
+                    'orocrm_channel.form.type.entity_choice' => new ChannelEntityType($provider),
+                    'orocrm_channel_entity_choice_form' => new ChannelEntityType($provider),
+                    'genemu_jqueryselect2_choice' => new Select2Type('choice')
+                ],
+                []
+            )
+        ];
     }
 }

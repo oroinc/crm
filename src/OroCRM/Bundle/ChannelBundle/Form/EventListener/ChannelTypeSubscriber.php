@@ -59,6 +59,19 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             $customerIdentityClosure = $this->getCustomerIdentityClosure($customerIdentityValue);
             $customerIdentityClosure($form);
         }
+
+        if ($data && $data->getId()) {
+            FormUtils::replaceField(
+                $form,
+                'customerIdentity',
+                ['required' => false, 'disabled' => true]
+            );
+            FormUtils::replaceField(
+                $form,
+                'channelType',
+                ['required' => false, 'disabled' => true]
+            );
+        }
     }
 
     /**
