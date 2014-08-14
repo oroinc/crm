@@ -222,7 +222,7 @@ define([
 
                 self.selectedEntities.push(self.predefinedCustomerIdentity.name);
 
-                this.$channelEntitiesEl.select2();
+                //this.$channelEntitiesEl.select2();
             }
         },
 

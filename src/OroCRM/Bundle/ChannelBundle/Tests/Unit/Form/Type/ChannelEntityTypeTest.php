@@ -2,12 +2,12 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityChoiceType;
+use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelEntityChoiceTypeTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var ChannelEntityChoiceType */
+    /** @var ChannelEntityType */
     protected $type;
 
     /** @var SettingsProvider */
@@ -21,7 +21,7 @@ class ChannelEntityChoiceTypeTest extends \PHPUnit_Framework_TestCase
         $settingProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
 
-        $this->type = new ChannelEntityChoiceType($provider, $settingProvider);
+        $this->type = new ChannelEntityType($provider, $settingProvider);
     }
 
     public function tearDown()
@@ -31,9 +31,9 @@ class ChannelEntityChoiceTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testType()
     {
-        $this->assertSame('orocrm_channel_entity_choice_form', $this->type->getName());
-        $this->assertSame('genemu_jqueryselect2_choice', $this->type->getParent());
+        $this->assertSame('orocrm_channel_entities', $this->type->getName());
+        $this->assertSame('hidden', $this->type->getParent());
 
-        $this->assertInstanceOf('Oro\Bundle\EntityBundle\Form\Type\EntityChoiceType', $this->type);
+        $this->assertInstanceOf('Symfony\Component\Form\AbstractType', $this->type);
     }
 }
