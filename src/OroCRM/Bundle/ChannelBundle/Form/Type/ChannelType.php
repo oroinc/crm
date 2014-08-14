@@ -52,16 +52,7 @@ class ChannelType extends AbstractType
                 'label'    => 'orocrm.channel.customer_identity.label',
             ]
         );
-        $builder->add(
-            'entities',
-            'orocrm_channel_entity_choice_form',
-            [
-                'required' => false,
-                'multiple' => true,
-                'label'    => 'orocrm.channel.entities.label',
-                'configs'  => ['placeholder' => 'orocrm.channel.form.select_entities.label']
-            ]
-        );
+        $builder->add('entities', 'orocrm_channel_entities');
         $builder->add(
             'channelType',
             'genemu_jqueryselect2_choice',

@@ -4,8 +4,9 @@ define([
     'backbone', 'oroui/js/mediator',
     'oroui/js/delete-confirmation',
     '../../utils/channel-form-utils',
+    '../../entity-management/entity-component-view',
     'jquery.select2'
-], function (_, __, Backbone, mediator, DeleteConfirmation, utils) {
+], function (_, __, Backbone, mediator, DeleteConfirmation, utils, EntityComponentView) {
     'use strict';
 
     var $ = Backbone.$;
@@ -193,6 +194,7 @@ define([
             });
         },
 
+
         /**
          * Check whether the item is read-only to select predefined value, if it exists
          *
@@ -234,6 +236,20 @@ define([
         }
     });
 
+    function initializeEntityComponent(entitiesEl, metadata) {
+        var $entitiesEl = $(entitiesEl),
+            value = $entitiesEl.val(),
+            entities = value ? JSON.parse(value) : [],
+            entityComponentView = new EntityComponentView({
+                data:       entities,
+                mode:       EntityComponentView.prototype.MODES.EDIT_MODE,
+                metadata:   metadata
+            });
+        entityComponentView.render();
+
+        $entitiesEl.after(entityComponentView.$el);
+    }
+
     /**
      * Initialize channel form component
      *
@@ -241,6 +257,7 @@ define([
      */
     return function (options) {
         var view = new ChannelFormComponentView(options);
+        initializeEntityComponent(options.channelEntitiesEl, options.entitiesMetadata);
         options._sourceElement.remove();
 
         return view;
