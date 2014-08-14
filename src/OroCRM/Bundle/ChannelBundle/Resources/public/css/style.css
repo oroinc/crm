@@ -2,3 +2,12 @@
     display: inline-block;
     padding-top: 3px;
 }
+
+.form-horizontal .entities-form-container .controls .select2-container {
+    width: 250px !important;
+}
+
+.form-horizontal .entities-form-container .entities-form-action-container {
+    margin-left: 20px;
+}
+

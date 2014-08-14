@@ -136,7 +136,7 @@ class CartItem extends ExtendCartItem
     /**
      * @param float $customPrice
      *
-     * @return $this
+     * @return CartItem
      */
     public function setCustomPrice($customPrice)
     {
@@ -155,7 +155,7 @@ class CartItem extends ExtendCartItem
     /**
      * @param string $description
      *
-     * @return $this
+     * @return CartItem
      */
     public function setDescription($description)
     {
@@ -174,7 +174,7 @@ class CartItem extends ExtendCartItem
     /**
      * @param string $freeShipping
      *
-     * @return $this
+     * @return CartItem
      */
     public function setFreeShipping($freeShipping)
     {
@@ -193,7 +193,7 @@ class CartItem extends ExtendCartItem
     /**
      * @param string $giftMessage
      *
-     * @return $this
+     * @return CartItem
      */
     public function setGiftMessage($giftMessage)
     {
@@ -212,7 +212,7 @@ class CartItem extends ExtendCartItem
     /**
      * @param float $isVirtual
      *
-     * @return $this
+     * @return CartItem
      */
     public function setIsVirtual($isVirtual)
     {
@@ -231,7 +231,7 @@ class CartItem extends ExtendCartItem
     /**
      * @param int $parentItemId
      *
-     * @return $this
+     * @return CartItem
      */
     public function setParentItemId($parentItemId)
     {
@@ -250,7 +250,7 @@ class CartItem extends ExtendCartItem
     /**
      * @param float $priceInclTax
      *
-     * @return $this
+     * @return CartItem
      */
     public function setPriceInclTax($priceInclTax)
     {
@@ -269,7 +269,7 @@ class CartItem extends ExtendCartItem
     /**
      * @param int $productId
      *
-     * @return $this
+     * @return CartItem
      */
     public function setProductId($productId)
     {
@@ -288,7 +288,7 @@ class CartItem extends ExtendCartItem
     /**
      * @param string $productType
      *
-     * @return $this
+     * @return CartItem
      */
     public function setProductType($productType)
     {
@@ -307,7 +307,7 @@ class CartItem extends ExtendCartItem
     /**
      * @param float $rowTotal
      *
-     * @return $this
+     * @return CartItem
      */
     public function setRowTotal($rowTotal)
     {
@@ -326,7 +326,7 @@ class CartItem extends ExtendCartItem
     /**
      * @param float $taxAmount
      *
-     * @return $this
+     * @return CartItem
      */
     public function setTaxAmount($taxAmount)
     {
@@ -345,7 +345,7 @@ class CartItem extends ExtendCartItem
     /**
      * @param string $taxClassId
      *
-     * @return $this
+     * @return CartItem
      */
     public function setTaxClassId($taxClassId)
     {
