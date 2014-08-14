@@ -33,6 +33,9 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
     /** @var Channel */
     protected $entity;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager */
+    protected $em;
+
     protected function setUp()
     {
         $this->request    = new Request();
