@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
@@ -47,6 +48,18 @@ class CaseController extends Controller
     {
         return [
             'account' => $account
+        ];
+    }
+
+    /**
+     * @Route("/widget/contact-cases/{id}", name="orocrm_case_contact_widget_cases", requirements={"id"="\d+"})
+     * @AclAncestor("orocrm_case_view")
+     * @Template
+     */
+    public function contactCasesAction(Contact $contact)
+    {
+        return [
+            'contact' => $contact
         ];
     }
 

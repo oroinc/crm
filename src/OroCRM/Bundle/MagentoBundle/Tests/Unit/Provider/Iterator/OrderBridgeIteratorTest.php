@@ -34,7 +34,7 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
                 $this->returnValue(new \ArrayIterator($websites))
             );
 
-        $this->transport->expects($this->at(2))->method('call')
+        $this->transport->expects($this->at(3))->method('call')
             ->with($this->equalTo('oroOrderList'))
             ->will($this->returnValue($orderArray));
 

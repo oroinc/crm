@@ -27,7 +27,7 @@ class OroCRMChannelBundle implements Migration
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('name', 'string', ['notnull' => true, 'length' => 255]);
         $table->addColumn('organization_owner_id', 'integer', ['notnull' => false]);
-        $table->addColumn('data_source_id', 'smallint', ['notnull' => false]);
+        $table->addColumn('data_source_id', 'integer', ['notnull' => false]);
         $table->addColumn('status', 'boolean', ['notnull' => true]);
         $table->addColumn('channel_type', 'string', ['notnull' => true]);
         $table->addColumn('customer_identity', 'string', ['notnull' => true]);

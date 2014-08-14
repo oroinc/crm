@@ -158,10 +158,10 @@ class Address extends ExtendAddress
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType",cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType")
      * @ORM\JoinTable(
      *     name="orocrm_magento_cust_addr_type",
-     *     joinColumns={@ORM\JoinColumn(name="customer_address_id", referencedColumnName="id", onDelete="CASCADE")},
+     *     joinColumns={@ORM\JoinColumn(name="customer_address_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )
      **/
@@ -222,7 +222,7 @@ class Address extends ExtendAddress
      * Set address created date/time
      *
      * @param \DateTime $created
-     * @return $this|AbstractAddress
+     * @return Address|AbstractAddress
      */
     public function setCreated($created)
     {
@@ -245,7 +245,7 @@ class Address extends ExtendAddress
      * Set address updated date/time
      *
      * @param \DateTime $updated
-     * @return $this|AbstractAddress
+     * @return Address|AbstractAddress
      */
     public function setUpdated($updated)
     {

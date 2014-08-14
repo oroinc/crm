@@ -21,7 +21,7 @@ class PeriodFilter extends ChoiceFilter
         if (is_array($data['value'])) {
             $data['value'] = reset($data['value']);
         }
-        $ds->groupBy($data['value']);
+        $ds->addGroupBy($data['value']);
 
         return true;
     }

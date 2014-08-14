@@ -145,7 +145,7 @@ class Product extends ExtendProduct
     /**
      * @param float $specialPrice
      *
-     * @return $this
+     * @return Product
      */
     public function setSpecialPrice($specialPrice)
     {
@@ -165,7 +165,7 @@ class Product extends ExtendProduct
     /**
      * @param Website $website
      *
-     * @return $this
+     * @return Product
      */
     public function addWebsite(Website $website)
     {
@@ -179,7 +179,7 @@ class Product extends ExtendProduct
     /**
      * @param Website $website
      *
-     * @return $this
+     * @return Product
      */
     public function removeWebsite(Website $website)
     {
@@ -193,7 +193,7 @@ class Product extends ExtendProduct
     /**
      * @param Website[] $websites
      *
-     * @return $this
+     * @return Product
      */
     public function setWebsites(array $websites)
     {
@@ -213,7 +213,7 @@ class Product extends ExtendProduct
     /**
      * @param int $originId
      *
-     * @return $this
+     * @return Product
      */
     public function setOriginId($originId)
     {

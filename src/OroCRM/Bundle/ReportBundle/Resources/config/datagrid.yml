@@ -187,7 +187,7 @@ datagrid:
             query:
                 select:
                     - COUNT(l.id) as leadsCount
-                    - SUBSTRING(l.createdAt, 1, 10) as createdDate
+                    - DATE(l.createdAt) as createdDate
                 from:
                     - { table: OroCRMSalesBundle:Lead, alias: l }
                 groupBy: createdDate
@@ -309,29 +309,18 @@ datagrid:
             type: orm
             acl_resource: oro_report_view
             query:
+                select:
+                    - CONCAT(MONTH(o.closeDate), ' / ', YEAR(o.closeDate)) as monthPeriod
+                    - CONCAT(QUARTER(o.closeDate), ' / ', YEAR(o.closeDate)) as quarterPeriod
+                    - YEAR(o.closeDate) as yearPeriod
+                    - SUM(o.closeRevenue) as value
+                    - COUNT(o.id) as cnt
                 from:
                     - { table: OroCRMSalesBundle:Opportunity, alias: o }
-                select:
-                    - CONCAT( CONCAT( SUBSTRING( o.closeDate, 6, 2 ), ' / '), SUBSTRING( o.closeDate, 1, 4 ) ) as monthPeriod
-                    - >
-                      CONCAT(
-                        CASE
-                          WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 1 AND 3 THEN '1'
-                          WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 4 AND 6 THEN '2'
-                          WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 7 AND 9 THEN '3'
-                          ELSE '4'
-                        END,
-                        CONCAT(
-                          ' / ',
-                          SUBSTRING( o.closeDate, 1, 4 )
-                        )
-                      ) as quarterPeriod
-                    - SUBSTRING( o.closeDate, 1, 4 ) as yearPeriod
-                    - SUM( o.closeRevenue ) as value
-                    - COUNT( o.id ) as cnt
                 join:
                     inner:
                         - { join: o.status, alias: s }
+                groupBy: o.closeDate
                 where:
                     and:
                         - s.name = 'won'
