@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
@@ -18,8 +19,8 @@ class ChannelHandler
     /** @var Request */
     protected $request;
 
-    /** @var EntityManager */
-    protected $em;
+    /** @var RegistryInterface */
+    protected $registry;
 
     /** @var FormInterface */
     protected $form;
@@ -30,18 +31,18 @@ class ChannelHandler
     /**
      * @param Request                  $request
      * @param FormInterface            $form
-     * @param EntityManager            $em
+     * @param RegistryInterface        $registry
      * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
         Request $request,
         FormInterface $form,
-        EntityManager $em,
+        RegistryInterface $registry,
         EventDispatcherInterface $dispatcher
     ) {
         $this->request    = $request;
         $this->form       = $form;
-        $this->em         = $em;
+        $this->registry   = $registry;
         $this->dispatcher = $dispatcher;
     }
 
@@ -74,8 +75,8 @@ class ChannelHandler
      */
     protected function doSave(Channel $entity)
     {
-        $this->em->persist($entity);
-        $this->em->flush();
+        $this->getManager()->persist($entity);
+        $this->getManager()->flush();
 
         $this->dispatcher->dispatch(ChannelSaveEvent::EVENT_NAME, new ChannelSaveEvent($entity));
     }
@@ -98,5 +99,13 @@ class ChannelHandler
         }
 
         return $form->createView();
+    }
+
+    /**
+     * @return EntityManager
+     */
+    protected function getManager()
+    {
+        return $this->registry->getEntityManager();
     }
 }

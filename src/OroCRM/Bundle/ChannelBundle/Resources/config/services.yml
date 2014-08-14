@@ -72,7 +72,7 @@ services:
         arguments:
             - @request
             - @orocrm_channel.form.channel
-            - @doctrine.orm.entity_manager
+            - @doctrine
             - @event_dispatcher
 
     orocrm_channel.channel_integration_form.handler:
@@ -129,7 +129,7 @@ services:
         arguments:
             - @orocrm_channel.provider.settings_provider
             - @orocrm_channel.state_cache
-            - @doctrine.orm.entity_manager
+            - @doctrine
         tags:
             - { name: kernel.event_listener, event: 'orocrm_channel.channel.save_succeed', method: processChannelChange}
             - { name: kernel.event_listener, event: 'orocrm_channel.channel.delete_succeed', method: processChannelChange}
@@ -163,15 +163,15 @@ services:
     orocrm_channel.event_listener.channel_change_status:
         class: %orocrm_channel.event_listener.channel_change_status.class%
         arguments:
-            - @doctrine.orm.entity_manager
+            - @doctrine
         tags:
-            - { name: kernel.event_listener, event: orocrm_channel.channel.status_change, method: onChannelStatusChanging }
+            - { name: kernel.event_listener, event: orocrm_channel.channel.status_change, method: onChannelStatusChange }
 
     orocrm_channel.event_listener.channel_save_succeed:
         class: %orocrm_channel.event_listener.channel_save_succeed.class%
         arguments:
             - @orocrm_channel.provider.settings_provider
-            - @doctrine.orm.entity_manager
+            - @doctrine
         tags:
             - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSucceedSave }
 

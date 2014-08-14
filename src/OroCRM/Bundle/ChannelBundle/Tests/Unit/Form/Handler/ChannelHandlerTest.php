@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
@@ -20,8 +21,8 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
     /** @var Request */
     protected $request;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager */
-    protected $em;
+    /** @var \PHPUnit_Framework_MockObject_MockObject|RegistryInterface */
+    protected $registry;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface */
     protected $dispatcher;
@@ -41,8 +42,10 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
+        $this->registry   = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
+
         $this->entity  = new Channel();
-        $this->handler = new ChannelHandler($this->request, $this->form, $this->em, $this->dispatcher);
+        $this->handler = new ChannelHandler($this->request, $this->form, $this->registry, $this->dispatcher);
     }
 
     public function testProcessUnsupportedRequest()
@@ -91,8 +94,10 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
         $this->form->expects($this->once())->method('isValid')
             ->will($this->returnValue(true));
 
+        $this->registry->expects($this->any())->method('getEntityManager') ->will($this->returnValue($this->em));
         $this->em->expects($this->once())->method('persist')->with($this->entity);
         $this->em->expects($this->once())->method('flush');
+
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with(
                 $this->equalTo(ChannelSaveEvent::EVENT_NAME),

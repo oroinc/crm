@@ -3,18 +3,25 @@
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityChoiceType;
+use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelEntityChoiceTypeTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ChannelEntityChoiceType */
     protected $type;
 
+    /** @var SettingsProvider */
+    protected $settingProvider;
+
     public function setUp()
     {
         $provider = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityProvider')
             ->disableOriginalConstructor()->getMock();
 
-        $this->type = new ChannelEntityChoiceType($provider);
+        $settingProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
+            ->disableOriginalConstructor()->getMock();
+
+        $this->type = new ChannelEntityChoiceType($provider, $settingProvider);
     }
 
     public function tearDown()

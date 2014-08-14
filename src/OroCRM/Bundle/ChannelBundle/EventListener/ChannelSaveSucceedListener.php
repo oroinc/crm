@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 
+use Symfony\Bridge\Doctrine\RegistryInterface;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
@@ -15,17 +17,17 @@ class ChannelSaveSucceedListener
     /** @var SettingsProvider */
     protected $settingsProvider;
 
-    /** @var EntityManager */
-    protected $em;
+    /** @var RegistryInterface */
+    protected $registry;
 
     /**
-     * @param SettingsProvider $settingsProvider
-     * @param EntityManager    $em
+     * @param SettingsProvider  $settingsProvider
+     * @param RegistryInterface $registry
      */
-    public function __construct(SettingsProvider $settingsProvider, EntityManager $em)
+    public function __construct(SettingsProvider $settingsProvider, RegistryInterface $registry)
     {
         $this->settingsProvider = $settingsProvider;
-        $this->em               = $em;
+        $this->registry         = $registry;
     }
 
     /**
@@ -43,8 +45,8 @@ class ChannelSaveSucceedListener
 
             $dataSource->setConnectors($connectors);
 
-            $this->em->persist($dataSource);
-            $this->em->flush();
+            $this->getManager()->persist($dataSource);
+            $this->getManager()->flush();
         }
     }
 
@@ -58,12 +60,25 @@ class ChannelSaveSucceedListener
         $result = [];
 
         foreach ($entities as $entity) {
-            array_push(
-                $result,
-                $this->settingsProvider->getIntegrationConnectorName($entity)
-            );
+
+            $connectorName = $this->settingsProvider->getIntegrationConnectorName($entity);
+
+            if (!empty($connectorName)) {
+                array_push(
+                    $result,
+                    $connectorName
+                );
+            }
         }
 
         return $result;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    protected function getManager()
+    {
+        return $this->registry->getEntityManager();
     }
 }

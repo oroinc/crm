@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 
+use Symfony\Bridge\Doctrine\RegistryInterface;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
@@ -11,21 +13,21 @@ use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
 
 class ChangeChannelStatusListener
 {
-    /** @var EntityManager */
-    protected $em;
+    /** @var RegistryInterface */
+    protected $registry;
 
     /**
-     * @param EntityManager $em
+     * @param RegistryInterface $registry
      */
-    public function __construct(EntityManager $em)
+    public function __construct(RegistryInterface $registry)
     {
-        $this->em = $em;
+        $this->registry = $registry;
     }
 
     /**
      * @param ChannelChangeStatusEvent $event
      */
-    public function onChannelStatusChanging(ChannelChangeStatusEvent $event)
+    public function onChannelStatusChange(ChannelChangeStatusEvent $event)
     {
         /** @var Channel $channel */
         $channel     = $event->getChannel();
@@ -38,8 +40,16 @@ class ChangeChannelStatusListener
                 $integration->setEnabled(false);
             }
 
-            $this->em->persist($integration);
-            $this->em->flush();
+            $this->getManager()->persist($integration);
+            $this->getManager()->flush();
         }
+    }
+
+    /**
+     * @return EntityManager
+     */
+    protected function getManager()
+    {
+        return $this->registry->getEntityManager();
     }
 }

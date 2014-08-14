@@ -265,10 +265,21 @@ class SettingsProvider
      */
     public function getCustomerIdentityFromConfig($type)
     {
+        return $this->getChannelConfigBlock($type, 'customer_identity');
+    }
+
+    /**
+     * @param string $type
+     * @param string $block
+     *
+     * @return mixed|null
+     */
+    protected function getChannelConfigBlock($type, $block)
+    {
         $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
 
-        return !empty($settings[$type]['customer_identity'])
-            ? $settings[$type]['customer_identity']
+        return !empty($settings[$type][$block])
+            ? $settings[$type][$block]
             : null;
     }
 }
