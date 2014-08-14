@@ -1,0 +1,12 @@
+<tr>
+    <td class="name-cell"><%= label %></td>
+    <td class="action-cell">
+        <% _.each(actions, function(action) { %>
+            <a href="<%= action.url ? action.url: 'javascript: void(0);' %>"
+               <% if (!action.url && action.dataPurpose) { %> class="no-hash" data-purpose="<%= __(action.dataPurpose) %>" <% } %>
+               title="<%= __(action.title) %>">
+                <i class="<%= action.icon %> hide-text"></i>
+            </a>
+        <% }) %>
+    </td>
+</tr>

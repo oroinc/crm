@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ChannelBundle\Form\Handler;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\FormFactoryInterface;
 
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -20,14 +21,22 @@ class ChannelIntegrationHandler
     /** @var FormInterface */
     protected $form;
 
+    /** @var array */
+    protected $options = ['disable_customer_datasource_types' => false];
+
     /**
-     * @param Request       $request
-     * @param FormInterface $form
+     * @param Request              $request
+     * @param FormFactoryInterface $factory
      */
-    public function __construct(Request $request, FormInterface $form)
+    public function __construct(Request $request, FormFactoryInterface $factory)
     {
         $this->request = $request;
-        $this->form    = $form;
+        $this->form    = $factory->createNamed(
+            'oro_integration_channel_form',
+            'oro_integration_channel_form',
+            null,
+            $this->options
+        );
     }
 
     /**
@@ -68,7 +77,7 @@ class ChannelIntegrationHandler
 
     /**
      * Builds form view in order to show on page, recreates form if update mode
-     * due to validation errors should not be shown if submitted in "update mode"
+     * due to validation errors should not be shown if submitted in 'update mode'
      * NOTE: it was impossible to use validation_groups because of structure of client validation framework
      *
      * @return FormView
@@ -81,7 +90,7 @@ class ChannelIntegrationHandler
         if ($isUpdateOnly) {
             $config = $this->form->getConfig();
             $form   = $config->getFormFactory()
-                ->createNamed($this->form->getName(), $config->getType()->getName(), $form->getData());
+                ->createNamed($this->form->getName(), $config->getType()->getName(), $form->getData(), $this->options);
         }
 
         $view = $form->createView();

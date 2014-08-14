@@ -1,12 +1,17 @@
-"Configure integration": "Configure integration"
-"configure": "configure"
+"Configure integration":         "Configure integration"
+"configure":                     "configure"
+"Actions":                       "Actions"
+"Entity":                        "Entity"
+"Add":                           "Add"
+"Cancel":                        "Cancel"
+"There is no entities selected": "There is no entities selected"
 
 orocrm:
     channel:
         form:
             select_customer_identity: Please select customer identity
+            entity:                   Please select entity
         confirmation:
             text: Are you sure you want to change type?
             title: Change Type
             agree: Yes, I Agree
-
