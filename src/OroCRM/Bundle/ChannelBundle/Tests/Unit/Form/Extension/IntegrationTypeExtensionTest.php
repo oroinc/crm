@@ -71,7 +71,7 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
             'entity with id' => [
                 '$config value' => ['type 1'],
                 '$data' => $entityUpdate,
-                '$expectedChoices' => ['type 1' => 'type 1', 'type 2' => 'type 2']
+                '$expectedChoices' => ['type 2' => 'type 2']
             ],
         ];
     }
