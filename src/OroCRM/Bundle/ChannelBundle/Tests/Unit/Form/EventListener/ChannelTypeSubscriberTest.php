@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\EventListener;
 
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2Type;
 
+use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\PreloadedExtension;
@@ -128,8 +129,9 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
             new PreloadedExtension(
                 [
                     $channelType->getName() => $channelType,
-                    'orocrm_channel.form.type.entity_choice' => new ChannelEntityChoiceType($provider),
-                    'orocrm_channel_entity_choice_form' => new ChannelEntityChoiceType($provider),
+                    'orocrm_channel_entities' => new ChannelEntityType(),
+                    'orocrm_channel.form.type.entity_choice' => new ChannelEntityType($provider),
+                    'orocrm_channel_entity_choice_form' => new ChannelEntityType($provider),
                     'genemu_jqueryselect2_choice' => new Select2Type('choice')
                 ],
                 []
