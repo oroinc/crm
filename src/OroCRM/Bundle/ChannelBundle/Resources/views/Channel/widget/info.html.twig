@@ -1,0 +1,12 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ UI.renderProperty('orocrm.channel.name.label'|trans, channel.name) }}
+            {{ UI.renderProperty('orocrm.channel.channel_type.label'|trans, channel.channelType) }}
+            {{ UI.renderProperty('orocrm.channel.customer_identity.label'|trans, oro_entity_config_value(channel.customerIdentity, 'messages')) }}
+            {{ UI.renderProperty('orocrm.channel.owner.label'|trans, channel.owner.name) }}
+        </div>
+    </div>
+</div>

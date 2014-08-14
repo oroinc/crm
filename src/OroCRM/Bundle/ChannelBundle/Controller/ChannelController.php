@@ -112,4 +112,33 @@ class ChannelController extends Controller
 
         return $this->redirect($this->generateUrl('orocrm_channel_update', ['id' => $channel->getId()]));
     }
+
+    /**
+     * @Route("/view/{id}", requirements={"id"="\d+"}, name="orocrm_one_channel_view")
+     * @Acl(
+     *      id="orocrm_one_channel_view",
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMChannelBundle:Channel"
+     * )
+     * @Template()
+     */
+    public function viewAction(Channel $channel)
+    {
+        return [
+            'entity' => $channel,
+        ];
+    }
+
+    /**
+     * @Route("/widget/info/{id}", name="orocrm_channel_widget_info", requirements={"id"="\d+"})
+     * @AclAncestor("orocrm_one_channel_view")
+     * @Template()
+     */
+    public function infoAction(Channel $channel)
+    {
+        return [
+            'channel' => $channel
+        ];
+    }
 }
