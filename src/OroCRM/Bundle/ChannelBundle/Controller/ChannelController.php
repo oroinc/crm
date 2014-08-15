@@ -84,8 +84,9 @@ class ChannelController extends Controller
                     ]
                 ],
                 [
-                    'route'      => 'orocrm_channel_index',
+                    'route'      => 'orocrm_channel_view',
                     'parameters' => [
+                        'id'                      => $channel->getId(),
                         '_enableContentProviders' => 'mainMenu'
                     ]
                 ],
@@ -100,10 +101,15 @@ class ChannelController extends Controller
     }
 
     /**
-     * @Route("/status/change/{id}", requirements={"id"="\d+"}, name="orocrm_channel_change_status")
+     * @Route(
+     *      "/status/change/{id}/{backRoute}",
+     *      requirements={"id"="\d+"},
+     *      defaults={"backRoute"="orocrm_channel_view"},
+     *      name="orocrm_channel_change_status"
+     *  )
      * @AclAncestor("orocrm_channel_update")
      */
-    public function changeStatusAction(Channel $channel)
+    public function changeStatusAction(Channel $channel, $backRoute)
     {
         if ($channel->getStatus() == Channel::STATUS_ACTIVE) {
             $message = 'orocrm.channel.controller.message.status.deactivated';
@@ -124,12 +130,36 @@ class ChannelController extends Controller
 
         return $this->redirect(
             $this->generateUrl(
-                'orocrm_channel_update',
+                $backRoute,
                 [
                     'id' => $channel->getId(),
                     '_enableContentProviders' => 'mainMenu'
                 ]
             )
         );
+    }
+
+    /**
+     * @Route("/view/{id}", requirements={"id"="\d+"}, name="orocrm_channel_view")
+     * @AclAncestor("orocrm_channel_view")
+     * @Template()
+     */
+    public function viewAction(Channel $channel)
+    {
+        return [
+            'entity' => $channel,
+        ];
+    }
+
+    /**
+     * @Route("/widget/info/{id}", name="orocrm_channel_widget_info", requirements={"id"="\d+"})
+     * @AclAncestor("orocrm_one_channel_view")
+     * @Template()
+     */
+    public function infoAction(Channel $channel)
+    {
+        return [
+            'channel' => $channel
+        ];
     }
 }

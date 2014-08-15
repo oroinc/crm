@@ -45,6 +45,21 @@ class ChannelControllerTest extends WebTestCase
     }
 
     /**
+     * @depends testCreate
+     */
+    public function testView($id)
+    {
+        $crawler = $this->client->request(
+            'GET',
+            $this->getUrl('orocrm_channel_view', array('id' => $id))
+        );
+
+        $result = $this->client->getResponse();
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
+        $this->assertContains("Account_name_update - Accounts - Customers", $crawler->html());
+    }
+
+    /**
      * @param array $data
      *
      * @depends testCreateChannel
