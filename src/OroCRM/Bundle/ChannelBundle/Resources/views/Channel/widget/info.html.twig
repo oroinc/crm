@@ -6,10 +6,18 @@
             {{ UI.renderProperty('orocrm.channel.name.label'|trans, channel.name) }}
             {{ UI.renderProperty('orocrm.channel.channel_type.label'|trans, channelTypes[channel.channelType]) }}
             {% if(channel.dataSource) %}
-                {{ UI.renderProperty('orocrm.channel.data_source.label'|trans, channel.dataSource.name) }}
+                {% set inegrationLink = UI.link({
+                    'label' : channel.dataSource.name,
+                    'title' : channel.dataSource.name,
+                    'path' : path('oro_integration_update',
+                    {'id' : channel.dataSource.id})
+                })%}
+                {{ UI.renderHTMLProperty('orocrm.channel.data_source.label'|trans, inegrationLink) }}
             {% endif %}
-            {{ UI.renderProperty('orocrm.channel.customer_identity.label'|trans, oro_entity_config_value(channel.customerIdentity, 'label')|trans) }}
-
+            {{ UI.renderProperty(
+                'orocrm.channel.customer_identity.label'|trans,
+                oro_entity_config_value(channel.customerIdentity, 'label')|trans
+            ) }}
         </div>
     </div>
 </div>
