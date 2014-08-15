@@ -3,14 +3,14 @@
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+
+
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;

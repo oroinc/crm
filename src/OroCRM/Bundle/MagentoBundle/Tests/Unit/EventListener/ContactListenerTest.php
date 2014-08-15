@@ -5,15 +5,15 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 
+
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-
-use OroCRM\Bundle\MagentoBundle\EventListener\ContactListener;
-use OroCRM\Bundle\MagentoBundle\Tests\Unit\Fixtures\Entity\ExtendContact;
-use OroCRM\Bundle\MagentoBundle\Tests\Unit\Fixtures\Entity\ExtendCustomer;
-
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
+use OroCRM\Bundle\MagentoBundle\EventListener\ContactListener;
+use OroCRM\Bundle\MagentoBundle\Tests\Unit\Fixtures\Entity\ExtendContact;
+use OroCRM\Bundle\MagentoBundle\Tests\Unit\Fixtures\Entity\ExtendCustomer;
 
 /**
  * @SuppressWarnings(PHPMD)

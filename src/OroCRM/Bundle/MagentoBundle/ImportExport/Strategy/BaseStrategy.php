@@ -2,22 +2,23 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\AddressBundle\Entity\Country;
-use Oro\Bundle\AddressBundle\Entity\Region;
+
+
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
-
-use OroCRM\Bundle\MagentoBundle\Utils\ValidationUtils;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\DoctrineHelper;
+use OroCRM\Bundle\MagentoBundle\Utils\ValidationUtils;
 
 abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
 {

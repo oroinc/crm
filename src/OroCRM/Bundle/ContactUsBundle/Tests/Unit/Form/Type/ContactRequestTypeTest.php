@@ -5,8 +5,9 @@ namespace OroCRM\Bundle\ContactUsBundle\Tests\Unit\Form\Type;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 
-use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
 
+
+use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
 use OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 
 class ContactRequestTypeTest extends TypeTestCase

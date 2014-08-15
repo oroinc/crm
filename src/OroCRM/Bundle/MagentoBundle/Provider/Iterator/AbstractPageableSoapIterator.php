@@ -2,13 +2,15 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
-use Psr\Log\NullLogger;
-use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 
-use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
+
+
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 
 abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderInterface, LoggerAwareInterface
 {

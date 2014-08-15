@@ -2,18 +2,17 @@
 
 namespace OroCRM\Bundle\CaseBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-
-use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
+use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class CaseController extends Controller
 {

@@ -4,13 +4,13 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Functional\API;
 
 use Doctrine\ORM\EntityManager;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\Group;
+
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\UserBundle\Entity\User;
-
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Group;
 
 /**
  * @outputBuffering enabled

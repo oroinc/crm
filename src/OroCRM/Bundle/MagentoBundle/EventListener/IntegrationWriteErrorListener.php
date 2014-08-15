@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
 use Oro\Bundle\IntegrationBundle\Event\WriterErrorEvent;
-
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 

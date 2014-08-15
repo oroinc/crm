@@ -2,16 +2,17 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Service;
 
-use Symfony\Component\Routing\Router;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Router;
+
+
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Exception\AdminUrlRequiredException;
-use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use OroCRM\Bundle\MagentoBundle\Exception\Exception as MagentoBundleException;
+use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 
 class MagentoUrlGenerator
 {

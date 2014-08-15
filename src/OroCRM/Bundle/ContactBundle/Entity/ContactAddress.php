@@ -3,9 +3,10 @@
 namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+
+
 
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;

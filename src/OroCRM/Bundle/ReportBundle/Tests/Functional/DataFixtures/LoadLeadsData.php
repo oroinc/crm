@@ -2,32 +2,31 @@
 
 namespace OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Collections\Collection;
 
-use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
 use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
-use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {

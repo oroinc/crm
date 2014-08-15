@@ -3,9 +3,10 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
-use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+
+
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;

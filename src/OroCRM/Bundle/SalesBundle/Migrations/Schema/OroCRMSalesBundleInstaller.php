@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 
+
+
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
@@ -15,7 +17,6 @@ use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
-
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_5\OroCRMSalesBundle as SalesNoteMigration;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_6\OroCRMSalesBundle as SalesActivityMigration;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;

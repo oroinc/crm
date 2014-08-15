@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Datagrid;
 
 use Doctrine\ORM\EntityRepository;
 
+
+
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 
 class MagentoDatagridHelper

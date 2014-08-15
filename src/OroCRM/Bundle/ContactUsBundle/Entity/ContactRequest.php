@@ -2,14 +2,15 @@
 
 namespace OroCRM\Bundle\ContactUsBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
+
 
 use Oro\Bundle\EmailBundle\Entity\Email;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;

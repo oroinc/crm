@@ -4,10 +4,11 @@ namespace OroCRM\Bundle\CampaignBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\UserBundle\Entity\User;
-
 use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
 
 /**

@@ -4,12 +4,14 @@ namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 
+
+
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_14\OroCRMMagentoBundle as MagentoActivities;
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle as IntegrationUpdate;
+use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_14\OroCRMMagentoBundle as MagentoActivities;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)

@@ -4,11 +4,12 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 
-use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Region;
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
+
+use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
+use OroCRM\Bundle\MagentoBundle\Entity\Region;
 
 class RegionConverterTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,12 +2,14 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
 
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Doctrine\Common\DataFixtures\AbstractFixture;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Region;
+
+
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
+use OroCRM\Bundle\MagentoBundle\Entity\Region;
 
 class LoadRegions extends AbstractFixture
 {

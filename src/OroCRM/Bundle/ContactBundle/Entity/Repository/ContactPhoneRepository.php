@@ -2,9 +2,11 @@
 
 namespace OroCRM\Bundle\ContactBundle\Entity\Repository;
 
-use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+
+
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;

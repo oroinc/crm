@@ -3,12 +3,12 @@
 namespace OroCRM\Bundle\ReportBundle\EventListener;
 
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
-use Oro\Bundle\DataGridBundle\Extension\Formatter\Property\PropertyInterface;
-use Oro\Bundle\FilterBundle\Filter\FilterUtility;
-use Oro\Bundle\FilterBundle\Grid\Extension\OrmFilterExtension;
-use Oro\Bundle\FilterBundle\Grid\Extension\Configuration as FilterConfiguration;
-use Oro\Bundle\DataGridBundle\Extension\Sorter\Configuration as OrmSorterConfiguration;
 use Oro\Bundle\DataGridBundle\Extension\Formatter\Configuration as FormatterConfiguration;
+use Oro\Bundle\DataGridBundle\Extension\Formatter\Property\PropertyInterface;
+use Oro\Bundle\DataGridBundle\Extension\Sorter\Configuration as OrmSorterConfiguration;
+use Oro\Bundle\FilterBundle\Filter\FilterUtility;
+use Oro\Bundle\FilterBundle\Grid\Extension\Configuration as FilterConfiguration;
+use Oro\Bundle\FilterBundle\Grid\Extension\OrmFilterExtension;
 
 class ReportGridListener
 {

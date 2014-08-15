@@ -2,9 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 /**

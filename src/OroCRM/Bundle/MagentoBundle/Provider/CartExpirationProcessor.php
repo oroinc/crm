@@ -3,16 +3,16 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
-
 use Psr\Log\LoggerAwareTrait;
+
+
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-
-use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 
 class CartExpirationProcessor
 {

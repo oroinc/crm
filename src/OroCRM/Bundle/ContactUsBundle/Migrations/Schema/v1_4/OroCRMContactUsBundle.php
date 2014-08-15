@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_4;
 
 use Doctrine\DBAL\Schema\Schema;
 
+
+
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;

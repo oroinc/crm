@@ -4,12 +4,13 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_4;
 
 use Doctrine\DBAL\Schema\Schema;
 
-use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+
 
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
+use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class OroCRMSalesBundle implements Migration, ExtendExtensionAwareInterface
 {

@@ -2,11 +2,12 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller\Dashboard;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Translation\TranslatorInterface;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use OroCRM\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository;

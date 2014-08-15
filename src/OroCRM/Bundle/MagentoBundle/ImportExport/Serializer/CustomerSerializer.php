@@ -4,14 +4,15 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
+
+
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
-use Oro\Bundle\UserBundle\Model\Gender;
 use Oro\Bundle\ImportExportBundle\Serializer\Serializer;
-
+use Oro\Bundle\UserBundle\Model\Gender;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;

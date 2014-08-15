@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 
+
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\DeleteProviderInterface;
 

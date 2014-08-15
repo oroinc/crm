@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\CallBundle\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+
+
 use OroCRM\Bundle\CallBundle\Entity\CallStatus;
 
 class LoadCallStatusData extends AbstractFixture

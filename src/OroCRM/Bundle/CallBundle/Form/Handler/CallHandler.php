@@ -2,11 +2,13 @@
 
 namespace OroCRM\Bundle\CallBundle\Form\Handler;
 
-use OroCRM\Bundle\CallBundle\Entity\Call;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use Doctrine\Common\Persistence\ObjectManager;
+
+
+use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class CallHandler
 {

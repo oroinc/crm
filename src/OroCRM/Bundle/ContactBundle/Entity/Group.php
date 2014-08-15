@@ -3,8 +3,9 @@
 namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Doctrine\ORM\Mapping as ORM;
+
+
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;

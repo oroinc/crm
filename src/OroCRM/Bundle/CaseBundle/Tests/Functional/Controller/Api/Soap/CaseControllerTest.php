@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller\Api\Soap;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
 use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
 use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
 use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;

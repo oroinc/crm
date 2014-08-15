@@ -4,12 +4,13 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper;
 
 use Akeneo\Bundle\BatchBundle\Item\InvalidItemException;
 
-use Oro\Bundle\AddressBundle\Entity\Country;
-use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
+
+
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
-
+use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 
 class AddressImportHelper

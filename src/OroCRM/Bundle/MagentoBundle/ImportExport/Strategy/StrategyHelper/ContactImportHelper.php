@@ -3,19 +3,19 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

@@ -6,15 +6,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+
+
+use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-
 use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\CaseBundle\Model\ExtendCaseEntity;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @ORM\Entity

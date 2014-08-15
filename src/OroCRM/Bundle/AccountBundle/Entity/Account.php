@@ -3,10 +3,11 @@
 namespace OroCRM\Bundle\AccountBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
+
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
@@ -15,7 +16,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\UserBundle\Entity\User;
-
 use OroCRM\Bundle\AccountBundle\Model\ExtendAccount;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 

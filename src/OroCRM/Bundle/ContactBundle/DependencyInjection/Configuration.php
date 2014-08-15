@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\ContactBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+
+
 use OroCRM\Bundle\ContactBundle\Model\Social;
 
 class Configuration implements ConfigurationInterface

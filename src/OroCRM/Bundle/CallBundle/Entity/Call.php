@@ -2,13 +2,16 @@
 
 namespace OroCRM\Bundle\CallBundle\Entity;
 
-use Symfony\Component\Validator\ExecutionContext;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\UserBundle\Entity\User;
+use Symfony\Component\Validator\ExecutionContext;
+
+
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 
 /**

@@ -2,12 +2,14 @@
 
 namespace OroCRM\Bundle\ContactBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Doctrine\ORM\Mapping as ORM;
+
+
 
 use Oro\Bundle\AddressBundle\Entity\AbstractEmail;
 use Oro\Bundle\EmailBundle\Entity\EmailInterface;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @ORM\Entity

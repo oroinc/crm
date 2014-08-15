@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\ReportBundle\Filter;
 
+use Oro\Bundle\FilterBundle\Datasource\FilterDatasourceAdapterInterface;
 use Oro\Bundle\FilterBundle\Filter\ChoiceFilter;
 use Oro\Bundle\FilterBundle\Filter\FilterUtility;
-use Oro\Bundle\FilterBundle\Datasource\FilterDatasourceAdapterInterface;
 
 class PeriodFilter extends ChoiceFilter
 {

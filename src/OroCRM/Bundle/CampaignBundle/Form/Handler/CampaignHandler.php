@@ -2,10 +2,11 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Form\Handler;
 
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use Doctrine\ORM\EntityManager;
+
 
 use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 

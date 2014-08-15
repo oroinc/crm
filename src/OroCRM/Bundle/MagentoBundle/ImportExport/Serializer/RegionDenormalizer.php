@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
-
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 

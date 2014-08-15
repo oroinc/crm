@@ -3,6 +3,9 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+
+
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;

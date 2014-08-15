@@ -2,11 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
 
-use JMS\JobQueueBundle\Entity\Job;
-
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityRepository;
+use JMS\JobQueueBundle\Entity\Job;
+
+
 
 use Oro\Bundle\IntegrationBundle\Command\SyncCommand;
 

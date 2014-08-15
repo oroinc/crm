@@ -2,12 +2,14 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
+
+
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
+use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
 
 class AbstractNormalizer implements SerializerAwareInterface
 {

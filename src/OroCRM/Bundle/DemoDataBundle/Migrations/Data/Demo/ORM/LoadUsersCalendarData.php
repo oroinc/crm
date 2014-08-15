@@ -3,18 +3,18 @@ namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
-
-use Oro\Bundle\CalendarBundle\Entity\CalendarConnection;
-use Oro\Bundle\CalendarBundle\Entity\Calendar;
-use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarRepository;
-use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
-
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
+
+
+use Oro\Bundle\CalendarBundle\Entity\Calendar;
+use Oro\Bundle\CalendarBundle\Entity\CalendarConnection;
+use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
+use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarRepository;
 
 class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {

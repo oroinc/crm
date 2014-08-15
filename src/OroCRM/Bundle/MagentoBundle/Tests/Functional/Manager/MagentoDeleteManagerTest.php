@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Manager;
 
 use Doctrine\ORM\EntityManager;
 
+
+
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**

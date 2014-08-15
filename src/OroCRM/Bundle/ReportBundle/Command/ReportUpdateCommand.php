@@ -4,12 +4,13 @@ namespace OroCRM\Bundle\ReportBundle\Command;
 
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\Query;
-
-use Oro\Bundle\CronBundle\Command\CronCommandInterface;
-
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+
+
+
+use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 
 /**
  * Class ReportUpdateCommand

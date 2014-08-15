@@ -4,8 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Transport;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-use Oro\Bundle\IntegrationBundle\Entity\Transport;
 
+
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class SoapTransportTest extends \PHPUnit_Framework_TestCase

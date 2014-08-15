@@ -6,24 +6,25 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\UserBundle\Entity\User;
+
+
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Model\Gender;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
-use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 use OroCRM\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
+use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
+use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
+use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
+use OroCRM\Bundle\MagentoBundle\Entity\Store;
+use OroCRM\Bundle\MagentoBundle\Entity\Website;
 
 class LoadMagentoChannel extends AbstractFixture
 {

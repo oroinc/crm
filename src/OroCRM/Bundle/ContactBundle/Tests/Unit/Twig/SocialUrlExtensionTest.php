@@ -2,8 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Twig;
 
-use OroCRM\Bundle\ContactBundle\Twig\SocialUrlExtension;
 use OroCRM\Bundle\ContactBundle\Model\Social;
+use OroCRM\Bundle\ContactBundle\Twig\SocialUrlExtension;
 
 class SocialUrlExtensionTest extends \PHPUnit_Framework_TestCase
 {

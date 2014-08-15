@@ -3,20 +3,20 @@ namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+
+
+
 use Oro\Bundle\TagBundle\Entity\Tag;
 use Oro\Bundle\TagBundle\Entity\TagManager;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\EntityManager;
-
+use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {

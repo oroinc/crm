@@ -4,8 +4,10 @@ namespace OroCRM\Bundle\CaseBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
+
+
 use Oro\Bundle\TranslationBundle\DataFixtures\AbstractTranslatableEntityFixture;
+use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 
 class LoadStatusData extends AbstractTranslatableEntityFixture
 {

@@ -2,12 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+
 
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 

@@ -7,10 +7,11 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 
+
+
 use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
-
 use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 
 class SoapConnectorsFormSubscriber implements EventSubscriberInterface

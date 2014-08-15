@@ -3,20 +3,19 @@
 namespace OroCRM\Bundle\AccountBundle\Form\Type;
 
 use Doctrine\Common\Collections\Collection;
-
-use Symfony\Component\Routing\Router;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Routing\Router;
+
+
 
 use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class AccountType extends AbstractType
 {

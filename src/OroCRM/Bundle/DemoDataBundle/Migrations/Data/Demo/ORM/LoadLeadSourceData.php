@@ -6,8 +6,11 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
+
+
+
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
 
 class LoadLeadSourceData extends AbstractFixture implements ContainerAwareInterface
 {

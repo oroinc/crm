@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+
+
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 
 class LoadLeadStatusData extends AbstractFixture

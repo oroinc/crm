@@ -3,18 +3,17 @@
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+
 
 use Oro\Bundle\UserBundle\Entity\User;
-
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
+use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 class LoadCampaignData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {

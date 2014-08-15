@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\CampaignBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
+
+
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class CampaignRepository extends EntityRepository

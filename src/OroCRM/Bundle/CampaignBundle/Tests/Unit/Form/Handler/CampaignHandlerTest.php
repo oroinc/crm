@@ -4,8 +4,10 @@ namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Form\Handler;
 
 use Symfony\Component\HttpFoundation\Request;
 
-use OroCRM\Bundle\CampaignBundle\Form\Handler\CampaignHandler;
+
+
 use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
+use OroCRM\Bundle\CampaignBundle\Form\Handler\CampaignHandler;
 
 class CampaignHandlerTest extends \PHPUnit_Framework_TestCase
 {

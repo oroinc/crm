@@ -2,11 +2,12 @@
 
 namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
 
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
+
 
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 

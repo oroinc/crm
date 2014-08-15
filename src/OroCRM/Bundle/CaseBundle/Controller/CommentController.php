@@ -2,19 +2,18 @@
 
 namespace OroCRM\Bundle\CaseBundle\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
 use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
+use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
 class CommentController extends Controller
 {

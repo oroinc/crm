@@ -5,8 +5,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
+
+
 use Oro\Bundle\EmbeddedFormBundle\Form\Type\CustomLayoutFormInterface;
+use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
 
 class ContactRequestType extends AbstractType implements EmbeddedFormInterface, CustomLayoutFormInterface
 {

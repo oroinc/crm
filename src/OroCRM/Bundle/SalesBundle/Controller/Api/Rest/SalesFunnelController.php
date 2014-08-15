@@ -2,23 +2,22 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller\Api\Rest;
 
+use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Controller\Annotations\RouteResource;
+use FOS\RestBundle\Routing\ClassResourceInterface;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 
 /**
  * @RouteResource("salesfunnel")

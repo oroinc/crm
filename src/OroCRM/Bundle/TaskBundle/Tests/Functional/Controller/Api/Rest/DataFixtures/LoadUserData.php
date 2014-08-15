@@ -4,9 +4,10 @@ namespace OroCRM\Bundle\TaskBundle\Tests\Functional\Controller\Api\Rest\DataFixt
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
+
 
 use Oro\Bundle\UserBundle\Entity\UserApi;
 

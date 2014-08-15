@@ -4,14 +4,14 @@ namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
-
-use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
-use OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
-
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
+
+
+use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
+use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
+use OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 
 class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInterface
 {

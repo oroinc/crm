@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\SalesBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+
+
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 
 class OpportunityApiType extends OpportunityType

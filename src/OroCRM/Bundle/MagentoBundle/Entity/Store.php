@@ -4,11 +4,12 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
+
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-
+use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendStore;
 
 /**
