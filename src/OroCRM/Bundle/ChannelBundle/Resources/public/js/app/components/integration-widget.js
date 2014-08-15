@@ -34,9 +34,10 @@ function (_, Backbone, __, routing, DialogWidget) {
          */
         linkTemplate: _.template(
             '<% if (name) {%>' +
-                ' <%= name %> (<a href="#" class="no-hash open-form-widget"><%= title %></a>)' +
+                ' <%= name %> (<a href="javascript: void(0);" class="no-hash form-element-text" data-purpose="open-form-widget"><%= title %></a>)' +
+                '<a href="javascript: void(0);" class="no-hash"><i class="icon-remove" data-purpose="remove-integration-data"></i></a>' +
             '<% } else { %>' +
-                '<a href="#" class="no-hash open-form-widget"><%= title %></a>' +
+                '<a href="javascript: void(0);" class="no-hash form-element-text" data-purpose="open-form-widget"><%= title %></a>' +
             '<% } %>'
         ),
 
@@ -44,7 +45,8 @@ function (_, Backbone, __, routing, DialogWidget) {
          * @type {Object.<string, *>}
          */
         events: {
-            'click .open-form-widget': 'openDialog'
+            'click [data-purpose="open-form-widget"]':          'openDialog',
+            'click [data-purpose="remove-integration-data"]' :  'removeIntegrationData'
         },
 
         /**
@@ -94,6 +96,17 @@ function (_, Backbone, __, routing, DialogWidget) {
 
             formDialog.on('formSave', _.bind(processFormSave, this));
             formDialog.render();
+        },
+
+        /**
+         * Clears storage elements and re-render widget link
+         */
+        removeIntegrationData: function () {
+            this.$dataEl.val(null);
+            this.$idEl.val(null);
+            this.$nameEl.val(null);
+
+            this.render();
         },
 
         /**

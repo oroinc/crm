@@ -28,7 +28,6 @@ class CustomerTest extends AbstractEntityTestCase
         $contact     = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
         $account     = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
         $owner       = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $dataChannel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
 
         return [
             'createdAt'   => ['createdAt', $date, $date],
@@ -42,7 +41,6 @@ class CustomerTest extends AbstractEntityTestCase
             'vat'         => ['vat', self::TEST_STRING . 'vat', self::TEST_STRING . 'vat'],
             'isActive'    => ['isActive', self::TEST_IS_ACTIVE, self::TEST_IS_ACTIVE],
             'owner'       => ['owner', $owner, $owner],
-            'dataChannel' => ['dataChannel', $dataChannel, $dataChannel],
         ];
     }
 

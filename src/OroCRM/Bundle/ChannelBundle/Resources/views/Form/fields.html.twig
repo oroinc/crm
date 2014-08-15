@@ -23,7 +23,7 @@
 {% block _orocrm_channel_form_customerIdentity_widget %}
     {% if form.vars.disabled %}
         {% set metadata = orocrm_channel_entities_metadata() %}
-        <label class="control-label">{{ metadata[form.vars.value]['label'] }}</label>
+        <span class="inline-text">{{ metadata[form.vars.value]['label'] }}</span>
     {% else %}
         {{ form_widget(form) }}
     {% endif %}
@@ -33,7 +33,7 @@
     {% if form.vars.disabled %}
         {% for choice in choices %}
             {% if choice is selectedchoice(value) %}
-                <label class="control-label">{{ choice.label|trans({}, translation_domain) }}</label>
+                <span class="inline-text">{{ choice.label|trans({}, translation_domain) }}</span>
             {% endif %}
         {% endfor %}
     {% else %}

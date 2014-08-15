@@ -8,9 +8,6 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Doctrine\ORM\EntityRepository;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -28,9 +25,8 @@ use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-class LoadMagentoData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
+class LoadMagentoData extends AbstractFixture implements DependentFixtureInterface
 {
     const VAT              = 0.0838;
     const INTEGRATION_NAME = 'Demo Web store';
@@ -38,30 +34,14 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
     /** @var array */
     protected $users;
 
-    /** @var  EntityRepository */
-    protected $channelRepository;
-
-    /** @var Channel  */
-    protected $channel;
-
     /**
      * {@inheritdoc}
      */
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData'
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData'
         ];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->channelRepository = $container->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCRMChannelBundle:Channel');
     }
 
     /**
@@ -99,8 +79,6 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $integration->setTransport($transport);
         $om->persist($integration);
 
-        $this->loadDataChannel();
-
         $this->persistDemoCustomers($om, $website, $store, $group, $integration);
         $om->flush();
 
@@ -109,21 +87,6 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
 
         $this->persistDemoOrders($om, $store, $integration);
         $om->flush();
-    }
-
-    /**
-     * Load and set data channel or throws exception
-     *
-     * @throws \Exception
-     */
-    public function loadDataChannel()
-    {
-        /** @var channel $channel */
-        $this->channel = $this->channelRepository->findOneByName('default');
-
-        if (!$this->channel) {
-            throw new \Exception('"default" channel is not defined!');
-        }
     }
 
     /**
@@ -226,7 +189,6 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $address = $this->getOrderAddress($om);
         $order->addAddress($address);
         $address->setOwner($order);
-        $order->setDataChannel($this->channel);
         $om->persist($order);
         return $order;
     }
@@ -306,7 +268,6 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $cart->setCreatedAt(new \DateTime('now'));
         $cart->setUpdatedAt(new \DateTime('now'));
         $cart->setOriginId($origin);
-        $cart->setDataChannel($this->channel);
         $om->persist($cart);
 
         return $cart;
@@ -419,7 +380,6 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
             if (is_null($accounts[$buffer[$i]])) {
                 var_dump($buffer[$i]);
             }
-            $customer->setDataChannel($this->channel);
             $customer->setWebsite($website)
                 ->setChannel($integration)
                 ->setStore($store)

@@ -26,9 +26,6 @@ class LeadTest extends \PHPUnit_Framework_TestCase
         $address = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Address')
             ->disableOriginalConstructor()
             ->getMock();
-        $channel = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
-            ->disableOriginalConstructor()
-            ->getMock();
 
         return array(
             'namePrefix' => array('namePrefix', 'test', 'test'),
@@ -48,7 +45,6 @@ class LeadTest extends \PHPUnit_Framework_TestCase
             'createdAt' => array('createdAt', $now, $now),
             'updatedAt' => array('updatedAt', $now, $now),
             'notes' => array('notes', 'test', 'test'),
-            'dataChannel' => ['dataChannel', $channel, $channel]
         );
     }
 }
