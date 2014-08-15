@@ -102,8 +102,11 @@ class ChannelController extends Controller
 
     /**
      * @Route(
-     *  "/status/change/{id}/{backRoute}", requirements={"id"="\d+"}, defaults={"backRoute"="orocrm_channel_view"},
-     *  name="orocrm_channel_change_status")
+     *  "/status/change/{id}/{backRoute}",
+     *  requirements={"id"="\d+"},
+     *  defaults={"backRoute"="orocrm_channel_view"},
+     *  name="orocrm_channel_change_status"
+     *  )
      * @AclAncestor("orocrm_channel_update")
      */
     public function changeStatusAction(Channel $channel, $backRoute)
