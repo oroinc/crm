@@ -76,7 +76,8 @@ class StateProvider
             $qb->distinct(true);
             $qb->select('e.value')
                 ->from('OroCRMChannelBundle:Channel', 'c')
-                ->andWhere('c.status', Channel::STATUS_ACTIVE)
+                ->andWhere('c.status = :status')
+                ->setParameter('status', Channel::STATUS_ACTIVE)
                 ->innerJoin('c.entities', 'e');
 
             $assignedEntityNames = $qb->getQuery()->getArrayResult();
