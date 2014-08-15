@@ -73,6 +73,13 @@ define([
                 }
             }
         });
+
+        // lock model if predefined identity
+        if ("readonly" === $el.attr('readonly')) {
+            _.each(entitiesCollection.where({name: $el.val()}), function(model) {
+                model.set('readonly', true);
+            });
+        }
     }
 
     /**
