@@ -7,22 +7,46 @@ datagrid:
                 select:
                     - c.id
                     - c.name
+                    - c.channelType
+                    - CASE WHEN c.status = 1 THEN 'enabled' ELSE 'disabled' END as status
                 from:
                     - { table: %orocrm_channel.entity.class%, alias: c }
                 groupBy: c.id
         columns:
             name:
                 label: orocrm.channel.name.label
+            channelType:
+                label: orocrm.channel.channel_type.label
+            status:
+                label: orocrm.channel.status.label
+                frontend_type: select
+                choices:
+                    enabled:  orocrm.channel.active.label
+                    disabled: orocrm.channel.inactive.label
+
         sorters:
             columns:
                 name:        { data_name: c.name }
+                channelType: { data_name: c.channelType }
+                status:      { data_name: c.status }
             default:
                 name:  ASC
         filters:
             columns:
                 name:
-                    type: string
+                    type:      string
                     data_name: c.name
+                channelType:
+                    type:      string
+                    data_name: channelType
+                status:
+                    data_name: c.status
+                    type:      choice
+                    options:
+                        field_options:
+                            choices:
+                                - orocrm.channel.inactive.label
+                                - orocrm.channel.active.label
         properties:
             id: ~
             update_link:

@@ -27,6 +27,8 @@ parameters:
     # event listener
     orocrm_channel.event_listener.navigation.class:                    OroCRM\Bundle\ChannelBundle\EventListener\NavigationListener
     orocrm_channel.form.subscriber.channel_subscriber.class:           OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
+    orocrm_channel.event_listener.channel_change_status.class:         OroCRM\Bundle\ChannelBundle\EventListener\ChangeChannelStatusListener
+    orocrm_channel.event_listener.channel_save_succeed.class:          OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener
 
     #twig
     orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
@@ -67,7 +69,7 @@ services:
         arguments:
             - @request
             - @orocrm_channel.form.channel
-            - @doctrine.orm.entity_manager
+            - @doctrine
             - @event_dispatcher
 
     orocrm_channel.channel_integration_form.handler:
@@ -124,7 +126,7 @@ services:
         arguments:
             - @orocrm_channel.provider.settings_provider
             - @orocrm_channel.state_cache
-            - @doctrine.orm.entity_manager
+            - @doctrine
         tags:
             - { name: kernel.event_listener, event: 'orocrm_channel.channel.save_succeed', method: processChannelChange}
             - { name: kernel.event_listener, event: 'orocrm_channel.channel.delete_succeed', method: processChannelChange}
@@ -155,6 +157,21 @@ services:
         class: %orocrm_channel.form.subscriber.channel_subscriber.class%
         arguments:
             - @orocrm_channel.provider.settings_provider
+
+    orocrm_channel.event_listener.channel_change_status:
+        class: %orocrm_channel.event_listener.channel_change_status.class%
+        arguments:
+            - @doctrine
+        tags:
+            - { name: kernel.event_listener, event: orocrm_channel.channel.status_change, method: onChannelStatusChange }
+
+    orocrm_channel.event_listener.channel_save_succeed:
+        class: %orocrm_channel.event_listener.channel_save_succeed.class%
+        arguments:
+            - @orocrm_channel.provider.settings_provider
+            - @doctrine
+        tags:
+            - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSucceedSave }
 
     #twig
     orocrm_channel.twig.metadata_extension:

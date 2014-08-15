@@ -164,7 +164,7 @@ class DatasourceDataTransformerTest extends \PHPUnit_Framework_TestCase
                 ->with(
                     $this->equalTo('oro_integration_channel_form'),
                     $this->isInstanceOf('Oro\Bundle\IntegrationBundle\Entity\Channel'),
-                    $this->equalTo(['csrf_protection' => false])
+                    $this->equalTo(['csrf_protection' => false, 'disable_customer_datasource_types' => false])
                 )
                 ->will(
                     $this->returnCallback(

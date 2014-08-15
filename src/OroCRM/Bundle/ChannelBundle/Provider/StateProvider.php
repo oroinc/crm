@@ -7,6 +7,8 @@ use Doctrine\Common\Cache\Cache;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
+use Symfony\Bridge\Doctrine\RegistryInterface;
+
 class StateProvider
 {
     const CACHE_ID = 'orocrm_channel_state_data';
@@ -17,22 +19,22 @@ class StateProvider
     /** @var Cache */
     protected $cache;
 
-    /** @var EntityManager */
-    protected $em;
+    /** @var RegistryInterface */
+    protected $registry;
 
     /** @var null|array */
     protected $enabledEntities;
 
     /**
-     * @param SettingsProvider $settingsProvider
-     * @param Cache            $cache
-     * @param EntityManager    $em
+     * @param SettingsProvider  $settingsProvider
+     * @param Cache             $cache
+     * @param RegistryInterface $registry
      */
-    public function __construct(SettingsProvider $settingsProvider, Cache $cache, EntityManager $em)
+    public function __construct(SettingsProvider $settingsProvider, Cache $cache, RegistryInterface $registry)
     {
         $this->settingsProvider = $settingsProvider;
         $this->cache            = $cache;
-        $this->em               = $em;
+        $this->registry         = $registry;
     }
 
     /**
@@ -72,7 +74,7 @@ class StateProvider
 
             $settings = $this->settingsProvider->getSettings(SettingsProvider::DATA_PATH);
 
-            $qb = $this->em->createQueryBuilder();
+            $qb = $this->getManager()->createQueryBuilder();
             $qb->distinct(true);
             $qb->select('e.value')
                 ->from('OroCRMChannelBundle:Channel', 'c')
@@ -116,5 +118,13 @@ class StateProvider
     protected function persistToCache()
     {
         $this->cache->save(self::CACHE_ID, $this->enabledEntities);
+    }
+
+    /**
+     * @return EntityManager
+     */
+    protected function getManager()
+    {
+        return $this->registry->getManager();
     }
 }
