@@ -63,6 +63,7 @@ class ChannelType extends AbstractType
                 'configs'  => ['placeholder' => 'orocrm.channel.form.select_channel_type.label'],
             ]
         );
+        $builder->addEventSubscriber(new ChannelTypeSubscriber($this->settingsProvider));
     }
 
     /**
