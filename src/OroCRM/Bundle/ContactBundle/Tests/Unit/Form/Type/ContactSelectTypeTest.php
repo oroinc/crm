@@ -17,7 +17,7 @@ class ContactSelectTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->type = new ContactSelectType();
+        $this->type = new ContactSelectType('OroCRM\Bundle\ContactBundle\Entity\Contact');
     }
 
     public function testSetDefaultOptions()

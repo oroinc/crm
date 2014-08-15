@@ -66,6 +66,8 @@ services:
     # Form type
     orocrm_contact.form.type.contact_select:
         class: %orocrm_contact.form.type.contact_select.class%
+        arguments:
+            - %orocrm_contact.entity.class%
         tags:
             - { name: form.type, alias: orocrm_contact_select }
 

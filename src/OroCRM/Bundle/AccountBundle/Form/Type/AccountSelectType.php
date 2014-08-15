@@ -7,19 +7,30 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class AccountSelectType extends AbstractType
 {
     /**
+     * @var string
+     */
+    protected $className;
+
+    /**
+     * @param string $className
+     */
+    public function __construct($className)
+    {
+        $this->className = $className;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
-                'configs' => array(
+            [
+                'configs'      => [
                     'placeholder' => 'orocrm.account.form.choose_account'
-                ),
-                'autocomplete_alias' => 'accounts',
-                'grid_name' => 'accounts-select-grid',
-                'create_form_route' => 'orocrm_account_create'
-            )
+                ],
+                'entity_class' => $this->className
+            ]
         );
     }
 

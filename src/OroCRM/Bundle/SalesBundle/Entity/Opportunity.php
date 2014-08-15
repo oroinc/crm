@@ -42,7 +42,10 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  *              "group_name"=""
  *          },
  *          "form"={
- *              "form_type"="orocrm_sales_opportunity_select"
+ *              "form_type"="orocrm_sales_opportunity_select",
+ *              "autocomplete_alias"="opportunities",
+ *              "grid_name"="sales-opportunity-grid",
+ *              "create_form_route"="orocrm_sales_opportunity_create"
  *          },
  *          "dataaudit"={
  *              "auditable"=true
@@ -382,6 +385,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param WorkflowItem $workflowItem
+     *
      * @return Opportunity
      */
     public function setWorkflowItem($workflowItem)
@@ -401,6 +405,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param WorkflowItem $workflowStep
+     *
      * @return Opportunity
      */
     public function setWorkflowStep($workflowStep)
@@ -428,6 +433,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param Account $account
+     *
      * @return Opportunity
      */
     public function setAccount($account)
@@ -446,6 +452,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param Lead $lead
+     *
      * @return Opportunity
      */
     public function setLead($lead)
@@ -464,6 +471,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param float $budgetAmount
+     *
      * @return Opportunity
      */
     public function setBudgetAmount($budgetAmount)
@@ -482,6 +490,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param \DateTime $closeDate
+     *
      * @return Opportunity
      */
     public function setCloseDate($closeDate)
@@ -500,6 +509,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param Contact $contact
+     *
      * @return Opportunity
      */
     public function setContact($contact)
@@ -518,6 +528,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param string $customerNeed
+     *
      * @return Opportunity
      */
     public function setCustomerNeed($customerNeed)
@@ -536,6 +547,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param float $probability
+     *
      * @return Opportunity
      */
     public function setProbability($probability)
@@ -554,6 +566,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param string $proposedSolution
+     *
      * @return Opportunity
      */
     public function setProposedSolution($proposedSolution)
@@ -572,6 +585,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param OpportunityStatus $status
+     *
      * @return Opportunity
      */
     public function setStatus($status)
@@ -590,6 +604,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param string $name
+     *
      * @return Opportunity
      */
     public function setName($name)
@@ -608,6 +623,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param OpportunityCloseReason $closeReason
+     *
      * @return Opportunity
      */
     public function setCloseReason($closeReason)
@@ -650,6 +666,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param \DateTime $created
+     *
      * @return Opportunity
      */
     public function setCreatedAt($created)
@@ -668,6 +685,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param \DateTime $updated
+     *
      * @return Opportunity
      */
     public function setUpdatedAt($updated)
@@ -695,6 +713,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     {
         return (string)$this->getName();
     }
+
     /**
      * @ORM\PrePersist
      */
@@ -722,6 +741,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param User $owningUser
+     *
      * @return Opportunity
      */
     public function setOwner($owningUser)
@@ -741,6 +761,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     /**
      * @param string $notes
+     *
      * @return Opportunity
      */
     public function setNotes($notes)
@@ -756,7 +777,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     {
         $em = $eventArgs->getEntityManager();
         /** @var LeadStatus $defaultStatus */
-        $defaultStatus   = $em->getReference('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
+        $defaultStatus = $em->getReference('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
         $this->setStatus($defaultStatus);
     }
 }
