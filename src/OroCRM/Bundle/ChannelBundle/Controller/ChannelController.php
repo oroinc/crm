@@ -109,18 +109,14 @@ class ChannelController extends Controller
         $event = new ChannelChangeStatusEvent($channel);
         $this->get('event_dispatcher')->dispatch(ChannelChangeStatusEvent::EVENT_NAME, $event);
         $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($message));
+        $request = $this->container->get('request');
 
-        return $this->redirect($this->generateUrl('orocrm_channel_update', ['id' => $channel->getId()]));
+        return $this->redirect($request->server->get('HTTP_REFERER'));
     }
 
     /**
-     * @Route("/view/{id}", requirements={"id"="\d+"}, name="orocrm_one_channel_view")
-     * @Acl(
-     *      id="orocrm_one_channel_view",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="OroCRMChannelBundle:Channel"
-     * )
+     * @Route("/view/{id}", requirements={"id"="\d+"}, name="orocrm_channel_view")
+     * @AclAncestor("orocrm_channel_view")
      * @Template()
      */
     public function viewAction(Channel $channel)
