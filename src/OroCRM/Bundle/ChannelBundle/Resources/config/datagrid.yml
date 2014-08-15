@@ -17,6 +17,8 @@ datagrid:
                 label: orocrm.channel.name.label
             channelType:
                 label: orocrm.channel.channel_type.label
+                frontend_type:  select
+                choices: @orocrm_channel.provider.settings_provider->getChannelTypeChoiceList
             status:
                 label: orocrm.channel.status.label
                 frontend_type: select
