@@ -1,14 +1,7 @@
-{% extends 'OroUIBundle:actions:update.html.twig' %}
-{% import 'OroCRMChannelBundle::macros.html.twig' as channelMacro %}
+{% extends 'OroUIBundle:actions:view.html.twig' %}
 
-{% form_theme form with ['OroCRMChannelBundle:Form:fields.html.twig'] %}
-
-{% set entity = form.vars.value %}
-{% set formAction = entity.id ? path('orocrm_channel_update', { id: entity.id }) : path('orocrm_channel_create') %}
-
-{% if entity.id %}
-    {% oro_title_set({params : {"%channel.name%": entity.name } }) %}
-{% endif %}
+{% block stats %}
+{% endblock stats %}
 
 {% block pageHeader %}
     {% if entity.id %}
@@ -21,9 +14,50 @@
         {{ parent() }}
     {% else %}
         {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.channel.entity_label'|trans}) %}
-        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title }%}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'channel-update' %}
+    {% set channelInformationWidget %}
+    {{ oro_widget_render({
+        'widgetType': 'block',
+        'url': path('orocrm_channel_widget_info', {id: entity.id})
+    }) }}
+    {% endset %}
+
+    {% set dataBlocks = [
+    {
+        'title': 'General'|trans,
+        'subblocks': [{
+        'title': '',
+        'data':  [ channelInformationWidget ]
+    }]
+    },
+    {
+        'title': 'Entities'|trans,
+        'subblocks': [{
+        'title': '',
+        'data':  []
+    }]
+    },
+    {
+        'title': 'Workflows'|trans,
+        'subblocks': [{
+        'title': '',
+        'data':  []
+    }]
+    }
+    ] %}
+
+    {% set data = {
+        'dataBlocks': dataBlocks,
+    } %}
+
+    {{ parent() }}
+
+{% endblock %}
 
 {% block navButtons %}
     {% if entity.id %}
@@ -32,7 +66,7 @@
                 'aCss':  'btn-danger',
                 'iCss':  'icon-remove',
                 'label': 'orocrm.channel.button.deactivate.label',
-                'path':  path('orocrm_channel_change_status', {'id' : entity.id, 'backRoute': 'orocrm_channel_update'}),
+                'path':  path('orocrm_channel_change_status', {'id' : entity.id}),
                 'title': 'orocrm.channel.button.deactivate.label',
             }) }}
         {% else %}
@@ -40,10 +74,17 @@
                 'aCss':  'btn-success',
                 'iCss':  'icon-ok',
                 'label': 'orocrm.channel.button.activate.label',
-                'path':  path('orocrm_channel_change_status', {'id' : entity.id, 'backRoute': 'orocrm_channel_update'}),
+                'path':  path('orocrm_channel_change_status', {'id' : entity.id}),
                 'title': 'orocrm.channel.button.activate.label',
             }) }}
         {% endif %}
+    {% endif %}
+
+    {% if resource_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path': path('orocrm_channel_update', {'id': entity.id}),
+            'entity_label': 'orocrm.channel.entity_label'|trans
+        }) }}
     {% endif %}
 
     {% if entity.id and resource_granted('DELETE', entity) %}
@@ -57,48 +98,6 @@
         }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
-
-    {{ UI.cancelButton(path('orocrm_channel_index')) }}
-
-    {% set html = UI.saveAndCloseButton() %}
-    {% if form.vars.value.id or resource_granted('orocrm_channel_update') %}
-        {% set html = html ~ UI.saveAndStayButton() %}
-    {% endif %}
-    {{ UI.dropdownSaveButton({'html': html}) }}
-{% endblock %}
-
-{% block content_data %}
-    {% set id = 'channel-update' %}
-    {% set dataBlocks = [
-        {
-            'title': 'General'|trans,
-            'subblocks': [{
-                'title': '',
-                'data':  [
-                    form_row(form.name),
-                    form_row(form.channelType),
-                    form.dataSource is defined ? form_row(form.dataSource) : '',
-                    form_row(form.customerIdentity),
-                ]
-            }]
-        },
-        {
-            'title': 'Entities'|trans,
-            'subblocks': [{
-                'title': '',
-                'data':  [form_row(form.entities)]
-            }]
-        }
-    ] %}
-
-    {% set data = {
-        'formErrors': form_errors(form)? form_errors(form) : null,
-        'dataBlocks': dataBlocks,
-    } %}
-
-    {{ parent() }}
-
-    {{ channelMacro.initializeChannelForm(form, orocrm_channel_entities_metadata(), orocrm_channel_integration_metadata()) }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -113,3 +112,7 @@
         {% endif %}
     </div>
 {% endblock breadcrumbs %}
+
+{% if entity.id %}
+    {% oro_title_set({params : {"%channel.name%": entity.name } }) %}
+{% endif %}

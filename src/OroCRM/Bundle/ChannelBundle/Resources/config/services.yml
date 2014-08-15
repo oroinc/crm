@@ -178,6 +178,7 @@ services:
         class: %orocrm_channel.twig.metadata_extension.class%
         arguments:
             - @orocrm_channel.provider.metadata_provider
+            - @orocrm_channel.provider.settings_provider
         tags:
             - { name: twig.extension }
 

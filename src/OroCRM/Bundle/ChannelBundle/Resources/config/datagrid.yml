@@ -62,6 +62,10 @@ datagrid:
                 type:    url
                 route:   orocrm_api_delete_channel
                 params:  [ id ]
+            view_link:
+                type: url
+                route: orocrm_channel_view
+                params: [ id ]
         actions:
             update:
                 type:         navigate
@@ -76,3 +80,8 @@ datagrid:
                 acl_resource: orocrm_channel_delete
                 icon:         trash
                 label:        orocrm.channel.datagrid.action.delete.label
+            view:
+                type:         navigate
+                link:         view_link
+                acl_resource: orocrm_channel_view
+                icon:         eye-open
