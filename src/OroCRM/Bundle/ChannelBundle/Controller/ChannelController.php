@@ -76,8 +76,19 @@ class ChannelController extends Controller
             );
 
             return $this->get('oro_ui.router')->redirectAfterSave(
-                ['route' => 'orocrm_channel_update', 'parameters' => ['id' => $channel->getId()]],
-                ['route' => 'orocrm_channel_index'],
+                [
+                    'route'      => 'orocrm_channel_update',
+                    'parameters' => [
+                        'id'                      => $channel->getId(),
+                        '_enableContentProviders' => 'mainMenu'
+                    ]
+                ],
+                [
+                    'route'      => 'orocrm_channel_index',
+                    'parameters' => [
+                        '_enableContentProviders' => 'mainMenu'
+                    ]
+                ],
                 $channel
             );
         }
@@ -110,6 +121,14 @@ class ChannelController extends Controller
         $this->get('event_dispatcher')->dispatch(ChannelChangeStatusEvent::EVENT_NAME, $event);
         $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($message));
 
-        return $this->redirect($this->generateUrl('orocrm_channel_update', ['id' => $channel->getId()]));
+        return $this->redirect(
+            $this->generateUrl(
+                'orocrm_channel_update',
+                [
+                    'id' => $channel->getId(),
+                    '_enableContentProviders' => 'mainMenu'
+                ]
+            )
+        );
     }
 }

@@ -128,6 +128,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: 'orocrm_channel.channel.save_succeed', method: processChannelChange}
             - { name: kernel.event_listener, event: 'orocrm_channel.channel.delete_succeed', method: processChannelChange}
+            - { name: kernel.event_listener, event: 'orocrm_channel.channel.status_change', method: processChannelChange}
 
     orocrm_channel.config_resolver:
         class: %orocrm_channel.config_resolver.class%

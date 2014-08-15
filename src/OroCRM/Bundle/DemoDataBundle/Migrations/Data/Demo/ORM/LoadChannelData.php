@@ -65,7 +65,8 @@ class LoadChannelData extends AbstractFixture implements ContainerAwareInterface
         $channel->setName('default');
         $channel->setOwner($organization);
         $channel->setStatus(true);
-        $channel->setChannelType('Custom');
+        $channel->setChannelType('custom');
+        $channel->setCustomerIdentity('OroCRM\Bundle\SalesBundle\Entity\Opportunity');
         $om->persist($channel);
 
         $this->addReference('default_channel', $channel);

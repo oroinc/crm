@@ -113,6 +113,8 @@ define(function (require) {
                 _.defer(_.bind(this._initializeForm, this));
             }
             this.renderList(this.collection.models);
+
+            return this;
         },
 
         /**
@@ -220,6 +222,20 @@ define(function (require) {
                 entityMetadata = this.options.metadata[entityName] || {};
 
             return _.defaults(entityMetadata, {name: entityName, label: entityName});
+        },
+
+        /**
+         * Creates model form name
+         *
+         * @param   {string} entityName
+         * @returns {Object.<orocrmchannel.entityManagement.Model>}
+         * @private
+         */
+        _createModel: function (entityName) {
+            var model = new EntityModel({name: entityName});
+            model.set(this._prepareModelAttributes(model));
+
+            return model;
         }
     });
 });
