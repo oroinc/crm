@@ -153,7 +153,7 @@ class ChannelController extends Controller
 
     /**
      * @Route("/widget/info/{id}", name="orocrm_channel_widget_info", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_one_channel_view")
+     * @AclAncestor("orocrm_channel_view")
      * @Template()
      */
     public function infoAction(Channel $channel)
