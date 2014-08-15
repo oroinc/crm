@@ -48,10 +48,12 @@ class ContactFixture extends AbstractTemplateRepository implements TemplateFixtu
             ->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
         $accountRepo = $this->templateManager
             ->getEntityRepository('OroCRM\Bundle\AccountBundle\Entity\Account');
+        $contactAddressRepo = $this->templateManager
+            ->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\ContactAddress');
 
         switch ($key) {
             case 'Jerry Coleman':
-                $primaryAddress = $this->createContactAddress('Jerry Coleman', 1);
+                $primaryAddress = $contactAddressRepo->getEntity('Jerry Coleman');
                 $entity
                     ->setId(1)
                     ->setNamePrefix('Mr.')
