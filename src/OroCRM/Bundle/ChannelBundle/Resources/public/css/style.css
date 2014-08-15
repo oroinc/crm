@@ -11,3 +11,7 @@
     margin-left: 20px;
 }
 
+.control-group .controls .inline-text {
+    display: inline-block;
+    padding-top: 4px;
+}
