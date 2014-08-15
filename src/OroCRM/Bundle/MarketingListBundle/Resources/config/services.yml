@@ -1,6 +1,7 @@
 parameters:
     orocrm_marketing_list.entity.class:  OroCRM\Bundle\MarketingListBundle\Entity\MarketingList
     orocrm_marketing_list.datagrid.marketing_list_type.provider.class: OroCRM\Bundle\MarketingListBundle\Datagrid\GridMarketingListTypeProvider
+    orocrm_marketing_list.form.type.marketing_list.class: OroCRM\Bundle\MarketingListBundle\Form\Type\MarketingListType
 
 services:
     orocrm_marketing_list.entity_provider:
@@ -9,3 +10,16 @@ services:
     orocrm_marketing_list.datagrid.marketing_list_type.provider:
         class: %orocrm_marketing_list.datagrid.marketing_list_type.provider.class%
         arguments: [ @doctrine ]
+
+    orocrm_marketing_list.form.type.marketing_list:
+        class: %orocrm_marketing_list.form.type.marketing_list.class%
+        tags:
+            - { name: form.type, alias: orocrm_marketing_list }
+
+    orocrm_marketing_list.form.marketing_list:
+        class:           Symfony\Component\Form\Form
+        factory_method:  createNamed
+        factory_service: form.factory
+        arguments:
+            - "orocrm_marketing_list_form"
+            - "orocrm_marketing_list"

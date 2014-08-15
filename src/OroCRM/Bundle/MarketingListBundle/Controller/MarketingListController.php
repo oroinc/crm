@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 
 /**
  * @Route("/marketing-list")
@@ -25,5 +26,62 @@ class MarketingListController extends Controller
         return [
             'entity_class' => $this->container->getParameter('orocrm_marketing_list.entity.class')
         ];
+    }
+
+    /**
+     * @Route("/create", name="orocrm_marketing_list_create")
+     * @Template("OroCRMMarketingListBundle:MarketingList:update.html.twig")
+     * @Acl(
+     *      id="orocrm_marketing_list_create",
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMMarketingListBundle:MarketingList"
+     * )
+     */
+    public function createAction()
+    {
+        return $this->update(new MarketingList());
+    }
+
+    /**
+     * @Route("/update/{id}", name="orocrm_marketing_list_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     *
+     * @Template
+     * @Acl(
+     *      id="orocrm_marketing_list_update",
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMMarketingListBundle:MarketingList"
+     * )
+     */
+    public function updateAction(MarketingList $entity)
+    {
+        return $this->update($entity);
+    }
+
+    /**
+     * @param MarketingList $entity
+     *
+     * @return array
+     */
+    protected function update(MarketingList $entity)
+    {
+        return $this->get('oro_form.model.update_handler')->handleUpdate(
+            $entity,
+            $this->get('orocrm_marketing_list.form.marketing_list'),
+            function (MarketingList $entity) {
+                return array(
+                    'route' => 'orocrm_marketing_list_update',
+                    'parameters' => array('id' => $entity->getId())
+                );
+            },
+            function (MarketingList $entity) {
+                return array(
+                    'route' => 'orocrm_marketing_list_view',
+                    'parameters' => array('id' => $entity->getId())
+                );
+            },
+            $this->get('translator')->trans('orocrm.marketinglist.entity.saved')
+        );
     }
 }

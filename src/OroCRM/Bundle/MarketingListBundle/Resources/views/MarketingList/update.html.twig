@@ -1,0 +1,148 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+{#{% import 'OroQueryDesignerBundle::macros.html.twig' as QD %}#}
+{#{% import 'OroSegmentBundle::macros.html.twig' as segmentQD %}#}
+
+{% oro_title_set({params : {"%marketing_list.name%": entity.name} }) %}
+{% set formAction = form.vars.value.id ? path('orocrm_marketing_list_update', { 'id': form.vars.value.id }) : path('orocrm_marketing_list_create')  %}
+
+{% block head_script %}
+    {{ parent() }}
+
+    {% block stylesheets %}
+        {{ form_stylesheet(form) }}
+    {% endblock %}
+{% endblock %}
+
+{% block navButtons %}
+    {% if form.vars.value.id and resource_granted('DELETE', form.vars.value) %}
+        {#{{ UI.deleteButton({#}
+            {#'dataUrl': path('oro_api_delete_marketing_list', {'id': form.vars.value.id}),#}
+            {#'dataRedirect': path('orocrm_marketing_list_index'),#}
+            {#'aCss': 'no-hash remove-button',#}
+            {#'id': 'btn-remove-marketing-list',#}
+            {#'dataId': form.vars.value.id,#}
+            {#'entity_label': 'orocrm.marketinglist.entity_label'|trans#}
+        {#}) }}#}
+
+        {{ UI.buttonSeparator() }}
+    {% endif %}
+    {{ UI.cancelButton(path('orocrm_marketing_list_index')) }}
+    {% set html = UI.saveAndCloseButton() %}
+    {% if form.vars.value.id or resource_granted('orocrm_marketing_list_update') %}
+        {% set html = html ~ UI.saveAndStayButton() %}
+    {% endif %}
+    {#{% set html = html ~ segmentQD.saveAndRefreshButton(entity) %}#}
+    {{ UI.dropdownSaveButton({'html': html}) }}
+{% endblock %}
+
+{% block pageHeader %}
+    {% if form.vars.value.id %}
+        {% set breadcrumbs = {
+            'entity':      form.vars.value,
+            'indexPath':   path('orocrm_marketing_list_index'),
+            'indexLabel': 'orocrm.marketinglist.entity_plural_label'|trans,
+            'entityTitle': entity.name
+        } %}
+        {{ parent() }}
+    {% else %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.marketinglist.entity_label'|trans}) %}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
+    {% endif %}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    <style type="text/css">
+        {# TODO: Remove hiding of pin block after fixing of https://magecore.atlassian.net/browse/CRM-907 #}
+        #pin-button-div {display: none !important}
+    </style>
+
+    {% set id = 'marketing-list-profile' %}
+    {% set ownerDataBlock = {
+        'dataBlocks': [{
+            'subblocks': [{
+                'data': []
+            }]
+        }]
+    } %}
+
+    {% set ownerDataBlock = oro_form_process(ownerDataBlock, form) %}
+    {% set dataBlocks = [{
+            'title': 'General'|trans,
+            'class': 'active',
+            'subblocks': [
+                {
+                    'title': '',
+                    'data': [
+                        form_row(form.name, {'label': 'orocrm.marketinglist.name.label'|trans}),
+                        form_row(form.description, {
+                            'label': 'orocrm.marketinglist.description.label'|trans,
+                            'attr': {
+                                'class': 'segment-descr'
+                            }
+                        })
+                    ]
+                },
+                {
+                    'title': '',
+                    'data': [
+                        form_row(form.entity, {'label': 'orocrm.marketinglist.entity.label'|trans}),
+                        form_row(form.type, {'label': 'orocrm.marketinglist.type.label'|trans}),
+                        ownerDataBlock.dataBlocks[0].subblocks[0].data[0]
+                    ]
+                }
+            ]
+        }]
+    %}
+
+    {#{% set dataBlocks = dataBlocks|merge( [{#}
+        {#'title' : 'oro.segment.form.designer'|trans,#}
+        {#'content_attr': {'id': 'segment-designer'},#}
+        {#'subblocks': [#}
+            {#{#}
+                {#'title': 'oro.segment.form.columns'|trans,#}
+                {#'spanClass': 'segment-columns responsive-cell',#}
+                {#'data': [#}
+                    {#QD.query_designer_column_form(#}
+                        {#form.column,#}
+                        {#{'id': 'segment-column-form'},#}
+                        {#{'entity_choice_id': 'oro_segment_form_entity'},#}
+                        {#['column', 'label', 'sorting', 'action']#}
+                    {#),#}
+                    {#QD.query_designer_column_list(#}
+                        {#{'id': 'segment-column-list', 'rowId': 'segment-column-row'},#}
+                        {#['column', 'label', 'sorting', 'action']#}
+                    {#),#}
+                {#]#}
+            {#},#}
+            {#{#}
+                {#'title': 'oro.segment.form.filters'|trans,#}
+                {#'spanClass': 'segment-filters responsive-cell',#}
+                {#'data': [#}
+                    {#segmentQD.query_designer_condition_builder({#}
+                        {#'id': 'segment-condition-builder',#}
+                        {#'criteria_list_id': 'filter-criteria-list',#}
+                        {#'entity_choice_id': 'oro_segment_form_entity',#}
+                        {#'currentSegmentId': entity.id|default(null),#}
+                        {#'page_limit': constant('\\Oro\\Bundle\\SegmentBundle\\Entity\\Manager\\SegmentManager::PER_PAGE')#}
+                    {#})#}
+                {#]#}
+            {#},#}
+        {#]#}
+    {#}] ) %}#}
+
+    {#{% set data = {#}
+        {#'formErrors': form_errors(form)? form_errors(form) : null,#}
+        {#'dataBlocks': dataBlocks,#}
+        {#'hiddenData': form_widget(form.definition)#}
+    {#} %}#}
+    {% set data = {
+        'formErrors': form_errors(form)? form_errors(form) : null,
+        'dataBlocks': dataBlocks
+    } %}
+
+    {{ UI.scrollData(id, data, form) }}
+
+    {#{{ QD.query_designer_column_chain_template('column-chain-template') }}#}
+    {#{{ segmentQD.initJsWidgets('segment', form, entities, metadata) }}#}
+
+{% endblock content_data %}

@@ -21,3 +21,8 @@ orocrm:
 
         form:
             choose_marketing_list_type:    Choose marketing list type
+
+        datagrid:
+            update: Update
+            delete: Delete
+            view: View
