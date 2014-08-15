@@ -22,3 +22,27 @@
     <div data-page-component-module="orocrmchannel/js/app/components/channel"
          data-page-component-options="{{ options|json_encode }}"></div>
 {% endmacro %}
+
+{#
+    Renders and initialize entity list compoenent in view mode
+    params:
+        channel - OroCRM\Bundle\ChannelBundle\Entity\Channel
+#}
+{% macro inializeEntitiesViewComponent(channel) %}
+    {% set containerIdenifier = 'entities-list-view' %}
+
+    <div id="{{ containerIdenifier }}"></div>
+    <script type="text/javascript">
+        require(['jquery', 'orocrmchannel/js/entity-management/entity-component-view'],
+        function ($, EntityComponentView) {
+            var entityComponentView = new EntityComponentView({
+                data:     {{ channel.entities|json_encode|raw }},
+                mode:     EntityComponentView.prototype.MODES.VIEW_MODE,
+                metadata: {{ orocrm_channel_entities_metadata()|json_encode|raw }}
+            });
+
+            entityComponentView.render();
+            $({{ ('#' ~ containerIdenifier)|json_encode|raw }}).append(entityComponentView.$el);
+        });
+    </script>
+{% endmacro %}

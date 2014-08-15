@@ -32,7 +32,7 @@ datagrid:
                 channelType: { data_name: c.channelType }
                 status:      { data_name: c.status }
             default:
-                name:  ASC
+                name: ASC
         filters:
             columns:
                 name:
@@ -55,33 +55,33 @@ datagrid:
         properties:
             id: ~
             update_link:
-                type: url
-                route: orocrm_channel_update
-                params: [ id ]
+                type:    url
+                route:   orocrm_channel_update
+                params:  [ id ]
             delete_link:
                 type:    url
                 route:   orocrm_api_delete_channel
                 params:  [ id ]
             view_link:
-                type: url
-                route: orocrm_channel_view
-                params: [ id ]
+                type:    url
+                route:   orocrm_channel_view
+                params:  [ id ]
         actions:
+            view:
+                type:         navigate
+                link:         view_link
+                acl_resource: orocrm_channel_view
+                icon:         eye-open
+                rowAction:    true
             update:
                 type:         navigate
                 link:         update_link
                 acl_resource: orocrm_channel_update
                 icon:         edit
                 label:        orocrm.channel.datagrid.action.update.label
-                rowAction:    true
             delete:
                 type:         delete
                 link:         delete_link
                 acl_resource: orocrm_channel_delete
                 icon:         trash
                 label:        orocrm.channel.datagrid.action.delete.label
-            view:
-                type:         navigate
-                link:         view_link
-                acl_resource: orocrm_channel_view
-                icon:         eye-open

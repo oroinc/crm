@@ -67,6 +67,19 @@
     {{ UI.dropdownSaveButton({'html': html}) }}
 {% endblock %}
 
+{% block breadcrumbs %}
+    {{ parent() }}
+    <div class="pull-left">
+        {% if entity.status %}
+            <div class="badge badge-enabled status-enabled">
+                <i class="icon-status-enabled icon-circle"></i>{{ 'orocrm.channel.active.label'|trans }}</div>
+        {% else %}
+            <div class="badge badge-disabled status-disabled">
+                <i class="icon-status-disabled icon-circle"></i>{{ 'orocrm.channel.inactive.label'|trans }}</div>
+        {% endif %}
+    </div>
+{% endblock breadcrumbs %}
+
 {% block content_data %}
     {% set id = 'channel-update' %}
     {% set dataBlocks = [
@@ -86,7 +99,7 @@
             'title': 'Entities'|trans,
             'subblocks': [{
                 'title': '',
-                'data':  [form_row(form.entities)]
+                'data':  [ form_row(form.entities) ]
             }]
         }
     ] %}
@@ -100,16 +113,3 @@
 
     {{ channelMacro.initializeChannelForm(form, orocrm_channel_entities_metadata(), orocrm_channel_integration_metadata()) }}
 {% endblock %}
-
-{% block breadcrumbs %}
-    {{ parent() }}
-    <div class="pull-left">
-        {% if entity.status %}
-            <div class="badge badge-enabled status-enabled">
-                <i class="icon-status-enabled icon-circle"></i>{{ 'orocrm.channel.active.label'|trans }}</div>
-        {% else %}
-            <div class="badge badge-disabled status-disabled">
-                <i class="icon-status-disabled icon-circle"></i>{{ 'orocrm.channel.inactive.label'|trans }}</div>
-        {% endif %}
-    </div>
-{% endblock breadcrumbs %}

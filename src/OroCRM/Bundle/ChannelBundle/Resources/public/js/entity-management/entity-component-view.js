@@ -13,6 +13,7 @@ define(function (require) {
         formTemplate = require('text!./templates/form.html');
 
     require('oroui/js/items-manager/editor');
+    require('oroui/js/items-manager/table');
 
     var modes = {
         VIEW_MODE: 1,
@@ -90,10 +91,8 @@ define(function (require) {
 
             var models = this.options.data.length > 0 ? _.map(this.options.data, _.bind(this._createModel, this)) : [];
             this.collection = this.collection || new (Backbone.Collection)(models, {model: EntityModel});
-
+            this.listenTo(this.collection, 'add remove reset', this._onCollectionChange);
             this.listenTo(this.collection, 'add', this._onItemAdded);
-            this.listenTo(this.collection, 'remove', this.renderList);
-            this.listenTo(this.collection, 'reset', this.renderList);
         },
 
         /**
@@ -103,7 +102,6 @@ define(function (require) {
             var templateContext = {__: __};
 
             this.$el.html(this.template(_.extend({}, templateContext)));
-
             this.$formContainer   = this.$el.find('.form-container');
             this.$listContainer   = this.$el.find('.grid-container');
             this.$noDataContainer = this.$el.find('.no-data');
@@ -112,56 +110,8 @@ define(function (require) {
                 this.$formContainer.html(this.formTemplate(_.extend({}, templateContext)));
                 _.defer(_.bind(this._initializeForm, this));
             }
-            this.renderList(this.collection.models);
 
-            return this;
-        },
-
-        /**
-         * Renders list into item container
-         *
-         * @param {Array.<orocrmchannel.entityManagement.Model>} models
-         */
-        renderList: function (models) {
-            var $itemsContainer = this.$listContainer.find('tbody');
-            $itemsContainer.empty();
-
-            if(models.length > 0){
-                _.each(models, _.bind(function (model) {
-                    $itemsContainer.append(this._renderItem(model));
-                }, this));
-
-                this._hideEmptyMessage();
-            } else {
-                this._showEmptyMessage();
-            }
-        },
-
-        /**
-         * Renders single item
-         *
-         * @param {orocrmchannel.entityManagement.Model} model
-         * @returns {string}
-         * @private
-         */
-        _renderItem: function (model) {
-            var context = _.extend({actions: [], __: __}, model.toJSON());
-
-            return this.itemTemplate(context);
-        },
-
-        /**
-         * Appends single item to list
-         *
-         * @param {Object.<orocrmchannel.entityManagement.Model>} model
-         * @private
-         */
-        _onItemAdded: function(model) {
-            model.set(this._prepareModelAttributes(model));
-
-            var $itemsContainer = this.$listContainer.find('tbody');
-            $itemsContainer.append(this._renderItem(model));
-            this._hideEmptyMessage();
+            _.defer(_.bind(this._initializeList, this));
         },
 
         /**
@@ -185,29 +135,82 @@ define(function (require) {
                 }, this)
             });
 
-            this.$formContainer.itemsManagerEditor($.extend({}, {
+            this.$formContainer.itemsManagerEditor({
                 collection: this.collection
-            }));
+            });
         },
 
         /**
-         * Hide list and show "No data" message
+         * Initialize list component
          *
          * @private
          */
-        _showEmptyMessage: function () {
-            this.$listContainer.hide();
-            this.$noDataContainer.show();
+        _initializeList: function () {
+            this.$listContainer.find('tbody').itemsManagerTable({
+                collection: this.collection,
+                itemTemplate: this.itemTemplate,
+                itemRender: _.bind(function itemRenderer(template, data) {
+                    var context,
+                        actions = [];
+
+                    if (data.view_link) {
+                        actions.push({
+                            title: 'View',
+                            icon:  'icon-eye-open',
+                            url:   data.view_link
+                        });
+                    }
+                    if (data.edit_link) {
+                        actions.push({
+                            title: 'Edit',
+                            icon:  'icon-edit',
+                            url:   data.edit_link
+                        });
+                    }
+
+                    if ((!data.readonly) && this.options.mode === modes.EDIT_MODE) {
+                        actions.push({
+                            collectionAction: 'delete',
+                            title: 'Delete',
+                            icon: 'icon-trash'
+                        });
+                    }
+
+                   context = _.extend({__: __}, data, {actions: actions});
+
+                    return template(context);
+                }, this),
+                deleteHandler: _.partial(function (collection, model, data) {
+                    collection.remove(model);
+                }, this.collection)
+            });
+            // emulate reset for first time
+            this._onCollectionChange();
         },
 
         /**
-         * Hide "No data" message and show list
+         * Collection change handler. Shows/Hides empty message
          *
          * @private
          */
-        _hideEmptyMessage: function () {
-            this.$listContainer.show();
-            this.$noDataContainer.hide();
+        _onCollectionChange: function() {
+            if (!this.collection.isEmpty()) {
+                this.$listContainer.show();
+                this.$noDataContainer.hide();
+            } else {
+                this.$listContainer.hide();
+                this.$noDataContainer.show();
+            }
+        },
+
+        /**
+         * Appends single item to list
+         *
+         * @param {Object.<orocrmchannel.entityManagement.Model>} model
+         * @private
+         */
+        _onItemAdded: function (model) {
+            model.set(this._prepareModelAttributes(model));
         },
 
         /**

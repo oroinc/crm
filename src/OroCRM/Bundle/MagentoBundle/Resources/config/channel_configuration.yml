@@ -55,7 +55,7 @@ orocrm_channel:
 
    channel_types:
         magento:
-            label: Magento type
+            label: Magento
             entities:
                 - OroCRM\Bundle\MagentoBundle\Entity\Cart
                 - OroCRM\Bundle\MagentoBundle\Entity\Customer
