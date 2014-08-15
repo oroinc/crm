@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ChannelBundle\Twig;
 
 use OroCRM\Bundle\ChannelBundle\Provider\MetadataProviderInterface;
+use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class MetadataExtension extends \Twig_Extension
 {
@@ -11,12 +12,17 @@ class MetadataExtension extends \Twig_Extension
     /** @var MetadataProviderInterface */
     protected $metaDataProvider;
 
+    /** @var SettingsProvider */
+    protected $settingsProvider;
+
     /**
      * @param MetadataProviderInterface $provider
+     * @param SettingsProvider $settingsProvider
      */
-    public function __construct(MetadataProviderInterface $provider)
+    public function __construct(MetadataProviderInterface $provider, SettingsProvider $settingsProvider)
     {
         $this->metaDataProvider = $provider;
+        $this->settingsProvider = $settingsProvider;
     }
 
     /**
@@ -40,10 +46,18 @@ class MetadataExtension extends \Twig_Extension
                 'getIntegrationEntities'
             ]
         );
+        $channelTypeMetadataFunction = new \Twig_SimpleFunction(
+            'orocrm_channel_type_metadata',
+            [
+                $this,
+                'getChannelTypeMetadata'
+            ]
+        );
 
         return [
             $entitiesMetadataFunction->getName()    => $entitiesMetadataFunction,
-            $integrationMetadataFunction->getName() => $integrationMetadataFunction
+            $integrationMetadataFunction->getName() => $integrationMetadataFunction,
+            $channelTypeMetadataFunction->getName() => $channelTypeMetadataFunction
         ];
     }
 
@@ -73,8 +87,8 @@ class MetadataExtension extends \Twig_Extension
         return self::EXTENSION_NAME;
     }
 
-    public function getChannelTypeLabel()
+    public function getChannelTypeMetadata()
     {
-
+        return $this->settingsProvider->getChannelTypeChoiceList();
     }
 }
