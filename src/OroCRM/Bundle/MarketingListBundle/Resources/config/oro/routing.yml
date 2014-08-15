@@ -1,0 +1,13 @@
+orocrm_marketing_list_bundle:
+    resource:     "@OroCRMMarketingListBundle/Controller"
+    type:         annotation
+    prefix:       /
+
+#orocrm_marketing_list_bundle_api:
+#    resource:     "@OroCRMMarketingListBundle/Controller/Api/Rest/MarketingListController.php"
+#    type:         rest
+#    prefix:       api/rest/{version}
+#    requirements:
+#        version:  latest|v1
+#    defaults:
+#        version:  latest

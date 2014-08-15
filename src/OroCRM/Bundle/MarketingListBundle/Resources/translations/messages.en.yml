@@ -1,0 +1,23 @@
+orocrm:
+    marketinglist:
+        entity_label:        Marketing List
+        entity_plural_label: Marketing Lists
+        description.label:   Description
+        id.label:            Id
+        last_run.label:      Last run
+        created_at.label:    Created At
+        name.label:          Name
+        owner.label:         Owner
+
+        entity:
+            label:   Entity
+            saved:   Marketing list saved
+
+        type:
+            label:   Type
+            dynamic: Dynamic
+            static:  On demand
+            manual:  Manual
+
+        form:
+            choose_marketing_list_type:    Choose marketing list type

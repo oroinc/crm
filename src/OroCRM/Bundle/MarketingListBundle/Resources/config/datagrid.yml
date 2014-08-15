@@ -1,0 +1,106 @@
+datagrid:
+    orocrm-marketing-list-grid:
+        extended_entity_name: OroCRM\Bundle\MarketingListBundle\Entity\MarketingList
+        source:
+            type: orm
+            query:
+                select:
+                    - ml.id
+                    - ml.name
+                    - ml.entity
+                    - type.label as listType
+                    - ml.createdAt
+                    - ml.lastRun
+                from:
+                    - { table: OroCRM\Bundle\MarketingListBundle\Entity\MarketingList, alias: ml }
+                join:
+                    inner:
+                        - { join: ml.type, alias: type }
+        columns:
+            name:
+                label:          orocrm.marketinglist.name.label
+            entity:
+                label:          orocrm.marketinglist.entity.label
+                type:           twig
+                template:       OroEntityBundle:Datagrid:Property/entity.html.twig
+                frontend_type:  html
+                context:
+                    entity_provider: @orocrm_marketing_list.entity_provider
+            listType:
+                label:          orocrm.marketinglist.type.label
+                type:           translatable
+                choices:        @orocrm_marketing_list.datagrid.marketing_list_type.provider->getListTypeChoices\
+            createdAt:
+                label:          orocrm.marketinglist.created_at.label
+                frontend_type:  date
+            lastRun:
+                label:          orocrm.marketinglist.last_run.label
+                frontend_type:  datetime
+        filters:
+            columns:
+                name:
+                    type:        string
+                    data_name:   ml.name
+                entity:
+                    type:      choice
+                    data_name: ml.entity
+                    options:
+                        is_translated_choices: true
+                        field_options:
+                            multiple:          true
+                            choices:           @oro_entity.datagrid_helper->getEntityNames
+                segmentType:
+                    type:               choice
+                    data_name:          ml.type
+                    options:
+                        field_options:
+                            choices:    @orocrm_marketing_list.datagrid.marketing_list_type.provider->getListTypeChoices
+                createdAt:
+                    type:       datetime
+                    data_name:  ml.createdAt
+                    enabled:    false
+                lastRun:
+                    type:       datetime
+                    data_name:  ml.lastRun
+                    enabled:    false
+        sorters:
+            columns:
+                name:        { data_name: ml.name }
+                createdAt:   { data_name: ml.createdAt }
+                lastRun:     { data_name: ml.lastRun }
+        properties:
+            id: ~
+#            view_link:
+#                type: url
+#                route: orocrm_marketing_list_view
+#                params: [ id ]
+#            update_link:
+#                type: url
+#                route: orocrm_marketing_list_update
+#                params:
+#                    - id
+#            delete_link:
+#                type: url
+#                route: oro_api_delete_marketing_list
+#                params:
+#                    - id
+#        actions:
+#            view:
+#                type:         navigate
+#                label:        orocrm.marketing_list.datagrid.actions.view.label
+#                link:         view_link
+#                icon:         eye-open
+#                acl_recource: orocrm_marketing_list_view
+#                rowAction:    true
+#            update:
+#                type:          navigate
+#                acl_resource:  orocrm_marketing_list_update
+#                label:         orocrm.marketing_list.datagrid.actions.update.label
+#                icon:          edit
+#                link:          update_link
+#            delete:
+#                type:          delete
+#                acl_resource:  orocrm_marketing_list_delete
+#                label:         orocrm.marketing_list.datagrid.actions.delete.label
+#                icon:          trash
+#                link:          delete_link

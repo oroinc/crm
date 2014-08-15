@@ -1,4 +1,11 @@
 parameters:
     orocrm_marketing_list.entity.class:  OroCRM\Bundle\MarketingListBundle\Entity\MarketingList
+    orocrm_marketing_list.datagrid.marketing_list_type.provider.class: OroCRM\Bundle\MarketingListBundle\Datagrid\GridMarketingListTypeProvider
 
 services:
+    orocrm_marketing_list.entity_provider:
+        alias: oro_entity.entity_provider
+
+    orocrm_marketing_list.datagrid.marketing_list_type.provider:
+        class: %orocrm_marketing_list.datagrid.marketing_list_type.provider.class%
+        arguments: [ @doctrine ]
