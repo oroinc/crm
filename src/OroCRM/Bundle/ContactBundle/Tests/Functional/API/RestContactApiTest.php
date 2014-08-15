@@ -4,13 +4,13 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Functional\API;
 
 use Doctrine\ORM\EntityManager;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\Group;
-
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\UserBundle\Entity\User;
-
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\Group;
 
 /**
  * @outputBuffering enabled
@@ -27,13 +27,13 @@ class RestContactApiTest extends WebTestCase
      * @var array
      */
     protected $testAddress = array(
-        'street' => 'contact_street',
-        'city' => 'contact_city',
-        'country' => 'US',
-        'region' => 'US-FL',
+        'street'     => 'contact_street',
+        'city'       => 'contact_city',
+        'country'    => 'US',
+        'region'     => 'US-FL',
         'postalCode' => '12345',
-        'primary' => true,
-        'types' => array(AddressType::TYPE_BILLING, AddressType::TYPE_SHIPPING),
+        'primary'    => true,
+        'types'      => array(AddressType::TYPE_BILLING, AddressType::TYPE_SHIPPING),
     );
 
     protected function setUp()
@@ -197,6 +197,38 @@ class RestContactApiTest extends WebTestCase
         }
 
         return $selectedContact;
+    }
+
+    /**
+     * @param array $requestData
+     *
+     * @depends testCreateContact
+     * @return array
+     */
+    public function testContactsFiltering(array $requestData)
+    {
+        $this->client->request(
+            'GET',
+            $this->getUrl('oro_api_get_contacts') . '?createdAt>2010-10-10T09:09:09+02:00&page=1'
+        );
+
+        $entities = $this->getJsonResponseContent($this->client->getResponse(), 200);
+
+        $this->assertNotEmpty($entities);
+        $this->assertCount(1, $entities);
+
+        /** @var Contact $entity */
+        $entity = array_pop($entities);
+        $this->assertEquals($requestData['contact']['firstName'], $entity['firstName']);
+        $this->assertEquals($requestData['contact']['lastName'], $entity['lastName']);
+
+        $this->client->request(
+            'GET',
+            $this->getUrl('oro_api_get_contacts') . '?createdAt>2050-10-10T09:09:09+02:00&limit=20'
+        );
+
+        $entities = $this->getJsonResponseContent($this->client->getResponse(), 200);
+        $this->assertEmpty($entities);
     }
 
     /**
