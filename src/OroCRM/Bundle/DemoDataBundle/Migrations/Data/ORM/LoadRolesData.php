@@ -49,16 +49,6 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
         /** @var AclManager $manager */
         $aclManager = $this->container->get('oro_security.acl.manager');
 
-        $defaultBusinessUnit = $manager
-            ->getRepository('OroOrganizationBundle:BusinessUnit')
-            ->findOneBy(['name' => LoadOrganizationAndBusinessUnitData::MAIN_BUSINESS_UNIT]);
-
-        if (!$defaultBusinessUnit) {
-            $defaultBusinessUnit = $manager
-                ->getRepository('OroOrganizationBundle:BusinessUnit')
-                ->findOneBy(['name' => 'Acme, General']);
-        }
-
         $fileName  = __DIR__ . '/CrmRoles/roles.yml';
         $fileName  = str_replace('/', DIRECTORY_SEPARATOR, $fileName);
         $rolesData = Yaml::parse($fileName);
@@ -72,9 +62,6 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
             }
 
             $role->setLabel($roleConfigData['label']);
-            if ($defaultBusinessUnit) {
-                $role->setOwner($defaultBusinessUnit);
-            }
             $manager->persist($role);
 
             if ($aclManager->isAclEnabled()) {
