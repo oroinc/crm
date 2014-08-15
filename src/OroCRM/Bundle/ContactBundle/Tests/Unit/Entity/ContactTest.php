@@ -115,7 +115,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $contact->addEmail($email);
         $this->assertNull($contact->getPrimaryEmail());
 
-        $email->setPrimary(true);
+        $contact->setPrimaryEmail($email);
         $this->assertSame($email, $contact->getPrimaryEmail());
     }
 
@@ -162,7 +162,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $contact->addPhone($phone);
         $this->assertNull($contact->getPrimaryPhone());
 
-        $phone->setPrimary(true);
+        $contact->setPrimaryPhone($phone);
         $this->assertSame($phone, $contact->getPrimaryPhone());
     }
 
@@ -373,5 +373,16 @@ class ContactTest extends \PHPUnit_Framework_TestCase
 
         $contact->addAccount(new Account());
         $this->assertTrue($contact->hasAccounts());
+    }
+
+    public function testHasEmail()
+    {
+        $email = new ContactEmail();
+
+        $contact = new Contact();
+        $this->assertFalse($contact->hasEmail($email));
+
+        $contact->addEmail($email);
+        $this->assertTrue($contact->hasEmail($email));
     }
 }

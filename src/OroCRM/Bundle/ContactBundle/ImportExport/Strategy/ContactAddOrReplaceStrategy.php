@@ -2,6 +2,9 @@
 
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Strategy;
 
+use Oro\Bundle\FormBundle\Entity\PrimaryItem;
+use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Security\Core\Util\ClassUtils;
 
@@ -15,6 +18,21 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
      * @var RegistryInterface
      */
     protected $registry;
+
+    /**
+     * @var ContactAddress|null
+     */
+    protected $primaryAddress;
+
+    /**
+     * @var ContactEmail|null
+     */
+    protected $primaryEmail;
+
+    /**
+     * @var ContactPhone|null
+     */
+    protected $primaryPhone;
 
     /**
      * @param RegistryInterface $registry
@@ -32,8 +50,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
         $entity = parent::process($entity);
 
         if ($entity) {
-            $this
-                ->updateAddresses($entity);
+            $this->updateAddresses($entity);
         }
 
         return $entity;
@@ -108,5 +125,77 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
             ->getManagerForClass($className)
             ->getRepository($className)
             ->findOneBy($criteria);
+    }
+
+    /**
+     * @param Contact $entity
+     * @return Contact
+     */
+    protected function beforeProcessEntity($entity)
+    {
+        // need to manually set empty types to skip merge from existing entities
+        $itemData = $this->context->getValue('itemData');
+        if (!empty($itemData['addresses'])) {
+            foreach ($itemData['addresses'] as $key => $address) {
+                if (!isset($address['types'])) {
+                    $itemData['addresses'][$key]['types'] = array();
+                }
+            }
+            $this->context->setValue('itemData', $itemData);
+        }
+
+        return $entity;
+    }
+
+    /**
+     * @param Contact $entity
+     * @return Contact
+     */
+    protected function afterProcessEntity($entity)
+    {
+        // there can be only one primary entity
+        $addresses = $entity->getAddresses();
+        $primaryAddress = $this->getPrimaryEntity($addresses);
+        if ($primaryAddress) {
+            $entity->setPrimaryAddress($primaryAddress);
+        } elseif ($addresses->count() > 0) {
+            $entity->setPrimaryAddress($addresses->first());
+        }
+
+        $emails = $entity->getEmails();
+        $primaryEmail = $this->getPrimaryEntity($emails);
+        if ($primaryEmail) {
+            $entity->setPrimaryEmail($primaryEmail);
+        } elseif ($emails->count() > 0) {
+            $entity->setPrimaryEmail($emails->first());
+        }
+
+        $phones = $entity->getPhones();
+        $primaryPhone = $this->getPrimaryEntity($phones);
+        if ($primaryPhone) {
+            $entity->setPrimaryPhone($primaryPhone);
+        } elseif ($phones->count() > 0) {
+            $entity->setPrimaryPhone($phones->first());
+        }
+
+        return $entity;
+    }
+
+    /**
+     * @param PrimaryItem[] $entities
+     * @return PrimaryItem|null
+     */
+    protected function getPrimaryEntity($entities)
+    {
+        $primaryEntities = array();
+        if ($entities) {
+            foreach ($entities as $entity) {
+                if ($entity->isPrimary()) {
+                    $primaryEntities[] = $entity;
+                }
+            }
+        }
+
+        return !empty($primaryEntities) ? current($primaryEntities) : null;
     }
 }
