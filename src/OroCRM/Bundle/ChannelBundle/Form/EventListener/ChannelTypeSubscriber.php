@@ -55,8 +55,8 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         $datasourceModifier($form);
 
         if (false === $this->settingsProvider->isCustomerIdentityUserDefined($data->getChannelType())) {
-            $customerIdentityValue = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
-            $customerIdentityClosure = $this->getCustomerIdentityClosure($customerIdentityValue);
+            $customerIdentityValue   = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
+            $customerIdentityClosure = $this->getCustomerIdentityModifierClosure($customerIdentityValue);
             $customerIdentityClosure($form);
         }
 
@@ -119,10 +119,18 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
      *
      * @return callable
      */
-    protected function getCustomerIdentityClosure($data)
+    protected function getCustomerIdentityModifierClosure($data)
     {
         return function (FormInterface $form) use ($data) {
             FormUtils::replaceField($form, 'customerIdentity', ['data' => $data, 'read_only' => true]);
+
+            // also add to entities
+            $entities = $form->get('entities')->getData();
+            $entities = is_array($entities) ? $entities : [];
+            if (!in_array($data, $entities, true)) {
+                $entities[] = $data;
+                FormUtils::replaceField($form, 'entities', ['data' => $entities]);
+            }
         };
     }
 }

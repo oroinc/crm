@@ -21,7 +21,6 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -51,7 +50,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadSourceData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData'
         ];
     }
 
@@ -70,25 +68,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     public function load(ObjectManager $manager)
     {
         $this->initSupportingEntities($manager);
-        $this->loadLeads($this->getChannelData());
+        $this->loadLeads();
         $this->loadSources();
-    }
-
-    /**
-     * @return Channel
-     * @throws \Exception
-     */
-    protected function getChannelData()
-    {
-        /** @var Channel $channel */
-        $channel = $this->container->get('doctrine.orm.entity_manager')->getRepository('OroCRMChannelBundle:Channel')
-            ->findOneByName('default');
-
-        if (!$channel) {
-            throw new \Exception('"default" channel is not defined');
-        }
-
-        return $channel;
     }
 
     /**
@@ -135,10 +116,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $this->flush($this->em);
     }
 
-    /**
-     * @param Channel $channel
-     */
-    public function loadLeads(Channel $channel)
+    public function loadLeads()
     {
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR. "leads.csv", "r");
         if ($handle) {
@@ -155,7 +133,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
                 $data = array_combine($headers, array_values($data));
 
-                $lead = $this->createLead($data, $user, $channel);
+                $lead = $this->createLead($data, $user);
                 $this->persist($this->em, $lead);
 
                 $i++;
@@ -181,11 +159,10 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /**
      * @param  array $data
      * @param User $user
-     * @param Channel $channel
      *
      * @return Lead
      */
-    protected function createLead(array $data, $user, $channel)
+    protected function createLead(array $data, $user)
     {
         $lead = new Lead();
         /** @var LeadStatus $defaultStatus */
@@ -198,7 +175,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setPhoneNumber($data['TelephoneNumber']);
         $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
-        $lead->setDataChannel($channel);
 
         /** @var Address $address */
         $address = new Address();

@@ -51,7 +51,7 @@ class ChangeChannelStatusListenerTest extends \PHPUnit_Framework_TestCase
     {
         $this->entity->setStatus($status);
 
-        $this->registry->expects($this->any())->method('getEntityManager')->will($this->returnValue($this->em));
+        $this->registry->expects($this->any())->method('getManager')->will($this->returnValue($this->em));
         $this->em->expects($this->once())->method('persist')->with($this->integration);
         $this->em->expects($this->once())->method('flush');
 

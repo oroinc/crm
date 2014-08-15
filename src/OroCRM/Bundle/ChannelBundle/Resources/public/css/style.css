@@ -1,4 +1,4 @@
-.open-form-widget {
+.form-element-text {
     display: inline-block;
     padding-top: 3px;
 }
@@ -11,3 +11,7 @@
     margin-left: 20px;
 }
 
+.control-group .controls .inline-text {
+    display: inline-block;
+    padding-top: 4px;
+}

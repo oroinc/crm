@@ -2,8 +2,10 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Provider;
 
-use Doctrine\Common\Cache\Cache;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Cache\Cache;
+
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -74,22 +76,10 @@ class StateProvider
 
             $qb = $this->getManager()->createQueryBuilder();
             $qb->distinct(true);
-            $qb->select('i.type')
-                ->from('OroCRMChannelBundle:Channel', 'c')
-                ->innerJoin('c.dataSource', 'i');
-
-            $assignedIntegrationTypes = $qb->getQuery()->getArrayResult();
-            $assignedIntegrationTypes = array_map(
-                function ($result) {
-                    return $result['type'];
-                },
-                $assignedIntegrationTypes
-            );
-
-            $qb = $this->getManager()->createQueryBuilder();
-            $qb->distinct(true);
             $qb->select('e.value')
                 ->from('OroCRMChannelBundle:Channel', 'c')
+                ->andWhere('c.status = :status')
+                ->setParameter('status', Channel::STATUS_ACTIVE)
                 ->innerJoin('c.entities', 'e');
 
             $assignedEntityNames = $qb->getQuery()->getArrayResult();
@@ -104,9 +94,6 @@ class StateProvider
             foreach ($settings as $entityName => $singleEntitySettings) {
                 if (in_array($entityName, $assignedEntityNames, true)) {
                     $this->enabledEntities[$entityName] = true;
-                } elseif ($this->settingsProvider->belongsToIntegration($entityName)) {
-                    $type                               = $this->settingsProvider->getIntegrationTypeData($entityName);
-                    $this->enabledEntities[$entityName] = in_array($type, $assignedIntegrationTypes, true);
                 }
             }
             $this->persistToCache();
@@ -138,6 +125,6 @@ class StateProvider
      */
     protected function getManager()
     {
-        return $this->registry->getEntityManager();
+        return $this->registry->getManager();
     }
 }

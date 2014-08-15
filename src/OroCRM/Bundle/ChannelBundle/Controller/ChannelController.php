@@ -76,8 +76,19 @@ class ChannelController extends Controller
             );
 
             return $this->get('oro_ui.router')->redirectAfterSave(
-                ['route' => 'orocrm_channel_update', 'parameters' => ['id' => $channel->getId()]],
-                ['route' => 'orocrm_channel_view', 'parameters' => ['id' => $channel->getId()]],
+                [
+                    'route'      => 'orocrm_channel_update',
+                    'parameters' => [
+                        'id'                      => $channel->getId(),
+                        '_enableContentProviders' => 'mainMenu'
+                    ]
+                ],
+                [
+                    'route'      => 'orocrm_channel_index',
+                    'parameters' => [
+                        '_enableContentProviders' => 'mainMenu'
+                    ]
+                ],
                 $channel
             );
         }
