@@ -6,7 +6,7 @@
             {{ UI.renderProperty('orocrm.channel.name.label'|trans, channel.name) }}
             {{ UI.renderProperty('orocrm.channel.channel_type.label'|trans, channelTypes[channel.channelType]) }}
             {% if(channel.dataSource) %}
-                {{ UI.renderProperty('orocrm.channel.data_source.label'|trans, channel.dataSource) }}
+                {{ UI.renderProperty('orocrm.channel.data_source.label'|trans, channel.dataSource.name) }}
             {% endif %}
             {{ UI.renderProperty('orocrm.channel.customer_identity.label'|trans, oro_entity_config_value(channel.customerIdentity, 'label')|trans) }}
 
