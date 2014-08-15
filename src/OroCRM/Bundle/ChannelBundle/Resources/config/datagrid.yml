@@ -37,8 +37,11 @@ datagrid:
                     type:      string
                     data_name: c.name
                 channelType:
-                    type:      string
+                    type:      choice
                     data_name: c.channelType
+                    options:
+                        field_options:
+                            choices: @orocrm_channel.provider.settings_provider->getChannelTypeChoiceList
                 status:
                     data_name: c.status
                     type:      choice
