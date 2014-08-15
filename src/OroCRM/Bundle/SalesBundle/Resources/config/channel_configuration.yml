@@ -42,5 +42,5 @@ orocrm_channel:
             entities:
                 - OroCRM\Bundle\SalesBundle\Entity\Lead
                 - OroCRM\Bundle\SalesBundle\Entity\Opportunity
-                - OroCRM\Bundle\SalesBundle\Entity\SalesProcess
+                - OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
             customer_identity: OroCRM\Bundle\SalesBundle\Entity\Lead

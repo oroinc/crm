@@ -267,6 +267,18 @@ class SettingsProvider
     }
 
     /**
+     * Returns predefined entity list for given channel type
+     *
+     * @param string $type
+     *
+     * @return array
+     */
+    public function getEntitiesByChannelType($type)
+    {
+        return $this->getChannelTypeConfig($type, 'entities') ?: [];
+    }
+
+    /**
      * @param string      $type
      * @param string|null $block
      *

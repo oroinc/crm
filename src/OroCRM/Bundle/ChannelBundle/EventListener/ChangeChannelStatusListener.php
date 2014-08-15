@@ -30,17 +30,13 @@ class ChangeChannelStatusListener
     public function onChannelStatusChange(ChannelChangeStatusEvent $event)
     {
         /** @var Channel $channel */
-        $channel     = $event->getChannel();
-        $integration = $channel->getDataSource();
+        $channel    = $event->getChannel();
+        $dataSource = $channel->getDataSource();
 
-        if ($integration instanceof Integration) {
-            if (Channel::STATUS_ACTIVE === $channel->getStatus()) {
-                $integration->setEnabled(true);
-            } elseif (Channel::STATUS_INACTIVE === $channel->getStatus()) {
-                $integration->setEnabled(false);
-            }
+        if ($dataSource instanceof Integration) {
+            $dataSource->setEnabled(Channel::STATUS_ACTIVE === $channel->getStatus());
 
-            $this->getManager()->persist($integration);
+            $this->getManager()->persist($dataSource);
             $this->getManager()->flush();
         }
     }
