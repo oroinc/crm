@@ -98,6 +98,9 @@ function (_, Backbone, __, routing, DialogWidget) {
             formDialog.render();
         },
 
+        /**
+         * Clears storage elements and re-render widget link
+         */
         removeIntegrationData: function () {
             this.$dataEl.val(null);
             this.$idEl.val(null);
