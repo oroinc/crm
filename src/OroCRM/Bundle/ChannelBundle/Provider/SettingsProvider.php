@@ -175,7 +175,7 @@ class SettingsProvider
      */
     public function getChannelTypeChoiceList()
     {
-        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
+        $settings     = $this->getSettings(self::CHANNEL_TYPE_PATH);
         $channelTypes = [];
 
         foreach (array_keys($settings) as $channelTypeName) {
@@ -183,6 +183,23 @@ class SettingsProvider
         }
 
         return $channelTypes;
+    }
+
+    /**
+     * Returns all entities from config which placed in field name
+     *
+     * @return array
+     */
+    public function getChannelEntitiesChoiceList()
+    {
+        $settings = $this->getSettings(self::DATA_PATH);
+        $result   = [];
+
+        foreach ($settings as $setting) {
+            $result[] = $setting['name'];
+        }
+
+        return $result;
     }
 
     /**
@@ -204,5 +221,65 @@ class SettingsProvider
 
         return !empty($settings[$channelType]['integration_type'])
             ? $settings[$channelType]['integration_type'] : false;
+    }
+
+    /**
+     * Returns integration connector name that entity belongs to
+     *
+     * @param string $entityFQCN entity full class name
+     *
+     * @return bool|string
+     */
+    public function getIntegrationConnectorName($entityFQCN)
+    {
+        if (!$this->isChannelEntity($entityFQCN)) {
+            return false;
+        }
+
+        $settings = $this->getSettings(self::DATA_PATH);
+
+        return isset($settings[$entityFQCN]['belongs_to'], $settings[$entityFQCN]['belongs_to']['connector']) ?
+            $settings[$entityFQCN]['belongs_to']['connector'] : false;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    public function isCustomerIdentityUserDefined($type)
+    {
+        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
+
+        return isset($settings[$type]['is_customer_identity_user_defined'])
+            ? $settings[$type]['is_customer_identity_user_defined']
+            : true;
+    }
+
+    /**
+     * Get CustomerIdentity definition from config
+     *
+     * @param $type
+     *
+     * @return string|null
+     */
+    public function getCustomerIdentityFromConfig($type)
+    {
+        return $this->getChannelConfigBlock($type, 'customer_identity');
+    }
+
+    /**
+     * @param string $type
+     * @param string $block
+     *
+     * @return mixed|null
+     */
+    protected function getChannelConfigBlock($type, $block)
+    {
+        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
+
+        return !empty($settings[$type][$block])
+            ? $settings[$type][$block]
+            : null;
     }
 }

@@ -96,10 +96,10 @@ class ChannelController extends Controller
     {
         if ($channel->getStatus() == Channel::STATUS_ACTIVE) {
             $message = 'orocrm.channel.controller.message.status.deactivated';
-            $channel->setStatus($channel::STATUS_INACTIVE);
+            $channel->setStatus(Channel::STATUS_INACTIVE);
         } else {
             $message = 'orocrm.channel.controller.message.status.activated';
-            $channel->setStatus($channel::STATUS_ACTIVE);
+            $channel->setStatus(Channel::STATUS_ACTIVE);
         }
 
         $this->getDoctrine()
@@ -107,6 +107,7 @@ class ChannelController extends Controller
             ->flush();
 
         $event = new ChannelChangeStatusEvent($channel);
+
         $this->get('event_dispatcher')->dispatch(ChannelChangeStatusEvent::EVENT_NAME, $event);
         $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($message));
         $request = $this->container->get('request');
