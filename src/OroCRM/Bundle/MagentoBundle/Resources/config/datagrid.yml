@@ -424,7 +424,7 @@ datagrid:
             acl_resource: orocrm_magento_product_view
             query:
                 select:
-                    - partial p.{id, name, sku, type, price, specialPrice, createdAt, updatedAt}
+                    - p
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Product , alias: p }
                 join:
