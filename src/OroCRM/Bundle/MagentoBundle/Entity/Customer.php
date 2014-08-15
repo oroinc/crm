@@ -14,7 +14,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
 
@@ -50,7 +49,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
  */
 class Customer extends ExtendCustomer
 {
-    use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait;
+    use IntegrationEntityTrait, OriginTrait;
 
     /*
      * FIELDS are duplicated to enable dataaudit only for customer fields
