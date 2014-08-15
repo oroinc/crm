@@ -2,15 +2,18 @@
 
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Strategy;
 
-use Oro\Bundle\FormBundle\Entity\PrimaryItem;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Security\Core\Util\ClassUtils;
+use Doctrine\Common\Collections\Collection;
 
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
+
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Security\Core\Util\ClassUtils;
 
 class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 {
@@ -67,6 +70,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
             // update country
             $country = $contactAddress->getCountry();
             if ($country) {
+                /** @var \Oro\Bundle\AddressBundle\Entity\Country $existingCountry */
                 $existingCountry = $this->getEntity(
                     $country,
                     ['iso2Code' => $country->getIso2Code()]
@@ -80,6 +84,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
             // update region
             $region = $contactAddress->getRegion();
             if ($region) {
+                /** @var \Oro\Bundle\AddressBundle\Entity\Region $existingRegion */
                 $existingRegion = $this->getEntity(
                     $region,
                     ['combinedCode' => $region->getCombinedCode()]
@@ -93,6 +98,8 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
             // update address types
             foreach ($contactAddress->getTypes() as $addressType) {
                 $contactAddress->removeType($addressType);
+
+                /** @var \Oro\Bundle\AddressBundle\Entity\AddressType $existingAddressType */
                 $existingAddressType = $this->getEntity(
                     $addressType,
                     ['name' => $addressType->getName()]
@@ -135,12 +142,14 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     {
         // need to manually set empty types to skip merge from existing entities
         $itemData = $this->context->getValue('itemData');
+
         if (!empty($itemData['addresses'])) {
             foreach ($itemData['addresses'] as $key => $address) {
                 if (!isset($address['types'])) {
                     $itemData['addresses'][$key]['types'] = array();
                 }
             }
+
             $this->context->setValue('itemData', $itemData);
         }
 
@@ -154,40 +163,42 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     protected function afterProcessEntity($entity)
     {
         // there can be only one primary entity
-        $addresses = $entity->getAddresses();
-        $primaryAddress = $this->getPrimaryEntity($addresses);
-        if ($primaryAddress) {
-            $entity->setPrimaryAddress($primaryAddress);
-        } elseif ($addresses->count() > 0) {
-            $entity->setPrimaryAddress($addresses->first());
-        }
+        foreach (array('address', 'email', 'phone') as $contactName) {
+            /** @var Collection $contacts */
+            $contactGetter  = $this->generateGetter($entity, $contactName);
+            $contactSetter  = 'setPrimary' . ucfirst($contactName);
+            $contacts       = $entity->$contactGetter();
+            $primaryContact = $this->getPrimaryEntity($contacts);
 
-        $emails = $entity->getEmails();
-        $primaryEmail = $this->getPrimaryEntity($emails);
-        if ($primaryEmail) {
-            $entity->setPrimaryEmail($primaryEmail);
-        } elseif ($emails->count() > 0) {
-            $entity->setPrimaryEmail($emails->first());
-        }
-
-        $phones = $entity->getPhones();
-        $primaryPhone = $this->getPrimaryEntity($phones);
-        if ($primaryPhone) {
-            $entity->setPrimaryPhone($primaryPhone);
-        } elseif ($phones->count() > 0) {
-            $entity->setPrimaryPhone($phones->first());
+            if ($primaryContact) {
+                $entity->$contactSetter($primaryContact);
+            } elseif ($contacts->count() > 0) {
+                $entity->$contactSetter($contacts->first());
+            }
         }
 
         return $entity;
     }
 
     /**
-     * @param PrimaryItem[] $entities
-     * @return PrimaryItem|null
+     * @param object $entity
+     * @param string $neededName
+     * @return string
+     */
+    protected function generateGetter($entity, $neededName)
+    {
+        $getter = 'get' . ucfirst($neededName);
+        return method_exists($entity, $getter . 's') ? $getter . 's' : $getter . 'es';
+    }
+
+    /**
+     * @param Collection|AbstractAddress[] $entities
+     * @return AbstractAddress|null
      */
     protected function getPrimaryEntity($entities)
     {
         $primaryEntities = array();
+
         if ($entities) {
             foreach ($entities as $entity) {
                 if ($entity->isPrimary()) {

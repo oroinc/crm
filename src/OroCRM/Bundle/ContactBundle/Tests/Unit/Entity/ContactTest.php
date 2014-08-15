@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Entity;
 
+use Oro\Bundle\AddressBundle\Entity\Country;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
@@ -10,6 +11,9 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ */
 class ContactTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetGroupLabels()
@@ -74,9 +78,9 @@ class ContactTest extends \PHPUnit_Framework_TestCase
 
     public function testEmails()
     {
-        $emailOne = new ContactEmail('emailone@example.com');
-        $emailTwo = new ContactEmail('emailtwo@example.com');
-        $emailThree = new ContactEmail('emailthree@example.com');
+        $emailOne = new ContactEmail('email-one@example.com');
+        $emailTwo = new ContactEmail('email-two@example.com');
+        $emailThree = new ContactEmail('email-three@example.com');
         $emails = array($emailOne, $emailTwo);
 
         $contact = new Contact();
@@ -169,11 +173,11 @@ class ContactTest extends \PHPUnit_Framework_TestCase
     public function testAddresses()
     {
         $addressOne = new ContactAddress();
-        $addressOne->setCountry('US');
+        $addressOne->setCountry(new Country('US'));
         $addressTwo = new ContactAddress();
-        $addressTwo->setCountry('UK');
+        $addressTwo->setCountry(new Country('UK'));
         $addressThree = new ContactAddress();
-        $addressThree->setCountry('RU');
+        $addressThree->setCountry(new Country('RU'));
         $addresses = array($addressOne, $addressTwo);
 
         $contact = new Contact();
