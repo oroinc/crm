@@ -2,16 +2,16 @@
 
 namespace OroCRM\Bundle\TestFrameworkBundle\Tests\DataFixtures;
 
-use Doctrine\ORM\EntityRepository;
-
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\UserBundle\Entity\UserManager;
+
+
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\UserBundle\Entity\UserManager;
 
 class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterface
 {

@@ -2,10 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
-
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;

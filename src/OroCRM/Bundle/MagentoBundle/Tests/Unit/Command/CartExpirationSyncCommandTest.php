@@ -5,10 +5,11 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
-use OroCRM\Bundle\MagentoBundle\Tests\Unit\Stub\MemoryOutput;
+
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Command\CartExpirationSyncCommand;
+use OroCRM\Bundle\MagentoBundle\Tests\Unit\Stub\MemoryOutput;
 
 class CartExpirationSyncCommandTest extends \PHPUnit_Framework_TestCase
 {

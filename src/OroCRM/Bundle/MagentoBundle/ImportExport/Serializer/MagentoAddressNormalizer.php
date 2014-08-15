@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\CompositeNormalizer;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
-use OroCRM\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
 
 class MagentoAddressNormalizer extends CompositeNormalizer
 {

@@ -2,10 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller\Dashboard;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+
 
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;

@@ -4,8 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 
+
+use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 

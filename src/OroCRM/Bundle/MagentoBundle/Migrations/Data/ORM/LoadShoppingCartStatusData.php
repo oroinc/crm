@@ -5,10 +5,11 @@ namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 
-use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
+
 use Oro\Bundle\MigrationBundle\Fixture\LoadedFixtureVersionAwareInterface;
+use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
+use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 
 class LoadShoppingCartStatusData extends AbstractFixture implements
     VersionedFixtureInterface,

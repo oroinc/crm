@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\ContactBundle\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+
+
 use OroCRM\Bundle\ContactBundle\Entity\Group;
 
 class LoadGroupData extends AbstractFixture

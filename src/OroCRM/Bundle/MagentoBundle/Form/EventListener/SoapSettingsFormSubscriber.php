@@ -2,15 +2,17 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Form\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+
 
 use Oro\Bundle\FormBundle\Utils\FormUtils;
-use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
-use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Status;
+use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 
 class SoapSettingsFormSubscriber implements EventSubscriberInterface
 {

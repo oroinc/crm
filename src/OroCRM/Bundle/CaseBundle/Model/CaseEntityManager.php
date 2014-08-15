@@ -4,8 +4,9 @@ namespace OroCRM\Bundle\CaseBundle\Model;
 
 use Doctrine\ORM\EntityManager;
 
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
+
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 use OroCRM\Bundle\CaseBundle\Entity\CasePriority;

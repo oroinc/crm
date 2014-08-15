@@ -3,14 +3,14 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\ORM\EntityManager;
-
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
+
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 use OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
-use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 
 class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
 {

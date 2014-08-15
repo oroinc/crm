@@ -4,13 +4,14 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
-
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 

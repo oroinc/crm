@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\ContactUsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;

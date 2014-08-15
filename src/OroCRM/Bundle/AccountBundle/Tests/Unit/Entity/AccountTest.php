@@ -2,10 +2,9 @@
 
 namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Entity;
 
+use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-
-use Oro\Bundle\UserBundle\Entity\User;
 
 class AccountTest extends \PHPUnit_Framework_TestCase
 {

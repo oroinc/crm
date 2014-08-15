@@ -1,18 +1,19 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-
-use Oro\Bundle\UserBundle\Entity\UserManager;
-use Oro\Bundle\UserBundle\Entity\User;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+
+
+
 use Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory;
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\UserBundle\Entity\UserManager;
 
 class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {

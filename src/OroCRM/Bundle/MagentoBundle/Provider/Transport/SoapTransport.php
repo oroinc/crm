@@ -4,22 +4,23 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+
+
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
-
+use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 
 /**
  * Magento SOAP transport

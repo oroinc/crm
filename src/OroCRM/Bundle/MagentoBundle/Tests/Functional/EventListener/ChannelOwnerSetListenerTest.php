@@ -2,16 +2,16 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\EventListener;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Util\ClassUtils;
-
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\DomCrawler\Form;
+
+
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
 /**

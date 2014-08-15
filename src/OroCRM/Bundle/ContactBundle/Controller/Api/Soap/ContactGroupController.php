@@ -2,8 +2,10 @@
 
 namespace OroCRM\Bundle\ContactBundle\Controller\Api\Soap;
 
-use Symfony\Component\Form\FormInterface;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+use Symfony\Component\Form\FormInterface;
+
+
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;

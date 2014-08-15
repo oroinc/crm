@@ -4,11 +4,12 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use OroCRM\Bundle\ContactBundle\Entity\Group;
 
-use Oro\Bundle\UserBundle\Entity\User;
+
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\ContactBundle\Entity\Group;
 
 class GroupTest extends \PHPUnit_Framework_TestCase
 {

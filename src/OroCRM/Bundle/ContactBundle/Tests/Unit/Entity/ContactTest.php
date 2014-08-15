@@ -2,13 +2,13 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Entity;
 
+use Oro\Bundle\AddressBundle\Entity\AddressType;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\Group;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 class ContactTest extends \PHPUnit_Framework_TestCase
 {

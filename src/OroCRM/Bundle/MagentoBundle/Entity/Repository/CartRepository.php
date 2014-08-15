@@ -4,11 +4,12 @@ namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
+
+
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\WorkflowBundle\Model\Workflow;
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
-
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 
 class CartRepository extends EntityRepository

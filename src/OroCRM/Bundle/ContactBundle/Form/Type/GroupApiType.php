@@ -2,9 +2,12 @@
 
 namespace OroCRM\Bundle\ContactBundle\Form\Type;
 
-use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+
+
+use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 
 class GroupApiType extends GroupType
 {

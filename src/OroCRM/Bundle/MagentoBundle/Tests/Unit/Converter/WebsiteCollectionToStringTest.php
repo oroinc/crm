@@ -4,8 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\DataGridBundle\Datasource\ResultRecord;
 
+
+use Oro\Bundle\DataGridBundle\Datasource\ResultRecord;
 use OroCRM\Bundle\MagentoBundle\Converter\WebsiteCollectionToString;
 
 class WebsiteCollectionToStringTest extends \PHPUnit_Framework_TestCase

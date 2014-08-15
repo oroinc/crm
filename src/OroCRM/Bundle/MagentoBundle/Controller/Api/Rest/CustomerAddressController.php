@@ -2,19 +2,19 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller\Api\Rest;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
-
+use FOS\Rest\Util\Codes;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\Rest\Util\Codes;
-
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+
+
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 /**
  * @NamePrefix("oro_api_")

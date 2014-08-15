@@ -2,17 +2,17 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-use Oro\Bundle\EmailBundle\Mailer\Processor;
+
 use Oro\Bundle\EmailBundle\Builder\EmailEntityBuilder;
 use Oro\Bundle\EmailBundle\Entity\EmailFolder;
-
+use Oro\Bundle\EmailBundle\Mailer\Processor;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class LoadEmailData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface

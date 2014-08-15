@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_5;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 
+
+
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 

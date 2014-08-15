@@ -2,12 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
-use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query;
+
+
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Event\DefaultOwnerSetEvent;
-
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 
 /**

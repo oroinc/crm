@@ -5,9 +5,10 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
 use Knp\Menu\MenuFactory;
 use Knp\Menu\MenuItem;
 
+
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
-
 use OroCRM\Bundle\MagentoBundle\EventListener\NavigationListener;
 
 class NavigationListenerTest extends \PHPUnit_Framework_TestCase

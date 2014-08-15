@@ -4,11 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Stub\StubIterator;
 
 /**

@@ -2,15 +2,14 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor;
 
 class CustomerReverseProcessorTest extends \PHPUnit_Framework_TestCase

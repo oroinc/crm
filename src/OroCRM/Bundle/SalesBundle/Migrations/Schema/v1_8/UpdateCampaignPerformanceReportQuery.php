@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_8;
 
 use Psr\Log\LoggerInterface;
 
+
+
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 

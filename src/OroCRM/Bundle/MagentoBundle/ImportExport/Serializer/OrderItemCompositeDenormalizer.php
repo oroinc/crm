@@ -4,8 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
-use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\OrderItemDataConverter;
+use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
 
 class OrderItemCompositeDenormalizer extends AbstractNormalizer implements DenormalizerInterface

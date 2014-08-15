@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 

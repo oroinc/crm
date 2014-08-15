@@ -2,29 +2,28 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 
-use Doctrine\ORM\EntityManager;
+use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 use Doctrine\Common\Collections\Collection;
-
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
+
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use Oro\Bundle\AddressBundle\Entity\Country as BAPCountry;
+use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
-
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\Region;
+use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Converter\RegionConverter;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\AbstractReverseProcessor;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

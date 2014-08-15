@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\UserBundle\Entity\User;
-
 use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 
 class CampaignTest extends AbstractEntityTestCase

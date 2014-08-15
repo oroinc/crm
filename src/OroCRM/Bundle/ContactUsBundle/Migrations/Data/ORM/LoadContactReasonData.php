@@ -2,8 +2,10 @@
 
 namespace OroCRM\Bundle\ContactUsBundle\Migrations\Data\ORM;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
+
+
 
 use OroCRM\Bundle\ContactUsBundle\Entity\ContactReason;
 

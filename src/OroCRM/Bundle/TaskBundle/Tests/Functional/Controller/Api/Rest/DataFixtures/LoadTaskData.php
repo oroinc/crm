@@ -2,14 +2,15 @@
 
 namespace OroCRM\Bundle\TaskBundle\Tests\Functional\Controller\Api\Rest\DataFixtures;
 
-use OroCRM\Bundle\TaskBundle\Entity\Task;
-
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
+
+
+
+use OroCRM\Bundle\TaskBundle\Entity\Task;
 
 class LoadTaskData extends AbstractFixture implements ContainerAwareInterface
 {

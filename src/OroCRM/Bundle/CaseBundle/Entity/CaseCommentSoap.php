@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\CaseBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+
+
 use Oro\Bundle\SoapBundle\Entity\SoapEntityInterface;
 
 /**

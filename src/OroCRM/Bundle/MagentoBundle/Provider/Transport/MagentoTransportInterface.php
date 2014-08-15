@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
-
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 

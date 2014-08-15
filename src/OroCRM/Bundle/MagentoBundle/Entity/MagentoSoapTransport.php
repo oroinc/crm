@@ -3,12 +3,13 @@
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-use Oro\Bundle\IntegrationBundle\Entity\Transport;
+
+
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
 
 /**
  * Class MagentoSoapTransport

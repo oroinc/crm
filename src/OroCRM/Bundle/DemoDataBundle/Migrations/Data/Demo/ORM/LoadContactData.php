@@ -1,29 +1,26 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Collections\Collection;
-
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+
 
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-
+use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\Source;
-use OroCRM\Bundle\ContactBundle\Entity\Group;
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-
-use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\ContactBundle\Entity\Group;
+use OroCRM\Bundle\ContactBundle\Entity\Source;
 
 class LoadContactData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {

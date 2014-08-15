@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
+
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;

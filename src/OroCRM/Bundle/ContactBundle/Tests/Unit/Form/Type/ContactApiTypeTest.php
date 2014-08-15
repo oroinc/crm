@@ -2,8 +2,10 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+
 
 use OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType;
 

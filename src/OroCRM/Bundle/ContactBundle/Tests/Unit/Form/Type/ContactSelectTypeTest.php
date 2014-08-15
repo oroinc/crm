@@ -3,6 +3,8 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+
+
 use OroCRM\Bundle\ContactBundle\Form\Type\ContactSelectType;
 
 class ContactSelectTypeTest extends \PHPUnit_Framework_TestCase

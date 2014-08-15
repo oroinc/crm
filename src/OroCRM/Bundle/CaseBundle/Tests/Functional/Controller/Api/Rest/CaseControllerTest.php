@@ -3,10 +3,9 @@
 namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller\Api\Rest;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
+use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
 use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
 use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
-use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
 
 /**
  * @outputBuffering enabled

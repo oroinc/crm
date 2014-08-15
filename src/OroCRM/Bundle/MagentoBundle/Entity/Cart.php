@@ -2,18 +2,19 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\UserBundle\Entity\User;
+
+
 use Oro\Bundle\EmailBundle\Entity\Email;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-
+use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCart;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;

@@ -3,9 +3,12 @@
 namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
 use BeSimple\SoapCommon\Type\KeyValue\Boolean;
-use OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+
+
+use OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType;
 
 class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
 {

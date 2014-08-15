@@ -2,22 +2,22 @@
 
 namespace OroCRM\Bundle\TaskBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository;
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 use OroCRM\Bundle\TaskBundle\Form\Type\TaskType;
-use OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository;
 
 /**
  * @Route("/task")

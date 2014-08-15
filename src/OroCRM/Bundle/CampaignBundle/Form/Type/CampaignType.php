@@ -2,10 +2,13 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Form\Type;
 
-use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+
+
+use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 
 class CampaignType extends AbstractType
 {

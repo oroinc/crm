@@ -2,19 +2,18 @@
 
 namespace OroCRM\Bundle\CaseBundle\Controller\Api\Rest;
 
-use Symfony\Component\HttpFoundation\Response;
-
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Symfony\Component\HttpFoundation\Response;
+
+
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-
+use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
 use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
-use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
 /**
  * @Rest\RouteResource("case")

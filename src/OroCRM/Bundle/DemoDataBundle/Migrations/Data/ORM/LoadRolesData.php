@@ -3,15 +3,17 @@
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Yaml\Yaml;
 
-use Oro\Bundle\UserBundle\Entity\Role;
-use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;
+
+
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
+use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;
+use Oro\Bundle\UserBundle\Entity\Role;
 
 class LoadRolesData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {

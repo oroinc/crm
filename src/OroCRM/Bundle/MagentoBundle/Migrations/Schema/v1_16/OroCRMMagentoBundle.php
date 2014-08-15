@@ -4,8 +4,10 @@ namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_16;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Schema;
-
 use Doctrine\DBAL\Types\Type;
+
+
+
 use Oro\Bundle\EntityBundle\Migrations\MigrateTypesQuery;
 use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;

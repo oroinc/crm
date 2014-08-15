@@ -3,8 +3,9 @@
 namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
-
 use Knp\Menu\ItemInterface;
+
+
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;

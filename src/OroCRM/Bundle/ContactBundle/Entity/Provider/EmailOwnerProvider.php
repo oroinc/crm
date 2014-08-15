@@ -3,9 +3,12 @@
 namespace OroCRM\Bundle\ContactBundle\Entity\Provider;
 
 use Doctrine\ORM\EntityManager;
+
+
+
+use Oro\Bundle\EmailBundle\Entity\Provider\EmailOwnerProviderInterface;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
-use Oro\Bundle\EmailBundle\Entity\Provider\EmailOwnerProviderInterface;
 
 class EmailOwnerProvider implements EmailOwnerProviderInterface
 {

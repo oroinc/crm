@@ -2,18 +2,18 @@
 
 namespace OroCRM\Bundle\CaseBundle\Model;
 
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Routing\RouterInterface;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
-use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
+
+use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
+use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class ViewFactory
 {

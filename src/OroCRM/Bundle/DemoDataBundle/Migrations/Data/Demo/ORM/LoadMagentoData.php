@@ -3,26 +3,27 @@
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+
+
 
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
+use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 
 class LoadMagentoData extends AbstractFixture implements DependentFixtureInterface
 {

@@ -4,9 +4,10 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 
+
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
@@ -15,8 +16,8 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\ContactImportHelper;
+use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class CustomerStrategy extends BaseStrategy
 {

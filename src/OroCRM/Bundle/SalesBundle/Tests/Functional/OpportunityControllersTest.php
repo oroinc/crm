@@ -3,11 +3,12 @@
 namespace OroCRM\Bundle\SalesBundle\Tests\Functional;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-
 use Symfony\Component\DomCrawler\Form;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+
+
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @outputBuffering enabled

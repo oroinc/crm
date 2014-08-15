@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
-
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class OrderSoapIterator extends AbstractPageableSoapIterator

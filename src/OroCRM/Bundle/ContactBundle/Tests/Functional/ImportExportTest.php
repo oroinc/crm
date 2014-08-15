@@ -3,9 +3,10 @@
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 
 use Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository as BatchJobRepository;
-
-use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\DomCrawler\Form;
+
+
 
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;

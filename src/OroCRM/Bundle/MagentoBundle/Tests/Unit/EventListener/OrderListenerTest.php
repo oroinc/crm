@@ -4,11 +4,13 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+
+
+
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\EventListener\OrderListener;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 class OrderListenerTest extends \PHPUnit_Framework_TestCase
 {

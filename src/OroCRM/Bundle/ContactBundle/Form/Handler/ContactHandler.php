@@ -2,14 +2,16 @@
 
 namespace OroCRM\Bundle\ContactBundle\Form\Handler;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\Common\Persistence\ObjectManager;
+
+
 
 use Oro\Bundle\TagBundle\Entity\TagManager;
+use Oro\Bundle\TagBundle\Form\Handler\TagHandlerInterface;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\TagBundle\Form\Handler\TagHandlerInterface;
 
 class ContactHandler implements TagHandlerInterface
 {

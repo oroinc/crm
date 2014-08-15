@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+
+
 use OroCRM\Bundle\ContactBundle\Form\Type\ContactType;
 
 class ContactTypeTest extends \PHPUnit_Framework_TestCase

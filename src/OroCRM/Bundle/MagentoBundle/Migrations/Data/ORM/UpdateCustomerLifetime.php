@@ -7,6 +7,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
+
+
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 
 class UpdateCustomerLifetime extends AbstractFixture

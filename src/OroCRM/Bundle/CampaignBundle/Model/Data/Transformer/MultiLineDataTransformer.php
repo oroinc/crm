@@ -6,7 +6,6 @@ use Oro\Bundle\ChartBundle\Model\Data\ArrayData;
 use Oro\Bundle\ChartBundle\Model\Data\DataInterface;
 use Oro\Bundle\ChartBundle\Model\Data\MappedData;
 use Oro\Bundle\ChartBundle\Model\Data\Transformer\TransformerInterface;
-
 use Oro\Bundle\UIBundle\Tools\ArrayUtils;
 use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 

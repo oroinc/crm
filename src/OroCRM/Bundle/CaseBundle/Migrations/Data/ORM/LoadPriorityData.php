@@ -4,8 +4,10 @@ namespace OroCRM\Bundle\CaseBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
+
+
 use Oro\Bundle\TranslationBundle\DataFixtures\AbstractTranslatableEntityFixture;
+use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
 
 class LoadPriorityData extends AbstractTranslatableEntityFixture
 {

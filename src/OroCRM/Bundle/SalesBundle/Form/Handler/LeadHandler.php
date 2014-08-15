@@ -2,11 +2,13 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Handler;
 
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use Doctrine\Common\Persistence\ObjectManager;
+
+
+use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 class LeadHandler
 {
