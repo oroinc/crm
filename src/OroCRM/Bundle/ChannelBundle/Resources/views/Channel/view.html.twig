@@ -114,14 +114,6 @@
     </div>
 {% endblock breadcrumbs %}
 
-{% block pageActions %}
-    {% if isDesktopVersion() %}
-        {% if entity.owner.name %}
-            <li>{{ 'oro.ui.owner'|trans }}: {{ entity.owner.name }}</li>
-        {% endif %}
-    {% endif %}
-{% endblock pageActions %}
-
 {% if entity.id %}
     {% oro_title_set({params : {"%channel.name%": entity.name } }) %}
 {% endif %}
