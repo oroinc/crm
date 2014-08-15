@@ -87,6 +87,9 @@ class MetadataExtension extends \Twig_Extension
         return self::EXTENSION_NAME;
     }
 
+    /**
+     * @return array
+     */
     public function getChannelTypeMetadata()
     {
         return $this->settingsProvider->getChannelTypeChoiceList();
