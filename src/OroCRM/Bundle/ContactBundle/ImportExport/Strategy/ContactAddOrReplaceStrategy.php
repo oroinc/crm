@@ -2,18 +2,18 @@
 
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Strategy;
 
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Security\Core\Util\ClassUtils;
+
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
+use Oro\Bundle\FormBundle\Entity\PrimaryItem;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Security\Core\Util\ClassUtils;
 
 class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 {
@@ -167,17 +167,17 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
         $primaryAddress = $this->getPrimaryEntity($addresses);
 
         if ($primaryAddress) {
-            /** @var \OroCRM\Bundle\ContactBundle\Entity\ContactAddress $primaryAddress */
+            /** @var ContactAddress $primaryAddress */
             $entity->setPrimaryAddress($primaryAddress);
         } elseif ($addresses->count() > 0) {
-                $entity->setPrimaryAddress($addresses->first());
+            $entity->setPrimaryAddress($addresses->first());
         }
 
         $emails = $entity->getEmails();
         $primaryEmail = $this->getPrimaryEntity($emails);
 
         if ($primaryEmail) {
-            /** @var \OroCRM\Bundle\ContactBundle\Entity\ContactEmail $primaryEmail */
+            /** @var ContactEmail $primaryEmail */
             $entity->setPrimaryEmail($primaryEmail);
         } elseif ($emails->count() > 0) {
             $entity->setPrimaryEmail($emails->first());
@@ -187,7 +187,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
         $primaryPhone = $this->getPrimaryEntity($phones);
 
         if ($primaryPhone) {
-            /** @var \OroCRM\Bundle\ContactBundle\Entity\ContactPhone $primaryPhone */
+            /** @var ContactPhone $primaryPhone */
             $entity->setPrimaryPhone($primaryPhone);
         } elseif ($phones->count() > 0) {
             $entity->setPrimaryPhone($phones->first());
@@ -197,8 +197,8 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     }
 
     /**
-     * @param Collection|AbstractAddress[] $entities
-     * @return AbstractAddress|null
+     * @param Collection|PrimaryItem[] $entities
+     * @return PrimaryItem|null
      */
     protected function getPrimaryEntity($entities)
     {
