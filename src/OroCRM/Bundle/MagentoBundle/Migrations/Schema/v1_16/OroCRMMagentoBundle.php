@@ -32,6 +32,16 @@ class OroCRMMagentoBundle implements Migration, DatabasePlatformAwareInterface
     public function up(Schema $schema, QueryBag $queries)
     {
         $queries->addQuery(
+            new MigrateTypesQuery($this->platform, $schema, 'oro_integration_channel', 'id', Type::INTEGER)
+        );
+        $queries->addQuery(
+            new MigrateTypesQuery($this->platform, $schema, 'oro_integration_channel_status', 'id', Type::INTEGER)
+        );
+        $queries->addQuery(
+            new MigrateTypesQuery($this->platform, $schema, 'oro_integration_transport', 'id', Type::INTEGER)
+        );
+
+        $queries->addQuery(
             new MigrateTypesQuery($this->platform, $schema, 'orocrm_contactus_contact_rsn', 'id', Type::INTEGER)
         );
         $queries->addQuery(
