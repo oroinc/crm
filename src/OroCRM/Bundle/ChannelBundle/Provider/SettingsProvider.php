@@ -86,18 +86,6 @@ class SettingsProvider
     }
 
     /**
-     * Return whether entity is channel related and belongs to any integration
-     *
-     * @param string $entityFQCN entity full class name
-     *
-     * @return bool
-     */
-    public function belongsToIntegration($entityFQCN)
-    {
-        return $this->getIntegrationTypeData($entityFQCN) !== false;
-    }
-
-    /**
      * Get entity dependencies
      *
      * @param string $entityFQCN entity full class name
@@ -133,41 +121,23 @@ class SettingsProvider
     }
 
     /**
-     * Returns integration type that entity belongs to
-     *
-     * @param string $entityFQCN entity full class name
-     *
-     * @return bool|string
-     */
-    public function getIntegrationTypeData($entityFQCN)
-    {
-        if (!$this->isChannelEntity($entityFQCN)) {
-            return false;
-        }
-
-        $settings = $this->getSettings(self::DATA_PATH);
-
-        return isset($settings[$entityFQCN]['belongs_to'], $settings[$entityFQCN]['belongs_to']['integration']) ?
-            $settings[$entityFQCN]['belongs_to']['integration'] : false;
-    }
-
-    /**
-     * Returns integration types that could be used as customer datasource
+     * Returns integration types that could not be used out of channel scope
      *
      * @return array
      */
     public function getSourceIntegrationTypes()
     {
-        $settings     = $this->getSettings(self::DATA_PATH);
-        $allowedTypes = [];
+        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
+        $types    = [];
 
-        foreach (array_keys($settings) as $entityName) {
-            if ($this->belongsToIntegration($entityName)) {
-                $allowedTypes[] = $this->getIntegrationTypeData($entityName);
+        foreach (array_keys($settings) as $channelTypeName) {
+            $integrationType = $this->getIntegrationType($channelTypeName);
+            if ($integrationType) {
+                $types[] = $integrationType;
             }
         }
 
-        return array_unique($allowedTypes);
+        return array_unique($types);
     }
 
     /**
@@ -185,23 +155,6 @@ class SettingsProvider
         }
 
         return $channelTypes;
-    }
-
-    /**
-     * Returns all entities from config which placed in field name
-     *
-     * @return array
-     */
-    public function getChannelEntitiesChoiceList()
-    {
-        $settings = $this->getSettings(self::DATA_PATH);
-        $result   = [];
-
-        foreach ($settings as $setting) {
-            $result[] = $setting['name'];
-        }
-
-        return $result;
     }
 
     /**
