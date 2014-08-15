@@ -15,7 +15,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCart;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
@@ -58,7 +57,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  */
 class Cart extends ExtendCart
 {
-    use IntegrationEntityTrait, OriginTrait, NamesAwareTrait, ChannelEntityTrait;
+    use IntegrationEntityTrait, OriginTrait, NamesAwareTrait;
 
     /**
      * @var CartItem[]|Collection

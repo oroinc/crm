@@ -13,7 +13,6 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
@@ -47,15 +46,12 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  *      },
  *      "dataaudit"={
  *          "auditable"=true
- *      },
- *      "grouping"={"groups"={"business"}}
+ *      }
  *  }
  * )
  */
 class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 {
-    use ChannelEntityTrait;
-
     /**
      * @var int
      *

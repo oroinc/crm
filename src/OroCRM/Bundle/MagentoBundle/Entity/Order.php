@@ -15,7 +15,6 @@ use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
 
 /**
@@ -57,7 +56,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
  */
 class Order extends ExtendOrder
 {
-    use IntegrationEntityTrait, NamesAwareTrait, ChannelEntityTrait;
+    use IntegrationEntityTrait, NamesAwareTrait;
 
     /**
      * @var string

@@ -76,8 +76,20 @@ class ChannelController extends Controller
             );
 
             return $this->get('oro_ui.router')->redirectAfterSave(
-                ['route' => 'orocrm_channel_update', 'parameters' => ['id' => $channel->getId()]],
-                ['route' => 'orocrm_channel_view', 'parameters' => ['id' => $channel->getId()]],
+                [
+                    'route'      => 'orocrm_channel_update',
+                    'parameters' => [
+                        'id'                      => $channel->getId(),
+                        '_enableContentProviders' => 'mainMenu'
+                    ]
+                ],
+                [
+                    'route'      => 'orocrm_channel_view',
+                    'parameters' => [
+                        'id'                      => $channel->getId(),
+                        '_enableContentProviders' => 'mainMenu'
+                    ]
+                ],
                 $channel
             );
         }
@@ -89,10 +101,12 @@ class ChannelController extends Controller
     }
 
     /**
-     * @Route("/status/change/{id}", requirements={"id"="\d+"}, name="orocrm_channel_change_status")
+     * @Route(
+     *  "/status/change/{id}/{backRoute}", requirements={"id"="\d+"}, defaults={"backRoute"="orocrm_channel_view"},
+     *  name="orocrm_channel_change_status")
      * @AclAncestor("orocrm_channel_update")
      */
-    public function changeStatusAction(Channel $channel)
+    public function changeStatusAction(Channel $channel, $backRoute)
     {
         if ($channel->getStatus() == Channel::STATUS_ACTIVE) {
             $message = 'orocrm.channel.controller.message.status.deactivated';
@@ -110,9 +124,16 @@ class ChannelController extends Controller
 
         $this->get('event_dispatcher')->dispatch(ChannelChangeStatusEvent::EVENT_NAME, $event);
         $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($message));
-        $request = $this->container->get('request');
 
-        return $this->redirect($request->server->get('HTTP_REFERER'));
+        return $this->redirect(
+            $this->generateUrl(
+                $backRoute,
+                [
+                    'id' => $channel->getId(),
+                    '_enableContentProviders' => 'mainMenu'
+                ]
+            )
+        );
     }
 
     /**

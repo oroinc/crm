@@ -75,7 +75,7 @@ class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
             ->with('OroCRM\Bundle\AcmeBundle\Entity\TestEntity2')
             ->will($this->returnValue('TestConnector2'));
 
-        $this->registry->expects($this->any())->method('getEntityManager')->will($this->returnValue($this->em));
+        $this->registry->expects($this->any())->method('getManager')->will($this->returnValue($this->em));
         $this->em->expects($this->once())->method('persist')->with($this->integration);
         $this->em->expects($this->once())->method('flush');
 

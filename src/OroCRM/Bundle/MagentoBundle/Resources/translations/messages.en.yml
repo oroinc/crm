@@ -102,7 +102,6 @@ orocrm:
             orders.label:        Customer orders
             lifetime.label:      Lifetime value
             currency.label:      Currency
-            data_channel.label:  Channel
 
         customergroup:
             entity_label:        Customer Group
@@ -158,7 +157,6 @@ orocrm:
             workflow_step.label:       Workflow step
             website.label:             Website
             status_message.label:      Status message
-            data_channel.label:        Channel
 
         cartitem:
             entity_label:              Shopping Cart Item
@@ -278,7 +276,6 @@ orocrm:
             workflow_item.label:    Workflow item
             workflow_step.label:    Workflow step
             website.label:          Website
-            data_channel.label:     Channel
 
         product:
             entity_label:         Product
@@ -295,7 +292,6 @@ orocrm:
             cost.label:           Cost
             websites.label:       Websites
             channel.label:        Integration
-            data_channel.label:   Channel
 
         address:
             entity_label:          Magento Customer Address

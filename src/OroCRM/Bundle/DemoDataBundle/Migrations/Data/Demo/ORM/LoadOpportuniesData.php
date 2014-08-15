@@ -16,7 +16,6 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
@@ -49,8 +48,7 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
     {
         return [
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData'
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData'
         ];
     }
 
@@ -68,24 +66,7 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
     public function load(ObjectManager $manager)
     {
         $this->initSupportingEntities($manager);
-        $this->loadOpportunities($this->getDataChannel());
-    }
-
-    /**
-     * @return Channel
-     * @throws \Exception
-     */
-    protected function getDataChannel()
-    {
-        /** @var Channel $channel */
-        $channel = $this->container->get('doctrine.orm.entity_manager')->getRepository('OroCRMChannelBundle:Channel')
-            ->findOneByName('default');
-
-        if (!$channel) {
-            throw new \Exception('"default" channel is not defined');
-        }
-
-        return $channel;
+        $this->loadOpportunities();
     }
 
     /**
@@ -106,14 +87,14 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
             ->execute();
     }
 
-    public function loadOpportunities(Channel $channel)
+    public function loadOpportunities()
     {
         $randomUser = count($this->users) - 1;
         for ($i = 0; $i < 50; $i++) {
             $user = $this->users[mt_rand(0, $randomUser)];
             $this->setSecurityContext($user);
             $contact = $this->contacts[array_rand($this->contacts)];
-            $opportunity = $this->createOpportunity($contact, $user, $channel);
+            $opportunity = $this->createOpportunity($contact, $user);
             $this->persist($this->em, $opportunity);
             if ($i % self::FLUSH_MAX == 0) {
                 $this->flush($this->em);
@@ -135,11 +116,10 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
     /**
      * @param Contact $contact
      * @param User $user
-     * @param Channel $channel
      *
      * @return Opportunity
      */
-    protected function createOpportunity($contact, $user, $channel)
+    protected function createOpportunity($contact, $user)
     {
         /** @var Account $account */
         $account = $contact->getAccounts()->first();
@@ -148,7 +128,6 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
         $opportunity->setContact($contact);
         $opportunity->setAccount($account);
         $opportunity->setOwner($user);
-        $opportunity->setDataChannel($channel);
 
         return $opportunity;
     }

@@ -106,6 +106,6 @@ class ChannelHandler
      */
     protected function getManager()
     {
-        return $this->registry->getEntityManager();
+        return $this->registry->getManager();
     }
 }

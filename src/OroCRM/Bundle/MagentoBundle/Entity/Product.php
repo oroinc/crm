@@ -10,7 +10,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendProduct;
 
 /**
@@ -42,7 +41,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendProduct;
  */
 class Product extends ExtendProduct
 {
-    use IntegrationEntityTrait, ChannelEntityTrait;
+    use IntegrationEntityTrait;
 
     /*
      * FIELDS are duplicated to enable dataaudit only for customer fields

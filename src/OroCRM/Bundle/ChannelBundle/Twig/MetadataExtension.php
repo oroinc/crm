@@ -72,4 +72,9 @@ class MetadataExtension extends \Twig_Extension
     {
         return self::EXTENSION_NAME;
     }
+
+    public function getChannelTypeLabel()
+    {
+
+    }
 }

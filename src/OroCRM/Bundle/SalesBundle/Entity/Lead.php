@@ -17,7 +17,6 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
 
@@ -53,15 +52,12 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  *      },
  *      "dataaudit"={
  *          "auditable"=true
- *      },
- *      "grouping"={"groups"={"business"}}
+ *      }
  *  }
  * )
  */
 class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
 {
-    use ChannelEntityTrait;
-
     /**
      * @var integer
      *
