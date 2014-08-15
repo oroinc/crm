@@ -6,10 +6,10 @@
 {% block pageHeader %}
     {% if entity.id %}
         {% set breadcrumbs = {
-        'entity':      entity,
-        'indexPath':   path('orocrm_channel_index'),
-        'indexLabel':  'orocrm.channel.entity_plural_label'|trans,
-        'entityTitle': entity.name|default('N/A')
+            'entity':      entity,
+            'indexPath':   path('orocrm_channel_index'),
+            'indexLabel':  'orocrm.channel.entity_plural_label'|trans,
+            'entityTitle': entity.name|default('N/A')
         } %}
         {{ parent() }}
     {% else %}
