@@ -8,7 +8,7 @@ datagrid:
                     - c.id
                     - c.name
                     - c.channelType
-                    - CASE WHEN c.status = 1 THEN 'enabled' ELSE 'disabled' END as status
+                    - CASE WHEN c.status = true THEN 'enabled' ELSE 'disabled' END as status
                 from:
                     - { table: %orocrm_channel.entity.class%, alias: c }
                 groupBy: c.id
@@ -38,7 +38,7 @@ datagrid:
                     data_name: c.name
                 channelType:
                     type:      string
-                    data_name: channelType
+                    data_name: c.channelType
                 status:
                     data_name: c.status
                     type:      choice

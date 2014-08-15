@@ -41,7 +41,9 @@ class SettingsProvider
     public function getSettings($section = null)
     {
         if (null === $this->resolvedSettings) {
-            $settings = $this->resolvedSettings = $this->resolver->resolve($this->settings);
+            $settings
+                                                     =
+            $this->resolvedSettings = $this->resolver->resolve($this->settings);
             $this->resolvedSettings[self::DATA_PATH] = [];
             foreach ($settings[self::DATA_PATH] as $singleEntitySetting) {
                 $this->resolvedSettings[self::DATA_PATH][trim($singleEntitySetting['name'])] = $singleEntitySetting;
@@ -249,11 +251,7 @@ class SettingsProvider
      */
     public function isCustomerIdentityUserDefined($type)
     {
-        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
-
-        return isset($settings[$type]['is_customer_identity_user_defined'])
-            ? $settings[$type]['is_customer_identity_user_defined']
-            : true;
+        return $this->getChannelTypeConfig($type, 'is_customer_identity_user_defined');
     }
 
     /**
@@ -265,21 +263,25 @@ class SettingsProvider
      */
     public function getCustomerIdentityFromConfig($type)
     {
-        return $this->getChannelConfigBlock($type, 'customer_identity');
+        return $this->getChannelTypeConfig($type, 'customer_identity');
     }
 
     /**
-     * @param string $type
-     * @param string $block
+     * @param string      $type
+     * @param string|null $block
      *
      * @return mixed|null
      */
-    protected function getChannelConfigBlock($type, $block)
+    protected function getChannelTypeConfig($type, $block = null)
     {
         $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
 
-        return !empty($settings[$type][$block])
-            ? $settings[$type][$block]
-            : null;
+        if (null === $block) {
+            $config = isset($settings[$type]) ? $settings[$type] : null;
+        } else {
+            $config = isset($settings[$type], $settings[$type][$block]) ? $settings[$type][$block] : null;
+        }
+
+        return $config;
     }
 }

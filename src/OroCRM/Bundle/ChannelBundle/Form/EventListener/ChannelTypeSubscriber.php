@@ -31,8 +31,9 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FormEvents::PRE_SET_DATA => 'preSet',
-            FormEvents::PRE_SUBMIT   => 'preSubmit',
+            FormEvents::PRE_SET_DATA  => 'preSet',
+            FormEvents::POST_SET_DATA => 'postSet',
+            FormEvents::PRE_SUBMIT    => 'preSubmit',
         ];
     }
 
@@ -54,13 +55,38 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         $datasourceModifier = $this->getDatasourceModifierClosure($data->getChannelType());
         $datasourceModifier($form);
 
-        if (false === $this->settingsProvider->isCustomerIdentityUserDefined($data->getChannelType())) {
-            $customerIdentityValue   = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
-            $customerIdentityClosure = $this->getCustomerIdentityModifierClosure($customerIdentityValue);
-            $customerIdentityClosure($form);
+        if ($data->getChannelType()) {
+            $readOnly   = !$this->settingsProvider->isCustomerIdentityUserDefined($data->getChannelType());
+            $predefined = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
+
+            if ((!$data->getId() || $readOnly) && null !== $predefined) {
+                $data->setCustomerIdentity($predefined);
+
+                // also add to entities
+                $entities = $data->getEntities();
+                $entities = is_array($entities) ? $entities : [];
+                if (!in_array($predefined, $entities, true)) {
+                    $entities[] = $predefined;
+                    $data->setEntities($entities);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param FormEvent $event
+     */
+    public function postSet(FormEvent $event)
+    {
+        $form = $event->getForm();
+        /** @var Channel $data */
+        $data = $event->getData();
+
+        if ($data === null) {
+            return;
         }
 
-        if ($data && $data->getId()) {
+        if ($data->getId()) {
             FormUtils::replaceField(
                 $form,
                 'customerIdentity',
@@ -71,6 +97,11 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                 'channelType',
                 ['required' => false, 'disabled' => true]
             );
+        }
+
+        if ($data->getChannelType()) {
+            $readOnly = !$this->settingsProvider->isCustomerIdentityUserDefined($data->getChannelType());
+            FormUtils::replaceField($form, 'customerIdentity', ['read_only' => $readOnly]);
         }
     }
 
@@ -114,23 +145,30 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         };
     }
 
-    /**
-     * @param string $data
-     *
-     * @return callable
-     */
-    protected function getCustomerIdentityModifierClosure($data)
-    {
-        return function (FormInterface $form) use ($data) {
-            FormUtils::replaceField($form, 'customerIdentity', ['data' => $data, 'read_only' => true]);
-
-            // also add to entities
-            $entities = $form->get('entities')->getData();
-            $entities = is_array($entities) ? $entities : [];
-            if (!in_array($data, $entities, true)) {
-                $entities[] = $data;
-                FormUtils::replaceField($form, 'entities', ['data' => $entities]);
-            }
-        };
-    }
+//    /**
+//     * @param string $type
+//     *
+//     * @return callable
+//     */
+//    protected function getCustomerIdentityModifierClosure($type)
+//    {
+//        return function (FormInterface $form) use ($type) {
+//            if ((null !== $type)) {
+//
+//
+//
+//
+//                    $form->get('customerIdentity')->setData($data)
+//
+//                    // also add to entities
+//                    $entities = $form->get('entities')->getData();
+//                    $entities = is_array($entities) ? $entities : [];
+//                    if (!in_array($data, $entities, true)) {
+//                        $entities[] = $data;
+//                        FormUtils::replaceField($form, 'entities', ['data' => $entities]);
+//                    }
+//                }
+//            }
+//        };
+//    }
 }
