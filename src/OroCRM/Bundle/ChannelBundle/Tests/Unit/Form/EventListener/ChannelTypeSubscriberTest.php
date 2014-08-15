@@ -41,16 +41,58 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
      * @dataProvider formDataProviderForPreSet
      *
      * @param Channel|null $formData
-     * @param boolean $expected
+     * @param string       $channelType
+     * @param boolean      $isCustomerIdentityUserDefined
      */
-    public function testPreSet($formData, $expected)
+    public function testPreSet($formData, $channelType, $isCustomerIdentityUserDefined)
     {
-        $form = $this->factory->create('orocrm_channel_form');
-        $form->setData($formData);
-        $customerIdentity = $form->get('customerIdentity');
-        $channelType = $form->get('channelType');
-        $this->assertEquals($expected, $customerIdentity->isDisabled());
-        $this->assertEquals($expected, $channelType->isDisabled());
+        $events = $this->subscriber->getSubscribedEvents();
+        $this->assertArrayHasKey(FormEvents::PRE_SET_DATA, $events);
+        $this->assertEquals($events[FormEvents::PRE_SET_DATA], 'preSet');
+
+        $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
+        $data = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $fieldMock = $this->getMock('Symfony\Component\Form\Test\FormInterface');
+
+        $configMock = $this->getMock('Symfony\Component\Form\FormConfigInterface');
+
+
+        if ($formData) {
+
+            $form->expects($this->any())
+                ->method('get')
+                ->will($this->returnValue($fieldMock));
+
+            $configMock->expects($this->once())
+                ->method('getOptions')
+                ->will($this->returnValue([]));
+            $configMock->expects($this->once())
+                ->method('getType')
+                ->will($this->returnValue($configMock));
+            $configMock->expects($this->once())
+                ->method('getName')
+                ->will($this->returnValue($configMock));
+
+            $fieldMock->expects($this->any())
+                ->method('getConfig')
+                ->will($this->returnValue($configMock));
+
+            $data
+                ->expects($this->exactly(3))
+                ->method('getChannelType')
+                ->will($this->returnValue($channelType));
+
+            $this->settingsProvider
+                ->expects($this->once())
+                ->method('isCustomerIdentityUserDefined')
+                ->with($channelType)
+                ->will($this->returnValue($isCustomerIdentityUserDefined));
+        }
+
+        $event = new FormEvent($form, $formData);
+        $event->setData($data);
+
+        $this->subscriber->preSet($event);
     }
 
     /**
@@ -66,16 +108,14 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
 
         return [
             'without data' => [
-                'formData' => null,
-                'expected' => false
+                null,
+                'magento',
+                true
             ],
-            'with data update' => [
-                'formData' => $channelUpdate,
-                'expected' => true
-            ],
-            'with data new channel' => [
-                'formData' => $channel,
-                'expected' => false
+            'with data'    => [
+                $channel,
+                'magento',
+                false
             ]
         ];
     }
