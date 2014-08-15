@@ -38,8 +38,7 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
  *      },
  *      "workflow"={
  *          "active_workflow"="b2b_flow_sales_funnel"
- *      },
- *      "grouping"={"groups"={"business"}}
+ *      }
  *  }
  * )
  */

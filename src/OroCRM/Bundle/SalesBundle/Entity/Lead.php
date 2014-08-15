@@ -52,8 +52,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  *      },
  *      "dataaudit"={
  *          "auditable"=true
- *      },
- *      "grouping"={"groups"={"business"}}
+ *      }
  *  }
  * )
  */

@@ -17,7 +17,6 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -70,24 +69,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     public function load(ObjectManager $manager)
     {
         $this->initSupportingEntities($manager);
-        $this->loadFlows($this->getDataChannel());
-    }
-
-    /**
-     * @return Channel
-     * @throws \Exception
-     */
-    protected function getDataChannel()
-    {
-        /** @var Channel $channel */
-        $channel = $this->container->get('doctrine.orm.entity_manager')->getRepository('OroCRMChannelBundle:Channel')
-            ->findOneByName('default');
-
-        if (!$channel) {
-            throw new \Exception('"default" channel is not defined');
-        }
-
-        return $channel;
+        $this->loadFlows();
     }
 
     /**
@@ -104,10 +86,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
         $this->opportunities = $this->em->getRepository('OroCRMSalesBundle:Opportunity')->findAll();
     }
 
-    /**
-     * @param Channel $channel
-     */
-    protected function loadFlows(Channel $channel)
+    protected function loadFlows()
     {
         $randomUser = count($this->users) - 1;
 
@@ -117,14 +96,14 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
         foreach ($leads as $lead) {
             $user = $this->users[mt_rand(0, $randomUser)];
             $this->setSecurityContext($user);
-            $this->loadSalesFlows($this->leads[$lead], $user, $channel);
+            $this->loadSalesFlows($this->leads[$lead], $user);
         }
         $this->flush($this->em);
 
         foreach ($opportunities as $opportunity) {
             $user = $this->users[mt_rand(0, $randomUser)];
             $this->setSecurityContext($user);
-            $this->loadSalesFlows($this->opportunities[$opportunity], $user, $channel);
+            $this->loadSalesFlows($this->opportunities[$opportunity], $user);
         }
         $this->flush($this->em);
     }
@@ -132,9 +111,8 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     /**
      * @param Lead | Opportunity $entity
      * @param User $owner
-     * @param Channel $channel
      */
-    protected function loadSalesFlows($entity, $owner, $channel)
+    protected function loadSalesFlows($entity, $owner)
     {
         if ($entity instanceof Lead) {
             $step = 'start_from_lead';
@@ -151,7 +129,6 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
         ), $parameters);
 
         $salesFunnel = new SalesFunnel();
-        $salesFunnel->setDataChannel($channel);
 
         if (!$this->workflowManager->isStartTransitionAvailable(
             'b2b_flow_sales_funnel',
