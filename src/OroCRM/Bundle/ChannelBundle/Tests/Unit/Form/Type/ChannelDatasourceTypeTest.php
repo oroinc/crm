@@ -27,6 +27,7 @@ use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormSubscriber;
 
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType;
+use OroCRM\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension;
 
 class ChannelDatasourceTypeTest extends FormIntegrationTestCase
 {
@@ -89,6 +90,9 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
             new DefaultTranslator()
         );
 
+        $settingsProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
+            ->disableOriginalConstructor()->getMock();
+
         return [
             new PreloadedExtension(
                 [
@@ -106,7 +110,10 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
                             $this->getMock('Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface')
                         ),
                         new FormTypeValidatorExtension($validator),
-                        new TooltipFormExtension()
+                        new TooltipFormExtension(),
+                    ],
+                    'oro_integration_channel_form' => [
+                        new IntegrationTypeExtension($settingsProvider)
                     ]
                 ]
             )
