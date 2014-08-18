@@ -50,26 +50,23 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         $this->assertArrayHasKey(FormEvents::PRE_SET_DATA, $events);
         $this->assertEquals($events[FormEvents::PRE_SET_DATA], 'preSet');
 
-        $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-        $data = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
-        $fieldMock = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-
+        $form       = $this->getMock('Symfony\Component\Form\Test\FormInterface');
+        $data       = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $fieldMock  = $this->getMock('Symfony\Component\Form\Test\FormInterface');
         $configMock = $this->getMock('Symfony\Component\Form\FormConfigInterface');
 
-
         if ($formData) {
-
             $form->expects($this->any())
                 ->method('get')
                 ->will($this->returnValue($fieldMock));
 
-            $configMock->expects($this->once())
+            $configMock->expects($this->exactly(2))
                 ->method('getOptions')
                 ->will($this->returnValue([]));
-            $configMock->expects($this->once())
+            $configMock->expects($this->exactly(2))
                 ->method('getType')
                 ->will($this->returnValue($configMock));
-            $configMock->expects($this->once())
+            $configMock->expects($this->exactly(2))
                 ->method('getName')
                 ->will($this->returnValue($configMock));
 
@@ -77,8 +74,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
                 ->method('getConfig')
                 ->will($this->returnValue($configMock));
 
-            $data
-                ->expects($this->exactly(3))
+            $data->expects($this->exactly(3))
                 ->method('getChannelType')
                 ->will($this->returnValue($channelType));
 
@@ -148,7 +144,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
     protected function getExtensions()
     {
         $channelType = new ChannelType($this->settingsProvider, $this->subscriber);
-        $provider = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityProvider')
+        $provider    = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityProvider')
             ->disableOriginalConstructor()->getMock();
         $provider->expects($this->any())
             ->method('getEntities')
@@ -156,10 +152,10 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
                 $this->returnValue(
                     [
                         [
-                            'name'          => 'name',
-                            'label'         => 'label',
-                            'plural_label'  => 'plural_label',
-                            'icon'          => 'icon'
+                            'name'         => 'name',
+                            'label'        => 'label',
+                            'plural_label' => 'plural_label',
+                            'icon'         => 'icon'
                         ]
                     ]
                 )
@@ -167,11 +163,11 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         return [
             new PreloadedExtension(
                 [
-                    $channelType->getName() => $channelType,
-                    'orocrm_channel_entities' => new ChannelEntityType(),
+                    $channelType->getName()                  => $channelType,
+                    'orocrm_channel_entities'                => new ChannelEntityType(),
                     'orocrm_channel.form.type.entity_choice' => new ChannelEntityType($provider),
-                    'orocrm_channel_entity_choice_form' => new ChannelEntityType($provider),
-                    'genemu_jqueryselect2_choice' => new Select2Type('choice')
+                    'orocrm_channel_entity_choice_form'      => new ChannelEntityType($provider),
+                    'genemu_jqueryselect2_choice'            => new Select2Type('choice')
                 ],
                 []
             )
