@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Unit\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\ImportExport\Strategy\ContactAddOrReplaceStrategy;
 
@@ -160,9 +161,38 @@ class ContactAddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
+        $itemData = array(
+            'addresses' => array(
+                array('firstName' => 'John', 'types' => array(AddressType::TYPE_BILLING)),
+                array('firstName' => 'John'),
+            )
+        );
+        $expectedItemData = $itemData;
+        $expectedItemData['addresses'][1]['types'] = array();
+
+        $this->context->expects($this->any())->method('getValue')->with('itemData')
+            ->will($this->returnValue($itemData));
+        $this->context->expects($this->once())->method('setValue')
+            ->with($this->isType('string'), $this->isType('array'))
+            ->will(
+                $this->returnCallback(
+                    function ($key, $value) use ($expectedItemData) {
+                        $this->assertEquals('itemData', $key);
+                        $this->assertEquals($expectedItemData, $value);
+                    }
+                )
+            );
+        $contact = $this->getEntity();
+        $contact->expects($this->once())->method('setPrimaryAddress')
+            ->with($this->isInstanceOf('OroCRM\Bundle\ContactBundle\Entity\ContactAddress'));
+        $contact->expects($this->once())->method('setPrimaryEmail')
+            ->with($this->isInstanceOf('OroCRM\Bundle\ContactBundle\Entity\ContactEmail'));
+        $contact->expects($this->once())->method('setPrimaryPhone')
+            ->with($this->isInstanceOf('OroCRM\Bundle\ContactBundle\Entity\ContactPhone'));
+
         $this->strategy->setRegistry($this->registry);
         $this->strategy->setEntityName($class);
-        $this->strategy->process($this->getEntity());
+        $this->strategy->process($contact);
     }
 
     /**
@@ -178,7 +208,7 @@ class ContactAddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $returnValues
-     * @return Contact
+     * @return Contact|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getEntity($returnValues = true)
     {
@@ -229,6 +259,26 @@ class ContactAddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue(
                     $returnValues ? new ArrayCollection([$type]) : null
+                )
+            );
+
+        $contactEmail = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\ContactEmail');
+        $contact
+            ->expects($this->any())
+            ->method('getEmails')
+            ->will(
+                $this->returnValue(
+                    new ArrayCollection([$contactEmail])
+                )
+            );
+
+        $contactPhone = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\ContactPhone');
+        $contact
+            ->expects($this->any())
+            ->method('getPhones')
+            ->will(
+                $this->returnValue(
+                    new ArrayCollection([$contactPhone])
                 )
             );
 

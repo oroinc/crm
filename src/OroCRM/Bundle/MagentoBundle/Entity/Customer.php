@@ -267,6 +267,7 @@ class Customer extends ExtendCustomer
     {
         parent::__construct();
 
+        $this->carts  = new ArrayCollection();
         $this->orders = new ArrayCollection();
     }
 
