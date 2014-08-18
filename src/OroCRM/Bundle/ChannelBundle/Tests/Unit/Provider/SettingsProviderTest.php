@@ -203,8 +203,25 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
                             'belongs_to'   => ['integration' => 'test']
                         ]
                     ],
+                    'channel_types' => [
+                        'magento' => [
+                            'label' => 'Magento type',
+                            'entities' => [
+                                'OroCRM\Bundle\MagentoBundle\Entity\Cart',
+                                'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                                'OroCRM\Bundle\MagentoBundle\Entity\Order'
+                            ],
+                            'integration_type' => 'magento',
+                            'customer_identity' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                            'is_customer_identity_user_defined' => false
+                        ],
+                        'custom' => [
+                            'label' => 'Custom',
+                            'entities' => [],
+                        ]
+                    ],
                 ],
-                '$expectedResults' => ['test']
+                '$expectedResults' => ['magento']
             ]
         ];
     }

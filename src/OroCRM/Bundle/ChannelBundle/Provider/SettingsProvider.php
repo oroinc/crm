@@ -130,10 +130,12 @@ class SettingsProvider
         $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
         $types    = [];
 
-        foreach (array_keys($settings) as $channelTypeName) {
-            $integrationType = $this->getIntegrationType($channelTypeName);
-            if ($integrationType) {
-                $types[] = $integrationType;
+        if (is_array($settings)) {
+            foreach (array_keys($settings) as $channelTypeName) {
+                $integrationType = $this->getIntegrationType($channelTypeName);
+                if ($integrationType) {
+                    $types[] = $integrationType;
+                }
             }
         }
 
