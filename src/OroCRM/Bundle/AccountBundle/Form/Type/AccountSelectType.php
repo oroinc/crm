@@ -26,10 +26,12 @@ class AccountSelectType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'configs'      => [
+                'autocomplete_alias' => 'accounts',
+                'create_form_route'  => 'orocrm_account_create',
+                'entity_class'       => $this->className,
+                'configs'            => [
                     'placeholder' => 'orocrm.account.form.choose_account'
                 ],
-                'entity_class' => $this->className
             ]
         );
     }

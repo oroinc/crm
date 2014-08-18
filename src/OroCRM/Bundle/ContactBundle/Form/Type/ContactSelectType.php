@@ -26,12 +26,14 @@ class ContactSelectType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'configs'      => [
+                'autocomplete_alias' => 'contacts',
+                'create_form_route'  => 'orocrm_contact_create',
+                'entity_class'       => $this->className,
+                'configs'            => [
                     'placeholder'             => 'orocrm.contact.form.choose_contact',
                     'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
                     'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                 ],
-                'entity_class' => $this->className,
             ]
         );
     }

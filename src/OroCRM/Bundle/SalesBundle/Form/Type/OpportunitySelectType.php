@@ -26,10 +26,12 @@ class OpportunitySelectType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'configs'      => [
+                'autocomplete_alias' => 'opportunities',
+                'create_form_route'  => 'orocrm_sales_opportunity_create',
+                'entity_class'       => $this->className,
+                'configs'            => [
                     'placeholder' => 'orocrm.sales.form.choose_opportunity'
                 ],
-                'entity_class' => $this->className
             ]
         );
     }

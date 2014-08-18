@@ -53,9 +53,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *          },
  *          "form"={
  *              "form_type"="orocrm_contact_select",
- *              "autocomplete_alias"="contacts",
  *              "grid_name"="contacts-select-grid",
- *              "create_form_route"="orocrm_contact_create"
  *          },
  *          "dataaudit"={
  *              "auditable"=true
