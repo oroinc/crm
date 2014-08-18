@@ -43,9 +43,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  *          },
  *          "form"={
  *              "form_type"="orocrm_sales_opportunity_select",
- *              "autocomplete_alias"="opportunities",
  *              "grid_name"="sales-opportunity-grid",
- *              "create_form_route"="orocrm_sales_opportunity_create"
  *          },
  *          "dataaudit"={
  *              "auditable"=true

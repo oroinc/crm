@@ -49,9 +49,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  *          },
  *          "form"={
  *              "form_type"="orocrm_sales_lead_select",
- *              "autocomplete_alias"="leads",
  *              "grid_name"="sales-lead-grid",
- *              "create_form_route"="orocrm_sales_lead_create"
  *          },
  *          "dataaudit"={
  *              "auditable"=true

@@ -48,8 +48,6 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *          "form"={
  *              "form_type"="orocrm_account_select",
  *              "grid_name"="accounts-select-grid",
- *              "create_form_route"="orocrm_account_create",
- *              "autocomplete_alias"="accounts"
  *          },
  *          "dataaudit"={
  *              "auditable"=true
