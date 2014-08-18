@@ -6,10 +6,11 @@
     {{ form_widget(form) }}
 
     {% set options = {
-        idEl:   '#' ~ form.identifier.vars.id,
-        dataEl: '#' ~ form.data.vars.id,
-        typeEl: '#' ~ form.type.vars.id,
-        nameEl: '#' ~ form.name.vars.id,
+        idEl:           '#' ~ form.identifier.vars.id,
+        dataEl:         '#' ~ form.data.vars.id,
+        typeEl:         '#' ~ form.type.vars.id,
+        nameEl:         '#' ~ form.name.vars.id,
+        channelNameEl:  '#' ~ form.parent.name.vars.id
     } %}
 
     <div data-page-component-module="orocrmchannel/js/app/components/integration-widget"
