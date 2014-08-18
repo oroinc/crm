@@ -27,7 +27,7 @@ class ChannelTest extends AbstractEntityTestCase
         $customerIdentity = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\EntityName', [], ['phone']);
         $status           = true;
         $channelType      = 'Custom';
-        $dt        = new \DateTime();
+        $someDateTime     = new \DateTime();
 
         return [
             'name'                     => ['name', $name, $name],
@@ -37,8 +37,8 @@ class ChannelTest extends AbstractEntityTestCase
             'status'                   => ['status', $status, $status],
             'customerIdentity'         => ['customerIdentity', $customerIdentity, $customerIdentity],
             'channelType'              => ['channelType', $channelType, $channelType],
-            'createdAt'                => ['createdAt', $dt, $dt],
-            'updatedAt'                => ['updatedAt', $dt, $dt]
+            'createdAt'                => ['createdAt', $someDateTime, $someDateTime],
+            'updatedAt'                => ['updatedAt', $someDateTime, $someDateTime]
         ];
     }
 
