@@ -2,10 +2,11 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Datagrid;
 
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
+
 use Symfony\Bridge\Doctrine\RegistryInterface;
+
+use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 
 class GridMarketingListTypeProvider
 {

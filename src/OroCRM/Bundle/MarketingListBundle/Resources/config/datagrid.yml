@@ -29,7 +29,7 @@ datagrid:
             listType:
                 label:          orocrm.marketinglist.type.label
                 type:           translatable
-                choices:        @orocrm_marketing_list.datagrid.marketing_list_type.provider->getListTypeChoices\
+                choices:        @orocrm_marketing_list.datagrid.marketing_list_type.provider->getListTypeChoices
             createdAt:
                 label:          orocrm.marketinglist.created_at.label
                 frontend_type:  date
