@@ -20,12 +20,11 @@ class UpdateGroupWithOrganization extends UpdateWithOrganization implements Depe
     }
 
     /**
-     * Update groups data with default organization
-     *
-     * @param \Doctrine\Common\Persistence\ObjectManager $manager
+     * {@inheritDoc}
      */
     public function load(ObjectManager $manager)
     {
         $this->update($manager, 'OroCRMContactBundle:Group');
+        $this->update($manager, 'OroCRMContactBundle:Contact');
     }
 }
