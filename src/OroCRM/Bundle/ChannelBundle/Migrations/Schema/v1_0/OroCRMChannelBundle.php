@@ -31,6 +31,8 @@ class OroCRMChannelBundle implements Migration
         $table->addColumn('status', 'boolean', ['notnull' => true]);
         $table->addColumn('channel_type', 'string', ['notnull' => true]);
         $table->addColumn('customer_identity', 'string', ['notnull' => true]);
+        $table->addColumn('createdAt', 'datetime', ['notnull' => true]);
+        $table->addColumn('updatedAt', 'datetime', ['notnull' => false]);
 
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_owner_id'], 'IDX_AEA90B929124A35B', []);
