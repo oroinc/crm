@@ -27,6 +27,7 @@ class ChannelTest extends AbstractEntityTestCase
         $customerIdentity = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\EntityName', [], ['phone']);
         $status           = true;
         $channelType      = 'Custom';
+        $someDateTime     = new \DateTime();
 
         return [
             'name'                     => ['name', $name, $name],
@@ -35,7 +36,9 @@ class ChannelTest extends AbstractEntityTestCase
             'dataSource nullable data' => ['dataSource', null, null],
             'status'                   => ['status', $status, $status],
             'customerIdentity'         => ['customerIdentity', $customerIdentity, $customerIdentity],
-            'channelType'              => ['channelType', $channelType, $channelType]
+            'channelType'              => ['channelType', $channelType, $channelType],
+            'createdAt'                => ['createdAt', $someDateTime, $someDateTime],
+            'updatedAt'                => ['updatedAt', $someDateTime, $someDateTime]
         ];
     }
 
@@ -89,5 +92,25 @@ class ChannelTest extends AbstractEntityTestCase
         }
 
         return $collection;
+    }
+
+    public function testPrePersist()
+    {
+        $this->assertNull($this->entity->getCreatedAt());
+
+        $this->entity->prePersist();
+
+        $this->assertInstanceOf('DateTime', $this->entity->getCreatedAt());
+        $this->assertLessThan(3, $this->entity->getCreatedAt()->diff(new \DateTime())->s);
+    }
+
+    public function testPreUpdate()
+    {
+        $this->assertNull($this->entity->getUpdatedAt());
+
+        $this->entity->preUpdate();
+
+        $this->assertInstanceOf('DateTime', $this->entity->getUpdatedAt());
+        $this->assertLessThan(3, $this->entity->getUpdatedAt()->diff(new \DateTime())->s);
     }
 }

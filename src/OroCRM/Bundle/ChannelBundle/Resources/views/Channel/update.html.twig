@@ -26,26 +26,6 @@
 {% endblock pageHeader %}
 
 {% block navButtons %}
-    {% if entity.id %}
-        {% if entity.status %}
-            {{ UI.button({
-                'aCss':  'btn-danger',
-                'iCss':  'icon-remove',
-                'label': 'orocrm.channel.button.deactivate.label',
-                'path':  path('orocrm_channel_change_status', {'id' : entity.id, 'backRoute': 'orocrm_channel_update'}),
-                'title': 'orocrm.channel.button.deactivate.label',
-            }) }}
-        {% else %}
-            {{ UI.button({
-                'aCss':  'btn-success',
-                'iCss':  'icon-ok',
-                'label': 'orocrm.channel.button.activate.label',
-                'path':  path('orocrm_channel_change_status', {'id' : entity.id, 'backRoute': 'orocrm_channel_update'}),
-                'title': 'orocrm.channel.button.activate.label',
-            }) }}
-        {% endif %}
-    {% endif %}
-
     {% if entity.id and resource_granted('DELETE', entity) %}
         {{ UI.deleteButton({
             'dataUrl': path('orocrm_api_delete_channel', {'id': entity.id}),
@@ -88,10 +68,11 @@
             'subblocks': [{
                 'title': '',
                 'data':  [
+                    form_row(form.status),
                     form_row(form.name),
                     form_row(form.channelType),
                     form.dataSource is defined ? form_row(form.dataSource) : '',
-                    form_row(form.customerIdentity),
+                    form_row(form.customerIdentity)
                 ]
             }]
         },

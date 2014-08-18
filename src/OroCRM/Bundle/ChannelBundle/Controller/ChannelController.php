@@ -102,14 +102,13 @@ class ChannelController extends Controller
 
     /**
      * @Route(
-     *      "/status/change/{id}/{backRoute}",
+     *      "/status/change/{id}",
      *      requirements={"id"="\d+"},
-     *      defaults={"backRoute"="orocrm_channel_view"},
      *      name="orocrm_channel_change_status"
      *  )
      * @AclAncestor("orocrm_channel_update")
      */
-    public function changeStatusAction(Channel $channel, $backRoute)
+    public function changeStatusAction(Channel $channel)
     {
         if ($channel->getStatus() == Channel::STATUS_ACTIVE) {
             $message = 'orocrm.channel.controller.message.status.deactivated';
@@ -130,7 +129,7 @@ class ChannelController extends Controller
 
         return $this->redirect(
             $this->generateUrl(
-                $backRoute,
+                'orocrm_channel_view',
                 [
                     'id' => $channel->getId(),
                     '_enableContentProviders' => 'mainMenu'
