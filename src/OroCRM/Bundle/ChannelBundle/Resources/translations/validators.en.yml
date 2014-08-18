@@ -2,3 +2,4 @@ orocrm:
     channel:
         form:
             customer_identity_selected_not_correctly.label: Customer identity selected not correctly
+            integration_selected_not_correctly.label: Integration is not selected, please choose the integration
