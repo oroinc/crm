@@ -24,6 +24,10 @@ class ChannelType extends AbstractType
     /** @var ChannelTypeSubscriber */
     protected $channelTypeSubscriber;
 
+    /**
+     * @param SettingsProvider      $settingsProvider
+     * @param ChannelTypeSubscriber $channelTypeSubscriber
+     */
     public function __construct(SettingsProvider $settingsProvider, ChannelTypeSubscriber $channelTypeSubscriber)
     {
         $this->settingsProvider      = $settingsProvider;
