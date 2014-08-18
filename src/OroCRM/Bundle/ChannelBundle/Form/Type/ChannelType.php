@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Form\Type;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
@@ -11,6 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 use OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 
@@ -66,7 +66,7 @@ class ChannelType extends AbstractType
         );
         $builder->add(
             'status',
-            'genemu_jqueryselect2_choice',
+            'choice',
             [
                 'choices'  => [
                     Channel::STATUS_INACTIVE    => 'orocrm.channel.inactive.label',
@@ -74,7 +74,6 @@ class ChannelType extends AbstractType
                 ],
                 'required' => true,
                 'label'    => 'orocrm.channel.status.label',
-                'configs'  => ['placeholder' => 'orocrm.channel.form.select_channel_status.label'],
             ]
         );
     }
