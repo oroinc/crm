@@ -30,10 +30,14 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
 
         $this->settingsProvider->expects($this->any())
             ->method('getEntitiesByChannelType')
-            ->will($this->returnValue([
+            ->will(
+                $this->returnValue(
+                    [
                         'OroCRM\Bundle\AcmeBundle\Entity\Test1',
                         'OroCRM\Bundle\AcmeBundle\Entity\Test2'
-                    ]));
+                    ]
+                )
+            );
         $this->subscriber = new ChannelTypeSubscriber($this->settingsProvider);
         parent::setUp();
     }
