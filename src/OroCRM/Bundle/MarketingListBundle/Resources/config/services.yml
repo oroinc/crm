@@ -23,3 +23,9 @@ services:
         arguments:
             - "orocrm_marketing_list_form"
             - "orocrm_marketing_list"
+
+    orocrm_marketing_list.marketing_list.manager.api:
+        class: %orocrm_campaign.campaign.manager.api.class%
+        arguments:
+            - %orocrm_marketing_list.entity.class%
+            - @doctrine.orm.entity_manager
