@@ -9,8 +9,9 @@ define(['backbone'], function (Backbone) {
      */
     return Backbone.Model.extend({
         defaults: {
-            name : null,
-            label: null
+            name :   null,
+            label:   null,
+            actions: []
         }
     });
 });
