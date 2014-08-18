@@ -133,7 +133,7 @@ function (_, Backbone, __, routing, DialogWidget) {
                 data = this._getValue('data'),
                 route = entityId ? 'orocrm_channel_integration_update' : 'orocrm_channel_integration_create',
                 type = this._getValue('type'),
-                params = {};
+                params = {test: 111};
 
             if (data) {
                 params.data = data;

@@ -1,16 +1,18 @@
-<tr data-cid="<%= cid %>">
-    <td class="name-cell"><%= label %></td>
-    <td class="action-cell" style="width: 100px;">
+<tr data-cid="<%- cid %>">
+    <td class="name-cell"><i class="<%= icon %> hide-text"></i>&nbsp;<%- label %></td>
+    <td class="action-cell">
         <% _.each(actions, function(action) { %>
             <a href="<%= action.url ? action.url: 'javascript: void(0);' %>"
-                class="action no-hash"
+                class="action <% if (!action.url) { %>no-hash<% } %>"
                 <% if (!action.url && action.collectionAction) { %>
                     data-collection-action="<%= action.collectionAction %>""
+                <% } %> title="<%- __(action.title) %>">
+
+                <% if (action.icon) { %>
+                    <i class="<%= action.icon %> hide-text"></i>
                 <% } else { %>
-                    target="_blank"
+                    <%- __(action.title) %>
                 <% } %>
-                title="<%= __(action.title) %>">
-                <i class="<%= action.icon %> hide-text"></i>
             </a>
         <% }) %>
     </td>
