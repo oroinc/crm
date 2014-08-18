@@ -49,7 +49,8 @@ define([
         var $el = $(selector);
 
         $el.select2({
-            placeholder: __('orocrm.channel.form.select_customer_identity'),
+            placeholder:     __('orocrm.channel.form.select_customer_identity'),
+            formatNoMatches: function () { return __('There is no entities selected'); },
             data: function () {
                 var data = {
                     more: false,

@@ -10,7 +10,10 @@ define(function (require) {
         EntityModel = require('./model'),
         componentTemplate = require('text!./templates/component.html'),
         entityTemplate = require('text!./templates/entity-item.html'),
-        formTemplate = require('text!./templates/form.html');
+        formTemplate = require('text!./templates/form.html'),
+        entitySelectResultTemplate = require('text!./templates/select2/result.html'),
+        entitySelectSelectionTemplate = require('text!./templates/select2/selection.html'),
+        select2Config = require('oroform/js/select2-config');
 
     require('oroui/js/items-manager/editor');
     require('oroui/js/items-manager/table');
@@ -119,24 +122,45 @@ define(function (require) {
          * @private
          */
         _initializeForm: function () {
-            this.$formContainer.find('[data-purpose="entity-selector"]').select2({
-                placeholder: __('orocrm.channel.form.entity'),
+            var configurator = new select2Config({
+                placeholder:        __('orocrm.channel.form.entity'),
+                result_template:    entitySelectResultTemplate,
+                selection_template: entitySelectSelectionTemplate,
                 data: _.bind(function () {
-                    var notSelected = _.filter(this.options.metadata, _.bind(function(entityMetadata) {
-                        return !this.collection.findWhere({name: entityMetadata.name});
-                    }, this)),
+                    var notSelected = _.omit(this.options.metadata, this.collection.pluck('name')),
+                        options = _.map(notSelected, function(entityMetadata) {
+                            return {
+                                id: entityMetadata.name,
+                                text: entityMetadata.label,
+                                icon: entityMetadata.icon,
+                                type: entityMetadata.type
+                            };
+                        }),
+                        optionGroups = _.groupBy(options, function(entityMetadata) {
+                            return entityMetadata.type;
+                        }),
+                        results = [];
 
-                        choices = _.map(notSelected, function(entityMetadata) {
-                            return {id: entityMetadata.name, text: entityMetadata.label};
+                    _.each(_.keys(optionGroups).sort().reverse(), function(groupName) {
+                        results.push({
+                            text: __('orocrm.channel.entity_owner.' + groupName),
+                            icon: null,
+                            children: optionGroups[groupName]
                         });
+                    });
 
-                    return {more: false, results: choices};
+                    return {results: results};
                 }, this)
             });
 
-            this.$formContainer.itemsManagerEditor({
-                collection: this.collection
-            });
+            this.$formContainer
+                .find('[data-purpose="entity-selector"]')
+                    .select2(configurator.getConfig())
+                    .trigger('select2-init')
+                .end()
+                .itemsManagerEditor({
+                    collection: this.collection
+                });
         },
 
         /**
@@ -146,7 +170,7 @@ define(function (require) {
          */
         _initializeList: function () {
             this.$listContainer.find('tbody').itemsManagerTable({
-                collection: this.collection,
+                collection:   this.collection,
                 itemTemplate: this.itemTemplate,
                 itemRender: function itemRenderer(template, data) {
                     var context = _.extend({__: __}, data);
