@@ -103,8 +103,6 @@ services:
 
     orocrm_sales.form.type.opportunity_select:
         class: %orocrm_sales.form.type.opportunity_select.class%
-        arguments:
-            - %orocrm_sales.opportunity.class%
         tags:
             - { name: form.type, alias: orocrm_sales_opportunity_select }
 
@@ -115,8 +113,6 @@ services:
 
     orocrm_sales.form.type.lead_select:
         class: %orocrm_sales.form.type.lead_select.class%
-        arguments:
-            - %orocrm_sales.lead.entity.class%
         tags:
             - { name: form.type, alias: "orocrm_sales_lead_select" }
 

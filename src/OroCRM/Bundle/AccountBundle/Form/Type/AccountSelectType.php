@@ -7,19 +7,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class AccountSelectType extends AbstractType
 {
     /**
-     * @var string
-     */
-    protected $className;
-
-    /**
-     * @param string $className
-     */
-    public function __construct($className)
-    {
-        $this->className = $className;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -28,7 +15,6 @@ class AccountSelectType extends AbstractType
             [
                 'autocomplete_alias' => 'accounts',
                 'create_form_route'  => 'orocrm_account_create',
-                'entity_class'       => $this->className,
                 'configs'            => [
                     'placeholder' => 'orocrm.account.form.choose_account'
                 ],

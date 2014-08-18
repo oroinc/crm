@@ -7,19 +7,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class OpportunitySelectType extends AbstractType
 {
     /**
-     * @var string
-     */
-    protected $className;
-
-    /**
-     * @param string $className
-     */
-    public function __construct($className)
-    {
-        $this->className = $className;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -28,7 +15,6 @@ class OpportunitySelectType extends AbstractType
             [
                 'autocomplete_alias' => 'opportunities',
                 'create_form_route'  => 'orocrm_sales_opportunity_create',
-                'entity_class'       => $this->className,
                 'configs'            => [
                     'placeholder' => 'orocrm.sales.form.choose_opportunity'
                 ],

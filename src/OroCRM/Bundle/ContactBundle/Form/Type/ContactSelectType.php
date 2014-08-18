@@ -7,19 +7,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class ContactSelectType extends AbstractType
 {
     /**
-     * @var string
-     */
-    protected $className;
-
-    /**
-     * @param string $className
-     */
-    public function __construct($className)
-    {
-        $this->className = $className;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -28,7 +15,6 @@ class ContactSelectType extends AbstractType
             [
                 'autocomplete_alias' => 'contacts',
                 'create_form_route'  => 'orocrm_contact_create',
-                'entity_class'       => $this->className,
                 'configs'            => [
                     'placeholder'             => 'orocrm.contact.form.choose_contact',
                     'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
