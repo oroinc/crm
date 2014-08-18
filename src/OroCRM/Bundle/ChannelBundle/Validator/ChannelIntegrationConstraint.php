@@ -14,8 +14,11 @@ class ChannelIntegrationConstraint extends Constraint
         return self::CLASS_CONSTRAINT;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function validatedBy()
     {
-        return 'alias_name';
+        return 'orocrm_channel.validator.channel_integration';
     }
 }

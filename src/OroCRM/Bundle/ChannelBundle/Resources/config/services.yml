@@ -198,4 +198,4 @@ services:
         arguments:
             - @orocrm_channel.provider.settings_provider
         tags:
-            - { name: validator.constraint_validator, alias: alias_name }
+            - { name: validator.constraint_validator, alias: orocrm_channel.validator.channel_integration }
