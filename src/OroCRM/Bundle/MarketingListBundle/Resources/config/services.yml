@@ -2,6 +2,7 @@ parameters:
     orocrm_marketing_list.entity.class:  OroCRM\Bundle\MarketingListBundle\Entity\MarketingList
     orocrm_marketing_list.datagrid.marketing_list_type.provider.class: OroCRM\Bundle\MarketingListBundle\Datagrid\GridMarketingListTypeProvider
     orocrm_marketing_list.form.type.marketing_list.class: OroCRM\Bundle\MarketingListBundle\Form\Type\MarketingListType
+    orocrm_marketing_list.form.type.marketing_list_segment.class: OroCRM\Bundle\MarketingListBundle\Form\Type\MarketingListSegmentType
 
 services:
     orocrm_marketing_list.entity_provider:

@@ -1,6 +1,6 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{#{% import 'OroQueryDesignerBundle::macros.html.twig' as QD %}#}
-{#{% import 'OroSegmentBundle::macros.html.twig' as segmentQD %}#}
+{% import 'OroQueryDesignerBundle::macros.html.twig' as QD %}
+{% import 'OroSegmentBundle::macros.html.twig' as segmentQD %}
 
 {% oro_title_set({params : {"%marketing_list.name%": entity.name} }) %}
 {% set formAction = form.vars.value.id ? path('orocrm_marketing_list_update', { 'id': form.vars.value.id }) : path('orocrm_marketing_list_create')  %}
@@ -94,55 +94,51 @@
         }]
     %}
 
-    {#{% set dataBlocks = dataBlocks|merge( [{#}
-        {#'title' : 'oro.segment.form.designer'|trans,#}
-        {#'content_attr': {'id': 'segment-designer'},#}
-        {#'subblocks': [#}
-            {#{#}
-                {#'title': 'oro.segment.form.columns'|trans,#}
-                {#'spanClass': 'segment-columns responsive-cell',#}
-                {#'data': [#}
-                    {#QD.query_designer_column_form(#}
-                        {#form.column,#}
-                        {#{'id': 'segment-column-form'},#}
-                        {#{'entity_choice_id': 'oro_segment_form_entity'},#}
-                        {#['column', 'label', 'sorting', 'action']#}
-                    {#),#}
-                    {#QD.query_designer_column_list(#}
-                        {#{'id': 'segment-column-list', 'rowId': 'segment-column-row'},#}
-                        {#['column', 'label', 'sorting', 'action']#}
-                    {#),#}
-                {#]#}
-            {#},#}
-            {#{#}
-                {#'title': 'oro.segment.form.filters'|trans,#}
-                {#'spanClass': 'segment-filters responsive-cell',#}
-                {#'data': [#}
-                    {#segmentQD.query_designer_condition_builder({#}
-                        {#'id': 'segment-condition-builder',#}
-                        {#'criteria_list_id': 'filter-criteria-list',#}
-                        {#'entity_choice_id': 'oro_segment_form_entity',#}
-                        {#'currentSegmentId': entity.id|default(null),#}
-                        {#'page_limit': constant('\\Oro\\Bundle\\SegmentBundle\\Entity\\Manager\\SegmentManager::PER_PAGE')#}
-                    {#})#}
-                {#]#}
-            {#},#}
-        {#]#}
-    {#}] ) %}#}
+    {% set type = 'orocrm_marketing_list' %}
+    {% set dataBlocks = dataBlocks|merge( [{
+        'title' : 'oro.segment.form.designer'|trans,
+        'content_attr': {'id': type ~ '-designer'},
+        'subblocks': [
+            {
+                'title': 'oro.segment.form.columns'|trans,
+                'spanClass': type ~ '-columns responsive-cell',
+                'data': [
+                    QD.query_designer_column_form(
+                        form.column,
+                        {'id': type ~ '-column-form'},
+                        {'entity_choice_id': 'orocrm_marketing_list_form_entity'},
+                        ['column', 'label', 'sorting', 'action']
+                    ),
+                    QD.query_designer_column_list(
+                        {'id': type ~ '-column-list', 'rowId': type ~ '-column-row'},
+                        ['column', 'label', 'sorting', 'action']
+                    ),
+                ]
+            },
+            {
+                'title': 'oro.segment.form.filters'|trans,
+                'spanClass': type ~  '-filters responsive-cell',
+                'data': [
+                    segmentQD.query_designer_condition_builder({
+                        'id': type ~ '-condition-builder',
+                        'criteria_list_id': 'filter-criteria-list',
+                        'entity_choice_id': 'orocrm_marketing_list_form_entity',
+                        'currentSegmentId': entity.id|default(null),
+                        'page_limit': constant('\\Oro\\Bundle\\SegmentBundle\\Entity\\Manager\\SegmentManager::PER_PAGE')
+                    })
+                ]
+            },
+        ]
+    }] ) %}
 
-    {#{% set data = {#}
-        {#'formErrors': form_errors(form)? form_errors(form) : null,#}
-        {#'dataBlocks': dataBlocks,#}
-        {#'hiddenData': form_widget(form.definition)#}
-    {#} %}#}
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
-        'dataBlocks': dataBlocks
+        'dataBlocks': dataBlocks,
+        'hiddenData': form_widget(form.definition)
     } %}
 
     {{ UI.scrollData(id, data, form) }}
 
-    {#{{ QD.query_designer_column_chain_template('column-chain-template') }}#}
-    {#{{ segmentQD.initJsWidgets('segment', form, entities, metadata) }}#}
-
+    {{ QD.query_designer_column_chain_template('column-chain-template') }}
+    {{ segmentQD.initJsWidgets(type, form, entities, metadata) }}
 {% endblock content_data %}

@@ -558,4 +558,30 @@ class MarketingList
 
         return $this;
     }
+
+    /**
+     * Get this segment definition in YAML format
+     *
+     * @return string
+     */
+    public function getDefinition()
+    {
+        if ($this->segment) {
+            return $this->segment->getDefinition();
+        }
+
+        return null;
+    }
+
+    /**
+     * Set this segment definition in YAML format
+     *
+     * @param string $definition
+     */
+    public function setDefinition($definition)
+    {
+        if ($this->segment) {
+            $this->segment->setDefinition($definition);
+        }
+    }
 }
