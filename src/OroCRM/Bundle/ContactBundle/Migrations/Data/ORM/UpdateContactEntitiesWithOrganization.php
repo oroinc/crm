@@ -7,7 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\UpdateWithOrganization;
 
-class UpdateGroupWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
+class UpdateContactEntitiesWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
 {
     /**
      * {@inheritdoc}
