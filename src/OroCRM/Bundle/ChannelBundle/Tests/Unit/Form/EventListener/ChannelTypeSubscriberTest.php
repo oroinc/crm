@@ -28,6 +28,12 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         $this->settingsProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
 
+        $this->settingsProvider->expects($this->any())
+            ->method('getEntitiesByChannelType')
+            ->will($this->returnValue([
+                        'OroCRM\Bundle\AcmeBundle\Entity\Test1',
+                        'OroCRM\Bundle\AcmeBundle\Entity\Test2'
+                    ]));
         $this->subscriber = new ChannelTypeSubscriber($this->settingsProvider);
         parent::setUp();
     }
@@ -51,7 +57,6 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         $this->assertEquals($events[FormEvents::PRE_SET_DATA], 'preSet');
 
         $form       = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-        $data       = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
         $fieldMock  = $this->getMock('Symfony\Component\Form\Test\FormInterface');
         $configMock = $this->getMock('Symfony\Component\Form\FormConfigInterface');
 
@@ -60,22 +65,17 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
                 ->method('get')
                 ->will($this->returnValue($fieldMock));
 
-            $configMock->expects($this->exactly(2))
-                ->method('getOptions')
-                ->will($this->returnValue([]));
-            $configMock->expects($this->exactly(2))
-                ->method('getType')
-                ->will($this->returnValue($configMock));
-            $configMock->expects($this->exactly(2))
-                ->method('getName')
-                ->will($this->returnValue($configMock));
-
             $fieldMock->expects($this->any())
                 ->method('getConfig')
                 ->will($this->returnValue($configMock));
 
-            $data->expects($this->exactly(3))
+            $formData->expects($this->exactly(5))
                 ->method('getChannelType')
+                ->will($this->returnValue($channelType));
+
+            $this->settingsProvider
+                ->expects($this->once())
+                ->method('getIntegrationType')
                 ->will($this->returnValue($channelType));
 
             $this->settingsProvider
@@ -86,7 +86,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         }
 
         $event = new FormEvent($form, $formData);
-        $event->setData($data);
+        $event->setData($formData);
 
         $this->subscriber->preSet($event);
     }
