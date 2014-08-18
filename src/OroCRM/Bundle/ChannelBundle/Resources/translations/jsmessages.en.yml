@@ -4,6 +4,9 @@
 "Entity":                        "Entity"
 "Add":                           "Add"
 "Cancel":                        "Cancel"
+"View":                          "View"
+"Edit":                          "Edit"
+"Delete":                        "Delete"
 "There is no entities selected": "There is no entities selected"
 
 orocrm:

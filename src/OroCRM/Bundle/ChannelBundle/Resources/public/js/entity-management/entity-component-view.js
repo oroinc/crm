@@ -25,7 +25,6 @@ define(function (require) {
      * @extends Backbone.View
      */
     return Backbone.View.extend({
-
         /**
          * Widget mode constants
          *
@@ -149,37 +148,11 @@ define(function (require) {
             this.$listContainer.find('tbody').itemsManagerTable({
                 collection: this.collection,
                 itemTemplate: this.itemTemplate,
-                itemRender: _.bind(function itemRenderer(template, data) {
-                    var context,
-                        actions = [];
-
-                    if (data.view_link) {
-                        actions.push({
-                            title: 'View',
-                            icon:  'icon-eye-open',
-                            url:   data.view_link
-                        });
-                    }
-                    if (data.edit_link) {
-                        actions.push({
-                            title: 'Edit',
-                            icon:  'icon-edit',
-                            url:   data.edit_link
-                        });
-                    }
-
-                    if ((!data.readonly) && this.options.mode === modes.EDIT_MODE) {
-                        actions.push({
-                            collectionAction: 'delete',
-                            title: 'Delete',
-                            icon: 'icon-trash'
-                        });
-                    }
-
-                   context = _.extend({__: __}, data, {actions: actions});
+                itemRender: function itemRenderer(template, data) {
+                    var context = _.extend({__: __}, data);
 
                     return template(context);
-                }, this),
+                },
                 deleteHandler: _.partial(function (collection, model, data) {
                     collection.remove(model);
                 }, this.collection)
@@ -222,9 +195,29 @@ define(function (require) {
          */
         _prepareModelAttributes: function (model) {
             var entityName = model.get('name'),
-                entityMetadata = this.options.metadata[entityName] || {};
+                entityMetadata = this.options.metadata[entityName] || {},
+                actions = [];
 
-            return _.defaults(entityMetadata, {name: entityName, label: entityName});
+            if ((!model.get('readonly')) && this.options.mode === modes.EDIT_MODE) {
+                actions.push({
+                    collectionAction: 'delete',
+                    title: 'Delete',
+                    icon: 'icon-trash'
+                });
+            } else if (this.options.mode === modes.VIEW_MODE) {
+                actions.push({
+                    title: 'View',
+                    icon:  'icon-eye-open',
+                    url:   entityMetadata.view_link
+                });
+                actions.push({
+                    title: 'Edit',
+                    icon:  'icon-edit',
+                    url:   entityMetadata.edit_link
+                });
+            }
+
+            return _.defaults(entityMetadata, {name: entityName, label: entityName, actions: actions});
         },
 
         /**
