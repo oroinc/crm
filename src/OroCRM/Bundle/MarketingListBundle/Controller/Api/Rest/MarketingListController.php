@@ -11,7 +11,6 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 
 /**
