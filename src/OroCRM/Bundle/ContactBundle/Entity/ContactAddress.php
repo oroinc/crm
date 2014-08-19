@@ -60,7 +60,8 @@ class ContactAddress extends AbstractTypedAddress
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "excluded"=true
+     *              "order"=200,
+     *              "short"=true
      *          }
      *      }
      * )
