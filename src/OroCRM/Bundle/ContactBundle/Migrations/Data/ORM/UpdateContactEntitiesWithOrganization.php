@@ -7,7 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\UpdateWithOrganization;
 
-class UpdateGroupWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
+class UpdateContactEntitiesWithOrganization extends UpdateWithOrganization implements DependentFixtureInterface
 {
     /**
      * {@inheritdoc}
@@ -20,12 +20,11 @@ class UpdateGroupWithOrganization extends UpdateWithOrganization implements Depe
     }
 
     /**
-     * Update groups data with default organization
-     *
-     * @param \Doctrine\Common\Persistence\ObjectManager $manager
+     * {@inheritDoc}
      */
     public function load(ObjectManager $manager)
     {
         $this->update($manager, 'OroCRMContactBundle:Group');
+        $this->update($manager, 'OroCRMContactBundle:Contact');
     }
 }

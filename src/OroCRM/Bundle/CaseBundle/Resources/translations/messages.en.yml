@@ -57,6 +57,7 @@ orocrm:
             updated_by.label:               Updated By
             owner.label:                    Owner
             id.label:                       Id
+            organization.label:             Organization
 
             action:
                 add: Add Comment
