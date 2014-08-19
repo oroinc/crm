@@ -75,8 +75,8 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             // pre-fill entities for new instances
             if (!$data->getId()) {
                 $channelTypeEntities = $this->settingsProvider->getEntitiesByChannelType($data->getChannelType());
-                $entities = $data->getEntities();
-                $entities = is_array($entities) ? $entities : [];
+                $entities            = $data->getEntities();
+                $entities            = is_array($entities) ? $entities : [];
                 $data->setEntities(array_unique(array_merge($entities, $channelTypeEntities)));
             }
         }
@@ -144,9 +144,9 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                         'dataSource',
                         'orocrm_channel_datasource_form',
                         [
-                            'label'    => 'orocrm.channel.data_source.label',
-                            'type'     => $integrationType,
-                            'required' => true,
+                            'label'          => 'orocrm.channel.data_source.label',
+                            'type'           => $integrationType,
+                            'required'       => true,
                             'error_bubbling' => false
                         ]
                     );
