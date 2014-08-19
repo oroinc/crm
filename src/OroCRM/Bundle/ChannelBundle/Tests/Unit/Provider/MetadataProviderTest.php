@@ -115,22 +115,16 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
     }
 
-    public function testGetIntegrationEntities()
+    public function tearDown()
     {
-        /** @var MetadataProvider $provider */
-        $provider = new MetadataProvider(
-            $this->settingsProvider,
+        unset(
+            $this->router,
             $this->entityProvider,
             $this->configManager,
-            $this->router
+            $this->settingsProvider,
+            $this->entityConfigModel1,
+            $this->entityConfigModel2
         );
-
-        $result = $provider->getIntegrationEntities();
-
-        $expectedResult = ['OroCRM\Bundle\TestBundle1\Entity\Entity1', 'OroCRM\Bundle\TestBundle2\Entity\Entity2'];
-        $this->assertArrayHasKey('testIntegrationType', $result);
-        $this->assertCount(2, $result['testIntegrationType']);
-        $this->assertSame($expectedResult, $result['testIntegrationType']);
     }
 
     public function testGetEntitiesMetadata()
@@ -145,12 +139,28 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getEntity')
             ->will($this->returnvalue($this->entityConfig3));
 
-        $this->configManager->expects($this->at(0))
+        $extendConfigModel = $this->getMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
+        $extendConfigModel->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo('owner'))
+            ->will($this->returnValue('Custom'));
+
+        $extendProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
+            ->disableOriginalConstructor()->getMock();
+        $extendProvider->expects($this->once())
+            ->method('map')
+            ->will($this->returnValue([]));
+        $extendProvider->expects($this->any())
+            ->method('getConfig')
+            ->will($this->returnValue($extendConfigModel));
+
+        $this->configManager->expects($this->any())
+            ->method('getProvider')
+            ->with($this->equalTo('extend'))
+            ->will($this->returnValue($extendProvider));
+        $this->configManager->expects($this->any())
             ->method('getConfigEntityModel')
-            ->will($this->returnvalue($this->entityConfigModel1));
-        $this->configManager->expects($this->at(1))
-            ->method('getConfigEntityModel')
-            ->will($this->returnvalue($this->entityConfigModel2));
+            ->will($this->onConsecutiveCalls($this->entityConfigModel1, $this->entityConfigModel2));
 
         $this->router->expects($this->exactly(4))
             ->method('generate');
@@ -185,6 +195,7 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
         $result['entity_id'] = $this->$entityId;
         $result['edit_link'] = null;
         $result['view_link'] = null;
+        $result['type']      = 'Custom';
 
         return $result;
     }

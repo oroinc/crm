@@ -18,3 +18,6 @@ orocrm:
             text: Are you sure you want to change type?
             title: Change Type
             agree: Yes, I Agree
+        entity_owner:
+            System: System
+            Custom: Custom

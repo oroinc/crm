@@ -41,9 +41,7 @@ class SettingsProvider
     public function getSettings($section = null)
     {
         if (null === $this->resolvedSettings) {
-            $settings
-                                                     =
-            $this->resolvedSettings = $this->resolver->resolve($this->settings);
+            $settings = $this->resolvedSettings = $this->resolver->resolve($this->settings);
             $this->resolvedSettings[self::DATA_PATH] = [];
             foreach ($settings[self::DATA_PATH] as $singleEntitySetting) {
                 $this->resolvedSettings[self::DATA_PATH][trim($singleEntitySetting['name'])] = $singleEntitySetting;
@@ -130,10 +128,12 @@ class SettingsProvider
         $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
         $types    = [];
 
-        foreach (array_keys($settings) as $channelTypeName) {
-            $integrationType = $this->getIntegrationType($channelTypeName);
-            if ($integrationType) {
-                $types[] = $integrationType;
+        if (is_array($settings)) {
+            foreach (array_keys($settings) as $channelTypeName) {
+                $integrationType = $this->getIntegrationType($channelTypeName);
+                if ($integrationType) {
+                    $types[] = $integrationType;
+                }
             }
         }
 

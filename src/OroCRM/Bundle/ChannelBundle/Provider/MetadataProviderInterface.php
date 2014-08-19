@@ -12,5 +12,5 @@ interface MetadataProviderInterface
     /**
      * @return array
      */
-    public function getIntegrationEntities();
+    public function getChannelTypeMetadata();
 }

@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\ChannelBundle\Provider;
 
 use Symfony\Component\Routing\RouterInterface;
 
+use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityBundle\Provider\EntityProvider;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
@@ -47,15 +49,16 @@ class MetadataProvider implements MetadataProviderInterface
     {
         $result = [];
 
-        foreach ($this->settings->getSettings(SettingsProvider::DATA_PATH) as $setting) {
-            $entityConfig      = $this->entityProvider->getEntity($setting['name'], true);
-            $configEntityModel = $this->configManager->getConfigEntityModel($setting['name']);
+        foreach ($this->getChannelEntities() as $entityName) {
+            $entityConfig      = $this->entityProvider->getEntity($entityName, true);
+            $extendConfig      = $this->configManager->getProvider('extend')->getConfig($entityName);
+            $configEntityModel = $this->configManager->getConfigEntityModel($entityName);
 
             if ($configEntityModel instanceof EntityConfigModel) {
                 $entityConfig = array_merge($entityConfig, $this->getEntityLinks($configEntityModel));
             }
 
-            $result[$setting['name']] = $entityConfig;
+            $result[$entityName] = array_merge($entityConfig, ['type' => $extendConfig->get('owner')]);
         }
 
         return $result;
@@ -64,19 +67,36 @@ class MetadataProvider implements MetadataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getIntegrationEntities()
+    public function getChannelTypeMetadata()
     {
-        $result = [];
+        return $this->settings->getChannelTypeChoiceList();
+    }
 
-        foreach ($this->settings->getSettings(SettingsProvider::DATA_PATH) as $setting) {
-            $integration = isset($setting['belongs_to']['integration']) ? $setting['belongs_to']['integration'] : false;
-            if (false !== $integration) {
-                $result[$integration]   = isset($result[$integration]) ? $result[$integration] : [];
-                $result[$integration][] = $setting['name'];
+    /**
+     * @return array
+     */
+    protected function getChannelEntities()
+    {
+        $customEntities = $this->configManager->getProvider('extend')->map(
+            function (ConfigInterface $extendConfig) {
+                $isCustom
+                    = $extendConfig->is('is_extend')
+                    && $extendConfig->get('owner') === ExtendScope::OWNER_CUSTOM
+                    && $extendConfig->in('state', [ExtendScope::STATE_ACTIVE, ExtendScope::STATE_UPDATED]);
+
+                return $isCustom ? $extendConfig->getId()->getClassName() : false;
             }
-        }
+        );
+        $customEntities = array_filter($customEntities);
 
-        return $result;
+        $entities = array_map(
+            function ($setting) {
+                return $setting['name'];
+            },
+            $this->settings->getSettings(SettingsProvider::DATA_PATH)
+        );
+
+        return array_unique(array_merge($customEntities, $entities));
     }
 
     /**

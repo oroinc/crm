@@ -28,6 +28,16 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         $this->settingsProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
 
+        $this->settingsProvider->expects($this->any())
+            ->method('getEntitiesByChannelType')
+            ->will(
+                $this->returnValue(
+                    [
+                        'OroCRM\Bundle\AcmeBundle\Entity\Test1',
+                        'OroCRM\Bundle\AcmeBundle\Entity\Test2'
+                    ]
+                )
+            );
         $this->subscriber = new ChannelTypeSubscriber($this->settingsProvider);
         parent::setUp();
     }
@@ -50,36 +60,26 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         $this->assertArrayHasKey(FormEvents::PRE_SET_DATA, $events);
         $this->assertEquals($events[FormEvents::PRE_SET_DATA], 'preSet');
 
-        $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-        $data = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
-        $fieldMock = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-
+        $form       = $this->getMock('Symfony\Component\Form\Test\FormInterface');
+        $fieldMock  = $this->getMock('Symfony\Component\Form\Test\FormInterface');
         $configMock = $this->getMock('Symfony\Component\Form\FormConfigInterface');
 
-
         if ($formData) {
-
             $form->expects($this->any())
                 ->method('get')
                 ->will($this->returnValue($fieldMock));
-
-            $configMock->expects($this->once())
-                ->method('getOptions')
-                ->will($this->returnValue([]));
-            $configMock->expects($this->once())
-                ->method('getType')
-                ->will($this->returnValue($configMock));
-            $configMock->expects($this->once())
-                ->method('getName')
-                ->will($this->returnValue($configMock));
 
             $fieldMock->expects($this->any())
                 ->method('getConfig')
                 ->will($this->returnValue($configMock));
 
-            $data
-                ->expects($this->exactly(3))
+            $formData->expects($this->exactly(5))
                 ->method('getChannelType')
+                ->will($this->returnValue($channelType));
+
+            $this->settingsProvider
+                ->expects($this->once())
+                ->method('getIntegrationType')
                 ->will($this->returnValue($channelType));
 
             $this->settingsProvider
@@ -90,7 +90,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         }
 
         $event = new FormEvent($form, $formData);
-        $event->setData($data);
+        $event->setData($formData);
 
         $this->subscriber->preSet($event);
     }
@@ -148,7 +148,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
     protected function getExtensions()
     {
         $channelType = new ChannelType($this->settingsProvider, $this->subscriber);
-        $provider = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityProvider')
+        $provider    = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityProvider')
             ->disableOriginalConstructor()->getMock();
         $provider->expects($this->any())
             ->method('getEntities')
@@ -156,10 +156,10 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
                 $this->returnValue(
                     [
                         [
-                            'name'          => 'name',
-                            'label'         => 'label',
-                            'plural_label'  => 'plural_label',
-                            'icon'          => 'icon'
+                            'name'         => 'name',
+                            'label'        => 'label',
+                            'plural_label' => 'plural_label',
+                            'icon'         => 'icon'
                         ]
                     ]
                 )
@@ -167,11 +167,11 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         return [
             new PreloadedExtension(
                 [
-                    $channelType->getName() => $channelType,
-                    'orocrm_channel_entities' => new ChannelEntityType(),
+                    $channelType->getName()                  => $channelType,
+                    'orocrm_channel_entities'                => new ChannelEntityType(),
                     'orocrm_channel.form.type.entity_choice' => new ChannelEntityType($provider),
-                    'orocrm_channel_entity_choice_form' => new ChannelEntityType($provider),
-                    'genemu_jqueryselect2_choice' => new Select2Type('choice')
+                    'orocrm_channel_entity_choice_form'      => new ChannelEntityType($provider),
+                    'genemu_jqueryselect2_choice'            => new Select2Type('choice')
                 ],
                 []
             )

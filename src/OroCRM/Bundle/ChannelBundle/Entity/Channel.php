@@ -128,8 +128,8 @@ class Channel
 
     public function __construct()
     {
-        $this->status       = self::STATUS_INACTIVE;
-        $this->entities     = new ArrayCollection();
+        $this->status   = self::STATUS_INACTIVE;
+        $this->entities = new ArrayCollection();
     }
 
     /**
@@ -293,7 +293,6 @@ class Channel
 
     /**
      * @param \DateTime $createdAt
-     * @return Channel
      */
     public function setCreatedAt(\DateTime $createdAt)
     {
@@ -310,7 +309,6 @@ class Channel
 
     /**
      * @param \DateTime $updatedAt
-     * @return Channel
      */
     public function setUpdatedAt(\DateTime $updatedAt)
     {
@@ -330,7 +328,7 @@ class Channel
      */
     public function prePersist()
     {
-        $this->createdAt  = $this->createdAt ? $this->createdAt : new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->createdAt = $this->createdAt ? $this->createdAt : new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
