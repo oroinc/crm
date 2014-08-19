@@ -30,6 +30,11 @@ function (_, Backbone, __, routing, DialogWidget) {
         $nameEl: null,
 
         /**
+         * @type {jQuery}
+         */
+        $channelNameEl: null,
+
+        /**
          * @type {function(object):string} linkTemplate
          */
         linkTemplate: _.template(
