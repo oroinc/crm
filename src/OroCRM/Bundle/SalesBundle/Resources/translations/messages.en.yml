@@ -97,6 +97,7 @@ orocrm:
             lead.label:           Lead
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
+            organization.label:   Organization
 
             datagrid:
                 view: View
@@ -147,6 +148,7 @@ orocrm:
             workflow_step.label:  Step
             information:          Lead Information
             campaign.label:       Campaign
+            organization.label:   Organization
 
             extend_source:
                 unclassified:     Unclassified
