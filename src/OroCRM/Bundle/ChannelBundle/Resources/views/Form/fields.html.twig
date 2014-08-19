@@ -3,9 +3,11 @@
 {% endblock %}
 
 {% block orocrm_channel_datasource_form_widget %}
-    {{ form_widget(form) }}
+    {% set attr = attr|merge({'class': (attr.class is defined ? attr.class ~ ' ' : '') ~ 'orocrm-channel-datasource-field' }) %}
+    {{ form_widget(form, { 'attr': attr }) }}
 
     {% set options = {
+        el:             '#' ~ form.vars.id,
         idEl:           '#' ~ form.identifier.vars.id,
         dataEl:         '#' ~ form.data.vars.id,
         typeEl:         '#' ~ form.type.vars.id,

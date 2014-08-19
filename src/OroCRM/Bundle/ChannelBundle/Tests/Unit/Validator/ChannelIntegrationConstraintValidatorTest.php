@@ -2,19 +2,26 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Validator;
 
-use OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator;
-use OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraint;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraint;
+use OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator;
 
 class ChannelIntegrationConstraintValidatorTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var SettingsProvider */
+    /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $provider;
 
     public function setUp()
     {
         $this->provider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
+    }
+
+    public function tearDown()
+    {
+        unset($this->provider);
     }
 
     /**
@@ -30,10 +37,10 @@ class ChannelIntegrationConstraintValidatorTest extends \PHPUnit_Framework_TestC
     /**
      * @dataProvider validItemsDataProvider
      *
-     * @param boolean $isValid
-     * @param string $integrationType
+     * @param boolean          $isValid
+     * @param null|Integration $integration
      */
-    public function testValidateValid($isValid, $integrationType)
+    public function testValidateValid($isValid, $integration)
     {
         $channel = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
             ->disableOriginalConstructor()->getMock();
@@ -47,7 +54,7 @@ class ChannelIntegrationConstraintValidatorTest extends \PHPUnit_Framework_TestC
         $channel
             ->expects($this->once())
             ->method('getDataSource')
-            ->will($this->returnValue($integrationType));
+            ->will($this->returnValue($integration));
 
         $this->provider
             ->expects($this->once())
@@ -67,16 +74,19 @@ class ChannelIntegrationConstraintValidatorTest extends \PHPUnit_Framework_TestC
         $validator->validate($channel, $constraint);
     }
 
+    /**
+     * @return array
+     */
     public function validItemsDataProvider()
     {
         return [
             'valid'   => [
-                'isValid'          => true,
-                'integration'      => 'testType',
+                '$isValid'     => true,
+                '$integration' => new Integration(),
             ],
             'invalid' => [
-                'isValid'          => false,
-                'integration'      => null,
+                '$isValid'     => false,
+                '$integration' => null,
             ],
         ];
     }

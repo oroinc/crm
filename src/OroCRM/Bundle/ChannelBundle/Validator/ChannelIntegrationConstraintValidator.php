@@ -11,9 +11,6 @@ use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelIntegrationConstraintValidator extends ConstraintValidator
 {
-    /** @var Constraint */
-    protected $constraint;
-
     /** @var SettingsProvider */
     protected $provider;
 
@@ -34,8 +31,6 @@ class ChannelIntegrationConstraintValidator extends ConstraintValidator
             throw new UnexpectedTypeException($value, 'Channel');
         }
 
-        $this->constraint = $constraint;
-
         $this->validateIntegration($value);
     }
 
@@ -44,7 +39,7 @@ class ChannelIntegrationConstraintValidator extends ConstraintValidator
      */
     protected function validateIntegration(Channel $channel)
     {
-        $errorLabel      = 'orocrm.channel.form.integration_selected_not_correctly.label';
+        $errorLabel      = 'orocrm.channel.form.integration_invalid.label';
         $field           = 'dataSource';
         $integrationType = $this->provider->getIntegrationType($channel->getChannelType());
 
