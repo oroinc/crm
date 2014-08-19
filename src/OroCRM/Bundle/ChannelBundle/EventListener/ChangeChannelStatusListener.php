@@ -8,8 +8,8 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
+use OroCRM\Bundle\ChannelBundle\Event\AbstractEvent;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
 
 class ChangeChannelStatusListener
 {
@@ -25,9 +25,9 @@ class ChangeChannelStatusListener
     }
 
     /**
-     * @param ChannelChangeStatusEvent $event
+     * @param AbstractEvent $event
      */
-    public function onChannelStatusChange(ChannelChangeStatusEvent $event)
+    public function onChannelStatusChange(AbstractEvent $event)
     {
         /** @var Channel $channel */
         $channel    = $event->getChannel();

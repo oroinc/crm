@@ -248,7 +248,7 @@ class Channel
      */
     public function setStatus($status)
     {
-        $this->status = $status;
+        $this->status = (bool) $status;
     }
 
     /**
@@ -256,7 +256,7 @@ class Channel
      */
     public function getStatus()
     {
-        return $this->status;
+        return (bool) $this->status;
     }
 
     /**
