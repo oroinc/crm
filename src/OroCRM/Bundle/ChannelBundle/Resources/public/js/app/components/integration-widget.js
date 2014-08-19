@@ -1,5 +1,5 @@
-define(['underscore', 'backbone', 'orotranslation/js/translator', 'routing', 'oro/dialog-widget'],
-function (_, Backbone, __, routing, DialogWidget) {
+define(['underscore', 'backbone', 'orotranslation/js/translator', 'routing', 'oro/dialog-widget', 'text!./template/integration-widget-link.html'],
+function (_, Backbone, __, routing, DialogWidget, linkTemplate) {
     'use strict';
 
     var $ = Backbone.$;
@@ -37,14 +37,7 @@ function (_, Backbone, __, routing, DialogWidget) {
         /**
          * @type {function(object):string} linkTemplate
          */
-        linkTemplate: _.template(
-            '<% if (name) {%>' +
-                ' <%= name %> (<a href="javascript: void(0);" class="no-hash form-element-text" data-purpose="open-form-widget"><%= title %></a>)' +
-                '<a href="javascript: void(0);" class="no-hash"><i class="icon-remove" data-purpose="remove-integration-data"></i></a>' +
-            '<% } else { %>' +
-                '<a href="javascript: void(0);" class="no-hash form-element-text" data-purpose="open-form-widget"><%= title %></a>' +
-            '<% } %>'
-        ),
+        linkTemplate: _.template(linkTemplate),
 
         /**
          * @type {Object.<string, *>}
@@ -125,7 +118,11 @@ function (_, Backbone, __, routing, DialogWidget) {
                 title: name ? __('configure') : __('Configure integration')
             };
 
-            this.$el.html(this.linkTemplate(templateContext))
+            this.$el
+                .find('.integration-widget-link-container')
+                    .remove()
+                .end()
+                .append(this.linkTemplate(templateContext));
         },
 
         /**
@@ -236,7 +233,7 @@ function (_, Backbone, __, routing, DialogWidget) {
         var view = new IntegrationWidgetView(options);
         view.render();
 
-        options._sourceElement.html(view.$el);
+        options._sourceElement.remove();
 
         return view;
     }

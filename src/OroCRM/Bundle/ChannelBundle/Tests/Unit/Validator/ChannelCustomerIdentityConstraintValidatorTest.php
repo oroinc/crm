@@ -19,6 +19,10 @@ class ChannelCustomerIdentityConstraintValidatorTest extends \PHPUnit_Framework_
 
     /**
      * @dataProvider validItemsDataProvider
+     *
+     * @param array   $entities
+     * @param string  $customerIdentity
+     * @param boolean $isValid
      */
     public function testValidateValid(array $entities, $customerIdentity, $isValid)
     {

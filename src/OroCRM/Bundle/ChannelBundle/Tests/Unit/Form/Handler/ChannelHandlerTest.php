@@ -5,9 +5,10 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Handler;
 use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
@@ -15,6 +16,8 @@ use OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelHandler;
 
 class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    const TEST_NAME = 'name';
+
     /** @var \PHPUnit_Framework_MockObject_MockObject|FormInterface */
     protected $form;
 
@@ -108,5 +111,69 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->assertTrue($this->handler->process($this->entity));
+    }
+
+
+    /**
+     * @dataProvider formViewDataProvider
+     *
+     * @param bool $isUpdateMode
+     */
+    public function testGetFormView($isUpdateMode)
+    {
+        $this->request->query->set(ChannelHandler::UPDATE_MARKER, $isUpdateMode);
+
+        $form = $this->form;
+        if ($isUpdateMode) {
+            $form        = $this->getMock('Symfony\Component\Form\Test\FormInterface');
+            $formConfig  = $this->getMock('Symfony\Component\Form\FormConfigInterface');
+            $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+            $formType    = $this->getMock('Symfony\Component\Form\ResolvedFormTypeInterface');
+
+            $formConfig->expects($this->once())->method('getFormFactory')
+                ->will($this->returnValue($formFactory));
+            $formConfig->expects($this->once())->method('getType')
+                ->will($this->returnValue($formType));
+            $formType->expects($this->once())->method('getName')
+                ->will($this->returnValue('type' . self::TEST_NAME));
+            $this->form->expects($this->once())->method('getName')
+                ->will($this->returnValue('form' . self::TEST_NAME));
+            $this->form->expects($this->once())->method('getConfig')
+                ->will($this->returnValue($formConfig));
+
+            $formFactory->expects($this->once())->method('createNamed')
+                ->will($this->returnValue($form));
+        }
+
+        $form->expects($this->once())->method('createView')
+            ->will($this->returnValue($this->getFormView()));
+
+        $this->assertInstanceOf('Symfony\Component\Form\FormView', $this->handler->getFormView());
+    }
+
+    /**
+     * @return array
+     */
+    public function formViewDataProvider()
+    {
+        return [
+            'update mode, should recreate form'       => ['$isUpdateMode' => true],
+            'regular mode, should return origin form' => ['$isUpdateMode' => false],
+        ];
+    }
+
+    /**
+     * @return FormView
+     */
+    protected function getFormView()
+    {
+        $rootView       = new FormView();
+        $connectorsView = new FormView($rootView);
+        $typeView       = new FormView($rootView);
+
+        $rootView->children['connectors'] = $connectorsView;
+        $rootView->children['type']       = $typeView;
+
+        return $rootView;
     }
 }

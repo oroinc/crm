@@ -67,19 +67,9 @@ class MetadataProvider implements MetadataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getIntegrationEntities()
+    public function getChannelTypeMetadata()
     {
-        $result = [];
-
-        foreach ($this->settings->getSettings(SettingsProvider::DATA_PATH) as $setting) {
-            $integration = isset($setting['belongs_to']['integration']) ? $setting['belongs_to']['integration'] : false;
-            if (false !== $integration) {
-                $result[$integration]   = isset($result[$integration]) ? $result[$integration] : [];
-                $result[$integration][] = $setting['name'];
-            }
-        }
-
-        return $result;
+        return $this->settings->getChannelTypeChoiceList();
     }
 
     /**
