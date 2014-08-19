@@ -6,7 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\UpdateWithOrganization;
 
-class UpdateCaseWithOrganization extends UpdateWithOrganization
+class UpdateCaseEntitiesWithOrganization extends UpdateWithOrganization
 {
     /**
      * {@inheritDoc}
@@ -14,5 +14,6 @@ class UpdateCaseWithOrganization extends UpdateWithOrganization
     public function load(ObjectManager $manager)
     {
         $this->update($manager, 'OroCRMCaseBundle:CaseEntity');
+        $this->update($manager, 'OroCRMCaseBundle:CaseComment');
     }
 }
