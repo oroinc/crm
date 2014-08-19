@@ -4,13 +4,12 @@ namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 
-use OroCRM\Bundle\ChannelBundle\Event\AbstractEvent;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
+use OroCRM\Bundle\ChannelBundle\Event\AbstractEvent;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
 
 class ChangeChannelStatusListener
 {
