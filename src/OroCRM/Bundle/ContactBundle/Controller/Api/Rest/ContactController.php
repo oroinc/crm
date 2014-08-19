@@ -339,6 +339,8 @@ class ContactController extends RestController implements ClassResourceInterface
 
     /**
      * @param Contact $contact
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function fixRequest($contact)
     {
@@ -366,6 +368,25 @@ class ContactController extends RestController implements ClassResourceInterface
             $contactData['removeAccounts'] = $removeAccounts;
             unset($contactData['accounts']);
 
+            $this->getRequest()->request->set($formAlias, $contactData);
+        }
+        // just a temporary workaround till new API is implemented
+        // to convert full country name to country code
+        if (array_key_exists('addresses', $contactData)) {
+            foreach ($contactData['addresses'] as &$address) {
+                if (!empty($address['country'])) {
+                    $countryRepo = $this->get('doctrine.orm.entity_manager')->getRepository('OroAddressBundle:Country');
+                    $country = $countryRepo->createQueryBuilder('c')
+                        ->select('c.iso2Code')
+                        ->where('c.name = :name')
+                        ->setParameter('name', $address['country'])
+                        ->getQuery()
+                        ->getArrayResult();
+                    if (!empty($country)) {
+                        $address['country'] = $country[0]['iso2Code'];
+                    }
+                }
+            }
             $this->getRequest()->request->set($formAlias, $contactData);
         }
     }
