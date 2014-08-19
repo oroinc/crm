@@ -45,13 +45,14 @@ class ChannelIntegrationConstraintValidator extends ConstraintValidator
     protected function validateIntegration(Channel $channel)
     {
         $errorLabel      = 'orocrm.channel.form.integration_selected_not_correctly.label';
+        $field           = 'dataSource';
         $integrationType = $this->provider->getIntegrationType($channel->getChannelType());
 
         if (!empty($integrationType)) {
             $integration = $channel->getDataSource();
 
             if (empty($integration)) {
-                $this->context->addViolation($errorLabel);
+                $this->context->addViolationAt($field, $errorLabel);
             }
         }
     }
