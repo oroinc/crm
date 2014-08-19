@@ -15,7 +15,7 @@ use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusines
 class ChannelControllerTest extends WebTestCase
 {
     const CHANNEL_NAME = 'some name';
-    const GRID_NAME    = 'channels-grid';
+    const GRID_NAME    = 'orocrm-channels-grid';
 
     public function setUp()
     {
@@ -29,11 +29,15 @@ class ChannelControllerTest extends WebTestCase
     {
         $organization = $this->getOrganization();
         $crawler      = $this->client->request('GET', $this->getUrl('orocrm_channel_create'));
+        $name         = 'Simple channel';
         $form         = $crawler->selectButton('Save and Close')->form();
+        $channelType  = 'custom';
 
-        $name                               = 'Simple channel';
-        $form['orocrm_channel_form[name]']  = $name;
-        $form['orocrm_channel_form[owner]'] = $organization->getId();
+        $form['orocrm_channel_form[name]']             = $name;
+        $form['orocrm_channel_form[channelType]']      = $channelType;
+        $form['orocrm_channel_form[owner]']            = $organization->getId();
+        $form['orocrm_channel_form[customerIdentity]'] = 'test1';
+        $form['orocrm_channel_form[entities]']         = json_encode(['test1', 'test2']);
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -41,22 +45,36 @@ class ChannelControllerTest extends WebTestCase
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains('Channel saved', $crawler->html());
 
-        return compact('name', 'organization');
+        return compact('name', 'channelType');
     }
 
     /**
-     * @depends testCreate
+     * @depends testCreateChannel
      */
-    public function testView($id)
+    public function testView($data)
     {
+        $response = $this->client->requestGrid(
+            self::GRID_NAME,
+            [
+                self::GRID_NAME . '[_filter][name][value]' => $data['name']
+            ]
+        );
+
+        $gridResult  = $this->getJsonResponseContent($response, 200);
+        $gridResult  = reset($gridResult['data']);
+        $id          = $gridResult['id'];
+
         $crawler = $this->client->request(
             'GET',
             $this->getUrl('orocrm_channel_view', array('id' => $id))
         );
 
         $result = $this->client->getResponse();
+
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Account_name_update - Accounts - Customers", $crawler->html());
+        $this->assertContains('Channels', $crawler->html());
+        $this->assertContains($data['name'], $crawler->html());
+        $this->assertContains($data['channelType'], $crawler->html());
     }
 
     /**

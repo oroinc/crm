@@ -20,11 +20,16 @@ class LoadChannel extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         $this->em = $manager;
+        $date = new \DateTime('now');
 
         $channel = new Channel();
         $channel->setName('some name');
         $channel->setOwner($this->loadOwner());
         $channel->setChannelType('testType');
+        $channel->setCreatedAt($date);
+        $channel->setUpdatedAt($date);
+        $channel->setCustomerIdentity('test1');
+        $channel->setEntities(['test1', 'test2']);
 
         $manager->persist($channel);
 

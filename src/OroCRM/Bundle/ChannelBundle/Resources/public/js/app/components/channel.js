@@ -46,39 +46,48 @@ define([
      * @param {Object.<Backbone.Collection>} entitiesCollection
      */
     function initializeCustomerIdentityComponent(selector, entitiesCollection) {
-        var $el = $(selector);
+        var $el = $(selector),
+            lockSelectedIdentity = function(value) {
+                var selected = entitiesCollection.findWhere({name: value});
 
-        $el.select2({
-            placeholder: __('orocrm.channel.form.select_customer_identity'),
-            data: function () {
-                var data = {
-                    more: false,
-                    results: []
-                };
+                selected && selected.set('readonly', true);
+            },
+            readOnlyMode = $el.is('[data-disabled]');
 
-                data.results = entitiesCollection.map(function (model) {
-                    return {id: model.get('name'), text: model.get('label')};
-                });
+        if (!readOnlyMode) {
+            $el.select2({
+                placeholder:     __('orocrm.channel.form.select_customer_identity'),
+                formatNoMatches: function () { return __('There is no entities selected'); },
+                data: function () {
+                    var data = {
+                        more: false,
+                        results: []
+                    };
 
-                return data;
-            }
-        });
+                    data.results = entitiesCollection.map(function (model) {
+                        return {id: model.get('name'), text: model.get('label')};
+                    });
 
-        entitiesCollection.on('add remove reset', function ensureCustomerIdentityInSync() {
-            var value = $el.val();
-
-            if (value) {
-                if (!entitiesCollection.findWhere({name: value})) {
-                    $el.select2('val', '');
+                    return data;
                 }
-            }
-        });
+            });
+
+            entitiesCollection.on('add remove reset', function ensureCustomerIdentityInSync() {
+                var value = $el.val();
+
+                if (value) {
+                    if (!entitiesCollection.findWhere({name: value})) {
+                        $el.select2('val', '');
+                    }
+                }
+            });
+        }
 
         // lock model if predefined identity
         if ("readonly" === $el.attr('readonly')) {
-            _.each(entitiesCollection.where({name: $el.val()}), function(model) {
-                model.set('readonly', true);
-            });
+            lockSelectedIdentity($el.val());
+        } else if (readOnlyMode) {
+            lockSelectedIdentity($el.data('value'));
         }
     }
 
@@ -140,5 +149,7 @@ define([
         initializeEntityComponent(options.channelEntitiesEl, options.entitiesMetadata);
         initializeCustomerIdentityComponent(options.customerIdentityEl, entitiesCollection);
         initializeChannelTypeComponent(options.channelTypeEl, options.fields);
+
+        options._sourceElement.remove();
     }
 });

@@ -10,9 +10,6 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class ChannelCustomerIdentityConstraintValidator extends ConstraintValidator
 {
-    /** @var Constraint */
-    protected $constraint;
-
     /**
      * {@inheritdoc}
      */
@@ -21,8 +18,6 @@ class ChannelCustomerIdentityConstraintValidator extends ConstraintValidator
         if (!($value instanceof Channel)) {
             throw new UnexpectedTypeException($value, 'Channel');
         }
-
-        $this->constraint = $constraint;
 
         $this->validateCustomerIdentity($value);
     }

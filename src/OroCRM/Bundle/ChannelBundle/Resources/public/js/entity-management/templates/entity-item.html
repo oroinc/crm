@@ -1,11 +1,18 @@
-<tr>
-    <td class="name-cell"><%= label %></td>
+<tr data-cid="<%- cid %>">
+    <td class="name-cell"><i class="<%= icon %> hide-text"></i>&nbsp;<%- label %></td>
     <td class="action-cell">
         <% _.each(actions, function(action) { %>
             <a href="<%= action.url ? action.url: 'javascript: void(0);' %>"
-               <% if (!action.url && action.dataPurpose) { %> class="no-hash" data-purpose="<%= __(action.dataPurpose) %>" <% } %>
-               title="<%= __(action.title) %>">
-                <i class="<%= action.icon %> hide-text"></i>
+                class="action <% if (!action.url) { %>no-hash<% } %>"
+                <% if (!action.url && action.collectionAction) { %>
+                    data-collection-action="<%= action.collectionAction %>""
+                <% } %> title="<%- __(action.title) %>">
+
+                <% if (action.icon) { %>
+                    <i class="<%= action.icon %> hide-text"></i>
+                <% } else { %>
+                    <%- __(action.title) %>
+                <% } %>
             </a>
         <% }) %>
     </td>

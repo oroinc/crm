@@ -102,58 +102,6 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider belongsToIntegrationConfigProvider
-     *
-     * @param string $entityName
-     * @param array  $config
-     * @param bool   $expectedResult
-     */
-    public function testBelongsToIntegration($entityName, $config, $expectedResult)
-    {
-        $this->assertSame(
-            $expectedResult,
-            $this->getSettingsProvider($config)->belongsToIntegration($entityName)
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function belongsToIntegrationConfigProvider()
-    {
-        return [
-            'empty config, entity is not channel related'                            => [
-                self::TEST_ENTITY_NAME,
-                ['entity_data' => []],
-                false
-            ],
-            'config given, entity is in config, but does not belongs to integration' => [
-                self::TEST_ENTITY_NAME,
-                [
-                    'entity_data' => [
-                        ['name' => self::TEST_ENTITY_NAME, 'dependent' => [], 'dependencies' => []]
-                    ]
-                ],
-                false
-            ],
-            'config given, entity belongs to integration' => [
-                self::TEST_ENTITY_NAME,
-                [
-                    'entity_data' => [
-                        [
-                            'name'         => self::TEST_ENTITY_NAME,
-                            'dependent'    => [],
-                            'dependencies' => [],
-                            'belongs_to'   => ['integration' => 'test']
-                        ],
-                    ]
-                ],
-                true
-            ]
-        ];
-    }
-
-    /**
      * @dataProvider configProvider
      *
      * @param array $config
@@ -255,8 +203,25 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
                             'belongs_to'   => ['integration' => 'test']
                         ]
                     ],
+                    'channel_types' => [
+                        'magento' => [
+                            'label' => 'Magento type',
+                            'entities' => [
+                                'OroCRM\Bundle\MagentoBundle\Entity\Cart',
+                                'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                                'OroCRM\Bundle\MagentoBundle\Entity\Order'
+                            ],
+                            'integration_type' => 'magento',
+                            'customer_identity' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                            'is_customer_identity_user_defined' => false
+                        ],
+                        'custom' => [
+                            'label' => 'Custom',
+                            'entities' => [],
+                        ]
+                    ],
                 ],
-                '$expectedResults' => ['test']
+                '$expectedResults' => ['magento']
             ]
         ];
     }

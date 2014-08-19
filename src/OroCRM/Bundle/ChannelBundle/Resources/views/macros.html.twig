@@ -3,15 +3,13 @@
     params:
         form                        - Symfony\Component\Form\FormView
         entitiesMetadata            - array of entities metadata
-        integrationEntitiesMetadata - array of entities by integration
 #}
-{% macro initializeChannelForm(form, entitiesMetadata, integrationEntitiesMetadata) %}
+{% macro initializeChannelForm(form, entitiesMetadata) %}
     {% set options = {
         channelTypeEl:               '#' ~ form.channelType.vars.id,
         customerIdentityEl:          '#' ~ form.customerIdentity.vars.id,
         channelEntitiesEl:           '#' ~ form.entities.vars.id,
         entitiesMetadata:            entitiesMetadata,
-        integrationEntitiesMetadata: integrationEntitiesMetadata,
         fields: {
             name:        '#' ~ form.name.vars.id,
             channelType: '#' ~ form.channelType.vars.id,
@@ -21,4 +19,28 @@
 
     <div data-page-component-module="orocrmchannel/js/app/components/channel"
          data-page-component-options="{{ options|json_encode }}"></div>
+{% endmacro %}
+
+{#
+    Renders and initialize entity list compoenent in view mode
+    params:
+        channel - OroCRM\Bundle\ChannelBundle\Entity\Channel
+#}
+{% macro inializeEntitiesViewComponent(channel) %}
+    {% set containerIdentifier = 'entities-list-view' %}
+
+    <div id="{{ containerIdentifier }}"></div>
+    <script type="text/javascript">
+        require(['jquery', 'orocrmchannel/js/entity-management/entity-component-view'],
+        function ($, EntityComponentView) {
+            var entityComponentView = new EntityComponentView({
+                data:     {{ channel.entities|json_encode|raw }},
+                mode:     EntityComponentView.prototype.MODES.VIEW_MODE,
+                metadata: {{ orocrm_channel_entities_metadata()|json_encode|raw }}
+            });
+
+            entityComponentView.render();
+            $({{ ('#' ~ containerIdentifier)|json_encode|raw }}).append(entityComponentView.$el);
+        });
+    </script>
 {% endmacro %}

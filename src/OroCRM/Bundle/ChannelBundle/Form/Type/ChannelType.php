@@ -10,6 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 use OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 
@@ -23,6 +24,10 @@ class ChannelType extends AbstractType
     /** @var ChannelTypeSubscriber */
     protected $channelTypeSubscriber;
 
+    /**
+     * @param SettingsProvider      $settingsProvider
+     * @param ChannelTypeSubscriber $channelTypeSubscriber
+     */
     public function __construct(SettingsProvider $settingsProvider, ChannelTypeSubscriber $channelTypeSubscriber)
     {
         $this->settingsProvider      = $settingsProvider;
@@ -63,7 +68,18 @@ class ChannelType extends AbstractType
                 'configs'  => ['placeholder' => 'orocrm.channel.form.select_channel_type.label'],
             ]
         );
-        $builder->addEventSubscriber(new ChannelTypeSubscriber($this->settingsProvider));
+        $builder->add(
+            'status',
+            'choice',
+            [
+                'choices'  => [
+                    Channel::STATUS_INACTIVE    => 'orocrm.channel.inactive.label',
+                    Channel::STATUS_ACTIVE      => 'orocrm.channel.active.label'
+                ],
+                'required' => true,
+                'label'    => 'orocrm.channel.status.label',
+            ]
+        );
     }
 
     /**

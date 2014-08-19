@@ -49,7 +49,10 @@ class EntityExclusionProvider implements ExclusionProviderInterface
      */
     public function isIgnoredRelation(ClassMetadata $metadata, $associationName)
     {
-        return !$this->isIncludedByChannels($metadata->getAssociationTargetClass($associationName));
+        $isMainEntityIncluded = $this->isIncludedByChannels($metadata->getName());
+        $isRelationIncluded   = $this->isIncludedByChannels($metadata->getAssociationTargetClass($associationName));
+
+        return !($isMainEntityIncluded && $isRelationIncluded);
     }
 
     /**

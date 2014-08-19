@@ -26,26 +26,6 @@
 {% endblock pageHeader %}
 
 {% block navButtons %}
-    {% if entity.id %}
-        {% if entity.status %}
-            {{ UI.button({
-                'aCss':  'btn-danger',
-                'iCss':  'icon-remove',
-                'label': 'orocrm.channel.button.deactivate.label',
-                'path':  path('orocrm_channel_change_status', {'id' : entity.id, 'backRoute': 'orocrm_channel_update'}),
-                'title': 'orocrm.channel.button.deactivate.label',
-            }) }}
-        {% else %}
-            {{ UI.button({
-                'aCss':  'btn-success',
-                'iCss':  'icon-ok',
-                'label': 'orocrm.channel.button.activate.label',
-                'path':  path('orocrm_channel_change_status', {'id' : entity.id, 'backRoute': 'orocrm_channel_update'}),
-                'title': 'orocrm.channel.button.activate.label',
-            }) }}
-        {% endif %}
-    {% endif %}
-
     {% if entity.id and resource_granted('DELETE', entity) %}
         {{ UI.deleteButton({
             'dataUrl': path('orocrm_api_delete_channel', {'id': entity.id}),
@@ -67,40 +47,6 @@
     {{ UI.dropdownSaveButton({'html': html}) }}
 {% endblock %}
 
-{% block content_data %}
-    {% set id = 'channel-update' %}
-    {% set dataBlocks = [
-        {
-            'title': 'General'|trans,
-            'subblocks': [{
-                'title': '',
-                'data':  [
-                    form_row(form.name),
-                    form_row(form.channelType),
-                    form.dataSource is defined ? form_row(form.dataSource) : '',
-                    form_row(form.customerIdentity),
-                ]
-            }]
-        },
-        {
-            'title': 'Entities'|trans,
-            'subblocks': [{
-                'title': '',
-                'data':  [form_row(form.entities)]
-            }]
-        }
-    ] %}
-
-    {% set data = {
-        'formErrors': form_errors(form)? form_errors(form) : null,
-        'dataBlocks': dataBlocks,
-    } %}
-
-    {{ parent() }}
-
-    {{ channelMacro.initializeChannelForm(form, orocrm_channel_entities_metadata(), orocrm_channel_integration_metadata()) }}
-{% endblock %}
-
 {% block breadcrumbs %}
     {{ parent() }}
     <div class="pull-left">
@@ -113,3 +59,38 @@
         {% endif %}
     </div>
 {% endblock breadcrumbs %}
+
+{% block content_data %}
+    {% set id = 'channel-update' %}
+    {% set dataBlocks = [
+        {
+            'title': 'General'|trans,
+            'subblocks': [{
+                'title': '',
+                'data':  [
+                    form_row(form.status),
+                    form_row(form.name),
+                    form_row(form.channelType),
+                    form.dataSource is defined ? form_row(form.dataSource) : '',
+                    form_row(form.customerIdentity)
+                ]
+            }]
+        },
+        {
+            'title': 'Entities'|trans,
+            'subblocks': [{
+                'title': '',
+                'data':  [ form_row(form.entities) ]
+            }]
+        }
+    ] %}
+
+    {% set data = {
+        'formErrors': form_errors(form)? form_errors(form) : null,
+        'dataBlocks': dataBlocks,
+    } %}
+
+    {{ parent() }}
+
+    {{ channelMacro.initializeChannelForm(form, orocrm_channel_entities_metadata()) }}
+{% endblock %}

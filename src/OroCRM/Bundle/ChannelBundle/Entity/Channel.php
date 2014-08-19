@@ -8,10 +8,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
  * @ORM\Entity()
  * @ORM\Table(name="orocrm_channel")
+ * @ORM\HasLifecycleCallbacks()
  * @Config(
  *  routeView="orocrm_channel_view",
  *  defaultValues={
@@ -30,8 +32,8 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
  */
 class Channel
 {
-    const STATUS_ACTIVE   = 1;
-    const STATUS_INACTIVE = 0;
+    const STATUS_ACTIVE   = true;
+    const STATUS_INACTIVE = false;
 
     /**
      * @var integer
@@ -96,10 +98,38 @@ class Channel
      */
     protected $channelType;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          }
+     *      }
+     * )
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          }
+     *      }
+     * )
+     */
+    protected $updatedAt;
+
     public function __construct()
     {
-        $this->status       = self::STATUS_INACTIVE;
-        $this->entities     = new ArrayCollection();
+        $this->status   = self::STATUS_INACTIVE;
+        $this->entities = new ArrayCollection();
     }
 
     /**
@@ -218,7 +248,7 @@ class Channel
      */
     public function setStatus($status)
     {
-        $this->status = $status;
+        $this->status = (bool) $status;
     }
 
     /**
@@ -226,7 +256,7 @@ class Channel
      */
     public function getStatus()
     {
-        return $this->status;
+        return (bool) $this->status;
     }
 
     /**
@@ -259,5 +289,53 @@ class Channel
     public function getChannelType()
     {
         return $this->channelType;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     */
+    public function setUpdatedAt(\DateTime $updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->createdAt = $this->createdAt ? $this->createdAt : new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }

@@ -44,6 +44,8 @@ class ChannelSaveSucceedListener
             $connectors = $this->getConnectors($entities);
 
             $dataSource->setConnectors($connectors);
+            $dataSource->setEnabled(Channel::STATUS_ACTIVE === $channel->getStatus());
+            $dataSource->setEditMode(Integration::EDIT_MODE_DISALLOW);
 
             $this->getManager()->persist($dataSource);
             $this->getManager()->flush();
@@ -60,7 +62,6 @@ class ChannelSaveSucceedListener
         $result = [];
 
         foreach ($entities as $entity) {
-
             $connectorName = $this->settingsProvider->getIntegrationConnectorName($entity);
 
             if (!empty($connectorName)) {

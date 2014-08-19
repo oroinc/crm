@@ -84,18 +84,6 @@ class SettingsProvider
     }
 
     /**
-     * Return whether entity is channel related and belongs to any integration
-     *
-     * @param string $entityFQCN entity full class name
-     *
-     * @return bool
-     */
-    public function belongsToIntegration($entityFQCN)
-    {
-        return $this->getIntegrationTypeData($entityFQCN) !== false;
-    }
-
-    /**
      * Get entity dependencies
      *
      * @param string $entityFQCN entity full class name
@@ -131,41 +119,25 @@ class SettingsProvider
     }
 
     /**
-     * Returns integration type that entity belongs to
-     *
-     * @param string $entityFQCN entity full class name
-     *
-     * @return bool|string
-     */
-    public function getIntegrationTypeData($entityFQCN)
-    {
-        if (!$this->isChannelEntity($entityFQCN)) {
-            return false;
-        }
-
-        $settings = $this->getSettings(self::DATA_PATH);
-
-        return isset($settings[$entityFQCN]['belongs_to'], $settings[$entityFQCN]['belongs_to']['integration']) ?
-            $settings[$entityFQCN]['belongs_to']['integration'] : false;
-    }
-
-    /**
-     * Returns integration types that could be used as customer datasource
+     * Returns integration types that could not be used out of channel scope
      *
      * @return array
      */
     public function getSourceIntegrationTypes()
     {
-        $settings     = $this->getSettings(self::DATA_PATH);
-        $allowedTypes = [];
+        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
+        $types    = [];
 
-        foreach (array_keys($settings) as $entityName) {
-            if ($this->belongsToIntegration($entityName)) {
-                $allowedTypes[] = $this->getIntegrationTypeData($entityName);
+        if (is_array($settings)) {
+            foreach (array_keys($settings) as $channelTypeName) {
+                $integrationType = $this->getIntegrationType($channelTypeName);
+                if ($integrationType) {
+                    $types[] = $integrationType;
+                }
             }
         }
 
-        return array_unique($allowedTypes);
+        return array_unique($types);
     }
 
     /**
@@ -183,23 +155,6 @@ class SettingsProvider
         }
 
         return $channelTypes;
-    }
-
-    /**
-     * Returns all entities from config which placed in field name
-     *
-     * @return array
-     */
-    public function getChannelEntitiesChoiceList()
-    {
-        $settings = $this->getSettings(self::DATA_PATH);
-        $result   = [];
-
-        foreach ($settings as $setting) {
-            $result[] = $setting['name'];
-        }
-
-        return $result;
     }
 
     /**
@@ -249,11 +204,7 @@ class SettingsProvider
      */
     public function isCustomerIdentityUserDefined($type)
     {
-        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
-
-        return isset($settings[$type]['is_customer_identity_user_defined'])
-            ? $settings[$type]['is_customer_identity_user_defined']
-            : true;
+        return $this->getChannelTypeConfig($type, 'is_customer_identity_user_defined');
     }
 
     /**
@@ -265,21 +216,37 @@ class SettingsProvider
      */
     public function getCustomerIdentityFromConfig($type)
     {
-        return $this->getChannelConfigBlock($type, 'customer_identity');
+        return $this->getChannelTypeConfig($type, 'customer_identity');
     }
 
     /**
+     * Returns predefined entity list for given channel type
+     *
      * @param string $type
-     * @param string $block
+     *
+     * @return array
+     */
+    public function getEntitiesByChannelType($type)
+    {
+        return $this->getChannelTypeConfig($type, 'entities') ?: [];
+    }
+
+    /**
+     * @param string      $type
+     * @param string|null $block
      *
      * @return mixed|null
      */
-    protected function getChannelConfigBlock($type, $block)
+    protected function getChannelTypeConfig($type, $block = null)
     {
         $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
 
-        return !empty($settings[$type][$block])
-            ? $settings[$type][$block]
-            : null;
+        if (null === $block) {
+            $config = isset($settings[$type]) ? $settings[$type] : null;
+        } else {
+            $config = isset($settings[$type], $settings[$type][$block]) ? $settings[$type][$block] : null;
+        }
+
+        return $config;
     }
 }

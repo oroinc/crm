@@ -12,10 +12,10 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
-use Oro\Bundle\IntegrationBundle\Form\Handler\ChannelHandler as IntegrationChannelHandler;
-
 class ChannelHandler
 {
+    const UPDATE_MARKER = 'formUpdateMarker';
+
     /** @var Request */
     protected $request;
 
@@ -58,7 +58,7 @@ class ChannelHandler
         if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
             $this->form->submit($this->request);
 
-            if (!$this->request->get(IntegrationChannelHandler::UPDATE_MARKER, false) && $this->form->isValid()) {
+            if (!$this->request->get(self::UPDATE_MARKER, false) && $this->form->isValid()) {
                 $this->doSave($entity);
 
                 return true;
@@ -88,14 +88,14 @@ class ChannelHandler
      */
     public function getFormView()
     {
-        $isUpdateOnly = $this->request->get(IntegrationChannelHandler::UPDATE_MARKER, false);
+        $isUpdateOnly = $this->request->get(self::UPDATE_MARKER, false);
 
         $form = $this->form;
         // take different form due to JS validation should be shown even in case when it was not validated on backend
         if ($isUpdateOnly) {
-            $config = $this->form->getConfig();
+            $config = $form->getConfig();
             $form   = $config->getFormFactory()
-                ->createNamed('orocrm_channel_form', 'orocrm_channel_form', $form->getData());
+                ->createNamed($form->getName(), $config->getType()->getName(), $form->getData());
         }
 
         return $form->createView();

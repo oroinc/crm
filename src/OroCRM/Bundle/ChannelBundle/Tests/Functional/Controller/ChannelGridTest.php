@@ -36,6 +36,7 @@ class ChannelGridTest extends WebTestCase
     {
         if (isset($filters['gridParameters']['id'])) {
             $gridId = $filters['gridParameters']['gridName'] . '[' . $filters['gridParameters']['id'] . ']';
+
             $filters['gridParameters'][$gridId] = $this->getReference('default_channel')->getId();
         }
 
@@ -65,7 +66,7 @@ class ChannelGridTest extends WebTestCase
                     ],
                     'gridFilters'         => [],
                     'assert'              => [
-                        'name'        => self::CHANNEL_NAME,
+                        'name' => self::CHANNEL_NAME,
                     ],
                     'expectedResultCount' => 1
                 ],
@@ -79,7 +80,7 @@ class ChannelGridTest extends WebTestCase
                         self::GRID_NAME . '[_filter][name][value]' => 'Not found',
                     ],
                     'assert'              => [
-                        'name'        => self::CHANNEL_NAME,
+                        'name' => self::CHANNEL_NAME,
                     ],
                     'expectedResultCount' => 0
                 ],

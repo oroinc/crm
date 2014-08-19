@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Handler;
 
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,12 +28,21 @@ class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
     /** @var ChannelIntegrationHandler */
     protected $handler;
 
+    /** @var FormFactoryInterface */
+    protected $formBuilder;
+
     public function setUp()
     {
-        $this->form    = $this->getMock('Symfony\Component\Form\Test\FormInterface');
+        $this->form        = $this->getMock('Symfony\Component\Form\Test\FormInterface');
+        $this->formBuilder = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $this->formBuilder
+            ->expects($this->any())
+            ->method('createNamed')
+            ->will($this->returnValue($this->form));
+
         $this->request = Request::create('');
         $this->entity  = new Integration();
-        $this->handler = new ChannelIntegrationHandler($this->request, $this->form);
+        $this->handler = new ChannelIntegrationHandler($this->request, $this->formBuilder);
     }
 
     public function tearDown()

@@ -10,42 +10,54 @@ class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
     /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $provider;
 
+    /** @var MetadataExtension */
+    protected $extension;
+
     public function setUp()
     {
         $this->provider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider')
             ->disableOriginalConstructor()->getMock();
+
+        $this->extension = new MetadataExtension($this->provider);
+    }
+
+    public function tearDown()
+    {
+        unset($this->extension, $this->provider);
     }
 
     public function testGetEntitiesMetadata()
     {
-        $this->provider->expects($this->once())
-            ->method('getEntitiesMetadata');
+        $expectedResult = new \stdClass();
 
-        $integrationEntities = new MetadataExtension($this->provider);
-        $integrationEntities->getEntitiesMetadata();
+        $this->provider->expects($this->once())
+            ->method('getEntitiesMetadata')
+            ->will($this->returnValue($expectedResult));
+
+        $this->assertSame($expectedResult, $this->extension->getEntitiesMetadata());
+    }
+
+    public function testGetChannelTypeMetadata()
+    {
+        $expectedResult = new \stdClass();
+
+        $this->provider->expects($this->once())
+            ->method('getChannelTypeMetadata')
+            ->will($this->returnValue($expectedResult));
+
+        $this->assertSame($expectedResult, $this->extension->getChannelTypeMetadata());
     }
 
     public function testGetName()
     {
-        $integrationEntities = new MetadataExtension($this->provider);
-        $this->assertEquals($integrationEntities->getName(), 'orocrm_list_of_integrations_entities');
+        $this->assertEquals($this->extension->getName(), 'orocrm_channel_metadata');
     }
 
     public function testGetFunctions()
     {
-        $integrationEntities = new MetadataExtension($this->provider);
-        $result              = $integrationEntities->getFunctions();
+        $result = $this->extension->getFunctions();
 
         $this->assertArrayHasKey('orocrm_channel_entities_metadata', $result);
-        $this->assertArrayHasKey('orocrm_channel_integration_metadata', $result);
-    }
-
-    public function testGetIntegrationEntitiesMetadata()
-    {
-        $this->provider->expects($this->once())
-            ->method('getIntegrationEntities');
-
-        $integrationEntities = new MetadataExtension($this->provider);
-        $integrationEntities->getIntegrationEntities();
+        $this->assertArrayHasKey('orocrm_channel_type_metadata', $result);
     }
 }

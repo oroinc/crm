@@ -17,14 +17,17 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 class ChannelIntegrationController extends Controller
 {
     /**
-     * @Route("/create/{type}", requirements={"type"="\w+"}, name="orocrm_channel_integration_create")
+     * @Route("/create/{type}/{channelName}", requirements={"type"="\w+"}, name="orocrm_channel_integration_create")
      * @AclAncestor("oro_integration_create")
      * @Template("OroCRMChannelBundle:ChannelIntegration:update.html.twig")
      */
-    public function createAction($type)
+    public function createAction($type, $channelName = null)
     {
-        $integration = new Integration();
+        $translator         = $this->get('translator');
+        $integrationName    = trim($channelName . ' ' . $translator->trans('orocrm.channel.data_source.label'));
+        $integration        = new Integration();
         $integration->setType($type);
+        $integration->setName($integrationName);
 
         return $this->update($integration);
     }

@@ -8,6 +8,7 @@ use OroCRM\Bundle\ChannelBundle\Provider\EntityExclusionProvider;
 
 class EntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
 {
+    const TEST_MAIN_ENTITY_NAME               = 'TestBundle\Entity\TestMain';
     const TEST_ENTITY_NAME                    = 'TestBundle\Entity\Test';
     const TEST_DEPENDENCY_ENTITY_NAME         = 'TestBundle\Entity\Test1';
     const TEST_ANOTHER_DEPENDENCY_ENTITY_NAME = 'TestBundle\Entity\Test12';
@@ -82,8 +83,15 @@ class EntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
         $enabledEntityMap = []
     ) {
         $this->settingsProvider->expects($this->any())
-            ->method('isChannelEntity')->with($this->equalTo(self::TEST_ENTITY_NAME))
-            ->will($this->returnValue($isChannelEntity));
+            ->method('isChannelEntity')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [self::TEST_MAIN_ENTITY_NAME, true],
+                        [self::TEST_ENTITY_NAME, $isChannelEntity]
+                    ]
+                )
+            );
         $this->settingsProvider->expects($this->any())
             ->method('getDependentEntityData')
             ->will($this->returnValueMap($dependentDataMap));
@@ -93,6 +101,9 @@ class EntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
 
         $classMetadataMock = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
             ->disableOriginalConstructor()->getMock();
+        $classMetadataMock->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue(self::TEST_MAIN_ENTITY_NAME));
         $classMetadataMock->expects($this->once())
             ->method('getAssociationTargetClass')->with($this->equalTo(self::TEST_ASSOC_NAME))
             ->will($this->returnValue(self::TEST_ENTITY_NAME));
@@ -123,19 +134,20 @@ class EntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
             'not related to channel entity given, should not be skipped' => [
                 false,
                 false,
-                [[self::TEST_ENTITY_NAME, false]]
+                [[self::TEST_ENTITY_NAME, false]],
+                [[self::TEST_MAIN_ENTITY_NAME, true]]
             ],
             'channel entity given, but not enabled'                      => [
                 true,
                 true,
                 [[self::TEST_ENTITY_NAME, false]],
-                [[self::TEST_ENTITY_NAME, false]]
+                [[self::TEST_ENTITY_NAME, false], [self::TEST_MAIN_ENTITY_NAME, true]]
             ],
             'channel entity given, enabled entity should not be skipped' => [
                 false,
                 true,
                 [[self::TEST_ENTITY_NAME, false]],
-                [[self::TEST_ENTITY_NAME, true]]
+                [[self::TEST_ENTITY_NAME, true], [self::TEST_MAIN_ENTITY_NAME, true]]
             ],
             'dependent entity given, all dependencies disabled'          => [
                 true,
@@ -148,7 +160,8 @@ class EntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     [self::TEST_DEPENDENCY_ENTITY_NAME, false],
-                    [self::TEST_ANOTHER_DEPENDENCY_ENTITY_NAME, false]
+                    [self::TEST_ANOTHER_DEPENDENCY_ENTITY_NAME, false],
+                    [self::TEST_ENTITY_NAME, true]
                 ]
             ],
             'dependent entity given, one dependency disabled'            => [
@@ -162,9 +175,10 @@ class EntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     [self::TEST_DEPENDENCY_ENTITY_NAME, true],
-                    [self::TEST_ANOTHER_DEPENDENCY_ENTITY_NAME, false]
+                    [self::TEST_ANOTHER_DEPENDENCY_ENTITY_NAME, false],
+                    [self::TEST_MAIN_ENTITY_NAME, true]
                 ]
-            ]
+            ],
         ];
     }
 }

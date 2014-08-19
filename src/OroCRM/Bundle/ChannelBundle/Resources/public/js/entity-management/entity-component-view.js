@@ -10,9 +10,13 @@ define(function (require) {
         EntityModel = require('./model'),
         componentTemplate = require('text!./templates/component.html'),
         entityTemplate = require('text!./templates/entity-item.html'),
-        formTemplate = require('text!./templates/form.html');
+        formTemplate = require('text!./templates/form.html'),
+        entitySelectResultTemplate = require('text!./templates/select2/result.html'),
+        entitySelectSelectionTemplate = require('text!./templates/select2/selection.html'),
+        select2Config = require('oroform/js/select2-config');
 
     require('oroui/js/items-manager/editor');
+    require('oroui/js/items-manager/table');
 
     var modes = {
         VIEW_MODE: 1,
@@ -24,7 +28,6 @@ define(function (require) {
      * @extends Backbone.View
      */
     return Backbone.View.extend({
-
         /**
          * Widget mode constants
          *
@@ -90,10 +93,8 @@ define(function (require) {
 
             var models = this.options.data.length > 0 ? _.map(this.options.data, _.bind(this._createModel, this)) : [];
             this.collection = this.collection || new (Backbone.Collection)(models, {model: EntityModel});
-
+            this.listenTo(this.collection, 'add remove reset', this._onCollectionChange);
             this.listenTo(this.collection, 'add', this._onItemAdded);
-            this.listenTo(this.collection, 'remove', this.renderList);
-            this.listenTo(this.collection, 'reset', this.renderList);
         },
 
         /**
@@ -103,7 +104,6 @@ define(function (require) {
             var templateContext = {__: __};
 
             this.$el.html(this.template(_.extend({}, templateContext)));
-
             this.$formContainer   = this.$el.find('.form-container');
             this.$listContainer   = this.$el.find('.grid-container');
             this.$noDataContainer = this.$el.find('.no-data');
@@ -112,56 +112,8 @@ define(function (require) {
                 this.$formContainer.html(this.formTemplate(_.extend({}, templateContext)));
                 _.defer(_.bind(this._initializeForm, this));
             }
-            this.renderList(this.collection.models);
 
-            return this;
-        },
-
-        /**
-         * Renders list into item container
-         *
-         * @param {Array.<orocrmchannel.entityManagement.Model>} models
-         */
-        renderList: function (models) {
-            var $itemsContainer = this.$listContainer.find('tbody');
-            $itemsContainer.empty();
-
-            if(models.length > 0){
-                _.each(models, _.bind(function (model) {
-                    $itemsContainer.append(this._renderItem(model));
-                }, this));
-
-                this._hideEmptyMessage();
-            } else {
-                this._showEmptyMessage();
-            }
-        },
-
-        /**
-         * Renders single item
-         *
-         * @param {orocrmchannel.entityManagement.Model} model
-         * @returns {string}
-         * @private
-         */
-        _renderItem: function (model) {
-            var context = _.extend({actions: [], __: __}, model.toJSON());
-
-            return this.itemTemplate(context);
-        },
-
-        /**
-         * Appends single item to list
-         *
-         * @param {Object.<orocrmchannel.entityManagement.Model>} model
-         * @private
-         */
-        _onItemAdded: function(model) {
-            model.set(this._prepareModelAttributes(model));
-
-            var $itemsContainer = this.$listContainer.find('tbody');
-            $itemsContainer.append(this._renderItem(model));
-            this._hideEmptyMessage();
+            _.defer(_.bind(this._initializeList, this));
         },
 
         /**
@@ -170,44 +122,92 @@ define(function (require) {
          * @private
          */
         _initializeForm: function () {
-            this.$formContainer.find('[data-purpose="entity-selector"]').select2({
-                placeholder: __('orocrm.channel.form.entity'),
+            var configurator = new select2Config({
+                placeholder:        __('orocrm.channel.form.entity'),
+                result_template:    entitySelectResultTemplate,
+                selection_template: entitySelectSelectionTemplate,
                 data: _.bind(function () {
-                    var notSelected = _.filter(this.options.metadata, _.bind(function(entityMetadata) {
-                        return !this.collection.findWhere({name: entityMetadata.name});
-                    }, this)),
+                    var notSelected = _.omit(this.options.metadata, this.collection.pluck('name')),
+                        options = _.map(notSelected, function(entityMetadata) {
+                            return {
+                                id: entityMetadata.name,
+                                text: entityMetadata.label,
+                                icon: entityMetadata.icon,
+                                type: entityMetadata.type
+                            };
+                        }),
+                        optionGroups = _.groupBy(options, function(entityMetadata) {
+                            return entityMetadata.type;
+                        }),
+                        results = [];
 
-                        choices = _.map(notSelected, function(entityMetadata) {
-                            return {id: entityMetadata.name, text: entityMetadata.label};
+                    _.each(_.keys(optionGroups).sort().reverse(), function(groupName) {
+                        results.push({
+                            text: __('orocrm.channel.entity_owner.' + groupName),
+                            icon: null,
+                            children: optionGroups[groupName]
                         });
+                    });
 
-                    return {more: false, results: choices};
+                    return {results: results};
                 }, this)
             });
 
-            this.$formContainer.itemsManagerEditor($.extend({}, {
-                collection: this.collection
-            }));
+            this.$formContainer
+                .find('[data-purpose="entity-selector"]')
+                    .select2(configurator.getConfig())
+                    .trigger('select2-init')
+                .end()
+                .itemsManagerEditor({
+                    collection: this.collection
+                });
         },
 
         /**
-         * Hide list and show "No data" message
+         * Initialize list component
          *
          * @private
          */
-        _showEmptyMessage: function () {
-            this.$listContainer.hide();
-            this.$noDataContainer.show();
+        _initializeList: function () {
+            this.$listContainer.find('tbody').itemsManagerTable({
+                collection:   this.collection,
+                itemTemplate: this.itemTemplate,
+                itemRender: function itemRenderer(template, data) {
+                    var context = _.extend({__: __}, data);
+
+                    return template(context);
+                },
+                deleteHandler: _.partial(function (collection, model, data) {
+                    collection.remove(model);
+                }, this.collection)
+            });
+            // emulate reset for first time
+            this._onCollectionChange();
         },
 
         /**
-         * Hide "No data" message and show list
+         * Collection change handler. Shows/Hides empty message
          *
          * @private
          */
-        _hideEmptyMessage: function () {
-            this.$listContainer.show();
-            this.$noDataContainer.hide();
+        _onCollectionChange: function() {
+            if (!this.collection.isEmpty()) {
+                this.$listContainer.show();
+                this.$noDataContainer.hide();
+            } else {
+                this.$listContainer.hide();
+                this.$noDataContainer.show();
+            }
+        },
+
+        /**
+         * Appends single item to list
+         *
+         * @param {Object.<orocrmchannel.entityManagement.Model>} model
+         * @private
+         */
+        _onItemAdded: function (model) {
+            model.set(this._prepareModelAttributes(model));
         },
 
         /**
@@ -219,9 +219,29 @@ define(function (require) {
          */
         _prepareModelAttributes: function (model) {
             var entityName = model.get('name'),
-                entityMetadata = this.options.metadata[entityName] || {};
+                entityMetadata = this.options.metadata[entityName] || {},
+                actions = [];
 
-            return _.defaults(entityMetadata, {name: entityName, label: entityName});
+            if ((!model.get('readonly')) && this.options.mode === modes.EDIT_MODE) {
+                actions.push({
+                    collectionAction: 'delete',
+                    title: 'Delete',
+                    icon: 'icon-trash'
+                });
+            } else if (this.options.mode === modes.VIEW_MODE) {
+                actions.push({
+                    title: 'View',
+                    icon:  'icon-eye-open',
+                    url:   entityMetadata.view_link
+                });
+                actions.push({
+                    title: 'Edit',
+                    icon:  'icon-edit',
+                    url:   entityMetadata.edit_link
+                });
+            }
+
+            return _.defaults(entityMetadata, {name: entityName, label: entityName, actions: actions});
         },
 
         /**
