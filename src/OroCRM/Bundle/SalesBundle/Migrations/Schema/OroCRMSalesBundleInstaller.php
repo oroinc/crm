@@ -271,7 +271,7 @@ class OroCRMSalesBundleInstaller implements
             $table,
             'extend_source',
             [
-                'extend' => ['is_extend' => true, 'set_expanded' => false]
+                'extend' => ['set_expanded' => false]
             ]
         );
         $this->extendExtension->addManyToOneRelation(
@@ -280,7 +280,7 @@ class OroCRMSalesBundleInstaller implements
             'campaign',
             'orocrm_campaign',
             'combined_name',
-            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
+            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
         );
         $table->addIndex(['status_name'], 'idx_73db46336625d392', []);
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);
