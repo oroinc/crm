@@ -21,10 +21,10 @@ class ChannelIntegrationController extends Controller
      * @AclAncestor("oro_integration_create")
      * @Template("OroCRMChannelBundle:ChannelIntegration:update.html.twig")
      */
-    public function createAction($type, $channelName)
+    public function createAction($type, $channelName = null)
     {
         $translator         = $this->get('translator');
-        $integrationName    = $channelName . ' ' . $translator->trans('orocrm.channel.data_source.label');
+        $integrationName    = trim($channelName . ' ' . $translator->trans('orocrm.channel.data_source.label'));
         $integration        = new Integration();
         $integration->setType($type);
         $integration->setName($integrationName);
