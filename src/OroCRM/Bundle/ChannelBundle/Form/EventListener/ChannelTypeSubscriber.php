@@ -147,6 +147,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                             'label'    => 'orocrm.channel.data_source.label',
                             'type'     => $integrationType,
                             'required' => true,
+                            'error_bubbling' => false
                         ]
                     );
                 }
