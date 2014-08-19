@@ -35,7 +35,8 @@ class ChannelGridTest extends WebTestCase
     public function testGrid($filters)
     {
         if (isset($filters['gridParameters']['id'])) {
-            $gridId                             = $filters['gridParameters']['gridName'] . '[' . $filters['gridParameters']['id'] . ']';
+            $gridId = $filters['gridParameters']['gridName'] . '[' . $filters['gridParameters']['id'] . ']';
+            
             $filters['gridParameters'][$gridId] = $this->getReference('default_channel')->getId();
         }
 
