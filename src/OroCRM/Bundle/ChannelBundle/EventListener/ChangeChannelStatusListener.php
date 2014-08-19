@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 
+use OroCRM\Bundle\ChannelBundle\Event\AbstractEvent;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -25,9 +26,9 @@ class ChangeChannelStatusListener
     }
 
     /**
-     * @param ChannelChangeStatusEvent $event
+     * @param AbstractEvent $event
      */
-    public function onChannelStatusChange(ChannelChangeStatusEvent $event)
+    public function onChannelStatusChange(AbstractEvent $event)
     {
         /** @var Channel $channel */
         $channel    = $event->getChannel();
