@@ -1057,6 +1057,15 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     }
 
     /**
+     * @param ContactEmail $email
+     * @return bool
+     */
+    public function hasEmail(ContactEmail $email)
+    {
+        return $this->getEmails()->contains($email);
+    }
+
+    /**
      * Gets primary email if it's available.
      *
      * @return ContactEmail|null
@@ -1073,6 +1082,24 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param ContactEmail $email
+     * @return Contact
+     */
+    public function setPrimaryEmail(ContactEmail $email)
+    {
+        if ($this->hasEmail($email)) {
+            $email->setPrimary(true);
+            foreach ($this->getPhones() as $otherEmail) {
+                if (!$email->isEqual($otherEmail)) {
+                    $otherEmail->setPrimary(false);
+                }
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -1136,6 +1163,15 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     }
 
     /**
+     * @param ContactPhone $phone
+     * @return bool
+     */
+    public function hasPhone(ContactPhone $phone)
+    {
+        return $this->getPhones()->contains($phone);
+    }
+
+    /**
      * Gets primary phone if it's available.
      *
      * @return ContactPhone|null
@@ -1152,6 +1188,24 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param ContactPhone $phone
+     * @return Contact
+     */
+    public function setPrimaryPhone(ContactPhone $phone)
+    {
+        if ($this->hasPhone($phone)) {
+            $phone->setPrimary(true);
+            foreach ($this->getPhones() as $otherPhone) {
+                if (!$phone->isEqual($otherPhone)) {
+                    $otherPhone->setPrimary(false);
+                }
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -1192,8 +1246,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     }
 
     /**
-     * Gets primary address if it's available
-     *
      * @param ContactAddress $address
      * @return Contact
      */
