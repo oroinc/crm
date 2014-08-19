@@ -56,3 +56,6 @@ orocrm:
             name:                   Contact name
             email:                  Contact email
             phone:                  Contact phone
+
+        organization:
+            label: Organization

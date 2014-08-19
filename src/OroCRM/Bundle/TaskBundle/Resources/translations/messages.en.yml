@@ -19,6 +19,7 @@ orocrm:
         reporter.label:             Reporter
         id.label:                   Id
         workflow_item.label:        Workflow item
+        organization.label:         Organization
 
         datagrid:
             view: View
