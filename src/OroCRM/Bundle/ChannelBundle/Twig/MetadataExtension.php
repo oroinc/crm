@@ -3,26 +3,20 @@
 namespace OroCRM\Bundle\ChannelBundle\Twig;
 
 use OroCRM\Bundle\ChannelBundle\Provider\MetadataProviderInterface;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class MetadataExtension extends \Twig_Extension
 {
-    const EXTENSION_NAME = 'orocrm_list_of_integrations_entities';
+    const EXTENSION_NAME = 'orocrm_channel_metadata';
 
     /** @var MetadataProviderInterface */
     protected $metaDataProvider;
 
-    /** @var SettingsProvider */
-    protected $settingsProvider;
-
     /**
      * @param MetadataProviderInterface $provider
-     * @param SettingsProvider $settingsProvider
      */
-    public function __construct(MetadataProviderInterface $provider, SettingsProvider $settingsProvider)
+    public function __construct(MetadataProviderInterface $provider)
     {
         $this->metaDataProvider = $provider;
-        $this->settingsProvider = $settingsProvider;
     }
 
     /**
@@ -39,13 +33,6 @@ class MetadataExtension extends \Twig_Extension
                 'getEntitiesMetadata'
             ]
         );
-        $integrationMetadataFunction = new \Twig_SimpleFunction(
-            'orocrm_channel_integration_metadata',
-            [
-                $this,
-                'getIntegrationEntities'
-            ]
-        );
         $channelTypeMetadataFunction = new \Twig_SimpleFunction(
             'orocrm_channel_type_metadata',
             [
@@ -56,7 +43,6 @@ class MetadataExtension extends \Twig_Extension
 
         return [
             $entitiesMetadataFunction->getName()    => $entitiesMetadataFunction,
-            $integrationMetadataFunction->getName() => $integrationMetadataFunction,
             $channelTypeMetadataFunction->getName() => $channelTypeMetadataFunction
         ];
     }
@@ -72,9 +58,9 @@ class MetadataExtension extends \Twig_Extension
     /**
      * @return array
      */
-    public function getIntegrationEntities()
+    public function getChannelTypeMetadata()
     {
-        return $this->metaDataProvider->getIntegrationEntities();
+        return $this->metaDataProvider->getChannelTypeMetadata();
     }
 
     /**
@@ -85,13 +71,5 @@ class MetadataExtension extends \Twig_Extension
     public function getName()
     {
         return self::EXTENSION_NAME;
-    }
-
-    /**
-     * @return array
-     */
-    public function getChannelTypeMetadata()
-    {
-        return $this->settingsProvider->getChannelTypeChoiceList();
     }
 }

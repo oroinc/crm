@@ -164,7 +164,6 @@ services:
             - @doctrine
         tags:
             - { name: kernel.event_listener, event: orocrm_channel.channel.status_change, method: onChannelStatusChange }
-            - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelStatusChange }
 
     orocrm_channel.event_listener.channel_save_succeed:
         class: %orocrm_channel.event_listener.channel_save_succeed.class%

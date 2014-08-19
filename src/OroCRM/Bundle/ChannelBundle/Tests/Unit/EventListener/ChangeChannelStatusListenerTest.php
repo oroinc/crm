@@ -6,9 +6,9 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-use OroCRM\Bundle\ChannelBundle\EventListener\ChangeChannelStatusListener;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
+use OroCRM\Bundle\ChannelBundle\EventListener\ChangeChannelStatusListener;
 
 class ChangeChannelStatusListenerTest extends \PHPUnit_Framework_TestCase
 {

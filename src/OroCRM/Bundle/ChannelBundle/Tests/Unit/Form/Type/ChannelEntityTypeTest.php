@@ -3,25 +3,15 @@
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelEntityChoiceTypeTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ChannelEntityType */
     protected $type;
 
-    /** @var SettingsProvider */
-    protected $settingProvider;
-
     public function setUp()
     {
-        $provider = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityProvider')
-            ->disableOriginalConstructor()->getMock();
-
-        $settingProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
-            ->disableOriginalConstructor()->getMock();
-
-        $this->type = new ChannelEntityType($provider, $settingProvider);
+        $this->type = new ChannelEntityType();
     }
 
     public function tearDown()
@@ -35,5 +25,17 @@ class ChannelEntityChoiceTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('hidden', $this->type->getParent());
 
         $this->assertInstanceOf('Symfony\Component\Form\AbstractType', $this->type);
+    }
+
+    public function testBuildForm()
+    {
+        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
+            ->disableOriginalConstructor()->getMock();
+
+        $builder->expects($this->once())
+            ->method('addViewTransformer')
+            ->with($this->isInstanceOf('Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer'));
+
+        $this->type->buildForm($builder, []);
     }
 }

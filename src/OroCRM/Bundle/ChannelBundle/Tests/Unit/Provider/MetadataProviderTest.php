@@ -115,22 +115,16 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
     }
 
-    public function testGetIntegrationEntities()
+    public function tearDown()
     {
-        /** @var MetadataProvider $provider */
-        $provider = new MetadataProvider(
-            $this->settingsProvider,
+        unset(
+            $this->router,
             $this->entityProvider,
             $this->configManager,
-            $this->router
+            $this->settingsProvider,
+            $this->entityConfigModel1,
+            $this->entityConfigModel2
         );
-
-        $result = $provider->getIntegrationEntities();
-
-        $expectedResult = ['OroCRM\Bundle\TestBundle1\Entity\Entity1', 'OroCRM\Bundle\TestBundle2\Entity\Entity2'];
-        $this->assertArrayHasKey('testIntegrationType', $result);
-        $this->assertCount(2, $result['testIntegrationType']);
-        $this->assertSame($expectedResult, $result['testIntegrationType']);
     }
 
     public function testGetEntitiesMetadata()
