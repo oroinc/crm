@@ -34,12 +34,5 @@ class MigrateLeadSource implements Migration, ExtendExtensionAwareInterface
             'source',
             'lead_source'
         );
-        $this->extendExtension->addEnumRelation(
-            $schema,
-            'orocrm_sales_lead',
-            'multiSource',
-            'lead_source',
-            true
-        );
     }
 }
