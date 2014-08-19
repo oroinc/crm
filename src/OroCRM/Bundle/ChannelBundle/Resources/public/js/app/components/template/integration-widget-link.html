@@ -1,0 +1,8 @@
+<div class="integration-widget-link-container">
+    <% if (name) {%>
+        <%= name %> (<a href="javascript: void(0);" class="no-hash form-element-text" data-purpose="open-form-widget"><%= title %></a>)
+        <a href="javascript: void(0);" class="no-hash"><i class="icon-remove" data-purpose="remove-integration-data"></i></a>
+    <% } else { %>
+        <a href="javascript: void(0);" class="no-hash form-element-text" data-purpose="open-form-widget"><%= title %></a>
+    <% } %>
+</div>

@@ -149,5 +149,7 @@ define([
         initializeEntityComponent(options.channelEntitiesEl, options.entitiesMetadata);
         initializeCustomerIdentityComponent(options.customerIdentityEl, entitiesCollection);
         initializeChannelTypeComponent(options.channelTypeEl, options.fields);
+
+        options._sourceElement.remove();
     }
 });

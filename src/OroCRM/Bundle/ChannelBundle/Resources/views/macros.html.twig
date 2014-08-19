@@ -27,9 +27,9 @@
         channel - OroCRM\Bundle\ChannelBundle\Entity\Channel
 #}
 {% macro inializeEntitiesViewComponent(channel) %}
-    {% set containerIdenifier = 'entities-list-view' %}
+    {% set containerIdentifier = 'entities-list-view' %}
 
-    <div id="{{ containerIdenifier }}"></div>
+    <div id="{{ containerIdentifier }}"></div>
     <script type="text/javascript">
         require(['jquery', 'orocrmchannel/js/entity-management/entity-component-view'],
         function ($, EntityComponentView) {
@@ -40,7 +40,7 @@
             });
 
             entityComponentView.render();
-            $({{ ('#' ~ containerIdenifier)|json_encode|raw }}).append(entityComponentView.$el);
+            $({{ ('#' ~ containerIdentifier)|json_encode|raw }}).append(entityComponentView.$el);
         });
     </script>
 {% endmacro %}
