@@ -182,3 +182,11 @@ orocrm:
         widgets:
             leads:         Leads
             opportunities: Opportunities
+
+        b2bcustomer:
+            entity_label:         B2B customer
+            entity_plural_label:  B2B customers
+            id.label:             Id
+            account.label:        Account
+            entity_description:   Represent B2B customer
+            label.label:          Label

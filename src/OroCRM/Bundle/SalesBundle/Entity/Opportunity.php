@@ -14,7 +14,6 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
 
 /**
@@ -121,24 +120,6 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
      * )
      **/
     protected $contact;
-
-    /**
-     * @var Account
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=120,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     **/
-    protected $account;
 
     /**
      * @var Lead
@@ -381,6 +362,20 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     protected $workflowStep;
 
     /**
+     * @var B2BCustomer
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\B2BCustomer")
+     * @ORM\JoinColumn(name="b2bcustomer_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *  }
+     * )
+     */
+    protected $b2bcustomer;
+
+    /**
      * @param WorkflowItem $workflowItem
      * @return Opportunity
      */
@@ -424,24 +419,6 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param Account $account
-     * @return Opportunity
-     */
-    public function setAccount($account)
-    {
-        $this->account = $account;
-        return $this;
-    }
-
-    /**
-     * @return Account
-     */
-    public function getAccount()
-    {
-        return $this->account;
     }
 
     /**
@@ -747,6 +724,22 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     {
         $this->notes = $notes;
         return $this;
+    }
+
+    /**
+     * @param B2BCustomer $b2bcustomer
+     */
+    public function setB2bcustomer($b2bcustomer)
+    {
+        $this->b2bcustomer = $b2bcustomer;
+    }
+
+    /**
+     * @return B2BCustomer
+     */
+    public function getB2bcustomer()
+    {
+        return $this->b2bcustomer;
     }
 
     /**
