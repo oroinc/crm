@@ -15,7 +15,8 @@ class UpdateContactEntitiesWithOrganization extends UpdateWithOrganization imple
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\ContactBundle\Migrations\Data\ORM\LoadGroupData'
+            'OroCRM\Bundle\ContactBundle\Migrations\Data\ORM\LoadGroupData',
+            'Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData'
         ];
     }
 
