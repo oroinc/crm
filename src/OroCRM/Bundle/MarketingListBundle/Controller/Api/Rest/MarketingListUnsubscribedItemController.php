@@ -14,21 +14,35 @@ use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 /**
- * @RouteResource("marketinglist")
+ * @RouteResource("marketinglist_unsubscribeditem")
  * @NamePrefix("orocrm_api_")
  */
-class MarketingListController extends RestController implements ClassResourceInterface
+class MarketingListUnsubscribedItemController extends RestController implements ClassResourceInterface
 {
+    /**
+     * REST POST
+     *
+     * @ApiDoc(
+     *     description="Create new MarketingListUnsubscribedItem",
+     *     resource=true
+     * )
+     * @AclAncestor("orocrm_marketinglist_unsubscribed_item_create")
+     */
+    public function postAction()
+    {
+        return $this->handleCreateRequest();
+    }
+
     /**
      * REST DELETE
      *
      * @param int $id
      *
      * @ApiDoc(
-     *      description="Delete Marketing List",
-     *      resource=true
+     *     description="Delete MarketingListRemovedItem",
+     *     resource=true
      * )
-     * @AclAncestor("orocrm_marketing_list_delete")
+     * @AclAncestor("orocrm_marketinglist_unsubscribed_item_delete")
      *
      * @return Response
      */
@@ -42,7 +56,7 @@ class MarketingListController extends RestController implements ClassResourceInt
      */
     public function getManager()
     {
-        return $this->get('orocrm_marketing_list.marketing_list.manager.api');
+        return $this->get('orocrm_marketing_list.marketing_list_unsubscribed_item.manager.api');
     }
 
     /**
@@ -50,7 +64,7 @@ class MarketingListController extends RestController implements ClassResourceInt
      */
     public function getForm()
     {
-        throw new \BadMethodCallException('Form is not available.');
+        return $this->get('orocrm_marketing_list.form.marketing_list_unsubscribed_item');
     }
 
     /**
@@ -58,6 +72,6 @@ class MarketingListController extends RestController implements ClassResourceInt
      */
     public function getFormHandler()
     {
-        throw new \BadMethodCallException('FormHandler is not available.');
+        return $this->get('orocrm_marketing_list.form.handler.marketing_list_unsubscribed_item');
     }
 }

@@ -584,4 +584,12 @@ class MarketingList
             $this->segment->setDefinition($definition);
         }
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }
