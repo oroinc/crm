@@ -2,7 +2,7 @@ parameters:
     orocrm_marketing_list.entity.class:  OroCRM\Bundle\MarketingListBundle\Entity\MarketingList
     orocrm_marketing_list.datagrid.marketing_list_type.provider.class: OroCRM\Bundle\MarketingListBundle\Datagrid\GridMarketingListTypeProvider
     orocrm_marketing_list.form.type.marketing_list.class: OroCRM\Bundle\MarketingListBundle\Form\Type\MarketingListType
-    orocrm_marketing_list.form.type.marketing_list_segment.class: OroCRM\Bundle\MarketingListBundle\Form\Type\MarketingListSegmentType
+    orocrm_marketing_list.form.handler.marketing_list.class: OroCRM\Bundle\MarketingListBundle\Form\Handler\MarketingListHandler
 
 services:
     orocrm_marketing_list.entity_provider:
@@ -24,6 +24,15 @@ services:
         arguments:
             - "orocrm_marketing_list_form"
             - "orocrm_marketing_list"
+
+    orocrm_marketing_list.form.handler.marketing_list:
+        class: %orocrm_marketing_list.form.handler.marketing_list.class%
+        scope: request
+        arguments:
+            - @orocrm_marketing_list.form.marketing_list
+            - @request
+            - @doctrine
+            - @validator
 
     orocrm_marketing_list.marketing_list.manager.api:
         class: %orocrm_campaign.campaign.manager.api.class%

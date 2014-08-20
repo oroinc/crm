@@ -81,7 +81,8 @@ class MarketingListController extends Controller
                     'parameters' => array('id' => $entity->getId())
                 );
             },
-            $this->get('translator')->trans('orocrm.marketinglist.entity.saved')
+            $this->get('translator')->trans('orocrm.marketinglist.entity.saved'),
+            $this->get('orocrm_marketing_list.form.handler.marketing_list')
         );
 
         if (is_array($response)) {
