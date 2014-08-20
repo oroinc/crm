@@ -3,6 +3,7 @@ parameters:
     orocrm_marketing_list.datagrid.marketing_list_type.provider.class: OroCRM\Bundle\MarketingListBundle\Datagrid\GridMarketingListTypeProvider
     orocrm_marketing_list.form.type.marketing_list.class: OroCRM\Bundle\MarketingListBundle\Form\Type\MarketingListType
     orocrm_marketing_list.form.handler.marketing_list.class: OroCRM\Bundle\MarketingListBundle\Form\Handler\MarketingListHandler
+    orocrm_marketing_list.contact_information_column_validator.class: OroCRM\Bundle\MarketingListBundle\Validator\ContactInformationColumnValidator
 
 services:
     orocrm_marketing_list.entity_provider:
@@ -39,3 +40,10 @@ services:
         arguments:
             - %orocrm_marketing_list.entity.class%
             - @doctrine.orm.entity_manager
+
+    orocrm_marketing_list.contact_information_column_validator:
+        class: %orocrm_marketing_list.contact_information_column_validator.class%
+        arguments:
+            - @oro_entity_config.provider.entity
+        tags:
+            - { name: validator.constraint_validator, alias: orocrm_marketing_list.contact_information_column_validator }

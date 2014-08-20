@@ -1,0 +1,19 @@
+OroCRM\Bundle\MarketingListBundle\Entity\MarketingList:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: [ name ]
+    properties:
+        name:
+            - NotBlank:     ~
+            - Length:
+                max: 255
+        type:
+            - NotBlank:     ~
+        entity:
+            - NotBlank:     ~
+            - Length:
+                max: 255
+
+Oro\Bundle\SegmentBundle\Entity\Segment:
+    constraints:
+        - OroCRM\Bundle\MarketingListBundle\Validator\Constraints\ContactInformationColumnConstraint:
+            groups: ["marketing_list"]
