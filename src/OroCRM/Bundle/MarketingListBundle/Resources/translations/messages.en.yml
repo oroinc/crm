@@ -26,3 +26,10 @@ orocrm:
             update: Update
             delete: Delete
             view: View
+
+        entity_config:
+            choices:
+                email: Email
+                phone: Phone
+            contact_information:
+                label: Contact Information
