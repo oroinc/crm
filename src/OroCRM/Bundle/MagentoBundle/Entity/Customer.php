@@ -119,6 +119,9 @@ class Customer extends ExtendCustomer
      *      defaultValues={
      *          "importexport"={
      *              "identity"=true
+     *          },
+     *          "entity"={
+     *              "contact_information"="email"
      *          }
      *      }
      * )

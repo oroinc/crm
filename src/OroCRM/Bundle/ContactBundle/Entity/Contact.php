@@ -363,6 +363,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *      defaultValues={
      *          "dataaudit"={
      *              "auditable"=true
+     *          },
+     *          "entity"={
+     *              "contact_information"="email"
      *          }
      *      }
      * )

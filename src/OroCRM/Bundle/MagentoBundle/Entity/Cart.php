@@ -140,6 +140,13 @@ class Cart extends ExtendCart
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "contact_information"="email"
+     *          }
+     *      }
+     * )
      */
     protected $email;
 

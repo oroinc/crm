@@ -260,12 +260,15 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      * @Oro\Versioned
      * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=100
+     *      defaultValues={
+     *          "dataaudit"={"auditable"=true},
+     *          "importexport"={
+     *              "order"=100
+     *          },
+     *          "entity"={
+     *              "contact_information"="email"
+     *          }
      *      }
-     *  }
      * )
      */
     protected $email;
