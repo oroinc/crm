@@ -30,7 +30,7 @@ class LeadTest extends \PHPUnit_Framework_TestCase
         $address     = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Address')
             ->disableOriginalConstructor()
             ->getMock();
-        $b2bcustomer = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\B2BCustomer')
+        $customer = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\B2BCustomer')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -52,7 +52,7 @@ class LeadTest extends \PHPUnit_Framework_TestCase
             'createdAt'         => ['createdAt', $now, $now],
             'updatedAt'         => ['updatedAt', $now, $now],
             'notes'             => ['notes', 'test', 'test'],
-            'b2bcustomer'       => ['b2bcustomer', $b2bcustomer, $b2bcustomer],
+            'customer'          => ['customer', $customer, $customer],
         ];
     }
 }
