@@ -16,6 +16,7 @@ class OroCRMChannelBundle implements Migration
     {
         self::addChannelTable($schema);
         self::addChannelEntityNameTable($schema);
+        self::addChannelIdentityTable($schema);
     }
 
     /**
@@ -74,6 +75,60 @@ class OroCRMChannelBundle implements Migration
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null],
             'FK_92BC967172F5A1AA'
+        );
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    public function addChannelIdentityTable(Schema $schema)
+    {
+        $table = $schema->createTable('orocrm_channel_identity');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('account_id', 'integer', ['notnull' => false]);
+        $table->addColumn('contact_id', 'integer', ['notnull' => false]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
+        $table->addColumn('name', 'string', ['length' => 255, 'notnull' => true]);
+        $table->addColumn('createdAt', 'datetime', ['notnull' => true]);
+        $table->addColumn('updatedAt', 'datetime', ['notnull' => false]);
+
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['account_id'], 'IDX_C793C699B6B5FBA', []);
+        $table->addIndex(['contact_id'], 'IDX_C793C69E7A1254A', []);
+        $table->addIndex(['channel_id'], 'IDX_C793C6972F5A1AA', []);
+        $table->addIndex(['user_owner_id'], 'IDX_C793C699EB185F9', []);
+
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_account'),
+            ['account_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL'],
+            'FK_C793C699B6B5FBA'
+        );
+
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_contact'),
+            ['contact_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL'],
+            'FK_C793C69E7A1254A'
+        );
+
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_channel'),
+            ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL'],
+            'FK_C793C6972F5A1AA'
+        );
+
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_user'),
+            ['user_owner_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL'],
+            'FK_C793C699EB185F9'
         );
     }
 }
