@@ -91,7 +91,6 @@ orocrm:
             status.label:         Status
             close_reason.label:   Close reason
             contact.label:        Potential Customer
-            account.label:        Account
             owner.label:          Owner
             notes.label:          Additional comments
             lead.label:           Lead
@@ -137,7 +136,6 @@ orocrm:
             industry.label:       Industry
             status.label:         Status
             contact.label:        Contact
-            account.label:        Account
             owner.label:          Owner
             address.label:        Address
             details.label:        Lead Details
