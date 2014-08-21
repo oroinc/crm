@@ -9,16 +9,16 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\SalesBundle\Model\ExtendB2BCustomer;
+use OroCRM\Bundle\SalesBundle\Model\ExtendCustomer;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="orocrm_sales_b2b_customer")
+ * @ORM\Table(name="orocrm_sales_customer")
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "label"="B2BCustomer",
- *              "plural_label"="B2BCustomer",
+ *              "label"="Customer",
+ *              "plural_label"="Customer",
  *              "icon"="icon-suitcase"
  *          },
  *          "ownership"={
@@ -36,7 +36,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendB2BCustomer;
  *      }
  * )
  */
-class B2BCustomer extends ExtendB2BCustomer
+class Customer extends ExtendCustomer
 {
     /**
      * @var integer
@@ -95,11 +95,10 @@ class B2BCustomer extends ExtendB2BCustomer
 
     /**
      * @param Account $account
-     * @return B2BCustomer
+     * @return Customer
      */
     public function setAccount(Account $account)
     {
         $this->account = $account;
-        return $this;
     }
 }

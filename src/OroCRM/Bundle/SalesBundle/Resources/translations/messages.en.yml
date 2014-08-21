@@ -183,7 +183,7 @@ orocrm:
             leads:         Leads
             opportunities: Opportunities
 
-        b2bcustomer:
+        customer:
             entity_label:         B2B customer
             entity_plural_label:  B2B customers
             id.label:             Id
