@@ -23,6 +23,14 @@ class OroCRMAccountBundle implements Migration
         $table->dropColumn('extend_rating');
         $table->dropColumn('extend_description');
 
+        $table->dropColumn('shipping_address_id');
+        $table->removeForeignKey('FK_7166D3714D4CFF2B');
+        $table->dropIndex('IDX_7166D3714D4CFF2B');
+
+        $table->dropColumn('billing_address_id');
+        $table->removeForeignKey('FK_7166D37179D0C0E4');
+        $table->dropIndex('IDX_7166D37179D0C0E4');
+
         if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
             $queries->addPostQuery(
                 'DELETE FROM oro_entity_config_index_value
@@ -35,6 +43,8 @@ class OroCRMAccountBundle implements Migration
                         OR oecf.field_name = \'extend_ticker_symbol\'
                         OR oecf.field_name = \'extend_rating\'
                         OR oecf.field_name = \'extend_description\'
+                        OR oecf.field_name = \'shipping_address_id\'
+                        OR oecf.field_name = \'billing_address_id\'
                    )
                    AND oecf.entity_id = (
                       SELECT oec.id
@@ -51,7 +61,9 @@ class OroCRMAccountBundle implements Migration
                         \'extend_ownership\',
                         \'extend_ticker_symbol\',
                         \'extend_rating\',
-                        \'extend_description\'
+                        \'extend_description\',
+                        \'shipping_address_id\',
+                        \'billing_address_id\'
                     )
                     AND
                     entity_id IN (
