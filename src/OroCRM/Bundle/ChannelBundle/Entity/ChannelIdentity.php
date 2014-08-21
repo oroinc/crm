@@ -94,7 +94,7 @@ class ChannelIdentity extends ExtendChannelIdentity
     /**
      * @param Account $account
      */
-    public function setAccount($account)
+    public function setAccount(Account $account)
     {
         $this->account = $account;
     }
@@ -108,15 +108,15 @@ class ChannelIdentity extends ExtendChannelIdentity
     }
 
     /**
-     * @param mixed $channel
+     * @param Channel $channel
      */
-    public function setChannel($channel)
+    public function setChannel(Channel $channel)
     {
         $this->channel = $channel;
     }
 
     /**
-     * @return mixed
+     * @return Channel
      */
     public function getChannel()
     {
@@ -126,7 +126,7 @@ class ChannelIdentity extends ExtendChannelIdentity
     /**
      * @param Contact $contact
      */
-    public function setContact($contact)
+    public function setContact(Contact $contact)
     {
         $this->contact = $contact;
     }
@@ -140,27 +140,19 @@ class ChannelIdentity extends ExtendChannelIdentity
     }
 
     /**
-     * @param mixed $createdAt
+     * @param \DateTime $createdAt
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }
 
     /**
-     * @return mixed
+     * @return \DateTime|null
      */
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 
     /**
@@ -188,15 +180,15 @@ class ChannelIdentity extends ExtendChannelIdentity
     }
 
     /**
-     * @param mixed $owner
+     * @param User $owner
      */
-    public function setOwner($owner)
+    public function setOwner(User $owner)
     {
         $this->owner = $owner;
     }
 
     /**
-     * @return mixed
+     * @return User
      */
     public function getOwner()
     {
@@ -204,15 +196,15 @@ class ChannelIdentity extends ExtendChannelIdentity
     }
 
     /**
-     * @param mixed $updatedAt
+     * @param \DateTime $updatedAt
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
     }
 
     /**
-     * @return mixed
+     * @return \DateTime|null
      */
     public function getUpdatedAt()
     {
