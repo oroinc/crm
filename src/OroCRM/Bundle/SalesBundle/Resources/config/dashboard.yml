@@ -8,12 +8,14 @@ oro_dashboard_config:
                     route:      orocrm_sales_lead_index
                     acl:        orocrm_sales_lead_view
                     position:   20
+                    applicable: @orocrm_sales.provider.enitity_state->isEntityLeadEnabled()
                 opportunities:
                     label:      Opportunities
                     icon:       usd
                     route:      orocrm_sales_opportunity_index
                     acl:        orocrm_sales_opportunity_view
                     position:   40
+                    applicable: @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
         opportunities_by_lead_source_chart:
             label:       orocrm.sales.dashboard.opportunities_by_lead_source_chart.title
             route:       orocrm_sales_dashboard_opportunities_by_lead_source_chart
