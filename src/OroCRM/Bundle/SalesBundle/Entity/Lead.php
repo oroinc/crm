@@ -440,6 +440,10 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=160,
+     *          "short"=true
+     *      }
      *  }
      * )
      */
