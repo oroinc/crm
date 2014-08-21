@@ -25,30 +25,6 @@ class DropFields implements Migration, OrderedMigrationInterface
     {
         self::orocrmLeadTable($schema);
         self::orocrmOpportunityTable($schema);
-
-        if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
-            $queries->addPostQuery(
-                'DELETE FROM oro_entity_config_index_value
-                 WHERE entity_id IS NULL AND field_id IN(
-                   SELECT oecf.id FROM oro_entity_config_field AS oecf
-                   WHERE oecf.field_name = \'account_id\'
-                   AND oecf.entity_id = (
-                      SELECT oec.id
-                      FROM oro_entity_config AS oec
-                      WHERE oec.class_name = \'OroCRM\\\\Bundle\\\\AccountBundle\\\\Entity\\\\Account\'
-                   )
-                 );
-
-                 DELETE FROM oro_entity_config_field
-                   WHERE
-                    field_name IN (\'account_id\')
-                    AND entity_id IN (
-                      SELECT id
-                      FROM oro_entity_config
-                      WHERE class_name = \'OroCRM\\\\Bundle\\\\AccountBundle\\\\Entity\\\\Account\'
-                    )'
-            );
-        }
     }
 
     /**
@@ -60,6 +36,29 @@ class DropFields implements Migration, OrderedMigrationInterface
         $leadTable->removeForeignKey('FK_73DB46339B6B5FBA');
         $leadTable->dropIndex('IDX_73DB46339B6B5FBA');
         $leadTable->dropColumn('account_id');
+
+        if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
+            $queries->addPostQuery(
+                'DELETE FROM oro_entity_config_index_value
+                 WHERE entity_id IS NULL AND field_id IN (
+                     SELECT oecf.id FROM oro_entity_config_field AS oecf
+                     WHERE (oecf.field_name = \'account_id\')
+                     AND oecf.entity_id = (
+                         SELECT oec.id
+                         FROM oro_entity_config AS oec
+                         WHERE oec.class_name = \'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Lead\'
+                     )
+                 );
+
+                 DELETE FROM oro_entity_config_field
+                   WHERE field_name IN (\'account_id\')
+                    AND entity_id IN (
+                        SELECT id
+                        FROM oro_entity_config
+                        WHERE class_name = \'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Lead\'
+                    )'
+            );
+        }
     }
 
     /**
@@ -71,5 +70,28 @@ class DropFields implements Migration, OrderedMigrationInterface
         $opportunityTable->removeForeignKey('FK_C0FE4AAC9B6B5FBA');
         $opportunityTable->dropIndex('IDX_C0FE4AAC9B6B5FBA');
         $opportunityTable->dropColumn('account_id');
+
+        if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
+            $queries->addPostQuery(
+                'DELETE FROM oro_entity_config_index_value
+                 WHERE entity_id IS NULL AND field_id IN (
+                     SELECT oecf.id FROM oro_entity_config_field AS oecf
+                     WHERE (oecf.field_name = \'account_id\')
+                     AND oecf.entity_id = (
+                         SELECT oec.id
+                         FROM oro_entity_config AS oec
+                         WHERE oec.class_name = \'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Opportunity\'
+                     )
+                 );
+
+                 DELETE FROM oro_entity_config_field
+                   WHERE field_name IN (\'account_id\')
+                    AND entity_id IN (
+                        SELECT id
+                        FROM oro_entity_config
+                        WHERE class_name = \'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Opportunity\'
+                    )'
+            );
+        }
     }
 }
