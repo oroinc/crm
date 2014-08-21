@@ -118,40 +118,6 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
     protected $owner;
 
     /**
-     * @var Address $shippingAddress
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "merge"={"display"=true},
-     *          "importexport"={
-     *              "full"=true,
-     *              "order"=60
-     *          }
-     *      }
-     * )
-     */
-    protected $shippingAddress;
-
-    /**
-     * @var Address $billingAddress
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "merge"={"display"=true},
-     *          "importexport"={
-     *              "full"=true,
-     *              "order"=70
-     *          }
-     *      }
-     * )
-     */
-    protected $billingAddress;
-
-    /**
      * Contacts storage
      *
      * @var ArrayCollection $contacts
@@ -367,52 +333,6 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
     public function setContacts(Collection $contacts)
     {
         $this->contacts = $contacts;
-
-        return $this;
-    }
-
-    /**
-     * Get shipping address
-     *
-     * @return Address
-     */
-    public function getShippingAddress()
-    {
-        return $this->shippingAddress;
-    }
-
-    /**
-     * Set shipping address
-     *
-     * @param Address $address
-     * @return Account
-     */
-    public function setShippingAddress($address)
-    {
-        $this->shippingAddress = $address;
-
-        return $this;
-    }
-
-    /**
-     * Get shipping address
-     *
-     * @return Address
-     */
-    public function getBillingAddress()
-    {
-        return $this->billingAddress;
-    }
-
-    /**
-     * Set billing address
-     *
-     * @param Address $address
-     * @return Account
-     */
-    public function setBillingAddress($address)
-    {
-        $this->billingAddress = $address;
 
         return $this;
     }

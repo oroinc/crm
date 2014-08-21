@@ -23,13 +23,13 @@ class OroCRMAccountBundle implements Migration
         $table->dropColumn('extend_rating');
         $table->dropColumn('extend_description');
 
-        $table->dropColumn('shipping_address_id');
         $table->removeForeignKey('FK_7166D3714D4CFF2B');
         $table->dropIndex('IDX_7166D3714D4CFF2B');
+        $table->dropColumn('shipping_address_id');
 
-        $table->dropColumn('billing_address_id');
         $table->removeForeignKey('FK_7166D37179D0C0E4');
         $table->dropIndex('IDX_7166D37179D0C0E4');
+        $table->dropColumn('billing_address_id');
 
         if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
             $queries->addPostQuery(
