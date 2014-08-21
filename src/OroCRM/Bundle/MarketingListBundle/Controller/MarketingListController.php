@@ -29,6 +29,22 @@ class MarketingListController extends Controller
     }
 
     /**
+     * @Route("/view/{id}", name="orocrm_marketing_list_view", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @AclAncestor("orocrm_marketing_list_view")
+     * @Template
+     *
+     * @param MarketingList $entity
+     *
+     * @return array
+     */
+    public function viewAction(MarketingList $entity)
+    {
+        return [
+            'entity' => $entity
+        ];
+    }
+
+    /**
      * @Route("/create", name="orocrm_marketing_list_create")
      * @Template("OroCRMMarketingListBundle:MarketingList:update.html.twig")
      * @Acl(
@@ -53,6 +69,10 @@ class MarketingListController extends Controller
      *      permission="EDIT",
      *      class="OroCRMMarketingListBundle:MarketingList"
      * )
+     *
+     * @param MarketingList $entity
+     *
+     * @return array
      */
     public function updateAction(MarketingList $entity)
     {
@@ -89,7 +109,7 @@ class MarketingListController extends Controller
             return array_merge(
                 $response,
                 [
-                    'entities' => $this->get('orocrm_marketing_list.entity_provider.contact_information')->getEntities(),
+                    'entities' => $this->get('oro_entity.entity_provider')->getEntities(),
                     'metadata' => $this->get('oro_query_designer.query_designer.manager')->getMetadata('segment')
                 ]
             );
