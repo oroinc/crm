@@ -25,7 +25,6 @@ class ContactInformationFieldHelper
     public function getContactInformationColumns(AbstractQueryDesigner $queryDesigner)
     {
         $columns = array();
-        $entity = $queryDesigner->getEntity();
 
         // If definition is empty there is no one contact information field
         $definition = $queryDesigner->getDefinition();
@@ -38,6 +37,7 @@ class ContactInformationFieldHelper
             return $columns;
         }
 
+        $entity = $queryDesigner->getEntity();
         $identifierHelper = new JoinIdentifierHelper($entity);
         $entityContactInfoColumns = array();
         foreach ($definition['columns'] as $column) {
