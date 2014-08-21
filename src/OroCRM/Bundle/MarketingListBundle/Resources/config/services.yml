@@ -15,6 +15,9 @@ parameters:
     orocrm_marketing_list.marketing_list.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_marketing_list.marketing_list_removed_item.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_marketing_list.marketing_list_unsubscribed_item.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
+    orocrm_marketing_list.provider.contact_information_exclusion.class: OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationExclusionProvider
+    orocrm_marketing_list.form.type.entity_choice.class: OroCRM\Bundle\MarketingListBundle\Form\Type\ContactInformationEntityChoiceType
 services:
     orocrm_marketing_list.entity_provider:
         alias: oro_entity.entity_provider
@@ -126,3 +129,21 @@ services:
             - @oro_entity_config.provider.entity
         tags:
             - { name: validator.constraint_validator, alias: orocrm_marketing_list.contact_information_column_validator }
+
+    orocrm_marketing_list.provider.contact_information_exclusion:
+        class: %orocrm_marketing_list.provider.contact_information_exclusion.class%
+        arguments:
+            - @oro_entity_config.provider.entity
+            - @doctrine
+
+    orocrm_marketing_list.entity_provider.contact_information:
+        parent: oro_query_designer.entity_provider
+        calls:
+            - [setExclusionProvider, [@orocrm_marketing_list.provider.contact_information_exclusion]]
+
+    orocrm_marketing_list.form.type.entity_choice:
+        class: %orocrm_marketing_list.form.type.entity_choice.class%
+        arguments:
+            - @orocrm_marketing_list.entity_provider.contact_information
+        tags:
+            - { name: form.type, alias: orocrm_marketing_list_contact_information_entity_choice }

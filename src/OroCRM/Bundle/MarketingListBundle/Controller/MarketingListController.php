@@ -89,7 +89,7 @@ class MarketingListController extends Controller
             return array_merge(
                 $response,
                 [
-                    'entities' => $this->get('oro_entity.entity_provider')->getEntities(),
+                    'entities' => $this->get('orocrm_marketing_list.entity_provider.contact_information')->getEntities(),
                     'metadata' => $this->get('oro_query_designer.query_designer.manager')->getMetadata('segment')
                 ]
             );

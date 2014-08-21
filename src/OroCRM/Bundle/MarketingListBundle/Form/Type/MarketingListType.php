@@ -16,7 +16,7 @@ class MarketingListType extends AbstractQueryDesignerType
     {
         $builder
             ->add('name', 'text', ['required' => true])
-            ->add('entity', 'oro_entity_choice', ['required' => true])
+            ->add('entity', 'orocrm_marketing_list_contact_information_entity_choice', ['required' => true])
             ->add(
                 'type',
                 'entity',
