@@ -45,6 +45,12 @@ class ContactInformationExclusionProviderTest extends \PHPUnit_Framework_TestCas
     }
 
     /**
+     * @param string $className
+     * @param bool   $hasEntityConfig
+     * @param array  $fieldNames
+     * @param array  $fieldNamesMapping
+     * @param bool   $expected
+     *
      * @dataProvider entityProvider
      */
     public function testIsIgnoredEntity(
@@ -122,21 +128,21 @@ class ContactInformationExclusionProviderTest extends \PHPUnit_Framework_TestCas
     public function entityProvider()
     {
         return [
-            'entity_level'         => ['\stdClass', true, [], [], true],
-            'empty_fields'         => ['\stdClass', false, [], [], false],
+            'entity_level'         => ['\stdClass', true, [], [], false],
+            'empty_fields'         => ['\stdClass', false, [], [], true],
             'has_not_field_config' => [
                 '\stdClass',
                 false,
                 ['fieldName'],
                 ['fieldName' => false],
-                false
+                true
             ],
             'has_field_config'     => [
                 '\stdClass',
                 false,
                 ['fieldName', 'fieldName2'],
                 ['fieldName' => false, 'fieldName2' => true],
-                true
+                false
             ],
         ];
     }

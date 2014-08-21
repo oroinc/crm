@@ -42,7 +42,7 @@ class ContactInformationExclusionProvider implements ExclusionProviderInterface
         $entityConfig = $this->entityConfigProvider->getConfig($className);
 
         if ($entityConfig->has('contact_information')) {
-            return true;
+            return false;
         }
 
         /** @var ClassMetadataInfo $metadata */
@@ -50,11 +50,11 @@ class ContactInformationExclusionProvider implements ExclusionProviderInterface
         foreach ($metadata->getFieldNames() as $fieldName) {
             $fieldConfig = $this->entityConfigProvider->getConfig($className, $fieldName);
             if ($fieldConfig->has('contact_information')) {
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
