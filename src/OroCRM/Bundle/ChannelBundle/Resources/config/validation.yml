@@ -13,3 +13,9 @@ OroCRM\Bundle\ChannelBundle\Entity\Channel:
             - NotBlank: ~
         channelType:
             - NotBlank: ~
+OroCRM\Bundle\ChannelBundle\Entity\ChannelIdentity:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 250

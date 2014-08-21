@@ -15,7 +15,19 @@ use Oro\Bundle\UserBundle\Entity\User;
 /**
  * @ORM\Entity()
  * @ORM\Table(name="orocrm_channel_identity")
- * @Config()
+ * @Config(
+ *  defaultValues={
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
+ *  }
+ * )
  */
 class ChannelIdentity extends ExtendChannelIdentity
 {
@@ -37,21 +49,21 @@ class ChannelIdentity extends ExtendChannelIdentity
 
     /**
      * @var Account
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $account;
 
     /**
      * @var Contact
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $contact;
 
     /**
      * @var Channel
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $channel;
@@ -94,7 +106,7 @@ class ChannelIdentity extends ExtendChannelIdentity
     /**
      * @param Account $account
      */
-    public function setAccount($account)
+    public function setAccount(Account $account)
     {
         $this->account = $account;
     }
@@ -108,15 +120,15 @@ class ChannelIdentity extends ExtendChannelIdentity
     }
 
     /**
-     * @param mixed $channel
+     * @param Channel $channel
      */
-    public function setChannel($channel)
+    public function setChannel(Channel $channel)
     {
         $this->channel = $channel;
     }
 
     /**
-     * @return mixed
+     * @return Channel
      */
     public function getChannel()
     {
@@ -126,7 +138,7 @@ class ChannelIdentity extends ExtendChannelIdentity
     /**
      * @param Contact $contact
      */
-    public function setContact($contact)
+    public function setContact(Contact $contact)
     {
         $this->contact = $contact;
     }
@@ -140,27 +152,19 @@ class ChannelIdentity extends ExtendChannelIdentity
     }
 
     /**
-     * @param mixed $createdAt
+     * @param \DateTime $createdAt
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 
     /**
@@ -188,15 +192,15 @@ class ChannelIdentity extends ExtendChannelIdentity
     }
 
     /**
-     * @param mixed $owner
+     * @param User $owner
      */
-    public function setOwner($owner)
+    public function setOwner(User $owner)
     {
         $this->owner = $owner;
     }
 
     /**
-     * @return mixed
+     * @return User
      */
     public function getOwner()
     {
@@ -204,15 +208,15 @@ class ChannelIdentity extends ExtendChannelIdentity
     }
 
     /**
-     * @param mixed $updatedAt
+     * @param \DateTime $updatedAt
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
     }
 
     /**
-     * @return mixed
+     * @return \DateTime|null
      */
     public function getUpdatedAt()
     {

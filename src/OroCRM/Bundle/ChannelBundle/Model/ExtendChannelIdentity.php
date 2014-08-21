@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Model;
 
-
 class ExtendChannelIdentity
 {
     /**

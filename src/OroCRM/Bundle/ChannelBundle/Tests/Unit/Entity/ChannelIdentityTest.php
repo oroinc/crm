@@ -17,13 +17,13 @@ class ChannelIdentityTest extends AbstractEntityTestCase
      */
     public function getDataProvider()
     {
-        $name       = 'Some name';
-        $account    = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
-        $contact    = $this->getMock('Oro\Bundle\ContactBundle\Entity\Contact');
-        $channel    = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
-        $owner      = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
+        $name           = 'Some name';
+        $account        = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $contact        = $this->getMock('Oro\Bundle\ContactBundle\Entity\Contact');
+        $channel        = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $owner          = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
 
-        $someDateTime     = new \DateTime();
+        $someDateTime   = new \DateTime();
 
         return [
             'name'      => ['name', $name, $name],
