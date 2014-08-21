@@ -20,6 +20,7 @@ parameters:
     orocrm_channel.provider.channel_entity_exclusion_provider.class:   OroCRM\Bundle\ChannelBundle\Provider\ChannelEntityExclusionProvider
     orocrm_channel.provider.state_provider.class:                      OroCRM\Bundle\ChannelBundle\Provider\StateProvider
     orocrm_channel.provider.entity_metadata.class:                     OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider
+    orocrm_channel.provider.utils.entity_state_provider.class:         OroCRM\Bundle\ChannelBundle\Provider\Utility\EntityStateProvider
 
     # config resolver
     orocrm_channel.config_resolver.class:                              Oro\Component\Config\Resolver\SystemAwareResolver
@@ -134,6 +135,12 @@ services:
             - { name: kernel.event_listener, event: 'orocrm_channel.channel.save_succeed', method: processChannelChange}
             - { name: kernel.event_listener, event: 'orocrm_channel.channel.delete_succeed', method: processChannelChange}
             - { name: kernel.event_listener, event: 'orocrm_channel.channel.status_change', method: processChannelChange}
+
+    orocrm_channel.provider.utils.entity_state_provider:
+        class: %orocrm_channel.provider.utils.entity_state_provider.class%
+        abstract: true
+        calls:
+            - [setStateProvider, [@orocrm_channel.provider.state_provider]]
 
     orocrm_channel.config_resolver:
         class: %orocrm_channel.config_resolver.class%
