@@ -26,7 +26,16 @@ class OroCRMSalesBundle implements Migration, OrderedMigrationInterface
         $customerTable = $schema->createTable('orocrm_sales_customer');
         $customerTable->addColumn('id', 'integer', ['autoincrement' => true]);
         $customerTable->addColumn('account_id', 'integer', ['notnull' => false]);
+
         $customerTable->setPrimaryKey(['id']);
         $customerTable->addIndex(['account_id'], 'IDX_94CC12929B6B5FBA', []);
+
+        $customerTable->addForeignKeyConstraint(
+            $schema->getTable('orocrm_account'),
+            ['account_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null],
+            'FK_9C6CFD79B6B5FBA'
+        );
     }
 }

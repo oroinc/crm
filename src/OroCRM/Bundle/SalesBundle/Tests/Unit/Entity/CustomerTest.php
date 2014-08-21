@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Entity;
 
 use OroCRM\Bundle\SalesBundle\Entity\Customer;
 
-class B2BCustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getSetDataProvider
