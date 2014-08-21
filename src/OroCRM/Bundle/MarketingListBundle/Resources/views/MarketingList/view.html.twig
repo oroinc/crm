@@ -41,6 +41,26 @@
                 {{ UI.renderProperty('orocrm.marketinglist.type.label'|trans, entity.type.label|trans) }}
                 {{ UI.renderProperty('orocrm.marketinglist.description.label'|trans, entity.description) }}
 
+                {%- set entityData -%}
+                    <i class="{{ config.icon }} hide-text"></i>&nbsp;{{ config.label }}
+                {%- endset -%}
+
+                {{ UI.renderHtmlProperty('orocrm.marketinglist.entity.label'|trans, entityData) }}
+
+                {% if entity.segment is not empty %}
+                    {%- set segmentData -%}
+                        {% if resource_granted('oro_segment_view') %}
+                            <a href="{{ path('oro_segment_view', {'id': entity.segment.id}) }}">
+                                {{ entity.segment.name }}
+                            </a>
+                        {% else %}
+                            {{ entity.segment.name }}
+                        {% endif %}
+                    {%- endset -%}
+
+                    {{ UI.renderHtmlProperty('oro.segment.entity_label'|trans, segmentData) }}
+                {% endif %}
+
                 {%- set ownerData -%}
                     {%- if entity.owner -%}
                         {% if resource_granted('oro_user_user_view') %}

@@ -39,8 +39,11 @@ class MarketingListController extends Controller
      */
     public function viewAction(MarketingList $entity)
     {
+        $entityConfig = $this->get('orocrm_marketing_list.entity_provider')->getEntity($entity->getEntity());
+
         return [
-            'entity' => $entity
+            'entity' => $entity,
+            'config' => $entityConfig
         ];
     }
 
