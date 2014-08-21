@@ -17,9 +17,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendCustomer;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "label"="Customer",
- *              "plural_label"="Customer",
- *              "icon"="icon-suitcase"
+ *              "icon"="icon-user-md"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -95,7 +93,6 @@ class Customer extends ExtendCustomer
 
     /**
      * @param Account $account
-     * @return Customer
      */
     public function setAccount(Account $account)
     {

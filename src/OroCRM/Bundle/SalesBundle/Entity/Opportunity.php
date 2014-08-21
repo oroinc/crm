@@ -113,7 +113,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=110,
+     *          "order"=120,
      *          "short"=true
      *      }
      *  }
@@ -370,6 +370,10 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=110,
+     *          "short"=true
+     *      }
      *  }
      * )
      */
