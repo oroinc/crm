@@ -14,6 +14,9 @@ datagrid:
                     - c.budget
                 from:
                     - { table: OroCRM\Bundle\CampaignBundle\Entity\Campaign, alias: c }
+                where:
+                    and:
+                      - c.organization = @oro_security.security_facade->getOrganizationId
         columns:
             name:
                 label: orocrm.campaign.name.label
