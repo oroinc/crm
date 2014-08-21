@@ -13,7 +13,6 @@ use Symfony\Component\Validator\Validator;
 
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use Oro\Bundle\SegmentBundle\Entity\SegmentType;
-use Oro\Bundle\SegmentBundle\Entity\Manager\StaticSegmentManager;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 
