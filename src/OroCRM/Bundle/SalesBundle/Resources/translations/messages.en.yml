@@ -97,6 +97,7 @@ orocrm:
             lead.label:           Lead
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
+            customer.label:       B2B Customer
 
             datagrid:
                 view: View
@@ -147,6 +148,7 @@ orocrm:
             workflow_step.label:  Step
             information:          Lead Information
             campaign.label:       Campaign
+            customer.label:       B2B Customer
 
             extend_source:
                 unclassified:     Unclassified
@@ -189,4 +191,3 @@ orocrm:
             id.label:             Id
             account.label:        Account
             entity_description:   Represent B2B customer
-            label.label:          Label
