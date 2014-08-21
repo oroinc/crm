@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OroCRM\Bundle\ChannelBundle\Provider\Utility;
 
 use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
