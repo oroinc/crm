@@ -70,10 +70,10 @@ datagrid:
                 lastRun:     { data_name: ml.lastRun }
         properties:
             id: ~
-#            view_link:
-#                type: url
-#                route: orocrm_marketing_list_view
-#                params: [ id ]
+            view_link:
+                type: url
+                route: orocrm_marketing_list_view
+                params: [ id ]
             update_link:
                 type: url
                 route: orocrm_marketing_list_update
@@ -85,13 +85,13 @@ datagrid:
                 params:
                     - id
         actions:
-#            view:
-#                type:         navigate
-#                label:        orocrm.marketinglist.datagrid.actions.view.label
-#                link:         view_link
-#                icon:         eye-open
-#                acl_recource: orocrm_marketing_list_view
-#                rowAction:    true
+            view:
+                type:         navigate
+                label:        orocrm.marketinglist.datagrid.actions.view.label
+                link:         view_link
+                icon:         eye-open
+                acl_recource: orocrm_marketing_list_view
+                rowAction:    true
             update:
                 type:          navigate
                 acl_resource:  orocrm_marketing_list_update

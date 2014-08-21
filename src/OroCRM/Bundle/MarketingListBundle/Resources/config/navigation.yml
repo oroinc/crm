@@ -21,3 +21,6 @@ oro_menu_config:
 
 oro_titles:
     orocrm_marketing_list_index:  ~
+    orocrm_marketing_list_update: '%%entity.name%% - Edit'
+    orocrm_marketing_list_view: '%%entity.name%%'
+    orocrm_marketing_list_create: oro.ui.create_entity

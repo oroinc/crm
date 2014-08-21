@@ -33,3 +33,6 @@ orocrm:
                 phone: Phone
             contact_information:
                 label: Contact Information
+
+        block:
+            general: General Information
