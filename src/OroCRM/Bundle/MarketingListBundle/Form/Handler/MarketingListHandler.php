@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Form\Handler;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormError;
@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Validator;
 
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use Oro\Bundle\SegmentBundle\Entity\SegmentType;
+use Oro\Bundle\SegmentBundle\Entity\Manager\StaticSegmentManager;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 
@@ -37,7 +38,7 @@ class MarketingListHandler
     protected $request;
 
     /**
-     * @var ObjectManager
+     * @var EntityManager
      */
     protected $manager;
 
@@ -126,6 +127,7 @@ class MarketingListHandler
     protected function getSegmentTypeByMarketingListType(MarketingListType $marketingListType)
     {
         $segmentTypeName = $this->marketingListTypeToSegmentTypeMap[$marketingListType->getName()];
+
         return $this->manager->find('OroSegmentBundle:SegmentType', $segmentTypeName);
     }
 

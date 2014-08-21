@@ -18,6 +18,8 @@ parameters:
 
     orocrm_marketing_list.provider.contact_information_exclusion.class: OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationExclusionProvider
     orocrm_marketing_list.form.type.entity_choice.class: OroCRM\Bundle\MarketingListBundle\Form\Type\ContactInformationEntityChoiceType
+
+    orocrm_marketing_list.contact_information_field_helper.class: OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper
 services:
     orocrm_marketing_list.entity_provider:
         alias: oro_entity.entity_provider
@@ -114,6 +116,11 @@ services:
         calls:
             - [setForm, [@orocrm_marketing_list.form.marketing_list_unsubscribed_item]]
 
+    orocrm_marketing_list.contact_information_field_helper:
+        class: %orocrm_marketing_list.contact_information_field_helper.class%
+        arguments:
+            - @oro_entity_config.provider.entity
+
     orocrm_marketing_list.form.handler.marketing_list:
         class: %orocrm_marketing_list.form.handler.marketing_list.class%
         scope: request
@@ -126,7 +133,7 @@ services:
     orocrm_marketing_list.contact_information_column_validator:
         class: %orocrm_marketing_list.contact_information_column_validator.class%
         arguments:
-            - @oro_entity_config.provider.entity
+            - @orocrm_marketing_list.contact_information_field_helper
         tags:
             - { name: validator.constraint_validator, alias: orocrm_marketing_list.contact_information_column_validator }
 

@@ -2,28 +2,27 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Validator;
 
-use Oro\Bundle\QueryDesignerBundle\QueryDesigner\JoinIdentifierHelper;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 use Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner;
-use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
 
 class ContactInformationColumnValidator extends ConstraintValidator
 {
     /**
-     * @var ConfigProvider
+     * @var ContactInformationFieldHelper
      */
-    protected $configProvider;
+    protected $contactInformationFieldHelper;
 
     /**
-     * @param ConfigProvider $configProvider
+     * @param ContactInformationFieldHelper $contactInformationFieldHelper
      */
-    public function __construct(ConfigProvider $configProvider)
+    public function __construct(ContactInformationFieldHelper $contactInformationFieldHelper)
     {
-        $this->configProvider = $configProvider;
+        $this->contactInformationFieldHelper = $contactInformationFieldHelper;
     }
 
     /**
@@ -40,7 +39,11 @@ class ContactInformationColumnValidator extends ConstraintValidator
             $value = $propertyAccess->getValue($value, $constraint->field);
         }
 
-        if ($value instanceof AbstractQueryDesigner && !$this->assertContactInformationFields($value)) {
+        if (!$value instanceof AbstractQueryDesigner) {
+            throw new UnexpectedTypeException($value, 'AbstractQueryDesigner');
+        }
+
+        if (!$this->assertContactInformationFields($value)) {
             if ($constraint->field) {
                 $this->context->addViolationAt($constraint->field, $constraint->message);
             } else {
@@ -57,36 +60,6 @@ class ContactInformationColumnValidator extends ConstraintValidator
      */
     protected function assertContactInformationFields(AbstractQueryDesigner $value)
     {
-        $entity = $value->getEntity();
-        // If entity has no configuration it has no contact information fields
-        if (!$this->configProvider->hasConfig($entity)) {
-            return false;
-        }
-
-        // If definition is empty there is no one contact information field
-        $definition = $value->getDefinition();
-        if (!$definition) {
-            return false;
-        }
-
-        $definition = json_decode($definition, JSON_OBJECT_AS_ARRAY);
-        if (empty($definition['columns'])) {
-            return false;
-        }
-
-        $identifierHelper = new JoinIdentifierHelper($entity);
-        foreach ($definition['columns'] as $column) {
-            $className = $identifierHelper->getEntityClassName($column['name']);
-            $fieldName = $identifierHelper->getFieldName($column['name']);
-            if ($this->configProvider->hasConfig($className, $fieldName)) {
-                $fieldConfiguration = $this->configProvider->getConfig($className, $fieldName);
-                $contactInformationType = $fieldConfiguration->get('contact_information');
-                if (!empty($contactInformationType)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return count($this->contactInformationFieldHelper->getContactInformationColumns($value)) > 0;
     }
 }
