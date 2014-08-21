@@ -985,7 +985,7 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * @param Customer $customer
      */
-    public function setCustomer($customer)
+    public function setCustomer(Customer $customer)
     {
         $this->customer = $customer;
     }

@@ -729,7 +729,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     /**
      * @param Customer $customer
      */
-    public function setCustomer($customer)
+    public function setCustomer(Customer $customer)
     {
         $this->customer = $customer;
     }

@@ -30,7 +30,7 @@ class LeadTest extends \PHPUnit_Framework_TestCase
         $address     = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Address')
             ->disableOriginalConstructor()
             ->getMock();
-        $customer = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\B2BCustomer')
+        $customer = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Customer')
             ->disableOriginalConstructor()
             ->getMock();
 
