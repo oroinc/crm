@@ -16,13 +16,17 @@ placeholders:
 
 items:
     orocrm_account_action_dropdown_add_opportuniy:
-        template: OroCRMSalesBundle:Account:action/addOpportunityButton.html.twig
+        template:   OroCRMSalesBundle:Account:action/addOpportunityButton.html.twig
+        applicable: @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
 
     orocrm_account_action_dropdown_add_lead:
-        template: OroCRMSalesBundle:Account:action/addLeadButton.html.twig
+        template:   OroCRMSalesBundle:Account:action/addLeadButton.html.twig
+        applicable: @orocrm_sales.provider.enitity_state->isEntityLeadEnabled()
 
     leads_launchpad:
-        template: OroCRMSalesBundle:Dashboard:leadsLaunchpad.html.twig
+        template:   OroCRMSalesBundle:Dashboard:leadsLaunchpad.html.twig
+        applicable: @orocrm_sales.provider.enitity_state->isEntityLeadEnabled()
 
     opportunities_launchpad:
-        template: OroCRMSalesBundle:Dashboard:opportunitiesLaunchpad.html.twig
+        template:   OroCRMSalesBundle:Dashboard:opportunitiesLaunchpad.html.twig
+        applicable: @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
