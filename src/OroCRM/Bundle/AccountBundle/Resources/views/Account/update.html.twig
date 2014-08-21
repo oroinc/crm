@@ -69,20 +69,6 @@
         ]
     }] %}
 
-    {% set dataBlocks = dataBlocks|merge( [{
-        'title' : 'Addresses'|trans,
-        'subblocks': [
-            {
-                'title': 'orocrm.account.billing_address.label'|trans,
-                'data': [form_widget(form.billingAddress)]
-            },
-            {
-                'title': 'orocrm.account.shipping_address.label'|trans,
-                'data': [form_widget(form.shippingAddress)]
-            },
-        ]
-    }] ) %}
-
     {% if form.additional is defined and form.additional.children|length > 0 %}
         {% set additionalData = [] %}
         {% for value in form.additional %}
