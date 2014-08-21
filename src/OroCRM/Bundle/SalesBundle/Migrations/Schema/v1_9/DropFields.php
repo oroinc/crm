@@ -23,14 +23,15 @@ class DropFields implements Migration, OrderedMigrationInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::orocrmLeadTable($schema);
-        self::orocrmOpportunityTable($schema);
+        self::orocrmLeadTable($schema, $queries);
+        self::orocrmOpportunityTable($schema, $queries);
     }
 
     /**
-     * @param Schema $schema
+     * @param Schema   $schema
+     * @param QueryBag $queries
      */
-    protected static function orocrmLeadTable(Schema $schema)
+    protected static function orocrmLeadTable(Schema $schema, QueryBag $queries)
     {
         $leadTable = $schema->getTable('orocrm_sales_lead');
         $leadTable->removeForeignKey('FK_73DB46339B6B5FBA');
@@ -62,9 +63,10 @@ class DropFields implements Migration, OrderedMigrationInterface
     }
 
     /**
-     * @param Schema $schema
+     * @param Schema   $schema
+     * @param QueryBag $queries
      */
-    protected static function orocrmOpportunityTable(Schema $schema)
+    protected static function orocrmOpportunityTable(Schema $schema, QueryBag $queries)
     {
         $opportunityTable = $schema->getTable('orocrm_sales_opportunity');
         $opportunityTable->removeForeignKey('FK_C0FE4AAC9B6B5FBA');
