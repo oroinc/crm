@@ -65,3 +65,8 @@ services:
             - false
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-account-opportunity-grid, method: onBuildAfter }
+
+    orocrm_sales.provider.enitity_state:
+        parent: orocrm_channel.provider.utils.entity_state_provider
+        arguments:
+            - 'OroCRM\Bundle\SalesBundle\Entity'
