@@ -40,7 +40,15 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *      routeView="orocrm_contact_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-group"
+ *              "icon"="icon-group",
+ *              "contact_information"={
+ *                  "email"={
+ *                      {"fieldName"="primaryEmail"}
+ *                  },
+ *                  "phone"={
+ *                      {"fieldName"="primaryPhone"}
+ *                  }
+ *              }
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
