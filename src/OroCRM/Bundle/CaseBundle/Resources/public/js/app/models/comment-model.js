@@ -1,23 +1,24 @@
 /*global define*/
-define(['backbone'],
-function (Backbone) {
+define([
+    'oroui/js/app/models/base/model'
+], function (BaseModel) {
     'use strict';
 
-    /**
-     * @export  orocrmcase/js/comment/model
-     * @class   orocrmcase.comment.Model
-     * @extends Backbone.Model
-     */
-    return Backbone.Model.extend({
+    var NoteModel;
+
+    NoteModel = BaseModel.extend({
         defaults: {
             id: null,
             message: null,
             briefMessage: null,
-            public: false,
+            'public': false,
             createdAt: null,
             updatedAt: null,
             permissions: null,
-            createdBy: null
+            createdBy: null,
+            updatedBy: null
         }
     });
+
+    return NoteModel;
 });
