@@ -33,44 +33,46 @@ class OroCRMAccountBundle implements Migration
 
         if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
             $queries->addPostQuery(
-                'DELETE FROM oro_entity_config_index_value
-                 WHERE entity_id IS NULL AND field_id IN(
-                   SELECT oecf.id FROM oro_entity_config_field AS oecf
-                   WHERE (
-                        oecf.field_name = \'extend_website\'
-                        OR oecf.field_name = \'extend_employees\'
-                        OR oecf.field_name = \'extend_ownership\'
-                        OR oecf.field_name = \'extend_ticker_symbol\'
-                        OR oecf.field_name = \'extend_rating\'
-                        OR oecf.field_name = \'extend_description\'
-                        OR oecf.field_name = \'shipping_address_id\'
-                        OR oecf.field_name = \'billing_address_id\'
+<<<DQL
+            DELETE FROM oro_entity_config_index_value
+                WHERE entity_id IS NULL AND field_id IN(
+                    SELECT oecf.id FROM oro_entity_config_field AS oecf
+                    WHERE oecf.field_name IN (
+                        'extend_website',
+                        'extend_employees',
+                        'extend_ownership',
+                        'extend_ticker_symbol',
+                        'extend_rating',
+                        'extend_description',
+                        'shippingAddress',
+                        'billingAddress'
                    )
                    AND oecf.entity_id = (
                       SELECT oec.id
                       FROM oro_entity_config AS oec
-                      WHERE oec.class_name = \'OroCRM\\\\Bundle\\\\AccountBundle\\\\Entity\\\\Account\'
+                      WHERE oec.class_name = 'OroCRM\\\\Bundle\\\\AccountBundle\\\\Entity\\\\Account'
                    )
                  );
 
                  DELETE FROM oro_entity_config_field
                    WHERE
                     field_name IN (
-                        \'extend_website\',
-                        \'extend_employees\',
-                        \'extend_ownership\',
-                        \'extend_ticker_symbol\',
-                        \'extend_rating\',
-                        \'extend_description\',
-                        \'shipping_address_id\',
-                        \'billing_address_id\'
+                        'extend_website',
+                        'extend_employees',
+                        'extend_ownership',
+                        'extend_ticker_symbol',
+                        'extend_rating',
+                        'extend_description',
+                        'shippingAddress',
+                        'billingAddress'
                     )
-                    AND
-                    entity_id IN (
+                    AND entity_id IN (
                       SELECT id
                       FROM oro_entity_config
-                      WHERE class_name = \'OroCRM\\\\Bundle\\\\AccountBundle\\\\Entity\\\\Account\'
-                    )'
+                      WHERE class_name = 'OroCRM\\\\Bundle\\\\AccountBundle\\\\Entity\\\\Account'
+                    )
+                ;
+DQL
             );
         }
     }
