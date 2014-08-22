@@ -14,7 +14,6 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
 
 /**
@@ -114,31 +113,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=110,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     **/
-    protected $contact;
-
-    /**
-     * @var Account
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
      *          "order"=120,
      *          "short"=true
      *      }
      *  }
      * )
      **/
-    protected $account;
+    protected $contact;
 
     /**
      * @var Lead
@@ -381,6 +362,24 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     protected $workflowStep;
 
     /**
+     * @var Customer
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Customer")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=110,
+     *          "short"=true
+     *      }
+     *  }
+     * )
+     */
+    protected $customer;
+
+    /**
      * @param WorkflowItem $workflowItem
      * @return Opportunity
      */
@@ -424,24 +423,6 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param Account $account
-     * @return Opportunity
-     */
-    public function setAccount($account)
-    {
-        $this->account = $account;
-        return $this;
-    }
-
-    /**
-     * @return Account
-     */
-    public function getAccount()
-    {
-        return $this->account;
     }
 
     /**
@@ -747,6 +728,22 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     {
         $this->notes = $notes;
         return $this;
+    }
+
+    /**
+     * @param Customer $customer
+     */
+    public function setCustomer(Customer $customer)
+    {
+        $this->customer = $customer;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
     }
 
     /**
