@@ -569,22 +569,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $nameParts = array_intersect_key($data, array_flip(['first_name', 'last_name']));
         $account   = ['name' => implode(' ', $nameParts)];
 
-        if (!empty($data['addresses'])) {
-            foreach ($data['addresses'] as $address) {
-                $addressTypes = array();
-                if (!empty($address['is_default_shipping'])) {
-                    $addressTypes[] = AddressType::TYPE_SHIPPING . 'Address';
-                }
-                if (!empty($address['is_default_billing'])) {
-                    $addressTypes[] = AddressType::TYPE_BILLING . 'Address';
-                }
-
-                foreach ($addressTypes as $addressType) {
-                    $account[$addressType] = $this->getBapAddressData($address);
-                }
-            }
-        }
-
         return $account;
     }
 

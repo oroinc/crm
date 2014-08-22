@@ -321,25 +321,6 @@ class CustomerStrategy extends BaseStrategy
             return $this;
         }
 
-        $addresses = [
-            AddressType::TYPE_SHIPPING => $account->getShippingAddress(),
-            AddressType::TYPE_BILLING  => $account->getBillingAddress()
-        ];
-
-        /** @var $address AbstractAddress|null */
-        foreach ($addresses as $key => $address) {
-            if (empty($address)) {
-                continue;
-            }
-
-            $address->setId(null);
-            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
-            $this->updateAddressCountryRegion($address, $mageRegionId);
-
-            $setter = 'set' . ucfirst($key) . 'Address';
-            $account->$setter($address->getCountry() ? $address : null);
-        }
-
         // populate default owner only for new accounts
         $this->defaultOwnerHelper->populateChannelOwner($account, $entity->getChannel());
         $entity->setAccount($account);
