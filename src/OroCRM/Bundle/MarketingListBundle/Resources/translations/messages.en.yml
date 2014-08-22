@@ -36,3 +36,9 @@ orocrm:
 
         block:
             general: General Information
+            list: List
+
+        action:
+            subscribe: Subscribe
+            unsubscribe: Unsubscribe
+            remove: Remove

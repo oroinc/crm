@@ -1,6 +1,7 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
 {% oro_title_set({params : {"%entity.name%": entity.name|default('N/A') }}) %}
 
@@ -80,12 +81,22 @@
         </div>
     {%- endset -%}
 
+    {%- set listData -%}
+        {{ dataGrid.renderGrid(gridName) }}
+    {%- endset -%}
+
     {% set dataBlocks = [
         {
             'title': 'orocrm.marketinglist.block.general'|trans,
             'class': 'active',
             'subblocks': [
                 {'data' : [listInformation]}
+            ]
+        },
+        {
+            'title': 'orocrm.marketinglist.block.list'|trans,
+            'subblocks': [
+                {'data' : [listData]}
             ]
         }
     ] %}

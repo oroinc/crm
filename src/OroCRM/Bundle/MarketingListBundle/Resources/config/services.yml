@@ -20,6 +20,7 @@ parameters:
     orocrm_marketing_list.form.type.entity_choice.class: OroCRM\Bundle\MarketingListBundle\Form\Type\ContactInformationEntityChoiceType
 
     orocrm_marketing_list.contact_information_field_helper.class: OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper
+    orocrm_marketing_list.datagrid.marketing_list_item_configuration_builder.class: OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemDatagridConfigurationBuilder
 services:
     orocrm_marketing_list.entity_provider:
         alias: oro_entity.entity_provider
@@ -154,3 +155,17 @@ services:
             - @orocrm_marketing_list.entity_provider.contact_information
         tags:
             - { name: form.type, alias: orocrm_marketing_list_contact_information_entity_choice }
+
+    orocrm_marketing_list.datagrid.marketing_list_item_configuration_builder:
+        class: %orocrm_marketing_list.datagrid.marketing_list_item_configuration_builder.class%
+        parent: oro_segment.grid.datagrid_configuration_builder
+        calls:
+            - [setConfigurationProvider, [@oro_datagrid.configuration.provider]]
+
+    orocrm_marketing_list.datagrid.configuration.provider:
+        class: %oro_segment.datagrid.configuration.provider.class%
+        arguments:
+            - @orocrm_marketing_list.datagrid.marketing_list_item_configuration_builder
+            - @doctrine
+        tags:
+            - { name: oro_datagrid.configuration.provider, priority: 20 }

@@ -104,3 +104,42 @@ datagrid:
                 label:         orocrm.marketinglist.datagrid.actions.delete.label
                 icon:          trash
                 link:          delete_link
+
+    orocrm-marketing-list-items-grid:
+        properties:
+            subscribe_link:
+                type: url
+                route: orocrm_api_delete_marketinglist_unsubscribeditem
+                params: [ id, marketingList ]
+            unsubscribe_link:
+                type: url
+                route: orocrm_api_post_marketinglist_unsubscribeditem
+                params: [ id, marketingList ]
+            remove_link:
+                type: url
+                route: orocrm_api_post_marketinglist_removeditem
+                params: [ id, marketingList ]
+        actions:
+            subscribe:
+                type:         ajax
+                label:        orocrm.marketinglist.action.subscribe
+                link:         subscribe_link
+                icon:         plus
+                acl_recource: orocrm_marketinglist_unsubscribed_item_delete
+                rowAction:    true
+            unsubscribe:
+                type:         ajax
+                label:        orocrm.marketinglist.action.unsubscribe
+                link:         unsubscribe_link
+                icon:         minus
+                acl_recource: orocrm_marketinglist_unsubscribed_item_create
+                rowAction:    true
+            remove:
+                type:         ajax
+                label:        orocrm.marketinglist.action.remove
+                link:         remove_link
+                icon:         remove
+                acl_recource: orocrm_marketing_list_removed_item_create
+                rowAction:    true
+#        options:
+#            export: true
