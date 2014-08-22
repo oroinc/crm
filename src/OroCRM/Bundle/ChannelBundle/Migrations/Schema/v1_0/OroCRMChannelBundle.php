@@ -22,7 +22,7 @@ class OroCRMChannelBundle implements Migration
         /** Foreign keys generation **/
         $this->addOrocrmChannelForeignKeys($schema);
         $this->addOrocrmChannelEntityNameForeignKeys($schema);
-        $this->addOrocrmChannelEntityNameForeignKeys($schema);
+        $this->addOrocrmChannelCustIdentityForeignKeys($schema);
     }
 
     /**
