@@ -16,7 +16,6 @@ use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
 
@@ -105,24 +104,6 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      * )
      */
     protected $contact;
-
-    /**
-     * @var Account
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=160,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     */
-    protected $account;
 
     /**
      * @var string
@@ -449,6 +430,24 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowStep;
+
+    /**
+     * @var Customer
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Customer")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=160,
+     *          "short"=true
+     *      }
+     *  }
+     * )
+     */
+    protected $customer;
 
     /**
      * Constructor
@@ -906,24 +905,6 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     }
 
     /**
-     * @return \OroCRM\Bundle\AccountBundle\Entity\Account
-     */
-    public function getAccount()
-    {
-        return $this->account;
-    }
-
-    /**
-     * @param Account $account
-     * @return Lead
-     */
-    public function setAccount($account)
-    {
-        $this->account = $account;
-        return $this;
-    }
-
-    /**
      * Get opportunities
      *
      * @return Opportunity[]
@@ -1003,6 +984,22 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     public function getWorkflowStep()
     {
         return $this->workflowStep;
+    }
+
+    /**
+     * @param Customer $customer
+     */
+    public function setCustomer(Customer $customer)
+    {
+        $this->customer = $customer;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
     }
 
     /**
