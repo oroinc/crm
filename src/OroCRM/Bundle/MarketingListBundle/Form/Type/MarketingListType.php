@@ -20,12 +20,12 @@ class MarketingListType extends AbstractQueryDesignerType
             ->add(
                 'type',
                 'entity',
-                array(
+                [
                     'class'       => 'OroCRMMarketingListBundle:MarketingListType',
                     'property'    => 'label',
                     'required'    => true,
                     'empty_value' => 'orocrm.marketinglist.form.choose_marketing_list_type'
-                )
+                ]
             )
             ->add('description', 'textarea', ['required' => false]);
 
