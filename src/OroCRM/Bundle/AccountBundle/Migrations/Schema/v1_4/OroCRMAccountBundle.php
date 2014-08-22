@@ -21,7 +21,6 @@ class OroCRMAccountBundle implements Migration
         $table->dropColumn('extend_ownership');
         $table->dropColumn('extend_ticker_symbol');
         $table->dropColumn('extend_rating');
-        $table->dropColumn('extend_description');
 
         $table->removeForeignKey('FK_7166D3714D4CFF2B');
         $table->dropIndex('IDX_7166D3714D4CFF2B');
