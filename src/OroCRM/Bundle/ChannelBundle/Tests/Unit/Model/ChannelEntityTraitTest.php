@@ -10,21 +10,21 @@ class ChannelEntityTraitTest extends \PHPUnit_Framework_TestCase
     {
         $stub = new StubChannelEntity();
 
-        $this->assertTrue(method_exists($stub, 'setDataChannel'));
-        $this->assertTrue(method_exists($stub, 'getDataChannel'));
+        $this->assertTrue(method_exists($stub, 'setChannel'));
+        $this->assertTrue(method_exists($stub, 'getChannel'));
     }
 
     public function testDataSet()
     {
         $stub = new StubChannelEntity();
 
-        $this->assertNull($stub->getDataChannel());
+        $this->assertNull($stub->getChannel());
 
         $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
-        $stub->setDataChannel($channel);
+        $stub->setChannel($channel);
 
-        $this->assertSame($channel, $stub->getDataChannel());
-        $this->assertAttributeSame($channel, 'dataChannel', $stub);
+        $this->assertSame($channel, $stub->getChannel());
+        $this->assertAttributeSame($channel, 'channel', $stub);
     }
 
     /**
@@ -33,6 +33,6 @@ class ChannelEntityTraitTest extends \PHPUnit_Framework_TestCase
     public function testSetterHasTypeHint()
     {
         $stub = new StubChannelEntity();
-        $stub->setDataChannel('testString');
+        $stub->setChannel('testString');
     }
 }
