@@ -23,9 +23,9 @@ class CustomerIdentityTest extends AbstractEntityTestCase
     public function getDataProvider()
     {
         $name    = 'Some name';
-        $account = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
-        $contact = $this->getMock('Oro\Bundle\ContactBundle\Entity\Contact');
-        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
+        $contact = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
+        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
         $owner   = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
 
         $someDateTime = new \DateTime();
