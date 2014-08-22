@@ -34,26 +34,6 @@ class OroCRMAccountBundle implements Migration
         if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
             $queries->addPostQuery(
 <<<DQL
-            DELETE FROM oro_entity_config_index_value
-                WHERE entity_id IS NULL AND field_id IN(
-                    SELECT oecf.id FROM oro_entity_config_field AS oecf
-                    WHERE oecf.field_name IN (
-                        'extend_website',
-                        'extend_employees',
-                        'extend_ownership',
-                        'extend_ticker_symbol',
-                        'extend_rating',
-                        'extend_description',
-                        'shippingAddress',
-                        'billingAddress'
-                   )
-                   AND oecf.entity_id = (
-                      SELECT oec.id
-                      FROM oro_entity_config AS oec
-                      WHERE oec.class_name = 'OroCRM\\\\Bundle\\\\AccountBundle\\\\Entity\\\\Account'
-                   )
-                 );
-
                  DELETE FROM oro_entity_config_field
                    WHERE
                     field_name IN (
@@ -62,7 +42,6 @@ class OroCRMAccountBundle implements Migration
                         'extend_ownership',
                         'extend_ticker_symbol',
                         'extend_rating',
-                        'extend_description',
                         'shippingAddress',
                         'billingAddress'
                     )
