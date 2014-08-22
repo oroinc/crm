@@ -45,7 +45,7 @@ class MarketingListController extends Controller
         return [
             'entity' => $entity,
             'config' => $entityConfig,
-            'gridName' => Segment::GRID_PREFIX . $entity->getId()
+            'gridName' => Segment::GRID_PREFIX . $entity->getSegment()->getId()
         ];
     }
 
