@@ -4,9 +4,9 @@ define([
 ], function (BaseModel) {
     'use strict';
 
-    var NoteModel;
+    var CommentModel;
 
-    NoteModel = BaseModel.extend({
+    CommentModel = BaseModel.extend({
         defaults: {
             id: null,
             message: null,
@@ -20,5 +20,5 @@ define([
         }
     });
 
-    return NoteModel;
+    return CommentModel;
 });
