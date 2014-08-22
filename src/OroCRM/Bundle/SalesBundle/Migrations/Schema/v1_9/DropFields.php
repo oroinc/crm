@@ -15,7 +15,7 @@ class DropFields implements Migration, OrderedMigrationInterface
      */
     public function getOrder()
     {
-        return 3;
+        return 30;
     }
 
     /**
@@ -40,24 +40,27 @@ class DropFields implements Migration, OrderedMigrationInterface
 
         if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
             $queries->addPostQuery(
-                'DELETE FROM oro_entity_config_index_value
+<<<DQL
+            DELETE FROM oro_entity_config_index_value
                  WHERE entity_id IS NULL AND field_id IN (
                      SELECT oecf.id FROM oro_entity_config_field AS oecf
-                     WHERE (oecf.field_name = \'account_id\')
-                     AND oecf.entity_id = (
-                         SELECT oec.id
-                         FROM oro_entity_config AS oec
-                         WHERE oec.class_name = \'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Lead\'
-                     )
+                    WHERE oecf.field_name = 'account'
+                    AND oecf.entity_id IN (
+                        SELECT id
+                        FROM oro_entity_config
+                        WHERE class_name = 'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Lead'
+                    )
                  );
 
                  DELETE FROM oro_entity_config_field
-                   WHERE field_name IN (\'account_id\')
-                    AND entity_id IN (
-                        SELECT id
-                        FROM oro_entity_config
-                        WHERE class_name = \'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Lead\'
-                    )'
+                        WHERE field_name IN ('account')
+                        AND entity_id IN (
+                            SELECT id
+                            FROM oro_entity_config
+                            WHERE class_name = 'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Lead'
+                        )
+                ;
+DQL
             );
         }
     }
@@ -75,24 +78,27 @@ class DropFields implements Migration, OrderedMigrationInterface
 
         if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
             $queries->addPostQuery(
-                'DELETE FROM oro_entity_config_index_value
+<<<DQL
+            DELETE FROM oro_entity_config_index_value
                  WHERE entity_id IS NULL AND field_id IN (
                      SELECT oecf.id FROM oro_entity_config_field AS oecf
-                     WHERE (oecf.field_name = \'account_id\')
-                     AND oecf.entity_id = (
-                         SELECT oec.id
-                         FROM oro_entity_config AS oec
-                         WHERE oec.class_name = \'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Opportunity\'
-                     )
+                    WHERE oecf.field_name = 'account'
+                    AND oecf.entity_id IN (
+                        SELECT id
+                        FROM oro_entity_config
+                        WHERE class_name = 'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Opportunity'
+                    )
                  );
 
                  DELETE FROM oro_entity_config_field
-                   WHERE field_name IN (\'account_id\')
-                    AND entity_id IN (
-                        SELECT id
-                        FROM oro_entity_config
-                        WHERE class_name = \'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Opportunity\'
-                    )'
+                        WHERE field_name IN ('account')
+                        AND entity_id IN (
+                            SELECT id
+                            FROM oro_entity_config
+                            WHERE class_name = 'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Opportunity'
+                        )
+                ;
+DQL
             );
         }
     }
