@@ -362,9 +362,9 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     protected $workflowStep;
 
     /**
-     * @var Customer
+     * @var B2bCustomer
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Customer")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\B2bCustomer")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      * @ConfigField(
@@ -731,15 +731,15 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param Customer $customer
+     * @param B2bCustomer $customer
      */
-    public function setCustomer(Customer $customer)
+    public function setCustomer(B2bCustomer $customer)
     {
         $this->customer = $customer;
     }
 
     /**
-     * @return Customer
+     * @return B2bCustomer
      */
     public function getCustomer()
     {

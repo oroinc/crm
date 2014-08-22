@@ -2,16 +2,16 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\SalesBundle\Entity\Customer;
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class B2bCustomerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getSetDataProvider
      */
     public function testGetSet($property, $value, $expected)
     {
-        $obj = new Customer();
+        $obj = new B2bCustomer();
 
         call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
         $this->assertEquals($expected, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));

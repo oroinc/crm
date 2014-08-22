@@ -5,19 +5,19 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
-use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\SalesBundle\Model\ExtendCustomer;
+use OroCRM\Bundle\SalesBundle\Model\ExtendB2bCustomer;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="orocrm_sales_customer")
+ * @ORM\Table(name="orocrm_sales_b2bcustomer")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      defaultValues={
@@ -39,7 +39,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendCustomer;
  *      }
  * )
  */
-class Customer extends ExtendCustomer implements Taggable
+class B2bCustomer extends ExtendB2bCustomer implements Taggable
 {
     /**
      * @var integer
@@ -260,23 +260,6 @@ class Customer extends ExtendCustomer implements Taggable
     /**
      * @return Address
      */
-    public function getBillingAddress()
-    {
-        return $this->billingAddress;
-    }
-
-    /**
-     * @param Address $billingAddress
-     */
-    public function setBillingAddress(Address $billingAddress)
-    {
-        $this->billingAddress = $billingAddress;
-    }
-
-
-    /**
-     * @return Address
-     */
     public function getShippingAddress()
     {
         return $this->shippingAddress;
@@ -288,6 +271,22 @@ class Customer extends ExtendCustomer implements Taggable
     public function setShippingAddress(Address $shippingAddress)
     {
         $this->shippingAddress = $shippingAddress;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getBillingAddress()
+    {
+        return $this->billingAddress;
+    }
+
+    /**
+     * @param Address $billingAddress
+     */
+    public function setBillingAddress(Address $billingAddress)
+    {
+        $this->billingAddress = $billingAddress;
     }
 
     /**
