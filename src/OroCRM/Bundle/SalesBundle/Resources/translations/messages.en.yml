@@ -91,12 +91,12 @@ orocrm:
             status.label:         Status
             close_reason.label:   Close reason
             contact.label:        Potential Customer
-            account.label:        Account
             owner.label:          Owner
             notes.label:          Additional comments
             lead.label:           Lead
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
+            customer.label:       B2B Customer
 
             datagrid:
                 view: View
@@ -136,7 +136,6 @@ orocrm:
             industry.label:       Industry
             status.label:         Status
             contact.label:        Contact
-            account.label:        Account
             owner.label:          Owner
             address.label:        Address
             details.label:        Lead Details
@@ -147,6 +146,7 @@ orocrm:
             workflow_step.label:  Step
             information:          Lead Information
             campaign.label:       Campaign
+            customer.label:       B2B Customer
 
             extend_source:
                 unclassified:     Unclassified
@@ -189,4 +189,3 @@ orocrm:
             id.label:             Id
             account.label:        Account
             entity_description:   Represent B2B customer
-            label.label:          Label

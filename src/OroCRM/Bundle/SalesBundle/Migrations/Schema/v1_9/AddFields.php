@@ -15,7 +15,7 @@ class AddFields implements Migration, OrderedMigrationInterface
      */
     public function getOrder()
     {
-        return 2;
+        return 20;
     }
 
     /**
@@ -34,12 +34,12 @@ class AddFields implements Migration, OrderedMigrationInterface
     {
         $leadTable = $schema->getTable('orocrm_sales_lead');
 
-        $leadTable->addColumn('b2bcustomer_id', 'integer', ['notnull' => false]);
-        $leadTable->addIndex(['b2bcustomer_id']);
+        $leadTable->addColumn('customer_id', 'integer', ['notnull' => false]);
+        $leadTable->addIndex(['customer_id'], 'IDX_73DB46339395C3F3', []);
 
         $leadTable->addForeignKeyConstraint(
             $schema->getTable('orocrm_sales_customer'),
-            ['b2bcustomer_id'],
+            ['customer_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
@@ -52,14 +52,14 @@ class AddFields implements Migration, OrderedMigrationInterface
     {
         $opportunityTable = $schema->getTable('orocrm_sales_opportunity');
 
-        $opportunityTable->addColumn('b2bcustomer_id', 'integer', ['notnull' => false]);
-        $opportunityTable->addIndex(['b2bcustomer_id']);
+        $opportunityTable->addColumn('customer_id', 'integer', ['notnull' => false]);
+        $opportunityTable->addIndex(['customer_id'], 'IDX_C0FE4AAC9395C3F3', []);
 
         $opportunityTable->addForeignKeyConstraint(
             $schema->getTable('orocrm_sales_customer'),
-            ['b2bcustomer_id'],
+            ['customer_id'],
             ['id'],
-            ['onDelete' => null, 'onUpdate' => null]
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
     }
 }
