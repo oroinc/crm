@@ -12,6 +12,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendB2bCustomer;
 
@@ -142,7 +143,7 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
     protected $contact;
 
     /**
-     * @var Contact
+     * @var Channel
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
@@ -231,6 +232,9 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
     public function __construct()
     {
         parent::__construct();
+
+        $this->leads         = new ArrayCollection();
+        $this->opportunities = new ArrayCollection();
     }
 
     /**
@@ -322,7 +326,7 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
     }
 
     /**
-     * @return Contact
+     * @return Channel
      */
     public function getChannel()
     {
@@ -330,9 +334,9 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
     }
 
     /**
-     * @param Contact $channel
+     * @param Channel $channel
      */
-    public function setChannel(Contact $channel)
+    public function setChannel(Channel $channel)
     {
         $this->channel = $channel;
     }
@@ -492,7 +496,7 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
      *
      * @ORM\PrePersist
      */
-    public function beforeSave()
+    public function prePersist()
     {
         $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
@@ -502,7 +506,7 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
      *
      * @ORM\PreUpdate
      */
-    public function beforeUpdate()
+    public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
