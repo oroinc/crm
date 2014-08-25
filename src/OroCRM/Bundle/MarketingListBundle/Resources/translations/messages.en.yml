@@ -1,3 +1,6 @@
+Item unsubscribed: Item unsubscribed
+Item subscribed: Item subscribed
+Item removed from list: Item removed from list
 orocrm:
     marketinglist:
         entity_label:        Marketing List

@@ -109,6 +109,7 @@ datagrid:
         source:
             query:
                 select:
+                    - t1.id
                     - (CASE WHEN mlu.id IS NULL THEN true ELSE false END) as subscribed
                 join:
                     left:
@@ -116,12 +117,12 @@ datagrid:
                             join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
                             alias: 'mlu'
                             conditionType: 'WITH'
-                            condition: 'mlu.entityId = t1.id'
+                            condition: 'mlu.entityId = t1.id AND mlu.marketingList = :marketingListEntity'
                         -
                             join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
                             alias: 'mlr'
                             conditionType: 'WITH'
-                            condition: 'mlr.entityId = t1.id'
+                            condition: 'mlr.entityId = t1.id AND mlr.marketingList = :marketingListEntity'
                 where:
                     and:
                         - mlr.id IS NULL
@@ -134,19 +135,23 @@ datagrid:
                 subscribed:
                     type: boolean
                     data_name: subscribed
+        sorters:
+            columns:
+                subscribed: { data_name: subscribed }
         properties:
+            marketingList: ~
             subscribe_link:
                 type: url
-                route: orocrm_api_delete_marketinglist_unsubscribeditem
-                params: [ id, marketingList ]
+                route: orocrm_api_subscribe_marketinglist_unsubscribeditem
+                params: [ marketingList, id ]
             unsubscribe_link:
                 type: url
-                route: orocrm_api_post_marketinglist_unsubscribeditem
-                params: [ id, marketingList ]
+                route: orocrm_api_unsubscribe_marketinglist_unsubscribeditem
+                params: [ marketingList, id ]
             remove_link:
                 type: url
-                route: orocrm_api_post_marketinglist_removeditem
-                params: [ id, marketingList ]
+                route: orocrm_api_remove_marketinglist_removeditem
+                params: [ marketingList, id ]
         actions:
             subscribe:
                 type:         ajax
@@ -166,6 +171,9 @@ datagrid:
                 link:         remove_link
                 icon:         remove
                 acl_recource: orocrm_marketing_list_removed_item_create
+
+        action_configuration: [@orocrm_marketing_list.datagrid.action_permission_provider, "getMarketingListItemPermissions"]
+
         options:
             export: true
             skip_count_walker: true
@@ -175,7 +183,7 @@ datagrid:
             marketingList: ~
             unremove_link:
                 type: url
-                route: orocrm_api_delete_marketinglist_removeditem_by_entity
+                route: orocrm_api_unremove_marketinglist_removeditem
                 params: [ marketingList, id ]
         actions:
             unremove:

@@ -15,6 +15,7 @@ parameters:
     orocrm_marketing_list.datagrid.marketing_list_type.provider.class: OroCRM\Bundle\MarketingListBundle\Datagrid\GridMarketingListTypeProvider
     orocrm_marketing_list.datagrid.listener.items.class: OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener
     orocrm_marketing_list.datagrid.listener.removed_items.class: OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListRemovedItemsListener
+    orocrm_marketing_list.datagrid.action_permission_provider.class: OroCRM\Bundle\MarketingListBundle\Datagrid\ActionPermissionProvider
 
 services:
     orocrm_marketing_list.entity_provider:
@@ -77,6 +78,7 @@ services:
             - @orocrm_marketing_list.datagrid_configuration_helper
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after, method: onBuildAfter }
 
     orocrm_marketing_list.datagrid.listener.removed_items:
         class: %orocrm_marketing_list.datagrid.listener.removed_items.class%
@@ -86,3 +88,6 @@ services:
             - @orocrm_marketing_list.datagrid_configuration_helper
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild }
+
+    orocrm_marketing_list.datagrid.action_permission_provider:
+        class: %orocrm_marketing_list.datagrid.action_permission_provider.class%
