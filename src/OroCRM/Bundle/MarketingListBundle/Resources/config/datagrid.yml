@@ -105,7 +105,35 @@ datagrid:
                 icon:          trash
                 link:          delete_link
 
-    orocrm-marketing-list-items-grid:
+    orocrm-marketing-list-items-mixin:
+        source:
+            query:
+                select:
+                    - (CASE WHEN mlu.id IS NULL THEN true ELSE false END) as subscribed
+                join:
+                    left:
+                        -
+                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
+                            alias: 'mlu'
+                            conditionType: 'WITH'
+                            condition: 'mlu.entityId = t1.id'
+                        -
+                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
+                            alias: 'mlr'
+                            conditionType: 'WITH'
+                            condition: 'mlr.entityId = t1.id'
+                where:
+                    and:
+                        - mlr.id IS NULL
+        columns:
+            subscribed:
+                label: orocrm.marketinglist.datagrid.subscribed
+                frontend_type: boolean
+        filters:
+            columns:
+                subscribed:
+                    type: boolean
+                    data_name: subscribed
         properties:
             subscribe_link:
                 type: url
@@ -138,10 +166,11 @@ datagrid:
                 link:         remove_link
                 icon:         remove
                 acl_recource: orocrm_marketing_list_removed_item_create
-#        options:
-#            export: true
+        options:
+            export: true
+            skip_count_walker: true
 
-    orocrm-marketing-list-removed-items-extend:
+    orocrm-marketing-list-removed-items-mixin:
         properties:
             marketingList: ~
             unremove_link:
@@ -155,3 +184,5 @@ datagrid:
                 link:         unremove_link
                 icon:         undo
                 acl_recource: orocrm_marketing_list_removed_item_delete
+        options:
+            skip_count_walker: true

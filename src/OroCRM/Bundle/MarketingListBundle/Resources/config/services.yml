@@ -3,27 +3,19 @@ parameters:
     orocrm_marketing_list.removed_item.class:  OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem
     orocrm_marketing_list.unsubscribed_item.class:  OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem
 
-    orocrm_marketing_list.datagrid.marketing_list_type.provider.class: OroCRM\Bundle\MarketingListBundle\Datagrid\GridMarketingListTypeProvider
-
-    orocrm_marketing_list.form.type.marketing_list.class: OroCRM\Bundle\MarketingListBundle\Form\Type\MarketingListType
-    orocrm_marketing_list.form.type.marketing_list_removed_item.class: OroCRM\Bundle\MarketingListBundle\Form\Type\MarketingListTypeRemovedItemType
-    orocrm_marketing_list.form.type.marketing_list_unsubscribed_item.class: OroCRM\Bundle\MarketingListBundle\Form\Type\MarketingListTypeUnsubscribedItemType
-
-    orocrm_marketing_list.form.handler.marketing_list.class: OroCRM\Bundle\MarketingListBundle\Form\Handler\MarketingListHandler
+    orocrm_marketing_list.contact_information_field_helper.class: OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper
     orocrm_marketing_list.contact_information_column_validator.class: OroCRM\Bundle\MarketingListBundle\Validator\ContactInformationColumnValidator
+    orocrm_marketing_list.provider.contact_information_exclusion.class: OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationExclusionProvider
 
     orocrm_marketing_list.marketing_list.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_marketing_list.marketing_list_removed_item.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_marketing_list.marketing_list_unsubscribed_item.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
-    orocrm_marketing_list.provider.contact_information_exclusion.class: OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationExclusionProvider
-    orocrm_marketing_list.form.type.entity_choice.class: OroCRM\Bundle\MarketingListBundle\Form\Type\ContactInformationEntityChoiceType
-
-    orocrm_marketing_list.contact_information_field_helper.class: OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper
     orocrm_marketing_list.datagrid_configuration_helper.class: OroCRM\Bundle\MarketingListBundle\Model\DataGridConfigurationHelper
-    orocrm_marketing_list.datagrid.marketing_list_item_configuration_builder.class: OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemDatagridConfigurationBuilder
+    orocrm_marketing_list.datagrid.marketing_list_type.provider.class: OroCRM\Bundle\MarketingListBundle\Datagrid\GridMarketingListTypeProvider
+    orocrm_marketing_list.datagrid.listener.items.class: OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener
+    orocrm_marketing_list.datagrid.listener.removed_items.class: OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListRemovedItemsListener
 
-    orocrm_marketing_list.datagrid.listener.removed_items.class: OroCRM\Bundle\MarketingListBundle\Datagrid\DataGridRemovedItemsListener
 services:
     orocrm_marketing_list.entity_provider:
         alias: oro_entity.entity_provider
@@ -32,93 +24,23 @@ services:
         class: %orocrm_marketing_list.datagrid.marketing_list_type.provider.class%
         arguments: [ @doctrine ]
 
-    # MarketingList
-    orocrm_marketing_list.form.type.marketing_list:
-        class: %orocrm_marketing_list.form.type.marketing_list.class%
-        tags:
-            - { name: form.type, alias: orocrm_marketing_list }
-
     orocrm_marketing_list.marketing_list.manager.api:
         class: %orocrm_marketing_list.marketing_list.manager.api.class%
         arguments:
             - %orocrm_marketing_list.entity.class%
             - @doctrine.orm.entity_manager
 
-    orocrm_marketing_list.form.marketing_list:
-        class:           Symfony\Component\Form\Form
-        factory_method:  createNamed
-        factory_service: form.factory
-        arguments:
-            - "orocrm_marketing_list_form"
-            - "orocrm_marketing_list"
-
-    # MarketingListRemovedItem
     orocrm_marketing_list.marketing_list_removed_item.manager.api:
         class: %orocrm_marketing_list.marketing_list_removed_item.manager.api.class%
         arguments:
             - %orocrm_marketing_list.removed_item.class%
             - @doctrine.orm.entity_manager
 
-    orocrm_marketing_list.form.type.marketing_list_removed_item:
-        class: %orocrm_marketing_list.form.type.marketing_list_removed_item.class%
-        tags:
-            - { name: form.type, alias: orocrm_marketing_list_removed_item }
-
-    orocrm_marketing_list.form.type.marketing_list_removed_item_api:
-        parent: oro_form.type.api
-        arguments:
-            - 'orocrm_marketing_list_removed_item_api'
-            - @orocrm_marketing_list.form.type.marketing_list_removed_item
-        tags:
-            - { name: form.type, alias: orocrm_marketing_list_removed_item_api }
-
-    orocrm_marketing_list.form.marketing_list_removed_item:
-        class:           Symfony\Component\Form\Form
-        factory_method:  createNamed
-        factory_service: form.factory
-        arguments:
-            - ~
-            - 'orocrm_marketing_list_removed_item_api'
-
-    orocrm_marketing_list.form.handler.marketing_list_removed_item:
-        parent: oro_form.form_handler.api
-        scope: request
-        calls:
-            - [setForm, [@orocrm_marketing_list.form.marketing_list_removed_item]]
-
-    # MarketingListUnsubscribedItem
     orocrm_marketing_list.marketing_list_unsubscribed_item.manager.api:
         class: %orocrm_marketing_list.marketing_list_unsubscribed_item.manager.api.class%
         arguments:
             - %orocrm_marketing_list.unsubscribed_item.class%
             - @doctrine.orm.entity_manager
-
-    orocrm_marketing_list.form.type.marketing_list_unsubscribed_item:
-        class: %orocrm_marketing_list.form.type.marketing_list_unsubscribed_item.class%
-        tags:
-            - { name: form.type, alias: orocrm_marketing_list_unsubscribed_item }
-
-    orocrm_marketing_list.form.type.marketing_list_unsubscribed_item_api:
-        parent: oro_form.type.api
-        arguments:
-            - 'orocrm_marketing_list_unsubscribed_item_api'
-            - @orocrm_marketing_list.form.type.marketing_list_unsubscribed_item
-        tags:
-            - { name: form.type, alias: orocrm_marketing_list_unsubscribed_item_api }
-
-    orocrm_marketing_list.form.marketing_list_unsubscribed_item:
-        class:           Symfony\Component\Form\Form
-        factory_method:  createNamed
-        factory_service: form.factory
-        arguments:
-            - ~
-            - 'orocrm_marketing_list_unsubscribed_item_api'
-
-    orocrm_marketing_list.form.handler.marketing_list_unsubscribed_item:
-        parent: oro_form.form_handler.api
-        scope: request
-        calls:
-            - [setForm, [@orocrm_marketing_list.form.marketing_list_unsubscribed_item]]
 
     orocrm_marketing_list.contact_information_field_helper:
         class: %orocrm_marketing_list.contact_information_field_helper.class%
@@ -129,15 +51,6 @@ services:
         class: %orocrm_marketing_list.datagrid_configuration_helper.class%
         arguments:
             - @oro_datagrid.configuration.provider
-
-    orocrm_marketing_list.form.handler.marketing_list:
-        class: %orocrm_marketing_list.form.handler.marketing_list.class%
-        scope: request
-        arguments:
-            - @orocrm_marketing_list.form.marketing_list
-            - @request
-            - @doctrine
-            - @validator
 
     orocrm_marketing_list.contact_information_column_validator:
         class: %orocrm_marketing_list.contact_information_column_validator.class%
@@ -157,34 +70,19 @@ services:
         calls:
             - [setExclusionProvider, [@orocrm_marketing_list.provider.contact_information_exclusion]]
 
-    orocrm_marketing_list.form.type.entity_choice:
-        class: %orocrm_marketing_list.form.type.entity_choice.class%
+    orocrm_marketing_list.datagrid.listener.items:
+        class: %orocrm_marketing_list.datagrid.listener.items.class%
         arguments:
-            - @orocrm_marketing_list.entity_provider.contact_information
-        tags:
-            - { name: form.type, alias: orocrm_marketing_list_contact_information_entity_choice }
-
-    orocrm_marketing_list.datagrid.marketing_list_item_configuration_builder:
-        class: %orocrm_marketing_list.datagrid.marketing_list_item_configuration_builder.class%
-        parent: oro_segment.grid.datagrid_configuration_builder
-        calls:
-            - [setConfigurationHelper, [@orocrm_marketing_list.datagrid_configuration_helper]]
-
-    orocrm_marketing_list.datagrid.configuration.provider:
-        class: %oro_segment.datagrid.configuration.provider.class%
-        arguments:
-            - @orocrm_marketing_list.datagrid.marketing_list_item_configuration_builder
             - @doctrine
+            - @orocrm_marketing_list.datagrid_configuration_helper
         tags:
-            - { name: oro_datagrid.configuration.provider, priority: 20 }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild }
 
     orocrm_marketing_list.datagrid.listener.removed_items:
         class: %orocrm_marketing_list.datagrid.listener.removed_items.class%
         arguments:
             - @doctrine
             - @oro_entity.doctrine_helper
-            - @service_container
             - @orocrm_marketing_list.datagrid_configuration_helper
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after, method: onBuildAfter }

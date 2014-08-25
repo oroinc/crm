@@ -23,6 +23,7 @@ orocrm:
             choose_marketing_list_type:    Choose marketing list type
 
         datagrid:
+            subscribed: Subscribed
             update: Update
             delete: Delete
             view: View
