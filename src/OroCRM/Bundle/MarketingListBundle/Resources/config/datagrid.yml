@@ -126,20 +126,32 @@ datagrid:
                 link:         subscribe_link
                 icon:         plus
                 acl_recource: orocrm_marketinglist_unsubscribed_item_delete
-                rowAction:    true
             unsubscribe:
                 type:         ajax
                 label:        orocrm.marketinglist.action.unsubscribe
                 link:         unsubscribe_link
                 icon:         minus
                 acl_recource: orocrm_marketinglist_unsubscribed_item_create
-                rowAction:    true
             remove:
                 type:         ajax
                 label:        orocrm.marketinglist.action.remove
                 link:         remove_link
                 icon:         remove
                 acl_recource: orocrm_marketing_list_removed_item_create
-                rowAction:    true
 #        options:
 #            export: true
+
+    orocrm-marketing-list-removed-items-extend:
+        properties:
+            marketingList: ~
+            unremove_link:
+                type: url
+                route: orocrm_api_delete_marketinglist_removeditem_by_entity
+                params: [ marketingList, id ]
+        actions:
+            unremove:
+                type:         delete
+                label:        orocrm.marketinglist.action.unremove
+                link:         unremove_link
+                icon:         undo
+                acl_recource: orocrm_marketing_list_removed_item_delete

@@ -35,7 +35,7 @@ class MarketingListUnsubscribedItem
     /**
      * @var MarketingList
      *
-     * @ORM\ManyToOne(targetEntity="MarketingList")
+     * @ORM\ManyToOne(targetEntity="MarketingList", inversedBy="marketingListUnsubscribedItems")
      * @ORM\JoinColumn(name="marketing_list_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     protected $marketingList;

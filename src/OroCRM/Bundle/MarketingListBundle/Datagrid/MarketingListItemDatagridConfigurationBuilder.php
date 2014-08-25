@@ -2,27 +2,26 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Datagrid;
 
-use Oro\Bundle\DataGridBundle\Provider\ConfigurationProviderInterface;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use Oro\Bundle\SegmentBundle\Grid\SegmentDatagridConfigurationBuilder;
+use OroCRM\Bundle\MarketingListBundle\Model\DataGridConfigurationHelper;
 
 class MarketingListItemDatagridConfigurationBuilder extends SegmentDatagridConfigurationBuilder
 {
     const MARKETING_LIST = 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingList';
-
     const GRID_NAME = 'orocrm-marketing-list-items-grid';
 
     /**
-     * @var ConfigurationProviderInterface
+     * @var DataGridConfigurationHelper
      */
-    protected $configurationProvider;
+    protected $dataGridConfigurationHelper;
 
     /**
-     * @param ConfigurationProviderInterface $configurationProvider
+     * @param DataGridConfigurationHelper $dataGridConfigurationHelper
      */
-    public function setConfigurationProvider(ConfigurationProviderInterface $configurationProvider)
+    public function setConfigurationHelper(DataGridConfigurationHelper $dataGridConfigurationHelper)
     {
-        $this->configurationProvider = $configurationProvider;
+        $this->dataGridConfigurationHelper = $dataGridConfigurationHelper;
     }
 
     /**
@@ -30,23 +29,7 @@ class MarketingListItemDatagridConfigurationBuilder extends SegmentDatagridConfi
      */
     public function getConfiguration()
     {
-        $configuration     = parent::getConfiguration();
-        $gridConfiguration = $this->configurationProvider->getConfiguration(self::GRID_NAME);
-        $scopes            = array_diff(array_keys($configuration->getIterator()->getArrayCopy()), ['name']);
-
-        foreach ($scopes as $scope) {
-            $path             = sprintf('[%s]', $scope);
-            $additionalParams = $gridConfiguration->offsetGetByPath($path);
-
-            if (empty($additionalParams)) {
-                continue;
-            }
-
-            $baseParams = $configuration->offsetGetByPath($path);
-            $configuration->offsetSetByPath($path, array_merge_recursive($baseParams, $additionalParams));
-        }
-
-        return $configuration;
+        return $this->dataGridConfigurationHelper->extendConfiguration(parent::getConfiguration(), self::GRID_NAME);
     }
 
     /**

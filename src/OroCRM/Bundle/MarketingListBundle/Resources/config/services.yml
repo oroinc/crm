@@ -20,7 +20,10 @@ parameters:
     orocrm_marketing_list.form.type.entity_choice.class: OroCRM\Bundle\MarketingListBundle\Form\Type\ContactInformationEntityChoiceType
 
     orocrm_marketing_list.contact_information_field_helper.class: OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper
+    orocrm_marketing_list.datagrid_configuration_helper.class: OroCRM\Bundle\MarketingListBundle\Model\DataGridConfigurationHelper
     orocrm_marketing_list.datagrid.marketing_list_item_configuration_builder.class: OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemDatagridConfigurationBuilder
+
+    orocrm_marketing_list.datagrid.listener.removed_items.class: OroCRM\Bundle\MarketingListBundle\Datagrid\DataGridRemovedItemsListener
 services:
     orocrm_marketing_list.entity_provider:
         alias: oro_entity.entity_provider
@@ -122,6 +125,11 @@ services:
         arguments:
             - @oro_entity_config.provider.entity
 
+    orocrm_marketing_list.datagrid_configuration_helper:
+        class: %orocrm_marketing_list.datagrid_configuration_helper.class%
+        arguments:
+            - @oro_datagrid.configuration.provider
+
     orocrm_marketing_list.form.handler.marketing_list:
         class: %orocrm_marketing_list.form.handler.marketing_list.class%
         scope: request
@@ -160,7 +168,7 @@ services:
         class: %orocrm_marketing_list.datagrid.marketing_list_item_configuration_builder.class%
         parent: oro_segment.grid.datagrid_configuration_builder
         calls:
-            - [setConfigurationProvider, [@oro_datagrid.configuration.provider]]
+            - [setConfigurationHelper, [@orocrm_marketing_list.datagrid_configuration_helper]]
 
     orocrm_marketing_list.datagrid.configuration.provider:
         class: %oro_segment.datagrid.configuration.provider.class%
@@ -169,3 +177,14 @@ services:
             - @doctrine
         tags:
             - { name: oro_datagrid.configuration.provider, priority: 20 }
+
+    orocrm_marketing_list.datagrid.listener.removed_items:
+        class: %orocrm_marketing_list.datagrid.listener.removed_items.class%
+        arguments:
+            - @doctrine
+            - @oro_entity.doctrine_helper
+            - @service_container
+            - @orocrm_marketing_list.datagrid_configuration_helper
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after, method: onBuildAfter }

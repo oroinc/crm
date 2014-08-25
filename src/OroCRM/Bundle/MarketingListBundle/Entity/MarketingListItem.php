@@ -40,7 +40,7 @@ class MarketingListItem
     /**
      * @var MarketingList
      *
-     * @ORM\ManyToOne(targetEntity="MarketingList")
+     * @ORM\ManyToOne(targetEntity="MarketingList", inversedBy="marketingListItems")
      * @ORM\JoinColumn(name="marketing_list_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     protected $marketingList;

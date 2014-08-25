@@ -41,4 +41,5 @@ orocrm:
         action:
             subscribe: Subscribe
             unsubscribe: Unsubscribe
+            unremove: Undo remove
             remove: Remove
