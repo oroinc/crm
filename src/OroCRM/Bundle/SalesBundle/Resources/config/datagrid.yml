@@ -632,7 +632,7 @@ datagrid:
                     - c.id
                     - c.name
                     - c.createdAt
-                    - channel.channelType as channelType
+                    - channel.name as channelName
                 from:
                     - { table: %orocrm_sales.customer.class%, alias: c }
                 join:
@@ -641,10 +641,8 @@ datagrid:
         columns:
             name:
                 label:          orocrm.sales.b2bcustomer.name.label
-            channelType:
-                label:          orocrm.channel.channel_type.label
-                frontend_type:  select
-                choices:        @orocrm_channel.provider.settings_provider->getChannelTypeChoiceList
+            channelName:
+                label:          orocrm.sales.b2bcustomer.channel.label
             createdAt:
                 label:          oro.ui.created_at
                 frontend_type:  datetime
@@ -652,7 +650,7 @@ datagrid:
             columns:
                 name:        { data_name: c.name }
                 createdAt:   { data_name: c.createdAt }
-                channelType: { data_name: channelType }
+                channelName: { data_name: channelName }
             default:
                 createdAt:  DESC
         filters:
@@ -660,12 +658,9 @@ datagrid:
                  name:
                     type:      string
                     data_name: c.name
-                 channelType:
-                    type:      choice
-                    data_name: channelType
-                    options:
-                        field_options:
-                            choices: @orocrm_channel.provider.settings_provider->getChannelTypeChoiceList
+                 channelName:
+                    type:      string
+                    data_name: channelName
         properties:
             id: ~
             view_link:
