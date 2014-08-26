@@ -10,6 +10,8 @@ parameters:
     orocrm_sales.salesfunnel.entity.class: OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
     orocrm_sales.salesfunnel.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
+    orocrm_sales.b2bcustomer.entity.class: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+
 services:
     orocrm_sales.opportunity.manager.api:
         class: %orocrm_sales.opportunity.manager.api.class%
@@ -48,6 +50,15 @@ services:
             - ["name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: leads, acl_resource: orocrm_sales_lead_view }
+        lazy: true
+
+    orocrm_sales.form.autocomplete.b2bcustomer.search_handler:
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - %orocrm_sales.b2bcustomer.entity.class%
+            - ["name"]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: b2b_cusomers}
         lazy: true
 
     orocrm_sales.event_listener.account_contacts_grid_listener:
