@@ -3,22 +3,37 @@
 namespace OroCRM\Bundle\ChannelBundle\Entity;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Model\ExtendChannelIdentity;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use OroCRM\Bundle\ChannelBundle\Model\ExtendCustomerIdentity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="orocrm_channel_identity")
- * @Config()
+ * @ORM\Table(name="orocrm_channel_cust_identity")
+ * @Config(
+ *  defaultValues={
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
+ *  }
+ * )
  */
-class ChannelIdentity extends ExtendChannelIdentity
+class CustomerIdentity extends ExtendCustomerIdentity
 {
+    use ChannelEntityTrait;
+
     /**
      * @var integer
      *
@@ -37,27 +52,23 @@ class ChannelIdentity extends ExtendChannelIdentity
 
     /**
      * @var Account
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", cascade="PERSIST")
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $account;
 
     /**
      * @var Contact
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", cascade="PERSIST")
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $contact;
 
     /**
-     * @var Channel
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel", cascade="PERSIST")
-     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $channel;
-
-    /**
      * @var User
+     *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
@@ -92,6 +103,29 @@ class ChannelIdentity extends ExtendChannelIdentity
     protected $updatedAt;
 
     /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+    /**
      * @param Account $account
      */
     public function setAccount(Account $account)
@@ -105,22 +139,6 @@ class ChannelIdentity extends ExtendChannelIdentity
     public function getAccount()
     {
         return $this->account;
-    }
-
-    /**
-     * @param Channel $channel
-     */
-    public function setChannel(Channel $channel)
-    {
-        $this->channel = $channel;
-    }
-
-    /**
-     * @return Channel
-     */
-    public function getChannel()
-    {
-        return $this->channel;
     }
 
     /**
@@ -148,35 +166,11 @@ class ChannelIdentity extends ExtendChannelIdentity
     }
 
     /**
-     * @return \DateTime|null
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**

@@ -15,10 +15,14 @@ orocrm:
         button:
             activate.label:       Activate
             deactivate.label:     Deactivate
-        channelidentity:
-            entity_description:   Description
-            entity_plural_label:  Channel identities
-            entity_label:         Channel identity
+        customeridentity:
+            id.label:             Id
+            name.label:           Name
+            entity_label:         Customer identity
+            account.label:        Account
+            channel.label:        Channel
+            contact.label:        Contact
+            owner.label:          Owner
         datagrid:
             action:
                 update.label: Update

@@ -24,15 +24,9 @@ class LeadTest extends \PHPUnit_Framework_TestCase
     {
         $now = new \DateTime('now');
 
-        $user        = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $address     = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Address')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customer = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Customer')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $user     = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
+        $address  = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
+        $customer = $this->getMock('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
 
         return [
             'namePrefix'        => ['namePrefix', 'test', 'test'],

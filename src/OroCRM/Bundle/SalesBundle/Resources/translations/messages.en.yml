@@ -182,10 +182,26 @@ orocrm:
         widgets:
             leads:         Leads
             opportunities: Opportunities
-
-        customer:
-            entity_label:         B2B customer
-            entity_plural_label:  B2B customers
-            id.label:             Id
-            account.label:        Account
-            entity_description:   Represent B2B customer
+        #
+        # OroCRM/Bundle/SalesBundle/Entity/B2bCustomer.php
+        #
+        b2bcustomer:
+            entity_label:               B2B customer
+            entity_plural_label:        B2B customers
+            entity_description:         Represent B2B customer
+            id.label:                   Id
+            name.label:                 Name
+            shipping_address.label:     Shipping Address
+            billing_address.label:      Billing Address
+            account.label:              Account
+            contact.label:              Contact
+            channel.label:              Channel
+            leads.label:                Leads
+            opportunities.label:        Opportunities
+            owner.label:                Owner
+            tags.label:                 Tags
+            ownership.label:            Ownership
+            rating.label:               Rating
+            ticker_symbol.label:        Ticker symbol
+            website.label:              Website
+            employees.label:            Employees
