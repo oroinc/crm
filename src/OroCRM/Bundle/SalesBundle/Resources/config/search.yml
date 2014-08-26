@@ -131,10 +131,10 @@ OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
 OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
     alias:                          oro_crm_b2bcustomer
     title_fields:                   [name]
-#    route:
-#        name:                       orocrm_sales_b2bcustomer_view
-#        parameters:
-#            id:                     id
+    route:
+        name:                       orocrm_sales_b2bcustomer_view
+        parameters:
+            id:                     id
     search_template:                OroCRMSalesBundle:B2bCustomer:searchResult.html.twig
     fields:
         -
