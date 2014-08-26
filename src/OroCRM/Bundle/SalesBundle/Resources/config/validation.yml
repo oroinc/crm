@@ -15,7 +15,7 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
             - Range:
                 min: 0
         customer:
-            - NotBlank: ~
+            - Valid: ~
 
 OroCRM\Bundle\SalesBundle\Entity\Lead:
     properties:
