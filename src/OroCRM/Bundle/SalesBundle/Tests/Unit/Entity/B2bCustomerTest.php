@@ -2,9 +2,10 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Entity;
 
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\ClassUtils;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class B2bCustomerTest extends \PHPUnit_Framework_TestCase
 {
