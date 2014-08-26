@@ -38,8 +38,6 @@ class AccountFixture extends AbstractTemplateRepository implements TemplateFixtu
      */
     public function fillEntityData($key, $entity)
     {
-        $addressRepo = $this->templateManager
-            ->getEntityRepository('Oro\Bundle\AddressBundle\Entity\Address');
         $userRepo    = $this->templateManager
             ->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
         $contactRepo = $this->templateManager
@@ -51,8 +49,6 @@ class AccountFixture extends AbstractTemplateRepository implements TemplateFixtu
                     ->setId(1)
                     ->setName($key)
                     ->setOwner($userRepo->getEntity('John Doo'))
-                    ->setBillingAddress($addressRepo->getEntity('John Doo'))
-                    ->setShippingAddress($addressRepo->getEntity('Jerry Coleman'))
                     ->addContact($contactRepo->getEntity('Jerry Coleman'))
                     ->setDefaultContact($contactRepo->getEntity('Jerry Coleman'));
                 return;
@@ -61,8 +57,6 @@ class AccountFixture extends AbstractTemplateRepository implements TemplateFixtu
                     ->setId(2)
                     ->setName($key)
                     ->setOwner($userRepo->getEntity('John Doo'))
-                    ->setBillingAddress($addressRepo->getEntity('John Doo'))
-                    ->setShippingAddress($addressRepo->getEntity('John Smith'))
                     ->addContact($contactRepo->getEntity('John Smith'))
                     ->setDefaultContact($contactRepo->getEntity('John Smith'));
                 return;

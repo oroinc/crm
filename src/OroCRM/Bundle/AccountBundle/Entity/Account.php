@@ -118,40 +118,6 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
     protected $owner;
 
     /**
-     * @var Address $shippingAddress
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "merge"={"display"=true},
-     *          "importexport"={
-     *              "full"=true,
-     *              "order"=60
-     *          }
-     *      }
-     * )
-     */
-    protected $shippingAddress;
-
-    /**
-     * @var Address $billingAddress
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "merge"={"display"=true},
-     *          "importexport"={
-     *              "full"=true,
-     *              "order"=70
-     *          }
-     *      }
-     * )
-     */
-    protected $billingAddress;
-
-    /**
      * Contacts storage
      *
      * @var ArrayCollection $contacts
