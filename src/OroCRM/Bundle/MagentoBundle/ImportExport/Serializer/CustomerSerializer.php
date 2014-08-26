@@ -6,13 +6,11 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
 use Oro\Bundle\UserBundle\Model\Gender;
 use Oro\Bundle\ImportExportBundle\Serializer\Serializer;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
@@ -419,7 +417,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         }
 
         $this->setContact($object, $data, $format, $context);
-        $this->setAccount($object, $data, $format, $context);
         $this->setWebsite($object, $data, $format, $context);
         $this->setStore($object, $data, $format, $context);
         $this->setGroup($object, $data, $format, $context);
@@ -494,32 +491,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         $this->setAddresses($object, $data, $format, $context);
     }
 
-    protected function setAccount(Customer $object, array $data, $format = null, array $context = array())
-    {
-        $data['account'] = $this->formatAccountData($data);
-
-        /** @var Account $account */
-        $account = $this->denormalizeObject(
-            $data,
-            'account',
-            'OroCRM\Bundle\AccountBundle\Entity\Account',
-            $format,
-            array_merge($context, ['mode' => ConfigurableEntityNormalizer::FULL_MODE])
-        );
-
-        if ($account) {
-            $contact = $object->getContact();
-            if (!$account->getContacts()->contains($contact)) {
-                $account->addContact($contact);
-            }
-            if (!$account->getDefaultContact()) {
-                $account->setDefaultContact($contact);
-            }
-        }
-
-        $object->setAccount($account);
-    }
-
     protected function setAddresses(Customer $object, array $data, $format = null, array $context = array())
     {
         if (!empty($data['contact']['addresses'])) {
@@ -555,37 +526,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
                 $object->resetAddresses($addresses);
             }
         }
-    }
-
-    /**
-     * @todo Move to converter CRM-789
-     *
-     * @param $data
-     *
-     * @return array
-     */
-    protected function formatAccountData($data)
-    {
-        $nameParts = array_intersect_key($data, array_flip(['first_name', 'last_name']));
-        $account   = ['name' => implode(' ', $nameParts)];
-
-        if (!empty($data['addresses'])) {
-            foreach ($data['addresses'] as $address) {
-                $addressTypes = array();
-                if (!empty($address['is_default_shipping'])) {
-                    $addressTypes[] = AddressType::TYPE_SHIPPING . 'Address';
-                }
-                if (!empty($address['is_default_billing'])) {
-                    $addressTypes[] = AddressType::TYPE_BILLING . 'Address';
-                }
-
-                foreach ($addressTypes as $addressType) {
-                    $account[$addressType] = $this->getBapAddressData($address);
-                }
-            }
-        }
-
-        return $account;
     }
 
     /**
