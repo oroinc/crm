@@ -496,8 +496,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
     protected function setAccount(Customer $object, array $data, $format = null, array $context = array())
     {
-        $data['account'] = $this->formatAccountData($data);
-
         /** @var Account $account */
         $account = $this->denormalizeObject(
             $data,
@@ -555,21 +553,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
                 $object->resetAddresses($addresses);
             }
         }
-    }
-
-    /**
-     * @todo Move to converter CRM-789
-     *
-     * @param $data
-     *
-     * @return array
-     */
-    protected function formatAccountData($data)
-    {
-        $nameParts = array_intersect_key($data, array_flip(['first_name', 'last_name']));
-        $account   = ['name' => implode(' ', $nameParts)];
-
-        return $account;
     }
 
     /**
