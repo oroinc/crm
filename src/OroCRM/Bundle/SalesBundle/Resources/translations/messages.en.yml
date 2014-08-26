@@ -91,12 +91,12 @@ orocrm:
             status.label:         Status
             close_reason.label:   Close reason
             contact.label:        Potential Customer
-            account.label:        Account
             owner.label:          Owner
             notes.label:          Additional comments
             lead.label:           Lead
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
+            customer.label:       B2B Customer
 
             datagrid:
                 view: View
@@ -136,7 +136,6 @@ orocrm:
             industry.label:       Industry
             status.label:         Status
             contact.label:        Contact
-            account.label:        Account
             owner.label:          Owner
             address.label:        Address
             details.label:        Lead Details
@@ -147,6 +146,7 @@ orocrm:
             workflow_step.label:  Step
             information:          Lead Information
             campaign.label:       Campaign
+            customer.label:       B2B Customer
 
             extend_source:
                 unclassified:     Unclassified
@@ -182,3 +182,26 @@ orocrm:
         widgets:
             leads:         Leads
             opportunities: Opportunities
+        #
+        # OroCRM/Bundle/SalesBundle/Entity/B2bCustomer.php
+        #
+        b2bcustomer:
+            entity_label:               B2B customer
+            entity_plural_label:        B2B customers
+            entity_description:         Represent B2B customer
+            id.label:                   Id
+            name.label:                 Name
+            shipping_address.label:     Shipping Address
+            billing_address.label:      Billing Address
+            account.label:              Account
+            contact.label:              Contact
+            channel.label:              Channel
+            leads.label:                Leads
+            opportunities.label:        Opportunities
+            owner.label:                Owner
+            tags.label:                 Tags
+            ownership.label:            Ownership
+            rating.label:               Rating
+            ticker_symbol.label:        Ticker symbol
+            website.label:              Website
+            employees.label:            Employees
