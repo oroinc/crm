@@ -621,3 +621,62 @@ datagrid:
                  where:
                     and:
                         - o.account = :accountId
+
+    sales-customer-grid:
+        extended_entity_name: %orocrm_sales.customer.class%
+        source:
+            type: orm
+            acl_resource: orocrm_sales_lead_view
+            query:
+                select:
+                    - c.id
+                    - c.name
+                    - c.createdAt
+                    - channel.channelType as channelType
+                from:
+                    - { table: %orocrm_sales.customer.class%, alias: c }
+                join:
+                    left:
+                        - { join: c.channel, alias: channel }
+        columns:
+            name:
+                label:          orocrm.sales.b2bcustomer.name.label
+            channelType:
+                label:          orocrm.channel.channel_type.label
+                frontend_type:  select
+                choices:        @orocrm_channel.provider.settings_provider->getChannelTypeChoiceList
+            createdAt:
+                label:          oro.ui.created_at
+                frontend_type:  datetime
+        sorters:
+            columns:
+                name:        { data_name: c.name }
+                createdAt:   { data_name: c.createdAt }
+                channelType: { data_name: channelType }
+            default:
+                createdAt:  DESC
+        filters:
+            columns:
+                 name:
+                    type:      string
+                    data_name: c.name
+                 channelType:
+                    type:      choice
+                    data_name: channelType
+                    options:
+                        field_options:
+                            choices: @orocrm_channel.provider.settings_provider->getChannelTypeChoiceList
+        properties:
+            id: ~
+            view_link:
+                type:   url
+                route:  orocrm_sales_b2bcustomer_view
+                params: [ id ]
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_sales_b2bcustomer_view
+                label:         orocrm.sales.b2bcustomer.datagrid.view
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
