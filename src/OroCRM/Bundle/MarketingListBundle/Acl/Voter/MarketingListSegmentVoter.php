@@ -28,10 +28,7 @@ class MarketingListSegmentVoter extends AbstractEntityVoter
     }
 
     /**
-     * @param string $class
-     * @param int $identifier
-     * @param string $attribute
-     * @return int
+     * {@inheritdoc}
      */
     protected function getPermissionForAttribute($class, $identifier, $attribute)
     {
