@@ -23,31 +23,31 @@ class DropFields implements Migration, OrderedMigrationInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::orocrmLeadTable($schema, $queries);
-        self::orocrmOpportunityTable($schema, $queries);
+        $this->modifyOrocrmLeadTable($schema, $queries);
+        $this->modifyOrocrmOpportunityTable($schema, $queries);
     }
 
     /**
      * @param Schema   $schema
      * @param QueryBag $queries
      */
-    protected static function orocrmLeadTable(Schema $schema, QueryBag $queries)
+    protected function modifyOrocrmLeadTable(Schema $schema, QueryBag $queries)
     {
-        $leadTable = $schema->getTable('orocrm_sales_lead');
-        $leadTable->removeForeignKey('FK_73DB46339B6B5FBA');
-        $leadTable->dropIndex('IDX_73DB46339B6B5FBA');
-        $leadTable->dropColumn('account_id');
+        $table = $schema->getTable('orocrm_sales_lead');
+        $table->removeForeignKey('FK_73DB46339B6B5FBA');
+        $table->dropIndex('IDX_73DB46339B6B5FBA');
+        $table->dropColumn('account_id');
 
         if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
             $queries->addPostQuery(
 <<<DQL
-             DELETE FROM oro_entity_config_field
-                WHERE field_name IN ('account')
-                AND entity_id IN (
-                    SELECT id
-                    FROM oro_entity_config
-                    WHERE class_name = 'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Lead'
-                );
+            DELETE FROM oro_entity_config_field
+            WHERE field_name = 'account'
+            AND entity_id IN (
+                SELECT id
+                FROM oro_entity_config
+                WHERE class_name = 'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Lead'
+            );
 DQL
             );
         }
@@ -57,23 +57,23 @@ DQL
      * @param Schema   $schema
      * @param QueryBag $queries
      */
-    protected static function orocrmOpportunityTable(Schema $schema, QueryBag $queries)
+    protected function modifyOrocrmOpportunityTable(Schema $schema, QueryBag $queries)
     {
-        $opportunityTable = $schema->getTable('orocrm_sales_opportunity');
-        $opportunityTable->removeForeignKey('FK_C0FE4AAC9B6B5FBA');
-        $opportunityTable->dropIndex('IDX_C0FE4AAC9B6B5FBA');
-        $opportunityTable->dropColumn('account_id');
+        $table = $schema->getTable('orocrm_sales_opportunity');
+        $table->removeForeignKey('FK_C0FE4AAC9B6B5FBA');
+        $table->dropIndex('IDX_C0FE4AAC9B6B5FBA');
+        $table->dropColumn('account_id');
 
         if ($schema->hasTable('oro_entity_config_index_value') && $schema->hasTable('oro_entity_config_field')) {
             $queries->addPostQuery(
 <<<DQL
-             DELETE FROM oro_entity_config_field
-                WHERE field_name IN ('account')
-                AND entity_id IN (
-                    SELECT id
-                    FROM oro_entity_config
-                    WHERE class_name = 'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Opportunity'
-                );
+            DELETE FROM oro_entity_config_field
+            WHERE field_name = 'account'
+            AND entity_id IN (
+                SELECT id
+                FROM oro_entity_config
+                WHERE class_name = 'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Opportunity'
+            );
 DQL
             );
         }
