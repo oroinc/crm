@@ -338,52 +338,6 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
     }
 
     /**
-     * Get shipping address
-     *
-     * @return Address
-     */
-    public function getShippingAddress()
-    {
-        return $this->shippingAddress;
-    }
-
-    /**
-     * Set shipping address
-     *
-     * @param Address $address
-     * @return Account
-     */
-    public function setShippingAddress($address)
-    {
-        $this->shippingAddress = $address;
-
-        return $this;
-    }
-
-    /**
-     * Get shipping address
-     *
-     * @return Address
-     */
-    public function getBillingAddress()
-    {
-        return $this->billingAddress;
-    }
-
-    /**
-     * Set billing address
-     *
-     * @param Address $address
-     * @return Account
-     */
-    public function setBillingAddress($address)
-    {
-        $this->billingAddress = $address;
-
-        return $this;
-    }
-
-    /**
      * Remove specified contact
      *
      * @param Contact $contact
