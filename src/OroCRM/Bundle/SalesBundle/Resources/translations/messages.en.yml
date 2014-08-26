@@ -46,6 +46,8 @@ orocrm:
             shortcut_new_lead.description: Create new lead
             shortcut_new_opportunity.label: Create new opportunity
             shortcut_new_opportunity.description: Create new opportunity
+            shortcut_list_b2bcustomers.label: Show B2B customers list
+            shortcut_list_b2bcustomers.description: List of B2B customers
         controller:
             lead.saved.message: Lead saved
             opportunity.saved.message: Opportunity saved
@@ -208,5 +210,3 @@ orocrm:
             employees.label:            Employees
             datagrid:
                 view:   View
-                update: Update
-                delete: Delete

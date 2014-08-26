@@ -44,6 +44,13 @@ oro_menu_config:
                 routes:      ['/^orocrm_sales_b2bcustomer_index/']
                 description: 'orocrm.sales.menu.b2bcustomer_list.description'
 
+        shortcut_list_b2bcustomers:
+            label: 'orocrm.sales.menu.shortcut_list_b2bcustomers.label'
+            route: 'orocrm_sales_lead_index'
+            display: false
+            extras:
+                description: 'orocrm.sales.menu.shortcut_list_b2bcustomers.description'
+
         shortcut_list_leads:
             label: 'orocrm.sales.menu.shortcut_list_leads.label'
             route: 'orocrm_sales_lead_index'
