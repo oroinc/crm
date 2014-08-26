@@ -17,6 +17,7 @@ parameters:
     orocrm_marketing_list.datagrid.listener.removed_items.class: OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListRemovedItemsListener
     orocrm_marketing_list.datagrid.action_permission_provider.class: OroCRM\Bundle\MarketingListBundle\Datagrid\ActionPermissionProvider
 
+    orocrm_marketing_list.security.acl.voter.segment.class: OroCRM\Bundle\MarketingListBundle\Acl\Voter\MarketingListSegmentVoter
 services:
     orocrm_marketing_list.entity_provider:
         alias: oro_entity.entity_provider
@@ -91,3 +92,11 @@ services:
 
     orocrm_marketing_list.datagrid.action_permission_provider:
         class: %orocrm_marketing_list.datagrid.action_permission_provider.class%
+
+    orocrm_marketing_list.security.acl.voter.segment:
+        class: %orocrm_marketing_list.security.acl.voter.segment.class%
+        arguments:
+            - @doctrine
+            - @oro_entity.doctrine_helper
+        tags:
+            - { name: security.voter, priority: 500 }
