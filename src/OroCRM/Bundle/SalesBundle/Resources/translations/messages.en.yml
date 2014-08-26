@@ -35,6 +35,7 @@ orocrm:
         menu:
             sales_tab.label: Sales
             lead_list.description: List of leads
+            b2bcustomer_list.description: List of B2B customers
             opportunity_list.description: List of opportunities
             sales_salesfunnel_list.description: List of sales funnels
             shortcut_list_leads.label: Show leads list
@@ -205,3 +206,7 @@ orocrm:
             ticker_symbol.label:        Ticker symbol
             website.label:              Website
             employees.label:            Employees
+            datagrid:
+                view:   View
+                update: Update
+                delete: Delete
