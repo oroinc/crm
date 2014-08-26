@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\IntegrationBundle\Tests\Selenium\Pages\Integrations;
+use OroCRM\Bundle\MagentoBundle\Tests\Selenium\Pages\Integration;
 
 /**
  * Class CreateIntegrationTest
@@ -44,7 +45,9 @@ class ManageIntegrationTest extends Selenium2TestCase
         $login->openIntegrations('Oro\Bundle\IntegrationBundle')
             ->add()
             ->setName($name)
-            ->setWsdlUrl(PHPUNIT_TESTSUITE_EXTENSION_MAGENTO_HOST . '/api/v2_soap/index/?wsdl=1')
+            ->setType('magento');
+        /** @var Integration $login */
+        $login->setWsdlUrl(PHPUNIT_TESTSUITE_EXTENSION_MAGENTO_HOST . '/api/v2_soap/index/?wsdl=1')
             ->setApiUser('api_user')
             ->setApiKey('api-key')
             ->setSyncDate('Jan 1, 2013')
