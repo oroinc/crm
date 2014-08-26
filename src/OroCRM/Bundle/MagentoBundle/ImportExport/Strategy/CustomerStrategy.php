@@ -4,10 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
@@ -66,7 +62,9 @@ class CustomerStrategy extends BaseStrategy
         // by the appropriate queued process to improve initial import performance
         if ($localEntity->getId()) {
             $this->updateContact($remoteEntity, $localEntity, $remoteEntity->getContact());
-            $localEntity->getAccount()->setDefaultContact($localEntity->getContact());
+            if ($localEntity->getAccount()) {
+                $localEntity->getAccount()->setDefaultContact($localEntity->getContact());
+            }
         } else {
             $localEntity->setContact(null);
             $localEntity->setAccount(null);
