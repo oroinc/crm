@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -222,17 +221,6 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param int $id
-     * @return Account
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /**

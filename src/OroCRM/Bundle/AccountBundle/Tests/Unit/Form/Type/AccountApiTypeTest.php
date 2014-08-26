@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
-use BeSimple\SoapCommon\Type\KeyValue\Boolean;
 use OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
