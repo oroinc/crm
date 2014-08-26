@@ -45,11 +45,6 @@ orocrm:
         phone.label:                Phone
         email.label:                Email
 
-        extend_website.label:       Website
-        extend_ticker_symbol.label: Ticker Symbol
-        extend_rating.label:        Rating
-        extend_ownership.label:     Ownership
-        extend_employees.label:     Employees
         extend_description.label:   Description
 
         contact:
