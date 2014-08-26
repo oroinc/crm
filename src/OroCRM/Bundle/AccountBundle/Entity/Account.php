@@ -225,17 +225,6 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
     }
 
     /**
-     * @param int $id
-     * @return Account
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getName()
