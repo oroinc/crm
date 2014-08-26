@@ -30,6 +30,8 @@ orocrm:
             update: Update
             delete: Delete
             view: View
+            contactedTimes: Number of times contacted
+            lastContactedAt: Last contacted at
 
         entity_config:
             choices:

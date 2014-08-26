@@ -110,6 +110,8 @@ datagrid:
             query:
                 select:
                     - t1.id
+                    - mli.contactedTimes
+                    - mli.lastContactedAt
                     - (CASE WHEN mlu.id IS NULL THEN true ELSE false END) as subscribed
                 join:
                     left:
@@ -123,6 +125,11 @@ datagrid:
                             alias: 'mlr'
                             conditionType: 'WITH'
                             condition: 'mlr.entityId = t1.id AND mlr.marketingList = :marketingListEntity'
+                        -
+                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'
+                            alias: 'mli'
+                            conditionType: 'WITH'
+                            condition: 'mli.entityId = t1.id AND mli.marketingList = :marketingListEntity'
                 where:
                     and:
                         - mlr.id IS NULL
@@ -130,6 +137,11 @@ datagrid:
             subscribed:
                 label: orocrm.marketinglist.datagrid.subscribed
                 frontend_type: boolean
+            contactedTimes:
+                label: orocrm.marketinglist.datagrid.contactedTimes
+            lastContactedAt:
+                label: orocrm.marketinglist.datagrid.lastContactedAt
+                frontend_type: datetime
         filters:
             columns:
                 subscribed:
