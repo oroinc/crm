@@ -14,7 +14,7 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
         closeRevenue:
             - Range:
                 min: 0
-        account:
+        customer:
             - NotBlank: ~
 
 OroCRM\Bundle\SalesBundle\Entity\Lead:
@@ -37,3 +37,11 @@ OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
         startDate:
             - NotBlank: ~
             - Date: ~
+
+OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length: 255
+        account:
+            - NotBlank: ~
