@@ -15,6 +15,11 @@ workflows:
             new_opportunity_name:
                 label: orocrm.sales.opportunity.name.label
                 type: string
+            new_b2bcustomer:
+                label: orocrm.sales.b2bcustomer.entity_label
+                type:  entity
+                options:
+                    class: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
             new_account:
                 label:  orocrm.account.entity_label
                 type: entity
@@ -31,8 +36,8 @@ workflows:
                 property_path: sales_funnel.opportunity.notes
             contact:
                 property_path: sales_funnel.opportunity.contact
-            account:
-                property_path: sales_funnel.opportunity.account
+            b2bcustomer:
+                property_path: sales_funnel.opportunity.customer
             probability:
                 property_path: sales_funnel.opportunity.probability
             budget_amount:
