@@ -660,8 +660,12 @@ datagrid:
                     type:      string
                     data_name: c.name
                  channelName:
-                    type:      string
+                    type:      entity
                     data_name: channelName
+                    options:
+                        field_options:
+                            class: OroCRMSalesBundle:B2bCustomer
+                            property: name
         properties:
             id: ~
             view_link:
