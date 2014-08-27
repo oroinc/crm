@@ -39,6 +39,11 @@ class MarketingListHandlerTest extends \PHPUnit_Framework_TestCase
     protected $validator;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $translator;
+
+    /**
      * @var MarketingList
      */
     protected $testEntity;
@@ -60,16 +65,16 @@ class MarketingListHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->request = new Request();
 
-        $this->validator = $this->getMockBuilder('Symfony\Component\Validator\Validator')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->validator = $this->getMock('Symfony\Component\Validator\ValidatorInterface');
+        $this->translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
 
         $this->testEntity = new MarketingList();
         $this->handler = new MarketingListHandler(
             $this->form,
             $this->request,
             $registry,
-            $this->validator
+            $this->validator,
+            $this->translator
         );
         $this->form->expects($this->once())
             ->method('setData')
@@ -88,6 +93,12 @@ class MarketingListHandlerTest extends \PHPUnit_Framework_TestCase
         $this->form->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(true));
+
+        $this->translator
+            ->expects($this->once())
+            ->method('trans')
+            ->with($this->isType('string'), $this->isType('array'))
+            ->will($this->returnValue('Marketing List test segment'));
 
         $this->form->expects($this->once())
             ->method('getName')
@@ -116,6 +127,12 @@ class MarketingListHandlerTest extends \PHPUnit_Framework_TestCase
         $this->form->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(false));
+
+        $this->translator
+            ->expects($this->once())
+            ->method('trans')
+            ->with($this->isType('string'), $this->isType('array'))
+            ->will($this->returnValue('Marketing List test segment'));
 
         $this->manager->expects($this->never())
             ->method('persist');
@@ -159,6 +176,12 @@ class MarketingListHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->with($this->isInstanceOf('Oro\Bundle\SegmentBundle\Entity\Segment'), array('Default', 'marketing_list'))
             ->will($this->returnValue($errors));
+
+        $this->translator
+            ->expects($this->once())
+            ->method('trans')
+            ->with($this->isType('string'), $this->isType('array'))
+            ->will($this->returnValue('Marketing List test segment'));
 
         $this->form->expects($this->once())
             ->method('addError')

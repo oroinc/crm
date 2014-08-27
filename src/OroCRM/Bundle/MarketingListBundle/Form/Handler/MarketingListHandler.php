@@ -8,8 +8,9 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ConstraintViolationInterface;
-use Symfony\Component\Validator\Validator;
+use Symfony\Component\Validator\ValidatorInterface;
 
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use Oro\Bundle\SegmentBundle\Entity\SegmentType;
@@ -42,26 +43,34 @@ class MarketingListHandler
     protected $manager;
 
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     protected $validator;
+
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
 
     /**
      * @param FormInterface $form
      * @param Request $request
      * @param RegistryInterface $doctrine
-     * @param Validator $validator
+     * @param ValidatorInterface $validator
+     * @param TranslatorInterface $translator
      */
     public function __construct(
         FormInterface $form,
         Request $request,
         RegistryInterface $doctrine,
-        Validator $validator
+        ValidatorInterface $validator,
+        TranslatorInterface $translator
     ) {
         $this->form = $form;
         $this->request = $request;
         $this->manager = $doctrine->getManager();
         $this->validator = $validator;
+        $this->translator = $translator;
     }
 
     /**
@@ -108,7 +117,10 @@ class MarketingListHandler
         if (!$segment) {
             $segment = new Segment();
         }
-        $segmentName = sprintf('Marketing List %s segment', $marketingList->getName());
+        $segmentName = $this->translator->trans(
+            'orocrm.marketinglist.segment',
+            ['%name%' => $marketingList->getName()]
+        );
         $segment
             ->setName($segmentName)
             ->setEntity($marketingList->getEntity())

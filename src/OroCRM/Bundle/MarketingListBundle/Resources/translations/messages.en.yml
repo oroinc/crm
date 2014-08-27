@@ -1,6 +1,3 @@
-Item unsubscribed: Item unsubscribed
-Item subscribed: Item subscribed
-Item removed from list: Item removed from list
 orocrm:
     marketinglist:
         entity_label:        Marketing List
@@ -11,6 +8,15 @@ orocrm:
         created_at.label:    Created At
         name.label:          Name
         owner.label:         Owner
+
+        controller:
+            unsubscribed: Item unsubscribed
+            subscribed: Item subscribed
+            removed: Item removed from list
+
+        segment: Marketing List %name% segment
+
+        removed: Removed
 
         entity:
             label:   Entity

@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 use Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner;
 use OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
+use OroCRM\Bundle\MarketingListBundle\Validator\Constraints\ContactInformationColumnConstraint;
 
 class ContactInformationColumnValidator extends ConstraintValidator
 {
@@ -30,6 +31,7 @@ class ContactInformationColumnValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
+        /** @var ContactInformationColumnConstraint $constraint */
         if ($constraint->field && !is_string($constraint->field)) {
             throw new UnexpectedTypeException($constraint->field, 'string');
         }

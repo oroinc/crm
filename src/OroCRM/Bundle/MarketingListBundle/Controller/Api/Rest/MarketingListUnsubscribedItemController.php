@@ -84,7 +84,7 @@ class MarketingListUnsubscribedItemController extends RestController implements 
             $this->view(
                 array(
                     'successful' => true,
-                    'message' => $this->get('translator')->trans('Item unsubscribed')
+                    'message' => $this->get('translator')->trans('orocrm.marketinglist.controller.unsubscribed')
                 ),
                 Codes::HTTP_OK
             )
@@ -132,7 +132,7 @@ class MarketingListUnsubscribedItemController extends RestController implements 
             $this->view(
                 array(
                     'successful' => true,
-                    'message' => $this->get('translator')->trans('Item subscribed')
+                    'message' => $this->get('translator')->trans('orocrm.marketinglist.controller.subscribed')
                 ),
                 Codes::HTTP_OK
             )

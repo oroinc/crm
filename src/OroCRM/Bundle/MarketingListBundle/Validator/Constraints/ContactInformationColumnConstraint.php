@@ -9,7 +9,7 @@ class ContactInformationColumnConstraint extends Constraint
     /**
      * @var string
      */
-    public $message = 'At least one column must contain contact information';
+    public $message = 'orocrm.marketinglist.contact_information_required';
 
     /**
      * @var string

@@ -1,1 +1,3 @@
-"At least one column must contain contact information": "At least one column must contain contact information"
+orocrm:
+    marketinglist:
+        contact_information_required: "At least one column must contain contact information"

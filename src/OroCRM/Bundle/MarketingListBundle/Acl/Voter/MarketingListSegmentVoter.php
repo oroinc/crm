@@ -33,12 +33,10 @@ class MarketingListSegmentVoter extends AbstractEntityVoter
     protected function getPermissionForAttribute($class, $identifier, $attribute)
     {
         if ($this->getMarketingListBySegment($identifier)) {
-            $permission = self::ACCESS_DENIED;
-        } else {
-            $permission = self::ACCESS_ABSTAIN;
+            return self::ACCESS_DENIED;
         }
 
-        return $permission;
+        return self::ACCESS_ABSTAIN;
     }
 
     /**

@@ -3,7 +3,7 @@
 {% import 'OroSegmentBundle::macros.html.twig' as segmentQD %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
-{% oro_title_set({params : {"%entity.name%": entity.name} }) %}
+{% oro_title_set({params : {"%entityName%": entity.name} }) %}
 {% set formAction = form.vars.value.id ? path('orocrm_marketing_list_update', { 'id': form.vars.value.id }) : path('orocrm_marketing_list_create')  %}
 
 {% block head_script %}
@@ -132,10 +132,10 @@
         ]
     }] ) %}
 
-    {% if entity.entity %}
+    {% if entity.entity and entity.id %}
         {% set entityGridName = oro_entity_config_value(entity.entity, 'grid_name', 'form') %}
         {% set dataBlocks = dataBlocks|merge( [{
-            'title' : 'Removed'|trans,
+            'title' : 'orocrm.marketinglist.removed'|trans,
             'subblocks': [
                 {'data' : [dataGrid.renderGrid(entityGridName, {marketing_list_id: entity.id})]}
             ]

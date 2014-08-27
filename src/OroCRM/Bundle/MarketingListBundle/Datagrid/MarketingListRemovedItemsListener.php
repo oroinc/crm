@@ -54,53 +54,64 @@ class MarketingListRemovedItemsListener
     public function onPreBuild(PreBuild $event)
     {
         $marketingListId = $this->getMarketingListId($event->getParameters());
-
-        if ($marketingListId) {
-            $marketingList = $this->getMarketingListById($marketingListId);
-
-            if ($marketingList) {
-                $config = $event->getConfig();
-                $entity = $marketingList->getEntity();
-                $marketingListId = (int)$marketingList->getId();
-                $removedItemAlias = '_mlri';
-                $idName = $this->doctrineHelper->getSingleEntityIdentifierFieldName($marketingList->getEntity());
-
-                $from = $config->offsetGetByPath('[source][query][from]');
-                foreach ($from as $table) {
-                    if ($table['table'] === $entity) {
-                        // Add marketingList id to select to be able to create correct URLs
-                        $config->offsetAddToArrayByPath(
-                            '[source][query][select]',
-                            array(
-                                $marketingListId . ' as marketingList'
-                            )
-                        );
-
-                        // Inner join removed items to restrict list only to removed
-                        $joinCondition = $removedItemAlias . '.entityId = ' . $table['alias'] . '.' . $idName
-                            . ' AND ' . $removedItemAlias . '.marketingList = ' . $marketingListId;
-                        $config->offsetAddToArrayByPath(
-                            '[source][query][join][inner]',
-                            array(
-                                array(
-                                    'join' => self::MARKETING_LIST_REMOVED_ITEM_ENTITY,
-                                    'alias' => $removedItemAlias,
-                                    'conditionType' => 'WITH',
-                                    'condition' => $joinCondition
-                                )
-                            )
-                        );
-                        break;
-                    }
-                }
-
-                // Apply mixin
-                $this->dataGridConfigurationHelper->extendConfiguration(
-                    $event->getConfig(),
-                    self::REMOVED_ITEMS_MIXIN_NAME
-                );
-            }
+        if (!$marketingListId) {
+            return;
         }
+
+        $marketingList = $this->getMarketingListById($marketingListId);
+        if (!$marketingList) {
+            return;
+        }
+
+        $config = $event->getConfig();
+        $entity = $marketingList->getEntity();
+        $marketingListId = (int)$marketingList->getId();
+        $removedItemAlias = '_mlri';
+        $idName = $this->doctrineHelper->getSingleEntityIdentifierFieldName($marketingList->getEntity());
+
+        $from = $config->offsetGetByPath('[source][query][from]');
+        foreach ($from as $table) {
+            if ($table['table'] !== $entity) {
+                continue;
+            }
+
+            // Add marketingList id to select to be able to create correct URLs
+            $config->offsetAddToArrayByPath(
+                '[source][query][select]',
+                array(
+                    $marketingListId . ' as marketingList'
+                )
+            );
+
+            // Inner join removed items to restrict list only to removed
+            $joinCondition = sprintf(
+                '%s.entityId = %s.%s AND %s.marketingList = %s',
+                $removedItemAlias,
+                $table['alias'],
+                $idName,
+                $removedItemAlias,
+                $marketingListId
+            );
+            $config->offsetAddToArrayByPath(
+                '[source][query][join][inner]',
+                array(
+                    array(
+                        'join' => self::MARKETING_LIST_REMOVED_ITEM_ENTITY,
+                        'alias' => $removedItemAlias,
+                        'conditionType' => 'WITH',
+                        'condition' => $joinCondition
+                    )
+                )
+            );
+
+            break;
+        }
+
+        // Apply mixin
+        $this->dataGridConfigurationHelper->extendConfiguration(
+            $event->getConfig(),
+            self::REMOVED_ITEMS_MIXIN_NAME
+        );
     }
 
     /**

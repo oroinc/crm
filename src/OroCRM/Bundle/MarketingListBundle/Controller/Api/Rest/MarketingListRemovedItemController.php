@@ -82,7 +82,7 @@ class MarketingListRemovedItemController extends RestController implements Class
             $this->view(
                 array(
                     'successful' => true,
-                    'message' => $this->get('translator')->trans('Item removed from list')
+                    'message' => $this->get('translator')->trans('orocrm.marketinglist.controller.removed')
                 ),
                 Codes::HTTP_OK
             )
@@ -113,9 +113,9 @@ class MarketingListRemovedItemController extends RestController implements Class
         if ($forRemove) {
             $item = $forRemove[0];
             return $this->handleDeleteRequest($item->getId());
-        } else {
-            return $this->handleView($this->view(null, Codes::HTTP_NOT_FOUND));
         }
+
+        return $this->handleView($this->view(null, Codes::HTTP_NOT_FOUND));
     }
 
     /**

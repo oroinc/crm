@@ -62,12 +62,8 @@ class MarketingListProvider
         if ($marketingList->getType()->getName() !== MarketingListType::TYPE_MANUAL) {
             $queryBuilder = $this->getMarketingListQueryBuilder($marketingList);
             $dataGridConfig = $this->getSegmentDataGrid($marketingList->getSegment())->getConfig();
-            $skipCountWalker = $dataGridConfig->offsetGetByPath(Builder::DATASOURCE_SKIP_COUNT_WALKER_PATH);
-            $useWalker = null;
-            if ($skipCountWalker !== null) {
-                $useWalker = !$skipCountWalker;
-            }
-            $iterator = new BufferedQueryResultIterator($queryBuilder, $useWalker);
+            $skipCountWalker = $dataGridConfig->offsetGetByPath(Builder::DATASOURCE_SKIP_COUNT_WALKER_PATH, false);
+            $iterator = new BufferedQueryResultIterator($queryBuilder, !$skipCountWalker);
 
             return $iterator;
         }

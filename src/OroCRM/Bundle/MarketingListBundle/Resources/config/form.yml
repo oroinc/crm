@@ -82,6 +82,7 @@ services:
             - @request
             - @doctrine
             - @validator
+            - @translator
 
     orocrm_marketing_list.form.type.entity_choice:
         class: %orocrm_marketing_list.form.type.entity_choice.class%
