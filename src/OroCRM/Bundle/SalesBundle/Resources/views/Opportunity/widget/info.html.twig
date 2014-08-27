@@ -14,14 +14,6 @@
             {%- endif -%}
 
             {{ ui.renderHtmlProperty('orocrm.sales.opportunity.contact.label'|trans, contactView) }}
-
-            {% if entity.account and resource_granted('VIEW', entity.account) %}
-                {% set accountView = ui.renderUrl(path('orocrm_account_view', {'id': entity.account.id}), entity.account) %}
-            {% else %}
-                {% set accountView = entity.account ? entity.account|escape : '' %}
-            {% endif %}
-
-            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.account.label'|trans, accountView) }}
             {{ ui.renderProperty('orocrm.sales.opportunity.probability.label'|trans, entity.probability|length ? entity.probability|oro_format_percent : '') }}
             {{ ui.renderProperty('orocrm.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount|length ? entity.budgetAmount|oro_format_currency, '') }}
 

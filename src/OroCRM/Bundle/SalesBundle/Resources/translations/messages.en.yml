@@ -22,6 +22,9 @@ orocrm:
                     hint: Sum close revenue for 'won' items
 
     sales:
+        sections:
+            general:  General
+            leads:    Leads
         dashboard:
             opportunities_by_state:
                 title:       Opportunities by Status
@@ -210,3 +213,7 @@ orocrm:
             employees.label:            Employees
             datagrid:
                 view:   View
+                update: Update
+                delete: Delete
+        widgets:
+            b2bcustomer_information: B2B Customer Information
