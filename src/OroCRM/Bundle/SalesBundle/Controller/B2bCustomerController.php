@@ -18,12 +18,7 @@ use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 class B2bCustomerController extends Controller
 {
     /**
-     * @Route(
-     *      "/{_format}",
-     *      name="orocrm_sales_b2bcustomer_index",
-     *      requirements={"_format"="html|json"},
-     *      defaults={"_format" = "html"}
-     * )
+     * @Route("/", name="orocrm_sales_b2bcustomer_index")
      * @Template
      * @AclAncestor("orocrm_sales_b2bcustomer_view")
      */

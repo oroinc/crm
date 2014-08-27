@@ -32,6 +32,7 @@ oro_menu_config:
             display: false
             extras:
                 routes:      ['/^orocrm_magento_customer_(index|view)$/']
+                position:    60
                 description: 'orocrm.magento.customer.entity_plural_label'
 
     tree:

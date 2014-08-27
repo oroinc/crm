@@ -40,7 +40,7 @@ oro_menu_config:
             route: 'orocrm_sales_b2bcustomer_index'
             display: true
             extras:
-                position:    40
+                position:    70
                 routes:      ['/^orocrm_sales_b2bcustomer/']
                 description: 'orocrm.sales.menu.b2bcustomer_list.description'
 
@@ -105,6 +105,8 @@ oro_menu_config:
                         sales_salesfunnel_list: ~
                         lead_list: ~
                         opportunity_list: ~
+                customers_tab:
+                     children:
                         b2bcustomer_list: ~
         shortcuts:
             children:
