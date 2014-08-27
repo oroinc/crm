@@ -498,6 +498,7 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
      */
     public function prePersist()
     {
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 

@@ -908,3 +908,20 @@ datagrid:
                 primaryEmail:
                     type: string
                     data_name: email.email
+    sales-b2bcustomer-lead-grid:
+        extends: sales-lead-grid
+        columns:
+            hasLeads:
+                label:   Assigned
+                editable: true
+                frontend_type: boolean
+        options:
+            routerEnabled: false
+            requireJSModules:
+              - orodatagrid/js/datagrid/listener/column-form-listener
+            columnListener:
+                dataField: id
+                columnName: hasLeads
+                selectors:
+                    included: '#appendLeads'
+                    excluded: '#removeLeads'
