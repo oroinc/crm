@@ -16,7 +16,12 @@ use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
 class ChannelController extends Controller
 {
     /**
-     * @Route("/", name="orocrm_channel_index")
+     * @Route(
+     *      "/{_format}",
+     *      name="orocrm_channel_index",
+     *      requirements={"_format"="html|json"},
+     *      defaults={"_format"="html"}
+     * )
      * @Acl(
      *      id="orocrm_channel_view",
      *      type="entity",
