@@ -32,6 +32,11 @@ class MarketingListItemsListener
     protected $marketingListsBySegment = array();
 
     /**
+     * @var array
+     */
+    protected $appliedFor = array();
+
+    /**
      * @param ManagerRegistry $managerRegistry
      * @param DataGridConfigurationHelper $dataGridConfigurationHelper
      */
@@ -49,8 +54,9 @@ class MarketingListItemsListener
     public function onPreBuild(PreBuild $event)
     {
         $gridName = $event->getConfig()->getName();
-        if ($this->isApplicable($gridName)) {
+        if ($this->isApplicable($gridName) && empty($this->appliedFor[$gridName])) {
             $this->dataGridConfigurationHelper->extendConfiguration($event->getConfig(), self::MIXIN_NAME);
+            $this->appliedFor[$gridName] = true;
         }
     }
 

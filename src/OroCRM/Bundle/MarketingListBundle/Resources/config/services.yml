@@ -18,6 +18,7 @@ parameters:
     orocrm_marketing_list.datagrid.action_permission_provider.class: OroCRM\Bundle\MarketingListBundle\Datagrid\ActionPermissionProvider
 
     orocrm_marketing_list.security.acl.voter.segment.class: OroCRM\Bundle\MarketingListBundle\Acl\Voter\MarketingListSegmentVoter
+    orocrm_marketing_list.provider.marketing_list.class: OroCRM\Bundle\MarketingListBundle\Provider\MarketingListProvider
 services:
     orocrm_marketing_list.entity_provider:
         alias: oro_entity.entity_provider
@@ -100,3 +101,8 @@ services:
             - @oro_entity.doctrine_helper
         tags:
             - { name: security.voter, priority: 500 }
+
+    orocrm_marketing_list.provider.marketing_list:
+        class: %orocrm_marketing_list.provider.marketing_list.class%
+        arguments:
+            - @oro_datagrid.datagrid.manager
