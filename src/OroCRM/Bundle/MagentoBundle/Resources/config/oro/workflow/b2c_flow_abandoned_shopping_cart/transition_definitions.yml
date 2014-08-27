@@ -106,9 +106,6 @@ workflows:
                         - @not_empty:
                             parameters: $opportunity_owner
                             message: 'Owner must be set'
-                        - @not_empty:
-                            parameters: $account
-                            message: 'Account must be set'
                 post_actions:
                     - @find_entity: # Set cart status to converted_to_opportunity
                         class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
@@ -126,7 +123,6 @@ workflows:
                             owner: $opportunity_owner
                             budgetAmount: $opportunity_budget
                             contact: $cart.customer.contact
-                            account: $account
                             status: $.result.opportunity_status
                             notes: $notes
 
