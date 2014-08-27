@@ -33,12 +33,16 @@ class MarketingListExtension extends AbstractExtension
      */
     public function isApplicable(DatagridConfiguration $config)
     {
-        $segmentId = $this->segmentHelper->getSegmentIdByGridName($config->offsetGetByPath('[name]'));
+        if ($config->offsetGetByPath(Builder::DATASOURCE_TYPE_PATH) !== OrmDatasource::TYPE) {
+            return false;
+        }
 
-        return
-            $config->offsetGetByPath(Builder::DATASOURCE_TYPE_PATH) == OrmDatasource::TYPE
-            && $segmentId
-            && (bool)$this->segmentHelper->getMarketingListBySegment($segmentId);
+        $segmentId = $this->segmentHelper->getSegmentIdByGridName($config->offsetGetByPath('[name]'));
+        if (!$segmentId) {
+            return false;
+        }
+
+        return (bool)$this->segmentHelper->getMarketingListBySegment($segmentId);
     }
 
     /**
