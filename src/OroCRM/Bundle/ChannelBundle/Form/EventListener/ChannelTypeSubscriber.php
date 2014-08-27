@@ -51,35 +51,38 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             return;
         }
 
+        if (!$data->getChannelType()) {
+            $data->setChannelType($this->getFirstChannelType());
+        }
+
         // builds datasource field
         $datasourceModifier = $this->getDatasourceModifierClosure($data->getChannelType());
         $datasourceModifier($form);
 
-        if ($data->getChannelType()) {
-            $readOnly   = !$this->settingsProvider->isCustomerIdentityUserDefined($data->getChannelType());
-            $predefined = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
+        $readOnly   = !$this->settingsProvider->isCustomerIdentityUserDefined($data->getChannelType());
+        $predefined = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
 
-            // pre-fill customer identity for new instances, or if it's not customer defined for this channel type
-            if ((!$data->getId() || $readOnly) && null !== $predefined) {
-                $data->setCustomerIdentity($predefined);
+        // pre-fill customer identity for new instances, or if it's not customer defined for this channel type
+        if ((!$data->getId() || $readOnly) && null !== $predefined) {
+            $data->setCustomerIdentity($predefined);
 
-                // also add to entities
-                $entities = $data->getEntities();
-                $entities = is_array($entities) ? $entities : [];
-                if (!in_array($predefined, $entities, true)) {
-                    $entities[] = $predefined;
-                    $data->setEntities($entities);
-                }
-            }
-
-            // pre-fill entities for new instances
-            if (!$data->getId()) {
-                $channelTypeEntities = $this->settingsProvider->getEntitiesByChannelType($data->getChannelType());
-                $entities            = $data->getEntities();
-                $entities            = is_array($entities) ? $entities : [];
-                $data->setEntities(array_unique(array_merge($entities, $channelTypeEntities)));
+            // also add to entities
+            $entities = $data->getEntities();
+            $entities = is_array($entities) ? $entities : [];
+            if (!in_array($predefined, $entities, true)) {
+                $entities[] = $predefined;
+                $data->setEntities($entities);
             }
         }
+
+        // pre-fill entities for new instances
+        if (!$data->getId()) {
+            $channelTypeEntities = $this->settingsProvider->getEntitiesByChannelType($data->getChannelType());
+            $entities            = $data->getEntities();
+            $entities            = is_array($entities) ? $entities : [];
+            $data->setEntities(array_unique(array_merge($entities, $channelTypeEntities)));
+        }
+
     }
 
     /**
@@ -153,5 +156,15 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                 }
             }
         };
+    }
+
+    /**
+     * @return string
+     */
+    protected function getFirstChannelType()
+    {
+        $channelTypes = $this->settingsProvider->getChannelTypeChoiceList();
+        reset($channelTypes);
+        return (string)key($channelTypes);
     }
 }
