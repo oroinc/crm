@@ -30,7 +30,7 @@ class B2bCustomerController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('orocrm_sales.customer.class')
+            'entity_class' => $this->container->getParameter('orocrm_sales.b2bcustomer.entity.class')
         ];
     }
 
@@ -46,8 +46,8 @@ class B2bCustomerController extends Controller
      */
     public function viewAction(B2bCustomer $customer)
     {
-        return array(
+        return [
             'entity' => $customer
-        );
+        ];
     }
 }

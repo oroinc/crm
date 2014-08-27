@@ -622,11 +622,11 @@ datagrid:
                     and:
                         - o.account = :accountId
 
-    sales-customer-grid:
-        extended_entity_name: %orocrm_sales.customer.class%
+    orocrm-sales-b2bcustomers-grid:
+        extended_entity_name: %orocrm_sales.b2bcustomer.entity.class%
         source:
             type: orm
-            acl_resource: orocrm_sales_lead_view
+            acl_resource: orocrm_sales_b2bcustomer_view
             query:
                 select:
                     - c.id
@@ -634,7 +634,7 @@ datagrid:
                     - c.createdAt
                     - channel.name as channelName
                 from:
-                    - { table: %orocrm_sales.customer.class%, alias: c }
+                    - { table: %orocrm_sales.b2bcustomer.entity.class%, alias: c }
                 join:
                     left:
                         - { join: c.channel, alias: channel }
@@ -652,7 +652,7 @@ datagrid:
                 createdAt:   { data_name: c.createdAt }
                 channelName: { data_name: channelName }
             default:
-                createdAt:  DESC
+                name: ASC
         filters:
             columns:
                  name:

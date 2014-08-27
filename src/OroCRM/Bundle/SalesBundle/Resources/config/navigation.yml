@@ -41,7 +41,7 @@ oro_menu_config:
             display: true
             extras:
                 position:    40
-                routes:      ['/^orocrm_sales_b2bcustomer_index/']
+                routes:      ['/^orocrm_sales_b2bcustomer/']
                 description: 'orocrm.sales.menu.b2bcustomer_list.description'
 
         shortcut_list_b2bcustomers:
