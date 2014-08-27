@@ -36,7 +36,10 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendB2bCustomer;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
- *          }
+ *          },
+ *         "form"={
+ *             "form_type"="orocrm_sales_b2bcustomer_select"
+ *         }
  *      }
  * )
  */
