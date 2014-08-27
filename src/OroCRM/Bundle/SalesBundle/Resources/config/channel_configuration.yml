@@ -36,6 +36,16 @@ orocrm_channel:
           navigation_items:
               - application_menu.sales_tab.sales_salesfunnel_list
 
+       -
+          name: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+          dependent: ~
+          dependencies:
+              - OroCRM\Bundle\SalesBundle\Entity\Opportunity
+              - OroCRM\Bundle\SalesBundle\Entity\Lead
+          dependencies_condition: OR
+          navigation_items:
+              - application_menu.customers_tab.b2bcustomer_list
+
    channel_types:
         b2b:
             label: B2B
@@ -43,4 +53,5 @@ orocrm_channel:
                 - OroCRM\Bundle\SalesBundle\Entity\Lead
                 - OroCRM\Bundle\SalesBundle\Entity\Opportunity
                 - OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
-            customer_identity: OroCRM\Bundle\SalesBundle\Entity\Lead
+                - OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+            customer_identity: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer

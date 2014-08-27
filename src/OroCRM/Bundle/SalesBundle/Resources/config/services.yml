@@ -80,11 +80,4 @@ services:
             - false
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-b2bcustomer-leads-grid, method: onBuildAfter }
-
-    orocrm_sales.event_listener.b2bcusomer_opportunities_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'customerId'
-            - false
-        tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-b2bcustomer-opportunities-grid, method: onBuildAfter }

@@ -59,7 +59,7 @@ class B2bCustomerController extends Controller
     }
 
     /**
-     * @Route("/widget/b2bcustomer-leads/{id}", name="orocrm_sales_widget_b2bcustomer_leads", requirements={"id"="\d+"})
+     * @Route("/widget/b2bcustomer-leads/{id}", name="orocrm_sales_b2bcustomer_widget_leads", requirements={"id"="\d+"})
      * @AclAncestor("orocrm_sales_lead_view")
      * @Template
      */
@@ -73,7 +73,7 @@ class B2bCustomerController extends Controller
     /**
      * @Route(
      *      "/widget/b2bcustomer-opportunities/{id}",
-     *      name="orocrm_sales_widget_b2bcustomer_opportunities",
+     *      name="orocrm_sales_b2bcustomer_widget_opportunities",
      *      requirements={"id"="\d+"}
      * )
      * @AclAncestor("orocrm_sales_opportunity_view")
