@@ -663,7 +663,7 @@ datagrid:
                     data_name: channelName
                     options:
                         field_options:
-                            class: OroCRMSalesBundle:B2bCustomer
+                            class: OroCRMChannelBundle:Channel
                             property: name
         properties:
             id: ~
