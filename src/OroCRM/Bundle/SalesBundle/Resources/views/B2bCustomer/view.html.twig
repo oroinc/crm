@@ -6,18 +6,18 @@
 {#% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
         {{ UI.editButton({
-        'path' : path('orocrm_sales_b2bcustomer_update', { 'id': entity.id }),
-        'entity_label': 'orocrm.sales.b2bcustomer.entity_label'|trans
+            'path' : path('orocrm_sales_b2bcustomer_update', { 'id': entity.id }),
+            'entity_label': 'orocrm.sales.b2bcustomer.entity_label'|trans
         }) }}
     {% endif %}
     {% if resource_granted('DELETE', entity) %}
         {{ UI.deleteButton({
-        'dataUrl': path('oro_api_delete_b2bcustomer', {'id': entity.id}),
-        'dataRedirect': path('orocrm_sales_b2bcustomer_index'),
-        'aCss': 'no-hash remove-button',
-        'id': 'btn-remove-lead',
-        'dataId': entity.id,
-        'entity_label': 'orocrm.sales.b2bcustomer.entity_label'|trans
+            'dataUrl': path('oro_api_delete_b2bcustomer', {'id': entity.id}),
+            'dataRedirect': path('orocrm_sales_b2bcustomer_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-lead',
+            'dataId': entity.id,
+            'entity_label': 'orocrm.sales.b2bcustomer.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock navButtons %#}
@@ -29,10 +29,10 @@
 
 {% block pageHeader %}
     {% set breadcrumbs = {
-    'entity': entity,
-    'indexPath': path('orocrm_sales_b2bcustomer_index'),
-    'indexLabel': 'orocrm.sales.b2bcustomer.entity_label'|trans,
-    'entityTitle': entity.name|default('N/A')
+        'entity': entity,
+        'indexPath': path('orocrm_sales_b2bcustomer_index'),
+        'indexLabel': 'orocrm.sales.b2bcustomer.entity_label'|trans,
+        'entityTitle': entity.name|default('N/A')
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
