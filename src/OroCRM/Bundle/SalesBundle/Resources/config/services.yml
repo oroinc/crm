@@ -10,7 +10,7 @@ parameters:
     orocrm_sales.salesfunnel.entity.class:                 OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
     orocrm_sales.salesfunnel.manager.api.class:            Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
-    orocrm_sales.customer.class:                           OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+    orocrm_sales.b2bcustomer.entity.class:                 OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
 
 services:
     orocrm_sales.opportunity.manager.api:
