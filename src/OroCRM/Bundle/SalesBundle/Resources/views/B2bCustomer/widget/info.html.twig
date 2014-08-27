@@ -1,11 +1,46 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% import 'OroTagBundle::macros.html.twig' as tag %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroAddressBundle::macros.html.twig' as address %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ UI.renderProperty('orocrm.sales.b2bcustomer.name.label'|trans, entity.name) }}
+
+            {%- if resource_granted('orocrm_account_view') and entity.account -%}
+                {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.account.id}) ~ '">' ~ entity.account|escape ~ '</a>' %}
+            {%- else -%}
+                {% set accountView = entity.account ? entity.account|escape : '' %}
+            {%- endif -%}
+            {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.account.label'|trans, accountView) }}
+
+            {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
+                {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name|escape ~ '</a>' %}
+            {%- else -%}
+                {% set contactView = entity.contact ? entity.contact : '' %}
+            {%- endif -%}
+            {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.contact.label'|trans, contactView) }}
+
+            {%- if resource_granted('orocrm_channel_view') and entity.channel -%}
+                {% set channelView = '<a href="' ~ path('orocrm_channel_view', {'id': entity.channel.id}) ~ '">' ~ entity.channel.name|escape ~ '</a>' %}
+            {%- else -%}
+                {% set channelView = entity.channel ? entity.channel : '' %}
+            {%- endif -%}
+            {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.channel.label'|trans, channelView) }}
+
+            {% if entity.billingAddress is not empty %}
+                {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.billing_address.label'|trans, address.renderAddress(entity.billingAddress)) }}
+            {% endif %}
+
+            {% if entity.shippingAddress is not empty %}
+                {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
+            {% endif %}
+
+            {% if resource_granted('oro_tag_view_tag_cloud') %}
+                {{ UI.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
+            {% endif %}
+
         </div>
         <div class="responsive-block">
             {{ entityConfig.renderDynamicFields(entity) }}
