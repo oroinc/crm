@@ -1,14 +1,16 @@
 parameters:
-    orocrm_sales.opportunity.class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
-    orocrm_sales.opportunity.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_sales.opportunity.class:                        OroCRM\Bundle\SalesBundle\Entity\Opportunity
+    orocrm_sales.opportunity.manager.api.class:            Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
-    orocrm_sales.lead.entity.class: OroCRM\Bundle\SalesBundle\Entity\Lead
-    orocrm_sales.lead.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_sales.lead.entity.class:                        OroCRM\Bundle\SalesBundle\Entity\Lead
+    orocrm_sales.lead.manager.api.class:                   Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
-    orocrm_sales.lead.datagrid_helper.class: Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
+    orocrm_sales.lead.datagrid_helper.class:               Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
 
-    orocrm_sales.salesfunnel.entity.class: OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
-    orocrm_sales.salesfunnel.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_sales.salesfunnel.entity.class:                 OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
+    orocrm_sales.salesfunnel.manager.api.class:            Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
+    orocrm_sales.b2bcustomer.entity.class:                 OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
 
 services:
     orocrm_sales.opportunity.manager.api:
