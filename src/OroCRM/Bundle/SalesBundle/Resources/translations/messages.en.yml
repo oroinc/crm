@@ -23,8 +23,9 @@ orocrm:
 
     sales:
         sections:
-            general:  General
-            leads:    Leads
+            general:       General
+            leads:         Leads
+            opportunities: Opportunities
         dashboard:
             opportunities_by_state:
                 title:       Opportunities by Status
