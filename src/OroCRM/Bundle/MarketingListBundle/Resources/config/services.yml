@@ -21,6 +21,8 @@ parameters:
     orocrm_marketing_list.provider.marketing_list.class: OroCRM\Bundle\MarketingListBundle\Provider\MarketingListProvider
 
     orocrm_marketing_list.model.marketing_list_item_connector.class: OroCRM\Bundle\MarketingListBundle\Model\MarketingListItemConnector
+    orocrm_marketing_list.datagrid.extension.class: OroCRM\Bundle\MarketingListBundle\Datagrid\Extension\MarketingListExtension
+    orocrm_marketing_list.model.segment_helper.class: OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper
 services:
     orocrm_marketing_list.entity_provider:
         alias: oro_entity.entity_provider
@@ -78,8 +80,8 @@ services:
     orocrm_marketing_list.datagrid.listener.items:
         class: %orocrm_marketing_list.datagrid.listener.items.class%
         arguments:
-            - @doctrine
             - @orocrm_marketing_list.datagrid_configuration_helper
+            - @orocrm_marketing_list.model.segment_helper
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after, method: onBuildAfter }
@@ -114,3 +116,15 @@ services:
         arguments:
             - @doctrine
             - @oro_entity.doctrine_helper
+
+    orocrm_marketing_list.model.segment_helper:
+        class: %orocrm_marketing_list.model.segment_helper.class%
+        arguments:
+            - @doctrine
+
+    orocrm_marketing_list.datagrid.extension:
+        class: %orocrm_marketing_list.datagrid.extension.class%
+        arguments:
+            - @orocrm_marketing_list.model.segment_helper
+        tags:
+            - { name: oro_datagrid.extension }

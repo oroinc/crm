@@ -47,11 +47,16 @@ class MarketingListTest extends \PHPUnit_Framework_TestCase
 
     public function propertiesDataProvider()
     {
+        $type = $this
+            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         return array(
             array('name', 'test'),
             array('description', 'test'),
             array('entity', 'Test'),
-            array('type', $this->getMock('OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType')),
+            array('type', $type),
             array('segment', $this->getMock('Oro\Bundle\SegmentBundle\Entity\Segment')),
             array('owner', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
             array('lastRun', new \DateTime()),

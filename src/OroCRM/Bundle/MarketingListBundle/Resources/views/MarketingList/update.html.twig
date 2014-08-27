@@ -3,7 +3,7 @@
 {% import 'OroSegmentBundle::macros.html.twig' as segmentQD %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
-{% oro_title_set({params : {"%marketing_list.name%": entity.name} }) %}
+{% oro_title_set({params : {"%entity.name%": entity.name} }) %}
 {% set formAction = form.vars.value.id ? path('orocrm_marketing_list_update', { 'id': form.vars.value.id }) : path('orocrm_marketing_list_create')  %}
 
 {% block head_script %}

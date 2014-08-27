@@ -147,6 +147,12 @@ datagrid:
                 subscribed:
                     type: boolean
                     data_name: subscribed
+                contactedTimes:
+                    type: number
+                    data_name: mli.contactedTimes
+                lastContactedAt:
+                    type: datetime
+                    data_name: mli.lastContactedAt
         sorters:
             columns:
                 subscribed: { data_name: subscribed }
