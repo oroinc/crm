@@ -22,6 +22,11 @@ class MarketingListProvider
     protected $dataGridManager;
 
     /**
+     * @var array
+     */
+    protected $dataGrid = array();
+
+    /**
      * @param Manager $dataGridManager
      */
     public function __construct(Manager $dataGridManager)
@@ -78,9 +83,13 @@ class MarketingListProvider
     {
         $dataGridName = $segment->getGridPrefix() . $segment->getId();
 
-        return $this->dataGridManager->getDatagrid(
-            $dataGridName,
-            array(PagerInterface::PAGER_ROOT_PARAM => array(PagerInterface::DISABLED_PARAM => true))
-        );
+        if (empty($this->dataGrid[$dataGridName])) {
+            $this->dataGrid[$dataGridName] = $this->dataGridManager->getDatagrid(
+                $dataGridName,
+                array(PagerInterface::PAGER_ROOT_PARAM => array(PagerInterface::DISABLED_PARAM => true))
+            );
+        }
+
+        return $this->dataGrid[$dataGridName];
     }
 }
