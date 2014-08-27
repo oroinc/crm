@@ -19,6 +19,8 @@ parameters:
 
     orocrm_marketing_list.security.acl.voter.segment.class: OroCRM\Bundle\MarketingListBundle\Acl\Voter\MarketingListSegmentVoter
     orocrm_marketing_list.provider.marketing_list.class: OroCRM\Bundle\MarketingListBundle\Provider\MarketingListProvider
+
+    orocrm_marketing_list.model.marketing_list_item_connector.class: OroCRM\Bundle\MarketingListBundle\Model\MarketingListItemConnector
 services:
     orocrm_marketing_list.entity_provider:
         alias: oro_entity.entity_provider
@@ -106,3 +108,9 @@ services:
         class: %orocrm_marketing_list.provider.marketing_list.class%
         arguments:
             - @oro_datagrid.datagrid.manager
+
+    orocrm_marketing_list.model.marketing_list_item_connector:
+        class: %orocrm_marketing_list.model.marketing_list_item_connector.class%
+        arguments:
+            - @doctrine
+            - @oro_entity.doctrine_helper
