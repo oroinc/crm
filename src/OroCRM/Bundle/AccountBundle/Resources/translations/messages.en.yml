@@ -38,8 +38,6 @@ orocrm:
         id.label:                   Id
         name.label:                 Account name
         owner.label:                Owner
-        shipping_address.label:     Shipping Address
-        billing_address.label:      Billing Address
         contacts.label:             Contacts
         default_contact.label:      Default
         phone.label:                Phone

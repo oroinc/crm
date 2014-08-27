@@ -4,10 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
@@ -66,8 +62,9 @@ class CustomerStrategy extends BaseStrategy
         // by the appropriate queued process to improve initial import performance
         if ($localEntity->getId()) {
             $this->updateContact($remoteEntity, $localEntity, $remoteEntity->getContact());
-            $this->updateAccount($localEntity, $remoteEntity->getAccount());
-            $localEntity->getAccount()->setDefaultContact($localEntity->getContact());
+            if ($localEntity->getAccount()) {
+                $localEntity->getAccount()->setDefaultContact($localEntity->getContact());
+            }
         } else {
             $localEntity->setContact(null);
             $localEntity->setAccount(null);
@@ -303,47 +300,5 @@ class CustomerStrategy extends BaseStrategy
         foreach ($toRemove as $address) {
             $entity->removeAddress($address);
         }
-    }
-
-    /**
-     * @param Customer $entity
-     * @param Account  $account
-     *
-     * @return $this
-     */
-    protected function updateAccount(Customer $entity, Account $account)
-    {
-        /** @var Account $existingAccount */
-        $existingAccount = $entity->getAccount();
-
-        // update not allowed
-        if ($existingAccount && $existingAccount->getId()) {
-            return $this;
-        }
-
-        $addresses = [
-            AddressType::TYPE_SHIPPING => $account->getShippingAddress(),
-            AddressType::TYPE_BILLING  => $account->getBillingAddress()
-        ];
-
-        /** @var $address AbstractAddress|null */
-        foreach ($addresses as $key => $address) {
-            if (empty($address)) {
-                continue;
-            }
-
-            $address->setId(null);
-            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
-            $this->updateAddressCountryRegion($address, $mageRegionId);
-
-            $setter = 'set' . ucfirst($key) . 'Address';
-            $account->$setter($address->getCountry() ? $address : null);
-        }
-
-        // populate default owner only for new accounts
-        $this->defaultOwnerHelper->populateChannelOwner($account, $entity->getChannel());
-        $entity->setAccount($account);
-
-        return $this;
     }
 }

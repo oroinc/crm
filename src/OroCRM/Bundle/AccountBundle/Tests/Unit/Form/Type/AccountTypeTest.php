@@ -66,14 +66,6 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->with('contacts', 'oro_multiple_entity')
             ->will($this->returnSelf());
-        $builder->expects($this->at(4))
-            ->method('add')
-            ->with('shippingAddress', 'oro_address')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(5))
-            ->method('add')
-            ->with('billingAddress', 'oro_address')
-            ->will($this->returnSelf());
 
         $type = new AccountType($this->router, $this->nameFormatter, $this->securityFacade);
         $type->buildForm($builder, []);
@@ -97,14 +89,6 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $builder->expects($this->at(1))
             ->method('add')
             ->with('tags', 'oro_tag_select')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(2))
-            ->method('add')
-            ->with('shippingAddress', 'oro_address')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(3))
-            ->method('add')
-            ->with('billingAddress', 'oro_address')
             ->will($this->returnSelf());
 
         $type = new AccountType($this->router, $this->nameFormatter, $this->securityFacade);
