@@ -808,40 +808,6 @@ datagrid:
                     type: string
                     data_name: addressPostalCode
                     enabled: false
-        properties:
-            id: ~
-            view_link:
-                type:       url
-                route:      orocrm_sales_lead_view
-                params:     [ id ]
-            update_link:
-                type:       url
-                route:      orocrm_sales_lead_update
-                params:     [ id ]
-            delete_link:
-                type:       url
-                route:      oro_api_delete_lead
-                params:     [ id ]
-        actions:
-            view:
-                type:          navigate
-                acl_resource:  orocrm_sales_lead_view
-                label:         orocrm.sales.lead.datagrid.view
-                icon:          eye-open
-                link:          view_link
-                rowAction:     true
-            update:
-                type:          navigate
-                acl_resource:  orocrm_sales_lead_update
-                label:         orocrm.sales.lead.datagrid.update
-                icon:          edit
-                link:          update_link
-            delete:
-                type:          delete
-                acl_resource:  orocrm_sales_lead_delete
-                label:         orocrm.sales.lead.datagrid.delete
-                icon:          trash
-                link:          delete_link
 
     sales-b2bcustomer-opportunities-grid:
         extended_entity_name: %orocrm_sales.b2bcustomer.entity.class%
@@ -893,20 +859,6 @@ datagrid:
                 label:         orocrm.sales.opportunity.status.label
             primaryEmail:
                 label:         orocrm.contact.email.label
-        properties:
-            id: ~
-            view_link:
-                type:       url
-                route:      orocrm_sales_opportunity_view
-                params:     [ id ]
-            update_link:
-                type:       url
-                route:      orocrm_sales_opportunity_update
-                params:     [ id ]
-            delete_link:
-                type:       url
-                route:      oro_api_delete_opportunity
-                params:     [ id ]
         sorters:
             columns:
                 name:
@@ -957,24 +909,3 @@ datagrid:
                 primaryEmail:
                     type: string
                     data_name: email.email
-        actions:
-            view:
-                type:          navigate
-                acl_resource:  orocrm_sales_opportunity_view
-                label:         orocrm.sales.opportunity.datagrid.view
-                icon:          eye-open
-                link:          view_link
-                rowAction:     true
-            update:
-                type:          navigate
-                acl_resource:  orocrm_sales_opportunity_update
-                label:         orocrm.sales.opportunity.datagrid.update
-                icon:          edit
-                link:          update_link
-            delete:
-                type:          delete
-                acl_resource:  orocrm_sales_opportunity_delete
-                label:         orocrm.sales.opportunity.datagrid.delete
-                icon:          trash
-                link:          delete_link
-
