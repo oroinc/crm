@@ -681,14 +681,13 @@ datagrid:
                 rowAction:     true
 
     sales-b2bcustomer-leads-grid:
-        extended_entity_name: %orocrm_sales.b2bcustomer.entity.class%
+        extended_entity_name: %orocrm_sales.lead.entity.class%
         source:
             type: orm
             acl_resource: orocrm_sales_lead_view
             query:
                 select:
-                    - c.id as cid
-                    - l.id as id
+                    - l.id
                     - l.name
                     - l.firstName
                     - l.lastName
@@ -707,17 +706,16 @@ datagrid:
                         ) as regionLabel
 
                 from:
-                    - { table: %orocrm_sales.b2bcustomer.entity.class%, alias: c }
+                    - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
                     left:
-                        - { join: c.leads, alias: l }
                         - { join: l.status, alias: status }
                         - { join: l.address, alias: address }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                 where:
                     and:
-                        - c.id = :customerId
+                        - l.customer = :customerId
         columns:
             name:
                 label:         orocrm.sales.lead.name.label
@@ -809,14 +807,12 @@ datagrid:
                     enabled: false
 
     sales-b2bcustomer-opportunities-grid:
-        extended_entity_name: %orocrm_sales.b2bcustomer.entity.class%
+        extended_entity_name: %orocrm_sales.opportunity.class%
         source:
             type: orm
-            acl_resource: orocrm_sales_lead_view
+            acl_resource: orocrm_sales_opportunity_view
             query:
                 select:
-                    - c.id as cid
-
                     - o.id as id
                     - o.name
                     - o.createdAt
@@ -827,16 +823,15 @@ datagrid:
                     - status.label as statusLabel
                     - email.email as primaryEmail
                 from:
-                    - { table: %orocrm_sales.b2bcustomer.entity.class%, alias: c }
+                    - { table: %orocrm_sales.opportunity.class%, alias: o }
                 join:
                     left:
-                        - { join: c.opportunities, alias: o }
                         - { join: o.contact , alias: contact }
                         - { join: o.status, alias: status }
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                 where:
                     and:
-                        - c.id = :customerId
+                        - o.customer = :customerId
         columns:
             name:
                 label:         orocrm.sales.opportunity.name.label
