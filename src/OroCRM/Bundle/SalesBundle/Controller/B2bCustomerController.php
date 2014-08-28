@@ -54,7 +54,7 @@ class B2bCustomerController extends Controller
     /**
      * @Route("/widget/info/{id}", name="orocrm_salses_b2bcustomer_widget_info", requirements={"id"="\d+"})
      * @AclAncestor("orocrm_sales_b2bcustomer_view")
-     * @Template()
+     * @Template
      */
     public function infoAction(B2bCustomer $customer)
     {
