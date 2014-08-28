@@ -43,10 +43,8 @@ class LoadChannelData extends AbstractFixture implements ContainerAwareInterface
     {
         /** @var Organization $organization */
         $organization = $this->organizationRepository->findOneByName('default');
+        $organization = $organization ? : $this->organizationRepository->findOneByName('Acme, Inc');
 
-        if (!$organization) {
-            $organization = $this->organizationRepository->findOneByName('Acme, Inc');
-        }
         if (!$organization) {
             throw new \Exception('"default" company is not defined');
         }
@@ -62,13 +60,21 @@ class LoadChannelData extends AbstractFixture implements ContainerAwareInterface
     protected function persistChannel(ObjectManager $om, Organization $organization)
     {
         $channel = new Channel();
-        $channel->setName('default');
+        $channel->setName('My B2b channel');
         $channel->setOwner($organization);
-        $channel->setStatus(true);
-        $channel->setChannelType('custom');
-        $channel->setCustomerIdentity('OroCRM\Bundle\SalesBundle\Entity\Opportunity');
-        $om->persist($channel);
+        $channel->setStatus(Channel::STATUS_ACTIVE);
+        $channel->setChannelType('b2b');
+        $channel->setCustomerIdentity('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
+        $channel->setEntities(
+            [
+                'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer',
+                'OroCRM\Bundle\SalesBundle\Entity\Lead',
+                'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel',
+            ]
+        );
 
+        $om->persist($channel);
         $this->addReference('default_channel', $channel);
     }
 }
