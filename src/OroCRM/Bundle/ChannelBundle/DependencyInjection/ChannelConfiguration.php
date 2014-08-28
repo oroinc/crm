@@ -9,7 +9,8 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class ChannelConfiguration implements ConfigurationInterface
 {
-    const ROOT_NODE_NAME = 'orocrm_channel';
+    const ROOT_NODE_NAME            = 'orocrm_channel';
+    const DEFAULT_CUSTOMER_IDENTITY = 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity';
 
     /**
      * {@inheritDoc}
@@ -56,10 +57,15 @@ class ChannelConfiguration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('label')->isRequired()->cannotBeEmpty()->end()
                             ->arrayNode('entities')
+                                ->treatNullLike(array())
                                 ->prototype('scalar')->cannotBeEmpty()->end()
+                                ->defaultValue([self::DEFAULT_CUSTOMER_IDENTITY])
                             ->end()
                             ->scalarNode('integration_type')->cannotBeEmpty()->end()
-                            ->scalarNode('customer_identity')->cannotBeEmpty()->end()
+                            ->scalarNode('customer_identity')
+                                ->cannotBeEmpty()
+                                ->defaultValue(self::DEFAULT_CUSTOMER_IDENTITY)
+                            ->end()
                             ->scalarNode('is_customer_identity_user_defined')->defaultTrue()->end()
                         ->end()
                     ->end()

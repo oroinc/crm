@@ -20,14 +20,14 @@ class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
                         'OroCRM\Bundle\TestBundle1\Entity\Entity1Status',
                         'OroCRM\Bundle\TestBundle1\Entity\Entity1Reason'
                     ],
-                    'navigation_items'       => [
-                        'application_menu.menu1.list',
-                    ],
                     'dependencies'           => [
                         'OroCRM\Bundle\TestBundle1\Entity\Entity2',
                         'OroCRM\Bundle\TestBundle1\Entity\Entity3'
                     ],
                     'dependencies_condition' => 'OR',
+                    'navigation_items'       => [
+                        'application_menu.menu1.list',
+                    ],
                     'belongs_to'             => [
                         'integration' => 'testIntegrationType'
                     ]
@@ -58,7 +58,10 @@ class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
                 ],
                 'test2' => [
                     'label'                             => 'test2 type',
-                    'entities'                          => [],
+                    'entities'                          => [
+                        'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity'
+                    ],
+                    'customer_identity' => 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity',
                     'is_customer_identity_user_defined' => true
                 ]
             ],

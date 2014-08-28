@@ -52,32 +52,22 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             return;
         }
 
+        if (!$data->getChannelType()) {
+            $data->setChannelType($this->getFirstChannelType());
+        }
+
         // builds datasource field
         $datasourceModifier = $this->getDatasourceModifierClosure($data->getChannelType());
         $datasourceModifier($form);
 
-        if ($data->getChannelType()) {
-            $predefined = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
-
-            if ((!$data->getId()) && null !== $predefined) {
-
-                // add to entities
-                $entities = $data->getEntities();
-                $entities = is_array($entities) ? $entities : [];
-                if (!in_array($predefined, $entities, true)) {
-                    $entities[] = $predefined;
-                    $data->setEntities($entities);
-                }
-            }
-
-            // pre-fill entities for new instances
-            if (!$data->getId()) {
-                $channelTypeEntities = $this->settingsProvider->getEntitiesByChannelType($data->getChannelType());
-                $entities            = $data->getEntities();
-                $entities            = is_array($entities) ? $entities : [];
-                $data->setEntities(array_unique(array_merge($entities, $channelTypeEntities)));
-            }
+        // pre-fill entities for new instances
+        if (!$data->getId()) {
+            $channelTypeEntities = $this->settingsProvider->getEntitiesByChannelType($data->getChannelType());
+            $entities            = $data->getEntities();
+            $entities            = is_array($entities) ? $entities : [];
+            $data->setEntities(array_unique(array_merge($entities, $channelTypeEntities)));
         }
+
     }
 
     /**
@@ -155,5 +145,15 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                 }
             }
         };
+    }
+
+    /**
+     * @return string
+     */
+    protected function getFirstChannelType()
+    {
+        $channelTypes = $this->settingsProvider->getChannelTypeChoiceList();
+        reset($channelTypes);
+        return (string)key($channelTypes);
     }
 }
