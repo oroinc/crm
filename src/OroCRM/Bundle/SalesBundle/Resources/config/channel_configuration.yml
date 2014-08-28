@@ -28,7 +28,6 @@ orocrm_channel:
 
        -
           name: OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
-          dependent: ~
           dependencies:
               - OroCRM\Bundle\SalesBundle\Entity\Opportunity
               - OroCRM\Bundle\SalesBundle\Entity\Lead
@@ -38,11 +37,6 @@ orocrm_channel:
 
        -
           name: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
-          dependent: ~
-          dependencies:
-              - OroCRM\Bundle\SalesBundle\Entity\Opportunity
-              - OroCRM\Bundle\SalesBundle\Entity\Lead
-          dependencies_condition: OR
           navigation_items:
               - application_menu.customers_tab.b2bcustomer_list
 
