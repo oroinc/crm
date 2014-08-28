@@ -50,4 +50,44 @@ class B2bCustomerController extends Controller
             'entity' => $customer
         ];
     }
+
+    /**
+     * @Route("/widget/info/{id}", name="orocrm_salses_b2bcustomer_widget_info", requirements={"id"="\d+"})
+     * @AclAncestor("orocrm_sales_b2bcustomer_view")
+     * @Template
+     */
+    public function infoAction(B2bCustomer $customer)
+    {
+        return [
+            'entity' => $customer
+        ];
+    }
+
+    /**
+     * @Route("/widget/b2bcustomer-leads/{id}", name="orocrm_sales_b2bcustomer_widget_leads", requirements={"id"="\d+"})
+     * @AclAncestor("orocrm_sales_lead_view")
+     * @Template
+     */
+    public function b2bCustomerLeadsAction(B2bCustomer $customer)
+    {
+        return [
+            'entity' => $customer
+        ];
+    }
+
+    /**
+     * @Route(
+     *      "/widget/b2bcustomer-opportunities/{id}",
+     *      name="orocrm_sales_b2bcustomer_widget_opportunities",
+     *      requirements={"id"="\d+"}
+     * )
+     * @AclAncestor("orocrm_sales_opportunity_view")
+     * @Template
+     */
+    public function b2bCustomerOpportunitiesAction(B2bCustomer $customer)
+    {
+        return [
+            'entity' => $customer
+        ];
+    }
 }

@@ -38,7 +38,7 @@ oro_menu_config:
         b2bcustomer_list:
             label: 'orocrm.sales.b2bcustomer.entity_plural_label'
             route: 'orocrm_sales_b2bcustomer_index'
-            display: true
+            display: false
             extras:
                 position:    70
                 routes:      ['/^orocrm_sales_b2bcustomer/']
