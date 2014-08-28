@@ -810,7 +810,7 @@ datagrid:
         extended_entity_name: %orocrm_sales.opportunity.class%
         source:
             type: orm
-            acl_resource: orocrm_sales_lead_view
+            acl_resource: orocrm_sales_opportunity_view
             query:
                 select:
                     - o.id as id
