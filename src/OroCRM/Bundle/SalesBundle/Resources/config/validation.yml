@@ -15,7 +15,7 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
             - Range:
                 min: 0
         customer:
-            - NotBlank: ~
+            - Valid: ~
 
 OroCRM\Bundle\SalesBundle\Entity\Lead:
     properties:
@@ -42,6 +42,7 @@ OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
     properties:
         name:
             - NotBlank: ~
-            - Length: 255
+            - Length:
+                max: 255
         account:
             - NotBlank: ~

@@ -17,13 +17,13 @@
             {{ ui.renderHtmlProperty('orocrm.sales.lead.contact.label'|trans, contactView) }}
             {{ ui.renderProperty('orocrm.sales.lead.job_title.label'|trans, entity.jobTitle) }}
 
-            {%- if resource_granted('orocrm_account_view') and entity.account -%}
-                {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.account.id}) ~ '">' ~ entity.account|escape ~ '</a>' %}
+            {%- if resource_granted('orocrm_sales_b2bcustomer_view') and entity.customer -%}
+                {% set customerView = '<a href="' ~ path('orocrm_sales_b2bcustomer_view', {'id': entity.customer.id}) ~ '">' ~ entity.customer|escape ~ '</a>' %}
             {%- else -%}
-                {% set accountView = entity.account ? entity.account|escape : '' %}
+                {% set customerView = entity.customer ? entity.customer|escape : '' %}
             {%- endif -%}
 
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.account.label'|trans, accountView) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.lead.customer.label'|trans, customerView) }}
             {{ ui.renderProperty('orocrm.sales.lead.company_name.label'|trans, entity.companyName) }}
             {{ ui.renderProperty('orocrm.sales.lead.industry.label'|trans, entity.industry) }}
             {{ ui.renderProperty('orocrm.sales.lead.number_of_employees.label'|trans, entity.numberOfEmployees) }}
