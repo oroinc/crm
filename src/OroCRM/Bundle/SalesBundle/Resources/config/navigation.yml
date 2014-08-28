@@ -99,7 +99,7 @@ oro_menu_config:
 
         b2bcustomer_list:
             label: 'orocrm.sales.b2bcustomer.entity_plural_label'
-            route: 'orocrm_b2bcustomer_index'
+            route: 'orocrm_sales_b2bcustomer_index'
     tree:
         application_menu:
             children:

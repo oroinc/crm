@@ -6,6 +6,7 @@ use Oro\Bundle\TagBundle\Entity\TagManager;
 
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,6 +55,7 @@ class B2bCustomerHandler
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
             $this->form->submit($this->request);
             $this->handleLeads($entity);
+            $this->handleOpportunities($entity);
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);
                 return true;
@@ -87,6 +89,18 @@ class B2bCustomerHandler
     }
 
     /**
+     * @param Opportunity $entity
+     */
+    protected function handleOpportunities($entity)
+    {
+        if ($this->form->has('opportunities')) {
+            $opportunities = $this->form->get('opportunities');
+            $this->appendOpportunities($entity, $opportunities->get('added')->getData());
+            $this->removeOpportunities($entity, $opportunities->get('removed')->getData());
+        }
+    }
+
+    /**
      * Append leads to B2bCustomer
      *
      * @param B2bCustomer $B2bCustomer
@@ -109,6 +123,32 @@ class B2bCustomerHandler
     {
         foreach ($leads as $lead) {
             $B2bCustomer->removeLead($lead);
+        }
+    }
+
+    /**
+     * Append opportunities to B2bCustomer
+     *
+     * @param B2bCustomer $B2bCustomer
+     * @param Opportunity[] $opportunities
+     */
+    protected function appendOpportunities(B2bCustomer $B2bCustomer, array $opportunities)
+    {
+        foreach ($opportunities as $opportunity) {
+            $B2bCustomer->addOpportunity($opportunity);
+        }
+    }
+
+    /**
+     * Remove opportunities from B2bCustomer
+     *
+     * @param B2bCustomer $B2bCustomer
+     * @param Opportunity[] $opportunities
+     */
+    protected function removeOpportunities(B2bCustomer $B2bCustomer, array $opportunities)
+    {
+        foreach ($opportunities as $opportunity) {
+            $B2bCustomer->removeOpportunity($opportunity);
         }
     }
 

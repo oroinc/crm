@@ -925,3 +925,21 @@ datagrid:
                 selectors:
                     included: '#appendLeads'
                     excluded: '#removeLeads'
+
+    sales-b2bcustomer-opportunity-grid:
+        extends: sales-opportunity-grid
+        columns:
+            hasOpportunities:
+                label:   Assigned
+                editable: true
+                frontend_type: boolean
+        options:
+            routerEnabled: false
+            requireJSModules:
+              - orodatagrid/js/datagrid/listener/column-form-listener
+            columnListener:
+                dataField: id
+                columnName: hasOpportunities
+                selectors:
+                    included: '#appendOpportunities'
+                    excluded: '#removeOpportunities'

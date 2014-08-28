@@ -5,9 +5,10 @@ namespace OroCRM\Bundle\SalesBundle\Form\Type;
 use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -85,7 +86,7 @@ class B2bCustomerType extends AbstractType
                 'opportunities',
                 'oro_multiple_entity',
                 array(
-                    'add_acl_resource'      => 'orocrm_sales_opportunities_view',
+                    'add_acl_resource'      => 'orocrm_sales_opportunity_view',
                     'class'                 => 'OroCRMSalesBundle:Opportunity',
                     'default_element'       => 'default_contact', //TODO: for remove
                     'required'              => false,
@@ -138,6 +139,14 @@ class B2bCustomerType extends AbstractType
                               );
             $view->children['leads']->vars['initial_elements']
                               = $this->getInitialElements($b2bcustomer->getLeads());
+
+            $view->children['opportunities']->vars['grid_url']
+                    = $this->router->generate(
+                        'orocrm_sales_widget_opportunities_info',
+                        array('id' => $b2bcustomer->getId())
+                    );
+            $view->children['opportunities']->vars['initial_elements']
+                = $this->getInitialOpportunities($b2bcustomer->getOpportunities());
     }
 
     /**
@@ -163,4 +172,25 @@ class B2bCustomerType extends AbstractType
         }
         return $result;
     }
+
+    /**
+     * @param Collection $opportunities
+     * @return array
+     */
+    protected function getInitialOpportunities(Collection $opportunities)
+    {
+        $result = array();
+        /** @var Lead $lead */
+        foreach ($opportunities as $oppotunity) {
+            $result[] = array(
+                'id' => $oppotunity->getId(),
+                'label' => $this->nameFormatter->format($oppotunity),
+                'link' => $this->router->generate('orocrm_sales_lead_info', array('id' => $oppotunity->getId())),
+                'extraData' => array(
+                ),
+            );
+        }
+        return $result;
+    }
+
 }

@@ -162,4 +162,21 @@ class B2bCustomerController extends Controller
             'b2bCustomer' => $b2bCustomer
         ];
     }
+
+    /**
+     * @Route(
+     *      "/widget/opportunities/{id}",
+     *      name="orocrm_sales_widget_opportunities_info",
+     *      requirements={"id"="\d+"},
+     *      defaults={"id"=0}
+     * )
+     * @AclAncestor("orocrm_b2bcustomer_view")
+     * @Template()
+     */
+    public function opportunitiesInfoAction(B2bCustomer $b2bCustomer = null)
+    {
+        return [
+            'b2bCustomer' => $b2bCustomer
+        ];
+    }
 }
