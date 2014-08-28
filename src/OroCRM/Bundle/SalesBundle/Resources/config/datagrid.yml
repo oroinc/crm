@@ -910,6 +910,17 @@ datagrid:
                     data_name: email.email
     sales-b2bcustomer-lead-grid:
         extends: sales-lead-grid
+        source:
+            query:
+                select:
+                    - >
+                        (CASE WHEN (:customer IS NOT NULL) THEN
+                          CASE WHEN (l.customer = :customer OR l.id IN (:data_in)) AND l.id NOT IN (:data_not_in)
+                          THEN true ELSE false END
+                        ELSE
+                          CASE WHEN l.id IN (:data_in) AND l.id NOT IN (:data_not_in)
+                          THEN true ELSE false END
+                        END)  as hasLeads
         columns:
             hasLeads:
                 label:   Assigned

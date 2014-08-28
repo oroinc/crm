@@ -379,6 +379,7 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
     {
         if ($this->getLeads()->contains($lead)) {
             $this->getLeads()->removeElement($lead);
+            $lead->removeCustomer();
         }
     }
 
@@ -417,6 +418,7 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
     {
         if ($this->getOpportunities()->contains($opportunity)) {
             $this->getOpportunities()->removeElement($opportunity);
+            $opportunity->removeCustomer();
         }
     }
 

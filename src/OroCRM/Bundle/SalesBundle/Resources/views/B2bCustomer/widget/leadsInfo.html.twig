@@ -2,6 +2,7 @@
     {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
     {% set gridName = 'sales-b2bcustomer-lead-grid' %}
     {% set params = {
+        'customer' : b2bCustomer.id,
         '_parameters' : {
             'data_in':     app.request.get('added')|split(','),
             'data_not_in': app.request.get('removed')|split(',')
