@@ -939,6 +939,17 @@ datagrid:
 
     sales-b2bcustomer-opportunity-grid:
         extends: sales-opportunity-grid
+        source:
+            query:
+                select:
+                    - >
+                        (CASE WHEN (:customer IS NOT NULL) THEN
+                          CASE WHEN (o.customer = :customer OR o.id IN (:data_in)) AND o.id NOT IN (:data_not_in)
+                          THEN true ELSE false END
+                        ELSE
+                          CASE WHEN o.id IN (:data_in) AND o.id NOT IN (:data_not_in)
+                          THEN true ELSE false END
+                        END)  as hasOpportunities
         columns:
             hasOpportunities:
                 label:   Assigned

@@ -99,3 +99,10 @@ services:
             - 'customer'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-b2bcustomer-lead-grid, method: onBuildAfter }
+
+    orocrm_sales.event_listener.sales_b2bcustomer_opportunity_grid:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'customer'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-b2bcustomer-opportunity-grid, method: onBuildAfter }
