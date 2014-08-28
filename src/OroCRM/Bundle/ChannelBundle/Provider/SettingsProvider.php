@@ -198,6 +198,18 @@ class SettingsProvider
     }
 
     /**
+     * Get CustomerIdentity definition from config
+     *
+     * @param $type
+     *
+     * @return string|null
+     */
+    public function getCustomerIdentityFromConfig($type)
+    {
+        return $this->getChannelTypeConfig($type, 'customer_identity');
+    }
+
+    /**
      * Returns predefined entity list for given channel type
      *
      * @param string $type
