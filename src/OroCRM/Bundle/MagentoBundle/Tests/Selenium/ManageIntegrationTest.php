@@ -43,7 +43,7 @@ class ManageIntegrationTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Integrations $login */
-        $login->openIntegrations('Oro\Bundle\IntegrationBundle')
+        $login = $login->openIntegrations('Oro\Bundle\IntegrationBundle')
             ->add()
             ->setName($name)
             ->setType('magento');
