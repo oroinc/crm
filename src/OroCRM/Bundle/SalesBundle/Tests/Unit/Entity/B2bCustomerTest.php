@@ -20,7 +20,7 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
         $this->entity = new B2bCustomer();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         unset($this->entity);
     }

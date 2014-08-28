@@ -72,13 +72,6 @@ workflows:
                         - @assign_value:
                             conditions:
                                 @and:
-                                    - @empty: $account
-                                    - @not_empty: $cart.customer
-                                    - @not_empty: $cart.customer.account
-                            parameters: [$account, $cart.customer.account]
-                        - @assign_value:
-                            conditions:
-                                @and:
                                     - @empty: $contact
                                     - @not_empty: $cart.customer
                                     - @not_empty: $cart.customer.contact
@@ -375,12 +368,6 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
-                        account:
-                            form_type: orocrm_account_select
-                            options:
-                                required: true
-                                constraints:
-                                    - NotBlank: ~
                         opportunity_budget:
                             form_type: oro_money
                             options:
@@ -402,13 +389,6 @@ workflows:
                             arguments:
                                 customer_name: $.result.formattedCustomerName
                                 shopping_cart_id: $cart.id
-                        - @assign_value:
-                            conditions:
-                                @and:
-                                    - @empty: $account
-                                    - @not_empty: $cart.customer
-                                    - @not_empty: $cart.customer.account
-                            parameters: [$account, $cart.customer.account]
             abandon:
                 label: 'Abandon'
                 message: 'You are going to abandon this shopping cart.'

@@ -115,7 +115,7 @@ function (_, Backbone, __, routing, DialogWidget, linkTemplate) {
             var name = this._getValue('name'),
                 templateContext = {
                 name: name ,
-                title: name ? __('configure') : __('Configure integration')
+                title: name ? __('edit') : __('Configure integration')
             };
 
             this.$el

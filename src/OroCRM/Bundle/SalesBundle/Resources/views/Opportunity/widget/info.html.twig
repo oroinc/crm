@@ -14,6 +14,14 @@
             {%- endif -%}
 
             {{ ui.renderHtmlProperty('orocrm.sales.opportunity.contact.label'|trans, contactView) }}
+
+            {%- if resource_granted('orocrm_sales_b2bcustomer_view') and entity.customer -%}
+                {% set customerView = '<a href="' ~ path('orocrm_sales_b2bcustomer_view', {'id': entity.customer.id}) ~ '">' ~ entity.customer|escape ~ '</a>' %}
+            {%- else -%}
+                {% set customerView = entity.customer ? entity.customer|escape : '' %}
+            {%- endif -%}
+
+            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.customer.label'|trans, customerView) }}
             {{ ui.renderProperty('orocrm.sales.opportunity.probability.label'|trans, entity.probability|length ? entity.probability|oro_format_percent : '') }}
             {{ ui.renderProperty('orocrm.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount|length ? entity.budgetAmount|oro_format_currency, '') }}
 
