@@ -36,7 +36,10 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendB2bCustomer;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
- *          }
+ *          },
+ *         "form"={
+ *             "form_type"="orocrm_sales_b2bcustomer_select"
+ *         }
  *      }
  * )
  */
@@ -498,8 +501,7 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
      */
     public function prePersist()
     {
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->createdAt = $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**

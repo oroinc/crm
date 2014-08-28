@@ -9,6 +9,11 @@ workflows:
                 type: entity
                 options:
                     class: OroCRM\Bundle\AccountBundle\Entity\Account
+            b2bcustomer:
+                label: orocrm.sales.b2bcustomer.entity_label
+                type:  entity
+                options:
+                    class: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
             company_name:
                 label: orocrm.sales.lead.company_name.label
                 type: string
