@@ -109,7 +109,7 @@ class B2bCustomerController extends Controller
             },
             function (B2bCustomer $entity) {
                 return array(
-                    'route' => 'orocrm_sales_b2bCustomer_view',
+                    'route' => 'orocrm_sales_b2bcustomer_view',
                     'parameters' => array('id' => $entity->getId())
                 );
             },

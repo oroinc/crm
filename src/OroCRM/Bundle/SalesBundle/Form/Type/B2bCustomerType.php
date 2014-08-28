@@ -69,30 +69,38 @@ class B2bCustomerType extends AbstractType
                 array(
                     'label' => 'oro.tag.entity_plural_label'
                 )
-            )->add(
-                'channel',
-                'choice'
-            )->add(
-                'leads',
-                'oro_multiple_entity',
-                array(
-                    'add_acl_resource'      => 'orocrm_sales_lead_view',
-                    'class'                 => 'OroCRMSalesBundle:Lead',
-                    'default_element'       => 'default_contact', //TODO: for remove
-                    'required'              => false,
-                    'selector_window_title' => 'orocrm.sales.menu.lead_list.description',
-                )
-            )->add(
-                'opportunities',
-                'oro_multiple_entity',
-                array(
-                    'add_acl_resource'      => 'orocrm_sales_opportunity_view',
-                    'class'                 => 'OroCRMSalesBundle:Opportunity',
-                    'default_element'       => 'default_contact', //TODO: for remove
-                    'required'              => false,
-                    'selector_window_title' => 'orocrm.sales.menu.opportunities_list.description',
-                )
             );
+
+        $builder->add(
+            'channel',
+            'orocrm_channel_select_type',
+            [
+                'required' => true,
+                'label' => 'orocrm.channel.entity_label'
+            ]
+        );
+
+        $builder->add(
+            'leads',
+            'oro_multiple_entity',
+            array(
+                'add_acl_resource'      => 'orocrm_sales_lead_view',
+                'class'                 => 'OroCRMSalesBundle:Lead',
+                'default_element'       => 'default_contact', //TODO: for remove
+                'required'              => false,
+                'selector_window_title' => 'orocrm.sales.menu.lead_list.description',
+            )
+        )->add(
+            'opportunities',
+            'oro_multiple_entity',
+            array(
+                'add_acl_resource'      => 'orocrm_sales_opportunity_view',
+                'class'                 => 'OroCRMSalesBundle:Opportunity',
+                'default_element'       => 'default_contact', //TODO: for remove
+                'required'              => false,
+                'selector_window_title' => 'orocrm.sales.menu.opportunities_list.description',
+            )
+        );
 
         $builder
             ->add(
