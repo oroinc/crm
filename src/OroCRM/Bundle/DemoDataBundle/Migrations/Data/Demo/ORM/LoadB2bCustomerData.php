@@ -6,8 +6,6 @@ namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-use Oro\Bundle\AddressBundle\Entity\Region;
-use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Address;
 
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -64,19 +62,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
         $customer = new B2bCustomer();
 
         $customer->setName($data['Company']);
-        $customer->setOwner($this->getRandomUser());
-
-        /** @var Country $country */
-        $country  = $this->em->getReference('OroAddressBundle:Country', $data['Country']);
-        $idRegion = $data['State'];
-
-        // TODO fix this
-        $regions = $country->getRegions();
-        $region  = $regions->filter(
-            function (Region $a) use ($idRegion) {
-                return $a->getCode() == $idRegion;
-            }
-        );
+        $customer->setOwner($this->getRandomUserReference());
 
         $address->setCity($data['City']);
         $address->setStreet($data['StreetAddress']);
@@ -84,8 +70,8 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
         $address->setFirstName($data['GivenName']);
         $address->setLastName($data['Surname']);
 
-        $address->setCountry($country);
-        $address->setRegion($region->first());
+        $address->setCountry($this->getCountryReference($data['Country']));
+        $address->setRegion($this->getRegionReference($data['Country'], $data['State']));
 
         $customer->setShippingAddress($address);
         $customer->setBillingAddress(clone $address);

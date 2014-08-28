@@ -34,7 +34,7 @@ class LoadAccountData extends AbstractDemoFixture implements DependentFixtureInt
             if (!isset($companies[$data['Company']])) {
                 $account = new Account();
                 $account->setName($data['Company']);
-                $account->setOwner($this->getRandomUser());
+                $account->setOwner($this->getRandomUserReference());
 
                 $this->em->persist($account);
 
