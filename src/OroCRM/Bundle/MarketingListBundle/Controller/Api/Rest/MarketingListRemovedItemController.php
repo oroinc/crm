@@ -93,6 +93,9 @@ class MarketingListRemovedItemController extends RestController implements Class
      * @param MarketingList $marketingList
      * @param int $id
      *
+     * @Rest\Delete(
+     *      "/marketinglist/{marketingList}/unremove/{id}"
+     * )
      * @ApiDoc(
      *     description="Delete MarketingListRemovedItem by marketing list entity",
      *     resource=true

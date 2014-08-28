@@ -29,10 +29,7 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registry = $this
-            ->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
 
         $om = $this
             ->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')

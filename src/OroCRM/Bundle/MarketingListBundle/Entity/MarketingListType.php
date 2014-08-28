@@ -61,10 +61,14 @@ class MarketingListType
      * Set label.
      *
      * @param string $label
+     *
+     * @return MarketingListType
      */
     public function setLabel($label)
     {
         $this->label = $label;
+
+        return $this;
     }
 
     /**

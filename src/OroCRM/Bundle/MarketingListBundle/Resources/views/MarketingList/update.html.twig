@@ -132,17 +132,6 @@
         ]
     }] ) %}
 
-    {% if entity.entity and entity.id %}
-        {% set entityGridName = oro_entity_config_value(entity.entity, 'grid_name', 'form') %}
-        {% set dataBlocks = dataBlocks|merge( [{
-            'title' : 'orocrm.marketinglist.removed'|trans,
-            'subblocks': [
-                {'data' : [dataGrid.renderGrid(entityGridName, {marketing_list_id: entity.id})]}
-            ]
-         }] )
-        %}
-    {% endif %}
-
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
         'dataBlocks': dataBlocks,

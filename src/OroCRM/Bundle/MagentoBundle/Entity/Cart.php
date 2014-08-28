@@ -49,6 +49,9 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *              "type"="ACL",
  *              "group_name"=""
  *          },
+ *          "form"={
+ *              "grid_name"="magento-cart-grid",
+ *          },
  *          "workflow"={
  *              "active_workflow"="b2c_flow_abandoned_shopping_cart"
  *          }

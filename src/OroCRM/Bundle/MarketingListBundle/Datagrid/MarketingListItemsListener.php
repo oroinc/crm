@@ -56,16 +56,17 @@ class MarketingListItemsListener
      */
     public function onBuildAfter(BuildAfter $event)
     {
-        $datagrid = $event->getDatagrid();
-        if ($this->isApplicable($datagrid->getName())) {
-            $dataSource = $event->getDatagrid()->getDatasource();
+        $dataGrid     = $event->getDatagrid();
+        $dataGridName = $dataGrid->getName();
+        if ($this->isApplicable($dataGridName)) {
+            $dataSource = $dataGrid->getDatasource();
 
             if ($dataSource instanceof OrmDatasource) {
-                $segmentId     = $this->segmentHelper->getSegmentIdByGridName($datagrid->getName());
+                $segmentId     = $this->segmentHelper->getSegmentIdByGridName($dataGridName);
                 $marketingList = $this->segmentHelper->getMarketingListBySegment($segmentId);
 
-                $queryBuilder = $dataSource->getQueryBuilder();
-                $queryBuilder
+                $dataSource
+                    ->getQueryBuilder()
                     ->addSelect($marketingList->getId() . ' as marketingList')
                     ->setParameter('marketingListEntity', $marketingList);
             }

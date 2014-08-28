@@ -8,19 +8,20 @@ class ActionPermissionProvider
 {
     /**
      * @param ResultRecordInterface $record
-     * @param array $actions
+     * @param array                 $actions
+     *
      * @return array
      */
     public function getMarketingListItemPermissions(ResultRecordInterface $record, array $actions)
     {
-        $actions = array_keys($actions);
+        $actions     = array_keys($actions);
         $permissions = array();
         foreach ($actions as $action) {
             $permissions[$action] = true;
         }
 
-        $isSubscribed = $record->getValue('subscribed');
-        $permissions['subscribe'] = !$isSubscribed;
+        $isSubscribed               = (bool)$record->getValue('subscribed');
+        $permissions['subscribe']   = !$isSubscribed;
         $permissions['unsubscribe'] = $isSubscribed;
 
         return $permissions;

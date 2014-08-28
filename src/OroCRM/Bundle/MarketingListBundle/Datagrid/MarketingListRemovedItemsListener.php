@@ -3,7 +3,8 @@
 namespace OroCRM\Bundle\MarketingListBundle\Datagrid;
 
 use Doctrine\ORM\EntityManager;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
+
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
@@ -24,7 +25,7 @@ class MarketingListRemovedItemsListener
     protected $doctrineHelper;
 
     /**
-     * @var ManagerRegistry
+     * @var RegistryInterface
      */
     protected $managerRegistry;
 
@@ -34,12 +35,12 @@ class MarketingListRemovedItemsListener
     protected $dataGridConfigurationHelper;
 
     /**
-     * @param ManagerRegistry $managerRegistry
+     * @param RegistryInterface $managerRegistry
      * @param DoctrineHelper $doctrineHelper
      * @param DataGridConfigurationHelper $dataGridConfigurationHelper
      */
     public function __construct(
-        ManagerRegistry $managerRegistry,
+        RegistryInterface $managerRegistry,
         DoctrineHelper $doctrineHelper,
         DataGridConfigurationHelper $dataGridConfigurationHelper
     ) {

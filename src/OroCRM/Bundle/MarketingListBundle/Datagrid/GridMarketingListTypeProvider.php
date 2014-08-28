@@ -2,14 +2,14 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Datagrid;
 
-use Doctrine\ORM\EntityManager;
-
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 
 class GridMarketingListTypeProvider
 {
+    const MARKETING_LIST_TYPE = 'OroCRMMarketingListBundle:MarketingListType';
+
     /**
      * @var RegistryInterface
      */
@@ -30,11 +30,10 @@ class GridMarketingListTypeProvider
      */
     public function getListTypeChoices()
     {
-        /** @var EntityManager $em */
-        $em = $this->registry->getManager();
-
         /** @var MarketingListType[] $types */
-        $types = $em->getRepository('OroCRMMarketingListBundle:MarketingListType')
+        $types = $this->registry
+            ->getManagerForClass(self::MARKETING_LIST_TYPE)
+            ->getRepository(self::MARKETING_LIST_TYPE)
             ->findBy(array(), array('name' => 'ASC'));
 
         $results = array();

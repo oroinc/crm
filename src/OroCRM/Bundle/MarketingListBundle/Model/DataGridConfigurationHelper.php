@@ -34,12 +34,12 @@ class DataGridConfigurationHelper
         foreach ($scopes as $scope) {
             $path = sprintf('[%s]', $scope);
             $additionalParams = $gridConfiguration->offsetGetByPath($path);
+            $baseParams = $configuration->offsetGetByPath($path, []);
 
-            if (empty($additionalParams)) {
+            if (!is_array($additionalParams) || !is_array($baseParams)) {
                 continue;
             }
 
-            $baseParams = $configuration->offsetGetByPath($path, array());
             $configuration->offsetSetByPath(
                 $path,
                 ArrayUtils::arrayMergeRecursiveDistinct($baseParams, $additionalParams)

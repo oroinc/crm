@@ -16,8 +16,6 @@ orocrm:
 
         segment: Marketing List %name% segment
 
-        removed: Removed
-
         entity:
             label:   Entity
             saved:   Marketing list saved
@@ -48,7 +46,8 @@ orocrm:
 
         block:
             general: General Information
-            list: List
+            items: Items
+            removed: Removed Items
 
         action:
             subscribe: Subscribe
