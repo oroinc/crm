@@ -20,7 +20,7 @@ workflows:
                 form_options:
                     attribute_fields:
                         contact: ~
-                        account:
+                        b2bcustomer:
                             options:
                                 required: true
                                 constraints:

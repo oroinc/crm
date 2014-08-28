@@ -32,6 +32,11 @@ class LeadType extends AbstractType
             ->add('jobTitle', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.job_title.label'))
             ->add('phoneNumber', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.phone_number.label'))
             ->add('email', 'email', array('required' => false, 'label' => 'orocrm.sales.lead.email.label'))
+            ->add(
+                'customer',
+                'orocrm_sales_b2bcustomer_select',
+                array('required' => false, 'label' => 'orocrm.sales.lead.customer.label')
+            )
             ->add('companyName', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.company_name.label'))
             ->add('website', 'url', array('required' => false, 'label' => 'orocrm.sales.lead.website.label'))
             ->add(

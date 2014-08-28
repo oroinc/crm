@@ -33,6 +33,11 @@ class OpportunityType extends AbstractType
                 'orocrm_contact_select',
                 array('required' => false, 'label' => 'orocrm.sales.opportunity.contact.label')
             )
+            ->add(
+                'customer',
+                'orocrm_sales_b2bcustomer_select',
+                array('required' => false, 'label' => 'orocrm.sales.opportunity.customer.label')
+            )
             ->add('name', 'text', array('required' => true, 'label' => 'orocrm.sales.opportunity.name.label'))
             ->add(
                 'closeDate',
