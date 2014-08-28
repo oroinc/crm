@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;

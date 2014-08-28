@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
@@ -8,6 +7,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtureInterface
@@ -20,6 +20,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
         return [
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData',
         ];
     }
 
@@ -33,12 +34,13 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
 
         $companies          = [];
         $customersPersisted = 0;
+        $channel            = $this->getChannel();
 
         while (($data = fgetcsv($handle, 1000, ",")) !== false && $customersPersisted < 25) {
             $data = array_combine($headers, array_values($data));
 
             if (!isset($companies[$data['Company']])) {
-                $customer = $this->createCustomer($data);
+                $customer = $this->createCustomer($data, $channel);
 
                 $this->em->persist($customer);
 
@@ -52,11 +54,12 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
     }
 
     /**
-     * @param array $data
+     * @param array   $data
+     * @param Channel $channel
      *
      * @return B2bCustomer
      */
-    protected function createCustomer($data)
+    protected function createCustomer($data, Channel $channel = null)
     {
         $address  = new Address();
         $customer = new B2bCustomer();
@@ -76,6 +79,25 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
         $customer->setShippingAddress($address);
         $customer->setBillingAddress(clone $address);
 
+        if ($channel) {
+            $customer->setChannel($channel);
+        }
+
         return $customer;
+    }
+
+    /**
+     * @return null|Channel
+     */
+    private function getChannel()
+    {
+        if ($this->hasReference('default_channel')) {
+            return $this->getReference('default_channel');
+        } else {
+            return $this->em->getRepository('OroCRMChannelBundle:Channel')->createQueryBuilder('c')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+        }
     }
 }

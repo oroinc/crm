@@ -45,7 +45,6 @@ OroCRMDemoDataBundle:
     demo:
         v1_0:
             - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData
-            - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountOpportunitiesData
             - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAclData
             - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadBusinessUnitData
             - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData
