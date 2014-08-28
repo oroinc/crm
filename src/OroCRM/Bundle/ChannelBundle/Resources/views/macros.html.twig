@@ -7,7 +7,6 @@
 {% macro initializeChannelForm(form, entitiesMetadata) %}
     {% set options = {
         channelTypeEl:               '#' ~ form.channelType.vars.id,
-        customerIdentityEl:          '#' ~ form.customerIdentity.vars.id,
         channelEntitiesEl:           '#' ~ form.entities.vars.id,
         entitiesMetadata:            entitiesMetadata,
         fields: {

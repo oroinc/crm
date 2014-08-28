@@ -17,6 +17,9 @@ use OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 
 class ChannelTypeSubscriberTest extends FormIntegrationTestCase
 {
+    const TEST_CHANNEL_TYPE      = 'test_type';
+    const TEST_CUSTOMER_IDENTITY = 'OroCRM\Bundle\AcmeBundle\Entity\Test1';
+
     /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $settingsProvider;
 
@@ -38,6 +41,14 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
                     ]
                 )
             );
+
+        $this->settingsProvider->expects($this->any())
+            ->method('getCustomerIdentityFromConfig')
+            ->with(self::TEST_CHANNEL_TYPE)
+            ->will(
+                $this->returnValue(self::TEST_CUSTOMER_IDENTITY)
+            );
+
         $this->subscriber = new ChannelTypeSubscriber($this->settingsProvider);
         parent::setUp();
     }
@@ -81,12 +92,6 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
                 ->expects($this->once())
                 ->method('getIntegrationType')
                 ->will($this->returnValue($channelType));
-
-            $this->settingsProvider
-                ->expects($this->once())
-                ->method('isCustomerIdentityUserDefined')
-                ->with($channelType)
-                ->will($this->returnValue($isCustomerIdentityUserDefined));
         }
 
         $event = new FormEvent($form, $formData);
@@ -109,12 +114,12 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         return [
             'without data' => [
                 null,
-                'magento',
+                self::TEST_CHANNEL_TYPE,
                 true
             ],
             'with data'    => [
                 $channel,
-                'magento',
+                self::TEST_CHANNEL_TYPE,
                 false
             ]
         ];
@@ -140,6 +145,22 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         $events = ChannelTypeSubscriber::getSubscribedEvents();
         $this->assertArrayHasKey(FormEvents::PRE_SET_DATA, $events);
         $this->assertArrayHasKey(FormEvents::PRE_SUBMIT, $events);
+    }
+
+    public function testPostSubmit()
+    {
+        $data = new Channel();
+        $data->setChannelType(self::TEST_CHANNEL_TYPE);
+
+        $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
+
+        $event = new FormEvent($form, $data);
+        $this->subscriber->postSubmit($event);
+
+        $this->assertEquals(
+            self::TEST_CUSTOMER_IDENTITY,
+            $data->getCustomerIdentity()
+        );
     }
 
     /**

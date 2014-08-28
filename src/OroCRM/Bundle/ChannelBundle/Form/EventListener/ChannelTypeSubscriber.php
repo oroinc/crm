@@ -34,6 +34,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             FormEvents::PRE_SET_DATA  => 'preSet',
             FormEvents::POST_SET_DATA => 'postSet',
             FormEvents::PRE_SUBMIT    => 'preSubmit',
+            FormEvents::POST_SUBMIT   => 'postSubmit',
         ];
     }
 
@@ -56,14 +57,11 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         $datasourceModifier($form);
 
         if ($data->getChannelType()) {
-            $readOnly   = !$this->settingsProvider->isCustomerIdentityUserDefined($data->getChannelType());
             $predefined = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
 
-            // pre-fill customer identity for new instances, or if it's not customer defined for this channel type
-            if ((!$data->getId() || $readOnly) && null !== $predefined) {
-                $data->setCustomerIdentity($predefined);
+            if ((!$data->getId()) && null !== $predefined) {
 
-                // also add to entities
+                // add to entities
                 $entities = $data->getEntities();
                 $entities = is_array($entities) ? $entities : [];
                 if (!in_array($predefined, $entities, true)) {
@@ -99,18 +97,9 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         if ($data->getId()) {
             FormUtils::replaceField(
                 $form,
-                'customerIdentity',
-                ['required' => false, 'disabled' => true]
-            );
-            FormUtils::replaceField(
-                $form,
                 'channelType',
                 ['required' => false, 'disabled' => true]
             );
-        } elseif (!$data->getId() && $data->getChannelType()) {
-            // mark customer identity readonly if it's not customer defined for this channel type
-            $readOnly = !$this->settingsProvider->isCustomerIdentityUserDefined($data->getChannelType());
-            FormUtils::replaceField($form, 'customerIdentity', ['read_only' => $readOnly]);
         }
     }
 
@@ -125,6 +114,19 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         $channelType        = !empty($data['channelType']) ? $data['channelType'] : null;
         $datasourceModifier = $this->getDatasourceModifierClosure($channelType);
         $datasourceModifier($form);
+    }
+
+    /**
+     * @param FormEvent $event
+     */
+    public function postSubmit(FormEvent $event)
+    {
+        $data             = $event->getData();
+        $customerIdentity = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
+
+        if ((!$data->getId()) && null !== $customerIdentity) {
+            $data->setCustomerIdentity($customerIdentity);
+        }
     }
 
     /**

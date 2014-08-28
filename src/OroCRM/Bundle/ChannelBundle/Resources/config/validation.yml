@@ -1,6 +1,5 @@
 OroCRM\Bundle\ChannelBundle\Entity\Channel:
     constraints:
-        - OroCRM\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraint: ~
         - OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraint: ~
     properties:
         name:
@@ -8,8 +7,6 @@ OroCRM\Bundle\ChannelBundle\Entity\Channel:
             - Length:
                 max: 250
         owner:
-            - NotBlank: ~
-        customerIdentity:
             - NotBlank: ~
         channelType:
             - NotBlank: ~

@@ -14,10 +14,6 @@
                 }) %}
                 {{ UI.renderHTMLProperty('orocrm.channel.data_source.label'|trans, inegrationLink) }}
             {% endif %}
-            {{ UI.renderProperty(
-                'orocrm.channel.customer_identity.label'|trans,
-                oro_entity_config_value(channel.customerIdentity, 'label')|trans
-            ) }}
         </div>
     </div>
 </div>

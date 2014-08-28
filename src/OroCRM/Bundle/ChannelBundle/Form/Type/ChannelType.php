@@ -49,14 +49,6 @@ class ChannelType extends AbstractType
                 'label'    => 'orocrm.channel.name.label'
             ]
         );
-        $builder->add(
-            'customerIdentity',
-            'text',
-            [
-                'required' => true,
-                'label'    => 'orocrm.channel.customer_identity.label',
-            ]
-        );
         $builder->add('entities', 'orocrm_channel_entities');
         $builder->add(
             'channelType',
