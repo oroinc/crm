@@ -610,17 +610,23 @@ datagrid:
         extends: sales-lead-grid
         source:
             query:
+                join:
+                    inner:
+                        - { join: l.customer, alias: c }
                 where:
                       and:
-                        - l.account = :accountId
+                        - c.account = :accountId
 
     sales-account-opportunity-grid:
         extends: sales-opportunity-grid
         source:
              query:
-                 where:
-                    and:
-                        - o.account = :accountId
+                join:
+                    inner:
+                        - { join: o.customer, alias: c }
+                where:
+                      and:
+                        - c.account = :accountId
 
     orocrm-sales-b2bcustomers-grid:
         extended_entity_name: %orocrm_sales.b2bcustomer.entity.class%
