@@ -154,14 +154,14 @@ class B2bCustomerController extends Controller
     /**
      * @Route(
      *      "/widget/leads/{id}",
-     *      name="orocrm_sales_widget_leads_info",
+     *      name="orocrm_sales_widget_leads_assign",
      *      requirements={"id"="\d+"},
      *      defaults={"id"=0}
      * )
      * @AclAncestor("orocrm_b2bcustomer_view")
      * @Template()
      */
-    public function leadsInfoAction(B2bCustomer $b2bCustomer = null)
+    public function leadsAssignAction(B2bCustomer $b2bCustomer = null)
     {
         return [
             'b2bCustomer' => $b2bCustomer
@@ -171,14 +171,14 @@ class B2bCustomerController extends Controller
     /**
      * @Route(
      *      "/widget/opportunities/{id}",
-     *      name="orocrm_sales_widget_opportunities_info",
+     *      name="orocrm_sales_widget_opportunities_assign",
      *      requirements={"id"="\d+"},
      *      defaults={"id"=0}
      * )
      * @AclAncestor("orocrm_b2bcustomer_view")
      * @Template()
      */
-    public function opportunitiesInfoAction(B2bCustomer $b2bCustomer = null)
+    public function opportunitiesAssignAction(B2bCustomer $b2bCustomer = null)
     {
         return [
             'b2bCustomer' => $b2bCustomer

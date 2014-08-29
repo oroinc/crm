@@ -8,6 +8,7 @@ use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
 
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -78,9 +79,9 @@ class B2bCustomerType extends AbstractType
                 array(
                     'add_acl_resource'      => 'orocrm_sales_lead_view',
                     'class'                 => 'OroCRMSalesBundle:Lead',
-                    'default_element'       => 'default_contact', //TODO: for remove
+                    'default_element'       => 'default_contact',
                     'required'              => false,
-                    'selector_window_title' => 'orocrm.sales.menu.lead_list.description',
+                    'selector_window_title' => 'orocrm.sales.b2bcustomer.leads.select',
                 )
             )->add(
                 'opportunities',
@@ -88,9 +89,9 @@ class B2bCustomerType extends AbstractType
                 array(
                     'add_acl_resource'      => 'orocrm_sales_opportunity_view',
                     'class'                 => 'OroCRMSalesBundle:Opportunity',
-                    'default_element'       => 'default_contact', //TODO: for remove
+                    'default_element'       => 'default_contact',
                     'required'              => false,
-                    'selector_window_title' => 'orocrm.sales.menu.opportunities_list.description',
+                    'selector_window_title' => 'orocrm.sales.b2bcustomer.opportunities.select',
                 )
             );
 
@@ -134,7 +135,7 @@ class B2bCustomerType extends AbstractType
             $b2bcustomer = $form->getData();
             $view->children['leads']->vars['grid_url']
                               = $this->router->generate(
-                                  'orocrm_sales_widget_leads_info',
+                                  'orocrm_sales_widget_leads_assign',
                                   array('id' => $b2bcustomer->getId())
                               );
             $view->children['leads']->vars['initial_elements']
@@ -142,7 +143,7 @@ class B2bCustomerType extends AbstractType
 
             $view->children['opportunities']->vars['grid_url']
                     = $this->router->generate(
-                        'orocrm_sales_widget_opportunities_info',
+                        'orocrm_sales_widget_opportunities_assign',
                         array('id' => $b2bcustomer->getId())
                     );
             $view->children['opportunities']->vars['initial_elements']
@@ -162,7 +163,7 @@ class B2bCustomerType extends AbstractType
                 $email = $lead->getEmail();
                 $result[] = array(
                     'id' => $lead->getId(),
-                    'label' => $this->nameFormatter->format($lead),
+                    'label' => $lead->getName(),
                     'link' => $this->router->generate('orocrm_sales_lead_info', array('id' => $lead->getId())),
                     'extraData' => array(
                         array('label' => 'Phone', 'value' => $phoneNumber ? $phoneNumber : null),
@@ -180,17 +181,18 @@ class B2bCustomerType extends AbstractType
     protected function getInitialOpportunities(Collection $opportunities)
     {
         $result = array();
-        /** @var Lead $lead */
-        foreach ($opportunities as $oppotunity) {
+        /** @var Opportunity $opportunity */
+        foreach ($opportunities as $opportunity) {
+            $email = $opportunity->getEmail();
             $result[] = array(
-                'id' => $oppotunity->getId(),
-                'label' => $this->nameFormatter->format($oppotunity),
-                'link' => $this->router->generate('orocrm_sales_lead_info', array('id' => $oppotunity->getId())),
+                'id' => $opportunity->getId(),
+                'label' => $opportunity->getName(),
+                'link' => $this->router->generate('orocrm_sales_lead_info', array('id' => $opportunity->getId())),
                 'extraData' => array(
+                    array('label' => 'Email', 'value' => $email ? $email : null)
                 ),
             );
         }
         return $result;
     }
-
 }

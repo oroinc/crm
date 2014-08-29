@@ -65,12 +65,8 @@
                                     addedModels[id] = new MultipleEntityModel({
                                         'id': model.get('id'),
                                         'link': routing.generate('orocrm_sales_opportunity_info', {id: model.get('id')}),
-                                        'label': nameFormatter.format(model.toJSON()),
+                                        'label': model.get('name'),
                                         'extraData': [
-                                            {
-                                                'label': 'Phone',
-                                                'value': model.get('primaryPhone')
-                                            },
                                             {
                                                 'label': 'Email',
                                                 'value': model.get('primaryEmail')
