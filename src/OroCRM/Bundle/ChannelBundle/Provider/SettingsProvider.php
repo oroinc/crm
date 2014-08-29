@@ -198,16 +198,6 @@ class SettingsProvider
     }
 
     /**
-     * @param string $type
-     *
-     * @return bool
-     */
-    public function isCustomerIdentityUserDefined($type)
-    {
-        return $this->getChannelTypeConfig($type, 'is_customer_identity_user_defined');
-    }
-
-    /**
      * Get CustomerIdentity definition from config
      *
      * @param $type

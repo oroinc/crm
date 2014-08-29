@@ -72,7 +72,6 @@
                     form_row(form.name),
                     form_row(form.channelType),
                     form.dataSource is defined ? form_row(form.dataSource) : '',
-                    form_row(form.customerIdentity)
                 ]
             }]
         },
@@ -92,5 +91,5 @@
 
     {{ parent() }}
 
-    {{ channelMacro.initializeChannelForm(form, orocrm_channel_entities_metadata()) }}
+    {{ channelMacro.initializeChannelForm(form, orocrm_channel_entities_metadata(), entity.customerIdentity) }}
 {% endblock %}

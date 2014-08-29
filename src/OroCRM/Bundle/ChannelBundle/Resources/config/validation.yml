@@ -9,8 +9,6 @@ OroCRM\Bundle\ChannelBundle\Entity\Channel:
                 max: 250
         owner:
             - NotBlank: ~
-        customerIdentity:
-            - NotBlank: ~
         channelType:
             - NotBlank: ~
 OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity:
