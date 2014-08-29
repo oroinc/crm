@@ -11,11 +11,13 @@ datagrid:
                     - type.label as listType
                     - ml.createdAt
                     - ml.lastRun
+                    - segment.lastRun as segmentLastRun
                 from:
                     - { table: OroCRM\Bundle\MarketingListBundle\Entity\MarketingList, alias: ml }
                 join:
                     inner:
                         - { join: ml.type, alias: type }
+                        - { join: ml.segment, alias: segment }
         columns:
             name:
                 label:          orocrm.marketinglist.name.label
@@ -28,8 +30,10 @@ datagrid:
                     entity_provider: @orocrm_marketing_list.entity_provider
             listType:
                 label:          orocrm.marketinglist.type.label
-                type:           translatable
+                type:           twig
                 choices:        @orocrm_marketing_list.datagrid.marketing_list_type.provider->getListTypeChoices
+                frontend_type:  html
+                template:       OroCRMMarketingListBundle:MarketingList:Datagrid/Property/listType.html.twig
             createdAt:
                 label:          orocrm.marketinglist.created_at.label
                 frontend_type:  date
