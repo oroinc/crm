@@ -90,11 +90,12 @@
         {% set dataBlocks = dataBlocks|merge([{
             'title' : 'orocrm.sales.b2bcustomer.leads.label'|trans,
             'subblocks': [{
-            'title' : null,
-            'useSpan': false,
-            'data' : [
-                form_widget(form.leads)]
-        }]
+                'title' : null,
+                'useSpan': false,
+                'data' : [
+                    form_widget(form.leads)
+                ]
+            }]
         }] ) %}
     {% endif %}
 
@@ -104,8 +105,9 @@
             'subblocks': [{
             'title' : null,
             'useSpan': false,
-            'data' : [
-                form_widget(form.opportunities)]
+                'data' : [
+                    form_widget(form.opportunities)
+                ]
             }]
         }] ) %}
     {% endif %}
@@ -113,7 +115,6 @@
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
         'dataBlocks': dataBlocks,
-    }
-    %}
+    } %}
     {{ parent() }}
 {% endblock content_data %}
