@@ -150,7 +150,7 @@ class MarketingListHandler
      */
     protected function isValid(MarketingList $marketingList)
     {
-        $errors = $this->validator->validate($marketingList->getSegment(), array('Default', 'marketing_list'));
+        $errors = $this->validator->validate($marketingList->getSegment(), array('marketing_list'));
         if (count($errors) > 0) {
             /** @var ConstraintViolationInterface $error */
             foreach ($errors as $error) {

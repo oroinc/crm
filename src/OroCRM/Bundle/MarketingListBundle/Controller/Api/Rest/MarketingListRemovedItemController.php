@@ -59,7 +59,7 @@ class MarketingListRemovedItemController extends RestController implements Class
      * Returns
      * - HTTP_OK (200)
      *
-     * @Rest\Get(
+     * @Rest\Delete(
      *      "/marketinglist/{marketingList}/remove/{id}"
      * )
      * @ApiDoc(description="Remove marketing list entity item", resource=true)
@@ -72,8 +72,15 @@ class MarketingListRemovedItemController extends RestController implements Class
     public function removeAction(MarketingList $marketingList, $id)
     {
         $item = new MarketingListRemovedItem();
-        $item->setMarketingList($marketingList)
+        $item
+            ->setMarketingList($marketingList)
             ->setEntityId($id);
+
+        $violations = $this->get('validator')->validate($item);
+        if ($violations->count()) {
+            return $this->handleView($this->view($violations, Codes::HTTP_BAD_REQUEST));
+        }
+
         $em = $this->getManager()->getObjectManager();
         $em->persist($item);
         $em->flush($item);

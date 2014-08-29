@@ -174,7 +174,7 @@ class MarketingListHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->validator->expects($this->once())
             ->method('validate')
-            ->with($this->isInstanceOf('Oro\Bundle\SegmentBundle\Entity\Segment'), array('Default', 'marketing_list'))
+            ->with($this->isInstanceOf('Oro\Bundle\SegmentBundle\Entity\Segment'), array('marketing_list'))
             ->will($this->returnValue($errors));
 
         $this->translator

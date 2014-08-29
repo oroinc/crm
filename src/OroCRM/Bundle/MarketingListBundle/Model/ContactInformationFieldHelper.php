@@ -21,7 +21,12 @@ class ContactInformationFieldHelper
     {
         $this->configProvider = $configProvider;
     }
-    
+
+    /**
+     * @param AbstractQueryDesigner $queryDesigner
+     *
+     * @return array
+     */
     public function getContactInformationColumns(AbstractQueryDesigner $queryDesigner)
     {
         $columns = array();

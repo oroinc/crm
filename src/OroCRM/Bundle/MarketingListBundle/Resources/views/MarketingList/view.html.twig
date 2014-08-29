@@ -83,9 +83,12 @@
         </div>
     {%- endset -%}
 
+    {% set marker = constant('\\OroCRM\\Bundle\\MarketingListBundle\\Entity\\MarketingList::MARKETING_LIST_MARKER') %}
     {%- set listData -%}
-        {{ dataGrid.renderGrid(gridName) }}
+        {{ dataGrid.renderGrid(gridName, {(marker): true}) }}
     {%- endset -%}
+
+    {% set entityGridName = oro_entity_config_value(entity.entity, 'grid_name', 'form') %}
 
     {% set dataBlocks = [
         {
@@ -100,19 +103,17 @@
             'subblocks': [
                 {'data' : [listData]}
             ]
-        }
-    ] %}
-
-    {% if entity.entity and entity.id %}
-        {% set entityGridName = oro_entity_config_value(entity.entity, 'grid_name', 'form') %}
-        {% set dataBlocks = dataBlocks|merge( [{
+        },
+        {
             'title' : 'orocrm.marketinglist.block.removed'|trans,
             'subblocks': [
                 {'data' : [dataGrid.renderGrid(entityGridName, {marketing_list_id: entity.id})]}
             ]
-         }] )
-        %}
-    {% endif %}
+        }
+    ] %}
+
+    <div data-page-component-module="orocrmmarketinglist/js/app/components/grid-linker"
+         data-page-component-options="{{ [gridName, entityGridName]|json_encode }}"></div>
 
     {% set id = 'marketingListView' %}
     {% set data = { 'dataBlocks': dataBlocks } %}

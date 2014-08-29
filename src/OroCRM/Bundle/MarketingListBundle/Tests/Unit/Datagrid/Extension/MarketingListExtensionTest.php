@@ -61,12 +61,13 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string      $gridName
      * @param string      $dataSource
+     * @param bool        $isMixin
      * @param object|null $entity
      * @param bool        $expected
      *
      * @dataProvider applicableDataProvider
      */
-    public function testIsApplicable($gridName, $dataSource, $entity, $expected)
+    public function testIsApplicable($gridName, $dataSource, $isMixin, $entity, $expected)
     {
         $config = $this
             ->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
@@ -80,7 +81,8 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
                 $this->returnValueMap(
                     [
                         ['[name]', null, $gridName],
-                        [Builder::DATASOURCE_TYPE_PATH, null, $dataSource]
+                        [Builder::DATASOURCE_TYPE_PATH, null, $dataSource],
+                        [MarketingListExtension::OPTIONS_MIXIN_PATH, false, $isMixin]
                     ]
                 )
             );
@@ -102,10 +104,14 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
     public function applicableDataProvider()
     {
         return [
-            ['gridName', 'dataSource', null, false],
-            ['gridName', OrmDatasource::TYPE, null, false],
-            [Segment::GRID_PREFIX, OrmDatasource::TYPE, null, false],
-            [Segment::GRID_PREFIX . '1', OrmDatasource::TYPE, new \stdClass(), true],
+            ['gridName', 'dataSource', false, null, false],
+            ['gridName', 'dataSource', true, null, false],
+            ['gridName', OrmDatasource::TYPE, false, null, false],
+            ['gridName', OrmDatasource::TYPE, true, null, false],
+            [Segment::GRID_PREFIX, OrmDatasource::TYPE, false, null, false],
+            [Segment::GRID_PREFIX, OrmDatasource::TYPE, true, null, false],
+            [Segment::GRID_PREFIX . '1', OrmDatasource::TYPE, false, new \stdClass(), false],
+            [Segment::GRID_PREFIX . '1', OrmDatasource::TYPE, true, new \stdClass(), true],
         ];
     }
 
@@ -141,7 +147,7 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
             /** @var Andx $where */
             $where = $dqlParts['where'];
             $parts = $where->getParts();
-            foreach ($parts as $key => $part) {
+            foreach ($parts as $part) {
                 $expr = $this
                     ->getMockBuilder('Doctrine\ORM\Query\Expr')
                     ->disableOriginalConstructor()

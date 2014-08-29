@@ -2,9 +2,11 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Datagrid;
 
+use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
+use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Model\DataGridConfigurationHelper;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper;
 
@@ -44,9 +46,11 @@ class MarketingListItemsListener
      */
     public function onPreBuild(PreBuild $event)
     {
-        $gridName = $event->getConfig()->getName();
-        if ($this->isApplicable($gridName) && empty($this->appliedFor[$gridName])) {
-            $this->dataGridConfigurationHelper->extendConfiguration($event->getConfig(), self::MIXIN_NAME);
+        $config     = $event->getConfig();
+        $parameters = $event->getParameters();
+        $gridName   = $config->getName();
+        if ($this->isApplicable($gridName, $parameters) && empty($this->appliedFor[$gridName])) {
+            $this->dataGridConfigurationHelper->extendConfiguration($config, self::MIXIN_NAME);
             $this->appliedFor[$gridName] = true;
         }
     }
@@ -58,28 +62,37 @@ class MarketingListItemsListener
     {
         $dataGrid     = $event->getDatagrid();
         $dataGridName = $dataGrid->getName();
-        if ($this->isApplicable($dataGridName)) {
-            $dataSource = $dataGrid->getDatasource();
+        $parameters   = $dataGrid->getParameters();
+        if (!$this->isApplicable($dataGridName, $parameters)) {
+            return;
+        }
 
-            if ($dataSource instanceof OrmDatasource) {
-                $segmentId     = $this->segmentHelper->getSegmentIdByGridName($dataGridName);
-                $marketingList = $this->segmentHelper->getMarketingListBySegment($segmentId);
+        $dataSource = $dataGrid->getDatasource();
 
-                $dataSource
-                    ->getQueryBuilder()
-                    ->addSelect($marketingList->getId() . ' as marketingList')
-                    ->setParameter('marketingListEntity', $marketingList);
-            }
+
+        if ($dataSource instanceof OrmDatasource) {
+            $segmentId     = $this->segmentHelper->getSegmentIdByGridName($dataGridName);
+            $marketingList = $this->segmentHelper->getMarketingListBySegment($segmentId);
+
+            $dataSource
+                ->getQueryBuilder()
+                ->addSelect($marketingList->getId() . ' as marketingList')
+                ->setParameter('marketingListEntity', $marketingList);
         }
     }
 
     /**
-     * @param string $gridName
+     * @param string       $gridName
+     * @param ParameterBag $parameters
      *
      * @return bool
      */
-    public function isApplicable($gridName)
+    public function isApplicable($gridName, $parameters)
     {
+        if (!$parameters->has(MarketingList::MARKETING_LIST_MARKER)) {
+            return false;
+        }
+
         $segmentId = $this->segmentHelper->getSegmentIdByGridName($gridName);
 
         return $segmentId && (bool)$this->segmentHelper->getMarketingListBySegment($segmentId);

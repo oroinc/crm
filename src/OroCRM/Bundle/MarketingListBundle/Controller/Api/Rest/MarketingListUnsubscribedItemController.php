@@ -74,8 +74,15 @@ class MarketingListUnsubscribedItemController extends RestController implements 
     public function unsubscribeAction(MarketingList $marketingList, $id)
     {
         $item = new MarketingListUnsubscribedItem();
-        $item->setMarketingList($marketingList)
+        $item
+            ->setMarketingList($marketingList)
             ->setEntityId($id);
+
+        $violations = $this->get('validator')->validate($item);
+        if ($violations->count()) {
+            return $this->handleView($this->view($violations, Codes::HTTP_BAD_REQUEST));
+        }
+
         $em = $this->getManager()->getObjectManager();
         $em->persist($item);
         $em->flush($item);

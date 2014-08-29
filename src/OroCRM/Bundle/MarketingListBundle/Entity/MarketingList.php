@@ -37,6 +37,8 @@ use Oro\Bundle\UserBundle\Entity\User;
  */
 class MarketingList
 {
+    const MARKETING_LIST_MARKER = 'marketingList';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")

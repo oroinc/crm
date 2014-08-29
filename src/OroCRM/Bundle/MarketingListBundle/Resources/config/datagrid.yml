@@ -49,7 +49,7 @@ datagrid:
                         field_options:
                             multiple:          true
                             choices:           @oro_entity.datagrid_helper->getEntityNames
-                segmentType:
+                listType:
                     type:               choice
                     data_name:          ml.type
                     options:
@@ -58,11 +58,9 @@ datagrid:
                 createdAt:
                     type:       datetime
                     data_name:  ml.createdAt
-                    enabled:    false
                 lastRun:
                     type:       datetime
                     data_name:  ml.lastRun
-                    enabled:    false
         sorters:
             columns:
                 name:        { data_name: ml.name }
@@ -184,7 +182,7 @@ datagrid:
                 icon:         minus
                 acl_recource: orocrm_marketinglist_unsubscribed_item_create
             remove:
-                type:         ajax
+                type:         delete
                 label:        orocrm.marketinglist.action.remove
                 link:         remove_link
                 icon:         remove
@@ -195,6 +193,7 @@ datagrid:
         options:
             export: true
             skip_count_walker: true
+            mixin: true
 
     orocrm-marketing-list-removed-items-mixin:
         properties:

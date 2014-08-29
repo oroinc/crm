@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Datagrid;
 
+use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
@@ -42,11 +43,12 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $gridName
+     * @param bool   $hasParameter
      * @param bool   $isApplicable
      *
      * @dataProvider preBuildDataProvider
      */
-    public function testOnPreBuild($gridName, $isApplicable)
+    public function testOnPreBuild($gridName, $hasParameter, $isApplicable)
     {
         $event = $this
             ->getMockBuilder('Oro\Bundle\DataGridBundle\Event\PreBuild')
@@ -59,7 +61,7 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $event
-            ->expects($this->exactly(1 + (int)$isApplicable))
+            ->expects($this->once())
             ->method('getConfig')
             ->will($this->returnValue($config));
 
@@ -67,6 +69,11 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($gridName));
+
+        $event
+            ->expects($this->once())
+            ->method('getParameters')
+            ->will($this->returnValue(new ParameterBag([MarketingList::MARKETING_LIST_MARKER => $hasParameter])));
 
         $this->segmentHelper
             ->expects($this->once())
@@ -100,19 +107,23 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
     public function preBuildDataProvider()
     {
         return [
-            ['gridName', false],
-            [Segment::GRID_PREFIX, false],
-            [Segment::GRID_PREFIX . '1', true],
+            ['gridName', false, false],
+            ['gridName', true, false],
+            [Segment::GRID_PREFIX, false, false],
+            [Segment::GRID_PREFIX, true, false],
+            [Segment::GRID_PREFIX . '1', false, true],
+            [Segment::GRID_PREFIX . '1', true, true],
         ];
     }
 
     /**
      * @param string $gridName
      * @param bool   $useDataSource
+     * @param bool   $hasParameter
      *
      * @dataProvider buildAfterDataProvider
      */
-    public function testOnBuildAfter($gridName, $useDataSource)
+    public function testOnBuildAfter($gridName, $useDataSource, $hasParameter)
     {
         $marketingList = $this
             ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
@@ -140,6 +151,11 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($gridName));
+
+        $datagrid
+            ->expects($this->once())
+            ->method('getParameters')
+            ->will($this->returnValue(new ParameterBag([MarketingList::MARKETING_LIST_MARKER => $hasParameter])));
 
         /** @var MarketingList $marketingList */
         $this->segmentHelper
@@ -193,12 +209,18 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
     public function buildAfterDataProvider()
     {
         return [
-            ['gridName', false],
-            ['gridName', true],
-            [Segment::GRID_PREFIX, false],
-            [Segment::GRID_PREFIX, true],
-            [Segment::GRID_PREFIX . '1', false],
-            [Segment::GRID_PREFIX . '1', true],
+            ['gridName', false, false],
+            ['gridName', false, true],
+            ['gridName', true, false],
+            ['gridName', true, true],
+            [Segment::GRID_PREFIX, false, false],
+            [Segment::GRID_PREFIX, false, true],
+            [Segment::GRID_PREFIX, true, false],
+            [Segment::GRID_PREFIX, true, true],
+            [Segment::GRID_PREFIX . '1', false, false],
+            [Segment::GRID_PREFIX . '1', false, true],
+            [Segment::GRID_PREFIX . '1', true, false],
+            [Segment::GRID_PREFIX . '1', true, true],
         ];
     }
 }
