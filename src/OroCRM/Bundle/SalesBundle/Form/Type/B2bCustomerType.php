@@ -56,71 +56,79 @@ class B2bCustomerType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('name', 'text', array('required' => true, 'label' => 'orocrm.sales.b2bcustomer.name.label'))
-            ->add(
-                'account',
-                'orocrm_account_select',
-                [
-                    'required' => false,
-                    'label' => 'orocrm.sales.b2bcustomer.account.label'
-                ]
-            )
-            ->add(
-                'contact',
-                'orocrm_contact_select',
-                [
-                    'label'     => 'orocrm.sales.b2bcustomer.contact.label',
-                    'required'  => false,
-                ]
-            )->add(
-                'tags',
-                'oro_tag_select',
-                [
-                    'label' => 'oro.tag.entity_plural_label'
-                ]
-            )->add(
-                'channel',
-                'choice'
-            )->add(
-                'leads',
-                'oro_multiple_entity',
-                [
-                    'add_acl_resource'      => 'orocrm_sales_lead_view',
-                    'class'                 => 'OroCRMSalesBundle:Lead',
-                    'default_element'       => 'default_contact',
-                    'required'              => false,
-                    'selector_window_title' => 'orocrm.sales.b2bcustomer.leads.select',
-                ]
-            )->add(
-                'opportunities',
-                'oro_multiple_entity',
-                [
-                    'add_acl_resource'      => 'orocrm_sales_opportunity_view',
-                    'class'                 => 'OroCRMSalesBundle:Opportunity',
-                    'default_element'       => 'default_contact',
-                    'required'              => false,
-                    'selector_window_title' => 'orocrm.sales.b2bcustomer.opportunities.select',
-                ]
-            );
-
-        $builder
-            ->add(
-                'shippingAddress',
-                'oro_address',
-                [
-                    'cascade_validation' => true,
-                    'required' => false
-                ]
-            )
-            ->add(
-                'billingAddress',
-                'oro_address',
-                [
-                    'cascade_validation' => true,
-                    'required' => false
-                ]
-            );
+        $builder->add(
+            'name',
+            'text',
+            [
+                'required' => true,
+                'label' => 'orocrm.sales.b2bcustomer.name.label'
+            ]
+        );
+        $builder->add(
+            'account',
+            'orocrm_account_select',
+            [
+                'required' => false,
+                'label' => 'orocrm.sales.b2bcustomer.account.label'
+            ]
+        );
+        $builder->add(
+            'contact',
+            'orocrm_contact_select',
+            [
+                'label'     => 'orocrm.sales.b2bcustomer.contact.label',
+                'required'  => false,
+            ]
+        );
+        $builder->add(
+            'tags',
+            'oro_tag_select',
+            [
+                'label' => 'oro.tag.entity_plural_label'
+            ]
+        );
+        $builder->add(
+            'channel',
+            'choice'
+        );
+        $builder->add(
+            'leads',
+            'oro_multiple_entity',
+            [
+                'add_acl_resource'      => 'orocrm_sales_lead_view',
+                'class'                 => 'OroCRMSalesBundle:Lead',
+                'default_element'       => 'default_contact',
+                'required'              => false,
+                'selector_window_title' => 'orocrm.sales.b2bcustomer.leads.select',
+            ]
+        );
+        $builder->add(
+            'opportunities',
+            'oro_multiple_entity',
+            [
+                'add_acl_resource'      => 'orocrm_sales_opportunity_view',
+                'class'                 => 'OroCRMSalesBundle:Opportunity',
+                'default_element'       => 'default_contact',
+                'required'              => false,
+                'selector_window_title' => 'orocrm.sales.b2bcustomer.opportunities.select',
+            ]
+        );
+        $builder->add(
+            'shippingAddress',
+            'oro_address',
+            [
+                'cascade_validation' => true,
+                'required'           => false
+            ]
+        );
+        $builder->add(
+            'billingAddress',
+            'oro_address',
+            [
+                'cascade_validation' => true,
+                'required'           => false
+            ]
+        );
     }
 
     /**
