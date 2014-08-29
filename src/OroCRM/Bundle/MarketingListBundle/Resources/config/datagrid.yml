@@ -36,7 +36,7 @@ datagrid:
                 template:       OroCRMMarketingListBundle:MarketingList:Datagrid/Property/listType.html.twig
             createdAt:
                 label:          orocrm.marketinglist.created_at.label
-                frontend_type:  date
+                frontend_type:  datetime
             lastRun:
                 label:          orocrm.marketinglist.last_run.label
                 frontend_type:  datetime

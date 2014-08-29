@@ -4,17 +4,19 @@ orocrm:
         entity_plural_label: Marketing Lists
         description.label:   Description
         id.label:            Id
-        last_run.label:      Last run
+        last_run.label:      Last Used
         created_at.label:    Created At
         name.label:          Name
         owner.label:         Owner
 
         controller:
-            unsubscribed: Item unsubscribed
-            subscribed: Item subscribed
-            removed: Item removed from list
+            unsubscribed: %entityName% unsubscribed
+            subscribed: %entityName% subscribed
+            removed: %entityName% removed from list
 
         segment: Marketing List %name% segment
+
+        update_list: Update List
 
         entity:
             label:   Entity

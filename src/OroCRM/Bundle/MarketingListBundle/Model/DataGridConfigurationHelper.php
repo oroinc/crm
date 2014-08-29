@@ -23,18 +23,19 @@ class DataGridConfigurationHelper
 
     /**
      * @param DatagridConfiguration $configuration
-     * @param string $gridName
+     * @param string                $gridName
+     *
      * @return DatagridConfiguration
      */
     public function extendConfiguration(DatagridConfiguration $configuration, $gridName)
     {
         $gridConfiguration = $this->configurationProvider->getConfiguration($gridName);
-        $scopes = array_diff(array_keys($gridConfiguration->getIterator()->getArrayCopy()), ['name']);
+        $scopes            = array_diff(array_keys($gridConfiguration->getIterator()->getArrayCopy()), []);
 
         foreach ($scopes as $scope) {
-            $path = sprintf('[%s]', $scope);
+            $path             = sprintf('[%s]', $scope);
             $additionalParams = $gridConfiguration->offsetGetByPath($path);
-            $baseParams = $configuration->offsetGetByPath($path, []);
+            $baseParams       = $configuration->offsetGetByPath($path, []);
 
             if (!is_array($additionalParams) || !is_array($baseParams)) {
                 continue;

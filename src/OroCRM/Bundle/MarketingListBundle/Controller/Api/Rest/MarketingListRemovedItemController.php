@@ -66,7 +66,8 @@ class MarketingListRemovedItemController extends RestController implements Class
      * @AclAncestor("orocrm_marketing_list_removed_item_delete")
      *
      * @param MarketingList $marketingList
-     * @param int $id
+     * @param int           $id
+     *
      * @return Response
      */
     public function removeAction(MarketingList $marketingList, $id)
@@ -85,11 +86,19 @@ class MarketingListRemovedItemController extends RestController implements Class
         $em->persist($item);
         $em->flush($item);
 
+        $entityName = $this
+            ->get('oro_entity_config.provider.entity')
+            ->getConfig($marketingList->getEntity())
+            ->get('label');
+
         return $this->handleView(
             $this->view(
                 array(
                     'successful' => true,
-                    'message' => $this->get('translator')->trans('orocrm.marketinglist.controller.removed')
+                    'message'    => $this->get('translator')->trans(
+                        'orocrm.marketinglist.controller.removed',
+                        ['%entityName%' => $this->get('translator')->trans($entityName)]
+                    )
                 ),
                 Codes::HTTP_OK
             )
@@ -98,7 +107,7 @@ class MarketingListRemovedItemController extends RestController implements Class
 
     /**
      * @param MarketingList $marketingList
-     * @param int $id
+     * @param int           $id
      *
      * @Rest\Delete(
      *      "/marketinglist/{marketingList}/unremove/{id}"
@@ -117,11 +126,12 @@ class MarketingListRemovedItemController extends RestController implements Class
         $forRemove = $this->getManager()->getRepository()->findBy(
             array(
                 'marketingList' => $marketingList,
-                'entityId' => $id
+                'entityId'      => $id
             )
         );
         if ($forRemove) {
             $item = $forRemove[0];
+
             return $this->handleDeleteRequest($item->getId());
         }
 

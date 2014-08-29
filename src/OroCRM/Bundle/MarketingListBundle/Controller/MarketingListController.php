@@ -43,8 +43,8 @@ class MarketingListController extends Controller
         $entityConfig = $this->get('orocrm_marketing_list.entity_provider')->getEntity($entity->getEntity());
 
         return [
-            'entity' => $entity,
-            'config' => $entityConfig,
+            'entity'   => $entity,
+            'config'   => $entityConfig,
             'gridName' => Segment::GRID_PREFIX . $entity->getSegment()->getId()
         ];
     }

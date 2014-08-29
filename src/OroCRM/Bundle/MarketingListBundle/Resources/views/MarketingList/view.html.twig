@@ -7,7 +7,7 @@
 {% oro_title_set({params : {"%entityName%": entity.name|default('N/A') }}) %}
 
 {% block navButtons %}
-    {{ segmentQD.runButton(entity.segment, true, true) }}
+    {{ segmentQD.runButton(entity.segment, true, true, 'orocrm.marketinglist.update_list') }}
     {% if resource_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path' : path('orocrm_marketing_list_update', { id: entity.id }),
@@ -99,7 +99,7 @@
             ]
         },
         {
-            'title': 'orocrm.marketinglist.block.items'|trans,
+            'title': config.label|trans,
             'subblocks': [
                 {'data' : [listData]}
             ]

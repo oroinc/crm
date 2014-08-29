@@ -68,7 +68,8 @@ class MarketingListUnsubscribedItemController extends RestController implements 
      * @AclAncestor("orocrm_marketinglist_unsubscribed_item_create")
      *
      * @param MarketingList $marketingList
-     * @param int $id
+     * @param int           $id
+     *
      * @return Response
      */
     public function unsubscribeAction(MarketingList $marketingList, $id)
@@ -87,11 +88,19 @@ class MarketingListUnsubscribedItemController extends RestController implements 
         $em->persist($item);
         $em->flush($item);
 
+        $entityName = $this
+            ->get('oro_entity_config.provider.entity')
+            ->getConfig($marketingList->getEntity())
+            ->get('label');
+
         return $this->handleView(
             $this->view(
                 array(
                     'successful' => true,
-                    'message' => $this->get('translator')->trans('orocrm.marketinglist.controller.unsubscribed')
+                    'message'    => $this->get('translator')->trans(
+                        'orocrm.marketinglist.controller.unsubscribed',
+                        ['%entityName%' => $this->get('translator')->trans($entityName)]
+                    )
                 ),
                 Codes::HTTP_OK
             )
@@ -100,7 +109,7 @@ class MarketingListUnsubscribedItemController extends RestController implements 
 
     /**
      * @param MarketingList $marketingList
-     * @param int $id
+     * @param int           $id
      *
      * @Rest\Get(
      *      "/marketinglist/{marketingList}/subscribe/{id}"
@@ -119,7 +128,7 @@ class MarketingListUnsubscribedItemController extends RestController implements 
         $forRemove = $this->getManager()->getRepository()->findBy(
             array(
                 'marketingList' => $marketingList,
-                'entityId' => $id
+                'entityId'      => $id
             )
         );
         if ($forRemove) {
@@ -135,11 +144,19 @@ class MarketingListUnsubscribedItemController extends RestController implements 
             }
         }
 
+        $entityName = $this
+            ->get('oro_entity_config.provider.entity')
+            ->getConfig($marketingList->getEntity())
+            ->get('label');
+
         return $this->handleView(
             $this->view(
                 array(
                     'successful' => true,
-                    'message' => $this->get('translator')->trans('orocrm.marketinglist.controller.subscribed')
+                    'message'    => $this->get('translator')->trans(
+                        'orocrm.marketinglist.controller.subscribed',
+                        ['%entityName%' => $this->get('translator')->trans($entityName)]
+                    )
                 ),
                 Codes::HTTP_OK
             )
