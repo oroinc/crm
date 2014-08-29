@@ -3,7 +3,7 @@
 
 {% oro_title_set({params : {"%B2bCustomer.name%": entity.name} }) %}
 
-{% set formAction = form.vars.value.id ? path('orocrm_sales_b2bcustomer_update', { 'id': form.vars.value.id }) : path('orocrm_b2bcustomer_create')  %}
+{% set formAction = form.vars.value.id ? path('orocrm_sales_b2bcustomer_update', { 'id': form.vars.value.id }) : path('orocrm_sales_b2bcustomer_create')  %}
 
 {% block head_script %}
     {{ parent() }}

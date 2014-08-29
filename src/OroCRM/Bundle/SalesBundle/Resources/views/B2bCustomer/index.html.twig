@@ -5,10 +5,10 @@
 {% set pageTitle = 'orocrm.sales.b2bcustomer.entity_plural_label'|trans %}
 
 {% block navButtons %}
-    {% if resource_granted('orocrm_sales_lead_create') %}
+    {% if resource_granted('orocrm_sales_b2bcustomer_create') %}
         <div class="btn-group">
             {{ UI.addButton({
-                'path' : path('orocrm_b2bcustomer_create'),
+                'path' : path('orocrm_sales_b2bcustomer_create'),
                 'entity_label': 'orocrm.sales.b2bcustomer.entity_label'|trans
             }) }}
         </div>
