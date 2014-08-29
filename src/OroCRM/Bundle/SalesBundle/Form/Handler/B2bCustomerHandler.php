@@ -31,6 +31,11 @@ class B2bCustomerHandler
     protected $manager;
 
     /**
+     * @var TagManager
+     */
+    protected $tagManager;
+
+    /**
      * @param FormInterface $form
      * @param Request       $request
      * @param ObjectManager $manager
@@ -74,6 +79,7 @@ class B2bCustomerHandler
     {
         $this->manager->persist($entity);
         $this->manager->flush();
+        $this->tagManager->saveTagging($entity);
     }
 
     /**

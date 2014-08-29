@@ -183,3 +183,5 @@ services:
             - @orocrm_sales.B2bCustomer.form
             - @request
             - @doctrine.orm.entity_manager
+        tags:
+            - { name: oro_tag.tag_manager }

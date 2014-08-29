@@ -25,6 +25,7 @@ class CreateCallTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Calls $login */
         $login->openCalls('OroCRM\Bundle\CallBundle')
+            ->assertTitle('Calls - Activities')
             ->add()
             ->assertTitle('Log Call - Calls - Activities')
             ->setCallSubject($callSubject)
@@ -74,7 +75,8 @@ class CreateCallTest extends Selenium2TestCase
         $login->openCalls('OroCRM\Bundle\CallBundle')
             ->filterBy('Subject', $newCallSubject)
             ->deleteEntity(array($newCallSubject))
-            ->assertMessage('Item deleted');
+            ->assertMessage('Item deleted')
+            ->assertTitle('Calls - Activities');
 
         $login->openCalls('OroCRM\Bundle\CallBundle')
             ->assertNoDataMessage('No records found');
