@@ -94,7 +94,6 @@ class B2bCustomerType extends AbstractType
             ]
         );
         $builder->add(
-
             'leads',
             'oro_multiple_entity',
             [
