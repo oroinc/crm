@@ -7,6 +7,8 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+
 class ChannelSelectType extends AbstractType
 {
     const NAME = 'orocrm_channel_select_type';
@@ -40,15 +42,14 @@ class ChannelSelectType extends AbstractType
                 'random_id'     => true,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('c')
-                        ->andWhere('c.status = true')
-                        ->orderBy('c.name', 'ASC');
+                        ->andWhere('c.status = :status')
+                        ->orderBy('c.name', 'ASC')
+                        ->setParameter('status', Channel::STATUS_ACTIVE);
                 },
                 'configs'       => [
                     'allowClear'  => true,
                     'placeholder' => 'orocrm.channel.form.select_channel_type.label'
                 ],
-                'empty_value'   => '',
-                'empty_data'    => null
             ]
         );
     }
