@@ -75,19 +75,21 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getParameters')
             ->will($this->returnValue(new ParameterBag([MarketingList::MARKETING_LIST_MARKER => $hasParameter])));
 
-        $this->segmentHelper
-            ->expects($this->once())
-            ->method('getSegmentIdByGridName')
-            ->with($this->equalTo($gridName))
-            ->will($this->returnValue((int)$isApplicable));
+        if ($hasParameter) {
+            $this->segmentHelper
+                ->expects($this->once())
+                ->method('getSegmentIdByGridName')
+                ->with($this->equalTo($gridName))
+                ->will($this->returnValue((int)$isApplicable));
 
-        $this->segmentHelper
-            ->expects($this->any())
-            ->method('getMarketingListBySegment')
-            ->with($this->equalTo((int)$isApplicable))
-            ->will($this->returnValue(new MarketingList()));
+            $this->segmentHelper
+                ->expects($this->any())
+                ->method('getMarketingListBySegment')
+                ->with($this->equalTo((int)$isApplicable))
+                ->will($this->returnValue(new MarketingList()));
+        }
 
-        if ($isApplicable) {
+        if ($isApplicable && $hasParameter) {
             $this->dataGridHelper
                 ->expects($this->once())
                 ->method('extendConfiguration')
@@ -158,17 +160,19 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(new ParameterBag([MarketingList::MARKETING_LIST_MARKER => $hasParameter])));
 
         /** @var MarketingList $marketingList */
-        $this->segmentHelper
-            ->expects($this->exactly(1 + (int)$useDataSource))
-            ->method('getSegmentIdByGridName')
-            ->with($this->equalTo($gridName))
-            ->will($this->returnValue($marketingList->getId()));
+        if ($hasParameter) {
+            $this->segmentHelper
+                ->expects($this->exactly(1 + (int)$useDataSource))
+                ->method('getSegmentIdByGridName')
+                ->with($this->equalTo($gridName))
+                ->will($this->returnValue($marketingList->getId()));
 
-        $this->segmentHelper
-            ->expects($this->exactly(1 + (int)$useDataSource))
-            ->method('getMarketingListBySegment')
-            ->with($this->equalTo($marketingList->getId()))
-            ->will($this->returnValue($marketingList));
+            $this->segmentHelper
+                ->expects($this->exactly(1 + (int)$useDataSource))
+                ->method('getMarketingListBySegment')
+                ->with($this->equalTo($marketingList->getId()))
+                ->will($this->returnValue($marketingList));
+        }
 
         $qb = $this
             ->getMockBuilder('Doctrine\ORM\QueryBuilder')
@@ -190,15 +194,17 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $dataSource
-            ->expects($this->exactly((int)$useDataSource))
-            ->method('getQueryBuilder')
-            ->will($this->returnValue($qb));
+        if ($hasParameter) {
+            $dataSource
+                ->expects($this->exactly((int)$useDataSource))
+                ->method('getQueryBuilder')
+                ->will($this->returnValue($qb));
 
-        $datagrid
-            ->expects($this->once())
-            ->method('getDatasource')
-            ->will($this->returnValue($useDataSource ? $dataSource : null));
+            $datagrid
+                ->expects($this->once())
+                ->method('getDatasource')
+                ->will($this->returnValue($useDataSource ? $dataSource : null));
+        }
 
         $this->listener->onBuildAfter($event);
     }

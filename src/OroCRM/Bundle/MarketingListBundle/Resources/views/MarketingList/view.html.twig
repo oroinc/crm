@@ -113,7 +113,10 @@
     ] %}
 
     <div data-page-component-module="orocrmmarketinglist/js/app/components/grid-linker"
-         data-page-component-options="{{ [gridName, entityGridName]|json_encode }}"></div>
+         data-page-component-options="{{ [
+             {main: gridName, secondary: entityGridName},
+             {main: entityGridName, secondary: gridName}
+         ]|json_encode }}"></div>
 
     {% set id = 'marketingListView' %}
     {% set data = { 'dataBlocks': dataBlocks } %}

@@ -69,7 +69,6 @@ class MarketingListItemsListener
 
         $dataSource = $dataGrid->getDatasource();
 
-
         if ($dataSource instanceof OrmDatasource) {
             $segmentId     = $this->segmentHelper->getSegmentIdByGridName($dataGridName);
             $marketingList = $this->segmentHelper->getMarketingListBySegment($segmentId);
@@ -89,7 +88,7 @@ class MarketingListItemsListener
      */
     public function isApplicable($gridName, $parameters)
     {
-        if (!$parameters->has(MarketingList::MARKETING_LIST_MARKER)) {
+        if (!$parameters->get(MarketingList::MARKETING_LIST_MARKER, false)) {
             return false;
         }
 
