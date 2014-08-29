@@ -34,7 +34,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             FormEvents::PRE_SET_DATA  => 'preSet',
             FormEvents::POST_SET_DATA => 'postSet',
             FormEvents::PRE_SUBMIT    => 'preSubmit',
-            FormEvents::POST_SUBMIT   => 'postSubmit',
+            FormEvents::POST_SUBMIT   => ['postSubmit', 20],
         ];
     }
 
