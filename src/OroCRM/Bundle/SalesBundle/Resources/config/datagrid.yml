@@ -666,7 +666,7 @@ datagrid:
                     data_name: c.name
                  channelName:
                     type:      entity
-                    data_name: c.name
+                    data_name: channel.id
                     options:
                         field_options:
                             class: OroCRMChannelBundle:Channel
