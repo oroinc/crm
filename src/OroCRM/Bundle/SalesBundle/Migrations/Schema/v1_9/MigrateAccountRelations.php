@@ -83,10 +83,10 @@ WHERE
     AND bc.user_owner_id = mainEntity.user_owner_id
 DQL;
         $leadUpdateQuery = <<<DQL
-UPDATE orocrm_sales_lead mainEntity SET mainEntity.customer_id = (%1\$s) WHERE EXISTS (%1\$s)
+UPDATE orocrm_sales_lead mainEntity SET customer_id = (%1\$s) WHERE EXISTS (%1\$s)
 DQL;
         $opportunityUpdateQuery = <<<DQL
-UPDATE orocrm_sales_opportunity mainEntity SET mainEntity.customer_id = (%1\$s) WHERE EXISTS (%1\$s)
+UPDATE orocrm_sales_opportunity mainEntity SET customer_id = (%1\$s) WHERE EXISTS (%1\$s)
 DQL;
 
         $leadUpdateQuery        = sprintf($leadUpdateQuery, $subSelect);
@@ -107,7 +107,7 @@ DQL;
     {
         $query = <<<DQL
 UPDATE orocrm_sales_b2bcustomer bc
-SET bc.website = (%s), bc.employees = (%s), bc.ownership = (%s), bc.ticker_symbol = (%s), bc.rating = (%s)
+SET website = (%s), employees = (%s), ownership = (%s), ticker_symbol = (%s), rating = (%s)
 WHERE EXISTS (%s)
 DQL;
         $query = sprintf(
