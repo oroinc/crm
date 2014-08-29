@@ -28,10 +28,10 @@
 {% block pageHeader %}
     {% if form.vars.value.id %}
         {% set breadcrumbs = {
-        'entity':      form.vars.value,
-        'indexPath':   path('orocrm_sales_b2bcustomer_index'),
-        'indexLabel': 'orocrm.sales.b2bcustomer.entity_plural_label'|trans,
-        'entityTitle': entity.name
+            'entity':      form.vars.value,
+            'indexPath':   path('orocrm_sales_b2bcustomer_index'),
+            'indexLabel': 'orocrm.sales.b2bcustomer.entity_plural_label'|trans,
+            'entityTitle': entity.name
         } %}
         {{ parent() }}
     {% else %}
@@ -64,26 +64,26 @@
         'title': 'General'|trans,
         'class': 'active',
         'subblocks': [
-    {
-        'title': 'orocrm.sales.widgets.b2bcustomer_information'|trans,
-        'data': formFields
-    },
-    ]
+        {
+            'title': 'orocrm.sales.widgets.b2bcustomer_information'|trans,
+            'data': formFields
+        },
+        ]
     }]
     %}
 
     {% set dataBlocks = dataBlocks|merge( [{
         'title' : 'Addresses'|trans,
         'subblocks': [
-    {
-        'title': 'orocrm.sales.b2bcustomer.billing_address.label'|trans,
-        'data': [form_widget(form.billingAddress)]
-    },
-    {
-        'title': 'orocrm.sales.b2bcustomer.shipping_address.label'|trans,
-        'data': [form_widget(form.shippingAddress)]
-    },
-    ]
+        {
+            'title': 'orocrm.sales.b2bcustomer.billing_address.label'|trans,
+            'data': [form_widget(form.billingAddress)]
+        },
+        {
+            'title': 'orocrm.sales.b2bcustomer.shipping_address.label'|trans,
+            'data': [form_widget(form.shippingAddress)]
+        },
+        ]
     }] ) %}
 
     {% if form.leads is defined%}
@@ -110,8 +110,7 @@
         }] ) %}
     {% endif %}
 
-    {% set data =
-    {
+    {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
         'dataBlocks': dataBlocks,
     }

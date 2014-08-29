@@ -109,7 +109,7 @@ class B2bCustomerController extends Controller
             },
             function (B2bCustomer $entity) {
                 return array(
-                    'route' => 'orocrm_sales_b2bCustomer_view',
+                    'route' => 'orocrm_sales_b2bcustomer_view',
                     'parameters' => array('id' => $entity->getId())
                 );
             },
@@ -158,7 +158,7 @@ class B2bCustomerController extends Controller
      *      requirements={"id"="\d+"},
      *      defaults={"id"=0}
      * )
-     * @AclAncestor("orocrm_b2bcustomer_view")
+     * @AclAncestor("orocrm_sales_lead_view")
      * @Template()
      */
     public function leadsAssignAction(B2bCustomer $b2bCustomer = null)
@@ -175,7 +175,7 @@ class B2bCustomerController extends Controller
      *      requirements={"id"="\d+"},
      *      defaults={"id"=0}
      * )
-     * @AclAncestor("orocrm_b2bcustomer_view")
+     * @AclAncestor("orocrm_sales_opportunity_view")
      * @Template()
      */
     public function opportunitiesAssignAction(B2bCustomer $b2bCustomer = null)
