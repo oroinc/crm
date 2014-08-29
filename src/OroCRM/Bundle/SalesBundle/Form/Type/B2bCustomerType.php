@@ -19,7 +19,6 @@ use Symfony\Component\Routing\Router;
 
 class B2bCustomerType extends AbstractType
 {
-
     /**
      * @var Router
      */
@@ -30,12 +29,20 @@ class B2bCustomerType extends AbstractType
      */
     protected $nameFormatter;
 
+
+    /**
+     * @param Router        $router
+     * @param NameFormatter $nameFormatter
+     */
     public function __construct(Router $router, NameFormatter $nameFormatter)
     {
         $this->router = $router;
         $this->nameFormatter = $nameFormatter;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'orocrm_sales_B2bCustomer';
@@ -47,31 +54,37 @@ class B2bCustomerType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('name', 'text', array('required' => true, 'label' => 'orocrm.sales.b2bcustomer.name.label'))
-            ->add(
-                'account',
-                'orocrm_account_select',
-                array(
-                    'required' => false,
-                    'label' => 'orocrm.sales.b2bcustomer.account.label'
-                )
-            )
-            ->add(
-                'contact',
-                'orocrm_contact_select',
-                [
-                    'label'     => 'orocrm.sales.b2bcustomer.contact.label',
-                    'required'  => false,
-                ]
-            )->add(
-                'tags',
-                'oro_tag_select',
-                array(
-                    'label' => 'oro.tag.entity_plural_label'
-                )
-            );
-
+        $builder->add(
+            'name',
+            'text',
+            [
+                'required' => true,
+                'label' => 'orocrm.sales.b2bcustomer.name.label'
+            ]
+        );
+        $builder->add(
+            'account',
+            'orocrm_account_select',
+            [
+                'required' => false,
+                'label' => 'orocrm.sales.b2bcustomer.account.label'
+            ]
+        );
+        $builder->add(
+            'contact',
+            'orocrm_contact_select',
+            [
+                'label'     => 'orocrm.sales.b2bcustomer.contact.label',
+                'required'  => false,
+            ]
+        );
+        $builder->add(
+            'tags',
+            'oro_tag_select',
+            [
+                'label' => 'oro.tag.entity_plural_label'
+            ]
+        );
         $builder->add(
             'channel',
             'orocrm_channel_select_type',
@@ -127,7 +140,7 @@ class B2bCustomerType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class'         => 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer',
+                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer',
             )
         );
     }
@@ -137,23 +150,23 @@ class B2bCustomerType extends AbstractType
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-            /** @var B2bCustomer $b2bcustomer */
-            $b2bcustomer = $form->getData();
-            $view->children['leads']->vars['grid_url']
-                              = $this->router->generate(
-                                  'orocrm_sales_widget_leads_assign',
-                                  array('id' => $b2bcustomer->getId())
-                              );
-            $view->children['leads']->vars['initial_elements']
-                              = $this->getInitialElements($b2bcustomer->getLeads());
+        /** @var B2bCustomer $b2bcustomer */
+        $b2bcustomer = $form->getData();
+        $view->children['leads']->vars['grid_url']
+                     = $this->router->generate(
+                         'orocrm_sales_widget_leads_assign',
+                         array('id' => $b2bcustomer->getId())
+                     );
+        $view->children['leads']->vars['initial_elements']
+                     = $this->getInitialElements($b2bcustomer->getLeads());
 
-            $view->children['opportunities']->vars['grid_url']
-                    = $this->router->generate(
-                        'orocrm_sales_widget_opportunities_assign',
-                        array('id' => $b2bcustomer->getId())
-                    );
-            $view->children['opportunities']->vars['initial_elements']
-                = $this->getInitialOpportunities($b2bcustomer->getOpportunities());
+        $view->children['opportunities']->vars['grid_url']
+            = $this->router->generate(
+                'orocrm_sales_widget_opportunities_assign',
+                array('id' => $b2bcustomer->getId())
+            );
+        $view->children['opportunities']->vars['initial_elements']
+            = $this->getInitialOpportunities($b2bcustomer->getOpportunities());
     }
 
     /**
