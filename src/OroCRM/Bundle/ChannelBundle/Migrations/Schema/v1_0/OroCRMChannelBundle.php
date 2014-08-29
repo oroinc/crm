@@ -71,7 +71,7 @@ class OroCRMChannelBundle implements Migration
     {
         $table = $schema->createTable('orocrm_channel_cust_identity');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('account_id', 'integer', ['notnull' => false]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('contact_id', 'integer', ['notnull' => false]);
@@ -82,7 +82,7 @@ class OroCRMChannelBundle implements Migration
         $table->addIndex(['account_id'], 'IDX_30F858859B6B5FBA', []);
         $table->addIndex(['contact_id'], 'IDX_30F85885E7A1254A', []);
         $table->addIndex(['user_owner_id'], 'IDX_30F858859EB185F9', []);
-        $table->addIndex(['channel_id'], 'IDX_30F8588572F5A1AA', []);
+        $table->addIndex(['data_channel_id'], 'IDX_30F8588572F5A1AA', []);
     }
 
     /**
@@ -133,7 +133,7 @@ class OroCRMChannelBundle implements Migration
         $table = $schema->getTable('orocrm_channel_cust_identity');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_channel'),
-            ['channel_id'],
+            ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );

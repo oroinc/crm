@@ -637,7 +637,7 @@ datagrid:
                     - { table: %orocrm_sales.b2bcustomer.entity.class%, alias: c }
                 join:
                     left:
-                        - { join: c.channel, alias: channel }
+                        - { join: c.dataChannel, alias: channel }
         columns:
             name:
                 label:          orocrm.sales.b2bcustomer.name.label

@@ -12,9 +12,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendB2bCustomer;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 
 /**
  * @ORM\Entity()
@@ -45,6 +45,8 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendB2bCustomer;
  */
 class B2bCustomer extends ExtendB2bCustomer implements Taggable
 {
+    use ChannelEntityTrait;
+
     /**
      * @var integer
      *
@@ -144,23 +146,6 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
      * )
      */
     protected $contact;
-
-    /**
-     * @var Channel
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
-     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=60,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     */
-    protected $channel;
 
     /**
      * @var ArrayCollection
@@ -326,22 +311,6 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
     public function setContact(Contact $contact)
     {
         $this->contact = $contact;
-    }
-
-    /**
-     * @return Channel
-     */
-    public function getChannel()
-    {
-        return $this->channel;
-    }
-
-    /**
-     * @param Channel $channel
-     */
-    public function setChannel(Channel $channel)
-    {
-        $this->channel = $channel;
     }
 
     /**

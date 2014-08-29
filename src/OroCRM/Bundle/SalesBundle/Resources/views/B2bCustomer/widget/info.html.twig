@@ -22,12 +22,12 @@
             {%- endif -%}
             {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.contact.label'|trans, contactView) }}
 
-            {%- if resource_granted('orocrm_channel_view') and entity.channel -%}
-                {% set channelView = '<a href="' ~ path('orocrm_channel_view', {'id': entity.channel.id}) ~ '">' ~ entity.channel.name|escape ~ '</a>' %}
+            {%- if resource_granted('orocrm_channel_view') and entity.dataChannel -%}
+                {% set channelView = '<a href="' ~ path('orocrm_channel_view', {'id': entity.dataChannel.id}) ~ '">' ~ entity.channel.name|escape ~ '</a>' %}
             {%- else -%}
-                {% set channelView = entity.channel ? entity.channel : '' %}
+                {% set channelView = entity.dataChannel ? entity.dataChannel : '' %}
             {%- endif -%}
-            {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.channel.label'|trans, channelView) }}
+            {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.data_channel.label'|trans, channelView) }}
 
             {% if entity.billingAddress is not empty %}
                 {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.billing_address.label'|trans, address.renderAddress(entity.billingAddress)) }}

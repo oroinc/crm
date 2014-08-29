@@ -10,23 +10,23 @@ trait ChannelEntityTrait
      * @var Channel
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
-     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="data_channel_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $channel;
+    protected $dataChannel;
 
     /**
      * @param Channel $channel
      */
-    public function setChannel(Channel $channel)
+    public function setDataChannel(Channel $channel)
     {
-        $this->channel = $channel;
+        $this->dataChannel = $channel;
     }
 
     /**
      * @return Channel
      */
-    public function getChannel()
+    public function getDataChannel()
     {
-        return $this->channel;
+        return $this->dataChannel;
     }
 }

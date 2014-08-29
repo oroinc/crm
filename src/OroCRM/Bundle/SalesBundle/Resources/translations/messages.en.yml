@@ -203,7 +203,7 @@ orocrm:
             billing_address.label:      Billing Address
             account.label:              Account
             contact.label:              Contact
-            channel.label:              Channel
+            data_channel.label:         Channel
             leads.label:                Leads
             opportunities.label:        Opportunities
             owner.label:                Owner
