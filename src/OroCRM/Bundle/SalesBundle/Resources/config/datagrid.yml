@@ -677,13 +677,13 @@ datagrid:
                 type:   url
                 route:  orocrm_sales_b2bcustomer_view
                 params: [ id ]
-            delete_link:
-                type:   url
-                route:  delete_b2b_customer
-                params: [ id ]
             update_link:
                 type:   url
                 route:  orocrm_sales_b2bcustomer_update
+                params: [ id ]
+            delete_link:
+                type:   url
+                route:  oro_api_delete_b2bcustomer
                 params: [ id ]
         actions:
             view:
@@ -701,7 +701,7 @@ datagrid:
                 link:          update_link
             delete:
                 type:          delete
-                acl_resource:  orocrm_b2bcustomer_delete
+                acl_resource:  orocrm_sales_b2bcustomer_delete
                 label:         Delete
                 icon:          trash
                 link:          delete_link

@@ -78,9 +78,9 @@ class B2bCustomerController extends Controller
     /**
      * Create b2bcustomer form
      *
-     * @Route("/create", name="orocrm_b2bcustomer_create")
+     * @Route("/create", name="orocrm_sales_b2bcustomer_create")
      * @Acl(
-     *      id="orocrm_b2bcustomer_create",
+     *      id="orocrm_sales_b2bcustomer_create",
      *      type="entity",
      *      permission="CREATE",
      *      class="OroCRMSalesBundle:B2bCustomer"
