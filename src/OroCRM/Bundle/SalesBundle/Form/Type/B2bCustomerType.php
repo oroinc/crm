@@ -19,7 +19,6 @@ use Symfony\Component\Routing\Router;
 
 class B2bCustomerType extends AbstractType
 {
-
     /**
      * @var Router
      */
@@ -40,7 +39,6 @@ class B2bCustomerType extends AbstractType
         $this->router = $router;
         $this->nameFormatter = $nameFormatter;
     }
-
 
     /**
      * @return string
@@ -89,7 +87,11 @@ class B2bCustomerType extends AbstractType
         );
         $builder->add(
             'channel',
-            'choice'
+            'orocrm_channel_select_type',
+            [
+                'required' => true,
+                'label'    => 'orocrm.channel.entity_label'
+            ]
         );
         $builder->add(
             'leads',
