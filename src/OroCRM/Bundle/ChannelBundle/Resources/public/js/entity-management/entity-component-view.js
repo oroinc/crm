@@ -57,7 +57,8 @@ define(function (require) {
             data: [],
             mode: modes.VIEW_MODE,
             entityModel: EntityModel,
-            metadata: null
+            metadata: null,
+            lockedEntities: []
         },
 
         /**
@@ -220,9 +221,10 @@ define(function (require) {
         _prepareModelAttributes: function (model) {
             var entityName = model.get('name'),
                 entityMetadata = this.options.metadata[entityName] || {},
-                actions = [];
+                actions = [],
+                lockedEntities = this.options.lockedEntities;
 
-            if ((!model.get('readonly')) && this.options.mode === modes.EDIT_MODE) {
+            if ((entityName.indexOf(lockedEntities) === -1) && this.options.mode === modes.EDIT_MODE) {
                 actions.push({
                     collectionAction: 'delete',
                     title: 'Delete',
