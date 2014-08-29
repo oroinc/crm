@@ -8,7 +8,7 @@ define(function (require) {
 
     return function (options) {
         _.each(options, function (grids) {
-            mediator.on('datagrid:removeRow:' + grids.main, function () {
+            mediator.on('datagrid:afterRemoveRow:' + grids.main, function () {
                 mediator.trigger('datagrid:doRefresh:' + grids.secondary);
             });
         });
