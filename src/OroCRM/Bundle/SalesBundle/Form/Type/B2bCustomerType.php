@@ -77,49 +77,47 @@ class B2bCustomerType extends AbstractType
             'orocrm_channel_select_type',
             [
                 'required' => true,
-                'label' => 'orocrm.channel.entity_label'
+                'label'    => 'orocrm.channel.entity_label'
             ]
         );
-
         $builder->add(
             'leads',
             'oro_multiple_entity',
-            array(
+            [
                 'add_acl_resource'      => 'orocrm_sales_lead_view',
                 'class'                 => 'OroCRMSalesBundle:Lead',
-                'default_element'       => 'default_contact', //TODO: for remove
+                'default_element'       => 'default_contact',
                 'required'              => false,
-                'selector_window_title' => 'orocrm.sales.menu.lead_list.description',
-            )
-        )->add(
+                'selector_window_title' => 'orocrm.sales.b2bcustomer.leads.select',
+            ]
+        );
+        $builder->add(
             'opportunities',
             'oro_multiple_entity',
-            array(
+            [
                 'add_acl_resource'      => 'orocrm_sales_opportunity_view',
                 'class'                 => 'OroCRMSalesBundle:Opportunity',
-                'default_element'       => 'default_contact', //TODO: for remove
+                'default_element'       => 'default_contact',
                 'required'              => false,
-                'selector_window_title' => 'orocrm.sales.menu.opportunities_list.description',
-            )
+                'selector_window_title' => 'orocrm.sales.b2bcustomer.opportunities.select',
+            ]
         );
-
-        $builder
-            ->add(
-                'shippingAddress',
-                'oro_address',
-                array(
-                    'cascade_validation' => true,
-                    'required' => false
-                )
-            )
-            ->add(
-                'billingAddress',
-                'oro_address',
-                array(
-                    'cascade_validation' => true,
-                    'required' => false
-                )
-            );
+        $builder->add(
+            'shippingAddress',
+            'oro_address',
+            [
+                'cascade_validation' => true,
+                'required'           => false
+            ]
+        );
+        $builder->add(
+            'billingAddress',
+            'oro_address',
+            [
+                'cascade_validation' => true,
+                'required'           => false
+            ]
+        );
     }
 
     /**
