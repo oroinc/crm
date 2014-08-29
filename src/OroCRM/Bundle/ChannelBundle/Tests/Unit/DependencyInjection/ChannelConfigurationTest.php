@@ -54,7 +54,6 @@ class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
                     ],
                     'integration_type'                  => 'test',
                     'customer_identity'                 => 'OroCRM\Bundle\TestBundle1\Entity\TestCustomer',
-                    'is_customer_identity_user_defined' => false
                 ],
                 'test2' => [
                     'label'                             => 'test2 type',
@@ -62,7 +61,6 @@ class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
                         'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity'
                     ],
                     'customer_identity' => 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity',
-                    'is_customer_identity_user_defined' => true
                 ]
             ],
         ];

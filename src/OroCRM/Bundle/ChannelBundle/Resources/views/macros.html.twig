@@ -4,11 +4,12 @@
         form                        - Symfony\Component\Form\FormView
         entitiesMetadata            - array of entities metadata
 #}
-{% macro initializeChannelForm(form, entitiesMetadata) %}
+{% macro initializeChannelForm(form, entitiesMetadata, customerIdentity) %}
     {% set options = {
-        channelTypeEl:               '#' ~ form.channelType.vars.id,
-        channelEntitiesEl:           '#' ~ form.entities.vars.id,
-        entitiesMetadata:            entitiesMetadata,
+        channelTypeEl:     '#' ~ form.channelType.vars.id,
+        channelEntitiesEl: '#' ~ form.entities.vars.id,
+        customerIdentity:  customerIdentity,
+        entitiesMetadata:  entitiesMetadata,
         fields: {
             status:      '#' ~ form.status.vars.id,
             name:        '#' ~ form.name.vars.id,

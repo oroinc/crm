@@ -20,15 +20,17 @@ define([
      *
      * @param {string} selector
      * @param {Array.<{object}>} metadata
+     * @param {Array.} lockedEntities
      */
-    function initializeEntityComponent(selector, metadata) {
+    function initializeEntityComponent(selector, metadata, lockedEntities) {
         var $storageEl = $(selector),
             value = $storageEl.val(),
             entities = value ? JSON.parse(value) : [],
             entityComponentView = new EntityComponentView({
                 data: entities,
                 mode: EntityComponentView.prototype.MODES.EDIT_MODE,
-                metadata: metadata
+                metadata: metadata,
+                lockedEntities: lockedEntities
             });
 
         entityComponentView.render();
@@ -94,7 +96,16 @@ define([
      * @param {Object} options
      */
     return function (options) {
-        initializeEntityComponent(options.channelEntitiesEl, options.entitiesMetadata);
+
+        var lockedEntities = [];
+
+        if (!_.isArray(options.customerIdentity)) {
+            lockedEntities = [options.customerIdentity];
+        } else {
+            lockedEntities = options.customerIdentity;
+        }
+
+        initializeEntityComponent(options.channelEntitiesEl, options.entitiesMetadata, lockedEntities);
         initializeChannelTypeComponent(options.channelTypeEl, options.fields);
 
         options._sourceElement.remove();

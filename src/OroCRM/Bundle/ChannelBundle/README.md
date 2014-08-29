@@ -75,10 +75,9 @@ Channel is configured by "Channel Type", "Customer Identity" and "Entities" fiel
                 - OroCRM\Bundle\AcmeBundle\Entity\Customer
             integration_type: some_type
             customer_identity: OroCRM\Bundle\AcmeBundle\Entity\Customer
-            is_customer_identity_user_defined: false
 ```
 
-If you want to add "Integration" to the channel you should define "integration_type", ["customer_identity"], ["is_customer_identity_user_defined"].
+If you want to add "Integration" to the channel you should define "integration_type", ["customer_identity"].
 
 * "label" - channel type label;
 
@@ -87,7 +86,5 @@ If you want to add "Integration" to the channel you should define "integration_t
 * "integration_type" describe which integration type appear in "Channel Type" select. When "integration_type" will have defined in config and you have selected your type in "Channel Type" selector, the Integration field has appeared in channel form like link, by clicking on it the dialog box will open;
 
 * When "Channel Type" has selected you can have predefined options in "Entities" field which you should describe in "entities";
-
-* Also if you define "customer_identity" option in your config, field "Cusomer Identity" will have parameter "read-only" and you can't change it. You can't remove it from the "Entities" field if "is_customer_identity_user_defined" is false.
 
 * Entity in "customer_identity" must also be in "entities" block;

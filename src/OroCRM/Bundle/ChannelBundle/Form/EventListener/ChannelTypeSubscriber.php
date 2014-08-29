@@ -65,9 +65,9 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             $channelTypeEntities = $this->settingsProvider->getEntitiesByChannelType($data->getChannelType());
             $entities            = $data->getEntities();
             $entities            = is_array($entities) ? $entities : [];
-            $data->setEntities(array_unique(array_merge($entities, $channelTypeEntities)));
+            $combinedEntities    = array_unique(array_merge($entities, $channelTypeEntities));
+            $data->setEntities($combinedEntities);
         }
-
     }
 
     /**
@@ -90,6 +90,9 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                 'channelType',
                 ['required' => false, 'disabled' => true]
             );
+        } else {
+            $customerIdentity = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
+            $data->setCustomerIdentity($customerIdentity);
         }
     }
 
@@ -114,7 +117,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         $data             = $event->getData();
         $customerIdentity = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
 
-        if ((!$data->getId()) && null !== $customerIdentity) {
+        if (!$data->getId()) {
             $data->setCustomerIdentity($customerIdentity);
         }
     }
