@@ -41,7 +41,7 @@ oro_menu_config:
             display: false
             extras:
                 position:    70
-                routes:      ['/^orocrm_sales_b2bcustomer/']
+                routes:      ['orocrm_sales_b2bcustomer_*']
                 description: 'orocrm.sales.menu.b2bcustomer_list.description'
 
         shortcut_list_b2bcustomers:
@@ -97,9 +97,6 @@ oro_menu_config:
                 widgetAcl: 'orocrm_sales_opportunity_view'
                 widgetRoute: 'orocrm_sales_widget_account_opportunities'
 
-        b2bcustomer_list:
-            label: 'orocrm.sales.b2bcustomer.entity_plural_label'
-            route: 'orocrm_sales_b2bcustomer_index'
     tree:
         application_menu:
             children:
