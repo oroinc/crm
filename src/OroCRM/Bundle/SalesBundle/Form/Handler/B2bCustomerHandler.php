@@ -109,52 +109,52 @@ class B2bCustomerHandler
     /**
      * Append leads to B2bCustomer
      *
-     * @param B2bCustomer $B2bCustomer
+     * @param B2bCustomer $b2bCustomer
      * @param Lead[] $leads
      */
-    protected function appendLeads(B2bCustomer $B2bCustomer, array $leads)
+    protected function appendLeads(B2bCustomer $b2bCustomer, array $leads)
     {
         foreach ($leads as $lead) {
-            $B2bCustomer->addLead($lead);
+            $b2bCustomer->addLead($lead);
         }
     }
 
     /**
      * Remove leads from B2bCustomer
      *
-     * @param B2bCustomer $B2bCustomer
+     * @param B2bCustomer $b2bCustomer
      * @param Lead[] $leads
      */
-    protected function removeLeads(B2bCustomer $B2bCustomer, array $leads)
+    protected function removeLeads(B2bCustomer $b2bCustomer, array $leads)
     {
         foreach ($leads as $lead) {
-            $B2bCustomer->removeLead($lead);
+            $b2bCustomer->removeLead($lead);
         }
     }
 
     /**
      * Append opportunities to B2bCustomer
      *
-     * @param B2bCustomer $B2bCustomer
+     * @param B2bCustomer $b2bCustomer
      * @param Opportunity[] $opportunities
      */
-    protected function appendOpportunities(B2bCustomer $B2bCustomer, array $opportunities)
+    protected function appendOpportunities(B2bCustomer $b2bCustomer, array $opportunities)
     {
         foreach ($opportunities as $opportunity) {
-            $B2bCustomer->addOpportunity($opportunity);
+            $b2bCustomer->addOpportunity($opportunity);
         }
     }
 
     /**
      * Remove opportunities from B2bCustomer
      *
-     * @param B2bCustomer $B2bCustomer
+     * @param B2bCustomer $b2bCustomer
      * @param Opportunity[] $opportunities
      */
-    protected function removeOpportunities(B2bCustomer $B2bCustomer, array $opportunities)
+    protected function removeOpportunities(B2bCustomer $b2bCustomer, array $opportunities)
     {
         foreach ($opportunities as $opportunity) {
-            $B2bCustomer->removeOpportunity($opportunity);
+            $b2bCustomer->removeOpportunity($opportunity);
         }
     }
 

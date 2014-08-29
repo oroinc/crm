@@ -42,9 +42,9 @@ class ChannelSelectType extends AbstractType
                 'random_id'     => true,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('c')
-                        ->andWhere('c.status = :status')
-                        ->orderBy('c.name', 'ASC')
-                        ->setParameter('status', Channel::STATUS_ACTIVE);
+                        ->andWhere('c.status = '.Channel::STATUS_ACTIVE)
+                        ->orderBy('c.name', 'ASC');
+                        #->setParameter('status', Channel::STATUS_ACTIVE);
                 },
                 'configs'       => [
                     'allowClear'  => true,

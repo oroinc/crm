@@ -187,9 +187,6 @@ orocrm:
                 view:   View
                 update: Update
                 delete: Delete
-        widgets:
-            leads:         Leads
-            opportunities: Opportunities
         #
         # OroCRM/Bundle/SalesBundle/Entity/B2bCustomer.php
         #
@@ -221,3 +218,5 @@ orocrm:
                 delete: Delete
         widgets:
             b2bcustomer_information: B2B Customer Information
+            leads:                   Leads
+            opportunities:           Opportunities
