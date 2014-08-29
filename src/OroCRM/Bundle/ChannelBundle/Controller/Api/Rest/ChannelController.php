@@ -64,7 +64,7 @@ class ChannelController extends RestController
      */
     public function getForm()
     {
-        return $this->get('orocrm_channel.form.channel');
+        throw new \BadMethodCallException('FormHandler is not available.');
     }
 
     /**
