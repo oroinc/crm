@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
+
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ChannelSelectTypetest extends \PHPUnit_Framework_TestCase
