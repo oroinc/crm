@@ -30,7 +30,7 @@ class DataGridConfigurationHelper
     public function extendConfiguration(DatagridConfiguration $configuration, $gridName)
     {
         $gridConfiguration = $this->configurationProvider->getConfiguration($gridName);
-        $scopes            = array_diff(array_keys($gridConfiguration->getIterator()->getArrayCopy()), []);
+        $scopes            = array_diff(array_keys($gridConfiguration->getIterator()->getArrayCopy()), ['name']);
 
         foreach ($scopes as $scope) {
             $path             = sprintf('[%s]', $scope);

@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MarketingListBundle\Datagrid;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
+use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Model\DataGridConfigurationHelper;
@@ -52,6 +53,20 @@ class MarketingListItemsListener
         if ($this->isApplicable($gridName, $parameters) && empty($this->appliedFor[$gridName])) {
             $this->dataGridConfigurationHelper->extendConfiguration($config, self::MIXIN_NAME);
             $this->appliedFor[$gridName] = true;
+        }
+    }
+
+    /**
+     * @param BuildBefore $event
+     */
+    public function onBuildBefore(BuildBefore $event)
+    {
+        $dataGrid     = $event->getDatagrid();
+        $dataGridName = $dataGrid->getName();
+        $parameters   = $dataGrid->getParameters();
+
+        if ($this->isApplicable($dataGridName, $parameters)) {
+            $event->stopPropagation();
         }
     }
 
