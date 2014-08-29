@@ -24,7 +24,9 @@ class CreateContactRequestTest extends Selenium2TestCase
         $login = $this->login();
         /** @var ContactRequests $login */
         $login->openContactRequests('OroCRM\Bundle\ContactUsBundle')
+            ->assertTitle('Contact Requests - Activities')
             ->add()
+            ->assertTitle('Create contact request - Contact Requests - Activities')
             ->setFirstName($firstName)
             ->setLastName($lastName)
             ->setEmail($email)

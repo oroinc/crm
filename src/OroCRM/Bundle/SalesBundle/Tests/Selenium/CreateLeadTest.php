@@ -31,7 +31,9 @@ class CreateLeadTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Leads $login */
         $login->openLeads('OroCRM\Bundle\SalesBundle')
+            ->assertTitle('Leads - Sales')
             ->add()
+            ->assertTitle('Create Lead - Leads - Sales')
             ->setName($name)
             ->setFirstName($name . '_first_name')
             ->setLastName($name . '_last_name')
@@ -65,8 +67,9 @@ class CreateLeadTest extends Selenium2TestCase
         $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->filterBy('Lead name', $name)
             ->open(array($name))
+            ->assertTitle("{$name} - Leads - Sales")
             ->edit()
-            ->assertTitle($name . ' - Edit - Leads - Sales')
+            ->assertTitle("{$name} - Edit - Leads - Sales")
             ->setName($newName)
             ->save()
             ->assertMessage('Lead saved')
