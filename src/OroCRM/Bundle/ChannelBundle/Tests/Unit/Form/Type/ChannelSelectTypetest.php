@@ -6,7 +6,7 @@ use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ChannelSelectTypetest extends \PHPUnit_Framework_TestCase
+class ChannelSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ChannelSelectType */
     protected $type;
