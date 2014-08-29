@@ -23,4 +23,3 @@ orocrm_channel:
                 - OroCRM\Bundle\TestBundle1\Entity\Entity3
             integration_type: test
             customer_identity: OroCRM\Bundle\TestBundle1\Entity\TestCustomer
-            is_customer_identity_user_defined: false

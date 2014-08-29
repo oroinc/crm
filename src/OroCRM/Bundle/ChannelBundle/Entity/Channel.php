@@ -200,7 +200,7 @@ class Channel
             $entitiesCollection->toArray()
         );
 
-        return $values;
+        return array_values($values);
     }
 
     /**
