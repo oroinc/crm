@@ -51,7 +51,7 @@ OroCRM\Bundle\CallBundle\Entity\Call:
                 -
                     name:                   name
                     target_type:            text
-                    target_fields:          [name]
+                    target_fields:          [accountName]
         -
             name: contactPhoneNumber
             relation_type: many-to-one
@@ -67,8 +67,8 @@ OroCRM\Bundle\CallBundle\Entity\Call:
                 -
                     name:                   name
                     target_type:            text
-                    target_fields:          [name]
+                    target_fields:          [directionName]
                 -
                     name:                   label
                     target_type:            text
-                    target_fields:          [label]
+                    target_fields:          [directionLabel]
