@@ -11,7 +11,7 @@ parameters:
     orocrm_sales.salesfunnel.manager.api.class:            Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
     orocrm_sales.b2bcustomer.entity.class:                 OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
-
+    orocrm_sales.b2bcustomer.manager.api.class:            Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 services:
     orocrm_sales.opportunity.manager.api:
         class: %orocrm_sales.opportunity.manager.api.class%
@@ -104,3 +104,9 @@ services:
             - 'customer'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-b2bcustomer-opportunity-grid, method: onBuildAfter }
+
+    orocrm_sales.b2bcustomer.manager.api:
+        class: %orocrm_sales.b2bcustomer.manager.api.class%
+        arguments:
+            - %orocrm_sales.b2bcustomer.entity.class%
+            - @doctrine.orm.entity_manager
