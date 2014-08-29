@@ -19,7 +19,6 @@ use Symfony\Component\Routing\Router;
 
 class B2bCustomerType extends AbstractType
 {
-
     /**
      * @var Router
      */
@@ -41,7 +40,6 @@ class B2bCustomerType extends AbstractType
         $this->nameFormatter = $nameFormatter;
     }
 
-
     /**
      * @return string
      */
@@ -56,7 +54,6 @@ class B2bCustomerType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder->add(
             'name',
             'text',
