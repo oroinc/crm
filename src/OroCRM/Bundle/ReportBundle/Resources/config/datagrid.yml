@@ -13,7 +13,8 @@ datagrid:
                     - { table: OroCRMSalesBundle:Opportunity, alias: o }
                 join:
                     inner:
-                        - { join: o.account, alias: a }
+                        - { join: o.customer, alias: c }
+                        - { join: c.account, alias: a }
                         - { join: o.status,  alias: s }
                 where:
                     and:
@@ -67,14 +68,6 @@ datagrid:
                     filter_by_having: true
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                closeDate:
-                    type:             date
-                    label:            orocrm.report.datagrid.columns.close_date
-                    data_name:        o.closeDate
-                createdAt:
-                    type:             date
-                    label:            orocrm.report.datagrid.columns.created_date
-                    data_name:        o.createdAt
         options:
             entityHint: report data
             export: true
@@ -96,7 +89,8 @@ datagrid:
                     - COUNT(o.id) as totalOps
                 join:
                     inner:
-                        - { join: o.account, alias: a }
+                        - { join: o.customer, alias: c }
+                        - { join: c.account, alias: a }
                         - { join: o.status, alias: s }
                 groupBy:  a.id
         properties:
