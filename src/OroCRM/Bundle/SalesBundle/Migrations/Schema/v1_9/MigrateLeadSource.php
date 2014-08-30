@@ -28,7 +28,7 @@ class MigrateLeadSource implements Migration, ExtendExtensionAwareInterface
     public function up(Schema $schema, QueryBag $queries)
     {
         // @todo: this is just a start point. this migration will be implemented later
-        $this->extendExtension->addEnumRelation(
+        $this->extendExtension->addEnumField(
             $schema,
             'orocrm_sales_lead',
             'source',
