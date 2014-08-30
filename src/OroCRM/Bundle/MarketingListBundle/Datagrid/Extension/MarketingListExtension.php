@@ -56,6 +56,10 @@ class MarketingListExtension extends AbstractExtension
      */
     public function visitDatasource(DatagridConfiguration $config, DatasourceInterface $datasource)
     {
+        if (!$this->isApplicable($config)) {
+            return;
+        }
+
         /** @var OrmDatasource $datasource */
         $qb       = $datasource->getQueryBuilder();
         $dqlParts = $qb->getDQLParts();

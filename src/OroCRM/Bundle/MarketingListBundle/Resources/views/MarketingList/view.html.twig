@@ -83,12 +83,11 @@
         </div>
     {%- endset -%}
 
-    {% set marker = constant('\\OroCRM\\Bundle\\MarketingListBundle\\Entity\\MarketingList::MARKETING_LIST_MARKER') %}
+    {% set itemsGridName = gridName ~ '_items' %}
+    {% set removedItemsGridName = gridName ~ '_removed_items' %}
     {%- set listData -%}
-        {{ dataGrid.renderGrid(gridName, {(marker): true}) }}
+        {{ dataGrid.renderGrid(itemsGridName, {'grid-mixin': 'orocrm-marketing-list-items-mixin'}) }}
     {%- endset -%}
-
-    {% set entityGridName = oro_entity_config_value(entity.entity, 'grid_name', 'form') %}
 
     {% set dataBlocks = [
         {
@@ -107,15 +106,15 @@
         {
             'title' : 'orocrm.marketinglist.block.removed'|trans,
             'subblocks': [
-                {'data' : [dataGrid.renderGrid(entityGridName, {marketing_list_id: entity.id})]}
+                {'data' : [dataGrid.renderGrid(removedItemsGridName, {'grid-mixin': 'orocrm-marketing-list-removed-items-mixin'})]}
             ]
         }
     ] %}
 
     <div data-page-component-module="orocrmmarketinglist/js/app/components/grid-linker"
          data-page-component-options="{{ [
-             {main: gridName, secondary: entityGridName},
-             {main: entityGridName, secondary: gridName}
+             {main: itemsGridName, secondary: removedItemsGridName},
+             {main: removedItemsGridName, secondary: itemsGridName}
          ]|json_encode }}"></div>
 
     {% set id = 'marketingListView' %}

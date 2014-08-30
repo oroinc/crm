@@ -200,6 +200,41 @@ datagrid:
             mixin: true
 
     orocrm-marketing-list-removed-items-mixin:
+        source:
+            query:
+                select:
+                    - t1.id
+                    - mli.contactedTimes
+                    - mli.lastContactedAt
+                join:
+                    left:
+                        -
+                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
+                            alias: 'mlr'
+                            conditionType: 'WITH'
+                            condition: 'mlr.entityId = t1.id AND mlr.marketingList = :marketingListEntity'
+                        -
+                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'
+                            alias: 'mli'
+                            conditionType: 'WITH'
+                            condition: 'mli.entityId = t1.id AND mli.marketingList = :marketingListEntity'
+                where:
+                    and:
+                        - mlr.id IS NOT NULL
+        columns:
+            contactedTimes:
+                label: orocrm.marketinglist.datagrid.contactedTimes
+            lastContactedAt:
+                label: orocrm.marketinglist.datagrid.lastContactedAt
+                frontend_type: datetime
+        filters:
+            columns:
+                contactedTimes:
+                    type: number
+                    data_name: mli.contactedTimes
+                lastContactedAt:
+                    type: datetime
+                    data_name: mli.lastContactedAt
         properties:
             marketingList: ~
             unremove_link:
@@ -213,5 +248,10 @@ datagrid:
                 link:         unremove_link
                 icon:         undo
                 acl_recource: orocrm_marketing_list_removed_item_delete
+
+        action_configuration: [@orocrm_marketing_list.datagrid.action_permission_provider, "getMarketingListItemPermissions"]
+
         options:
+            export: true
             skip_count_walker: true
+            mixin: true

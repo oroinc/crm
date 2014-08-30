@@ -7,13 +7,12 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Model\DataGridConfigurationHelper;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper;
 
 class MarketingListItemsListener
 {
-    const MIXIN_NAME = 'orocrm-marketing-list-items-mixin';
+    const MIXIN = 'grid-mixin';
 
     /**
      * @var DataGridConfigurationHelper
@@ -50,9 +49,13 @@ class MarketingListItemsListener
         $config     = $event->getConfig();
         $parameters = $event->getParameters();
         $gridName   = $config->getName();
-        if ($this->isApplicable($gridName, $parameters) && empty($this->appliedFor[$gridName])) {
-            $this->dataGridConfigurationHelper->extendConfiguration($config, self::MIXIN_NAME);
-            $this->appliedFor[$gridName] = true;
+        if (!$this->isApplicable($gridName, $parameters)) {
+            return;
+        }
+        $gridMixin = $parameters->get(self::MIXIN);
+        if (empty($this->appliedFor[$gridName . $gridMixin])) {
+            $this->dataGridConfigurationHelper->extendConfiguration($config, $gridMixin);
+            $this->appliedFor[$gridName . $gridMixin] = true;
         }
     }
 
@@ -103,7 +106,7 @@ class MarketingListItemsListener
      */
     public function isApplicable($gridName, $parameters)
     {
-        if (!$parameters->get(MarketingList::MARKETING_LIST_MARKER, false)) {
+        if (!$parameters->get(self::MIXIN, false)) {
             return false;
         }
 
