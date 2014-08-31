@@ -33,9 +33,10 @@
         },
         notesData: render(path('orocrm_case_comment_list', {'id': case.id}))
     } %}
-    {% include 'OroCRMCaseBundle:Comment:js/list.js.twig' with {'id': 'template-comment-list'} %}
-    {% include 'OroCRMCaseBundle:Comment:js/view.js.twig' with {'id': 'template-comment-item'} %}
     <div class="accordion" id="comment-list"
          data-page-component-module="oronote/js/app/components/notes-component"
          data-page-component-options="{{ options|json_encode }}"></div>
+
+    {% include 'OroCRMCaseBundle:Comment:js/list.js.twig' with {'id': 'template-comment-list'} %}
+    {% include 'OroCRMCaseBundle:Comment:js/view.js.twig' with {'id': 'template-comment-item'} %}
 {% endblock %}

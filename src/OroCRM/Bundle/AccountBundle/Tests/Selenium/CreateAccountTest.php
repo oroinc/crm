@@ -22,7 +22,9 @@ class CreateAccountTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Accounts $login */
         $login->openAccounts('OroCRM\Bundle\AccountBundle')
+            ->assertTitle('Accounts - Customers')
             ->add()
+            ->assertTitle('Create Account - Accounts - Customers')
             ->setAccountName($accountName)
             ->setOwner('admin')
             ->save()
@@ -70,8 +72,9 @@ class CreateAccountTest extends Selenium2TestCase
         $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
             ->open(array($accountName))
+            ->assertTitle("{$accountName} - Accounts - Customers")
             ->edit()
-            ->assertTitle($accountName . ' - Edit - Accounts - Customers')
+            ->assertTitle("{$accountName} - Edit - Accounts - Customers")
             ->setAccountName($newAccountName)
             ->save()
             ->assertMessage('Account saved')

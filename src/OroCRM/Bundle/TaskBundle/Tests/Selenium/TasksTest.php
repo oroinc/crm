@@ -22,7 +22,9 @@ class TasksTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Tasks $login */
         $login->openTasks('OroCRM\Bundle\TaskBundle')
+            ->assertTitle('Tasks - Activities')
             ->add()
+            ->assertTitle('Create Task - Tasks - Activities')
             ->setSubject($subject)
             ->setDescription($subject)
             ->setDueDate('Apr 9, 2014 12:51 PM')
@@ -48,8 +50,9 @@ class TasksTest extends Selenium2TestCase
         $login->openTasks('OroCRM\Bundle\TaskBundle')
             ->filterBy('Subject', $subject)
             ->open(array($subject))
+            ->assertTitle("{$subject} - Tasks - Activities")
             ->edit()
-            ->assertTitle($subject . ' - Edit - Tasks - Activities')
+            ->assertTitle("{$subject} - Edit - Tasks - Activities")
             ->setSubject($newSubject)
             ->save()
             ->assertMessage('Task saved')
@@ -86,6 +89,7 @@ class TasksTest extends Selenium2TestCase
         $login->openTasks('OroCRM\Bundle\TaskBundle')
             ->filterBy('Subject', $subject)
             ->open(array($subject))
+            ->assertTitle("{$subject} - Tasks - Activities")
             ->delete()
             ->assertTitle('Tasks - Activities')
             ->assertMessage('Task deleted')
