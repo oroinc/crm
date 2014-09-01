@@ -10,6 +10,7 @@ parameters:
     orocrm_channel.form.type.channel.class:                            OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
     orocrm_channel.form.type.entity.class:                             OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType
     orocrm_channel.form.type.channel_datasource.class:                 OroCRM\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType
+    orocrm_channel.form.type.channel_select.class:                     OroCRM\Bundle\ChannelBundle\Form\Type\ChannelSelectType
 
     # manager
     orocrm_channel.manager.api.class:                                  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
@@ -65,6 +66,11 @@ services:
         factory_method:               createNamed
         factory_service:              form.factory
         arguments:                    ["orocrm_channel_form", "orocrm_channel_form", null]
+
+    orocrm_channel.form.type.channel_select:
+        class: %orocrm_channel.form.type.channel_select.class%
+        tags:
+            - { name: form.type, alias: orocrm_channel_select_type }
 
     # handlers
     orocrm_channel.channel_form.handler:

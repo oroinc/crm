@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\IntegrationBundle\Tests\Selenium\Pages\Integrations;
+
 use OroCRM\Bundle\MagentoBundle\Tests\Selenium\Pages\Integration;
 
 /**

@@ -41,7 +41,7 @@ oro_menu_config:
             display: false
             extras:
                 position:    70
-                routes:      ['/^orocrm_sales_b2bcustomer/']
+                routes:      ['orocrm_sales_b2bcustomer_*']
                 description: 'orocrm.sales.menu.b2bcustomer_list.description'
 
         shortcut_list_b2bcustomers:
@@ -138,3 +138,5 @@ oro_titles:
 
     orocrm_sales_b2bcustomer_index: ~
     orocrm_sales_b2bcustomer_view:   '%%b2bcustomer.name%%'
+    orocrm_sales_b2bcustomer_create: 'Create B2B Customer'
+    orocrm_sales_b2bcustomer_update: '%%b2bcustomer.name%% - Edit'

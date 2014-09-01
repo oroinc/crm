@@ -756,4 +756,14 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
         $defaultStatus   = $em->getReference('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
         $this->setStatus($defaultStatus);
     }
+
+    /**
+     * Remove Customer
+     *
+     * @return Lead
+     */
+    public function removeCustomer()
+    {
+        $this->customer = null;
+    }
 }

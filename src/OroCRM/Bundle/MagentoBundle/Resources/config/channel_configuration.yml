@@ -58,7 +58,6 @@ orocrm_channel:
             label: Magento
             entities:
                 - OroCRM\Bundle\MagentoBundle\Entity\Cart
-                - OroCRM\Bundle\MagentoBundle\Entity\Customer
                 - OroCRM\Bundle\MagentoBundle\Entity\Order
             integration_type: magento
             customer_identity: OroCRM\Bundle\MagentoBundle\Entity\Customer
