@@ -56,7 +56,7 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
                 -
                     name: name
                     target_type: text
-                    target_fields: [name]
+                    target_fields: [accountName]
         -
             name:                   contact
             relation_type:          many-to-one
@@ -98,7 +98,7 @@ OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
                 -
                     name: name
                     target_type: text
-                    target_fields: [name]
+                    target_fields: [leadName]
                 -
                     name: namePrefix
                     target_type: text
@@ -126,7 +126,7 @@ OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
                 -
                     name: name
                     target_type: text
-                    target_fields: [name]
+                    target_fields: [opportunityName]
 
 OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
     alias:                          oro_crm_b2bcustomer
