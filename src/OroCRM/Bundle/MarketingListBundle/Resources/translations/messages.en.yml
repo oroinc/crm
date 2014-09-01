@@ -13,6 +13,7 @@ orocrm:
             unsubscribed: %entityName% unsubscribed
             subscribed: %entityName% subscribed
             removed: %entityName% removed from list
+            unremoved: %entityName% unremoved from list
 
         segment: Marketing List %name% segment
 

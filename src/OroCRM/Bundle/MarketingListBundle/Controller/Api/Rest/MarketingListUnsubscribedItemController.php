@@ -3,17 +3,18 @@
 namespace OroCRM\Bundle\MarketingListBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
-use Symfony\Component\HttpFoundation\Response;
-
+use FOS\Rest\Util\Codes;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\Rest\Util\Codes;
 
-use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+
+use Symfony\Component\HttpFoundation\Response;
+
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem;
 
@@ -131,6 +132,7 @@ class MarketingListUnsubscribedItemController extends RestController implements 
                 'entityId'      => $id
             )
         );
+
         if ($forRemove) {
             try {
                 $item = $forRemove[0];

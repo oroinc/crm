@@ -186,7 +186,7 @@ datagrid:
                 icon:         minus
                 acl_recource: orocrm_marketinglist_unsubscribed_item_create
             remove:
-                type:         delete
+                type:         ajaxdelete
                 label:        orocrm.marketinglist.action.remove
                 link:         remove_link
                 icon:         remove
@@ -243,7 +243,7 @@ datagrid:
                 params: [ marketingList, id ]
         actions:
             unremove:
-                type:         delete
+                type:         ajaxdelete
                 label:        orocrm.marketinglist.action.unremove
                 link:         unremove_link
                 icon:         undo

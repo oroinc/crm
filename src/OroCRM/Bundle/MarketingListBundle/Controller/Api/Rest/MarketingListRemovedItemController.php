@@ -2,18 +2,21 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Controller\Api\Rest;
 
+use Doctrine\ORM\EntityNotFoundException;
+
 use FOS\Rest\Util\Codes;
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem;
-use Symfony\Component\HttpFoundation\Response;
-
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 
-use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+
+use Symfony\Component\HttpFoundation\Response;
+
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem;
 
 /**
  * @Rest\RouteResource("marketinglist_removeditem")
@@ -59,7 +62,7 @@ class MarketingListRemovedItemController extends RestController implements Class
      * Returns
      * - HTTP_OK (200)
      *
-     * @Rest\Delete(
+     * @Rest\Get(
      *      "/marketinglist/{marketingList}/remove/{id}"
      * )
      * @ApiDoc(description="Remove marketing list entity item", resource=true)
@@ -109,7 +112,7 @@ class MarketingListRemovedItemController extends RestController implements Class
      * @param MarketingList $marketingList
      * @param int           $id
      *
-     * @Rest\Delete(
+     * @Rest\Get(
      *      "/marketinglist/{marketingList}/unremove/{id}"
      * )
      * @ApiDoc(
@@ -129,13 +132,37 @@ class MarketingListRemovedItemController extends RestController implements Class
                 'entityId'      => $id
             )
         );
-        if ($forRemove) {
-            $item = $forRemove[0];
 
-            return $this->handleDeleteRequest($item->getId());
+        if ($forRemove) {
+            try {
+                $item = $forRemove[0];
+                $this->getDeleteHandler()->handleDelete($item->getId(), $this->getManager());
+            } catch (EntityNotFoundException $notFoundEx) {
+                return $this->handleView($this->view(null, Codes::HTTP_NOT_FOUND));
+            } catch (ForbiddenException $forbiddenEx) {
+                return $this->handleView(
+                    $this->view(['reason' => $forbiddenEx->getReason()], Codes::HTTP_FORBIDDEN)
+                );
+            }
         }
 
-        return $this->handleView($this->view(null, Codes::HTTP_NOT_FOUND));
+        $entityName = $this
+            ->get('oro_entity_config.provider.entity')
+            ->getConfig($marketingList->getEntity())
+            ->get('label');
+
+        return $this->handleView(
+            $this->view(
+                array(
+                    'successful' => true,
+                    'message'    => $this->get('translator')->trans(
+                        'orocrm.marketinglist.controller.unremoved',
+                        ['%entityName%' => $this->get('translator')->trans($entityName)]
+                    )
+                ),
+                Codes::HTTP_OK
+            )
+        );
     }
 
     /**
