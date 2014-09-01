@@ -2,14 +2,16 @@
 
 namespace OroCRM\Bundle\ContactBundle\Form\Handler;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\UnitOfWork;
+
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\TagBundle\Entity\TagManager;
+use Oro\Bundle\TagBundle\Form\Handler\TagHandlerInterface;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\TagBundle\Form\Handler\TagHandlerInterface;
 
 class ContactHandler implements TagHandlerInterface
 {
@@ -24,7 +26,7 @@ class ContactHandler implements TagHandlerInterface
     protected $request;
 
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
     protected $manager;
 
@@ -34,12 +36,11 @@ class ContactHandler implements TagHandlerInterface
     protected $tagManager;
 
     /**
-     *
-     * @param FormInterface $form
-     * @param Request       $request
-     * @param ObjectManager $manager
+     * @param FormInterface          $form
+     * @param Request                $request
+     * @param EntityManagerInterface $manager
      */
-    public function __construct(FormInterface $form, Request $request, ObjectManager $manager)
+    public function __construct(FormInterface $form, Request $request, EntityManagerInterface $manager)
     {
         $this->form    = $form;
         $this->request = $request;
@@ -50,6 +51,7 @@ class ContactHandler implements TagHandlerInterface
      * Process form
      *
      * @param  Contact $entity
+     *
      * @return bool True on successful processing, false otherwise
      */
     public function process(Contact $entity)
@@ -84,8 +86,32 @@ class ContactHandler implements TagHandlerInterface
         $this->removeAccounts($entity, $removeAccounts);
 
         $this->manager->persist($entity);
+        $this->setUpdatedAt($entity);
+
         $this->manager->flush();
         $this->tagManager->saveTagging($entity);
+    }
+
+    /**
+     * Set updated at to current DateTime when related entities updated
+     * TODO: consider refactoring of this feature to make it applicable to all entities
+     *
+     * @param Contact $entity
+     */
+    protected function setUpdatedAt(Contact $entity)
+    {
+        /** @var UnitOfWork $uow */
+        $uow = $this->manager->getUnitOfWork();
+        $uow->computeChangeSets();
+
+        $isEntityChanged   = count($uow->getEntityChangeSet($entity)) > 0;
+        $isRelationChanged = count($uow->getScheduledEntityUpdates()) > 0 ||
+            count($uow->getScheduledCollectionUpdates()) > 0;
+
+        if (false === $isEntityChanged && $isRelationChanged) {
+            $entity->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+            $this->manager->persist($entity);
+        }
     }
 
     /**
