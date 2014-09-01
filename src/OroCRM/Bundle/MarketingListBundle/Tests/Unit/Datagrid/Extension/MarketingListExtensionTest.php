@@ -116,22 +116,38 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $dqlParts
+     * @param bool  $isMixin
+     * @param bool  $expected
+     *
      * @dataProvider dataSourceDataProvider
      */
-    public function testVisitDatasource($dqlParts)
+    public function testVisitDatasource($dqlParts, $isMixin, $expected)
     {
         $config = $this
             ->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->repository
+            ->expects($this->any())
+            ->method('findOneBy')
+            ->will($this->returnValue(new \stdClass()));
+
         $id = '1';
 
         $config
             ->expects($this->any())
             ->method('offsetGetByPath')
-            ->with($this->equalTo('[name]'))
-            ->will($this->returnValue(Segment::GRID_PREFIX . $id));
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['[source][type]', null, OrmDatasource::TYPE],
+                        ['[name]', null, Segment::GRID_PREFIX . $id],
+                        [MarketingListExtension::OPTIONS_MIXIN_PATH, false, $isMixin]
+                    ]
+                )
+            );
 
         $dataSource = $this
             ->getMockBuilder('Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource')
@@ -143,68 +159,78 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $qb
+            ->expects($this->any())
+            ->method('from')
+            ->will($this->returnSelf());
+
+        $qb
+            ->expects($this->any())
+            ->method('leftJoin')
+            ->will($this->returnSelf());
+
+        $qb
+            ->expects($this->any())
+            ->method('select')
+            ->will($this->returnSelf());
+
+        $expr = $this
+            ->getMockBuilder('Doctrine\ORM\Query\Expr')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $qb
+            ->expects($this->any())
+            ->method('expr')
+            ->will($this->returnValue($expr));
+
+        $orX = $this
+            ->getMockBuilder('Doctrine\ORM\Query\Expr')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $expr
+            ->expects($this->any())
+            ->method('orX')
+            ->will($this->returnValue($orX));
+
         if (!empty($dqlParts['where'])) {
             /** @var Andx $where */
             $where = $dqlParts['where'];
             $parts = $where->getParts();
-            foreach ($parts as $part) {
-                $expr = $this
-                    ->getMockBuilder('Doctrine\ORM\Query\Expr')
-                    ->disableOriginalConstructor()
-                    ->getMock();
 
-                $qb
-                    ->expects($this->any())
-                    ->method('expr')
-                    ->will($this->returnValue($expr));
-
-                $orX = $this
-                    ->getMockBuilder('Doctrine\ORM\Query\Expr')
-                    ->disableOriginalConstructor()
-                    ->getMock();
-
-                $qb
-                    ->expects($this->any())
-                    ->method('from')
-                    ->will($this->returnSelf());
-
-                $qb
-                    ->expects($this->any())
-                    ->method('leftJoin')
-                    ->will($this->returnSelf());
-
-                $qb
-                    ->expects($this->any())
-                    ->method('select')
-                    ->will($this->returnSelf());
-
-                $expr
-                    ->expects($this->any())
-                    ->method('orX')
-                    ->will($this->returnValue($orX));
-
+            if ($expected) {
                 $qb
                     ->expects($this->exactly(sizeof($parts)))
                     ->method('andWhere');
+            }
 
-                if (!is_string($part)) {
-                    $qb
-                        ->expects($this->once())
-                        ->method('setParameter')
-                        ->with($this->equalTo('segmentId'), $this->equalTo($id));
+            $functionParts = array_filter(
+                $parts,
+                function ($part) {
+                    return !is_string($part);
                 }
+            );
+
+            if ($functionParts && $expected) {
+                $qb
+                    ->expects($this->once())
+                    ->method('setParameter')
+                    ->with($this->equalTo('segmentId'), $this->equalTo($id));
             }
         }
 
-        $qb
-            ->expects($this->once())
-            ->method('getDQLParts')
-            ->will($this->returnValue($dqlParts));
+        if ($expected) {
+            $qb
+                ->expects($this->once())
+                ->method('getDQLParts')
+                ->will($this->returnValue($dqlParts));
 
-        $dataSource
-            ->expects($this->once())
-            ->method('getQueryBuilder')
-            ->will($this->returnValue($qb));
+            $dataSource
+                ->expects($this->once())
+                ->method('getQueryBuilder')
+                ->will($this->returnValue($qb));
+        }
 
         $this->extension->visitDatasource($config, $dataSource);
     }
@@ -215,11 +241,16 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
     public function dataSourceDataProvider()
     {
         return [
-            [['where' => []]],
-            [['where' => new Andx()]],
-            [['where' => new Andx(['test'])]],
-            [['where' => new Andx([new Func('func condition', ['argument'])])]],
-            [['where' => new Andx(['test', new Func('func condition', ['argument'])])]],
+            [['where' => []], false, false],
+            [['where' => []], true, true],
+            [['where' => new Andx()], false, false],
+            [['where' => new Andx()], true, true],
+            [['where' => new Andx(['test'])], false, false],
+            [['where' => new Andx(['test'])], true, true],
+            [['where' => new Andx([new Func('func condition', ['argument'])])], false, false],
+            [['where' => new Andx([new Func('func condition', ['argument'])])], true, true],
+            [['where' => new Andx(['test', new Func('func condition', ['argument'])])], false, false],
+            [['where' => new Andx(['test', new Func('func condition', ['argument'])])], true, true],
         ];
     }
 

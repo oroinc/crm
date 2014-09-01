@@ -11,6 +11,8 @@ use OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper;
 
 class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
 {
+    const MIXIN_NAME = 'new-mixin-for-test-grid';
+
     /**
      * @var MarketingListItemsListener
      */
@@ -70,10 +72,15 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getName')
             ->will($this->returnValue($gridName));
 
+        $parameters = [];
+        if ($hasParameter) {
+            $parameters = [MarketingListItemsListener::MIXIN => self::MIXIN_NAME];
+        }
+
         $event
             ->expects($this->once())
             ->method('getParameters')
-            ->will($this->returnValue(new ParameterBag([MarketingList::MARKETING_LIST_MARKER => $hasParameter])));
+            ->will($this->returnValue(new ParameterBag($parameters)));
 
         if ($hasParameter) {
             $this->segmentHelper
@@ -93,7 +100,7 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
             $this->dataGridHelper
                 ->expects($this->once())
                 ->method('extendConfiguration')
-                ->with($this->equalTo($config), $this->equalTo(MarketingListItemsListener::MIXIN_NAME));
+                ->with($this->equalTo($config), $this->equalTo(self::MIXIN_NAME));
         } else {
             $this->dataGridHelper
                 ->expects($this->never())
@@ -154,10 +161,15 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getName')
             ->will($this->returnValue($gridName));
 
+        $parameters = [];
+        if ($hasParameter) {
+            $parameters = [MarketingListItemsListener::MIXIN => self::MIXIN_NAME];
+        }
+
         $datagrid
             ->expects($this->once())
             ->method('getParameters')
-            ->will($this->returnValue(new ParameterBag([MarketingList::MARKETING_LIST_MARKER => $hasParameter])));
+            ->will($this->returnValue(new ParameterBag($parameters)));
 
         /** @var MarketingList $marketingList */
         if ($hasParameter) {
@@ -227,6 +239,77 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
             [Segment::GRID_PREFIX . '1', false, true],
             [Segment::GRID_PREFIX . '1', true, false],
             [Segment::GRID_PREFIX . '1', true, true],
+        ];
+    }
+
+    /**
+     * @param string $gridName
+     * @param bool   $hasParameter
+     * @param bool   $isApplicable
+     * @param bool   $expected
+     *
+     * @dataProvider onBuildBeforeDataProvider
+     */
+    public function testOnBuildBefore($gridName, $hasParameter, $isApplicable, $expected)
+    {
+        $event = $this
+            ->getMockBuilder('Oro\Bundle\DataGridBundle\Event\BuildBefore')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $datagrid = $this->getMock('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface');
+
+        $event
+            ->expects($this->once())
+            ->method('getDatagrid')
+            ->will($this->returnValue($datagrid));
+
+        $parameters = [];
+        if ($hasParameter) {
+            $parameters = [MarketingListItemsListener::MIXIN => self::MIXIN_NAME];
+
+            $this->segmentHelper
+                ->expects($this->once())
+                ->method('getSegmentIdByGridName')
+                ->with($this->equalTo($gridName))
+                ->will($this->returnValue((int)$isApplicable));
+
+            $this->segmentHelper
+                ->expects($this->any())
+                ->method('getMarketingListBySegment')
+                ->with($this->equalTo((int)$isApplicable))
+                ->will($this->returnValue(new MarketingList()));
+        }
+
+        $datagrid
+            ->expects($this->once())
+            ->method('getParameters')
+            ->will($this->returnValue(new ParameterBag($parameters)));
+
+        $datagrid
+            ->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue($gridName));
+
+        if ($expected) {
+            $event
+                ->expects($this->once())
+                ->method('stopPropagation');
+        }
+
+        $this->listener->onBuildBefore($event);
+    }
+
+    /**
+     * @return array
+     */
+    public function onBuildBeforeDataProvider()
+    {
+        return [
+            ['gridName', false, false, false],
+            ['gridName', false, true, false],
+            ['gridName', true, false, false],
+            ['gridName', true, true, true],
         ];
     }
 }
