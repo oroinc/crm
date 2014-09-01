@@ -81,6 +81,7 @@ WHERE
     bc.name = mainEntity.name
     AND bc.account_id = mainEntity.account_id
     AND bc.user_owner_id = mainEntity.user_owner_id
+LIMIT 1
 DQL;
         $leadUpdateQuery = <<<DQL
 UPDATE orocrm_sales_lead mainEntity SET customer_id = (%1\$s) WHERE EXISTS (%1\$s)

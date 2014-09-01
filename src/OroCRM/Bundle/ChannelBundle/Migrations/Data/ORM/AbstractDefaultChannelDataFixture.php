@@ -4,9 +4,11 @@ namespace OroCRM\Bundle\ChannelBundle\Migrations\Data\ORM;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Oro\Bundle\BatchBundle\ORM\Query\QueryCountCalculator;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
@@ -14,7 +16,7 @@ use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
-abstract class AbstractDefaultChannelDataFixture extends AbstractFixture
+abstract class AbstractDefaultChannelDataFixture extends AbstractFixture implements ContainerAwareInterface
 {
     const BATCH_SIZE = 50;
 
@@ -55,7 +57,8 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture
      */
     protected function fillChannelToEntity(Channel $channel, $entity)
     {
-        if (!in_array('OroCRM\\Bundle\\ChannelBundle\\Model\\ChannelAwareInterface', class_implements($entity))) {
+        $interfaces = class_implements($entity) ?: [];
+        if (!in_array('OroCRM\\Bundle\\ChannelBundle\\Model\\ChannelAwareInterface', $interfaces)) {
             return;
         }
 
@@ -73,19 +76,19 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture
                 $writeCount++;
 
                 if (!$data->getDataChannel()) {
-                    $data->setDataChannel($channel);
+                    $data->setDataChannel($this->em->getReference(ClassUtils::getClass($channel), $channel->getId()));
                     $toWrite[] = $data;
                 }
 
                 if (0 === $writeCount % static::BATCH_SIZE) {
-                    $this->write($this->em, $toWrite);
+                    $this->write($toWrite);
 
                     $toWrite = [];
                 }
             }
 
             if (count($toWrite) > 0) {
-                $this->write($this->em, $toWrite);
+                $this->write($toWrite);
             }
 
             $this->em->commit();
@@ -107,6 +110,8 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture
             $this->em->persist($item);
         }
         $this->em->flush();
-        $this->em->clear();
+        foreach ($items as $item) {
+            $this->em->detach($item);
+        }
     }
 }

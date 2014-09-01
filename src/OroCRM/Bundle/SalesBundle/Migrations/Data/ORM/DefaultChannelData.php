@@ -4,12 +4,10 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
 
-class DefaultChannelData extends AbstractDefaultChannelDataFixture implements ContainerAwareInterface
+class DefaultChannelData extends AbstractDefaultChannelDataFixture
 {
     const B2B_CHANNEL_TYPE = 'b2b';
 
@@ -18,12 +16,13 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture implements Co
      */
     public function load(ObjectManager $manager)
     {
-        $settingsProvider = $this->container->get('orocrm_channel.provider.settings_provider');
+        $builder = $this->container->get('orocrm_channel.builder.factory')->createBuilder();
+        $builder->setChannelType(self::B2B_CHANNEL_TYPE);
+        $builder->setStatus(Channel::STATUS_ACTIVE);
+        $builder->setEntities();
 
-        $entities = $settingsProvider->getEntitiesByChannelType(self::B2B_CHANNEL_TYPE);
-        $identity = $settingsProvider->getCustomerIdentityFromConfig(self::B2B_CHANNEL_TYPE);
-        array_unshift($entities, $identity);
-        $entities = array_unique($entities);
+        $channel  = $builder->getChannel();
+        $entities = $channel->getEntities();
 
         $shouldBeCreated = false;
         foreach ($entities as $entity) {
@@ -35,23 +34,6 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture implements Co
         }
 
         if ($shouldBeCreated) {
-            $owner = $this->em->getRepository('OroOrganizationBundle:Organization')
-                ->createQueryBuilder('o')
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getSingleResult();
-
-            $channel = new Channel();
-            $channel->setChannelType(self::B2B_CHANNEL_TYPE);
-            $channel->setEntities($entities);
-            $channel->setStatus(Channel::STATUS_ACTIVE);
-            $channel->setCustomerIdentity($identity);
-            $channel->setName(ucfirst(self::B2B_CHANNEL_TYPE . ' channel'));
-
-            if ($owner) {
-                $channel->setOwner($owner);
-            }
-
             $this->em->persist($channel);
             $this->em->flush();
 
