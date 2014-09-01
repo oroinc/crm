@@ -154,45 +154,7 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $qb = $this
-            ->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $qb
-            ->expects($this->any())
-            ->method('from')
-            ->will($this->returnSelf());
-
-        $qb
-            ->expects($this->any())
-            ->method('leftJoin')
-            ->will($this->returnSelf());
-
-        $qb
-            ->expects($this->any())
-            ->method('select')
-            ->will($this->returnSelf());
-
-        $expr = $this
-            ->getMockBuilder('Doctrine\ORM\Query\Expr')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $qb
-            ->expects($this->any())
-            ->method('expr')
-            ->will($this->returnValue($expr));
-
-        $orX = $this
-            ->getMockBuilder('Doctrine\ORM\Query\Expr')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $expr
-            ->expects($this->any())
-            ->method('orX')
-            ->will($this->returnValue($orX));
+        $qb = $this->getQbMock();
 
         if (!empty($dqlParts['where'])) {
             /** @var Andx $where */
@@ -233,6 +195,54 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->extension->visitDatasource($config, $dataSource);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getQbMock()
+    {
+        $qb = $this
+            ->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $qb
+            ->expects($this->any())
+            ->method('from')
+            ->will($this->returnSelf());
+
+        $qb
+            ->expects($this->any())
+            ->method('leftJoin')
+            ->will($this->returnSelf());
+
+        $qb
+            ->expects($this->any())
+            ->method('select')
+            ->will($this->returnSelf());
+
+        $expr = $this
+            ->getMockBuilder('Doctrine\ORM\Query\Expr')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $qb
+            ->expects($this->any())
+            ->method('expr')
+            ->will($this->returnValue($expr));
+
+        $orX = $this
+            ->getMockBuilder('Doctrine\ORM\Query\Expr')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $expr
+            ->expects($this->any())
+            ->method('orX')
+            ->will($this->returnValue($orX));
+
+        return $qb;
     }
 
     /**

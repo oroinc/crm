@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Functional\Datagrid;
+namespace OroCRM\Bundle\MarketingListBundle\Tests\Functional\Controller\Api\Rest;
 
 use FOS\Rest\Util\Codes;
 
@@ -16,7 +16,7 @@ class MarketingListRemovedItemControllerTest extends WebTestCase
         $this->initClient([], $this->generateWsseAuthHeader());
 
         $this->loadFixtures(
-            ['OroCRM\Bundle\MarketingListBundle\Tests\Functional\Controller\Api\Rest\DataFixtures\LoadMarketingListData']
+            [ __NAMESPACE__ . '\\DataFixtures\\LoadMarketingListData']
         );
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Functional\Datagrid;
+namespace OroCRM\Bundle\MarketingListBundle\Tests\Functional\Controller\Api\Rest;
 
 use FOS\Rest\Util\Codes;
 
