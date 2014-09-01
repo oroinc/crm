@@ -6,6 +6,7 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\SecurityBundle\Migrations\Schema\UpdateOwnershipTypeQuery;
 
 class OroCRMAccountBundle implements Migration
 {
@@ -15,6 +16,16 @@ class OroCRMAccountBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         self::addOrganization($schema);
+        //Add organization fields to ownership entity config
+        $queries->addQuery(
+            new UpdateOwnershipTypeQuery(
+                'OroCRM\Bundle\AccountBundle\Entity\Account',
+                [
+                    'organization_field_name' => 'organization',
+                    'organization_column_name' => 'organization_id'
+                ]
+            )
+        );
     }
 
     /**

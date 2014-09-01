@@ -84,6 +84,7 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $channel->setName(self::CHANNEL_NAME);
         $channel->setEnabled(false);
         $channel->setTransport($transport);
+        $channel->setOrganization($this->organization);
 
         $om->persist($channel);
 
