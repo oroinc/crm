@@ -18,6 +18,7 @@ use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_5\OroCRMSalesBundle as SalesNoteMigration;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_6\OroCRMSalesBundle as SalesActivityMigration;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_9\OroCRMSalesBundle as SalesOrganizations;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
 
 /**
@@ -88,7 +89,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_8';
+        return 'v1_9';
     }
 
     /**
@@ -113,6 +114,8 @@ class OroCRMSalesBundleInstaller implements
         SalesNoteMigration::addNoteAssociations($schema, $this->noteExtension);
         SalesActivityMigration::addActivityAssociations($schema, $this->activityExtension);
         OpportunityAttachment::addOpportunityAttachment($schema, $this->attachmentExtension);
+
+        SalesOrganizations::addOrganization($schema);
     }
 
     /**
