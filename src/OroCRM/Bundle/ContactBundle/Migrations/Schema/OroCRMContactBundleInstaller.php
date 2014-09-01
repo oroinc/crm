@@ -16,6 +16,7 @@ use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_4\OroCRMContactBundle as NoteMigration;
 use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_5\OroCRMContactBundle as AttachmentMigration;
 use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_6\OroCRMContactBundle as ActivityMigration;
+use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_8\OroCRMContactBundle as ContactOrganizations;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -71,7 +72,7 @@ class OroCRMContactBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_7';
+        return 'v1_8';
     }
 
     /**
@@ -103,6 +104,7 @@ class OroCRMContactBundleInstaller implements
         NoteMigration::addNoteAssociations($schema, $this->noteExtension);
         AttachmentMigration::addPhotoToContact($schema, $this->attachmentExtension);
         ActivityMigration::addActivityAssociations($schema, $this->activityExtension);
+        ContactOrganizations::addOrganization($schema);
     }
 
     /**
