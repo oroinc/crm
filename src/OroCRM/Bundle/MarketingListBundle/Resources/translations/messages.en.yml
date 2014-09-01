@@ -16,7 +16,7 @@ orocrm:
 
         segment: Marketing List %name% segment
 
-        update_list: Update List
+        refresh_list: Refresh List
 
         entity:
             label:   Entity
@@ -38,6 +38,7 @@ orocrm:
             view: View
             contactedTimes: Number of times contacted
             lastContactedAt: Last contacted at
+            refreshedOn: Refreshed on
 
         entity_config:
             choices:
