@@ -6,6 +6,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -16,7 +17,9 @@ use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
-abstract class AbstractDefaultChannelDataFixture extends AbstractFixture implements ContainerAwareInterface
+abstract class AbstractDefaultChannelDataFixture extends AbstractFixture implements
+    ContainerAwareInterface,
+    DependentFixtureInterface
 {
     const BATCH_SIZE = 50;
 
@@ -33,6 +36,14 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
     {
         $this->container = $container;
         $this->em        = $container->get('doctrine')->getManager();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies()
+    {
+        return ['Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData'];
     }
 
     /**
@@ -57,7 +68,7 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
      */
     protected function fillChannelToEntity(Channel $channel, $entity)
     {
-        $interfaces = class_implements($entity) ?: [];
+        $interfaces = class_implements($entity) ? : [];
         if (!in_array('OroCRM\\Bundle\\ChannelBundle\\Model\\ChannelAwareInterface', $interfaces)) {
             return;
         }
