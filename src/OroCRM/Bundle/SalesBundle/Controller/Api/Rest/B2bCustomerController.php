@@ -57,7 +57,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      */
     public function getForm()
     {
-        throw new \BadMethodCallException('Form is not available.');
+        throw new \BadMethodCallException('FormInterface is not available.');
     }
 
     /**

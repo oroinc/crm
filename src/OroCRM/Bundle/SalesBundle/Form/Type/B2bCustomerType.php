@@ -29,7 +29,6 @@ class B2bCustomerType extends AbstractType
      */
     protected $nameFormatter;
 
-
     /**
      * @param Router        $router
      * @param NameFormatter $nameFormatter
