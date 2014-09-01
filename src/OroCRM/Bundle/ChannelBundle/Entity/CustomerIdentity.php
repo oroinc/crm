@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ChannelBundle\Entity;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ExtendCustomerIdentity;
@@ -30,7 +31,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  *  }
  * )
  */
-class CustomerIdentity extends ExtendCustomerIdentity
+class CustomerIdentity extends ExtendCustomerIdentity implements ChannelAwareInterface
 {
     use ChannelEntityTrait;
 

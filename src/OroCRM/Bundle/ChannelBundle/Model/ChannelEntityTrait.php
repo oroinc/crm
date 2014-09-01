@@ -15,7 +15,7 @@ trait ChannelEntityTrait
     protected $dataChannel;
 
     /**
-     * @param Channel $channel
+     * {@inheritdoc}
      */
     public function setDataChannel(Channel $channel)
     {
@@ -23,7 +23,7 @@ trait ChannelEntityTrait
     }
 
     /**
-     * @return Channel
+     * {@inheritdoc}
      */
     public function getDataChannel()
     {

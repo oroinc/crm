@@ -4,51 +4,34 @@ namespace OroCRM\Bundle\ChannelBundle\Migrations\Data\ORM;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\AbstractFixture;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
-class DefaultChannelFixture extends AbstractFixture implements ContainerAwareInterface
+class DefaultChannelData extends AbstractDefaultChannelDataFixture implements ContainerAwareInterface
 {
-    /** @var ContainerInterface */
-    protected $container;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
-        /** @var EntityManager $em */
-        $em               = $this->container->get('doctrine')->getManager();
         $settingsProvider = $this->container->get('orocrm_channel.provider.settings_provider');
 
-        $this->createChannelsForIntegrations($em, $settingsProvider);
-        $this->createChannelsForExistingEntities($em, $settingsProvider);
+        $this->createChannelsForIntegrations($settingsProvider);
     }
 
     /**
-     * @param EntityManager    $em
      * @param SettingsProvider $settingsProvider
      */
-    protected function createChannelsForIntegrations(EntityManager $em, SettingsProvider $settingsProvider)
+    protected function createChannelsForIntegrations(SettingsProvider $settingsProvider)
     {
         // create channels for integrations
         $types        = $settingsProvider->getSourceIntegrationTypes();
-        $integrations = $em->getRepository('OroIntegrationBundle:Channel')
+        $integrations = $this->em->getRepository('OroIntegrationBundle:Channel')
             ->findBy(['type' => $types]);
 
         /** @var Integration $integration */
@@ -75,7 +58,7 @@ class DefaultChannelFixture extends AbstractFixture implements ContainerAwareInt
             $connectors = array_diff($integration->getConnectors(), $connectors);
             $owner      = $integration->getOrganization();
             if (!$owner) {
-                $owner = $em->getRepository('OroOrganizationBundle:Organization')
+                $owner = $this->em->getRepository('OroOrganizationBundle:Organization')
                     ->createQueryBuilder('o')
                     ->setMaxResults(1)
                     ->getQuery()
@@ -104,19 +87,11 @@ class DefaultChannelFixture extends AbstractFixture implements ContainerAwareInt
             $integration->setEditMode(Integration::EDIT_MODE_DISALLOW);
             $integration->setConnectors($connectors);
 
-            $em->persist($channel);
+            $this->em->persist($channel);
+            $this->em->flush();
+
+            $this->fillChannelToEntity($channel, $entities);
         }
-
-        $em->flush();
-    }
-
-    /**
-     * @param EntityManager    $em
-     * @param SettingsProvider $settingsProvider
-     */
-    protected function createChannelsForExistingEntities(EntityManager $em, SettingsProvider $settingsProvider)
-    {
-//        $settingsProvider->getC
     }
 
     /**

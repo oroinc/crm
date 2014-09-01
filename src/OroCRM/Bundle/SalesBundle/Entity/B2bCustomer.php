@@ -15,6 +15,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendB2bCustomer;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @ORM\Entity()
@@ -43,7 +44,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
  *      }
  * )
  */
-class B2bCustomer extends ExtendB2bCustomer implements Taggable
+class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInterface
 {
     use ChannelEntityTrait;
 

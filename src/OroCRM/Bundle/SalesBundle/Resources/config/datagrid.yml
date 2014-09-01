@@ -648,7 +648,7 @@ datagrid:
             name:
                 label:          orocrm.sales.b2bcustomer.name.label
             channelName:
-                label:          orocrm.sales.b2bcustomer.channel.label
+                label:          orocrm.sales.b2bcustomer.data_channel.label
             createdAt:
                 label:          oro.ui.created_at
                 frontend_type:  datetime

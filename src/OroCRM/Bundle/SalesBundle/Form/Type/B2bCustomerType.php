@@ -86,11 +86,11 @@ class B2bCustomerType extends AbstractType
             ]
         );
         $builder->add(
-            'channel',
+            'dataChannel',
             'orocrm_channel_select_type',
             [
                 'required' => true,
-                'label'    => 'orocrm.channel.entity_label'
+                'label'    => 'orocrm.sales.b2bcustomer.data_channel.label'
             ]
         );
         $builder->add(
@@ -156,15 +156,15 @@ class B2bCustomerType extends AbstractType
             'orocrm_sales_widget_leads_assign',
             array('id' => $b2bcustomer->getId())
         );
-        $view->children['leads']->vars['initial_elements']
-                     = $this->getInitialElements($b2bcustomer->getLeads());
+        $view->children['leads']->vars['initial_elements'] = $this->getInitialElements($b2bcustomer->getLeads());
 
         $view->children['opportunities']->vars['grid_url'] = $this->router->generate(
             'orocrm_sales_widget_opportunities_assign',
             array('id' => $b2bcustomer->getId())
         );
-        $view->children['opportunities']->vars['initial_elements']
-            = $this->getInitialOpportunities($b2bcustomer->getOpportunities());
+        $view->children['opportunities']->vars['initial_elements'] = $this->getInitialOpportunities(
+            $b2bcustomer->getOpportunities()
+        );
     }
 
     /**

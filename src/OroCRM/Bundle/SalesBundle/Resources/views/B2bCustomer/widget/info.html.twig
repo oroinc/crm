@@ -23,7 +23,7 @@
             {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.contact.label'|trans, contactView) }}
 
             {%- if resource_granted('orocrm_channel_view') and entity.dataChannel -%}
-                {% set channelView = '<a href="' ~ path('orocrm_channel_view', {'id': entity.dataChannel.id}) ~ '">' ~ entity.channel.name|escape ~ '</a>' %}
+                {% set channelView = '<a href="' ~ path('orocrm_channel_view', {'id': entity.dataChannel.id}) ~ '">' ~ entity.dataChannel.name|escape ~ '</a>' %}
             {%- else -%}
                 {% set channelView = entity.dataChannel ? entity.dataChannel : '' %}
             {%- endif -%}
