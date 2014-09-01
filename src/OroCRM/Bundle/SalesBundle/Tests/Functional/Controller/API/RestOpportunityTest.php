@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\API;
+namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -18,36 +18,17 @@ class RestOpportunityTest extends WebTestCase
         );
     }
 
-    protected function preAccountData()
-    {
-        $request = array(
-            "account" => array (
-                "name" => 'Account_name_opportunity',
-                "owner" => '1',
-            )
-        );
-        $this->client->request(
-            'POST',
-            $this->getUrl('oro_api_post_account'),
-            $request
-        );
-
-        $result = $this->getJsonResponseContent($this->client->getResponse(), 201);
-
-        return $result['id'];
-    }
     /**
      * @return array
      */
     public function testPostOpportunity()
     {
-        $request = array(
-           "opportunity" => array(
+        $request = [
+           "opportunity" => [
                'name' => 'opportunity_name_' . mt_rand(1, 500),
-               'owner' => '1',
-               'account' => $this->preAccountData()
-           )
-        );
+               'owner' => '1'
+           ]
+        ];
 
         $this->client->request(
             'POST',
@@ -79,7 +60,7 @@ class RestOpportunityTest extends WebTestCase
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['opportunity']['name'], $result['name']);
         $this->assertEquals('In Progress', $result['status']);
-        $this->assertEquals('Account_name_opportunity', $result['account']);
+        //$this->assertEquals('B2bCustomer_name_opportunity', $result['cusotmer']);
         // TODO: incomplete CRM-816
         //$this->assertEquals($request['opportunity']['owner'], $result['owner']['id']);
         return $request;

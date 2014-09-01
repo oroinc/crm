@@ -7,11 +7,18 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtureInterface
 {
+    /** @var array */
+    protected $accountIds;
+
+    /** @var int */
+    protected $accountsCount;
+
     /**
      * {@inheritdoc}
      */
@@ -66,6 +73,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
 
         $customer->setName($data['Company']);
         $customer->setOwner($this->getRandomUserReference());
+        $customer->setAccount($this->getAccount());
 
         $address->setCity($data['City']);
         $address->setStreet($data['StreetAddress']);
@@ -99,5 +107,50 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
                 ->getQuery()
                 ->getResult();
         }
+    }
+
+    /**
+     * @return Account
+     */
+    private function getAccount()
+    {
+        if (empty($this->accountIds)) {
+            $this->accountIds = $this->loadAccountsIds();
+            shuffle($this->accountIds);
+            $this->accountsCount = count($this->accountIds) - 1;
+        }
+
+        $random = rand(0, $this->accountsCount);
+
+        return $this->getAccountReference($this->accountIds[$random]);
+    }
+
+    /**
+     * @return array
+     */
+    private function loadAccountsIds()
+    {
+        $items = $this->em->createQueryBuilder()
+            ->from('OroCRMAccountBundle:Account', 'a')
+            ->select('a.id')
+            ->getQuery()
+            ->getArrayResult();
+
+        return array_map(
+            function ($item) {
+                return $item['id'];
+            },
+            $items
+        );
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return Account
+     */
+    private  function getAccountReference($id)
+    {
+        return $this->em->getReference('OroCRMAccountBundle:Account', $id);
     }
 }

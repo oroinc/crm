@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional;
+namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller;
 
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
@@ -16,7 +16,7 @@ class LeadControllersTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient(
-            array(),
+            [],
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
     }
