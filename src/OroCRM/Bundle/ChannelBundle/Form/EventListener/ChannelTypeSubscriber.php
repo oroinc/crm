@@ -60,13 +60,14 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         $datasourceModifier = $this->getDatasourceModifierClosure($data->getChannelType());
         $datasourceModifier($form);
 
+        $customerIdentity = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
+        $data->setCustomerIdentity($customerIdentity);
+        $this->addEnititesToChannel($data, [$customerIdentity]);
+
         // pre-fill entities for new instances
         if (!$data->getId()) {
             $channelTypeEntities = $this->settingsProvider->getEntitiesByChannelType($data->getChannelType());
-            $entities            = $data->getEntities();
-            $entities            = is_array($entities) ? $entities : [];
-            $combinedEntities    = array_unique(array_merge($entities, $channelTypeEntities));
-            $data->setEntities($combinedEntities);
+            $this->addEnititesToChannel($data, $channelTypeEntities);
         }
     }
 
@@ -90,9 +91,6 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                 'channelType',
                 ['required' => false, 'disabled' => true]
             );
-        } else {
-            $customerIdentity = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
-            $data->setCustomerIdentity($customerIdentity);
         }
     }
 
@@ -157,6 +155,19 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
     {
         $channelTypes = $this->settingsProvider->getChannelTypeChoiceList();
         reset($channelTypes);
+
         return (string)key($channelTypes);
+    }
+
+    /**
+     * @param Channel $channel
+     * @param array   $entitiesToAdd
+     */
+    protected function addEnititesToChannel(Channel $channel, array $entitiesToAdd)
+    {
+        $entities         = $channel->getEntities();
+        $entities         = is_array($entities) ? $entities : [];
+        $combinedEntities = array_unique(array_merge($entities, $entitiesToAdd));
+        $channel->setEntities($combinedEntities);
     }
 }
