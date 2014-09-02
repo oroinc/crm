@@ -954,7 +954,7 @@ datagrid:
                         END)  as hasLeads
         columns:
             hasLeads:
-                label:   Assigned
+                label:         orocrm.sales.lead.assigned.label
                 editable: true
                 frontend_type: boolean
             name:
@@ -991,7 +991,7 @@ datagrid:
                 phoneNumber:
                     data_name: l.phoneNumber
             default:
-                createdAt:  DESC
+                hasLeads:  DESC
         properties:
             id: ~
         options:
@@ -1020,8 +1020,8 @@ datagrid:
                         END)  as hasOpportunities
         columns:
             hasOpportunities:
-                label:   Assigned
-                editable: true
+                label:         orocrm.sales.opportunity.assigned.label
+                editable:      true
                 frontend_type: boolean
             name:
                 label:         orocrm.sales.opportunity.name.label
@@ -1060,7 +1060,7 @@ datagrid:
                 primaryEmail:
                     data_name: email.email
             default:
-                createdAt: DESC
+                hasOpportunities: DESC
         properties:
             id: ~
         options:

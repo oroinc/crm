@@ -1,11 +1,11 @@
 <div class="widget-content grid-widget-content">
     {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
     {% set params = {
-    'customer' : b2bCustomer,
-    '_parameters' : {
-    'data_in':     app.request.get('added')|split(','),
-    'data_not_in': app.request.get('removed')|split(',')
-    }
+        'customer' : b2bCustomer,
+        '_parameters' : {
+        'data_in':     app.request.get('added')|split(','),
+        'data_not_in': app.request.get('removed')|split(',')
+        }
     } %}
 
     <style type="text/css">
