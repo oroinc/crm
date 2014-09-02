@@ -78,11 +78,11 @@
             {% set additionalData = additionalData|merge([form_row(value)]) %}
         {% endfor %}
         {% set dataBlocks = dataBlocks|merge([{
-        'title': 'Additional Information'|trans,
-        'subblocks': [{
-        'title': '',
-        'useSpan': false,
-        'data' : additionalData
+            'title': 'Additional Information'|trans,
+            'subblocks': [{
+            'title': '',
+            'useSpan': false,
+            'data' : additionalData
         }]
         }] ) %}
     {% endif %}
