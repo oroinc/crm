@@ -105,12 +105,12 @@ orocrm:
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             customer.label:       B2B Customer
+            assigned.label:       Assigned
 
             datagrid:
-                view: View
-                update: Update
-                delete: Delete
-
+                view:     View
+                update:   Update
+                delete:   Delete
         #
         # OroCRM/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
@@ -155,6 +155,7 @@ orocrm:
             information:          Lead Information
             campaign.label:       Campaign
             customer.label:       B2B Customer
+            assigned.label:       Assigned
 
             extend_source:
                 unclassified:     Unclassified
