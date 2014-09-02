@@ -17,6 +17,11 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
     protected $queryDesigner;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $doctrineHelper;
+
+    /**
      * @var ContactInformationFieldHelper
      */
     protected $helper;
@@ -30,12 +35,16 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
         $this->queryDesigner = $this
             ->getMockForAbstractClass('Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner');
 
-        $this->helper = new ContactInformationFieldHelper($this->configProvider);
+        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->helper = new ContactInformationFieldHelper($this->configProvider, $this->doctrineHelper);
     }
 
     public function testGetContactInformationColumnsNoDefinition()
     {
-        $this->assertEmpty($this->helper->getContactInformationColumns($this->queryDesigner));
+        $this->assertEmpty($this->helper->getQueryContactInformationColumns($this->queryDesigner));
     }
 
     public function testGetContactInformationColumnsNoColumns()
@@ -43,7 +52,7 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
         $this->queryDesigner->expects($this->once())
             ->method('getDefinition')
             ->will($this->returnValue(json_encode(array('columns' => array()))));
-        $this->assertEmpty($this->helper->getContactInformationColumns($this->queryDesigner));
+        $this->assertEmpty($this->helper->getQueryContactInformationColumns($this->queryDesigner));
     }
 
     public function testGetContactInformationColumns()
@@ -116,7 +125,7 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array('email' => array(array('name' => $fieldOne)), 'phone' => array(array('name' => $fieldTwo))),
-            $this->helper->getContactInformationColumns($this->queryDesigner)
+            $this->helper->getQueryContactInformationColumns($this->queryDesigner)
         );
     }
 
