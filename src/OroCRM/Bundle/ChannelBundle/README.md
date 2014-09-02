@@ -63,7 +63,8 @@ Menu item should be hidden by default in navigation configuration using paramete
 Channel types block:
 --------------------
 
-Channel is configured by "Channel Type", "Customer Identity" and "Entities" fields. Some types of channels that bring customers, also bring the "integration" field to configure the integration. It should be described in configuration block:
+Channel is configured by `Channel Type` and `Entities` fields. Some types of channels that bring customers,
+also bring the `integration` field to configure the integration. It should be described in configuration block:
 
 **Config example:**
 ```yml
@@ -74,17 +75,19 @@ Channel is configured by "Channel Type", "Customer Identity" and "Entities" fiel
                 - OroCRM\Bundle\AcmeBundle\Entity\Entity
                 - OroCRM\Bundle\AcmeBundle\Entity\Customer
             integration_type: some_type
-            customer_identity: OroCRM\Bundle\AcmeBundle\Entity\Customer
+            customer_identity: OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity
 ```
 
-If you want to add "Integration" to the channel you should define "integration_type", ["customer_identity"].
+If you want to add `Integration` to the channel, you should define `label`, `integration_type`, [`entities`], [`customer_identity`].
 
-* "label" - channel type label;
+* `label` responsible for the label of channel;
 
-* "entities" describe which fields will be defined in "Entities" filed after channel type has been selected;
+* `entities` (optional) describe which fields will be defined in `Entities` filed after channel type has been selected;
 
-* "integration_type" describe which integration type appear in "Channel Type" select. When "integration_type" will have defined in config and you have selected your type in "Channel Type" selector, the Integration field has appeared in channel form like link, by clicking on it the dialog box will open;
+* `integration_type` (optional) describe which integration type appear in `Channel Type` select. When `integration_type` will have
+  defined in config and you have selected your type in `Channel Type` selector, the Integration field has appeared in
+  channel form like link, by clicking on it the dialog box will open;
 
-* When "Channel Type" has selected you can have predefined options in "Entities" field which you should describe in "entities";
+* `customer_identity` (optional) If you don't set it, system will set it by default value - `OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity`;
 
-* Entity in "customer_identity" must also be in "entities" block;
+* When `Channel Type` has selected you can have predefined options in `Entities` field which you should describe in `entities`;
