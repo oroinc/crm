@@ -60,7 +60,6 @@ class RestOpportunityTest extends WebTestCase
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['opportunity']['name'], $result['name']);
         $this->assertEquals('In Progress', $result['status']);
-        //$this->assertEquals('B2bCustomer_name_opportunity', $result['cusotmer']);
         // TODO: incomplete CRM-816
         //$this->assertEquals($request['opportunity']['owner'], $result['owner']['id']);
         return $request;
