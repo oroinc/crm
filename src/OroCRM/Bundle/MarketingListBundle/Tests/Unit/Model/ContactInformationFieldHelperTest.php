@@ -22,6 +22,11 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
     protected $doctrineHelper;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $fieldProvider;
+
+    /**
      * @var ContactInformationFieldHelper
      */
     protected $helper;
@@ -39,7 +44,15 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->helper = new ContactInformationFieldHelper($this->configProvider, $this->doctrineHelper);
+        $this->fieldProvider = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityFieldProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->helper = new ContactInformationFieldHelper(
+            $this->configProvider,
+            $this->doctrineHelper,
+            $this->fieldProvider
+        );
     }
 
     public function testGetContactInformationColumnsNoDefinition()
