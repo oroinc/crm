@@ -68,7 +68,7 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
      */
     protected function fillChannelToEntity(Channel $channel, $entity)
     {
-        $interfaces = class_implements($entity) ? : [];
+        $interfaces = class_implements($entity) ?: [];
         if (!in_array('OroCRM\\Bundle\\ChannelBundle\\Model\\ChannelAwareInterface', $interfaces)) {
             return;
         }

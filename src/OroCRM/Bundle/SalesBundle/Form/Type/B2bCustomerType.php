@@ -208,6 +208,7 @@ class B2bCustomerType extends AbstractType
                 'link'      => $this->router->generate('orocrm_sales_lead_info', array('id' => $opportunity->getId())),
                 'extraData' => array(
                     array('label' => 'Email', 'value' => $email ? $email : null)
+
                 ),
             );
         }

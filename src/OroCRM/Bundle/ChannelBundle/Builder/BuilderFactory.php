@@ -94,7 +94,7 @@ class BuilderFactory
 
     /**
      * @param SettingsProvider $settingsProvider
-     * @param  string          $integrationType
+     * @param string           $integrationType
      *
      * @return bool|string
      */
