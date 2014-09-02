@@ -30,7 +30,7 @@ class B2bCustomerControllerTest extends WebTestCase
     {
         $this->initClient(
             [],
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
         );
 
         $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadB2bCustomer']);
@@ -79,7 +79,7 @@ class B2bCustomerControllerTest extends WebTestCase
             break;
         }
 
-        $this->assertCount((int)$filters['expectedResultCount'], $result['data']);
+        $this->assertCount((int) $filters['expectedResultCount'], $result['data']);
     }
 
     /**
@@ -205,7 +205,7 @@ class B2bCustomerControllerTest extends WebTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_b2bcustomer_view', array('id' => $returnValue['id']))
+            $this->getUrl('orocrm_sales_b2bcustomer_view', ['id' => $returnValue['id']])
         );
 
         $result = $this->client->getResponse();
@@ -225,7 +225,7 @@ class B2bCustomerControllerTest extends WebTestCase
             'GET',
             $this->getUrl(
                 'orocrm_salses_b2bcustomer_widget_info',
-                array('id' => $returnValue['id'], '_widgetContainer' => 'block')
+                ['id' => $returnValue['id'], '_widgetContainer' => 'block']
             )
         );
 
@@ -242,7 +242,7 @@ class B2bCustomerControllerTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('oro_api_delete_b2bcustomer', array('id' => $returnValue['id']))
+            $this->getUrl('oro_api_delete_b2bcustomer', ['id' => $returnValue['id']])
         );
 
         $result = $this->client->getResponse();
@@ -250,7 +250,7 @@ class B2bCustomerControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_b2bcustomer_view', array('id' => $returnValue['id']))
+            $this->getUrl('orocrm_sales_b2bcustomer_view', ['id' => $returnValue['id']])
         );
 
         $result = $this->client->getResponse();
