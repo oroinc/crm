@@ -15,6 +15,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  * @ORM\Table(name="orocrm_channel")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
+ *  routeName="orocrm_channel_index",
  *  routeView="orocrm_channel_view",
  *  defaultValues={
  *      "entity"={"icon"="icon-sitemap"},
@@ -337,5 +338,13 @@ class Channel
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getName();
     }
 }

@@ -56,7 +56,7 @@ orocrm:
             lead.saved.message: Lead saved
             opportunity.saved.message: Opportunity saved
             sales_funnel.saved.message: Sales process saved
-
+            b2bcustomer.saved.message: Customer saved
         form:
             choose_opportunity: Choose an opportunity....
             choose_lead:        Choose a lead....
@@ -105,12 +105,12 @@ orocrm:
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             customer.label:       B2B Customer
+            assigned.label:       Assigned
 
             datagrid:
-                view: View
-                update: Update
-                delete: Delete
-
+                view:     View
+                update:   Update
+                delete:   Delete
         #
         # OroCRM/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
@@ -155,6 +155,7 @@ orocrm:
             information:          Lead Information
             campaign.label:       Campaign
             customer.label:       B2B Customer
+            assigned.label:       Assigned
 
             extend_source:
                 unclassified:     Unclassified
@@ -210,6 +211,8 @@ orocrm:
             ticker_symbol.label:        Ticker symbol
             website.label:              Website
             employees.label:            Employees
+            opportunities.select:       Select opportunities
+            leads.select:               Select leads
             datagrid:
                 view:   View
                 update: Update

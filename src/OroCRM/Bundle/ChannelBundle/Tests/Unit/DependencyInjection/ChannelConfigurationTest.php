@@ -46,20 +46,18 @@ class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
             ],
             'channel_types' => [
                 'test1' => [
-                    'label'                             => 'test1 type',
-                    'entities'                          => [
+                    'label'             => 'test1 type',
+                    'entities'          => [
                         'OroCRM\Bundle\TestBundle1\Entity\Entity1',
                         'OroCRM\Bundle\TestBundle1\Entity\Entity2',
                         'OroCRM\Bundle\TestBundle1\Entity\Entity3',
                     ],
-                    'integration_type'                  => 'test',
-                    'customer_identity'                 => 'OroCRM\Bundle\TestBundle1\Entity\TestCustomer',
+                    'integration_type'  => 'test',
+                    'customer_identity' => 'OroCRM\Bundle\TestBundle1\Entity\TestCustomer',
                 ],
                 'test2' => [
-                    'label'                             => 'test2 type',
-                    'entities'                          => [
-                        'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity'
-                    ],
+                    'label'             => 'test2 type',
+                    'entities'          => [],
                     'customer_identity' => 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity',
                 ]
             ],

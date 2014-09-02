@@ -1012,4 +1012,14 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
         $defaultStatus   = $em->getReference('OroCRMSalesBundle:LeadStatus', 'new');
         $this->setStatus($defaultStatus);
     }
+
+    /**
+     * Remove Customer
+     *
+     * @return Lead
+     */
+    public function removeCustomer()
+    {
+        $this->customer = null;
+    }
 }
