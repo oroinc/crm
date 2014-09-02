@@ -34,7 +34,8 @@ class B2bCustomerTypeTest extends \PHPUnit_Framework_TestCase
     public function testGetName()
     {
         $type = new B2bCustomerType($this->router, $this->nameFormatter);
-        $this->assertEquals('orocrm_sales_B2bCustomer', $type->getName());
+
+        $this->assertEquals('orocrm_sales_b2bcustomer', $type->getName());
     }
 
     public function testAddEntityFields()

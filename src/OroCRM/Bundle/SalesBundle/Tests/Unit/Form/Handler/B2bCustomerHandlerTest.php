@@ -58,7 +58,6 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     public function testProcessUnsupportedRequest()
     {
         $this->form->expects($this->once())

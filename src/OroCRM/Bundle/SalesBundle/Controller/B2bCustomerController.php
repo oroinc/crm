@@ -159,12 +159,18 @@ class B2bCustomerController extends Controller
      *      defaults={"id"=0}
      * )
      * @AclAncestor("orocrm_sales_lead_view")
-     * @Template()
+     * @Template("OroCRMSalesBundle:B2bCustomer:multipleAssign.html.twig")
      */
     public function leadsAssignAction(B2bCustomer $b2bCustomer = null)
     {
         return [
-            'b2bCustomer' => $b2bCustomer
+            'b2bCustomer' => $b2bCustomer,
+            'gridName' => 'sales-b2bcustomer-lead-grid',
+            'addedName' => 'appendLeads',
+            'removedName' => 'removeLeads',
+            'columnName' => 'hasLeads',
+            'routeName' => 'orocrm_sales_lead_info',
+            'extraData' => ['Phone' => 'phoneNumber', 'Email' => 'email']
         ];
     }
 
@@ -176,12 +182,18 @@ class B2bCustomerController extends Controller
      *      defaults={"id"=0}
      * )
      * @AclAncestor("orocrm_sales_opportunity_view")
-     * @Template()
+     * @Template("OroCRMSalesBundle:B2bCustomer:multipleAssign.html.twig")
      */
     public function opportunitiesAssignAction(B2bCustomer $b2bCustomer = null)
     {
         return [
-            'b2bCustomer' => $b2bCustomer
+            'b2bCustomer' => $b2bCustomer,
+            'gridName' => 'sales-b2bcustomer-opportunity-grid',
+            'addedName' => 'appendOpportunities',
+            'removedName' => 'removeOpportunities',
+            'columnName' => 'hasOpportunities',
+            'routeName' => 'orocrm_sales_opportunity_info',
+            'extraData' => ['Email' => 'primaryEmail']
         ];
     }
 }

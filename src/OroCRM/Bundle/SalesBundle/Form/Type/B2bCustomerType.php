@@ -44,7 +44,7 @@ class B2bCustomerType extends AbstractType
      */
     public function getName()
     {
-        return 'orocrm_sales_B2bCustomer';
+        return 'orocrm_sales_b2bcustomer';
     }
 
     /**
@@ -163,7 +163,7 @@ class B2bCustomerType extends AbstractType
             array('id' => $b2bcustomer->getId())
         );
         $view->children['opportunities']->vars['initial_elements']
-            = $this->getInitialOpportunities($b2bcustomer->getOpportunities());
+                     = $this->getInitialOpportunities($b2bcustomer->getOpportunities());
     }
 
     /**
