@@ -94,6 +94,7 @@ datagrid:
                 label:         orocrm.account.contact.email
             contactPhone:
                 label:         orocrm.account.contact.phone
+                frontend_type: phone
             ownerName:
                 label:         orocrm.account.owner.label
             createdAt:
