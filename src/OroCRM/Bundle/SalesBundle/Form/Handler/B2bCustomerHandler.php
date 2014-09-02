@@ -83,9 +83,9 @@ class B2bCustomerHandler
     }
 
     /**
-     * @param Lead $entity
+     * @param B2bCustomer $entity
      */
-    protected function handleLeads($entity)
+    protected function handleLeads(B2bCustomer $entity)
     {
         if ($this->form->has('leads')) {
             $leads = $this->form->get('leads');
@@ -95,9 +95,9 @@ class B2bCustomerHandler
     }
 
     /**
-     * @param Opportunity $entity
+     * @param B2bCustomer $entity
      */
-    protected function handleOpportunities($entity)
+    protected function handleOpportunities(B2bCustomer $entity)
     {
         if ($this->form->has('opportunities')) {
             $opportunities = $this->form->get('opportunities');
@@ -159,7 +159,9 @@ class B2bCustomerHandler
     }
 
     /**
-     * {@inheritdoc}
+     * Setter for tag manager
+     *
+     * @param TagManager $tagManager
      */
     public function setTagManager(TagManager $tagManager)
     {

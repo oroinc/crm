@@ -29,7 +29,6 @@ class B2bCustomerType extends AbstractType
      */
     protected $nameFormatter;
 
-
     /**
      * @param Router        $router
      * @param NameFormatter $nameFormatter
@@ -45,7 +44,7 @@ class B2bCustomerType extends AbstractType
      */
     public function getName()
     {
-        return 'orocrm_sales_B2bCustomer';
+        return 'orocrm_sales_b2bcustomer';
     }
 
     /**
