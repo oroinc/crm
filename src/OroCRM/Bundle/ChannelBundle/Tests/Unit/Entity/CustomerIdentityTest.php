@@ -31,13 +31,13 @@ class CustomerIdentityTest extends AbstractEntityTestCase
         $someDateTime = new \DateTime();
 
         return [
-            'name'      => ['name', $name, $name],
-            'owner'     => ['owner', $owner, $owner],
-            'account'   => ['account', $account, $account],
-            'contact'   => ['contact', $contact, $contact],
-            'channel'   => ['channel', $channel, $channel],
-            'createdAt' => ['createdAt', $someDateTime, $someDateTime],
-            'updatedAt' => ['updatedAt', $someDateTime, $someDateTime]
+            'name'        => ['name', $name, $name],
+            'owner'       => ['owner', $owner, $owner],
+            'account'     => ['account', $account, $account],
+            'contact'     => ['contact', $contact, $contact],
+            'dataChannel' => ['dataChannel', $channel, $channel],
+            'createdAt'   => ['createdAt', $someDateTime, $someDateTime],
+            'updatedAt'   => ['updatedAt', $someDateTime, $someDateTime]
         ];
     }
 
