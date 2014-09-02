@@ -45,6 +45,11 @@ class ChannelObjectBuilder
     /** @var Channel */
     protected $channel;
 
+    /**
+     * @param EntityManager    $em
+     * @param SettingsProvider $settingsProvider
+     * @param Channel          $channel
+     */
     public function __construct(EntityManager $em, SettingsProvider $settingsProvider, Channel $channel)
     {
         $this->em               = $em;
@@ -132,6 +137,9 @@ class ChannelObjectBuilder
         $this->dataSource = $dataSource;
     }
 
+    /**
+     * @param bool $status
+     */
     public function setStatus($status)
     {
         $this->status = $status;

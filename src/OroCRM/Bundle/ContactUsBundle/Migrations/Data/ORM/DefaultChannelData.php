@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OroCRM\Bundle\ContactUsBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;

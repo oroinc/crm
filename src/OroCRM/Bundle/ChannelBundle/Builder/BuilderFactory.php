@@ -11,6 +11,7 @@ use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class BuilderFactory
 {
+    /** @var ManagerRegistry */
     protected $registry;
 
     /** @var SettingsProvider */
