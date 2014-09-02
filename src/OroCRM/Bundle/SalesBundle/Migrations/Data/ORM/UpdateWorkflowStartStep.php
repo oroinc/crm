@@ -7,7 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\WorkflowBundle\Entity\Repository\WorkflowItemRepository;
 
-class UpdateWorfklowStartStep extends AbstractFixture
+class UpdateWorkflowStartStep extends AbstractFixture
 {
     /**
      * {@inheritDoc}
