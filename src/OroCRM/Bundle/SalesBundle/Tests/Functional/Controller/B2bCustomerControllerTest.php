@@ -140,10 +140,10 @@ class B2bCustomerControllerTest extends WebTestCase
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
 
-        $form['orocrm_sales_B2bCustomer_form[name]'] = $name;
-        $form['orocrm_sales_B2bCustomer_form[account]'] = self::$account->getId();
-        $form['orocrm_sales_B2bCustomer_form[channel]'] = self::$channel->getId();
-        $form['orocrm_sales_B2bCustomer_form[owner]']   = 1;
+        $form['orocrm_sales_b2bcustomer_form[name]'] = $name;
+        $form['orocrm_sales_b2bcustomer_form[account]'] = self::$account->getId();
+        $form['orocrm_sales_b2bcustomer_form[channel]'] = self::$channel->getId();
+        $form['orocrm_sales_b2bcustomer_form[owner]']   = 1;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -180,8 +180,8 @@ class B2bCustomerControllerTest extends WebTestCase
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
-        $form['orocrm_sales_B2bCustomer_form[name]'] = $name;
-        $form['orocrm_sales_B2bCustomer_form[owner]']   = 1;
+        $form['orocrm_sales_b2bcustomer_form[name]'] = $name;
+        $form['orocrm_sales_b2bcustomer_form[owner]']   = 1;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
