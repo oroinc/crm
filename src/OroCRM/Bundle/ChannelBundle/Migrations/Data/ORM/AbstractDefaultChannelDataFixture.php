@@ -87,7 +87,8 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
                 $writeCount++;
 
                 if (!$data->getDataChannel()) {
-                    $data->setDataChannel($this->em->getReference(ClassUtils::getClass($channel), $channel->getId()));
+                    $channelReference = $this->em->getReference(ClassUtils::getClass($channel), $channel->getId());
+                    $data->setDataChannel($channelReference);
                     $toWrite[] = $data;
                 }
 
