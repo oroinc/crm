@@ -22,7 +22,9 @@ class CasesTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Cases $login */
         $login->openCases('OroCRM\Bundle\CaseBundle')
+            ->assertTitle('Cases - Activities')
             ->add()
+            ->assertTitle('Create Case - Cases - Activities')
             ->setSubject($subject)
             ->setDescription($subject)
             ->save()
@@ -47,8 +49,9 @@ class CasesTest extends Selenium2TestCase
         $login->openCases('OroCRM\Bundle\CaseBundle')
             ->filterBy('Subject', $subject)
             ->open(array($subject))
+            ->assertTitle("{$subject} - Cases - Activities")
             ->edit()
-            ->assertTitle($subject . ' - Edit - Cases - Activities')
+            ->assertTitle("{$subject} - Edit - Cases - Activities")
             ->setSubject($newSubject)
             ->save()
             ->assertMessage('Case saved')

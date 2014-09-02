@@ -25,7 +25,9 @@ class CreateOpportunityTest extends Selenium2TestCase
         $accountName = $this->createAccount($login);
         /** @var Opportunities $login */
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
+            ->assertTitle('Opportunities - Sales')
             ->add()
+            ->assertTitle('Create Opportunity - Opportunities - Sales')
             ->setName($opportunityName)
             ->setAccount($accountName)
             ->setProbability('50')
@@ -74,8 +76,9 @@ class CreateOpportunityTest extends Selenium2TestCase
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $name)
             ->open(array($name))
+            ->assertTitle("{$name} - Edit - Opportunities - Sales")
             ->edit()
-            ->assertTitle($name . ' - Edit - Opportunities - Sales')
+            ->assertTitle("{$name} - Edit - Opportunities - Sales")
             ->setName($newName)
             ->save()
             ->assertMessage('Opportunity saved')
