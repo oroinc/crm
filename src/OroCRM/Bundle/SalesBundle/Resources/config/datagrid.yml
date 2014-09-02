@@ -974,6 +974,8 @@ datagrid:
                 label:         orocrm.sales.lead.phone_number.label
         sorters:
             columns:
+                hasLeads:
+                    data_name: hasLeads
                 name:
                     data_name: l.name
                 statusLabel:
@@ -1041,6 +1043,8 @@ datagrid:
                 label:         orocrm.contact.email.label
         sorters:
             columns:
+                hasOpportunities:
+                    data_name: hasOpportunities
                 name:
                     data_name: o.name
                 createdAt:
