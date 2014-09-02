@@ -111,6 +111,7 @@ class LeadControllersTest extends WebTestCase
         $this->assertContains("Lead saved", $crawler->html());
 
         $returnValue['name'] = $name;
+
         return $returnValue;
     }
 

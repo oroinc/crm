@@ -370,7 +370,7 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInt
     }
 
     /**
-     * @param  Opportunity $opportunity
+     * @param Opportunity $opportunity
      */
     public function addOpportunity(Opportunity $opportunity)
     {
@@ -382,7 +382,7 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInt
     }
 
     /**
-     * @param  Opportunity $opportunity
+     * @param Opportunity $opportunity
      */
     public function removeOpportunity(Opportunity $opportunity)
     {
@@ -421,7 +421,7 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInt
      */
     public function getTags()
     {
-        $this->tags = $this->tags ? : new ArrayCollection();
+        $this->tags = $this->tags ?: new ArrayCollection();
 
         return $this->tags;
     }
@@ -491,6 +491,6 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInt
      */
     public function __toString()
     {
-        return (string)$this->getName();
+        return (string) $this->getName();
     }
 }

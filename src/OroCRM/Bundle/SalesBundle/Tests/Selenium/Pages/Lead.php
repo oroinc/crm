@@ -62,6 +62,7 @@ class Lead extends AbstractPageEntity
         $this->campaign = $this->test->byXpath(
             "//div[starts-with(@id,'s2id_orocrm_sales_lead_form_additional_campaign')]/a"
         );
+
         return $this;
     }
 
@@ -69,6 +70,7 @@ class Lead extends AbstractPageEntity
     {
         $this->name->clear();
         $this->name->value($name);
+
         return $this;
     }
 
@@ -81,6 +83,7 @@ class Lead extends AbstractPageEntity
     {
         $this->firstName->clear();
         $this->firstName->value($firstName);
+
         return $this;
     }
 
@@ -93,6 +96,7 @@ class Lead extends AbstractPageEntity
     {
         $this->lastName->clear();
         $this->lastName->value($lastName);
+
         return $this;
     }
 
@@ -123,6 +127,7 @@ class Lead extends AbstractPageEntity
     {
         $this->jobTitle->clear();
         $this->jobTitle->value($jobTitle);
+
         return $this;
     }
 
@@ -135,6 +140,7 @@ class Lead extends AbstractPageEntity
     {
         $this->phone->clear();
         $this->phone->value($phone);
+
         return $this;
     }
 
@@ -147,6 +153,7 @@ class Lead extends AbstractPageEntity
     {
         $this->email->clear();
         $this->email->value($email);
+
         return $this;
     }
 
@@ -159,6 +166,7 @@ class Lead extends AbstractPageEntity
     {
         $this->companyName->clear();
         $this->companyName->value($companyName);
+
         return $this;
     }
 
@@ -171,6 +179,7 @@ class Lead extends AbstractPageEntity
     {
         $this->website->clear();
         $this->website->value($website);
+
         return $this;
     }
 
@@ -183,6 +192,7 @@ class Lead extends AbstractPageEntity
     {
         $this->employees->clear();
         $this->employees->value($employees);
+
         return $this;
     }
 
@@ -219,6 +229,7 @@ class Lead extends AbstractPageEntity
     public function getAddressLabel()
     {
         $addressLabel = $this->test->byId("orocrm_sales_lead_form_address_label");
+
         return $addressLabel->attribute('value');
     }
 
@@ -234,6 +245,7 @@ class Lead extends AbstractPageEntity
     public function getAddressStreet()
     {
         $addressStreet = $this->test->byId("orocrm_sales_lead_form_address_street");
+
         return $addressStreet->attribute('value');
     }
 
@@ -249,6 +261,7 @@ class Lead extends AbstractPageEntity
     public function getAddressCity()
     {
         $addressCity = $this->test->byId("orocrm_sales_lead_form_address_city");
+
         return $addressCity->attribute('value');
     }
 
@@ -264,6 +277,7 @@ class Lead extends AbstractPageEntity
     public function getAddressZipCode()
     {
         $addressCity = $this->test->byId("orocrm_sales_lead_form_address_postalCode");
+
         return $addressCity->attribute('value');
     }
 
@@ -342,6 +356,7 @@ class Lead extends AbstractPageEntity
     public function checkStatus($status)
     {
         $this->assertElementPresent("//div[@class='status-enabled pull-left'][contains(., '{$status}')]");
+
         return $this;
     }
 
@@ -351,6 +366,7 @@ class Lead extends AbstractPageEntity
         $this->waitPageToLoad();
         $this->waitForAjax();
         $this->init();
+
         return $this;
     }
 
@@ -360,6 +376,7 @@ class Lead extends AbstractPageEntity
         $this->test->byXpath("//div[div[contains(., 'Delete Confirmation')]]//a[text()='Yes, Delete']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
+
         return new Contacts($this->test, false);
     }
 }

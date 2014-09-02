@@ -27,9 +27,9 @@ class LeadRepository extends EntityRepository implements EntityConfigAwareReposi
      * Returns top $limit opportunities and grouped by lead source and calculate
      * a fraction of opportunities for each lead source
      *
-     * @param AclHelper $aclHelper
-     * @param int       $limit
-     * @return array [itemCount, label]
+     * @param  AclHelper $aclHelper
+     * @param  int       $limit
+     * @return array     [itemCount, label]
      */
     public function getOpportunitiesByLeadSource(AclHelper $aclHelper, $limit = 10)
     {

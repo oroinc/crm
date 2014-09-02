@@ -188,6 +188,7 @@ class B2bCustomerType extends AbstractType
                 ),
             );
         }
+
         return $result;
     }
 
@@ -212,6 +213,7 @@ class B2bCustomerType extends AbstractType
                 ),
             );
         }
+
         return $result;
     }
 }

@@ -380,7 +380,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     protected $customer;
 
     /**
-     * @param WorkflowItem $workflowItem
+     * @param  WorkflowItem $workflowItem
      * @return Opportunity
      */
     public function setWorkflowItem($workflowItem)
@@ -399,7 +399,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param WorkflowItem $workflowStep
+     * @param  WorkflowItem $workflowStep
      * @return Opportunity
      */
     public function setWorkflowStep($workflowStep)
@@ -426,12 +426,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param Lead $lead
+     * @param  Lead        $lead
      * @return Opportunity
      */
     public function setLead($lead)
     {
         $this->lead = $lead;
+
         return $this;
     }
 
@@ -444,12 +445,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param float $budgetAmount
+     * @param  float       $budgetAmount
      * @return Opportunity
      */
     public function setBudgetAmount($budgetAmount)
     {
         $this->budgetAmount = $budgetAmount;
+
         return $this;
     }
 
@@ -462,12 +464,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param \DateTime $closeDate
+     * @param  \DateTime   $closeDate
      * @return Opportunity
      */
     public function setCloseDate($closeDate)
     {
         $this->closeDate = $closeDate;
+
         return $this;
     }
 
@@ -480,12 +483,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param Contact $contact
+     * @param  Contact     $contact
      * @return Opportunity
      */
     public function setContact($contact)
     {
         $this->contact = $contact;
+
         return $this;
     }
 
@@ -498,12 +502,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param string $customerNeed
+     * @param  string      $customerNeed
      * @return Opportunity
      */
     public function setCustomerNeed($customerNeed)
     {
         $this->customerNeed = $customerNeed;
+
         return $this;
     }
 
@@ -516,12 +521,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param float $probability
+     * @param  float       $probability
      * @return Opportunity
      */
     public function setProbability($probability)
     {
         $this->probability = $probability;
+
         return $this;
     }
 
@@ -534,12 +540,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param string $proposedSolution
+     * @param  string      $proposedSolution
      * @return Opportunity
      */
     public function setProposedSolution($proposedSolution)
     {
         $this->proposedSolution = $proposedSolution;
+
         return $this;
     }
 
@@ -552,12 +559,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param OpportunityStatus $status
+     * @param  OpportunityStatus $status
      * @return Opportunity
      */
     public function setStatus($status)
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -570,12 +578,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param string $name
+     * @param  string      $name
      * @return Opportunity
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -588,12 +597,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param OpportunityCloseReason $closeReason
+     * @param  OpportunityCloseReason $closeReason
      * @return Opportunity
      */
     public function setCloseReason($closeReason)
     {
         $this->closeReason = $closeReason;
+
         return $this;
     }
 
@@ -630,12 +640,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param \DateTime $created
+     * @param  \DateTime   $created
      * @return Opportunity
      */
     public function setCreatedAt($created)
     {
         $this->createdAt = $created;
+
         return $this;
     }
 
@@ -648,12 +659,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param \DateTime $updated
+     * @param  \DateTime   $updated
      * @return Opportunity
      */
     public function setUpdatedAt($updated)
     {
         $this->updatedAt = $updated;
+
         return $this;
     }
 
@@ -674,7 +686,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     public function __toString()
     {
-        return (string)$this->getName();
+        return (string) $this->getName();
     }
     /**
      * @ORM\PrePersist
@@ -702,7 +714,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param User $owningUser
+     * @param  User        $owningUser
      * @return Opportunity
      */
     public function setOwner($owningUser)
@@ -721,12 +733,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param string $notes
+     * @param  string      $notes
      * @return Opportunity
      */
     public function setNotes($notes)
     {
         $this->notes = $notes;
+
         return $this;
     }
 

@@ -51,7 +51,7 @@ class B2bCustomerHandler
      * Process form
      *
      * @param  B2bCustomer $entity
-     * @return bool  True on successful processing, false otherwise
+     * @return bool        True on successful processing, false otherwise
      */
     public function process(B2bCustomer $entity)
     {
@@ -63,6 +63,7 @@ class B2bCustomerHandler
             $this->handleOpportunities($entity);
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);
+
                 return true;
             }
         }
@@ -110,7 +111,7 @@ class B2bCustomerHandler
      * Append leads to B2bCustomer
      *
      * @param B2bCustomer $b2bCustomer
-     * @param Lead[] $leads
+     * @param Lead[]      $leads
      */
     protected function appendLeads(B2bCustomer $b2bCustomer, array $leads)
     {
@@ -123,7 +124,7 @@ class B2bCustomerHandler
      * Remove leads from B2bCustomer
      *
      * @param B2bCustomer $b2bCustomer
-     * @param Lead[] $leads
+     * @param Lead[]      $leads
      */
     protected function removeLeads(B2bCustomer $b2bCustomer, array $leads)
     {
@@ -135,7 +136,7 @@ class B2bCustomerHandler
     /**
      * Append opportunities to B2bCustomer
      *
-     * @param B2bCustomer $b2bCustomer
+     * @param B2bCustomer   $b2bCustomer
      * @param Opportunity[] $opportunities
      */
     protected function appendOpportunities(B2bCustomer $b2bCustomer, array $opportunities)
@@ -148,7 +149,7 @@ class B2bCustomerHandler
     /**
      * Remove opportunities from B2bCustomer
      *
-     * @param B2bCustomer $b2bCustomer
+     * @param B2bCustomer   $b2bCustomer
      * @param Opportunity[] $opportunities
      */
     protected function removeOpportunities(B2bCustomer $b2bCustomer, array $opportunities)

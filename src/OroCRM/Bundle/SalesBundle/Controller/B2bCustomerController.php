@@ -93,7 +93,7 @@ class B2bCustomerController extends Controller
     }
 
     /**
-     * @param B2bCustomer $entity
+     * @param  B2bCustomer $entity
      * @return array
      */
     protected function update(B2bCustomer $entity = null)
