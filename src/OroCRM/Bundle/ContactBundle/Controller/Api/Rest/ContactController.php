@@ -186,7 +186,8 @@ class ContactController extends RestController implements ClassResourceInterface
 
     /**
      * @param Contact $entity
-     * @param array $result
+     * @param array   $result
+     *
      * @return array
      */
     protected function prepareContactEntities(Contact $entity, array $result)
@@ -510,5 +511,23 @@ class ContactController extends RestController implements ClassResourceInterface
     protected function getFormAlias()
     {
         return ContactApiType::NAME;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function fixFormData(array &$data, $entity)
+    {
+        /** @var Contact $entity */
+        parent::fixFormData($data, $entity);
+
+        unset($data['id']);
+        unset($data['createdAt']);
+        unset($data['updatedAt']);
+        unset($data['email']);
+        unset($data['createdBy']);
+        unset($data['updatedBy']);
+
+        return true;
     }
 }
