@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_17;
+namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_5;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
@@ -9,7 +9,7 @@ use Oro\Bundle\EntityBundle\Migrations\MigrateTypeMigration;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMMagentoBundle extends MigrateTypeMigration implements Migration
+class OroCRMContactUsBundle extends MigrateTypeMigration implements Migration
 {
     /**
      * {@inheritdoc}
