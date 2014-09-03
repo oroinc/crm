@@ -75,10 +75,10 @@ class OpportunityControllersTest extends WebTestCase
     {
         $response = $this->client->requestGrid(
             'sales-opportunity-grid',
-            array(
+            [
                 'sales-opportunity-grid[_filter][name][type]' => '1',
                 'sales-opportunity-grid[_filter][name][value]' => $name,
-            )
+            ]
         );
 
         $result = $this->getJsonResponseContent($response, 200);
@@ -86,7 +86,7 @@ class OpportunityControllersTest extends WebTestCase
         $returnValue = $result;
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_opportunity_update', array('id' => $result['id']))
+            $this->getUrl('orocrm_sales_opportunity_update', ['id' => $result['id']])
         );
 
         /** @var Form $form */
@@ -116,7 +116,7 @@ class OpportunityControllersTest extends WebTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_opportunity_view', array('id' => $returnValue['id']))
+            $this->getUrl('orocrm_sales_opportunity_view', ['id' => $returnValue['id']])
         );
 
         $result = $this->client->getResponse();
@@ -136,7 +136,7 @@ class OpportunityControllersTest extends WebTestCase
             'GET',
             $this->getUrl(
                 'orocrm_sales_opportunity_info',
-                array('id' => $returnValue['id'], '_widgetContainer' => 'block')
+                ['id' => $returnValue['id'], '_widgetContainer' => 'block']
             )
         );
 
@@ -152,7 +152,7 @@ class OpportunityControllersTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('oro_api_delete_opportunity', array('id' => $returnValue['id']))
+            $this->getUrl('oro_api_delete_opportunity', ['id' => $returnValue['id']])
         );
 
         $result = $this->client->getResponse();
@@ -160,7 +160,7 @@ class OpportunityControllersTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_opportunity_view', array('id' => $returnValue['id']))
+            $this->getUrl('orocrm_sales_opportunity_view', ['id' => $returnValue['id']])
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 404);

@@ -13,7 +13,7 @@ class RestOpportunityTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient(
-            array(),
+            [],
             $this->generateWsseAuthHeader()
         );
     }
@@ -24,10 +24,10 @@ class RestOpportunityTest extends WebTestCase
     public function testPostOpportunity()
     {
         $request = [
-           "opportunity" => [
-               'name' => 'opportunity_name_' . mt_rand(1, 500),
-               'owner' => '1'
-           ]
+            "opportunity" => [
+                'name'  => 'opportunity_name_' . mt_rand(1, 500),
+                'owner' => '1'
+            ]
         ];
 
         $this->client->request(
@@ -45,14 +45,15 @@ class RestOpportunityTest extends WebTestCase
 
     /**
      * @param $request
+     *
      * @depends testPostOpportunity
-     * @return mixed
+     * @return  mixed
      */
     public function testGetOpportunity($request)
     {
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_opportunity', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_opportunity', ['id' => $request['id']])
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -67,8 +68,9 @@ class RestOpportunityTest extends WebTestCase
 
     /**
      * @param $request
+     *
      * @depends testGetOpportunity
-     * @return mixed
+     * @return  mixed
      */
     public function testPutOpportunity($request)
     {
@@ -77,7 +79,7 @@ class RestOpportunityTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            $this->getUrl('oro_api_put_opportunity', array('id' => $request['id'])),
+            $this->getUrl('oro_api_put_opportunity', ['id' => $request['id']]),
             $request
         );
 
@@ -86,7 +88,7 @@ class RestOpportunityTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_opportunity', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_opportunity', ['id' => $request['id']])
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -125,14 +127,14 @@ class RestOpportunityTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('oro_api_delete_opportunity', array('id' => $request['id']))
+            $this->getUrl('oro_api_delete_opportunity', ['id' => $request['id']])
         );
         $result = $this->client->getResponse();
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_opportunity', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_opportunity', ['id' => $request['id']])
         );
 
         $result = $this->client->getResponse();

@@ -13,7 +13,7 @@ class RestLeadTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient(
-            array(),
+            [],
             $this->generateWsseAuthHeader()
         );
     }
@@ -23,14 +23,14 @@ class RestLeadTest extends WebTestCase
      */
     public function testPostLead()
     {
-        $request = array(
-           "lead" => array(
-                'name' => 'lead_name_' . mt_rand(1, 500),
+        $request = [
+            "lead" => [
+                'name'      => 'lead_name_' . mt_rand(1, 500),
                 'firstName' => 'first_name_' . mt_rand(1, 500),
-                'lastName' => 'last_name_' . mt_rand(1, 500),
-                'owner' => '1'
-           )
-        );
+                'lastName'  => 'last_name_' . mt_rand(1, 500),
+                'owner'     => '1'
+            ]
+        ];
 
         $this->client->request(
             'POST',
@@ -47,14 +47,15 @@ class RestLeadTest extends WebTestCase
 
     /**
      * @param $request
+     *
      * @depends testPostLead
-     * @return mixed
+     * @return  mixed
      */
     public function testGetLead($request)
     {
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_lead', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_lead', ['id' => $request['id']])
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -71,8 +72,9 @@ class RestLeadTest extends WebTestCase
 
     /**
      * @param $request
+     *
      * @depends testGetLead
-     * @return mixed
+     * @return  mixed
      */
     public function testPutLead($request)
     {
@@ -82,7 +84,7 @@ class RestLeadTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            $this->getUrl('oro_api_put_lead', array('id' => $request['id'])),
+            $this->getUrl('oro_api_put_lead', ['id' => $request['id']]),
             $request
         );
 
@@ -91,7 +93,7 @@ class RestLeadTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_lead', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_lead', ['id' => $request['id']])
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -134,14 +136,14 @@ class RestLeadTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('oro_api_delete_lead', array('id' => $request['id']))
+            $this->getUrl('oro_api_delete_lead', ['id' => $request['id']])
         );
         $result = $this->client->getResponse();
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_lead', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_lead', ['id' => $request['id']])
         );
 
         $result = $this->client->getResponse();

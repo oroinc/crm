@@ -17,7 +17,7 @@ class LeadControllersTest extends WebTestCase
     {
         $this->initClient(
             [],
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
         );
     }
 
@@ -87,7 +87,7 @@ class LeadControllersTest extends WebTestCase
     {
         $response = $this->client->requestGrid(
             'sales-lead-grid',
-            array('sales-lead-grid[_filter][name][value]' => $name)
+            ['sales-lead-grid[_filter][name][value]' => $name]
         );
 
         $result = $this->getJsonResponseContent($response, 200);
@@ -95,7 +95,7 @@ class LeadControllersTest extends WebTestCase
         $returnValue = $result;
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_lead_update', array('id' => $result['id']))
+            $this->getUrl('orocrm_sales_lead_update', ['id' => $result['id']])
         );
 
         /** @var Form $form */
@@ -125,7 +125,7 @@ class LeadControllersTest extends WebTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_lead_view', array('id' => $returnValue['id']))
+            $this->getUrl('orocrm_sales_lead_view', ['id' => $returnValue['id']])
         );
 
         $result = $this->client->getResponse();
@@ -145,7 +145,7 @@ class LeadControllersTest extends WebTestCase
             'GET',
             $this->getUrl(
                 'orocrm_sales_lead_info',
-                array('id' => $returnValue['id'], '_widgetContainer' => 'block')
+                ['id' => $returnValue['id'], '_widgetContainer' => 'block']
             )
         );
 
@@ -163,7 +163,7 @@ class LeadControllersTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('oro_api_delete_lead', array('id' => $returnValue['id']))
+            $this->getUrl('oro_api_delete_lead', ['id' => $returnValue['id']])
         );
 
         $result = $this->client->getResponse();
@@ -171,7 +171,7 @@ class LeadControllersTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_lead_view', array('id' => $returnValue['id']))
+            $this->getUrl('orocrm_sales_lead_view', ['id' => $returnValue['id']])
         );
 
         $result = $this->client->getResponse();

@@ -135,7 +135,7 @@ class B2bCustomerControllerTest extends WebTestCase
 
         $form['orocrm_sales_b2bcustomer_form[name]'] = $name;
         $form['orocrm_sales_b2bcustomer_form[account]'] = self::$account->getId();
-        $form['orocrm_sales_b2bcustomer_form[channel]'] = self::$channel->getId();
+        $form['orocrm_sales_b2bcustomer_form[dataChannel]'] = self::$channel->getId();
         $form['orocrm_sales_b2bcustomer_form[owner]']   = 1;
 
         $this->client->followRedirects(true);
