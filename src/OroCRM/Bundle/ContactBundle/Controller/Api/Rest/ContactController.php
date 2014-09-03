@@ -25,6 +25,8 @@ use OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType;
 /**
  * @RouteResource("contact")
  * @NamePrefix("oro_api_")
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ContactController extends RestController implements ClassResourceInterface
 {
@@ -235,6 +237,17 @@ class ContactController extends RestController implements ClassResourceInterface
             $addressArray = parent::getPreparedItem($address);
             $addressArray['types'] = $address->getTypeNames();
             $addressArray = $this->removeUnusedValues($addressArray, array('owner'));
+
+            // @todo: just a temporary workaround until new API is implemented
+            // the normal solution can be to use region_name virtual field and
+            // exclusion rule declared in oro/entity.yml
+            // - for 'region' field use a region text if filled; otherwise, use region name
+            // - remove regionText field from a result
+            if (!empty($addressArray['regionText'])) {
+                $addressArray['region'] = $addressArray['regionText'];
+            }
+            unset($addressArray['regionText']);
+
             $addressData[] = $addressArray;
         }
         $result['addresses'] = $addressData;
@@ -339,6 +352,9 @@ class ContactController extends RestController implements ClassResourceInterface
 
     /**
      * @param Contact $contact
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function fixRequest($contact)
     {
@@ -368,6 +384,124 @@ class ContactController extends RestController implements ClassResourceInterface
 
             $this->getRequest()->request->set($formAlias, $contactData);
         }
+
+        // @todo: just a temporary workaround until new API is implemented
+        // - convert country name to country code (as result we accept both the code and the name)
+        //   also it will be good to accept ISO3 code in future, need to be discussed with product owners
+        // - convert region name to region code (as result we accept the combined code, code and name)
+        // - move region name to region_text field for unknown region
+        if (array_key_exists('addresses', $contactData)) {
+            foreach ($contactData['addresses'] as &$address) {
+                if (!empty($address['country'])) {
+                    $countryCode = $this->getCountryCodeByName($address['country']);
+                    if (!empty($countryCode)) {
+                        $address['country'] = $countryCode;
+                    }
+                }
+                if (!empty($address['region']) && !$this->isRegionCombinedCodeByCode($address['region'])) {
+                    if (!empty($address['country'])) {
+                        $regionId = $this->getRegionCombinedCodeByCode($address['country'], $address['region']);
+                        if (!empty($regionId)) {
+                            $address['region'] = $regionId;
+                        } else {
+                            $regionId = $this->getRegionCombinedCodeByName($address['country'], $address['region']);
+                            if (!empty($regionId)) {
+                                $address['region'] = $regionId;
+                            } else {
+                                $address['region_text'] = $address['region'];
+                                unset($address['region']);
+                            }
+                        }
+                    } else {
+                        $address['region_text'] = $address['region'];
+                        unset($address['region']);
+                    }
+                }
+            }
+            $this->getRequest()->request->set($formAlias, $contactData);
+        }
+    }
+
+    /**
+     * @param string $countryName
+     *
+     * @return string|null
+     */
+    protected function getCountryCodeByName($countryName)
+    {
+        $countryRepo = $this->get('doctrine.orm.entity_manager')
+            ->getRepository('OroAddressBundle:Country');
+        $country = $countryRepo->createQueryBuilder('c')
+            ->select('c.iso2Code')
+            ->where('c.name = :name')
+            ->setParameter('name', $countryName)
+            ->getQuery()
+            ->getArrayResult();
+
+        return !empty($country) ? $country[0]['iso2Code'] : null;
+    }
+
+    /**
+     * @param string $region
+     *
+     * @return bool
+     */
+    protected function isRegionCombinedCodeByCode($region)
+    {
+        $regionRepo = $this->get('doctrine.orm.entity_manager')
+            ->getRepository('OroAddressBundle:Region');
+        $region = $regionRepo->createQueryBuilder('r')
+            ->select('r.combinedCode')
+            ->where('r.combinedCode = :region')
+            ->setParameter('region', $region)
+            ->getQuery()
+            ->getArrayResult();
+
+        return !empty($region);
+    }
+
+    /**
+     * @param string $countryCode
+     * @param string $regionCode
+     *
+     * @return string|null
+     */
+    protected function getRegionCombinedCodeByCode($countryCode, $regionCode)
+    {
+        $regionRepo = $this->get('doctrine.orm.entity_manager')
+            ->getRepository('OroAddressBundle:Region');
+        $region = $regionRepo->createQueryBuilder('r')
+            ->select('r.combinedCode')
+            ->innerJoin('r.country', 'c')
+            ->where('c.iso2Code = :country AND r.code = :region')
+            ->setParameter('country', $countryCode)
+            ->setParameter('region', $regionCode)
+            ->getQuery()
+            ->getArrayResult();
+
+        return !empty($region) ? $region[0]['combinedCode'] : null;
+    }
+
+    /**
+     * @param string $countryCode
+     * @param string $regionName
+     *
+     * @return string|null
+     */
+    protected function getRegionCombinedCodeByName($countryCode, $regionName)
+    {
+        $regionRepo = $this->get('doctrine.orm.entity_manager')
+            ->getRepository('OroAddressBundle:Region');
+        $region = $regionRepo->createQueryBuilder('r')
+            ->select('r.combinedCode')
+            ->innerJoin('r.country', 'c')
+            ->where('c.iso2Code = :country AND r.name = :region')
+            ->setParameter('country', $countryCode)
+            ->setParameter('region', $regionName)
+            ->getQuery()
+            ->getArrayResult();
+
+        return !empty($region) ? $region[0]['combinedCode'] : null;
     }
 
     /**
