@@ -6,10 +6,14 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
-class LoadB2bCustomer extends AbstractFixture
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+class LoadB2bCustomer extends AbstractFixture implements ContainerAwareInterface
 {
     const CUSTOMER_NAME = 'b2bCustomer name';
     const CHANNEL_TYPE  = 'b2b';
@@ -18,6 +22,17 @@ class LoadB2bCustomer extends AbstractFixture
 
     /** @var ObjectManager */
     protected $em;
+
+    /** @var BuilderFactory */
+    protected $factory;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->factory = $container->get('orocrm_channel.builder.factory');
+    }
 
     /**
      * @param ObjectManager $manager
@@ -61,12 +76,11 @@ class LoadB2bCustomer extends AbstractFixture
      */
     protected function createChannel()
     {
-        $channel = new Channel();
-        $channel->setName(self::CHANNEL_NAME);
-        $channel->setChannelType(self::CHANNEL_TYPE);
-        $channel->setStatus(Channel::STATUS_ACTIVE);
-        $channel->setCustomerIdentity('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
-        $channel->setEntities(
+        $builder = $this->factory->createBuilder();
+        $builder->setName(self::CHANNEL_NAME);
+        $builder->setChannelType(self::CHANNEL_TYPE);
+        $builder->setStatus(Channel::STATUS_ACTIVE);
+        $builder->setEntities(
             [
                 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer',
                 'OroCRM\Bundle\SalesBundle\Entity\Lead',
@@ -74,9 +88,9 @@ class LoadB2bCustomer extends AbstractFixture
                 'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel',
             ]
         );
-
+        $channel = $builder->getChannel();
         $this->em->persist($channel);
-
+        
         return $channel;
     }
 }
