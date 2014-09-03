@@ -76,6 +76,7 @@ class SalesFunnelController extends Controller
     public function createAction()
     {
         $entity = new SalesFunnel();
+
         return $this->update($entity);
     }
 
@@ -95,7 +96,7 @@ class SalesFunnelController extends Controller
     }
 
     /**
-     * @param SalesFunnel $entity
+     * @param  SalesFunnel $entity
      * @return array
      */
     protected function update(SalesFunnel $entity)

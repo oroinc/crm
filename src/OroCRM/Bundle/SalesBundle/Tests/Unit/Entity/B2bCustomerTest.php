@@ -56,7 +56,7 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
             'billingAddress'  => ['billingAddress', $address, $address],
             'account'         => ['account', $account, $account],
             'contact'         => ['contact', $contact, $contact],
-            'channel'         => ['channel', $channel, $channel],
+            'dataChannel'     => ['dataChannel', $channel, $channel],
             'owner'           => ['owner', $owner, $owner],
             'createdAt'       => ['createdAt', $date, $date],
             'updatedAt'       => ['updatedAt', $date, $date],
@@ -146,6 +146,6 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
     public function testToSting()
     {
         $this->entity->setName(self::TEST_NAME);
-        $this->assertSame(self::TEST_NAME, (string)$this->entity);
+        $this->assertSame(self::TEST_NAME, (string) $this->entity);
     }
 }

@@ -185,6 +185,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
                     ]
                 )
             );
+
         return [
             new PreloadedExtension(
                 [

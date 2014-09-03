@@ -96,7 +96,7 @@ class OpportunityController extends Controller
     }
 
     /**
-     * @param Opportunity $entity
+     * @param  Opportunity $entity
      * @return array
      */
     protected function update(Opportunity $entity)

@@ -80,7 +80,6 @@ class AclLeadTest extends Selenium2TestCase
         return $name;
     }
 
-
     /**
      * @depends testCreateUser
      * @depends testCreateRole

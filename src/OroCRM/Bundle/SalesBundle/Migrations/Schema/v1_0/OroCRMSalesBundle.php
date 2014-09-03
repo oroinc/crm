@@ -159,7 +159,7 @@ class OroCRMSalesBundle implements Migration, ExtendExtensionAwareInterface
     public static function orocrmSalesOpportunityCloseReasonTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_sales_opportunity_close_reason **/
-        $table = $schema->createTable($tableName ? : 'orocrm_sales_opportunity_close_reason');
+        $table = $schema->createTable($tableName ?: 'orocrm_sales_opportunity_close_reason');
         $table->addColumn('name', 'string', ['length' => 32]);
         $table->addColumn('label', 'string', ['length' => 255]);
         $table->setPrimaryKey(['name']);
@@ -176,7 +176,7 @@ class OroCRMSalesBundle implements Migration, ExtendExtensionAwareInterface
     public static function orocrmSalesOpportunityStatusTable(Schema $schema, $tableName = null)
     {
         /** Generate table orocrm_sales_opportunity_status **/
-        $table = $schema->createTable($tableName ? : 'orocrm_sales_opportunity_status');
+        $table = $schema->createTable($tableName ?: 'orocrm_sales_opportunity_status');
         $table->addColumn('name', 'string', ['length' => 32]);
         $table->addColumn('label', 'string', ['length' => 255]);
         $table->setPrimaryKey(['name']);
@@ -299,7 +299,7 @@ class OroCRMSalesBundle implements Migration, ExtendExtensionAwareInterface
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable($opportunityStatusTableName ? : 'orocrm_sales_opportunity_status'),
+            $schema->getTable($opportunityStatusTableName ?: 'orocrm_sales_opportunity_status'),
             ['status_name'],
             ['name'],
             ['onDelete' => null, 'onUpdate' => null]
@@ -317,7 +317,7 @@ class OroCRMSalesBundle implements Migration, ExtendExtensionAwareInterface
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable($closeReasonTableName ? : 'orocrm_sales_opportunity_close_reason'),
+            $schema->getTable($closeReasonTableName ?: 'orocrm_sales_opportunity_close_reason'),
             ['close_reason_name'],
             ['name'],
             ['onDelete' => null, 'onUpdate' => null]

@@ -2,22 +2,20 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\ORM\EntityRepository;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 
 class LoadChannelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    /** @var  EntityRepository */
-    protected $organizationRepository;
+    /** @var BuilderFactory */
+    protected $factory;
 
     /**
      * {@inheritdoc}
@@ -32,8 +30,7 @@ class LoadChannelData extends AbstractFixture implements ContainerAwareInterface
      */
     public function setContainer(ContainerInterface $container = null)
     {
-        $this->organizationRepository = $container->get('doctrine.orm.entity_manager')
-            ->getRepository('OroOrganizationBundle:Organization');
+        $this->factory = $container->get('orocrm_channel.builder.factory');
     }
 
     /**
@@ -41,40 +38,16 @@ class LoadChannelData extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $om)
     {
-        /** @var Organization $organization */
-        $organization = $this->organizationRepository->findOneByName('default');
-        $organization = $organization ? : $this->organizationRepository->findOneByName('Acme, Inc');
+        $builder = $this->factory->createBuilder();
+        $builder->setStatus(Channel::STATUS_ACTIVE);
+        $builder->setEntities();
+        $builder->setChannelType('b2b');
 
-        if (!$organization) {
-            throw new \Exception('"default" company is not defined');
-        }
-
-        $this->persistChannel($om, $organization);
-        $om->flush();
-    }
-
-    /**
-     * @param ObjectManager $om
-     * @param Organization  $organization
-     */
-    protected function persistChannel(ObjectManager $om, Organization $organization)
-    {
-        $channel = new Channel();
-        $channel->setName('My B2b channel');
-        $channel->setOwner($organization);
-        $channel->setStatus(Channel::STATUS_ACTIVE);
-        $channel->setChannelType('b2b');
-        $channel->setCustomerIdentity('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
-        $channel->setEntities(
-            [
-                'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer',
-                'OroCRM\Bundle\SalesBundle\Entity\Lead',
-                'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
-                'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel',
-            ]
-        );
+        $channel = $builder->getChannel();
 
         $om->persist($channel);
+        $om->flush();
+
         $this->addReference('default_channel', $channel);
     }
 }

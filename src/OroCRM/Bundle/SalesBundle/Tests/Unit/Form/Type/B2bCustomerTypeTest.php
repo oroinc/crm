@@ -81,12 +81,12 @@ class B2bCustomerTypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->router->expects($this->at(0))
             ->method('generate')
-            ->with('orocrm_sales_widget_leads_assign', array('id' => 100))
+            ->with('orocrm_sales_widget_leads_assign', ['id' => 100])
             ->will($this->returnValue('/test-path/100'));
 
         $this->router->expects($this->at(1))
             ->method('generate')
-            ->with('orocrm_sales_widget_opportunities_assign', array('id' => 100))
+            ->with('orocrm_sales_widget_opportunities_assign', ['id' => 100])
             ->will($this->returnValue('/test-info/100'));
 
         $b2bCustomer = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer')
@@ -97,10 +97,10 @@ class B2bCustomerTypeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(100));
         $b2bCustomer->expects($this->once())
             ->method('getLeads')
-            ->will($this->returnValue(new ArrayCollection(array())));
+            ->will($this->returnValue(new ArrayCollection([])));
         $b2bCustomer->expects($this->once())
             ->method('getOpportunities')
-            ->will($this->returnValue(new ArrayCollection(array())));
+            ->will($this->returnValue(new ArrayCollection([])));
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
             ->getMock();
@@ -113,7 +113,7 @@ class B2bCustomerTypeTest extends \PHPUnit_Framework_TestCase
         $type->finishView(
             $formView,
             $form,
-            array()
+            []
         );
     }
 }

@@ -88,7 +88,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
         $customer->setBillingAddress(clone $address);
 
         if ($channel) {
-            $customer->setChannel($channel);
+            $customer->setDataChannel($channel);
         }
 
         return $customer;

@@ -102,6 +102,7 @@ class OpportunityControllersTest extends WebTestCase
         $this->assertContains("Opportunity saved", $crawler->html());
 
         $returnValue['name'] = $name;
+
         return $returnValue;
     }
 

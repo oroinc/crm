@@ -30,6 +30,7 @@ class SalesFunnel extends AbstractPageEntity
         $this->startDate = $this->test->byId('oro_workflow_transition_sales_funnel_name');
         $this->startDate->clear();
         $this->startDate->value($date);
+
         return $this;
     }
 
@@ -83,6 +84,7 @@ class SalesFunnel extends AbstractPageEntity
         $this->test->byXpath("//button[@id='save-and-transit']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
+
         return new Workflow($this->test);
     }
 
@@ -93,6 +95,7 @@ class SalesFunnel extends AbstractPageEntity
         )->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
+
         return $this;
     }
 
@@ -102,6 +105,7 @@ class SalesFunnel extends AbstractPageEntity
         $this->test->byXpath("//div[div[contains(., 'Delete Confirmation')]]//a[text()='Yes, Delete']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
+
         return new SalesFunnels($this->test, false);
     }
 }

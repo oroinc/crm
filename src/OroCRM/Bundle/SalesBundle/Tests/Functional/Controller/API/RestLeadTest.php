@@ -41,6 +41,7 @@ class RestLeadTest extends WebTestCase
         $result = $this->getJsonResponseContent($this->client->getResponse(), 201);
 
         $request['id'] = $result['id'];
+
         return $request;
     }
 

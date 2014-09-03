@@ -46,5 +46,5 @@ OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
                 max: 255
         account:
             - NotBlank: ~
-        channel:
+        dataChannel:
             - NotBlank: ~

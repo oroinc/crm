@@ -33,7 +33,7 @@ class OpportunityAttachment implements Migration, AttachmentExtensionAwareInterf
     /**
      * Add Attachment for Opportunity.
      *
-     * @param Schema $schema
+     * @param Schema              $schema
      * @param AttachmentExtension $attachmentExtension
      */
     public static function addOpportunityAttachment(Schema $schema, AttachmentExtension $attachmentExtension)

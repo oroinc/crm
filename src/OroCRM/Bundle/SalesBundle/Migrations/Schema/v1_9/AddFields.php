@@ -25,6 +25,8 @@ class AddFields implements Migration, OrderedMigrationInterface
     {
         $this->modifyOrocrmSalesLeadTable($schema);
         $this->modifyOrocrmSalesOpportunityTable($schema);
+
+        $queries->addPostQuery(new MigrateAccountRelations());
     }
 
     /**

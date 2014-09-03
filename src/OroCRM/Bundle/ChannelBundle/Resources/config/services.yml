@@ -2,6 +2,9 @@ parameters:
     # entity
     orocrm_channel.entity.class:                                       OroCRM\Bundle\ChannelBundle\Entity\Channel
 
+    # builder
+    orocrm_channel.builder.factory.class:                              OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory
+
     # handlers
     orocrm_channel.channel_form.handler.class:                         OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelHandler
     orocrm_channel.channel_integration_form.handler.class:             OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler
@@ -39,6 +42,12 @@ parameters:
     orocrm_channel.validators.channel_integration_validator.class:     OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator
 
 services:
+    orocrm_channel.builder.factory:
+        class: %orocrm_channel.builder.factory.class%
+        arguments:
+          - @doctrine
+          - @orocrm_channel.provider.settings_provider
+
     # forms
     orocrm_channel.form.type.channel:
         class: %orocrm_channel.form.type.channel.class%
