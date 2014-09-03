@@ -45,6 +45,11 @@ class ChannelObjectBuilder
     /** @var Channel */
     protected $channel;
 
+    /**
+     * @param EntityManager    $em
+     * @param SettingsProvider $settingsProvider
+     * @param Channel          $channel
+     */
     public function __construct(EntityManager $em, SettingsProvider $settingsProvider, Channel $channel)
     {
         $this->em               = $em;
@@ -55,7 +60,7 @@ class ChannelObjectBuilder
         $this->name             = $channel->getName();
         $this->owner            = $channel->getOwner();
         $this->entities         = $channel->getEntities();
-        $this->status           = (bool)$channel->getStatus();
+        $this->status           = (bool) $channel->getStatus();
     }
 
     /**
@@ -132,6 +137,9 @@ class ChannelObjectBuilder
         $this->dataSource = $dataSource;
     }
 
+    /**
+     * @param bool $status
+     */
     public function setStatus($status)
     {
         $this->status = $status;
@@ -144,8 +152,8 @@ class ChannelObjectBuilder
      */
     public function getChannel()
     {
-        $type     = $this->channelType ? : self::CUSTOM_CHANNEL_TYPE;
-        $name     = $this->name ? : ucfirst($type . ' channel');
+        $type     = $this->channelType ?: self::CUSTOM_CHANNEL_TYPE;
+        $name     = $this->name ?: ucfirst($type . ' channel');
         $identity = $this->settingsProvider->getCustomerIdentityFromConfig($type);
         if ($this->populateEntities) {
             $this->entities = $this->settingsProvider->getEntitiesByChannelType($type);
@@ -154,7 +162,7 @@ class ChannelObjectBuilder
 
         $this->channel->setChannelType($type);
         $this->channel->setName($name);
-        $this->channel->setOwner($this->owner ? : $this->getDefaultOrganization());
+        $this->channel->setOwner($this->owner ?: $this->getDefaultOrganization());
         $this->channel->setCustomerIdentity($identity);
         $this->channel->setEntities($this->entities);
         $this->channel->setStatus($this->status);

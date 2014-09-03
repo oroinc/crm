@@ -146,6 +146,6 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
     public function testToSting()
     {
         $this->entity->setName(self::TEST_NAME);
-        $this->assertSame(self::TEST_NAME, (string)$this->entity);
+        $this->assertSame(self::TEST_NAME, (string) $this->entity);
     }
 }

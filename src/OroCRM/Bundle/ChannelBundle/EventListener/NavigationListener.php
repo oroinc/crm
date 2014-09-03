@@ -33,7 +33,7 @@ class NavigationListener
      */
     public function onNavigationConfigure(ConfigureMenuEvent $event)
     {
-        foreach ((array)$this->settings->getSettings(SettingsProvider::DATA_PATH) as $setting) {
+        foreach ((array) $this->settings->getSettings(SettingsProvider::DATA_PATH) as $setting) {
             if (!$this->state->isEntityEnabled($setting['name'])) {
                 continue;
             }

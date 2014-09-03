@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
 
-class ChannelEntityChoiceTypeTest extends \PHPUnit_Framework_TestCase
+class ChannelEntityTypeTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ChannelEntityType */
     protected $type;

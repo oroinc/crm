@@ -41,7 +41,7 @@ class LeadHandler
      * Process form
      *
      * @param  Lead $entity
-     * @return bool  True on successful processing, false otherwise
+     * @return bool True on successful processing, false otherwise
      */
     public function process(Lead $entity)
     {
@@ -52,6 +52,7 @@ class LeadHandler
 
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);
+
                 return true;
             }
         }

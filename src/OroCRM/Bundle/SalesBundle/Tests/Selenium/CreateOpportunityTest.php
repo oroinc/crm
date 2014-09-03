@@ -46,7 +46,7 @@ class CreateOpportunityTest extends Selenium2TestCase
     }
 
     /**
-     * @param Login $login
+     * @param  Login  $login
      * @return string
      */
     protected function createAccount(Login $login)

@@ -37,6 +37,7 @@ class SalesFunnels extends AbstractPageFilteredGrid
         $this->test->byXPath("//a[@title='Start from Opportunity']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
+
         return new SalesFunnel($this->test);
     }
 

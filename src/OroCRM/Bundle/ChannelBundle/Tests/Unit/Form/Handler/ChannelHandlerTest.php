@@ -100,7 +100,7 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
         $this->form->expects($this->once())->method('isValid')
             ->will($this->returnValue(true));
 
-        $this->registry->expects($this->any())->method('getManager') ->will($this->returnValue($this->em));
+        $this->registry->expects($this->any())->method('getManager')->will($this->returnValue($this->em));
         $this->em->expects($this->once())->method('persist')->with($this->entity);
         $this->em->expects($this->once())->method('flush');
 
@@ -112,7 +112,6 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->handler->process($this->entity));
     }
-
 
     /**
      * @dataProvider formViewDataProvider

@@ -59,7 +59,7 @@ class OpportunityStatus
     /**
      * Set address type label
      *
-     * @param string $label
+     * @param  string            $label
      * @return OpportunityStatus
      */
     public function setLabel($label)
