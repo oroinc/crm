@@ -60,21 +60,7 @@ class OpportunityController extends Controller
      */
     public function createAction()
     {
-        $entity = new Opportunity();
-        $accountId = $this->getRequest()->get('account');
-        if ($accountId) {
-            $repository = $this->getDoctrine()->getRepository('OroCRMAccountBundle:Account');
-            /** @var Account $account */
-            $account = $repository->find($accountId);
-            if ($account) {
-                /** @var Opportunity $entity */
-                $entity->setAccount($account);
-            } else {
-                throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
-            }
-        }
-
-        return $this->update($entity);
+        return $this->update(new Opportunity());
     }
 
     /**

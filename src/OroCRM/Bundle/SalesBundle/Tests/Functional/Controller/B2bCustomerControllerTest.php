@@ -38,15 +38,8 @@ class B2bCustomerControllerTest extends WebTestCase
 
     protected function postFixtureLoad()
     {
-        self::$account = $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroCRMAccountBundle:Account')
-            ->findOneByName(LoadB2bCustomer::ACCOUNT_NAME);
-
-        self::$customer = $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroCRMSalesBundle:B2bCustomer')
-            ->findOneByName(LoadB2bCustomer::CUSTOMER_NAME);
+        self::$account  = $this->getReference('default_b2bcustomer_account');
+        self::$customer = $this->getReference('default_b2bcustomer');
 
         self::$channel = $this->getContainer()
             ->get('doctrine')

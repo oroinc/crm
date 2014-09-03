@@ -30,10 +30,7 @@ class OpportunityControllersTest extends WebTestCase
 
     protected function postFixtureLoad()
     {
-        self::$customer = $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroCRMSalesBundle:B2bCustomer')
-            ->findOneByName(LoadB2bCustomer::CUSTOMER_NAME);
+        self::$customer = $this->getReference('default_b2bcustomer');
     }
 
     public function testIndex()

@@ -36,6 +36,10 @@ class LoadB2bCustomer extends AbstractFixture
         $this->em->persist($customer);
         $this->em->flush();
 
+        $this->setReference('default_b2bcustomer', $customer);
+        $this->setReference('default_b2bcustomer_account', $customer->getAccount());
+        $this->setReference('default_b2bcustomer_channel', $customer->getChannel());
+
         return $customer;
     }
 
