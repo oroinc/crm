@@ -41,11 +41,11 @@ In order to implement ability to enable feature in scope of channel - configurat
 
 | Option                   | Description                                                                                       |
 |--------------------------|---------------------------------------------------------------------------------------------------|
-| `name`                   | entity name                                                                                       |
-| `dependent`              | list of entities which will be shown/hidden too. (Related entities to the entity in field 'name') |
-| `navigation_items`       | list of menu items which should be enabled/disabled in any menu.                                  |
-| `belongs_to.integration` | integration type name                                                                             |
-| `belongs_to.connector`   | integration connector name                                                                        |
+| `name`                   | Entity name                                                                                       |
+| `dependent`              | List of entities which will be shown/hidden too. (Related entities to the entity in field 'name') |
+| `navigation_items`       | List of menu items which should be enabled/disabled in any menu.                                  |
+| `belongs_to.integration` | Integration type name                                                                             |
+| `belongs_to.connector`   | Integration connector name                                                                        |
 
 Menu item should be hidden by default in navigation configuration using parameter 'display' with value 'false'.
 
