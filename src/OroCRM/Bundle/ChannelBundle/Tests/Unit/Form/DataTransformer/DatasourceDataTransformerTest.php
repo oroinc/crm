@@ -177,7 +177,6 @@ class DatasourceDataTransformerTest extends \PHPUnit_Framework_TestCase
                     )
                 );
 
-
             $formMock->expects($this->once())->method('submit')
                 ->will(
                     $this->returnCallback(

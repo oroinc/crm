@@ -12,9 +12,10 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendB2bCustomer;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @ORM\Entity()
@@ -43,8 +44,10 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendB2bCustomer;
  *      }
  * )
  */
-class B2bCustomer extends ExtendB2bCustomer implements Taggable
+class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInterface
 {
+    use ChannelEntityTrait;
+
     /**
      * @var integer
      *
@@ -144,23 +147,6 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
      * )
      */
     protected $contact;
-
-    /**
-     * @var Channel
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
-     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=60,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     */
-    protected $channel;
 
     /**
      * @var ArrayCollection
@@ -329,22 +315,6 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
     }
 
     /**
-     * @return Channel
-     */
-    public function getChannel()
-    {
-        return $this->channel;
-    }
-
-    /**
-     * @param Channel $channel
-     */
-    public function setChannel(Channel $channel)
-    {
-        $this->channel = $channel;
-    }
-
-    /**
      * @return ArrayCollection
      */
     public function getLeads()
@@ -400,7 +370,7 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
     }
 
     /**
-     * @param  Opportunity $opportunity
+     * @param Opportunity $opportunity
      */
     public function addOpportunity(Opportunity $opportunity)
     {
@@ -412,7 +382,7 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
     }
 
     /**
-     * @param  Opportunity $opportunity
+     * @param Opportunity $opportunity
      */
     public function removeOpportunity(Opportunity $opportunity)
     {
@@ -451,7 +421,7 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
      */
     public function getTags()
     {
-        $this->tags = $this->tags ? : new ArrayCollection();
+        $this->tags = $this->tags ?: new ArrayCollection();
 
         return $this->tags;
     }
@@ -521,6 +491,6 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable
      */
     public function __toString()
     {
-        return (string)$this->getName();
+        return (string) $this->getName();
     }
 }

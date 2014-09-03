@@ -44,15 +44,6 @@ orocrm_channel:
               integration: magento
               connector: order
 
-       -
-          name: OroCRM\Bundle\MagentoBundle\Entity\Product
-          dependent:
-              - OroCRM\Bundle\MagentoBundle\Entity\Website
-              - OroCRM\Bundle\MagentoBundle\Entity\Store
-          navigation_items: ~
-          belongs_to:
-              integration: magento
-
    channel_types:
         magento:
             label: Magento

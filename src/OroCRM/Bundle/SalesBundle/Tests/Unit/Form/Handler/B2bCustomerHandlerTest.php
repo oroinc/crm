@@ -84,7 +84,7 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
 
         $appendForm->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $removeForm = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
@@ -92,7 +92,7 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
 
         $removeForm->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $leadsForm = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
@@ -114,7 +114,7 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
 
         $appendForm2->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $removeForm2 = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
@@ -122,7 +122,7 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
 
         $removeForm2->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $opportunityForm = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
@@ -166,10 +166,10 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function supportedMethods()
     {
-        return array(
-            array('POST'),
-            array('PUT')
-        );
+        return [
+            ['POST'],
+            ['PUT']
+        ];
     }
 
     public function testProcessWithoutLeadViewPermission()
@@ -207,8 +207,8 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
         $actualLeads = $this->entity->getLeads()->toArray();
         $actualOpportunities = $this->entity->getOpportunities()->toArray();
         $this->assertCount(0, $actualLeads);
-        $this->assertEquals(array(), $actualLeads);
+        $this->assertEquals([], $actualLeads);
         $this->assertCount(0, $actualOpportunities);
-        $this->assertEquals(array(), $actualOpportunities);
+        $this->assertEquals([], $actualOpportunities);
     }
 }

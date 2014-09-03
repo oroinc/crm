@@ -30,6 +30,7 @@ class Leads extends AbstractPageFilteredGrid
         $this->waitPageToLoad();
         $this->waitForAjax();
         $lead = new Lead($this->test);
+
         return $lead->init();
     }
 

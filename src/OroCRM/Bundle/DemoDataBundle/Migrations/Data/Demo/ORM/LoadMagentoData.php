@@ -6,13 +6,15 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-use Doctrine\ORM\EntityRepository;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\UserBundle\Entity\User;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
@@ -25,14 +27,18 @@ use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
+use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 
-class LoadMagentoData extends AbstractFixture implements DependentFixtureInterface
+class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     const VAT              = 0.0838;
     const INTEGRATION_NAME = 'Demo Web store';
 
     /** @var array */
     protected $users;
+
+    /** @var BuilderFactory */
+    protected $factory;
 
     /**
      * {@inheritdoc}
@@ -42,6 +48,14 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         return [
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData'
         ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->factory = $container->get('orocrm_channel.builder.factory');
     }
 
     /**
@@ -86,6 +100,15 @@ class LoadMagentoData extends AbstractFixture implements DependentFixtureInterfa
         $om->flush();
 
         $this->persistDemoOrders($om, $store, $integration);
+        $om->flush();
+
+        $builder = $this->factory->createBuilderForIntegration($integration);
+        $builder->setOwner($integration->getOrganization());
+        $builder->setDataSource($integration);
+        $builder->setStatus($integration->getEnabled() ? Channel::STATUS_ACTIVE : Channel::STATUS_INACTIVE);
+        $channel = $builder->getChannel();
+
+        $om->persist($channel);
         $om->flush();
     }
 

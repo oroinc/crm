@@ -156,7 +156,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         $channelTypes = $this->settingsProvider->getChannelTypeChoiceList();
         reset($channelTypes);
 
-        return (string)key($channelTypes);
+        return (string) key($channelTypes);
     }
 
     /**

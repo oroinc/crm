@@ -54,23 +54,20 @@
     {% endif %}
     {% set formFields = formFields|merge([
         form_row(form.name),
+        form_row(form.dataChannel),
         form_row(form.account),
         form_row(form.contact),
         form_row(form.tags),
-        form_row(form.channel),
     ]) %}
 
     {% set dataBlocks = [{
         'title': 'General'|trans,
         'class': 'active',
-        'subblocks': [
-        {
+        'subblocks': [{
             'title': 'orocrm.sales.widgets.b2bcustomer_information'|trans,
             'data': formFields
-        },
-        ]
-    }]
-    %}
+        }]
+    }] %}
 
     {% set dataBlocks = dataBlocks|merge( [{
         'title' : 'Addresses'|trans,

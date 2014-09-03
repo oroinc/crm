@@ -85,11 +85,11 @@ class B2bCustomerType extends AbstractType
             ]
         );
         $builder->add(
-            'channel',
+            'dataChannel',
             'orocrm_channel_select_type',
             [
                 'required' => true,
-                'label'    => 'orocrm.channel.entity_label'
+                'label'    => 'orocrm.sales.b2bcustomer.data_channel.label'
             ]
         );
         $builder->add(
@@ -138,9 +138,9 @@ class B2bCustomerType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer',
-            )
+            ]
         );
     }
 
@@ -150,20 +150,20 @@ class B2bCustomerType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         /** @var B2bCustomer $b2bcustomer */
-        $b2bcustomer = $form->getData();
-        $view->children['leads']->vars['grid_url'] = $this->router->generate(
+        $b2bcustomer                                       = $form->getData();
+        $view->children['leads']->vars['grid_url']         = $this->router->generate(
             'orocrm_sales_widget_leads_assign',
-            array('id' => $b2bcustomer->getId())
+            ['id' => $b2bcustomer->getId()]
         );
-        $view->children['leads']->vars['initial_elements']
-                     = $this->getInitialElements($b2bcustomer->getLeads());
+        $view->children['leads']->vars['initial_elements'] = $this->getInitialElements($b2bcustomer->getLeads());
 
-        $view->children['opportunities']->vars['grid_url'] = $this->router->generate(
+        $view->children['opportunities']->vars['grid_url']         = $this->router->generate(
             'orocrm_sales_widget_opportunities_assign',
-            array('id' => $b2bcustomer->getId())
+            ['id' => $b2bcustomer->getId()]
         );
-        $view->children['opportunities']->vars['initial_elements']
-                     = $this->getInitialOpportunities($b2bcustomer->getOpportunities());
+        $view->children['opportunities']->vars['initial_elements'] = $this->getInitialOpportunities(
+            $b2bcustomer->getOpportunities()
+        );
     }
 
     /**
@@ -173,21 +173,22 @@ class B2bCustomerType extends AbstractType
      */
     protected function getInitialElements(Collection $leads)
     {
-        $result = array();
+        $result = [];
         /** @var Lead $lead */
         foreach ($leads as $lead) {
             $phoneNumber = $lead->getPhoneNumber();
             $email       = $lead->getEmail();
-            $result[]    = array(
+            $result[]    = [
                 'id'        => $lead->getId(),
                 'label'     => $lead->getName(),
-                'link'      => $this->router->generate('orocrm_sales_lead_info', array('id' => $lead->getId())),
-                'extraData' => array(
-                    array('label' => 'Phone', 'value' => $phoneNumber ? $phoneNumber : null),
-                    array('label' => 'Email', 'value' => $email ? $email : null),
-                ),
-            );
+                'link'      => $this->router->generate('orocrm_sales_lead_info', ['id' => $lead->getId()]),
+                'extraData' => [
+                    ['label' => 'Phone', 'value' => $phoneNumber ? $phoneNumber : null],
+                    ['label' => 'Email', 'value' => $email ? $email : null],
+                ],
+            ];
         }
+
         return $result;
     }
 
@@ -198,19 +199,21 @@ class B2bCustomerType extends AbstractType
      */
     protected function getInitialOpportunities(Collection $opportunities)
     {
-        $result = array();
+        $result = [];
         /** @var Opportunity $opportunity */
         foreach ($opportunities as $opportunity) {
             $email    = $opportunity->getEmail();
-            $result[] = array(
+            $result[] = [
                 'id'        => $opportunity->getId(),
                 'label'     => $opportunity->getName(),
-                'link'      => $this->router->generate('orocrm_sales_lead_info', array('id' => $opportunity->getId())),
-                'extraData' => array(
-                    array('label' => 'Email', 'value' => $email ? $email : null)
-                ),
-            );
+                'link'      => $this->router->generate('orocrm_sales_lead_info', ['id' => $opportunity->getId()]),
+                'extraData' => [
+                    ['label' => 'Email', 'value' => $email ? $email : null]
+
+                ],
+            ];
         }
+
         return $result;
     }
 }

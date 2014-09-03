@@ -307,7 +307,7 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('billing_address_id', 'integer', ['notnull' => false]);
         $table->addColumn('shipping_address_id', 'integer', ['notnull' => false]);
-        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('account_id', 'integer', ['notnull' => false]);
         $table->addColumn('contact_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
@@ -318,7 +318,7 @@ class OroCRMSalesBundleInstaller implements
         $table->addIndex(['shipping_address_id'], 'IDX_9C6CFD74D4CFF2B', []);
         $table->addIndex(['billing_address_id'], 'IDX_9C6CFD779D0C0E4', []);
         $table->addIndex(['contact_id'], 'IDX_9C6CFD7E7A1254A', []);
-        $table->addIndex(['channel_id'], 'IDX_9C6CFD772F5A1AA', []);
+        $table->addIndex(['data_channel_id'], 'IDX_DAC0BD29BDC09B73', []);
         $table->addIndex(['user_owner_id'], 'IDX_9C6CFD79EB185F9', []);
 
         $table->addColumn(
@@ -556,7 +556,7 @@ class OroCRMSalesBundleInstaller implements
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_channel'),
-            ['channel_id'],
+            ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );

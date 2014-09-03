@@ -24,9 +24,9 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
     /**
      * @dataProvider buildFormProvider
      *
-     * @param array $configValue
+     * @param array            $configValue
      * @param null|Integration $data
-     * @param array $expectedChoices
+     * @param array            $expectedChoices
      */
     public function testBuildForm($configValue, $data, $expectedChoices)
     {
@@ -93,6 +93,7 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
     protected function getExtensions()
     {
         $integrationType = new IntegrationFormTypeStub();
+
         return [
             new PreloadedExtension(
                 [$integrationType->getName() => $integrationType],

@@ -62,7 +62,7 @@ class OroCRMAccountBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_4';
+        return 'v1_3';
     }
 
     /**

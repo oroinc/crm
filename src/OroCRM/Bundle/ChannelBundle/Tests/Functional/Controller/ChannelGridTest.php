@@ -53,7 +53,7 @@ class ChannelGridTest extends WebTestCase
             }
         }
 
-        $this->assertCount((int)$filters['expectedResultCount'], $result['data']);
+        $this->assertCount((int) $filters['expectedResultCount'], $result['data']);
     }
 
     public function gridProvider()

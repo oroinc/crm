@@ -60,6 +60,7 @@ class Opportunity extends AbstractPageEntity
     {
         $this->name->clear();
         $this->name->value($name);
+
         return $this;
     }
 
@@ -115,6 +116,7 @@ class Opportunity extends AbstractPageEntity
     {
         $this->probability->clear();
         $this->probability->value($probability);
+
         return $this;
     }
 
@@ -127,6 +129,7 @@ class Opportunity extends AbstractPageEntity
     {
         $this->budget->clear();
         $this->budget->value($budget);
+
         return $this;
     }
 
@@ -139,6 +142,7 @@ class Opportunity extends AbstractPageEntity
     {
         $this->customerNeed->clear();
         $this->customerNeed->value($customerNeed);
+
         return $this;
     }
 
@@ -151,6 +155,7 @@ class Opportunity extends AbstractPageEntity
     {
         $this->proposedSolution->clear();
         $this->proposedSolution->value($proposedSolution);
+
         return $this;
     }
 
@@ -162,6 +167,7 @@ class Opportunity extends AbstractPageEntity
     public function setCloseReason($closeReason)
     {
         $this->closeReason->selectOptionByLabel($closeReason);
+
         return $this;
     }
 
@@ -169,6 +175,7 @@ class Opportunity extends AbstractPageEntity
     {
         $this->closeRevenue->clear();
         $this->closeRevenue->value($closeRevenue);
+
         return $this;
     }
 
@@ -181,6 +188,7 @@ class Opportunity extends AbstractPageEntity
     {
         $this->closeDate->clear();
         $this->closeDate->value($closeDate);
+
         return $this;
     }
 
@@ -192,6 +200,7 @@ class Opportunity extends AbstractPageEntity
     public function checkStatus($status)
     {
         $this->assertElementPresent("//div[@class='status-enabled pull-left'][contains(., '{$status}')]");
+
         return $this;
     }
 
@@ -203,6 +212,7 @@ class Opportunity extends AbstractPageEntity
         $this->waitPageToLoad();
         $this->waitForAjax();
         $this->init();
+
         return $this;
     }
 
@@ -212,6 +222,7 @@ class Opportunity extends AbstractPageEntity
         $this->test->byXpath("//div[div[contains(., 'Delete Confirmation')]]//a[text()='Yes, Delete']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
+
         return new Contacts($this->test, false);
     }
 }
