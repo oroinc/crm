@@ -40,11 +40,7 @@ class B2bCustomerControllerTest extends WebTestCase
     {
         self::$account  = $this->getReference('default_b2bcustomer_account');
         self::$customer = $this->getReference('default_b2bcustomer');
-
-        self::$channel = $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroCRMChannelBundle:Channel')
-            ->findOneByName(LoadB2bCustomer::CHANNEL_NAME);
+        self::$channel  = $this->getReference('default_b2bcustomer_channel');
     }
 
     public function testIndex()
