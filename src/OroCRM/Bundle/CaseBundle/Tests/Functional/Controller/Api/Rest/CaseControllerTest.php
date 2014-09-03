@@ -64,9 +64,9 @@ class CaseControllerTest extends WebTestCase
             $request
         );
 
-        $resonse = $this->getJsonResponseContent($this->client->getResponse(), 201);
+        $response = $this->getJsonResponseContent($this->client->getResponse(), 201);
 
-        return $resonse['id'];
+        return $response['id'];
     }
 
     /**
