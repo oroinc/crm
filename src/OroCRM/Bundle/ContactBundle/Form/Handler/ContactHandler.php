@@ -106,7 +106,8 @@ class ContactHandler implements TagHandlerInterface
 
         $isEntityChanged   = count($uow->getEntityChangeSet($entity)) > 0;
         $isRelationChanged = count($uow->getScheduledEntityUpdates()) > 0 ||
-            count($uow->getScheduledCollectionUpdates()) > 0;
+            count($uow->getScheduledCollectionUpdates()) > 0 ||
+            count($uow->getScheduledCollectionDeletions()) > 0;
 
         if (false === $isEntityChanged && $isRelationChanged) {
             $entity->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
