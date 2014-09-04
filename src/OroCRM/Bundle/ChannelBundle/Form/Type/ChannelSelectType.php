@@ -5,12 +5,12 @@ namespace OroCRM\Bundle\ChannelBundle\Form\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
+
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class ChannelSelectType extends AbstractType
 {
@@ -49,10 +49,10 @@ class ChannelSelectType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $queryBuilderNormalizer = function (Options $options, $qb) {
-
             /** @var EntityManager $em */
             $em = $options['em'];
 
+            /** @var EntityRepository $repository */
             $repository = $em->getRepository('OroCRMChannelBundle:Channel');
             $entities   = $options['configs']['entities'];
 
@@ -65,32 +65,7 @@ class ChannelSelectType extends AbstractType
                 'class'         => 'OroCRMChannelBundle:Channel',
                 'property'      => 'name',
                 'random_id'     => true,
-                'query_builder' => function (EntityRepository $er, $entities = null) {
-                    $query = $er->createQueryBuilder('c');
-
-                    if (!empty($entities)) {
-                        $query->innerJoin('c.entities', 'e');
-                        $query->andWhere($query->expr()->in('e.name', $entities));
-                    }
-
-                    $query->orderBy('c.name', 'ASC');
-
-                    if (!empty($entities)) {
-                        $query->groupBy('c.name');
-                        $query->having(
-                            $query->expr()->eq(
-                                $query->expr()->countDistinct('e.name'),
-                                ':count'
-                            )
-                        );
-
-                        $query->setParameter('count', count($entities));
-                    }
-                    $query->andWhere('c.status = :status');
-                    $query->setParameter('status', Channel::STATUS_ACTIVE);
-
-                    return $query;
-                    },
+                'query_builder' =>  $this->getQueryBuilder(),
                 'configs'       => [
                     'allowClear'  => true,
                     'placeholder' => 'orocrm.channel.form.select_channel_type.label'
@@ -99,5 +74,31 @@ class ChannelSelectType extends AbstractType
         );
 
         $resolver->setNormalizers(['query_builder' => $queryBuilderNormalizer]);
+    }
+
+    /**
+     * @return callable
+     */
+    private function getQueryBuilder()
+    {
+        return function (EntityRepository $er, $entities = null) {
+            $query = $er->createQueryBuilder('c');
+
+            if (!empty($entities)) {
+                $countDistinctName = $query->expr()->eq($query->expr()->countDistinct('e.name'), ':count');
+
+                $query->innerJoin('c.entities', 'e');
+                $query->andWhere($query->expr()->in('e.name', $entities));
+                $query->groupBy('c.name');
+                $query->having($countDistinctName);
+                $query->setParameter('count', count($entities));
+            }
+
+            $query->andWhere('c.status = :status');
+            $query->orderBy('c.name', 'ASC');
+            $query->setParameter('status', Channel::STATUS_ACTIVE);
+
+            return $query;
+        };
     }
 }
