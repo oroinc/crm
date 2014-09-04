@@ -18,6 +18,8 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -55,8 +57,10 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  *  }
  * )
  */
-class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
+class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface, ChannelAwareInterface
 {
+    use ChannelEntityTrait;
+
     /**
      * @var integer
      *

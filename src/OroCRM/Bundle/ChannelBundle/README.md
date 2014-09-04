@@ -1,8 +1,8 @@
 OroCRMChannelBundle
 ===================
 
-Entity data block:
-------------------
+Entity data block
+-----------------
 
 This bundle brings "channel entity" to the system. Channel is a set of features which might be included in CRM.
 Also channel may come with "customer datasource", it's basically integration that brings business entities into system.
@@ -39,11 +39,13 @@ In order to implement ability to enable feature in scope of channel - configurat
                     connector:   another                                 # connector name
 ```
 
- - `name` - entity name
- - `dependent` - list of entities which will be shown/hidden too. (Related entities to the entity in field 'name')
- - `navigation_items` - list of menu items which should be enabled/disabled in any menu.
- - `belongs_to.integration` - integration type name
- - `belongs_to.connector`   - integration connector name
+| Option                   | Description                                                                                       |
+|--------------------------|---------------------------------------------------------------------------------------------------|
+| `name`                   | Entity name                                                                                       |
+| `dependent`              | List of entities which will be shown/hidden too. (Related entities to the entity in field 'name') |
+| `navigation_items`       | List of menu items which should be enabled/disabled in any menu.                                  |
+| `belongs_to.integration` | Integration type name                                                                             |
+| `belongs_to.connector`   | Integration connector name                                                                        |
 
 Menu item should be hidden by default in navigation configuration using parameter 'display' with value 'false'.
 
@@ -60,10 +62,11 @@ Menu item should be hidden by default in navigation configuration using paramete
                     menu_item: ~
 ```
 
-Channel types block:
---------------------
+Channel types block
+-------------------
 
-Channel is configured by "Channel Type", "Customer Identity" and "Entities" fields. Some types of channels that bring customers, also bring the "integration" field to configure the integration. It should be described in configuration block:
+Channel is configured by `Channel Type` and `Entities` fields. Some types of channels that bring customers,
+also bring the `integration` field to configure the integration. It should be described in configuration block:
 
 **Config example:**
 ```yml
@@ -74,17 +77,16 @@ Channel is configured by "Channel Type", "Customer Identity" and "Entities" fiel
                 - OroCRM\Bundle\AcmeBundle\Entity\Entity
                 - OroCRM\Bundle\AcmeBundle\Entity\Customer
             integration_type: some_type
-            customer_identity: OroCRM\Bundle\AcmeBundle\Entity\Customer
+            customer_identity: OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity
 ```
 
-If you want to add "Integration" to the channel you should define "integration_type", ["customer_identity"].
+| Option              | Description                                                                                                         | Required |
+|---------------------|---------------------------------------------------------------------------------------------------------------------|----------|
+| `label`             | Label of the channel type                                                                                           | yes      |
+| `entities`          | Determines which fields will be defined in `entities` field after channel type has been selected                    | no       |
+| `integration_type`  | Determines which integration type should be created in scope of particular channel that is based on the current ype | no       |
+| `customer_identity` | Determines entity that will be used as customer identifier for channels that are based of the current ype           | no       |
 
-* "label" - channel type label;
 
-* "entities" describe which fields will be defined in "Entities" filed after channel type has been selected;
-
-* "integration_type" describe which integration type appear in "Channel Type" select. When "integration_type" will have defined in config and you have selected your type in "Channel Type" selector, the Integration field has appeared in channel form like link, by clicking on it the dialog box will open;
-
-* When "Channel Type" has selected you can have predefined options in "Entities" field which you should describe in "entities";
-
-* Entity in "customer_identity" must also be in "entities" block;
+By default, if `customer_identity` option is not set `OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity` will be used as *customer identity* and
+will be included automatically.

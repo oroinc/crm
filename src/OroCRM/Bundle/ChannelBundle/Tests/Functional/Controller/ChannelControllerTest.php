@@ -33,15 +33,17 @@ class ChannelControllerTest extends WebTestCase
         $form         = $crawler->selectButton('Save and Close')->form();
         $channelType  = 'custom';
 
-        $form['orocrm_channel_form[name]']             = $name;
-        $form['orocrm_channel_form[channelType]']      = $channelType;
-        $form['orocrm_channel_form[owner]']            = $organization->getId();
-        $form['orocrm_channel_form[customerIdentity]'] = 'test1';
-        $form['orocrm_channel_form[entities]']         = json_encode(['test1', 'test2']);
+        $form['orocrm_channel_form[name]']        = $name;
+        $form['orocrm_channel_form[channelType]'] = $channelType;
+        $form['orocrm_channel_form[owner]']       = $organization->getId();
+        $form['orocrm_channel_form[entities]']    = json_encode(
+            ['OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity']
+        );
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
         $result  = $this->client->getResponse();
+
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains('Channel saved', $crawler->html());
 
@@ -60,13 +62,13 @@ class ChannelControllerTest extends WebTestCase
             ]
         );
 
-        $gridResult  = $this->getJsonResponseContent($response, 200);
-        $gridResult  = reset($gridResult['data']);
-        $id          = $gridResult['id'];
+        $gridResult = $this->getJsonResponseContent($response, 200);
+        $gridResult = reset($gridResult['data']);
+        $id         = $gridResult['id'];
 
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_channel_view', array('id' => $id))
+            $this->getUrl('orocrm_channel_view', ['id' => $id])
         );
 
         $result = $this->client->getResponse();
