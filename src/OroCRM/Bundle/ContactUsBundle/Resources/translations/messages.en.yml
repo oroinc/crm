@@ -21,6 +21,7 @@ orocrm:
             workflow_step.label:            Workflow step
             organization_name.label:        Organization name
             preferred_contact_method.label: Preferred contact method
+            data_channel.label:             Channel
 
             datagrid:
                 update: Update

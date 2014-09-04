@@ -98,6 +98,7 @@ orocrm:
             addresses.label:     Adresses
             carts.label:         Carts
             channel.label:       Integration
+            data_channel.label:  Channel
             name.label:          Name
             orders.label:        Customer orders
             lifetime.label:      Lifetime value
@@ -149,6 +150,7 @@ orocrm:
             shipping_address.label:    Shipping address
             billing_address.label:     Billing address
             channel.label:             Integration
+            data_channel.label:        Channel
             opportunity.label:         Opportunity
             notes.label:               Additional comments
             b2c_flow_abandoned_shopping_cart.step.label: Step
@@ -267,6 +269,7 @@ orocrm:
             is_virtual.label:       Is virtual
             is_guest.label:         Is guest
             channel.label:          Integration
+            data_channel.label:     Channel
             notes.label:            Additional comments
             feedback.label:         Feedback
             b2c_flow_order_follow_up.step.label: Step

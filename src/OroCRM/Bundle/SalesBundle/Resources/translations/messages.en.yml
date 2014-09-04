@@ -105,6 +105,7 @@ orocrm:
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             customer.label:       B2B Customer
+            data_channel.label:   Channel
             assigned.label:       Assigned
 
             datagrid:
@@ -155,6 +156,7 @@ orocrm:
             information:          Lead Information
             campaign.label:       Campaign
             customer.label:       B2B Customer
+            data_channel.label:   Channel
             assigned.label:       Assigned
 
             extend_source:
@@ -181,6 +183,7 @@ orocrm:
             owner.label:          Owner
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
+            data_channel.label:   Channel
 
             hint: 'Sales Process #%id%'
 
