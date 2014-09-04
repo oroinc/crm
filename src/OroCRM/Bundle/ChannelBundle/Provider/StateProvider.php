@@ -76,7 +76,7 @@ class StateProvider
 
             $qb = $this->getManager()->createQueryBuilder();
             $qb->distinct(true);
-            $qb->select('e.value')
+            $qb->select('e.name')
                 ->from('OroCRMChannelBundle:Channel', 'c')
                 ->andWhere('c.status = :status')
                 ->setParameter('status', Channel::STATUS_ACTIVE)
@@ -85,7 +85,7 @@ class StateProvider
             $assignedEntityNames = $qb->getQuery()->getArrayResult();
             $assignedEntityNames = array_map(
                 function ($result) {
-                    return $result['value'];
+                    return $result['name'];
                 },
                 $assignedEntityNames
             );
