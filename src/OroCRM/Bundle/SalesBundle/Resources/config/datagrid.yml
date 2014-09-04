@@ -25,6 +25,9 @@ datagrid:
                         - { join: o.contact , alias: contact }
                         - { join: o.status, alias: status }
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+                where:
+                    and:
+                      - o.organization = @oro_security.security_facade->getOrganizationId
         columns:
             name:
                 label:         orocrm.sales.opportunity.name.label
@@ -166,6 +169,9 @@ datagrid:
                         - { join: l.address, alias: address }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+                where:
+                    and:
+                      - l.organization = @oro_security.security_facade->getOrganizationId
             hints:
                 - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
         columns:
@@ -315,6 +321,9 @@ datagrid:
                         - { join: salesFunnel.workflowStep, alias: step }
                         - { join: salesFunnel.lead, alias: lead }
                         - { join: salesFunnel.opportunity, alias: opportunity }
+                where:
+                    and:
+                      - salesFunnel.organization = @oro_security.security_facade->getOrganizationId
         columns:
             id:
                 label: orocrm.sales.salesfunnel.id.label

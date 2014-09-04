@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\EmailBundle\Entity\Email;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -24,6 +25,11 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  * @Config(
  *      routeName="orocrm_contactus_request_index",
  *      defaultValues={
+ *          "ownership"={
+ *              "owner_type"="ORGANIZATION",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="owner_id"
+ *          },
  *          "entity"={
  *              "icon"="icon-envelope"
  *          },
@@ -123,6 +129,14 @@ class ContactRequest extends AbstractContactRequest
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowStep;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $owner;
 
     public function __construct()
     {
@@ -332,5 +346,21 @@ class ContactRequest extends AbstractContactRequest
     public function getWorkflowStep()
     {
         return $this->workflowStep;
+    }
+
+    /**
+     * @return Organization
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param Organization $organization
+     */
+    public function setOwner(Organization $organization)
+    {
+        $this->owner = $organization;
     }
 }
