@@ -20,7 +20,6 @@ parameters:
     orocrm_contact.email.owner.provider.class:        OroCRM\Bundle\ContactBundle\Entity\Provider\EmailOwnerProvider
 
     orocrm_contact.social_url_formatter.class:        OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter
-    orocrm_contact.event_listener.contact_email_grid_listener.class: OroCRM\Bundle\ContactBundle\EventListener\ContactEmailGridListener
 
     orocrm_contact.contact.datagrid_helper.class:     Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
 

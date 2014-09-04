@@ -30,6 +30,8 @@ class OroCRMCampaignBundle implements Migration
     {
         $table = $schema->createTable('orocrm_campaign_email');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('name', 'string', ['length' => 255]);
+        $table->addColumn('description', 'text', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('marketing_list_id', 'integer', []);
         $table->addColumn('campaign_id', 'integer', []);
