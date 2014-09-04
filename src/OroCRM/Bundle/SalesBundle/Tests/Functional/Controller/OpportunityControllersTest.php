@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional;
-
-use Doctrine\Common\Persistence\ManagerRegistry;
+namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller;
 
 use Symfony\Component\DomCrawler\Form;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadB2bCustomer;
 
 /**
  * @outputBuffering enabled
@@ -15,12 +15,22 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class OpportunityControllersTest extends WebTestCase
 {
+    /** @var B2bCustomer */
+    protected static $customer;
+
     protected function setUp()
     {
         $this->initClient(
-            array(),
+            ['debug' => false],
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
+
+        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadB2bCustomer']);
+    }
+
+    protected function postFixtureLoad()
+    {
+        self::$customer = $this->getReference('default_b2bcustomer');
     }
 
     public function testIndex()
@@ -33,12 +43,12 @@ class OpportunityControllersTest extends WebTestCase
     public function testCreate()
     {
         $crawler = $this->client->request('GET', $this->getUrl('orocrm_sales_opportunity_create'));
-        $account = $this->createAccount();
+
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
         $form['orocrm_sales_opportunity_form[name]']         = $name;
-        $form['orocrm_sales_opportunity_form[account]']      = $account->getId();
+        $form['orocrm_sales_opportunity_form[customer]']     = self::$customer->getId();
         $form['orocrm_sales_opportunity_form[probability]']  = 50;
         $form['orocrm_sales_opportunity_form[budgetAmount]'] = 10000;
         $form['orocrm_sales_opportunity_form[customerNeed]'] = 10001;
@@ -55,25 +65,7 @@ class OpportunityControllersTest extends WebTestCase
         return $name;
     }
 
-    /**
-     * @return Account
-     */
-    protected function createAccount()
-    {
-        /** @var ManagerRegistry $registry */
-        $registry = $this->client->getKernel()->getContainer()->get('doctrine');
-        $entityManager = $registry->getManagerForClass('OroCRMAccountBundle:Account');
-
-        $account = new Account();
-        $account->setName('test account');
-
-        $entityManager->persist($account);
-        $entityManager->flush($account);
-
-        return $account;
-    }
-
-    /**
+     /**
      * @param string $name
      * @depends testCreate
      *
@@ -83,10 +75,10 @@ class OpportunityControllersTest extends WebTestCase
     {
         $response = $this->client->requestGrid(
             'sales-opportunity-grid',
-            array(
+            [
                 'sales-opportunity-grid[_filter][name][type]' => '1',
                 'sales-opportunity-grid[_filter][name][value]' => $name,
-            )
+            ]
         );
 
         $result = $this->getJsonResponseContent($response, 200);
@@ -94,7 +86,7 @@ class OpportunityControllersTest extends WebTestCase
         $returnValue = $result;
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_opportunity_update', array('id' => $result['id']))
+            $this->getUrl('orocrm_sales_opportunity_update', ['id' => $result['id']])
         );
 
         /** @var Form $form */
@@ -124,7 +116,7 @@ class OpportunityControllersTest extends WebTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_opportunity_view', array('id' => $returnValue['id']))
+            $this->getUrl('orocrm_sales_opportunity_view', ['id' => $returnValue['id']])
         );
 
         $result = $this->client->getResponse();
@@ -144,7 +136,7 @@ class OpportunityControllersTest extends WebTestCase
             'GET',
             $this->getUrl(
                 'orocrm_sales_opportunity_info',
-                array('id' => $returnValue['id'], '_widgetContainer' => 'block')
+                ['id' => $returnValue['id'], '_widgetContainer' => 'block']
             )
         );
 
@@ -160,7 +152,7 @@ class OpportunityControllersTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('oro_api_delete_opportunity', array('id' => $returnValue['id']))
+            $this->getUrl('oro_api_delete_opportunity', ['id' => $returnValue['id']])
         );
 
         $result = $this->client->getResponse();
@@ -168,7 +160,7 @@ class OpportunityControllersTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_opportunity_view', array('id' => $returnValue['id']))
+            $this->getUrl('orocrm_sales_opportunity_view', ['id' => $returnValue['id']])
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 404);

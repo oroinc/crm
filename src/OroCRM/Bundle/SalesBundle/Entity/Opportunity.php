@@ -13,8 +13,10 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
@@ -49,8 +51,10 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  *  }
  * )
  */
-class Opportunity extends ExtendOpportunity implements EmailHolderInterface
+class Opportunity extends ExtendOpportunity implements EmailHolderInterface, ChannelAwareInterface
 {
+    use ChannelEntityTrait;
+
     /**
      * @var int
      *

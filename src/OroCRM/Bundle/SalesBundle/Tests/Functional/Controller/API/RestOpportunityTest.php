@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\API;
+namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -13,41 +13,22 @@ class RestOpportunityTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient(
-            array(),
+            [],
             $this->generateWsseAuthHeader()
         );
     }
 
-    protected function preAccountData()
-    {
-        $request = array(
-            "account" => array (
-                "name" => 'Account_name_opportunity',
-                "owner" => '1',
-            )
-        );
-        $this->client->request(
-            'POST',
-            $this->getUrl('oro_api_post_account'),
-            $request
-        );
-
-        $result = $this->getJsonResponseContent($this->client->getResponse(), 201);
-
-        return $result['id'];
-    }
     /**
      * @return array
      */
     public function testPostOpportunity()
     {
-        $request = array(
-           "opportunity" => array(
-               'name' => 'opportunity_name_' . mt_rand(1, 500),
-               'owner' => '1',
-               'account' => $this->preAccountData()
-           )
-        );
+        $request = [
+            "opportunity" => [
+                'name'  => 'opportunity_name_' . mt_rand(1, 500),
+                'owner' => '1'
+            ]
+        ];
 
         $this->client->request(
             'POST',
@@ -64,14 +45,15 @@ class RestOpportunityTest extends WebTestCase
 
     /**
      * @param $request
+     *
      * @depends testPostOpportunity
-     * @return mixed
+     * @return  mixed
      */
     public function testGetOpportunity($request)
     {
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_opportunity', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_opportunity', ['id' => $request['id']])
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -79,7 +61,6 @@ class RestOpportunityTest extends WebTestCase
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['opportunity']['name'], $result['name']);
         $this->assertEquals('In Progress', $result['status']);
-        $this->assertEquals('Account_name_opportunity', $result['account']);
         // TODO: incomplete CRM-816
         //$this->assertEquals($request['opportunity']['owner'], $result['owner']['id']);
         return $request;
@@ -87,8 +68,9 @@ class RestOpportunityTest extends WebTestCase
 
     /**
      * @param $request
+     *
      * @depends testGetOpportunity
-     * @return mixed
+     * @return  mixed
      */
     public function testPutOpportunity($request)
     {
@@ -97,7 +79,7 @@ class RestOpportunityTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            $this->getUrl('oro_api_put_opportunity', array('id' => $request['id'])),
+            $this->getUrl('oro_api_put_opportunity', ['id' => $request['id']]),
             $request
         );
 
@@ -106,7 +88,7 @@ class RestOpportunityTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_opportunity', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_opportunity', ['id' => $request['id']])
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -145,14 +127,14 @@ class RestOpportunityTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('oro_api_delete_opportunity', array('id' => $request['id']))
+            $this->getUrl('oro_api_delete_opportunity', ['id' => $request['id']])
         );
         $result = $this->client->getResponse();
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_opportunity', array('id' => $request['id']))
+            $this->getUrl('oro_api_get_opportunity', ['id' => $request['id']])
         );
 
         $result = $this->client->getResponse();
