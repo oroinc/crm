@@ -9,6 +9,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Oro\Bundle\IntegrationBundle\Utils\FormUtils as IntegrationFormUtils;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
@@ -123,26 +124,22 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
      */
     protected function muteFields(FormInterface $form)
     {
-        if ($form->getParent()) {
-            /** @var Channel $channel */
-            $channel = $form->getParent()->getData();
+        if (!$form->getParent()) {
+            return;
+        }
 
-            if (!($channel && $channel->getId())) {
-                // do nothing if channel is new
-                return;
-            }
+        /** @var Channel $channel */
+        $channel = $form->getParent()->getData();
+        // if channel is new
+        if (false === ($channel && $channel->getId())) {
+            return;
+        }
 
-            $atLeastOneSync = $channel->getStatuses()->exists(
-                function ($key, Status $status) {
-                    return intval($status->getCode()) === Status::STATUS_COMPLETED;
-                }
-            );
-            if ($atLeastOneSync) {
-                // disable start sync date
-                FormUtils::replaceField($form, 'syncStartDate', ['disabled' => true]);
-                // disable websites selector
-                FormUtils::replaceField($form, 'websiteId', ['disabled' => true]);
-            }
+        if (IntegrationFormUtils::wasSyncedAtLeastOnce($channel)) {
+            // disable start sync date
+            FormUtils::replaceField($form, 'syncStartDate', ['disabled' => true]);
+            // disable websites selector
+            FormUtils::replaceField($form, 'websiteId', ['disabled' => true]);
         }
     }
 }
