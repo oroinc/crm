@@ -89,7 +89,10 @@ class B2bCustomerType extends AbstractType
             'orocrm_channel_select_type',
             [
                 'required' => true,
-                'label'    => 'orocrm.sales.b2bcustomer.data_channel.label'
+                'label'    => 'orocrm.sales.b2bcustomer.data_channel.label',
+                'entities' => [
+                    'OroCRM\\Bundle\\SalesBundle\\Entity\\B2bCustomer'
+                ],
             ]
         );
         $builder->add(

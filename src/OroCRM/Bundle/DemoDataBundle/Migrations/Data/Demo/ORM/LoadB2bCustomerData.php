@@ -149,7 +149,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
      *
      * @return Account
      */
-    private  function getAccountReference($id)
+    private function getAccountReference($id)
     {
         return $this->em->getReference('OroCRMAccountBundle:Account', $id);
     }
