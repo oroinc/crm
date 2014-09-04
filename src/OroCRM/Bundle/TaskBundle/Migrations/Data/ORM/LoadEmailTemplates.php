@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ReminderBundle\Migrations\Data\ORM;
+namespace OroCRM\Bundle\TaskBundle\Migrations\Data\ORM;
 
 use Oro\Bundle\EmailBundle\Migrations\Data\ORM\AbstractEmailFixture;
 
