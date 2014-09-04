@@ -49,10 +49,13 @@ define(function (require) {
                 icon = 'icon-envelope';
             }
 
-            element
-                .find('[data-cid="' + model.cid + '"] .name-cell')
-                .addClass('has-icon')
-                .prepend($('<i/>').addClass(icon));
+            var item = element.find('[data-cid="' + model.cid + '"] .name-cell');
+
+            if (!item.hasClass('has-icon')) {
+                item
+                    .addClass('has-icon')
+                    .prepend($('<i/>').addClass(icon));
+            }
         }
     };
 
