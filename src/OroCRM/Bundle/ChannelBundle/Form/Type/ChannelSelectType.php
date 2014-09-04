@@ -12,6 +12,11 @@ use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
+/**
+ * Class ChannelSelectType
+ *
+ * @see Resourses\Doc\ChannelSelectType.md
+ */
 class ChannelSelectType extends AbstractType
 {
     const NAME = 'orocrm_channel_select_type';
