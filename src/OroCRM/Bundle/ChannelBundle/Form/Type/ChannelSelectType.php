@@ -8,7 +8,6 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
@@ -48,7 +47,7 @@ class ChannelSelectType extends AbstractType
 
             /** @var EntityRepository $repository */
             $repository = $em->getRepository('OroCRMChannelBundle:Channel');
-            $entities   = $options['configs']['entities'];
+            $entities   = $options->get('entities');
 
             return $qb($repository, $entities);
         };
@@ -64,6 +63,7 @@ class ChannelSelectType extends AbstractType
                     'allowClear'  => true,
                     'placeholder' => 'orocrm.channel.form.select_channel_type.label'
                 ],
+                'entities'      =>[]
             ]
         );
 
