@@ -44,6 +44,11 @@ class ChannelSelectTypeTest extends \PHPUnit_Framework_TestCase
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with($this->isType('array'));
+
+        $resolver->expects($this->once())
+            ->method('setNormalizers')
+            ->with($this->isType('array'));
+
         $this->type->setDefaultOptions($resolver);
     }
 }
