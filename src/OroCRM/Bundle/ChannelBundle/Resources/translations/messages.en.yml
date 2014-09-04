@@ -23,6 +23,7 @@ orocrm:
             account.label:        Account
             contact.label:        Contact
             owner.label:          Owner
+            data_channel.label:   Channel
         datagrid:
             action:
                 update.label: Update
