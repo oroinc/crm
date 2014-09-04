@@ -99,7 +99,7 @@ class ChannelSelectTypeTest extends OrmTestCase
         $this->assertSame($query, $this->type->getConfig()->getOption('query_builder')->getDQL());
     }
 
-    // @codingStandardsIgnoreStart
+
     public function dataProvider()
     {
         return [
@@ -107,7 +107,8 @@ class ChannelSelectTypeTest extends OrmTestCase
                 'config' => [
                     'entities' => []
                 ],
-                'query'  => 'SELECT c FROM OroCRM\Bundle\ChannelBundle\Entity\Channel c WHERE c.status = :status ORDER BY c.name ASC'
+                'query'  => 'SELECT c FROM OroCRM\Bundle\ChannelBundle\Entity\Channel c' .
+                    ' WHERE c.status = :status ORDER BY c.name ASC'
             ],
             'with entities'    => [
                 'config' => [
@@ -116,9 +117,10 @@ class ChannelSelectTypeTest extends OrmTestCase
                         'entity2'
                     ]
                 ],
-                'query'  => 'SELECT c FROM OroCRM\Bundle\ChannelBundle\Entity\Channel c INNER JOIN c.entities e WHERE e.name IN(\'entity1\', \'entity2\') AND c.status = :status GROUP BY c.name HAVING COUNT(DISTINCT e.name) = :count ORDER BY c.name ASC'
+                'query'  => 'SELECT c FROM OroCRM\Bundle\ChannelBundle\Entity\Channel c INNER JOIN c.entities e'.
+                    ' WHERE e.name IN(\'entity1\', \'entity2\') AND c.status = :status GROUP BY c.name'.
+                    ' HAVING COUNT(DISTINCT e.name) = :count ORDER BY c.name ASC'
             ]
         ];
     }
-    // @codingStandardsIgnoreEnd
 }
