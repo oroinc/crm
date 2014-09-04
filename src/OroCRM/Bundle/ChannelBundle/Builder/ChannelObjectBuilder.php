@@ -152,8 +152,8 @@ class ChannelObjectBuilder
      */
     public function getChannel()
     {
-        $type     = $this->channelType ?: self::CUSTOM_CHANNEL_TYPE;
-        $name     = $this->name ?: ucfirst($type . ' channel');
+        $type     = $this->getDefaultType();
+        $name     = $this->getDefaultName($type);
         $identity = $this->settingsProvider->getCustomerIdentityFromConfig($type);
         if ($this->populateEntities) {
             $this->entities = $this->settingsProvider->getEntitiesByChannelType($type);
@@ -192,5 +192,23 @@ class ChannelObjectBuilder
         }
 
         return $default;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDefaultType()
+    {
+        return $this->channelType ?: self::CUSTOM_CHANNEL_TYPE;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return string
+     */
+    protected function getDefaultName($type)
+    {
+        return $this->name ?: ucfirst($type . ' channel');
     }
 }

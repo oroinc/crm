@@ -11,6 +11,9 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+
 /**
  * @ORM\Table(
  *      name="orocrm_sales_funnel",
@@ -42,8 +45,9 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
  *  }
  * )
  */
-class SalesFunnel
+class SalesFunnel implements ChannelAwareInterface
 {
+    use ChannelEntityTrait;
     /**
      * @var integer
      *
