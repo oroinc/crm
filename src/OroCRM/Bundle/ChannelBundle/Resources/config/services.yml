@@ -78,8 +78,6 @@ services:
 
     orocrm_channel.form.type.channel_select:
         class: %orocrm_channel.form.type.channel_select.class%
-        arguments:
-            - @doctrine
         tags:
             - { name: form.type, alias: orocrm_channel_select_type }
 

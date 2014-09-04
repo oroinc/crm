@@ -21,17 +21,6 @@ class ChannelSelectType extends AbstractType
 {
     const NAME = 'orocrm_channel_select_type';
 
-    /** @var EntityManager */
-    protected $em;
-
-    /**
-     * @param ManagerRegistry $registry
-     */
-    public function __construct(ManagerRegistry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     /**
      * {@inheritdoc}
      */
