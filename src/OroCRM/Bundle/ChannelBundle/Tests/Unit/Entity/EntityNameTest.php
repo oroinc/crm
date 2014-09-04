@@ -19,10 +19,10 @@ class EntityNameTest extends AbstractEntityTestCase
     public function getDataProvider()
     {
         $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
-        $value   = 'testValue';
+        $name   = 'testName';
 
         return [
-            'value'   => ['value', $value, $value],
+            'name'   => ['name', $name, $name],
             'channel' => ['channel', $channel, $channel],
         ];
     }
