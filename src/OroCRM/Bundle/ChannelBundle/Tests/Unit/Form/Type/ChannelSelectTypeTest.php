@@ -7,10 +7,9 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2Type;
 
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\Forms;
+use Symfony\Component\Form\FormFactory;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\PreloadedExtension;
 
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
@@ -22,30 +21,27 @@ class ChannelSelectTypeTest extends OrmTestCase
     /** @var ChannelSelectType */
     protected $type;
 
-    /** @var RegistryInterface */
-    protected $registry;
-
     /** @var FormFactory */
     protected $factory;
 
     public function setUp()
     {
-        $this->registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $registry       = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $metadataDriver = new AnnotationDriver(
             new AnnotationReader(),
-            'OroCRM\Bundle\ChannelBundle\Entity'
+            'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'
         );
 
         $em     = $this->getTestEntityManager();
         $config = $em->getConfiguration();
         $config->setMetadataDriverImpl($metadataDriver);
-        $config->setEntityNamespaces(['OroCRMChannelBundle' => 'OroCRM\Bundle\ChannelBundle\Entity']);
+        $config->setEntityNamespaces(['OroCRMChannelBundle' => 'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity']);
 
-        $this->registry->expects($this->any())
+        $registry->expects($this->any())
             ->method('getManagerForClass')
             ->will($this->returnValue($em));
 
-        $entityType = new EntityType($this->registry);
+        $entityType = new EntityType($registry);
         $genemuType = new Select2Type('entity');
         $this->type = new ChannelSelectType();
 
@@ -67,7 +63,7 @@ class ChannelSelectTypeTest extends OrmTestCase
 
     public function tearDown()
     {
-        unset($this->type);
+        unset($this->type, $this->factory);
     }
 
     public function testGetName()
@@ -94,12 +90,14 @@ class ChannelSelectTypeTest extends OrmTestCase
      */
     public function testSetDefaultOptions($config, $query)
     {
-        $this->type = $this->factory->create(ChannelSelectType::NAME, null, $config);
+        $field = $this->factory->create($this->type, null, $config);
 
-        $this->assertSame($query, $this->type->getConfig()->getOption('query_builder')->getDQL());
+        $this->assertSame($query, $field->getConfig()->getOption('query_builder')->getDQL());
     }
 
-
+    /**
+     * @return array
+     */
     public function dataProvider()
     {
         return [
@@ -107,7 +105,7 @@ class ChannelSelectTypeTest extends OrmTestCase
                 'config' => [
                     'entities' => []
                 ],
-                'query'  => 'SELECT c FROM OroCRM\Bundle\ChannelBundle\Entity\Channel c' .
+                'query'  => 'SELECT c FROM OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Channel c' .
                     ' WHERE c.status = :status ORDER BY c.name ASC'
             ],
             'with entities'    => [
@@ -117,9 +115,10 @@ class ChannelSelectTypeTest extends OrmTestCase
                         'entity2'
                     ]
                 ],
-                'query'  => 'SELECT c FROM OroCRM\Bundle\ChannelBundle\Entity\Channel c INNER JOIN c.entities e'.
-                    ' WHERE e.name IN(\'entity1\', \'entity2\') AND c.status = :status GROUP BY c.name'.
-                    ' HAVING COUNT(DISTINCT e.name) = :count ORDER BY c.name ASC'
+                'query'  => 'SELECT c FROM OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Channel c ' .
+                    'INNER JOIN c.entities e ' .
+                    'WHERE e.name IN(\'entity1\', \'entity2\') AND c.status = :status GROUP BY c.name ' .
+                    'HAVING COUNT(DISTINCT e.name) = :count ORDER BY c.name ASC'
             ]
         ];
     }
