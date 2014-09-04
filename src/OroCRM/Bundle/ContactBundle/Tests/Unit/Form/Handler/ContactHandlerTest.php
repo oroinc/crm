@@ -2,12 +2,14 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Form\Handler;
 
+use Doctrine\Common\Persistence\ObjectManager;
+
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\Common\Persistence\ObjectManager;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-
 use OroCRM\Bundle\ContactBundle\Form\Handler\ContactHandler;
 
 class ContactHandlerTest extends \PHPUnit_Framework_TestCase
@@ -23,7 +25,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
     protected $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface
      */
     protected $manager;
 
@@ -43,7 +45,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->request = new Request();
-        $this->manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
+        $this->manager = $this->getMockBuilder('Doctrine\ORM\EntityManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -55,7 +57,6 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
                 ->getMock()
         );
     }
-
 
     public function testProcessUnsupportedRequest()
     {
@@ -96,7 +97,12 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testProcessValidData()
+    /**
+     * @dataProvider processValidDataProvider
+     *
+     * @param bool $isDataChanged
+     */
+    public function testProcessValidData($isDataChanged)
     {
         $appendedAccount = new Account();
         $appendedAccount->setId(1);
@@ -142,17 +148,59 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('removeAccounts')
             ->will($this->returnValue($removeForm));
 
-        $this->manager->expects($this->once())
-            ->method('persist')
-            ->with($this->entity);
+        if ($isDataChanged) {
+            $this->manager->expects($this->once())
+                ->method('persist')
+                ->with($this->entity);
+        } else {
+            $this->manager->expects($this->exactly(2))
+                ->method('persist')
+                ->with($this->entity);
+        }
 
         $this->manager->expects($this->once())
             ->method('flush');
+
+        $this->configureUnitOfWork($isDataChanged);
 
         $this->assertTrue($this->handler->process($this->entity));
 
         $actualAccounts = $this->entity->getAccounts()->toArray();
         $this->assertCount(1, $actualAccounts);
         $this->assertEquals($appendedAccount, current($actualAccounts));
+    }
+
+    public function processValidDataProvider()
+    {
+        return [
+            [true],
+            [false],
+        ];
+    }
+
+    /**
+     * @param bool $isChangesExists
+     */
+    protected function configureUnitOfWork($isChangesExists)
+    {
+        $uowMock = $this->getMockBuilder('\Doctrine\ORM\UnitOfWork')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->manager->expects($this->once())
+            ->method('getUnitOfWork')
+            ->will($this->returnValue($uowMock));
+
+        $uowMock->expects($this->once())
+            ->method('computeChangeSets');
+
+        $uowMock->expects($this->once())
+            ->method('getEntityChangeSet')
+            ->with($this->entity)
+            ->will($this->returnValue($isChangesExists ? [1] : []));
+
+        $uowMock->expects($this->once())
+            ->method('getScheduledEntityUpdates')
+            ->will($this->returnValue([1]));
     }
 }
