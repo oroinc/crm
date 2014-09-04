@@ -13,6 +13,9 @@ class ContactInformationFieldsExtension extends \Twig_Extension
      */
     protected $helper;
 
+    /**
+     * @param ContactInformationFieldHelper $helper
+     */
     public function __construct(ContactInformationFieldHelper $helper)
     {
         $this->helper = $helper;
@@ -31,6 +34,10 @@ class ContactInformationFieldsExtension extends \Twig_Extension
         );
     }
 
+    /**
+     * @param string $entityClass
+     * @return array
+     */
     public function getContactInformationFieldsInfo($entityClass)
     {
         if (!$entityClass) {

@@ -10,19 +10,6 @@
     {{ parent() }}
 
     {% block stylesheets %}
-        <style type="text/css">
-            #orocrm_marketing_list-column-list .name-cell {
-                padding-left: 28px;
-            }
-
-            #orocrm_marketing_list-column-list .name-cell.has-icon {
-                padding-left: 10px;
-            }
-
-            #orocrm_marketing_list-column-list .name-cell .entity-field-path {
-                padding-left: 2px
-            }
-        </style>
         {{ form_stylesheet(form) }}
     {% endblock %}
 {% endblock %}
@@ -108,12 +95,11 @@
         }]
     %}
 
+    {% set hasEntity = form.vars.value is not empty and form.vars.value.entity is defined and form.vars.value.entity is not empty %}
     {% set columnsComponentOptions = {
         'entityChoiceSelector': '#orocrm_marketing_list_form_entity',
         'fieldsChoiceSelector': '#contact-information-fields-list',
-        'contactInformationFields': form.vars.value is not empty and form.vars.value.entity is defined and form.vars.value.entity is not empty
-            ? get_contact_information_fields_info(form.vars.value.entity)
-            : []
+        'contactInformationFields': hasEntity ? get_contact_information_fields_info(form.vars.value.entity) : []
     } %}
 
     {% set type = 'orocrm_marketing_list' %}
@@ -140,8 +126,8 @@
             ['column', 'label', 'sorting', 'action']
         ) }}
     </div>
-
     {% endset %}
+
     {% set dataBlocks = dataBlocks|merge( [{
         'title' : 'oro.segment.form.designer'|trans,
         'content_attr': {'id': type ~ '-designer'},

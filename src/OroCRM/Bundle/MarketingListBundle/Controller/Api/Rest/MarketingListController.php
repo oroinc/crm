@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Controller\Api\Rest;
 
-use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\Rest\Util\Codes;
