@@ -389,7 +389,7 @@ class EmailCampaign
                 sprintf(
                     'Schedule type %s is not know. Known types are %s',
                     $schedule,
-                    array(self::SCHEDULE_IMMEDIATE, self::SCHEDULE_DEFERRED)
+                    implode(', ', array(self::SCHEDULE_IMMEDIATE, self::SCHEDULE_DEFERRED))
                 )
             );
         }

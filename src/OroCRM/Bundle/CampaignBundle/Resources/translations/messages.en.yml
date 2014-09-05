@@ -70,7 +70,7 @@ orocrm:
             created_at.label:    Created At
             updated_at.label:    Updated At
             campaign.label:      Campaign
-            sent.label:           Sent
+            sent.label:          Sent
             status:
                 sent: Sent
                 not_sent: Not sent

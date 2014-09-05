@@ -5,9 +5,10 @@ namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Entity;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
+use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 
-class CampaignEmailTest extends AbstractEntityTestCase
+class EmailCampaignTest extends AbstractEntityTestCase
 {
     /**
      * {@inheritDoc}
@@ -31,14 +32,17 @@ class CampaignEmailTest extends AbstractEntityTestCase
         $template = 1;
 
         return [
-            'name'          => ['campaign', $campaign, $campaign],
+            'name'          => ['name', 'test', 'test'],
+            'description'   => ['description', 'test', 'test'],
+            'campaign'      => ['campaign', $campaign, $campaign],
             'sent'          => ['sent', true, true],
-            'schedule'      => ['schedule', 'schedule', 'schedule'],
+            'schedule'      => ['schedule', EmailCampaign::SCHEDULE_DEFERRED, EmailCampaign::SCHEDULE_DEFERRED],
+            'scheduledAt'   => ['scheduledAt', $date, $date],
             'marketingList' => ['marketingList', $marketingList, $marketingList],
             'owner'         => ['owner', $owner, $owner],
             'template'      => ['template', $template, $template],
-            'updatedAt'     => ['template', $date, $date],
-            'createdAt'     => ['template', $date, $date],
+            'updatedAt'     => ['updatedAt', $date, $date],
+            'createdAt'     => ['createdAt', $date, $date],
         ];
     }
 
@@ -51,5 +55,15 @@ class CampaignEmailTest extends AbstractEntityTestCase
 
         $this->assertEquals($date->format('Y-m-d'), $this->entity->getCreatedAt()->format('Y-m-d'));
         $this->assertEquals($date->format('Y-m-d'), $this->entity->getUpdatedAt()->format('Y-m-d'));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Schedule type unknown is not know. Known types are immediate, deferred
+     */
+    public function testUnknownSchedule()
+    {
+        $entity = new EmailCampaign();
+        $entity->setSchedule('unknown');
     }
 }
