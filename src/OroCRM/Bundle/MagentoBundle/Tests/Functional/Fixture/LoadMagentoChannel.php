@@ -105,7 +105,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $order = $this->createOrder($cart, $customer);
 
         $this->setReference('customer', $customer);
-        $this->setReference('channel', $this->integration);
+        $this->setReference('integration', $this->integration);
         $this->setReference('cart', $cart);
         $this->setReference('order', $order);
 
@@ -507,13 +507,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $builder->setChannelType(self::CHANNEL_TYPE);
         $builder->setStatus(Channel::STATUS_ACTIVE);
         $builder->setDataSource($this->integration);
-        $builder->setEntities(
-            [
-                'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer',
-                'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart',
-                'OroCRM\\Bundle\\MagentoBundle\\Entity\\Order'
-            ]
-        );
+        $builder->setEntities();
 
         $channel = $builder->getChannel();
 
