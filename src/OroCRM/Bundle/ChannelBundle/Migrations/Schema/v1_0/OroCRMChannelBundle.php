@@ -4,12 +4,29 @@ namespace OroCRM\Bundle\ChannelBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMChannelBundle implements Migration
+class OroCRMChannelBundle implements Migration, ExtendExtensionAwareInterface
 {
     /**
+     * @var ExtendExtension
+     */
+    protected $extendExtension;
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtendExtension(ExtendExtension $extendExtension)
+    {
+        var_dump(1);
+        $this->extendExtension = $extendExtension;
+    }
+
+     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
@@ -23,6 +40,19 @@ class OroCRMChannelBundle implements Migration
         $this->addOrocrmChannelForeignKeys($schema);
         $this->addOrocrmChannelEntityNameForeignKeys($schema);
         $this->addOrocrmChannelCustIdentityForeignKeys($schema);
+
+        var_dump(2);
+
+        \Doctrine\Common\Util\Debug::dump($this->extendExtension, 1);
+
+        $this->extendExtension->addManyToOneRelation(
+            $schema,
+            'oro_embedded_form',
+            'channel',
+            'orocrm_channel',
+            'id',
+            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
+        );
     }
 
     /**
