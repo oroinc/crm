@@ -1,10 +1,13 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroAddressBundle::macros.html.twig' as address %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
+            {{ channel.renderChannelProperty(entity, 'orocrm.magento.order.data_channel.label') }}
+
             {{ ui.renderProperty('orocrm.magento.order.status.label'|trans, entity.status|trans) }}
             {{ ui.renderProperty('orocrm.magento.order.currency.label'|trans, entity.currency) }}
             {{ ui.renderProperty('orocrm.magento.order.total_amount.label'|trans, entity.totalAmount|oro_format_currency({'currency': entity.currency})) }}
