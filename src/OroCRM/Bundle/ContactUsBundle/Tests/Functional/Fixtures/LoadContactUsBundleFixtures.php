@@ -70,7 +70,5 @@ class LoadContactUsBundleFixtures extends AbstractFixture implements ContainerAw
         $this->em->flush();
 
         $this->setReference('default_channel', $channel);
-
-        return $this;
     }
 }
