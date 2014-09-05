@@ -131,7 +131,7 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
         /** @var Channel $channel */
         $channel = $form->getParent()->getData();
         // if channel is new
-        if (false === ($channel && $channel->getId())) {
+        if (!$channel || !$channel->getId()) {
             return;
         }
 
