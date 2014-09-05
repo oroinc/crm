@@ -71,13 +71,7 @@ class ContactRequestsGridTest extends AbstractDatagridTestCase
                             LoadContactUsBundleFixtures::CHANNEL_NAME,
                         'orcrm-contact-requests-grid[_filter][firstName][value]'   => 'something'
                     ],
-                    'assert'              => [
-                        'channelName'  => LoadContactUsBundleFixtures::CHANNEL_NAME,
-                        'firstName'    => 'fname',
-                        'lastName'     => 'lname',
-                        'emailAddress' => 'email@email.com',
-                        'phone'        => '123123123'
-                    ],
+                    'assert'              => [],
                     'expectedResultCount' => 0
                 ],
             ],
