@@ -12,7 +12,7 @@ class CustomerReverseSyncTest extends WebTestCase
     const FIXTURE_NS = 'OroCRM\\Bundle\\MagentoBundle\\Tests\\Functional\\Fixture\\';
 
     /** @var int */
-    protected static $channelId;
+    protected static $integrationId;
 
     /** @var int */
     protected static $contactId;
@@ -29,15 +29,15 @@ class CustomerReverseSyncTest extends WebTestCase
 
     protected function postFixtureLoad()
     {
-        $channel = $this->getReference('channel');
-        $contact = $this->getReference('contact');
+        $integration = $this->getReference('integration');
+        $contact     = $this->getReference('contact');
 
-        if (!($channel && $contact)) {
+        if (!($integration && $contact)) {
             $this->markTestIncomplete('Invalid fixtures, unable to perform test case');
         }
 
-        self::$contactId = $contact->getId();
-        self::$channelId = $channel->getId();
+        self::$contactId     = $contact->getId();
+        self::$integrationId = $integration->getId();
     }
 
     /**
@@ -49,7 +49,7 @@ class CustomerReverseSyncTest extends WebTestCase
     public function testJobScheduling($twoWaySyncEnabled, $expectedJobsCount)
     {
         $em      = $this->getEM();
-        $channel = $em->find('OroIntegrationBundle:Channel', self::$channelId);
+        $channel = $em->find('OroIntegrationBundle:Channel', self::$integrationId);
 
         $settings = $channel->getSynchronizationSettings();
         $settings->offsetSet('isTwoWaySyncEnabled', $twoWaySyncEnabled);

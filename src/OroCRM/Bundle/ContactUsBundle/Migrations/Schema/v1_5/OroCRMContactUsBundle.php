@@ -3,36 +3,46 @@
 namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_5;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 
+use Oro\Bundle\EntityBundle\Migrations\Extension\ChangeTypeExtension;
+use Oro\Bundle\EntityBundle\Migrations\Extension\ChangeTypeExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMContactUsBundle implements Migration
+class OroCRMContactUsBundle implements Migration, ChangeTypeExtensionAwareInterface
 {
+    /**
+     * @var ChangeTypeExtension
+     */
+    protected $changeTypeExtension;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setChangeTypeExtension(ChangeTypeExtension $changeTypeExtension)
+    {
+        $this->changeTypeExtension = $changeTypeExtension;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->modifycOrocrmContactusRequestTable($schema);
-    }
-
-    /**
-     * @param Schema $schema
-     */
-    protected function modifycOrocrmContactusRequestTable(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_contactus_request');
-
-        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['data_channel_id'], 'IDX_342872E8BDC09B73', []);
-
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
-            ['data_channel_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null],
-            'FK_342872E8BDC09B73'
+        $this->changeTypeExtension->changePrimaryKeyType(
+            $schema,
+            $queries,
+            'orocrm_contactus_contact_rsn',
+            'id',
+            Type::INTEGER
+        );
+        $this->changeTypeExtension->changePrimaryKeyType(
+            $schema,
+            $queries,
+            'orocrm_contact_group',
+            'id',
+            Type::INTEGER
         );
     }
 }

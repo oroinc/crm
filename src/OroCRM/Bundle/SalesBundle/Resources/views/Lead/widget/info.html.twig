@@ -1,12 +1,15 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroEmailBundle::macros.html.twig' as email %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ ui.renderProperty('orocrm.sales.lead.first_name.label'|trans, entity.firstName) }}
             {{ ui.renderProperty('orocrm.sales.lead.last_name.label'|trans, entity.lastName) }}
+
+            {{ channel.renderChannelProperty(entity, 'orocrm.sales.lead.data_channel.label') }}
 
             {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
                 {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name|escape ~ '</a>' %}

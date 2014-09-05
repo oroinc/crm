@@ -15,10 +15,7 @@ class CustomerControllerTest extends AbstractController
     {
         parent::postFixtureLoad();
 
-        self::$customer = $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroCRMMagentoBundle:Customer')
-            ->findOneByChannel(self::$channel);
+        self::$customer = $this->getReference('customer');
     }
 
     protected function getMainEntityId()
@@ -54,8 +51,8 @@ class CustomerControllerTest extends AbstractController
                 [
                     'gridParameters'      => ['gridName' => 'magento-customers-grid'],
                     'gridFilters'         => [],
-                    'channelName'         => 'Demo Web store',
                     'assert'              => [
+                        'channelName' => 'Magento channel',
                         'firstName'   => 'John',
                         'lastName'    => 'Doe',
                         'email'       => 'test@example.com',
@@ -74,8 +71,8 @@ class CustomerControllerTest extends AbstractController
                         'magento-customers-grid[_filter][firstName][value]' => 'John',
                         'magento-customers-grid[_filter][email][value]'     => 'test@example.com',
                     ],
-                    'channelName'         => 'Demo Web store',
                     'assert'              => [
+                        'channelName' => 'Magento channel',
                         'firstName'   => 'John',
                         'lastName'    => 'Doe',
                         'email'       => 'test@example.com',
@@ -94,7 +91,6 @@ class CustomerControllerTest extends AbstractController
                         'magento-customers-grid[_filter][firstName][value]' => 'John1',
                         'magento-customers-grid[_filter][email][value]'     => 'test@example.com',
                     ],
-                    'channelName'         => 'Demo Web store',
                     'assert'              => [],
                     'expectedResultCount' => 0
                 ],
@@ -107,7 +103,6 @@ class CustomerControllerTest extends AbstractController
                         'channel'  => 'channelId'
                     ],
                     'gridFilters'         => [],
-                    'channelName'         => 'Demo Web store',
                     'assert'              => [
                         'grandTotal'  => '$2.54',
                         'statusLabel' => 'Open',
@@ -124,7 +119,6 @@ class CustomerControllerTest extends AbstractController
                         'channel'  => 'channelId'
                     ],
                     'gridFilters'         => [],
-                    'channelName'         => 'Demo Web store',
                     'assert'              => [
                         'totalAmount'     => '$0.00',
                         'totalPaidAmount' => '$17.85',
