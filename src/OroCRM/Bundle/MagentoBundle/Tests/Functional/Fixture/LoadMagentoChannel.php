@@ -8,9 +8,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\UserBundle\Model\Gender;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
@@ -28,33 +29,34 @@ use OroCRM\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
 class LoadMagentoChannel extends AbstractFixture
 {
     /** @var ObjectManager */
-    private $em;
+    protected $em;
 
-    /** @var Channel */
-    private $channel;
+    /** @var integration */
+    protected $integration;
 
     /** @var MagentoSoapTransport */
-    private $transport;
+    protected $transport;
 
     /** @var array */
-    private $countries;
+    protected $countries;
 
     /** @var array */
-    private $regions;
+    protected $regions;
 
     /** @var Website */
-    private $website;
+    protected $website;
 
     /** @var Store */
-    private $store;
+    protected $store;
 
     /** @var CustomerGroup */
-    private $customerGroup;
+    protected $customerGroup;
+
+    /** @var Channel */
+    protected $channel;
 
     /**
-     * @param ObjectManager $manager
-     *
-     * @return Channel
+     * {@inheritDoc}
      */
     public function load(ObjectManager $manager)
     {
@@ -63,15 +65,14 @@ class LoadMagentoChannel extends AbstractFixture
         $this->regions   = $this->loadStructure('OroAddressBundle:Region', 'getCombinedCode');
 
         $this->createTransport()
+            ->createIntegration()
             ->createChannel()
             ->createWebSite()
             ->createCustomerGroup()
             ->createStore();
 
-        $address1       = $this->createAddress($this->regions['US-AZ'], $this->countries['US']);
-        $address2       = $this->createAddress($this->regions['US-AZ'], $this->countries['US']);
         $magentoAddress = $this->createMagentoAddress($this->regions['US-AZ'], $this->countries['US']);
-        $account        = $this->createAccount($address1, $address2);
+        $account        = $this->createAccount();
         $customer       = $this->createCustomer(1, $account, $magentoAddress);
         $cartAddress1   = $this->createCartAddress($this->regions['US-AZ'], $this->countries['US'], 1);
         $cartAddress2   = $this->createCartAddress($this->regions['US-AZ'], $this->countries['US'], 2);
@@ -86,7 +87,7 @@ class LoadMagentoChannel extends AbstractFixture
         $order = $this->createOrder($cart, $customer);
 
         $this->setReference('customer', $customer);
-        $this->setReference('channel', $this->channel);
+        $this->setReference('channel', $this->integration);
         $this->setReference('cart', $cart);
         $this->setReference('order', $order);
 
@@ -95,8 +96,6 @@ class LoadMagentoChannel extends AbstractFixture
         $this->em->persist($order);
 
         $this->em->flush();
-
-        return $this->channel;
     }
 
     /**
@@ -111,7 +110,8 @@ class LoadMagentoChannel extends AbstractFixture
     protected function createCart($billing, $shipping, Customer $customer, ArrayCollection $item, $status)
     {
         $cart = new Cart();
-        $cart->setChannel($this->channel);
+        $cart->setChannel($this->integration);
+        $cart->setDataChannel($this->channel);
         $cart->setBillingAddress($billing);
         $cart->setShippingAddress($shipping);
         $cart->setCustomer($customer);
@@ -156,16 +156,16 @@ class LoadMagentoChannel extends AbstractFixture
     /**
      * @return $this
      */
-    protected function createChannel()
+    protected function createIntegration()
     {
-        $channel = new Channel();
-        $channel->setName('Demo Web store');
-        $channel->setType('magento');
-        $channel->setConnectors(["customer", "order", "cart", "region"]);
-        $channel->setTransport($this->transport);
+        $integration = new Integration();
+        $integration->setName('Demo Web store');
+        $integration->setType('magento');
+        $integration->setConnectors(["customer", "order", "cart", "region"]);
+        $integration->setTransport($this->transport);
 
-        $this->em->persist($channel);
-        $this->channel = $channel;
+        $this->em->persist($integration);
+        $this->integration = $integration;
 
         return $this;
     }
@@ -273,7 +273,8 @@ class LoadMagentoChannel extends AbstractFixture
     protected function createCustomer($oid, Account $account, MagentoAddress $address)
     {
         $customer = new Customer();
-        $customer->setChannel($this->channel);
+        $customer->setChannel($this->integration);
+        $customer->setDataChannel($this->channel);
         $customer->setFirstName('John');
         $customer->setLastName('Doe');
         $customer->setEmail('test@example.com');
@@ -303,7 +304,7 @@ class LoadMagentoChannel extends AbstractFixture
         $website->setName('web site');
         $website->setOriginId(1);
         $website->setCode('web site code');
-        $website->setChannel($this->channel);
+        $website->setChannel($this->integration);
 
         $this->em->persist($website);
         $this->website = $website;
@@ -318,7 +319,7 @@ class LoadMagentoChannel extends AbstractFixture
     {
         $store = new Store;
         $store->setName('demo store');
-        $store->setChannel($this->channel);
+        $store->setChannel($this->integration);
         $store->setCode(1);
         $store->setWebsite($this->website);
         $store->setOriginId(1);
@@ -330,17 +331,12 @@ class LoadMagentoChannel extends AbstractFixture
     }
 
     /**
-     * @param      $billing
-     * @param      $shipping
-     *
      * @return Account
      */
-    protected function createAccount($billing, $shipping)
+    protected function createAccount()
     {
         $account = new Account;
         $account->setName('acc');
-        $account->setBillingAddress($billing);
-        $account->setShippingAddress($shipping);
         $account->setOwner($this->getUser());
 
         $this->em->persist($account);
@@ -355,7 +351,7 @@ class LoadMagentoChannel extends AbstractFixture
     {
         $customerGroup = new CustomerGroup;
         $customerGroup->setName('group');
-        $customerGroup->setChannel($this->channel);
+        $customerGroup->setChannel($this->integration);
         $customerGroup->setOriginId(1);
 
         $this->em->persist($customerGroup);
@@ -424,7 +420,8 @@ class LoadMagentoChannel extends AbstractFixture
     protected function createOrder(Cart $cart, Customer $customer)
     {
         $order = new Order();
-        $order->setChannel($this->channel);
+        $order->setChannel($this->integration);
+        $order->setDataChannel($this->channel);
         $order->setStatus('open');
         $order->setIncrementId('one');
         $order->setCreatedAt(new \DateTime('now'));
@@ -480,5 +477,35 @@ class LoadMagentoChannel extends AbstractFixture
         $user = $this->em->getRepository('OroUserBundle:User')->findOneBy(['username' => 'admin']);
 
         return $user;
+    }
+
+    protected function createChannel()
+    {
+        $date = new \DateTime('now');
+
+        $channel = new Channel();
+        $channel->setName('Magento channel');
+        $channel->setDataSource($this->integration);
+        $channel->setChannelType('magento');
+        $channel->setCreatedAt($date);
+        $channel->setUpdatedAt($date);
+        $channel->setCustomerIdentity('OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer');
+        $channel->setEntities(
+            [
+                'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer',
+                'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart',
+                'OroCRM\\Bundle\\MagentoBundle\\Entity\\Order'
+            ]
+        );
+
+        $this->em->persist($channel);
+
+        $this->setReference('default_channel', $channel);
+
+        $this->em->flush();
+
+        $this->channel = $channel;
+
+        return $this;
     }
 }

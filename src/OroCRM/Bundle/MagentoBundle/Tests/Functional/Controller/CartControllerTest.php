@@ -18,7 +18,7 @@ class CartControllerTest extends AbstractController
         self::$cart = $this->getContainer()
             ->get('doctrine')
             ->getRepository('OroCRMMagentoBundle:Cart')
-            ->findOneByChannel(self::$channel);
+            ->findOneByChannel(self::$integration);
     }
 
     protected function getMainEntityId()
@@ -61,7 +61,7 @@ class CartControllerTest extends AbstractController
                         'gridName' => 'magento-cart-grid'
                     ],
                     'gridFilters'         => [],
-                    'channelName'         => 'Demo Web store',
+                    'channelName'         => 'Magento channel',
                     'assert'              => [
                         'firstName'  => 'John',
                         'lastName'   => 'Doe',
@@ -80,7 +80,7 @@ class CartControllerTest extends AbstractController
                         'magento-cart-grid[_filter][lastName][value]'  => 'Doe',
                         'magento-cart-grid[_filter][firstName][value]' => 'John',
                     ],
-                    'channelName'         => 'Demo Web store',
+                    'channelName'         => 'Magento channel',
                     'assert'              => [
                         'firstName'  => 'John',
                         'lastName'   => 'Doe',
@@ -99,7 +99,7 @@ class CartControllerTest extends AbstractController
                         'magento-cart-grid[_filter][lastName][value]'  => 'Doe',
                         'magento-cart-grid[_filter][firstName][value]' => 'Doe',
                     ],
-                    'channelName'         => 'Demo Web store',
+                    'channelName'         => 'Magento channel',
                     'assert'              => [],
                     'expectedResultCount' => 0
                 ]

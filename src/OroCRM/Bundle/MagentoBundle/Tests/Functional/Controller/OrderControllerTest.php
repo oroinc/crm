@@ -18,7 +18,7 @@ class OrderControllerTest extends AbstractController
         self::$order = $this->getContainer()
             ->get('doctrine')
             ->getRepository('OroCRMMagentoBundle:Order')
-            ->findOneByChannel(self::$channel);
+            ->findOneByChannel(self::$integration);
     }
 
     protected function getMainEntityId()
@@ -65,7 +65,7 @@ class OrderControllerTest extends AbstractController
                         'gridName' => 'magento-order-grid'
                     ],
                     'gridFilters'         => [],
-                    'channelName'         => 'Demo Web store',
+                    'channelName'         => 'Magento channel',
                     'assert'              => [
                         'firstName' => 'John',
                         'lastName'  => 'Doe',
@@ -85,7 +85,7 @@ class OrderControllerTest extends AbstractController
                         'magento-order-grid[_filter][firstName][value]' => 'John',
                         'magento-order-grid[_filter][status][value]'    => 'open',
                     ],
-                    'channelName'         => 'Demo Web store',
+                    'channelName'         => 'Magento channel',
                     'assert'              => [
                         'firstName' => 'John',
                         'lastName'  => 'Doe',
@@ -105,7 +105,7 @@ class OrderControllerTest extends AbstractController
                         'magento-order-grid[_filter][firstName][value]' => 'John',
                         'magento-order-grid[_filter][status][value]'    => 'close',
                     ],
-                    'channelName'         => 'Demo Web store',
+                    'channelName'         => 'Magento channel',
                     'assert'              => [],
                     'expectedResultCount' => 0
                 ],
@@ -117,7 +117,7 @@ class OrderControllerTest extends AbstractController
                         'id'       => 'id',
                     ],
                     'gridFilters'         => [],
-                    'channelName'         => 'Demo Web store',
+                    'channelName'         => 'Magento channel',
                     'assert'              => [
                         'sku'            => 'some sku',
                         'qty'            => 1,

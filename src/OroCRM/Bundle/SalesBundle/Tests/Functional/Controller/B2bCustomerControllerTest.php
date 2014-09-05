@@ -9,7 +9,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadB2bCustomer;
 
 /**
  * @outputBuffering enabled
@@ -33,14 +32,14 @@ class B2bCustomerControllerTest extends WebTestCase
             array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
         );
 
-        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadB2bCustomer']);
+        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
     }
 
     protected function postFixtureLoad()
     {
-        self::$account  = $this->getReference('default_b2bcustomer_account');
+        self::$account  = $this->getReference('default_account');
         self::$customer = $this->getReference('default_b2bcustomer');
-        self::$channel  = $this->getReference('default_b2bcustomer_channel');
+        self::$channel  = $this->getReference('default_channel');
     }
 
     public function testIndex()
@@ -48,79 +47,6 @@ class B2bCustomerControllerTest extends WebTestCase
         $this->client->request('GET', $this->getUrl('orocrm_sales_b2bcustomer_index'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-    }
-
-    /**
-     * @dataProvider gridProvider
-     *
-     * @param array $filters
-     */
-    public function testGrid($filters)
-    {
-        $this->client->requestGrid($filters['gridParameters'], $filters['gridFilters']);
-        $response = $this->client->getResponse();
-        $result   = $this->getJsonResponseContent($response, 200);
-
-        foreach ($result['data'] as $row) {
-            foreach ($filters['assert'] as $fieldName => $value) {
-                $this->assertEquals($value, $row[$fieldName]);
-            }
-            break;
-        }
-
-        $this->assertCount((int) $filters['expectedResultCount'], $result['data']);
-    }
-
-    /**
-     * @return array
-     */
-    public function gridProvider()
-    {
-        return [
-            'B2B Customer grid' => [
-                [
-                    'gridParameters'      => [
-                        'gridName' => 'orocrm-sales-b2bcustomers-grid'
-                    ],
-                    'gridFilters'         => [],
-                    'assert'              => [
-                        'name'        => 'b2bCustomer name',
-                        'channelName' => 'b2b Channel'
-                    ],
-                    'expectedResultCount' => 1
-                ],
-            ],
-            'B2B Customer grid with filter' => [
-                [
-                    'gridParameters'      => [
-                        'gridName' => 'orocrm-sales-b2bcustomers-grid'
-                    ],
-                    'gridFilters'         => [
-                        'orocrm-sales-b2bcustomers-grid[_filter][channelName][value]'  => 'b2b Channel',
-                    ],
-                    'assert'              => [
-                        'name'        => 'b2bCustomer name',
-                        'channelName' => 'b2b Channel'
-                    ],
-                    'expectedResultCount' => 1
-                ],
-            ],
-            'B2B Customer grid without data' => [
-                [
-                    'gridParameters'      => [
-                        'gridName' => 'orocrm-sales-b2bcustomers-grid'
-                    ],
-                    'gridFilters'         => [
-                        'orocrm-sales-b2bcustomers-grid[_filter][name][value]'  => 'some other type',
-                    ],
-                    'assert'              => [
-                        'name'        => 'b2bCustomer name',
-                        'channelName' => 'b2b Channel'
-                    ],
-                    'expectedResultCount' => 0
-                ],
-            ],
-        ];
     }
 
     public function testCreate()
@@ -144,6 +70,7 @@ class B2bCustomerControllerTest extends WebTestCase
 
     /**
      * @param string $name
+     *
      * @depends testCreate
      *
      * @return string
@@ -186,6 +113,7 @@ class B2bCustomerControllerTest extends WebTestCase
 
     /**
      * @param array $returnValue
+     *
      * @depends testUpdate
      *
      * @return string
@@ -204,6 +132,7 @@ class B2bCustomerControllerTest extends WebTestCase
 
     /**
      * @param array $returnValue
+     *
      * @depends testUpdate
      *
      * @return string
@@ -225,6 +154,7 @@ class B2bCustomerControllerTest extends WebTestCase
 
     /**
      * @param array $returnValue
+     *
      * @depends testUpdate
      */
     public function testDelete($returnValue)

@@ -16,6 +16,8 @@ class RestOpportunityTest extends WebTestCase
             [],
             $this->generateWsseAuthHeader()
         );
+
+        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
     }
 
     /**
@@ -26,7 +28,8 @@ class RestOpportunityTest extends WebTestCase
         $request = [
             "opportunity" => [
                 'name'  => 'opportunity_name_' . mt_rand(1, 500),
-                'owner' => '1'
+                'owner' => '1',
+                'customer' => $this->getReference('default_b2bcustomer')->getid()
             ]
         ];
 
@@ -113,6 +116,12 @@ class RestOpportunityTest extends WebTestCase
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertNotEmpty($result);
+
+        foreach ($result as $key => $value) {
+            if ($value['name'] !== $request['opportunity']['name']) {
+                unset($result[$key]);
+            }
+        }
 
         $result = reset($result);
         $this->assertEquals($request['id'], $result['id']);
