@@ -59,6 +59,20 @@ class EmailCampaign
     protected $description;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_sent", type="boolean")
+     */
+    protected $isSent = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="schedule", type="string", length=255)
+     */
+    protected $schedule;
+
+    /**
      * @var Campaign
      *
      * @ORM\ManyToOne(targetEntity="Campaign")
@@ -70,7 +84,7 @@ class EmailCampaign
      * @var MarketingList
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MarketingListBundle\Entity\MarketingList")
-     * @ORM\JoinColumn(name="marketing_list_id", referencedColumnName="id", onDelete="SET NULL", nullable=false)
+     * @ORM\JoinColumn(name="marketing_list_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $marketingList;
 
@@ -166,7 +180,7 @@ class EmailCampaign
     /**
      * Get template
      *
-     * @return integer 
+     * @return integer
      */
     public function getTemplate()
     {
@@ -189,7 +203,7 @@ class EmailCampaign
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -212,7 +226,7 @@ class EmailCampaign
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -271,7 +285,7 @@ class EmailCampaign
      * Set owner
      *
      * @param User $owner
-     * 
+     *
      * @return EmailCampaign
      */
     public function setOwner(User $owner = null)
@@ -284,7 +298,7 @@ class EmailCampaign
     /**
      * Get owner
      *
-     * @return User 
+     * @return User
      */
     public function getOwner()
     {
@@ -327,5 +341,51 @@ class EmailCampaign
         $this->description = $description;
 
         return $this;
+    }
+
+    /**
+     * Set isSent
+     *
+     * @param boolean $isSent
+     * @return EmailCampaign
+     */
+    public function setSent($isSent)
+    {
+        $this->isSent = $isSent;
+
+        return $this;
+    }
+
+    /**
+     * Get isSent
+     *
+     * @return boolean
+     */
+    public function isSent()
+    {
+        return $this->isSent;
+    }
+
+    /**
+     * Set schedule
+     *
+     * @param string $schedule
+     * @return EmailCampaign
+     */
+    public function setSchedule($schedule)
+    {
+        $this->schedule = $schedule;
+
+        return $this;
+    }
+
+    /**
+     * Get schedule
+     *
+     * @return string
+     */
+    public function getSchedule()
+    {
+        return $this->schedule;
     }
 }

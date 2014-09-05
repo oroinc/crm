@@ -32,6 +32,8 @@ class CampaignEmailTest extends AbstractEntityTestCase
 
         return [
             'name'          => ['campaign', $campaign, $campaign],
+            'sent'          => ['sent', true, true],
+            'schedule'      => ['schedule', 'schedule', 'schedule'],
             'marketingList' => ['marketingList', $marketingList, $marketingList],
             'owner'         => ['owner', $owner, $owner],
             'template'      => ['template', $template, $template],
