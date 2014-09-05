@@ -70,6 +70,10 @@ orocrm:
             created_at.label:    Created At
             updated_at.label:    Updated At
             campaign.label:      Campaign
+            sent.label:           Sent
+            status:
+                sent: Sent
+                not_sent: Not sent
             block:
                 general: General Information
             controller:

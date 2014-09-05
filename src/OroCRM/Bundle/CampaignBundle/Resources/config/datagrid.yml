@@ -218,6 +218,7 @@ datagrid:
             query:
                 select:
                     - ec.id
+                    - ec.sent
                     - ec.name
                     - ec.schedule
                     - ec.scheduledAt
@@ -243,6 +244,9 @@ datagrid:
             scheduledAt:
                 label: orocrm.campaign.emailcampaign.scheduled_at.label
                 frontend_type: datetime
+            sent:
+                label:         orocrm.campaign.emailcampaign.sent.label
+                frontend_type: boolean
             createdAt:
                 label: orocrm.campaign.emailcampaign.created_at.label
                 frontend_type: datetime
@@ -260,16 +264,20 @@ datagrid:
                 marktingListName:
                     type:        string
                     data_name:   ml.name
-#                schedule:
-#                    type:        choice
-#                    data_name:   ec.schedule
-#                    options:
-#                    field_options:
-#                        multiple: true
-#                        choices:  @orocrm_campaign.datagrid.email_campaign.schedule_type_provider->getScheduleTypes
+                schedule:
+                    type:        choice
+                    data_name:   ec.schedule
+                    options:
+                        field_options:
+                            choices:
+                                immediate: Immediate
+                                deferred: Deferred
                 scheduledAt:
                     type:        datetime
                     data_name:   ec.scheduledAt
+                sent:
+                    type: boolean
+                    data_name: ec.sent
                 createdAt:
                     type:        datetime
                     data_name:   ec.createdAt
@@ -281,7 +289,8 @@ datagrid:
                 name:             { data_name: ec.name }
                 campaignName:     { data_name: c.name }
                 marktingListName: { data_name: ml.name }
-#                schedule:         { data_name: ec.schedule }
+                schedule:         { data_name: ec.schedule }
+                sent:             { data_name: ec.sent }
                 scheduledAt:      { data_name: ec.scheduledAt }
                 createdAt:        { data_name: ec.createdAt }
                 updatedAt:        { data_name: ec.updatedAt }
