@@ -24,7 +24,7 @@ class EntityName
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $value;
+    protected $name;
 
     /**
      * @var Channel
@@ -35,11 +35,11 @@ class EntityName
     protected $channel;
 
     /**
-     * @param string $value
+     * @param string $name
      */
-    public function __construct($value)
+    public function __construct($name)
     {
-        $this->value = $value;
+        $this->name = $name;
     }
 
     /**
@@ -51,19 +51,19 @@ class EntityName
     }
 
     /**
-     * @param string $value
+     * @param string $name
      */
-    public function setValue($value)
+    public function setName($name)
     {
-        $this->value = $value;
+        $this->name = $name;
     }
 
     /**
      * @return string
      */
-    public function getValue()
+    public function getName()
     {
-        return $this->value;
+        return $this->name;
     }
 
     /**

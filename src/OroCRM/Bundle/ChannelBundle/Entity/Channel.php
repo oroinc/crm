@@ -164,13 +164,13 @@ class Channel
     {
         list($stillPresent, $removed) = $this->getEntitiesCollection()->partition(
             function ($key, EntityName $entityName) use ($entities) {
-                return in_array($entityName->getValue(), $entities, true);
+                return in_array($entityName->getName(), $entities, true);
             }
         );
 
         $stillPresent = array_map(
             function (EntityName $entityName) {
-                return $entityName->getValue();
+                return $entityName->getName();
             },
             $stillPresent->toArray()
         );
@@ -196,7 +196,7 @@ class Channel
 
         $values = array_map(
             function (EntityName $entityName) {
-                return $entityName->getValue();
+                return $entityName->getName();
             },
             $entitiesCollection->toArray()
         );
