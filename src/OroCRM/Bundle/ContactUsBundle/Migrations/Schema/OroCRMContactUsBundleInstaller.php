@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema;
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_5\OroCRMContactUsBundle;
+use OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_6\OroCRMContactUsBundle;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -18,7 +18,7 @@ class OroCRMContactUsBundleInstaller implements Installation
      */
     public function getMigrationVersion()
     {
-        return 'v1_5';
+        return 'v1_6';
     }
 
     /**
