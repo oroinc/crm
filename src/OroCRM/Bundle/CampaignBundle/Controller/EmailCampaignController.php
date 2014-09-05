@@ -17,8 +17,8 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 class EmailCampaignController extends Controller
 {
     /**
-     * @Route("/", name="orocrm_campaign_index")
-     * @AclAncestor("orocrm_campaign_view")
+     * @Route("/", name="orocrm_email_campaign_index")
+     * @AclAncestor("orocrm_email_campaign_view")
      * @Template
      */
     public function indexAction()
@@ -106,7 +106,7 @@ class EmailCampaignController extends Controller
                     'parameters' => array('id' => $entity->getId())
                 );
             },
-            $this->get('translator')->trans('orocrm.campaign.controller.email_campaign.saved.message')
+            $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.saved.message')
         );
     }
 }

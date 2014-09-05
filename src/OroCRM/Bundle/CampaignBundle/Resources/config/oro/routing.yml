@@ -9,7 +9,7 @@ orocrm_campaign_dashboard:
     prefix:       /dashboard
 
 orocrm_campaign_bundle_api:
-    resource:     "@OroCRMCampaignBundle/Controller/Api/Rest/CampaignController.php"
+    resource:     "@OroCRMCampaignBundle/Resources/config/oro/routing_api.yml"
     type:         rest
     prefix:       api/rest/{version}
     requirements:

@@ -31,6 +31,7 @@ orocrm:
 
         form:
             choose_marketing_list_type:    Choose marketing list type
+            choose_marketing_list:         Choose marketing list
 
         datagrid:
             subscribed: Subscribed

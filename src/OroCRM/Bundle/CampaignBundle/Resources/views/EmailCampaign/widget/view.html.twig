@@ -1,0 +1,12 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEmailBundle::macros.html.twig' as email %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderProperty('orocrm.campaign.emailcampaign.name.label'|trans, entity.name) }}
+            {#{{ ui.renderProperty('orocrm.email_campaign.code.label'|trans, entity.campaign) }}#}
+            {{ ui.renderHtmlProperty('orocrm.campaign.emailcampaign.description.label'|trans, entity.description) }}
+        </div>
+    </div>
+</div>

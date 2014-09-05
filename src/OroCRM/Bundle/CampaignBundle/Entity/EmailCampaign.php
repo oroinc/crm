@@ -35,6 +35,9 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
  */
 class EmailCampaign
 {
+    const SCHEDULE_IMMEDIATE = 'immediate';
+    const SCHEDULE_DEFERRED = 'deferred';
+
     /**
      * @var int
      *
@@ -63,7 +66,7 @@ class EmailCampaign
      *
      * @ORM\Column(name="is_sent", type="boolean")
      */
-    protected $isSent = false;
+    protected $sent = false;
 
     /**
      * @var string
@@ -71,6 +74,13 @@ class EmailCampaign
      * @ORM\Column(name="schedule", type="string", length=255)
      */
     protected $schedule;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="scheduled_at", type="datetime", nullable=true)
+     */
+    protected $scheduledAt;
 
     /**
      * @var Campaign
@@ -101,7 +111,7 @@ class EmailCampaign
      *
      * @var User
      *
-     * @ORM\Column(type="integer", name="template_id")
+     * @ORM\Column(type="integer", name="template_id", nullable=true)
      */
     protected $template;
 
@@ -157,7 +167,7 @@ class EmailCampaign
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -351,7 +361,7 @@ class EmailCampaign
      */
     public function setSent($isSent)
     {
-        $this->isSent = $isSent;
+        $this->sent = $isSent;
 
         return $this;
     }
@@ -363,7 +373,7 @@ class EmailCampaign
      */
     public function isSent()
     {
-        return $this->isSent;
+        return $this->sent;
     }
 
     /**
@@ -374,6 +384,15 @@ class EmailCampaign
      */
     public function setSchedule($schedule)
     {
+        if ($schedule != self::SCHEDULE_DEFERRED && $schedule != self::SCHEDULE_IMMEDIATE) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Schedule type %s is not know. Known types are %s',
+                    $schedule,
+                    array(self::SCHEDULE_IMMEDIATE, self::SCHEDULE_DEFERRED)
+                )
+            );
+        }
         $this->schedule = $schedule;
 
         return $this;
@@ -387,5 +406,24 @@ class EmailCampaign
     public function getSchedule()
     {
         return $this->schedule;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getScheduledAt()
+    {
+        return $this->scheduledAt;
+    }
+
+    /**
+     * @param \DateTime $scheduledAt
+     * @return EmailCampaign
+     */
+    public function setScheduledAt($scheduledAt)
+    {
+        $this->scheduledAt = $scheduledAt;
+
+        return $this;
     }
 }

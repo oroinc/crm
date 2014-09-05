@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Form\Type;
 
+use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -19,15 +20,35 @@ class EmailCampaignType extends AbstractType
                 'name',
                 'text',
                 [
-                    'label'    => 'orocrm.email_campaign.name.label',
+                    'label'    => 'orocrm.campaign.emailcampaign.name.label',
                     'required' => true
+                ]
+            )
+            ->add(
+                'schedule',
+                'choice',
+                [
+                    'choices' => [
+                        EmailCampaign::SCHEDULE_IMMEDIATE => EmailCampaign::SCHEDULE_IMMEDIATE,
+                        EmailCampaign::SCHEDULE_DEFERRED => EmailCampaign::SCHEDULE_DEFERRED
+                    ],
+                    'label' => 'orocrm.campaign.emailcampaign.schedule.label',
+                    'required' => true
+                ]
+            )
+            ->add(
+                'scheduledAt',
+                'oro_datetime',
+                [
+                    'label' => 'orocrm.campaign.emailcampaign.scheduled_at.label',
+                    'required' => false
                 ]
             )
             ->add(
                 'campaign',
                 'orocrm_campaign_select',
                 [
-                    'label'    => 'orocrm.email_campaign.campaign.label',
+                    'label'    => 'orocrm.campaign.emailcampaign.campaign.label',
                     'required' => true
                 ]
             )
@@ -35,7 +56,7 @@ class EmailCampaignType extends AbstractType
                 'marketingList',
                 'orocrm_marketing_list_select',
                 [
-                    'label'    => 'orocrm.email_campaign.marketing_list.label',
+                    'label'    => 'orocrm.campaign.emailcampaign.marketing_list.label',
                     'required' => true
                 ]
             )
@@ -43,7 +64,7 @@ class EmailCampaignType extends AbstractType
                 'description',
                 'textarea',
                 [
-                    'label'    => 'orocrm.email_campaign.description.label',
+                    'label'    => 'orocrm.campaign.emailcampaign.description.label',
                     'required' => false,
                 ]
             );

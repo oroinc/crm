@@ -209,3 +209,115 @@ datagrid:
             logTime:
                 label: orocrm.campaign.trackingevent.report.date.label
                 frontend_type: date
+
+    orocrm-email-campaign-grid:
+        extended_entity_name: OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign
+        source:
+            type: orm
+            acl_resource: orocrm_email_campaign_view
+            query:
+                select:
+                    - ec.id
+                    - ec.name
+                    - ec.schedule
+                    - ec.scheduledAt
+                    - ec.createdAt
+                    - ec.updatedAt
+                    - c.name as campaignName
+                    - ml.name as marktingListName
+                from:
+                    - { table: OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign, alias: ec }
+                join:
+                    left:
+                        - { join: ec.campaign, alias: c }
+                        - { join: ec.marketingList, alias: ml }
+        columns:
+            name:
+                label: orocrm.campaign.emailcampaign.name.label
+            campaignName:
+                label: orocrm.campaign.emailcampaign.campaign.label
+            marktingListName:
+                label: orocrm.campaign.emailcampaign.marketing_list.label
+            schedule:
+                label: orocrm.campaign.emailcampaign.schedule.label
+            scheduledAt:
+                label: orocrm.campaign.emailcampaign.scheduled_at.label
+                frontend_type: datetime
+            createdAt:
+                label: orocrm.campaign.emailcampaign.created_at.label
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.campaign.emailcampaign.updated_at.label
+                frontend_type: datetime
+        filters:
+            columns:
+                name:
+                    type:        string
+                    data_name:   ec.name
+                campaignName:
+                    type:        string
+                    data_name:   c.name
+                marktingListName:
+                    type:        string
+                    data_name:   ml.name
+#                schedule:
+#                    type:        choice
+#                    data_name:   ec.schedule
+#                    options:
+#                    field_options:
+#                        multiple: true
+#                        choices:  @orocrm_campaign.datagrid.email_campaign.schedule_type_provider->getScheduleTypes
+                scheduledAt:
+                    type:        datetime
+                    data_name:   ec.scheduledAt
+                createdAt:
+                    type:        datetime
+                    data_name:   ec.createdAt
+                updatedAt:
+                    type:        datetime
+                    data_name:   ec.updatedAt
+        sorters:
+            columns:
+                name:             { data_name: ec.name }
+                campaignName:     { data_name: c.name }
+                marktingListName: { data_name: ml.name }
+#                schedule:         { data_name: ec.schedule }
+                scheduledAt:      { data_name: ec.scheduledAt }
+                createdAt:        { data_name: ec.createdAt }
+                updatedAt:        { data_name: ec.updatedAt }
+            default:
+                name: ASC
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: orocrm_email_campaign_view
+                params: [ id ]
+            update_link:
+                type: url
+                route: orocrm_email_campaign_update
+                params: [ id ]
+            delete_link:
+                type: url
+                route: oro_api_delete_emailcampaign
+                params: [ id ]
+        actions:
+            view:
+                type:         navigate
+                label:        orocrm.campaign.emailcampaign.datagrid.actions.view.label
+                link:         view_link
+                icon:         eye-open
+                acl_recource: orocrm_email_campaign_view
+                rowAction:    true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_email_campaign_update
+                label:         orocrm.campaign.emailcampaign.datagrid.actions.update.label
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_email_campaign_delete
+                label:         orocrm.campaign.emailcampaign.datagrid.actions.delete.label
+                icon:          trash
+                link:          delete_link

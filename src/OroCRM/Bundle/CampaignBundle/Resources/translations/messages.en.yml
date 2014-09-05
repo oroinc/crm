@@ -12,6 +12,8 @@ orocrm:
         description.label:   Description
         budget.label:        Budget
         owner.label:         Owner
+        form:
+            choose_campaign: Choose campaign
         report_period:
             label: Report Scale
             hour:  Hourly
@@ -53,3 +55,27 @@ orocrm:
             campaigns_by_close_revenue:
                 title: Campaigns by close revenue
                 description: This widget shows you top 5 campaigns that generate most revenue.
+
+        emailcampaign:
+            entity_description:  Marketing email campaigns
+            entity_label:        Email Campaign
+            entity_plural_label: Email Campaigns
+            id.label:            Id
+            name.label:          Name
+            description.label:   Description
+            schedule.label:      Schedule
+            scheduled_at.label:  Scheduled At
+            owner.label:         Owner
+            marketing_list.label: Marketing List
+            created_at.label:    Created At
+            updated_at.label:    Updated At
+            campaign.label:      Campaign
+            block:
+                general: General Information
+            controller:
+                saved.message: "Email campaign saved"
+            datagrid:
+                actions:
+                    view.label: View
+                    update.label: Update
+                    delete.label: Delete
