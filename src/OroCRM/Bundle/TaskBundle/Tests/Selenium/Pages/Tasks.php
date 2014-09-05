@@ -42,6 +42,7 @@ class Tasks extends AbstractPageFilteredGrid
     {
         $task = $this->getEntity($entityData, 1);
         $task->click();
+        sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
 
