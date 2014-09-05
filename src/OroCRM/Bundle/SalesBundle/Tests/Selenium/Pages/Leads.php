@@ -38,6 +38,7 @@ class Leads extends AbstractPageFilteredGrid
     {
         $contact = $this->getEntity($entityData);
         $contact->click();
+        sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
 
