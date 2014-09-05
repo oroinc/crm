@@ -15,10 +15,7 @@ class CartControllerTest extends AbstractController
     {
         parent::postFixtureLoad();
 
-        self::$cart = $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroCRMMagentoBundle:Cart')
-            ->findOneByChannel(self::$channel);
+        self::$cart = $this->getReference('cart');
     }
 
     protected function getMainEntityId()
@@ -61,12 +58,12 @@ class CartControllerTest extends AbstractController
                         'gridName' => 'magento-cart-grid'
                     ],
                     'gridFilters'         => [],
-                    'channelName'         => 'Demo Web store',
                     'assert'              => [
-                        'firstName'  => 'John',
-                        'lastName'   => 'Doe',
-                        'email'      => 'email@email.com',
-                        'regionName' => 'Arizona'
+                        'channelName' => 'Magento channel',
+                        'firstName'   => 'John',
+                        'lastName'    => 'Doe',
+                        'email'       => 'email@email.com',
+                        'regionName'  => 'Arizona'
                     ],
                     'expectedResultCount' => 1
                 ],
@@ -80,12 +77,12 @@ class CartControllerTest extends AbstractController
                         'magento-cart-grid[_filter][lastName][value]'  => 'Doe',
                         'magento-cart-grid[_filter][firstName][value]' => 'John',
                     ],
-                    'channelName'         => 'Demo Web store',
                     'assert'              => [
-                        'firstName'  => 'John',
-                        'lastName'   => 'Doe',
-                        'email'      => 'email@email.com',
-                        'regionName' => 'Arizona'
+                        'channelName' => 'Magento channel',
+                        'firstName'   => 'John',
+                        'lastName'    => 'Doe',
+                        'email'       => 'email@email.com',
+                        'regionName'  => 'Arizona'
                     ],
                     'expectedResultCount' => 1
                 ],
@@ -99,7 +96,6 @@ class CartControllerTest extends AbstractController
                         'magento-cart-grid[_filter][lastName][value]'  => 'Doe',
                         'magento-cart-grid[_filter][firstName][value]' => 'Doe',
                     ],
-                    'channelName'         => 'Demo Web store',
                     'assert'              => [],
                     'expectedResultCount' => 0
                 ]
@@ -111,7 +107,6 @@ class CartControllerTest extends AbstractController
                         'id'       => 'id',
                     ],
                     'gridFilters'         => [],
-                    'channelName'         => 'Demo Web store',
                     'assert'              => [
                         'sku'            => 'sku',
                         'qty'            => 0,

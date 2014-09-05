@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 /**
  * @outputBuffering enabled
@@ -10,8 +11,8 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 abstract class AbstractController extends WebTestCase
 {
-    /** @var \Oro\Bundle\IntegrationBundle\Entity\Channel */
-    protected static $channel;
+    /** @var Integration */
+    protected static $integration;
 
     public function setUp()
     {
@@ -24,42 +25,46 @@ abstract class AbstractController extends WebTestCase
 
     protected function postFixtureLoad()
     {
-        self::$channel = $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroIntegrationBundle:Channel')
-            ->findOneByName('Demo Web store');
+        self::$integration = $this->getReference('integration');
     }
 
     /**
      * @dataProvider gridProvider
      *
-     * @param array $filters
+     * @param array $requestData
      */
-    public function testGrid($filters)
+    public function testGrid($requestData)
     {
-        if (isset($filters['gridParameters']['id'])) {
-            $gridId = $filters['gridParameters']['gridName'] . '[' . $filters['gridParameters']['id'] . ']';
-            $filters['gridParameters'][$gridId] = $this->getMainEntityId();
+        $gridName = $requestData['gridParameters']['gridName'];
+
+        $expectedResultCount   = (int)$requestData['expectedResultCount'];
+        $shouldPassIdentifier  = isset($requestData['gridParameters']['id']);
+        $shouldPassIntegration = isset($requestData['gridParameters']['channel']);
+        $shouldAssertData      = $expectedResultCount === 1;
+
+        if ($shouldPassIdentifier) {
+            $paramName = $gridName . '[' . $requestData['gridParameters']['id'] . ']';
+            $requestData['gridParameters'][$paramName] = $this->getMainEntityId();
         }
 
-        if (isset($filters['gridParameters']['channel'])) {
-            $gridChannel = $filters['gridParameters']['gridName'] . '[' . $filters['gridParameters']['channel'] . ']';
-            $filters['gridParameters'][$gridChannel] = self::$channel->getId();
+        if ($shouldPassIntegration) {
+            $paramName = $gridName . '[' . $requestData['gridParameters']['channel'] . ']';
+            $requestData['gridParameters'][$paramName] = self::$integration->getId();
         }
 
-        $this->client->requestGrid($filters['gridParameters'], $filters['gridFilters']);
+        $this->client->requestGrid($requestData['gridParameters'], $requestData['gridFilters']);
         $response = $this->client->getResponse();
         $result   = $this->getJsonResponseContent($response, 200);
 
         foreach ($result['data'] as $row) {
-            if ((isset($filters['gridParameters']['id'])) || ($filters['channelName'] === $row['channelName'])) {
-                foreach ($filters['assert'] as $fieldName => $value) {
+            if ($shouldAssertData) {
+                foreach ($requestData['assert'] as $fieldName => $value) {
                     $this->assertEquals($value, $row[$fieldName]);
                 }
                 break;
             }
         }
 
-        $this->assertCount((int)$filters['expectedResultCount'], $result['data']);
+        $this->assertCount($expectedResultCount, $result['data']);
     }
 }
