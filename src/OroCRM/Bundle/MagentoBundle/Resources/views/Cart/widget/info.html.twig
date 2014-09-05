@@ -2,11 +2,15 @@
 {% import 'OroAddressBundle::macros.html.twig' as address %}
 {% import 'OroEmailBundle::macros.html.twig' as email %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ ui.renderHtmlProperty('orocrm.magento.cart.email.label'|trans, email.email_address_simple(entity.email)) }}
+
+            {{ channel.renderChannelProperty(entity, 'orocrm.magento.cart.data_channel.label') }}
+
             {{ ui.renderProperty('orocrm.magento.cart.items_qty.label'|trans, entity.itemsQty) }}
             {{ ui.renderProperty('orocrm.magento.cart.status.label'|trans, entity.status|trans) }}
             {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.store.website.name) }}

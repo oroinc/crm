@@ -2,11 +2,14 @@
 {% import 'OroTagBundle::macros.html.twig' as tag %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 {% import 'OroAddressBundle::macros.html.twig' as address %}
+{% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ UI.renderProperty('orocrm.sales.b2bcustomer.name.label'|trans, entity.name) }}
+
+            {{ channel.renderChannelProperty(entity, 'orocrm.sales.b2bcustomer.data_channel.label') }}
 
             {%- if resource_granted('orocrm_account_view') and entity.account -%}
                 {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.account.id}) ~ '">' ~ entity.account|escape ~ '</a>' %}
@@ -21,13 +24,6 @@
                 {% set contactView = entity.contact ? entity.contact : '' %}
             {%- endif -%}
             {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.contact.label'|trans, contactView) }}
-
-            {%- if resource_granted('orocrm_channel_view') and entity.dataChannel -%}
-                {% set channelView = '<a href="' ~ path('orocrm_channel_view', {'id': entity.dataChannel.id}) ~ '">' ~ entity.dataChannel.name|escape ~ '</a>' %}
-            {%- else -%}
-                {% set channelView = entity.dataChannel ? entity.dataChannel : '' %}
-            {%- endif -%}
-            {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.data_channel.label'|trans, channelView) }}
 
             {% if entity.billingAddress is not empty %}
                 {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.billing_address.label'|trans, address.renderAddress(entity.billingAddress)) }}

@@ -45,3 +45,26 @@
         });
     </script>
 {% endmacro %}
+
+{#
+    Renders channel property for entities that aware of it. Check wheter view of channel is allowed then renders
+    link to channel view page.
+    params:
+        entity - entity instanse of OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface
+        params - set of params required for render(e.g. label etc..)
+#}
+{% macro renderChannelProperty(entity, params = {}) %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
+    {% set label = params.label is defined
+        ? params.label
+        :  oro_entity_config_value('OroCRM\\Bundle\\ChannelBundle\\Entity\\Channel', 'label')
+    %}
+
+    {%- if entity.dataChannel and resource_granted('VIEW', entity.dataChannel) -%}
+        {% set channelView = '<a href="' ~ path('orocrm_channel_view', {'id': entity.dataChannel.id}) ~ '">' ~ entity.dataChannel.name|escape ~ '</a>' %}
+    {%- else -%}
+        {% set channelView = entity.dataChannel ? entity.dataChannel : '' %}
+    {%- endif -%}
+    {{ UI.renderHtmlProperty(label|trans, channelView) }}
+{% endmacro %}
