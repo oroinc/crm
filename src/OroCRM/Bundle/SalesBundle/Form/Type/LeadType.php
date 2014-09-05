@@ -16,6 +16,17 @@ class LeadType extends AbstractType
     {
         $builder
             ->add('name', 'text', array('required' => true, 'label' => 'orocrm.sales.lead.name.label'))
+            ->add(
+                'dataChannel',
+                'orocrm_channel_select_type',
+                array(
+                    'required' => true,
+                    'label' => 'orocrm.sales.lead.data_channel.label',
+                    'entities' => [
+                        'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead'
+                    ],
+                )
+            )
             ->add('namePrefix', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.name_prefix.label'))
             ->add('firstName', 'text', array('required' => true, 'label' => 'orocrm.sales.lead.first_name.label'))
             ->add('middleName', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.middle_name.label'))

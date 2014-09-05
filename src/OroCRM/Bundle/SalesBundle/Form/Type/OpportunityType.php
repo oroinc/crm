@@ -40,6 +40,17 @@ class OpportunityType extends AbstractType
             )
             ->add('name', 'text', array('required' => true, 'label' => 'orocrm.sales.opportunity.name.label'))
             ->add(
+                'dataChannel',
+                'orocrm_channel_select_type',
+                array(
+                    'required' => true,
+                    'label' => 'orocrm.sales.opportunity.data_channel.label',
+                    'entities' => [
+                        'OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity'
+                    ],
+                )
+            )
+            ->add(
                 'closeDate',
                 'oro_date',
                 array('required' => false, 'label' => 'orocrm.sales.opportunity.close_date.label')

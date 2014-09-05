@@ -35,6 +35,7 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
         $workflowStep = $this->getMockBuilder('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep')
             ->disableOriginalConstructor()
             ->getMock();
+        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
 
         return array(
             'startDate' => array('startDate', $now, $now),
@@ -45,6 +46,7 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
             'workflowStep' => array('workflowStep', $workflowStep, $workflowStep),
             'createdAt' => array('createdAt', $now, $now),
             'updatedAt' => array('updatedAt', $now, $now),
+            'dataChannel'       => ['dataChannel', $channel, $channel]
         );
     }
 
