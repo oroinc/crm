@@ -354,14 +354,14 @@ class EmailCampaign
     }
 
     /**
-     * Set isSent
+     * Set sent
      *
-     * @param boolean $isSent
+     * @param boolean $sent
      * @return EmailCampaign
      */
-    public function setSent($isSent)
+    public function setSent($sent)
     {
-        $this->sent = $isSent;
+        $this->sent = $sent;
 
         return $this;
     }

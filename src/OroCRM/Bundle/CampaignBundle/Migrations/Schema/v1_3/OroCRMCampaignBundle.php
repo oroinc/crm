@@ -37,6 +37,7 @@ class OroCRMCampaignBundle implements Migration
         $table->addColumn('campaign_id', 'integer', []);
         $table->addColumn('is_sent', 'boolean', []);
         $table->addColumn('schedule', 'string', ['length' => 255]);
+        $table->addColumn('scheduled_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('template_id', 'integer', []);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('updated_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
