@@ -2,14 +2,23 @@
 
 namespace OroCRM\Bundle\ContactUsBundle\Tests\Functional\Grid;
 
+use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
+
 use OroCRM\Bundle\ContactUsBundle\Tests\Functional\Fixtures\LoadContactUsBundleFixtures;
 
 /**
  * @outputBuffering enabled
  * @dbIsolation
  */
-class ContactRequestsGridTest extends AbstractGrid
+class ContactRequestsGridTest extends AbstractDatagridTestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->loadFixtures(['OroCRM\Bundle\ContactUsBundle\Tests\Functional\Fixtures\LoadContactUsBundleFixtures']);
+    }
+
     /**
      * @return array
      */

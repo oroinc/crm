@@ -1,15 +1,23 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller;
+namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Grid;
 
+use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 use OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 
 /**
  * @outputBuffering enabled
  * @dbIsolation
  */
-class OpportunityGridTest extends AbstractController
+class OpportunityGridTest extends AbstractDatagridTestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+    }
+
     /**
      * @return array
      */

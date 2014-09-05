@@ -1,6 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller;
+namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Grid;
+
+use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 
 use OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 
@@ -8,8 +10,15 @@ use OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
  * @outputBuffering enabled
  * @dbIsolation
  */
-class B2bCustomerGridTest extends AbstractController
+class B2bCustomerGridTest extends AbstractDatagridTestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+    }
+
     /**
      * @return array
      */

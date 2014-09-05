@@ -2,6 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -11,6 +14,7 @@ use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\UserBundle\Model\Gender;
 
+use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
@@ -26,8 +30,11 @@ use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 use OroCRM\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
 
-class LoadMagentoChannel extends AbstractFixture
+class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterface
 {
+    const CHANNEL_NAME = 'Magento channel';
+    const CHANNEL_TYPE = 'magento';
+
     /** @var ObjectManager */
     protected $em;
 
@@ -54,6 +61,17 @@ class LoadMagentoChannel extends AbstractFixture
 
     /** @var Channel */
     protected $channel;
+
+    /** @var BuilderFactory */
+    protected $factory;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->factory = $container->get('orocrm_channel.builder.factory');
+    }
 
     /**
      * {@inheritDoc}
@@ -479,18 +497,17 @@ class LoadMagentoChannel extends AbstractFixture
         return $user;
     }
 
+    /**
+     * @return Channel
+     */
     protected function createChannel()
     {
-        $date = new \DateTime('now');
-
-        $channel = new Channel();
-        $channel->setName('Magento channel');
-        $channel->setDataSource($this->integration);
-        $channel->setChannelType('magento');
-        $channel->setCreatedAt($date);
-        $channel->setUpdatedAt($date);
-        $channel->setCustomerIdentity('OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer');
-        $channel->setEntities(
+        $builder = $this->factory->createBuilder();
+        $builder->setName(self::CHANNEL_NAME);
+        $builder->setChannelType(self::CHANNEL_TYPE);
+        $builder->setStatus(Channel::STATUS_ACTIVE);
+        $builder->setDataSource($this->integration);
+        $builder->setEntities(
             [
                 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer',
                 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart',
@@ -498,9 +515,11 @@ class LoadMagentoChannel extends AbstractFixture
             ]
         );
 
+        $channel = $builder->getChannel();
+
         $this->em->persist($channel);
         $this->em->flush();
-        
+
         $this->setReference('default_channel', $channel);
 
         $this->channel = $channel;
