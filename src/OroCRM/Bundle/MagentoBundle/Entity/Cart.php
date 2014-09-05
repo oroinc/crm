@@ -53,6 +53,9 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *              "type"="ACL",
  *              "group_name"=""
  *          },
+ *          "form"={
+ *              "grid_name"="magento-cart-grid",
+ *          },
  *          "workflow"={
  *              "active_workflow"="b2c_flow_abandoned_shopping_cart"
  *          }
@@ -144,6 +147,13 @@ class Cart extends ExtendCart
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "contact_information"="email"
+     *          }
+     *      }
+     * )
      */
     protected $email;
 

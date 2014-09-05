@@ -41,7 +41,15 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *      routeView="orocrm_contact_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-group"
+ *              "icon"="icon-group",
+ *              "contact_information"={
+ *                  "email"={
+ *                      {"fieldName"="primaryEmail"}
+ *                  },
+ *                  "phone"={
+ *                      {"fieldName"="primaryPhone"}
+ *                  }
+ *              }
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -55,7 +63,8 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *              "group_name"=""
  *          },
  *          "form"={
- *              "form_type"="orocrm_contact_select"
+ *              "form_type"="orocrm_contact_select",
+ *              "grid_name"="contacts-select-grid",
  *          },
  *          "dataaudit"={
  *              "auditable"=true
@@ -365,6 +374,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *      defaultValues={
      *          "dataaudit"={
      *              "auditable"=true
+     *          },
+     *          "entity"={
+     *              "contact_information"="email"
      *          }
      *      }
      * )
@@ -657,11 +669,11 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     {
         parent::__construct();
 
-        $this->groups    = new ArrayCollection();
-        $this->accounts  = new ArrayCollection();
-        $this->emails    = new ArrayCollection();
-        $this->phones    = new ArrayCollection();
-        $this->tags      = new ArrayCollection();
+        $this->groups   = new ArrayCollection();
+        $this->accounts = new ArrayCollection();
+        $this->emails   = new ArrayCollection();
+        $this->phones   = new ArrayCollection();
+        $this->tags     = new ArrayCollection();
     }
 
     public function __clone()
@@ -707,6 +719,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param User $assignedTo
+     *
      * @return Contact
      */
     public function setAssignedTo($assignedTo)
@@ -726,6 +739,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param string $description
+     *
      * @return Contact
      */
     public function setDescription($description)
@@ -745,6 +759,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param Source $source
+     *
      * @return Contact
      */
     public function setSource($source)
@@ -764,6 +779,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param Method $method
+     *
      * @return Contact
      */
     public function setMethod($method)
@@ -783,6 +799,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param User $owningUser
+     *
      * @return Contact
      */
     public function setOwner($owningUser)
@@ -802,6 +819,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param Contact $reportsTo
+     *
      * @return Contact
      */
     public function setReportsTo($reportsTo)
@@ -821,6 +839,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param string $jobTitle
+     *
      * @return Contact
      */
     public function setJobTitle($jobTitle)
@@ -840,6 +859,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param string $fax
+     *
      * @return Contact
      */
     public function setFax($fax)
@@ -859,6 +879,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param string $skype
+     *
      * @return Contact
      */
     public function setSkype($skype)
@@ -878,6 +899,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param string $facebookUrl
+     *
      * @return Contact
      */
     public function setFacebook($facebookUrl)
@@ -897,6 +919,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param string $googlePlusUrl
+     *
      * @return Contact
      */
     public function setGooglePlus($googlePlusUrl)
@@ -916,6 +939,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param string $linkedInUrl
+     *
      * @return Contact
      */
     public function setLinkedIn($linkedInUrl)
@@ -935,6 +959,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param string $twitterUrl
+     *
      * @return Contact
      */
     public function setTwitter($twitterUrl)
@@ -989,6 +1014,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * This method could not be named setEmails because of bug CRM-253.
      *
      * @param Collection|ContactEmail[] $emails
+     *
      * @return Contact
      */
     public function resetEmails($emails)
@@ -1006,6 +1032,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * Add email
      *
      * @param ContactEmail $email
+     *
      * @return Contact
      */
     public function addEmail(ContactEmail $email)
@@ -1022,6 +1049,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * Remove email
      *
      * @param ContactEmail $email
+     *
      * @return Contact
      */
     public function removeEmail(ContactEmail $email)
@@ -1108,6 +1136,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * This method could not be named setPhones because of bug CRM-253.
      *
      * @param Collection|ContactPhone[] $phones
+     *
      * @return Contact
      */
     public function resetPhones($phones)
@@ -1125,6 +1154,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * Add phone
      *
      * @param ContactPhone $phone
+     *
      * @return Contact
      */
     public function addPhone(ContactPhone $phone)
@@ -1141,6 +1171,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * Remove phone
      *
      * @param ContactPhone $phone
+     *
      * @return Contact
      */
     public function removePhone(ContactPhone $phone)
@@ -1212,6 +1243,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * Add address
      *
      * @param AbstractAddress $address
+     *
      * @return BasePerson
      */
     public function addAddress(AbstractAddress $address)
@@ -1247,6 +1279,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param ContactAddress $address
+     *
      * @return Contact
      */
     public function setPrimaryAddress(ContactAddress $address)
@@ -1269,6 +1302,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *
      * @param ContactAddress $address
      * @param AddressType    $addressType
+     *
      * @return Contact
      */
     public function setAddressType(ContactAddress $address, AddressType $addressType)
@@ -1290,6 +1324,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * Gets one address that has specified type.
      *
      * @param AddressType $type
+     *
      * @return ContactAddress|null
      */
     public function getAddressByType(AddressType $type)
@@ -1301,6 +1336,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * Gets one address that has specified type name.
      *
      * @param string $typeName
+     *
      * @return ContactAddress|null
      */
     public function getAddressByTypeName($typeName)
@@ -1335,7 +1371,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      */
     public function getGroupLabels()
     {
-        $result = array();
+        $result = [];
 
         /** @var Group $group */
         foreach ($this->getGroups() as $group) {
@@ -1359,6 +1395,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * Add specified group
      *
      * @param Group $group
+     *
      * @return Contact
      */
     public function addGroup(Group $group)
@@ -1374,6 +1411,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * Remove specified group
      *
      * @param Group $group
+     *
      * @return Contact
      */
     public function removeGroup(Group $group)
@@ -1399,6 +1437,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * Add specified account
      *
      * @param Account $account
+     *
      * @return Contact
      */
     public function addAccount(Account $account)
@@ -1415,6 +1454,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * Remove specified account
      *
      * @param Account $account
+     *
      * @return Contact
      */
     public function removeAccount(Account $account)
@@ -1437,6 +1477,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param \Oro\Bundle\UserBundle\Entity\User $createdBy
+     *
      * @return Contact
      */
     public function setCreatedBy($createdBy)
@@ -1456,6 +1497,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 
     /**
      * @param \Oro\Bundle\UserBundle\Entity\User $updatedBy
+     *
      * @return Contact
      */
     public function setUpdatedBy($updatedBy)
@@ -1485,7 +1527,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
             . $this->getNameSuffix();
         $name = preg_replace('/ +/', ' ', $name);
 
-        return (string) trim($name);
+        return (string)trim($name);
     }
 
     /**

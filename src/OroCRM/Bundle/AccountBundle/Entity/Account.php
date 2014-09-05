@@ -49,7 +49,8 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *              "enable"=true
  *          },
  *          "form"={
- *              "form_type"="orocrm_account_select"
+ *              "form_type"="orocrm_account_select",
+ *              "grid_name"="accounts-select-grid",
  *          },
  *          "dataaudit"={
  *              "auditable"=true
@@ -271,6 +272,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
 
     /**
      * @param int $id
+     *
      * @return Account
      */
     public function setId($id)
@@ -291,7 +293,8 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
     /**
      * Set account name
      *
-     * @param  string  $name New name
+     * @param  string $name New name
+     *
      * @return Account
      */
     public function setName($name)
@@ -313,6 +316,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
 
     /**
      * @param \DateTime
+     *
      * @return Account
      */
     public function setCreatedAt($created)
@@ -334,6 +338,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
 
     /**
      * @param \DateTime
+     *
      * @return Account
      */
     public function setUpdatedAt($updated)
@@ -357,6 +362,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
      * Add specified contact
      *
      * @param Contact $contact
+     *
      * @return Account
      */
     public function addContact(Contact $contact)
@@ -373,6 +379,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
      * Set contacts collection
      *
      * @param Collection $contacts
+     *
      * @return Account
      */
     public function setContacts(Collection $contacts)
@@ -396,6 +403,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
      * Set shipping address
      *
      * @param Address $address
+     *
      * @return Account
      */
     public function setShippingAddress($address)
@@ -419,6 +427,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
      * Set billing address
      *
      * @param Address $address
+     *
      * @return Account
      */
     public function setBillingAddress($address)
@@ -432,6 +441,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
      * Remove specified contact
      *
      * @param Contact $contact
+     *
      * @return Account
      */
     public function removeContact(Contact $contact)
@@ -446,7 +456,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
 
     public function __toString()
     {
-        return (string) $this->getName();
+        return (string)$this->getName();
     }
 
     /**
@@ -508,6 +518,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
 
     /**
      * @param User $owningUser
+     *
      * @return Account
      */
     public function setOwner($owningUser)
@@ -519,6 +530,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
 
     /**
      * @param Contact $defaultContact
+     *
      * @return Account
      */
     public function setDefaultContact($defaultContact)
