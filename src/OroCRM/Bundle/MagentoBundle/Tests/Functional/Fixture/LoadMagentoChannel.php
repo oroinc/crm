@@ -499,10 +499,9 @@ class LoadMagentoChannel extends AbstractFixture
         );
 
         $this->em->persist($channel);
-
-        $this->setReference('default_channel', $channel);
-
         $this->em->flush();
+        
+        $this->setReference('default_channel', $channel);
 
         $this->channel = $channel;
 
