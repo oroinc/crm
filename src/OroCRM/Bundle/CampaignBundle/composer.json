@@ -8,6 +8,7 @@
     "require": {
         "php": ">=5.4.9",
         "symfony/symfony": "2.3.*",
+        "oro/user-bundle": "dev-master",
         "oro/ui-bundle": "dev-master",
         "oro/dashboard-bundle": "dev-master",
         "oro/chart-bundle": "dev-master",

@@ -6,22 +6,27 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ContactSelectType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
-                'configs' => array(
-                    'placeholder' => 'orocrm.contact.form.choose_contact',
-                    'result_template_twig' => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
-                    'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
-                ),
+            [
                 'autocomplete_alias' => 'contacts',
-                'grid_name' => 'contacts-select-grid',
-                'create_form_route' => 'orocrm_contact_create'
-            )
+                'create_form_route'  => 'orocrm_contact_create',
+                'configs'            => [
+                    'placeholder'             => 'orocrm.contact.form.choose_contact',
+                    'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
+                    'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
+                ],
+            ]
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getParent()
     {
         return 'oro_entity_create_or_select_inline';

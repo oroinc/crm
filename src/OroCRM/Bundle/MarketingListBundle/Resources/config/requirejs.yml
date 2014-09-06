@@ -1,0 +1,4 @@
+config:
+    paths:
+        'orocrmmarketinglist/js/app/components/grid-linker': 'bundles/orocrmmarketinglist/js/app/components/grid-linker.js'
+        'orocrmmarketinglist/js/app/components/columns-component': 'bundles/orocrmmarketinglist/js/app/components/columns-component.js'
