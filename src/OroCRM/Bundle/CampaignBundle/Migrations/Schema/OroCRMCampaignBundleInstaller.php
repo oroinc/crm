@@ -114,6 +114,12 @@ class OroCRMCampaignBundleInstaller implements Installation
     {
         $table = $schema->getTable('orocrm_campaign_email');
         $table->addForeignKeyConstraint(
+            $schema->getTable('oro_email_template'),
+            ['template_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'SET NULL']
+        );
+        $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
             ['owner_id'],
             ['id'],

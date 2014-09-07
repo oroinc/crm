@@ -8,6 +8,7 @@ parameters:
     orocrm_campaign.data_transformer.multi_line.class: OroCRM\Bundle\CampaignBundle\Model\Data\Transformer\MultiLineDataTransformer
     orocrm_campaign.form.type.campaign_select.class: OroCRM\Bundle\CampaignBundle\Form\Type\CampaignSelectType
     orocrm_campaign.form.type.email_campaign.class: OroCRM\Bundle\CampaignBundle\Form\Type\EmailCampaignType
+    orocrm_campaign.transport.email.class: OroCRM\Bundle\CampaignBundle\Transport\EmailTransport
 services:
     orocrm_campaign.campaign.form.type:
         class: %orocrm_campaign.campaign.form.type.class%
@@ -86,3 +87,11 @@ services:
         class: %orocrm_campaign.form.type.campaign_select.class%
         tags:
             - { name: form.type, alias: "orocrm_campaign_select" }
+
+    orocrm_campaign.transport.email:
+        class: %orocrm_campaign.transport.email.class%
+        arguments:
+            - @orocrm_marketing_list.provider.marketing_list
+            - @orocrm_marketing_list.contact_information_field_helper
+            - @oro_email.mailer.processor
+            - @oro_email.email_renderer

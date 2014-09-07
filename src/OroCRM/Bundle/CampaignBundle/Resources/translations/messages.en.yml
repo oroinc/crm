@@ -83,3 +83,4 @@ orocrm:
                     view.label: View
                     update.label: Update
                     delete.label: Delete
+            send: Send

@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\CampaignBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -107,11 +108,10 @@ class EmailCampaign
     protected $owner;
 
     /**
-     * @todo: relation
+     * @var EmailTemplate
      *
-     * @var User
-     *
-     * @ORM\Column(type="integer", name="template_id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\EmailBundle\Entity\EmailTemplate")
+     * @ORM\JoinColumn(name="template_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $template;
 
@@ -174,13 +174,15 @@ class EmailCampaign
         return $this->id;
     }
 
+
     /**
      * Set template
      *
-     * @param integer $template
-     * @return EmailCampaign
+     * @param EmailTemplate $template
+     *
+     * ы@return EmailCampaign
      */
-    public function setTemplate($template)
+    public function setTemplate(EmailTemplate $template = null)
     {
         $this->template = $template;
 
@@ -190,7 +192,7 @@ class EmailCampaign
     /**
      * Get template
      *
-     * @return integer
+     * @return EmailTemplate
      */
     public function getTemplate()
     {

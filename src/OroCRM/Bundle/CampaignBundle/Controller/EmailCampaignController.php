@@ -67,7 +67,7 @@ class EmailCampaignController extends Controller
     /**
      * View email campaign
      *
-     * @Route("/view/{id}", name="orocrm_email_campaign_view")
+     * @Route("/view/{id}", name="orocrm_email_campaign_view", requirements={"id"="\d+"})
      * @Acl(
      *      id="orocrm_email_campaign_view",
      *      type="entity",
@@ -107,6 +107,30 @@ class EmailCampaignController extends Controller
                 );
             },
             $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.saved.message')
+        );
+    }
+
+    /**
+     * @Route("/send/{id}", name="orocrm_email_campaign_send", requirements={"id"="\d+"})
+     * @Acl(
+     *      id="orocrm_email_campaign_send",
+     *      type="action",
+     *      label="Send campaign emails",
+     *      group_name=""
+     * )
+     *
+     * @param EmailCampaign $entity
+     * @return array
+     */
+    public function sendAction(EmailCampaign $entity)
+    {
+        $this->get('orocrm_campaign.transport.email')->send($entity);
+
+        return $this->redirect(
+            $this->generateUrl(
+                'orocrm_email_campaign_view',
+                ['id' => $entity->getId()]
+            )
         );
     }
 }

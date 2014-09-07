@@ -24,3 +24,16 @@ OroCRM\Bundle\CampaignBundle\Entity\Campaign:
             - NotBlank: ~
         reportPeriod:
             - NotBlank: ~
+
+OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 100
+        campaign:
+            - NotBlank: ~
+        marketingList:
+            - NotBlank: ~
+        owner:
+            - NotBlank: ~
