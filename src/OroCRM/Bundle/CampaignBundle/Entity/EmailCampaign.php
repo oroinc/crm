@@ -354,14 +354,14 @@ class EmailCampaign
     }
 
     /**
-     * Set isSent
+     * Set sent
      *
-     * @param boolean $isSent
+     * @param boolean $sent
      * @return EmailCampaign
      */
-    public function setSent($isSent)
+    public function setSent($sent)
     {
-        $this->sent = $isSent;
+        $this->sent = $sent;
 
         return $this;
     }
@@ -389,7 +389,7 @@ class EmailCampaign
                 sprintf(
                     'Schedule type %s is not know. Known types are %s',
                     $schedule,
-                    array(self::SCHEDULE_IMMEDIATE, self::SCHEDULE_DEFERRED)
+                    implode(', ', array(self::SCHEDULE_IMMEDIATE, self::SCHEDULE_DEFERRED))
                 )
             );
         }
