@@ -95,7 +95,39 @@
         }]
     %}
 
+    {% set hasEntity = form.vars.value is not empty and form.vars.value.entity is defined and form.vars.value.entity is not empty %}
+    {% set columnsComponentOptions = {
+        'entityChoiceSelector': '#orocrm_marketing_list_form_entity',
+        'fieldsChoiceSelector': '#contact-information-fields-list',
+        'contactInformationFields': hasEntity ? get_contact_information_fields_info(form.vars.value.entity) : []
+    } %}
+
     {% set type = 'orocrm_marketing_list' %}
+    {% set columnsDesigner %}
+    <div data-page-component-module="orocrmmarketinglist/js/app/components/columns-component"
+         data-page-component-options="{{ columnsComponentOptions|json_encode }}"
+         class="marketing-list-qd-columns"
+    >
+        <div id="column-information-notice" class="alert alert-info">
+            <strong>{{ 'orocrm.marketinglist.form.importance'|trans }}</strong>:
+            {{ 'orocrm.marketinglist.form.columns_notice'|trans }}:
+            <div id="contact-information-fields-list"></div>
+        </div>
+
+        {{ QD.query_designer_column_form(
+            form.column,
+            {'id': type ~ '-column-form'},
+            {'entity_choice_id': 'orocrm_marketing_list_form_entity'},
+            ['column', 'label', 'sorting', 'action']
+        ) }}
+
+        {{ QD.query_designer_column_list(
+            {'id': type ~ '-column-list', 'rowId': type ~ '-column-row'},
+            ['column', 'label', 'sorting', 'action']
+        ) }}
+    </div>
+    {% endset %}
+
     {% set dataBlocks = dataBlocks|merge( [{
         'title' : 'oro.segment.form.designer'|trans,
         'content_attr': {'id': type ~ '-designer'},
@@ -104,16 +136,7 @@
                 'title': 'oro.segment.form.columns'|trans,
                 'spanClass': type ~ '-columns responsive-cell',
                 'data': [
-                    QD.query_designer_column_form(
-                        form.column,
-                        {'id': type ~ '-column-form'},
-                        {'entity_choice_id': 'orocrm_marketing_list_form_entity'},
-                        ['column', 'label', 'sorting', 'action']
-                    ),
-                    QD.query_designer_column_list(
-                        {'id': type ~ '-column-list', 'rowId': type ~ '-column-row'},
-                        ['column', 'label', 'sorting', 'action']
-                    ),
+                    columnsDesigner
                 ]
             },
             {
