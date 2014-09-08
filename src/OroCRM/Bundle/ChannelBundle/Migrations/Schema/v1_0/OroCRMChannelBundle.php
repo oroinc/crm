@@ -4,17 +4,15 @@ namespace OroCRM\Bundle\ChannelBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
 
-use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 
 class OroCRMChannelBundle implements Migration, ExtendExtensionAwareInterface
 {
-    /**
-     * @var ExtendExtension
-     */
+    /** @var ExtendExtension */
     protected $extendExtension;
 
     /**
@@ -22,7 +20,6 @@ class OroCRMChannelBundle implements Migration, ExtendExtensionAwareInterface
      */
     public function setExtendExtension(ExtendExtension $extendExtension)
     {
-        var_dump(1);
         $this->extendExtension = $extendExtension;
     }
 
@@ -41,18 +38,8 @@ class OroCRMChannelBundle implements Migration, ExtendExtensionAwareInterface
         $this->addOrocrmChannelEntityNameForeignKeys($schema);
         $this->addOrocrmChannelCustIdentityForeignKeys($schema);
 
-        var_dump(2);
-
-        \Doctrine\Common\Util\Debug::dump($this->extendExtension, 1);
-
-        $this->extendExtension->addManyToOneRelation(
-            $schema,
-            'oro_embedded_form',
-            'channel',
-            'orocrm_channel',
-            'id',
-            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
-        );
+        /** Add extended fields */
+        $this->addExtendedFields($schema);
     }
 
     /**
@@ -184,6 +171,21 @@ class OroCRMChannelBundle implements Migration, ExtendExtensionAwareInterface
             ['contact_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+    }
+
+    /**
+     * @param $schema
+     */
+    public function addExtendedFields($schema)
+    {
+        $this->extendExtension->addManyToOneRelation(
+            $schema,
+            'oro_embedded_form',
+            'channel',
+            'orocrm_channel',
+            'id',
+            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
         );
     }
 }
