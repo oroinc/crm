@@ -39,6 +39,7 @@ datagrid:
                 label: orocrm.contact.email.label
             primaryPhone:
                 label: orocrm.contact.contactphone.phone.label
+                frontend_type: phone
         options:
             entityHint: contact
             toolbarOptions:

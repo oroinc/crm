@@ -133,6 +133,7 @@ datagrid:
                 frontend_type: html
             phone:
                 label: orocrm.call.phone_number.label
+                frontend_type: phone
         sorters:
             columns:
                 contactName:
