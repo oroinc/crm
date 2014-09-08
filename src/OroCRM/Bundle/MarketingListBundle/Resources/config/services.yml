@@ -24,6 +24,7 @@ parameters:
     orocrm_marketing_list.model.segment_helper.class: OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper
 
     orocrm_marketing_list.twig.extension.contact_information_fields.class: OroCRM\Bundle\MarketingListBundle\Twig\ContactInformationFieldsExtension
+    orocrm_marketing_list.provider.contact_information_fields.class: OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider
 services:
     orocrm_marketing_list.entity_provider:
         alias: oro_entity.entity_provider
@@ -138,3 +139,8 @@ services:
             - @orocrm_marketing_list.contact_information_field_helper
         tags:
             - { name: twig.extension }
+
+    orocrm_marketing_list.provider.contact_information_fields:
+        class: %orocrm_marketing_list.provider.contact_information_fields.class%
+        arguments:
+            - @orocrm_marketing_list.contact_information_field_helper

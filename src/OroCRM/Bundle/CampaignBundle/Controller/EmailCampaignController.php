@@ -124,7 +124,10 @@ class EmailCampaignController extends Controller
      */
     public function sendAction(EmailCampaign $entity)
     {
-        $this->get('orocrm_campaign.transport.email')->send($entity);
+        $emailTransport = $this->get('orocrm_campaign.transport.email');
+        $sender = $this->get('orocrm_campaign.email_campaign.sender');
+        $sender->setTransport($emailTransport);
+        $sender->send($entity);
 
         return $this->redirect(
             $this->generateUrl(

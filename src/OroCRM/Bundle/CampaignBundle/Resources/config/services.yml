@@ -9,6 +9,7 @@ parameters:
     orocrm_campaign.form.type.campaign_select.class: OroCRM\Bundle\CampaignBundle\Form\Type\CampaignSelectType
     orocrm_campaign.form.type.email_campaign.class: OroCRM\Bundle\CampaignBundle\Form\Type\EmailCampaignType
     orocrm_campaign.transport.email.class: OroCRM\Bundle\CampaignBundle\Transport\EmailTransport
+    orocrm_campaign.email_campaign.sender.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSender
 services:
     orocrm_campaign.campaign.form.type:
         class: %orocrm_campaign.campaign.form.type.class%
@@ -91,9 +92,14 @@ services:
     orocrm_campaign.transport.email:
         class: %orocrm_campaign.transport.email.class%
         arguments:
-            - @orocrm_marketing_list.provider.marketing_list
-            - @orocrm_marketing_list.contact_information_field_helper
-            - @orocrm_marketing_list.model.marketing_list_item_connector
             - @oro_email.mailer.processor
             - @oro_email.email_renderer
+            - @oro_entity.doctrine_helper
+
+    orocrm_campaign.email_campaign.sender:
+        class: %orocrm_campaign.email_campaign.sender.class%
+        arguments:
+            - @orocrm_marketing_list.provider.marketing_list
             - @oro_config.global
+            - @orocrm_marketing_list.model.marketing_list_item_connector
+            - @orocrm_marketing_list.provider.contact_information_fields
