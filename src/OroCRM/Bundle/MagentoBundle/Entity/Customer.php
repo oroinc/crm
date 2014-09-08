@@ -42,7 +42,10 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
  *          "security"={
  *              "type"="ACL",
  *              "group_name"=""
- *          }
+ *          },
+ *          "form"={
+ *              "grid_name"="magento-customers-grid",
+ *          },
  *      }
  * )
  * @Oro\Loggable
@@ -119,6 +122,9 @@ class Customer extends ExtendCustomer
      *      defaultValues={
      *          "importexport"={
      *              "identity"=true
+     *          },
+     *          "entity"={
+     *              "contact_information"="email"
      *          }
      *      }
      * )
@@ -266,6 +272,7 @@ class Customer extends ExtendCustomer
     {
         parent::__construct();
 
+        $this->carts  = new ArrayCollection();
         $this->orders = new ArrayCollection();
     }
 

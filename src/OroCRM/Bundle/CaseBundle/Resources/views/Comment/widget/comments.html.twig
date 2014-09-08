@@ -4,60 +4,39 @@
 {% set containerExtraClass = 'comments' %}
 
 {% block items_container %}
-    <div class="accordion" id="comment-list"></div>
+    {% set options = {
+        widgetId: app.request.get('_wid'),
+        notesOptions: {
+            template: '#template-comment-list',
+            itemTemplate: '#template-comment-item',
+            itemAddEvent: 'comment:add',
+            itemViewIdPrefix: 'comment-',
+            itemView: 'orocrmcase/js/app/views/comment-view',
+            itemModel: 'orocrmcase/js/app/models/comment-model',
+            messages: {
+                addDialogTitle: "orocrm.case.casecomment.dialog.add"|trans,
+                editDialogTitle: "orocrm.case.casecomment.dialog.edit"|trans,
+                itemSaved: "orocrm.case.casecomment.message.saved"|trans,
+                itemRemoved: "orocrm.case.casecomment.message.removed"|trans,
+                deleteConfirmation: "orocrm.case.casecomment.message.delete_confirmation"|trans,
+                loadItemsError: "orocrm.case.casecomment.error.load"|trans,
+                deleteItemError: "orocrm.case.casecomment.error.delete"|trans
+            },
+            urls: {
+                list: path('orocrm_case_comment_list', {'id': case.id}),
+                createItem: path('orocrm_case_comment_create', {'caseId': case.id}),
+            },
+            routes: {
+                update: 'orocrm_case_comment_update',
+                delete: 'orocrm_case_api_delete_comment'
+            }
+        },
+        notesData: render(path('orocrm_case_comment_list', {'id': case.id}))
+    } %}
+    <div class="accordion" id="comment-list"
+         data-page-component-module="oronote/js/app/components/notes-component"
+         data-page-component-options="{{ options|json_encode }}"></div>
 
     {% include 'OroCRMCaseBundle:Comment:js/list.js.twig' with {'id': 'template-comment-list'} %}
     {% include 'OroCRMCaseBundle:Comment:js/view.js.twig' with {'id': 'template-comment-item'} %}
-{% endblock %}
-
-{% block scripts %}
-    <script type="text/javascript">
-        require(['jquery', 'underscore', 'routing', 'oroui/js/mediator',
-                'oroui/js/widget-manager', 'oronote/js/note-list', 'orocrmcase/js/comment/view'],
-            function($, _, routing, mediator, widgetManager, NoteList, CommentView, CommentModel) {
-                widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
-                    var commentList = new NoteList({
-                        el: '#comment-list',
-                        template: '#template-comment-list',
-                        itemTemplate: '#template-comment-item',
-                        itemAddEvent: 'comment:add',
-                        itemViewIdPrefix: 'comment-',
-                        itemView: CommentView,
-                        itemModel: CommentModel,
-                        messages: {
-                            addDialogTitle: {{ "orocrm.case.casecomment.dialog.add"|trans|json_encode|raw }},
-                            editDialogTitle: {{ "orocrm.case.casecomment.dialog.edit"|trans|json_encode|raw }},
-                            itemSaved: {{ "orocrm.case.casecomment.message.saved"|trans|json_encode|raw }},
-                            itemRemoved: {{ "orocrm.case.casecomment.message.removed"|trans|json_encode|raw }},
-                            deleteConfirmation: {{ "orocrm.case.casecomment.message.delete_confirmation"|trans|json_encode|raw }},
-                            loadItemsError: {{ "orocrm.case.casecomment.error.load"|trans|json_encode|raw }},
-                            deleteItemError: {{ "orocrm.case.casecomment.error.delete"|trans|json_encode|raw }}
-                        },
-                        urls: {
-                            list: {{ path('orocrm_case_comment_list', {'id': case.id})|json_encode|raw }},
-                            createItem: {{ path('orocrm_case_comment_create', {'caseId': case.id})|json_encode|raw }},
-                            updateItem: function(model) {
-                                return routing.generate('orocrm_case_comment_update', {'id': model.get('id')});
-                            },
-                            deleteItem: function(model) {
-                                return routing.generate('orocrm_case_api_delete_comment', {'id': model.get('id')});
-                            }
-                        }
-                    });
-                    widget.getAction('collapse_all', 'adopted', function(action) {
-                        action.on('click', _.bind(commentList.collapseAll, commentList));
-                    });
-                    widget.getAction('refresh', 'adopted', function(action) {
-                        action.on('click', _.bind(commentList.refresh, commentList));
-                    });
-                    widget.getAction('toggle_sorting', 'adopted', function(action) {
-                        action.on('click', _.bind(commentList.toggleSorting, commentList));
-                    });
-                    commentList
-                        .render()
-                        .getCollection()
-                        .reset({{ render(path('orocrm_case_comment_list', {'id': case.id})) }});
-                });
-            });
-    </script>
 {% endblock %}

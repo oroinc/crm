@@ -44,7 +44,9 @@ class CreateContactTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Contacts $login */
         $login->openContacts('OroCRM\Bundle\ContactBundle')
+            ->assertTitle('Contacts - Customers')
             ->add()
+            ->assertTitle('Create Contact - Contacts - Customers')
             ->setFirstName($contactName . '_first')
             ->setLastName($contactName . '_last')
             ->setOwner('admin')

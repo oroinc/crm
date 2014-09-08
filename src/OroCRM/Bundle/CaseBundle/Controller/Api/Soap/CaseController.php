@@ -20,7 +20,7 @@ class CaseController extends SoapController
     public function cgetAction($page = 1, $limit = 10, $order = 'DESC')
     {
         $order = (strtoupper($order) == 'ASC') ? $order : 'DESC';
-        return $this->handleGetListRequest($page, $limit, array('reportedAt' => $order));
+        return $this->handleGetListRequest($page, $limit, [], array('reportedAt' => $order));
     }
 
     /**

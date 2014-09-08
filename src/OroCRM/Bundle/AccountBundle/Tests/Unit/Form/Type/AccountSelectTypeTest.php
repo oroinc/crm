@@ -16,7 +16,7 @@ class AccountSelectTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->type = new AccountSelectType('orocrm_account_select');
+        $this->type = new AccountSelectType();
     }
 
     public function testName()

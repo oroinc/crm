@@ -178,8 +178,9 @@ datagrid:
             acl_resource: orocrm_contact_view
             query:
                 select:
-                    # selects full entity because group labels should be taken from object
-                    - c
+                    - c.id
+                    - c.lastName
+                    - c.firstName
                     - contactSource.label as contactSourceLabel
                     - email.email as primaryEmail
                     - phone.phone as primaryPhone

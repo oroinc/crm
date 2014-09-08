@@ -22,7 +22,9 @@ class CreateEmbeddedFormTest extends Selenium2TestCase
         $login = $this->login();
         /** @var EmbeddedForms $login */
         $login->openEmbeddedForms('Oro\Bundle\EmbeddedFormBundle')
+            ->assertTitle('Embedded Forms - Integrations - System')
             ->add()
+            ->assertTitle('Create Embedded Form - Embedded Forms - Integrations - System')
             ->setTitle($title)
             ->save()
             ->assertMessage('Form has been saved successfully')
@@ -48,8 +50,9 @@ class CreateEmbeddedFormTest extends Selenium2TestCase
         $login->openEmbeddedForms('Oro\Bundle\EmbeddedFormBundle')
             ->filterBy('Title', $title)
             ->open(array($title))
+            ->assertTitle("{$title} - Embedded Forms - Integrations - System")
             ->edit()
-            ->assertTitle($title . ' - Edit - Embedded Forms - Integrations - System')
+            ->assertTitle("{$title} - Edit - Embedded Forms - Integrations - System")
             ->setTitle($newTitle)
             ->save()
             ->assertMessage('Form has been saved successfully');
@@ -69,8 +72,9 @@ class CreateEmbeddedFormTest extends Selenium2TestCase
             ->filterBy('Title', $title)
             ->open(array($title))
             ->delete()
-            ->assertTitle('Embedded Forms - Integrations - System')
-            ->assertMessage('Embedded Form deleted');  /** @var EmbeddedForms $login */
+            ->assertMessage('Embedded Form deleted');
+
+        /** @var EmbeddedForms $login */
         $login->openEmbeddedForms('Oro\Bundle\EmbeddedFormBundle');
         if ($login->getRowsCount() > 0) {
             $login->filterBy('Title', $title)

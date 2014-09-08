@@ -17,7 +17,9 @@ class EntityTest extends Selenium2TestCase
         $fieldName = 'test_field' . mt_rand();
         $login = $this->login();
         $login->openConfigEntities('Oro\Bundle\EntityConfigBundle')
+            ->assertTitle('Entity Management - Entities - System')
             ->open(array($entityName))
+            ->assertTitle("{$entityName} - Entity Management - Entities - System")
             ->createField()
             ->setFieldName($fieldName)
             ->setType('String')
@@ -25,6 +27,7 @@ class EntityTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Field saved')
             ->updateSchema()
+            ->assertTitle('Entity Management - Entities - System')
             ->close()
             ->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
