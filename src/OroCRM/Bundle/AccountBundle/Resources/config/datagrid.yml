@@ -40,6 +40,7 @@ datagrid:
                 label: orocrm.contact.contactemail.email.label
             contactPhone:
                 label: orocrm.contact.contactphone.phone.label
+                frontend_type: phone
         options:
             entityHint: account
             toolbarOptions:
@@ -94,6 +95,7 @@ datagrid:
                 label:         orocrm.account.contact.email
             contactPhone:
                 label:         orocrm.account.contact.phone
+                frontend_type: phone
             ownerName:
                 label:         orocrm.account.owner.label
             createdAt:
@@ -246,6 +248,7 @@ datagrid:
                 label: orocrm.contact.email.label
             primaryPhone:
                 label: orocrm.contact.contactphone.phone.label
+                frontend_type: phone
             countryName:
                 label: orocrm.contact.contactaddress.country.label
             regionLabel:
@@ -336,6 +339,7 @@ datagrid:
                 label:   orocrm.account.contact.email
             contactPhone:
                 label:   orocrm.account.contact.phone
+                frontend_type: phone
             ownerName:
                 label:   orocrm.account.owner.label
         sorters:
