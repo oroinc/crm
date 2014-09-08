@@ -93,5 +93,7 @@ services:
         arguments:
             - @orocrm_marketing_list.provider.marketing_list
             - @orocrm_marketing_list.contact_information_field_helper
+            - @orocrm_marketing_list.model.marketing_list_item_connector
             - @oro_email.mailer.processor
             - @oro_email.email_renderer
+            - @oro_config.global

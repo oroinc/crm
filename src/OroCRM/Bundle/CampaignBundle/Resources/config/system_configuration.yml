@@ -1,0 +1,31 @@
+oro_system_configuration:
+    groups:
+        campaign_settings:
+            icon: icon-envelope #icon-send
+            title: orocrm.campaign.emailcampaign.config.label
+        mail_settings:
+            icon: icon-envelope
+            title: orocrm.campaign.emailcampaign.config.mail
+
+    fields:
+        oro_crm_campaign.campaign_from_email:
+            data_type: string
+            type: text
+            options:
+                label: orocrm.campaign.emailcampaign.config.campaign_from_email
+
+    tree:
+        system_configuration:
+            platform:
+                children:
+                    general_setup:
+                        children:
+                            campaign_settings:
+                                priority: -10
+                                children:
+                                    mail_settings:
+                                        children:
+                                            - oro_crm_campaign.campaign_from_email
+    api_tree:
+        campaign_settings:
+            oro_crm_campaign.campaign_from_email: ~

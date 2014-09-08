@@ -7,7 +7,8 @@
     {{ UI.button({
         'path' : path('orocrm_email_campaign_send', { id: entity.id }),
         'title': 'orocrm.campaign.emailcampaign.send'|trans,
-        'label': 'orocrm.campaign.emailcampaign.send'|trans
+        'label': 'orocrm.campaign.emailcampaign.send'|trans,
+        'iCss': 'icon-envelope'
     })  }}
     {% if resource_granted('EDIT', entity) %}
         {{ UI.editButton({
