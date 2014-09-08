@@ -39,7 +39,7 @@ orocrm:
         name.label:                 Account name
         owner.label:                Owner
         contacts.label:             Contacts
-        default_contact.label:      Default
+        default_contact.label:      Default Contact
         phone.label:                Phone
         email.label:                Email
 

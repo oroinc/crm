@@ -1,0 +1,62 @@
+orocrm:
+    marketinglist:
+        entity_label:        Marketing List
+        entity_plural_label: Marketing Lists
+        description.label:   Description
+        id.label:            Id
+        last_run.label:      Last Used
+        created_at.label:    Created At
+        name.label:          Name
+        owner.label:         Owner
+
+        controller:
+            unsubscribed: %entityName% unsubscribed
+            subscribed: %entityName% subscribed
+            removed: %entityName% removed from list
+            unremoved: %entityName% unremoved from list
+
+        segment: Marketing List %name% segment
+
+        refresh_list: Refresh List
+
+        entity:
+            label:   Entity
+            saved:   Marketing list saved
+
+        type:
+            label:   Type
+            dynamic: Dynamic
+            static:  On demand
+            manual:  Manual
+
+        form:
+            choose_marketing_list_type:    Choose marketing list type
+            importance: Important
+            columns_notice: At least one column with contact information must be selected. Available contact information fields
+
+        datagrid:
+            subscribed: Subscribed
+            update: Update
+            delete: Delete
+            view: View
+            contactedTimes: Number of times contacted
+            lastContactedAt: Last contacted at
+            refreshedOn: Refreshed on
+
+        entity_config:
+            choices:
+                email: Email
+                phone: Phone
+            contact_information:
+                label: Contact Information
+
+        block:
+            general: General Information
+            items: Items
+            removed: Removed Items
+
+        action:
+            subscribe: Subscribe
+            unsubscribe: Unsubscribe
+            unremove: Undo remove
+            remove: Remove
