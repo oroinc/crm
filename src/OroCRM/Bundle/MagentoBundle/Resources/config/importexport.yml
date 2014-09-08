@@ -110,6 +110,7 @@ services:
         class: %orocrm_magento.importexport.denormalizer.customer.class%
         arguments:
             - @orocrm_magento.service.import_helper
+            - @orocrm_channel.importexport.helper.channel
         tags:
             - { name: oro_importexport.normalizer }
 
@@ -118,6 +119,7 @@ services:
         arguments:
             - @oro_importexport.field.field_helper
             - @orocrm_magento.service.import_helper
+            - @orocrm_channel.importexport.helper.channel
         tags:
             - { name: oro_importexport.normalizer }
 
@@ -141,6 +143,7 @@ services:
         arguments:
             - @oro_importexport.field.field_helper
             - @orocrm_magento.service.import_helper
+            - @orocrm_channel.importexport.helper.channel
         tags:
             - { name: oro_importexport.normalizer }
 

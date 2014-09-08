@@ -21,6 +21,8 @@ use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
+use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -91,6 +93,19 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'createdAt',
         'birthday'
     ];
+
+    /** @var ChannelHelper */
+    protected $channelImportHelper;
+
+    /**
+     * @param ImportHelper  $importHelper
+     * @param ChannelHelper $channelHelper
+     */
+    public function __construct(ImportHelper $importHelper, ChannelHelper $channelHelper)
+    {
+        parent::__construct($importHelper);
+        $this->channelImportHelper = $channelHelper;
+    }
 
     /**
      * @param array          $remoteData
@@ -320,7 +335,8 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $resultObject = new Customer();
+        /** @var Customer $resultObject */
+        $resultObject = new $class;
 
         if (!is_array($data)) {
             return $resultObject;
@@ -345,7 +361,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             }
         }
 
-        $resultObject->setChannel($this->getChannelFromContext($context));
+        $integration = $this->getIntegrationFromContext($context);
+        $resultObject->setChannel($integration);
+        $resultObject->setDataChannel($this->channelImportHelper->getChannel($integration));
+
         $this->setScalarFieldsValues($resultObject, $mappedData);
         $this->setObjectFieldsValues($resultObject, $mappedData, $format, $context);
 

@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Service;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+
 class ImportHelper
 {
     /** @var RegistryInterface */
@@ -20,10 +22,10 @@ class ImportHelper
     /**
      * @param array $context
      *
-     * @return \Oro\Bundle\IntegrationBundle\Entity\Channel
+     * @return Integration
      * @throws \LogicException
      */
-    public function getChannelFromContext(array $context)
+    public function getIntegrationFromContext(array $context)
     {
         if (!isset($context['channel'])) {
             throw new \LogicException('Context should contain reference to channel');
