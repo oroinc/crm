@@ -26,6 +26,8 @@ services:
 
     orocrm_campaign.email_campaign.form.type:
         class: %orocrm_campaign.form.type.email_campaign.class%
+        arguments:
+            - @oro_email.form.subscriber.emailtemplate
         tags:
             - { name: form.type, alias: orocrm_email_campaign }
 

@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Controller;
 
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -10,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 
 /**
  * @Route("/campaign/email")
@@ -93,7 +93,7 @@ class EmailCampaignController extends Controller
     {
         return $this->get('oro_form.model.update_handler')->handleUpdate(
             $entity,
-            $this->get('orocrm_campaign.email_campaign.form'),
+            $this->createForm('orocrm_email_campaign', $entity),
             function (EmailCampaign $entity) {
                 return array(
                     'route' => 'orocrm_email_contact_update',

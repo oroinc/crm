@@ -458,4 +458,16 @@ class EmailCampaign
     {
         return $this->fromEmail;
     }
+
+    /**
+     * @return null|string
+     */
+    public function getEntityName()
+    {
+        if ($this->marketingList) {
+            return $this->marketingList->getEntity();
+        }
+
+        return null;
+    }
 }

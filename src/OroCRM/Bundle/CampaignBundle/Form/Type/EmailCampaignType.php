@@ -2,19 +2,36 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Form\Type;
 
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use Oro\Bundle\EmailBundle\Form\EventListener\BuildTemplateFormSubscriber;
+use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
+
 class EmailCampaignType extends AbstractType
 {
     /**
+     * @var BuildTemplateFormSubscriber
+     */
+    protected $subscriber;
+
+    /**
+     * @param BuildTemplateFormSubscriber $subscriber
+     */
+    public function __construct(BuildTemplateFormSubscriber $subscriber)
+    {
+        $this->subscriber = $subscriber;
+    }
+
+    /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->addEventSubscriber($this->subscriber);
+
         $builder
             ->add(
                 'name',
@@ -28,11 +45,11 @@ class EmailCampaignType extends AbstractType
                 'schedule',
                 'choice',
                 [
-                    'choices' => [
+                    'choices'  => [
                         EmailCampaign::SCHEDULE_IMMEDIATE => ucfirst(EmailCampaign::SCHEDULE_IMMEDIATE),
-                        EmailCampaign::SCHEDULE_DEFERRED => ucfirst(EmailCampaign::SCHEDULE_DEFERRED)
+                        EmailCampaign::SCHEDULE_DEFERRED  => ucfirst(EmailCampaign::SCHEDULE_DEFERRED)
                     ],
-                    'label' => 'orocrm.campaign.emailcampaign.schedule.label',
+                    'label'    => 'orocrm.campaign.emailcampaign.schedule.label',
                     'required' => true
                 ]
             )
@@ -40,7 +57,7 @@ class EmailCampaignType extends AbstractType
                 'scheduledAt',
                 'oro_datetime',
                 [
-                    'label' => 'orocrm.campaign.emailcampaign.scheduled_at.label',
+                    'label'    => 'orocrm.campaign.emailcampaign.scheduled_at.label',
                     'required' => false
                 ]
             )
@@ -64,8 +81,9 @@ class EmailCampaignType extends AbstractType
                 'template',
                 'oro_email_template_list',
                 [
-                    'label'    => 'orocrm.campaign.emailcampaign.template.label',
-                    'required' => true
+                    'label'                   => 'orocrm.campaign.emailcampaign.template.label',
+                    'required'                => true,
+                    'depends_on_parent_field' => 'marketingList'
                 ]
             )
             ->add(
