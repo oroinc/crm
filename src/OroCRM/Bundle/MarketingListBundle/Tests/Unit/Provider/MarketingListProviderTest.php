@@ -78,12 +78,75 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getConfig')
             ->will($this->returnValue($config));
 
-        $this->assertGetQueryBuilder($marketingList, $queryBuilder, $dataGrid);
+        $this->assertGetQueryBuilder(
+            $marketingList,
+            $queryBuilder,
+            $dataGrid,
+            MarketingListProvider::RESULT_ITEMS_MIXIN
+        );
 
         $this->assertInstanceOf('\Iterator', $this->provider->getMarketingListResultIterator($marketingList));
     }
 
-    protected function assertGetQueryBuilder($marketingList, $queryBuilder, $dataGrid)
+    public function testGetMarketingListEntitiesQueryBuilder()
+    {
+        $marketingList = $this->getMarketingList(MarketingListType::TYPE_DYNAMIC);
+        $this->assertEntitiesQueryBuilder($marketingList);
+
+        $this->assertInstanceOf(
+            'Doctrine\ORM\QueryBuilder',
+            $this->provider->getMarketingListEntitiesQueryBuilder($marketingList)
+        );
+    }
+
+    public function testGetMarketingListEntitiesQueryBuilderManual()
+    {
+        $marketingList = $this->getMarketingList(MarketingListType::TYPE_MANUAL);
+        $this->assertNull($this->provider->getMarketingListEntitiesQueryBuilder($marketingList));
+    }
+
+    public function testGetMarketingListEntitiesIteratorManual()
+    {
+        $marketingList = $this->getMarketingList(MarketingListType::TYPE_MANUAL);
+        $this->assertNull($this->provider->getMarketingListEntitiesIterator($marketingList));
+    }
+
+    public function testGetMarketingListEntitiesIterator()
+    {
+        $marketingList = $this->getMarketingList(MarketingListType::TYPE_DYNAMIC);
+        $this->assertEntitiesQueryBuilder($marketingList);
+        $this->assertInstanceOf('\Iterator', $this->provider->getMarketingListEntitiesIterator($marketingList));
+    }
+
+    protected function assertEntitiesQueryBuilder($marketingList)
+    {
+        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dataGrid = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface')
+            ->getMockForAbstractClass();
+
+        $queryBuilder->expects($this->exactly(2))
+            ->method('resetDQLPart')
+            ->will($this->returnSelf());
+        $queryBuilder->expects($this->once())
+            ->method('select')
+            ->with('t1')
+            ->will($this->returnSelf());
+        $queryBuilder->expects($this->once())
+            ->method('orderBy')
+            ->with('t1.id')
+            ->will($this->returnSelf());
+
+        $this->assertGetQueryBuilder(
+            $marketingList,
+            $queryBuilder,
+            $dataGrid,
+            MarketingListProvider::RESULT_ENTITIES_MIXIN
+        );
+    }
+
+    protected function assertGetQueryBuilder($marketingList, $queryBuilder, $dataGrid, $mixin = null)
     {
         $segment = $this->getMockBuilder('Oro\Bundle\SegmentBundle\Entity\Segment')
             ->disableOriginalConstructor()
@@ -105,14 +168,18 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getQueryBuilder')
             ->will($this->returnValue($queryBuilder));
         $dataGrid->expects($this->once())
-            ->method('getDatasource')
+            ->method('getAcceptedDatasource')
             ->will($this->returnValue($dataSource));
+
+        $parameters = array(
+            PagerInterface::PAGER_ROOT_PARAM => array(PagerInterface::DISABLED_PARAM => true)
+        );
+        if ($mixin) {
+            $parameters['grid-mixin'] = $mixin;
+        }
         $this->dataGridManager->expects($this->atLeastOnce())
             ->method('getDatagrid')
-            ->with(
-                'grid_prefix_1',
-                array(PagerInterface::PAGER_ROOT_PARAM => array(PagerInterface::DISABLED_PARAM => true))
-            )
+            ->with('grid_prefix_1', $parameters)
             ->will($this->returnValue($dataGrid));
     }
 
