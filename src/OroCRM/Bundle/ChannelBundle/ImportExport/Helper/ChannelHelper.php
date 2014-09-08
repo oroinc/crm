@@ -59,13 +59,13 @@ class ChannelHelper
         }
 
         /** @var EntityManager $em */
-        $em     = $this->registry->getManager();
-        $result = $em->createQueryBuilder()
+        $em = $this->registry->getManager();
+        $qb = $em->createQueryBuilder()
             ->select('c.id, i.id as integrationId')
             ->from('OroCRMChannelBundle:Channel', 'c')
-            ->innerJoin('c.dataSource', 'i')
-            ->getQuery()
-            ->getArrayResult();
+            ->innerJoin('c.dataSource', 'i');
+
+        $result = $qb->getQuery()->getArrayResult();
 
         foreach ($result as $row) {
             $this->integrationToChannelMap[$row['integrationId']] = $row['id'];
