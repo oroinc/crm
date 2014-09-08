@@ -16,6 +16,9 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 
 class MarketingListProvider
 {
+    const RESULT_ITEMS_MIXIN = 'orocrm-marketing-list-items-mixin';
+    const RESULT_ENTITIES_MIXIN = 'orocrm-marketing-list-entities-mixin';
+
     /**
      * @var Manager
      */
@@ -36,15 +39,16 @@ class MarketingListProvider
 
     /**
      * @param MarketingList $marketingList
+     * @param string|null $mixin
      * @return QueryBuilder|null
      */
-    public function getMarketingListQueryBuilder(MarketingList $marketingList)
+    public function getMarketingListQueryBuilder(MarketingList $marketingList, $mixin = null)
     {
         if ($marketingList->getType()->getName() !== MarketingListType::TYPE_MANUAL) {
-            $dataGrid = $this->getSegmentDataGrid($marketingList->getSegment());
+            $dataGrid = $this->getSegmentDataGrid($marketingList->getSegment(), $mixin);
 
             /** @var OrmDatasource $dataSource */
-            $dataSource = $dataGrid->getDatasource();
+            $dataSource = $dataGrid->getAcceptedDatasource();
             $queryBuilder = $dataSource->getQueryBuilder();
 
             return $queryBuilder;
@@ -60,8 +64,17 @@ class MarketingListProvider
     public function getMarketingListResultIterator(MarketingList $marketingList)
     {
         if ($marketingList->getType()->getName() !== MarketingListType::TYPE_MANUAL) {
-            $queryBuilder = $this->getMarketingListQueryBuilder($marketingList);
-            $dataGridConfig = $this->getSegmentDataGrid($marketingList->getSegment())->getConfig();
+            $queryBuilder = $this->getMarketingListQueryBuilder(
+                $marketingList,
+                self::RESULT_ITEMS_MIXIN
+            );
+            $dataGridConfig = $this
+                ->getSegmentDataGrid(
+                    $marketingList->getSegment(),
+                    self::RESULT_ITEMS_MIXIN
+                )
+                ->getConfig();
+
             $skipCountWalker = $dataGridConfig->offsetGetByPath(Builder::DATASOURCE_SKIP_COUNT_WALKER_PATH, false);
             $iterator = new BufferedQueryResultIterator($queryBuilder, !$skipCountWalker);
 
@@ -72,20 +85,63 @@ class MarketingListProvider
     }
 
     /**
+     * @param MarketingList $marketingList
+     * @return QueryBuilder|null
+     */
+    public function getMarketingListEntitiesQueryBuilder(MarketingList $marketingList)
+    {
+        if ($marketingList->getType()->getName() !== MarketingListType::TYPE_MANUAL) {
+            $queryBuilder = clone $this->getMarketingListQueryBuilder(
+                $marketingList,
+                self::RESULT_ENTITIES_MIXIN
+            );
+            // Select only entity related information ordered by identifier field for maximum performance
+            $queryBuilder
+                ->resetDQLPart('select')
+                ->resetDQLPart('orderBy')
+                ->select('t1')
+                ->orderBy('t1.id');
+
+            return $queryBuilder;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param MarketingList $marketingList
+     * @return BufferedQueryResultIterator|null
+     */
+    public function getMarketingListEntitiesIterator(MarketingList $marketingList)
+    {
+        if ($marketingList->getType()->getName() !== MarketingListType::TYPE_MANUAL) {
+            return new BufferedQueryResultIterator($this->getMarketingListEntitiesQueryBuilder($marketingList), false);
+        }
+
+        return null;
+    }
+
+    /**
      * @param Segment $segment
+     * @param null|string $mixin
      * @return DatagridInterface
      */
-    protected function getSegmentDataGrid(Segment $segment)
+    protected function getSegmentDataGrid(Segment $segment, $mixin = null)
     {
         $dataGridName = $segment->getGridPrefix() . $segment->getId();
 
-        if (empty($this->dataGrid[$dataGridName])) {
-            $this->dataGrid[$dataGridName] = $this->dataGridManager->getDatagrid(
-                $dataGridName,
-                array(PagerInterface::PAGER_ROOT_PARAM => array(PagerInterface::DISABLED_PARAM => true))
+        $resultKey = $dataGridName . $mixin;
+        if (empty($this->dataGrid[$resultKey])) {
+            $gridParameters = array(
+                PagerInterface::PAGER_ROOT_PARAM => array(PagerInterface::DISABLED_PARAM => true)
             );
+            if ($mixin) {
+                $gridParameters['grid-mixin'] = $mixin;
+            }
+            $this->dataGrid[$resultKey] = $this->dataGridManager->getDatagrid($dataGridName, $gridParameters);
+
         }
 
-        return $this->dataGrid[$dataGridName];
+        return $this->dataGrid[$resultKey];
     }
 }
