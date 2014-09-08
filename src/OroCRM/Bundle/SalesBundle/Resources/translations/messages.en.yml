@@ -107,7 +107,6 @@ orocrm:
             customer.label:       B2B Customer
             data_channel.label:   Channel
             assigned.label:       Assigned
-            data_channel.label:   Channel
 
             datagrid:
                 view:     View

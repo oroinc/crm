@@ -51,27 +51,34 @@ class ContactRequestTypeTest extends TypeTestCase
     public function testBuildForm()
     {
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->disableOriginalConstructor()->getMock();
 
+        $fields = [];
         $builder->expects($this->exactly(7))
             ->method('add')
             ->will(
-                $this->returnValueMap(
-                    [
-                        [['dataChannel', 'orocrm_channel_select_type'], $this->returnSelf()],
-                        [['firstName', 'text'], $this->returnSelf()],
-                        [['lastName', 'text'], $this->returnSelf()],
-                        [['organizationName', 'text'], $this->returnSelf()],
-                        [['preferredContactMethod', 'choice'], $this->returnSelf()],
-                        [['phone', 'text'], $this->returnSelf()],
-                        [['emailAddress', 'text'], $this->returnSelf()],
-                        [['contactReason', 'entity'], $this->returnSelf()],
-                        [['comment', 'textarea'], $this->returnSelf()],
-                        [['submit', 'submit'], $this->returnSelf()],
-                    ]
+                $this->returnCallback(
+                    function ($fieldName, $fieldType) use (&$fields) {
+                        $fields[$fieldName] = $fieldType;
+
+                        return new \PHPUnit_Framework_MockObject_Stub_ReturnSelf();
+                    }
                 )
             );
+
         $this->formType->buildForm($builder, []);
+
+        $this->assertSame(
+            [
+                'dataChannel'  => 'orocrm_channel_select_type',
+                'firstName'    => 'text',
+                'lastName'     => 'text',
+                'emailAddress' => 'text',
+                'phone'        => 'text',
+                'comment'      => 'textarea',
+                'submit'       => 'submit',
+            ],
+            $fields
+        );
     }
 }
