@@ -25,7 +25,7 @@ class B2bCustomerGridTest extends AbstractDatagridTestCase
     public function gridProvider()
     {
         return [
-            'B2B Customer grid' => [
+            'B2B Customer grid'              => [
                 [
                     'gridParameters'      => [
                         'gridName' => 'orocrm-sales-b2bcustomers-grid'
@@ -38,13 +38,13 @@ class B2bCustomerGridTest extends AbstractDatagridTestCase
                     'expectedResultCount' => 1
                 ],
             ],
-            'B2B Customer grid with filter' => [
+            'B2B Customer grid with filter'  => [
                 [
                     'gridParameters'      => [
                         'gridName' => 'orocrm-sales-b2bcustomers-grid'
                     ],
                     'gridFilters'         => [
-                        'orocrm-sales-b2bcustomers-grid[_filter][channelName][value]'  => 'b2b Channel',
+                        'orocrm-sales-b2bcustomers-grid[_filter][channelName][value]' => 'b2b Channel',
                     ],
                     'assert'              => [
                         'name'        => LoadSalesBundleFixtures::CUSTOMER_NAME,
@@ -59,12 +59,9 @@ class B2bCustomerGridTest extends AbstractDatagridTestCase
                         'gridName' => 'orocrm-sales-b2bcustomers-grid'
                     ],
                     'gridFilters'         => [
-                        'orocrm-sales-b2bcustomers-grid[_filter][name][value]'  => 'some other type',
+                        'orocrm-sales-b2bcustomers-grid[_filter][name][value]' => 'some other type',
                     ],
-                    'assert'              => [
-                        'name'        => LoadSalesBundleFixtures::CUSTOMER_NAME,
-                        'channelName' => LoadSalesBundleFixtures::CHANNEL_NAME
-                    ],
+                    'assert'              => [],
                     'expectedResultCount' => 0
                 ],
             ],
