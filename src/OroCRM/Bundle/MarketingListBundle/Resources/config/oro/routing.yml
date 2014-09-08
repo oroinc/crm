@@ -1,0 +1,31 @@
+orocrm_marketing_list_bundle:
+    resource:     "@OroCRMMarketingListBundle/Controller"
+    type:         annotation
+    prefix:       /
+
+orocrm_marketing_list_api:
+    resource:     "@OroCRMMarketingListBundle/Controller/Api/Rest/MarketingListController.php"
+    type:         rest
+    prefix:       api/rest/{version}
+    requirements:
+        version:  latest|v1
+    defaults:
+        version:  latest
+
+orocrm_marketing_list_removed_item_api:
+    resource:     "@OroCRMMarketingListBundle/Controller/Api/Rest/MarketingListRemovedItemController.php"
+    type:         rest
+    prefix:       api/rest/{version}
+    requirements:
+        version:  latest|v1
+    defaults:
+        version:  latest
+
+orocrm_marketing_list_unsubscribed_item_api:
+    resource:     "@OroCRMMarketingListBundle/Controller/Api/Rest/MarketingListUnsubscribedItemController.php"
+    type:         rest
+    prefix:       api/rest/{version}
+    requirements:
+        version:  latest|v1
+    defaults:
+        version:  latest

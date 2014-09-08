@@ -76,7 +76,7 @@ class CreateOpportunityTest extends Selenium2TestCase
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $name)
             ->open(array($name))
-            ->assertTitle("{$name} - Edit - Opportunities - Sales")
+            ->assertTitle("{$name} - Opportunities - Sales")
             ->edit()
             ->assertTitle("{$name} - Edit - Opportunities - Sales")
             ->setName($newName)
