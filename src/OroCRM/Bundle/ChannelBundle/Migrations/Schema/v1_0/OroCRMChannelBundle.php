@@ -182,9 +182,9 @@ class OroCRMChannelBundle implements Migration, ExtendExtensionAwareInterface
         $this->extendExtension->addManyToOneRelation(
             $schema,
             'oro_embedded_form',
-            'channel',
+            'dataChannel',
             'orocrm_channel',
-            'id',
+            'name',
             ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
         );
     }
