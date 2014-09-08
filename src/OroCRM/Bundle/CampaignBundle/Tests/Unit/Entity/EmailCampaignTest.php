@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Entity;
 
+use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
@@ -27,9 +28,7 @@ class EmailCampaignTest extends AbstractEntityTestCase
         $marketingList = new MarketingList();
         $owner         = new User();
         $date          = new \DateTime('now', new \DateTimeZone('UTC'));
-
-        /** @todo: relation */
-        $template = 1;
+        $template      = new EmailTemplate();
 
         return [
             'name'          => ['name', 'test', 'test'],

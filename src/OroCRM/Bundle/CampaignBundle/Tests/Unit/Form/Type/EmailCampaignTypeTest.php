@@ -11,7 +11,12 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->type = new EmailCampaignType();
+        $subscriber = $this
+            ->getMockBuilder('Oro\Bundle\EmailBundle\Form\EventListener\BuildTemplateFormSubscriber')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->type = new EmailCampaignType($subscriber);
     }
 
     protected function tearDown()
@@ -25,27 +30,31 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $builder->expects($this->at(0))
+        $builder->expects($this->at(1))
             ->method('add')
             ->with('name', 'text')
             ->will($this->returnSelf());
-        $builder->expects($this->at(1))
+        $builder->expects($this->at(2))
             ->method('add')
             ->with('schedule', 'choice')
             ->will($this->returnSelf());
-        $builder->expects($this->at(2))
+        $builder->expects($this->at(3))
             ->method('add')
             ->with('scheduledAt', 'oro_datetime')
             ->will($this->returnSelf());
-        $builder->expects($this->at(3))
+        $builder->expects($this->at(4))
             ->method('add')
             ->with('campaign', 'orocrm_campaign_select')
             ->will($this->returnSelf());
-        $builder->expects($this->at(4))
+        $builder->expects($this->at(5))
             ->method('add')
             ->with('marketingList', 'orocrm_marketing_list_select')
             ->will($this->returnSelf());
-        $builder->expects($this->at(5))
+        $builder->expects($this->at(6))
+            ->method('add')
+            ->with('template', 'oro_email_template_list')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(7))
             ->method('add')
             ->with('description', 'textarea')
             ->will($this->returnSelf());
