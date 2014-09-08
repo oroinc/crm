@@ -54,6 +54,9 @@ class EmailCampaignSender
         $this->contactInformationFieldsProvider = $contactInformationFieldsProvider;
     }
 
+    /**
+     * @param TransportInterface $transport
+     */
     public function setTransport(TransportInterface $transport)
     {
         $this->transport = $transport;
