@@ -76,7 +76,7 @@ services:
         class: %orocrm_campaign.data_transformer.multi_line.class%
 
     orocrm_campaign.form.autocomplete.campaign.search_handler:
-        parent: oro_form.autocomplete.full_name.search_handler
+        parent: oro_form.autocomplete.search_handler
         arguments:
             - %orocrm_campaign.entity.class%
             - ["name"]

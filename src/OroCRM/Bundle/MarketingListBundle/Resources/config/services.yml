@@ -125,7 +125,7 @@ services:
             - { name: oro_datagrid.extension }
 
     orocrm_marketing_list.form.autocomplete.marketing_list.search_handler:
-        parent: oro_form.autocomplete.full_name.search_handler
+        parent: oro_form.autocomplete.search_handler
         arguments:
             - %orocrm_marketing_list.entity.class%
             - ["name"]

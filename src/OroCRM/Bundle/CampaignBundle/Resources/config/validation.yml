@@ -37,3 +37,5 @@ OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign:
             - NotBlank: ~
         owner:
             - NotBlank: ~
+        template:
+            - NotBlank: ~

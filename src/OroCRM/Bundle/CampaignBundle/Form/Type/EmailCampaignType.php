@@ -61,6 +61,14 @@ class EmailCampaignType extends AbstractType
                 ]
             )
             ->add(
+                'template',
+                'oro_email_template_list',
+                [
+                    'label'    => 'orocrm.campaign.emailcampaign.template.label',
+                    'required' => true
+                ]
+            )
+            ->add(
                 'description',
                 'textarea',
                 [

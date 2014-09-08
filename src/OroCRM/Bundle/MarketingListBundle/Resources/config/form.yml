@@ -92,14 +92,6 @@ services:
         tags:
             - { name: form.type, alias: orocrm_marketing_list_contact_information_entity_choice }
 
-    orocrm_marketing_list.form.autocomplete.marketing_list.search_handler:
-        parent: oro_form.autocomplete.full_name.search_handler
-        arguments:
-            - %orocrm_marketing_list.entity.class%
-            - ["name"]
-        tags:
-            - { name: oro_form.autocomplete.search_handler, alias: marketing_lists, acl_resource: orocrm_marketing_list_view }
-
     orocrm_marketing_list.form.type.marketing_list_select:
         class: %orocrm_marketing_list.form.type.marketing_list_select.class%
         tags:

@@ -52,12 +52,33 @@
                         form_row(form.scheduledAt),
                         form_row(form.campaign),
                         form_row(form.marketingList),
+                        form_row(form.template),
                         form_row(form.description),
                     ]
                 }
             ]
         }]
     %}
+
+    <script type="text/javascript">
+        require(
+            ['jquery', 'oroemail/js/email/template/view', 'orocrmcampaign/js/email/template/collection'],
+            function($, View, Collection) {
+                $(function () {
+                    'use strict';
+                    new View({
+                        el: $('[name="orocrm_email_campaign[marketingList]"]'),
+                        target: $('#orocrm_email_campaign_template'),
+                        collection: new Collection()
+                    });
+                });
+            })
+    </script>
+    <script type="text/template" id="emailtemplate-chooser-template">
+        <% _.each(entities, function(entity, i) { %>
+        <option value="<%= entity.get('id') %>"><%= entity.get('name') %></option>
+        <% }); %>
+    </script>
 
     {% set data =
         {

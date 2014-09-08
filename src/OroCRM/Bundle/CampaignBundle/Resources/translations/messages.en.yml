@@ -67,6 +67,7 @@ orocrm:
             scheduled_at.label:  Scheduled At
             owner.label:         Owner
             marketing_list.label: Marketing List
+            template.label:      Template
             created_at.label:    Created At
             updated_at.label:    Updated At
             campaign.label:      Campaign
