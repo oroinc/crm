@@ -6,20 +6,25 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class LeadSelectType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
-                'configs' => array(
-                    'placeholder' => 'orocrm.sales.form.choose_lead'
-                ),
+            [
                 'autocomplete_alias' => 'leads',
-                'grid_name' => 'sales-lead-grid',
-                'create_form_route' => 'orocrm_sales_lead_create'
-            )
+                'create_form_route'  => 'orocrm_sales_lead_create',
+                'configs'            => [
+                    'placeholder' => 'orocrm.sales.form.choose_lead'
+                ],
+            ]
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getParent()
     {
         return 'oro_entity_create_or_select_inline';

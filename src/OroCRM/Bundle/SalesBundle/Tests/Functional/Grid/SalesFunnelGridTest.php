@@ -25,7 +25,7 @@ class SalesFunnelGridTest extends AbstractDatagridTestCase
     public function gridProvider()
     {
         return [
-            'Sales funnel grid by lead'        => [
+            'Sales funnel grid by lead'                       => [
                 [
                     'gridParameters'      => [
                         'gridName' => 'sales-funnel-grid'
@@ -57,7 +57,7 @@ class SalesFunnelGridTest extends AbstractDatagridTestCase
                     'expectedResultCount' => 0
                 ],
             ],
-            'Sales funnel grid by opportunity' => [
+            'Sales funnel grid by opportunity'                => [
                 [
                     'gridParameters'      => [
                         'gridName' => 'sales-funnel-grid'
@@ -84,12 +84,7 @@ class SalesFunnelGridTest extends AbstractDatagridTestCase
                         'sales-funnel-grid[_filter][channelName][value]'     => 'b2b Channel',
                         'sales-funnel-grid[_filter][opportunityName][value]' => 'something',
                     ],
-                    'assert'              => [
-                        'channelName'            => LoadSalesBundleFixtures::CHANNEL_NAME,
-                        'opportunityName'        => 'opname',
-                        'opportunityBudget'      => 50.00,
-                        'opportunityProbability' => 10
-                    ],
+                    'assert'              => [],
                     'expectedResultCount' => 0
                 ],
             ],

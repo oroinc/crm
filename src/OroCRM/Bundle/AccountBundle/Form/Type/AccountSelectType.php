@@ -12,14 +12,13 @@ class AccountSelectType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
-                'configs' => array(
-                    'placeholder' => 'orocrm.account.form.choose_account'
-                ),
+            [
                 'autocomplete_alias' => 'accounts',
-                'grid_name' => 'accounts-select-grid',
-                'create_form_route' => 'orocrm_account_create'
-            )
+                'create_form_route'  => 'orocrm_account_create',
+                'configs'            => [
+                    'placeholder' => 'orocrm.account.form.choose_account'
+                ],
+            ]
         );
     }
 

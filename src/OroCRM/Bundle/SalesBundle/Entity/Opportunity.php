@@ -43,7 +43,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          "group_name"=""
  *      },
  *      "form"={
- *          "form_type"="orocrm_sales_opportunity_select"
+ *              "form_type"="orocrm_sales_opportunity_select",
+ *              "grid_name"="sales-opportunity-grid",
  *      },
  *      "dataaudit"={
  *          "auditable"=true
