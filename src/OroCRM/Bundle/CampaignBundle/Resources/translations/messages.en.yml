@@ -84,3 +84,7 @@ orocrm:
                     update.label: Update
                     delete.label: Delete
             send: Send
+            config:
+                label: Campaign Configuration
+                campaign_from_email: From Email
+                mail: Mail Configuration

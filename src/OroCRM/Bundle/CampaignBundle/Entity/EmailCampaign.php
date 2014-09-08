@@ -84,6 +84,13 @@ class EmailCampaign
     protected $scheduledAt;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="from_email", type="string", length=255, nullable=true)
+     */
+    protected $fromEmail;
+
+    /**
      * @var Campaign
      *
      * @ORM\ManyToOne(targetEntity="Campaign")
@@ -427,5 +434,28 @@ class EmailCampaign
         $this->scheduledAt = $scheduledAt;
 
         return $this;
+    }
+
+    /**
+     * Set fromEmail
+     *
+     * @param string $fromEmail
+     * @return EmailCampaign
+     */
+    public function setFromEmail($fromEmail)
+    {
+        $this->fromEmail = $fromEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get fromEmail
+     *
+     * @return string 
+     */
+    public function getFromEmail()
+    {
+        return $this->fromEmail;
     }
 }
