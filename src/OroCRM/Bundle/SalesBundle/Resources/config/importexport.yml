@@ -1,6 +1,7 @@
 parameters:
     orocrm_sales.importexport.template_fixture.lead.class:        OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture\LeadFixture
     orocrm_sales.importexport.template_fixture.opportunity.class: OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture\OpportunityFixture
+    orocrm_sales.importexport.template_fixture.b2bcustomer.class: OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture\B2bCustomerFixture
 
 services:
     orocrm_sales.importexport.template_fixture.lead:
@@ -10,6 +11,11 @@ services:
 
     orocrm_sales.importexport.template_fixture.opportunity:
         class: %orocrm_sales.importexport.template_fixture.opportunity.class%
+        tags:
+            - { name: oro_importexport.template_fixture }
+
+    orocrm_sales.importexport.template_fixture.b2bcustomer:
+        class: %orocrm_sales.importexport.template_fixture.b2bcustomer.class%
         tags:
             - { name: oro_importexport.template_fixture }
 

@@ -1,0 +1,8 @@
+parameters:
+    orocrm_channel.importexport.template_fixture.channel.class: OroCRM\Bundle\ChannelBundle\ImportExport\TemplateFixture\ChannelFixture
+
+services:
+    orocrm_channel.importexport.template_fixture.channel:
+        class: %orocrm_channel.importexport.template_fixture.channel.class%
+        tags:
+            - { name: oro_importexport.template_fixture }
