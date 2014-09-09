@@ -201,6 +201,7 @@ datagrid:
                 label:         orocrm.sales.lead.email.label
             phoneNumber:
                 label:         orocrm.sales.lead.phone_number.label
+                frontend_type: phone
             countryName:
                 label:         orocrm.sales.lead.datagrid.country
             regionLabel:
@@ -509,6 +510,7 @@ datagrid:
                 label: orocrm.sales.lead.email.label
             phoneNumber:
                 label: orocrm.sales.lead.phone_number.label
+                frontend_type: phone
             countryName:
                 label: orocrm.sales.lead.datagrid.country
             regionLabel:
