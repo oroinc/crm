@@ -4,25 +4,30 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
+use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
+use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class OrderDenormalizer extends ConfigurableEntityNormalizer
 {
-    /**
-     * @var ImportHelper
-     */
+    /** @var ImportHelper */
     protected $importHelper;
 
+    /** @var ChannelHelper */
+    protected $channelImportHelper;
+
     /**
-     * @param FieldHelper $fieldHelper
-     * @param ImportHelper $contextHelper
+     * @param FieldHelper   $fieldHelper
+     * @param ImportHelper  $importHelper
+     * @param ChannelHelper $channelHelper
      */
-    public function __construct(FieldHelper $fieldHelper, ImportHelper $contextHelper)
+    public function __construct(FieldHelper $fieldHelper, ImportHelper $importHelper, ChannelHelper $channelHelper)
     {
         parent::__construct($fieldHelper);
-        $this->importHelper = $contextHelper;
+        $this->importHelper        = $importHelper;
+        $this->channelImportHelper = $channelHelper;
     }
 
     /**
@@ -53,10 +58,12 @@ class OrderDenormalizer extends ConfigurableEntityNormalizer
         /** @var Order $order */
         $order = parent::denormalize($data, $class, $format, $context);
 
-        $channel = $this->importHelper->getChannelFromContext($context);
-        $order->setChannel($channel);
+        $integration = $this->importHelper->getIntegrationFromContext($context);
+        $order->setChannel($integration);
+        $order->setDataChannel($this->channelImportHelper->getChannel($integration));
+
         if ($order->getStore()) {
-            $order->getStore()->setChannel($channel);
+            $order->getStore()->setChannel($integration);
         }
 
         return $order;
