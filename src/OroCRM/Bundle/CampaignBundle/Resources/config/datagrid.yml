@@ -241,6 +241,9 @@ datagrid:
                 label: orocrm.campaign.emailcampaign.marketing_list.label
             schedule:
                 label: orocrm.campaign.emailcampaign.schedule.label
+                type:          twig
+                frontend_type: html
+                template:      OroCRMCampaignBundle:EmailCampaign:Property/schedule.html.twig
             scheduledAt:
                 label: orocrm.campaign.emailcampaign.scheduled_at.label
                 frontend_type: datetime

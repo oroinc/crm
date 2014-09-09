@@ -5,7 +5,7 @@
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ ui.renderProperty('orocrm.campaign.emailcampaign.name.label'|trans, entity.name) }}
-            {{ ui.renderProperty('orocrm.campaign.emailcampaign.schedule.label'|trans, entity.schedule) }}
+            {{ ui.renderProperty('orocrm.campaign.emailcampaign.schedule.label'|trans, entity.schedule|capitalize) }}
             {{ ui.renderProperty('orocrm.campaign.emailcampaign.scheduled_at.label'|trans, entity.scheduledAt ? entity.scheduledAt|oro_format_datetime : '') }}
 
             {%- if entity.campaign and resource_granted('orocrm_campaign_view') -%}

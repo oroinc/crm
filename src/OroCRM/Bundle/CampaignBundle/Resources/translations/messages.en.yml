@@ -79,6 +79,7 @@ orocrm:
                 general: General Information
             controller:
                 saved.message: "Email campaign saved"
+                sent: "Email campaign was sent"
             datagrid:
                 actions:
                     view.label: View

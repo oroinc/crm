@@ -129,6 +129,11 @@ class EmailCampaignController extends Controller
         $sender->setTransport($emailTransport);
         $sender->send($entity);
 
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.sent')
+        );
+
         return $this->redirect(
             $this->generateUrl(
                 'orocrm_email_campaign_view',
