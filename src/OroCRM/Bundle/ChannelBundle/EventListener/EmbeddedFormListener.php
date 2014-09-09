@@ -6,7 +6,6 @@ use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Symfony\Component\Form\FormView;
 
 class EmbeddedFormListener
 {
