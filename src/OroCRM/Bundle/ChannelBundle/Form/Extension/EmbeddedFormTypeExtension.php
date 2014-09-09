@@ -2,8 +2,13 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Form\Extension;
 
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
+use Oro\Bundle\FormBundle\Utils\FormUtils;
 
 class EmbeddedFormTypeExtension extends AbstractTypeExtension
 {
@@ -18,15 +23,21 @@ class EmbeddedFormTypeExtension extends AbstractTypeExtension
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $resolver->setDefaults(
-            [
-                'error_mapping' => [
-                    'dataChannel' => 'additional.dataChannel',
-                ],
-                'cascade_validation' => true,
-            ]
-        );
+        $modifier = function (FormEvent $event) {
+            $form = $event->getForm();
+
+            if ($form->has('additional') && $form->get('additional')->has('dataChannel')) {
+                FormUtils::replaceField(
+                    $form->get('additional'),
+                    'dataChannel',
+                    ['required' => true, 'constraints' => [new NotBlank()]]
+                );
+            }
+        };
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, $modifier);
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, $modifier);
     }
 }

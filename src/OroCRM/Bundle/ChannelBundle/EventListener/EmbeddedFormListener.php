@@ -6,7 +6,6 @@ use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Symfony\Component\Form\FormView;
 
 class EmbeddedFormListener
 {
@@ -56,7 +55,7 @@ class EmbeddedFormListener
          */
         if (!empty($data['dataBlocks'])) {
             if (isset($data['dataBlocks'][0]['subblocks'])) {
-                $data['dataBlocks'][0]['subblocks'][0]['data'][] = $dataChannelField;
+                array_unshift($data['dataBlocks'][0]['subblocks'][0]['data'], $dataChannelField);
             }
         }
 
