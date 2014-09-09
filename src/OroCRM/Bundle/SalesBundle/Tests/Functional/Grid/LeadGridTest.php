@@ -25,7 +25,7 @@ class LeadGridTest extends AbstractDatagridTestCase
     public function gridProvider()
     {
         return [
-            'Lead grid' => [
+            'Lead grid'                => [
                 [
                     'gridParameters'      => [
                         'gridName' => 'sales-lead-grid'
@@ -41,14 +41,14 @@ class LeadGridTest extends AbstractDatagridTestCase
                     'expectedResultCount' => 1
                 ],
             ],
-            'Lead grid with filters' => [
+            'Lead grid with filters'   => [
                 [
                     'gridParameters'      => [
                         'gridName' => 'sales-lead-grid'
                     ],
                     'gridFilters'         => [
-                        'sales-lead-grid[_filter][channelName][value]'  => 'b2b Channel',
-                        'sales-lead-grid[_filter][name][value]'  => 'Lead name',
+                        'sales-lead-grid[_filter][channelName][value]' => 'b2b Channel',
+                        'sales-lead-grid[_filter][name][value]'        => 'Lead name',
                     ],
                     'assert'              => [
                         'name'        => 'Lead name',
@@ -66,16 +66,10 @@ class LeadGridTest extends AbstractDatagridTestCase
                         'gridName' => 'sales-lead-grid'
                     ],
                     'gridFilters'         => [
-                        'sales-lead-grid[_filter][channelName][value]'  => 'b2b Channel',
-                        'sales-lead-grid[_filter][name][value]'  => 'some name',
+                        'sales-lead-grid[_filter][channelName][value]' => 'b2b Channel',
+                        'sales-lead-grid[_filter][name][value]'        => 'some name',
                     ],
-                    'assert'              => [
-                        'name'        => 'Lead name',
-                        'channelName' => LoadSalesBundleFixtures::CHANNEL_NAME,
-                        'firstName'   => 'fname',
-                        'lastName'    => 'lname',
-                        'email'       => 'email@email.com'
-                    ],
+                    'assert'              => [],
                     'expectedResultCount' => 0
                 ],
             ],

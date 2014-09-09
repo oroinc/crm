@@ -44,7 +44,10 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          "security"={
  *              "type"="ACL",
  *              "group_name"=""
- *          }
+ *          },
+ *          "form"={
+ *              "grid_name"="magento-customers-grid",
+ *          },
  *      }
  * )
  * @Oro\Loggable
@@ -121,6 +124,9 @@ class Customer extends ExtendCustomer implements ChannelAwareInterface
      *      defaultValues={
      *          "importexport"={
      *              "identity"=true
+     *          },
+     *          "entity"={
+     *              "contact_information"="email"
      *          }
      *      }
      * )

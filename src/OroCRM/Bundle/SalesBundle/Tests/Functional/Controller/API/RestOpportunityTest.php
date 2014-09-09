@@ -117,13 +117,7 @@ class RestOpportunityTest extends WebTestCase
 
         $this->assertNotEmpty($result);
 
-        foreach ($result as $key => $value) {
-            if ($value['name'] !== $request['opportunity']['name']) {
-                unset($result[$key]);
-            }
-        }
-
-        $result = reset($result);
+        $result = end($result);
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['opportunity']['name'], $result['name']);
         $this->assertEquals('In Progress', $result['status']);

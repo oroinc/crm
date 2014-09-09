@@ -33,28 +33,29 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *  routeName="orocrm_sales_lead_index",
- *  routeView="orocrm_sales_lead_view",
- *  defaultValues={
- *      "entity"={
- *          "icon"="icon-phone"
- *      },
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="user_owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "form"={
- *          "form_type"="orocrm_sales_lead_select"
- *      },
- *      "dataaudit"={
- *          "auditable"=true
+ *      routeName="orocrm_sales_lead_index",
+ *      routeView="orocrm_sales_lead_view",
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-phone"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="user_owner_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "form"={
+ *              "form_type"="orocrm_sales_lead_select",
+ *              "grid_name"="sales-lead-grid",
+ *          },
+ *          "dataaudit"={
+ *              "auditable"=true
+ *          }
  *      }
- *  }
  * )
  */
 class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface, ChannelAwareInterface
@@ -244,12 +245,15 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      * @Oro\Versioned
      * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=100
+     *      defaultValues={
+     *          "dataaudit"={"auditable"=true},
+     *          "importexport"={
+     *              "order"=100
+     *          },
+     *          "entity"={
+     *              "contact_information"="email"
+     *          }
      *      }
-     *  }
      * )
      */
     protected $email;
@@ -476,7 +480,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * Set topic
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return Lead
      */
     public function setName($name)
@@ -497,7 +502,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     }
 
     /**
-     * @param  string $namePrefix
+     * @param string $namePrefix
+     *
      * @return Lead
      */
     public function setNamePrefix($namePrefix)
@@ -518,7 +524,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * Set first name
      *
-     * @param  string $firstName
+     * @param string $firstName
+     *
      * @return Lead
      */
     public function setFirstName($firstName)
@@ -547,7 +554,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     }
 
     /**
-     * @param  string $middleName
+     * @param string $middleName
+     *
      * @return Lead
      */
     public function setMiddleName($middleName)
@@ -560,7 +568,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * Set last name
      *
-     * @param  string $lastName
+     * @param string $lastName
+     *
      * @return Lead
      */
     public function setLastName($lastName)
@@ -581,7 +590,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     }
 
     /**
-     * @param  string $nameSuffix
+     * @param string $nameSuffix
+     *
      * @return Lead
      */
     public function setNameSuffix($nameSuffix)
@@ -602,7 +612,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * Set job title
      *
-     * @param  string $jobTitle
+     * @param string $jobTitle
+     *
      * @return Lead
      */
     public function setJobTitle($jobTitle)
@@ -625,7 +636,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * Set phone number
      *
-     * @param  string $phoneNumber
+     * @param string $phoneNumber
+     *
      * @return Lead
      */
     public function setPhoneNumber($phoneNumber)
@@ -648,7 +660,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * Set email
      *
-     * @param  string $email
+     * @param string $email
+     *
      * @return Lead
      */
     public function setEmail($email)
@@ -671,7 +684,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * Set company name
      *
-     * @param  string $companyName
+     * @param string $companyName
+     *
      * @return Lead
      */
     public function setCompanyName($companyName)
@@ -694,7 +708,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * Set website
      *
-     * @param  string $website
+     * @param string $website
+     *
      * @return Lead
      */
     public function setWebsite($website)
@@ -717,7 +732,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * Set number of employees
      *
-     * @param  integer $numberOfEmployees
+     * @param integer $numberOfEmployees
+     *
      * @return Lead
      */
     public function setNumberOfEmployees($numberOfEmployees)
@@ -740,7 +756,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * Set industry
      *
-     * @param  string $industry
+     * @param string $industry
+     *
      * @return Lead
      */
     public function setIndustry($industry)
@@ -769,7 +786,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     }
 
     /**
-     * @param  LeadStatus $status
+     * @param LeadStatus $status
+     *
      * @return Lead
      */
     public function setStatus($status)
@@ -792,7 +810,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * Set address
      *
-     * @param  Address $address
+     * @param Address $address
+     *
      * @return Lead
      */
     public function setAddress($address)
@@ -803,7 +822,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     }
 
     /**
-     * @param  Contact $contact
+     * @param Contact $contact
+     *
      * @return Lead
      */
     public function setContact($contact)
@@ -832,7 +852,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     }
 
     /**
-     * @param  \DateTime $created
+     * @param \DateTime $created
+     *
      * @return Lead
      */
     public function setCreatedAt($created)
@@ -853,7 +874,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     }
 
     /**
-     * @param  \DateTime $updated
+     * @param \DateTime $updated
+     *
      * @return Lead
      */
     public function setUpdatedAt($updated)
@@ -899,7 +921,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     }
 
     /**
-     * @param  User $owningUser
+     * @param User $owningUser
+     *
      * @return Lead
      */
     public function setOwner($owningUser)
@@ -922,7 +945,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * Add opportunity
      *
-     * @param  Opportunity $opportunity
+     * @param Opportunity $opportunity
+     *
      * @return Lead
      */
     public function addOpportunity(Opportunity $opportunity)
@@ -943,7 +967,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     }
 
     /**
-     * @param  string $notes
+     * @param string $notes
+     *
      * @return Lead
      */
     public function setNotes($notes)
@@ -954,7 +979,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     }
 
     /**
-     * @param  WorkflowItem $workflowItem
+     * @param WorkflowItem $workflowItem
+     *
      * @return Lead
      */
     public function setWorkflowItem($workflowItem)
@@ -973,7 +999,8 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     }
 
     /**
-     * @param  WorkflowItem $workflowStep
+     * @param WorkflowItem $workflowStep
+     *
      * @return Lead
      */
     public function setWorkflowStep($workflowStep)
@@ -1014,7 +1041,7 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     {
         $em = $eventArgs->getEntityManager();
         /** @var LeadStatus $defaultStatus */
-        $defaultStatus   = $em->getReference('OroCRMSalesBundle:LeadStatus', 'new');
+        $defaultStatus = $em->getReference('OroCRMSalesBundle:LeadStatus', 'new');
         $this->setStatus($defaultStatus);
     }
 

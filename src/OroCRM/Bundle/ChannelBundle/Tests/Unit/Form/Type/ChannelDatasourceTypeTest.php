@@ -84,6 +84,17 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
         $searchRegistry = new SearchRegistry();
         $searchRegistry->addSearchHandler('users', $searchHandler);
 
+        $config = $this->getMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
+        $config->expects($this->any())->method('has')->with($this->equalTo('grid_name'))
+            ->will($this->returnValue(true));
+        $config->expects($this->any())->method('get')->with($this->equalTo('grid_name'))
+            ->will($this->returnValue('test_grid'));
+        $cp = $this->getMock('Oro\Bundle\EntityConfigBundle\Provider\ConfigProviderInterface');
+        $cp->expects($this->any())->method('getConfig')->will($this->returnValue($config));
+        $cm = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\ConfigManager')
+            ->disableOriginalConstructor()->getMock();
+        $cm->expects($this->any())->method('getProvider')->will($this->returnValue($cp));
+
         $validator = new Validator(
             new ClassMetadataFactory(new LoaderChain([])),
             new ConstraintValidatorFactory(),
@@ -99,8 +110,8 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
                     'oro_integration_channel_form'       => $this->getChannelType($registry),
                     'oro_integration_type_select'        => new IntegrationTypeSelectType($registry, $assetsHelper),
                     'oro_user_select'                    => new UserSelectType(),
-                    'oro_entity_create_or_select_inline' => new OroEntitySelectOrCreateInlineType($security),
-                    'oro_jqueryselect2_hidden'           => new OroJquerySelect2HiddenType($em, $searchRegistry),
+                    'oro_entity_create_or_select_inline' => new OroEntitySelectOrCreateInlineType($security, $cm),
+                    'oro_jqueryselect2_hidden'           => new OroJquerySelect2HiddenType($em, $searchRegistry, $cp),
                     'genemu_jqueryselect2_choice'        => new Select2Type('choice'),
                     'genemu_jqueryselect2_hidden'        => new Select2Type('hidden')
                 ],

@@ -42,6 +42,9 @@ parameters:
     #validators
     orocrm_channel.validators.channel_integration_validator.class:     OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator
 
+    # import/export
+    orocrm_channel.importexport.helper.channel.class:                  OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper
+
 services:
     orocrm_channel.builder.factory:
         class: %orocrm_channel.builder.factory.class%
@@ -234,3 +237,9 @@ services:
             - @orocrm_channel.provider.settings_provider
         tags:
             - { name: validator.constraint_validator, alias: orocrm_channel.validator.channel_integration }
+
+    # import/export
+    orocrm_channel.importexport.helper.channel:
+        class: %orocrm_channel.importexport.helper.channel.class%
+        arguments:
+            - @doctrine

@@ -51,6 +51,9 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *              "type"="ACL",
  *              "group_name"=""
  *          },
+ *          "form"={
+ *              "grid_name"="magento-cart-grid",
+ *          },
  *          "workflow"={
  *              "active_workflow"="b2c_flow_abandoned_shopping_cart"
  *          }
@@ -142,6 +145,13 @@ class Cart extends ExtendCart implements ChannelAwareInterface
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "contact_information"="email"
+     *          }
+     *      }
+     * )
      */
     protected $email;
 
