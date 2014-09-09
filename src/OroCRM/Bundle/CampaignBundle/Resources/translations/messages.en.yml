@@ -64,6 +64,7 @@ orocrm:
             name.label:          Name
             fromEmail.label:     From Email
             description.label:   Description
+            transport.label:     Transport
             schedule:
                 label:     Schedule
                 immediate: Immediate

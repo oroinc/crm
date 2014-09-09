@@ -2,14 +2,14 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Command;
 
-use OroCRM\Bundle\CampaignBundle\Entity\Repository\EmailCampaignRepository;
-use OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSender;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
+use OroCRM\Bundle\CampaignBundle\Entity\Repository\EmailCampaignRepository;
+use OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSenderFactory;
 
 /**
  * Command to send scheduled email campaigns
@@ -62,24 +62,22 @@ class SendEmailCampaignsCommand extends ContainerAwareCommand implements CronCom
      */
     protected function send($output, array $emailCampaigns)
     {
-        $sender = $this->getSender();
+        $senderFactory = $this->getSenderFactory();
 
         foreach ($emailCampaigns as $emailCampaign) {
             $output->writeln(sprintf('<info>Sending email campaign</info>: %s', $emailCampaign->getName()));
+
+            $sender = $senderFactory->getSender($emailCampaign);
             $sender->send($emailCampaign);
         }
     }
 
     /**
-     * @return EmailCampaignSender
+     * @return EmailCampaignSenderFactory
      */
-    protected function getSender()
+    protected function getSenderFactory()
     {
-        $emailTransport = $this->getContainer()->get('orocrm_campaign.transport.email');
-        $sender = $this->getContainer()->get('orocrm_campaign.email_campaign.sender');
-        $sender->setTransport($emailTransport);
-
-        return $sender;
+        return $this->getContainer()->get('orocrm_campaign.email_campaign.sender.factory');
     }
 
     /**

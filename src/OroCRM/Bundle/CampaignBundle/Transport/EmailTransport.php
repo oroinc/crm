@@ -67,4 +67,20 @@ class EmailTransport implements TransportInterface
 
         $this->processor->process($emailModel);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'internal';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDisplayName()
+    {
+        return 'Internal';
+    }
 }

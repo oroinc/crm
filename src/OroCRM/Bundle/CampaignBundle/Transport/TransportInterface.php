@@ -14,4 +14,14 @@ interface TransportInterface
      * @return mixed
      */
     public function send(EmailCampaign $campaign, $entity, $from, array $to);
+
+    /**
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * @return string
+     */
+    public function getDisplayName();
 }

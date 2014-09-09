@@ -8,9 +8,12 @@ parameters:
     orocrm_campaign.data_transformer.multi_line.class: OroCRM\Bundle\CampaignBundle\Model\Data\Transformer\MultiLineDataTransformer
     orocrm_campaign.form.type.campaign_select.class: OroCRM\Bundle\CampaignBundle\Form\Type\CampaignSelectType
     orocrm_campaign.form.type.email_campaign.class: OroCRM\Bundle\CampaignBundle\Form\Type\EmailCampaignType
+    orocrm_campaign.form.type.email_transport_select.class: OroCRM\Bundle\CampaignBundle\Form\Type\EmailTransportSelectType
     orocrm_campaign.form.listener.entityName.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\EntityNameListener
     orocrm_campaign.transport.email.class: OroCRM\Bundle\CampaignBundle\Transport\EmailTransport
     orocrm_campaign.email_campaign.sender.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSender
+    orocrm_campaign.email_transport.provider.class: OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider
+    orocrm_campaign.email_campaign.sender.factory.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSenderFactory
 services:
     orocrm_campaign.campaign.form.type:
         class: %orocrm_campaign.campaign.form.type.class%
@@ -93,15 +96,25 @@ services:
         tags:
             - { name: form.type, alias: "orocrm_campaign_select" }
 
+    orocrm_campaign.form.type.email_transport_select:
+        class: %orocrm_campaign.form.type.email_transport_select.class%
+        arguments:
+            - @orocrm_campaign.email_transport.provider
+        tags:
+            - { name: form.type, alias: "orocrm_campaign_email_transport_select" }
+
     orocrm_campaign.transport.email:
         class: %orocrm_campaign.transport.email.class%
         arguments:
             - @oro_email.mailer.processor
             - @oro_email.email_renderer
             - @oro_entity.doctrine_helper
+        tags:
+            - { name: "orocrm_campaign.email_transport" }
 
     orocrm_campaign.email_campaign.sender:
         class: %orocrm_campaign.email_campaign.sender.class%
+        scope: prototype
         arguments:
             - @orocrm_marketing_list.provider.marketing_list
             - @oro_config.global
@@ -114,3 +127,12 @@ services:
         class: %orocrm_campaign.form.listener.entityName.class%
         arguments:
             - @doctrine
+
+    orocrm_campaign.email_transport.provider:
+        class: %orocrm_campaign.email_transport.provider.class%
+
+    orocrm_campaign.email_campaign.sender.factory:
+        class: %orocrm_campaign.email_campaign.sender.factory.class%
+        arguments:
+            - @service_container
+            - @orocrm_campaign.email_transport.provider

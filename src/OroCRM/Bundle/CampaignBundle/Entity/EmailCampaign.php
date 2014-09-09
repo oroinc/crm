@@ -123,6 +123,13 @@ class EmailCampaign
     protected $template;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="transport", type="string", length=255, nullable=false)
+     */
+    protected $transport;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -469,5 +476,24 @@ class EmailCampaign
         }
 
         return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransport()
+    {
+        return $this->transport;
+    }
+
+    /**
+     * @param string $transport
+     * @return EmailCampaign
+     */
+    public function setTransport($transport)
+    {
+        $this->transport = $transport;
+
+        return $this;
     }
 }

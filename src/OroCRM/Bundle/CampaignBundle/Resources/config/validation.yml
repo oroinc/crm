@@ -43,3 +43,5 @@ OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign:
             - NotBlank: ~
         template:
             - NotBlank: ~
+        transport:
+            - NotBlank: ~

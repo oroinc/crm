@@ -124,9 +124,8 @@ class EmailCampaignController extends Controller
      */
     public function sendAction(EmailCampaign $entity)
     {
-        $emailTransport = $this->get('orocrm_campaign.transport.email');
-        $sender = $this->get('orocrm_campaign.email_campaign.sender');
-        $sender->setTransport($emailTransport);
+        $senderFactory = $this->get('orocrm_campaign.email_campaign.sender.factory');
+        $sender = $senderFactory->getSender($entity);
         $sender->send($entity);
 
         $this->get('session')->getFlashBag()->add(
