@@ -42,7 +42,7 @@ class EmailCampaignSenderFactory
     {
         $transportName = $emailCampaign->getTransport();
         if (!isset($this->senders[$transportName])) {
-            $transport = $this->emailTransportProvider->getTransportByName($emailCampaign->getTransport());
+            $transport = $this->emailTransportProvider->getTransportByName($transportName);
             $sender = $this->container->get('orocrm_campaign.email_campaign.sender');
             $sender->setTransport($transport);
             $this->senders[$transportName] = $sender;

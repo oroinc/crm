@@ -42,6 +42,8 @@ class EmailCampaignTest extends AbstractEntityTestCase
             'template'      => ['template', $template, $template],
             'updatedAt'     => ['updatedAt', $date, $date],
             'createdAt'     => ['createdAt', $date, $date],
+            'fromEmail'     => ['fromEmail', 'test@test.com', 'test@test.com'],
+            'transport'     => ['transport', 'transport', 'transport'],
         ];
     }
 

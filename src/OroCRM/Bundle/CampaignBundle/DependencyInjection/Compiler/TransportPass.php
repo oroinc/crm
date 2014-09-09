@@ -22,17 +22,10 @@ class TransportPass implements CompilerPassInterface
 
         $contentProviderManagerDefinition = $container->getDefinition(self::SERVICE);
         $taggedServices = $container->findTaggedServiceIds(self::TAG);
-        foreach ($taggedServices as $id => $attributes) {
-            $alias = null;
-            foreach ($attributes as $attribute) {
-                if (array_key_exists('alias', $attribute)) {
-                    $alias = !empty($attribute['alias']);
-                    break;
-                }
-            }
+        foreach (array_keys($taggedServices) as $id) {
             $contentProviderManagerDefinition->addMethodCall(
                 'addTransport',
-                array(new Reference($id), $alias)
+                array(new Reference($id))
             );
         }
     }
