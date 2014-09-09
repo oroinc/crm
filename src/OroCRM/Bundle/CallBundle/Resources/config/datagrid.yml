@@ -27,6 +27,7 @@ datagrid:
                 label: orocrm.call.subject.label
             phone:
                 label: orocrm.call.phone_number.label
+                frontend_type: phone
             dateTime:
                 label: orocrm.call.call_date_time.label
                 frontend_type: datetime
@@ -132,6 +133,7 @@ datagrid:
                 frontend_type: html
             phone:
                 label: orocrm.call.phone_number.label
+                frontend_type: phone
         sorters:
             columns:
                 contactName:
@@ -232,6 +234,7 @@ datagrid:
                 template: OroCRMCallBundle:Datagrid:Column/subject.html.twig
             phone:
                 label: orocrm.call.phone_number.label
+                frontend_type: phone
         sorters:
             columns:
                 dateTime:
