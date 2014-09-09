@@ -9,7 +9,7 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 
 class EmbeddedFormListener
 {
-    /** @var ConfigManager  */
+    /** @var ConfigManager */
     protected $configManager;
 
     /**
