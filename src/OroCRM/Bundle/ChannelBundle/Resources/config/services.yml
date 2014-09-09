@@ -222,6 +222,11 @@ services:
         tags:
             - { name: form.type_extension, alias: oro_integration_channel_form }
 
+    orocrm_channel_bundle.channel_select_type_extension:
+        class: OroCRM\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension
+        tags:
+            - { name: form.type_extension, alias: embedded_form }
+
     #validators
     orocrm_channel.validators.channel_integration_validator:
         class: %orocrm_channel.validators.channel_integration_validator.class%
