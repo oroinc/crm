@@ -48,13 +48,16 @@ class EmailTransport implements TransportInterface
         $entityId = $this->doctrineHelper->getSingleEntityIdentifier($entity);
         $marketingList = $campaign->getMarketingList();
 
+        $template = $campaign->getTemplate();
         list ($subjectRendered, $templateRendered) = $this->emailRenderer->compileMessage(
-            $campaign->getTemplate(),
+            $template,
             ['entity' => $entity]
         );
 
+
         $emailModel = new Email();
         $emailModel
+            ->setType($template->getType())
             ->setFrom($from)
             ->setEntityClass($marketingList->getEntity())
             ->setEntityId($entityId)
