@@ -21,7 +21,6 @@ OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity:
             - NotBlank: ~
         channel:
             - NotBlank: ~
-
 Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm:
     properties:
         dataChannel:

@@ -35,11 +35,6 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface, 
                     ],
                 )
             );
-        } else {
-            $builder->add(
-                'dataChannel',
-                'hidden'
-            );
         }
         $builder->add(
             'firstName',

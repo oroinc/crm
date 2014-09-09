@@ -17,6 +17,8 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
         customer:
             - Valid: ~
             - NotBlank: ~
+        dataChannel:
+            - NotBlank: ~
 
 OroCRM\Bundle\SalesBundle\Entity\Lead:
     properties:
@@ -32,12 +34,16 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
             - NotBlank: ~
             - Length:
                 max: 255
+        dataChannel:
+            - NotBlank: ~
 
 OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
     properties:
         startDate:
             - NotBlank: ~
             - Date: ~
+        dataChannel:
+            - NotBlank: ~
 
 OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
     properties:
@@ -49,3 +55,4 @@ OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
             - NotBlank: ~
         dataChannel:
             - NotBlank: ~
+
