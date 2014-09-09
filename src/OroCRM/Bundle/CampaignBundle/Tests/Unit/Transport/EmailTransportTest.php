@@ -70,10 +70,12 @@ class EmailTransportTest extends \PHPUnit_Framework_TestCase
         $marketingList = new MarketingList();
         $marketingList->setEntity($entity);
 
+        $template = new EmailTemplate();
+        $template->setType('html');
         $campaign = new EmailCampaign();
         $campaign
             ->setMarketingList($marketingList)
-            ->setTemplate(new EmailTemplate());
+            ->setTemplate($template);
 
         $this->renderer
             ->expects($this->once())
@@ -83,6 +85,7 @@ class EmailTransportTest extends \PHPUnit_Framework_TestCase
         $emailModel = new Email();
         $emailModel
             ->setFrom($from)
+            ->setType($template->getType())
             ->setEntityClass($entity)
             ->setEntityId($id)
             ->setTo($to)

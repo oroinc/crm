@@ -30,7 +30,7 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $builder->expects($this->exactly(8))
+        $builder->expects($this->exactly(9))
             ->method('add')
             ->with($this->isType('string'), $this->isType('string'))
             ->will($this->returnSelf());
