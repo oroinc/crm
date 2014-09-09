@@ -11,7 +11,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\CampaignBundle\Entity\Repository\EmailCampaignRepository")
  * @ORM\Table(
  *      name="orocrm_campaign_email",
  *      indexes={@ORM\Index(name="cmpgn_email_owner_idx", columns={"owner_id"})}
