@@ -41,6 +41,16 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $registry;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $logger;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $transport;
 
     protected function setUp()
@@ -64,6 +74,10 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->registry = $this->getMockBuilder('Symfony\Bridge\Doctrine\ManagerRegistry')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->transport = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface');
 
@@ -71,7 +85,9 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
             $this->marketingListProvider,
             $this->configManager,
             $this->marketingListConnector,
-            $this->contactInformationFieldsProvider
+            $this->contactInformationFieldsProvider,
+            $this->registry,
+            $this->logger
         );
     }
 
@@ -104,14 +120,31 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
             ->setTemplate(new EmailTemplate())
             ->setFromEmail(reset($to));
 
+        $itCount = count($iterable);
         $this->marketingListProvider
             ->expects($this->once())
             ->method('getMarketingListEntitiesIterator')
             ->will($this->returnValue($iterable));
 
-        if (!empty($iterable)) {
+        $manager = $this->getMockBuilder('\Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->registry->expects($this->once())
+            ->method('getManager')
+            ->will($this->returnValue($manager));
+        $manager->expects($this->once())
+            ->method('persist')
+            ->with($campaign);
+        $manager->expects($this->atLeastOnce())
+            ->method('flush');
+        $manager->expects($this->exactly($itCount))
+            ->method('beginTransaction');
+        $manager->expects($this->exactly($itCount))
+            ->method('commit');
+
+        if ($itCount) {
             $this->contactInformationFieldsProvider
-                ->expects($this->exactly(sizeof($iterable)))
+                ->expects($this->exactly($itCount))
                 ->method('getQueryContactInformationFields')
                 ->with(
                     $this->equalTo($segment),
@@ -121,13 +154,92 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($to));
 
             $this->marketingListConnector
-                ->expects($this->exactly(sizeof($iterable)))
+                ->expects($this->exactly($itCount))
                 ->method('contact')
                 ->with(
                     $this->equalTo($marketingList),
                     $this->equalTo(self::ENTITY_ID)
                 );
         }
+
+        $this->transport->expects($this->exactly($itCount))
+            ->method('send');
+
+        $this->sender->setTransport($this->transport);
+        $this->sender->send($campaign);
+    }
+
+    /**
+     * @param array $iterable
+     *
+     * @dataProvider sendDataProvider
+     */
+    public function testSendError($iterable, $to)
+    {
+        $segment = new Segment();
+
+        $marketingList = new MarketingList();
+        $marketingList->setSegment($segment);
+
+        $campaign = new EmailCampaign();
+        $campaign
+            ->setMarketingList($marketingList)
+            ->setTemplate(new EmailTemplate())
+            ->setFromEmail(reset($to));
+
+        $itCount = count($iterable);
+        $this->marketingListProvider
+            ->expects($this->once())
+            ->method('getMarketingListEntitiesIterator')
+            ->will($this->returnValue($iterable));
+
+        $manager = $this->getMockBuilder('\Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->registry->expects($this->once())
+            ->method('getManager')
+            ->will($this->returnValue($manager));
+        $manager->expects($this->once())
+            ->method('persist')
+            ->with($campaign);
+        $manager->expects($this->atLeastOnce())
+            ->method('flush');
+        $manager->expects($this->exactly($itCount))
+            ->method('beginTransaction');
+        $manager->expects($this->exactly($itCount))
+            ->method('rollback');
+
+        if ($itCount) {
+            $this->contactInformationFieldsProvider
+                ->expects($this->exactly($itCount))
+                ->method('getQueryContactInformationFields')
+                ->with(
+                    $this->equalTo($segment),
+                    $this->isType('object'),
+                    $this->equalTo(ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL)
+                )
+                ->will($this->returnValue($to));
+
+            $this->marketingListConnector
+                ->expects($this->exactly($itCount))
+                ->method('contact')
+                ->with(
+                    $this->equalTo($marketingList),
+                    $this->equalTo(self::ENTITY_ID)
+                )
+                ->will(
+                    $this->returnCallback(
+                        function () {
+                            throw new \Exception('Error');
+                        }
+                    )
+                );
+            $this->logger->expects($this->exactly($itCount))
+                ->method('error');
+        }
+
+        $this->transport->expects($this->exactly($itCount))
+            ->method('send');
 
         $this->sender->setTransport($this->transport);
         $this->sender->send($campaign);
@@ -138,9 +250,8 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
      */
     public function sendDataProvider()
     {
-        $entity = $this
-            ->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
-            ->disableOriginalConstructor()
+        $entity = $this->getMockBuilder('\stdClass')
+            ->setMethods(array('getId'))
             ->getMock();
 
         $entity

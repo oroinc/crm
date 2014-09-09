@@ -105,3 +105,5 @@ services:
             - @oro_config.global
             - @orocrm_marketing_list.model.marketing_list_item_connector
             - @orocrm_marketing_list.provider.contact_information_fields
+            - @doctrine
+            - @?logger

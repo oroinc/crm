@@ -2,6 +2,10 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Model;
 
+use Doctrine\ORM\EntityManager;
+use Psr\Log\LoggerInterface;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
+
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 use OroCRM\Bundle\CampaignBundle\Transport\TransportInterface;
@@ -32,6 +36,16 @@ class EmailCampaignSender
     protected $contactInformationFieldsProvider;
 
     /**
+     * @var ManagerRegistry
+     */
+    protected $registry;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @var TransportInterface
      */
     protected $transport;
@@ -41,17 +55,23 @@ class EmailCampaignSender
      * @param ConfigManager $configManager
      * @param MarketingListItemConnector $marketingListItemConnector
      * @param ContactInformationFieldsProvider $contactInformationFieldsProvider
+     * @param ManagerRegistry $registry
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         MarketingListProvider $marketingListProvider,
         ConfigManager $configManager,
         MarketingListItemConnector $marketingListItemConnector,
-        ContactInformationFieldsProvider $contactInformationFieldsProvider
+        ContactInformationFieldsProvider $contactInformationFieldsProvider,
+        ManagerRegistry $registry,
+        LoggerInterface $logger = null
     ) {
         $this->marketingListProvider = $marketingListProvider;
         $this->configManager = $configManager;
         $this->marketingListItemConnector = $marketingListItemConnector;
         $this->contactInformationFieldsProvider = $contactInformationFieldsProvider;
+        $this->registry = $registry;
+        $this->logger = $logger;
     }
 
     /**
@@ -69,6 +89,8 @@ class EmailCampaignSender
     {
         $this->assertTransport();
         $marketingList = $campaign->getMarketingList();
+        /** @var EntityManager $manager */
+        $manager = $this->registry->getManager();
 
         foreach ($this->getIterator($campaign) as $entity) {
             $from = $this->getFromEmail($campaign);
@@ -78,12 +100,31 @@ class EmailCampaignSender
                 ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL
             );
 
-            // Do actual send
-            $this->transport->send($campaign, $entity, $from, $to);
+            try {
+                $manager->beginTransaction();
+                // Do actual send
+                $this->transport->send($campaign, $entity, $from, $to);
 
-            // Mark marketing list item as contacted
-            $this->marketingListItemConnector->contact($marketingList, $entity->getId());
+                // Mark marketing list item as contacted
+                $this->marketingListItemConnector->contact($marketingList, $entity->getId());
+
+                $manager->flush();
+                $manager->commit();
+            } catch (\Exception $e) {
+                $manager->rollback();
+
+                if ($this->logger) {
+                    $this->logger->error(
+                        sprintf('Email sending to "%s" failed.', implode(', ', $to)),
+                        array('exception' => $e)
+                    );
+                }
+            }
         }
+
+        $campaign->setSent(true);
+        $manager->persist($campaign);
+        $manager->flush();
     }
 
     /**
