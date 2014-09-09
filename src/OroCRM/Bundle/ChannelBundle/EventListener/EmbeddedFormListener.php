@@ -56,7 +56,8 @@ class EmbeddedFormListener
          */
         if (!empty($data['dataBlocks'])) {
             if (isset($data['dataBlocks'][0]['subblocks'])) {
-                $data['dataBlocks'][0]['subblocks'][0]['data'][] = $dataChannelField;
+
+                array_unshift($data['dataBlocks'][0]['subblocks'][0]['data'], $dataChannelField);
             }
         }
 
