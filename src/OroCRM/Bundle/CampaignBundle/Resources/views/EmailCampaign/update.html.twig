@@ -62,14 +62,14 @@
 
     <script type="text/javascript">
         require(
-            ['jquery', 'oroemail/js/email/template/view', 'orocrmcampaign/js/email/template/collection'],
+            ['jquery', 'oroemail/js/email/template/view', 'oroemail/js/email/template/collection'],
             function($, View, Collection) {
                 $(function () {
                     'use strict';
                     new View({
                         el: $('[name="orocrm_email_campaign[marketingList]"]'),
                         target: $('#orocrm_email_campaign_template'),
-                        collection: new Collection()
+                        collection: new Collection('orocrm_api_get_emailcampaign_email_templates', 'id')
                     });
                 });
             })

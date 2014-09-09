@@ -1,3 +1,0 @@
-config:
-    paths:
-        'orocrmcampaign/js/email/template/collection': 'bundles/orocrmcampaign/js/email/template/collection.js'
