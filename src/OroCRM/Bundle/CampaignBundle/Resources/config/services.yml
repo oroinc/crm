@@ -8,6 +8,7 @@ parameters:
     orocrm_campaign.data_transformer.multi_line.class: OroCRM\Bundle\CampaignBundle\Model\Data\Transformer\MultiLineDataTransformer
     orocrm_campaign.form.type.campaign_select.class: OroCRM\Bundle\CampaignBundle\Form\Type\CampaignSelectType
     orocrm_campaign.form.type.email_campaign.class: OroCRM\Bundle\CampaignBundle\Form\Type\EmailCampaignType
+    orocrm_campaign.form.listener.entityName.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\EntityNameListener
     orocrm_campaign.transport.email.class: OroCRM\Bundle\CampaignBundle\Transport\EmailTransport
     orocrm_campaign.email_campaign.sender.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSender
 services:
@@ -107,3 +108,8 @@ services:
             - @orocrm_marketing_list.provider.contact_information_fields
             - @doctrine
             - @?logger
+
+    orocrm_campaign.form.listener.entityName:
+        class: %orocrm_campaign.form.listener.entityName.class%
+        arguments:
+            - @doctrine

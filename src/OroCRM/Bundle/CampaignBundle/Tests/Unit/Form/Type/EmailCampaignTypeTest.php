@@ -30,33 +30,9 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $builder->expects($this->at(1))
+        $builder->expects($this->exactly(8))
             ->method('add')
-            ->with('name', 'text')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(2))
-            ->method('add')
-            ->with('schedule', 'choice')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(3))
-            ->method('add')
-            ->with('scheduledAt', 'oro_datetime')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(4))
-            ->method('add')
-            ->with('campaign', 'orocrm_campaign_select')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(5))
-            ->method('add')
-            ->with('marketingList', 'orocrm_marketing_list_select')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(6))
-            ->method('add')
-            ->with('template', 'oro_email_template_list')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(7))
-            ->method('add')
-            ->with('description', 'textarea')
+            ->with($this->isType('string'), $this->isType('string'))
             ->will($this->returnSelf());
 
         $this->type->buildForm($builder, []);
@@ -77,5 +53,12 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
             ->with(['data_class' => 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign']);
 
         $this->type->setDefaultOptions($resolver);
+    }
+
+    public function testAddProvider()
+    {
+        $subscriber = $this->getMock('Symfony\Component\EventDispatcher\EventSubscriberInterface');
+
+        $this->type->addSubscriber($subscriber);
     }
 }

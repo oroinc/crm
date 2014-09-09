@@ -2,26 +2,26 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Form\Type;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Oro\Bundle\EmailBundle\Form\EventListener\BuildTemplateFormSubscriber;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 
 class EmailCampaignType extends AbstractType
 {
     /**
-     * @var BuildTemplateFormSubscriber
+     * @var EventSubscriberInterface[]
      */
-    protected $subscriber;
+    protected $subscribers = [];
 
     /**
-     * @param BuildTemplateFormSubscriber $subscriber
+     * @param EventSubscriberInterface $subscriber
      */
-    public function __construct(BuildTemplateFormSubscriber $subscriber)
+    public function addSubscriber(EventSubscriberInterface $subscriber)
     {
-        $this->subscriber = $subscriber;
+        $this->subscribers[] = $subscriber;
     }
 
     /**
@@ -30,7 +30,9 @@ class EmailCampaignType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventSubscriber($this->subscriber);
+        foreach ($this->subscribers as $subscriber) {
+            $builder->addEventSubscriber($subscriber);
+        }
 
         $builder
             ->add(
@@ -86,6 +88,7 @@ class EmailCampaignType extends AbstractType
                     'depends_on_parent_field' => 'marketingList'
                 ]
             )
+            ->add('entityName', 'hidden', ['required' => false, 'mapped' => false])
             ->add(
                 'description',
                 'textarea',

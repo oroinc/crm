@@ -35,6 +35,14 @@ class ContactInformationFieldsProvider
      */
     public function getQueryContactInformationFields(AbstractQueryDesigner $abstractQueryDesigner, $entity, $type)
     {
+        $contactInformationFields = $this
+            ->contactInformationFieldHelper
+            ->getEntityContactInformationColumns(ClassUtils::getRealClass($entity));
+
+        if (empty($contactInformationFields)) {
+            return [];
+        }
+
         $definitionColumns = [];
 
         $definition = $abstractQueryDesigner->getDefinition();
@@ -50,19 +58,17 @@ class ContactInformationFieldsProvider
             }
         }
 
-        $contactInformationFields = $this
-            ->contactInformationFieldHelper
-            ->getEntityContactInformationColumns(ClassUtils::getRealClass($entity));
-
-        $typedFields = array_filter(
-            $contactInformationFields,
-            function ($contactInformationField) use ($type) {
-                return $contactInformationField === $type;
-            }
+        $typedFields = array_keys(
+            array_filter(
+                $contactInformationFields,
+                function ($contactInformationField) use ($type) {
+                    return $contactInformationField === $type;
+                }
+            )
         );
 
         if (!empty($definitionColumns)) {
-            $typedFields = array_intersect(array_keys($typedFields), $definitionColumns);
+            $typedFields = array_intersect($typedFields, $definitionColumns);
         }
 
         $propertyAccessor = PropertyAccess::createPropertyAccessor();

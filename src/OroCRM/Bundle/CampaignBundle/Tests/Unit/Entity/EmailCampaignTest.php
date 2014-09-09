@@ -65,4 +65,16 @@ class EmailCampaignTest extends AbstractEntityTestCase
         $entity = new EmailCampaign();
         $entity->setSchedule('unknown');
     }
+
+
+    public function testGetEntityName()
+    {
+        $marketingList = new MarketingList();
+        $marketingList->setEntity('\stdClass');
+        $campaign = new EmailCampaign();
+        $this->assertNull($campaign->getEntityName());
+
+        $campaign->setMarketingList($marketingList);
+        $this->assertEquals($marketingList->getEntity(), $campaign->getEntityName());
+    }
 }
