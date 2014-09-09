@@ -38,9 +38,14 @@ class EmailCampaignType extends AbstractType
             ->add(
                 'name',
                 'text',
+                ['label' => 'orocrm.campaign.emailcampaign.name.label']
+            )
+            ->add(
+                'fromEmail',
+                'text',
                 [
-                    'label'    => 'orocrm.campaign.emailcampaign.name.label',
-                    'required' => true
+                    'label'    => 'orocrm.campaign.emailcampaign.fromEmail.label',
+                    'required' => false
                 ]
             )
             ->add(
@@ -52,7 +57,6 @@ class EmailCampaignType extends AbstractType
                         EmailCampaign::SCHEDULE_DEFERRED  => ucfirst(EmailCampaign::SCHEDULE_DEFERRED)
                     ],
                     'label'    => 'orocrm.campaign.emailcampaign.schedule.label',
-                    'required' => true
                 ]
             )
             ->add(
@@ -66,25 +70,18 @@ class EmailCampaignType extends AbstractType
             ->add(
                 'campaign',
                 'orocrm_campaign_select',
-                [
-                    'label'    => 'orocrm.campaign.emailcampaign.campaign.label',
-                    'required' => true
-                ]
+                ['label'    => 'orocrm.campaign.emailcampaign.campaign.label']
             )
             ->add(
                 'marketingList',
                 'orocrm_marketing_list_select',
-                [
-                    'label'    => 'orocrm.campaign.emailcampaign.marketing_list.label',
-                    'required' => true
-                ]
+                ['label'    => 'orocrm.campaign.emailcampaign.marketing_list.label']
             )
             ->add(
                 'template',
                 'oro_email_template_list',
                 [
                     'label'                   => 'orocrm.campaign.emailcampaign.template.label',
-                    'required'                => true,
                     'depends_on_parent_field' => 'marketingList'
                 ]
             )

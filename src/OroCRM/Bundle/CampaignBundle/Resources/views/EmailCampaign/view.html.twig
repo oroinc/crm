@@ -4,12 +4,14 @@
 {% oro_title_set({params : {"%entity.name%": entity.name|default('N/A') }}) %}
 
 {% block navButtons %}
-    {{ UI.button({
-        'path' : path('orocrm_email_campaign_send', { id: entity.id }),
-        'title': 'orocrm.campaign.emailcampaign.send'|trans,
-        'label': 'orocrm.campaign.emailcampaign.send'|trans,
-        'iCss': 'icon-envelope'
-    })  }}
+    {% if entity.schedule == constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_IMMEDIATE') %}
+        {{ UI.button({
+            'path' : path('orocrm_email_campaign_send', { id: entity.id }),
+            'title': 'orocrm.campaign.emailcampaign.send'|trans,
+            'label': 'orocrm.campaign.emailcampaign.send'|trans,
+            'iCss': 'icon-envelope'
+        })  }}
+    {% endif %}
     {% if resource_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path' : path('orocrm_email_campaign_update', { id: entity.id }),
@@ -53,12 +55,27 @@
         {% include 'OroCRMCampaignBundle:EmailCampaign:widget/view.html.twig' %}
     {% endset %}
 
+    {%- set listData -%}
+        {% if entity.marketingList is not empty %}
+            {{ dataGrid.renderGrid(
+                constant('Oro\\Bundle\\SegmentBundle\\Entity\\Segment::GRID_PREFIX') ~ entity.marketingList.segment.id,
+                {'grid-mixin': 'orocrm-marketing-list-items-mixin'}
+            ) }}
+        {% endif %}
+    {%- endset -%}
+
     {% set dataBlocks = [
         {
             'title': 'orocrm.campaign.emailcampaign.block.general'|trans,
             'class': 'active',
             'subblocks': [
                 {'data' : [campaignInformationWidget]}
+            ]
+        },
+        {
+            'title': 'orocrm.campaign.emailcampaign.block.list_items'|trans,
+            'subblocks': [
+                {'data' : [listData]}
             ]
         }
     ] %}

@@ -62,8 +62,13 @@ orocrm:
             entity_plural_label: Email Campaigns
             id.label:            Id
             name.label:          Name
+            fromEmail.label:     From Email
             description.label:   Description
-            schedule.label:      Schedule
+            schedule:
+                label:     Schedule
+                immediate: Immediate
+                deferred:  Deferred
+
             scheduled_at.label:  Scheduled At
             owner.label:         Owner
             marketing_list.label: Marketing List
@@ -77,6 +82,7 @@ orocrm:
                 not_sent: Not sent
             block:
                 general: General Information
+                list_items: Marketing List Items
             controller:
                 saved.message: "Email campaign saved"
                 sent: "Email campaign was sent"

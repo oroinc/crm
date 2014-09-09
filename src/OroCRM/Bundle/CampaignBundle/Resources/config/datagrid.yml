@@ -220,6 +220,7 @@ datagrid:
                     - ec.id
                     - ec.sent
                     - ec.name
+                    - ec.fromEmail
                     - ec.schedule
                     - ec.scheduledAt
                     - ec.createdAt
@@ -235,6 +236,8 @@ datagrid:
         columns:
             name:
                 label: orocrm.campaign.emailcampaign.name.label
+            fromEmail:
+                label: orocrm.campaign.emailcampaign.fromEmail.label
             campaignName:
                 label: orocrm.campaign.emailcampaign.campaign.label
             marktingListName:
@@ -261,6 +264,9 @@ datagrid:
                 name:
                     type:        string
                     data_name:   ec.name
+                fromEmail:
+                    type:        string
+                    data_name:   ec.fromEmail
                 campaignName:
                     type:        string
                     data_name:   c.name
@@ -290,6 +296,7 @@ datagrid:
         sorters:
             columns:
                 name:             { data_name: ec.name }
+                fromEmail:        { data_name: ec.fromEmail }
                 campaignName:     { data_name: c.name }
                 marktingListName: { data_name: ml.name }
                 schedule:         { data_name: ec.schedule }
