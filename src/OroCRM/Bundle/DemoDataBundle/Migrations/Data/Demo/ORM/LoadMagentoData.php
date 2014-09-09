@@ -93,15 +93,6 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $integration->setTransport($transport);
         $om->persist($integration);
 
-        $this->persistDemoCustomers($om, $website, $store, $group, $integration);
-        $om->flush();
-
-        $this->persistDemoCarts($om, $store, $integration);
-        $om->flush();
-
-        $this->persistDemoOrders($om, $store, $integration);
-        $om->flush();
-
         $builder = $this->factory->createBuilderForIntegration($integration);
         $builder->setOwner($integration->getOrganization());
         $builder->setDataSource($integration);
@@ -109,6 +100,15 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $channel = $builder->getChannel();
 
         $om->persist($channel);
+        $om->flush();
+
+        $this->persistDemoCustomers($om, $website, $store, $group, $integration);
+        $om->flush();
+
+        $this->persistDemoCarts($om, $store, $integration);
+        $om->flush();
+
+        $this->persistDemoOrders($om, $store, $integration);
         $om->flush();
     }
 
