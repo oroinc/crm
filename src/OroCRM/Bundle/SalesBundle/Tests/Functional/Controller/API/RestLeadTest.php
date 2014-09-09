@@ -10,12 +10,20 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class RestLeadTest extends WebTestCase
 {
+    protected static $dataChannel;
+
     protected function setUp()
     {
         $this->initClient(
             [],
             $this->generateWsseAuthHeader()
         );
+        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+    }
+
+    protected function postFixtureLoad()
+    {
+        self::$dataChannel = $this->getReference('default_channel');
     }
 
     /**
@@ -25,10 +33,11 @@ class RestLeadTest extends WebTestCase
     {
         $request = [
             "lead" => [
-                'name'      => 'lead_name_' . mt_rand(1, 500),
-                'firstName' => 'first_name_' . mt_rand(1, 500),
-                'lastName'  => 'last_name_' . mt_rand(1, 500),
-                'owner'     => '1'
+                'name'          => 'lead_name_' . mt_rand(1, 500),
+                'firstName'     => 'first_name_' . mt_rand(1, 500),
+                'lastName'      => 'last_name_' . mt_rand(1, 500),
+                'owner'         => '1',
+                'dataChannel'   => self::$dataChannel->getId()
             ]
         ];
 
@@ -121,7 +130,7 @@ class RestLeadTest extends WebTestCase
 
         $this->assertNotEmpty($result);
 
-        $result = reset($result);
+        $result = end($result);
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['lead']['firstName'], $result['firstName']);
         $this->assertEquals($request['lead']['lastName'], $result['lastName']);

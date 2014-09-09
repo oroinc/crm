@@ -17,6 +17,8 @@ services:
         arguments:
             - "orocrm_contactus_contact_request"
             - "orocrm_contactus_contact_request"
+            - null
+            - { dataChannelField : true }
 
     orocrm_contact_us.contact_request.form.handler:
         class: %orocrm_contact_us.contact_request.form.handler.class%

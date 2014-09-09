@@ -18,6 +18,8 @@ class OpportunityControllersTest extends WebTestCase
     /** @var B2bCustomer */
     protected static $customer;
 
+    protected static $dataChannel;
+
     protected function setUp()
     {
         $this->initClient(
@@ -31,6 +33,7 @@ class OpportunityControllersTest extends WebTestCase
     protected function postFixtureLoad()
     {
         self::$customer = $this->getReference('default_b2bcustomer');
+        self::$dataChannel = $this->getReference('default_channel');
     }
 
     public function testIndex()
@@ -54,6 +57,7 @@ class OpportunityControllersTest extends WebTestCase
         $form['orocrm_sales_opportunity_form[customerNeed]'] = 10001;
         $form['orocrm_sales_opportunity_form[closeReason]']  = 'cancelled';
         $form['orocrm_sales_opportunity_form[owner]']        = 1;
+        $form['orocrm_sales_opportunity_form[dataChannel]']  = $this->getReference('default_channel')->getId();
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
