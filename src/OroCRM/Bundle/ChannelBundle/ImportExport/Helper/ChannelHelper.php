@@ -17,6 +17,9 @@ class ChannelHelper
     /** @var null|array */
     protected $integrationToChannelMap;
 
+    /**
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         $this->registry = $registry;
