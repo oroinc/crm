@@ -6,6 +6,9 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
+use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -40,19 +43,25 @@ class ConvertLeadSourceData extends AbstractFixture implements ContainerAwareInt
             'OroCRM\Bundle\SalesBundle\Entity\Lead',
             'extend_source'
         );
-
-        $options   = $this->getLeadSourceOptions($manager, $configFieldModel);
-        $className = $this->getLeadSourceValueEntityName();
+        if (is_null($configFieldModel)) {
+            // no old options found
+            return;
+        }
 
         $enumOptions = [];
+        $options     = $this->getLeadSourceOptions($manager, $configFieldModel);
+        if (empty($options)) {
+            // no old options found
+            return;
+        }
+        $className   = $this->getLeadSourceValueEntityName();
+
+        /** @var EnumValueRepository $enumRepo */
+        $enumRepo = $manager->getRepository($className);
 
         /** @var OptionSet $option */
         foreach ($options as $option) {
-            $enumValueId = null;
-
-            /** @var AbstractEnumValue $enumOption */
-            $enumOption = new $className(
-                $enumValueId,
+            $enumOption = $enumRepo->createEnumValue(
                 $option->getLabel(),
                 $option->getPriority(),
                 $option->getIsDefault()
@@ -63,23 +72,21 @@ class ConvertLeadSourceData extends AbstractFixture implements ContainerAwareInt
         }
 
         $qBuilder = $manager->getRepository('OroCRMSalesBundle:Lead')
-            ->createQueryBuilder('lead')
-            ->setMaxResults(25);
+            ->createQueryBuilder('lead');
 
-        $relRepo = $manager->getRepository('OroEntityConfigBundle:OptionSetRelation');
-
+        $relRepo   = $manager->getRepository('OroEntityConfigBundle:OptionSetRelation');
         $paginator = new Paginator($qBuilder, false);
 
         /** @var Lead $lead */
         foreach ($paginator as $lead) {
             /** @var OptionSetRelation $relEntity */
             $relEntity = $relRepo->createQueryBuilder('r')
-                ->select('r.option_id')
-                ->where('r.field_id = ?0', 'r.entity_id = ?1')
+                ->select('IDENTITY(r.option) as option_id')
+                ->where('r.field = ?0', 'r.entity_id = ?1')
                 ->getQuery()
-                ->execute([$configFieldModel->getId(), $lead->getId()]);
+                ->execute([$configFieldModel, $lead->getId()]);
 
-            $sourceOptionId = $relEntity['option_id'];
+            $sourceOptionId = $relEntity[0]['option_id'];
             $source         = empty($enumOptions[$sourceOptionId]) ? null: $enumOptions[$sourceOptionId];
 
             $lead->setSource($source);
@@ -93,21 +100,21 @@ class ConvertLeadSourceData extends AbstractFixture implements ContainerAwareInt
      */
     protected function getLeadSourceValueEntityName()
     {
-        return 'Extend\Entity\EV_Lead_Source';
+        return ExtendHelper::buildEnumValueClassName('lead_source');
     }
 
     /**
-     * @param ObjectManager $manager
-     * @param               $fieldModel
+     * @param ObjectManager    $manager
+     * @param FieldConfigModel $fieldModel
      *
      * @return array
      */
-    protected function getLeadSourceOptions(ObjectManager $manager, $fieldModel)
+    protected function getLeadSourceOptions(ObjectManager $manager, FieldConfigModel $fieldModel)
     {
         $options = [];
         try {
             $options = $manager->getRepository('OroEntityConfigBundle:OptionSet')
-                ->findOptionsByField($configFieldModel->getId());
+                ->findOptionsByField($fieldModel->getId());
         } catch (\Exception $e) {
         }
 
