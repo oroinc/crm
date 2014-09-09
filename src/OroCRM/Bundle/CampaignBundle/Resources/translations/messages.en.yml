@@ -82,7 +82,7 @@ orocrm:
                 not_sent: Not sent
             block:
                 general: General Information
-                list_items: Marketing List Items
+                recipients: Recipients
             controller:
                 saved.message: "Email campaign saved"
                 sent: "Email campaign was sent"
