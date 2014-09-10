@@ -58,11 +58,12 @@ class ChannelSelectType extends AbstractType
                 'class'         => 'OroCRMChannelBundle:Channel',
                 'property'      => 'name',
                 'random_id'     => true,
-                'query_builder' =>  $this->getQueryBuilder(),
+                'query_builder' => $this->getQueryBuilder(),
                 'configs'       => [
                     'allowClear'  => true,
                     'placeholder' => 'orocrm.channel.form.select_channel_type.label'
                 ],
+                'entities'      => []
             ]
         );
 

@@ -44,8 +44,10 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getForm')
             ->will($this->returnValue($formView));
 
-        $formData['dataBlocks'][0]['subblocks'][0]['data'][] = $newField;
-        $event->expects($this->once())->method('setFormData')->with($formData);
+        array_unshift($formData['dataBlocks'][0]['subblocks'][0]['data'], $newField);
+        $event->expects($this->once())
+            ->method('setFormData')
+            ->with($formData);
 
         $provider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
             ->disableOriginalConstructor()
