@@ -4,12 +4,15 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+
 /**
  * @outputBuffering enabled
  * @dbIsolation
  */
 class RestLeadTest extends WebTestCase
 {
+    /** @var  Channel */
     protected static $dataChannel;
 
     protected function setUp()
