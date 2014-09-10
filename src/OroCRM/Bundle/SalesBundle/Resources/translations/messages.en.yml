@@ -148,6 +148,7 @@ orocrm:
             address.label:        Address
             details.label:        Lead Details
             extend_source.label:  Source
+            source.label:         Source
             notes.label:          Additional comments
             opportunities.label:  Opportunities
             workflow_item.label:  Workflow Item
