@@ -88,7 +88,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_8';
+        return 'v1_9';
     }
 
     /**
@@ -266,14 +266,20 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('createdat', 'datetime', []);
         $table->addColumn('updatedat', 'datetime', ['notnull' => false]);
         $table->addColumn('notes', 'text', ['notnull' => false]);
-        $this->extendExtension->addOptionSet(
+
+        $this->extendExtension->addEnumField(
             $schema,
-            $table,
-            'extend_source',
+            'orocrm_sales_lead',
+            'source',
+            'lead_source',
+            false,
+            false,
             [
-                'extend' => ['set_expanded' => false]
+                'extend'   => ['owner' => ExtendScope::OWNER_CUSTOM],
+                'datagrid' => ['is_visible' => false],
             ]
         );
+
         $this->extendExtension->addManyToOneRelation(
             $schema,
             $table,
