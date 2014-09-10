@@ -1,7 +1,3 @@
 {% if form.additional.dataChannel is defined %}
-    {% if form.additional.dataChannel.vars.label == 'oro.embeddedform.data_channel.label' %}
-        {{ form_row(form.additional.dataChannel) }}
-    {% else %}
-        {{ form_row(form.additional.dataChannel, {'label': label is not same as(false) ? label|trans : ''}) }}
-    {% endif %}
+    {{ form_row(form.additional.dataChannel) }}
 {% endif %}

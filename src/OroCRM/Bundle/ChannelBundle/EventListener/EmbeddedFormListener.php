@@ -2,24 +2,10 @@
 
 namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
-use Doctrine\Common\Util\ClassUtils;
-
 use Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 
 class EmbeddedFormListener
 {
-    /** @var ConfigManager */
-    protected $configManager;
-
-    /**
-     * @param ConfigManager $configManager
-     */
-    public function __construct(ConfigManager $configManager)
-    {
-        $this->configManager = $configManager;
-    }
-
     /**
      * Add owner field to forms
      *
@@ -27,29 +13,10 @@ class EmbeddedFormListener
      */
     public function addDataChannelField(BeforeFormRenderEvent $event)
     {
-        $environment    = $event->getTwigEnvironment();
-        $data           = $event->getFormData();
-        $form           = $event->getForm();
-        $label          = false;
-        $entityProvider = $this->configManager->getProvider('entity');
-
-        if (is_object($form->vars['value'])) {
-            $className = ClassUtils::getClass($form->vars['value']);
-            if (class_exists($className)
-                && $entityProvider->hasConfig($className, 'dataChannel')
-            ) {
-                $config = $entityProvider->getConfig($className, 'dataChannel');
-                $label  = $config->get('label');
-            }
-        }
-
-        $dataChannelField = $environment->render(
-            "OroCRMChannelBundle:Form:dataChannelField.html.twig",
-            [
-                'form'  => $form,
-                'label' => $label
-            ]
-        );
+        $env              = $event->getTwigEnvironment();
+        $data             = $event->getFormData();
+        $form             = $event->getForm();
+        $dataChannelField = $env->render('OroCRMChannelBundle:Form:dataChannelField.html.twig', ['form' => $form]);
 
         /**
          * Setting dataChannel field as first field in first data block
