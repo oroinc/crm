@@ -5,13 +5,10 @@ namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
-class LoadLeadSourceData extends AbstractFixture implements ContainerAwareInterface
+class LoadLeadSourceData extends AbstractFixture
 {
     /** @var array */
     protected $data = [
@@ -22,17 +19,6 @@ class LoadLeadSourceData extends AbstractFixture implements ContainerAwareInterf
         'Outbound'        => false,
         'Partner'         => false
     ];
-
-    /** @var ContainerInterface */
-    protected $container;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
 
     /**
      * @param ObjectManager $manager
@@ -45,13 +31,8 @@ class LoadLeadSourceData extends AbstractFixture implements ContainerAwareInterf
         $enumRepo = $manager->getRepository($className);
 
         $priority = 1;
-        foreach ($this->data as $optionSetLabel => $isDefault) {
-            $enumOption = $enumRepo->createEnumValue(
-                $optionSetLabel,
-                $priority++,
-                $isDefault
-            );
-
+        foreach ($this->data as $name => $isDefault) {
+            $enumOption = $enumRepo->createEnumValue($name, $priority++, $isDefault);
             $manager->persist($enumOption);
         }
 

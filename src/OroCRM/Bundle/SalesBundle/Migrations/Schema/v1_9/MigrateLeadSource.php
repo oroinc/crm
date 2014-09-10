@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_9;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
@@ -31,7 +32,10 @@ class MigrateLeadSource implements Migration, ExtendExtensionAwareInterface
             $schema,
             'orocrm_sales_lead',
             'source',
-            'lead_source'
+            'lead_source',
+            false,
+            false,
+            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
         );
     }
 }

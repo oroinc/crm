@@ -6,16 +6,16 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
-use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
 use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
+
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 class ConvertLeadSourceData extends AbstractFixture implements ContainerAwareInterface
@@ -54,7 +54,7 @@ class ConvertLeadSourceData extends AbstractFixture implements ContainerAwareInt
             // no old options found
             return;
         }
-        $className   = $this->getLeadSourceValueEntityName();
+        $className = ExtendHelper::buildEnumValueClassName('lead_source');
 
         /** @var EnumValueRepository $enumRepo */
         $enumRepo = $manager->getRepository($className);
@@ -93,14 +93,6 @@ class ConvertLeadSourceData extends AbstractFixture implements ContainerAwareInt
         }
 
         $manager->flush();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getLeadSourceValueEntityName()
-    {
-        return ExtendHelper::buildEnumValueClassName('lead_source');
     }
 
     /**
