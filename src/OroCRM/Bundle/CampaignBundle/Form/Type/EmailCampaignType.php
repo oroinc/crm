@@ -53,17 +53,17 @@ class EmailCampaignType extends AbstractType
                 'choice',
                 [
                     'choices' => [
-                        EmailCampaign::SCHEDULE_IMMEDIATE => ucfirst(EmailCampaign::SCHEDULE_IMMEDIATE),
-                        EmailCampaign::SCHEDULE_DEFERRED  => ucfirst(EmailCampaign::SCHEDULE_DEFERRED)
+                        EmailCampaign::SCHEDULE_MANUAL   => ucfirst(EmailCampaign::SCHEDULE_MANUAL),
+                        EmailCampaign::SCHEDULE_DEFERRED => ucfirst(EmailCampaign::SCHEDULE_DEFERRED)
                     ],
                     'label'   => 'orocrm.campaign.emailcampaign.schedule.label',
                 ]
             )
             ->add(
-                'scheduledAt',
+                'scheduledFor',
                 'oro_datetime',
                 [
-                    'label'    => 'orocrm.campaign.emailcampaign.scheduled_at.label',
+                    'label'    => 'orocrm.campaign.emailcampaign.scheduled_for.label',
                     'required' => false
                 ]
             )

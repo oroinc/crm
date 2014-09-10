@@ -36,7 +36,7 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
  */
 class EmailCampaign
 {
-    const SCHEDULE_IMMEDIATE = 'immediate';
+    const SCHEDULE_MANUAL = 'manual';
     const SCHEDULE_DEFERRED = 'deferred';
 
     /**
@@ -79,9 +79,9 @@ class EmailCampaign
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="scheduled_at", type="datetime", nullable=true)
+     * @ORM\Column(name="scheduled_for", type="datetime", nullable=true)
      */
-    protected $scheduledAt;
+    protected $scheduledFor;
 
     /**
      * @var string
@@ -400,12 +400,12 @@ class EmailCampaign
      */
     public function setSchedule($schedule)
     {
-        if ($schedule != self::SCHEDULE_DEFERRED && $schedule != self::SCHEDULE_IMMEDIATE) {
+        if ($schedule != self::SCHEDULE_DEFERRED && $schedule != self::SCHEDULE_MANUAL) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'Schedule type %s is not know. Known types are %s',
                     $schedule,
-                    implode(', ', array(self::SCHEDULE_IMMEDIATE, self::SCHEDULE_DEFERRED))
+                    implode(', ', array(self::SCHEDULE_MANUAL, self::SCHEDULE_DEFERRED))
                 )
             );
         }
@@ -427,18 +427,18 @@ class EmailCampaign
     /**
      * @return \DateTime
      */
-    public function getScheduledAt()
+    public function getScheduledFor()
     {
-        return $this->scheduledAt;
+        return $this->scheduledFor;
     }
 
     /**
-     * @param \DateTime $scheduledAt
+     * @param \DateTime $scheduledFor
      * @return EmailCampaign
      */
-    public function setScheduledAt($scheduledAt)
+    public function setScheduledFor($scheduledFor)
     {
-        $this->scheduledAt = $scheduledAt;
+        $this->scheduledFor = $scheduledFor;
 
         return $this;
     }

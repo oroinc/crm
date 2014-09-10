@@ -66,18 +66,18 @@ orocrm:
             description.label:   Description
             transport.label:     Transport
             schedule:
-                label:     Schedule
-                immediate: Immediate
-                deferred:  Deferred
+                label:    Schedule
+                manual:   Manual
+                deferred: Deferred
 
-            scheduled_at.label:  Scheduled At
-            owner.label:         Owner
+            scheduled_for.label:  Scheduled For
+            owner.label:          Owner
             marketing_list.label: Marketing List
-            template.label:      Template
-            created_at.label:    Created At
-            updated_at.label:    Updated At
-            campaign.label:      Campaign
-            sent.label:          Sent
+            template.label:       Template
+            created_at.label:     Created At
+            updated_at.label:     Updated At
+            campaign.label:       Campaign
+            sent.label:           Sent
             status:
                 sent: Sent
                 not_sent: Not sent

@@ -222,7 +222,7 @@ datagrid:
                     - ec.name
                     - ec.fromEmail
                     - ec.schedule
-                    - ec.scheduledAt
+                    - ec.scheduledFor
                     - ec.createdAt
                     - ec.updatedAt
                     - c.name as campaignName
@@ -247,8 +247,8 @@ datagrid:
                 type:          twig
                 frontend_type: html
                 template:      OroCRMCampaignBundle:EmailCampaign:Property/schedule.html.twig
-            scheduledAt:
-                label: orocrm.campaign.emailcampaign.scheduled_at.label
+            scheduledFor:
+                label: orocrm.campaign.emailcampaign.scheduled_for.label
                 frontend_type: datetime
             sent:
                 label:         orocrm.campaign.emailcampaign.sent.label
@@ -279,11 +279,11 @@ datagrid:
                     options:
                         field_options:
                             choices:
-                                immediate: Immediate
+                                manual: Manual
                                 deferred: Deferred
-                scheduledAt:
+                scheduledFor:
                     type:        datetime
-                    data_name:   ec.scheduledAt
+                    data_name:   ec.scheduledFor
                 sent:
                     type: boolean
                     data_name: ec.sent
@@ -301,7 +301,7 @@ datagrid:
                 marktingListName: { data_name: ml.name }
                 schedule:         { data_name: ec.schedule }
                 sent:             { data_name: ec.sent }
-                scheduledAt:      { data_name: ec.scheduledAt }
+                scheduledFor:     { data_name: ec.scheduledFor }
                 createdAt:        { data_name: ec.createdAt }
                 updatedAt:        { data_name: ec.updatedAt }
             default:

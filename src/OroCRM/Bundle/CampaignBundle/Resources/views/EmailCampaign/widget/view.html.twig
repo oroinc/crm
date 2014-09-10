@@ -7,7 +7,7 @@
             {{ ui.renderProperty('orocrm.campaign.emailcampaign.name.label'|trans, entity.name) }}
             {{ ui.renderProperty('orocrm.campaign.emailcampaign.fromEmail.label'|trans, entity.fromEmail) }}
             {{ ui.renderProperty('orocrm.campaign.emailcampaign.schedule.label'|trans, ('orocrm.campaign.emailcampaign.schedule.' ~ entity.schedule)|trans ) }}
-            {{ ui.renderProperty('orocrm.campaign.emailcampaign.scheduled_at.label'|trans, entity.scheduledAt ? entity.scheduledAt|oro_format_datetime : '') }}
+            {{ ui.renderProperty('orocrm.campaign.emailcampaign.scheduled_for.label'|trans, entity.scheduledFor ? entity.scheduledFor|oro_format_datetime : '') }}
 
             {%- if entity.campaign and resource_granted('orocrm_campaign_view') -%}
                 {% set campaignView = '<a href="' ~ path('orocrm_campaign_view', {'id': entity.campaign.id}) ~ '">' ~ entity.campaign.name ~ '</a>' %}

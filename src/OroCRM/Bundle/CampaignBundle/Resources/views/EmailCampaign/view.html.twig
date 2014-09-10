@@ -4,7 +4,7 @@
 {% oro_title_set({params : {"%entity.name%": entity.name|default('N/A') }}) %}
 
 {% block navButtons %}
-    {% if entity.schedule == constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_IMMEDIATE') %}
+    {% if entity.schedule == constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_MANUAL') %}
         {{ UI.button({
             'path' : path('orocrm_email_campaign_send', { id: entity.id }),
             'title': 'orocrm.campaign.emailcampaign.send'|trans,

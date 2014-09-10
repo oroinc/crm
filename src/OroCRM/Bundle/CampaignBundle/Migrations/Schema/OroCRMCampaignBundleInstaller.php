@@ -79,7 +79,7 @@ class OroCRMCampaignBundleInstaller implements Installation
         $table->addColumn('campaign_id', 'integer', []);
         $table->addColumn('is_sent', 'boolean', []);
         $table->addColumn('schedule', 'string', ['length' => 255]);
-        $table->addColumn('scheduled_at', 'datetime', ['comment' => '(DC2Type:datetime)', 'notnull' => false]);
+        $table->addColumn('scheduled_for', 'datetime', ['comment' => '(DC2Type:datetime)', 'notnull' => false]);
         $table->addColumn('from_email', 'string', ['length' => 255, 'notnull' => false]);
         $table->addColumn('template_id', 'integer', ['notnull' => false]);
         $table->addColumn('transport', 'string', ['length' => 255, 'notnull' => true]);

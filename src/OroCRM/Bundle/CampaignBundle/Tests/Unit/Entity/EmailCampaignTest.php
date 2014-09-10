@@ -36,7 +36,7 @@ class EmailCampaignTest extends AbstractEntityTestCase
             'campaign'      => ['campaign', $campaign, $campaign],
             'sent'          => ['sent', true, true],
             'schedule'      => ['schedule', EmailCampaign::SCHEDULE_DEFERRED, EmailCampaign::SCHEDULE_DEFERRED],
-            'scheduledAt'   => ['scheduledAt', $date, $date],
+            'scheduledFor'  => ['scheduledFor', $date, $date],
             'marketingList' => ['marketingList', $marketingList, $marketingList],
             'owner'         => ['owner', $owner, $owner],
             'template'      => ['template', $template, $template],
@@ -60,7 +60,7 @@ class EmailCampaignTest extends AbstractEntityTestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Schedule type unknown is not know. Known types are immediate, deferred
+     * @expectedExceptionMessage Schedule type unknown is not know. Known types are manual, deferred
      */
     public function testUnknownSchedule()
     {
