@@ -94,6 +94,15 @@ class ChannelTest extends AbstractEntityTestCase
         return $collection;
     }
 
+    public function testToString()
+    {
+        $this->assertEmpty((string)$this->entity);
+
+        $testName = uniqid('name');
+        $this->entity->setName($testName);
+        $this->assertSame($testName, $this->entity->getName());
+    }
+
     public function testPrePersist()
     {
         $this->assertNull($this->entity->getCreatedAt());

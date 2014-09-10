@@ -34,6 +34,7 @@ parameters:
     orocrm_channel.form.subscriber.channel_subscriber.class:           OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
     orocrm_channel.event_listener.channel_change_status.class:         OroCRM\Bundle\ChannelBundle\EventListener\ChangeChannelStatusListener
     orocrm_channel.event_listener.channel_save_succeed.class:          OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener
+    orocrm_channel.event_listener.embedded_form_add_fields.class:      OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
 
     #twig
     orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
@@ -201,6 +202,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSucceedSave }
 
+    orocrm_channel.event_listener.embedded_form_add_fields:
+        class: %orocrm_channel.event_listener.embedded_form_add_fields.class%
+        tags:
+            - { name: kernel.event_listener, event: entity_form.render.before, method: addDataChannelField }
+
     #twig
     orocrm_channel.twig.metadata_extension:
         class: %orocrm_channel.twig.metadata_extension.class%
@@ -216,6 +222,11 @@ services:
             - @orocrm_channel.provider.settings_provider
         tags:
             - { name: form.type_extension, alias: oro_integration_channel_form }
+
+    orocrm_channel_bundle.embedded_form_type_extension:
+        class: OroCRM\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension
+        tags:
+            - { name: form.type_extension, alias: embedded_form }
 
     #validators
     orocrm_channel.validators.channel_integration_validator:
