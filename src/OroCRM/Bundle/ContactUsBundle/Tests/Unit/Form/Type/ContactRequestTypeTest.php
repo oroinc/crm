@@ -66,7 +66,7 @@ class ContactRequestTypeTest extends TypeTestCase
                 )
             );
 
-        $this->formType->buildForm($builder, []);
+        $this->formType->buildForm($builder, ['dataChannelField' => true]);
 
         $this->assertSame(
             [
