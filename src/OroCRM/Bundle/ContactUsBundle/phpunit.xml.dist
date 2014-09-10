@@ -14,7 +14,7 @@
 
     <testsuites>
         <testsuite name="OroCRMContactUsBundle Test Suite">
-            <directory>./Tests</directory>
+            <directory>./Tests/Unit</directory>
         </testsuite>
     </testsuites>
 

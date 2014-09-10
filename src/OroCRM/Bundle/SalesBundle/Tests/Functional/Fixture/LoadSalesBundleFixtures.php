@@ -161,12 +161,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $builder->setName(self::CHANNEL_NAME);
         $builder->setChannelType(self::CHANNEL_TYPE);
         $builder->setStatus(Channel::STATUS_ACTIVE);
-        $builder->setEntities(
-            [
-                'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
-                'OroCRM\Bundle\SalesBundle\Entity\Lead'
-            ]
-        );
+        $builder->setEntities();
 
         $channel = $builder->getChannel();
 
