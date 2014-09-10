@@ -19,6 +19,7 @@ class LeadControllersTest extends WebTestCase
             [],
             array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
         );
+        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
     }
 
     public function testIndex()
@@ -45,6 +46,7 @@ class LeadControllersTest extends WebTestCase
         $form['orocrm_sales_lead_form[companyName]']         = 'Company';
         $form['orocrm_sales_lead_form[email]']               = 'test@example.test';
         $form['orocrm_sales_lead_form[owner]']               = 1;
+        $form['orocrm_sales_lead_form[dataChannel]']         = $this->getReference('default_channel')->getId();
 
         $doc = new \DOMDocument("1.0");
         $doc->loadHTML(

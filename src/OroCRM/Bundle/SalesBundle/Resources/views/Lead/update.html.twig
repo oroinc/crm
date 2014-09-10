@@ -73,6 +73,7 @@
     {% endif %}
     {% set formFields = formFields|merge([
         form_row(form.name),
+        form_row(form.dataChannel),
         form_row(form.namePrefix),
         form_row(form.firstName),
         form_row(form.middleName),
