@@ -6,6 +6,7 @@ use Symfony\Component\DomCrawler\Form;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadB2bCustomer;
 
@@ -17,7 +18,7 @@ class OpportunityControllersTest extends WebTestCase
 {
     /** @var B2bCustomer */
     protected static $customer;
-
+    /** @var  Channel */
     protected static $dataChannel;
 
     protected function setUp()
