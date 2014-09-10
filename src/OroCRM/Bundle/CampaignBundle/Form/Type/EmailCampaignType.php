@@ -89,8 +89,8 @@ class EmailCampaignType extends AbstractType
                 'transport',
                 'orocrm_campaign_email_transport_select',
                 [
-                    'label'                   => 'orocrm.campaign.emailcampaign.transport.label',
-                    'required'                => true
+                    'label'    => 'orocrm.campaign.emailcampaign.transport.label',
+                    'required' => true
                 ]
             )
             ->add('entityName', 'hidden', ['required' => false, 'mapped' => false])
