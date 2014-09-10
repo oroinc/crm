@@ -28,10 +28,12 @@ class OroCRMCampaignBundleInstaller implements Installation
         /** Tables generation **/
         $this->createOrocrmCampaignTable($schema);
         $this->createOrocrmCampaignEmailTable($schema);
+        $this->createOrocrmEmailCampaignStatisticsTable($schema);
 
         /** Foreign keys generation **/
         $this->addOrocrmCampaignForeignKeys($schema);
         $this->addOrocrmCampaignEmailForeignKeys($schema);
+        $this->addOrocrmEmailCampaignStatisticsForeignKeys($schema);
     }
 
     /**
@@ -92,6 +94,23 @@ class OroCRMCampaignBundleInstaller implements Installation
     }
 
     /**
+     * Create orocrm_email_campaign_statistics table
+     *
+     * @param Schema $schema
+     */
+    protected function createOrocrmEmailCampaignStatisticsTable(Schema $schema)
+    {
+        $table = $schema->createTable('orocrm_email_campaign_statistics');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('email_campaign_id', 'integer', []);
+        $table->addColumn('marketing_list_item_id', 'integer', []);
+        $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
+        $table->addIndex(['marketing_list_item_id'], 'idx_31465f07d530662', []);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['email_campaign_id'], 'idx_31465f07e0f98bc3', []);
+    }
+
+    /**
      * Add orocrm_campaign foreign keys.
      *
      * @param Schema $schema
@@ -136,6 +155,28 @@ class OroCRMCampaignBundleInstaller implements Installation
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_campaign'),
             ['campaign_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'CASCADE']
+        );
+    }
+
+    /**
+     * Add orocrm_email_campaign_statistics foreign keys.
+     *
+     * @param Schema $schema
+     */
+    protected function addOrocrmEmailCampaignStatisticsForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('orocrm_email_campaign_statistics');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_campaign_email'),
+            ['email_campaign_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'CASCADE']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_marketing_list_item'),
+            ['marketing_list_item_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'CASCADE']
         );

@@ -132,9 +132,8 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $this->registry->expects($this->once())
             ->method('getManager')
             ->will($this->returnValue($manager));
-        $manager->expects($this->once())
-            ->method('persist')
-            ->with($campaign);
+        $manager->expects($this->exactly($itCount + 1))
+            ->method('persist');
         $manager->expects($this->atLeastOnce())
             ->method('flush');
         $manager->expects($this->exactly($itCount))
@@ -153,13 +152,17 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
                 )
                 ->will($this->returnValue($to));
 
+            $marketingListItem = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem')
+                ->disableOriginalConstructor()
+                ->getMock();
             $this->marketingListConnector
                 ->expects($this->exactly($itCount))
                 ->method('contact')
                 ->with(
                     $this->equalTo($marketingList),
                     $this->equalTo(self::ENTITY_ID)
-                );
+                )
+                ->will($this->returnValue($marketingListItem));
         }
 
         $this->transport->expects($this->exactly($itCount))
