@@ -64,7 +64,12 @@ class EmailCampaignType extends AbstractType
                 'oro_datetime',
                 [
                     'label'    => 'orocrm.campaign.emailcampaign.scheduled_for.label',
-                    'required' => false
+                    'required' => false,
+                    'attr'     => [
+                        'data-validation-optional-group' => true,
+                        'data-validation-ignore'         => true,
+                        'data-validation'                => json_encode(['DateTime' => [], 'NotBlank' => []])
+                    ]
                 ]
             )
             ->add(

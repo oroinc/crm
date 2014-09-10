@@ -50,7 +50,7 @@
                         form_row(form.name),
                         form_row(form.fromEmail),
                         form_row(form.schedule),
-                        form_row(form.scheduledFor),
+                        form_row(form.scheduledFor, {'attr': {'class': 'hide scheduledFor'}}),
                         form_row(form.campaign),
                         form_row(form.marketingList),
                         form_row(form.template),
@@ -61,6 +61,16 @@
             ]
         }]
     %}
+
+    {% set scheduleOptions = {
+        target: '#orocrm_email_campaign_schedule',
+        element: '.scheduledFor',
+        hideOn: [constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_MANUAL')],
+        showOn: [constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_DEFERRED')]
+    } %}
+
+    <div data-page-component-module="orocrmcampaign/js/app/components/schedule-handler"
+         data-page-component-options="{{ scheduleOptions|json_encode }}"></div>
 
     <script type="text/javascript">
         require(
