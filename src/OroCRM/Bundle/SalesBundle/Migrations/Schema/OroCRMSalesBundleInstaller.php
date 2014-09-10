@@ -271,13 +271,7 @@ class OroCRMSalesBundleInstaller implements
             $schema,
             'orocrm_sales_lead',
             'source',
-            'lead_source',
-            false,
-            false,
-            [
-                'extend'   => ['owner' => ExtendScope::OWNER_CUSTOM],
-                'datagrid' => ['is_visible' => false],
-            ]
+            'lead_source'
         );
 
         $this->extendExtension->addManyToOneRelation(

@@ -156,6 +156,11 @@ orocrm:
             information:          Lead Information
             campaign.label:       Campaign
 
+            source:
+                unclassified:     Unclassified
+                others:           Others
+                none:             None
+
             extend_source:
                 unclassified:     Unclassified
                 others:           Others
