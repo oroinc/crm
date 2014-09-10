@@ -204,8 +204,6 @@ services:
 
     orocrm_channel.event_listener.embedded_form_add_fields:
         class: %orocrm_channel.event_listener.embedded_form_add_fields.class%
-        arguments:
-            - @oro_entity_config.config_manager
         tags:
             - { name: kernel.event_listener, event: entity_form.render.before, method: addDataChannelField }
 

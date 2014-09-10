@@ -49,21 +49,7 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
             ->method('setFormData')
             ->with($formData);
 
-        $provider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $provider->expects($this->any())
-            ->method('hasConfig')
-            ->will($this->returnValue(false));
-
-        $configManager = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\ConfigManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configManager->expects($this->any())
-            ->method('getProvider')
-            ->will($this->returnValue($provider));
-
-        $listener = new EmbeddedFormListener($configManager);
+        $listener = new EmbeddedFormListener();
         $listener->addDataChannelField($event);
     }
 }
