@@ -17,6 +17,12 @@ class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
         parent::setUp();
     }
 
+    protected function tearDown()
+    {
+        unset($this->extension);
+        parent::tearDown();
+    }
+
     public function testGetExtendedType()
     {
         $this->assertEquals(
