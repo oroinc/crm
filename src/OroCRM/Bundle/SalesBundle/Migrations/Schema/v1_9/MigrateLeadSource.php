@@ -36,7 +36,10 @@ class MigrateLeadSource implements Migration, ExtendExtensionAwareInterface
             'lead_source',
             false,
             false,
-            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
+            [
+                'extend'   => ['owner' => ExtendScope::OWNER_CUSTOM],
+                'datagrid' => ['is_visible' => false],
+            ]
         );
 
         $queries->addPostQuery(

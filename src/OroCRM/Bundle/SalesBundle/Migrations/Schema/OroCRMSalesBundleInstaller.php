@@ -274,7 +274,10 @@ class OroCRMSalesBundleInstaller implements
             'lead_source',
             false,
             false,
-            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
+            [
+                'extend'   => ['owner' => ExtendScope::OWNER_CUSTOM],
+                'datagrid' => ['is_visible' => false],
+            ]
         );
 
         $this->extendExtension->addManyToOneRelation(
