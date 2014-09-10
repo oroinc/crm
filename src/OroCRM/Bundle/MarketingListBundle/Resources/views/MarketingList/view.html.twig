@@ -7,7 +7,12 @@
 {% oro_title_set({params : {"%entityName%": entity.name|default('N/A') }}) %}
 
 {% block navButtons %}
-    {{ segmentQD.runButton(entity.segment, true, true, 'orocrm.marketinglist.refresh_list') }}
+    {% set buttonOptions = {
+        label: 'orocrm.marketinglist.refresh_list',
+        successMessage: 'orocrm.marketinglist.refresh_dialog.success',
+        content: 'orocrm.marketinglist.refresh_dialog.content',
+    } %}
+    {{ segmentQD.runButton(entity.segment, true, true, buttonOptions) }}
     {% if resource_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path' : path('orocrm_marketing_list_update', { id: entity.id }),
