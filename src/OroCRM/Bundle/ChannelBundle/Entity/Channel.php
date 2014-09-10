@@ -115,6 +115,13 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="customer_identity", type="string", length=255, nullable=false)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $customerIdentity;
 
@@ -125,8 +132,7 @@ class Channel
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "full"=true,
-     *              "order"=30
+     *              "excluded"=true
      *          }
      *      }
      * )
