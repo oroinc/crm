@@ -129,19 +129,23 @@ class EmailCampaign
     protected $owner;
 
     /**
-     * @var EmailTemplate
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\EmailBundle\Entity\EmailTemplate")
-     * @ORM\JoinColumn(name="template_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $template;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="transport", type="string", length=255, nullable=false)
      */
     protected $transport;
+
+    /**
+     * @var TransportSettings
+     *
+     * @ORM\OneToOne(
+     *     targetEntity="OroCRM\Bundle\CampaignBundle\Entity\TransportSettings",
+     *     cascade={"all"},
+     *     orphanRemoval=true
+     * )
+     * @ORM\JoinColumn(name="transport_settings_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     */
+    protected $transportSettings;
 
     /**
      * @var \DateTime
@@ -212,31 +216,6 @@ class EmailCampaign
     public function getId()
     {
         return $this->id;
-    }
-
-
-    /**
-     * Set template
-     *
-     * @param EmailTemplate $template
-     *
-     * ы@return EmailCampaign
-     */
-    public function setTemplate(EmailTemplate $template = null)
-    {
-        $this->template = $template;
-
-        return $this;
-    }
-
-    /**
-     * Get template
-     *
-     * @return EmailTemplate
-     */
-    public function getTemplate()
-    {
-        return $this->template;
     }
 
     /**
@@ -473,26 +452,7 @@ class EmailCampaign
     }
 
     /**
-     * @return string
-     */
-    public function getTransport()
-    {
-        return $this->transport;
-    }
-
-    /**
-     * @param string $transport
-     * @return EmailCampaign
-     */
-    public function setTransport($transport)
-    {
-        $this->transport = $transport;
-
-        return $this;
-    }
-
-    /**
-     * Set senderEmail
+     * Set Sender Email address.
      *
      * @param string $senderEmail
      * @return EmailCampaign
@@ -505,7 +465,7 @@ class EmailCampaign
     }
 
     /**
-     * Get senderEmail
+     * Get Sender Email address.
      *
      * @return string 
      */
@@ -515,7 +475,7 @@ class EmailCampaign
     }
 
     /**
-     * Set senderName
+     * Set Sender Name.
      *
      * @param string $senderName
      * @return EmailCampaign
@@ -528,9 +488,9 @@ class EmailCampaign
     }
 
     /**
-     * Get senderName
+     * Get Sender Name.
      *
-     * @return string 
+     * @return string
      */
     public function getSenderName()
     {
@@ -553,10 +513,48 @@ class EmailCampaign
     /**
      * Get sentAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getSentAt()
     {
         return $this->sentAt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransport()
+    {
+        return $this->transport;
+    }
+
+    /**
+     * @param string $transport
+     * @return EmailCampaign
+     */
+    public function setTransport($transport)
+    {
+        $this->transport = $transport;
+
+        return $this;
+    }
+
+    /**
+     * @return TransportSettings
+     */
+    public function getTransportSettings()
+    {
+        return $this->transportSettings;
+    }
+
+    /**
+     * @param TransportSettings $transportSettings
+     * @return EmailCampaign
+     */
+    public function setTransportSettings($transportSettings)
+    {
+        $this->transportSettings = $transportSettings;
+
+        return $this;
     }
 }

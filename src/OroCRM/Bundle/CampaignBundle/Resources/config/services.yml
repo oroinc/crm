@@ -14,6 +14,9 @@ parameters:
     orocrm_campaign.email_campaign.sender.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSender
     orocrm_campaign.email_transport.provider.class: OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider
     orocrm_campaign.email_campaign.sender.factory.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSenderFactory
+
+    orocrm_campaign.form.type.internal_transport_settings.class: OroCRM\Bundle\CampaignBundle\Form\Type\InternalTransportSettingsType
+    orocrm_campaign.form.subscriber.transport_settings.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsListener
 services:
     orocrm_campaign.campaign.form.type:
         class: %orocrm_campaign.campaign.form.type.class%
@@ -31,8 +34,7 @@ services:
     orocrm_campaign.email_campaign.form.type:
         class: %orocrm_campaign.form.type.email_campaign.class%
         calls:
-            - [addSubscriber, [@oro_email.form.subscriber.emailtemplate]]
-            - [addSubscriber, [@orocrm_campaign.form.listener.entityName]]
+            - [addSubscriber, [@orocrm_campaign.form.subscriber.transport_settings]]
         tags:
             - { name: form.type, alias: orocrm_email_campaign }
 
@@ -136,4 +138,14 @@ services:
         class: %orocrm_campaign.email_campaign.sender.factory.class%
         arguments:
             - @service_container
+            - @orocrm_campaign.email_transport.provider
+
+    orocrm_campaign.form.type.internal_transport_settings:
+        class: %orocrm_campaign.form.type.internal_transport_settings.class%
+        tags:
+            - { name: form.type, alias: "orocrm_campaign_internal_transport_settings" }
+
+    orocrm_campaign.form.subscriber.transport_settings:
+        class: %orocrm_campaign.form.subscriber.transport_settings.class%
+        arguments:
             - @orocrm_campaign.email_transport.provider

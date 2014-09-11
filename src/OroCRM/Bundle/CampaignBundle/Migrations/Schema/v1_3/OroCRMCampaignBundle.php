@@ -17,10 +17,13 @@ class OroCRMCampaignBundle implements Migration
         /** Tables generation **/
         $this->createOrocrmCampaignEmailTable($schema);
         $this->createOrocrmEmailCampaignStatisticsTable($schema);
+        $this->createOrocrmCmpgnTransportStngsTable($schema);
+        $this->updateOrocrmCmpgnTransportStngsTableAddInternalEmailTransport($schema);
 
         /** Foreign keys generation **/
         $this->addOrocrmCampaignEmailForeignKeys($schema);
         $this->addOrocrmEmailCampaignStatisticsForeignKeys($schema);
+        $this->addOrocrmCmpgnTransportStngsForeignKeysForInternalTransport($schema);
     }
 
     /**
@@ -32,35 +35,36 @@ class OroCRMCampaignBundle implements Migration
     {
         $table = $schema->createTable('orocrm_campaign_email');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('campaign_id', 'integer', ['notnull' => false]);
+        $table->addColumn('transport_settings_id', 'integer', ['notnull' => false]);
+        $table->addColumn('marketing_list_id', 'integer', ['notnull' => false]);
+        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('description', 'text', ['notnull' => false]);
-        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
-        $table->addColumn('marketing_list_id', 'integer', ['notnull' => false]);
-        $table->addColumn('campaign_id', 'integer', ['notnull' => false]);
         $table->addColumn('is_sent', 'boolean', []);
-        $table->addColumn('sent_at', 'datetime', ['comment' => '(DC2Type:datetime)', 'notnull' => false]);
         $table->addColumn('schedule', 'string', ['length' => 255]);
-        $table->addColumn('scheduled_for', 'datetime', ['comment' => '(DC2Type:datetime)']);
-        $table->addColumn('sender_email', 'string', ['length' => 255, 'notnull' => false]);
-        $table->addColumn('sender_name', 'string', ['length' => 255, 'notnull' => false]);
-        $table->addColumn('template_id', 'integer', []);
-        $table->addColumn('transport', 'string', ['length' => 255, 'notnull' => true]);
+        $table->addColumn('scheduled_for', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
+        $table->addColumn('sender_email', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('updated_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
+        $table->addColumn('sent_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
+        $table->addColumn('sender_name', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('transport', 'string', ['length' => 255]);
+        $table->addUniqueIndex(['transport_settings_id'], 'uniq_6cd4c1e1cffa7b8f');
         $table->addIndex(['marketing_list_id'], 'idx_6cd4c1e196434d04', []);
-        $table->addIndex(['campaign_id'], 'idx_6cd4c1e1f639f774', []);
         $table->addIndex(['owner_id'], 'idx_6cd4c1e17e3c61f9', []);
         $table->setPrimaryKey(['id']);
+        $table->addIndex(['campaign_id'], 'idx_6cd4c1e1f639f774', []);
     }
 
     /**
-     * Create orocrm_email_campaign_stats table
+     * Create orocrm_campaign_email_stats table
      *
      * @param Schema $schema
      */
     protected function createOrocrmEmailCampaignStatisticsTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_email_campaign_stats');
+        $table = $schema->createTable('orocrm_campaign_email_stats');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('email_campaign_id', 'integer', []);
         $table->addColumn('marketing_list_item_id', 'integer', []);
@@ -68,6 +72,31 @@ class OroCRMCampaignBundle implements Migration
         $table->addIndex(['marketing_list_item_id'], 'idx_31465f07d530662', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['email_campaign_id'], 'idx_31465f07e0f98bc3', []);
+    }
+
+    /**
+     * Create orocrm_cmpgn_transport_stngs table
+     *
+     * @param Schema $schema
+     */
+    protected function createOrocrmCmpgnTransportStngsTable(Schema $schema)
+    {
+        $table = $schema->createTable('orocrm_cmpgn_transport_stngs');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('type', 'string', ['length' => 50]);
+        $table->setPrimaryKey(['id']);
+    }
+
+    /**
+     * Update orocrm_cmpgn_transport_stngs table with internal transport settings.
+     *
+     * @param Schema $schema
+     */
+    protected function updateOrocrmCmpgnTransportStngsTableAddInternalEmailTransport(Schema $schema)
+    {
+        $table = $schema->getTable('orocrm_cmpgn_transport_stngs');
+        $table->addColumn('email_template_id', 'integer', ['notnull' => false]);
+        $table->addIndex(['email_template_id'], 'idx_16e86bf2131a730f', []);
     }
 
     /**
@@ -79,14 +108,14 @@ class OroCRMCampaignBundle implements Migration
     {
         $table = $schema->getTable('orocrm_campaign_email');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_email_template'),
-            ['template_id'],
+            $schema->getTable('orocrm_campaign'),
+            ['campaign_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_user'),
-            ['owner_id'],
+            $schema->getTable('orocrm_cmpgn_transport_stngs'),
+            ['transport_settings_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
@@ -97,21 +126,21 @@ class OroCRMCampaignBundle implements Migration
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_campaign'),
-            ['campaign_id'],
+            $schema->getTable('oro_user'),
+            ['owner_id'],
             ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
     }
 
     /**
-     * Add orocrm_email_campaign_stats foreign keys.
+     * Add orocrm_campaign_email_stats foreign keys.
      *
      * @param Schema $schema
      */
     protected function addOrocrmEmailCampaignStatisticsForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_email_campaign_stats');
+        $table = $schema->getTable('orocrm_campaign_email_stats');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_campaign_email'),
             ['email_campaign_id'],
@@ -123,6 +152,22 @@ class OroCRMCampaignBundle implements Migration
             ['marketing_list_item_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'CASCADE']
+        );
+    }
+
+    /**
+     * Add orocrm_cmpgn_transport_stngs internal trnasport foreign keys.
+     *
+     * @param Schema $schema
+     */
+    protected function addOrocrmCmpgnTransportStngsForeignKeysForInternalTransport(Schema $schema)
+    {
+        $table = $schema->getTable('orocrm_cmpgn_transport_stngs');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_email_template'),
+            ['email_template_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
     }
 }

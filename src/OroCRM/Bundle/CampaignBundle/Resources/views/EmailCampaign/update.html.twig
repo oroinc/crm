@@ -40,6 +40,12 @@
 
 {% block content_data %}
     {% set id = 'orocrm_email_campaign_form-profile' %}
+
+    {% set transportFormData = [form_row(form.transport)] %}
+    {% if form.transportSettings is defined %}
+        {% set transportFormData = transportFormData|merge([form_widget(form.transportSettings)]) %}
+    {% endif %}
+
     {% set dataBlocks = [{
             'title': 'General'|trans,
             'class': 'active',
@@ -48,16 +54,23 @@
                     'title': '',
                     'data': [
                         form_row(form.name),
+                        form_row(form.marketingList),
+                        form_row(form.schedule),
                         form_row(form.senderEmail),
                         form_row(form.senderName),
-                        form_row(form.schedule),
                         form_row(form.scheduledFor, {'attr': {'class': 'hide scheduledFor'}}),
                         form_row(form.campaign),
-                        form_row(form.marketingList),
-                        form_row(form.template),
-                        form_row(form.transport),
                         form_row(form.description),
                     ]
+                }
+            ]
+        },
+        {
+            'title': 'Transport'|trans,
+            'subblocks': [
+                {
+                    'title': '',
+                    'data': transportFormData
                 }
             ]
         }]

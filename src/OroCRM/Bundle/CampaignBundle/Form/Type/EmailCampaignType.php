@@ -91,22 +91,23 @@ class EmailCampaignType extends AbstractType
                 ['label' => 'orocrm.campaign.emailcampaign.marketing_list.label', 'required' => true]
             )
             ->add(
-                'template',
-                'oro_email_template_list',
-                [
-                    'label'                   => 'orocrm.campaign.emailcampaign.template.label',
-                    'depends_on_parent_field' => 'marketingList'
-                ]
-            )
-            ->add(
                 'transport',
                 'orocrm_campaign_email_transport_select',
                 [
                     'label'    => 'orocrm.campaign.emailcampaign.transport.label',
-                    'required' => true
+                    'required' => true,
+                    'mapped' => false
                 ]
             )
-            ->add('entityName', 'hidden', ['required' => false, 'mapped' => false])
+//            ->add(
+//                // @todo must be moved somewhere to InternalTransportSettings
+//                'entityName',
+//                'hidden',
+//                [
+//                    'required' => false,
+//                    'mapped' => false
+//                ]
+//            )
             ->add(
                 'description',
                 'textarea',
@@ -122,7 +123,12 @@ class EmailCampaignType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(['data_class' => 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign']);
+        $resolver->setDefaults(
+            [
+                'data_class' => 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign',
+                'cascade_validation' => true
+            ]
+        );
     }
 
     /**
