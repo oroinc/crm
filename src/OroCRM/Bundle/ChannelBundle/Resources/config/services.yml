@@ -10,10 +10,11 @@ parameters:
     orocrm_channel.channel_integration_form.handler.class:             OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler
 
     # forms
-    orocrm_channel.form.type.channel.class:                            OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
-    orocrm_channel.form.type.entity.class:                             OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType
-    orocrm_channel.form.type.channel_datasource.class:                 OroCRM\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType
-    orocrm_channel.form.type.channel_select.class:                     OroCRM\Bundle\ChannelBundle\Form\Type\ChannelSelectType
+    orocrm_channel.form.type.channel.class:                               OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
+    orocrm_channel.form.type.entity.class:                                OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType
+    orocrm_channel.form.type.channel_datasource.class:                    OroCRM\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType
+    orocrm_channel.form.type.channel_select.class:                        OroCRM\Bundle\ChannelBundle\Form\Type\ChannelSelectType
+    orocrm_channel.form.type.create_or_select_inline_channel_aware.class: OroCRM\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAware
 
     # manager
     orocrm_channel.manager.api.class:                                  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
@@ -74,16 +75,21 @@ services:
         tags:
             - { name: form.type, alias: orocrm_channel_datasource_form }
 
+    orocrm_channel.form.type.channel_select:
+        class: %orocrm_channel.form.type.channel_select.class%
+        tags:
+            - { name: form.type, alias: orocrm_channel_select_type }
+
+    orocrm_channel.form.type.create_or_select_inline_channel_aware:
+        class: %orocrm_channel.form.type.create_or_select_inline_channel_aware.class%
+        tags:
+            - { name: form.type, alias: oro_entity_create_or_select_inline_channel_aware }
+
     orocrm_channel.form.channel:
         class:                        Symfony\Component\Form\Form
         factory_method:               createNamed
         factory_service:              form.factory
         arguments:                    ["orocrm_channel_form", "orocrm_channel_form", null]
-
-    orocrm_channel.form.type.channel_select:
-        class: %orocrm_channel.form.type.channel_select.class%
-        tags:
-            - { name: form.type, alias: orocrm_channel_select_type }
 
     # handlers
     orocrm_channel.channel_form.handler:

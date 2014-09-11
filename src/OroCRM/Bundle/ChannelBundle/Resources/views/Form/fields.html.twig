@@ -34,3 +34,56 @@
         {{ form_widget(form) }}
     {% endif %}
 {% endblock %}
+
+{% block oro_entity_create_or_select_inline_js_channel_aware %}
+    <script type="text/javascript">
+        require(['jquery', 'oroform/js/select-create-inline-type-handler'],
+        function ($, handler) {
+            $(function() {
+                {% set gridParameters = form.vars.grid_parameters|merge({
+                    'channelId': channel_id
+                }) %}
+
+                {% set urlParts = {
+                    grid: {
+                        route: 'oro_datagrid_widget',
+                        parameters: {
+                            gridName     : form.vars.grid_name,
+                            params       : gridParameters,
+                            renderParams : form.vars.grid_render_parameters
+                        }
+                    }
+                } %}
+
+                {% if form.vars.create_enabled|default(false) is sameas(true) %}
+                {% set urlParts = urlParts|merge({
+                    create: {
+                        route:      form.vars.create_form_route,
+                        parameters: form.vars.create_form_route_parameters
+                    }
+                }) %}
+                {% endif %}
+
+                var configurator = handler(
+                    $('#{{ id }}-el'),
+                    $('#{{ id }}'),
+                    {{ label|trans|json_encode|raw }},
+                    {{ urlParts|json_encode|raw }},
+                    {{ form.vars.existing_entity_grid_id|default('id')|json_encode|raw }},
+                    {{ form.vars.create_enabled|default(false)|json_encode|raw }}
+                ),
+                changeHandler = function($el) {
+                    var parts = configurator.getUrlParts();
+                    parts.grid.parameters.params.channelId = $el.val();
+                    parts.create.parameters.channelId      = $el.val();
+                },
+                $channelSelector = $({{ ('#' ~ channel_field_selector)|json_encode|raw }});
+
+                $channelSelector.change(function() {
+                    changeHandler($(this));
+                });
+                changeHandler($channelSelector);
+            });
+        });
+    </script>
+{% endblock %}
