@@ -27,6 +27,12 @@ parameters:
     orocrm_channel.provider.entity_metadata.class:                     OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider
     orocrm_channel.provider.utils.entity_state_provider.class:         OroCRM\Bundle\ChannelBundle\Provider\Utility\EntityStateProvider
 
+    # datagrid
+    orocrm_channel.datagrid.extension.orm_channel_limitation.class:    OroCRM\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtension
+
+    # autocomplete
+    orocrm_channel.autocomplete.channel_limitation_handler.class:      OroCRM\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler
+
     # config resolver
     orocrm_channel.config_resolver.class:                              Oro\Component\Config\Resolver\SystemAwareResolver
 
@@ -137,6 +143,20 @@ services:
             - @oro_entity.entity_provider
             - @oro_entity_config.config_manager
             - @router
+
+    # datagrid
+    orocrm_channel.datagrid.extension.orm_channel_limitation:
+        class: %orocrm_channel.datagrid.extension.orm_channel_limitation.class%
+        tags:
+            - { name: oro_datagrid.extension }
+
+    # autocomplete
+    orocrm_channel.autocomplete.channel_limitation_handler:
+        class: %orocrm_channel.autocomplete.channel_limitation_handler.class%
+        calls:
+            - [initDoctrinePropertiesByManagerRegistry, ["@doctrine"]]
+            - [initSearchIndexer, ["@oro_search.index", %oro_search.entities_config%]]
+            - [setAclHelper,["@oro_security.acl_helper"]]
 
     # config resolver
     orocrm_channel.provider.channel_entity_exclusion_provider:

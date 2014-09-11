@@ -4,12 +4,6 @@ namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
-
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -17,16 +11,18 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Routing\Router;
 
+use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
+
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+
 class B2bCustomerType extends AbstractType
 {
-    /**
-     * @var Router
-     */
+    /** @var Router */
     protected $router;
 
-    /**
-     * @var NameFormatter
-     */
+    /** @var NameFormatter */
     protected $nameFormatter;
 
     /**
@@ -101,7 +97,7 @@ class B2bCustomerType extends AbstractType
             [
                 'add_acl_resource'      => 'orocrm_sales_lead_view',
                 'class'                 => 'OroCRMSalesBundle:Lead',
-                'default_element'       => 'default_contact',
+                'default_element'       => 'default_lead',
                 'required'              => false,
                 'selector_window_title' => 'orocrm.sales.b2bcustomer.leads.select',
             ]
@@ -112,7 +108,7 @@ class B2bCustomerType extends AbstractType
             [
                 'add_acl_resource'      => 'orocrm_sales_opportunity_view',
                 'class'                 => 'OroCRMSalesBundle:Opportunity',
-                'default_element'       => 'default_contact',
+                'default_element'       => 'default_opportunity',
                 'required'              => false,
                 'selector_window_title' => 'orocrm.sales.b2bcustomer.opportunities.select',
             ]

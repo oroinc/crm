@@ -35,6 +35,32 @@
     {% endif %}
 {% endblock %}
 
+{% block oro_combobox_dataconfig_channel_aware %}
+    (function() {
+        var $channelSelector = $({{ ('#' ~ channel_field_selector)|json_encode|raw }}),
+            getQueryString = function (searchString) {
+                return [searchString, $channelSelector.val()].join(';');
+            }
+
+        select2Config.ajax = {
+            'url': {{ url|json_encode|raw }},
+            'data': function (query, page) {
+                return {
+                    'page': page,
+                    'per_page': {{ configs.per_page|default(10) }},
+                    'name': "{{ configs.autocomplete_alias }}",
+                    'query': getQueryString(query)
+                };
+            },
+            'results': function (data, page) {
+                return data;
+            }
+        };
+    })();
+
+    {{ block('oro_combobox_dataconfig_onselect') }}
+{% endblock %}
+
 {% block oro_entity_create_or_select_inline_js_channel_aware %}
     <script type="text/javascript">
         require(['jquery', 'oroform/js/select-create-inline-type-handler'],

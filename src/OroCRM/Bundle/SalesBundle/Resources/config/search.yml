@@ -149,3 +149,11 @@ OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
                     name: name
                     target_type: text
                     target_fields: [name]
+        -
+            name:                   dataChannel
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name:          id
+                    target_type:   integer
+                    target_fields: [dataChannelId]
