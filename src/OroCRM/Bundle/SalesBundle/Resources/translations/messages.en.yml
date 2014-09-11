@@ -3,6 +3,13 @@ oro:
         my_sales_flow:
             b2b: B2B
             b2c: B2C
+    entityextend:
+        enums:
+            lead_source:
+                entity_label:         Lead Source
+                entity_plural_label:  Lead Sources
+                entity_description:   Represents a list of all lead sources
+
 orocrm:
     query_designer:
         aggregates:
@@ -141,12 +148,18 @@ orocrm:
             address.label:        Address
             details.label:        Lead Details
             extend_source.label:  Source
+            source.label:         Source
             notes.label:          Additional comments
             opportunities.label:  Opportunities
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             information:          Lead Information
             campaign.label:       Campaign
+
+            source:
+                unclassified:     Unclassified
+                others:           Others
+                none:             None
 
             extend_source:
                 unclassified:     Unclassified

@@ -32,7 +32,7 @@ class OroCRMAccountBundle implements Migration
             'text',
             [
                 'oro_options' => [
-                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'extend'    => ['owner' => ExtendScope::OWNER_CUSTOM],
                     'datagrid'  => ['is_visible' => false],
                     'merge'     => ['display' => true],
                     'dataaudit' => ['auditable' => true]
@@ -44,7 +44,7 @@ class OroCRMAccountBundle implements Migration
             'string',
             [
                 'oro_options' => [
-                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'extend'    => ['owner' => ExtendScope::OWNER_CUSTOM],
                     'datagrid'  => ['is_visible' => false],
                     'merge'     => ['display' => true],
                     'dataaudit' => ['auditable' => true]
@@ -56,7 +56,7 @@ class OroCRMAccountBundle implements Migration
             'integer',
             [
                 'oro_options' => [
-                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'extend'    => ['owner' => ExtendScope::OWNER_CUSTOM],
                     'datagrid'  => ['is_visible' => false],
                     'merge'     => ['display' => true],
                     'dataaudit' => ['auditable' => true]
@@ -68,7 +68,7 @@ class OroCRMAccountBundle implements Migration
             'string',
             [
                 'oro_options' => [
-                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'extend'    => ['owner' => ExtendScope::OWNER_CUSTOM],
                     'datagrid'  => ['is_visible' => false],
                     'merge'     => ['display' => true],
                     'dataaudit' => ['auditable' => true]
@@ -80,7 +80,7 @@ class OroCRMAccountBundle implements Migration
             'string',
             [
                 'oro_options' => [
-                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'extend'    => ['owner' => ExtendScope::OWNER_CUSTOM],
                     'datagrid'  => ['is_visible' => false],
                     'merge'     => ['display' => true],
                     'dataaudit' => ['auditable' => true]
@@ -92,7 +92,7 @@ class OroCRMAccountBundle implements Migration
             'string',
             [
                 'oro_options' => [
-                    'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
+                    'extend'    => ['owner' => ExtendScope::OWNER_CUSTOM],
                     'datagrid'  => ['is_visible' => false],
                     'merge'     => ['display' => true],
                     'dataaudit' => ['auditable' => true]
