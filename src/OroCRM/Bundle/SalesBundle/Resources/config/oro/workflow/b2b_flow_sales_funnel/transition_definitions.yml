@@ -177,6 +177,7 @@ workflows:
                             name: $new_opportunity_name
                             contact: $lead.contact
                             customer: $new_b2bcustomer
+                            dataChannel: $lead.dataChannel
                             lead: $lead
                             notes: $new_notes
                     - @find_entity: # set status "In progress" to opportunity
