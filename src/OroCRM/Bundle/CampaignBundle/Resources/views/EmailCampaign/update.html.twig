@@ -91,26 +91,6 @@
     <div data-page-component-module="orocrmcampaign/js/app/components/schedule-handler"
          data-page-component-options="{{ scheduleOptions|json_encode }}"></div>
 
-    <script type="text/javascript">
-        require(
-            ['jquery', 'oroemail/js/email/template/view', 'oroemail/js/email/template/collection'],
-            function($, View, Collection) {
-                $(function () {
-                    'use strict';
-                    new View({
-                        el: $('[name="orocrm_email_campaign[marketingList]"]'),
-                        target: $('#orocrm_email_campaign_transportSettings_template'),
-                        collection: new Collection('orocrm_api_get_emailcampaign_email_templates', 'id')
-                    });
-                });
-            })
-    </script>
-    <script type="text/template" id="emailtemplate-chooser-template">
-        <% _.each(entities, function(entity, i) { %>
-        <option value="<%= entity.get('id') %>"><%= entity.get('name') %></option>
-        <% }); %>
-    </script>
-
     {% set data =
         {
             'formErrors': form_errors(form)? form_errors(form) : null,

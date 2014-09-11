@@ -2,12 +2,13 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Form\EventListener;
 
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
-use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
-use OroCRM\Bundle\CampaignBundle\Transport\TransportInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+
+use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
+use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
+use OroCRM\Bundle\CampaignBundle\Transport\TransportInterface;
 
 class TransportSettingsListener implements EventSubscriberInterface
 {
@@ -30,12 +31,13 @@ class TransportSettingsListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FormEvents::PRE_SET_DATA  => 'preSet'
+            FormEvents::PRE_SET_DATA  => 'preSet',
+            FormEvents::PRE_SUBMIT => 'preSubmit'
         ];
     }
 
     /**
-     * Modifies form based on data that comes from DB
+     * Add Transport Settings form if any
      *
      * @param FormEvent $event
      */
@@ -57,6 +59,22 @@ class TransportSettingsListener implements EventSubscriberInterface
             }
 
             $data->setTransport($selectedTransport->getName());
+        }
+    }
+
+    /**
+     * Pass top level data to transportSettings.
+     *
+     * @param FormEvent $event
+     */
+    public function preSubmit(FormEvent $event)
+    {
+        if ($event->getForm()->has('transportSettings')) {
+            $data = $event->getData();
+            $parentData = $event->getData();
+            unset($parentData['transportSettings']);
+            $data['transportSettings']['parentData'] = $parentData;
+            $event->setData($data);
         }
     }
 
