@@ -14,7 +14,8 @@ parameters:
     orocrm_channel.form.type.entity.class:                                OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType
     orocrm_channel.form.type.channel_datasource.class:                    OroCRM\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType
     orocrm_channel.form.type.channel_select.class:                        OroCRM\Bundle\ChannelBundle\Form\Type\ChannelSelectType
-    orocrm_channel.form.type.create_or_select_inline_channel_aware.class: OroCRM\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAware
+    orocrm_channel.form.type.create_or_select_inline_channel_aware.class: OroCRM\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType
+    orocrm_channel.form.type.multiple_entity_channel_aware.class:         OroCRM\Bundle\ChannelBundle\Form\Type\MultipleEntityChannelAwareType
 
     # manager
     orocrm_channel.manager.api.class:                                  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
@@ -90,6 +91,11 @@ services:
         class: %orocrm_channel.form.type.create_or_select_inline_channel_aware.class%
         tags:
             - { name: form.type, alias: oro_entity_create_or_select_inline_channel_aware }
+
+    orocrm_channel.form.type.multiple_entity_channel_aware:
+        class: %orocrm_channel.form.type.multiple_entity_channel_aware.class%
+        tags:
+            - { name: form.type, alias: oro_multiple_entity_channel_aware }
 
     orocrm_channel.form.channel:
         class:                        Symfony\Component\Form\Form

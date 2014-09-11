@@ -93,7 +93,7 @@ class B2bCustomerType extends AbstractType
         );
         $builder->add(
             'leads',
-            'oro_multiple_entity',
+            'oro_multiple_entity_channel_aware',
             [
                 'add_acl_resource'      => 'orocrm_sales_lead_view',
                 'class'                 => 'OroCRMSalesBundle:Lead',
@@ -104,7 +104,7 @@ class B2bCustomerType extends AbstractType
         );
         $builder->add(
             'opportunities',
-            'oro_multiple_entity',
+            'oro_multiple_entity_channel_aware',
             [
                 'add_acl_resource'      => 'orocrm_sales_opportunity_view',
                 'class'                 => 'OroCRMSalesBundle:Opportunity',
@@ -148,20 +148,20 @@ class B2bCustomerType extends AbstractType
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        /** @var B2bCustomer $b2bcustomer */
-        $b2bcustomer                                       = $form->getData();
-        $view->children['leads']->vars['grid_url']         = $this->router->generate(
-            'orocrm_sales_widget_leads_assign',
-            ['id' => $b2bcustomer->getId()]
-        );
-        $view->children['leads']->vars['initial_elements'] = $this->getInitialElements($b2bcustomer->getLeads());
+        /** @var B2bCustomer $b2bCustomer */
+        $b2bCustomer = $form->getData();
+        $parameters  = $b2bCustomer->getId() ? ['id' => $b2bCustomer->getId()] : [];
 
-        $view->children['opportunities']->vars['grid_url']         = $this->router->generate(
-            'orocrm_sales_widget_opportunities_assign',
-            ['id' => $b2bcustomer->getId()]
+        $view->children['leads']->vars['selection_route']        = 'orocrm_sales_widget_leads_assign';
+        $view->children['leads']->vars['selection_route_params'] = $parameters;
+        $view->children['leads']->vars['initial_elements']       = $this->getInitialElements(
+            $b2bCustomer->getLeads()
         );
-        $view->children['opportunities']->vars['initial_elements'] = $this->getInitialOpportunities(
-            $b2bcustomer->getOpportunities()
+
+        $view->children['opportunities']->vars['selection_route']        = 'orocrm_sales_widget_opportunities_assign';
+        $view->children['opportunities']->vars['selection_route_params'] = $parameters;
+        $view->children['opportunities']->vars['initial_elements']       = $this->getInitialOpportunities(
+            $b2bCustomer->getOpportunities()
         );
     }
 

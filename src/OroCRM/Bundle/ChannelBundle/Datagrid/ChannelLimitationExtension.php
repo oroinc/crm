@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Datagrid;
 
-use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
 
@@ -23,7 +22,7 @@ class ChannelLimitationExtension extends AbstractExtension
     public function isApplicable(DatagridConfiguration $config)
     {
         return $config->offsetGetByPath(Builder::DATASOURCE_TYPE_PATH) == OrmDatasource::TYPE
-            && $this->getParameters()->get('channelId', false);
+            && $this->getParameters()->get('channelIds', false);
     }
 
     /**
@@ -53,9 +52,10 @@ class ChannelLimitationExtension extends AbstractExtension
 
         $mainEntity   = $this->ensureJoined($queryBuilder, $mainEntity);
         $relationName = $this->ensureJoined($queryBuilder, $relationName, $mainEntity);
+        $channelIds   = explode(',', $this->getParameters()->get('channelIds'));
 
-        $queryBuilder->andWhere($relationName . '.id = :channelId');
-        $queryBuilder->setParameter('channelId', $this->getParameters()->get('channelId'), Type::INTEGER);
+        $queryBuilder->andWhere($relationName . '.id in (:channelIds)');
+        $queryBuilder->setParameter('channelIds', $channelIds);
     }
 
     /**
