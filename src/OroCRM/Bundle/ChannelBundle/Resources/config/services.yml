@@ -35,7 +35,6 @@ parameters:
     orocrm_channel.event_listener.channel_change_status.class:         OroCRM\Bundle\ChannelBundle\EventListener\ChangeChannelStatusListener
     orocrm_channel.event_listener.channel_save_succeed.class:          OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener
     orocrm_channel.event_listener.embedded_form_add_fields.class:      OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
-    orocrm_channel.event_listener.contact_us_request_create.class:     OroCRM\Bundle\ChannelBundle\EventListener\ContactUsRequestCreateListener
 
     #twig
     orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
@@ -208,10 +207,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: entity_form.render.before, method: addDataChannelField }
 
-    orocrm_channel.event_listener.contact_us_request_create:
-        class: %orocrm_channel.event_listener.contact_us_request_create.class%
+    orocrm_channel.event_listener.embedded_form_submit_before:
+        class: %orocrm_channel.event_listener.embedded_form_add_fields.class%
         tags:
-            - { name: kernel.event_listener, event: orocrm_channel.contact_request.create, method: onEmbededFormSubmit }
+            - { name: kernel.event_listener, event: oro_embedded_form.form_submit.before, method: onEmbededFormSubmit }
 
     #twig
     orocrm_channel.twig.metadata_extension:
