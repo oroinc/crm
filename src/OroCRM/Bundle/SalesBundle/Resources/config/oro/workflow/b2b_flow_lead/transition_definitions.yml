@@ -132,10 +132,11 @@ workflows:
                                     class: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
                                     attribute: $b2bcustomer
                                     data:
-                                        name:            $company_name
-                                        account:         $account
-                                        website:   $lead.website
-                                        employees: $lead.numberOfEmployees
+                                        name:        $company_name
+                                        dataChannel: $lead.dataChannel
+                                        account:     $account
+                                        website:     $lead.website
+                                        employees:   $lead.numberOfEmployees
                     - @call_method: # connect customer with Contact
                         conditions:
                             @empty: $b2bcustomer.contact
