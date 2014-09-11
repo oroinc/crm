@@ -20,3 +20,5 @@ workflows:
             notes:
                 label: orocrm.sales.lead.notes.label
                 type: string
+            dataChannel:
+                property_path: lead.dataChannel

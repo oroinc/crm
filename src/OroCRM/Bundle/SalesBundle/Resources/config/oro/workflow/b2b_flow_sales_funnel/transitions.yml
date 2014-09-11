@@ -86,6 +86,16 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
+                        dataChannel:
+                            form_type: orocrm_channel_select_type
+                            options:
+                                required: true
+                                label: orocrm.sales.lead.data_channel.label
+                                entities:
+                                    - OroCRM\Bundle\SalesBundle\Entity\Lead
+                                    - OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
+                                constraints:
+                                    - NotBlank: ~
                         opportunity:
                             form_type: orocrm_sales_opportunity_select
                             options:
