@@ -54,13 +54,13 @@ class OroCRMCampaignBundle implements Migration
     }
 
     /**
-     * Create orocrm_email_campaign_statistics table
+     * Create orocrm_email_campaign_stats table
      *
      * @param Schema $schema
      */
     protected function createOrocrmEmailCampaignStatisticsTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_email_campaign_statistics');
+        $table = $schema->createTable('orocrm_email_campaign_stats');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('email_campaign_id', 'integer', []);
         $table->addColumn('marketing_list_item_id', 'integer', []);
@@ -105,13 +105,13 @@ class OroCRMCampaignBundle implements Migration
     }
 
     /**
-     * Add orocrm_email_campaign_statistics foreign keys.
+     * Add orocrm_email_campaign_stats foreign keys.
      *
      * @param Schema $schema
      */
     protected function addOrocrmEmailCampaignStatisticsForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_email_campaign_statistics');
+        $table = $schema->getTable('orocrm_email_campaign_stats');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_campaign_email'),
             ['email_campaign_id'],

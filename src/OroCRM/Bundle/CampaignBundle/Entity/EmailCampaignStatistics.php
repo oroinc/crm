@@ -9,7 +9,7 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
 /**
  * Email Campaign Statistics.
  *
- * @ORM\Table(name="orocrm_email_campaign_statistics")
+ * @ORM\Table(name="orocrm_email_campaign_stats")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
