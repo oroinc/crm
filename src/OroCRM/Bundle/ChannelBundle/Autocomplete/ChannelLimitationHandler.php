@@ -29,7 +29,7 @@ class ChannelLimitationHandler extends SearchHandler
         }
 
         if ($searchString) {
-            $queryObj->andWhere('name', '~', $searchString, 'string');
+            $queryObj->andWhere('name', '~', $searchString);
         }
 
         $ids      = [];
