@@ -191,6 +191,11 @@ datagrid:
                 link:         remove_link
                 icon:         remove
                 acl_recource: orocrm_marketing_list_removed_item_create
+                defaultMessages:
+                    confirm_title:   orocrm.marketinglist.remove_dialog.confirm_title
+                    confirm_ok:      orocrm.marketinglist.remove_dialog.confirm_ok
+                    confirm_content: orocrm.marketinglist.remove_dialog.content
+                    success:         orocrm.marketinglist.remove_dialog.success
 
         action_configuration: [@orocrm_marketing_list.datagrid.action_permission_provider, "getMarketingListItemPermissions"]
 
@@ -248,6 +253,11 @@ datagrid:
                 link:         unremove_link
                 icon:         undo
                 acl_recource: orocrm_marketing_list_removed_item_delete
+                defaultMessages:
+                    confirm_title:   orocrm.marketinglist.unremove_dialog.confirm_title
+                    confirm_ok:      orocrm.marketinglist.unremove_dialog.confirm_ok
+                    confirm_content: orocrm.marketinglist.unremove_dialog.content
+                    success:         orocrm.marketinglist.unremove_dialog.success
 
         action_configuration: [@orocrm_marketing_list.datagrid.action_permission_provider, "getMarketingListItemPermissions"]
 

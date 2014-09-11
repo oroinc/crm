@@ -18,7 +18,7 @@ use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_5\OroCRMSalesBundle as SalesNoteMigration;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_6\OroCRMSalesBundle as SalesActivityMigration;
-use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_9\OroCRMSalesBundle as SalesOrganizations;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_10\OroCRMSalesBundle as SalesOrganizations;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
 
 /**
@@ -269,22 +269,23 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('createdat', 'datetime', []);
         $table->addColumn('updatedat', 'datetime', ['notnull' => false]);
         $table->addColumn('notes', 'text', ['notnull' => false]);
-        $this->extendExtension->addOptionSet(
+
+        $this->extendExtension->addEnumField(
             $schema,
-            $table,
-            'extend_source',
-            [
-                'extend' => ['is_extend' => true, 'set_expanded' => false]
-            ]
+            'orocrm_sales_lead',
+            'source',
+            'lead_source'
         );
+
         $this->extendExtension->addManyToOneRelation(
             $schema,
             $table,
             'campaign',
             'orocrm_campaign',
             'combined_name',
-            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
+            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
         );
+
         $table->addIndex(['status_name'], 'idx_73db46336625d392', []);
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);
         $table->addIndex(['account_id'], 'idx_73db46339b6b5fba', []);
