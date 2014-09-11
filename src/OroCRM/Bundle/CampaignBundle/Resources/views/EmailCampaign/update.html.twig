@@ -46,6 +46,11 @@
         {% set transportFormData = transportFormData|merge([form_widget(form.transportSettings)]) %}
     {% endif %}
 
+    {% set hideScheduleFor = '' %}
+    {% if form.vars.value.schedule != constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_DEFERRED') %}
+        {% set hideScheduleFor = 'hide' %}
+    {% endif %}
+
     {% set dataBlocks = [{
             'title': 'General'|trans,
             'class': 'active',
@@ -56,9 +61,9 @@
                         form_row(form.name),
                         form_row(form.marketingList),
                         form_row(form.schedule),
+                        form_row(form.scheduledFor, {'attr': {'class': hideScheduleFor ~ ' scheduledFor'}}),
                         form_row(form.senderEmail),
                         form_row(form.senderName),
-                        form_row(form.scheduledFor, {'attr': {'class': 'hide scheduledFor'}}),
                         form_row(form.campaign),
                         form_row(form.description),
                     ]
@@ -94,7 +99,7 @@
                     'use strict';
                     new View({
                         el: $('[name="orocrm_email_campaign[marketingList]"]'),
-                        target: $('#orocrm_email_campaign_template'),
+                        target: $('#orocrm_email_campaign_transportSettings_template'),
                         collection: new Collection('orocrm_api_get_emailcampaign_email_templates', 'id')
                     });
                 });
