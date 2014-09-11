@@ -106,7 +106,8 @@ class EmailCampaignController extends Controller
                     'parameters' => array('id' => $entity->getId())
                 );
             },
-            $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.saved.message')
+            $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.saved.message'),
+            $this->get('orocrm_campaign.form.handler.email_campaign')
         );
     }
 

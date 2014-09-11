@@ -81,21 +81,22 @@
         }]
     %}
 
-    {% set scheduleOptions = {
-        target: '#orocrm_email_campaign_schedule',
-        element: '.scheduledFor',
-        hideOn: [constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_MANUAL')],
-        showOn: [constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_DEFERRED')]
-    } %}
-
-    <div data-page-component-module="orocrmcampaign/js/app/components/schedule-handler"
-         data-page-component-options="{{ scheduleOptions|json_encode }}"></div>
-
     {% set data =
         {
             'formErrors': form_errors(form)? form_errors(form) : null,
             'dataBlocks': dataBlocks
         }
     %}
-    {{ parent() }}
+
+    {% set componentOptions = {
+        scheduleEl: '#' ~ form.schedule.vars.id,
+        scheduledForEl: '.scheduledFor',
+        transportEl: '#' ~ form.transport.vars.id,
+        hideOn: [constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_MANUAL')],
+        showOn: [constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_DEFERRED')]
+    } %}
+    <div data-page-component-module="orocrmcampaign/js/app/components/email-campaign-form"
+         data-page-component-options="{{ componentOptions|json_encode }}">
+        {{ parent() }}
+    </div>
 {% endblock content_data %}

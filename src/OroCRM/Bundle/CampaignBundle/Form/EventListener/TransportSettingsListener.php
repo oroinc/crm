@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormEvents;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
 use OroCRM\Bundle\CampaignBundle\Transport\TransportInterface;
+use Symfony\Component\Form\FormInterface;
 
 class TransportSettingsListener implements EventSubscriberInterface
 {
@@ -49,17 +50,7 @@ class TransportSettingsListener implements EventSubscriberInterface
             return;
         }
 
-        $selectedTransport = $this->getSelectedTransport($data);
-        if ($selectedTransport) {
-            $transportSettingsFormType = $selectedTransport->getSettingsFormType();
-
-            if ($transportSettingsFormType) {
-                $form = $event->getForm();
-                $form->add('transportSettings', $transportSettingsFormType, ['required' => true]);
-            }
-
-            $data->setTransport($selectedTransport->getName());
-        }
+        $this->addTransportSettingsForm($data->getTransport(), $event->getForm());
     }
 
     /**
@@ -69,22 +60,42 @@ class TransportSettingsListener implements EventSubscriberInterface
      */
     public function preSubmit(FormEvent $event)
     {
+        $data = $event->getData();
+
+        $transportName = isset($data['transport']) ? $data['transport'] : '';
+        $this->addTransportSettingsForm($transportName, $event->getForm());
+
         if ($event->getForm()->has('transportSettings')) {
-            $data = $event->getData();
             $parentData = $event->getData();
             unset($parentData['transportSettings']);
             $data['transportSettings']['parentData'] = $parentData;
-            $event->setData($data);
+        }
+
+        $event->setData($data);
+    }
+
+    /**
+     * @param string $selectedTransportName
+     * @param FormInterface $form
+     */
+    protected function addTransportSettingsForm($selectedTransportName, FormInterface $form)
+    {
+        $selectedTransport = $this->getSelectedTransport($selectedTransportName);
+        if ($selectedTransport) {
+            $transportSettingsFormType = $selectedTransport->getSettingsFormType();
+
+            if ($transportSettingsFormType) {
+                $form->add('transportSettings', $transportSettingsFormType, ['required' => true]);
+            }
         }
     }
 
     /**
-     * @param EmailCampaign $data
+     * @param string $selectedTransportName
      * @return TransportInterface
      */
-    protected function getSelectedTransport(EmailCampaign $data)
+    protected function getSelectedTransport($selectedTransportName)
     {
-        $selectedTransportName = $data->getTransport();
         if ($selectedTransportName) {
             $selectedTransport = $this->emailTransportProvider->getTransportByName($selectedTransportName);
         } else {

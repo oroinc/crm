@@ -17,6 +17,7 @@ parameters:
     orocrm_campaign.form.type.internal_transport_settings.class: OroCRM\Bundle\CampaignBundle\Form\Type\InternalTransportSettingsType
     orocrm_campaign.form.subscriber.transport_settings.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsListener
     orocrm_campaign.form.subscriber.transport_settings_email_template.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsEmailTemplateListener
+    orocrm_campaign.form.handler.email_campaign.class: OroCRM\Bundle\CampaignBundle\Form\Handler\EmailCampaignHandler
 services:
     orocrm_campaign.campaign.form.type:
         class: %orocrm_campaign.campaign.form.type.class%
@@ -153,3 +154,22 @@ services:
         class: %orocrm_campaign.form.subscriber.transport_settings_email_template.class%
         arguments:
             - @doctrine
+
+    orocrm_campaign.form.handler.email_campaign:
+        class: %orocrm_campaign.form.handler.email_campaign.class%
+        scope: request
+        arguments:
+            - @request
+            - @orocrm_campaign.email_campaign.form
+            - @doctrine
+
+    #TODO: Remove all Dummy entities and services
+    orocrm_campaign.transport.dummy:
+        class: OroCRM\Bundle\CampaignBundle\Transport\DummyTransport
+        tags:
+            - { name: "orocrm_campaign.email_transport" }
+
+    orocrm_campaign.form.type.dummy_transport_settings:
+        class: OroCRM\Bundle\CampaignBundle\Form\Type\DummyTransportSettingsType
+        tags:
+            - { name: form.type, alias: "orocrm_campaign_dummy_transport_settings" }
