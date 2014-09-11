@@ -80,7 +80,7 @@ class OroCRMSalesBundle implements Migration, ExtendExtensionAwareInterface
             $table,
             'extend_source',
             [
-                'extend' => ['is_extend' => true, 'set_expanded' => false]
+                'extend' => ['set_expanded' => false]
             ]
         );
         $table->setPrimaryKey(['id']);

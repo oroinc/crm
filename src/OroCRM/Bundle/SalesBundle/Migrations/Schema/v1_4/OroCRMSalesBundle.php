@@ -37,7 +37,7 @@ class OroCRMSalesBundle implements Migration, ExtendExtensionAwareInterface
             'campaign',
             'orocrm_campaign',
             'combined_name',
-            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
+            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
         );
     }
 }

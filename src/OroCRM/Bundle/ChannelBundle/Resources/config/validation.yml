@@ -21,3 +21,5 @@ OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity:
             - NotBlank: ~
         channel:
             - NotBlank: ~
+        dataChannel:
+            - NotBlank: ~

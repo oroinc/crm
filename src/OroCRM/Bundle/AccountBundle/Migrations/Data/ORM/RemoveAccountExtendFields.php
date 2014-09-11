@@ -55,7 +55,7 @@ class RemoveAccountExtendFields extends AbstractFixture implements ContainerAwar
             }
 
             $extendFieldConfig = $configManager->getProvider('extend')->getConfig($this->entity, $fieldName);
-            $extendFieldConfig->set('state', ExtendScope::STATE_DELETED);
+            $extendFieldConfig->set('state', ExtendScope::STATE_DELETE);
             $configManager->persist($extendFieldConfig);
 
             $formFieldConfig = $configManager->getProvider('form')->getConfig($this->entity, $fieldName);

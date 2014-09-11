@@ -25,7 +25,7 @@ class ContactRequestsGridTest extends AbstractDatagridTestCase
     public function gridProvider()
     {
         return [
-            'B2B Customer grid'                => [
+            'Contact Request grid'                => [
                 [
                     'gridParameters'      => [
                         'gridName' => 'orcrm-contact-requests-grid'
@@ -41,7 +41,7 @@ class ContactRequestsGridTest extends AbstractDatagridTestCase
                     'expectedResultCount' => 1
                 ],
             ],
-            'B2B Customer grid with filters'   => [
+            'Contact Request grid with filters'   => [
                 [
                     'gridParameters'      => [
                         'gridName' => 'orcrm-contact-requests-grid'
@@ -61,7 +61,7 @@ class ContactRequestsGridTest extends AbstractDatagridTestCase
                     'expectedResultCount' => 1
                 ],
             ],
-            'B2B Customer grid without result' => [
+            'Contact Request grid without result' => [
                 [
                     'gridParameters'      => [
                         'gridName' => 'orcrm-contact-requests-grid'
