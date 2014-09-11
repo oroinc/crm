@@ -152,15 +152,15 @@ class B2bCustomerType extends AbstractType
         $b2bCustomer = $form->getData();
         $parameters  = $b2bCustomer->getId() ? ['id' => $b2bCustomer->getId()] : [];
 
-        $view->children['leads']->vars['selection_route']        = 'orocrm_sales_widget_leads_assign';
-        $view->children['leads']->vars['selection_route_params'] = $parameters;
-        $view->children['leads']->vars['initial_elements']       = $this->getInitialElements(
+        $view->children['leads']->vars['selection_route']            = 'orocrm_sales_widget_leads_assign';
+        $view->children['leads']->vars['selection_route_parameters'] = $parameters;
+        $view->children['leads']->vars['initial_elements']           = $this->getInitialElements(
             $b2bCustomer->getLeads()
         );
 
-        $view->children['opportunities']->vars['selection_route']        = 'orocrm_sales_widget_opportunities_assign';
-        $view->children['opportunities']->vars['selection_route_params'] = $parameters;
-        $view->children['opportunities']->vars['initial_elements']       = $this->getInitialOpportunities(
+        $view->children['opportunities']->vars['selection_route'] = 'orocrm_sales_widget_opportunities_assign';
+        $view->children['opportunities']->vars['selection_route_parameters'] = $parameters;
+        $view->children['opportunities']->vars['initial_elements']           = $this->getInitialOpportunities(
             $b2bCustomer->getOpportunities()
         );
     }

@@ -109,12 +109,12 @@ class B2bCustomerTypeTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertArrayHasKey('selection_route', $leadsView->vars);
-        $this->assertArrayHasKey('selection_route_params', $leadsView->vars);
+        $this->assertArrayHasKey('selection_route_parameters', $leadsView->vars);
         $this->assertArrayHasKey('initial_elements', $leadsView->vars);
         $this->assertInternalType('array', $leadsView->vars['initial_elements']);
 
         $this->assertArrayHasKey('selection_route', $opportunitiesView->vars);
-        $this->assertArrayHasKey('selection_route_params', $opportunitiesView->vars);
+        $this->assertArrayHasKey('selection_route_parameters', $opportunitiesView->vars);
         $this->assertArrayHasKey('initial_elements', $opportunitiesView->vars);
         $this->assertInternalType('array', $opportunitiesView->vars['initial_elements']);
     }
