@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Model\Data\Transformer;
+namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Model;
 
 use OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSenderFactory;
 

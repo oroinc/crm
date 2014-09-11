@@ -34,7 +34,8 @@ class EmailCampaignTest extends AbstractEntityTestCase
             'name'          => ['name', 'test', 'test'],
             'description'   => ['description', 'test', 'test'],
             'campaign'      => ['campaign', $campaign, $campaign],
-            'sent'          => ['sent', true, true],
+            'sent'          => ['sent', $date, $date],
+            'sentAt'        => ['sentAt', true, true],
             'schedule'      => ['schedule', EmailCampaign::SCHEDULE_DEFERRED, EmailCampaign::SCHEDULE_DEFERRED],
             'scheduledFor'  => ['scheduledFor', $date, $date],
             'marketingList' => ['marketingList', $marketingList, $marketingList],
@@ -42,7 +43,8 @@ class EmailCampaignTest extends AbstractEntityTestCase
             'template'      => ['template', $template, $template],
             'updatedAt'     => ['updatedAt', $date, $date],
             'createdAt'     => ['createdAt', $date, $date],
-            'fromEmail'     => ['fromEmail', 'test@test.com', 'test@test.com'],
+            'senderEmail'   => ['senderEmail', 'test@test.com', 'test@test.com'],
+            'senderName'    => ['senderName', 'name', 'name'],
             'transport'     => ['transport', 'transport', 'transport'],
         ];
     }

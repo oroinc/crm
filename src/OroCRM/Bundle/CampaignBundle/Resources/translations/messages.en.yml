@@ -62,7 +62,8 @@ orocrm:
             entity_plural_label: Email Campaigns
             id.label:            Id
             name.label:          Name
-            fromEmail.label:     From Email
+            senderEmail.label:   Sender Email
+            senderName.label:    Sender Name
             description.label:   Description
             transport.label:     Transport
             schedule:
@@ -93,7 +94,7 @@ orocrm:
                     update.label: Update
                     delete.label: Delete
             send: Send
-            config:
-                label: Campaign Configuration
-                campaign_from_email: From Email
-                mail: Mail Configuration
+            system_configuration:
+                campaign_sender_email: Sender Email
+                campaign_sender_name: Sender Name
+                title: Campaign Configuration

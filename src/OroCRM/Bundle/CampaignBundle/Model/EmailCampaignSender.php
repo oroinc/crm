@@ -94,7 +94,6 @@ class EmailCampaignSender
         $manager = $this->registry->getManager();
 
         foreach ($this->getIterator($campaign) as $entity) {
-            $from = $this->getFromEmail($campaign);
             $to = $this->contactInformationFieldsProvider->getQueryContactInformationFields(
                 $marketingList->getSegment(),
                 $entity,
@@ -104,7 +103,12 @@ class EmailCampaignSender
             try {
                 $manager->beginTransaction();
                 // Do actual send
-                $this->transport->send($campaign, $entity, $from, $to);
+                $this->transport->send(
+                    $campaign,
+                    $entity,
+                    [$this->getSenderEmail($campaign) => $this->getSenderName($campaign)],
+                    $to
+                );
 
                 // Mark marketing list item as contacted
                 $marketingListItem = $this->marketingListItemConnector->contact($marketingList, $entity->getId());
@@ -151,13 +155,27 @@ class EmailCampaignSender
      *
      * @return string
      */
-    protected function getFromEmail(EmailCampaign $campaign)
+    protected function getSenderEmail(EmailCampaign $campaign)
     {
-        if ($fromEmail = $campaign->getFromEmail()) {
-            return $fromEmail;
+        if ($senderEmail = $campaign->getSenderEmail()) {
+            return $senderEmail;
         }
 
-        return $this->configManager->get('oro_crm_campaign.campaign_from_email');
+        return $this->configManager->get('oro_crm_campaign.campaign_sender_email');
+    }
+
+    /**
+     * @param EmailCampaign $campaign
+     *
+     * @return string
+     */
+    protected function getSenderName(EmailCampaign $campaign)
+    {
+        if ($senderName = $campaign->getSenderName()) {
+            return $senderName;
+        }
+
+        return $this->configManager->get('oro_crm_campaign.campaign_sender_name');
     }
 
     /**

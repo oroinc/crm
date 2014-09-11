@@ -20,7 +20,8 @@ class Configuration implements ConfigurationInterface
         SettingsBuilder::append(
             $rootNode,
             [
-                'campaign_from_email' => ['value' => sprintf('no-reply@%s.example', gethostname())]
+                'campaign_sender_email' => ['value' => sprintf('no-reply@%s.example', gethostname())],
+                'campaign_sender_name'  => ['value' => 'Oro']
             ]
         );
 

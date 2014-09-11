@@ -70,6 +70,13 @@ class EmailCampaign
     protected $sent = false;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="sent_at", type="datetime", nullable=true)
+     */
+    protected $sentAt;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="schedule", type="string", length=255)
@@ -86,15 +93,22 @@ class EmailCampaign
     /**
      * @var string
      *
-     * @ORM\Column(name="from_email", type="string", length=255, nullable=true)
+     * @ORM\Column(name="sender_email", type="string", length=255, nullable=true)
      */
-    protected $fromEmail;
+    protected $senderEmail;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sender_name", type="string", length=255, nullable=true)
+     */
+    protected $senderName;
 
     /**
      * @var Campaign
      *
      * @ORM\ManyToOne(targetEntity="Campaign")
-     * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $campaign;
 
@@ -176,6 +190,18 @@ class EmailCampaign
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getEntityName()
+    {
+        if ($this->marketingList) {
+            return $this->marketingList->getEntity();
+        }
+
+        return null;
     }
 
     /**
@@ -378,6 +404,7 @@ class EmailCampaign
     public function setSent($sent)
     {
         $this->sent = $sent;
+        $this->sentAt = new \DateTime('now', new \DateTimeZone('UTC'));
 
         return $this;
     }
@@ -400,12 +427,14 @@ class EmailCampaign
      */
     public function setSchedule($schedule)
     {
-        if ($schedule != self::SCHEDULE_DEFERRED && $schedule != self::SCHEDULE_MANUAL) {
+        $types = [self::SCHEDULE_MANUAL, self::SCHEDULE_DEFERRED];
+
+        if (!in_array($schedule, $types)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'Schedule type %s is not know. Known types are %s',
                     $schedule,
-                    implode(', ', array(self::SCHEDULE_MANUAL, self::SCHEDULE_DEFERRED))
+                    implode(', ', $types)
                 )
             );
         }
@@ -444,41 +473,6 @@ class EmailCampaign
     }
 
     /**
-     * Set fromEmail
-     *
-     * @param string $fromEmail
-     * @return EmailCampaign
-     */
-    public function setFromEmail($fromEmail)
-    {
-        $this->fromEmail = $fromEmail;
-
-        return $this;
-    }
-
-    /**
-     * Get fromEmail
-     *
-     * @return string 
-     */
-    public function getFromEmail()
-    {
-        return $this->fromEmail;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getEntityName()
-    {
-        if ($this->marketingList) {
-            return $this->marketingList->getEntity();
-        }
-
-        return null;
-    }
-
-    /**
      * @return string
      */
     public function getTransport()
@@ -495,5 +489,74 @@ class EmailCampaign
         $this->transport = $transport;
 
         return $this;
+    }
+
+    /**
+     * Set senderEmail
+     *
+     * @param string $senderEmail
+     * @return EmailCampaign
+     */
+    public function setSenderEmail($senderEmail)
+    {
+        $this->senderEmail = $senderEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get senderEmail
+     *
+     * @return string 
+     */
+    public function getSenderEmail()
+    {
+        return $this->senderEmail;
+    }
+
+    /**
+     * Set senderName
+     *
+     * @param string $senderName
+     * @return EmailCampaign
+     */
+    public function setSenderName($senderName)
+    {
+        $this->senderName = $senderName;
+
+        return $this;
+    }
+
+    /**
+     * Get senderName
+     *
+     * @return string 
+     */
+    public function getSenderName()
+    {
+        return $this->senderName;
+    }
+
+    /**
+     * Set sentAt
+     *
+     * @param \DateTime $sentAt
+     * @return EmailCampaign
+     */
+    public function setSentAt($sentAt)
+    {
+        $this->sentAt = $sentAt;
+
+        return $this;
+    }
+
+    /**
+     * Get sentAt
+     *
+     * @return \DateTime 
+     */
+    public function getSentAt()
+    {
+        return $this->sentAt;
     }
 }

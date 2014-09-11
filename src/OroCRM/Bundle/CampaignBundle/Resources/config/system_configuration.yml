@@ -1,18 +1,19 @@
 oro_system_configuration:
     groups:
-        campaign_settings:
-            icon: icon-envelope #icon-send
-            title: orocrm.campaign.emailcampaign.config.label
-        mail_settings:
-            icon: icon-envelope
-            title: orocrm.campaign.emailcampaign.config.mail
+        email_campaign_settings:
+            title: orocrm.campaign.emailcampaign.system_configuration.title
 
     fields:
-        oro_crm_campaign.campaign_from_email:
+        oro_crm_campaign.campaign_sender_email:
             data_type: string
             type: text
             options:
-                label: orocrm.campaign.emailcampaign.config.campaign_from_email
+                label: orocrm.campaign.emailcampaign.system_configuration.campaign_sender_email
+        oro_crm_campaign.campaign_sender_name:
+            data_type: string
+            type: text
+            options:
+                label: orocrm.campaign.emailcampaign.system_configuration.campaign_sender_name
 
     tree:
         system_configuration:
@@ -20,12 +21,14 @@ oro_system_configuration:
                 children:
                     general_setup:
                         children:
-                            campaign_settings:
+                            email_configuration:
                                 priority: -10
                                 children:
-                                    mail_settings:
+                                    email_campaign_settings:
                                         children:
-                                            - oro_crm_campaign.campaign_from_email
+                                            - oro_crm_campaign.campaign_sender_email
+                                            - oro_crm_campaign.campaign_sender_name
     api_tree:
-        campaign_settings:
-            oro_crm_campaign.campaign_from_email: ~
+        email_configuration:
+            oro_crm_campaign.campaign_sender_email: ~
+            oro_crm_campaign.campaign_sender_name: ~

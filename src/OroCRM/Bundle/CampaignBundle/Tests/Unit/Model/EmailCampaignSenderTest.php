@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Model\Data\Transformer;
+namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Model;
 
 use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
@@ -118,7 +118,7 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $campaign
             ->setMarketingList($marketingList)
             ->setTemplate(new EmailTemplate())
-            ->setFromEmail(reset($to));
+            ->setSenderEmail(reset($to));
 
         $itCount = count($iterable);
         $this->marketingListProvider
@@ -188,7 +188,7 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $campaign
             ->setMarketingList($marketingList)
             ->setTemplate(new EmailTemplate())
-            ->setFromEmail(reset($to));
+            ->setSenderEmail(reset($to));
 
         $itCount = count($iterable);
         $this->marketingListProvider

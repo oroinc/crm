@@ -41,10 +41,18 @@ class EmailCampaignType extends AbstractType
                 ['label' => 'orocrm.campaign.emailcampaign.name.label']
             )
             ->add(
-                'fromEmail',
+                'senderEmail',
                 'text',
                 [
-                    'label'    => 'orocrm.campaign.emailcampaign.fromEmail.label',
+                    'label'    => 'orocrm.campaign.emailcampaign.senderEmail.label',
+                    'required' => false
+                ]
+            )
+            ->add(
+                'senderName',
+                'text',
+                [
+                    'label'    => 'orocrm.campaign.emailcampaign.senderName.label',
                     'required' => false
                 ]
             )
@@ -75,7 +83,7 @@ class EmailCampaignType extends AbstractType
             ->add(
                 'campaign',
                 'orocrm_campaign_select',
-                ['label' => 'orocrm.campaign.emailcampaign.campaign.label', 'required' => true]
+                ['label' => 'orocrm.campaign.emailcampaign.campaign.label']
             )
             ->add(
                 'marketingList',

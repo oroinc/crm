@@ -31,12 +31,15 @@ OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign:
             - NotBlank: ~
             - Length:
                 max: 100
-        fromEmail:
+        senderEmail:
             - Email: ~
             - Length:
                 max: 100
-        campaign:
-            - NotBlank: ~
+        senderName:
+            - Length:
+                max: 100
+        scheduledFor:
+            - DateTime: ~
         marketingList:
             - NotBlank: ~
         owner:

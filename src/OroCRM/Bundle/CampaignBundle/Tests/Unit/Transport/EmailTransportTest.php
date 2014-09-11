@@ -30,6 +30,11 @@ class EmailTransportTest extends \PHPUnit_Framework_TestCase
      */
     protected $helper;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $emailHelper;
+
     protected function setUp()
     {
         $this->processor = $this
@@ -47,25 +52,34 @@ class EmailTransportTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->transport = new EmailTransport($this->processor, $this->renderer, $this->helper);
+        $this->emailHelper = $this->getMock('Oro\Bundle\EmailBundle\Tools\EmailAddressHelper');
+
+        $this->transport = new EmailTransport($this->processor, $this->renderer, $this->helper, $this->emailHelper);
     }
 
     /**
      * @param int    $id
      * @param string $entity
-     * @param string $from
+     * @param array  $from
      * @param array  $to
      * @param string $subject
      * @param string $body
      *
      * @dataProvider sendDataProvider
      */
-    public function testSend($id, $entity, $from, array $to, $subject, $body, $expects)
+    public function testSend($id, $entity, array $from, array $to, $subject, $body, $expects)
     {
+        $emails = array_keys($from);
+
         $this->helper
             ->expects($this->once())
             ->method('getSingleEntityIdentifier')
             ->will($this->returnValue($id));
+
+        $this->emailHelper
+            ->expects($this->once())
+            ->method('buildFullEmailAddress')
+            ->will($this->returnValue(sprintf('%s <%s>', reset($emails), reset($from))));
 
         $marketingList = new MarketingList();
         $marketingList->setEntity($entity);
@@ -84,7 +98,7 @@ class EmailTransportTest extends \PHPUnit_Framework_TestCase
 
         $emailModel = new Email();
         $emailModel
-            ->setFrom($from)
+            ->setFrom(sprintf('%s <%s>', reset($emails), reset($from)))
             ->setType($template->getType())
             ->setEntityClass($entity)
             ->setEntityId($id)
@@ -106,16 +120,66 @@ class EmailTransportTest extends \PHPUnit_Framework_TestCase
     public function sendDataProvider()
     {
         return [
-            [1, '\stdClass', 'from', [], 'subject', 'body', $this->once()],
-            [null, '\stdClass', 'from', [], 'subject', 'body', $this->once()],
-            ['string', '\stdClass', 'from', [], 'subject', 'body', $this->once()],
-            [1, '\stdClass', 'from', ['test@example.com'], 'subject', 'body', $this->once()],
-            [1, '\stdClass', 'from', ['test@example.com'], null, 'body', $this->once()],
-            [1, '\stdClass', 'from', ['test@example.com'], 'subject', null, $this->once()],
-            [1, '\stdClass', 'from', ['test@example.com'], null, null, $this->once()],
-            [1, null, 'from', ['test@example.com'], null, null, $this->once()],
-            [1, '\stdClass', null, ['test@example.com'], null, null, $this->once()],
-            [1, '\stdClass', null, [null], null, null, $this->once()],
+            [1, '\stdClass', ['sender@example.com' => 'Sender Name'], [], 'subject', 'body', $this->once()],
+            [null, '\stdClass', ['sender@example.com' => 'Sender Name'], [], 'subject', 'body', $this->once()],
+            ['string', '\stdClass', ['sender@example.com' => 'Sender Name'], [], 'subject', 'body', $this->once()],
+            [
+                1,
+                '\stdClass',
+                ['sender@example.com' => 'Sender Name'],
+                ['test@example.com'],
+                'subject',
+                'body',
+                $this->once()
+            ],
+            [
+                1,
+                '\stdClass',
+                ['sender@example.com' => 'Sender Name'],
+                ['test@example.com'],
+                null,
+                'body',
+                $this->once()
+            ],
+            [
+                1,
+                '\stdClass',
+                ['sender@example.com' => 'Sender Name'],
+                ['test@example.com'],
+                'subject',
+                null,
+                $this->once()
+            ],
+            [1, '\stdClass', ['sender@example.com' => 'Sender Name'], ['test@example.com'], null, null, $this->once()],
+            [1, null, ['sender@example.com' => 'Sender Name'], ['test@example.com'], null, null, $this->once()],
+            [1, '\stdClass', ['sender@example.com' => 'Sender Name'], ['test@example.com'], null, null, $this->once()],
+            [1, '\stdClass', ['sender@example.com' => 'Sender Name'], [null], null, null, $this->once()],
         ];
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Sender email and name is empty
+     */
+    public function testFromEmpty()
+    {
+        $entity = new \stdClass();
+
+        $this->helper
+            ->expects($this->once())
+            ->method('getSingleEntityIdentifier')
+            ->will($this->returnValue(1));
+
+        $marketingList = new MarketingList();
+        $marketingList->setEntity($entity);
+
+        $template = new EmailTemplate();
+        $template->setType('html');
+        $campaign = new EmailCampaign();
+        $campaign
+            ->setMarketingList($marketingList)
+            ->setTemplate($template);
+
+        $this->transport->send($campaign, $entity, [], []);
     }
 }

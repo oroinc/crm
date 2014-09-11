@@ -9,11 +9,11 @@ interface TransportInterface
     /**
      * @param EmailCampaign $campaign
      * @param string $entity
-     * @param string $from
+     * @param string[] $from Associative array, key is sender email, value is sender name
      * @param string[] $to
      * @return mixed
      */
-    public function send(EmailCampaign $campaign, $entity, $from, array $to);
+    public function send(EmailCampaign $campaign, $entity, array $from, array $to);
 
     /**
      * @return string

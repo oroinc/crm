@@ -78,11 +78,13 @@ class OroCRMCampaignBundleInstaller implements Installation
         $table->addColumn('description', 'text', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('marketing_list_id', 'integer', ['notnull' => false]);
-        $table->addColumn('campaign_id', 'integer', []);
+        $table->addColumn('campaign_id', 'integer', ['notnull' => false]);
         $table->addColumn('is_sent', 'boolean', []);
+        $table->addColumn('sent_at', 'datetime', ['comment' => '(DC2Type:datetime)', 'notnull' => false]);
         $table->addColumn('schedule', 'string', ['length' => 255]);
         $table->addColumn('scheduled_for', 'datetime', ['comment' => '(DC2Type:datetime)', 'notnull' => false]);
-        $table->addColumn('from_email', 'string', ['length' => 255, 'notnull' => false]);
+        $table->addColumn('sender_email', 'string', ['length' => 255, 'notnull' => false]);
+        $table->addColumn('sender_name', 'string', ['length' => 255, 'notnull' => false]);
         $table->addColumn('template_id', 'integer', ['notnull' => false]);
         $table->addColumn('transport', 'string', ['length' => 255, 'notnull' => true]);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
@@ -156,7 +158,7 @@ class OroCRMCampaignBundleInstaller implements Installation
             $schema->getTable('orocrm_campaign'),
             ['campaign_id'],
             ['id'],
-            ['onUpdate' => null, 'onDelete' => 'CASCADE']
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
     }
 
