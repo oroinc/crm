@@ -40,6 +40,9 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
     /** @var BuilderFactory */
     protected $factory;
 
+    /** @var  Channel */
+    protected $dataChannel;
+
     /**
      * {@inheritdoc}
      */
@@ -97,9 +100,9 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $builder->setOwner($integration->getOrganization());
         $builder->setDataSource($integration);
         $builder->setStatus($integration->getEnabled() ? Channel::STATUS_ACTIVE : Channel::STATUS_INACTIVE);
-        $channel = $builder->getChannel();
+        $this->dataChannel = $builder->getChannel();
 
-        $om->persist($channel);
+        $om->persist($this->dataChannel);
         $om->flush();
 
         $this->persistDemoCustomers($om, $website, $store, $group, $integration);
@@ -201,6 +204,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $order->setCurrency($cart->getBaseCurrencyCode());
         $order->setTotalAmount($cart->getGrandTotal());
         $order->setTotalInvoicedAmount($cart->getGrandTotal());
+        $order->setDataChannel($this->dataChannel);
         if ($status == 'Completed') {
             $order->setTotalPaidAmount($cart->getGrandTotal());
         }
@@ -291,6 +295,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $cart->setCreatedAt(new \DateTime('now'));
         $cart->setUpdatedAt(new \DateTime('now'));
         $cart->setOriginId($origin);
+        $cart->setDataChannel($this->dataChannel);
         $om->persist($cart);
 
         return $cart;
@@ -418,6 +423,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
                 ->setAccount($accounts[$buffer[$i]])
                 ->setContact($contact)
                 ->setOwner($this->getRandomOwner());
+            $customer->setDataChannel($this->dataChannel);
 
             $om->persist($customer);
         }

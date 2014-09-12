@@ -10,12 +10,17 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
 use OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 
 class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInterface
 {
     protected $container;
+
+    /** @var  Channel */
+    protected $dataChannel;
 
     // @codingStandardsIgnoreStart
     protected $contactRequests = array(
@@ -59,8 +64,25 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
      */
     public function load(ObjectManager $om)
     {
+        $this->createDataChannel($om);
         $this->persistDemoEmbeddedForm($om);
         $this->persistDemoContactUsForm($om);
+        $om->flush();
+    }
+
+    /**
+     * @param ObjectManager $om
+     */
+    public function createDataChannel(ObjectManager $om)
+    {
+        /** @var BuilderFactory $builderFactory */
+        $builderFactory = $this->container->get('orocrm_channel.builder.factory');
+        $builder = $builderFactory->createBuilder();
+        $builder->setStatus(Channel::STATUS_ACTIVE);
+        $builder->setEntities();
+        $builder->setChannelType('custom');
+        $this->dataChannel = $builder->getChannel();
+        $om->persist($this->dataChannel);
         $om->flush();
     }
 
@@ -77,6 +99,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
         $embeddedForm->setCss($contactUs->getDefaultCss());
         $embeddedForm->setSuccessMessage($contactUs->getDefaultSuccessMessage());
         $embeddedForm->setTitle('Contact Us Form');
+        $embeddedForm->setDataChannel($this->dataChannel);
         $om->persist($embeddedForm);
     }
 
@@ -94,6 +117,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
             }
             $request->setPreferredContactMethod(ContactRequest::CONTACT_METHOD_BOTH);
             $request->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+            $request->setDataChannel($this->dataChannel);
             $om->persist($request);
         }
     }
