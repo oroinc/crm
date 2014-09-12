@@ -19,7 +19,5 @@ OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity:
                 max: 250
         account:
             - NotBlank: ~
-        channel:
-            - NotBlank: ~
         dataChannel:
             - NotBlank: ~

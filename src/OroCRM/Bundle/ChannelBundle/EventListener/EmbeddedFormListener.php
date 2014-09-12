@@ -2,7 +2,10 @@
 
 namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
+use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
 use Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent;
+
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 class EmbeddedFormListener
 {
@@ -28,5 +31,21 @@ class EmbeddedFormListener
         }
 
         $event->setFormData($data);
+    }
+
+    /**
+     * @param EmbeddedFormSubmitBeforeEvent $event
+     */
+    public function onEmbeddedFormSubmit(EmbeddedFormSubmitBeforeEvent $event)
+    {
+        /** @var ChannelAwareInterface $form */
+        $form = $event->getFormEntity();
+        /** @var  Object */
+        $data = $event->getData();
+
+        if ($data instanceof ChannelAwareInterface) {
+            $dataChannel = $form->getDataChannel();
+            $data->setDataChannel($dataChannel);
+        }
     }
 }
