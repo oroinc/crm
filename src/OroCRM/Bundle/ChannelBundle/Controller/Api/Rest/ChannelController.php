@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\ChannelBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
 use Symfony\Component\HttpFoundation\Response;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -45,6 +47,11 @@ class ChannelController extends RestController
     {
         try {
             $channel = $this->getManager()->find($id);
+
+            $this->get('event_dispatcher')->dispatch(
+                ChannelBeforeDeleteEvent::EVENT_NAME,
+                new ChannelBeforeDeleteEvent($channel)
+            );
 
             $this->getDeleteHandler()->handleDelete($id, $this->getManager());
             $this->get('event_dispatcher')->dispatch(ChannelDeleteEvent::EVENT_NAME, new ChannelDeleteEvent($channel));
