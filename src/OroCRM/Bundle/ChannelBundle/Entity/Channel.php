@@ -27,6 +27,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
+ *      },
+ *      "form"={
+ *            "form_type"="orocrm_channel_select_type"
  *      }
  *  }
  * )

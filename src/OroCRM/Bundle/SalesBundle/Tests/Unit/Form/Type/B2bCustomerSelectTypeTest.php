@@ -35,7 +35,7 @@ class B2bCustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParent()
     {
-        $this->assertEquals('oro_entity_create_or_select_inline', $this->type->getParent());
+        $this->assertEquals('oro_entity_create_or_select_inline_channel_aware', $this->type->getParent());
     }
 
     public function testGetName()

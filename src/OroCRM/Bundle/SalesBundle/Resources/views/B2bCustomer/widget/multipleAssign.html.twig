@@ -3,9 +3,10 @@
     {% set params = {
         'customer' : b2bCustomer,
         '_parameters' : {
-        'data_in':     app.request.get('added')|split(','),
-        'data_not_in': app.request.get('removed')|split(',')
-        }
+            'data_in':     app.request.get('added')|split(','),
+            'data_not_in': app.request.get('removed')|split(',')
+        },
+        'channelIds': app.request.get('channelIds')
     } %}
 
     <style type="text/css">

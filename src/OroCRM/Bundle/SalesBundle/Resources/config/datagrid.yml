@@ -686,25 +686,22 @@ datagrid:
                     left:
                         - { join: c.dataChannel, alias: channel }
         columns:
-            name:
-                label:          orocrm.sales.b2bcustomer.name.label
             channelName:
                 label:          orocrm.sales.b2bcustomer.data_channel.label
+            name:
+                label:          orocrm.sales.b2bcustomer.name.label
             createdAt:
                 label:          oro.ui.created_at
                 frontend_type:  datetime
         sorters:
             columns:
+                channelName: { data_name: channelName }
                 name:        { data_name: c.name }
                 createdAt:   { data_name: c.createdAt }
-                channelName: { data_name: channelName }
             default:
                 name: ASC
         filters:
             columns:
-                 name:
-                    type:      string
-                    data_name: c.name
                  channelName:
                     type:      entity
                     data_name: channel.id
@@ -712,6 +709,9 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                 name:
+                    type:      string
+                    data_name: c.name
         properties:
             id: ~
             view_link:

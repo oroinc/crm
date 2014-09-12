@@ -10,10 +10,12 @@ parameters:
     orocrm_channel.channel_integration_form.handler.class:             OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler
 
     # forms
-    orocrm_channel.form.type.channel.class:                            OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
-    orocrm_channel.form.type.entity.class:                             OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType
-    orocrm_channel.form.type.channel_datasource.class:                 OroCRM\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType
-    orocrm_channel.form.type.channel_select.class:                     OroCRM\Bundle\ChannelBundle\Form\Type\ChannelSelectType
+    orocrm_channel.form.type.channel.class:                               OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
+    orocrm_channel.form.type.entity.class:                                OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType
+    orocrm_channel.form.type.channel_datasource.class:                    OroCRM\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType
+    orocrm_channel.form.type.channel_select.class:                        OroCRM\Bundle\ChannelBundle\Form\Type\ChannelSelectType
+    orocrm_channel.form.type.create_or_select_inline_channel_aware.class: OroCRM\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType
+    orocrm_channel.form.type.multiple_entity_channel_aware.class:         OroCRM\Bundle\ChannelBundle\Form\Type\MultipleEntityChannelAwareType
 
     # manager
     orocrm_channel.manager.api.class:                                  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
@@ -26,6 +28,12 @@ parameters:
     orocrm_channel.provider.entity_metadata.class:                     OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider
     orocrm_channel.provider.utils.entity_state_provider.class:         OroCRM\Bundle\ChannelBundle\Provider\Utility\EntityStateProvider
 
+    # datagrid
+    orocrm_channel.datagrid.extension.orm_channel_limitation.class:    OroCRM\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtension
+
+    # autocomplete
+    orocrm_channel.autocomplete.channel_limitation_handler.class:      OroCRM\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler
+
     # config resolver
     orocrm_channel.config_resolver.class:                              Oro\Component\Config\Resolver\SystemAwareResolver
 
@@ -34,7 +42,7 @@ parameters:
     orocrm_channel.form.subscriber.channel_subscriber.class:           OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
     orocrm_channel.event_listener.channel_change_status.class:         OroCRM\Bundle\ChannelBundle\EventListener\ChangeChannelStatusListener
     orocrm_channel.event_listener.channel_save_succeed.class:          OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener
-    orocrm_channel.event_listener.embedded_form_add_fields.class:      OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
+    orocrm_channel.event_listener.embedded_form.class:                 OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
 
     #twig
     orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
@@ -77,16 +85,26 @@ services:
         tags:
             - { name: form.type, alias: orocrm_channel_datasource_form }
 
+    orocrm_channel.form.type.channel_select:
+        class: %orocrm_channel.form.type.channel_select.class%
+        tags:
+            - { name: form.type, alias: orocrm_channel_select_type }
+
+    orocrm_channel.form.type.create_or_select_inline_channel_aware:
+        class: %orocrm_channel.form.type.create_or_select_inline_channel_aware.class%
+        tags:
+            - { name: form.type, alias: oro_entity_create_or_select_inline_channel_aware }
+
+    orocrm_channel.form.type.multiple_entity_channel_aware:
+        class: %orocrm_channel.form.type.multiple_entity_channel_aware.class%
+        tags:
+            - { name: form.type, alias: oro_multiple_entity_channel_aware }
+
     orocrm_channel.form.channel:
         class:                        Symfony\Component\Form\Form
         factory_method:               createNamed
         factory_service:              form.factory
         arguments:                    ["orocrm_channel_form", "orocrm_channel_form", null]
-
-    orocrm_channel.form.type.channel_select:
-        class: %orocrm_channel.form.type.channel_select.class%
-        tags:
-            - { name: form.type, alias: orocrm_channel_select_type }
 
     # handlers
     orocrm_channel.channel_form.handler:
@@ -134,6 +152,20 @@ services:
             - @oro_entity.entity_provider
             - @oro_entity_config.config_manager
             - @router
+
+    # datagrid
+    orocrm_channel.datagrid.extension.orm_channel_limitation:
+        class: %orocrm_channel.datagrid.extension.orm_channel_limitation.class%
+        tags:
+            - { name: oro_datagrid.extension }
+
+    # autocomplete
+    orocrm_channel.autocomplete.channel_limitation_handler:
+        class: %orocrm_channel.autocomplete.channel_limitation_handler.class%
+        calls:
+            - [initDoctrinePropertiesByManagerRegistry, ["@doctrine"]]
+            - [initSearchIndexer, ["@oro_search.index", %oro_search.entities_config%]]
+            - [setAclHelper,["@oro_security.acl_helper"]]
 
     # config resolver
     orocrm_channel.provider.channel_entity_exclusion_provider:
@@ -205,10 +237,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSucceedSave }
 
-    orocrm_channel.event_listener.embedded_form_add_fields:
-        class: %orocrm_channel.event_listener.embedded_form_add_fields.class%
+    orocrm_channel.event_listener.embedded_form:
+        class: %orocrm_channel.event_listener.embedded_form.class%
         tags:
             - { name: kernel.event_listener, event: entity_form.render.before, method: addDataChannelField }
+            - { name: kernel.event_listener, event: oro_embedded_form.form_submit.before, method: onEmbeddedFormSubmit }
 
     #twig
     orocrm_channel.twig.metadata_extension:
