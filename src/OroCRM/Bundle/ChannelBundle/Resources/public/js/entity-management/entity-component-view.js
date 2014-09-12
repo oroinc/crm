@@ -180,7 +180,8 @@ define(function (require) {
                 },
                 deleteHandler: _.partial(function (collection, model, data) {
                     collection.remove(model);
-                }, this.collection)
+                }, this.collection),
+                sorting: false
             });
             // emulate reset for first time
             this._onCollectionChange();
