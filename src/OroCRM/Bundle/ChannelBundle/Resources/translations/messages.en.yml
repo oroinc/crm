@@ -41,5 +41,7 @@ orocrm:
             select_customer_identity.label: Please select customer identity
             select_channel_type.label:      Choose channel type...
             select_channel_status.label:    Choose channel status...
+        channel_type:
+            custom.label: Custom
 
 oro.embeddedform.data_channel.label: Channel

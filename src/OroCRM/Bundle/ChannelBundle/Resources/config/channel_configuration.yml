@@ -5,4 +5,4 @@ orocrm_channel:
 
     channel_types:
         custom:
-            label: Custom
+            label: orocrm.channel.channel_type.custom.label
