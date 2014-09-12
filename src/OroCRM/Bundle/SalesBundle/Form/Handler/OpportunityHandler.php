@@ -8,42 +8,49 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider;
 
 class OpportunityHandler
 {
-    /**
-     * @var FormInterface
-     */
+    /** @var FormInterface */
     protected $form;
 
-    /**
-     * @var Request
-     */
+    /** @var Request */
     protected $request;
 
-    /**
-     * @var ObjectManager
-     */
+    /** @var ObjectManager */
     protected $manager;
 
+    /** @var RequestChannelProvider */
+    protected $requestChannelProvider;
+
     /**
-     * @param FormInterface $form
-     * @param Request       $request
-     * @param ObjectManager $manager
+     * @param FormInterface          $form
+     * @param Request                $request
+     * @param ObjectManager          $manager
+     * @param RequestChannelProvider $requestChannelProvider
      */
-    public function __construct(FormInterface $form, Request $request, ObjectManager $manager)
-    {
-        $this->form    = $form;
-        $this->request = $request;
-        $this->manager = $manager;
+    public function __construct(
+        FormInterface $form,
+        Request $request,
+        ObjectManager $manager,
+        RequestChannelProvider $requestChannelProvider
+    ) {
+        $this->form                   = $form;
+        $this->request                = $request;
+        $this->manager                = $manager;
+        $this->requestChannelProvider = $requestChannelProvider;
     }
 
     /**
      * @param  Opportunity $entity
+     *
      * @return bool
      */
     public function process(Opportunity $entity)
     {
+        $this->requestChannelProvider->setDataChannel($entity);
+
         $this->form->setData($entity);
 
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
