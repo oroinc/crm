@@ -75,15 +75,9 @@
         {% set formFields = formFields|merge([form_row(form.owner, {label: 'orocrm.sales.opportunity.owner.label'|trans})]) %}
     {% endif %}
 
-    {% set dataChannelClasses = '' %}
-
-    {% if entity.dataChannel is defined and entity.dataChannel is not empty and form.dataChannel.vars.value == entity.dataChannel.id %}
-        {% set dataChannelClasses = 'hide' %}
-    {% endif %}
-
     {% set formFields = formFields|merge([
         form_row(form.name),
-        form_row(form.dataChannel, {'attr': {'class':dataChannelClasses}}),
+        form_row(form.dataChannel),
         form_row(form.contact),
         form_row(form.customer),
         form_row(form.probability),
