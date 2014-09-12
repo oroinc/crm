@@ -56,7 +56,7 @@
 
 {% block breadcrumbs %}
     {{ parent() }}
-    <div class="status-enabled pull-left">
+    <div class="pull-left">
         {% if entity.status.name != 'lost' %}
             <div class="badge badge-enabled status-enabled">
                 <i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
@@ -74,10 +74,12 @@
     {% if form.owner is defined %}
         {% set formFields = formFields|merge([form_row(form.owner, {label: 'orocrm.sales.opportunity.owner.label'|trans})]) %}
     {% endif %}
+
     {% set formFields = formFields|merge([
         form_row(form.name),
+        form_row(form.dataChannel),
         form_row(form.contact),
-        form_row(form.account),
+        form_row(form.customer),
         form_row(form.probability),
         form_row(form.budgetAmount),
         form_row(form.customerNeed),

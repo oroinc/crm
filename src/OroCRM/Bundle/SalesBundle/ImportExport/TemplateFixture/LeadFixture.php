@@ -39,37 +39,35 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
      */
     public function fillEntityData($key, $entity)
     {
-        $addressRepo = $this->templateManager
-            ->getEntityRepository('Oro\Bundle\AddressBundle\Entity\Address');
-        $userRepo    = $this->templateManager
-            ->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
-        $accountRepo = $this->templateManager
-            ->getEntityRepository('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $contactRepo = $this->templateManager
-            ->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
+        $addressRepo  = $this->templateManager->getEntityRepository('Oro\Bundle\AddressBundle\Entity\Address');
+        $userRepo     = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
+        $customerRepo = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
+        $contactRepo  = $this->templateManager->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
+        $channelRepo  = $this->templateManager->getEntityRepository('OroCRM\Bundle\ChannelBundle\Entity\Channel');
 
         switch ($key) {
             case 'Jerry Coleman':
-                $entity
-                    ->setName('Oro Inc. Lead Name')
-                    ->setCompanyName('Oro Inc.')
-                    ->setOwner($userRepo->getEntity('John Doo'))
-                    ->setCreatedAt(new \DateTime())
-                    ->setUpdatedAt(new \DateTime())
-                    ->setAccount($accountRepo->getEntity('Coleman'))
-                    ->setContact($contactRepo->getEntity('Jerry Coleman'))
-                    ->setAddress($addressRepo->getEntity('Jerry Coleman'))
-                    ->setEmail('JerryAColeman@armyspy.com')
-                    ->setNamePrefix('Mr.')
-                    ->setFirstName('Jerry')
-                    ->setLastName('Coleman')
-                    ->setNameSuffix('Jr.')
-                    ->setStatus(new LeadStatus('New'))
-                    ->setJobTitle('Manager')
-                    ->setPhoneNumber('585-255-1127')
-                    ->setWebsite('http://orocrm.com')
-                    ->setNumberOfEmployees(100)
-                    ->setIndustry('Internet');
+                $entity->setName('Oro Inc. Lead Name');
+                $entity->setCompanyName('Oro Inc.');
+                $entity->setOwner($userRepo->getEntity('John Doo'));
+                $entity->setDataChannel($channelRepo->getEntity('B2b channel|b2b'));
+                $entity->setCreatedAt(new \DateTime());
+                $entity->setUpdatedAt(new \DateTime());
+                $entity->setCustomer($customerRepo->getEntity('Jerry Coleman'));
+                $entity->setContact($contactRepo->getEntity('Jerry Coleman'));
+                $entity->setAddress($addressRepo->getEntity('Jerry Coleman'));
+                $entity->setEmail('JerryAColeman@armyspy.com');
+                $entity->setNamePrefix('Mr.');
+                $entity->setFirstName('Jerry');
+                $entity->setLastName('Coleman');
+                $entity->setNameSuffix('Jr.');
+                $entity->setStatus(new LeadStatus('New'));
+                $entity->setJobTitle('Manager');
+                $entity->setPhoneNumber('585-255-1127');
+                $entity->setWebsite('http://orocrm.com');
+                $entity->setNumberOfEmployees(100);
+                $entity->setIndustry('Internet');
+
                 return;
         }
 

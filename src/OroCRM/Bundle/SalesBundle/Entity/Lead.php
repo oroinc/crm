@@ -13,12 +13,13 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
-
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -57,8 +58,10 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  *      }
  * )
  */
-class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
+class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface, ChannelAwareInterface
 {
+    use ChannelEntityTrait;
+
     /**
      * @var integer
      *
@@ -106,24 +109,6 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      * )
      */
     protected $contact;
-
-    /**
-     * @var Account
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=160,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     */
-    protected $account;
 
     /**
      * @var string
@@ -453,6 +438,24 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowStep;
+
+    /**
+     * @var B2bCustomer
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\B2bCustomer", inversedBy="leads")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=160,
+     *          "short"=true
+     *      }
+     *  }
+     * )
+     */
+    protected $customer;
 
     /**
      * Constructor
@@ -826,6 +829,7 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     public function setContact($contact)
     {
         $this->contact = $contact;
+
         return $this;
     }
 
@@ -886,7 +890,7 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      */
     public function __toString()
     {
-        return (string)$this->getName();
+        return (string) $this->getName();
     }
 
     /**
@@ -929,25 +933,6 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     }
 
     /**
-     * @return \OroCRM\Bundle\AccountBundle\Entity\Account
-     */
-    public function getAccount()
-    {
-        return $this->account;
-    }
-
-    /**
-     * @param Account $account
-     *
-     * @return Lead
-     */
-    public function setAccount($account)
-    {
-        $this->account = $account;
-        return $this;
-    }
-
-    /**
      * Get opportunities
      *
      * @return Opportunity[]
@@ -960,7 +945,7 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * Add opportunity
      *
-     * @param  Opportunity $opportunity
+     * @param Opportunity $opportunity
      *
      * @return Lead
      */
@@ -1034,6 +1019,23 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     }
 
     /**
+     * @param B2bCustomer $customer
+     * @TODO remove null after BAP-5248
+     */
+    public function setCustomer(B2bCustomer $customer = null)
+    {
+        $this->customer = $customer;
+    }
+
+    /**
+     * @return B2bCustomer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
      * @ORM\PrePersist
      */
     public function prePersist(LifecycleEventArgs $eventArgs)
@@ -1042,5 +1044,15 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
         /** @var LeadStatus $defaultStatus */
         $defaultStatus = $em->getReference('OroCRMSalesBundle:LeadStatus', 'new');
         $this->setStatus($defaultStatus);
+    }
+
+    /**
+     * Remove Customer
+     *
+     * @return Lead
+     */
+    public function removeCustomer()
+    {
+        $this->customer = null;
     }
 }

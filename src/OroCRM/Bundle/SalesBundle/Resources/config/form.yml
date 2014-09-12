@@ -7,14 +7,16 @@ parameters:
     orocrm_sales.lead.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadApiType
     orocrm_sales.lead.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\LeadHandler
 
+    orocrm_sales.form.type.lead_select.class:        OroCRM\Bundle\SalesBundle\Form\Type\LeadSelectType
     orocrm_sales.form.type.opportunity_select.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunitySelectType
-    orocrm_sales.form.type.opportunity_create_select.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityCreateSelectType
-    orocrm_sales.form.type.lead_select.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadSelectType
-    orocrm_sales.form.type.lead_create_select.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadCreateSelectType
+    orocrm_sales.form.type.b2bcustomer_select.class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType
 
     orocrm_sales.salesfunnel.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\SalesFunnelType
     orocrm_sales.salesfunnel.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\SalesFunnelApiType
     orocrm_sales.salesfunnel.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler
+
+    orocrm_sales.b2bcustomer.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerType
+    orocrm_sales.b2bcustomer.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler
 
 services:
     orocrm_sales.opportunity.form.type:
@@ -50,6 +52,7 @@ services:
             - @orocrm_sales.opportunity.form
             - @request
             - @doctrine.orm.entity_manager
+            - @orocrm_channel.provider.request_channel
 
     orocrm_sales.opportunity.form.handler.api:
         class: %orocrm_sales.opportunity.form.handler.class%
@@ -58,6 +61,7 @@ services:
             - @orocrm_sales.opportunity.form.api
             - @request
             - @doctrine.orm.entity_manager
+            - @orocrm_channel.provider.request_channel
 
     orocrm_sales.lead.form.type:
         class: %orocrm_sales.lead.form.type.class%
@@ -92,6 +96,7 @@ services:
             - @orocrm_sales.lead.form
             - @request
             - @doctrine.orm.entity_manager
+            - @orocrm_channel.provider.request_channel
 
     orocrm_sales.lead.form.handler.api:
         class: %orocrm_sales.lead.form.handler.class%
@@ -100,26 +105,22 @@ services:
             - @orocrm_sales.lead.form.api
             - @request
             - @doctrine.orm.entity_manager
+            - @orocrm_channel.provider.request_channel
 
     orocrm_sales.form.type.opportunity_select:
         class: %orocrm_sales.form.type.opportunity_select.class%
         tags:
             - { name: form.type, alias: orocrm_sales_opportunity_select }
 
-    orocrm_sales.form.type.opportunity_create_select:
-        class: %orocrm_sales.form.type.opportunity_create_select.class%
-        tags:
-            - { name: form.type, alias: "orocrm_sales_opportunity_create_select" }
-
     orocrm_sales.form.type.lead_select:
         class: %orocrm_sales.form.type.lead_select.class%
         tags:
             - { name: form.type, alias: "orocrm_sales_lead_select" }
 
-    orocrm_sales.form.type.lead_create_select:
-        class: %orocrm_sales.form.type.lead_create_select.class%
+    orocrm_sales.form.type.b2bcustomer_select:
+        class: %orocrm_sales.form.type.b2bcustomer_select.class%
         tags:
-            - { name: form.type, alias: "orocrm_sales_lead_create_select" }
+            - { name: form.type, alias: orocrm_sales_b2bcustomer_select }
 
     orocrm_sales.salesfunnel.form.type:
         class: %orocrm_sales.salesfunnel.form.type.class%
@@ -162,3 +163,30 @@ services:
             - @orocrm_sales.salesfunnel.form.api
             - @request
             - @doctrine.orm.entity_manager
+
+    orocrm_sales.b2bcustomer.form.type:
+        class: %orocrm_sales.b2bcustomer.form.type.class%
+        arguments:
+            - @router
+            - @oro_locale.formatter.name
+        tags:
+            - { name: form.type, alias: orocrm_sales_b2bcustomer }
+
+    orocrm_sales.b2bcustomer.form:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - "orocrm_sales_b2bcustomer_form"
+            - "orocrm_sales_b2bcustomer"
+
+    orocrm_sales.b2bcustomer.form.handler:
+        class: %orocrm_sales.b2bcustomer.form.handler.class%
+        scope: request
+        arguments:
+            - @orocrm_sales.b2bcustomer.form
+            - @request
+            - @doctrine.orm.entity_manager
+            - @orocrm_channel.provider.request_channel
+        tags:
+            - { name: oro_tag.tag_manager }

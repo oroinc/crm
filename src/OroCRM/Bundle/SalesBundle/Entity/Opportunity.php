@@ -10,12 +10,13 @@ use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\UserBundle\Entity\User;
-
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
@@ -26,33 +27,35 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *      routeName="orocrm_sales_opportunity_index",
- *      routeView="orocrm_sales_opportunity_view",
- *      defaultValues={
- *          "entity"={
- *              "icon"="icon-usd"
- *          },
- *          "ownership"={
- *              "owner_type"="USER",
- *              "owner_field_name"="owner",
- *              "owner_column_name"="user_owner_id"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "form"={
+ *  routeName="orocrm_sales_opportunity_index",
+ *  routeView="orocrm_sales_opportunity_view",
+ *  defaultValues={
+ *      "entity"={
+ *          "icon"="icon-usd"
+ *      },
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      },
+ *      "form"={
  *              "form_type"="orocrm_sales_opportunity_select",
  *              "grid_name"="sales-opportunity-grid",
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
+ *      },
+ *      "dataaudit"={
+ *          "auditable"=true
  *      }
+ *  }
  * )
  */
-class Opportunity extends ExtendOpportunity implements EmailHolderInterface
+class Opportunity extends ExtendOpportunity implements EmailHolderInterface, ChannelAwareInterface
 {
+    use ChannelEntityTrait;
+
     /**
      * @var int
      *
@@ -115,31 +118,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
-     *          "order"=110,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     **/
-    protected $contact;
-
-    /**
-     * @var Account
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
      *          "order"=120,
      *          "short"=true
      *      }
      *  }
      * )
      **/
-    protected $account;
+    protected $contact;
 
     /**
      * @var Lead
@@ -382,8 +367,25 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     protected $workflowStep;
 
     /**
-     * @param WorkflowItem $workflowItem
+     * @var B2bCustomer
      *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\B2bCustomer", inversedBy="opportunities")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=110,
+     *          "short"=true
+     *      }
+     *  }
+     * )
+     */
+    protected $customer;
+
+    /**
+     * @param  WorkflowItem $workflowItem
      * @return Opportunity
      */
     public function setWorkflowItem($workflowItem)
@@ -402,8 +404,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param WorkflowItem $workflowStep
-     *
+     * @param  WorkflowItem $workflowStep
      * @return Opportunity
      */
     public function setWorkflowStep($workflowStep)
@@ -430,32 +431,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param Account $account
-     *
-     * @return Opportunity
-     */
-    public function setAccount($account)
-    {
-        $this->account = $account;
-        return $this;
-    }
-
-    /**
-     * @return Account
-     */
-    public function getAccount()
-    {
-        return $this->account;
-    }
-
-    /**
-     * @param Lead $lead
-     *
+     * @param  Lead        $lead
      * @return Opportunity
      */
     public function setLead($lead)
     {
         $this->lead = $lead;
+
         return $this;
     }
 
@@ -468,13 +450,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param float $budgetAmount
-     *
+     * @param  float       $budgetAmount
      * @return Opportunity
      */
     public function setBudgetAmount($budgetAmount)
     {
         $this->budgetAmount = $budgetAmount;
+
         return $this;
     }
 
@@ -487,13 +469,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param \DateTime $closeDate
-     *
+     * @param  \DateTime   $closeDate
      * @return Opportunity
      */
     public function setCloseDate($closeDate)
     {
         $this->closeDate = $closeDate;
+
         return $this;
     }
 
@@ -506,13 +488,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param Contact $contact
-     *
+     * @param  Contact     $contact
      * @return Opportunity
      */
     public function setContact($contact)
     {
         $this->contact = $contact;
+
         return $this;
     }
 
@@ -525,13 +507,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param string $customerNeed
-     *
+     * @param  string      $customerNeed
      * @return Opportunity
      */
     public function setCustomerNeed($customerNeed)
     {
         $this->customerNeed = $customerNeed;
+
         return $this;
     }
 
@@ -544,13 +526,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param float $probability
-     *
+     * @param  float       $probability
      * @return Opportunity
      */
     public function setProbability($probability)
     {
         $this->probability = $probability;
+
         return $this;
     }
 
@@ -563,13 +545,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param string $proposedSolution
-     *
+     * @param  string      $proposedSolution
      * @return Opportunity
      */
     public function setProposedSolution($proposedSolution)
     {
         $this->proposedSolution = $proposedSolution;
+
         return $this;
     }
 
@@ -582,13 +564,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param OpportunityStatus $status
-     *
+     * @param  OpportunityStatus $status
      * @return Opportunity
      */
     public function setStatus($status)
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -601,13 +583,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param string $name
-     *
+     * @param  string      $name
      * @return Opportunity
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -620,13 +602,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param OpportunityCloseReason $closeReason
-     *
+     * @param  OpportunityCloseReason $closeReason
      * @return Opportunity
      */
     public function setCloseReason($closeReason)
     {
         $this->closeReason = $closeReason;
+
         return $this;
     }
 
@@ -663,13 +645,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param \DateTime $created
-     *
+     * @param  \DateTime   $created
      * @return Opportunity
      */
     public function setCreatedAt($created)
     {
         $this->createdAt = $created;
+
         return $this;
     }
 
@@ -682,13 +664,13 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param \DateTime $updated
-     *
+     * @param  \DateTime   $updated
      * @return Opportunity
      */
     public function setUpdatedAt($updated)
     {
         $this->updatedAt = $updated;
+
         return $this;
     }
 
@@ -709,9 +691,8 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
 
     public function __toString()
     {
-        return (string)$this->getName();
+        return (string) $this->getName();
     }
-
     /**
      * @ORM\PrePersist
      */
@@ -738,8 +719,7 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param User $owningUser
-     *
+     * @param  User        $owningUser
      * @return Opportunity
      */
     public function setOwner($owningUser)
@@ -758,14 +738,31 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     }
 
     /**
-     * @param string $notes
-     *
+     * @param  string      $notes
      * @return Opportunity
      */
     public function setNotes($notes)
     {
         $this->notes = $notes;
+
         return $this;
+    }
+
+    /**
+     * @param B2bCustomer $customer
+     * @TODO remove null after BAP-5248
+     */
+    public function setCustomer(B2bCustomer $customer = null)
+    {
+        $this->customer = $customer;
+    }
+
+    /**
+     * @return B2bCustomer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
     }
 
     /**
@@ -775,7 +772,17 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface
     {
         $em = $eventArgs->getEntityManager();
         /** @var LeadStatus $defaultStatus */
-        $defaultStatus = $em->getReference('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
+        $defaultStatus   = $em->getReference('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
         $this->setStatus($defaultStatus);
+    }
+
+    /**
+     * Remove Customer
+     *
+     * @return Lead
+     */
+    public function removeCustomer()
+    {
+        $this->customer = null;
     }
 }

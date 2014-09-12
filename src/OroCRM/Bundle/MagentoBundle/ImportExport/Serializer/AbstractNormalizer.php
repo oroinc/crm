@@ -2,31 +2,29 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
 
+use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
+
 class AbstractNormalizer implements SerializerAwareInterface
 {
-    /**
-     * @var SerializerInterface|NormalizerInterface|DenormalizerInterface
-     */
+    /** @var SerializerInterface|NormalizerInterface|DenormalizerInterface */
     protected $serializer;
 
-    /**
-     * @var ImportHelper
-     */
+    /** @var ImportHelper */
     protected $importHelper;
 
     /**
-     * @param ImportHelper $contextHelper
+     * @param ImportHelper $importHelper
      */
-    public function __construct(ImportHelper $contextHelper)
+    public function __construct(ImportHelper $importHelper)
     {
-        $this->importHelper = $contextHelper;
+        $this->importHelper = $importHelper;
     }
 
     /**
@@ -142,11 +140,11 @@ class AbstractNormalizer implements SerializerAwareInterface
     /**
      * @param array $context
      *
-     * @return \Oro\Bundle\IntegrationBundle\Entity\Channel
+     * @return Integration
      * @throws \LogicException
      */
-    protected function getChannelFromContext(array $context)
+    protected function getIntegrationFromContext(array $context)
     {
-        return $this->importHelper->getChannelFromContext($context);
+        return $this->importHelper->getIntegrationFromContext($context);
     }
 }

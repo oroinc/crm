@@ -64,6 +64,7 @@ class Workflow extends AbstractPageEntity
         $this->budget = $this->test->byId('oro_workflow_transition_budget_amount');
         $this->budget->clear();
         $this->budget->value($budget);
+
         return $this;
     }
 
@@ -77,6 +78,7 @@ class Workflow extends AbstractPageEntity
         $this->probability = $this->test->byId('oro_workflow_transition_probability');
         $this->probability->clear();
         $this->probability->value($probability);
+
         return $this;
     }
 
@@ -90,6 +92,7 @@ class Workflow extends AbstractPageEntity
         $field = $this->test->byId('oro_workflow_transition_customer_need');
         $field->clear();
         $field->value($customerNeed);
+
         return $this;
     }
 
@@ -103,6 +106,7 @@ class Workflow extends AbstractPageEntity
         $this->solution = $this->test->byId('oro_workflow_transition_proposed_solution');
         $this->solution->clear();
         $this->solution->value($solution);
+
         return $this;
     }
 
@@ -116,6 +120,7 @@ class Workflow extends AbstractPageEntity
         $field = $this->test->byId('oro_workflow_transition_close_revenue');
         $field->clear();
         $field->value($closeRevenue);
+
         return $this;
     }
 
@@ -123,6 +128,7 @@ class Workflow extends AbstractPageEntity
     {
         $field = $this->test->select($this->test->byId('oro_workflow_transition_close_reason_name'));
         $field->selectOptionByLabel($closeReason);
+
         return $this;
     }
 
@@ -131,6 +137,7 @@ class Workflow extends AbstractPageEntity
         $field = $this->test->byId($this->test->byId('date_selector_oro_workflow_transition_close_date'));
         $field->clear();
         $field->value($closeDate);
+
         return $this;
     }
 
@@ -139,6 +146,7 @@ class Workflow extends AbstractPageEntity
         $field = $this->test->byId('oro_workflow_transition_new_company_name');
         $field->clear();
         $field->value($company);
+
         return $this;
     }
 
@@ -151,6 +159,7 @@ class Workflow extends AbstractPageEntity
         $this->assertElementPresent(
             "//div[@class='ui-dialog-content ui-widget-content']/preceding-sibling::div/span[text()='Qualify']"
         );
+
         return $this;
     }
 
@@ -160,6 +169,7 @@ class Workflow extends AbstractPageEntity
         sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
+
         return $this;
     }
 
@@ -169,6 +179,7 @@ class Workflow extends AbstractPageEntity
         sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
+
         return $this;
     }
 
@@ -180,6 +191,7 @@ class Workflow extends AbstractPageEntity
         $this->test->byXpath("//div[div[contains(., 'Reopen')]]//a[text()='OK']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
+
         return $this;
     }
 
@@ -192,6 +204,7 @@ class Workflow extends AbstractPageEntity
         $this->assertElementPresent(
             "//div[@class='ui-dialog-content ui-widget-content']/preceding-sibling::div/span[text()='Develop']"
         );
+
         return $this;
     }
 
@@ -201,6 +214,7 @@ class Workflow extends AbstractPageEntity
         sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
+
         return $this;
     }
 
@@ -210,12 +224,14 @@ class Workflow extends AbstractPageEntity
         sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
+
         return $this;
     }
 
     public function checkStep($step)
     {
         $this->assertElementPresent("//div[@class='widget-content']//li[contains (.,'{$step}')]");
+
         return $this;
     }
 
@@ -227,6 +243,7 @@ class Workflow extends AbstractPageEntity
         //processing redirect
         $this->waitPageToLoad();
         $this->waitForAjax();
+
         return $this;
     }
 }

@@ -155,7 +155,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             array(
                 'opportunity_name' => $lead->getName(),
                 'company_name' => $lead->getCompanyName(),
-                'account' => $lead->getAccount(),
             )
         );
         if ($this->getRandomBoolean()) {

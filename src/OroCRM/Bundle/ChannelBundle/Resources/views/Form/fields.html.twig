@@ -1,0 +1,141 @@
+{% block orocrm_channel_datasource_form_row %}
+    {{ block('form_row') }}
+{% endblock %}
+
+{% block orocrm_channel_datasource_form_widget %}
+    {% set attr = attr|merge({'class': (attr.class is defined ? attr.class ~ ' ' : '') ~ 'orocrm-channel-datasource-field' }) %}
+    {{ form_widget(form, { 'attr': attr }) }}
+
+    {% set options = {
+        el:             '#' ~ form.vars.id,
+        idEl:           '#' ~ form.identifier.vars.id,
+        dataEl:         '#' ~ form.data.vars.id,
+        typeEl:         '#' ~ form.type.vars.id,
+        nameEl:         '#' ~ form.name.vars.id,
+        channelNameEl:  '#' ~ form.parent.name.vars.id
+    } %}
+
+    <div data-page-component-module="orocrmchannel/js/app/components/integration-widget"
+         data-page-component-options="{{ options|json_encode }}"></div>
+{% endblock %}
+
+{% block orocrm_channel_entity_choice_form_row %}
+    {{ form_row(form) }}
+{% endblock %}
+
+{% block _orocrm_channel_form_channelType_widget %}
+    {% if form.vars.disabled %}
+        {% for choice in choices %}
+            {% if choice is selectedchoice(value) %}
+                <span class="inline-text" id="{{ form.vars.id }}" data-value="{{ form.vars.value }}" data-disabled>{{ choice.label|trans }}</span>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {{ form_widget(form) }}
+    {% endif %}
+{% endblock %}
+
+{% block oro_multiple_entity_js_channel_aware %}
+    var $channelSelector = $('select[name="' + {{ channel_field_name|json_encode|raw }} + '"]'),
+        presetChannelId = {{ channel_id|json_encode|raw }},
+        changeHandler = function($el) {
+            var channelIds = [$el.val()];
+
+            if (presetChannelId) {
+                channelIds.push(presetChannelId);
+            }
+
+            widget.options.selectionRouteParams.channelIds = channelIds.join(',');
+        };
+
+        $channelSelector.change(function() {
+            changeHandler($(this));
+            widget.removeAll();
+        });
+        changeHandler($channelSelector);
+{% endblock %}
+
+{% block oro_combobox_dataconfig_channel_aware %}
+    (function() {
+        var $channelSelector = $('select[name="' + {{ channel_field_name|json_encode|raw }} + '"]'),
+            presetChannelId = {{ channel_id|json_encode|raw }},
+            getQueryString = function (searchString) {
+                return [searchString, presetChannelId || $channelSelector.val()].join(';');
+            }
+
+        select2Config.ajax = {
+            'url': {{ url|json_encode|raw }},
+            'data': function (query, page) {
+                return {
+                    'page': page,
+                    'per_page': {{ configs.per_page|default(10) }},
+                    'name': "{{ configs.autocomplete_alias }}",
+                    'query': getQueryString(query)
+                };
+            },
+            'results': function (data, page) {
+                return data;
+            }
+        };
+    })();
+
+    {{ block('oro_combobox_dataconfig_onselect') }}
+{% endblock %}
+
+{% block oro_entity_create_or_select_inline_js_channel_aware %}
+    <script type="text/javascript">
+        require(['jquery', 'oroform/js/select-create-inline-type-handler'],
+        function ($, handler) {
+            $(function() {
+                var presetChannelId = {{ channel_id|json_encode|raw }};
+
+                {% set urlParts = {
+                    grid: {
+                        route: 'oro_datagrid_widget',
+                        parameters: {
+                            gridName     : form.vars.grid_name,
+                            params       : form.vars.grid_parameters,
+                            renderParams : form.vars.grid_render_parameters
+                        }
+                    }
+                } %}
+
+                {% if form.vars.create_enabled|default(false) is sameas(true) %}
+                {% set urlParts = urlParts|merge({
+                    create: {
+                        route:      form.vars.create_form_route,
+                        parameters: form.vars.create_form_route_parameters
+                    }
+                }) %}
+                {% endif %}
+
+                var configurator = handler(
+                    $('#{{ id }}-el'),
+                    $('#{{ id }}'),
+                    {{ label|trans|json_encode|raw }},
+                    {{ urlParts|json_encode(constant('JSON_FORCE_OBJECT'))|raw }},
+                    {{ form.vars.existing_entity_grid_id|default('id')|json_encode|raw }},
+                    {{ form.vars.create_enabled|default(false)|json_encode|raw }}
+                ),
+                changeHandler = function($el) {
+                    var parts = configurator.getUrlParts(),
+                        channelIds = [$el.val()];
+
+                    if (presetChannelId) {
+                        channelIds.push(presetChannelId);
+                    }
+
+                    parts.grid.parameters.params.channelIds = channelIds.join(',');
+                    parts.create.parameters.channelId       = presetChannelId || $el.val();
+                },
+                $channelSelector = $('select[name="' + {{ channel_field_name|json_encode|raw }} + '"]');
+
+                $channelSelector.change(function() {
+                    changeHandler($(this));
+                    configurator.setSelection(null);
+                });
+                changeHandler($channelSelector);
+            });
+        });
+    </script>
+{% endblock %}

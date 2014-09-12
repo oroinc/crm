@@ -35,6 +35,14 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
             name:                   companyName
             target_type:            text
             target_fields:          [companyName]
+        -
+            name:                  dataChannel
+            relation_type:         many-to-one
+            relation_fields:
+                -
+                    name:          id
+                    target_type:   integer
+                    target_fields: [dataChannelId]
 
 OroCRM\Bundle\SalesBundle\Entity\Opportunity:
     alias:                          oro_crm_opportunity
@@ -50,7 +58,7 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
             target_type:            text
             target_fields:          [name]
         -
-            name:                   account
+            name:                   customer
             relation_type:          many-to-one
             relation_fields:
                 -
@@ -81,6 +89,15 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
                     name: nameSuffix
                     target_type: text
                     target_fields: [nameSuffix]
+        -
+            name:                  dataChannel
+            relation_type:         many-to-one
+            relation_fields:
+                -
+                    name:          id
+                    target_type:   integer
+                    target_fields: [dataChannelId]
+
 
 OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
     alias:                          oro_crm_sales_funnel
@@ -127,3 +144,41 @@ OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
                     name: name
                     target_type: text
                     target_fields: [opportunityName]
+        -
+            name:                  dataChannel
+            relation_type:         many-to-one
+            relation_fields:
+                -
+                    name:          id
+                    target_type:   integer
+                    target_fields: [dataChannelId]
+
+OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
+    alias:                          oro_crm_b2bcustomer
+    title_fields:                   [name]
+    route:
+        name:                       orocrm_sales_b2bcustomer_view
+        parameters:
+            id:                     id
+    search_template:                OroCRMSalesBundle:B2bCustomer:searchResult.html.twig
+    fields:
+        -
+            name:                   name
+            target_type:            text
+            target_fields:          [name]
+        -
+            name:                   account
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name: name
+                    target_type: text
+                    target_fields: [accountName]
+        -
+            name:                  dataChannel
+            relation_type:         many-to-one
+            relation_fields:
+                -
+                    name:          id
+                    target_type:   integer
+                    target_fields: [dataChannelId]
