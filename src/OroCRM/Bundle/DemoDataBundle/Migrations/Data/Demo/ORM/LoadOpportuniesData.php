@@ -30,7 +30,8 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
         return [
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadB2bCustomerData'
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadB2bCustomerData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData'
         ];
     }
 
@@ -85,10 +86,12 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
     protected function createOpportunity($contact, $customer, $user)
     {
         $opportunity = new Opportunity();
+        $dataChannel = $this->getReference('default_channel');
         $opportunity->setName($contact->getFirstName() . ' ' . $contact->getLastName());
         $opportunity->setContact($contact);
         $opportunity->setOwner($user);
         $opportunity->setCustomer($customer);
+        $opportunity->setDataChannel($dataChannel);
 
         return $opportunity;
     }
