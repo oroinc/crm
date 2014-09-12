@@ -27,9 +27,9 @@ class RestOpportunityTest extends WebTestCase
     {
         $request = [
             "opportunity" => [
-                'name'  => 'opportunity_name_' . mt_rand(1, 500),
-                'owner' => '1',
-                'customer' => $this->getReference('default_b2bcustomer')->getid(),
+                'name'        => 'opportunity_name_' . mt_rand(1, 500),
+                'owner'       => '1',
+                'customer'    => $this->getReference('default_b2bcustomer')->getId(),
                 'dataChannel' => $this->getReference('default_channel')->getId()
             ]
         ];

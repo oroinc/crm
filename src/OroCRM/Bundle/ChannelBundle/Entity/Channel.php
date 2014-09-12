@@ -42,6 +42,13 @@ class Channel
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ConfigField(
+     *  defaultValues={
+     *      "importexport"={
+     *          "order"=0
+     *      }
+     *  }
+     * )
      */
     protected $id;
 
@@ -49,6 +56,17 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          },
+     *          "importexport"={
+     *              "identity"=true,
+     *              "order"=10
+     *          }
+     *      }
+     * )
      */
     protected $name;
 
@@ -82,6 +100,14 @@ class Channel
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean", nullable=false)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true,
+     *              "order"=20
+     *          }
+     *      }
+     * )
      */
     protected $status;
 
@@ -89,6 +115,13 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="customer_identity", type="string", length=255, nullable=false)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $customerIdentity;
 
@@ -96,6 +129,13 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="channel_type", type="string", nullable=false)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $channelType;
 
@@ -107,6 +147,9 @@ class Channel
      *      defaultValues={
      *          "entity"={
      *              "label"="oro.ui.created_at"
+     *          },
+     *          "importexport"={
+     *              "excluded"=true
      *          }
      *      }
      * )
@@ -121,6 +164,9 @@ class Channel
      *      defaultValues={
      *          "entity"={
      *              "label"="oro.ui.updated_at"
+     *          },
+     *          "importexport"={
+     *              "excluded"=true
      *          }
      *      }
      * )
