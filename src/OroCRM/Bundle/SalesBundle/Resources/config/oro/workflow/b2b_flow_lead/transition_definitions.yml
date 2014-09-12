@@ -132,10 +132,11 @@ workflows:
                                     class: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
                                     attribute: $b2bcustomer
                                     data:
-                                        name:            $company_name
-                                        account:         $account
-                                        website:   $lead.website
-                                        employees: $lead.numberOfEmployees
+                                        name:        $company_name
+                                        dataChannel: $lead.dataChannel
+                                        account:     $account
+                                        website:     $lead.website
+                                        employees:   $lead.numberOfEmployees
                     - @call_method: # connect customer with Contact
                         conditions:
                             @empty: $b2bcustomer.contact
@@ -148,11 +149,12 @@ workflows:
                         attribute: $.result.opportunity
                         flush: true
                         data:
-                            name: $opportunity_name
-                            contact: $lead.contact
-                            customer: $b2bcustomer
-                            lead: $lead
-                            notes: $notes
+                            name:        $opportunity_name
+                            contact:     $lead.contact
+                            customer:    $b2bcustomer
+                            dataChannel: $lead.dataChannel
+                            lead:        $lead
+                            notes:       $notes
                     - @find_entity: # set status "In progress" to opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'

@@ -158,10 +158,11 @@ workflows:
                                     class:     OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
                                     attribute: $new_b2bcustomer
                                     data:
-                                        name:            $new_company_name
-                                        account:         $new_account
+                                        name:      $new_company_name
+                                        account:   $new_account
                                         website:   $lead.website
                                         employees: $lead.numberOfEmployees
+                                        dataChannel: $dataChannel
                     - @call_method: # connect customer with Contact
                         conditions:
                             @empty: $new_b2bcustomer.contact
@@ -170,15 +171,16 @@ workflows:
                             method: setContact
                             method_parameters: [$lead.contact]
                     - @create_entity: # create an opportunity
-                        class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                        class:     OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $opportunity
-                        flush: true
+                        flush:     true
                         data:
-                            name: $new_opportunity_name
-                            contact: $lead.contact
-                            customer: $new_b2bcustomer
-                            lead: $lead
-                            notes: $new_notes
+                            name:        $new_opportunity_name
+                            contact:     $lead.contact
+                            customer:    $new_b2bcustomer
+                            dataChannel: $dataChannel
+                            lead:        $lead
+                            notes:       $new_notes
                     - @find_entity: # set status "In progress" to opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
