@@ -142,7 +142,8 @@ services:
         arguments:
             - @orocrm_marketing_list.model.segment_helper
         tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre,   method: onPreBuild }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after, method: onBuildAfter }
 
     orocrm_campaign.form.type.internal_transport_settings:
         class: %orocrm_campaign.form.type.internal_transport_settings.class%

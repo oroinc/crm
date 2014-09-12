@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\CampaignBundle\EventListener;
 
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
+use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
+use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper;
@@ -42,7 +44,7 @@ class CampaignStatisticDatagridListener
         $selects = $config->offsetGetByPath('[source][query][select]', []);
         $groupBy = [];
         foreach ($selects as $select) {
-            preg_match('/(.+)\sas\sc\d$/i', $select, $parts);
+            preg_match('/([^\s]+)\s+as\s+c\d+$/i', $select, $parts);
 
             if (!empty($parts[1])) {
                 $groupBy[] = $parts[1];
@@ -58,6 +60,26 @@ class CampaignStatisticDatagridListener
         }
 
         $config->offsetSetByPath(self::PATH_GROUPBY, implode(', ', $groupBy));
+    }
+
+    /**
+     * @param BuildAfter $event
+     */
+    public function onBuildAfter(BuildAfter $event)
+    {
+        $datagrid   = $event->getDatagrid();
+        $datasource = $datagrid->getDatasource();
+        $parameters = $datagrid->getParameters();
+
+        if (!$this->isApplicable($datagrid->getName(), $parameters)) {
+            return;
+        }
+
+        if ($datasource instanceof OrmDatasource) {
+            $datasource
+                ->getQueryBuilder()
+                ->setParameter('emailCampaign', $parameters->get('emailCampaign'));
+        }
     }
 
     /**

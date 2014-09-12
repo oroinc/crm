@@ -75,6 +75,8 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function preBuildDataProvider()
     {
@@ -169,6 +171,20 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
                 'selects'    => ['alias.matchedFields as ca'],
                 'groupBy'    => null,
                 'expected'   => null,
+            ],
+            [
+                'gridName'   => Segment::GRID_PREFIX,
+                'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
+                'selects'    => ['alias.matchedFields as c100'],
+                'groupBy'    => null,
+                'expected'   => 'alias.matchedFields',
+            ],
+            [
+                'gridName'   => Segment::GRID_PREFIX,
+                'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
+                'selects'    => ['alias.matchedFields   as   c1'],
+                'groupBy'    => null,
+                'expected'   => 'alias.matchedFields',
             ]
         ];
     }

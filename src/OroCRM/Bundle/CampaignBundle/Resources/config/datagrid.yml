@@ -365,6 +365,7 @@ datagrid:
                 where:
                     and:
                         - mlr.id IS NULL
+                        - cs.emailCampaign = :emailCampaign
                 groupBy: t1.id, mlu.id, mli.contactedTimes, mli.lastContactedAt
         columns:
             campaignContactedTimes:
