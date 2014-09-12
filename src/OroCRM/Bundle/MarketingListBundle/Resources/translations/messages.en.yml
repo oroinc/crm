@@ -42,7 +42,7 @@ orocrm:
 
         datagrid:
             subscribed: Subscribed
-            contactedTimes: Number of times contacted
+            contactedTimes: Total contacted
             lastContactedAt: Last contacted at
             refreshedOn: Refreshed on
             actions:

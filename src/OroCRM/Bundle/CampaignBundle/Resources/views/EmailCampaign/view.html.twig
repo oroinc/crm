@@ -59,7 +59,7 @@
         {% if entity.marketingList is not empty %}
             {{ dataGrid.renderGrid(
                 constant('Oro\\Bundle\\SegmentBundle\\Entity\\Segment::GRID_PREFIX') ~ entity.marketingList.segment.id,
-                {'grid-mixin': 'orocrm-marketing-list-items-mixin'}
+                {'grid-mixin': constant('OroCRM\\Bundle\\CampaignBundle\\EventListener\\CampaignStatisticDatagridListener::MIXIN_NAME')}
             ) }}
         {% endif %}
     {%- endset -%}

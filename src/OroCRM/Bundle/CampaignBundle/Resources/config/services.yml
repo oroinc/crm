@@ -14,6 +14,7 @@ parameters:
     orocrm_campaign.email_transport.provider.class: OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider
     orocrm_campaign.email_campaign.sender.factory.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSenderFactory
 
+    orocrm_campaign.listener.email_campaign_statistic.class: OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticDatagridListener
     orocrm_campaign.form.type.internal_transport_settings.class: OroCRM\Bundle\CampaignBundle\Form\Type\InternalTransportSettingsType
     orocrm_campaign.form.subscriber.transport_settings.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsListener
     orocrm_campaign.form.subscriber.transport_settings_email_template.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsEmailTemplateListener
@@ -135,6 +136,13 @@ services:
         arguments:
             - @service_container
             - @orocrm_campaign.email_transport.provider
+
+    orocrm_campaign.listener.email_campaign_statistic:
+        class: %orocrm_campaign.listener.email_campaign_statistic.class%
+        arguments:
+            - @orocrm_marketing_list.model.segment_helper
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild }
 
     orocrm_campaign.form.type.internal_transport_settings:
         class: %orocrm_campaign.form.type.internal_transport_settings.class%

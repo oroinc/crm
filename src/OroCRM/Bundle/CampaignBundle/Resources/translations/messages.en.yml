@@ -93,6 +93,8 @@ orocrm:
                     view.label: View
                     update.label: Update
                     delete.label: Delete
+                campaignContactedTimes: Campaign contacted
+                campaignLastContactedAt: Campaign last contacted at
             send: Send
             system_configuration:
                 campaign_sender_email: Sender Email
