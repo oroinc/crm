@@ -281,6 +281,8 @@ services:
     # conditions
     oro_workflow.condition.custom:
         class: %oro_workflow.condition.channel_entity_availiable.class%
-        arguments: [@oro_workflow.context_accessor]
+        arguments:
+            - @oro_workflow.context_accessor
+            - @orocrm_channel.provider.state_provider
         tags:
             - { name: oro_workflow.condition, alias: channel_entity_availiable }

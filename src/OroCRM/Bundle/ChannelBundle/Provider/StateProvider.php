@@ -52,6 +52,34 @@ class StateProvider
     }
 
     /**
+     * Check are there any channel with all listed entities enabled
+     *
+     * @param array $entities
+     *
+     * @return bool
+     */
+    public function isEntitiesEnabledInSomeChannel(array $entities)
+    {
+        $qb = $this->getManager()->createQueryBuilder('c');
+        $qb->from('OroCRMChannelBundle:Channel', 'c');
+        $qb->select('c.id');
+        $qb->andWhere('c.status = :status');
+        $qb->setParameter('status', Channel::STATUS_ACTIVE);
+
+        if (!empty($entities)) {
+            $countDistinctName = $qb->expr()->eq($qb->expr()->countDistinct('e.name'), ':count');
+
+            $qb->innerJoin('c.entities', 'e');
+            $qb->andWhere($qb->expr()->in('e.name', $entities));
+            $qb->groupBy('c.name');
+            $qb->having($countDistinctName);
+            $qb->setParameter('count', count($entities));
+        }
+
+        return (bool)$qb->getQuery()->getArrayResult();
+    }
+
+    /**
      * Event listener subscribed  on 'orocrm_channel.channel.save_succeed' and on
      * 'orocrm_channel.channel.delete_succeed' event.
      */

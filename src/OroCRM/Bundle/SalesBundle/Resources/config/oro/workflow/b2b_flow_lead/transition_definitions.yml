@@ -6,7 +6,9 @@ workflows:
                     @not_empty: $lead.id
             qualify_definition:
                 pre_conditions:  # if lead.status = "new"
-                    @equal: [$lead.status.name, 'new']
+                    @and:
+                        - @equal: [$lead.status.name, 'new']
+                        - @channel_entity_availiable: [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\Opportunity', 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions:
                     @or:
                         parameters:

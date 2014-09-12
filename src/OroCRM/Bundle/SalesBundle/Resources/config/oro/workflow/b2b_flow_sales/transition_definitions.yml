@@ -6,9 +6,11 @@ workflows:
                     @equal: [$opportunity.status.name, 'in_progress']
             develop_definition:
                 pre_conditions: # if opportunity.status = "in_progress"
-                    @equal:
-                        message: 'Opportunity must be in status "In progress"'
-                        parameters: [$opportunity.status.name, 'in_progress']
+                    @and:
+                        - @equal:
+                            message: 'Opportunity must be in status "In progress"'
+                            parameters: [$opportunity.status.name, 'in_progress']
+                        - @channel_entity_availiable: [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions: # if opportunity.status = "in_progress"
                     @and:
                         - @greater_or_equal:
