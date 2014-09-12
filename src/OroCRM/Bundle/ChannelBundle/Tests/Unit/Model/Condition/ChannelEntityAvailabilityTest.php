@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Model\Condition;
 use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
 
 use OroCRM\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability;
+
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
