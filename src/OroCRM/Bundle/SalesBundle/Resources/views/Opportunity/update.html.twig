@@ -77,7 +77,7 @@
 
     {% set dataChannelClasses = '' %}
 
-    {% if form.dataChannel.vars.value is not empty %}
+    {% if entity.dataChannel is defined and entity.dataChannel is not empty and form.dataChannel.vars.value == entity.dataChannel.id %}
         {% set dataChannelClasses = 'hide' %}
     {% endif %}
 
