@@ -53,6 +53,9 @@ parameters:
     # import/export
     orocrm_channel.importexport.helper.channel.class:                  OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper
 
+    # conditions
+    oro_workflow.condition.channel_entity_availiable.class:            OroCRM\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability
+
 services:
     orocrm_channel.builder.factory:
         class: %orocrm_channel.builder.factory.class%
@@ -274,3 +277,10 @@ services:
         class: %orocrm_channel.importexport.helper.channel.class%
         arguments:
             - @doctrine
+
+    # conditions
+    oro_workflow.condition.custom:
+        class: %oro_workflow.condition.channel_entity_availiable.class%
+        arguments: [@oro_workflow.context_accessor]
+        tags:
+            - { name: oro_workflow.condition, alias: channel_entity_availiable }
