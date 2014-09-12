@@ -156,6 +156,7 @@ services:
         class: %orocrm_campaign.form.subscriber.transport_settings.class%
         arguments:
             - @orocrm_campaign.email_transport.provider
+            - @oro_entity.doctrine_helper
 
     orocrm_campaign.form.subscriber.transport_settings_email_template:
         class: %orocrm_campaign.form.subscriber.transport_settings_email_template.class%

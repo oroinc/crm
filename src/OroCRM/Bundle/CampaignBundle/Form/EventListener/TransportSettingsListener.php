@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Form\EventListener;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -19,11 +20,18 @@ class TransportSettingsListener implements EventSubscriberInterface
     protected $emailTransportProvider;
 
     /**
-     * @param EmailTransportProvider $emailTransportProvider
+     * @var DoctrineHelper
      */
-    public function __construct(EmailTransportProvider $emailTransportProvider)
+    protected $doctrineHelper;
+
+    /**
+     * @param EmailTransportProvider $emailTransportProvider
+     * @param DoctrineHelper $doctrineHelper
+     */
+    public function __construct(EmailTransportProvider $emailTransportProvider, DoctrineHelper $doctrineHelper)
     {
         $this->emailTransportProvider = $emailTransportProvider;
+        $this->doctrineHelper = $doctrineHelper;
     }
 
     /**
@@ -51,8 +59,10 @@ class TransportSettingsListener implements EventSubscriberInterface
             return;
         }
 
-        if ($transport = $this->addTransportSettingsForm($data->getTransport(), $event->getForm())) {
-            $data->setTransport($transport->getName());
+        $selectedTransport = $this->getSelectedTransport($data->getTransport());
+        if ($selectedTransport) {
+            $this->addTransportSettingsForm($selectedTransport, $event->getForm());
+            $data->setTransport($selectedTransport->getName());
         }
         $event->setData($data);
     }
@@ -85,11 +95,21 @@ class TransportSettingsListener implements EventSubscriberInterface
     {
         $data = $event->getData();
         $form = $event->getForm();
+        $formData = $form->getData();
 
         $transportName = isset($data['transport']) ? $data['transport'] : '';
-        if ($transport = $this->addTransportSettingsForm($transportName, $event->getForm())) {
-            $form->getData()->setTransport($transport->getName());
-            $form->get('transport')->setData($transport->getName());
+
+        $selectedTransport = $this->getSelectedTransport($transportName);
+        if ($selectedTransport->getName() != $formData->getTransport()) {
+            $newSettings = $this->doctrineHelper
+                ->createEntityInstance($selectedTransport->getSettingsEntityFQCN());
+            $formData->setTransportSettings($newSettings);
+        }
+
+        if ($selectedTransport) {
+            $this->addTransportSettingsForm($selectedTransport, $event->getForm());
+            $formData->setTransport($selectedTransport->getName());
+            $form->get('transport')->setData($selectedTransport->getName());
         }
 
         if ($event->getForm()->has('transportSettings')) {
@@ -102,13 +122,11 @@ class TransportSettingsListener implements EventSubscriberInterface
     }
 
     /**
-     * @param string $selectedTransportName
+     * @param TransportInterface $selectedTransport
      * @param FormInterface $form
-     * @return null|TransportInterface
      */
-    protected function addTransportSettingsForm($selectedTransportName, FormInterface $form)
+    protected function addTransportSettingsForm(TransportInterface $selectedTransport, FormInterface $form)
     {
-        $selectedTransport = $this->getSelectedTransport($selectedTransportName);
         if ($selectedTransport) {
             $transportSettingsFormType = $selectedTransport->getSettingsFormType();
 
@@ -117,11 +135,7 @@ class TransportSettingsListener implements EventSubscriberInterface
             } elseif ($form->has('transportSettings')) {
                 $form->remove('transportSettings');
             }
-
-            return $selectedTransport;
         }
-
-        return null;
     }
 
     /**

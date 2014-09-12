@@ -35,4 +35,11 @@ interface TransportInterface
      * @return string
      */
     public function getSettingsFormType();
+
+    /**
+     * Returns entity name needed to store transport settings.
+     *
+     * @return string
+     */
+    public function getSettingsEntityFQCN();
 }
