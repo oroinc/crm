@@ -1,0 +1,48 @@
+<?php
+
+namespace OroCRM\Bundle\ChannelBundle\Form\Type;
+
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+class CreateOrSelectInlineChannelAwareType extends AbstractChannelAwareType
+{
+    const NAME = 'oro_entity_create_or_select_inline_channel_aware';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return self::NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParent()
+    {
+        return 'oro_entity_create_or_select_inline';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setOptional(['channel_id']);
+        $resolver->setDefaults(['channel_field' => 'dataChannel']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        parent::buildView($view, $form, $options);
+
+        $options['configs']['extra_config'] = 'channel_aware';
+        $view->vars                         = array_replace_recursive($view->vars, ['configs' => $options['configs']]);
+    }
+}

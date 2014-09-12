@@ -79,20 +79,9 @@ class B2bCustomerTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testFinishView()
     {
-        $this->router->expects($this->at(0))
-            ->method('generate')
-            ->with('orocrm_sales_widget_leads_assign', ['id' => 100])
-            ->will($this->returnValue('/test-path/100'));
-
-        $this->router->expects($this->at(1))
-            ->method('generate')
-            ->with('orocrm_sales_widget_opportunities_assign', ['id' => 100])
-            ->will($this->returnValue('/test-info/100'));
-
         $b2bCustomer = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $b2bCustomer->expects($this->exactly(2))
+            ->disableOriginalConstructor()->getMock();
+        $b2bCustomer->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(100));
         $b2bCustomer->expects($this->once())
@@ -101,19 +90,32 @@ class B2bCustomerTypeTest extends \PHPUnit_Framework_TestCase
         $b2bCustomer->expects($this->once())
             ->method('getOpportunities')
             ->will($this->returnValue(new ArrayCollection([])));
+
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $form->expects($this->once())
-            ->method('getData')
+            ->disableOriginalConstructor()->getMock();
+        $form->expects($this->once())->method('getData')
             ->will($this->returnValue($b2bCustomer));
 
-        $formView = new FormView();
+        $formView           = new FormView();
+        $leadsView          = new FormView($formView);
+        $opportunitiesView  = new FormView($formView);
+        $formView->children = ['leads' => $leadsView, 'opportunities' => $opportunitiesView];
+
         $type = new B2bCustomerType($this->router, $this->nameFormatter);
         $type->finishView(
             $formView,
             $form,
             []
         );
+
+        $this->assertArrayHasKey('selection_route', $leadsView->vars);
+        $this->assertArrayHasKey('selection_route_parameters', $leadsView->vars);
+        $this->assertArrayHasKey('initial_elements', $leadsView->vars);
+        $this->assertInternalType('array', $leadsView->vars['initial_elements']);
+
+        $this->assertArrayHasKey('selection_route', $opportunitiesView->vars);
+        $this->assertArrayHasKey('selection_route_parameters', $opportunitiesView->vars);
+        $this->assertArrayHasKey('initial_elements', $opportunitiesView->vars);
+        $this->assertInternalType('array', $opportunitiesView->vars['initial_elements']);
     }
 }
