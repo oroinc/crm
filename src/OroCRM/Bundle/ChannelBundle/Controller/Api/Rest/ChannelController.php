@@ -17,6 +17,7 @@ use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
 use OroCRM\Bundle\ChannelBundle\Event\ChannelDeleteEvent;
+use OroCRM\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
 
 /**
  * @RouteResource("channel")
@@ -45,6 +46,11 @@ class ChannelController extends RestController
     {
         try {
             $channel = $this->getManager()->find($id);
+
+            $this->get('event_dispatcher')->dispatch(
+                ChannelBeforeDeleteEvent::EVENT_NAME,
+                new ChannelBeforeDeleteEvent($channel)
+            );
 
             $this->getDeleteHandler()->handleDelete($id, $this->getManager());
             $this->get('event_dispatcher')->dispatch(ChannelDeleteEvent::EVENT_NAME, new ChannelDeleteEvent($channel));

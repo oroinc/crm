@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
+use Symfony\Component\HttpFoundation\Request;
+
 use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
 use Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent;
 
@@ -9,6 +11,17 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 class EmbeddedFormListener
 {
+    /** @var Request */
+    protected $request;
+
+    /**
+     * @param Request $request
+     */
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
     /**
      * Add owner field to forms
      *
@@ -16,21 +29,25 @@ class EmbeddedFormListener
      */
     public function addDataChannelField(BeforeFormRenderEvent $event)
     {
-        $env              = $event->getTwigEnvironment();
-        $data             = $event->getFormData();
-        $form             = $event->getForm();
-        $dataChannelField = $env->render('OroCRMChannelBundle:Form:dataChannelField.html.twig', ['form' => $form]);
+        $routename = $this->request->attributes->get('_route');
 
-        /**
-         * Setting dataChannel field as first field in first data block
-         */
-        if (!empty($data['dataBlocks'])) {
-            if (isset($data['dataBlocks'][0]['subblocks'])) {
-                array_unshift($data['dataBlocks'][0]['subblocks'][0]['data'], $dataChannelField);
+        if (strrpos($routename, 'oro_embedded_form_') === 0) {
+            $env              = $event->getTwigEnvironment();
+            $data             = $event->getFormData();
+            $form             = $event->getForm();
+            $dataChannelField = $env->render('OroCRMChannelBundle:Form:dataChannelField.html.twig', ['form' => $form]);
+
+            /**
+             * Setting dataChannel field as first field in first data block
+             */
+            if (!empty($data['dataBlocks'])) {
+                if (isset($data['dataBlocks'][0]['subblocks'])) {
+                    array_unshift($data['dataBlocks'][0]['subblocks'][0]['data'], $dataChannelField);
+                }
             }
-        }
 
-        $event->setFormData($data);
+            $event->setFormData($data);
+        }
     }
 
     /**

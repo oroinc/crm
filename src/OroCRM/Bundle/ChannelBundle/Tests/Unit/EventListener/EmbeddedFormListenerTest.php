@@ -6,8 +6,18 @@ use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
 
 use OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var Request */
+    protected $request;
+
+    protected function setUp()
+    {
+        $this->request = new Request([], [], ['_route'=>'oro_embedded_form_']);
+    }
+
     public function testAddDataChannelField()
     {
         $env      = $this->getMockBuilder('Twig_Environment')
@@ -51,7 +61,7 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
             ->method('setFormData')
             ->with($formData);
 
-        $listener = new EmbeddedFormListener();
+        $listener = new EmbeddedFormListener($this->request);
         $listener->addDataChannelField($event);
     }
 
@@ -63,7 +73,7 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getDataChannel');
         $event = new EmbeddedFormSubmitBeforeEvent([], $formEntity);
 
-        $listener = new EmbeddedFormListener;
+        $listener = new EmbeddedFormListener($this->request);
         $listener->onEmbeddedFormSubmit($event);
     }
 
@@ -81,7 +91,7 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
             ->method('setDataChannel');
         $event = new EmbeddedFormSubmitBeforeEvent($data, $formEntity);
 
-        $listener = new EmbeddedFormListener;
+        $listener = new EmbeddedFormListener($this->request);
         $listener->onEmbeddedFormSubmit($event);
     }
 }

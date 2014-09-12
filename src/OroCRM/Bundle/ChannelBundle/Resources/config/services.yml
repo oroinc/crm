@@ -43,6 +43,7 @@ parameters:
     orocrm_channel.form.subscriber.channel_subscriber.class:           OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
     orocrm_channel.event_listener.channel_change_status.class:         OroCRM\Bundle\ChannelBundle\EventListener\ChangeChannelStatusListener
     orocrm_channel.event_listener.channel_save_succeed.class:          OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener
+    orocrm_channel.event_listener.channel_before_deleted.class:        OroCRM\Bundle\ChannelBundle\EventListener\ChannelBeforeDeleteListener
     orocrm_channel.event_listener.embedded_form.class:                 OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
 
     #twig
@@ -245,8 +246,18 @@ services:
         tags:
             - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSucceedSave }
 
+    orocrm_channel.event_listener.channel_succeed_deleted:
+        class: %orocrm_channel.event_listener.channel_before_deleted.class%
+        arguments:
+            - @oro_integration.delete_manager
+        tags:
+            - { name: kernel.event_listener, event: orocrm_channel.channel.before_delete, method: onChannelBeforeDelete }
+
     orocrm_channel.event_listener.embedded_form:
         class: %orocrm_channel.event_listener.embedded_form.class%
+        scope: request
+        arguments:
+            - @request
         tags:
             - { name: kernel.event_listener, event: entity_form.render.before, method: addDataChannelField }
             - { name: kernel.event_listener, event: oro_embedded_form.form_submit.before, method: onEmbeddedFormSubmit }
