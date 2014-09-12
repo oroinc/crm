@@ -23,9 +23,9 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider isAllowedDataProvider
      *
-     * @param array $options
-     * @param $context
-     * @param $expectedResult
+     * @param array  $options
+     * @param string $context
+     * @param string $expectedResult
      */
     public function testIsAllowed(array $options, $context, $expectedResult)
     {
@@ -33,6 +33,9 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->condition->isAllowed($context));
     }
 
+    /**
+     * @return array
+     */
     public function isAllowedDataProvider()
     {
         $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
@@ -47,30 +50,31 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
                     ]
                 )
             );
-        return array(
-            'full occurrence' => [
-                'options' => [
+
+        return [
+            'full occurrence'     => [
+                'options'        => [
                     new PropertyPath('[channel]'),
                     [
                         'OroCRM\Bundle\SalesBundle\Entity\Lead',
                         'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
                     ]
                 ],
-                'context' => ['channel' => $channel],
+                'context'        => ['channel' => $channel],
                 'expectedResult' => true
             ],
             'not full occurrence' => [
-                'options' => [
+                'options'        => [
                     new PropertyPath('[channel]'),
                     [
                         'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
                         'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel'
                     ]
                 ],
-                'context' => ['channel' => $channel],
+                'context'        => ['channel' => $channel],
                 'expectedResult' => false
             ]
-        );
+        ];
     }
 
     /**
