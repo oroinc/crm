@@ -1020,8 +1020,9 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
 
     /**
      * @param B2bCustomer $customer
+     * @TODO remove null after BAP-5248
      */
-    public function setCustomer(B2bCustomer $customer)
+    public function setCustomer(B2bCustomer $customer = null)
     {
         $this->customer = $customer;
     }

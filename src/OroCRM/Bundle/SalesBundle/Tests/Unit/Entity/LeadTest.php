@@ -27,6 +27,7 @@ class LeadTest extends \PHPUnit_Framework_TestCase
         $user     = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
         $address  = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
         $customer = $this->getMock('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
+        $channel  = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
 
         return [
             'namePrefix'        => ['namePrefix', 'test', 'test'],
@@ -47,6 +48,7 @@ class LeadTest extends \PHPUnit_Framework_TestCase
             'updatedAt'         => ['updatedAt', $now, $now],
             'notes'             => ['notes', 'test', 'test'],
             'customer'          => ['customer', $customer, $customer],
+            'dataChannel'       => ['dataChannel', $channel, $channel]
         ];
     }
 }

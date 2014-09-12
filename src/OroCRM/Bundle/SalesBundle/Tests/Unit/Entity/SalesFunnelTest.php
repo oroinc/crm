@@ -19,14 +19,14 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
 
     public function getSetDataProvider()
     {
-        $now = new \DateTime('now');
-        $lead = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Lead')
+        $now          = new \DateTime('now');
+        $lead         = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Lead')
             ->disableOriginalConstructor()
             ->getMock();
-        $opportunity = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Opportunity')
+        $opportunity  = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Opportunity')
             ->disableOriginalConstructor()
             ->getMock();
-        $user = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User')
+        $user         = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User')
             ->disableOriginalConstructor()
             ->getMock();
         $workflowItem = $this->getMockBuilder('Oro\Bundle\WorkflowBundle\Entity\WorkflowItem')
@@ -35,16 +35,18 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
         $workflowStep = $this->getMockBuilder('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep')
             ->disableOriginalConstructor()
             ->getMock();
+        $channel      = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
 
         return array(
-            'startDate' => array('startDate', $now, $now),
-            'lead' => array('lead', $lead, $lead),
-            'opportunity' => array('opportunity', $opportunity, $opportunity),
-            'owner' => array('owner', $user, $user),
+            'startDate'    => array('startDate', $now, $now),
+            'lead'         => array('lead', $lead, $lead),
+            'opportunity'  => array('opportunity', $opportunity, $opportunity),
+            'owner'        => array('owner', $user, $user),
             'workflowItem' => array('workflowItem', $workflowItem, $workflowItem),
             'workflowStep' => array('workflowStep', $workflowStep, $workflowStep),
-            'createdAt' => array('createdAt', $now, $now),
-            'updatedAt' => array('updatedAt', $now, $now),
+            'createdAt'    => array('createdAt', $now, $now),
+            'updatedAt'    => array('updatedAt', $now, $now),
+            'dataChannel'  => ['dataChannel', $channel, $channel]
         );
     }
 
