@@ -80,7 +80,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
         $builderFactory = $this->container->get('orocrm_channel.builder.factory');
         $builder = $builderFactory->createBuilder();
         $builder->setStatus(Channel::STATUS_ACTIVE);
-        $builder->setEntities();
+        $builder->setEntities(['OroCRM\\Bundle\\ContactUsBundle\\Entity\\ContactRequest']);
         $builder->setChannelType('custom');
         $this->dataChannel = $builder->getChannel();
         $om->persist($this->dataChannel);
