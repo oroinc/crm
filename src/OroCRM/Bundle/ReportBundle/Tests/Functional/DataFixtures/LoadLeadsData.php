@@ -20,10 +20,9 @@ use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
-use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
-use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
-use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
@@ -74,7 +73,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $this->initSupportingEntities($manager);
         $this->loadLeads();
-        $this->loadSources();
+        $this->loadSources($manager);
     }
 
     protected function initSupportingEntities(ObjectManager $manager = null)
@@ -87,39 +86,28 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
     }
 
-    public function loadSources()
+    /**
+     * @param ObjectManager $manager
+     */
+    public function loadSources(ObjectManager $manager)
     {
-        // TODO: Use cache manager instead of manual entity extracting (see git history)
-        // TODO: https://magecore.atlassian.net/browse/BAP-2706
-        $entityConfigModel = $this->em->getRepository(EntityConfigModel::ENTITY_NAME)->findOneBy(
-            array('className' => 'OroCRM\Bundle\SalesBundle\Entity\Lead')
-        );
-        $configFieldModel = $this->em->getRepository(FieldConfigModel::ENTITY_NAME)->findOneBy(
-            array(
-                'entity'    => $entityConfigModel,
-                'fieldName' => 'extend_source'
-            )
-        );
+        $className = ExtendHelper::buildEnumValueClassName('lead_source');
 
-        /** @var OptionSet[] $sources */
-        $sources = $configFieldModel->getOptions()->toArray();
-        $randomSource = count($sources)-1;
+        /** @var EnumValueRepository $enumRepo */
+        $enumRepo = $manager->getRepository($className);
+
+        /** @var AbstractEnumValue[] $sources */
+        $sources      = $enumRepo->findAll();
+        $randomSource = count($sources) - 1;
 
         $leads = $this->em->getRepository('OroCRMSalesBundle:Lead')->findAll();
-
+        /** @var Lead $lead */
         foreach ($leads as $lead) {
-            /** @var Lead $lead */
             $source = $sources[mt_rand(0, $randomSource)];
-            $optionSetRelation = new OptionSetRelation();
-            $optionSetRelation->setData(
-                null,
-                $lead->getId(),
-                $configFieldModel,
-                $source
-            );
-            $this->persist($this->em, $optionSetRelation);
+            $lead->setSource($source);
+            $manager->persist($lead);
         }
-        $this->flush($this->em);
+        $manager->flush();
     }
 
     public function loadLeads()
@@ -140,17 +128,17 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 $data = array_combine($headers, array_values($data));
 
                 $lead = $this->createLead($data, $user);
-                $this->persist($this->em, $lead);
+                $this->em->persist($lead);
 
                 $this->loadSalesFlows($lead);
 
                 $i++;
                 if ($i % self::FLUSH_MAX == 0) {
-                    $this->flush($this->em);
+                    $this->em->flush();
                 }
             }
 
-            $this->flush($this->em);
+            $this->em->flush();
             fclose($handle);
         }
     }
@@ -305,27 +293,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         /** @var EntityManager $em */
         $workflow->transit($workflowItem, $transition);
         $workflowItem->setUpdated();
-    }
-
-    /**
-     * Persist object
-     *
-     * @param mixed $manager
-     * @param mixed $object
-     */
-    private function persist($manager, $object)
-    {
-        $manager->persist($object);
-    }
-
-    /**
-     * Flush objects
-     *
-     * @param mixed $manager
-     */
-    private function flush($manager)
-    {
-        $manager->flush();
     }
 
     public function getOrder()

@@ -4,97 +4,107 @@ namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\EntityBundle\ORM\EntityConfigAwareRepositoryInterface;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
-class LeadRepository extends EntityRepository implements EntityConfigAwareRepositoryInterface
+class LeadRepository extends EntityRepository
 {
     /**
-     * @var ConfigManager
-     */
-    protected $entityConfigManager;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEntityConfigManager(ConfigManager $entityConfigManager)
-    {
-        $this->entityConfigManager = $entityConfigManager;
-    }
-
-    /**
-     * Returns top $limit opportunities and grouped by lead source and calculate
-     * a fraction of opportunities for each lead source
+     * Returns top $limit opportunities grouped by lead source
      *
      * @param AclHelper $aclHelper
      * @param int       $limit
-     * @return array [itemCount, label]
+     * @return array [source, itemCount]
      */
     public function getOpportunitiesByLeadSource(AclHelper $aclHelper, $limit = 10)
     {
-        $leadSourceFieldId = $this->entityConfigManager
-            ->getConfigFieldModel($this->getClassName(), "extend_source")
-            ->getId();
-
-        // get top $limit - 1 rows
-        $qb     = $this->createQueryBuilder('l')
-            ->select('count(o.id) as itemCount, opt.id as source_id, opt.label as label')
+        $qb   = $this->createQueryBuilder('l')
+            ->select('s.id as source, count(o.id) as itemCount')
             ->leftJoin('l.opportunities', 'o')
-            ->leftJoin('OroEntityConfigBundle:OptionSetRelation', 'osr', 'WITH', 'osr.entity_id = l.id')
-            ->leftJoin('osr.field', 'f', 'WITH', 'f.id = ' . $leadSourceFieldId)
-            ->leftJoin('osr.option', 'opt')
-            ->groupBy('opt.id, opt.label')
-            ->setMaxResults($limit - 1);
-        $result = $aclHelper->apply($qb)->getArrayResult();
+            ->leftJoin('l.source', 's')
+            ->groupBy('source');
+        $rows = $aclHelper->apply($qb)->getArrayResult();
 
-        // calculate total number of opportunities, update Unclassified source and collect other sources
-        $sources               = [];
+        return $this->processOpportunitiesByLeadSource($rows, $limit);
+    }
 
-        $hasUnclassifiedSource = false;
-        foreach ($result as &$row) {
-            if ($row['label'] === null) {
-                $hasUnclassifiedSource = true;
-                $row['label'] = 'orocrm.sales.lead.extend_source.unclassified';
-            } else {
-                $sources[] = $row['source_id'];
+    /**
+     * @param array $rows
+     * @param int   $limit
+     *
+     * @return array
+     */
+    protected function processOpportunitiesByLeadSource(array $rows, $limit)
+    {
+        $result       = [];
+        $unclassified = null;
+        $others       = [];
+
+        $this->sortByCountReverse($rows);
+        foreach ($rows as $row) {
+            if ($row['itemCount']) {
+                if ($row['source'] === null) {
+                    $unclassified = $row;
+                } else {
+                    if (count($result) < $limit) {
+                        $result[] = $row;
+                    } else {
+                        $others[] = $row;
+                    }
+                }
             }
         }
 
-        // get Others if needed
-        if (count($result) === $limit - 1) {
-            $qb = $this->createQueryBuilder('l')
-                ->select('count(o.id) as itemCount')
-                ->leftJoin('l.opportunities', 'o')
-                ->leftJoin('OroEntityConfigBundle:OptionSetRelation', 'osr', 'WITH', 'osr.entity_id = l.id')
-                ->leftJoin('osr.field', 'f', 'WITH', 'f.id = ' . $leadSourceFieldId)
-                ->leftJoin('osr.option', 'opt');
-            $qb->where($qb->expr()->notIn('opt.id', $sources));
-            if (!$hasUnclassifiedSource) {
-                $qb->orWhere($qb->expr()->isNull('opt.id'));
+        if ($unclassified) {
+            if (count($result) === $limit) {
+                // allocate space for 'unclassified' item
+                array_unshift($others, array_pop($result));
             }
-            $others   = $aclHelper->apply($qb)->getArrayResult();
-            if (!empty($others)) {
-                $others = reset($others);
-                $result[] = array_merge(['label' => 'orocrm.sales.lead.extend_source.others'], $others);
-            }
+            // add 'unclassified' item to the top to avoid moving it to $others
+            array_unshift($result, $unclassified);
         }
-
-        // if no data found
-        if (empty($result)) {
-            $result[] = array(
-                'label' => 'orocrm.sales.lead.extend_source.none'
-            );
-        }
-
-        // sort alphabetically by label
-        usort(
-            $result,
-            function ($a, $b) {
-                return strcasecmp($a['label'], $b['label']);
+        if (!empty($others)) {
+            if (count($result) === $limit) {
+                // allocate space for 'others' item
+                array_unshift($others, array_pop($result));
             }
-        );
+            // add 'others' item
+            $result[] = [
+                'source'    => '',
+                'itemCount' => $this->sumCount($others)
+            ];
+        }
 
         return $result;
+    }
+
+    /**
+     * @param array $rows
+     *
+     * @return int
+     */
+    protected function sumCount(array $rows)
+    {
+        $result = 0;
+        foreach ($rows as $row) {
+            $result += $row['itemCount'];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $rows
+     */
+    protected function sortByCountReverse(array &$rows)
+    {
+        usort(
+            $rows,
+            function ($a, $b) {
+                if ($a['itemCount'] === $b['itemCount']) {
+                    return 0;
+                }
+                return $a['itemCount'] < $b['itemCount'] ? 1 : -1;
+            }
+        );
     }
 }

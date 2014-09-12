@@ -88,7 +88,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_8';
+        return 'v1_9';
     }
 
     /**
@@ -266,21 +266,21 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('createdat', 'datetime', []);
         $table->addColumn('updatedat', 'datetime', ['notnull' => false]);
         $table->addColumn('notes', 'text', ['notnull' => false]);
-        $this->extendExtension->addOptionSet(
+
+        $this->extendExtension->addEnumField(
             $schema,
-            $table,
-            'extend_source',
-            [
-                'extend' => ['is_extend' => true, 'set_expanded' => false]
-            ]
+            'orocrm_sales_lead',
+            'source',
+            'lead_source'
         );
+
         $this->extendExtension->addManyToOneRelation(
             $schema,
             $table,
             'campaign',
             'orocrm_campaign',
             'combined_name',
-            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
+            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
         );
         $table->addIndex(['status_name'], 'idx_73db46336625d392', []);
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);

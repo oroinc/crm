@@ -53,13 +53,12 @@ class LeadType extends AbstractType
             ->add('industry', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.industry.label'))
             ->add('address', 'oro_address', array('required' => false))
             ->add(
-                'extend_source',
-                'oro_option_select',
+                'source',
+                'oro_enum_select',
                 array(
-                    'required'        => false,
-                    'label'           => 'orocrm.sales.lead.extend_source.label',
-                    'entityClassName' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
-                    'entityFieldName' => 'extend_source'
+                    'required' => false,
+                    'label'    => 'orocrm.sales.lead.source.label',
+                    'enum_code' => 'lead_source'
                 )
             )
             ->add('notes', 'textarea', array('required' => false, 'label' => 'orocrm.sales.lead.notes.label'));

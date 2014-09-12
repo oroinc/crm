@@ -20,6 +20,7 @@ datagrid:
                 label:         orocrm.contactus.contactrequest.last_name.label
             phone:
                 label:         orocrm.contactus.contactrequest.phone.label
+                frontend_type: phone
             emailAddress:
                 label:         orocrm.contactus.contactrequest.email_address.label
             createdAt:

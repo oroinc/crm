@@ -8,12 +8,17 @@ orocrm:
         created_at.label:    Created At
         name.label:          Name
         owner.label:         Owner
+        segment.label:       Segment
+
+        marketing_list_items.label:              Marketing List Items
+        marketing_list_removed_items.label:      Marketing List Removed Items
+        marketing_list_unsubscribed_items.label: Marketing List Unsubscribed Items
 
         controller:
             unsubscribed: %entityName% unsubscribed
             subscribed: %entityName% subscribed
             removed: %entityName% removed from list
-            unremoved: %entityName% unremoved from list
+            unremoved: Undo was successful
 
         segment: Marketing List %name% segment
 
@@ -36,12 +41,13 @@ orocrm:
 
         datagrid:
             subscribed: Subscribed
-            update: Update
-            delete: Delete
-            view: View
             contactedTimes: Number of times contacted
             lastContactedAt: Last contacted at
             refreshedOn: Refreshed on
+            actions:
+                update.label: Update
+                delete.label: Delete
+                view.label: View
 
         entity_config:
             choices:
