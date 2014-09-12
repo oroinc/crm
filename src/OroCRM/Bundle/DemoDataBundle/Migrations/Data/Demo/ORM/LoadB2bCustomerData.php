@@ -145,12 +145,12 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
     }
 
     /**
-     * @param int $id
+     * @param int $identifier
      *
      * @return Account
      */
-    private function getAccountReference($id)
+    private function getAccountReference($identifier)
     {
-        return $this->em->getReference('OroCRMAccountBundle:Account', $id);
+        return $this->em->getReference('OroCRMAccountBundle:Account', $identifier);
     }
 }
