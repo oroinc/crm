@@ -46,7 +46,8 @@ class OpportunityType extends AbstractType
                     'required' => true,
                     'label' => 'orocrm.sales.opportunity.data_channel.label',
                     'entities' => [
-                        'OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity'
+                        'OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity',
+                        'OroCRM\\Bundle\\SalesBundle\\Entity\\B2bCustomer'
                     ],
                 )
             )

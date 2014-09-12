@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Form\Handler;
 
 use Oro\Bundle\TagBundle\Entity\TagManager;
 
+use OroCRM\Bundle\ChannelBundle\Handler\ChannelFromRequest;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
@@ -35,26 +36,38 @@ class B2bCustomerHandler
      */
     protected $tagManager;
 
+    /** @var ChannelFromRequest  */
+    protected $channelFromRequest;
+
     /**
-     * @param FormInterface $form
-     * @param Request       $request
-     * @param ObjectManager $manager
+     * @param FormInterface      $form
+     * @param Request            $request
+     * @param ObjectManager      $manager
+     * @param ChannelFromRequest $channelFromRequest
      */
-    public function __construct(FormInterface $form, Request $request, ObjectManager $manager)
-    {
-        $this->form    = $form;
-        $this->request = $request;
-        $this->manager = $manager;
+    public function __construct(
+        FormInterface $form,
+        Request $request,
+        ObjectManager $manager,
+        ChannelFromRequest $channelFromRequest
+    ) {
+        $this->form               = $form;
+        $this->request            = $request;
+        $this->manager            = $manager;
+        $this->channelFromRequest = $channelFromRequest;
     }
 
     /**
      * Process form
      *
      * @param  B2bCustomer $entity
+     *
      * @return bool        True on successful processing, false otherwise
      */
     public function process(B2bCustomer $entity)
     {
+        $this->channelFromRequest->setDataChannel($this->request, $entity);
+
         $this->form->setData($entity);
 
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {

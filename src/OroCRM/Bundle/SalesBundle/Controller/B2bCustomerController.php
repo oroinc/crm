@@ -12,6 +12,8 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * @Route("/b2bcustomer")
  */

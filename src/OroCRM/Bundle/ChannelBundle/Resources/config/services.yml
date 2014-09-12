@@ -8,6 +8,7 @@ parameters:
     # handlers
     orocrm_channel.channel_form.handler.class:                         OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelHandler
     orocrm_channel.channel_integration_form.handler.class:             OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler
+    orocrm_channel.channel_from_requst.handler.class:                  OroCRM\Bundle\ChannelBundle\Handler\ChannelFromRequest
 
     # forms
     orocrm_channel.form.type.channel.class:                               OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
@@ -125,6 +126,11 @@ services:
         class: %orocrm_channel.manager.api.class%
         arguments:
             - %orocrm_channel.entity.class%
+            - @doctrine.orm.entity_manager
+
+    orocrm_channel.channel_from_requst.handler:
+        class: %orocrm_channel.channel_from_requst.handler.class%
+        arguments:
             - @doctrine.orm.entity_manager
 
     # Providers

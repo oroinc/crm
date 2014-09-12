@@ -71,9 +71,16 @@
     {% if form.owner is defined %}
         {% set formFields = formFields|merge([form_row(form.owner)]) %}
     {% endif %}
+
+    {% set dataChannelClasses = '' %}
+
+    {% if form.dataChannel.vars.value is not empty %}
+        {% set dataChannelClasses = 'hide' %}
+    {% endif %}
+
     {% set formFields = formFields|merge([
         form_row(form.name),
-        form_row(form.dataChannel),
+        form_row(form.dataChannel, {'attr': {'class':dataChannelClasses}}),
         form_row(form.namePrefix),
         form_row(form.firstName),
         form_row(form.middleName),
