@@ -28,7 +28,7 @@ class EmailCampaignTest extends AbstractEntityTestCase
         $marketingList = new MarketingList();
         $owner         = new User();
         $date          = new \DateTime('now', new \DateTimeZone('UTC'));
-        $template      = new EmailTemplate();
+        $transportSettings = $this->getMockForAbstractClass('OroCRM\Bundle\CampaignBundle\Entity\TransportSettings');
 
         return [
             'name'          => ['name', 'test', 'test'],
@@ -40,12 +40,12 @@ class EmailCampaignTest extends AbstractEntityTestCase
             'scheduledFor'  => ['scheduledFor', $date, $date],
             'marketingList' => ['marketingList', $marketingList, $marketingList],
             'owner'         => ['owner', $owner, $owner],
-            'template'      => ['template', $template, $template],
             'updatedAt'     => ['updatedAt', $date, $date],
             'createdAt'     => ['createdAt', $date, $date],
             'senderEmail'   => ['senderEmail', 'test@test.com', 'test@test.com'],
             'senderName'    => ['senderName', 'name', 'name'],
             'transport'     => ['transport', 'transport', 'transport'],
+            'transportSettings' => ['transportSettings', $transportSettings, $transportSettings]
         ];
     }
 
