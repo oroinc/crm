@@ -59,7 +59,7 @@ workflows:
                             attribute: $lead
                             data:
                                 owner: $sales_funnel_owner
-                transition_definition: start_definition
+                transition_definition: start_from_lead
             start_from_opportunity:
                 label: 'Start from Opportunity'
                 step_to: new_opportunity
@@ -118,7 +118,7 @@ workflows:
                             attribute: $opportunity
                             data:
                                 owner: $sales_funnel_owner
-                transition_definition: start_definition
+                transition_definition: start_from_opportunity
             disqualify:
                 label: 'Disqualify'
                 step_to: disqualified_lead
