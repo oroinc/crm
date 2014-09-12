@@ -4,8 +4,6 @@ namespace OroCRM\Bundle\ChannelBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
 use Symfony\Component\HttpFoundation\Response;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -19,6 +17,7 @@ use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
 use OroCRM\Bundle\ChannelBundle\Event\ChannelDeleteEvent;
+use OroCRM\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
 
 /**
  * @RouteResource("channel")
