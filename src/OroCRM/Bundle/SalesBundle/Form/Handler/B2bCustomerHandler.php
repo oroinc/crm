@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Form\Handler;
 
 use Oro\Bundle\TagBundle\Entity\TagManager;
 
-use OroCRM\Bundle\ChannelBundle\Handler\ChannelFromRequest;
+use OroCRM\Bundle\ChannelBundle\Provider\ChannelFromRequest;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;

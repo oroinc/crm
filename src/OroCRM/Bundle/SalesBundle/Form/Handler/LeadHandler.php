@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Handler;
 
-use OroCRM\Bundle\ChannelBundle\Handler\ChannelFromRequest;
+use OroCRM\Bundle\ChannelBundle\Provider\ChannelFromRequest;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 use Symfony\Component\Form\FormInterface;

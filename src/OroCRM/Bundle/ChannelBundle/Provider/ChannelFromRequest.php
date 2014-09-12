@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Handler;
+namespace OroCRM\Bundle\ChannelBundle\Provider;
 
 use Doctrine\Common\Persistence\ObjectManager;
 

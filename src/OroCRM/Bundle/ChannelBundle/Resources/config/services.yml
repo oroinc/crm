@@ -8,7 +8,6 @@ parameters:
     # handlers
     orocrm_channel.channel_form.handler.class:                         OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelHandler
     orocrm_channel.channel_integration_form.handler.class:             OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler
-    orocrm_channel.channel_from_requst.handler.class:                  OroCRM\Bundle\ChannelBundle\Handler\ChannelFromRequest
 
     # forms
     orocrm_channel.form.type.channel.class:                               OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
@@ -28,6 +27,7 @@ parameters:
     orocrm_channel.provider.state_provider.class:                      OroCRM\Bundle\ChannelBundle\Provider\StateProvider
     orocrm_channel.provider.entity_metadata.class:                     OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider
     orocrm_channel.provider.utils.entity_state_provider.class:         OroCRM\Bundle\ChannelBundle\Provider\Utility\EntityStateProvider
+    orocrm_channel.channel_from_requst.provider.class:                 OroCRM\Bundle\ChannelBundle\Provider\ChannelFromRequest
 
     # datagrid
     orocrm_channel.datagrid.extension.orm_channel_limitation.class:    OroCRM\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtension
@@ -128,11 +128,6 @@ services:
             - %orocrm_channel.entity.class%
             - @doctrine.orm.entity_manager
 
-    orocrm_channel.channel_from_requst.handler:
-        class: %orocrm_channel.channel_from_requst.handler.class%
-        arguments:
-            - @doctrine.orm.entity_manager
-
     # Providers
     orocrm_channel.provider.settings_provider:
         class: %orocrm_channel.provider.settings_provider.class%
@@ -155,6 +150,11 @@ services:
             - @oro_entity.entity_provider
             - @oro_entity_config.config_manager
             - @router
+
+    orocrm_channel.channel_from_requst.provider:
+        class: %orocrm_channel.channel_from_requst.provider.class%
+        arguments:
+            - @doctrine.orm.entity_manager
 
     # datagrid
     orocrm_channel.datagrid.extension.orm_channel_limitation:

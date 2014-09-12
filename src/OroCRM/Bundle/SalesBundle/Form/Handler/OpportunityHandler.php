@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\ChannelBundle\Handler\ChannelFromRequest;
+use OroCRM\Bundle\ChannelBundle\Provider\ChannelFromRequest;
 
 class OpportunityHandler
 {

@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Handler;
 
+use OroCRM\Bundle\ChannelBundle\Provider\ChannelFromRequest;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler;
 
@@ -37,6 +38,9 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected $entity;
 
+    /** @var ChannelFromRequest  */
+    protected $channelFromRequest;
+
     protected function setUp()
     {
         $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')
@@ -49,8 +53,12 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->channelFromRequest = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\ChannelFromRequest')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->entity  = new B2bCustomer();
-        $this->handler = new B2bCustomerHandler($this->form, $this->request, $this->manager);
+        $this->handler = new B2bCustomerHandler($this->form, $this->request, $this->manager, $this->channelFromRequest);
         $this->handler->setTagManager(
             $this->getMockBuilder('Oro\Bundle\TagBundle\Entity\TagManager')
                 ->disableOriginalConstructor()
@@ -60,6 +68,10 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessUnsupportedRequest()
     {
+        $this->channelFromRequest->expects($this->once())
+            ->method('setDataChannel')
+            ->with($this->request, $this->entity);
+
         $this->form->expects($this->once())
             ->method('setData')
             ->with($this->entity);
@@ -175,6 +187,10 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
     public function testProcessWithoutLeadViewPermission()
     {
         $this->request->setMethod('POST');
+
+        $this->channelFromRequest->expects($this->once())
+            ->method('setDataChannel')
+            ->with($this->request, $this->entity);
 
         $this->form->expects($this->once())
             ->method('setData')
