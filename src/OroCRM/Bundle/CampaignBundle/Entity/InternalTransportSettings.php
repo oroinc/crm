@@ -21,11 +21,6 @@ class InternalTransportSettings extends TransportSettings
     protected $template;
 
     /**
-     * @var ParameterBag
-     */
-    private $settings;
-
-    /**
      * Set template
      *
      * @param EmailTemplate $emailTemplate

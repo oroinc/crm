@@ -11,7 +11,7 @@ define(function (require) {
         var $schedule = options._sourceElement.find(options.scheduleEl),
             $scheduledFor = options._sourceElement.find(options.scheduledForEl),
             $transportEl = options._sourceElement.find(options.transportEl),
-            label = $scheduledFor.find('label'),
+            $label = $scheduledFor.find('label'),
             hideOn = options.hideOn || [],
             showOn = options.showOn || [];
 
@@ -37,8 +37,8 @@ define(function (require) {
                     .addClass('hide')
                     .data('validation-ignore', true);
 
-                if (label.hasClass('required')) {
-                    label
+                if ($label.hasClass('required')) {
+                    $label
                         .removeClass('required')
                         .find('em').remove();
                 }
@@ -48,8 +48,8 @@ define(function (require) {
                     .removeClass('hide')
                     .removeData('validation-ignore');
 
-                if (!label.hasClass('required')) {
-                    label
+                if (!$label.hasClass('required')) {
+                    $label
                         .addClass('required')
                         .append('<em>*</em>');
                 }

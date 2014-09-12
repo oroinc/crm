@@ -5,8 +5,6 @@ namespace OroCRM\Bundle\CampaignBundle\Form\Type;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
@@ -98,7 +96,7 @@ class EmailCampaignType extends AbstractType
                 [
                     'label'    => 'orocrm.campaign.emailcampaign.transport.label',
                     'required' => true,
-                    'mapped' => false
+                    'mapped'   => false
                 ]
             )
             ->add(

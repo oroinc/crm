@@ -51,7 +51,8 @@
         {% set hideScheduleFor = 'hide' %}
     {% endif %}
 
-    {% set dataBlocks = [{
+    {% set dataBlocks = [
+        {
             'title': 'General'|trans,
             'class': 'active',
             'subblocks': [
@@ -78,8 +79,8 @@
                     'data': transportFormData
                 }
             ]
-        }]
-    %}
+        }
+    ] %}
 
     {% set data =
         {

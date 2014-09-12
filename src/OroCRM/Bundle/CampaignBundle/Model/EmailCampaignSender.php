@@ -69,7 +69,6 @@ class EmailCampaignSender
      * @param ContactInformationFieldsProvider $contactInformationFieldsProvider
      * @param ManagerRegistry $registry
      * @param EmailTransportProvider $emailTransportProvider
-     * @param LoggerInterface|null $logger
      */
     public function __construct(
         MarketingListProvider $marketingListProvider,
@@ -77,8 +76,7 @@ class EmailCampaignSender
         MarketingListItemConnector $marketingListItemConnector,
         ContactInformationFieldsProvider $contactInformationFieldsProvider,
         ManagerRegistry $registry,
-        EmailTransportProvider $emailTransportProvider,
-        LoggerInterface $logger = null
+        EmailTransportProvider $emailTransportProvider
     ) {
         $this->marketingListProvider = $marketingListProvider;
         $this->configManager = $configManager;
@@ -86,6 +84,13 @@ class EmailCampaignSender
         $this->contactInformationFieldsProvider = $contactInformationFieldsProvider;
         $this->registry = $registry;
         $this->emailTransportProvider = $emailTransportProvider;
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
         $this->logger = $logger;
     }
 

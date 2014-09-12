@@ -24,6 +24,11 @@ abstract class TransportSettings
     protected $id;
 
     /**
+     * @var ParameterBag
+     */
+    protected $settings;
+
+    /**
      * @return mixed
      */
     public function getId()

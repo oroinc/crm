@@ -2,18 +2,16 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Controller;
 
-use OroCRM\Bundle\CampaignBundle\Entity\DummyTransportSettings;
-use OroCRM\Bundle\CampaignBundle\Form\Handler\EmailCampaignHandler;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
+use OroCRM\Bundle\CampaignBundle\Form\Handler\EmailCampaignHandler;
 
 /**
  * @Route("/campaign/email")

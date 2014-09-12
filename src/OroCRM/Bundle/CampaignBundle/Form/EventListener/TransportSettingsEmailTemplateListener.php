@@ -73,7 +73,7 @@ class TransportSettingsEmailTemplateListener implements EventSubscriberInterface
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return MarketingList
      */
     protected function getMarketingListById($id)
@@ -85,7 +85,7 @@ class TransportSettingsEmailTemplateListener implements EventSubscriberInterface
 
     /**
      * @param FormInterface $form
-     * @param $entityName
+     * @param string $entityName
      */
     protected function fillEmailTemplateChoices(FormInterface $form, $entityName)
     {
