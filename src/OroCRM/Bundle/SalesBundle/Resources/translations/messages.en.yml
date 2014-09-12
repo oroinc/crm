@@ -237,3 +237,5 @@ orocrm:
             b2bcustomer_information: B2B Customer Information
             leads:                   Leads
             opportunities:           Opportunities
+        channel_type:
+            b2b.label: B2b

@@ -42,7 +42,7 @@ orocrm_channel:
 
    channel_types:
         b2b:
-            label: B2B
+            label: orocrm.sales.channel_type.b2b.label
             entities:
                 - OroCRM\Bundle\SalesBundle\Entity\Lead
                 - OroCRM\Bundle\SalesBundle\Entity\Opportunity

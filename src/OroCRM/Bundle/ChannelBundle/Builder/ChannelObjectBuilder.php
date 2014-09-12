@@ -148,6 +148,8 @@ class ChannelObjectBuilder
     /**
      * Returns built channel
      *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
      * @return Channel
      */
     public function getChannel()
@@ -160,9 +162,14 @@ class ChannelObjectBuilder
         }
         $this->addEntity($identity, true);
 
+        $owner = $this->owner;
+        if (!$owner) {
+            $owner = $this->getDefaultOrganization();
+        }
+
         $this->channel->setChannelType($type);
         $this->channel->setName($name);
-        $this->channel->setOwner($this->owner ?: $this->getDefaultOrganization());
+        $this->channel->setOwner($owner);
         $this->channel->setCustomerIdentity($identity);
         $this->channel->setEntities($this->entities);
         $this->channel->setStatus($this->status);
