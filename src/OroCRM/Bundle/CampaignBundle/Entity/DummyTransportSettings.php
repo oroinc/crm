@@ -32,7 +32,8 @@ class DummyTransportSettings extends TransportSettings
         if (null === $this->settings) {
             $this->settings = new ParameterBag(
                 array(
-                    'template' => $this->getTemplate()
+                    'sentAt' => $this->getSentAt(),
+                    'notes' => $this->getNotes()
                 )
             );
         }

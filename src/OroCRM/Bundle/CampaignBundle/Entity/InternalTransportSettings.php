@@ -27,7 +27,7 @@ class InternalTransportSettings extends TransportSettings
      *
      * @return InternalTransportSettings
      */
-    public function setTemplate(EmailTemplate $emailTemplate)
+    public function setTemplate(EmailTemplate $emailTemplate = null)
     {
         $this->template = $emailTemplate;
 
@@ -37,7 +37,7 @@ class InternalTransportSettings extends TransportSettings
     /**
      * Get template
      *
-     * @return EmailTemplate
+     * @return EmailTemplate|null
      */
     public function getTemplate()
     {

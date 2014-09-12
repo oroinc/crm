@@ -45,4 +45,12 @@ class DummyTransport implements TransportInterface
     {
         return DummyTransportSettingsType::NAME;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSettingsEntityFQCN()
+    {
+        return 'OroCRM\Bundle\CampaignBundle\Entity\DummyTransportSettings';
+    }
 }

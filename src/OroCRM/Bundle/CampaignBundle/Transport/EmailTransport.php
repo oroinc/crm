@@ -118,4 +118,12 @@ class EmailTransport implements TransportInterface
     {
         return InternalTransportSettingsType::NAME;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSettingsEntityFQCN()
+    {
+        return 'OroCRM\Bundle\CampaignBundle\Entity\InternalTransportSettings';
+    }
 }

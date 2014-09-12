@@ -68,8 +68,6 @@ class TransportSettingsEmailTemplateListener implements EventSubscriberInterface
 
         $entityName = $marketingList->getEntity();
         $this->fillEmailTemplateChoices($event->getForm(), $entityName);
-
-        $event->setData($data);
     }
 
     /**
