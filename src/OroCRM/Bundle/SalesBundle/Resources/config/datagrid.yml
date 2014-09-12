@@ -347,11 +347,11 @@ datagrid:
         columns:
             id:
                 label: orocrm.sales.salesfunnel.id.label
+            channelName:
+                label: orocrm.sales.salesfunnel.data_channel.label
             startDate:
                 label: orocrm.sales.salesfunnel.start_date.label
                 frontend_type: date
-            channelName:
-                label: orocrm.sales.salesfunnel.data_channel.label
             leadName:
                 label: orocrm.sales.salesfunnel.lead.label
             opportunityName:
@@ -384,10 +384,10 @@ datagrid:
             columns:
                 id:
                     data_name: salesFunnel.id
-                startDate:
-                    data_name: salesFunnel.startDate
                 channelName:
                     data_name: channelName
+                startDate:
+                    data_name: salesFunnel.startDate
                 leadName:
                     data_name: lead.name
                 opportunityName:
@@ -428,9 +428,6 @@ datagrid:
                     type: string
                     data_name: salesFunnel.id
                     type: number
-                startDate:
-                    type:      date
-                    data_name: salesFunnel.startDate
                 channelName:
                     type:      entity
                     data_name: channel.id
@@ -438,6 +435,9 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                startDate:
+                    type:      date
+                    data_name: salesFunnel.startDate
                 leadName:
                     type: string
                     data_name: lead.name
