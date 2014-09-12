@@ -100,7 +100,7 @@ class B2bCustomerController extends Controller
     {
         return $this->get('oro_form.model.update_handler')->handleUpdate(
             $entity,
-            $this->get('orocrm_sales.b2bCustomer.form'),
+            $this->get('orocrm_sales.b2bcustomer.form'),
             function (B2bCustomer $entity) {
                 return [
                     'route'      => 'orocrm_sales_b2bcustomer_update',
@@ -114,7 +114,7 @@ class B2bCustomerController extends Controller
                 ];
             },
             $this->get('translator')->trans('orocrm.sales.controller.b2bcustomer.saved.message'),
-            $this->get('orocrm_sales.b2bCustomer.form.handler')
+            $this->get('orocrm_sales.b2bcustomer.form.handler')
         );
     }
 
