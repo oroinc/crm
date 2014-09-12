@@ -95,6 +95,16 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
     }
 
     /**
+     * @param int $identifier
+     *
+     * @return Account
+     */
+    protected function getAccountReference($identifier)
+    {
+        return $this->em->getReference('OroCRMAccountBundle:Account', $identifier);
+    }
+
+    /**
      * @return null|Channel
      */
     private function getChannel()
@@ -142,15 +152,5 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
             },
             $items
         );
-    }
-
-    /**
-     * @param int $identifier
-     *
-     * @return Account
-     */
-    private function getAccountReference($identifier)
-    {
-        return $this->em->getReference('OroCRMAccountBundle:Account', $identifier);
     }
 }

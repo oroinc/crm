@@ -148,6 +148,8 @@ class ChannelObjectBuilder
     /**
      * Returns built channel
      *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
      * @return Channel
      */
     public function getChannel()
