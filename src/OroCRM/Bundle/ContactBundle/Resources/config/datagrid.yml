@@ -6,7 +6,7 @@ datagrid:
             query:
                 select:
                     - c.id
-                    - CONCAT(c.firstName, CONCAT(' ', c.lastName)) as contactName
+                    - CONCAT(c.firstName, ' ', c.lastName) as contactName
                     - email.email as primaryEmail
                     - phone.phone as primaryPhone
                     - max(history.visitedAt) as visitDate
@@ -24,11 +24,11 @@ datagrid:
                             condition: "c.id=history.entityId AND history.route='orocrm_contact_view'"
                 where:
                     and:
-                      - history.entityId<>0
                       - history.user = @oro_security.security_facade->getLoggedUserId
-                groupBy:  c.id, contactName, primaryEmail, primaryPhone
-        sorters:
-            visitDate: { history.: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
+                groupBy: c.id, contactName, primaryEmail, primaryPhone
+                orderBy:
+                      - column: visitDate
+                        dir: desc
         columns:
             contactName:
                 type: twig

@@ -23,12 +23,13 @@ datagrid:
                             alias: history
                             conditionType: WITH
                             condition: "a.id=history.entityId AND history.route='orocrm_account_view'"
-
                 where:
                     and:
-                      - history.entityId<>0
                       - history.user = @oro_security.security_facade->getLoggedUserId
                 groupBy:  a.id, a.name, contactEmail, contactPhone
+                orderBy:
+                    - column: visitDate
+                      dir: desc
         sorters:
             visitDate: { history.: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
         columns:
