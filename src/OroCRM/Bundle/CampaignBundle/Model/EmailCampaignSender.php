@@ -101,9 +101,8 @@ class EmailCampaignSender
     {
         $this->emailCampaign = $emailCampaign;
 
-        $transport = $this->emailTransportProvider
+        $this->transport = $this->emailTransportProvider
             ->getTransportByName($emailCampaign->getTransport());
-        $this->transport = $transport;
     }
 
     public function send()

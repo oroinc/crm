@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Model\Data\Transformer;
 use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\EmailBundle\Form\Model\Email;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
+use OroCRM\Bundle\CampaignBundle\Entity\InternalTransportSettings;
 use OroCRM\Bundle\CampaignBundle\Transport\EmailTransport;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 
@@ -86,10 +87,13 @@ class EmailTransportTest extends \PHPUnit_Framework_TestCase
 
         $template = new EmailTemplate();
         $template->setType('html');
+        $settings = new InternalTransportSettings();
+        $settings
+            ->setTemplate($template);
         $campaign = new EmailCampaign();
         $campaign
             ->setMarketingList($marketingList)
-            ->setTemplate($template);
+            ->setTransportSettings($settings);
 
         $this->renderer
             ->expects($this->once())
@@ -175,10 +179,13 @@ class EmailTransportTest extends \PHPUnit_Framework_TestCase
 
         $template = new EmailTemplate();
         $template->setType('html');
+        $settings = new InternalTransportSettings();
+        $settings
+            ->setTemplate($template);
         $campaign = new EmailCampaign();
         $campaign
             ->setMarketingList($marketingList)
-            ->setTemplate($template);
+            ->setTransportSettings($settings);
 
         $this->transport->send($campaign, $entity, [], []);
     }

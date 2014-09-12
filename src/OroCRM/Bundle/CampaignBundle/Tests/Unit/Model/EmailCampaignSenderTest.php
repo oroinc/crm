@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Model;
 
-use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 use OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSender;
@@ -53,6 +52,11 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
      */
     protected $transport;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $transportProvider;
+
     protected function setUp()
     {
         $this->marketingListProvider = $this
@@ -81,14 +85,18 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
 
         $this->transport = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface');
 
+        $this->transportProvider = $this->getMock('OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider');
+
         $this->sender = new EmailCampaignSender(
             $this->marketingListProvider,
             $this->configManager,
             $this->marketingListConnector,
             $this->contactInformationFieldsProvider,
             $this->registry,
-            $this->logger
+            $this->transportProvider
         );
+
+        $this->sender->setLogger($this->logger);
     }
 
     /**
@@ -117,7 +125,7 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $campaign = new EmailCampaign();
         $campaign
             ->setMarketingList($marketingList)
-            ->setTemplate(new EmailTemplate())
+            ->setSenderName(reset($to))
             ->setSenderEmail(reset($to));
 
         $itCount = count($iterable);
@@ -168,7 +176,12 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $this->transport->expects($this->exactly($itCount))
             ->method('send');
 
-        $this->sender->setTransport($this->transport);
+        $this->transportProvider
+            ->expects($this->once())
+            ->method('getTransportByName')
+            ->will($this->returnValue($this->transport));
+
+        $this->sender->setEmailCampaign($campaign);
         $this->sender->send($campaign);
     }
 
@@ -187,7 +200,6 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $campaign = new EmailCampaign();
         $campaign
             ->setMarketingList($marketingList)
-            ->setTemplate(new EmailTemplate())
             ->setSenderEmail(reset($to));
 
         $itCount = count($iterable);
@@ -244,7 +256,12 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $this->transport->expects($this->exactly($itCount))
             ->method('send');
 
-        $this->sender->setTransport($this->transport);
+        $this->transportProvider
+            ->expects($this->once())
+            ->method('getTransportByName')
+            ->will($this->returnValue($this->transport));
+
+        $this->sender->setEmailCampaign($campaign);
         $this->sender->send($campaign);
     }
 

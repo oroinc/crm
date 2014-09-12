@@ -25,11 +25,6 @@ class DummyTransportSettings extends TransportSettings
     protected $notes;
 
     /**
-     * @var ParameterBag
-     */
-    private $settings;
-
-    /**
      * {@inheritdoc}
      */
     public function getSettingsBag()
