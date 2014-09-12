@@ -17,6 +17,7 @@ use OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 
 class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInterface
 {
+    /** @var ContainerInterface */
     protected $container;
 
     /** @var  Channel */

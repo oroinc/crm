@@ -20,7 +20,6 @@ use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
@@ -162,7 +161,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     protected function createLead(array $data, $user)
     {
         $lead = new Lead();
-        $dataChannel = $this->getReference('default_channel');
         /** @var LeadStatus $defaultStatus */
         $defaultStatus = $this->em->find('OroCRMSalesBundle:LeadStatus', 'new');
         $lead->setStatus($defaultStatus);
@@ -173,7 +171,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setPhoneNumber($data['TelephoneNumber']);
         $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
-        $lead->setDataChannel($dataChannel);
+        $lead->setDataChannel($this->getReference('default_channel'));
 
         /** @var Address $address */
         $address = new Address();

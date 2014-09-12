@@ -5,24 +5,18 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Model\Condition;
 use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
 
 use OroCRM\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
-use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
 
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var ChannelEntityAvailability
-     */
+    /** @var ChannelEntityAvailability */
     protected $condition;
 
     protected function setUp()
     {
-        $stateProvider = $this
-            ->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\StateProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stateProvider   = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\StateProvider')
+            ->disableOriginalConstructor()->getMock();
         $this->condition = new ChannelEntityAvailability(new ContextAccessor(), $stateProvider);
     }
 

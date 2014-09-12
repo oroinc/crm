@@ -51,10 +51,10 @@ oro_menu_config:
 
 oro_titles:
     orocrm_magento_customer_index: ~
-    orocrm_magento_customer_view:  '%%customer.name%% - Web Customers'
-    orocrm_magento_cart_index:     'Shopping Carts'
-    orocrm_magento_cart_view:      'Cart %%cart.id%% - Shopping Carts'
-    orocrm_magento_order_index:    'Orders'
-    orocrm_magento_order_view:     'Order %%order.incrementId%% - Orders'
-    orocrm_magento_product_index:  'Products'
-    orocrm_magento_product_view:   '%%product.name%% - Products'
+    orocrm_magento_customer_view:  %%customer.name%%
+    orocrm_magento_cart_index:     ~
+    orocrm_magento_cart_view:      Cart %%cart.id%%
+    orocrm_magento_order_index:    ~
+    orocrm_magento_order_view:     %%order.incrementId%%
+    orocrm_magento_product_index:  ~
+    orocrm_magento_product_view:   %%product.name%%
