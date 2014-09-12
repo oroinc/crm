@@ -100,21 +100,21 @@ class B2bCustomerController extends Controller
     {
         return $this->get('oro_form.model.update_handler')->handleUpdate(
             $entity,
-            $this->get('orocrm_sales.B2bCustomer.form'),
+            $this->get('orocrm_sales.b2bcustomer.form'),
             function (B2bCustomer $entity) {
-                return array(
-                    'route' => 'orocrm_sales_b2bcustomer_update',
-                    'parameters' => array('id' => $entity->getId())
-                );
+                return [
+                    'route'      => 'orocrm_sales_b2bcustomer_update',
+                    'parameters' => ['id' => $entity->getId()]
+                ];
             },
             function (B2bCustomer $entity) {
-                return array(
-                    'route' => 'orocrm_sales_b2bcustomer_view',
-                    'parameters' => array('id' => $entity->getId())
-                );
+                return [
+                    'route'      => 'orocrm_sales_b2bcustomer_view',
+                    'parameters' => ['id' => $entity->getId()]
+                ];
             },
             $this->get('translator')->trans('orocrm.sales.controller.b2bcustomer.saved.message'),
-            $this->get('orocrm_sales.B2bCustomer.form.handler')
+            $this->get('orocrm_sales.b2bcustomer.form.handler')
         );
     }
 
@@ -165,12 +165,12 @@ class B2bCustomerController extends Controller
     {
         return [
             'b2bCustomer' => $b2bCustomer,
-            'gridName' => 'sales-b2bcustomer-lead-grid',
-            'addedName' => 'appendLeads',
+            'gridName'    => 'sales-b2bcustomer-lead-grid',
+            'addedName'   => 'appendLeads',
             'removedName' => 'removeLeads',
-            'columnName' => 'hasLeads',
-            'routeName' => 'orocrm_sales_lead_info',
-            'extraData' => ['Phone' => 'phoneNumber', 'Email' => 'email']
+            'columnName'  => 'hasLeads',
+            'routeName'   => 'orocrm_sales_lead_info',
+            'extraData'   => ['Phone' => 'phoneNumber', 'Email' => 'email']
         ];
     }
 
@@ -188,12 +188,12 @@ class B2bCustomerController extends Controller
     {
         return [
             'b2bCustomer' => $b2bCustomer,
-            'gridName' => 'sales-b2bcustomer-opportunity-grid',
-            'addedName' => 'appendOpportunities',
+            'gridName'    => 'sales-b2bcustomer-opportunity-grid',
+            'addedName'   => 'appendOpportunities',
             'removedName' => 'removeOpportunities',
-            'columnName' => 'hasOpportunities',
-            'routeName' => 'orocrm_sales_opportunity_info',
-            'extraData' => ['Email' => 'primaryEmail']
+            'columnName'  => 'hasOpportunities',
+            'routeName'   => 'orocrm_sales_opportunity_info',
+            'extraData'   => ['Email' => 'primaryEmail']
         ];
     }
 }
