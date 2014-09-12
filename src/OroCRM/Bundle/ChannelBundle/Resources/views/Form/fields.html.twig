@@ -58,8 +58,9 @@
 {% block oro_combobox_dataconfig_channel_aware %}
     (function() {
         var $channelSelector = $('select[name="' + {{ channel_field_name|json_encode|raw }} + '"]'),
+            presetChannelId = {{ channel_id|json_encode|raw }},
             getQueryString = function (searchString) {
-                return [searchString, $channelSelector.val()].join(';');
+                return [searchString, presetChannelId || $channelSelector.val()].join(';');
             }
 
         select2Config.ajax = {
