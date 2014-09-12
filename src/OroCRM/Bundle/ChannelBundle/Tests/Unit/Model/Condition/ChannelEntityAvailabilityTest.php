@@ -48,7 +48,7 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
                 )
             );
         return array(
-            'not_empty_string' => [
+            'full occurrence' => [
                 'options' => [
                     new PropertyPath('[channel]'),
                     [
@@ -59,7 +59,7 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
                 'context' => ['channel' => $channel],
                 'expectedResult' => true
             ],
-            'not_empty_string2' => [
+            'not full occurrence' => [
                 'options' => [
                     new PropertyPath('[channel]'),
                     [
