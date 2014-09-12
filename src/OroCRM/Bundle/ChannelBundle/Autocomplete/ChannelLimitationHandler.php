@@ -10,37 +10,42 @@ class ChannelLimitationHandler extends SearchHandler
     /** @var string */
     protected $channelPropertyName;
 
+    /** @var string */
+    protected $channelSearchPropertyName;
+
     /**
      * @param string $entityName
      * @param array  $properties
-     * @param string $channelPropertyName
+     * @param string $channelRelationName
+     * @param string $channelSearchPropertyName
      */
-    public function __construct($entityName, array $properties, $channelPropertyName = 'dataChannelId')
-    {
+    public function __construct(
+        $entityName,
+        array $properties,
+        $channelRelationName = 'dataChannel',
+        $channelSearchPropertyName = 'dataChannelId'
+    ) {
         parent::__construct($entityName, $properties);
-        $this->channelPropertyName = $channelPropertyName;
+        $this->channelRelationName       = $channelRelationName;
+        $this->channelSearchPropertyName = $channelSearchPropertyName;
     }
 
     /**
-     * @param string $search
-     * @param int    $firstResult
-     * @param int    $maxResults
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function searchIds($search, $firstResult, $maxResults)
     {
         $parts        = explode(';', $search);
         $searchString = $parts[0];
-        $channelId    = isset($parts[1]) ? $parts[1] : false;
+        $channelId    = !empty($parts[1]) ? $parts[1] : false;
 
         $queryObj = $this->indexer->select()
             ->from($this->entitySearchAlias)
             ->setMaxResults($maxResults)
             ->setFirstResult($firstResult);
 
-        if ($channelId) {
-            $queryObj->andWhere($this->channelPropertyName, '=', $channelId, 'integer');
+        if (false !== $channelId) {
+            $queryObj->andWhere($this->channelSearchPropertyName, '=', $channelId, 'integer');
         }
 
         if ($searchString) {
@@ -56,5 +61,22 @@ class ChannelLimitationHandler extends SearchHandler
         }
 
         return $ids;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function findById($query)
+    {
+        $parts     = explode(';', $query);
+        $id        = $parts[0];
+        $channelId = !empty($parts[1]) ? $parts[1] : false;
+
+        $criteria = [$this->idFieldName => $id];
+        if (false !== $channelId) {
+            $criteria[$this->channelRelationName] = $channelId;
+        }
+
+        return $this->entityRepository->findBy($criteria, null, 1);
     }
 }

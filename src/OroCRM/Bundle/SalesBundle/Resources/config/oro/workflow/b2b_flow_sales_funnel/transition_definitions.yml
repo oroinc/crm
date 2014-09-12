@@ -162,6 +162,7 @@ workflows:
                                         account:   $new_account
                                         website:   $lead.website
                                         employees: $lead.numberOfEmployees
+                                        dataChannel: $dataChannel
                     - @call_method: # connect customer with Contact
                         conditions:
                             @empty: $new_b2bcustomer.contact
@@ -177,7 +178,7 @@ workflows:
                             name:        $new_opportunity_name
                             contact:     $lead.contact
                             customer:    $new_b2bcustomer
-                            dataChannel: $lead.dataChannel
+                            dataChannel: $dataChannel
                             lead:        $lead
                             notes:       $new_notes
                     - @find_entity: # set status "In progress" to opportunity

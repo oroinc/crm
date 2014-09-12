@@ -92,7 +92,7 @@ workflows:
                                 required: true
                                 label: orocrm.sales.lead.data_channel.label
                                 entities:
-                                    - OroCRM\Bundle\SalesBundle\Entity\Lead
+                                    - OroCRM\Bundle\SalesBundle\Entity\Opportunity
                                     - OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
                                 constraints:
                                     - NotBlank: ~
@@ -158,7 +158,9 @@ workflows:
                                 required: true
                                 constraints:
                                   - NotBlank: ~
-                        new_b2bcustomer: ~
+                        new_b2bcustomer:
+                            options:
+                                channel_id: $dataChannel.id
                         new_company_name: ~
                         new_notes:
                             form_type: textarea
@@ -196,6 +198,7 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
+                                channel_id: $dataChannel.id
                         budget_amount: ~
                         probability: ~
                         customer_need: ~

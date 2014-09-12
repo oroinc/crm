@@ -9,11 +9,12 @@ use OroCRM\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler;
 
 class ChannelLimitationHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    const TEST_ENTITY_NAME   = 'OroCRM\\Bundle\\ChannelBundle\\Tests\\Unit\\Stubs\\Entity\\StubEntity';
-    const TEST_ENTITY_ALIAS  = 'orocrm_channel_stub';
-    const TEST_SEARCH_FIELD  = 'some_field';
-    const TEST_CHANNEL_FIELD = 'some_fieldDataChannel';
-    const TEST_ID_FIELD      = 'id';
+    const TEST_ENTITY_NAME            = 'OroCRM\\Bundle\\ChannelBundle\\Tests\\Unit\\Stubs\\Entity\\StubEntity';
+    const TEST_ENTITY_ALIAS           = 'orocrm_channel_stub';
+    const TEST_SEARCH_FIELD           = 'some_field';
+    const TEST_CHANNEL_SEARCH_FIELD   = 'some_fieldDataChannel';
+    const TEST_CHANNEL_RELATION_FIELD = 'some_fieldDataChannel';
+    const TEST_ID_FIELD               = 'id';
 
     /** @var ChannelLimitationHandler */
     protected $handler;
@@ -23,7 +24,8 @@ class ChannelLimitationHandlerTest extends \PHPUnit_Framework_TestCase
         $this->handler = new ChannelLimitationHandler(
             self::TEST_ENTITY_NAME,
             [self::TEST_SEARCH_FIELD],
-            self::TEST_CHANNEL_FIELD
+            self::TEST_CHANNEL_RELATION_FIELD,
+            self::TEST_CHANNEL_SEARCH_FIELD
         );
     }
 
@@ -77,7 +79,7 @@ class ChannelLimitationHandlerTest extends \PHPUnit_Framework_TestCase
         $query        = new Query();
         $self         = $this;
         $entityAlias  = self::TEST_ENTITY_ALIAS;
-        $channelField = self::TEST_CHANNEL_FIELD;
+        $channelField = self::TEST_CHANNEL_SEARCH_FIELD;
         $indexer->expects($this->once())->method('select')
             ->will($this->returnValue($query));
         $indexer->expects($this->once())->method('query')

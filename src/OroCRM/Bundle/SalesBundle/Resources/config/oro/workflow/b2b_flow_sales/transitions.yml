@@ -25,6 +25,7 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
+                                channel_id: $dataChannel.id
                         budget_amount: ~
                         probability: ~
                         customer_need: ~
