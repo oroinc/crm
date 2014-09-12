@@ -27,6 +27,16 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
+                        dataChannel:
+                            form_type: orocrm_channel_select_type
+                            options:
+                                required: true
+                                label: orocrm.sales.lead.data_channel.label
+                                entities:
+                                    - OroCRM\Bundle\SalesBundle\Entity\Lead
+                                    - OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
+                                constraints:
+                                    - NotBlank: ~
                         lead:
                             form_type: orocrm_sales_lead_select
                             options:
@@ -74,6 +84,16 @@ workflows:
                         sales_funnel_start_date:
                             options:
                                 required: true
+                                constraints:
+                                    - NotBlank: ~
+                        dataChannel:
+                            form_type: orocrm_channel_select_type
+                            options:
+                                required: true
+                                label: orocrm.sales.lead.data_channel.label
+                                entities:
+                                    - OroCRM\Bundle\SalesBundle\Entity\Lead
+                                    - OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
                                 constraints:
                                     - NotBlank: ~
                         opportunity:
