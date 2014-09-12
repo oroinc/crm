@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Handler;
 
-use OroCRM\Bundle\ChannelBundle\Provider\ChannelFromRequest;
+use OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 use Symfony\Component\Form\FormInterface;
@@ -21,25 +21,25 @@ class LeadHandler
     /** @var ObjectManager */
     protected $manager;
 
-    /** @var ChannelFromRequest */
-    protected $channelFromRequest;
+    /** @var RequestChannelProvider */
+    protected $requestChannelProvider;
 
     /**
-     * @param FormInterface      $form
-     * @param Request            $request
-     * @param ObjectManager      $manager
-     * @param ChannelFromRequest $channelFromRequest
+     * @param FormInterface          $form
+     * @param Request                $request
+     * @param ObjectManager          $manager
+     * @param RequestChannelProvider $requestChannelProvider
      */
     public function __construct(
         FormInterface $form,
         Request $request,
         ObjectManager $manager,
-        ChannelFromRequest $channelFromRequest
+        RequestChannelProvider $requestChannelProvider
     ) {
-        $this->form               = $form;
-        $this->request            = $request;
-        $this->manager            = $manager;
-        $this->channelFromRequest = $channelFromRequest;
+        $this->form                   = $form;
+        $this->request                = $request;
+        $this->manager                = $manager;
+        $this->requestChannelProvider = $requestChannelProvider;
     }
 
     /**
@@ -51,7 +51,7 @@ class LeadHandler
      */
     public function process(Lead $entity)
     {
-        $this->channelFromRequest->setDataChannel($this->request, $entity);
+        $this->requestChannelProvider->setDataChannel($entity);
 
         $this->form->setData($entity);
 

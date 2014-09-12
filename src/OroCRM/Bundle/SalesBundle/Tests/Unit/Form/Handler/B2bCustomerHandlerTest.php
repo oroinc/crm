@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Handler;
 
-use OroCRM\Bundle\ChannelBundle\Provider\ChannelFromRequest;
+use OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler;
 
@@ -38,8 +38,8 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected $entity;
 
-    /** @var ChannelFromRequest  */
-    protected $channelFromRequest;
+    /** @var RequestChannelProvider */
+    protected $requestChannelProvider;
 
     protected function setUp()
     {
@@ -53,22 +53,26 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->channelFromRequest = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\ChannelFromRequest')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestChannelProvider
+            = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider')
+            ->disableOriginalConstructor()->getMock();
 
         $this->entity  = new B2bCustomer();
-        $this->handler = new B2bCustomerHandler($this->form, $this->request, $this->manager, $this->channelFromRequest);
+        $this->handler = new B2bCustomerHandler(
+            $this->form,
+            $this->request,
+            $this->manager,
+            $this->requestChannelProvider
+        );
         $this->handler->setTagManager(
             $this->getMockBuilder('Oro\Bundle\TagBundle\Entity\TagManager')
-                ->disableOriginalConstructor()
-                ->getMock()
+                ->disableOriginalConstructor()->getMock()
         );
     }
 
     public function testProcessUnsupportedRequest()
     {
-        $this->channelFromRequest->expects($this->once())
+        $this->requestChannelProvider->expects($this->once())
             ->method('setDataChannel')
             ->with($this->request, $this->entity);
 
@@ -84,6 +88,7 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider supportedMethods
+     *
      * @param string $method
      */
     public function testProcessSupportedRequest($method)
@@ -188,7 +193,7 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->setMethod('POST');
 
-        $this->channelFromRequest->expects($this->once())
+        $this->requestChannelProvider->expects($this->once())
             ->method('setDataChannel')
             ->with($this->request, $this->entity);
 
@@ -220,7 +225,7 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->handler->process($this->entity));
 
-        $actualLeads = $this->entity->getLeads()->toArray();
+        $actualLeads         = $this->entity->getLeads()->toArray();
         $actualOpportunities = $this->entity->getOpportunities()->toArray();
         $this->assertCount(0, $actualLeads);
         $this->assertEquals([], $actualLeads);

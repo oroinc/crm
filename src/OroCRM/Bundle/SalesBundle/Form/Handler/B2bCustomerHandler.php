@@ -4,10 +4,10 @@ namespace OroCRM\Bundle\SalesBundle\Form\Handler;
 
 use Oro\Bundle\TagBundle\Entity\TagManager;
 
-use OroCRM\Bundle\ChannelBundle\Provider\ChannelFromRequest;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,45 +16,37 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class B2bCustomerHandler
 {
-    /**
-     * @var FormInterface
-     */
+    /** @var FormInterface */
     protected $form;
 
-    /**
-     * @var Request
-     */
+    /** @var Request */
     protected $request;
 
-    /**
-     * @var ObjectManager
-     */
+    /** @var ObjectManager */
     protected $manager;
 
-    /**
-     * @var TagManager
-     */
+    /** @var TagManager */
     protected $tagManager;
 
-    /** @var ChannelFromRequest  */
-    protected $channelFromRequest;
+    /** @var RequestChannelProvider */
+    protected $requestChannelProvider;
 
     /**
-     * @param FormInterface      $form
-     * @param Request            $request
-     * @param ObjectManager      $manager
-     * @param ChannelFromRequest $channelFromRequest
+     * @param FormInterface          $form
+     * @param Request                $request
+     * @param ObjectManager          $manager
+     * @param RequestChannelProvider $requestChannelProvider
      */
     public function __construct(
         FormInterface $form,
         Request $request,
         ObjectManager $manager,
-        ChannelFromRequest $channelFromRequest
+        RequestChannelProvider $requestChannelProvider
     ) {
-        $this->form               = $form;
-        $this->request            = $request;
-        $this->manager            = $manager;
-        $this->channelFromRequest = $channelFromRequest;
+        $this->form                   = $form;
+        $this->request                = $request;
+        $this->manager                = $manager;
+        $this->requestChannelProvider = $requestChannelProvider;
     }
 
     /**
@@ -66,7 +58,7 @@ class B2bCustomerHandler
      */
     public function process(B2bCustomer $entity)
     {
-        $this->channelFromRequest->setDataChannel($this->request, $entity);
+        $this->requestChannelProvider->setDataChannel($entity);
 
         $this->form->setData($entity);
 
