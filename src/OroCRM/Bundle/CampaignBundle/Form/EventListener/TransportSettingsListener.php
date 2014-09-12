@@ -2,12 +2,12 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Form\EventListener;
 
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
 use OroCRM\Bundle\CampaignBundle\Transport\TransportInterface;
