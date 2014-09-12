@@ -1,7 +1,21 @@
 workflows:
     b2b_flow_sales_funnel:
         transition_definitions:
-            start_definition:
+            start_from_lead:
+                pre_conditions:
+                    @channel_entity_availiable: [['OroCRM\Bundle\SalesBundle\Entity\SalesFunnel', 'OroCRM\Bundle\SalesBundle\Entity\Lead']]
+                post_actions:
+                    - @create_related_entity: # create Sales Funnel if it not exist yet
+                        conditions:
+                            @empty: [$sales_funnel.id]
+                        parameters: ~
+                    - @redirect: # redirect to Sales funnel view page
+                        route: 'orocrm_sales_salesfunnel_view'
+                        route_parameters:
+                            id: $sales_funnel.id
+            start_from_opportunity:
+                pre_conditions:
+                    @channel_entity_availiable: [['OroCRM\Bundle\SalesBundle\Entity\SalesFunnel', 'OroCRM\Bundle\SalesBundle\Entity\Opportunity']]
                 post_actions:
                     - @create_related_entity: # create Sales Funnel if it not exist yet
                         conditions:
@@ -32,7 +46,9 @@ workflows:
                         attribute: $lead.status
             qualify_definition:
                 pre_conditions:  # if lead.status = "new"
-                    @equal: [$lead.status.name, 'new']
+                    @and:
+                        - @equal: [$lead.status.name, 'new']
+                        - @channel_entity_availiable: [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\Opportunity', 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions:
                     @or:
                         parameters:
@@ -189,9 +205,11 @@ workflows:
                         [$new_account, $new_customer]
             develop_definition:
                 pre_conditions: # if opportunity.status = "in_progress"
-                    @equal:
-                        message: 'Opportunity must be in status "In progress"'
-                        parameters: [$opportunity.status.name, 'in_progress']
+                    @and:
+                        - @equal:
+                            message: 'Opportunity must be in status "In progress"'
+                            parameters: [$opportunity.status.name, 'in_progress']
+                        - @channel_entity_availiable: [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions: # if opportunity.status = "in_progress"
                     @and:
                         - @greater_or_equal:
