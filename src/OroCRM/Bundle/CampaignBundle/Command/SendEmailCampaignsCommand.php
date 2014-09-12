@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 use OroCRM\Bundle\CampaignBundle\Entity\Repository\EmailCampaignRepository;
-use OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSenderFactory;
+use OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSenderBuilder;
 
 /**
  * Command to send scheduled email campaigns
@@ -73,11 +73,11 @@ class SendEmailCampaignsCommand extends ContainerAwareCommand implements CronCom
     }
 
     /**
-     * @return EmailCampaignSenderFactory
+     * @return EmailCampaignSenderBuilder
      */
     protected function getSenderFactory()
     {
-        return $this->getContainer()->get('orocrm_campaign.email_campaign.sender.factory');
+        return $this->getContainer()->get('orocrm_campaign.email_campaign.sender.builder');
     }
 
     /**

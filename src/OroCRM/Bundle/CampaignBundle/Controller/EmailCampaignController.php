@@ -137,7 +137,7 @@ class EmailCampaignController extends Controller
      */
     public function sendAction(EmailCampaign $entity)
     {
-        $senderFactory = $this->get('orocrm_campaign.email_campaign.sender.factory');
+        $senderFactory = $this->get('orocrm_campaign.email_campaign.sender.builder');
         $sender = $senderFactory->getSender($entity);
         $sender->send($entity);
 

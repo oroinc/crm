@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;

@@ -12,7 +12,7 @@ parameters:
     orocrm_campaign.transport.email.class: OroCRM\Bundle\CampaignBundle\Transport\EmailTransport
     orocrm_campaign.email_campaign.sender.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSender
     orocrm_campaign.email_transport.provider.class: OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider
-    orocrm_campaign.email_campaign.sender.factory.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSenderFactory
+    orocrm_campaign.email_campaign.sender.builder.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSenderBuilder
 
     orocrm_campaign.listener.email_campaign_statistic.class: OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticDatagridListener
     orocrm_campaign.form.type.internal_transport_settings.class: OroCRM\Bundle\CampaignBundle\Form\Type\InternalTransportSettingsType
@@ -119,7 +119,6 @@ services:
 
     orocrm_campaign.email_campaign.sender:
         class: %orocrm_campaign.email_campaign.sender.class%
-        scope: prototype
         arguments:
             - @orocrm_marketing_list.provider.marketing_list
             - @oro_config.global
@@ -132,11 +131,10 @@ services:
     orocrm_campaign.email_transport.provider:
         class: %orocrm_campaign.email_transport.provider.class%
 
-    orocrm_campaign.email_campaign.sender.factory:
-        class: %orocrm_campaign.email_campaign.sender.factory.class%
+    orocrm_campaign.email_campaign.sender.builder:
+        class: %orocrm_campaign.email_campaign.sender.builder.class%
         arguments:
-            - @service_container
-            - @orocrm_campaign.email_transport.provider
+            - @orocrm_campaign.email_campaign.sender
 
     orocrm_campaign.listener.email_campaign_statistic:
         class: %orocrm_campaign.listener.email_campaign_statistic.class%
@@ -171,14 +169,3 @@ services:
             - @request
             - @orocrm_campaign.email_campaign.form
             - @doctrine
-
-    #TODO: Remove all Dummy entities and services
-    orocrm_campaign.transport.dummy:
-        class: OroCRM\Bundle\CampaignBundle\Transport\DummyTransport
-        tags:
-            - { name: "orocrm_campaign.email_transport" }
-
-    orocrm_campaign.form.type.dummy_transport_settings:
-        class: OroCRM\Bundle\CampaignBundle\Form\Type\DummyTransportSettingsType
-        tags:
-            - { name: form.type, alias: "orocrm_campaign_dummy_transport_settings" }
