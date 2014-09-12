@@ -247,6 +247,9 @@ services:
 
     orocrm_channel.event_listener.embedded_form:
         class: %orocrm_channel.event_listener.embedded_form.class%
+        scope: request
+        arguments:
+            - @request
         tags:
             - { name: kernel.event_listener, event: entity_form.render.before, method: addDataChannelField }
             - { name: kernel.event_listener, event: oro_embedded_form.form_submit.before, method: onEmbeddedFormSubmit }

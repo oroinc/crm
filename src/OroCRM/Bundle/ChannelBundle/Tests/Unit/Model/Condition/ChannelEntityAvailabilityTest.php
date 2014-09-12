@@ -6,6 +6,7 @@ use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
 
 use OroCRM\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability;
 
+use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
@@ -15,9 +16,24 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
      */
     protected $condition;
 
+    /** @var StateProvider */
+    protected $stateProvider;
+
     protected function setUp()
     {
-        $this->condition = new ChannelEntityAvailability(new ContextAccessor());
+        $this->stateProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\StateProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->condition = new ChannelEntityAvailability(
+            new ContextAccessor(),
+            $this->stateProvider
+        );
+    }
+
+    protected function tearDown()
+    {
+        unset($this->condition);
     }
 
     /**
@@ -79,10 +95,10 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Oro\Bundle\WorkflowBundle\Exception\ConditionException
-     * @expectedExceptionMessage Options must have 2 element, but 0 given
+     * @expectedExceptionMessage Invalid options count: 0
      */
     public function testInitializeFailsWhenOptionNotOneElement()
     {
-        $this->condition->initialize(array());
+        $this->condition->initialize([]);
     }
 }
