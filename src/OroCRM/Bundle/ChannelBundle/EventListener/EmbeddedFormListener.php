@@ -36,7 +36,7 @@ class EmbeddedFormListener
     /**
      * @param EmbeddedFormSubmitBeforeEvent $event
      */
-    public function onEmbededFormSubmit(EmbeddedFormSubmitBeforeEvent $event)
+    public function onEmbeddedFormSubmit(EmbeddedFormSubmitBeforeEvent $event)
     {
         /** @var ChannelAwareInterface $form */
         $form = $event->getFormEntity();

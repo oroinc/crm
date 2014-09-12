@@ -55,24 +55,23 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
         $listener->addDataChannelField($event);
     }
 
-    public function testOnEmbededFormSubmit()
+    public function testOnEmbeddedFormSubmit()
     {
         $formEntity = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\EmbeddedFormStub')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->disableOriginalConstructor()->getMock();
         $formEntity->expects($this->never())
             ->method('getDataChannel');
         $event = new EmbeddedFormSubmitBeforeEvent([], $formEntity);
 
-        $listener   = new EmbeddedFormListener;
-        $listener->onEmbededFormSubmit($event);
+        $listener = new EmbeddedFormListener;
+        $listener->onEmbeddedFormSubmit($event);
     }
 
-    public function testOnEmbededFormSubmitWithDataChannel()
+    public function testOnEmbeddedFormSubmitWithDataChannel()
     {
         $formEntity = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\EmbeddedFormStub')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->disableOriginalConstructor()->getMock();
+
         $dataChannel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
         $formEntity->expects($this->once())
             ->method('getDataChannel')
@@ -82,7 +81,7 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
             ->method('setDataChannel');
         $event = new EmbeddedFormSubmitBeforeEvent($data, $formEntity);
 
-        $listener   = new EmbeddedFormListener;
-        $listener->onEmbededFormSubmit($event);
+        $listener = new EmbeddedFormListener;
+        $listener->onEmbeddedFormSubmit($event);
     }
 }

@@ -8,6 +8,5 @@ class EmbeddedFormStub extends EmbeddedForm
 {
     public function getDataChannel()
     {
-
     }
 }
