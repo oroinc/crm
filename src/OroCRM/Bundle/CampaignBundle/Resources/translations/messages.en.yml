@@ -100,3 +100,5 @@ orocrm:
                 campaign_sender_email: Sender Email
                 campaign_sender_name: Sender Name
                 title: Campaign Configuration
+            transport:
+                internal: Internal

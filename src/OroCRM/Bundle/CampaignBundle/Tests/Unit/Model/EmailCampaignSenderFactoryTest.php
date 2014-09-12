@@ -34,25 +34,31 @@ class EmailCampaignSenderFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSender()
     {
-        $emailCampaign = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $emailCampaign = $this
+            ->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
-        $emailCampaign->expects($this->once())
+        $emailCampaign
+            ->expects($this->once())
             ->method('getTransport')
             ->will($this->returnValue('test'));
         $transport = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface');
-        $sender = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSender')
+        $sender = $this
+            ->getMockBuilder('OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSender')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->emailTransportProvider->expects($this->once())
+        $this->emailTransportProvider
+            ->expects($this->once())
             ->method('getTransportByName')
             ->with('test')
             ->will($this->returnValue($transport));
-        $this->container->expects($this->once())
+        $this->container
+            ->expects($this->once())
             ->method('get')
             ->with('orocrm_campaign.email_campaign.sender')
             ->will($this->returnValue($sender));
-        $sender->expects($this->once())
+        $sender
+            ->expects($this->once())
             ->method('setTransport')
             ->with($transport);
 

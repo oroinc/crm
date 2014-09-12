@@ -31,20 +31,24 @@ class EmailTransportSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDefaultOptions()
     {
-        $choices = ['internal' => 'Internal'];
+        $choices = ['internal' => 'orocrm.campaign.emailcampaign.transport.internal'];
         $transport = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface');
-        $transport->expects($this->once())
+        $transport
+            ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('internal'));
-        $transport->expects($this->once())
-            ->method('getDisplayName')
-            ->will($this->returnValue('Internal'));
+        $transport
+            ->expects($this->once())
+            ->method('getLabel')
+            ->will($this->returnValue('orocrm.campaign.emailcampaign.transport.internal'));
         $transports = ['internal' => $transport];
-        $this->emailTransportProvider->expects($this->once())
+        $this->emailTransportProvider
+            ->expects($this->once())
             ->method('getTransports')
             ->will($this->returnValue($transports));
         $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
-        $resolver->expects($this->once())
+        $resolver
+            ->expects($this->once())
             ->method('setDefaults')
             ->with(['choices' => $choices]);
         $this->type->setDefaultOptions($resolver);

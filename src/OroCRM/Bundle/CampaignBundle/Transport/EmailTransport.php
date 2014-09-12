@@ -108,7 +108,7 @@ class EmailTransport implements TransportInterface
      */
     public function getLabel()
     {
-        return 'Internal';
+        return 'orocrm.campaign.emailcampaign.transport.' . self::NAME;
     }
 
     /**

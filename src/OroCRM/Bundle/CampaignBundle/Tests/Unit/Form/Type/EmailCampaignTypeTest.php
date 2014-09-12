@@ -48,9 +48,15 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
     public function testSetDefaultOptions()
     {
         $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
-        $resolver->expects($this->once())
+        $resolver
+            ->expects($this->once())
             ->method('setDefaults')
-            ->with(['data_class' => 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign']);
+            ->with(
+                [
+                    'data_class'         => 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign',
+                    'cascade_validation' => true
+                ]
+            );
 
         $this->type->setDefaultOptions($resolver);
     }
