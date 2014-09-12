@@ -84,6 +84,7 @@ orocrm:
                 not_sent: Not sent
             block:
                 general: General Information
+                email_settings: Email Settings
                 recipients: Recipients
             controller:
                 saved.message: "Email campaign saved"
