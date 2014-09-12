@@ -58,7 +58,7 @@ services:
             - %orocrm_sales.b2bcustomer.entity.class%
             - ["name"]
         tags:
-            - { name: oro_form.autocomplete.search_handler, alias: b2b_cusomers, acl_resource: orocrm_sales_b2bcustomer_view }
+            - { name: oro_form.autocomplete.search_handler, alias: b2b_customers, acl_resource: orocrm_sales_b2bcustomer_view }
         lazy: true
 
     orocrm_sales.event_listener.account_contacts_grid_listener:
@@ -82,7 +82,7 @@ services:
         arguments:
             - 'OroCRM\Bundle\SalesBundle\Entity'
 
-    orocrm_sales.event_listener.b2bcusomer_leads_grid_listener:
+    orocrm_sales.event_listener.b2bcustomer_leads_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
             - 'customerId'

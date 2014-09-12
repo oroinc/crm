@@ -157,7 +157,9 @@ services:
     orocrm_channel.provider.request_channel:
         class: %orocrm_channel.provider.request_channel.class%
         arguments:
-            - @
+            - @request
+            - @doctrine
+        scope: request
 
     # datagrid
     orocrm_channel.datagrid.extension.orm_channel_limitation:

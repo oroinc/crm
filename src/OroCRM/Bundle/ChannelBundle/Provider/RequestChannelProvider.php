@@ -2,9 +2,8 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Provider;
 
-use Doctrine\Common\Persistence\ObjectManager;
-
 use Doctrine\ORM\EntityManager;
+
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\Request;
 

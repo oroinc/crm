@@ -38,7 +38,9 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected $entity;
 
-    /** @var RequestChannelProvider */
+    /**
+     * @var RequestChannelProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $requestChannelProvider;
 
     protected function setUp()
@@ -74,7 +76,7 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestChannelProvider->expects($this->once())
             ->method('setDataChannel')
-            ->with($this->request, $this->entity);
+            ->with($this->entity);
 
         $this->form->expects($this->once())
             ->method('setData')
@@ -192,10 +194,6 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
     public function testProcessWithoutLeadViewPermission()
     {
         $this->request->setMethod('POST');
-
-        $this->requestChannelProvider->expects($this->once())
-            ->method('setDataChannel')
-            ->with($this->request, $this->entity);
 
         $this->form->expects($this->once())
             ->method('setData')
