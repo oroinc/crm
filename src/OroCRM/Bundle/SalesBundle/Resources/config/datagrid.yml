@@ -805,23 +805,6 @@ datagrid:
                  phoneNumber:
                     type: string
                     data_name: l.phoneNumber
-                 countryName:
-                    type: entity
-                    data_name: address.country
-                    enabled: false
-                    options:
-                        field_options:
-                          class: OroAddressBundle:Country
-                          property: name
-                          query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
-                 regionLabel:
-                    type: string
-                    data_name: regionLabel
-                    enabled: false
-                 addressPostalCode:
-                    type: string
-                    data_name: addressPostalCode
-                    enabled: false
 
     sales-b2bcustomer-leads-grid:
         extends: base-sales-b2bcustomer-leads-grid
@@ -876,6 +859,25 @@ datagrid:
                     data_name: addressPostalCode
             default:
                 createdAt:  DESC
+        filters:
+            columns:
+                 countryName:
+                    type: entity
+                    data_name: address.country
+                    enabled: false
+                    options:
+                        field_options:
+                          class: OroAddressBundle:Country
+                          property: name
+                          query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                 regionLabel:
+                    type: string
+                    data_name: regionLabel
+                    enabled: false
+                 addressPostalCode:
+                    type: string
+                    data_name: addressPostalCode
+                    enabled: false
 
     base-sales-b2bcustomer-opportunities-grid:
         extended_entity_name: %orocrm_sales.opportunity.class%
@@ -908,9 +910,6 @@ datagrid:
                 createdAt:
                     type: datetime
                     data_name: o.createdAt
-                contactName:
-                    type: string
-                    data_name: contactName
                 closeDate:
                     type: date
                     data_name: o.closeDate
@@ -944,8 +943,6 @@ datagrid:
             createdAt:
                 label:         oro.ui.created_at
                 frontend_type: datetime
-            contactName:
-                label:         orocrm.sales.opportunity.contact.label
             closeDate:
                 label:         orocrm.sales.opportunity.close_date.label
                 frontend_type: date
@@ -965,8 +962,6 @@ datagrid:
                     data_name: o.name
                 createdAt:
                     data_name: o.createdAt
-                contactName:
-                    data_name: contactName
                 closeDate:
                     data_name: o.closeDate
                 budgetAmount:
