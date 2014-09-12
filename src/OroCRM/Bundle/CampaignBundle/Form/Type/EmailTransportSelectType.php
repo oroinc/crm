@@ -41,7 +41,7 @@ class EmailTransportSelectType extends AbstractType
         $transports = $this->emailTransportProvider->getTransports();
         $choices = array();
         foreach ($transports as $transport) {
-            $choices[$transport->getName()] = $transport->getDisplayName();
+            $choices[$transport->getName()] = $transport->getLabel();
         }
 
         return $choices;

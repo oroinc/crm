@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\CampaignBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;

@@ -13,6 +13,7 @@ use OroCRM\Bundle\MarketingListBundle\Model\MarketingListItemConnector;
 use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 use OroCRM\Bundle\MarketingListBundle\Provider\MarketingListProvider;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics;
+use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
 
 class EmailCampaignSender
 {
@@ -42,6 +43,11 @@ class EmailCampaignSender
     protected $registry;
 
     /**
+     * @var EmailTransportProvider
+     */
+    protected $emailTransportProvider;
+
+    /**
      * @var LoggerInterface
      */
     protected $logger;
@@ -52,11 +58,17 @@ class EmailCampaignSender
     protected $transport;
 
     /**
+     * @var EmailCampaign
+     */
+    protected $emailCampaign;
+
+    /**
      * @param MarketingListProvider $marketingListProvider
      * @param ConfigManager $configManager
      * @param MarketingListItemConnector $marketingListItemConnector
      * @param ContactInformationFieldsProvider $contactInformationFieldsProvider
      * @param ManagerRegistry $registry
+     * @param EmailTransportProvider $emailTransportProvider
      * @param LoggerInterface|null $logger
      */
     public function __construct(
@@ -65,6 +77,7 @@ class EmailCampaignSender
         MarketingListItemConnector $marketingListItemConnector,
         ContactInformationFieldsProvider $contactInformationFieldsProvider,
         ManagerRegistry $registry,
+        EmailTransportProvider $emailTransportProvider,
         LoggerInterface $logger = null
     ) {
         $this->marketingListProvider = $marketingListProvider;
@@ -72,28 +85,30 @@ class EmailCampaignSender
         $this->marketingListItemConnector = $marketingListItemConnector;
         $this->contactInformationFieldsProvider = $contactInformationFieldsProvider;
         $this->registry = $registry;
+        $this->emailTransportProvider = $emailTransportProvider;
         $this->logger = $logger;
     }
 
     /**
-     * @param TransportInterface $transport
+     * @param EmailCampaign $emailCampaign
      */
-    public function setTransport(TransportInterface $transport)
+    public function setEmailCampaign(EmailCampaign $emailCampaign)
     {
+        $this->emailCampaign = $emailCampaign;
+
+        $transport = $this->emailTransportProvider
+            ->getTransportByName($emailCampaign->getTransport());
         $this->transport = $transport;
     }
 
-    /**
-     * @param EmailCampaign $campaign
-     */
-    public function send(EmailCampaign $campaign)
+    public function send()
     {
         $this->assertTransport();
-        $marketingList = $campaign->getMarketingList();
+        $marketingList = $this->emailCampaign->getMarketingList();
         /** @var EntityManager $manager */
         $manager = $this->registry->getManager();
 
-        foreach ($this->getIterator($campaign) as $entity) {
+        foreach ($this->getIterator() as $entity) {
             $to = $this->contactInformationFieldsProvider->getQueryContactInformationFields(
                 $marketingList->getSegment(),
                 $entity,
@@ -104,18 +119,19 @@ class EmailCampaignSender
                 $manager->beginTransaction();
                 // Do actual send
                 $this->transport->send(
-                    $campaign,
+                    $this->emailCampaign,
                     $entity,
-                    [$this->getSenderEmail($campaign) => $this->getSenderName($campaign)],
+                    [$this->getSenderEmail() => $this->getSenderName()],
                     $to
                 );
 
                 // Mark marketing list item as contacted
-                $marketingListItem = $this->marketingListItemConnector->contact($marketingList, $entity->getId());
+                $marketingListItem = $this->marketingListItemConnector
+                    ->contact($marketingList, $entity->getId());
 
                 // Record email campaign contact statistic
                 $statisticsRecord = new EmailCampaignStatistics();
-                $statisticsRecord->setEmailCampaign($campaign)
+                $statisticsRecord->setEmailCampaign($this->emailCampaign)
                     ->setMarketingListItem($marketingListItem);
                 $manager->persist($statisticsRecord);
 
@@ -133,8 +149,8 @@ class EmailCampaignSender
             }
         }
 
-        $campaign->setSent(true);
-        $manager->persist($campaign);
+        $this->emailCampaign->setSent(true);
+        $manager->persist($this->emailCampaign);
         $manager->flush();
     }
 
@@ -151,13 +167,11 @@ class EmailCampaignSender
     }
 
     /**
-     * @param EmailCampaign $campaign
-     *
      * @return string
      */
-    protected function getSenderEmail(EmailCampaign $campaign)
+    protected function getSenderEmail()
     {
-        if ($senderEmail = $campaign->getSenderEmail()) {
+        if ($senderEmail = $this->emailCampaign->getSenderEmail()) {
             return $senderEmail;
         }
 
@@ -165,13 +179,11 @@ class EmailCampaignSender
     }
 
     /**
-     * @param EmailCampaign $campaign
-     *
      * @return string
      */
-    protected function getSenderName(EmailCampaign $campaign)
+    protected function getSenderName()
     {
-        if ($senderName = $campaign->getSenderName()) {
+        if ($senderName = $this->emailCampaign->getSenderName()) {
             return $senderName;
         }
 
@@ -179,11 +191,11 @@ class EmailCampaignSender
     }
 
     /**
-     * @param EmailCampaign $campaign
      * @return \Iterator
      */
-    protected function getIterator(EmailCampaign $campaign)
+    protected function getIterator()
     {
-        return $this->marketingListProvider->getMarketingListEntitiesIterator($campaign->getMarketingList());
+        return $this->marketingListProvider
+            ->getMarketingListEntitiesIterator($this->emailCampaign->getMarketingList());
     }
 }

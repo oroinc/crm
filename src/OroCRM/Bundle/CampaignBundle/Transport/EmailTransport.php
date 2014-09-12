@@ -2,15 +2,19 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Transport;
 
+use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\EmailBundle\Form\Model\Email;
 use Oro\Bundle\EmailBundle\Mailer\Processor;
 use Oro\Bundle\EmailBundle\Provider\EmailRenderer;
 use Oro\Bundle\EmailBundle\Tools\EmailAddressHelper;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
+use OroCRM\Bundle\CampaignBundle\Form\Type\InternalTransportSettingsType;
 
 class EmailTransport implements TransportInterface
 {
+    const NAME = 'internal';
+
     /**
      * @var Processor $processor
      */
@@ -57,7 +61,8 @@ class EmailTransport implements TransportInterface
         $entityId      = $this->doctrineHelper->getSingleEntityIdentifier($entity);
         $marketingList = $campaign->getMarketingList();
 
-        $template = $campaign->getTemplate();
+        /** @var EmailTemplate $template */
+        $template = $campaign->getTransportSettings()->getSettingsBag()->get('template');
         list ($subjectRendered, $templateRendered) = $this->emailRenderer->compileMessage(
             $template,
             ['entity' => $entity]
@@ -95,14 +100,22 @@ class EmailTransport implements TransportInterface
      */
     public function getName()
     {
-        return 'internal';
+        return self::NAME;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDisplayName()
+    public function getLabel()
     {
         return 'Internal';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSettingsFormType()
+    {
+        return InternalTransportSettingsType::NAME;
     }
 }

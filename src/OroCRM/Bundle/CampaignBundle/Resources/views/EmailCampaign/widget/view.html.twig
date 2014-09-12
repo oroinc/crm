@@ -29,13 +29,6 @@
             {%- endif -%}
             {{ ui.renderHtmlProperty('orocrm.campaign.emailcampaign.marketing_list.label'|trans, marketingListView) }}
 
-            {%- if entity.template and resource_granted('oro_email_emailtemplate_update') -%}
-                {% set templateView = '<a href="' ~ path('oro_email_emailtemplate_update', {'id': entity.template.id}) ~ '">' ~ entity.template.name ~ '</a>' %}
-            {%- else -%}
-                {% set templateView = entity.template.name %}
-            {%- endif -%}
-            {{ ui.renderHtmlProperty('orocrm.campaign.emailcampaign.template.label'|trans, templateView) }}
-
             {{ ui.renderHtmlProperty('orocrm.campaign.emailcampaign.description.label'|trans, entity.description) }}
         </div>
     </div>

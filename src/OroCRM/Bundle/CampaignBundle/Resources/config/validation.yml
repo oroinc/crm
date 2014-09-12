@@ -44,7 +44,10 @@ OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign:
             - NotBlank: ~
         owner:
             - NotBlank: ~
-        template:
-            - NotBlank: ~
         transport:
+            - NotBlank: ~
+
+OroCRM\Bundle\CampaignBundle\Entity\InternalTransportSettings:
+    properties:
+        template:
             - NotBlank: ~

@@ -96,7 +96,7 @@ class EmailCampaignController extends Controller
             $this->createForm('orocrm_email_campaign', $entity),
             function (EmailCampaign $entity) {
                 return array(
-                    'route' => 'orocrm_email_contact_update',
+                    'route' => 'orocrm_email_campaign_update',
                     'parameters' => array('id' => $entity->getId())
                 );
             },
@@ -106,7 +106,8 @@ class EmailCampaignController extends Controller
                     'parameters' => array('id' => $entity->getId())
                 );
             },
-            $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.saved.message')
+            $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.saved.message'),
+            $this->get('orocrm_campaign.form.handler.email_campaign')
         );
     }
 
