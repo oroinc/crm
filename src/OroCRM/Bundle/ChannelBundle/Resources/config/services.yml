@@ -27,6 +27,7 @@ parameters:
     orocrm_channel.provider.state_provider.class:                      OroCRM\Bundle\ChannelBundle\Provider\StateProvider
     orocrm_channel.provider.entity_metadata.class:                     OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider
     orocrm_channel.provider.utils.entity_state_provider.class:         OroCRM\Bundle\ChannelBundle\Provider\Utility\EntityStateProvider
+    orocrm_channel.provider.request_channel.class:                     OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider
 
     # datagrid
     orocrm_channel.datagrid.extension.orm_channel_limitation.class:    OroCRM\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtension
@@ -152,6 +153,13 @@ services:
             - @oro_entity.entity_provider
             - @oro_entity_config.config_manager
             - @router
+
+    orocrm_channel.provider.request_channel:
+        class: %orocrm_channel.provider.request_channel.class%
+        arguments:
+            - @request
+            - @doctrine
+        scope: request
 
     # datagrid
     orocrm_channel.datagrid.extension.orm_channel_limitation:

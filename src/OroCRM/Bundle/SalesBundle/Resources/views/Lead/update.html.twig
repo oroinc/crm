@@ -71,6 +71,7 @@
     {% if form.owner is defined %}
         {% set formFields = formFields|merge([form_row(form.owner)]) %}
     {% endif %}
+
     {% set formFields = formFields|merge([
         form_row(form.name),
         form_row(form.dataChannel),

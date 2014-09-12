@@ -97,7 +97,9 @@ workflows:
 
             convert_to_opportunity_definition:
                 pre_conditions:
-                    @equal: [$cart.status.name, 'open']
+                    @and:
+                        - @equal: [$cart.status.name, 'open']
+                        - @channel_entity_availiable: [$cart.dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\Opportunity']]
                 conditions:
                     @and:
                         - @not_empty:
@@ -125,6 +127,7 @@ workflows:
                             contact: $cart.customer.contact
                             status: $.result.opportunity_status
                             notes: $notes
+                            dataChannel: $cart.dataChannel
 
             abandon_definition:
                 pre_conditions:
