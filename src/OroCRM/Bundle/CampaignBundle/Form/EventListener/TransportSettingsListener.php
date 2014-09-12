@@ -33,12 +33,13 @@ class TransportSettingsListener implements EventSubscriberInterface
     {
         return [
             FormEvents::PRE_SET_DATA  => 'preSet',
-            FormEvents::PRE_SUBMIT => 'preSubmit'
+            FormEvents::POST_SET_DATA => 'postSet',
+            FormEvents::PRE_SUBMIT    => 'preSubmit'
         ];
     }
 
     /**
-     * Add Transport Settings form if any
+     * Add Transport Settings form if any for existing entities.
      *
      * @param FormEvent $event
      */
@@ -50,10 +51,32 @@ class TransportSettingsListener implements EventSubscriberInterface
             return;
         }
 
-        $this->addTransportSettingsForm($data->getTransport(), $event->getForm());
+        if ($transport = $this->addTransportSettingsForm($data->getTransport(), $event->getForm())) {
+            $data->setTransport($transport->getName());
+        }
+        $event->setData($data);
     }
 
     /**
+     * Set correct transport setting value.
+     *
+     * @param FormEvent $event
+     */
+    public function postSet(FormEvent $event)
+    {
+        /** @var EmailCampaign $data */
+        $data = $event->getData();
+
+        if ($data === null) {
+            return;
+        }
+
+        $form = $event->getForm();
+        $form->get('transport')->setData($data->getTransport());
+    }
+
+    /**
+     * Change transport settings subform to form matching transport passed in request.
      * Pass top level data to transportSettings.
      *
      * @param FormEvent $event
@@ -61,9 +84,13 @@ class TransportSettingsListener implements EventSubscriberInterface
     public function preSubmit(FormEvent $event)
     {
         $data = $event->getData();
+        $form = $event->getForm();
 
         $transportName = isset($data['transport']) ? $data['transport'] : '';
-        $this->addTransportSettingsForm($transportName, $event->getForm());
+        if ($transport = $this->addTransportSettingsForm($transportName, $event->getForm())) {
+            $form->getData()->setTransport($transport->getName());
+            $form->get('transport')->setData($transport->getName());
+        }
 
         if ($event->getForm()->has('transportSettings')) {
             $parentData = $event->getData();
@@ -77,6 +104,7 @@ class TransportSettingsListener implements EventSubscriberInterface
     /**
      * @param string $selectedTransportName
      * @param FormInterface $form
+     * @return null|TransportInterface
      */
     protected function addTransportSettingsForm($selectedTransportName, FormInterface $form)
     {
@@ -86,8 +114,14 @@ class TransportSettingsListener implements EventSubscriberInterface
 
             if ($transportSettingsFormType) {
                 $form->add('transportSettings', $transportSettingsFormType, ['required' => true]);
+            } elseif ($form->has('transportSettings')) {
+                $form->remove('transportSettings');
             }
+
+            return $selectedTransport;
         }
+
+        return null;
     }
 
     /**

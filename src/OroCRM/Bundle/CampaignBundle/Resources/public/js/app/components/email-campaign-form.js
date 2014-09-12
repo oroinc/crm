@@ -8,9 +8,9 @@ define(function (require) {
         mediator = require('oroui/js/mediator');
 
     return function (options) {
-        var $schedule = $(options.scheduleEl),
-            $scheduledFor = $(options.scheduledForEl),
-            $transportEl = $(options.transportEl),
+        var $schedule = options._sourceElement.find(options.scheduleEl),
+            $scheduledFor = options._sourceElement.find(options.scheduledForEl),
+            $transportEl = options._sourceElement.find(options.transportEl),
             label = $scheduledFor.find('label'),
             hideOn = options.hideOn || [],
             showOn = options.showOn || [];
@@ -23,20 +23,12 @@ define(function (require) {
                 url = $form.attr('action');
             data.push({name: 'formUpdateMarker', value: 1});
 
-            $.post(url, data, function (res, status, jqXHR) {
-                var formContent = $(res).find('#' + $form.prop('id'));
-                if (formContent.length) {
-                    $form.replaceWith(formContent);
-                    formContent.validate({});
-                    // update wdt
-                    mediator.execute({name: 'updateDebugToolbar', silent: true}, jqXHR);
-                    // process UI decorators
-                    mediator.execute('layout:init', document.body);
-                    mediator.execute('afterPageChange');
-                }
-            }).always(function () {
-                mediator.execute('hideLoading');
-            });
+            var event = {formEl: $form, data: data, reloadManually: true};
+            mediator.trigger('integrationFormReload:before', event);
+
+            if (event.reloadManually) {
+                mediator.execute('submitPage', {url: url, type: $form.attr('method'), data: $.param(data)});
+            }
         });
 
         $schedule.on('change', function () {

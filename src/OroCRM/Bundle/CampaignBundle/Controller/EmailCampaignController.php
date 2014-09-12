@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Controller;
 
+use OroCRM\Bundle\CampaignBundle\Entity\DummyTransportSettings;
+use OroCRM\Bundle\CampaignBundle\Form\Handler\EmailCampaignHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -10,6 +12,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/campaign/email")
@@ -93,7 +97,7 @@ class EmailCampaignController extends Controller
     {
         return $this->get('oro_form.model.update_handler')->handleUpdate(
             $entity,
-            $this->createForm('orocrm_email_campaign', $entity),
+            $this->get('orocrm_campaign.email_campaign.form'),
             function (EmailCampaign $entity) {
                 return array(
                     'route' => 'orocrm_email_campaign_update',
@@ -107,7 +111,17 @@ class EmailCampaignController extends Controller
                 );
             },
             $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.saved.message'),
-            $this->get('orocrm_campaign.form.handler.email_campaign')
+            $this->get('orocrm_campaign.form.handler.email_campaign'),
+            function (EmailCampaign $entity, FormInterface $form, Request $request) {
+                $isUpdateOnly = $request->get(EmailCampaignHandler::UPDATE_MARKER, false);
+                if ($isUpdateOnly) {
+                    $origData = $form->getData();
+                    $form = $this->get('form.factory')
+                        ->createNamed('orocrm_email_campaign', 'orocrm_email_campaign', $origData);
+                }
+
+                return array('form' => $form->createView());
+            }
         );
     }
 
