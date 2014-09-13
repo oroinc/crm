@@ -45,10 +45,12 @@ parameters:
     orocrm_channel.event_listener.channel_save_succeed.class:          OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener
     orocrm_channel.event_listener.channel_before_deleted.class:        OroCRM\Bundle\ChannelBundle\EventListener\ChannelBeforeDeleteListener
     orocrm_channel.event_listener.embedded_form.class:                 OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
+    orocrm_channel.channel_doctrinet.listener.class:                   OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
 
     #twig
     orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
     orocrm_channel_bundle.integration_type_extension.class:            OroCRM\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension
+    orocrm_channel_bundle.embedded_form_type_extension.class:          OroCRM\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension
 
     #validators
     orocrm_channel.validators.channel_integration_validator.class:     OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator
@@ -264,7 +266,7 @@ services:
             - { name: kernel.event_listener, event: oro_embedded_form.form_submit.before, method: onEmbeddedFormSubmit }
 
     orocrm_channel.channel_doctrinet.listener:
-      class: OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
+      class: %orocrm_channel.channel_doctrinet.listener.class%
       arguments:
           - @orocrm_channel.provider.settings_provider
       tags:
@@ -287,7 +289,7 @@ services:
             - { name: form.type_extension, alias: oro_integration_channel_form }
 
     orocrm_channel_bundle.embedded_form_type_extension:
-        class: OroCRM\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension
+        class: %orocrm_channel_bundle.embedded_form_type_extension.class%
         tags:
             - { name: form.type_extension, alias: embedded_form }
 
