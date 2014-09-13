@@ -78,6 +78,7 @@ also bring the `integration` field to configure the integration. It should be de
                 - OroCRM\Bundle\AcmeBundle\Entity\Customer
             integration_type: some_type
             customer_identity: OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity
+            lifetime_value: field
 ```
 
 | Option              | Description                                                                                                         | Required |
@@ -86,6 +87,7 @@ also bring the `integration` field to configure the integration. It should be de
 | `entities`          | Determines which fields will be defined in `entities` field after channel type has been selected                    | no       |
 | `integration_type`  | Determines which integration type should be created in scope of particular channel that is based on the current ype | no       |
 | `customer_identity` | Determines entity that will be used as customer identifier for channels that are based of the current ype           | no       |
+| `lifetime_value`    | Determines which fields will be used from `customer_identity` for calculating lifetime value                        | no       |
 
 
 By default, if `customer_identity` option is not set `OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity` will be used as *customer identity* and
