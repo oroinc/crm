@@ -138,7 +138,7 @@ function (_, Backbone, __, routing, DialogWidget, linkTemplate) {
                 type = this._getValue('type'),
                 params = {};
 
-            params.channelName = this._getValue('channelName');
+            params.channelName = encodeURIComponent(this._getValue('channelName'));
 
             if (data) {
                 params.data = data;
@@ -147,7 +147,7 @@ function (_, Backbone, __, routing, DialogWidget, linkTemplate) {
             if (entityId) {
                 params.id = entityId;
             } else if (type) {
-                params.type = type;
+                params.type = encodeURIComponent(type);
             }
 
             return routing.generate(route, params);
