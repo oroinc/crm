@@ -83,7 +83,7 @@ class ChannelSelectType extends AbstractType
 
                 $query->innerJoin('c.entities', 'e');
                 $query->andWhere($query->expr()->in('e.name', $entities));
-                $query->groupBy('c.name');
+                $query->groupBy('c.name', 'c.id');
                 $query->having($countDistinctName);
                 $query->setParameter('count', count($entities));
             }

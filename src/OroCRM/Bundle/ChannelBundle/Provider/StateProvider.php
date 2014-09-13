@@ -71,7 +71,7 @@ class StateProvider
 
             $qb->innerJoin('c.entities', 'e');
             $qb->andWhere($qb->expr()->in('e.name', $entities));
-            $qb->groupBy('c.name');
+            $qb->groupBy('c.name', 'c.id');
             $qb->having($countDistinctName);
             $qb->setParameter('count', count($entities));
         }

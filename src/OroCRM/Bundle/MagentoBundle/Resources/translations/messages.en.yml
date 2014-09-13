@@ -427,5 +427,3 @@ orocrm:
         cart_information: Cart Information
         communications: Communications
         entity_number: %entityName% %entityNumber%
-        channel_type:
-            magento.label: Magento

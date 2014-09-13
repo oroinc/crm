@@ -117,7 +117,7 @@ class ChannelSelectTypeTest extends OrmTestCase
                 ],
                 'query'  => 'SELECT c FROM OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Channel c ' .
                     'INNER JOIN c.entities e ' .
-                    'WHERE e.name IN(\'entity1\', \'entity2\') AND c.status = :status GROUP BY c.name ' .
+                    'WHERE e.name IN(\'entity1\', \'entity2\') AND c.status = :status GROUP BY c.name, c.id ' .
                     'HAVING COUNT(DISTINCT e.name) = :count ORDER BY c.name ASC'
             ]
         ];
