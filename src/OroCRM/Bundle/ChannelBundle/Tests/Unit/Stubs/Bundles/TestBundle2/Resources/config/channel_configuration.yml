@@ -10,3 +10,4 @@ orocrm_channel:
    channel_types:
         test2:
             label: test2 type
+            lifetime_value: some_field2

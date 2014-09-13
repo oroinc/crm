@@ -6,3 +6,4 @@ orocrm_channel:
     channel_types:
         custom:
             label: orocrm.channel.channel_type.custom.label
+            lifetime_value: lifetimevalue

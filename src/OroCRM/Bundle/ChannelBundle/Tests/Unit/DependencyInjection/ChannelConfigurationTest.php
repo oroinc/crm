@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\DependencyInjection;
 
 use Oro\Component\Config\CumulativeResourceManager;
-
 use OroCRM\Bundle\ChannelBundle\DependencyInjection\CompilerPass\SettingsPass;
 use OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle1\TestBundle1;
 use OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle2\TestBundle2;
@@ -54,9 +53,11 @@ class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
                     ],
                     'integration_type'  => 'test',
                     'customer_identity' => 'OroCRM\Bundle\TestBundle1\Entity\TestCustomer',
+                    'lifetime_value'    => 'some_field',
                 ],
                 'test2' => [
                     'label'             => 'test2 type',
+                    'lifetime_value'    => 'some_field2',
                     'entities'          => [],
                     'customer_identity' => 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity',
                 ]
