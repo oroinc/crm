@@ -126,9 +126,21 @@ class ChannelDoctrineListener
 
         $currentLifetimeValue = $this->getLifetimeValueFromEntity($entity, $config);
 
+        $currentLifetime = 0;
+
+        if (is_array($lifetimeValue)) {
+            foreach ($currentLifetimeValue as $row) {
+                $currentLifetime += $row;
+            }
+        } else {
+            $currentLifetime = $currentLifetimeValue;
+        }
+
+        $currentLifetime = $currentLifetime + $currentLifetimeValue;
+
         #$amountFromQuery + $currentEntity ->getLEFITIMEFIELD
 
-        $this->createHistory($account, $dataChannel, 0);
+        $this->createHistory($account, $dataChannel, $currentLifetime);
     }
 
     /**
@@ -184,7 +196,6 @@ class ChannelDoctrineListener
 
     protected function createHistory($channel, $account, $amount)
     {
-
         $history = new LifetimeValueHistory();
         $history->setDataChannel($channel);
         $history->setAccount($account);
