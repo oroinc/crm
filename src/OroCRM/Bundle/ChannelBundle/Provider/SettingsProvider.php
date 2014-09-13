@@ -250,10 +250,16 @@ class SettingsProvider
 
         foreach ($settings as $setting) {
             if (!empty($setting['lifetime_value'])) {
-                array_push($result, $setting['customer_identity']);
+                array_push(
+                    $result,
+                    [
+                        'customer_identity' => $setting['customer_identity'],
+                        'lifetime_value' => $setting['lifetime_value']
+                    ]
+                );
             }
         }
 
-        return array_unique($result);
+        return $result;
     }
 }
