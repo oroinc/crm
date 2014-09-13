@@ -28,6 +28,7 @@ parameters:
     orocrm_channel.provider.entity_metadata.class:                     OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider
     orocrm_channel.provider.utils.entity_state_provider.class:         OroCRM\Bundle\ChannelBundle\Provider\Utility\EntityStateProvider
     orocrm_channel.provider.request_channel.class:                     OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider
+    orocrm_channel.provider.lifetime.amount_provider.class:            OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider
 
     # datagrid
     orocrm_channel.datagrid.extension.orm_channel_limitation.class:    OroCRM\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtension
@@ -48,6 +49,7 @@ parameters:
 
     #twig
     orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
+    orocrm_channel.twig.lifetime_value_extension.class:                OroCRM\Bundle\ChannelBundle\Twig\LifetimeValueExtension
 
     #validators
     orocrm_channel.validators.channel_integration_validator.class:     OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator
@@ -162,6 +164,11 @@ services:
             - @doctrine
         scope: request
 
+    orocrm_channel.provider.lifetime.amount_provider:
+        class: %orocrm_channel.provider.lifetime.amount_provider.class%
+        arguments:
+            - @doctrine
+
     # datagrid
     orocrm_channel.datagrid.extension.orm_channel_limitation:
         class: %orocrm_channel.datagrid.extension.orm_channel_limitation.class%
@@ -268,6 +275,13 @@ services:
         arguments:
             - @orocrm_channel.provider.metadata_provider
             - @orocrm_channel.provider.settings_provider
+        tags:
+            - { name: twig.extension }
+
+    orocrm_channel.twig.lifetime_value_extension:
+        class: %orocrm_channel.twig.lifetime_value_extension.class%
+        arguments:
+            - @orocrm_channel.provider.lifetime.amount_provider
         tags:
             - { name: twig.extension }
 

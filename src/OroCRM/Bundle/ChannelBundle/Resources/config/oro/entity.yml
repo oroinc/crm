@@ -1,0 +1,11 @@
+oro_entity:
+    virtual_fields:
+        OroCRM\Bundle\AccountBundle\Entity\Account:
+            lifetimeValue:
+                query:
+                    select:
+                        expr:         h.amount
+                        return_type:  money
+                    join:
+                        left:
+                            - { join: OroCRMChannelBundle:LifetimeValueHistory, alias: h, conditionType: 'WITH', condition: 'h.account = $entity' }
