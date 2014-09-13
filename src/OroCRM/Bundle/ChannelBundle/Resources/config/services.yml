@@ -48,6 +48,7 @@ parameters:
 
     #twig
     orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
+    orocrm_channel_bundle.integration_type_extension.class:            OroCRM\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension
 
     #validators
     orocrm_channel.validators.channel_integration_validator.class:     OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator
@@ -262,6 +263,13 @@ services:
             - { name: kernel.event_listener, event: entity_form.render.before, method: addDataChannelField }
             - { name: kernel.event_listener, event: oro_embedded_form.form_submit.before, method: onEmbeddedFormSubmit }
 
+    orocrm_channel.channel_doctrinet.listener:
+      class: OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
+      arguments:
+          - @orocrm_channel.provider.settings_provider
+      tags:
+        - { name: doctrine.event_listener, event: onFlush, method: onFlush }
+
     #twig
     orocrm_channel.twig.metadata_extension:
         class: %orocrm_channel.twig.metadata_extension.class%
@@ -272,7 +280,7 @@ services:
             - { name: twig.extension }
 
     orocrm_channel_bundle.integration_type_extension:
-        class: OroCRM\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension
+        class: %orocrm_channel_bundle.integration_type_extension.class%
         arguments:
             - @orocrm_channel.provider.settings_provider
         tags:
