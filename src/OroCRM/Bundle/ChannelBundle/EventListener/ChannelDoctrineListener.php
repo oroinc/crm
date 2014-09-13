@@ -8,12 +8,15 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\Query;
 
-use Oro\Bundle\EntityBundle\ORM\OroEntityManager;
-
-use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+
+use Oro\Bundle\EntityBundle\ORM\OroEntityManager;
+
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelDoctrineListener
 {
@@ -89,19 +92,11 @@ class ChannelDoctrineListener
      */
     protected function update($entity, array $config, $isUpdate = false)
     {
-        $changeSet          = $this->uow->getEntityChangeSet($entity);
-        $lifetimeValueQuery = [];
+        $changeSet = $this->uow->getEntityChangeSet($entity);
 
-        if (
-            $isUpdate &&
-            (
-                (!empty($changeSet['account']) && !empty($changeSet['account'][0]))
-                || !empty($changeSet['dataChannel']) && !empty($changeSet['dataChannel'][0])
-            )
-        ) {
-            $account = $changeSet['account'][0];
+        if ($this->isUpdate($changeSet, $isUpdate)) {
+            $account     = $changeSet['account'][0];
             $dataChannel = $changeSet['dataChannel'][0];
-
             $entityParam = [
                 'account' => $account,
                 'channel' => $dataChannel,
@@ -114,9 +109,8 @@ class ChannelDoctrineListener
 
             $lifetimeValue = $this->getLifetimeValue($config, $entityParam);
         } else {
-            $account = $changeSet['account'][1];
-            $dataChannel = $changeSet['dataChannel'][1];
-
+            $account       = $changeSet['account'][1];
+            $dataChannel   = $changeSet['dataChannel'][1];
             $entityParam   = [
                 'account' => $account,
                 'channel' => $dataChannel
@@ -141,6 +135,21 @@ class ChannelDoctrineListener
         #$amountFromQuery + $currentEntity ->getLEFITIMEFIELD
 
         $this->createHistory($account, $dataChannel, $currentLifetime);
+    }
+
+    /**
+     * @param array $changeSet
+     * @param bool  $isUpdate
+     *
+     * @return bool
+     */
+    protected function isUpdate($changeSet, $isUpdate)
+    {
+        return $isUpdate &&
+        (
+            (!empty($changeSet['account']) && !empty($changeSet['account'][0]))
+            || !empty($changeSet['dataChannel']) && !empty($changeSet['dataChannel'][0])
+        );
     }
 
     /**
@@ -194,11 +203,19 @@ class ChannelDoctrineListener
         return $result;
     }
 
-    protected function createHistory($channel, $account, $amount)
+    /**
+     * @param Channel $channel
+     * @param Account $account
+     * @param int     $amount
+     */
+    protected function createHistory(Channel $channel, Account $account, $amount = 0)
     {
         $history = new LifetimeValueHistory();
         $history->setDataChannel($channel);
         $history->setAccount($account);
         $history->setAmount($amount);
+
+        $this->em->persist($history);
+        $this->em->flush();
     }
 }
