@@ -15,10 +15,7 @@ class OrderControllerTest extends AbstractController
     {
         parent::postFixtureLoad();
 
-        self::$order = $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroCRMMagentoBundle:Order')
-            ->findOneByChannel(self::$channel);
+        self::$order = $this->getReference('order');
     }
 
     protected function getMainEntityId()
@@ -65,12 +62,12 @@ class OrderControllerTest extends AbstractController
                         'gridName' => 'magento-order-grid'
                     ],
                     'gridFilters'         => [],
-                    'channelName'         => 'Demo Web store',
                     'assert'              => [
-                        'firstName' => 'John',
-                        'lastName'  => 'Doe',
-                        'status'    => 'open',
-                        'subTotal'  => '$0.00',
+                        'channelName' => 'Magento channel',
+                        'firstName'   => 'John',
+                        'lastName'    => 'Doe',
+                        'status'      => 'open',
+                        'subTotal'    => '$0.00',
                     ],
                     'expectedResultCount' => 1
                 ],
@@ -85,12 +82,12 @@ class OrderControllerTest extends AbstractController
                         'magento-order-grid[_filter][firstName][value]' => 'John',
                         'magento-order-grid[_filter][status][value]'    => 'open',
                     ],
-                    'channelName'         => 'Demo Web store',
                     'assert'              => [
-                        'firstName' => 'John',
-                        'lastName'  => 'Doe',
-                        'status'    => 'open',
-                        'subTotal'  => '$0.00',
+                        'channelName' => 'Magento channel',
+                        'firstName'   => 'John',
+                        'lastName'    => 'Doe',
+                        'status'      => 'open',
+                        'subTotal'    => '$0.00',
                     ],
                     'expectedResultCount' => 1
                 ],
@@ -105,7 +102,6 @@ class OrderControllerTest extends AbstractController
                         'magento-order-grid[_filter][firstName][value]' => 'John',
                         'magento-order-grid[_filter][status][value]'    => 'close',
                     ],
-                    'channelName'         => 'Demo Web store',
                     'assert'              => [],
                     'expectedResultCount' => 0
                 ],
@@ -117,7 +113,6 @@ class OrderControllerTest extends AbstractController
                         'id'       => 'id',
                     ],
                     'gridFilters'         => [],
-                    'channelName'         => 'Demo Web store',
                     'assert'              => [
                         'sku'            => 'some sku',
                         'qty'            => 1,

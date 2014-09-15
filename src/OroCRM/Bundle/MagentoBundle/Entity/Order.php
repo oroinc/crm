@@ -16,6 +16,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * Class Order
@@ -54,9 +56,9 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Order extends ExtendOrder
+class Order extends ExtendOrder implements ChannelAwareInterface
 {
-    use IntegrationEntityTrait, NamesAwareTrait;
+    use IntegrationEntityTrait, NamesAwareTrait, ChannelEntityTrait;
 
     /**
      * @var string

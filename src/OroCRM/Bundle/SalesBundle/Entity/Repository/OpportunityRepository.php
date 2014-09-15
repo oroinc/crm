@@ -27,11 +27,12 @@ class OpportunityRepository extends EntityRepository
             $dateEnd->format('Y') . '-01-' . ((ceil($dateEnd->format('n') / 3) - 1) * 3 + 1),
             new \DateTimeZone('UTC')
         );
+
         return $this->getOpportunitiesDataByStatus($aclHelper, $dateStart, $dateEnd);
     }
 
     /**
-     * @param AclHelper $aclHelper
+     * @param  AclHelper $aclHelper
      * @param $dateStart
      * @param $dateEnd
      * @return array

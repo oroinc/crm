@@ -1,12 +1,15 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroEmailBundle::macros.html.twig' as email %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ ui.renderProperty('orocrm.sales.lead.first_name.label'|trans, entity.firstName) }}
             {{ ui.renderProperty('orocrm.sales.lead.last_name.label'|trans, entity.lastName) }}
+
+            {{ channel.renderChannelProperty(entity, 'orocrm.sales.lead.data_channel.label') }}
 
             {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
                 {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name|escape ~ '</a>' %}
@@ -17,16 +20,17 @@
             {{ ui.renderHtmlProperty('orocrm.sales.lead.contact.label'|trans, contactView) }}
             {{ ui.renderProperty('orocrm.sales.lead.job_title.label'|trans, entity.jobTitle) }}
 
-            {%- if resource_granted('orocrm_account_view') and entity.account -%}
-                {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.account.id}) ~ '">' ~ entity.account|escape ~ '</a>' %}
+            {%- if resource_granted('orocrm_sales_b2bcustomer_view') and entity.customer -%}
+                {% set customerView = '<a href="' ~ path('orocrm_sales_b2bcustomer_view', {'id': entity.customer.id}) ~ '">' ~ entity.customer|escape ~ '</a>' %}
             {%- else -%}
-                {% set accountView = entity.account ? entity.account|escape : '' %}
+                {% set customerView = entity.customer ? entity.customer|escape : '' %}
             {%- endif -%}
 
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.account.label'|trans, accountView) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.lead.customer.label'|trans, customerView) }}
             {{ ui.renderProperty('orocrm.sales.lead.company_name.label'|trans, entity.companyName) }}
             {{ ui.renderProperty('orocrm.sales.lead.industry.label'|trans, entity.industry) }}
             {{ ui.renderProperty('orocrm.sales.lead.number_of_employees.label'|trans, entity.numberOfEmployees) }}
+            {{ ui.renderProperty('orocrm.sales.lead.source.label'|trans, entity.source) }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>

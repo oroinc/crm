@@ -1,0 +1,20 @@
+oro_menu_config:
+    items:
+        channels_list:
+            label: 'orocrm.channel.entity_plural_label'
+            route: 'orocrm_channel_index'
+            extras:
+                routes: ['orocrm_channel_*']
+                position: 55
+    tree:
+        application_menu:
+            children:
+                system_tab:
+                    children:
+                        channels_list: ~
+
+oro_titles:
+    orocrm_channel_index:   ~
+    orocrm_channel_create: 'Create Channel'
+    orocrm_channel_update: '%%channel.name%% - Edit'
+    orocrm_channel_view: '%%channel.name%%'

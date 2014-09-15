@@ -3,6 +3,13 @@ oro:
         my_sales_flow:
             b2b: B2B
             b2c: B2C
+    entityextend:
+        enums:
+            lead_source:
+                entity_label:         Lead Source
+                entity_plural_label:  Lead Sources
+                entity_description:   Represents a list of all lead sources
+
 orocrm:
     query_designer:
         aggregates:
@@ -22,6 +29,10 @@ orocrm:
                     hint: Sum close revenue for 'won' items
 
     sales:
+        sections:
+            general:       General
+            leads:         Leads
+            opportunities: Opportunities
         dashboard:
             opportunities_by_state:
                 title:       Opportunities by Status
@@ -35,6 +46,7 @@ orocrm:
         menu:
             sales_tab.label: Sales
             lead_list.description: List of leads
+            b2bcustomer_list.description: List of B2B customers
             opportunity_list.description: List of opportunities
             sales_salesfunnel_list.description: List of sales funnels
             shortcut_list_leads.label: Show leads list
@@ -45,14 +57,17 @@ orocrm:
             shortcut_new_lead.description: Create new lead
             shortcut_new_opportunity.label: Create new opportunity
             shortcut_new_opportunity.description: Create new opportunity
+            shortcut_list_b2bcustomers.label: Show B2B customers list
+            shortcut_list_b2bcustomers.description: List of B2B customers
         controller:
             lead.saved.message: Lead saved
             opportunity.saved.message: Opportunity saved
             sales_funnel.saved.message: Sales process saved
-
+            b2bcustomer.saved.message: Customer saved
         form:
             choose_opportunity: Choose an opportunity....
-            choose_lead: Choose a lead....
+            choose_lead:        Choose a lead....
+            choose_b2bcustomer: Choose a customer....
 
         #
         # OroCRM/Bundle/SalesBundle/Entity/LeadStatus.php
@@ -91,18 +106,19 @@ orocrm:
             status.label:         Status
             close_reason.label:   Close reason
             contact.label:        Potential Customer
-            account.label:        Account
             owner.label:          Owner
             notes.label:          Additional comments
             lead.label:           Lead
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
+            customer.label:       B2B Customer
+            data_channel.label:   Channel
+            assigned.label:       Assigned
 
             datagrid:
-                view: View
-                update: Update
-                delete: Delete
-
+                view:     View
+                update:   Update
+                delete:   Delete
         #
         # OroCRM/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
@@ -136,17 +152,25 @@ orocrm:
             industry.label:       Industry
             status.label:         Status
             contact.label:        Contact
-            account.label:        Account
             owner.label:          Owner
             address.label:        Address
             details.label:        Lead Details
             extend_source.label:  Source
+            source.label:         Source
             notes.label:          Additional comments
             opportunities.label:  Opportunities
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             information:          Lead Information
             campaign.label:       Campaign
+            customer.label:       B2B Customer
+            data_channel.label:   Channel
+            assigned.label:       Assigned
+
+            source:
+                unclassified:     Unclassified
+                others:           Others
+                none:             None
 
             extend_source:
                 unclassified:     Unclassified
@@ -172,6 +196,7 @@ orocrm:
             owner.label:          Owner
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
+            data_channel.label:   Channel
 
             hint: 'Sales Process #%id%'
 
@@ -179,6 +204,38 @@ orocrm:
                 view:   View
                 update: Update
                 delete: Delete
+        #
+        # OroCRM/Bundle/SalesBundle/Entity/B2bCustomer.php
+        #
+        b2bcustomer:
+            entity_label:               B2B customer
+            entity_plural_label:        B2B customers
+            entity_description:         Represent B2B customer
+            id.label:                   Id
+            name.label:                 Name
+            shipping_address.label:     Shipping Address
+            billing_address.label:      Billing Address
+            account.label:              Account
+            contact.label:              Contact
+            data_channel.label:         Channel
+            leads.label:                Leads
+            opportunities.label:        Opportunities
+            owner.label:                Owner
+            tags.label:                 Tags
+            ownership.label:            Ownership
+            rating.label:               Rating
+            ticker_symbol.label:        Ticker symbol
+            website.label:              Website
+            employees.label:            Employees
+            opportunities.select:       Select opportunities
+            leads.select:               Select leads
+            datagrid:
+                view:   View
+                update: Update
+                delete: Delete
         widgets:
-            leads:         Leads
-            opportunities: Opportunities
+            b2bcustomer_information: B2B Customer Information
+            leads:                   Leads
+            opportunities:           Opportunities
+        channel_type:
+            b2b.label: B2b

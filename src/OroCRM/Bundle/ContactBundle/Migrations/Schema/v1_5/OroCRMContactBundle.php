@@ -37,11 +37,10 @@ class OroCRMContactBundle implements Migration, AttachmentExtensionAwareInterfac
      */
     public static function addPhotoToContact(Schema $schema, AttachmentExtension $attachmentExtension)
     {
-        $attachmentExtension->addFileRelation(
+        $attachmentExtension->addImageRelation(
             $schema,
             'orocrm_contact',
             'picture',
-            'image',
             [],
             2,
             58,

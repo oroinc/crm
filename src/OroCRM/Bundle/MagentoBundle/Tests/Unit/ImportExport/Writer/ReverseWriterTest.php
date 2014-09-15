@@ -68,8 +68,10 @@ class ReverseWriterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->importHelper = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Service\ImportHelper')
             ->disableOriginalConstructor()->getMock();
+        $channelHelper = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper')
+            ->disableOriginalConstructor()->getMock();
 
-        $this->customerSerializer = new CustomerSerializer($this->importHelper);
+        $this->customerSerializer = new CustomerSerializer($this->importHelper, $channelHelper);
 
         $this->writer = new ReverseWriter(
             $this->em,

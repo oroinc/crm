@@ -10,7 +10,7 @@ OroCRM\Bundle\CampaignBundle\Entity\Campaign:
             - NotBlank: ~
             - Regex:
                 pattern: "/^[a-zA-Z0-9_\-]*$/"
-                message: "This value should contains only alphabetic symbols, underscore, hyphen and numbers"
+                message: "This value should contain only alphabetic symbols, underscore, hyphen and numbers."
             - Length:
                 max: 20
         startDate:

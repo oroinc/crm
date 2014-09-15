@@ -11,9 +11,15 @@ datagrid:
                     - cr.emailAddress
                     - cr.phone
                     - cr.createdAt
+                    - channel.name as channelName
                 from:
                     - { table: OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest, alias: cr }
+                join:
+                    left:
+                        - { join: cr.dataChannel, alias: channel }
         columns:
+            channelName:
+                label:         orocrm.contactus.contactrequest.data_channel.label
             firstName:
                 label:         orocrm.contactus.contactrequest.first_name.label
             lastName:
@@ -28,6 +34,8 @@ datagrid:
                 label:         oro.ui.created_at
         sorters:
             columns:
+                channelName:
+                    data_name: channelName
                 firstName:
                     data_name: cr.firstName
                 lastName:
@@ -42,6 +50,13 @@ datagrid:
                 createdAt: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
         filters:
             columns:
+                channelName:
+                    type:      entity
+                    data_name: channel.id
+                    options:
+                        field_options:
+                            class: OroCRMChannelBundle:Channel
+                            property: name
                 firstName:
                     type:      string
                     data_name: cr.firstName

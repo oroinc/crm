@@ -46,7 +46,6 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
      */
     public function load(ObjectManager $manager)
     {
-
         /** @var Organization $organization */
         $organization = $this->organizationRepository->findOneBy(array('name' => 'default'));
         if (!$organization) {
