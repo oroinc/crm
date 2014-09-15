@@ -14,7 +14,7 @@ datagrid:
                     - c.currency
                     - c.createdAt
                     - c.updatedAt
-                    - ch.name as channelName
+                    - channel.name as channelName
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
@@ -22,14 +22,14 @@ datagrid:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
                     left:
-                        - { join: c.channel, alias: ch }
+                        - { join: c.dataChannel, alias: channel }
                         - { join: c.addresses, alias: address,  conditionType: WITH, condition: "address.primary = true"}
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: c.website, alias: cw }
         columns:
             channelName:
-                label:            orocrm.magento.customer.channel.label
+                label:            orocrm.magento.customer.data_channel.label
             websiteName:
                 label:            orocrm.magento.customer.website.label
             firstName:
@@ -65,7 +65,7 @@ datagrid:
                 firstName:   { data_name: c.firstName }
                 lastName:    { data_name: c.lastName }
                 email:       { data_name: c.email }
-                channelName: { data_name: ch.name }
+                channelName: { data_name: channelName }
                 websiteName: { data_name: cw.name }
                 createdAt:   { data_name: c.createdAt }
                 updatedAt:   { data_name: c.updatedAt }
@@ -78,14 +78,12 @@ datagrid:
         filters:
             columns:
                 channelName:
-                    type: entity
-                    data_name: ch.id
+                    type:      entity
+                    data_name: channel.id
                     options:
                         field_options:
-                            multiple: true
-                            class: OroIntegrationBundle:Channel
+                            class: OroCRMChannelBundle:Channel
                             property: name
-                            query_builder: @orocrm_magento.datagrid_helper->getMagentoChannelsQueryBuilder
                 websiteName:
                     type: entity
                     data_name: cw.id
@@ -156,7 +154,7 @@ datagrid:
                     - c.updatedAt
                     - cstatus.label as statusLabel
                     - step.label as stepLabel
-                    - ch.name as channelName
+                    - channel.name as channelName
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
@@ -165,7 +163,7 @@ datagrid:
                 join:
                     left:
                         - { join: c.store, alias: cs }
-                        - { join: c.channel, alias: ch }
+                        - { join: c.dataChannel, alias: channel }
                         - { join: c.status, alias: cstatus }
                         - { join: c.workflowStep, alias: step }
                         - { join: c.billingAddress, alias: address }
@@ -174,7 +172,7 @@ datagrid:
                         - { join: cs.website, alias: cw }
         columns:
             channelName:
-                label:            orocrm.magento.cart.channel.label
+                label:            orocrm.magento.cart.data_channel.label
             websiteName:
                 label:            orocrm.magento.cart.website.label
             originId:
@@ -216,31 +214,30 @@ datagrid:
                 params: [ id ]
         sorters:
             columns:
-                originId:             { data_name: c.originId }
-                firstName:            { data_name: c.firstName }
-                lastName:             { data_name: c.lastName }
-                email:                { data_name: c.email }
-                itemsQty:             { data_name: c.itemsQty }
-                channelName:          { data_name: ch.name }
-                websiteName:          { data_name: cw.name }
-                grandTotal:           { data_name: c.grandTotal }
-                createdAt:            { data_name: c.createdAt }
-                updatedAt:            { data_name: c.updatedAt }
-                countryName:          { data_name: country.name }
-                regionName:           { data_name: regionName }
-                statusLabel:          { data_name: cstatus.label }
-                stepLabel:            { data_name: step.label }
+                originId:    { data_name: c.originId }
+                firstName:   { data_name: c.firstName }
+                lastName:    { data_name: c.lastName }
+                email:       { data_name: c.email }
+                itemsQty:    { data_name: c.itemsQty }
+                channelName: { data_name: channelName }
+                websiteName: { data_name: cw.name }
+                grandTotal:  { data_name: c.grandTotal }
+                createdAt:   { data_name: c.createdAt }
+                updatedAt:   { data_name: c.updatedAt }
+                countryName: { data_name: country.name }
+                regionName:  { data_name: regionName }
+                statusLabel: { data_name: cstatus.label }
+                stepLabel:   { data_name: step.label }
             default:
                 updatedAt:  DESC
         filters:
             columns:
                 channelName:
-                    type: entity
-                    data_name: ch.id
+                    type:      entity
+                    data_name: channel.id
                     options:
                         field_options:
-                            multiple: true
-                            class: OroIntegrationBundle:Channel
+                            class: OroCRMChannelBundle:Channel
                             property: name
                 websiteName:
                     type: entity
@@ -539,7 +536,7 @@ datagrid:
                     - o.customerEmail as email
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
-                    - ch.name as channelName
+                    - channel.name as channelName
                     - cw.name as websiteName
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Order, alias: o }
@@ -554,12 +551,12 @@ datagrid:
                             condition: "address.id IN (SELECT oa.id FROM OroCRMMagentoBundle:OrderAddress oa LEFT JOIN oa.types type WHERE type.name = 'billing')"
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
-                        - { join: o.channel, alias: ch }
+                        - { join: o.dataChannel, alias: channel }
                         - { join: o.store, alias: cs }
                         - { join: cs.website, alias: cw }
         columns:
             channelName:
-                label:            orocrm.magento.order.channel.label
+                label:            orocrm.magento.order.data_channel.label
             websiteName:
                 label:            orocrm.magento.order.website.label
             incrementId:
@@ -620,7 +617,7 @@ datagrid:
                 countryName:            { data_name: country.name }
                 regionName:             { data_name: regionName }
                 status:                 { data_name: o.status }
-                channelName:            { data_name: ch.name }
+                channelName:            { data_name: channelName }
                 websiteName:            { data_name: cw.name }
                 stepLabel:              { data_name: step.label }
                 createdAt:              { data_name: o.createdAt }
@@ -630,12 +627,11 @@ datagrid:
         filters:
             columns:
                 channelName:
-                    type: entity
-                    data_name: ch.id
+                    type:      entity
+                    data_name: channel.id
                     options:
                         field_options:
-                            multiple: true
-                            class: OroIntegrationBundle:Channel
+                            class: OroCRMChannelBundle:Channel
                             property: name
                 websiteName:
                     type: entity

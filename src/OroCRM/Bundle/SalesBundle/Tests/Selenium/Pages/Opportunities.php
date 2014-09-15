@@ -30,6 +30,7 @@ class Opportunities extends AbstractPageFilteredGrid
         $this->waitPageToLoad();
         $this->waitForAjax();
         $lead = new Opportunity($this->test);
+
         return $lead->init();
     }
 

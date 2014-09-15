@@ -14,6 +14,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @ORM\Entity
@@ -41,8 +43,10 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *      }
  * )
  */
-class ContactRequest extends AbstractContactRequest
+class ContactRequest extends AbstractContactRequest implements ChannelAwareInterface
 {
+    use ChannelEntityTrait;
+
     const CONTACT_METHOD_BOTH  = 'orocrm.contactus.contactrequest.method.both';
     const CONTACT_METHOD_PHONE = 'orocrm.contactus.contactrequest.method.phone';
     const CONTACT_METHOD_EMAIL = 'orocrm.contactus.contactrequest.method.email';

@@ -11,9 +11,9 @@ class LeadRepository extends EntityRepository
     /**
      * Returns top $limit opportunities grouped by lead source
      *
-     * @param AclHelper $aclHelper
-     * @param int       $limit
-     * @return array [source, itemCount]
+     * @param  AclHelper $aclHelper
+     * @param  int       $limit
+     * @return array     [itemCount, label]
      */
     public function getOpportunitiesByLeadSource(AclHelper $aclHelper, $limit = 10)
     {

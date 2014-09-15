@@ -36,12 +36,13 @@ orocrm:
 
         form:
             choose_marketing_list_type:    Choose marketing list type
+            choose_marketing_list:         Choose marketing list
             importance: Important
             columns_notice: At least one column with contact information must be selected. Available contact information fields
 
         datagrid:
             subscribed: Subscribed
-            contactedTimes: Number of times contacted
+            contactedTimes: Total contacted
             lastContactedAt: Last contacted at
             refreshedOn: Refreshed on
             actions:

@@ -6,7 +6,6 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\SecurityBundle\Migrations\Schema\SetOwnershipTypeQuery;
 
 class OroCRMContactUsBundle implements Migration
 {
@@ -15,39 +14,25 @@ class OroCRMContactUsBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addOwner($schema);
-        self::setOwnership($queries);
+        $this->modifycOrocrmContactusRequestTable($schema);
     }
 
     /**
-     * Adds owner_id field
-     *
      * @param Schema $schema
      */
-    public static function addOwner(Schema $schema)
+    protected function modifycOrocrmContactusRequestTable(Schema $schema)
     {
         $table = $schema->getTable('orocrm_contactus_request');
 
-        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['owner_id'], 'IDX_342872E87E3C61F9', []);
+        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
+        $table->addIndex(['data_channel_id'], 'IDX_342872E8BDC09B73', []);
 
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_organization'),
-            ['owner_id'],
+            $schema->getTable('orocrm_channel'),
+            ['data_channel_id'],
             ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
-        );
-    }
-
-    /**
-     * Set ownership type for Contact Request entity to Organization
-     *
-     * @param QueryBag $queries
-     */
-    public function setOwnership(QueryBag $queries)
-    {
-        $queries->addQuery(
-            new SetOwnershipTypeQuery('Oro\Bundle\ContactUsBundle\Entity\ContactRequest')
+            ['onDelete' => 'SET NULL', 'onUpdate' => null],
+            'FK_342872E8BDC09B73'
         );
     }
 }

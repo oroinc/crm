@@ -16,9 +16,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Store;
 
 class OrderTest extends AbstractEntityTestCase
 {
-    /**
-     * @var Order
-     */
+    /** @var Order */
     protected $entity;
 
     /**

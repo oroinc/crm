@@ -1,0 +1,12 @@
+orocrm_channel:
+   entity_data:
+       -
+          name: OroCRM\Bundle\TestBundle2\Entity\Entity
+          dependent:
+              - OroCRM\Bundle\TestBundle2\Entity\EntityContact
+          navigation_items:
+              - application_menu.activities_tab.contact
+
+   channel_types:
+        test2:
+            label: test2 type

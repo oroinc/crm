@@ -41,7 +41,7 @@ class SalesFunnelHandler
      * Process form
      *
      * @param  SalesFunnel $entity
-     * @return bool  True on successful processing, false otherwise
+     * @return bool        True on successful processing, false otherwise
      */
     public function process(SalesFunnel $entity)
     {
@@ -52,6 +52,7 @@ class SalesFunnelHandler
 
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);
+
                 return true;
             }
         }

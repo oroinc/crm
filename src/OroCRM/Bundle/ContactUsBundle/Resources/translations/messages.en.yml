@@ -22,6 +22,7 @@ orocrm:
             organization_name.label:        Organization name
             preferred_contact_method.label: Preferred contact method
             owner.label:                    Organization
+            data_channel.label:             Channel
 
             datagrid:
                 update: Update

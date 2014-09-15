@@ -39,27 +39,25 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
      */
     public function fillEntityData($key, $entity)
     {
-        $userRepo    = $this->templateManager
-            ->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
-        $accountRepo = $this->templateManager
-            ->getEntityRepository('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $contactRepo = $this->templateManager
-            ->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $leadRepo    = $this->templateManager
-            ->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\Lead');
+        $userRepo     = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
+        $customerRepo = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
+        $contactRepo  = $this->templateManager->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
+        $leadRepo     = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\Lead');
+        $channelRepo  = $this->templateManager->getEntityRepository('OroCRM\Bundle\ChannelBundle\Entity\Channel');
 
         switch ($key) {
             case 'Jerry Coleman':
-                $entity
-                    ->setName('Oro Inc. Opportunity Name')
-                    ->setAccount($accountRepo->getEntity('Coleman'))
-                    ->setCreatedAt(new \DateTime())
-                    ->setUpdatedAt(new \DateTime())
-                    ->setOwner($userRepo->getEntity('John Doo'))
-                    ->setBudgetAmount(1000000)
-                    ->setContact($contactRepo->getEntity('Jerry Coleman'))
-                    ->setLead($leadRepo->getEntity('Jerry Coleman'))
-                    ->setStatus(new OpportunityStatus('In Progress'));
+                $entity->setName('Oro Inc. Opportunity Name');
+                $entity->setCustomer($customerRepo->getEntity('Jerry Coleman'));
+                $entity->setDataChannel($channelRepo->getEntity('B2b channel|b2b'));
+                $entity->setCreatedAt(new \DateTime());
+                $entity->setUpdatedAt(new \DateTime());
+                $entity->setOwner($userRepo->getEntity('John Doo'));
+                $entity->setBudgetAmount(1000000);
+                $entity->setContact($contactRepo->getEntity('Jerry Coleman'));
+                $entity->setLead($leadRepo->getEntity('Jerry Coleman'));
+                $entity->setStatus(new OpportunityStatus('In Progress'));
+
                 return;
         }
 

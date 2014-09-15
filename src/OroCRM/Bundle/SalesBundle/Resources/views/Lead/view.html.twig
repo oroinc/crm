@@ -39,7 +39,7 @@
 
 {% block breadcrumbs %}
     {{ parent() }}
-    <div class="status-enabled pull-left">
+    <div class="pull-left">
         {% if entity.status.name != 'canceled' %}
             <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
         {% else %}

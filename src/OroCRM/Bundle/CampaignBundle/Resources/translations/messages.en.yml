@@ -12,6 +12,8 @@ orocrm:
         description.label:   Description
         budget.label:        Budget
         owner.label:         Owner
+        form:
+            choose_campaign: Choose campaign
         report_period:
             label: Report Scale
             hour:  Hourly
@@ -55,3 +57,50 @@ orocrm:
                 description: This widget shows you top 5 campaigns that generate most revenue.
         organization:
             label: Organization
+        emailcampaign:
+            entity_description:  Marketing email campaigns
+            entity_label:        Email Campaign
+            entity_plural_label: Email Campaigns
+            id.label:            Id
+            name.label:          Name
+            senderEmail.label:   Sender Email
+            senderName.label:    Sender Name
+            description.label:   Description
+            transport.label:     Transport
+            schedule:
+                label:    Schedule
+                manual:   Manual
+                deferred: Deferred
+
+            scheduled_for.label:  Scheduled For
+            owner.label:          Owner
+            marketing_list.label: Marketing List
+            template.label:       Template
+            created_at.label:     Created At
+            updated_at.label:     Updated At
+            campaign.label:       Campaign
+            sent.label:           Sent
+            status:
+                sent: Sent
+                not_sent: Not sent
+            block:
+                general: General Information
+                email_settings: Email Settings
+                recipients: Recipients
+            controller:
+                saved.message: "Email campaign saved"
+                sent: "Email campaign was sent"
+            datagrid:
+                actions:
+                    view.label: View
+                    update.label: Update
+                    delete.label: Delete
+                campaignContactedTimes: Campaign contacted
+                campaignLastContactedAt: Campaign last contacted at
+            send: Send
+            system_configuration:
+                campaign_sender_email: Sender Email
+                campaign_sender_name: Sender Name
+                title: Campaign Configuration
+            transport:
+                internal: Internal

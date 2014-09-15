@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -120,40 +119,6 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
      * )
      */
     protected $owner;
-
-    /**
-     * @var Address $shippingAddress
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "merge"={"display"=true},
-     *          "importexport"={
-     *              "full"=true,
-     *              "order"=60
-     *          }
-     *      }
-     * )
-     */
-    protected $shippingAddress;
-
-    /**
-     * @var Address $billingAddress
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "merge"={"display"=true},
-     *          "importexport"={
-     *              "full"=true,
-     *              "order"=70
-     *          }
-     *      }
-     * )
-     */
-    protected $billingAddress;
 
     /**
      * Contacts storage
@@ -271,8 +236,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
     }
 
     /**
-     * @param int $id
-     *
+     * @param  int     $id
      * @return Account
      */
     public function setId($id)
@@ -293,7 +257,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
     /**
      * Set account name
      *
-     * @param  string $name New name
+     * @param string $name New name
      *
      * @return Account
      */
@@ -390,54 +354,6 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
     }
 
     /**
-     * Get shipping address
-     *
-     * @return Address
-     */
-    public function getShippingAddress()
-    {
-        return $this->shippingAddress;
-    }
-
-    /**
-     * Set shipping address
-     *
-     * @param Address $address
-     *
-     * @return Account
-     */
-    public function setShippingAddress($address)
-    {
-        $this->shippingAddress = $address;
-
-        return $this;
-    }
-
-    /**
-     * Get shipping address
-     *
-     * @return Address
-     */
-    public function getBillingAddress()
-    {
-        return $this->billingAddress;
-    }
-
-    /**
-     * Set billing address
-     *
-     * @param Address $address
-     *
-     * @return Account
-     */
-    public function setBillingAddress($address)
-    {
-        $this->billingAddress = $address;
-
-        return $this;
-    }
-
-    /**
      * Remove specified contact
      *
      * @param Contact $contact
@@ -456,7 +372,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
 
     public function __toString()
     {
-        return (string)$this->getName();
+        return (string) $this->getName();
     }
 
     /**

@@ -31,19 +31,13 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 {
     const FLUSH_MAX = 50;
 
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface */
     protected $container;
 
-    /**
-     * @var User[]
-     */
+    /** @var User[] */
     protected $users;
 
-    /**
-     * @var Country[]
-     */
+    /** @var Country[] */
     protected $countries;
 
     /** @var  EntityManager */
@@ -65,7 +59,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         return [
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadSourceData'
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadSourceData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData'
         ];
     }
 
@@ -88,6 +83,9 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $this->loadSources($manager);
     }
 
+    /**
+     * @param ObjectManager $manager
+     */
     protected function initSupportingEntities(ObjectManager $manager = null)
     {
         if ($manager) {
@@ -184,6 +182,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
         $lead->setOrganization($this->organization);
+        $lead->setDataChannel($this->getReference('default_channel'));
+
         /** @var Address $address */
         $address = new Address();
         $address->setLabel('Primary Address');

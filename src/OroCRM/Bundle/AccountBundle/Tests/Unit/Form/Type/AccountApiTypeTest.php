@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
-use BeSimple\SoapCommon\Type\KeyValue\Boolean;
 use OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -83,14 +82,6 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->with('contacts', 'oro_multiple_entity')
             ->will($this->returnSelf());
-        $builder->expects($this->at(4))
-            ->method('add')
-            ->with('shippingAddress', 'oro_address')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(5))
-            ->method('add')
-            ->with('billingAddress', 'oro_address')
-            ->will($this->returnSelf());
 
         $builder->expects($this->once())
             ->method('addEventSubscriber')
@@ -115,14 +106,6 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
         $builder->expects($this->at(1))
             ->method('add')
             ->with('tags', 'oro_tag_select')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(2))
-            ->method('add')
-            ->with('shippingAddress', 'oro_address')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(3))
-            ->method('add')
-            ->with('billingAddress', 'oro_address')
             ->will($this->returnSelf());
 
         $builder->expects($this->once())

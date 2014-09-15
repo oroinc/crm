@@ -1,5 +1,5 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
+{% form_theme form with ['OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
 {% oro_title_set({params : {"%account.name%": form.vars.value.name|default('N/A')} }) %}
 
 {% set formAction = form.vars.value.id ? path('orocrm_account_update', { 'id': form.vars.value.id }) : path('orocrm_account_create')  %}
@@ -69,20 +69,6 @@
         ]
     }] %}
 
-    {% set dataBlocks = dataBlocks|merge( [{
-        'title' : 'Addresses'|trans,
-        'subblocks': [
-            {
-                'title': 'orocrm.account.billing_address.label'|trans,
-                'data': [form_widget(form.billingAddress)]
-            },
-            {
-                'title': 'orocrm.account.shipping_address.label'|trans,
-                'data': [form_widget(form.shippingAddress)]
-            },
-        ]
-    }] ) %}
-
     {% if form.additional is defined and form.additional.children|length > 0 %}
         {% set additionalData = [] %}
         {% for value in form.additional %}
@@ -110,7 +96,6 @@
             }]
         }] ) %}
     {% endif %}
-
 
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
