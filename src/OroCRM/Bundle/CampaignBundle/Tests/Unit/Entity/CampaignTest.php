@@ -17,7 +17,7 @@ class CampaignTest extends AbstractEntityTestCase
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getSetDataProvider()
     {

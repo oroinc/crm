@@ -1,0 +1,89 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+{% oro_title_set({params : {"%entity.name%": entity.name|default('N/A') }}) %}
+
+{% block navButtons %}
+    {% if entity.schedule == constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_MANUAL') and not entity.sent %}
+        {{ UI.button({
+            'path' : path('orocrm_email_campaign_send', { id: entity.id }),
+            'title': 'orocrm.campaign.emailcampaign.send'|trans,
+            'label': 'orocrm.campaign.emailcampaign.send'|trans,
+            'iCss': 'icon-envelope'
+        })  }}
+    {% endif %}
+    {% if resource_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path' : path('orocrm_email_campaign_update', { id: entity.id }),
+            'entity_label': 'orocrm.campaign.emailcampaign.entity_label'|trans
+        })  }}
+    {% endif %}
+    {% if resource_granted('DELETE', entity) %}
+        {{ UI.deleteButton({
+            'dataUrl': path('oro_api_delete_emailcampaign', {'id': entity.id}),
+            'dataRedirect': path('orocrm_email_campaign_index'),
+            'aCss': 'no-hash remove-button',
+            'dataId': entity.id,
+            'entity_label': 'orocrm.campaign.emailcampaign.entity_label'|trans
+        }) }}
+    {% endif %}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity':      entity,
+        'indexPath':   path('orocrm_email_campaign_index'),
+        'indexLabel':  'orocrm.campaign.emailcampaign.entity_plural_label',
+        'entityTitle': entity.name|default('N/A'),
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block breadcrumbs %}
+    {{ parent() }}
+    <div class="status-enabled pull-left">
+        {% if entity.sent %}
+            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ 'orocrm.campaign.emailcampaign.status.sent'|trans }}</div>
+        {% else %}
+            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled icon-circle"></i>{{ 'orocrm.campaign.emailcampaign.status.not_sent'|trans }}</div>
+        {% endif %}
+    </div>
+{% endblock breadcrumbs %}
+
+{% block content_data %}
+    {% set campaignInformationWidget %}
+        {% include 'OroCRMCampaignBundle:EmailCampaign:widget/view.html.twig' %}
+    {% endset %}
+
+    {%- set listData -%}
+        {% if entity.marketingList is not empty %}
+            {{ dataGrid.renderGrid(
+                constant('Oro\\Bundle\\SegmentBundle\\Entity\\Segment::GRID_PREFIX') ~ entity.marketingList.segment.id,
+                {
+                    'grid-mixin': constant('OroCRM\\Bundle\\CampaignBundle\\EventListener\\CampaignStatisticDatagridListener::MIXIN_NAME'),
+                    'emailCampaign': entity.id
+                }
+            ) }}
+        {% endif %}
+    {%- endset -%}
+
+    {% set dataBlocks = [
+        {
+            'title': 'orocrm.campaign.emailcampaign.block.general'|trans,
+            'class': 'active',
+            'subblocks': [
+                {'data' : [campaignInformationWidget]}
+            ]
+        },
+        {
+            'title': 'orocrm.campaign.emailcampaign.block.recipients'|trans,
+            'subblocks': [
+                {'data' : [listData]}
+            ]
+        }
+    ] %}
+
+    {% set id = 'emailCampaignView' %}
+    {% set data = { 'dataBlocks': dataBlocks } %}
+    {{ parent() }}
+{% endblock content_data %}

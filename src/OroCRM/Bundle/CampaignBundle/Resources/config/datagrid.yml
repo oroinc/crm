@@ -209,3 +209,175 @@ datagrid:
             logTime:
                 label: orocrm.campaign.trackingevent.report.date.label
                 frontend_type: date
+
+    orocrm-email-campaign-grid:
+        extended_entity_name: OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign
+        source:
+            type: orm
+            acl_resource: orocrm_email_campaign_view
+            query:
+                select:
+                    - ec.id
+                    - ec.sent
+                    - ec.name
+                    - ec.senderEmail
+                    - ec.senderName
+                    - ec.schedule
+                    - ec.scheduledFor
+                    - ec.createdAt
+                    - ec.updatedAt
+                    - c.name as campaignName
+                    - ml.name as marktingListName
+                from:
+                    - { table: OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign, alias: ec }
+                join:
+                    left:
+                        - { join: ec.campaign, alias: c }
+                        - { join: ec.marketingList, alias: ml }
+        columns:
+            name:
+                label: orocrm.campaign.emailcampaign.name.label
+            senderEmail:
+                label: orocrm.campaign.emailcampaign.senderEmail.label
+            senderName:
+                label: orocrm.campaign.emailcampaign.senderName.label
+            campaignName:
+                label: orocrm.campaign.emailcampaign.campaign.label
+            marktingListName:
+                label: orocrm.campaign.emailcampaign.marketing_list.label
+            schedule:
+                label: orocrm.campaign.emailcampaign.schedule.label
+                type:          twig
+                frontend_type: html
+                template:      OroCRMCampaignBundle:EmailCampaign:Property/schedule.html.twig
+            scheduledFor:
+                label: orocrm.campaign.emailcampaign.scheduled_for.label
+                frontend_type: datetime
+            sent:
+                label:         orocrm.campaign.emailcampaign.sent.label
+                frontend_type: boolean
+            createdAt:
+                label: orocrm.campaign.emailcampaign.created_at.label
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.campaign.emailcampaign.updated_at.label
+                frontend_type: datetime
+        filters:
+            columns:
+                name:
+                    type:        string
+                    data_name:   ec.name
+                senderEmail:
+                    type:        string
+                    data_name:   ec.senderEmail
+                senderName:
+                    type:        string
+                    data_name:   ec.senderName£
+                campaignName:
+                    type:        string
+                    data_name:   c.name
+                marktingListName:
+                    type:        string
+                    data_name:   ml.name
+                schedule:
+                    type:        choice
+                    data_name:   ec.schedule
+                    options:
+                        field_options:
+                            choices:
+                                manual: Manual
+                                deferred: Deferred
+                scheduledFor:
+                    type:        datetime
+                    data_name:   ec.scheduledFor
+                sent:
+                    type: boolean
+                    data_name: ec.sent
+                createdAt:
+                    type:        datetime
+                    data_name:   ec.createdAt
+                updatedAt:
+                    type:        datetime
+                    data_name:   ec.updatedAt
+        sorters:
+            columns:
+                name:             { data_name: ec.name }
+                senderEmail:      { data_name: ec.senderEmail }
+                senderName:       { data_name: ec.senderName }
+                campaignName:     { data_name: c.name }
+                marktingListName: { data_name: ml.name }
+                schedule:         { data_name: ec.schedule }
+                sent:             { data_name: ec.sent }
+                scheduledFor:     { data_name: ec.scheduledFor }
+                createdAt:        { data_name: ec.createdAt }
+                updatedAt:        { data_name: ec.updatedAt }
+            default:
+                name: ASC
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: orocrm_email_campaign_view
+                params: [ id ]
+            update_link:
+                type: url
+                route: orocrm_email_campaign_update
+                params: [ id ]
+            delete_link:
+                type: url
+                route: oro_api_delete_emailcampaign
+                params: [ id ]
+        actions:
+            view:
+                type:         navigate
+                label:        orocrm.campaign.emailcampaign.datagrid.actions.view.label
+                link:         view_link
+                icon:         eye-open
+                acl_recource: orocrm_email_campaign_view
+                rowAction:    true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_email_campaign_update
+                label:         orocrm.campaign.emailcampaign.datagrid.actions.update.label
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_email_campaign_delete
+                label:         orocrm.campaign.emailcampaign.datagrid.actions.delete.label
+                icon:          trash
+                link:          delete_link
+
+    orocrm-email-campaign-marketing-list-items-mixin:
+        extends: orocrm-marketing-list-items-base-unsubscribe-mixin
+        source:
+            query:
+                select:
+                    - COUNT(cs.id) as campaignContactedTimes
+                    - MAX(cs.createdAt) as campaignLastContactedAt
+                join:
+                    left:
+                        -
+                            join: 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics'
+                            alias: 'cs'
+                            conditionType: 'WITH'
+                            condition: 'mli.id = cs.marketingListItem'
+                where:
+                    and:
+                        - mlr.id IS NULL
+                        - cs.emailCampaign = :emailCampaign
+                groupBy: t1.id, mlu.id, mli.contactedTimes, mli.lastContactedAt
+        columns:
+            campaignContactedTimes:
+                label: orocrm.campaign.emailcampaign.datagrid.campaignContactedTimes
+            campaignLastContactedAt:
+                label: orocrm.campaign.emailcampaign.datagrid.campaignLastContactedAt
+                frontend_type: datetime
+        filters:
+            columns:
+                campaignContactedTimes:  { type: number,   data_name: campaignContactedTimes }
+                campaignLastContactedAt: { type: datetime, data_name: campaignLastContactedAt }
+        sorters:
+            columns:
+                campaignContactedTimes:  { data_name: campaignContactedTimes }
+                campaignLastContactedAt: { data_name: campaignLastContactedAt }
