@@ -7,8 +7,6 @@ OroCRM\Bundle\ChannelBundle\Entity\Channel:
             - NotBlank: ~
             - Length:
                 max: 250
-        owner:
-            - NotBlank: ~
         channelType:
             - NotBlank: ~
 OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity:

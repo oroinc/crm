@@ -50,13 +50,14 @@ services:
 
     orocrm_campaign.campaign.manager.api:
         class: %orocrm_campaign.campaign.manager.api.class%
-        parent: oro_soap.managet.entity_manager.abstract
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_campaign.entity.class%
             - @doctrine.orm.entity_manager
 
     orocrm_campaign.email_campaign.manager.api:
         class: %orocrm_campaign.email_campaign.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_campaign.email_campaign.entity.class%
             - @doctrine.orm.entity_manager
