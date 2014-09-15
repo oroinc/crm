@@ -59,8 +59,6 @@ class ChannelDoctrineListener
             }
         }
 
-        #$this->uow->getScheduledEntityDeletions();
-
         foreach ($this->uow->getScheduledEntityUpdates() as $entity) {
             $className = ClassUtils::getClass($entity);
             $config    = $this->searchIn($className, $settings);
@@ -68,6 +66,15 @@ class ChannelDoctrineListener
             if (!empty($config)) {
                 $this->update($entity, $config, true);
             }
+        }
+
+        foreach ($this->uow->getScheduledEntityDeletions() as $entity) {
+            #$className = ClassUtils::getClass($entity);
+            #$config    = $this->searchIn($className, $settings);
+
+            #if (!empty($config)) {
+            #    $this->update($entity, $config, true);
+            #}
         }
     }
 
@@ -95,8 +102,6 @@ class ChannelDoctrineListener
     protected function update($entity, array $config, $isUpdate = false)
     {
         $changeSet = $this->uow->getEntityChangeSet($entity);
-
-#sludge condition
 
         if ($this->isUpdate($changeSet, $isUpdate, $config)) {
             $account     = $changeSet['account'][0];
@@ -163,8 +168,10 @@ class ChannelDoctrineListener
 
         return $isUpdate &&
         (
-            $this->isChanged($changeSet, 'account')
-            || $this->isChanged($changeSet, 'dataChannel')
+            (
+                $this->isChanged($changeSet, 'account')
+                && $this->isChanged($changeSet, 'dataChannel')
+            )
             || $this->isChanged($changeSet, $lifetimeValue)
         );
     }
