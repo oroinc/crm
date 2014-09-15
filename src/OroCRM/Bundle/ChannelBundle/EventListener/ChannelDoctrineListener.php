@@ -9,6 +9,7 @@ use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 
+use Doctrine\ORM\UnitOfWork;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
@@ -42,6 +43,7 @@ class ChannelDoctrineListener
      */
     public function onFlush(OnFlushEventArgs $args)
     {
+        /** @var UnitOfWork $uow */
         $uow = $args->getEntityManager()->getUnitOfWork();
 
         $entities = array_merge(
@@ -107,19 +109,19 @@ class ChannelDoctrineListener
 
         $this->isInProgress = true;
         $em                 = $args->getEntityManager();
+        /** @var UnitOfWork $uow */
         $uow                = $em->getUnitOfWork();
 
         if (!empty($this->queued)) {
             foreach ($this->queued as $customerIdentity => $groupedByEntityUpdates) {
                 foreach ($groupedByEntityUpdates as &$data) {
 
-                    $identifiers = $uow->getEntityIdentifier($data['entity']);
-                    $changeSet   = $uow->getEntityChangeSet($data['entity']);
-
+                    $data['account'] = $this->getAccount($uow, $data);
 
                     $entity = $this->createHistoryEntry($em, $customerIdentity, $data);
                     $em->persist($entity);
                 }
+                unset($data);
             }
 
             $em->flush();
@@ -127,6 +129,25 @@ class ChannelDoctrineListener
             $this->queued       = [];
             $this->isInProgress = false;
         }
+    }
+
+    /**
+     * @param UnitOfWork $uow
+     * @param array      $data
+     *
+     * @return mixed
+     */
+    protected function getAccount(UnitOfWork $uow, array $data)
+    {
+        $changeSet = $uow->getEntityChangeSet($data['entity']);
+
+        if (array_key_exists('account', $changeSet)) {
+            $account = !empty($changeSet['account'][0]) ? : $changeSet['account'][1];
+        } else {
+            $account = $data['entity']->getAccount();
+        }
+
+        return $account;
     }
 
     /***
