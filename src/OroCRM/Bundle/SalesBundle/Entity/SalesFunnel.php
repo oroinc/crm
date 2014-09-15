@@ -46,7 +46,6 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *              "active_workflow"="b2b_flow_sales_funnel"
  *          }
  *      }
- *  }
  * )
  */
 class SalesFunnel implements ChannelAwareInterface
