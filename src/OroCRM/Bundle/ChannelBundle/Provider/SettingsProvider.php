@@ -243,20 +243,17 @@ class SettingsProvider
     /**
      * @return array
      */
-    public function getChannelTypeLifetimeValue()
+    public function getLifetimeValueSettings()
     {
         $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
         $result   = [];
 
-        foreach ($settings as $setting) {
+        foreach ($settings as $channelType => $setting) {
             if (!empty($setting['lifetime_value'])) {
-                array_push(
-                    $result,
-                    [
-                        'customer_identity' => $setting['customer_identity'],
-                        'lifetime_value' => $setting['lifetime_value']
-                    ]
-                );
+                $result[$channelType] = [
+                    'entity' => $setting['customer_identity'],
+                    'field'  => $setting['lifetime_value']
+                ];
             }
         }
 

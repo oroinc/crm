@@ -2,48 +2,39 @@
 
 namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\UnitOfWork;
-use Doctrine\ORM\Query;
-
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
-use Oro\Bundle\EntityBundle\ORM\OroEntityManager;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelDoctrineListener
 {
-    /** @var SettingsProvider */
-    protected $settingsProvider;
-
-    /** @var PropertyAccess */
-    protected $accessor;
-
-    /** @var OroEntityManager */
-    protected $em;
-
-    /** @var UnitOfWork */
-    protected $uow;
+    /** @var array */
+    protected $queued = [];
 
     /** @var array */
-    protected $collection;
+    protected $customerIdentities = [];
+
+    /** @var bool */
+    protected $isInProgress = false;
 
     /**
      * @param SettingsProvider $settingsProvider
      */
     public function __construct(SettingsProvider $settingsProvider)
     {
-        $this->settingsProvider = $settingsProvider;
-        $this->accessor         = PropertyAccess::createPropertyAccessor();
-        $this->collection       = [];
+        $settings = $settingsProvider->getLifetimeValueSettings();
+        foreach ($settings as $singleChannelTypeData) {
+            $this->customerIdentities[$singleChannelTypeData['entity']] = $singleChannelTypeData['field'];
+        }
     }
 
     /**
@@ -51,251 +42,148 @@ class ChannelDoctrineListener
      */
     public function onFlush(OnFlushEventArgs $args)
     {
-        $settings  = $this->settingsProvider->getChannelTypeLifetimeValue();
-        $this->em  = $args->getEntityManager();
-        $this->uow = $this->em->getUnitOfWork();
+        $uow = $args->getEntityManager()->getUnitOfWork();
 
-        foreach ($this->uow->getScheduledEntityInsertions() as $entity) {
-            $className = ClassUtils::getClass($entity);
-            $config    = $this->searchIn($className, $settings);
-
-            if (!empty($config)) {
-                $this->update($entity, $config);
-            }
-        }
-
-        foreach ($this->uow->getScheduledEntityUpdates() as $entity) {
-            $className = ClassUtils::getClass($entity);
-            $config    = $this->searchIn($className, $settings);
-
-            if (!empty($config)) {
-                $this->update($entity, $config, true);
-            }
-        }
-
-        foreach ($this->uow->getScheduledEntityDeletions() as $entity) {
-            #$className = ClassUtils::getClass($entity);
-            #$config    = $this->searchIn($className, $settings);
-
-            #if (!empty($config)) {
-            #    $this->update($entity, $config, true);
-            #}
-        }
-    }
-
-    public function postFlush(postFlushEventArgs $args)
-    {
-        $this->em  = $args->getEntityManager();
-        $this->uow = $this->em->getUnitOfWork();
-
-    }
-
-    /**
-     * @param string $className
-     * @param array  $settings
-     *
-     * @return array
-     */
-    protected function searchIn($className, $settings)
-    {
-        foreach ($settings as $row) {
-            if ($row['customer_identity'] === $className) {
-                return $row;
-            }
-        }
-        return [];
-    }
-
-    /**
-     * @param Object $entity
-     * @param array  $config
-     * @param bool   $isUpdate
-     */
-    protected function update($entity, array $config, $isUpdate = false)
-    {
-        $changeSet = $this->uow->getEntityChangeSet($entity);
-
-        if ($this->isUpdate($changeSet, $isUpdate, $config)) {
-            $account     = $changeSet['account'][0];
-            $dataChannel = $changeSet['dataChannel'][0];
-            $entityParam = [
-                'account' => $account,
-                'channel' => $dataChannel,
-                'id'      => $entity->getId()
-            ];
-
-            if ($entity->getId()) {
-                $entityParam['id'] = $entity->getId();
-            }
-
-            $lifetimeValue = $this->getLifetimeValue($config, $entityParam);
-        } else {
-            $account       = $changeSet['account'][1];
-            $dataChannel   = $changeSet['dataChannel'][1];
-            $entityParam   = [
-                'account' => $account,
-                'channel' => $dataChannel
-            ];
-            $lifetimeValue = $this->getLifetimeValue($config, $entityParam);
-        }
-
-        $currentLifetime = $this->calculateLifeTime($entity, $config, $lifetimeValue);
-
-        $this->fillCollection($dataChannel, $account, $currentLifetime, $entity);
-
-        #$this->createHistory($dataChannel, $account, $currentLifetime);
-    }
-
-    /**
-     * @param Object $entity
-     * @param array  $config
-     * @param mixed  $lifetimeValue
-     *
-     * @return int
-     */
-    protected function calculateLifeTime($entity, array $config, $lifetimeValue)
-    {
-        $entityLifetimeValue = $this->getLifetimeValueFromEntity($entity, $config);
-        $currentLifetime     = 0;
-
-        if (is_array($lifetimeValue)) {
-            foreach ($entityLifetimeValue as $row) {
-                $currentLifetime += $row;
-            }
-        } else {
-            $currentLifetime = $entityLifetimeValue;
-        }
-
-        return $currentLifetime;
-    }
-
-    /**
-     * @param array $changeSet
-     * @param bool  $isUpdate
-     * @param array $config
-     *
-     * @return bool
-     */
-    protected function isUpdate(array $changeSet, $isUpdate, array $config)
-    {
-        $lifetimeValue = !empty($config['lifetime_value']) ? $config['lifetime_value'] : false;
-
-        return $isUpdate &&
-        (
-            (
-                $this->isChanged($changeSet, 'account')
-                && $this->isChanged($changeSet, 'dataChannel')
-            )
-            || $this->isChanged($changeSet, $lifetimeValue)
+        $entities = array_merge(
+            $uow->getScheduledEntityInsertions(),
+            $uow->getScheduledEntityDeletions(),
+            $uow->getScheduledEntityUpdates()
         );
-    }
 
-    /**
-     * @param array $config
-     * @param array $entityParam
-     *
-     * @return Query
-     */
-    protected function getLifetimeValue(array $config, array $entityParam)
-    {
-        /** @var QueryBuilder $qb */
-        $qb = $this->em->createQueryBuilder();
-        $qb->add(
-            'select',
-            'SUM(e.' . $config['lifetime_value'] . ')'
+        $collections = array_merge(
+            $uow->getScheduledCollectionDeletions(),
+            $uow->getScheduledCollectionUpdates()
         );
-        $qb->from($config['customer_identity'], 'e');
-        $qb->andWhere('e.account = :account');
-        $qb->andWhere('e.channel = :channel');
 
-        if (!empty($entityParam['id'])) {
-            $qb->andWhere('e.id <> :id');
-            $qb->setParameter('id', $entityParam['id']);
+        /** @var PersistentCollection $collectionToChange */
+        foreach ($collections as $collectionToChange) {
+            $entities = array_merge($entities, $collectionToChange->unwrap()->toArray());
         }
 
-        $qb->setParameter('account', $entityParam['account']);
-        $qb->setParameter('channel', $entityParam['channel']);
+        foreach ($entities as $entity) {
+            $className = ClassUtils::getClass($entity);
 
-        return $qb->getQuery()->getSingleScalarResult();
+            if (array_key_exists($className, $this->customerIdentities)) {
+                /** @var ChannelAwareInterface $entity */
+                if ($uow->isScheduledForUpdate($entity)) {
+                    $changeSet = $uow->getEntityChangeSet($entity);
+
+                    $isUpdateRequired = array_key_exists('dataChannel', $changeSet)
+                        || array_key_exists('account', $changeSet)
+                        || array_key_exists($this->customerIdentities[$className], $changeSet);
+
+                    if ($isUpdateRequired) {
+                        $account = $entity->getAccount();
+                        $channel = $entity->getDataChannel();
+                        $this->scheduleUpdate($className, $account, $channel);
+
+                        $oldChannel          = $this->getOldValue($changeSet, 'dataChannel');
+                        $oldAccount          = $this->getOldValue($changeSet, 'account');
+                        $extraUpdateRequired = $oldChannel || $oldAccount;
+                        if ($extraUpdateRequired) {
+                            $this->scheduleUpdate($className, $oldAccount ? : $account, $oldChannel ? : $channel);
+                        }
+                    }
+                } else {
+                    $this->scheduleUpdate($className, $entity->getAccount(), $entity->getDataChannel());
+                }
+            }
+        }
     }
 
     /**
-     * @param Object $entity
-     * @param array  $config
+     * @param PostFlushEventArgs $args
+     */
+    public function postFlush(PostFlushEventArgs $args)
+    {
+        if ($this->isInProgress) {
+            return;
+        }
+
+        $this->isInProgress = true;
+        $em                 = $args->getEntityManager();
+
+        if (!empty($this->queued)) {
+            foreach ($this->queued as $customerIdentity => $groupedByEntityUpdates) {
+                foreach ($groupedByEntityUpdates as $data) {
+                    $entity = $this->createHistoryEntry($em, $customerIdentity, $data);
+                    $em->persist($entity);
+                }
+            }
+
+            $em->flush();
+
+            $this->queued       = [];
+            $this->isInProgress = false;
+        }
+    }
+
+    /***
+     * @param string  $customerIdentity
+     * @param Account $account
+     * @param Channel $channel
+     */
+    protected function scheduleUpdate($customerIdentity, Account $account = null, Channel $channel = null)
+    {
+        if ($account && $channel) {
+            $key                                   = sprintf('%d__%d', $account->getId(), $channel->getId());
+            $this->queued[$customerIdentity][$key] = ['account' => $account->getId(), 'channel' => $channel->getId()];
+        }
+    }
+
+    /**
+     * Returns value before change, or null otherwise
      *
-     * @return int|mixed
+     * @param array  $changeSet
+     * @param string $key
+     *
+     * @return null|object
      */
-    protected function getLifetimeValueFromEntity($entity, $config)
+    protected function getOldValue(array $changeSet, $key)
     {
-        $result = 0;
-
-        try {
-            $result = $this->accessor->getValue($entity, $config['lifetime_value']);
-        } catch (Exception $e) {
-
-        }
-
-        return $result;
+        return array_key_exists($key, $changeSet) ? $changeSet[$key][0] : null;
     }
 
-
     /**
-     * @param Channel $channel
-     * @param Account $account
-     * @param int     $amount
-     * @param Object  $entity
+     * @param EntityManager $em
+     * @param string        $customerIdentity
+     * @param array         $data
+     *
+     * @return LifetimeValueHistory
      */
-    protected function fillCollection(Channel $channel = null, $account = null, $amount = 0, $entity)
+    protected function createHistoryEntry(EntityManager $em, $customerIdentity, array $data)
     {
-        $result = [
-            'amount'      => $amount,
-            'dataChannel' => $channel,
-            'entity'      => $entity
-        ];
+        $account = $em->getReference('OroCRMAccountBundle:Account', $data['account']);
+        $channel = $em->getReference('OroCRMChannelBundle:Channel', $data['channel']);
 
-        if (!empty($account)) {
-            $result['account'] = $account;
-        }
-
-        array_push($this->collection, $result);
-    }
-
-
-    /**
-     * @param Channel $channel
-     * @param Account $account
-     * @param int     $amount
-     */
-    protected function createHistory(Channel $channel = null, $account = null, $amount = 0)
-    {
         $history = new LifetimeValueHistory();
-        $history->setAmount($amount);
+        $history->setAmount($this->calculateLifetime($em, $customerIdentity, $account, $channel));
         $history->setCreatedAt(new \DateTime('now'));
         $history->setDataChannel($channel);
+        $history->setAccount($account);
 
-        if (!empty($account)) {
-            $history->setAccount($account);
-        }
-
-        $this->em->persist($history);
-
-        $this->uow->computeChangeSet(
-            $this->em->getClassMetadata('OroCRMChannelBundle:LifetimeValueHistory'),
-            $history
-        );
+        return $history;
     }
 
     /**
-     * @param array  $changeSet
-     * @param string $field
+     * @param EntityManager $em
+     * @param string        $customerIdentity
+     * @param Account       $account
+     * @param Channel       $channel
      *
-     * @return bool
+     * @return mixed
      */
-    private function isChanged(array $changeSet, $field)
+    protected function calculateLifetime(EntityManager $em, $customerIdentity, Account $account, Channel $channel)
     {
-        $oldValue = (!empty($changeSet[$field][0])) ? $changeSet[$field][0] : false;
-        $newValue = (!empty($changeSet[$field][1])) ? $changeSet[$field][1] : false;
+        /** @var QueryBuilder $qb */
+        $qb = $em->createQueryBuilder();
+        $qb->from($customerIdentity, 'e');
+        $qb->select(sprintf('SUM(e.%s)', $this->customerIdentities[$customerIdentity]));
+        $qb->andWhere('e.account = :account');
+        $qb->andWhere('e.channel = :channel');
+        $qb->setParameter('account', $account);
+        $qb->setParameter('channel', $channel);
 
-        return ($oldValue !== $newValue);
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }
