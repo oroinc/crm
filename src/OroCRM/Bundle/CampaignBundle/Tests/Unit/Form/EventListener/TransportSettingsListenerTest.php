@@ -376,7 +376,6 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
             ->with($transportName)
             ->will($this->returnValue($transport));
 
-
         $this->doctrineHelper->expects($this->once())
             ->method('createEntityInstance')
             ->with('\stdClass')
@@ -457,7 +456,6 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getTransportByName')
             ->with($transportName)
             ->will($this->returnValue($transport));
-
 
         $this->doctrineHelper->expects($this->never())
             ->method('createEntityInstance');
