@@ -94,7 +94,7 @@ class ChannelDoctrineListener
     {
         $changeSet = $this->uow->getEntityChangeSet($entity);
 
-        if ($this->isUpdate($changeSet, $isUpdate)) {
+        if ($this->isUpdate($changeSet, $isUpdate, $config)) {
             $account     = $changeSet['account'][0];
             $dataChannel = $changeSet['dataChannel'][0];
             $entityParam = [
@@ -118,37 +118,50 @@ class ChannelDoctrineListener
             $lifetimeValue = $this->getLifetimeValue($config, $entityParam);
         }
 
-        $currentLifetimeValue = $this->getLifetimeValueFromEntity($entity, $config);
-
-        $currentLifetime = 0;
-
-        if (is_array($lifetimeValue)) {
-            foreach ($currentLifetimeValue as $row) {
-                $currentLifetime += $row;
-            }
-        } else {
-            $currentLifetime = $currentLifetimeValue;
-        }
-
-        $currentLifetime = $currentLifetime + $currentLifetimeValue;
-
-        #$amountFromQuery + $currentEntity ->getLEFITIMEFIELD
+        $currentLifetime = $this->calculateLifeTime($entity, $config, $lifetimeValue);
 
         $this->createHistory($account, $dataChannel, $currentLifetime);
     }
 
     /**
+     * @param Object $entity
+     * @param array  $config
+     * @param mixed  $lifetimeValue
+     *
+     * @return int
+     */
+    protected function calculateLifeTime($entity, array $config, $lifetimeValue)
+    {
+        $entityLifetimeValue = $this->getLifetimeValueFromEntity($entity, $config);
+        $currentLifetime     = 0;
+
+        if (is_array($lifetimeValue)) {
+            foreach ($entityLifetimeValue as $row) {
+                $currentLifetime += $row;
+            }
+        } else {
+            $currentLifetime = $entityLifetimeValue;
+        }
+
+        return  $currentLifetime;
+    }
+
+    /**
      * @param array $changeSet
      * @param bool  $isUpdate
+     * @param array $config
      *
      * @return bool
      */
-    protected function isUpdate($changeSet, $isUpdate)
+    protected function isUpdate(array $changeSet, $isUpdate, array $config)
     {
+        $lifetimeValue = !empty($config['lifetime_value']) ? $config['lifetime_value'] : false;
+
         return $isUpdate &&
         (
-            (!empty($changeSet['account']) && !empty($changeSet['account'][0]))
-            || !empty($changeSet['dataChannel']) && !empty($changeSet['dataChannel'][0])
+            $this->isChanged($changeSet, 'account')
+            || $this->isChanged($changeSet, 'dataChannel')
+            || $this->isChanged($changeSet, $lifetimeValue)
         );
     }
 
@@ -181,7 +194,7 @@ class ChannelDoctrineListener
             $qb->setParameter('id', $entityParam['id']);
         }
 
-        return $qb->getQuery()->execute();
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -217,5 +230,19 @@ class ChannelDoctrineListener
 
         $this->em->persist($history);
         $this->em->flush();
+    }
+
+    /**
+     * @param array  $changeSet
+     * @param string $field
+     *
+     * @return bool
+     */
+    private function isChanged(array $changeSet, $field)
+    {
+        $oldValue = (!empty($changeSet[$field][0])) ? $changeSet[$field][0] : false;
+        $newValue = (!empty($changeSet[$field][1])) ? $changeSet[$field][1] : false;
+
+        return ($oldValue !== $newValue);
     }
 }
