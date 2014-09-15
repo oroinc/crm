@@ -59,6 +59,8 @@ class ChannelDoctrineListener
             }
         }
 
+        #$this->uow->getScheduledEntityDeletions();
+
         foreach ($this->uow->getScheduledEntityUpdates() as $entity) {
             $className = ClassUtils::getClass($entity);
             $config    = $this->searchIn($className, $settings);
@@ -93,6 +95,8 @@ class ChannelDoctrineListener
     protected function update($entity, array $config, $isUpdate = false)
     {
         $changeSet = $this->uow->getEntityChangeSet($entity);
+
+#sludge condition
 
         if ($this->isUpdate($changeSet, $isUpdate, $config)) {
             $account     = $changeSet['account'][0];
@@ -185,14 +189,11 @@ class ChannelDoctrineListener
 
         if (!empty($entityParam['id'])) {
             $qb->andWhere('e.id <> :id');
+            $qb->setParameter('id', $entityParam['id']);
         }
 
         $qb->setParameter('account', $entityParam['account']);
         $qb->setParameter('channel', $entityParam['channel']);
-
-        if (!empty($entityParam['id'])) {
-            $qb->setParameter('id', $entityParam['id']);
-        }
 
         return $qb->getQuery()->getSingleScalarResult();
     }
@@ -225,8 +226,11 @@ class ChannelDoctrineListener
     {
         $history = new LifetimeValueHistory();
         $history->setDataChannel($channel);
-        $history->setAccount($account);
         $history->setAmount($amount);
+
+        if (!empty($account)) {
+            $history->setAccount($account);
+        }
 
         $this->em->persist($history);
         $this->em->flush();
