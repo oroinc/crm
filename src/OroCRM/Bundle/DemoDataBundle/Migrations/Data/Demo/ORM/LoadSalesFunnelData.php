@@ -45,9 +45,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     /** @var  EntityManager */
     protected $em;
 
-    /**
-     * @var Organization
-     */
+    /** @var Organization */
     protected $organization;
 
     /**
@@ -75,7 +73,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
      */
     public function load(ObjectManager $manager)
     {
-        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $this->organization = $this->getReference('default_organization');
         $this->initSupportingEntities($manager);
         $this->loadFlows();
     }
@@ -226,7 +224,12 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     protected function setSecurityContext($user)
     {
         $securityContext = $this->container->get('security.context');
-        $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
+        $token = new UsernamePasswordOrganizationToken(
+            $user,
+            $user->getUsername(),
+            'main',
+            $this->organization
+        );
         $securityContext->setToken($token);
     }
 

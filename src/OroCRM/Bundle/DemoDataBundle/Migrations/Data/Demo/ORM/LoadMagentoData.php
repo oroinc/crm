@@ -76,12 +76,14 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $this->users = $om->getRepository('OroUserBundle:User')->findAll();
 
         $website = new Website();
-        $website->setCode('admin')
+        $website
+            ->setCode('admin')
             ->setName('Admin');
         $om->persist($website);
 
         $store = new Store();
-        $store->setCode('admin')
+        $store
+            ->setCode('admin')
             ->setName('Admin')
             ->setWebsite($website);
         $om->persist($website);
@@ -101,6 +103,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $integration->setConnectors(['customer', 'cart', 'order']);
         $integration->setName(self::INTEGRATION_NAME);
         $integration->setTransport($transport);
+        $integration->setOrganization($this->organization);
         $om->persist($integration);
 
         $builder = $this->factory->createBuilderForIntegration($integration);
