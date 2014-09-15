@@ -124,7 +124,7 @@ class ChannelDoctrineListener
 
         $currentLifetime = $this->calculateLifeTime($entity, $config, $lifetimeValue);
 
-        $this->createHistory($account, $dataChannel, $currentLifetime);
+        $this->createHistory($dataChannel, $account, $currentLifetime);
     }
 
     /**
@@ -222,18 +222,23 @@ class ChannelDoctrineListener
      * @param Account $account
      * @param int     $amount
      */
-    protected function createHistory(Channel $channel, Account $account, $amount = 0)
+    protected function createHistory(Channel $channel = null, $account = null, $amount = 0)
     {
         $history = new LifetimeValueHistory();
-        $history->setDataChannel($channel);
         $history->setAmount($amount);
+        $history->setCreatedAt(new \DateTime('now'));
+        $history->setDataChannel($channel);
 
         if (!empty($account)) {
             $history->setAccount($account);
         }
 
         $this->em->persist($history);
-        $this->em->flush();
+
+        $this->uow->computeChangeSet(
+            $this->em->getClassMetadata('OroCRMChannelBundle:LifetimeValueHistory'),
+            $history
+        );
     }
 
     /**
