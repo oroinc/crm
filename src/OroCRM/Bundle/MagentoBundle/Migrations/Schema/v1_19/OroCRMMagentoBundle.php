@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_10;
+namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_19;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -8,7 +8,7 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\SecurityBundle\Migrations\Schema\UpdateOwnershipTypeQuery;
 
-class OroCRMSalesBundle implements Migration
+class OroCRMMagentoBundle implements Migration
 {
     /**
      * {@inheritdoc}
@@ -19,7 +19,7 @@ class OroCRMSalesBundle implements Migration
         //Add organization fields to ownership entity config
         $queries->addQuery(
             new UpdateOwnershipTypeQuery(
-                'OroCRM\Bundle\SalesBundle\Entity\Lead',
+                'OroCRM\Bundle\MagentoBundle\Entity\Cart',
                 [
                     'organization_field_name' => 'organization',
                     'organization_column_name' => 'organization_id'
@@ -29,7 +29,17 @@ class OroCRMSalesBundle implements Migration
         //Add organization fields to ownership entity config
         $queries->addQuery(
             new UpdateOwnershipTypeQuery(
-                'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                [
+                    'organization_field_name' => 'organization',
+                    'organization_column_name' => 'organization_id'
+                ]
+            )
+        );
+        //Add organization fields to ownership entity config
+        $queries->addQuery(
+            new UpdateOwnershipTypeQuery(
+                'OroCRM\Bundle\MagentoBundle\Entity\Order',
                 [
                     'organization_field_name' => 'organization',
                     'organization_column_name' => 'organization_id'
@@ -45,9 +55,9 @@ class OroCRMSalesBundle implements Migration
      */
     public static function addOrganization(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_sales_funnel');
+        $table = $schema->getTable('orocrm_magento_customer');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['organization_id'], 'IDX_E20C734432C8A3DE', []);
+        $table->addIndex(['organization_id'], 'IDX_2A61EE7D32C8A3DE', []);
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_id'],
@@ -55,9 +65,9 @@ class OroCRMSalesBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
 
-        $table = $schema->getTable('orocrm_sales_lead');
+        $table = $schema->getTable('orocrm_magento_order');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['organization_id'], 'IDX_73DB463332C8A3DE', []);
+        $table->addIndex(['organization_id'], 'IDX_4D09F30532C8A3DE', []);
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_id'],
@@ -65,9 +75,9 @@ class OroCRMSalesBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
 
-        $table = $schema->getTable('orocrm_sales_opportunity');
+        $table = $schema->getTable('orocrm_magento_cart');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['organization_id'], 'IDX_C0FE4AAC32C8A3DE', []);
+        $table->addIndex(['organization_id'], 'IDX_96661A8032C8A3DE', []);
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_id'],
