@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\Query;
@@ -32,6 +33,9 @@ class ChannelDoctrineListener
     /** @var UnitOfWork */
     protected $uow;
 
+    /** @var array */
+    protected $collection;
+
     /**
      * @param SettingsProvider $settingsProvider
      */
@@ -39,6 +43,7 @@ class ChannelDoctrineListener
     {
         $this->settingsProvider = $settingsProvider;
         $this->accessor         = PropertyAccess::createPropertyAccessor();
+        $this->collection       = [];
     }
 
     /**
@@ -76,6 +81,13 @@ class ChannelDoctrineListener
             #    $this->update($entity, $config, true);
             #}
         }
+    }
+
+    public function postFlush(postFlushEventArgs $args)
+    {
+        $this->em  = $args->getEntityManager();
+        $this->uow = $this->em->getUnitOfWork();
+
     }
 
     /**
@@ -129,7 +141,9 @@ class ChannelDoctrineListener
 
         $currentLifetime = $this->calculateLifeTime($entity, $config, $lifetimeValue);
 
-        $this->createHistory($dataChannel, $account, $currentLifetime);
+        $this->fillCollection($dataChannel, $account, $currentLifetime, $entity);
+
+        #$this->createHistory($dataChannel, $account, $currentLifetime);
     }
 
     /**
@@ -152,7 +166,7 @@ class ChannelDoctrineListener
             $currentLifetime = $entityLifetimeValue;
         }
 
-        return  $currentLifetime;
+        return $currentLifetime;
     }
 
     /**
@@ -223,6 +237,29 @@ class ChannelDoctrineListener
 
         return $result;
     }
+
+
+    /**
+     * @param Channel $channel
+     * @param Account $account
+     * @param int     $amount
+     * @param Object  $entity
+     */
+    protected function fillCollection(Channel $channel = null, $account = null, $amount = 0, $entity)
+    {
+        $result = [
+            'amount'      => $amount,
+            'dataChannel' => $channel,
+            'entity'      => $entity
+        ];
+
+        if (!empty($account)) {
+            $result['account'] = $account;
+        }
+
+        array_push($this->collection, $result);
+    }
+
 
     /**
      * @param Channel $channel

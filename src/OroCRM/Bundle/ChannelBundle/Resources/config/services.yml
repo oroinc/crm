@@ -271,6 +271,7 @@ services:
           - @orocrm_channel.provider.settings_provider
       tags:
         - { name: doctrine.event_listener, event: onFlush, method: onFlush }
+        - { name: doctrine.event_listener, event: postFlush, method: postFlush }
 
     #twig
     orocrm_channel.twig.metadata_extension:
