@@ -22,11 +22,11 @@ class ChannelIntegrationController extends Controller
      */
     public function createAction($type, $channelName = null)
     {
-        $translator         = $this->get('translator');
-        $integrationName    = trim($channelName . ' ' . $translator->trans('orocrm.channel.data_source.label'));
-        $integration        = new Integration();
-        $integration->setType($type);
-        $integration->setName($integrationName);
+        $translator      = $this->get('translator');
+        $integrationName = urldecode($channelName) . ' ' . $translator->trans('orocrm.channel.data_source.label');
+        $integration = new Integration();
+        $integration->setType(urldecode($type));
+        $integration->setName(trim($integrationName));
 
         return $this->update($integration);
     }

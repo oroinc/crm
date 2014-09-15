@@ -8,4 +8,4 @@ oro_entity:
                         return_type:  money
                     join:
                         left:
-                            - { join: OroCRMChannelBundle:LifetimeValueHistory, alias: h, conditionType: 'WITH', condition: 'h.account = $entity' }
+                            - { join: OroCRMChannelBundle:LifetimeValueHistory, alias: h, conditionType: 'WITH', condition: 'h.account = entity.id' }

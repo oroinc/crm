@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Entity;
 
 use Doctrine\Common\Util\ClassUtils;
+
 use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 
 class LifetimeValueHistoryTest extends AbstractEntityTestCase
