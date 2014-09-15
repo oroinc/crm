@@ -186,6 +186,20 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
                 'selects'    => ['alias.matchedFields   as   c1'],
                 'groupBy'    => null,
                 'expected'   => 'alias.matchedFields',
+            ],
+            [
+                'gridName'   => Segment::GRID_PREFIX,
+                'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
+                'selects'    => ['alias.matchedFields AS c1'],
+                'groupBy'    => null,
+                'expected'   => 'alias.matchedFields',
+            ],
+            [
+                'gridName'   => Segment::GRID_PREFIX,
+                'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
+                'selects'    => ['alias.matchedFields As c1'],
+                'groupBy'    => null,
+                'expected'   => 'alias.matchedFields',
             ]
         ];
     }
