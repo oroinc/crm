@@ -231,43 +231,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         }
         $account->setName($name);
 
-        $isoCode = $data['Country'];
-        $country = array_filter(
-            $this->countries,
-            function (Country $a) use ($isoCode) {
-                return $a->getIso2Code() == $isoCode;
-            }
-        );
-        $country = array_values($country);
-        /** @var Country $country */
-        $country = $country[0];
-
-        $idRegion = $data['State'];
-        //$idRegion = 'AL';
-        /** @var Collection $regions */
-        $regions = $country->getRegions();
-
-        $region = $regions->filter(
-            function (Region $a) use ($idRegion) {
-                return $a->getCode() == $idRegion;
-            }
-        );
-
-        $address = new Address();
-        $address->setCity($data['City']);
-        $address->setStreet($data['StreetAddress']);
-        $address->setPostalCode($data['ZipCode']);
-        $address->setFirstName($data['GivenName']);
-        $address->setLastName($data['Surname']);
-
-        $address->setCountry($country);
-        if (!$region->isEmpty()) {
-            $address->setRegion($region->first());
-        }
-
-        $account->setShippingAddress($address);
-        $account->setBillingAddress(clone $address);
-
         return $account;
     }
 
